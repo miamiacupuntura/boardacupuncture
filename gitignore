@@ -1,0 +1,22 @@
+# Moodle data & secrets — never tracked in git
+/config.php
+/moodledata/
+/moodledata*/
+
+# If diagnostics show dataroot living somewhere else inside the webroot,
+# add that exact path here too before the first commit.
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+
+# Dependencies, if any get introduced later
+/vendor/
+/node_modules/
+
+# Moodle-generated, safe to regenerate
+/cache/
+/localcache/
+/temp/
+/trashdir/
+/sessions/

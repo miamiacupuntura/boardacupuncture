@@ -1,0 +1,103 @@
+<?php
+defined('MOODLE_INTERNAL') || die();
+
+class block_myprogress extends block_base {
+    public function init() {
+        $this->title = get_string('pluginname', 'block_myprogress');
+    }
+
+    private function get_progress(array $courseids) {
+        global $DB, $USER;
+        $overallgrade = 0;
+        $overallcount = 0;
+        $passed = 0;
+        $total = 0;
+
+        foreach ($courseids as $courseid) {
+            $scorms = $DB->get_records('scorm', ['course' => $courseid]);
+            $total += count($scorms);
+
+            foreach ($scorms as $scorm) {
+                $attempts = $DB->get_records('scorm_attempt', [
+                    'scormid' => $scorm->id,
+                    'userid' => $USER->id
+                ]);
+                $scores = [];
+
+                foreach ($attempts as $attempt) {
+                    $track = $DB->get_record('scorm_scoes_value', [
+                        'attemptid' => $attempt->id,
+                        'elementid' => 8
+                    ]);
+                    if ($track && $track->value !== null && $track->value !== '') {
+                        $scores[] = (float)$track->value;
+                    }
+                }
+
+                if (!empty($scores)) {
+                    $best = max($scores);
+                    $overallgrade += $best;
+                    $overallcount++;
+                    if ($best >= 70) {
+                        $passed++;
+                    }
+                }
+            }
+        }
+
+        return [
+            'grade' => $overallcount ? round($overallgrade / $overallcount, 2) : 0,
+            'passed' => $passed,
+            'total' => $total
+        ];
+    }
+
+    public function get_content() {
+        global $CFG;
+
+        if ($this->content !== null) {
+            return $this->content;
+        }
+
+        $subjects = [
+            ['name' => 'Foundations', 'courseids' => [30], 'link' => $CFG->wwwroot . '/course/view.php?id=30'],
+            ['name' => 'Acupuncture & Point Location', 'courseids' => [34], 'link' => $CFG->wwwroot . '/course/view.php?id=34'],
+            ['name' => 'Chinese Herbology', 'courseids' => [45, 117], 'link' => $CFG->wwwroot . '/course/view.php?id=45'],
+            ['name' => 'Biomedicine', 'courseids' => [36], 'link' => $CFG->wwwroot . '/course/view.php?id=36'],
+            ['name' => 'Clean Needle Techniques', 'courseids' => [113], 'link' => $CFG->wwwroot . '/course/view.php?id=113']
+        ];
+
+        $html = '<style>
+        .myprogress-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+        .myprogress-card{background:#fff;border:1px solid #e2e6ea;border-radius:14px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+        .myprogress-name{font-size:18px;font-weight:700;margin-bottom:12px}
+        .myprogress-grade{font-size:32px;font-weight:700;margin-bottom:12px}
+        .myprogress-bar{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-bottom:10px}
+        .myprogress-fill{height:100%;background:#2563eb;border-radius:999px}
+        .myprogress-meta{color:#64748b;font-size:14px;margin-bottom:16px}
+        .myprogress-button{display:inline-block;padding:10px 14px;background:#f1f5f9;color:#1e293b;text-decoration:none;border-radius:9px;font-weight:600}
+        .myprogress-button:hover{text-decoration:none;background:#e2e8f0}
+        @media(max-width:600px){.myprogress-grid{grid-template-columns:1fr}}
+        .myprogress-heading{margin-bottom:20px}.myprogress-heading h2{margin:0 0 6px;font-size:26px;font-weight:700}.myprogress-heading p{margin:0;color:#64748b;font-size:15px}.myprogress-card{min-height:250px}</style><div class="myprogress-heading"><h2>My Progress</h2><p>Track your board preparation across each major subject.</p></div><div class="myprogress-grid">';
+
+        foreach ($subjects as $subject) {
+            $progress = $this->get_progress($subject['courseids']);
+            $grade = min(100, max(0, $progress['grade']));
+            $html .= '<div class="myprogress-card"><div class="myprogress-name">' . s($subject['name']) . '</div><div class="myprogress-grade">' . $progress['grade'] . '%</div><div class="myprogress-bar"><div class="myprogress-fill" style="width:' . $grade . '%;"></div></div><div class="myprogress-meta">' . $progress['passed'] . ' of ' . number_format($progress['total']) . ' exams passed</div><a class="myprogress-button" href="' . s($subject['link']) . '">View Progress →</a></div>';
+        }
+
+        $html .= '</div>';
+        $this->content = new stdClass();
+        $this->content->text = $html;
+        $this->content->footer = '';
+        return $this->content;
+    }
+
+    public function applicable_formats() {
+        return ['my' => true];
+    }
+
+    public function instance_allow_multiple() {
+        return false;
+    }
+}
