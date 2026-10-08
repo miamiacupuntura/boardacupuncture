@@ -333,6 +333,11 @@ final class manager_test extends \advanced_testcase {
      * Test call_action_provider.
      */
     public function test_call_action_provider(): void {
+        $this->resetAfterTest();
+        // Test dispatch without contacting a paid image-generation endpoint.
+        ['mock' => $mock] = $this->get_mocked_http_client();
+        $mock->append(new \GuzzleHttp\Psr7\Response(401, ['Content-Type' => 'application/json'],
+            json_encode(['error' => ['message' => 'Simulated authentication failure']])));
         $contextid = 1;
         $userid = 1;
         $prompttext = 'This is a test prompt';
