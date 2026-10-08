@@ -52,6 +52,36 @@ class block_myprogress extends block_base {
         ];
     }
 
+    private function get_last_exam(array $courseids) {
+        global $DB, $USER;
+
+        $courseids = array_map('intval', $courseids);
+        list($insql, $params) = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED, 'course');
+
+        $sql = "SELECT s.name, MAX(v.timemodified) AS last_taken
+                  FROM {scorm} s
+                  JOIN {scorm_attempt} a ON a.scormid = s.id
+                  JOIN {scorm_scoes_value} v ON v.attemptid = a.id
+                 WHERE s.course $insql
+                   AND a.userid = :userid
+                   AND v.timemodified > 0
+              GROUP BY s.id, s.name
+              ORDER BY MAX(v.timemodified) DESC";
+
+        $params['userid'] = $USER->id;
+
+        $record = $DB->get_record_sql($sql, $params);
+
+        if (!$record) {
+            return null;
+        }
+
+        return [
+            'name' => $record->name,
+            'time' => (int)$record->last_taken
+        ];
+    }
+
     public function get_content() {
         global $CFG;
 
@@ -82,6 +112,7 @@ class block_myprogress extends block_base {
 
         foreach ($subjects as $subject) {
             $progress = $this->get_progress($subject['courseids']);
+            $last_exam = $this->get_last_exam($subject['courseids']);
             $grade = min(100, max(0, $progress['grade']));
             $branches = '';
             if ($subject['name'] === 'Chinese Herbology') {
@@ -89,7 +120,15 @@ class block_myprogress extends block_base {
                 $formulas = $this->get_progress([117]);
                 $branches = '<div class="myprogress-branches"><span>Single Herbs: ' . number_format($single['grade'], 2) . '%</span><br><span>Formulas: ' . number_format($formulas['grade'], 2) . '%</span></div>';
             }
-            $html .= '<div class="myprogress-card"><div class="myprogress-name">' . s($subject['name']) . '</div><div class="myprogress-grade">' . $progress['grade'] . '%</div><div class="myprogress-bar"><div class="myprogress-fill" style="width:' . $grade . '%;"></div></div>' . $branches . '<div class="myprogress-meta">' . $progress['passed'] . ' of ' . number_format($progress['total']) . ' exams passed</div><a class="myprogress-button" href="' . s($subject['link']) . '">View Progress →</a></div>';
+            $last_exam_html = '<div class="myprogress-last-exam"><strong>Last exam taken:</strong><br>No exam taken yet</div>';
+            if ($last_exam) {
+                $last_exam_html = '<div class="myprogress-last-exam"><strong>Last exam taken:</strong><br>' .
+                    s($last_exam['name']) . '<br><span>' .
+                    userdate($last_exam['time'], '%b %d, %Y · %I:%M %p') .
+                    '</span></div>';
+            }
+
+            $html .= '<div class="myprogress-card"><div class="myprogress-name">' . s($subject['name']) . '</div><div class="myprogress-grade">' . $progress['grade'] . '%</div><div class="myprogress-bar"><div class="myprogress-fill" style="width:' . $grade . '%;"></div></div>' . $branches . '<div class="myprogress-meta">' . $progress['passed'] . ' of ' . number_format($progress['total']) . ' exams passed</div>' . $last_exam_html . '<a class="myprogress-button" href="' . s($subject['link']) . '">View Progress →</a></div>';
         }
 
         $html .= '</div>';

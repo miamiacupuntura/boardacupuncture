@@ -52,12 +52,19 @@ class process_generate_image extends abstract_processor {
     protected function query_ai_api(): array {
         $response = parent::query_ai_api();
 
-        // If the request was successful, save the URL to a file.
+        // Store GPT Image base64 responses or legacy image URLs.
         if ($response['success']) {
-            $fileobj = $this->url_to_file(
-                $this->action->get_configuration('userid'),
-                $response['sourceurl']
-            );
+            if (!empty($response['imagebase64'])) {
+                $fileobj = $this->base64_to_file(
+                    $this->action->get_configuration('userid'),
+                    $response['imagebase64']
+                );
+            } else {
+                $fileobj = $this->url_to_file(
+                    $this->action->get_configuration('userid'),
+                    $response['sourceurl']
+                );
+            }
             // Add the file to the response, so the calling placement can do whatever they want with it.
             $response['draftfile'] = $fileobj;
         }
@@ -87,22 +94,35 @@ class process_generate_image extends abstract_processor {
 
     #[\Override]
     protected function create_request_object(string $userid): RequestInterface {
+        $model = $this->get_model();
+
+        if ($model === 'gpt-image-1-mini') {
+            $body = [
+                'model' => $model,
+                'prompt' => $this->action->get_configuration('prompttext'),
+                'n' => 1,
+                'size' => '1024x1024',
+                'quality' => 'low',
+                'user' => $userid,
+            ];
+        } else {
+            $body = [
+                'prompt' => $this->action->get_configuration('prompttext'),
+                'model' => $model,
+                'n' => $this->numberimages,
+                'quality' => $this->action->get_configuration('quality'),
+                'size' => $this->calculate_size(
+                    $this->action->get_configuration('aspectratio')
+                ),
+                'user' => $userid,
+            ];
+        }
+
         return new Request(
             method: 'POST',
             uri: '',
-            body: json_encode((object) [
-                'prompt' => $this->action->get_configuration('prompttext'),
-                'model' => $this->get_model(),
-                'n' => $this->numberimages,
-                'quality' => $this->action->get_configuration('quality'),
-                'response_format' => $this->responseformat,
-                'size' => $this->calculate_size($this->action->get_configuration('aspectratio')),
-                'style' => $this->action->get_configuration('style'),
-                'user' => $userid,
-            ]),
-            headers: [
-                'Content-Type' => 'application/json',
-            ],
+            body: json_encode((object) $body),
+            headers: ['Content-Type' => 'application/json'],
         );
     }
 
@@ -113,8 +133,9 @@ class process_generate_image extends abstract_processor {
 
         return [
             'success' => true,
-            'sourceurl' => $bodyobj->data[0]->url,
-            'revisedprompt' => $bodyobj->data[0]->revised_prompt,
+            'sourceurl' => $bodyobj->data[0]->url ?? '',
+            'imagebase64' => $bodyobj->data[0]->b64_json ?? '',
+            'revisedprompt' => $bodyobj->data[0]->revised_prompt ?? '',
         ];
     }
 
@@ -129,6 +150,35 @@ class process_generate_image extends abstract_processor {
      * @param string $url The URL to the image.
      * @return \stored_file The file object.
      */
+    private function base64_to_file(int $userid, string $encoded): \stored_file {
+        $binary = base64_decode($encoded, true);
+        if ($binary === false) {
+            throw new \moodle_exception('Invalid image data.');
+        }
+
+        $tempdst = make_request_directory() . '/ai_flashcard_' .
+            bin2hex(random_bytes(8)) . '.png';
+
+        file_put_contents($tempdst, $binary);
+
+        $image = new ai_image($tempdst);
+        $image->add_watermark()->save();
+
+        $fileinfo = new \stdClass();
+        $fileinfo->contextid = \context_user::instance($userid)->id;
+        $fileinfo->filearea = 'draft';
+        $fileinfo->component = 'user';
+        require_once($GLOBALS['CFG']->libdir . '/filelib.php');
+        $fileinfo->itemid = \file_get_unused_draft_itemid();
+        $fileinfo->filepath = '/';
+        $fileinfo->filename = basename($tempdst);
+
+        return get_file_storage()->create_file_from_pathname(
+            $fileinfo,
+            $tempdst
+        );
+    }
+
     private function url_to_file(int $userid, string $url): \stored_file {
         global $CFG;
 
@@ -155,7 +205,8 @@ class process_generate_image extends abstract_processor {
         $fileinfo->contextid = \context_user::instance($userid)->id;
         $fileinfo->filearea = 'draft';
         $fileinfo->component = 'user';
-        $fileinfo->itemid = file_get_unused_draft_itemid();
+        require_once($GLOBALS['CFG']->libdir . '/filelib.php');
+        $fileinfo->itemid = \file_get_unused_draft_itemid();
         $fileinfo->filepath = '/';
         $fileinfo->filename = $filename;
 

@@ -77,6 +77,11 @@ require_once($CFG->dirroot.'/grade/querylib.php');
         $course = $format->get_course();
 		$maxsection = $format->get_last_section_number();
 		$currentsection = $format->get_section_number();
+
+error_log("ACUP_DEBUG: section=" . $section->section .
+    " currentsection=" . $currentsection .
+    " mainsection=" . ($_SESSION["mainsection"] ?? "NULL") .
+    " outside_before=" . ($outside ? "true" : "false"));
 		$courseurl = $format->get_view_url(null);
 		$modinfo = $format->get_modinfo();
 
@@ -135,7 +140,7 @@ $htmlContentENDemAB = <<<HTML
 HTML;
 
 $rowHTMLAB = <<<HTML
-<td class="all-columns" style="font-size:12px;text-align:center;">
+<td class="all-columns" style="font-size:12px;text-align:center;background-color:#ffffff !important;">
 HTML;
 $rowHTMLendAB = <<<HTML
 </td>
@@ -150,7 +155,7 @@ $rowHTML3AB = <<<HTML
 <td class="all-columns" style="font-size:12px;text-align:left;">
 HTML;
 $rowHTMLLinkAB = <<<HTML
-<td class="all-columns2" style="font-size:12px;text-align:center;">
+<td class="all-columns2" style="font-size:10px;text-align:center;word-break:break-word;overflow-wrap:anywhere;">
 HTML;
 
 $rowHTML = <<<HTML
@@ -172,10 +177,10 @@ $linkEND = <<<HTML
 </a>
 HTML;
 $rowHTMLLink = <<<HTML
-<td class="all-columns2" style="font-size:12px;text-align:center;">
+<td class="all-columns2" style="font-size:10px;text-align:center;word-break:break-word;overflow-wrap:anywhere;">
 HTML;
 $rowHTML3 = <<<HTML
-<tr><td colspan="4" class="special-column" style="text-align:center;background-color:#F47E2C;font-size:13px;font-weight:bold;color:#ffffff;padding:3px;">
+<tr><td colspan="7" class="special-column" style="text-align:left;background-color:#F47E2C;font-size:13px;font-weight:bold;color:#ffffff;padding:3px;">
 HTML;
 $rowHTMLend3 = <<<HTML
 </td></tr>
@@ -246,11 +251,21 @@ $outside = false;
 $outside = false;
 }
 
+error_log("ACUP_DEBUG_AFTER: section=" . $section->section .
+    " currentsection=" . $currentsection .
+    " mainsection=" . ($_SESSION["mainsection"] ?? "NULL") .
+    " outside_after=" . ($outside ? "true" : "false"));
+
 ///EXAM LIST INSIDE TOPICS BEGIN
 if ($inside == true) {  
 $Passed = array();
 $maxScore = array();
 $maxAttempt = array();
+$attemptsStarted = array();
+$attemptsCompleted = array();
+$lastAttemptDate = array();
+$lastAttemptScore = array();
+$lastAttemptStatus = array();
 $scormName = array();
 $examLink = array();
 
@@ -277,14 +292,70 @@ $attemptScores = array();
 $scormurl = $DB->get_record('course_modules', ['instance' => $scorm->id]);
 $courseSections = $DB->get_records('course_sections', ['course' => $COURSE->id, 'id' => $scormurl->section]);
 $sectionName = $courseSections[$scormurl->section]->name;
-$scormurlValue = "/mod/scorm/view.php?id=" . $scormurl->id;
+$scormurlValue = "/mod/scorm/studyguide/?id=" . $scormurl->instance . "&cmid=" . $scormurl->id;
 
 if (($currentSection->name) == $sectionName) {
 $attempts = $DB->get_records('scorm_attempt', ['scormid' => $scorm->id, 'userid' => $USER->id]);
+
+$tempAttempt = count($attempts);
+$tempCompleted = 0;
+$latestAttemptTime = 0;
+$latestAttemptScore = null;
+$latestAttemptStatus = 'incomplete';
+
 foreach ($attempts as $attemptX) {
-$tracks = $DB->get_record('scorm_scoes_value',['attemptid' => $attemptX->id, 'elementid'=> 8]);
-$attemptScores[] = $tracks->value;
-$tempAttempt = $tempAttempt + 1;
+    $tracks = $DB->get_record('scorm_scoes_value', [
+        'attemptid' => $attemptX->id,
+        'elementid' => 3
+    ]);
+
+    $statusTrack = $DB->get_record('scorm_scoes_value', [
+        'attemptid' => $attemptX->id,
+        'elementid' => 2
+    ]);
+
+    $lastActivityTrack = $DB->get_record_sql(
+        "SELECT * FROM {scorm_scoes_value}
+          WHERE attemptid = ?
+          ORDER BY timemodified DESC, id DESC",
+        [$attemptX->id]
+    );
+
+    if ($tracks && $tracks->value !== '') {
+        $attemptScores[] = $tracks->value;
+    }
+
+    $status = $statusTrack ? strtolower(trim($statusTrack->value)) : 'incomplete';
+
+    if ($status === 'passed' || $status === 'failed') {
+        $tempCompleted++;
+    }
+
+    $attemptTime = 0;
+
+    if ($lastActivityTrack && !empty($lastActivityTrack->timemodified)) {
+        $attemptTime = (int)$lastActivityTrack->timemodified;
+    }
+
+    if ($attemptTime >= $latestAttemptTime) {
+        $latestAttemptTime = $attemptTime;
+        $latestAttemptScore = ($tracks && $tracks->value !== '') ? $tracks->value : null;
+        $latestAttemptStatus = $status;
+    }
+}
+
+$attemptsStarted[] = $mainRowHTML . $tempAttempt . $rowHTMLend;
+$attemptsCompleted[] = $mainRowHTML . $tempCompleted . $rowHTMLend;
+        $attemptsCombined[] = $mainRowHTML . $tempAttempt . " / " . $tempCompleted . $rowHTMLend;
+$lastAttemptDate[] = $mainRowHTML . ($latestAttemptTime ? userdate($latestAttemptTime, get_string('strftimedatetimeshort', 'langconfig')) : '-') . $rowHTMLend;
+$lastAttemptScore[] = $mainRowHTML . (($latestAttemptScore !== null && $latestAttemptScore !== '') ? $latestAttemptScore . '%' : '-') . $rowHTMLend;
+
+if ($latestAttemptStatus === 'passed') {
+    $lastAttemptStatus[] = '<td class="all-columns" style="font-size:12px;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;width:110px !important;min-width:110px !important;background-color:#ffffff !important;">PASS</td>';
+} else if ($latestAttemptStatus === 'failed') {
+    $lastAttemptStatus[] = '<td class="all-columns" style="font-size:12px;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;width:110px !important;min-width:110px !important;background-color:#ffffff !important;">FAIL</td>';
+} else {
+    $lastAttemptStatus[] = '<td class="all-columns" style="font-size:12px;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;width:110px !important;min-width:110px !important;background-color:#ffffff !important;">Pending</td>';
 }
 
 $tempName = trim($scorm->name, " ");
@@ -309,7 +380,7 @@ $tempScore = "0%";
 if ($tempAttempt == 0) {
 $tempScore = "-";
 $tempPassed = "-";
-$btnValue = "Try Now";
+$btnValue = "Study Guide";
 $tempAttempt = 0;
 }
 
@@ -398,7 +469,7 @@ $navigationTopic = $htmlContent3 . "Main Page" . $htmlContentEND . $htmlContent6
 ///NAVIGATION INSIDE TOPIC END
 
 $htmlMainSectionExams = <<<HTML
-<table class="course-stats course-stats2 show-table">
+<table class="course-stats course-stats2 exams-list-main show-table" style="width:100%;max-width:100%;table-layout:fixed;box-sizing:border-box;">
   <tr>
     <th colspan = "6" class="first-column">Exams List</th>
   </tr>
@@ -408,7 +479,7 @@ $htmlMainSectionExams = <<<HTML
 	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Attempts</strong></td>
 	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Maximum Score</strong></td>
 	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Exam Status</strong></td>
-	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Exam Link</strong></td>
+	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Exam History</strong></td>
   </tr>
 $resultExamsAB
 </table>
@@ -422,7 +493,26 @@ $maxAttempt = array();
 $scormName = array();
 $examLinks = array();
 $resultExamsAB = array();
+$attemptsStarted = array();
+$attemptsCompleted = array();
+$lastAttemptDate = array();
+$lastAttemptScore = array();
+$lastAttemptStatus = array();
 $sectionNames = array();
+$sectionIds = array();
+$mainRowHTML = <<<HTML
+<td class="all-columns" style="font-size:12px;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;background-color:#ffffff !important;border-bottom:1px solid #D9D9D9 !important;vertical-align:top !important;">
+HTML;
+$mainRowHTMLB = <<<HTML
+<td class="all-columns" style="font-size:12px;text-align:left !important;padding-left:0 !important;background-color:#ffffff !important;border-bottom:1px solid #D9D9D9 !important;white-space:normal !important;word-break:normal !important;overflow-wrap:break-word !important;vertical-align:top !important;">
+HTML;
+$mainRowHTMLLink = <<<HTML
+<td class="all-columns2" style="font-size:10px;text-align:center;word-break:break-word;overflow-wrap:anywhere;background-color:#ffffff !important;border-bottom:1px solid #D9D9D9 !important;">
+HTML;
+$mainRowHTML2 = <<<HTML
+<tr style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">
+HTML;
+
 $sectionName = "";
 $scormcount = 0;
 
@@ -439,13 +529,76 @@ $scormcount = $scormcount + 1;
 
 $scormurl = $DB->get_record('course_modules', ['instance' => $scorm->id]);
 $sectionName = $allSections[$scormurl->section]->name;
-$scormurlValue = "/mod/scorm/view.php?id=" . $scormurl->id;
+$sectionId = $scormurl->section;
+$sectionIds[] = $sectionId;
+$scormurlValue = "/mod/scorm/studyguide/?id=" . $scormurl->instance . "&cmid=" . $scormurl->id;
 
-$attempts = $DB->get_records('scorm_attempt', ['scormid' => $scorm->id, 'userid' => $USER->id]);
+$attempts = $DB->get_records(
+    'scorm_attempt',
+    ['scormid' => $scorm->id, 'userid' => $USER->id],
+    'attempt ASC'
+);
+
+$tempAttempt = count($attempts);
+$tempCompleted = 0;
+$latestAttemptTime = 0;
+$latestAttemptScore = null;
+$latestAttemptStatus = null;
+
 foreach ($attempts as $attemptX) {
-$tracks = $DB->get_record('scorm_scoes_value',['attemptid' => $attemptX->id, 'elementid'=> 8]);
-$attemptScores[] = $tracks->value;
-$tempAttempt = $tempAttempt + 1;
+    $tracks = $DB->get_records(
+        'scorm_scoes_value',
+        ['attemptid' => $attemptX->id],
+        'timemodified DESC'
+    );
+
+    $attemptStatus = null;
+    $attemptScore = null;
+    $attemptLastTime = 0;
+
+    foreach ($tracks as $track) {
+        if ($track->timemodified > $attemptLastTime) {
+            $attemptLastTime = $track->timemodified;
+        }
+
+        if ((int)$track->elementid === 2) {
+            $attemptStatus = strtolower(trim($track->value));
+        }
+
+        if ((int)$track->elementid === 8) {
+            $attemptScore = trim($track->value);
+        }
+    }
+
+    if ($attemptStatus === 'passed' || $attemptStatus === 'failed') {
+        $tempCompleted++;
+    }
+
+    if ($attemptLastTime >= $latestAttemptTime) {
+        $latestAttemptTime = $attemptLastTime;
+        $latestAttemptScore = $attemptScore;
+        $latestAttemptStatus = $attemptStatus;
+    }
+}
+
+$attemptsStarted[] = $mainRowHTML . $tempAttempt . $rowHTMLend;
+$attemptsCompleted[] = $mainRowHTML . $tempCompleted . $rowHTMLend;
+        $attemptsCombined[] = $mainRowHTML . $tempAttempt . " / " . $tempCompleted . $rowHTMLend;
+$lastAttemptDate[] = $mainRowHTML .
+    ($latestAttemptTime
+        ? userdate($latestAttemptTime, '%m/%d/%y') . '<br>' . userdate($latestAttemptTime, '%l:%M %p')
+        : '-') .
+    $rowHTMLend;
+$lastAttemptScore[] = $mainRowHTML .
+    (($latestAttemptScore !== null && $latestAttemptScore !== '') ? $latestAttemptScore . '%' : '-') .
+    $rowHTMLend;
+
+if ($latestAttemptStatus === 'passed') {
+    $lastAttemptStatus[] = $mainRowHTML . '<span class="last-status-pill last-status-passed">PASS</span>' . $rowHTMLend;
+} else if ($latestAttemptStatus === 'failed') {
+    $lastAttemptStatus[] = $mainRowHTML . '<span class="last-status-pill last-status-failed">FAIL</span>' . $rowHTMLend;
+} else {
+    $lastAttemptStatus[] = $mainRowHTML . '<span class="last-status-pill last-status-incomplete">Pending</span>' . $rowHTMLend;
 }
 
 $tempName = trim($scorm->name, " ");
@@ -470,7 +623,7 @@ $tempScore = "0%";
 if ($tempAttempt == 0) {
 $tempScore = "-";
 $tempPassed = "-";
-$btnValue = "Try Now";
+$btnValue = "Study Guide";
 $tempAttempt = 0;
 }
 
@@ -478,11 +631,13 @@ $examLink = <<<HTML
 <a href="$scormurlValue" class="link-retry">$btnValue
 HTML;
 
-$examLinks[] = $rowHTMLLink . $examLink . $linkEND . $rowHTMLend;
-$Passed[] = $rowHTML . $tempPassed . $rowHTMLend;
-$scormName[] = $rowHTMLB . $tempName . $rowHTMLend;
-$maxAttempt[] = $rowHTML . $tempAttempt . $rowHTMLend;
-$maxScore[] = $rowHTML . $tempScore . $rowHTMLend;;
+error_log("ACUP_NAME_DEBUG: " . $tempName);
+
+$examLinks[] = $mainRowHTMLLink . $examLink . $linkEND . $rowHTMLend;
+$Passed[] = $mainRowHTML . $tempPassed . $rowHTMLend;
+$scormName[] = $mainRowHTMLB . $tempName . $rowHTMLend;
+$maxAttempt[] = $mainRowHTML . $tempAttempt . $rowHTMLend;
+$maxScore[] = $mainRowHTML . $tempScore . $rowHTMLend;;
 $sectionNames[] = $sectionName;
 }
 
@@ -516,7 +671,7 @@ $summarynote = "$fullname has a total of $scormcount exams that you must pass wi
 }
 
 $htmlMainSection = <<<HTML
-<table class="course-stats">
+<table class="course-stats course-stats-main" style="width:100% !important;max-width:100% !important;min-width:0 !important;box-sizing:border-box !important;">
   <tr>
     <th colspan = "5" class="first-column">Course Statistics</th>
   </tr>
@@ -536,36 +691,341 @@ HTML;
 
 $coursestats = $htmlMainSection;
 
+error_log("ACUP_BEFORE_SORT: sectionNames=" . count($sectionNames) .
+    " scormName=" . count($scormName) .
+    " attemptsStarted=" . count($attemptsStarted) .
+    " attemptsCompleted=" . count($attemptsCompleted) .
+    " lastAttemptDate=" . count($lastAttemptDate) .
+    " lastAttemptScore=" . count($lastAttemptScore) .
+    " lastAttemptStatus=" . count($lastAttemptStatus));
+
 $tempSectionName = "";
-array_multisort($scormName, $sectionNames, $maxScore, $maxAttempt, $examLinks);
+array_multisort($scormName, $sectionNames, $sectionIds, $maxScore, $maxAttempt, $examLinks, $attemptsStarted, $attemptsCompleted, $attemptsCombined, $lastAttemptDate, $lastAttemptScore, $lastAttemptStatus);
 for ($z = 0; $z <= $maxsection; $z++) {	
 for ($x = 0; $x <= count($sectionNames)-1; $x++) {
 if ($format->get_section_name($z) == $sectionNames[$x]) {
 if ($tempSectionName !== $sectionNames[$x]) {
-$resultExams = $resultExams . $rowHTML3 . $sectionNames[$x] . $rowHTMLend3 . $rowHTML2 . $scormName[$x] . $maxAttempt[$x] . $maxScore[$x] . $examLinks[$x] . $rowHTMLend2;	
+/* Todos los Topics usan el mismo color naranja */
+$topicHeaderBg = '#F4A261';
+$topicHeaderText = '#ffffff';
+
+$topicExamHeaders = <<<HTML
+<tr class="exam-topic-header" data-topic="{$sectionNames[$x]}" style="background-color:{$topicHeaderBg} !important;">
+<td style="text-align:left;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 8px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>{$sectionNames[$x]}</strong></td>
+<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>Attempts<br><span style="white-space:nowrap;font-size:9px;">Started /</span><br><span style="white-space:nowrap;font-size:9px;">Completed</span></strong></td>
+<!-- REMOVED SECOND ATTEMPTS HEADER -->
+<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>Last Attempt</strong></td>
+<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong><span style="white-space:normal;">Last Score</span></strong></td>
+<td style="text-align:center;font-size:10px;white-space:normal;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>Last Status</strong></td>
+<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:6px 4px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns">
+<a href="/mod/scorm/examhistory/?courseid={$COURSE->id}&sectionid={$sectionIds[$x]}" style="display:inline-block;background-color:#ffffff !important;color:#333333 !important;border:1px solid #d0d0d0 !important;border-radius:4px !important;padding:4px 7px !important;font-size:9px !important;font-weight:bold !important;text-decoration:none !important;white-space:nowrap !important;">Exam History</a>
+</td>
+</tr>
+HTML;
+
+$resultExams = $resultExams . $topicExamHeaders . str_replace('<tr style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', '<tr class="exam-topic-row" data-topic="' . s($sectionNames[$x]) . '" style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', $mainRowHTML2) . $scormName[$x] . $attemptsCombined[$x] . $lastAttemptDate[$x] . $lastAttemptScore[$x] . $lastAttemptStatus[$x] . $examLinks[$x] . $rowHTMLend2;	
 $tempSectionName = $sectionNames[$x];
 } else {
-$resultExams = $resultExams . $rowHTML2 . $scormName[$x] . $maxAttempt[$x] . $maxScore[$x] . $examLinks[$x] . $rowHTMLend2;
+$resultExams = $resultExams . str_replace('<tr style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', '<tr class="exam-topic-row" data-topic="' . s($sectionNames[$x]) . '" style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', $mainRowHTML2) . $scormName[$x] . $attemptsCombined[$x] . $lastAttemptDate[$x] . $lastAttemptScore[$x] . $lastAttemptStatus[$x] . $examLinks[$x] . $rowHTMLend2;
 }
 }
 }
 }
 
+/* Exams List: Topics desplegables */
+$examTopicDropdownJS = <<<HTML
+<style>
+.main-exams-list .exam-topic-header {
+    border-top: 2px solid #000000 !important;
+    border-bottom: 2px solid #000000 !important;
+}
+
+.main-exams-list .exam-topic-header td {
+    border-top: 2px solid #000000 !important;
+    border-bottom: 2px solid #000000 !important;
+}
+
+.main-exams-list .exam-topic-header td:first-child {
+    text-align: left !important;
+}
+
+.main-exams-list .exam-topic-header {
+    cursor: pointer;
+}
+
+.main-exams-list .exam-topic-header td:first-child strong::before {
+    content: "▶ ";
+    display: inline-block;
+    font-size: 9px;
+    transition: transform 0.2s ease;
+}
+
+.main-exams-list .exam-topic-header.exam-topic-open td:first-child strong::before {
+    transform: rotate(90deg);
+}
+
+.main-exams-list .exam-topic-row {
+    display: none;
+}
+
+.main-exams-list .exam-topic-row.exam-topic-visible {
+    display: table-row;
+}
+
+@media (max-width: 767px) {
+    .main-exams-list {
+        table-layout: fixed !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .main-exams-list .exam-topic-header td,
+    .main-exams-list .exam-topic-row td {
+        font-size: 9px !important;
+        padding: 6px 3px !important;
+    }
+
+/* Reduce only Pending in Last Status */
+.main-exams-list .exam-topic-row td:nth-child(5) {
+    font-size: 8px !important;
+}
+
+    .main-exams-list.course-stats .exam-topic-row td {
+        font-size: 9px !important;
+    }
+
+    /* Mobile: column widths are controlled only by the table colgroup */
+    .main-exams-list .exam-topic-header td,
+    .main-exams-list .exam-topic-row td {
+        width: auto !important;
+        min-width: 0 !important;
+    }
+}
+
+/* Last Status pills */
+.main-exams-list .last-status-pill {
+    display: inline-block !important;
+    padding: 4px 8px !important;
+    border-radius: 999px !important;
+    font-size: 8px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    min-width: 52px !important;
+    box-sizing: border-box !important;
+}
+
+.main-exams-list .last-status-passed {
+    background: #d9f2df !important;
+    color: #237a3b !important;
+}
+
+.main-exams-list .last-status-failed {
+    background: #f8d7da !important;
+    color: #a1262f !important;
+}
+
+.main-exams-list .last-status-incomplete {
+    background: #dbeafe !important;
+    color: #2563a6 !important;
+}
+
+@media (max-width: 767px) {
+    .main-exams-list .last-status-pill {
+        padding: 3px 5px !important;
+        min-width: 48px !important;
+        font-size: 8px !important;
+    }
+}
+
+/* Mobile fix: final content alignment for main Exams List */
+@media (max-width: 767px) {
+    .main-exams-list .exam-topic-row td:nth-child(4) {
+        white-space:normal !important;
+        word-break:normal !important;
+        overflow-wrap:normal !important;
+        line-height:1.2 !important;
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(5) {
+        white-space:nowrap !important;
+        word-break:normal !important;
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(6) {
+        white-space:normal !important;
+        word-break:normal !important;
+        overflow-wrap:break-word !important;
+        line-height:1.2 !important;
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(6) {
+        overflow:hidden !important;
+        text-align:center !important;
+        padding-left:2px !important;
+        padding-right:2px !important;
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(6) .link-retry {
+        display:inline-block !important;
+        width:auto !important;
+        max-width:100% !important;
+        box-sizing:border-box !important;
+        white-space:nowrap !important;
+        font-size:10px !important;
+        padding:6px 9px !important;
+        overflow:hidden !important;
+    }
+
+    /* Mobile: allow exam-row cells to wrap inside their assigned columns */
+    .main-exams-list .exam-topic-row td {
+        white-space:normal !important;
+        word-break:normal !important;
+        overflow-wrap:break-word !important;
+        min-width:0 !important;
+        max-width:100% !important;
+        box-sizing:border-box !important;
+        vertical-align:top !important;
+    }
+
+    .main-exams-list .exam-topic-row td:first-child {
+        white-space:normal !important;
+        overflow-wrap:break-word !important;
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(2),
+    .main-exams-list .exam-topic-row td:nth-child(3),
+    .main-exams-list .exam-topic-row td:nth-child(5) {
+        white-space:nowrap !important;
+        overflow:hidden !important;
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(4),
+    .main-exams-list .exam-topic-row td:nth-child(6) {
+        white-space:normal !important;
+        word-break:break-word !important;
+        overflow-wrap:anywhere !important;
+    }
+}
+
+/* Mobile fix: main Exams List only */
+@media (max-width: 767px) {
+    table.exams-list-main {
+        table-layout: fixed !important;
+        width: 100% !important;
+    }
+
+    table.exams-list-main tr td {
+        font-size: 10px !important;
+        padding: 5px 2px !important;
+        vertical-align: middle !important;
+        line-height: 1.2 !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+    }
+
+    table.exams-list-main tr td:nth-child(1) {
+        width: 7% !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
+
+    table.exams-list-main tr td:nth-child(2) {
+        width: 38% !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        text-align: left !important;
+    }
+
+    table.exams-list-main tr td:nth-child(3) {
+        width: 10% !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
+
+    table.exams-list-main tr td:nth-child(4) {
+        width: 15% !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
+
+    table.exams-list-main tr td:nth-child(5) {
+        width: 15% !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+
+    table.exams-list-main tr td:nth-child(6) {
+        width: 15% !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var topics = document.querySelectorAll('.main-exams-list .exam-topic-header');
+
+    topics.forEach(function(topic) {
+        topic.addEventListener('click', function() {
+            var topicName = topic.getAttribute('data-topic');
+            var rows = document.querySelectorAll(
+                '.main-exams-list .exam-topic-row[data-topic="' +
+                CSS.escape(topicName) + '"]'
+            );
+
+            var isOpen = topic.classList.contains('exam-topic-open');
+
+            topic.classList.toggle('exam-topic-open', !isOpen);
+
+            rows.forEach(function(row) {
+                row.classList.toggle('exam-topic-visible', !isOpen);
+            });
+        });
+    });
+});
+</script>
+HTML;
+
 $htmlMainSectionAdd = <<<HTML
-<table style="display:none;" class="course-stats course-stats2">
+<table style="display:none;" class="course-stats course-stats2 main-exams-list">
+  <colgroup>
+    <col style="width:28%;">
+    <col style="width:15%;">
+    <col style="width:17%;">
+    <col style="width:10%;">
+    <col style="width:12%;">
+    <col style="width:18%;">
+  </colgroup>
   <tr>
-    <th colspan = "4" class="first-column">Exams List</th>
-  </tr>
-  <tr>
-    <td style="text-align:left;font-size:14px;" class="all-columns"><strong>Exam Name</strong></td>
-	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Total Attempts</strong></td>
-	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Maximum Score</strong></td>
-	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Exam Link</strong></td>
+    <th colspan = "6" class="first-column">Exams List</th>
   </tr>
 $resultExams
+  <tr>
+    <td colspan="6" class="exams-list-explanation" style="background:#eef6ff !important; color:#34445a !important; text-align:left !important; padding:16px 18px !important; font-size:12px !important; line-height:1.5 !important; white-space:normal !important; overflow-wrap:break-word !important;">
+      <strong style="font-size:14px;">How Attempts and Scores Are Shown</strong><br><br>
+      <strong>Started / Completed:</strong> Shows the number of times you have started and completed the exam.<br>
+      <strong>Last Score:</strong> Shows your score from your <strong>most recent completed attempt</strong>.<br>
+      <strong>Last Status:</strong> Shows the status of your <strong>most recent completed attempt</strong>.<br>
+      <strong>Study Guide:</strong> The Study Guide is available when you have <strong>not yet taken the exam</strong>. It is optional and allows you to review the study material before starting the exam. Once you have taken the exam, the Study Guide option is no longer displayed.<br>
+      <span style="display:block; margin-top:10px; padding:10px 12px; background:#fff4d6; border-radius:6px;">
+        <strong>Important:</strong> Previous attempts are <strong>not included</strong> in Last Score or Last Status.
+        If you currently have an attempt in progress, it will not be shown as your Last Score until that attempt is completed.
+      </span>
+    </td>
+  </tr>
 </table>
 HTML;
-$coursestats = $coursestats . $htmlNavMainPage . $htmlLastPage . $htmlMainSectionAddToggle . $htmlNavMainPageEND . $htmlMainSectionAdd;
+$coursestats = $coursestats . $htmlNavMainPage . $htmlLastPage . $htmlMainSectionAddToggle . $htmlNavMainPageEND . $examTopicDropdownJS . $htmlMainSectionAdd;
+
+error_log("ACUP_COURSESTATS: has_attempts_started=" .
+    (strpos($coursestats, 'Attempts Started') !== false ? 'YES' : 'NO') .
+    " length=" . strlen($coursestats));
 }///COURSE MAIN PAGE INFORMATION END
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -620,3 +1080,6 @@ $_SESSION["mainsection"] = $_SESSION["mainsection"] + 1;
         return $data;
     }
 }
+
+
+
