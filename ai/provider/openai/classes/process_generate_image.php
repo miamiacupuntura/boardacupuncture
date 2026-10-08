@@ -24,6 +24,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
+// The draft file helpers are procedural and are not loaded by class autoloading.
+require_once($CFG->libdir . '/filelib.php');
+
 /**
  * Class process image generation.
  *
@@ -111,6 +114,7 @@ class process_generate_image extends abstract_processor {
                 'model' => $model,
                 'n' => $this->numberimages,
                 'quality' => $this->action->get_configuration('quality'),
+                'response_format' => $this->responseformat,
                 'size' => $this->calculate_size(
                     $this->action->get_configuration('aspectratio')
                 ),
@@ -140,14 +144,14 @@ class process_generate_image extends abstract_processor {
     }
 
     /**
-     * Convert the url for the image to a file.
+     * Convert a Base64 image response to a watermarked draft file.
      *
      * Placements can't interact with the provider AI directly,
      * therefore we need to provide the image file in a format that can
      * be used by placements. So we use the file API.
      *
      * @param int $userid The user id.
-     * @param string $url The URL to the image.
+     * @param string $encoded The Base64 image data.
      * @return \stored_file The file object.
      */
     private function base64_to_file(int $userid, string $encoded): \stored_file {
@@ -168,7 +172,6 @@ class process_generate_image extends abstract_processor {
         $fileinfo->contextid = \context_user::instance($userid)->id;
         $fileinfo->filearea = 'draft';
         $fileinfo->component = 'user';
-        require_once($GLOBALS['CFG']->libdir . '/filelib.php');
         $fileinfo->itemid = \file_get_unused_draft_itemid();
         $fileinfo->filepath = '/';
         $fileinfo->filename = basename($tempdst);
@@ -181,8 +184,6 @@ class process_generate_image extends abstract_processor {
 
     private function url_to_file(int $userid, string $url): \stored_file {
         global $CFG;
-
-        require_once("{$CFG->libdir}/filelib.php");
 
         $parsedurl = parse_url($url, PHP_URL_PATH); // Parse the URL to get the path.
         $filename = basename($parsedurl); // Get the basename of the path.
@@ -205,7 +206,6 @@ class process_generate_image extends abstract_processor {
         $fileinfo->contextid = \context_user::instance($userid)->id;
         $fileinfo->filearea = 'draft';
         $fileinfo->component = 'user';
-        require_once($GLOBALS['CFG']->libdir . '/filelib.php');
         $fileinfo->itemid = \file_get_unused_draft_itemid();
         $fileinfo->filepath = '/';
         $fileinfo->filename = $filename;
