@@ -106,7 +106,10 @@ deploy_release() {
         exit 1
     fi
 
-    chmod -R u=rwX,g=rX,o= "${temporary_dir}"
+    # Apache serves the static release as www-data. The content contains no
+    # server-side code or secrets, so it must remain readable and traversable
+    # after the deploy user extracts it.
+    chmod -R u=rwX,go=rX "${temporary_dir}"
     mv "${temporary_dir}" "${release_dir}"
     trap - EXIT
 
