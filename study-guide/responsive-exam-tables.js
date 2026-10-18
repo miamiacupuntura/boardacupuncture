@@ -149,7 +149,8 @@
       outline-offset: 2px;
     }
 
-    @container study-guide-exams (max-width: 760px) {
+    /* Switch before a six-column table becomes cramped on landscape phones. */
+    @container study-guide-exams (max-width: 900px) {
       .study-guide-exam-table {
         display: block;
         table-layout: auto;
@@ -225,7 +226,7 @@
     }
 
     @supports not (container-type: inline-size) {
-      @media (max-width: 760px) {
+      @media (max-width: 900px) {
         .study-guide-exam-table thead {
           position: absolute;
           width: 1px;
