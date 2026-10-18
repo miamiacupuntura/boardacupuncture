@@ -1,0 +1,95 @@
+name: Deploy Study Guide to production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: study-guide-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the selected commit
+        uses: actions/checkout@v4
+
+      - name: Build and validate the static artifact
+        run: deploy/study-guide/build-release.sh "$RUNNER_TEMP/release" "$GITHUB_SHA"
+
+      - name: Upload the immutable release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: study-guide-production-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/release/study-guide-${{ github.sha }}.tar.gz
+            ${{ runner.temp }}/release/study-guide-${{ github.sha }}.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment: study-guide-production
+    steps:
+      - name: Download the tested artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: study-guide-production-${{ github.sha }}
+          path: ${{ runner.temp }}/release
+
+      - name: Configure trusted SSH access
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.PRODUCTION_SSH_KNOWN_HOSTS }}
+        run: |
+          install -d -m 0700 "$RUNNER_TEMP/ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/ssh/key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/ssh/key" "$RUNNER_TEMP/ssh/known_hosts"
+
+      - name: Upload and activate the production release
+        env:
+          DEPLOY_HOST: ${{ secrets.PRODUCTION_DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.PRODUCTION_DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.PRODUCTION_DEPLOY_USER }}
+        run: |
+          ARTIFACT="study-guide-${GITHUB_SHA}.tar.gz"
+          CHECKSUM="$(awk '{print $1}' "$RUNNER_TEMP/release/${ARTIFACT}.sha256")"
+          SSH_OPTIONS=(
+            -i "$RUNNER_TEMP/ssh/key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts"
+            -o StrictHostKeyChecking=yes
+            -p "$DEPLOY_PORT"
+          )
+          SCP_OPTIONS=(
+            -i "$RUNNER_TEMP/ssh/key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts"
+            -o StrictHostKeyChecking=yes
+            -P "$DEPLOY_PORT"
+          )
+
+          scp "${SCP_OPTIONS[@]}" \
+            "$RUNNER_TEMP/release/$ARTIFACT" \
+            "$DEPLOY_USER@$DEPLOY_HOST:/var/lib/acupuncture-deploy/production-incoming/$ARTIFACT"
+
+          ssh "${SSH_OPTIONS[@]}" "$DEPLOY_USER@$DEPLOY_HOST" \
+            "/usr/local/bin/deploy-study-guide-production deploy '/var/lib/acupuncture-deploy/production-incoming/$ARTIFACT' '$GITHUB_SHA' '$CHECKSUM'"
+
+      - name: Verify the public production response
+        run: |
+          RESPONSE="$RUNNER_TEMP/production-response.html"
+          curl --fail --silent --show-error \
+            --retry 3 \
+            --header 'Cache-Control: no-cache' \
+            https://www.acupuncturetests.com/study-guide/ \
+            --output "$RESPONSE"
+          grep -q 'Acupuncture &amp; Point Location' "$RESPONSE"
+          echo "Public production smoke test passed."
