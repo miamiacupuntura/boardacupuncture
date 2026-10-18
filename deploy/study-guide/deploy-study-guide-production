@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_DIR="/var/www/acupuncturetests-study-guide"
+INCOMING_DIR="/var/lib/acupuncture-deploy/production-incoming"
+RELEASES_DIR="${BASE_DIR}/releases"
+CURRENT_LINK="${BASE_DIR}/current"
+
+usage() {
+    echo "Usage:" >&2
+    echo "  deploy-study-guide-production deploy ARTIFACT RELEASE_ID SHA256" >&2
+    echo "  deploy-study-guide-production rollback RELEASE_ID" >&2
+    echo "  deploy-study-guide-production status" >&2
+    exit 2
+}
+
+valid_release_id() {
+    [[ "${1:-}" =~ ^[0-9a-f]{40}$ ]]
+}
+
+show_status() {
+    if [[ -L "${CURRENT_LINK}" ]]; then
+        printf 'Current production release: %s\n' "$(readlink "${CURRENT_LINK}")"
+    else
+        echo "Current production release: none"
+    fi
+    echo "Available production releases:"
+    find "${RELEASES_DIR}" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort
+}
+
+activate_release() {
+    local release_id="$1"
+    local release_dir="${RELEASES_DIR}/${release_id}"
+    local next_link="${BASE_DIR}/.current-${release_id}-$$"
+
+    [[ -f "${release_dir}/index.html" ]] || {
+        echo "Release ${release_id} has no index.html." >&2
+        exit 1
+    }
+
+    ln -s "releases/${release_id}" "${next_link}"
+    mv -Tf "${next_link}" "${CURRENT_LINK}"
+    printf '%s\t%s\n' "$(date -u +%FT%TZ)" "${release_id}" >> "${BASE_DIR}/deployments.log"
+}
+
+deploy_release() {
+    local artifact="${1:-}"
+    local release_id="${2:-}"
+    local expected_sha="${3:-}"
+    local artifact_real
+    local temporary_dir
+    local release_dir
+
+    [[ -f "${artifact}" ]] || {
+        echo "Artifact does not exist: ${artifact}" >&2
+        exit 1
+    }
+    valid_release_id "${release_id}" || {
+        echo "Invalid release ID." >&2
+        exit 1
+    }
+    [[ "${expected_sha}" =~ ^[0-9a-f]{64}$ ]] || {
+        echo "Invalid SHA-256 checksum." >&2
+        exit 1
+    }
+
+    artifact_real="$(realpath "${artifact}")"
+    case "${artifact_real}" in
+        "${INCOMING_DIR}"/*) ;;
+        *)
+            echo "Artifact must be inside ${INCOMING_DIR}." >&2
+            exit 1
+            ;;
+    esac
+
+    printf '%s  %s\n' "${expected_sha}" "${artifact_real}" | sha256sum -c -
+
+    if tar -tzf "${artifact_real}" | grep -Eq '(^/|(^|/)\.\.(/|$))'; then
+        echo "Artifact contains an unsafe path." >&2
+        exit 1
+    fi
+
+    if tar -tvzf "${artifact_real}" | awk '$1 ~ /^[lh]/ {found=1} END {exit !found}'; then
+        echo "Artifact contains a link, which is not allowed." >&2
+        exit 1
+    fi
+
+    release_dir="${RELEASES_DIR}/${release_id}"
+    if [[ -e "${release_dir}" ]]; then
+        echo "Release already exists: ${release_id}" >&2
+        exit 1
+    fi
+
+    temporary_dir="${RELEASES_DIR}/.${release_id}.tmp.$$"
+    trap 'rm -rf -- "${temporary_dir}"' EXIT
+    mkdir -p "${temporary_dir}"
+    tar -xzf "${artifact_real}" --no-same-owner --no-same-permissions -C "${temporary_dir}"
+
+    [[ -f "${temporary_dir}/index.html" ]] || {
+        echo "Extracted artifact has no index.html." >&2
+        exit 1
+    }
+
+    if find "${temporary_dir}" -type f \( -iname '*.php' -o -iname '*.phtml' -o -iname '*.phar' \) -print -quit | grep -q .; then
+        echo "Extracted artifact contains executable PHP content." >&2
+        exit 1
+    fi
+
+    chmod -R u=rwX,go=rX "${temporary_dir}"
+    mv "${temporary_dir}" "${release_dir}"
+    trap - EXIT
+
+    activate_release "${release_id}"
+    rm -f -- "${artifact_real}"
+    echo "Activated production Study Guide release ${release_id}."
+}
+
+rollback_release() {
+    local release_id="${1:-}"
+    valid_release_id "${release_id}" || {
+        echo "Invalid release ID." >&2
+        exit 1
+    }
+    [[ -d "${RELEASES_DIR}/${release_id}" ]] || {
+        echo "Release is not available: ${release_id}" >&2
+        exit 1
+    }
+    activate_release "${release_id}"
+    echo "Rolled production Study Guide back to ${release_id}."
+}
+
+umask 027
+mkdir -p "${INCOMING_DIR}" "${RELEASES_DIR}"
+cd "${BASE_DIR}"
+
+case "${1:-}" in
+    deploy)
+        [[ $# -eq 4 ]] || usage
+        deploy_release "$2" "$3" "$4"
+        ;;
+    rollback)
+        [[ $# -eq 2 ]] || usage
+        rollback_release "$2"
+        ;;
+    status)
+        [[ $# -eq 1 ]] || usage
+        show_status
+        ;;
+    *)
+        usage
+        ;;
+esac

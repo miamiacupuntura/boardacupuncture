@@ -55,3 +55,34 @@ sudo -u deploy-acupuncture /usr/local/bin/deploy-study-guide rollback COMMIT_SHA
 
 Rollback only switches the static Study Guide symlink. It does not touch
 Moodle or any database.
+
+## Production publication
+
+Production publishes the same validated static artifact at
+`https://www.acupuncturetests.com/study-guide/`. Moodle remains the Apache
+DocumentRoot; the tracked `apache-production.conf` adds only a narrow Alias for
+that URL.
+
+Create the protected GitHub environment `study-guide-production` with required
+reviewers and these secrets:
+
+- `PRODUCTION_DEPLOY_HOST`
+- `PRODUCTION_DEPLOY_PORT`
+- `PRODUCTION_DEPLOY_USER`
+- `PRODUCTION_SSH_PRIVATE_KEY`
+- `PRODUCTION_SSH_KNOWN_HOSTS`
+
+Install `deploy-study-guide-production` as
+`/usr/local/bin/deploy-study-guide-production`, owned by root and mode `0755`.
+The deployment user owns only the static release and incoming directories:
+
+- `/var/lib/acupuncture-deploy/production-incoming`
+- `/var/www/acupuncturetests-study-guide`
+
+The production workflow is manual and is isolated from the staging workflow.
+Rollback switches only the production Study Guide symlink:
+
+```bash
+sudo -u deploy-acupuncture \
+  /usr/local/bin/deploy-study-guide-production rollback COMMIT_SHA
+```
