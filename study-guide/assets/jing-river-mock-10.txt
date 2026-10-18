@@ -1,0 +1,69 @@
+1. Which point is the Jing-River point of the Lung channel?
+A) LU8 Jingqu +++++
+B) LU11 Shaoshang
+C) LU10 Yuji
+D) LU9 Taiyuan
+Feedback: LU8 Jingqu is the Jing-River and Metal point of the Lung channel. Why are the other options incorrect? LU11 Shaoshang — LU11 Shaoshang is the Jing-Well and Wood point of the Lung channel. LU10 Yuji — LU10 Yuji is the Ying-Spring and Fire point of the Lung channel. LU9 Taiyuan — LU9 Taiyuan is the Shu-Stream and Earth point of the Lung channel.
+
+2. Which point is the Jing-River point of the Large Intestine channel?
+A) LI1 Shangyang
+B) LI2 Erjian
+C) LI3 Sanjian
+D) LI5 Yangxi +++++
+Feedback: LI5 Yangxi is the Jing-River and Fire point of the Large Intestine channel. Why are the other options incorrect? LI1 Shangyang — LI1 Shangyang is the Jing-Well and Metal point of the Large Intestine channel. LI2 Erjian — LI2 Erjian is the Ying-Spring and Water point of the Large Intestine channel. LI3 Sanjian — LI3 Sanjian is the Shu-Stream and Wood point of the Large Intestine channel.
+
+3. Which point is the Jing-River point of the Stomach channel?
+A) ST44 Neiting
+B) ST43 Xiangu
+C) ST41 Jiexi +++++
+D) ST45 Lidui
+Feedback: ST41 Jiexi is the Jing-River and Fire point of the Stomach channel. Why are the other options incorrect? ST44 Neiting — ST44 Neiting is the Ying-Spring and Water point of the Stomach channel. ST43 Xiangu — ST43 Xiangu is the Shu-Stream and Wood point of the Stomach channel. ST45 Lidui — ST45 Lidui is the Jing-Well and Metal point of the Stomach channel.
+
+4. Which point is the Jing-River point of the Spleen channel?
+A) SP3 Taibai
+B) SP5 Shangqiu +++++
+C) SP1 Yinbai
+D) SP2 Dadu
+Feedback: SP5 Shangqiu is the Jing-River and Metal point of the Spleen channel. Why are the other options incorrect? SP3 Taibai — SP3 Taibai is the Shu-Stream and Earth point of the Spleen channel. SP1 Yinbai — SP1 Yinbai is the Jing-Well and Wood point of the Spleen channel. SP2 Dadu — SP2 Dadu is the Ying-Spring and Fire point of the Spleen channel.
+
+5. Which point is the Jing-River point of the Heart channel?
+A) HT4 Lingdao +++++
+B) HT9 Shaochong
+C) HT8 Shaofu
+D) HT7 Shenmen
+Feedback: HT4 Lingdao is the Jing-River and Metal point of the Heart channel. Why are the other options incorrect? HT9 Shaochong — HT9 Shaochong is the Jing-Well and Wood point of the Heart channel. HT8 Shaofu — HT8 Shaofu is the Ying-Spring and Fire point of the Heart channel. HT7 Shenmen — HT7 Shenmen is the Shu-Stream and Earth point of the Heart channel.
+
+6. Which point is the Jing-River point of the Kidney channel?
+A) KID1 Yongquan
+B) KID2 Rangu
+C) KID3 Taixi
+D) KID7 Fuliu +++++
+Feedback: KID7 Fuliu is the Jing-River and Metal point of the Kidney channel. Why are the other options incorrect? KID1 Yongquan — KID1 Yongquan is the Jing-Well and Wood point of the Kidney channel. KID2 Rangu — KID2 Rangu is the Ying-Spring and Fire point of the Kidney channel. KID3 Taixi — KID3 Taixi is the Shu-Stream and Earth point of the Kidney channel.
+
+7. Which point is the Jing-River point of the Gall Bladder channel?
+A) GB43 Xiaxi
+B) GB41 Zulinqi
+C) GB38 Yangfu +++++
+D) GB44 Zuqiaoyin
+Feedback: GB38 Yangfu is the Jing-River and Fire point of the Gall Bladder channel. Why are the other options incorrect? GB43 Xiaxi — GB43 Xiaxi is the Ying-Spring and Water point of the Gall Bladder channel. GB41 Zulinqi — GB41 Zulinqi is the Shu-Stream and Wood point of the Gall Bladder channel. GB44 Zuqiaoyin — GB44 Zuqiaoyin is the Jing-Well and Metal point of the Gall Bladder channel.
+
+8. Which statement correctly gives the Five Elements of Jing-River points?
+A) Metal on Yin and Fire on Yang +++++
+B) Fire on Yin and Water on Yang
+C) Earth on Yin and Wood on Yang
+D) Water on Yin and Earth on Yang
+Feedback: Jing-River corresponds to Metal on Yin channels and Fire on Yang channels. Why are the other options incorrect? Fire on Yin and Water on Yang — Fire on Yin and Water on Yang describe Ying-Spring. Earth on Yin and Wood on Yang — Earth on Yin and Wood on Yang describe Shu-Stream. Water on Yin and Earth on Yang — Water on Yin and Earth on Yang describe He-Sea.
+
+9. Which category is classically associated with cough and dyspnoea, chills and fever, while still requiring individual point and pattern assessment?
+A) Jing-Well
+B) Jing-River +++++
+C) Shu-Stream
+D) He-Sea
+Feedback: Jing-River has the classical category association with cough and dyspnoea, chills and fever; these indications are not exclusive to every Jing-River point or to this category alone. Why are the other options incorrect? Jing-Well — Jing-Well is the category where Qi emerges and is classically associated with fullness below the Heart. Shu-Stream — Shu-Stream is classically associated with heaviness of the body and pain of the joints. He-Sea — He-Sea is classically associated with counterflow Qi and diarrhoea.
+
+10. Which description matches the classical transport metaphor for Jing-River?
+A) The point at which Qi glides
+B) The point at which Qi pours through
+C) The point at which Qi flows +++++
+D) The point at which Qi enters inward
+Feedback: Jing-River is associated with the point at which Qi flows. Why are the other options incorrect? The point at which Qi glides — Qi glides refers to Ying-Spring. The point at which Qi pours through — Qi pours through refers to Shu-Stream. The point at which Qi enters inward — Qi enters inward refers to He-Sea.

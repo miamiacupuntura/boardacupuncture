@@ -1,0 +1,69 @@
+1. Which point is the Meeting point of the Gall Bladder channel with Dai Mai in the corrected source comparison?
+A) GB26 Daimai +++++
+B) GB25 Jingmen
+C) GB24 Riyue
+D) GB29 Juliao
+Feedback: GB26 Daimai has the Gall Bladder–Dai Mai Meeting relationship; the source exercise’s GB25 answer is inconsistent with the point entry. Why are the other options incorrect? GB25 Jingmen — GB25 is Kidney Front-Mu and does not satisfy the requested Dai Mai Meeting relationship. GB24 Riyue — GB24 is Gall Bladder Front-Mu, not the Dai Mai point requested. GB29 Juliao — GB29 is a different Gall Bladder point, not the Dai Mai Meeting correspondence requested.
+
+2. Which point is a Meeting point of the three Foot Yin channels: Spleen, Liver and Kidney?
+A) SP4 Gongsun
+B) SP6 Sanyinjiao +++++
+C) SP3 Taibai
+D) SP9 Yinlingquan
+Feedback: SP6 Sanyinjiao is a Meeting point of Spleen, Liver and Kidney. Why are the other options incorrect? SP4 Gongsun — SP4 is Spleen Luo-Connecting and Chong confluent. SP3 Taibai — SP3 is Spleen Shu-Stream and Yuan-Source. SP9 Yinlingquan — SP9 is Spleen He-Sea and Water.
+
+3. Which point is both Lung Front-Mu and a Meeting point of Lung and Spleen?
+A) LU7 Lieque
+B) LU9 Taiyuan
+C) LU1 Zhongfu +++++
+D) LU5 Chize
+Feedback: LU1 Zhongfu is Lung Front-Mu and Meeting point of Lung and Spleen. Why are the other options incorrect? LU7 Lieque — LU7 is Lung Luo and Ren confluent. LU9 Taiyuan — LU9 is Lung Shu-Stream, Yuan-Source and Hui-Meeting of vessels. LU5 Chize — LU5 is Lung He-Sea and Water.
+
+4. Which point is both Bladder Front-Mu and a Meeting point of Ren with the Spleen, Liver and Kidney channels?
+A) REN12 Zhongwan
+B) REN17 Shanzhong
+C) REN5 Shimen
+D) REN3 Zhongji +++++
+Feedback: REN3 Zhongji is Bladder Front-Mu and Meeting point of Ren with the three Foot Yin channels. Why are the other options incorrect? REN12 Zhongwan — REN12 is Stomach Front-Mu, not Bladder Front-Mu. REN17 Shanzhong — REN17 is Pericardium Front-Mu and Hui-Meeting of Qi. REN5 Shimen — REN5 is San Jiao Front-Mu.
+
+5. Which point is both Small Intestine Front-Mu and a Meeting point of Ren with Spleen, Liver and Kidney?
+A) REN4 Guanyuan +++++
+B) REN3 Zhongji
+C) REN5 Shimen
+D) REN14 Juque
+Feedback: REN4 Guanyuan is Small Intestine Front-Mu and has the specified Meeting relationship. Why are the other options incorrect? REN3 Zhongji — REN3 is Bladder Front-Mu. REN5 Shimen — REN5 is San Jiao Front-Mu. REN14 Juque — REN14 is Heart Front-Mu.
+
+6. Which statement accurately distinguishes a Meeting point from a Hui-Meeting point?
+A) Every Meeting point is Hui-Meeting of Blood.
+B) A Meeting relationship identifies named channels or vessels; Hui-Meeting identifies a substance, tissue or organ category. +++++
+C) Both terms always refer to the same eight points.
+D) All Meeting points must be on Ren.
+Feedback: Meeting relationships concern specified channels or vessels, while the eight Hui-Meeting correspondences concern categories such as Blood, bones or zang. Why are the other options incorrect? Every Meeting point is Hui-Meeting of Blood. — Blood Hui-Meeting is UB17; it does not define every Meeting point. Both terms always refer to the same eight points. — The categories are not identical eight-point lists. All Meeting points must be on Ren. — SP6 and LU1 provide non-Ren Meeting examples.
+
+7. If an exercise labels GB25 as the Gall Bladder point meeting Dai Mai, what is the best correction?
+A) Keep GB25 because every GB point meets Dai Mai.
+B) Replace GB25 with GB24 because it is Gall Bladder Front-Mu.
+C) Check the point entry and use GB26 for the Dai Mai Meeting relationship. +++++
+D) Replace Dai Mai with Kidney because the wording cannot be checked.
+Feedback: Check the point entry: GB26 has the Dai Mai Meeting relationship, whereas GB25 is Kidney Front-Mu. Why are the other options incorrect? Keep GB25 because every GB point meets Dai Mai. — A GB channel code does not establish a Dai Mai relationship for every point. Replace GB25 with GB24 because it is Gall Bladder Front-Mu. — Front-Mu and the Dai Mai Meeting relationship are different classifications. Replace Dai Mai with Kidney because the wording cannot be checked. — A contradictory exercise can be corrected through source verification rather than arbitrarily changing the requested relationship.
+
+8. Which statement correctly describes a point carrying multiple classifications?
+A) Its Meeting classification removes its Front-Mu classification.
+B) Only its channel name matters.
+C) It must answer every category question on that channel.
+D) LU1 can be Lung Front-Mu and a Lung–Spleen Meeting point at the same time. +++++
+Feedback: LU1 retains both documented classifications; the question’s requested relationship determines which fact is relevant. Why are the other options incorrect? Its Meeting classification removes its Front-Mu classification. — Classifications can coexist without cancelling each other. Only its channel name matters. — Channel identity alone does not describe all classifications. It must answer every category question on that channel. — Different category questions require their specific correspondences.
+
+9. Which relationship should be identified first when answering a Meeting-point question?
+A) The named channels or vessel being asked about +++++
+B) Only the Five Element colour of the illustration
+C) Only the point’s numerical position
+D) Only whether the point treats pain
+Feedback: First identify the named channels or vessel, then check the point’s recorded Meeting classification. Why are the other options incorrect? Only the Five Element colour of the illustration — Colour is a memory cue, not a Meeting classification. Only the point’s numerical position — Numbered position does not establish a Meeting relationship. Only whether the point treats pain — Pain indications alone do not establish a Meeting relationship.
+
+10. Which comparison correctly separates the Kidney Front-Mu point from the Gall Bladder–Dai Mai Meeting point?
+A) GB26 is Kidney Front-Mu and GB25 is the Dai Mai Meeting point.
+B) GB25 is Kidney Front-Mu and GB26 is the Dai Mai Meeting point. +++++
+C) GB24 is Kidney Front-Mu and GB29 is the Dai Mai point.
+D) GB25 and GB26 are two names for the same point.
+Feedback: GB25 Jingmen is Kidney Front-Mu; GB26 Daimai has the Gall Bladder–Dai Mai Meeting relationship. Why are the other options incorrect? GB26 is Kidney Front-Mu and GB25 is the Dai Mai Meeting point. — The two classifications are reversed. GB24 is Kidney Front-Mu and GB29 is the Dai Mai point. — GB24 is Gall Bladder Front-Mu, and GB29 does not supply the requested Dai Mai correspondence. GB25 and GB26 are two names for the same point. — GB25 and GB26 are distinct points.

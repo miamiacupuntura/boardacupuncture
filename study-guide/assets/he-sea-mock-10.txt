@@ -1,0 +1,69 @@
+1. Which He-Sea point is particularly relevant to harmonizing the Stomach and strengthening the Spleen in digestive disorders?
+A) ST36 Zusanli +++++
+B) SP9 Yinlingquan
+C) GB34 Yanglingquan
+D) UB40 Weizhong
+Feedback: ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. ST36 harmonizes the Stomach and strengthens the Spleen. Why are the other options incorrect? SP9 Yinlingquan — SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. GB34 Yanglingquan — GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. UB40 Weizhong — UB40 Weizhong is the He-Sea and Earth point of the Urinary Bladder channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+2. Which Spleen He-Sea point is particularly relevant to resolving Dampness in a presentation of diarrhoea and heaviness?
+A) ST36 Zusanli
+B) GB34 Yanglingquan
+C) UB40 Weizhong
+D) SP9 Yinlingquan +++++
+Feedback: SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. SP9 resolves Dampness, linking the category with the specified digestive presentation. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. GB34 Yanglingquan — GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. UB40 Weizhong — UB40 Weizhong is the He-Sea and Earth point of the Urinary Bladder channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+3. Which Gall Bladder He-Sea point also has the Hui-Meeting classification of sinews?
+A) SP9 Yinlingquan
+B) UB40 Weizhong
+C) GB34 Yanglingquan +++++
+D) ST36 Zusanli
+Feedback: GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. GB34 is also the Hui-Meeting point of sinews, satisfying the additional classification requested. Why are the other options incorrect? SP9 Yinlingquan — SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. UB40 Weizhong — UB40 Weizhong is the He-Sea and Earth point of the Urinary Bladder channel. ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+4. Which Urinary Bladder He-Sea point is traditionally important for pain and dysfunction of the lumbar region?
+A) GB34 Yanglingquan
+B) UB40 Weizhong +++++
+C) ST36 Zusanli
+D) SP9 Yinlingquan
+Feedback: UB40 Weizhong is the He-Sea and Earth point of the Urinary Bladder channel. UB40 benefits the lumbar region, supporting the specified regional indication. Why are the other options incorrect? GB34 Yanglingquan — GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. SP9 Yinlingquan — SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+5. Which Large Intestine He-Sea point has traditional Heat-clearing indications including itching and urticaria?
+A) LI11 Quchi +++++
+B) ST36 Zusanli
+C) SP9 Yinlingquan
+D) GB34 Yanglingquan
+Feedback: LI11 Quchi is the He-Sea and Earth point of the Large Intestine channel. LI11 clears Heat and has traditional indications including itching and urticaria. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. SP9 Yinlingquan — SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. GB34 Yanglingquan — GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+6. Which Kidney He-Sea point has traditional indications including itching of the scrotum?
+A) ST36 Zusanli
+B) SP9 Yinlingquan
+C) GB34 Yanglingquan
+D) KID10 Yingu +++++
+Feedback: KID10 Yingu is the He-Sea and Water point of the Kidney channel. KID10 has a traditional indication for itching of the scrotum; the named channel distinguishes overlapping genital indications. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. SP9 Yinlingquan — SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. GB34 Yanglingquan — GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+7. Which Liver He-Sea point has traditional indications including genital itching?
+A) SP9 Yinlingquan
+B) GB34 Yanglingquan
+C) LIV8 Ququan +++++
+D) ST36 Zusanli
+Feedback: LIV8 Ququan is the He-Sea and Water point of the Liver channel. LIV8 has traditional genital indications including itching; the named channel distinguishes it from KID10. Why are the other options incorrect? SP9 Yinlingquan — SP9 Yinlingquan is the He-Sea and Water point of the Spleen channel. GB34 Yanglingquan — GB34 Yanglingquan is the He-Sea and Earth point of the Gall Bladder channel. ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel. Individual indications can overlap; the named channel and any additional classification determine the requested correspondence.
+
+8. Which statement correctly gives the He-Sea Five Element allocations?
+A) Water on Yin and Earth on Yang +++++
+B) Earth on Yin and Water on Yang
+C) Metal on Yin and Fire on Yang
+D) Fire on Yin and Water on Yang
+Feedback: He-Sea is Water on Yin channels and Earth on Yang channels. Why are the other options incorrect? Earth on Yin and Water on Yang — This reverses the He-Sea allocations. Metal on Yin and Fire on Yang — These are Jing-River allocations. Fire on Yin and Water on Yang — These are Ying-Spring allocations.
+
+9. Which statement distinguishes an individual He-Sea point from a Lower He-Sea correspondence?
+A) All Hand Yang He-Sea points are also their Lower He-Sea points.
+B) LI11 is Large Intestine He-Sea; ST37 is its Lower He-Sea point. +++++
+C) ST37 is the Large Intestine Jing-River point.
+D) LI11 and ST37 belong to the same named channel.
+Feedback: LI11 Quchi is the Large Intestine He-Sea point and ST37 Shangjuxu is its Lower He-Sea point. Why are the other options incorrect? All Hand Yang He-Sea points are also their Lower He-Sea points. — The three Hand Yang channels have separate Lower He-Sea points on the legs. ST37 is the Large Intestine Jing-River point. — ST37 is Large Intestine Lower He-Sea, not its Jing-River point; LI5 is Large Intestine Jing-River. LI11 and ST37 belong to the same named channel. — LI11 lies on Large Intestine and ST37 lies on Stomach.
+
+10. Which description matches the classical transport metaphor for He-Sea?
+A) Qi glides
+B) Qi pours through
+C) Qi enters inward +++++
+D) Qi emerges
+Feedback: He-Sea is associated with the point at which Qi enters inward. Why are the other options incorrect? Qi glides — Qi glides describes Ying-Spring. Qi pours through — Qi pours through describes Shu-Stream. Qi emerges — Qi emerges describes Jing-Well.

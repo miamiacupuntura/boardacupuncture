@@ -1,0 +1,69 @@
+1. Which point is the Front-Mu point of the Lung in a teaching case of cough and chest discomfort, rather than its Luo-Connecting, Xi-Cleft or He-Sea point?
+A) LU1 Zhongfu +++++
+B) LU7 Lieque
+C) LU6 Kongzui
+D) LU5 Chize
+Feedback: LU1 Zhongfu is the Front-Mu point of the Lung and has traditional respiratory and chest indications. Why are the other options incorrect? LU7 is Lung Luo-Connecting and the Ren vessel confluent point, LU6 is Lung Xi-Cleft, and LU5 is Lung He-Sea and Water. These points can share respiratory indications but do not have the Front-Mu classification requested.
+
+2. A question asks for the point that is both the Front-Mu point of the Spleen and the Hui-Meeting point of zang. Which point satisfies both classifications?
+A) LIV14 Qimen
+B) LIV13 Zhangmen +++++
+C) SP3 Taibai
+D) REN12 Zhongwan
+Feedback: LIV13 Zhangmen is the Spleen Front-Mu point and Hui-Meeting point of zang; its carrying channel is Liver, while its Front-Mu correspondence is Spleen. Why are the other options incorrect? LIV14 is Liver Front-Mu, SP3 is Spleen Shu-Stream and Yuan-Source, and REN12 is Stomach Front-Mu and Hui-Meeting of fu. Identify both requested classifications rather than choosing any point associated with Spleen function.
+
+3. Which point is the Front-Mu point of the Gall Bladder, located in the seventh intercostal space on the chest, directly inferior to the nipple region?
+A) LIV14 Qimen
+B) GB25 Jingmen
+C) GB24 Riyue +++++
+D) LIV13 Zhangmen
+Feedback: GB24 Riyue is Gall Bladder Front-Mu and is located in the seventh intercostal space, four cun lateral to the midline. Why are the other options incorrect? LIV14 is Liver Front-Mu in the sixth intercostal space, GB25 is Kidney Front-Mu at the free end of the twelfth rib, and LIV13 is Spleen Front-Mu at the free end of the eleventh rib. The intercostal and rib landmarks distinguish nearby point regions.
+
+4. A practitioner intends to combine the Kidney Front-Mu and Back-Shu points. Which pair gives these two classifications in that order?
+A) KID3 Taixi and UB23 Shenshu
+B) GB24 Riyue and UB19 Danshu
+C) LIV13 Zhangmen and UB20 Pishu
+D) GB25 Jingmen and UB23 Shenshu +++++
+Feedback: GB25 Jingmen is Kidney Front-Mu and UB23 Shenshu is Kidney Back-Shu. Why are the other options incorrect? KID3 is Kidney Shu-Stream and Yuan-Source, not Front-Mu; GB24 with UB19 is the Gall Bladder Mu-Shu pair; LIV13 with UB20 is the Spleen Mu-Shu pair. A Front-Mu point may lie on a channel different from the organ it corresponds to.
+
+5. Which point is both the Front-Mu point of the Stomach and the Hui-Meeting point of fu in a teaching case involving epigastric discomfort?
+A) REN12 Zhongwan +++++
+B) ST25 Tianshu
+C) REN14 Juque
+D) REN5 Shimen
+Feedback: REN12 Zhongwan is Stomach Front-Mu and Hui-Meeting of fu, with traditional actions that harmonize the Stomach and middle jiao. Why are the other options incorrect? ST25 is Large Intestine Front-Mu, REN14 is Heart Front-Mu, and REN5 is San Jiao Front-Mu. Shared abdominal location does not make these correspondences interchangeable.
+
+6. Which point is the Front-Mu point of the Large Intestine, located two cun lateral to the umbilicus, in a question concerning regulation of bowel function?
+A) REN12 Zhongwan
+B) ST25 Tianshu +++++
+C) REN4 Guanyuan
+D) REN3 Zhongji
+Feedback: ST25 Tianshu is Large Intestine Front-Mu and lies two cun lateral to the umbilicus. Why are the other options incorrect? REN12 is Stomach Front-Mu, REN4 is Small Intestine Front-Mu, and REN3 is Urinary Bladder Front-Mu. The organ and location cues both identify ST25; being on the Stomach channel does not change its Large Intestine correspondence.
+
+7. Which set correctly lists the Front-Mu points of Heart, Pericardium and San Jiao, in that order?
+A) REN17, REN14, REN5
+B) REN14, REN17, REN4
+C) REN14, REN17, REN5 +++++
+D) REN12, REN17, REN3
+Feedback: REN14 Juque, REN17 Shanzhong and REN5 Shimen are the Front-Mu points of Heart, Pericardium and San Jiao respectively. Why are the other options incorrect? “REN17, REN14, REN5” reverses the Heart and Pericardium correspondences. “REN14, REN17, REN4” substitutes Small Intestine Front-Mu REN4 for San Jiao Front-Mu REN5. “REN12, REN17, REN3” substitutes Stomach Front-Mu REN12 for Heart and Bladder Front-Mu REN3 for San Jiao. Match each organ to its point before evaluating the set.
+
+8. Which pair correctly identifies the Front-Mu points of Small Intestine and Urinary Bladder, in that order?
+A) REN3 Zhongji and REN4 Guanyuan
+B) REN5 Shimen and ST25 Tianshu
+C) REN4 Guanyuan and REN5 Shimen
+D) REN4 Guanyuan and REN3 Zhongji +++++
+Feedback: REN4 Guanyuan is Small Intestine Front-Mu and REN3 Zhongji is Urinary Bladder Front-Mu. Why are the other options incorrect? “REN3 Zhongji and REN4 Guanyuan” reverses the Small Intestine and Bladder correspondences. “REN5 Shimen and ST25 Tianshu” gives the Front-Mu points of San Jiao and Large Intestine, not Small Intestine and Bladder. “REN4 Guanyuan and REN5 Shimen” correctly identifies Small Intestine but substitutes San Jiao Front-Mu REN5 for Bladder Front-Mu REN3. Nearby lower-abdominal points have different Front-Mu relationships.
+
+9. Which point is the Front-Mu point of the Liver in a question describing the sixth intercostal space and hypochondriac discomfort?
+A) LIV14 Qimen +++++
+B) LIV13 Zhangmen
+C) GB24 Riyue
+D) GB25 Jingmen
+Feedback: LIV14 Qimen is Liver Front-Mu and lies in the sixth intercostal space, four cun lateral to the midline. Why are the other options incorrect? LIV13 is Spleen Front-Mu despite being on the Liver channel, GB24 is Gall Bladder Front-Mu in the seventh intercostal space, and GB25 is Kidney Front-Mu near the twelfth-rib tip. Use both the organ correspondence and landmark to distinguish the alternatives.
+
+10. Which statement correctly describes GB25 Jingmen in a question combining Front-Mu classification, point location and needling safety?
+A) It is Kidney Front-Mu on the Kidney channel, so deep perpendicular needling is always appropriate.
+B) It is Kidney Front-Mu on the Gall Bladder channel near the free end of the twelfth rib; deep needling can risk injury to the Kidney. +++++
+C) It is Gall Bladder Front-Mu in the seventh intercostal space.
+D) It is Spleen Front-Mu at the free end of the eleventh rib.
+Feedback: GB25 Jingmen is Kidney Front-Mu on the Gall Bladder channel, anterior and inferior to the free end of the twelfth rib; Deadman cautions against deep needling because of possible Kidney injury, especially in thin patients. Why are the other options incorrect? “It is Kidney Front-Mu on the Kidney channel, so deep perpendicular needling is always appropriate” assigns the wrong carrying channel and makes an unsafe unconditional depth claim. “It is Gall Bladder Front-Mu in the seventh intercostal space” describes GB24 Riyue, not GB25. “It is Spleen Front-Mu at the free end of the eleventh rib” describes LIV13 Zhangmen, not GB25. Nearby anatomy supports safety assessment but does not independently prove the traditional organ correspondence.

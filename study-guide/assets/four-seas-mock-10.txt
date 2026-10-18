@@ -1,0 +1,69 @@
+1. Which complete point group is listed for the Sea of Qi?
+A) ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen +++++
+B) UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu
+C) ST30 Qichong; ST36 Zusanli
+D) DU20 Baihui; DU16 Fengfu
+Feedback: ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen is the complete point group listed for the Sea of Qi. Why are the other options incorrect? UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu — This group belongs to the Sea of Blood, not the Sea requested. ST30 Qichong; ST36 Zusanli — This group belongs to the Sea of Water and Grain, not the Sea requested. DU20 Baihui; DU16 Fengfu — This group belongs to the Sea of Marrow, not the Sea requested.
+
+2. Which complete point group is listed for the Sea of Blood?
+A) ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen
+B) ST30 Qichong; ST36 Zusanli
+C) DU20 Baihui; DU16 Fengfu
+D) UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu +++++
+Feedback: UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu is the complete point group listed for the Sea of Blood. Why are the other options incorrect? ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen — This group belongs to the Sea of Qi, not the Sea requested. ST30 Qichong; ST36 Zusanli — This group belongs to the Sea of Water and Grain, not the Sea requested. DU20 Baihui; DU16 Fengfu — This group belongs to the Sea of Marrow, not the Sea requested.
+
+3. Which complete point group is listed for the Sea of Water and Grain?
+A) UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu
+B) DU20 Baihui; DU16 Fengfu
+C) ST30 Qichong; ST36 Zusanli +++++
+D) ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen
+Feedback: ST30 Qichong; ST36 Zusanli is the complete point group listed for the Sea of Water and Grain. Why are the other options incorrect? UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu — This group belongs to the Sea of Blood, not the Sea requested. DU20 Baihui; DU16 Fengfu — This group belongs to the Sea of Marrow, not the Sea requested. ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen — This group belongs to the Sea of Qi, not the Sea requested.
+
+4. Which complete point group is listed for the Sea of Marrow?
+A) ST30 Qichong; ST36 Zusanli
+B) DU20 Baihui; DU16 Fengfu +++++
+C) ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen
+D) UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu
+Feedback: DU20 Baihui; DU16 Fengfu is the complete point group listed for the Sea of Marrow. Why are the other options incorrect? ST30 Qichong; ST36 Zusanli — This group belongs to the Sea of Water and Grain, not the Sea requested. ST9 Renying; REN17 Shanzhong; DU14 Dazhui; DU15 Yamen — This group belongs to the Sea of Qi, not the Sea requested. UB11 Dazhu; ST37 Shangjuxu; ST39 Xiajuxu — This group belongs to the Sea of Blood, not the Sea requested.
+
+5. In the Four Seas classification, which Sea includes ST9 Renying?
+A) Sea of Qi +++++
+B) Sea of Blood
+C) Sea of Water and Grain
+D) Sea of Marrow
+Feedback: ST9 Renying belongs to the Sea of Qi point group. Why are the other options incorrect? Sea of Blood — Sea of Blood has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Water and Grain — Sea of Water and Grain has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Marrow — Sea of Marrow has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership.
+
+6. In the Four Seas classification, which Sea includes UB11 Dazhu?
+A) Sea of Qi
+B) Sea of Water and Grain
+C) Sea of Marrow
+D) Sea of Blood +++++
+Feedback: UB11 Dazhu belongs to the Sea of Blood point group. Why are the other options incorrect? Sea of Qi — Sea of Qi has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Water and Grain — Sea of Water and Grain has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Marrow — Sea of Marrow has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership.
+
+7. In the Four Seas classification, which Sea includes ST30 Qichong?
+A) Sea of Blood
+B) Sea of Marrow
+C) Sea of Water and Grain +++++
+D) Sea of Qi
+Feedback: ST30 Qichong belongs to the Sea of Water and Grain point group. Why are the other options incorrect? Sea of Blood — Sea of Blood has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Marrow — Sea of Marrow has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Qi — Sea of Qi has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership.
+
+8. In the Four Seas classification, which Sea includes DU16 Fengfu?
+A) Sea of Water and Grain
+B) Sea of Marrow +++++
+C) Sea of Qi
+D) Sea of Blood
+Feedback: DU16 Fengfu belongs to the Sea of Marrow point group. Why are the other options incorrect? Sea of Water and Grain — Sea of Water and Grain has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Qi — Sea of Qi has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership. Sea of Blood — Sea of Blood has a different designated point group; do not substitute a Hui-Meeting or He-Sea classification for Four Seas membership.
+
+9. Which distinction between Four Seas and Hui-Meeting of Blood is correct?
+A) UB17 alone is the entire Four Seas Sea of Blood group.
+B) The Sea of Blood group is UB11, ST37 and ST39; UB17 is Hui-Meeting of Blood. +++++
+C) LU9 is the only Sea of Blood point.
+D) Sea of Blood and Sea of Water and Grain are identical.
+Feedback: The Four Seas Sea of Blood group is UB11 with ST37 and ST39, while UB17 is Hui-Meeting of Blood, a different classification. Why are the other options incorrect? UB17 alone is the entire Four Seas Sea of Blood group. — UB17’s Hui-Meeting correspondence does not define the Four Seas group. LU9 is the only Sea of Blood point. — LU9 is Hui-Meeting of vessels, not the Sea of Blood group. Sea of Blood and Sea of Water and Grain are identical. — Sea of Water and Grain uses ST30 and ST36.
+
+10. Which statement correctly distinguishes He-Sea points from the Four Seas?
+A) Every He-Sea point belongs to the same Four Seas group.
+B) Four Seas is another name for the five transporting points.
+C) He-Sea is a Five Shu category; Four Seas is a separate classical grouping with designated point sets. +++++
+D) Four Seas includes only leg points.
+Feedback: He-Sea belongs to the Five Shu classification, while Four Seas organizes separate groups of points. Why are the other options incorrect? Every He-Sea point belongs to the same Four Seas group. — A He-Sea classification does not establish one universal Four Seas membership. Four Seas is another name for the five transporting points. — The two systems are distinct classifications. Four Seas includes only leg points. — The Sea of Marrow group includes DU20 and DU16 on the head and nape.

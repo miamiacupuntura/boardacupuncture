@@ -1,0 +1,69 @@
+1. Which point is the Yuan-Source point of the Lung channel?
+A) LU9 Taiyuan +++++
+B) LU11 Shaoshang
+C) LU10 Yuji
+D) LU8 Jingqu
+Feedback: LU9 Taiyuan is the Yuan-Source point of the Lung channel. Why are the other options incorrect? LU11 Shaoshang — LU11 Shaoshang is the Jing-Well and Wood point of the Lung channel. LU10 Yuji — LU10 Yuji is the Ying-Spring and Fire point of the Lung channel. LU8 Jingqu — LU8 Jingqu is the Jing-River and Metal point of the Lung channel.
+
+2. Which point is the Yuan-Source point of the Large Intestine channel?
+A) LI1 Shangyang
+B) LI2 Erjian
+C) LI3 Sanjian
+D) LI4 Hegu +++++
+Feedback: LI4 Hegu is the Yuan-Source point of the Large Intestine channel. Why are the other options incorrect? LI1 Shangyang — LI1 Shangyang is the Jing-Well and Metal point of the Large Intestine channel. LI2 Erjian — LI2 Erjian is the Ying-Spring and Water point of the Large Intestine channel. LI3 Sanjian — LI3 Sanjian is the Shu-Stream and Wood point of the Large Intestine channel.
+
+3. Which point is the Yuan-Source point of the Stomach channel?
+A) ST44 Neiting
+B) ST43 Xiangu
+C) ST42 Chongyang +++++
+D) ST45 Lidui
+Feedback: ST42 Chongyang is the Yuan-Source point of the Stomach channel. Why are the other options incorrect? ST44 Neiting — ST44 Neiting is the Ying-Spring and Water point of the Stomach channel. ST43 Xiangu — ST43 Xiangu is the Shu-Stream and Wood point of the Stomach channel. ST45 Lidui — ST45 Lidui is the Jing-Well and Metal point of the Stomach channel.
+
+4. Which point is the Yuan-Source point of the Spleen channel?
+A) SP5 Shangqiu
+B) SP3 Taibai +++++
+C) SP1 Yinbai
+D) SP2 Dadu
+Feedback: SP3 Taibai is the Yuan-Source point of the Spleen channel. Why are the other options incorrect? SP5 Shangqiu — SP5 Shangqiu is the Jing-River and Metal point of the Spleen channel. SP1 Yinbai — SP1 Yinbai is the Jing-Well and Wood point of the Spleen channel. SP2 Dadu — SP2 Dadu is the Ying-Spring and Fire point of the Spleen channel.
+
+5. Which point is the Yuan-Source point of the Heart channel?
+A) HT7 Shenmen +++++
+B) HT9 Shaochong
+C) HT8 Shaofu
+D) HT4 Lingdao
+Feedback: HT7 Shenmen is the Yuan-Source point of the Heart channel. Why are the other options incorrect? HT9 Shaochong — HT9 Shaochong is the Jing-Well and Wood point of the Heart channel. HT8 Shaofu — HT8 Shaofu is the Ying-Spring and Fire point of the Heart channel. HT4 Lingdao — HT4 Lingdao is the Jing-River and Metal point of the Heart channel.
+
+6. Which point is the Yuan-Source point of the Kidney channel?
+A) KID1 Yongquan
+B) KID2 Rangu
+C) KID7 Fuliu
+D) KID3 Taixi +++++
+Feedback: KID3 Taixi is the Yuan-Source point of the Kidney channel. Why are the other options incorrect? KID1 Yongquan — KID1 Yongquan is the Jing-Well and Wood point of the Kidney channel. KID2 Rangu — KID2 Rangu is the Ying-Spring and Fire point of the Kidney channel. KID7 Fuliu — KID7 Fuliu is the Jing-River and Metal point of the Kidney channel.
+
+7. Which point is the Yuan-Source point of the Liver channel?
+A) LIV2 Xingjian
+B) LIV4 Zhongfeng
+C) LIV3 Taichong +++++
+D) LIV1 Dadun
+Feedback: LIV3 Taichong is the Yuan-Source point of the Liver channel. Why are the other options incorrect? LIV2 Xingjian — LIV2 Xingjian is the Ying-Spring and Fire point of the Liver channel. LIV4 Zhongfeng — LIV4 Zhongfeng is the Jing-River and Metal point of the Liver channel. LIV1 Dadun — LIV1 Dadun is the Jing-Well and Wood point of the Liver channel.
+
+8. Which statement correctly describes the Yuan-Source relationship to Shu-Stream?
+A) They coincide on all twelve primary channels.
+B) They are separate only on Yin channels.
+C) Yuan-Source is always the fourth numbered point.
+D) They coincide on Yin channels; Yang channels have a separate Yuan-Source point. +++++
+Feedback: The six Yin Shu-Stream points are also Yuan-Source; the six Yang channels have distinct Yuan-Source points. Why are the other options incorrect? They coincide on all twelve primary channels. — Yang channels have separate points, so the overlap is not universal. They are separate only on Yin channels. — This reverses the Yin and Yang relationship. Yuan-Source is always the fourth numbered point. — Point numbering is not category order; Stomach Yuan-Source is ST42, for example.
+
+9. Which pair follows the Yuan-Luo rule using the Lung Yuan-Source point and the Luo-Connecting point of its paired Large Intestine channel?
+A) LU9 Taiyuan and LI6 Pianli +++++
+B) LU7 Lieque and LI4 Hegu
+C) LU9 Taiyuan and LI4 Hegu
+D) LU6 Kongzui and LI6 Pianli
+Feedback: LU9 is Lung Yuan-Source and LI6 is Large Intestine Luo-Connecting, forming the requested paired-channel Yuan-Luo relationship. Why are the other options incorrect? LU7 Lieque and LI4 Hegu — LU7 with LI4 gives Lung Luo with Large Intestine Yuan, the reverse emphasis. LU9 Taiyuan and LI4 Hegu — LU9 with LI4 combines two Yuan-Source points, not Yuan with Luo. LU6 Kongzui and LI6 Pianli — LU6 is Lung Xi-Cleft, not Yuan-Source.
+
+10. Which statement accurately distinguishes LI3 Sanjian and LI4 Hegu?
+A) LI3 is Yuan-Source and LI4 is Shu-Stream.
+B) LI3 is Shu-Stream and LI4 is Yuan-Source. +++++
+C) Both points are Shu-Stream and Yuan-Source.
+D) Neither belongs to the Large Intestine channel.
+Feedback: LI3 is Large Intestine Shu-Stream and Wood; LI4 is its separate Yuan-Source point. Why are the other options incorrect? LI3 is Yuan-Source and LI4 is Shu-Stream. — This reverses the classifications. Both points are Shu-Stream and Yuan-Source. — The Yin dual-classification rule does not apply to these Yang-channel points. Neither belongs to the Large Intestine channel. — Both codes identify points on the Large Intestine channel.

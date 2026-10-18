@@ -1,0 +1,69 @@
+1. Which point is confluent or opening point of Ren Mai?
+A) LU7 Lieque +++++
+B) KID6 Zhaohai
+C) SI3 Houxi
+D) UB62 Shenmai
+Feedback: LU7 Lieque is the confluent point of Ren Mai. Its paired treatment point is KID6, but the two vessel identities remain distinct. Why are the other options incorrect? KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested. SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested. UB62 Shenmai — UB62 Shenmai opens Yang Qiao Mai, rather than the vessel requested.
+
+2. Which point is confluent or opening point of Yin Qiao Mai?
+A) LU7 Lieque
+B) SI3 Houxi
+C) UB62 Shenmai
+D) KID6 Zhaohai +++++
+Feedback: KID6 Zhaohai is the confluent point of Yin Qiao Mai. Its paired treatment point is LU7, but the two vessel identities remain distinct. Why are the other options incorrect? LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested. SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested. UB62 Shenmai — UB62 Shenmai opens Yang Qiao Mai, rather than the vessel requested.
+
+3. Which point is confluent or opening point of Du Mai?
+A) KID6 Zhaohai
+B) UB62 Shenmai
+C) SI3 Houxi +++++
+D) LU7 Lieque
+Feedback: SI3 Houxi is the confluent point of Du Mai. Its paired treatment point is UB62, but the two vessel identities remain distinct. Why are the other options incorrect? KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested. UB62 Shenmai — UB62 Shenmai opens Yang Qiao Mai, rather than the vessel requested. LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested.
+
+4. Which point is confluent or opening point of Yang Qiao Mai?
+A) SI3 Houxi
+B) UB62 Shenmai +++++
+C) LU7 Lieque
+D) KID6 Zhaohai
+Feedback: UB62 Shenmai is the confluent point of Yang Qiao Mai. Its paired treatment point is SI3, but the two vessel identities remain distinct. Why are the other options incorrect? SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested. LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested. KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested.
+
+5. Which point is confluent or opening point of Chong Mai?
+A) SP4 Gongsun +++++
+B) LU7 Lieque
+C) KID6 Zhaohai
+D) SI3 Houxi
+Feedback: SP4 Gongsun is the confluent point of Chong Mai. Its paired treatment point is PC6, but the two vessel identities remain distinct. Why are the other options incorrect? LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested. KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested. SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested.
+
+6. Which point is confluent or opening point of Yin Wei Mai?
+A) LU7 Lieque
+B) KID6 Zhaohai
+C) SI3 Houxi
+D) PC6 Neiguan +++++
+Feedback: PC6 Neiguan is the confluent point of Yin Wei Mai. Its paired treatment point is SP4, but the two vessel identities remain distinct. Why are the other options incorrect? LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested. KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested. SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested.
+
+7. Which point is confluent or opening point of Dai Mai?
+A) KID6 Zhaohai
+B) SI3 Houxi
+C) GB41 Zulinqi +++++
+D) LU7 Lieque
+Feedback: GB41 Zulinqi is the confluent point of Dai Mai. Its paired treatment point is SJ5, but the two vessel identities remain distinct. Why are the other options incorrect? KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested. SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested. LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested.
+
+8. Which point is confluent or opening point of Yang Wei Mai?
+A) SI3 Houxi
+B) SJ5 Waiguan +++++
+C) LU7 Lieque
+D) KID6 Zhaohai
+Feedback: SJ5 Waiguan is the confluent point of Yang Wei Mai. Its paired treatment point is GB41, but the two vessel identities remain distinct. Why are the other options incorrect? SI3 Houxi — SI3 Houxi opens Du Mai, rather than the vessel requested. LU7 Lieque — LU7 Lieque opens Ren Mai, rather than the vessel requested. KID6 Zhaohai — KID6 Zhaohai opens Yin Qiao Mai, rather than the vessel requested.
+
+9. Which pair correctly combines the opening points of Du Mai and Yang Qiao Mai?
+A) SI3 Houxi and UB62 Shenmai +++++
+B) LU7 Lieque and KID6 Zhaohai
+C) SP4 Gongsun and PC6 Neiguan
+D) GB41 Zulinqi and SJ5 Waiguan
+Feedback: SI3 opens Du Mai and UB62 opens Yang Qiao Mai; they form the paired opening-point relationship requested. Why are the other options incorrect? LU7 Lieque and KID6 Zhaohai — LU7 with KID6 pairs Ren with Yin Qiao. SP4 Gongsun and PC6 Neiguan — SP4 with PC6 pairs Chong with Yin Wei. GB41 Zulinqi and SJ5 Waiguan — GB41 with SJ5 pairs Dai with Yang Wei.
+
+10. Which distinction is correct for Yin Wei Mai?
+A) KID9 is opening and PC6 is Xi-Cleft.
+B) PC6 is opening and KID9 is Xi-Cleft. +++++
+C) SP4 and PC6 open the same vessel.
+D) Yin Wei and Yin Qiao have the same opening point.
+Feedback: PC6 Neiguan is Yin Wei’s confluent point and KID9 Zhubin its Xi-Cleft point. Why are the other options incorrect? KID9 is opening and PC6 is Xi-Cleft. — These two classifications are reversed. SP4 and PC6 open the same vessel. — SP4 opens Chong while PC6 opens Yin Wei. Yin Wei and Yin Qiao have the same opening point. — Yin Qiao opens at KID6, not PC6.

@@ -1,0 +1,69 @@
+1. A patient has a chronic weak cough, exertional shortness of breath, a weak voice and spontaneous sweating. Which Back-Shu point most directly corresponds to the zang involved in this presentation?
+A) UB13 Feishu +++++
+B) UB14 Jueyinshu
+C) UB20 Pishu
+D) UB23 Shenshu
+Feedback: UB13 Feishu is the Lung Back-Shu point; the weak cough, voice and exertional breathlessness support a Lung Qi deficiency teaching presentation. Why are the other options incorrect? UB14 is the Pericardium Back-Shu point, UB20 is the Spleen Back-Shu point and UB23 is the Kidney Back-Shu point. The symptom cluster, rather than cough alone, identifies the intended organ relationship.
+
+2. UB23 Shenshu is included in a treatment plan for chronic low-back and knee weakness, cold feet, aversion to cold and frequent clear urination. Which pattern is best supported by the complete presentation?
+A) Kidney Yin deficiency
+B) Kidney Yang deficiency +++++
+C) Bladder Damp-Heat
+D) Liver Qi constraint
+Feedback: Kidney Yang deficiency is best supported by the low-back weakness together with Cold signs and frequent clear urine. Why are the other options incorrect? Kidney Yin deficiency would more typically include deficiency-Heat signs such as night sweating or five-palm Heat; Bladder Damp-Heat would favour burning urination and dark urine; Liver Qi constraint would favour emotional aggravation, sighing and distention. UB23 alone does not establish a pattern because it has more than one traditional application.
+
+3. A patient reports poor appetite, fatigue and loose stools without marked Heat or Cold signs. Which point is the Back-Shu point of the organ whose transportation and transformation function is principally involved?
+A) UB21 Weishu
+B) UB25 Dachangshu
+C) UB20 Pishu +++++
+D) UB28 Pangguangshu
+Feedback: UB20 Pishu is the Spleen Back-Shu point; poor appetite, fatigue and loose stools support a Spleen Qi deficiency teaching presentation. Why are the other options incorrect? UB21 is the Stomach Back-Shu point, UB25 is the Large Intestine Back-Shu point and UB28 is the Urinary Bladder Back-Shu point. Although digestive symptoms can overlap, the combined clues emphasize impaired Spleen transportation and transformation.
+
+4. A patient has stress-related flank distention, frequent sighing and symptoms that fluctuate with emotions. Which Back-Shu point corresponds most directly to the organ associated with the inferred Qi constraint?
+A) UB19 Danshu
+B) UB15 Xinshu
+C) UB14 Jueyinshu
+D) UB18 Ganshu +++++
+Feedback: UB18 Ganshu is the Liver Back-Shu point, and the emotional variation, sighing and flank distention support Liver Qi constraint. Why are the other options incorrect? UB19 corresponds to the Gall Bladder, UB15 to the Heart and UB14 to the Pericardium. These points may have overlapping regional indications, but they do not share UB18’s Liver Back-Shu correspondence.
+
+5. Which point is both the Back-Shu point of the Heart and a relevant traditional selection for a presentation of palpitations and poor sleep accompanied by pallor?
+A) UB15 Xinshu +++++
+B) UB14 Jueyinshu
+C) UB17 Geshu
+D) UB13 Feishu
+Feedback: UB15 Xinshu is the Heart Back-Shu point; palpitations and poor sleep with pallor support a Heart Blood deficiency teaching presentation. Why are the other options incorrect? UB14 is the Pericardium Back-Shu point, UB17 is the Diaphragm Shu and Hui-Meeting point of Blood, and UB13 is the Lung Back-Shu point. UB17’s Blood classification does not make it the Heart Back-Shu point.
+
+6. A teaching case describes burning difficult urination, urgency, dark urine and a yellow greasy tongue coating. Which point is the Back-Shu point of the fu most directly associated with these urinary symptoms?
+A) UB23 Shenshu
+B) UB28 Pangguangshu +++++
+C) UB22 Sanjiaoshu
+D) UB27 Xiaochangshu
+Feedback: UB28 Pangguangshu is the Urinary Bladder Back-Shu point; burning urination and dark urine with a greasy yellow coating support a Bladder Damp-Heat teaching presentation. Why are the other options incorrect? UB23 corresponds to Kidney, UB22 to San Jiao and UB27 to Small Intestine. These points can also have urinary or fluid-related indications, but the question asks specifically for the Bladder Back-Shu correspondence.
+
+7. A practitioner wants the Back-Shu point of the Stomach for epigastric pain relieved by warmth and a preference for warm drinks. Which point satisfies the requested correspondence?
+A) UB20 Pishu
+B) UB19 Danshu
+C) UB21 Weishu +++++
+D) UB25 Dachangshu
+Feedback: UB21 Weishu is the Stomach Back-Shu point; relief with warmth supports Cold affecting the Stomach, although further findings are needed to distinguish excess Cold from deficiency Cold. Why are the other options incorrect? UB20 is Spleen Back-Shu, UB19 is Gall Bladder Back-Shu and UB25 is Large Intestine Back-Shu. Shared digestive indications do not change their organ correspondences.
+
+8. Which statement accurately explains why the twelve zangfu Back-Shu correspondence table moves from UB15 to UB18 without listing UB16 and UB17 as zangfu correspondences?
+A) There are no Urinary Bladder points at the T6 and T7 levels.
+B) UB16 and UB17 are both Front-Mu points.
+C) UB16 and UB17 are the Liver and Spleen Back-Shu points.
+D) UB16 and UB17 exist but are not among the twelve zangfu Back-Shu correspondences. +++++
+Feedback: UB16 Dushu and UB17 Geshu exist at the T6 and T7 levels but are not among the twelve zangfu Back-Shu correspondences; UB16 has a Governing Vessel relationship, while UB17 is Diaphragm Shu and Hui-Meeting of Blood. Why are the other options incorrect? “There are no Urinary Bladder points at the T6 and T7 levels” is false because UB16 and UB17 occupy those levels. “UB16 and UB17 are both Front-Mu points” is false because these are posterior Shu points, not Front-Mu points. “UB16 and UB17 are the Liver and Spleen Back-Shu points” assigns the wrong correspondences: Liver Back-Shu is UB18 and Spleen Back-Shu is UB20.
+
+9. Which set correctly identifies the Back-Shu points of San Jiao, Large Intestine and Small Intestine, in that order?
+A) UB22, UB25, UB27 +++++
+B) UB22, UB27, UB25
+C) UB21, UB25, UB28
+D) UB14, UB25, UB27
+Feedback: UB22 Sanjiaoshu, UB25 Dachangshu and UB27 Xiaochangshu correspond to San Jiao, Large Intestine and Small Intestine respectively. Why are the other options incorrect? “UB22, UB27, UB25” reverses the Small Intestine and Large Intestine correspondences. “UB21, UB25, UB28” substitutes Stomach Back-Shu UB21 for San Jiao and Bladder Back-Shu UB28 for Small Intestine. “UB14, UB25, UB27” substitutes Pericardium Back-Shu UB14 for San Jiao Back-Shu UB22. Match each organ to its code before evaluating the set.
+
+10. Which pair correctly identifies the Front-Mu and Back-Shu points of the Kidney, in that order?
+A) KID3 Taixi and UB23 Shenshu
+B) GB25 Jingmen and UB23 Shenshu +++++
+C) GB24 Riyue and UB19 Danshu
+D) LIV13 Zhangmen and UB20 Pishu
+Feedback: GB25 Jingmen is the Kidney Front-Mu point and UB23 Shenshu is the Kidney Back-Shu point. Why are the other options incorrect? KID3 is Kidney Shu-Stream and Yuan-Source rather than Front-Mu; GB24 with UB19 is the Gall Bladder Mu-Shu pair; LIV13 with UB20 is the Spleen Mu-Shu pair. The channel carrying a Front-Mu point need not have the same name as its associated organ.

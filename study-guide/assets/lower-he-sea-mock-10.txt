@@ -1,0 +1,69 @@
+1. Which point is the Lower He-Sea correspondence of the Stomach?
+A) ST36 Zusanli +++++
+B) ST37 Shangjuxu
+C) ST39 Xiajuxu
+D) UB39 Weiyang
+Feedback: ST36 Zusanli is the Lower He-Sea point of the Stomach. Why are the other options incorrect? ST37 Shangjuxu — ST37 Shangjuxu corresponds to Large Intestine in the Lower He-Sea system. ST39 Xiajuxu — ST39 Xiajuxu corresponds to Small Intestine in the Lower He-Sea system. UB39 Weiyang — UB39 Weiyang corresponds to San Jiao in the Lower He-Sea system.
+
+2. Which point is the Lower He-Sea correspondence of the Large Intestine?
+A) ST36 Zusanli
+B) ST39 Xiajuxu
+C) UB39 Weiyang
+D) ST37 Shangjuxu +++++
+Feedback: ST37 Shangjuxu is the Lower He-Sea point of the Large Intestine. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli corresponds to Stomach in the Lower He-Sea system. ST39 Xiajuxu — ST39 Xiajuxu corresponds to Small Intestine in the Lower He-Sea system. UB39 Weiyang — UB39 Weiyang corresponds to San Jiao in the Lower He-Sea system.
+
+3. Which point is the Lower He-Sea correspondence of the Small Intestine?
+A) ST37 Shangjuxu
+B) UB39 Weiyang
+C) ST39 Xiajuxu +++++
+D) ST36 Zusanli
+Feedback: ST39 Xiajuxu is the Lower He-Sea point of the Small Intestine. Why are the other options incorrect? ST37 Shangjuxu — ST37 Shangjuxu corresponds to Large Intestine in the Lower He-Sea system. UB39 Weiyang — UB39 Weiyang corresponds to San Jiao in the Lower He-Sea system. ST36 Zusanli — ST36 Zusanli corresponds to Stomach in the Lower He-Sea system.
+
+4. Which point is the Lower He-Sea correspondence of the San Jiao?
+A) ST39 Xiajuxu
+B) UB39 Weiyang +++++
+C) ST36 Zusanli
+D) ST37 Shangjuxu
+Feedback: UB39 Weiyang is the Lower He-Sea point of the San Jiao. Why are the other options incorrect? ST39 Xiajuxu — ST39 Xiajuxu corresponds to Small Intestine in the Lower He-Sea system. ST36 Zusanli — ST36 Zusanli corresponds to Stomach in the Lower He-Sea system. ST37 Shangjuxu — ST37 Shangjuxu corresponds to Large Intestine in the Lower He-Sea system.
+
+5. Which point is the Lower He-Sea correspondence of the Urinary Bladder?
+A) UB40 Weizhong +++++
+B) ST36 Zusanli
+C) ST37 Shangjuxu
+D) ST39 Xiajuxu
+Feedback: UB40 Weizhong is the Lower He-Sea point of the Urinary Bladder. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli corresponds to Stomach in the Lower He-Sea system. ST37 Shangjuxu — ST37 Shangjuxu corresponds to Large Intestine in the Lower He-Sea system. ST39 Xiajuxu — ST39 Xiajuxu corresponds to Small Intestine in the Lower He-Sea system.
+
+6. Which point is the Lower He-Sea correspondence of the Gall Bladder?
+A) ST36 Zusanli
+B) ST37 Shangjuxu
+C) ST39 Xiajuxu
+D) GB34 Yanglingquan +++++
+Feedback: GB34 Yanglingquan is the Lower He-Sea point of the Gall Bladder. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli corresponds to Stomach in the Lower He-Sea system. ST37 Shangjuxu — ST37 Shangjuxu corresponds to Large Intestine in the Lower He-Sea system. ST39 Xiajuxu — ST39 Xiajuxu corresponds to Small Intestine in the Lower He-Sea system.
+
+7. For a question about the traditional Lower He-Sea approach to Large Intestine visceral dysfunction, which pair correctly contrasts the channel’s He-Sea point with its Lower He-Sea point?
+A) LI11 Quchi and ST37 Shangjuxu +++++
+B) LI11 Quchi and ST39 Xiajuxu
+C) LI5 Yangxi and ST37 Shangjuxu
+D) ST36 Zusanli and LI11 Quchi
+Feedback: LI11 is Large Intestine He-Sea and ST37 is Large Intestine Lower He-Sea. Why are the other options incorrect? LI11 Quchi and ST39 Xiajuxu — ST39 corresponds to Small Intestine rather than Large Intestine. LI5 Yangxi and ST37 Shangjuxu — LI5 is Large Intestine Jing-River, not He-Sea. ST36 Zusanli and LI11 Quchi — ST36 is Stomach He-Sea and Lower He-Sea; LI11 is not a Lower He-Sea point.
+
+8. Which pair correctly gives the Lower He-Sea points of Small Intestine and San Jiao, in that order?
+A) ST37 and UB40
+B) ST39 and UB39 +++++
+C) SI8 and SJ10
+D) ST39 and ST36
+Feedback: ST39 Xiajuxu corresponds to Small Intestine and UB39 Weiyang corresponds to San Jiao in the Lower He-Sea system. Why are the other options incorrect? ST37 and UB40 — ST37 corresponds to Large Intestine and UB40 to Bladder. SI8 and SJ10 — SI8 and SJ10 are the Hand Yang channels’ He-Sea points, not their Lower He-Sea points. ST39 and ST36 — ST36 corresponds to Stomach, not San Jiao.
+
+9. Which statement correctly distinguishes ST36’s two category roles?
+A) There are two different ST36 points, one for each role.
+B) ST36 is Lower He-Sea of both Stomach and Large Intestine.
+C) ST36 is one point classified as both Stomach He-Sea and Stomach Lower He-Sea. +++++
+D) ST36 is Lower He-Sea but not a Five Shu point.
+Feedback: ST36 is one anatomical point with Stomach He-Sea and Stomach Lower He-Sea classifications. Why are the other options incorrect? There are two different ST36 points, one for each role. — Two classifications do not create two anatomical points. ST36 is Lower He-Sea of both Stomach and Large Intestine. — Large Intestine Lower He-Sea is ST37. ST36 is Lower He-Sea but not a Five Shu point. — He-Sea is one of the Five Shu categories, and ST36 carries it.
+
+10. Why are ST37, ST39 and UB39 particularly important when studying visceral indications of the Hand Yang channels?
+A) They replace every clinical use of LI11, SI8 and SJ10.
+B) They are the Hand Yang Yuan-Source points.
+C) They all belong to the Stomach channel.
+D) They provide the Lower He-Sea correspondences of Large Intestine, Small Intestine and San Jiao on the legs. +++++
+Feedback: ST37, ST39 and UB39 provide the leg-based Lower He-Sea correspondences of Large Intestine, Small Intestine and San Jiao, which organize their traditional fu-related treatment relationships. Why are the other options incorrect? They replace every clinical use of LI11, SI8 and SJ10. — The Hand Yang He-Sea points retain broad individual and channel indications; they are not eliminated. They are the Hand Yang Yuan-Source points. — Hand Yang Yuan-Source points are LI4, SI4 and SJ4. They all belong to the Stomach channel. — UB39 lies on the Urinary Bladder channel, not Stomach.

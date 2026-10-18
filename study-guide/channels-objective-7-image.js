@@ -1,0 +1,27 @@
+(() => {
+  'use strict';
+  const visual=document.querySelector('#channels-objective-7 .objective-visual');
+  if(!visual||document.getElementById('minute-collaterals-figure'))return;
+  const figure=document.createElement('figure');figure.id='minute-collaterals-figure';figure.className='minute-network-figure';
+  const heading=document.createElement('h5');heading.textContent='Minute Collaterals — Sun Luo: progressive branching';
+  const img=document.createElement('img');img.src='assets/minute-collaterals/minute-collaterals-sun-luo-network.webp?v=1';img.alt='Conceptual anterior and posterior body views showing a thick Major Channel dividing into medium Luo branches and many fine Minute Collaterals.';img.loading='lazy';img.tabIndex=0;img.setAttribute('role','button');img.setAttribute('aria-label','Enlarge Minute Collaterals diagram');
+  const caption=document.createElement('figcaption');caption.textContent='Interpret the colors hierarchically: teal represents a major channel trunk, orange represents larger Luo branches, and coral represents the increasingly fine Minute Collaterals. The image illustrates distribution throughout the body; it is not a vascular anatomy chart or an acupuncture point-location guide.';
+  const button=document.createElement('button');button.type='button';button.textContent='Enlarge image';
+  figure.append(heading,img,caption,button);
+  const anchor=visual.querySelector('.minute-reading');(anchor||visual.lastElementChild)?.after(figure);
+  const dialog=document.createElement('dialog');dialog.className='minute-network-dialog';dialog.setAttribute('aria-label','Enlarged Minute Collaterals diagram');
+  const controls=document.createElement('div');controls.className='minute-network-controls';
+  const close=document.createElement('button');close.type='button';close.textContent='Close / Cerrar';
+  const zoom=document.createElement('button');zoom.type='button';zoom.textContent='Zoom in';
+  const fit=document.createElement('button');fit.type='button';fit.textContent='Fit image';
+  controls.append(close,zoom,fit);
+  const full=document.createElement('img');full.src=img.src;full.alt=img.alt;
+  const note=document.createElement('p');note.textContent=caption.textContent;
+  dialog.append(controls,full,note);document.body.append(dialog);
+  let scale=1,last=null;const apply=()=>{full.style.width=scale===1?'100%':`${scale*100}%`;full.style.maxWidth=scale===1?'100%':'none'};
+  const open=trigger=>{scale=1;last=trigger;apply();dialog.showModal();dialog.scrollTop=0;close.focus()};
+  button.onclick=()=>open(button);img.onclick=()=>open(img);img.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(img)}};
+  close.onclick=()=>dialog.close();zoom.onclick=()=>{scale=Math.min(3,scale+.5);apply()};fit.onclick=()=>{scale=1;apply()};dialog.onclick=e=>{if(e.target===dialog)dialog.close()};dialog.onclose=()=>last?.focus();
+  const style=document.createElement('style');style.textContent=`.minute-network-figure{max-width:780px;margin:20px auto;padding:14px;border:1px solid #bfd5d3;border-radius:12px;background:#fff}.minute-network-figure h5{margin:0 0 12px;color:#075f60}.minute-network-figure img{display:block;width:100%;height:auto;border:1px solid #dce5e6;border-radius:8px;cursor:zoom-in}.minute-network-figure figcaption{margin:12px 0;line-height:1.55;color:#425969}.minute-network-figure>button,.minute-network-controls button{min-height:44px;padding:10px 16px;border:0;border-radius:8px;background:#087774;color:#fff;font-weight:800;cursor:pointer}.minute-network-dialog{width:min(1100px,calc(100vw - 24px));max-height:94vh;overflow:auto;padding:14px;border:0;border-radius:12px}.minute-network-dialog::backdrop{background:rgba(9,31,38,.78)}.minute-network-controls{position:sticky;z-index:2;top:0;display:flex;gap:8px;padding:7px;background:#fff}.minute-network-controls button:first-child{background:#f47e2c;color:#17232a}.minute-network-dialog img{display:block;height:auto;margin:10px auto;transition:width .15s ease}.minute-network-dialog p{text-align:center}@media(max-width:760px){.minute-network-figure{padding:9px}.minute-network-figure>button{width:100%}.minute-network-dialog{width:calc(100vw - 8px);max-width:none;max-height:calc(100vh - 8px);box-sizing:border-box;padding:8px}.minute-network-controls{flex-wrap:wrap}.minute-network-controls button{flex:1 1 auto}}`;
+  document.head.append(style);
+})();

@@ -1,0 +1,69 @@
+1. Which point is Xi-Cleft of Yin Qiao Mai (Yin Motility)?
+A) KID8 Jiaoxin +++++
+B) UB59 Fuyang
+C) KID9 Zhubin
+D) GB35 Yangjiao
+Feedback: KID8 Jiaoxin is Xi-Cleft of Yin Qiao Mai (Yin Motility). Why are the other options incorrect? UB59 Fuyang — UB59 Fuyang is Xi-Cleft of Yang Qiao Mai (Yang Motility). KID9 Zhubin — KID9 Zhubin is Xi-Cleft of Yin Wei Mai (Yin Linking). GB35 Yangjiao — GB35 Yangjiao is Xi-Cleft of Yang Wei Mai (Yang Linking).
+
+2. Which point is Xi-Cleft of Yang Qiao Mai (Yang Motility)?
+A) KID8 Jiaoxin
+B) KID9 Zhubin
+C) GB35 Yangjiao
+D) UB59 Fuyang +++++
+Feedback: UB59 Fuyang is Xi-Cleft of Yang Qiao Mai (Yang Motility). Why are the other options incorrect? KID8 Jiaoxin — KID8 Jiaoxin is Xi-Cleft of Yin Qiao Mai (Yin Motility). KID9 Zhubin — KID9 Zhubin is Xi-Cleft of Yin Wei Mai (Yin Linking). GB35 Yangjiao — GB35 Yangjiao is Xi-Cleft of Yang Wei Mai (Yang Linking).
+
+3. Which point is Xi-Cleft of Yin Wei Mai (Yin Linking)?
+A) UB59 Fuyang
+B) GB35 Yangjiao
+C) KID9 Zhubin +++++
+D) KID8 Jiaoxin
+Feedback: KID9 Zhubin is Xi-Cleft of Yin Wei Mai (Yin Linking). Why are the other options incorrect? UB59 Fuyang — UB59 Fuyang is Xi-Cleft of Yang Qiao Mai (Yang Motility). GB35 Yangjiao — GB35 Yangjiao is Xi-Cleft of Yang Wei Mai (Yang Linking). KID8 Jiaoxin — KID8 Jiaoxin is Xi-Cleft of Yin Qiao Mai (Yin Motility).
+
+4. Which point is Xi-Cleft of Yang Wei Mai (Yang Linking)?
+A) KID9 Zhubin
+B) GB35 Yangjiao +++++
+C) KID8 Jiaoxin
+D) UB59 Fuyang
+Feedback: GB35 Yangjiao is Xi-Cleft of Yang Wei Mai (Yang Linking). Why are the other options incorrect? KID9 Zhubin — KID9 Zhubin is Xi-Cleft of Yin Wei Mai (Yin Linking). KID8 Jiaoxin — KID8 Jiaoxin is Xi-Cleft of Yin Qiao Mai (Yin Motility). UB59 Fuyang — UB59 Fuyang is Xi-Cleft of Yang Qiao Mai (Yang Motility).
+
+5. Which statement correctly distinguishes the Xi-Cleft and confluent points of Yin Qiao Mai (Yin Motility)?
+A) KID8 Jiaoxin — Xi-Cleft; KID6 Zhaohai — confluent +++++
+B) KID6 Zhaohai — Xi-Cleft; KID8 Jiaoxin — confluent
+C) KID8 Jiaoxin — both Xi-Cleft and confluent
+D) KID6 Zhaohai — both Xi-Cleft and confluent
+Feedback: KID8 Jiaoxin is its Xi-Cleft point, while KID6 Zhaohai is its confluent or opening point. Why are the other options incorrect? KID6 Zhaohai — Xi-Cleft; KID8 Jiaoxin — confluent — This reverses the two classifications. KID8 Jiaoxin — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide. KID6 Zhaohai — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide.
+
+6. Which statement correctly distinguishes the Xi-Cleft and confluent points of Yang Qiao Mai (Yang Motility)?
+A) UB62 Shenmai — Xi-Cleft; UB59 Fuyang — confluent
+B) UB59 Fuyang — both Xi-Cleft and confluent
+C) UB62 Shenmai — both Xi-Cleft and confluent
+D) UB59 Fuyang — Xi-Cleft; UB62 Shenmai — confluent +++++
+Feedback: UB59 Fuyang is its Xi-Cleft point, while UB62 Shenmai is its confluent or opening point. Why are the other options incorrect? UB62 Shenmai — Xi-Cleft; UB59 Fuyang — confluent — This reverses the two classifications. UB59 Fuyang — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide. UB62 Shenmai — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide.
+
+7. Which statement correctly distinguishes the Xi-Cleft and confluent points of Yin Wei Mai (Yin Linking)?
+A) KID9 Zhubin — both Xi-Cleft and confluent
+B) PC6 Neiguan — both Xi-Cleft and confluent
+C) KID9 Zhubin — Xi-Cleft; PC6 Neiguan — confluent +++++
+D) PC6 Neiguan — Xi-Cleft; KID9 Zhubin — confluent
+Feedback: KID9 Zhubin is its Xi-Cleft point, while PC6 Neiguan is its confluent or opening point. Why are the other options incorrect? KID9 Zhubin — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide. PC6 Neiguan — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide. PC6 Neiguan — Xi-Cleft; KID9 Zhubin — confluent — This reverses the two classifications.
+
+8. Which statement correctly distinguishes the Xi-Cleft and confluent points of Yang Wei Mai (Yang Linking)?
+A) SJ5 Waiguan — both Xi-Cleft and confluent
+B) GB35 Yangjiao — Xi-Cleft; SJ5 Waiguan — confluent +++++
+C) SJ5 Waiguan — Xi-Cleft; GB35 Yangjiao — confluent
+D) GB35 Yangjiao — both Xi-Cleft and confluent
+Feedback: GB35 Yangjiao is its Xi-Cleft point, while SJ5 Waiguan is its confluent or opening point. Why are the other options incorrect? SJ5 Waiguan — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide. SJ5 Waiguan — Xi-Cleft; GB35 Yangjiao — confluent — This reverses the two classifications. GB35 Yangjiao — both Xi-Cleft and confluent — These are different points with different classifications; they do not coincide.
+
+9. Which statement correctly interprets the paired vessel names in the correspondence table?
+A) Yin Qiao Mai and Yin Motility refer to the same vessel; Yin Wei Mai and Yin Linking refer to the same vessel. +++++
+B) Yin Qiao and Yang Qiao are the same vessel.
+C) Motility and Linking are the same classification.
+D) Yin Wei has no Xi-Cleft correspondence.
+Feedback: Qiao is translated as Motility and Wei as Linking; the Chinese and English names identify the same respective vessel. Why are the other options incorrect? Yin Qiao and Yang Qiao are the same vessel. — Yin and Yang Qiao are distinct vessels despite belonging to a paired functional grouping. Motility and Linking are the same classification. — Motility refers to Qiao and Linking to Wei, not interchangeable names. Yin Wei has no Xi-Cleft correspondence. — KID9 Zhubin is Yin Wei Xi-Cleft.
+
+10. Which inference is appropriate when a case states only that KID9 Zhubin was selected?
+A) The patient must have Kidney Yang deficiency.
+B) It identifies Yin Wei Xi-Cleft, but symptoms and examination are still needed to infer the patient’s pattern. +++++
+C) It proves that PC6 was not relevant to the vessel.
+D) It means Yin Wei and Yin Qiao are interchangeable.
+Feedback: KID9 identifies the Yin Wei Xi-Cleft correspondence; the selected point alone does not establish a unique pattern. Why are the other options incorrect? The patient must have Kidney Yang deficiency. — Point selection alone does not diagnose Kidney Yang deficiency. It proves that PC6 was not relevant to the vessel. — PC6 remains Yin Wei’s confluent point; another point’s selection does not erase that relationship. It means Yin Wei and Yin Qiao are interchangeable. — Yin Wei and Yin Qiao are distinct vessels, with KID9 and KID8 Xi-Cleft points respectively.
