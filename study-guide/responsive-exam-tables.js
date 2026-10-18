@@ -188,7 +188,7 @@
 
       .study-guide-exam-table tbody th {
         grid-column: 1 / -1;
-        width: auto;
+        width: auto !important;
         padding: 4px 4px 10px;
         border-bottom: 1px solid #d4e0e4;
       }
@@ -225,8 +225,22 @@
       }
     }
 
-    @supports not (container-type: inline-size) {
-      @media (max-width: 900px) {
+    /* Viewport fallback also handles iOS in-app browsers whose container
+       query size can lag after rotating or switching chapters. */
+    @media (max-width: 900px) {
+        .preview-view-switch {
+          position: static;
+        }
+
+        .study-guide-exam-table {
+          display: block;
+          table-layout: auto;
+        }
+
+        .study-guide-exam-table caption {
+          display: block;
+        }
+
         .study-guide-exam-table thead {
           position: absolute;
           width: 1px;
@@ -239,7 +253,7 @@
 
         .study-guide-exam-table tbody {
           display: grid;
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 12px;
         }
 
@@ -254,8 +268,9 @@
 
         .study-guide-exam-table tbody th {
           grid-column: 1 / -1;
-          width: auto;
+          width: auto !important;
           padding: 4px 4px 10px;
+          border-bottom: 1px solid #d4e0e4;
         }
 
         .study-guide-exam-table tbody td {
@@ -282,6 +297,12 @@
         .study-guide-exam-table tbody .study-guide-exam-action-cell::before {
           content: none;
         }
+
+    }
+
+    @media (max-width: 520px) {
+      .study-guide-exam-table tbody {
+        grid-template-columns: 1fr;
       }
     }
   `;
