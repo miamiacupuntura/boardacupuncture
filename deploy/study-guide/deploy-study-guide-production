@@ -131,6 +131,7 @@ rollback_release() {
 
 umask 027
 mkdir -p "${INCOMING_DIR}" "${RELEASES_DIR}"
+cd "${BASE_DIR}"
 
 case "${1:-}" in
     deploy)
