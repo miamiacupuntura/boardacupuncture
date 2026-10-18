@@ -1,0 +1,10 @@
+.preview-notice,
+.preview-view-switch,
+.internal-project-report {
+  display: none !important;
+}
+
+body {
+  margin-top: 0 !important;
+}
+

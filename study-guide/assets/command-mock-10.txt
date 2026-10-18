@@ -1,0 +1,69 @@
+1. Which Command point corresponds to lumbar region and back in the list studied here?
+A) UB40 Weizhong +++++
+B) LI4 Hegu
+C) ST36 Zusanli
+D) LU7 Lieque
+Feedback: UB40 Weizhong has the listed Command correspondence for lumbar region and back. Why are the other options incorrect? LI4 Hegu — LI4 Hegu corresponds to face and mouth in this Command list, not the region or purpose requested. ST36 Zusanli — ST36 Zusanli corresponds to abdominal disorders; tonification of qi and blood in this Command list, not the region or purpose requested. LU7 Lieque — LU7 Lieque corresponds to head, neck and nape in this Command list, not the region or purpose requested.
+
+2. Which Command point corresponds to face and mouth in the list studied here?
+A) UB40 Weizhong
+B) ST36 Zusanli
+C) LU7 Lieque
+D) LI4 Hegu +++++
+Feedback: LI4 Hegu has the listed Command correspondence for face and mouth. Why are the other options incorrect? UB40 Weizhong — UB40 Weizhong corresponds to lumbar region and back in this Command list, not the region or purpose requested. ST36 Zusanli — ST36 Zusanli corresponds to abdominal disorders; tonification of qi and blood in this Command list, not the region or purpose requested. LU7 Lieque — LU7 Lieque corresponds to head, neck and nape in this Command list, not the region or purpose requested.
+
+3. Which Command point corresponds to abdominal disorders; tonification of qi and blood in the list studied here?
+A) LI4 Hegu
+B) LU7 Lieque
+C) ST36 Zusanli +++++
+D) UB40 Weizhong
+Feedback: ST36 Zusanli has the listed Command correspondence for abdominal disorders; tonification of qi and blood. Why are the other options incorrect? LI4 Hegu — LI4 Hegu corresponds to face and mouth in this Command list, not the region or purpose requested. LU7 Lieque — LU7 Lieque corresponds to head, neck and nape in this Command list, not the region or purpose requested. UB40 Weizhong — UB40 Weizhong corresponds to lumbar region and back in this Command list, not the region or purpose requested.
+
+4. Which Command point corresponds to head, neck and nape in the list studied here?
+A) ST36 Zusanli
+B) LU7 Lieque +++++
+C) UB40 Weizhong
+D) LI4 Hegu
+Feedback: LU7 Lieque has the listed Command correspondence for head, neck and nape. Why are the other options incorrect? ST36 Zusanli — ST36 Zusanli corresponds to abdominal disorders; tonification of qi and blood in this Command list, not the region or purpose requested. UB40 Weizhong — UB40 Weizhong corresponds to lumbar region and back in this Command list, not the region or purpose requested. LI4 Hegu — LI4 Hegu corresponds to face and mouth in this Command list, not the region or purpose requested.
+
+5. Which Command point corresponds to chest and lateral costal region in the list studied here?
+A) PC6 Neiguan +++++
+B) UB40 Weizhong
+C) LI4 Hegu
+D) ST36 Zusanli
+Feedback: PC6 Neiguan has the listed Command correspondence for chest and lateral costal region. Why are the other options incorrect? UB40 Weizhong — UB40 Weizhong corresponds to lumbar region and back in this Command list, not the region or purpose requested. LI4 Hegu — LI4 Hegu corresponds to face and mouth in this Command list, not the region or purpose requested. ST36 Zusanli — ST36 Zusanli corresponds to abdominal disorders; tonification of qi and blood in this Command list, not the region or purpose requested.
+
+6. Which Command point corresponds to resuscitation in the list studied here?
+A) UB40 Weizhong
+B) LI4 Hegu
+C) ST36 Zusanli
+D) DU26 Renzhong +++++
+Feedback: DU26 Renzhong has the listed Command correspondence for resuscitation. Why are the other options incorrect? UB40 Weizhong — UB40 Weizhong corresponds to lumbar region and back in this Command list, not the region or purpose requested. LI4 Hegu — LI4 Hegu corresponds to face and mouth in this Command list, not the region or purpose requested. ST36 Zusanli — ST36 Zusanli corresponds to abdominal disorders; tonification of qi and blood in this Command list, not the region or purpose requested.
+
+7. Which set gives the traditional Four Command points associated with Gao Wu?
+A) ST36, UB40, LU7, LI4 +++++
+B) PC6, DU26, SP6, KID3
+C) ST36, ST37, ST39, UB39
+D) LIV13, REN12, UB17, REN17
+Feedback: ST36, UB40, LU7 and LI4 form the traditional Four Command grouping for abdomen, back, head and nape, and face and mouth. Why are the other options incorrect? PC6, DU26, SP6, KID3 — PC6 and DU26 occur in the expanded Command list, but SP6 and KID3 do not establish the Four Command grouping. ST36, ST37, ST39, UB39 — These are Lower He-Sea correspondences, not the Four Command set. LIV13, REN12, UB17, REN17 — These are Hui-Meeting correspondences, not the Four Command set.
+
+8. Which two points expand the Four Command grouping to the Six Command list used here?
+A) SP6 and KID3
+B) PC6 and DU26 +++++
+C) ST37 and ST39
+D) UB11 and GB39
+Feedback: PC6 for the chest and lateral costal region and DU26 for traditional resuscitation expand the grouping to six. Why are the other options incorrect? SP6 and KID3 — SP6 and KID3 are not the two additions in this list. ST37 and ST39 — ST37 and ST39 are intestinal Lower He-Sea points. UB11 and GB39 — UB11 and GB39 are Hui-Meeting of bones and marrow.
+
+9. Which point has both a Lung Luo-Connecting classification and the Command correspondence for the head and nape?
+A) LI4 Hegu
+B) PC6 Neiguan
+C) LU7 Lieque +++++
+D) ST36 Zusanli
+Feedback: LU7 Lieque is Lung Luo-Connecting and the Command point for head and nape in this grouping. Why are the other options incorrect? LI4 Hegu — LI4 is Large Intestine Yuan-Source and Command of face and mouth. PC6 Neiguan — PC6 is Pericardium Luo and Command of chest in the expanded list. ST36 Zusanli — ST36 is Stomach He-Sea and Command of the abdomen.
+
+10. Which interpretation of a Command-point question is most appropriate?
+A) The point must lie inside the body region it treats.
+B) All points with regional indications are Command points.
+C) A Command classification proves a modern emergency protocol.
+D) Match the stated region or purpose to the designated list, while keeping individual indications and clinical assessment distinct. +++++
+Feedback: Command is a designated regional or functional classification; its use does not eliminate pattern differentiation or modern clinical assessment. Why are the other options incorrect? The point must lie inside the body region it treats. — A distal point can have a regional Command correspondence. All points with regional indications are Command points. — Regional indications alone do not establish membership. A Command classification proves a modern emergency protocol. — Traditional resuscitation terminology does not establish a complete modern emergency protocol.

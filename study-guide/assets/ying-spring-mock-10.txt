@@ -1,0 +1,69 @@
+1. Which point is the Ying-Spring point of the Lung channel?
+A) LU10 Yuji +++++
+B) LU11 Shaoshang
+C) LU9 Taiyuan
+D) LU8 Jingqu
+Feedback: LU10 Yuji is the Ying-Spring and Fire point of the Lung channel. Why are the other options incorrect? LU11 Shaoshang — LU11 Shaoshang is the Jing-Well and Wood point of the Lung channel. LU9 Taiyuan — LU9 Taiyuan is the Shu-Stream and Earth point of the Lung channel. LU8 Jingqu — LU8 Jingqu is the Jing-River and Metal point of the Lung channel.
+
+2. Which point is the Ying-Spring point of the Large Intestine channel?
+A) LI1 Shangyang
+B) LI3 Sanjian
+C) LI5 Yangxi
+D) LI2 Erjian +++++
+Feedback: LI2 Erjian is the Ying-Spring and Water point of the Large Intestine channel. Why are the other options incorrect? LI1 Shangyang — LI1 Shangyang is the Jing-Well and Metal point of the Large Intestine channel. LI3 Sanjian — LI3 Sanjian is the Shu-Stream and Wood point of the Large Intestine channel. LI5 Yangxi — LI5 Yangxi is the Jing-River and Fire point of the Large Intestine channel.
+
+3. Which point is the Ying-Spring point of the Stomach channel?
+A) ST43 Xiangu
+B) ST41 Jiexi
+C) ST44 Neiting +++++
+D) ST45 Lidui
+Feedback: ST44 Neiting is the Ying-Spring and Water point of the Stomach channel. Why are the other options incorrect? ST43 Xiangu — ST43 Xiangu is the Shu-Stream and Wood point of the Stomach channel. ST41 Jiexi — ST41 Jiexi is the Jing-River and Fire point of the Stomach channel. ST45 Lidui — ST45 Lidui is the Jing-Well and Metal point of the Stomach channel.
+
+4. Which point is the Ying-Spring point of the Heart channel?
+A) HT4 Lingdao
+B) HT8 Shaofu +++++
+C) HT9 Shaochong
+D) HT7 Shenmen
+Feedback: HT8 Shaofu is the Ying-Spring and Fire point of the Heart channel. Why are the other options incorrect? HT4 Lingdao — HT4 Lingdao is the Jing-River and Metal point of the Heart channel. HT9 Shaochong — HT9 Shaochong is the Jing-Well and Wood point of the Heart channel. HT7 Shenmen — HT7 Shenmen is the Shu-Stream and Earth point of the Heart channel.
+
+5. Which point is the Ying-Spring point of the Kidney channel?
+A) KID2 Rangu +++++
+B) KID1 Yongquan
+C) KID3 Taixi
+D) KID7 Fuliu
+Feedback: KID2 Rangu is the Ying-Spring and Fire point of the Kidney channel. Why are the other options incorrect? KID1 Yongquan — KID1 Yongquan is the Jing-Well and Wood point of the Kidney channel. KID3 Taixi — KID3 Taixi is the Shu-Stream and Earth point of the Kidney channel. KID7 Fuliu — KID7 Fuliu is the Jing-River and Metal point of the Kidney channel.
+
+6. Which point is the Ying-Spring point of the Gall Bladder channel?
+A) GB44 Zuqiaoyin
+B) GB41 Zulinqi
+C) GB38 Yangfu
+D) GB43 Xiaxi +++++
+Feedback: GB43 Xiaxi is the Ying-Spring and Water point of the Gall Bladder channel. Why are the other options incorrect? GB44 Zuqiaoyin — GB44 Zuqiaoyin is the Jing-Well and Metal point of the Gall Bladder channel. GB41 Zulinqi — GB41 Zulinqi is the Shu-Stream and Wood point of the Gall Bladder channel. GB38 Yangfu — GB38 Yangfu is the Jing-River and Fire point of the Gall Bladder channel.
+
+7. Which point is the Ying-Spring point of the Liver channel?
+A) LIV3 Taichong
+B) LIV4 Zhongfeng
+C) LIV2 Xingjian +++++
+D) LIV1 Dadun
+Feedback: LIV2 Xingjian is the Ying-Spring and Fire point of the Liver channel. Why are the other options incorrect? LIV3 Taichong — LIV3 Taichong is the Shu-Stream and Earth point of the Liver channel. LIV4 Zhongfeng — LIV4 Zhongfeng is the Jing-River and Metal point of the Liver channel. LIV1 Dadun — LIV1 Dadun is the Jing-Well and Wood point of the Liver channel.
+
+8. Which statement correctly gives the Five Elements of Ying-Spring points?
+A) Water on Yin and Fire on Yang
+B) Earth on Yin and Wood on Yang
+C) Fire on Yin and Water on Yang +++++
+D) Metal on Yin and Fire on Yang
+Feedback: Ying-Spring corresponds to Fire on Yin channels and Water on Yang channels. Why are the other options incorrect? Water on Yin and Fire on Yang — This reverses the Yin and Yang allocations. Earth on Yin and Wood on Yang — Earth on Yin and Wood on Yang describe Shu-Stream. Metal on Yin and Fire on Yang — Metal on Yin and Fire on Yang describe Jing-River.
+
+9. Which point is the Stomach Ying-Spring point with traditional indications for Stomach Heat affecting the teeth and gums?
+A) ST36 Zusanli
+B) ST41 Jiexi
+C) ST43 Xiangu
+D) ST44 Neiting +++++
+Feedback: ST44 Neiting is Stomach Ying-Spring and Water and clears Heat from the Stomach channel. Why are the other options incorrect? ST36 Zusanli — ST36 is Stomach He-Sea and Earth, not Ying-Spring. ST41 Jiexi — ST41 is Stomach Jing-River and Fire, not Ying-Spring. ST43 Xiangu — ST43 is Stomach Shu-Stream and Wood, not Ying-Spring.
+
+10. Which description matches the classical transport metaphor for Ying-Spring?
+A) The point at which Qi glides +++++
+B) The point at which Qi pours through
+C) The point at which Qi flows
+D) The point at which Qi enters inward
+Feedback: Ying-Spring is associated with the point at which Qi glides. Why are the other options incorrect? The point at which Qi pours through — Qi pours through describes Shu-Stream. The point at which Qi flows — Qi flows describes Jing-River. The point at which Qi enters inward — Qi enters inward describes He-Sea.

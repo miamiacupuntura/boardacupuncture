@@ -1,0 +1,69 @@
+1. In the Entry–Exit convention studied here, which point is the Entry point of the Lung channel?
+A) LU1 Zhongfu +++++
+B) LU7 Lieque
+C) LI4 Hegu
+D) ST1 Chengqi
+Feedback: LU1 Zhongfu is the Entry point of Lung in this convention. Why are the other options incorrect? LU7 Lieque — LU7 Lieque is this channel’s Exit point. LI4 Hegu — LI4 Hegu is the Entry point of Large Intestine, not Lung. ST1 Chengqi — ST1 Chengqi is the Entry point of Stomach, not Lung.
+
+2. In the Entry–Exit convention studied here, which point is the Exit point of the Large Intestine channel?
+A) LI4 Hegu
+B) LU7 Lieque
+C) ST42 Chongyang
+D) LI20 Yingxiang +++++
+Feedback: LI20 Yingxiang is the Exit point of Large Intestine in this convention. Why are the other options incorrect? LI4 Hegu — LI4 Hegu is this channel’s Entry point. LU7 Lieque — LU7 Lieque is the Exit point of Lung, not Large Intestine. ST42 Chongyang — ST42 Chongyang is the Exit point of Stomach, not Large Intestine.
+
+3. In the Entry–Exit convention studied here, which point is the Entry point of the Stomach channel?
+A) LU1 Zhongfu
+B) LI4 Hegu
+C) ST1 Chengqi +++++
+D) ST42 Chongyang
+Feedback: ST1 Chengqi is the Entry point of Stomach in this convention. Why are the other options incorrect? LU1 Zhongfu — LU1 Zhongfu is the Entry point of Lung, not Stomach. LI4 Hegu — LI4 Hegu is the Entry point of Large Intestine, not Stomach. ST42 Chongyang — ST42 Chongyang is this channel’s Exit point.
+
+4. In the Entry–Exit convention studied here, which point is the Exit point of the Spleen channel?
+A) LI20 Yingxiang
+B) SP21 Dabao +++++
+C) SP1 Yinbai
+D) LU7 Lieque
+Feedback: SP21 Dabao is the Exit point of Spleen in this convention. Why are the other options incorrect? LI20 Yingxiang — LI20 Yingxiang is the Exit point of Large Intestine, not Spleen. SP1 Yinbai — SP1 Yinbai is this channel’s Entry point. LU7 Lieque — LU7 Lieque is the Exit point of Lung, not Spleen.
+
+5. In the Entry–Exit convention studied here, which point is the Entry point of the Heart channel?
+A) HT1 Jiquan +++++
+B) HT9 Shaochong
+C) LU1 Zhongfu
+D) LI4 Hegu
+Feedback: HT1 Jiquan is the Entry point of Heart in this convention. Why are the other options incorrect? HT9 Shaochong — HT9 Shaochong is this channel’s Exit point. LU1 Zhongfu — LU1 Zhongfu is the Entry point of Lung, not Heart. LI4 Hegu — LI4 Hegu is the Entry point of Large Intestine, not Heart.
+
+6. In the Entry–Exit convention studied here, which point is the Exit point of the Small Intestine channel?
+A) SI1 Shaoze
+B) LU7 Lieque
+C) LI20 Yingxiang
+D) SI19 Tinggong +++++
+Feedback: SI19 Tinggong is the Exit point of Small Intestine in this convention. Why are the other options incorrect? SI1 Shaoze — SI1 Shaoze is this channel’s Entry point. LU7 Lieque — LU7 Lieque is the Exit point of Lung, not Small Intestine. LI20 Yingxiang — LI20 Yingxiang is the Exit point of Large Intestine, not Small Intestine.
+
+7. In the Entry–Exit convention studied here, which point is the Entry point of the Urinary Bladder channel?
+A) LU1 Zhongfu
+B) LI4 Hegu
+C) UB1 Jingming +++++
+D) UB67 Zhiyin
+Feedback: UB1 Jingming is the Entry point of Urinary Bladder in this convention. Why are the other options incorrect? LU1 Zhongfu — LU1 Zhongfu is the Entry point of Lung, not Urinary Bladder. LI4 Hegu — LI4 Hegu is the Entry point of Large Intestine, not Urinary Bladder. UB67 Zhiyin — UB67 Zhiyin is this channel’s Exit point.
+
+8. In the Entry–Exit convention studied here, which point is the Exit point of the Kidney channel?
+A) LI20 Yingxiang
+B) KID22 Bulang +++++
+C) KID1 Yongquan
+D) LU7 Lieque
+Feedback: KID22 Bulang is the Exit point of Kidney in this convention. Why are the other options incorrect? LI20 Yingxiang — LI20 Yingxiang is the Exit point of Large Intestine, not Kidney. KID1 Yongquan — KID1 Yongquan is this channel’s Entry point. LU7 Lieque — LU7 Lieque is the Exit point of Lung, not Kidney.
+
+9. Which statement accurately distinguishes Entry–Exit convention from numbered channel endpoints?
+A) Every Entry is the first number and every Exit the last number.
+B) Entry–Exit is identical to Jing-Well classification.
+C) LU1 is Lung Entry and LU7 Lung Exit in this convention, although LU11 is the last numbered Lung point. +++++
+D) LU11 cannot be Jing-Well because it is a last numbered point.
+Feedback: Entry–Exit relationships in this convention need not coincide with first and last numbered points; Lung uses LU1 and LU7. Why are the other options incorrect? Every Entry is the first number and every Exit the last number. — Lung Exit LU7 and Kidney Exit KID22 show that the rule is not first-and-last numbering. Entry–Exit is identical to Jing-Well classification. — Jing-Well is a separate Five Shu classification. LU11 cannot be Jing-Well because it is a last numbered point. — LU11 remains Jing-Well and the last numbered Lung point.
+
+10. Which statement correctly distinguishes the Pericardium Exit point from its Yin Wei confluent point?
+A) PC6 is Exit and PC8 is Yin Wei confluent.
+B) PC1 and PC6 are both Exit points.
+C) PC8 and PC6 have identical classifications.
+D) PC8 is Pericardium Exit in this convention; PC6 is Yin Wei confluent. +++++
+Feedback: PC8 Laogong is Pericardium Exit in the studied convention, while PC6 Neiguan is Yin Wei confluent. Why are the other options incorrect? PC6 is Exit and PC8 is Yin Wei confluent. — These two relationships are reversed. PC1 and PC6 are both Exit points. — PC1 is Pericardium Entry, while PC6 has different classifications. PC8 and PC6 have identical classifications. — Sharing a channel does not make their classifications identical.

@@ -1,0 +1,69 @@
+1. Which point is the same-channel Mother point of the Lung channel in the Five Element generating cycle?
+A) LU9 Taiyuan +++++
+B) LU11 Shaoshang
+C) LU10 Yuji
+D) LU8 Jingqu
+Feedback: LU9 Taiyuan is the Mother point: its Earth element generates the channel’s Metal element. Why are the other options incorrect? LU11 Shaoshang — LU11 Shaoshang is the Jing-Well and Wood point of the Lung channel. Its element does not satisfy the mother relationship requested. LU10 Yuji — LU10 Yuji is the Ying-Spring and Fire point of the Lung channel. Its element does not satisfy the mother relationship requested. LU8 Jingqu — LU8 Jingqu is the Jing-River and Metal point of the Lung channel. Its element does not satisfy the mother relationship requested.
+
+2. Which point is the same-channel Mother point of the Large Intestine channel in the Five Element generating cycle?
+A) LI1 Shangyang
+B) LI2 Erjian
+C) LI3 Sanjian
+D) LI11 Quchi +++++
+Feedback: LI11 Quchi is the Mother point: its Earth element generates the channel’s Metal element. Why are the other options incorrect? LI1 Shangyang — LI1 Shangyang is the Jing-Well and Metal point of the Large Intestine channel. Its element does not satisfy the mother relationship requested. LI2 Erjian — LI2 Erjian is the Ying-Spring and Water point of the Large Intestine channel. Its element does not satisfy the mother relationship requested. LI3 Sanjian — LI3 Sanjian is the Shu-Stream and Wood point of the Large Intestine channel. Its element does not satisfy the mother relationship requested.
+
+3. Which point is the same-channel Mother point of the Stomach channel in the Five Element generating cycle?
+A) ST44 Neiting
+B) ST43 Xiangu
+C) ST41 Jiexi +++++
+D) ST45 Lidui
+Feedback: ST41 Jiexi is the Mother point: its Fire element generates the channel’s Earth element. Why are the other options incorrect? ST44 Neiting — ST44 Neiting is the Ying-Spring and Water point of the Stomach channel. Its element does not satisfy the mother relationship requested. ST43 Xiangu — ST43 Xiangu is the Shu-Stream and Wood point of the Stomach channel. Its element does not satisfy the mother relationship requested. ST45 Lidui — ST45 Lidui is the Jing-Well and Metal point of the Stomach channel. Its element does not satisfy the mother relationship requested.
+
+4. Which point is the same-channel Mother point of the Spleen channel in the Five Element generating cycle?
+A) SP5 Shangqiu
+B) SP2 Dadu +++++
+C) SP1 Yinbai
+D) SP3 Taibai
+Feedback: SP2 Dadu is the Mother point: its Fire element generates the channel’s Earth element. Why are the other options incorrect? SP5 Shangqiu — SP5 Shangqiu is the Jing-River and Metal point of the Spleen channel. Its element does not satisfy the mother relationship requested. SP1 Yinbai — SP1 Yinbai is the Jing-Well and Wood point of the Spleen channel. Its element does not satisfy the mother relationship requested. SP3 Taibai — SP3 Taibai is the Shu-Stream and Earth point of the Spleen channel. Its element does not satisfy the mother relationship requested.
+
+5. Which point is the same-channel Mother point of the Heart channel in the Five Element generating cycle?
+A) HT9 Shaochong +++++
+B) HT8 Shaofu
+C) HT7 Shenmen
+D) HT4 Lingdao
+Feedback: HT9 Shaochong is the Mother point: its Wood element generates the channel’s Fire element. Why are the other options incorrect? HT8 Shaofu — HT8 Shaofu is the Ying-Spring and Fire point of the Heart channel. Its element does not satisfy the mother relationship requested. HT7 Shenmen — HT7 Shenmen is the Shu-Stream and Earth point of the Heart channel. Its element does not satisfy the mother relationship requested. HT4 Lingdao — HT4 Lingdao is the Jing-River and Metal point of the Heart channel. Its element does not satisfy the mother relationship requested.
+
+6. Which point is the same-channel Mother point of the Kidney channel in the Five Element generating cycle?
+A) KID1 Yongquan
+B) KID2 Rangu
+C) KID3 Taixi
+D) KID7 Fuliu +++++
+Feedback: KID7 Fuliu is the Mother point: its Metal element generates the channel’s Water element. Why are the other options incorrect? KID1 Yongquan — KID1 Yongquan is the Jing-Well and Wood point of the Kidney channel. Its element does not satisfy the mother relationship requested. KID2 Rangu — KID2 Rangu is the Ying-Spring and Fire point of the Kidney channel. Its element does not satisfy the mother relationship requested. KID3 Taixi — KID3 Taixi is the Shu-Stream and Earth point of the Kidney channel. Its element does not satisfy the mother relationship requested.
+
+7. Which point is the same-channel Mother point of the Liver channel in the Five Element generating cycle?
+A) LIV2 Xingjian
+B) LIV3 Taichong
+C) LIV8 Ququan +++++
+D) LIV1 Dadun
+Feedback: LIV8 Ququan is the Mother point: its Water element generates the channel’s Wood element. Why are the other options incorrect? LIV2 Xingjian — LIV2 Xingjian is the Ying-Spring and Fire point of the Liver channel. Its element does not satisfy the mother relationship requested. LIV3 Taichong — LIV3 Taichong is the Shu-Stream and Earth point of the Liver channel. Its element does not satisfy the mother relationship requested. LIV1 Dadun — LIV1 Dadun is the Jing-Well and Wood point of the Liver channel. Its element does not satisfy the mother relationship requested.
+
+8. Which classical principle underlies the Mother-point approach in the Nanjing, Difficulty 69?
+A) In deficiency, reinforce the Mother; in excess, reduce the Child. +++++
+B) In deficiency, always reduce the Child.
+C) Mother points are always the Yuan-Source points on Yang channels.
+D) Every Mother point belongs to the same element as its channel.
+Feedback: Difficulty 69 supplies the Mother–Child principle: in deficiency, reinforce the Mother; in excess, reduce the Child. Application still requires pattern differentiation. Why are the other options incorrect? In deficiency, always reduce the Child. — This replaces the deficiency principle with the excess principle. Mother points are always the Yuan-Source points on Yang channels. — For example, LI11 is Mother while LI4 is Yuan-Source. Every Mother point belongs to the same element as its channel. — A Mother element precedes and generates the channel element; it is not the same element.
+
+9. The Lung channel belongs to Metal. Which element identifies its Mother point within the generating cycle?
+A) Water
+B) Earth +++++
+C) Fire
+D) Wood
+Feedback: Earth generates Metal, so Lung Mother-point selection seeks the Earth point LU9. Why are the other options incorrect? Water — Water is Metal’s Child, not Mother. Fire — Fire controls Metal in the controlling cycle, rather than generating it. Wood — Wood is neither the immediate Mother nor Child of Metal in the generating cycle.
+
+10. Which statement correctly distinguishes a Mother-point classification from a complete clinical prescription?
+A) Selecting a Mother point establishes the diagnosis without symptoms.
+B) Every patient on that channel must receive the Mother point.
+C) The classification identifies a generating-cycle relationship; individual actions and the patient’s pattern still guide selection. +++++
+D) Mother and Child are interchangeable terms.
+Feedback: Mother identifies the generating-cycle relationship, while point actions and pattern differentiation determine the clinical application. Why are the other options incorrect? Selecting a Mother point establishes the diagnosis without symptoms. — A point classification cannot independently establish diagnosis. Every patient on that channel must receive the Mother point. — Channel identity does not make a Mother point mandatory for every presentation. Mother and Child are interchangeable terms. — Mother generates the channel element; Child is generated by it.

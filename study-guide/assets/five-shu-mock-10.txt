@@ -1,0 +1,69 @@
+1. Which sequence correctly follows the Five Shu categories from the distal extremities toward the elbows or knees?
+A) Jing-Well → Ying-Spring → Shu-Stream → Jing-River → He-Sea +++++
+B) Jing-Well → Shu-Stream → Ying-Spring → Jing-River → He-Sea
+C) He-Sea → Jing-River → Shu-Stream → Ying-Spring → Jing-Well
+D) Jing-Well → Ying-Spring → Yuan-Source → Jing-River → He-Sea
+Feedback: Jing-Well, Ying-Spring, Shu-Stream, Jing-River and He-Sea form the distal-to-proximal Five Shu sequence. Why are the other options incorrect? Jing-Well → Shu-Stream → Ying-Spring → Jing-River → He-Sea — Ying-Spring precedes Shu-Stream, so this sequence reverses them. He-Sea → Jing-River → Shu-Stream → Ying-Spring → Jing-Well — This is the opposite, proximal-to-distal direction. Jing-Well → Ying-Spring → Yuan-Source → Jing-River → He-Sea — Yuan-Source is a different classification and does not replace Shu-Stream in the Five Shu sequence.
+
+2. Which set gives the Five Elements of the Yin Five Shu points in Jing-Well, Ying-Spring, Shu-Stream, Jing-River and He-Sea order?
+A) Metal, Water, Wood, Fire, Earth
+B) Wood, Fire, Earth, Metal, Water +++++
+C) Wood, Water, Earth, Metal, Fire
+D) Fire, Earth, Metal, Water, Wood
+Feedback: The Yin sequence is Wood, Fire, Earth, Metal and Water. Why are the other options incorrect? Metal, Water, Wood, Fire, Earth — This is the Yang sequence, not the Yin sequence. Wood, Water, Earth, Metal, Fire — Ying-Spring is Fire and He-Sea is Water on Yin channels; those two elements are misplaced. Fire, Earth, Metal, Water, Wood — This begins with Fire rather than Jing-Well’s Wood and shifts the entire sequence.
+
+3. Which set gives the Five Elements of the Yang Five Shu points in Jing-Well, Ying-Spring, Shu-Stream, Jing-River and He-Sea order?
+A) Wood, Fire, Earth, Metal, Water
+B) Metal, Fire, Wood, Water, Earth
+C) Metal, Water, Wood, Fire, Earth +++++
+D) Water, Wood, Fire, Earth, Metal
+Feedback: The Yang sequence is Metal, Water, Wood, Fire and Earth. Why are the other options incorrect? Wood, Fire, Earth, Metal, Water — This is the Yin sequence. Metal, Fire, Wood, Water, Earth — Yang Ying-Spring is Water and Jing-River is Fire, so those elements are reversed. Water, Wood, Fire, Earth, Metal — This starts at Ying-Spring’s Water rather than Jing-Well’s Metal.
+
+4. Which Lung point is both Shu-Stream and Yuan-Source?
+A) LU11 Shaoshang
+B) LU10 Yuji
+C) LU8 Jingqu
+D) LU9 Taiyuan +++++
+Feedback: LU9 Taiyuan is the Shu-Stream and Earth point of the Lung channel. Why are the other options incorrect? LU11 Shaoshang — LU11 Shaoshang is the Jing-Well and Wood point of the Lung channel. LU10 Yuji — LU10 Yuji is the Ying-Spring and Fire point of the Lung channel. LU8 Jingqu — LU8 Jingqu is the Jing-River and Metal point of the Lung channel.
+
+5. Which Large Intestine point is Shu-Stream and Wood, rather than its separate Yuan-Source point?
+A) LI3 Sanjian +++++
+B) LI4 Hegu
+C) LI5 Yangxi
+D) LI11 Quchi
+Feedback: LI3 Sanjian is the Shu-Stream and Wood point of the Large Intestine channel. Why are the other options incorrect? LI4 Hegu — LI4 Hegu is the Yuan-Source point of the Large Intestine channel, separate from its Shu-Stream point. LI5 Yangxi — LI5 Yangxi is the Jing-River and Fire point of the Large Intestine channel. LI11 Quchi — LI11 Quchi is the He-Sea and Earth point of the Large Intestine channel.
+
+6. Which Kidney point is Jing-Well and Wood?
+A) KID3 Taixi
+B) KID1 Yongquan +++++
+C) KID7 Fuliu
+D) KID10 Yingu
+Feedback: KID1 Yongquan is the Jing-Well and Wood point of the Kidney channel. Why are the other options incorrect? KID3 Taixi — KID3 Taixi is the Shu-Stream and Earth point of the Kidney channel. KID7 Fuliu — KID7 Fuliu is the Jing-River and Metal point of the Kidney channel. KID10 Yingu — KID10 Yingu is the He-Sea and Water point of the Kidney channel.
+
+7. Which Stomach point is Ying-Spring and Water?
+A) ST43 Xiangu
+B) ST41 Jiexi
+C) ST44 Neiting +++++
+D) ST36 Zusanli
+Feedback: ST44 Neiting is the Ying-Spring and Water point of the Stomach channel. Why are the other options incorrect? ST43 Xiangu — ST43 Xiangu is the Shu-Stream and Wood point of the Stomach channel. ST41 Jiexi — ST41 Jiexi is the Jing-River and Fire point of the Stomach channel. ST36 Zusanli — ST36 Zusanli is the He-Sea and Earth point of the Stomach channel.
+
+8. Which Spleen point is Jing-River and Metal?
+A) SP1 Yinbai
+B) SP2 Dadu
+C) SP3 Taibai
+D) SP5 Shangqiu +++++
+Feedback: SP5 Shangqiu is the Jing-River and Metal point of the Spleen channel. Why are the other options incorrect? SP1 Yinbai — SP1 Yinbai is the Jing-Well and Wood point of the Spleen channel. SP2 Dadu — SP2 Dadu is the Ying-Spring and Fire point of the Spleen channel. SP3 Taibai — SP3 Taibai is the Shu-Stream and Earth point of the Spleen channel.
+
+9. Which Urinary Bladder point is He-Sea and Earth?
+A) UB40 Weizhong +++++
+B) UB60 Kunlun
+C) UB65 Shugu
+D) UB67 Zhiyin
+Feedback: UB40 Weizhong is the He-Sea and Earth point of the Urinary Bladder channel. Why are the other options incorrect? UB60 Kunlun — UB60 Kunlun is the Jing-River and Fire point of the Urinary Bladder channel. UB65 Shugu — UB65 Shugu is the Shu-Stream and Wood point of the Urinary Bladder channel. UB67 Zhiyin — UB67 Zhiyin is the Jing-Well and Metal point of the Urinary Bladder channel.
+
+10. Which Heart point is Ying-Spring and Fire?
+A) HT7 Shenmen
+B) HT8 Shaofu +++++
+C) HT4 Lingdao
+D) HT3 Shaohai
+Feedback: HT8 Shaofu is the Ying-Spring and Fire point of the Heart channel. Why are the other options incorrect? HT7 Shenmen — HT7 Shenmen is the Shu-Stream and Earth point of the Heart channel. HT4 Lingdao — HT4 Lingdao is the Jing-River and Metal point of the Heart channel. HT3 Shaohai — HT3 Shaohai is the He-Sea and Water point of the Heart channel.

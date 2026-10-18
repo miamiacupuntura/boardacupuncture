@@ -1,0 +1,69 @@
+1. Which point is the Hui-Meeting point of zang organs?
+A) LIV13 Zhangmen +++++
+B) REN12 Zhongwan
+C) REN17 Shanzhong
+D) UB17 Geshu
+Feedback: LIV13 Zhangmen is the Hui-Meeting point of zang organs. Why are the other options incorrect? REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested. REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested. UB17 Geshu — UB17 Geshu is Hui-Meeting of blood, not the category requested.
+
+2. Which point is the Hui-Meeting point of fu organs?
+A) LIV13 Zhangmen
+B) REN17 Shanzhong
+C) UB17 Geshu
+D) REN12 Zhongwan +++++
+Feedback: REN12 Zhongwan is the Hui-Meeting point of fu organs. Why are the other options incorrect? LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested. REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested. UB17 Geshu — UB17 Geshu is Hui-Meeting of blood, not the category requested.
+
+3. Which point is the Hui-Meeting point of qi?
+A) REN12 Zhongwan
+B) UB17 Geshu
+C) REN17 Shanzhong +++++
+D) LIV13 Zhangmen
+Feedback: REN17 Shanzhong is the Hui-Meeting point of qi. Why are the other options incorrect? REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested. UB17 Geshu — UB17 Geshu is Hui-Meeting of blood, not the category requested. LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested.
+
+4. Which point is the Hui-Meeting point of blood?
+A) REN17 Shanzhong
+B) UB17 Geshu +++++
+C) LIV13 Zhangmen
+D) REN12 Zhongwan
+Feedback: UB17 Geshu is the Hui-Meeting point of blood. Why are the other options incorrect? REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested. LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested. REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested.
+
+5. Which point is the Hui-Meeting point of sinews?
+A) GB34 Yanglingquan +++++
+B) LIV13 Zhangmen
+C) REN12 Zhongwan
+D) REN17 Shanzhong
+Feedback: GB34 Yanglingquan is the Hui-Meeting point of sinews. Why are the other options incorrect? LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested. REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested. REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested.
+
+6. Which point is the Hui-Meeting point of vessels?
+A) LIV13 Zhangmen
+B) REN12 Zhongwan
+C) REN17 Shanzhong
+D) LU9 Taiyuan +++++
+Feedback: LU9 Taiyuan is the Hui-Meeting point of vessels. Why are the other options incorrect? LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested. REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested. REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested.
+
+7. Which point is the Hui-Meeting point of bones?
+A) REN12 Zhongwan
+B) REN17 Shanzhong
+C) UB11 Dazhu +++++
+D) LIV13 Zhangmen
+Feedback: UB11 Dazhu is the Hui-Meeting point of bones. Why are the other options incorrect? REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested. REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested. LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested.
+
+8. Which point is the Hui-Meeting point of marrow?
+A) REN17 Shanzhong
+B) GB39 Xuanzhong +++++
+C) LIV13 Zhangmen
+D) REN12 Zhongwan
+Feedback: GB39 Xuanzhong is the Hui-Meeting point of marrow. Why are the other options incorrect? REN17 Shanzhong — REN17 Shanzhong is Hui-Meeting of qi, not the category requested. LIV13 Zhangmen — LIV13 Zhangmen is Hui-Meeting of zang organs, not the category requested. REN12 Zhongwan — REN12 Zhongwan is Hui-Meeting of fu organs, not the category requested.
+
+9. Which statement correctly distinguishes the Hui-Meeting categories of Blood and vessels?
+A) UB17 is Blood; LU9 is vessels. +++++
+B) LU9 is Blood; UB17 is vessels.
+C) UB11 is Blood; GB39 is vessels.
+D) Blood and vessels always require the same point.
+Feedback: UB17 Geshu is Hui-Meeting of Blood and LU9 Taiyuan is Hui-Meeting of vessels; the two labels refer to different traditional correspondences. Why are the other options incorrect? LU9 is Blood; UB17 is vessels. — The Blood and vessels correspondences are reversed. UB11 is Blood; GB39 is vessels. — UB11 corresponds to bones and GB39 to marrow. Blood and vessels always require the same point. — Related traditional categories do not share the same Hui-Meeting point.
+
+10. Which statement avoids an incorrect literal translation of traditional marrow and bone correspondences?
+A) GB39 is proven to treat every biomedical spinal-cord disease.
+B) GB39 is Hui-Meeting of marrow and UB11 of bones; traditional Sui and Gu relationships are not identical to every biomedical diagnosis. +++++
+C) UB11 and GB39 are names for the same point.
+D) A marrow correspondence means all bone problems must use GB39 alone.
+Feedback: GB39 and UB11 have distinct traditional marrow and bone correspondences; translating these terms does not establish a universal biomedical mechanism or treatment. Why are the other options incorrect? GB39 is proven to treat every biomedical spinal-cord disease. — A traditional category does not prove universal spinal-cord efficacy. UB11 and GB39 are names for the same point. — UB11 Dazhu and GB39 Xuanzhong are different points. A marrow correspondence means all bone problems must use GB39 alone. — Point selection requires a differentiated presentation rather than an automatic single-point rule.

@@ -1,0 +1,104 @@
+name: Deploy Study Guide to staging
+
+on:
+  pull_request:
+    paths:
+      - study-guide/**
+      - deploy/study-guide/**
+      - .github/workflows/deploy-study-guide-staging.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: study-guide-staging
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the selected commit
+        uses: actions/checkout@v4
+
+      - name: Build and validate the static artifact
+        run: deploy/study-guide/build-release.sh "$RUNNER_TEMP/release" "$GITHUB_SHA"
+
+      - name: Upload the immutable release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: study-guide-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/release/study-guide-${{ github.sha }}.tar.gz
+            ${{ runner.temp }}/release/study-guide-${{ github.sha }}.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-24.04
+    environment: study-guide-staging
+    steps:
+      - name: Download the tested artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: study-guide-${{ github.sha }}
+          path: ${{ runner.temp }}/release
+
+      - name: Configure trusted SSH access
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.STAGING_SSH_KNOWN_HOSTS }}
+        run: |
+          install -d -m 0700 "$RUNNER_TEMP/ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/ssh/key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/ssh/key" "$RUNNER_TEMP/ssh/known_hosts"
+
+      - name: Upload and activate the release
+        env:
+          DEPLOY_HOST: ${{ secrets.STAGING_DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.STAGING_DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.STAGING_DEPLOY_USER }}
+        run: |
+          ARTIFACT="study-guide-${GITHUB_SHA}.tar.gz"
+          CHECKSUM="$(awk '{print $1}' "$RUNNER_TEMP/release/${ARTIFACT}.sha256")"
+          SSH_OPTIONS=(
+            -i "$RUNNER_TEMP/ssh/key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts"
+            -o StrictHostKeyChecking=yes
+            -p "$DEPLOY_PORT"
+          )
+          SCP_OPTIONS=(
+            -i "$RUNNER_TEMP/ssh/key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts"
+            -o StrictHostKeyChecking=yes
+            -P "$DEPLOY_PORT"
+          )
+
+          scp "${SCP_OPTIONS[@]}" \
+            "$RUNNER_TEMP/release/$ARTIFACT" \
+            "$DEPLOY_USER@$DEPLOY_HOST:/var/lib/acupuncture-deploy/incoming/$ARTIFACT"
+
+          ssh "${SSH_OPTIONS[@]}" "$DEPLOY_USER@$DEPLOY_HOST" \
+            "/usr/local/bin/deploy-study-guide deploy '/var/lib/acupuncture-deploy/incoming/$ARTIFACT' '$GITHUB_SHA' '$CHECKSUM'"
+
+      - name: Verify authenticated staging response
+        env:
+          STAGING_BASIC_USER: ${{ secrets.STAGING_BASIC_USER }}
+          STAGING_BASIC_PASSWORD: ${{ secrets.STAGING_BASIC_PASSWORD }}
+        run: |
+          RESPONSE="$RUNNER_TEMP/staging-response.html"
+          curl --fail --silent --show-error \
+            --retry 3 \
+            --user "$STAGING_BASIC_USER:$STAGING_BASIC_PASSWORD" \
+            https://staging.acupuncturetests.com/ \
+            --output "$RESPONSE"
+          grep -q 'Acupuncture &amp; Point Location' "$RESPONSE"
+          echo "Authenticated staging smoke test passed."
