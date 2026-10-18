@@ -1,6 +1,11 @@
 name: Deploy Study Guide to staging
 
 on:
+  pull_request:
+    paths:
+      - study-guide/**
+      - deploy/study-guide/**
+      - .github/workflows/deploy-study-guide-staging.yml
   workflow_dispatch:
 
 permissions:
@@ -31,6 +36,7 @@ jobs:
           retention-days: 30
 
   deploy:
+    if: github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-24.04
     environment: study-guide-staging
