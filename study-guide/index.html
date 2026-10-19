@@ -5002,46 +5002,54 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
   {stem:'What should a learner do when references use different classification conventions?',options:['Silently merge the classifications into one table.','Name the convention and compare the references.','Choose the convention with the shortest point list.','Assume the newest source is always correct.'],answer:1,feedback:'The reading recommends naming the convention and comparing references instead of silently combining different systems.'},
   {stem:'How should professional articles in the Continuing Education reading be used?',options:['As the only source that defines examination content.','As replacements for foundational texts and safety references.','As supplementary perspectives for broader reading and comparison.','As proof that one point is suitable for every patient.'],answer:2,feedback:'Professional articles broaden comparison and perspective; they do not replace foundational references or independently define examination content.'}
  ];
+ const distractorFeedback=[
+  ['Association with an organ does not transfer a point to that organ’s channel; UB18 remains a point of the Urinary Bladder Channel.',null,'Acupuncture points may have several classifications or relationships.','Back-Shu identifies an organ-associated category, while channel membership identifies the channel on which the point is located.'],
+  [null,'Both Front-Mu and Back-Shu categories have organ or Fu correspondences.','Back-Shu and Yuan-Source are separate point classifications with different organizing principles.','Neither category is defined by being the first numbered point of a channel.'],
+  ['This reverses the Mother and Child relationships; LU5 is the Child point and LU9 is the Mother point.','LU11 and LU10 are Five Shu points, but they are not the Mother and Child pair for the Lung Channel.',null,'LI4 belongs to the Large Intestine Channel and LU7 is a Luo-Connecting point.'],
+  ['Entry and Exit points do not consistently correspond to the first and last numbered points.',null,'Jing-Well is a Five Shu classification; Entry–Exit is a separate relationship.','An Exit point does not have to be the highest-numbered point on its channel; LU7 is one example.'],
+  [null,'Selecting a code before defining the pattern and strategy reverses the reasoning process.','Comparing alternatives demonstrates why the selected point fits better than plausible distractors.','A correspondence table supports recall but does not replace the full clinical or educational reasoning process.'],
+  ['A properly labeled correspondence table can directly identify the listed category.','A point code printed in the table can be read directly from it.',null,'Row placement and relationships displayed in the table can be observed directly.'],
+  [null,'Yang channels have a separate Yuan-Source point, so the classifications do not coincide on every channel.','This states the opposite of the Yin-channel relationship.','The relationship is based on traditional point classification, not simply on numerical order.'],
+  ['Ying-Spring and Shu-Stream are distinct categories and are not interchangeable.','Category membership alone does not make an arbitrary pair a complete or appropriate prescription.',null,'Point combinations do not remove the need for patient assessment and appropriate safety considerations.'],
+  ['Silently merging conventions can create inaccurate or misleading classifications.',null,'The length of a point list does not establish the authority or appropriateness of a convention.','Publication date alone does not resolve differences among historical, educational or professional conventions.'],
+  ['A professional article does not independently define the complete examination content.','Articles supplement rather than automatically replace foundational texts or safety references.',null,'No article establishes that one acupuncture point is suitable for every patient or clinical circumstance.']
+ ];
  function make(tag,text,parent){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(parent)parent.append(node);return node;}
  const exam=make('details','',reading);exam.id='pc-continuing-education-mock';exam.className='sgv2-resource continuing-education-mock';
- make('summary','Continuing Education Mock Exam — 10 Questions',exam);
- make('p','Educational Mock practice based on this chapter’s Continuing Education reading. It is not an official Board examination, does not award Continuing Education credit and does not submit a Moodle grade.',exam);
- const form=make('form','',exam);form.noValidate=true;
- const cards=[];
+ make('summary','Continuing Education Review — 10 Questions',exam);
+ make('p','Review these questions, correct answers and explanations before opening the scored SCORM activity. This review does not submit a grade.',exam);
+ const reviewControls=make('div','',exam);reviewControls.className='continuing-education-review-controls';
+ const showAll=make('button','Show all answers and feedback',reviewControls);showAll.type='button';
+ const hideAll=make('button','Hide all answers and feedback',reviewControls);hideAll.type='button';
+ const review=make('div','',exam);review.className='continuing-education-review-list';
+ const feedbackPanels=[];
  questions.forEach((question,index)=>{
-  const fieldset=make('fieldset','',form);fieldset.className='continuing-education-mock-question';
-  make('legend',(index+1)+'. '+question.stem,fieldset);
-  question.options.forEach((option,optionIndex)=>{const label=make('label','',fieldset);label.className='continuing-education-mock-option';const input=make('input','',label);input.type='radio';input.name='continuing-education-mock-'+index;input.value=String(optionIndex);make('span',option,label);});
-  const check=make('button','Check answer',fieldset);check.type='button';check.className='continuing-education-mock-check';
-  const feedback=make('p','',fieldset);feedback.className='continuing-education-mock-feedback';feedback.hidden=true;feedback.setAttribute('aria-live','polite');cards.push({fieldset,feedback,question});
-  check.addEventListener('click',()=>showFeedback(index,cards[index]));
+  const card=make('article','',review);card.className='continuing-education-review-question';
+  make('h4',(index+1)+'. '+question.stem,card);
+  const options=make('ol','',card);options.type='A';options.className='continuing-education-review-options';
+  question.options.forEach(option=>make('li',option,options));
+  const feedback=make('details','',card);feedback.className='continuing-education-review-feedback';feedbackPanels.push(feedback);
+  make('summary','Show answer and feedback',feedback);
+  const answer=make('p','',feedback);answer.className='continuing-education-review-answer';
+  make('strong','Correct answer: '+String.fromCharCode(65+question.answer)+'. '+question.options[question.answer],answer);
+  make('p',question.feedback,feedback);
+  make('h5','Why are the other options incorrect?',feedback);
+  const reasons=make('ul','',feedback);
+  question.options.forEach((option,optionIndex)=>{if(optionIndex===question.answer)return;const item=make('li','',reasons);make('strong',option+' — ',item);item.append(document.createTextNode(distractorFeedback[index][optionIndex]));});
  });
- function showFeedback(index,{fieldset,feedback,question}){
-  const selected=form.querySelector('input[name="continuing-education-mock-'+index+'"]:checked');
-  fieldset.classList.remove('is-correct','is-incorrect');
-  feedback.hidden=false;
-  if(!selected){feedback.textContent='Select an answer first.';return {selected:null,correct:false};}
-  const correct=Number(selected.value)===question.answer;
-  fieldset.classList.add(correct?'is-correct':'is-incorrect');
-  feedback.textContent=correct
-   ?'Correct. '+question.feedback
-   :'Incorrect. Correct answer: '+question.options[question.answer]+'. '+question.feedback;
-  return {selected,correct};
- }
- const actions=make('div','',form);actions.className='continuing-education-mock-actions';
- const submit=make('button','Check all 10 answers',actions);submit.type='submit';
- const reset=make('button','Try again',actions);reset.type='reset';
- const status=make('p','',form);status.className='continuing-education-mock-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
- form.addEventListener('submit',event=>{event.preventDefault();let score=0,answered=0;cards.forEach((card,index)=>{const result=showFeedback(index,card);if(result.selected)answered++;if(result.correct)score++;});status.textContent='Score: '+score+' of '+questions.length+'. '+answered+' of '+questions.length+' questions answered. This practice result is not submitted to Moodle.';status.focus?.();});
- form.addEventListener('reset',()=>queueMicrotask(()=>{cards.forEach(({fieldset,feedback})=>{fieldset.classList.remove('is-correct','is-incorrect');feedback.hidden=true;feedback.textContent='';});status.textContent='';}));
+ showAll.addEventListener('click',()=>{feedbackPanels.forEach(panel=>panel.open=true);feedbackPanels[0]?.querySelector('summary')?.focus();});
+ hideAll.addEventListener('click',()=>{feedbackPanels.forEach(panel=>panel.open=false);showAll.focus();});
+ const scorm=make('section','',exam);scorm.className='continuing-education-scorm';
+ make('h4','Ready for Point Categories Continuing Education (Mock 10)?',scorm);
+ make('p','After reviewing the questions and feedback above, open the SCORM activity. The SCORM opens in a new tab.',scorm);
+ const scormLink=make('a','Start Point Categories Continuing Education (Mock 10)',scorm);scormLink.href='https://www.acupuncturetests.com/mod/scorm/view.php?id=9355';scormLink.target='_blank';scormLink.rel='noopener';scormLink.className='continuing-education-scorm-button';
  const style=make('style','',document.head);style.textContent=`
   .continuing-education-mock{margin:22px 16px!important;border-top:4px solid #8a642d!important}.continuing-education-mock>summary{font-weight:800;color:#62481f}
-  .continuing-education-mock form{margin-top:16px}.continuing-education-mock-question{margin:16px 0;padding:16px;border:1px solid #c8d8dc;border-radius:10px;background:#fff;text-align:left}.continuing-education-mock-question legend{padding:0 6px;font-weight:750;line-height:1.5;color:#173f4c;text-align:left}
-  .continuing-education-mock-option{display:flex;align-items:flex-start;gap:10px;padding:9px 4px;line-height:1.5;text-align:left}.continuing-education-mock-option input{flex:0 0 auto;margin-top:5px}.continuing-education-mock-option span{min-width:0;overflow-wrap:anywhere;text-align:left}
-  .continuing-education-mock-check{min-height:40px;margin-top:8px;padding:8px 14px;border:2px solid #087774;border-radius:8px;background:#fff;color:#075f60;font-weight:750;cursor:pointer}.continuing-education-mock-check:hover{background:#eaf6f4}.continuing-education-mock-check:focus-visible{outline:3px solid #1769c2;outline-offset:2px}
-  .continuing-education-mock-feedback{margin:10px 0 0;padding:10px 12px;border-radius:7px;background:#eef5f6}.continuing-education-mock-question.is-correct{border-color:#348153}.continuing-education-mock-question.is-correct .continuing-education-mock-feedback{background:#e9f6ed;color:#195b34}.continuing-education-mock-question.is-incorrect{border-color:#b45b43}.continuing-education-mock-question.is-incorrect .continuing-education-mock-feedback{background:#fff0eb;color:#7c2f1d}
-  .continuing-education-mock-actions{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.continuing-education-mock-actions button{min-height:44px;padding:10px 16px;border:0;border-radius:9px;font-weight:750;cursor:pointer}.continuing-education-mock-actions button[type=submit]{background:#087774;color:#fff}.continuing-education-mock-actions button[type=reset]{background:#e7edf0;color:#183548}.continuing-education-mock-status{font-weight:800;color:#174f60}
-  @media(max-width:600px){.continuing-education-mock{margin:18px 0!important}.continuing-education-mock-question{padding:13px 10px}.continuing-education-mock-check,.continuing-education-mock-actions button{width:100%}}
+  .continuing-education-review-controls{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.continuing-education-review-controls button{min-height:42px;padding:9px 14px;border:2px solid #087774;border-radius:8px;background:#fff;color:#075f60;font-weight:750;cursor:pointer}.continuing-education-review-controls button:hover{background:#eaf6f4}.continuing-education-review-controls button:focus-visible{outline:3px solid #1769c2;outline-offset:2px}
+  .continuing-education-review-question{margin:16px 0;padding:16px;border:1px solid #c8d8dc;border-radius:10px;background:#fff;text-align:left}.continuing-education-review-question h4{margin:0 0 12px;color:#173f4c;line-height:1.5}.continuing-education-review-options{margin:0 0 14px;padding-left:30px}.continuing-education-review-options li{margin:8px 0;padding-left:4px;line-height:1.5}
+  .continuing-education-review-feedback{border:1px solid #b9d6d0;border-radius:8px;background:#eef7f4}.continuing-education-review-feedback>summary{padding:11px 13px;color:#075f60;font-weight:800;cursor:pointer}.continuing-education-review-feedback>p,.continuing-education-review-feedback>h5,.continuing-education-review-feedback>ul{margin-left:14px;margin-right:14px}.continuing-education-review-feedback>ul{padding-left:22px}.continuing-education-review-feedback>li{line-height:1.5}.continuing-education-review-answer{padding:10px 12px;border-left:4px solid #348153;background:#e8f6ed}
+  .continuing-education-scorm{margin:24px 0 4px;padding:18px;border:1px solid #e3b27e;border-left:5px solid #f47e2c;border-radius:10px;background:#fff7ed}.continuing-education-scorm h4{margin-top:0;color:#743d16}.continuing-education-scorm-button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;box-sizing:border-box;padding:11px 18px;border-radius:9px;background:#f47e2c;color:#17232a;font-weight:850;text-decoration:none}.continuing-education-scorm-button:hover{background:#dc681b}.continuing-education-scorm-button:focus-visible{outline:3px solid #1769c2;outline-offset:3px}
+  @media(max-width:600px){.continuing-education-mock{margin:18px 0!important}.continuing-education-review-question{padding:13px 10px}.continuing-education-review-controls button,.continuing-education-scorm-button{width:100%}}
  `;
 })();</script>
 <script id="student-notes-after-objective-return">(()=>{
