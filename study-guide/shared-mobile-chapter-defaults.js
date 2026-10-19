@@ -116,6 +116,7 @@
       .study-guide-mobile-index-back .point-categories-hero-back{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;box-sizing:border-box;padding:10px 14px;border:2px solid #176b70;border-radius:9px;background:#fff;color:#145960;font-weight:800;text-align:center;text-decoration:none}
     }
     @media(max-width:600px){
+      #point-categories-draft .point-objective-explanation.sgv2-resource{box-sizing:border-box!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;overflow:visible!important}
       .shared-mobile-chapter-defaults .study-guide-mobile-table-shell{position:relative;box-sizing:border-box;width:calc(100vw - 30px)!important;max-width:calc(100vw - 30px)!important;margin-left:calc((100% - (100vw - 30px))/2)!important;margin-right:calc((100% - (100vw - 30px))/2)!important;overflow-x:auto!important;overscroll-behavior-x:contain;background:#fff}
       .shared-mobile-chapter-defaults .study-guide-content-table{display:table!important}
       .shared-mobile-chapter-defaults .study-guide-content-table caption{display:table-caption!important;position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important;clip-path:none!important}
