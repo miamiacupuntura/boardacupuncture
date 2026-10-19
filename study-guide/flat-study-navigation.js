@@ -46,6 +46,7 @@
   function addSection(nav, title, items) {
     const section = document.createElement('section');
     section.className = 'flat-navigation-section';
+    if (title === 'Objectives') section.classList.add('flat-navigation-objectives');
     const heading = document.createElement('h4');
     heading.textContent = title;
     const list = document.createElement('ul');
@@ -181,6 +182,7 @@
     .shared-study-navigation>.flat-navigation-section a:hover{border-left-color:#63aaa8!important;background:#f0f7f7;color:#075f60}
     .shared-study-navigation>.flat-navigation-section a:focus-visible{outline:3px solid #1769c2;outline-offset:1px}
     .shared-study-navigation>.flat-navigation-section a[aria-current="location"],.shared-study-navigation>.flat-navigation-section a.active{border-left-color:#087774!important;background:#dff0ed;color:#075f60;font-weight:750}
+    @media(max-width:760px){.sgv2-navigation>.flat-navigation-objectives{display:none!important}}
   `;
   document.head.append(style);
 
