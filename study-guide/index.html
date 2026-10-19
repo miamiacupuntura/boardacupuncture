@@ -4977,11 +4977,57 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
  }
 })();</script>
 <script id="continuing-education-reading-title">(()=>{
- const title='In-depth Chapter Reading - Continuing Education';
+ const title='How this Chapter aligns with the Continuing Education';
  const section=document.getElementById('pc-continuing-reading');
- const summary=section?.querySelector(':scope > summary');
- if(summary)summary.textContent=title;
- for(const link of document.querySelectorAll('a[href="#pc-continuing-reading"]'))link.textContent=title;
+ function rename(){
+  const summary=section?.querySelector(':scope > summary');
+  if(summary)summary.textContent=title;
+  for(const link of document.querySelectorAll('a[href="#pc-continuing-reading"]'))link.textContent=title;
+ }
+ new MutationObserver(rename).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ rename();
+})();</script>
+<script id="continuing-education-mock-exam">(()=>{
+ const reading=document.getElementById('pc-continuing-reading');
+ if(!reading||document.getElementById('pc-continuing-education-mock'))return;
+ const questions=[
+  {stem:'What does Ganshu UB18 demonstrate about point classification?',options:['It belongs to the Liver Channel because it is associated with Liver.','It belongs to the Urinary Bladder Channel and is the Back-Shu point associated with Liver.','A point can belong to only one traditional category.','Back-Shu and channel membership are interchangeable labels.'],answer:1,feedback:'A point may have several relationships. UB18 belongs to the Urinary Bladder Channel while its Back-Shu correspondence is associated with Liver.'},
+  {stem:'Why should Front-Mu and Back-Shu not be treated as interchangeable categories?',options:['They organize organ correspondences from different body regions and must be interpreted in their own contexts.','Only Front-Mu points have organ correspondences.','Back-Shu points are simply another name for Yuan-Source points.','Both categories identify the first point on a channel.'],answer:0,feedback:'Front-Mu and Back-Shu are distinct organ-associated categories organized from different body regions.'},
+  {stem:'Which pairing correctly identifies the Mother and Child points of the Lung Channel in this chapter?',options:['Mother LU5 Chize; Child LU9 Taiyuan.','Mother LU11 Shaoshang; Child LU10 Yuji.','Mother LU9 Taiyuan; Child LU5 Chize.','Mother LI4 Hegu; Child LU7 Lieque.'],answer:2,feedback:'The chapter identifies LU9 Taiyuan as the Mother point and LU5 Chize as the Child point of the Lung Channel.'},
+  {stem:'Which statement correctly distinguishes Entry–Exit classification from channel numbering?',options:['Every Entry point is the first numbered point and every Exit point is the last.','LI4 may be an Entry point and LU7 an Exit point even though neither rule is based simply on first and last numbering.','Entry–Exit is identical to Jing-Well classification.','An Exit point always has the highest number on its channel.'],answer:1,feedback:'The Entry–Exit convention is a particular relationship and is not derived simply from the first and last numbered points.'},
+  {stem:'After identifying the intended strategy in a reasoned point-selection explanation, what should come next?',options:['Choose the relevant category before identifying a matching point.','Select a point by code before describing the pattern.','Skip comparison with alternatives.','Use the correspondence table as the complete treatment argument.'],answer:0,feedback:'The reading organizes reasoning as pattern, strategy, relevant category, matching point and comparison of alternatives.'},
+  {stem:'What cannot a correspondence table determine by itself?',options:['The name of a listed category.','A point code shown in the table.','Needling depth, contraindications and suitability for an individual patient.','Whether two entries appear in the same row.'],answer:2,feedback:'Correspondence tables support study, but location, needling, safety and individual suitability require appropriate references and clinical assessment.'},
+  {stem:'How do Shu-Stream and Yuan-Source classifications relate on Yin and Yang channels?',options:['They coincide on Yin channels; on Yang channels the Yuan-Source point is separate.','They coincide on every channel.','They are always separate on Yin channels.','The relationship depends only on point numbering.'],answer:0,feedback:'On Yin channels the Shu-Stream and Yuan-Source classifications coincide; Yang channels have a separate Yuan-Source point.'},
+  {stem:'What is the best interpretation of combining Ying-Spring and Shu-Stream points?',options:['The two categories are interchangeable.','Any two points from the categories form a complete prescription.','Their different contributions may be combined when supported by the pattern and treatment strategy.','The combination removes the need to assess the patient.'],answer:2,feedback:'The categories retain distinct contributions. A combination must be justified by the pattern and strategy rather than used automatically.'},
+  {stem:'What should a learner do when references use different classification conventions?',options:['Silently merge the classifications into one table.','Name the convention and compare the references.','Choose the convention with the shortest point list.','Assume the newest source is always correct.'],answer:1,feedback:'The reading recommends naming the convention and comparing references instead of silently combining different systems.'},
+  {stem:'How should professional articles in the Continuing Education reading be used?',options:['As the only source that defines examination content.','As replacements for foundational texts and safety references.','As supplementary perspectives for broader reading and comparison.','As proof that one point is suitable for every patient.'],answer:2,feedback:'Professional articles broaden comparison and perspective; they do not replace foundational references or independently define examination content.'}
+ ];
+ function make(tag,text,parent){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(parent)parent.append(node);return node;}
+ const exam=make('details','',reading);exam.id='pc-continuing-education-mock';exam.className='sgv2-resource continuing-education-mock';
+ make('summary','Continuing Education Mock Exam — 10 Questions',exam);
+ make('p','Educational Mock practice based on this chapter’s Continuing Education reading. It is not an official Board examination, does not award Continuing Education credit and does not submit a Moodle grade.',exam);
+ const form=make('form','',exam);form.noValidate=true;
+ const cards=[];
+ questions.forEach((question,index)=>{
+  const fieldset=make('fieldset','',form);fieldset.className='continuing-education-mock-question';
+  make('legend',(index+1)+'. '+question.stem,fieldset);
+  question.options.forEach((option,optionIndex)=>{const label=make('label','',fieldset);label.className='continuing-education-mock-option';const input=make('input','',label);input.type='radio';input.name='continuing-education-mock-'+index;input.value=String(optionIndex);make('span',option,label);});
+  const feedback=make('p','',fieldset);feedback.className='continuing-education-mock-feedback';feedback.hidden=true;feedback.setAttribute('aria-live','polite');cards.push({fieldset,feedback,question});
+ });
+ const actions=make('div','',form);actions.className='continuing-education-mock-actions';
+ const submit=make('button','Check all 10 answers',actions);submit.type='submit';
+ const reset=make('button','Try again',actions);reset.type='reset';
+ const status=make('p','',form);status.className='continuing-education-mock-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+ form.addEventListener('submit',event=>{event.preventDefault();let score=0,answered=0;cards.forEach(({fieldset,feedback,question},index)=>{const selected=form.querySelector('input[name="continuing-education-mock-'+index+'"]:checked');const correct=selected&&Number(selected.value)===question.answer;if(selected)answered++;if(correct)score++;fieldset.classList.toggle('is-correct',!!correct);fieldset.classList.toggle('is-incorrect',!correct);feedback.hidden=false;feedback.textContent=(correct?'Correct. ':'Review: ')+question.feedback;});status.textContent='Score: '+score+' of '+questions.length+'. '+answered+' of '+questions.length+' questions answered. This practice result is not submitted to Moodle.';status.focus?.();});
+ form.addEventListener('reset',()=>queueMicrotask(()=>{cards.forEach(({fieldset,feedback})=>{fieldset.classList.remove('is-correct','is-incorrect');feedback.hidden=true;feedback.textContent='';});status.textContent='';}));
+ const style=make('style','',document.head);style.textContent=`
+  .continuing-education-mock{margin:22px 16px!important;border-top:4px solid #8a642d!important}.continuing-education-mock>summary{font-weight:800;color:#62481f}
+  .continuing-education-mock form{margin-top:16px}.continuing-education-mock-question{margin:16px 0;padding:16px;border:1px solid #c8d8dc;border-radius:10px;background:#fff;text-align:left}.continuing-education-mock-question legend{padding:0 6px;font-weight:750;line-height:1.5;color:#173f4c;text-align:left}
+  .continuing-education-mock-option{display:flex;align-items:flex-start;gap:10px;padding:9px 4px;line-height:1.5;text-align:left}.continuing-education-mock-option input{flex:0 0 auto;margin-top:5px}.continuing-education-mock-option span{min-width:0;overflow-wrap:anywhere;text-align:left}
+  .continuing-education-mock-feedback{margin:10px 0 0;padding:10px 12px;border-radius:7px;background:#eef5f6}.continuing-education-mock-question.is-correct{border-color:#348153}.continuing-education-mock-question.is-correct .continuing-education-mock-feedback{background:#e9f6ed;color:#195b34}.continuing-education-mock-question.is-incorrect{border-color:#b45b43}.continuing-education-mock-question.is-incorrect .continuing-education-mock-feedback{background:#fff0eb;color:#7c2f1d}
+  .continuing-education-mock-actions{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.continuing-education-mock-actions button{min-height:44px;padding:10px 16px;border:0;border-radius:9px;font-weight:750;cursor:pointer}.continuing-education-mock-actions button[type=submit]{background:#087774;color:#fff}.continuing-education-mock-actions button[type=reset]{background:#e7edf0;color:#183548}.continuing-education-mock-status{font-weight:800;color:#174f60}
+  @media(max-width:600px){.continuing-education-mock{margin:18px 0!important}.continuing-education-mock-question{padding:13px 10px}.continuing-education-mock-actions button{width:100%}}
+ `;
 })();</script>
 <script id="student-notes-after-objective-return">(()=>{
  const review=document.getElementById('pc-objective-return');
@@ -5045,6 +5091,17 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
   .student-note-image-delete{flex:0 0 auto;background:#9f2f2f;color:#fff;padding:8px 11px}.student-notes-empty{grid-column:1/-1;color:#5d6f75;font-style:italic}
   @media(max-width:700px){.student-notes-gallery{grid-template-columns:1fr}.student-note-image-card img{height:auto;max-height:320px}.student-notes-controls button{width:100%}}
  `;
+})();</script>
+<script id="continuing-education-after-student-notes">(()=>{
+ const reading=document.getElementById('pc-continuing-reading');
+ const notes=document.getElementById('pc-notes');
+ if(reading&&notes)notes.after(reading);
+ const navigation=document.getElementById('point-categories-study-navigation');
+ const readingLink=navigation?.querySelector('a[href="#pc-continuing-reading"]');
+ const notesLink=navigation?.querySelector('a[href="#pc-notes"]');
+ const readingItem=readingLink?.closest('li')||readingLink;
+ const notesItem=notesLink?.closest('li')||notesLink;
+ if(readingItem&&notesItem)notesItem.after(readingItem);
 })();</script>
 <script id="point-categories-compact-hero">(()=>{
  const hero=document.getElementById('pc-introduction');
@@ -5113,4 +5170,25 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
   shell.classList.add('point-category-mobile-table-shell');
  });}
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;enhance();});}).observe(root,{childList:true,subtree:true});mobile.addEventListener?.('change',enhance);enhance();
-})();</script><script src="shared-mobile-chapter-defaults.js?v=20261019-3"></script>
+})();</script><script src="shared-mobile-chapter-defaults.js?v=20261019-3"></script><script id="finalize-continuing-education-placement">(()=>{
+ const title='How this Chapter aligns with the Continuing Education';
+ function finalize(){
+  const reading=document.getElementById('pc-continuing-reading');
+  const notes=document.getElementById('pc-notes');
+  const summary=reading?.querySelector(':scope > summary');
+  if(summary&&summary.textContent!==title)summary.textContent=title;
+  const navigation=document.getElementById('point-categories-study-navigation');
+  const readingLink=navigation?.querySelector('a[href="#pc-continuing-reading"]');
+  const notesLink=navigation?.querySelector('a[href="#pc-notes"]');
+  if(readingLink&&readingLink.textContent!==title){readingLink.textContent=title;readingLink.title=title;}
+  if(reading&&notes&&notes.nextElementSibling!==reading)notes.after(reading);
+  const readingItem=readingLink?.closest('li')||readingLink;
+  const notesItem=notesLink?.closest('li')||notesLink;
+  if(readingItem&&notesItem&&notesItem.nextElementSibling!==readingItem)notesItem.after(readingItem);
+ }
+ let queued=false;const queue=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;finalize();});};
+ new MutationObserver(queue).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ const navigation=document.getElementById('point-categories-study-navigation');
+ if(navigation)new MutationObserver(queue).observe(navigation,{childList:true,subtree:true});
+ finalize();
+})();</script>
