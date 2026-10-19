@@ -2,6 +2,22 @@
   'use strict';
   const chapterIndexUrl = '/blocks/myprogress/study-guide.php?area=pointlocation';
   const chapterIndexLabel = '← Back to Study Guide index';
+  function ensureMobileIndexBack() {
+    const selector = document.querySelector('.chapter-selector');
+    if (!selector) return;
+    let bar = document.querySelector('.study-guide-mobile-index-back');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.className = 'study-guide-mobile-index-back';
+      const link = document.createElement('a');
+      link.className = 'point-categories-hero-button point-categories-hero-back';
+      bar.append(link);
+      selector.before(bar);
+    }
+    const link = bar.querySelector('a');
+    link.href = chapterIndexUrl;
+    link.textContent = chapterIndexLabel;
+  }
   const channels = document.getElementById('sgv2-introduction');
   function ensurePointHero() {
     const hero = document.getElementById('pc-introduction');
@@ -33,6 +49,7 @@
     const caption = document.createElement('figcaption'); caption.textContent = 'Conceptual chapter cover — not a point-location or needling guide.';
     figure.append(image, caption); hero.append(copy, figure);
   }
+  ensureMobileIndexBack();
   ensurePointHero();
   document.querySelectorAll('.chapter-selector button')[1]?.addEventListener('click', () => setTimeout(ensurePointHero, 0));
   if (!channels) return;
@@ -99,7 +116,8 @@
     .shared-chapter-hero .point-categories-hero-lead{max-width:660px;margin:0;color:#38525c;font-size:1rem;line-height:1.48}
     .shared-chapter-hero .point-categories-hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:16px}
     .shared-chapter-hero .point-categories-hero-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border-radius:9px;font-weight:800;text-decoration:none;box-sizing:border-box}
-    .shared-chapter-hero .point-categories-hero-back{border:2px solid #176b70;background:#fff;color:#145960}
+    .shared-chapter-hero .point-categories-hero-back,.study-guide-mobile-index-back .point-categories-hero-back{border:2px solid #176b70;background:#fff;color:#145960}
+    .study-guide-mobile-index-back{display:none}
     .shared-chapter-hero .point-categories-hero-exam{border:2px solid #f47e2c;background:#f47e2c;color:#17232a;box-shadow:0 5px 12px rgba(202,91,13,.18)}
     .shared-chapter-hero .point-categories-hero-button:focus-visible{outline:3px solid #185cca;outline-offset:3px}
     .shared-chapter-hero .point-categories-hero-button:hover{transform:translateY(-1px)}
@@ -110,7 +128,8 @@
     #sgv2-introduction.channels-chapter-hero h1{margin:0;color:#102d3b;font-size:clamp(1.65rem,3vw,2.35rem);line-height:1.08}
     #sgv2-introduction.channels-chapter-hero h2{margin:5px 0 9px;color:#a64f12;font-size:clamp(1.3rem,2.2vw,1.8rem);line-height:1.15}
     #sgv2-introduction.channels-chapter-hero .point-categories-hero-art img{object-position:center 12%}
-    @media(max-width:760px){.shared-chapter-hero,#sgv2-introduction.channels-chapter-hero{grid-template-columns:1fr;padding:18px;gap:16px}.shared-chapter-hero .point-categories-hero-art{order:-1;height:180px;max-height:180px}.shared-chapter-hero .point-categories-hero-art img{min-height:180px}.shared-chapter-hero .point-categories-hero-actions{display:grid;grid-template-columns:1fr 1fr}.shared-chapter-hero .point-categories-hero-button{padding:9px 10px}}
+    @media(min-width:761px){.chapter-selector{display:none!important}}
+    @media(max-width:760px){.study-guide-mobile-index-back{display:block;position:sticky;top:0;z-index:1000;margin:0 0 14px;padding:10px 0;background:rgba(238,247,247,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.study-guide-mobile-index-back .point-categories-hero-back{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;padding:10px 14px;border-radius:9px;font-weight:800;text-decoration:none;box-sizing:border-box}.shared-chapter-hero .point-categories-hero-back{display:none}.shared-chapter-hero,#sgv2-introduction.channels-chapter-hero{grid-template-columns:1fr;padding:18px;gap:16px}.shared-chapter-hero .point-categories-hero-art{order:-1;height:180px;max-height:180px}.shared-chapter-hero .point-categories-hero-art img{min-height:180px}.shared-chapter-hero .point-categories-hero-actions{display:grid;grid-template-columns:1fr}.shared-chapter-hero .point-categories-hero-button{padding:9px 10px}}
     @media(max-width:430px){.shared-chapter-hero .point-categories-hero-actions{grid-template-columns:1fr}.shared-chapter-hero .point-categories-hero-art{height:155px;max-height:155px}.shared-chapter-hero .point-categories-hero-art img{min-height:155px}}
   `;
   document.head.append(style);
