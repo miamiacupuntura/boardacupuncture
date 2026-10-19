@@ -16,7 +16,7 @@
     const h2 = document.createElement('h2'); h2.textContent = 'Point Categories';
     const lead = document.createElement('p'); lead.className = 'point-categories-hero-lead'; lead.textContent = 'Connect point classifications, channel correspondences and clinical reasoning through 26 focused objectives.';
     const actions = document.createElement('div'); actions.className = 'point-categories-hero-actions';
-    const back = document.createElement('a'); back.href = 'https://www.acupuncturetests.com/course/view.php?id=34#section-2'; back.className = 'point-categories-hero-button point-categories-hero-back'; back.textContent = '← Back to course';
+    const back = document.createElement('a'); back.href = '/blocks/myprogress/study-guide.php?area=pointlocation'; back.className = 'point-categories-hero-button point-categories-hero-back'; back.textContent = '← Back to Study Guide index';
     const exam = document.createElement('a'); exam.href = '#pc-exam-history'; exam.className = 'point-categories-hero-button point-categories-hero-exam'; exam.textContent = 'Start Exam';
     exam.addEventListener('click', event => {const target=document.getElementById('pc-exam-history');if(!target)return;event.preventDefault();target.open=true;history.replaceState(null,'','#pc-exam-history');target.scrollIntoView({behavior:'smooth',block:'start'});target.querySelector(':scope > summary')?.focus({preventScroll:true})});
     actions.append(back, exam); copy.append(eyebrow, h1, h2, lead, actions);
@@ -29,7 +29,7 @@
   document.querySelectorAll('.chapter-selector button')[1]?.addEventListener('click', () => setTimeout(ensurePointHero, 0));
   if (!channels) return;
 
-  const oldBack = channels.querySelector('.preview-back-button')?.href || 'https://www.acupuncturetests.com/course/view.php?id=34#module-610';
+  const oldBack = '/blocks/myprogress/study-guide.php?area=pointlocation';
   channels.className = 'sgv2-card point-categories-hero shared-chapter-hero channels-chapter-hero';
   channels.replaceChildren();
 
@@ -53,7 +53,7 @@
   const back = document.createElement('a');
   back.href = oldBack;
   back.className = 'point-categories-hero-button point-categories-hero-back';
-  back.textContent = '← Back to course';
+  back.textContent = '← Back to Study Guide index';
   const exam = document.createElement('a');
   exam.href = '#chapter-exam-history';
   exam.className = 'point-categories-hero-button point-categories-hero-exam';
