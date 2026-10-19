@@ -101,6 +101,8 @@
       background: #e7f1f4;
       color: #123b4a;
       font-weight: 800;
+      overflow-wrap: normal;
+      word-break: normal;
     }
 
     .study-guide-exam-table tbody th {
@@ -216,7 +218,7 @@
     @media (max-width: 520px) {
       .study-guide-exam-table {
         font-size: .78rem;
-        min-width: 640px !important;
+        min-width: 470px !important;
       }
 
       .study-guide-exam-table th,
@@ -227,7 +229,16 @@
       }
 
       .study-guide-exam-table th:first-child {
-        width: 34%;
+        width: 30%;
+      }
+
+      .study-guide-exam-table thead th:first-child::after {
+        content: "→";
+        display: block;
+        margin-top: 4px;
+        color: #087774;
+        font-size: 1.25rem;
+        line-height: 1;
       }
     }
   `;
