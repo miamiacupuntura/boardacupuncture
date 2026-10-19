@@ -4899,6 +4899,28 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
   @media(max-width:760px){.chapter-summary-gallery{grid-template-columns:1fr}.chapter-summary-image-button img{height:auto;max-height:330px}.chapter-summary-dialog{width:96vw;padding:14px}}
  `;document.head.append(style);
 })();</script>
+<script id="finalize-channels-continuing-education-placement">(()=>{
+ const title='How the Channels and Collaterals Chapter Aligns with Continuing Education';
+ function finalize(){
+  const reading=document.getElementById('channels-chapter-continuing-education');
+  const notes=document.getElementById('student_notes_form');
+  const summary=reading?.querySelector(':scope > summary');
+  if(summary&&summary.textContent!==title)summary.textContent=title;
+  const readingLink=document.querySelector('a[href="#channels-chapter-continuing-education"]');
+  const notesLink=document.querySelector('a[href="#student_notes_form"]');
+  if(readingLink&&readingLink.textContent!==title){readingLink.textContent=title;readingLink.title=title;}
+  if(reading&&notes&&notes.nextElementSibling!==reading)notes.after(reading);
+  const readingItem=readingLink?.closest('li')||readingLink;
+  const notesItem=notesLink?.closest('li')||notesLink;
+  if(readingItem&&notesItem&&notesItem.nextElementSibling!==readingItem)notesItem.after(readingItem);
+ }
+ let queued=false;const queue=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;finalize();});};
+ new MutationObserver(queue).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ const readingLink=document.querySelector('a[href="#channels-chapter-continuing-education"]');
+ const navigation=readingLink?.closest('nav');
+ if(navigation)new MutationObserver(queue).observe(navigation,{childList:true,subtree:true});
+ finalize();
+})();</script>
 <script id="historical-gallery-after-chapter-summary">(()=>{
  const summary=document.getElementById('pc-image');
  const history=document.getElementById('pc-history-gallery');
@@ -4976,8 +4998,9 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
   if(readingItem&&alignmentItem)readingItem.after(alignmentItem);
  }
 })();</script>
+<script src="channels-continuing-education-review.js?v=20261019-1"></script>
 <script id="continuing-education-reading-title">(()=>{
- const title='How this Chapter aligns with the Continuing Education';
+ const title='How the Point Categories Chapter Aligns with Continuing Education';
  const section=document.getElementById('pc-continuing-reading');
  function rename(){
   const summary=section?.querySelector(':scope > summary');
@@ -5194,7 +5217,7 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
  });}
  let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;enhance();});}).observe(root,{childList:true,subtree:true});mobile.addEventListener?.('change',enhance);enhance();
 })();</script><script src="shared-mobile-chapter-defaults.js?v=20261019-3"></script><script id="finalize-continuing-education-placement">(()=>{
- const title='How this Chapter aligns with the Continuing Education';
+ const title='How the Point Categories Chapter Aligns with Continuing Education';
  function finalize(){
   const reading=document.getElementById('pc-continuing-reading');
   const notes=document.getElementById('pc-notes');

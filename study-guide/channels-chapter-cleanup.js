@@ -18,7 +18,7 @@
 
   const gallery=document.getElementById('chapter-image-library');
   let continuing=document.getElementById('channels-chapter-continuing-education');
-  if(!continuing){continuing=document.createElement('details');continuing.id='channels-chapter-continuing-education';continuing.className='sgv2-card channels-chapter-continuing';const summary=document.createElement('summary');summary.textContent='In-depth Chapter Reading — Continuing Education';const intro=document.createElement('p');intro.textContent='This continuous reading extends comparison and clinical reasoning across the chapter. It does not award continuing-education credit or replace the assigned sources.';continuing.append(summary,intro);const fallback=[
+  if(!continuing){continuing=document.createElement('details');continuing.id='channels-chapter-continuing-education';continuing.className='sgv2-card channels-chapter-continuing';const summary=document.createElement('summary');summary.textContent='How the Channels and Collaterals Chapter Aligns with Continuing Education';const intro=document.createElement('p');intro.textContent='This continuous reading extends comparison and clinical reasoning across the chapter. It does not award continuing-education credit or replace the assigned sources.';continuing.append(summary,intro);const fallback=[
     ['The functional network and relative depth','The functional network joins zangfu, channels, tissues and sense organs. Relative depth supports exterior–interior reasoning but is a conceptual relationship, not a measured anatomical ladder.','Deadman, Al-Khafaji and Baker, A Manual of Acupuncture, “The Functions of the Channels.”'],
     ['Primary Channels as the reference network','A channel and its zangfu share a traditional relationship but are not identical. Surface charts omit internal branches, and pathway location alone does not establish a zangfu diagnosis.','Deadman, Al-Khafaji and Baker, A Manual of Acupuncture, “The Twelve Primary Channels.”'],
     ['Separation, convergence and reconnection','Divergent Channels reinforce deeper relationships through separation, convergence and reconnection. Yuen’s Wei–Yuan comparison is a teaching framework, not a literal anatomical tunnel.','Deadman, Al-Khafaji and Baker, A Manual of Acupuncture, “The Twelve Divergent Channels.”'],
@@ -45,7 +45,7 @@
   [...content.children].find(node=>node.matches('div:not([id]):not([class])')&&node.querySelector('a[href*="course/view.php"]'))?.remove();
 
   let cursor=lastObjective;
-  [gallery,continuing,lecture,board,history,mocks,final,notes].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
+  [gallery,lecture,board,history,mocks,final,notes,continuing].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
 
   const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#chapter-exam-history','#channels-mock-exams','#sgv2-final-review'];
   [...nav.children].forEach(li=>{if(cleanupHrefs.includes(li.querySelector('a')?.getAttribute('href')))li.remove();if(li.classList.contains('channels-final-nav-label'))li.remove()});
@@ -53,8 +53,8 @@
   const navItem=(label,href,group=false)=>{const li=document.createElement('li');if(group){li.className='channels-nav-label channels-final-nav-label';li.textContent=label}else{const a=document.createElement('a');a.href=href;a.textContent=label;li.append(a)}navCursor.after(li);navCursor=li};
   navItem('Chapter Summary Image — Visual Review','#chapter-image-library');
   navItem('Practice & review','',true);navItem('Self-Test — Practice without score','#topic-questions-answers');
-  navItem('Further reading','',true);navItem('In-depth Chapter Reading — Continuing Education','#channels-chapter-continuing-education');
   navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('Exam History and Start Exam','#chapter-exam-history');navItem('Mock Exams — Channels and Collaterals','#channels-mock-exams');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');
+  navItem('Further reading','',true);navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');
 
   const style=document.createElement('style');style.textContent=`
     .channels-chapter-continuing{margin-top:0}
