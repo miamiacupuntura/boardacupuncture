@@ -44,14 +44,17 @@
     #point-categories-mock-exams tbody tr:nth-child(even){background:#fff}
     #point-categories-mock-exams .mock-directory-exam-button{display:inline-flex;width:100%;align-items:center;justify-content:center;padding:10px 8px;line-height:1.2;white-space:normal}
     @media(max-width:760px){
+      #point-categories-mock-exams{box-sizing:border-box;width:100%;min-width:0;overflow-x:hidden!important}
+      #point-categories-mock-exams table{box-sizing:border-box;width:100%!important;min-width:0!important;max-width:100%!important}
       #point-categories-mock-exams thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
-      #point-categories-mock-exams tbody{display:grid;gap:12px}
-      #point-categories-mock-exams tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;border:1px solid #d4e0e4;border-radius:10px;background:#fff}
+      #point-categories-mock-exams tbody{display:grid;width:100%;min-width:0;gap:12px}
+      #point-categories-mock-exams tbody tr{display:grid;box-sizing:border-box;width:100%;min-width:0;max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;border:1px solid #d4e0e4;border-radius:10px;background:#fff;overflow:hidden}
       #point-categories-mock-exams tbody th{grid-column:1/-1;width:auto;padding:4px 4px 10px;border-bottom:1px solid #d4e0e4}
-      #point-categories-mock-exams tbody td{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px 4px;text-align:right}
+      #point-categories-mock-exams tbody td{display:grid;box-sizing:border-box;width:auto;min-width:0!important;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px 4px;text-align:right}
       #point-categories-mock-exams tbody td::before{content:attr(data-label);font-weight:750;color:#38525c;text-align:left}
       #point-categories-mock-exams tbody td:last-child{grid-column:1/-1;display:block;padding-top:10px}
       #point-categories-mock-exams tbody td:last-child::before{content:none}
+      #point-categories-mock-exams .mock-directory-exam-button{box-sizing:border-box;width:100%;max-width:100%;min-width:0}
     }
   `;
   document.head.append(style);
