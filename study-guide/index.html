@@ -5012,21 +5012,36 @@ el('p','Check your reasoning: explain which findings suggest Cold, which suggest
   const fieldset=make('fieldset','',form);fieldset.className='continuing-education-mock-question';
   make('legend',(index+1)+'. '+question.stem,fieldset);
   question.options.forEach((option,optionIndex)=>{const label=make('label','',fieldset);label.className='continuing-education-mock-option';const input=make('input','',label);input.type='radio';input.name='continuing-education-mock-'+index;input.value=String(optionIndex);make('span',option,label);});
+  const check=make('button','Check answer',fieldset);check.type='button';check.className='continuing-education-mock-check';
   const feedback=make('p','',fieldset);feedback.className='continuing-education-mock-feedback';feedback.hidden=true;feedback.setAttribute('aria-live','polite');cards.push({fieldset,feedback,question});
+  check.addEventListener('click',()=>showFeedback(index,cards[index]));
  });
+ function showFeedback(index,{fieldset,feedback,question}){
+  const selected=form.querySelector('input[name="continuing-education-mock-'+index+'"]:checked');
+  fieldset.classList.remove('is-correct','is-incorrect');
+  feedback.hidden=false;
+  if(!selected){feedback.textContent='Select an answer first.';return {selected:null,correct:false};}
+  const correct=Number(selected.value)===question.answer;
+  fieldset.classList.add(correct?'is-correct':'is-incorrect');
+  feedback.textContent=correct
+   ?'Correct. '+question.feedback
+   :'Incorrect. Correct answer: '+question.options[question.answer]+'. '+question.feedback;
+  return {selected,correct};
+ }
  const actions=make('div','',form);actions.className='continuing-education-mock-actions';
  const submit=make('button','Check all 10 answers',actions);submit.type='submit';
  const reset=make('button','Try again',actions);reset.type='reset';
  const status=make('p','',form);status.className='continuing-education-mock-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
- form.addEventListener('submit',event=>{event.preventDefault();let score=0,answered=0;cards.forEach(({fieldset,feedback,question},index)=>{const selected=form.querySelector('input[name="continuing-education-mock-'+index+'"]:checked');const correct=selected&&Number(selected.value)===question.answer;if(selected)answered++;if(correct)score++;fieldset.classList.toggle('is-correct',!!correct);fieldset.classList.toggle('is-incorrect',!correct);feedback.hidden=false;feedback.textContent=(correct?'Correct. ':'Review: ')+question.feedback;});status.textContent='Score: '+score+' of '+questions.length+'. '+answered+' of '+questions.length+' questions answered. This practice result is not submitted to Moodle.';status.focus?.();});
+ form.addEventListener('submit',event=>{event.preventDefault();let score=0,answered=0;cards.forEach((card,index)=>{const result=showFeedback(index,card);if(result.selected)answered++;if(result.correct)score++;});status.textContent='Score: '+score+' of '+questions.length+'. '+answered+' of '+questions.length+' questions answered. This practice result is not submitted to Moodle.';status.focus?.();});
  form.addEventListener('reset',()=>queueMicrotask(()=>{cards.forEach(({fieldset,feedback})=>{fieldset.classList.remove('is-correct','is-incorrect');feedback.hidden=true;feedback.textContent='';});status.textContent='';}));
  const style=make('style','',document.head);style.textContent=`
   .continuing-education-mock{margin:22px 16px!important;border-top:4px solid #8a642d!important}.continuing-education-mock>summary{font-weight:800;color:#62481f}
   .continuing-education-mock form{margin-top:16px}.continuing-education-mock-question{margin:16px 0;padding:16px;border:1px solid #c8d8dc;border-radius:10px;background:#fff;text-align:left}.continuing-education-mock-question legend{padding:0 6px;font-weight:750;line-height:1.5;color:#173f4c;text-align:left}
   .continuing-education-mock-option{display:flex;align-items:flex-start;gap:10px;padding:9px 4px;line-height:1.5;text-align:left}.continuing-education-mock-option input{flex:0 0 auto;margin-top:5px}.continuing-education-mock-option span{min-width:0;overflow-wrap:anywhere;text-align:left}
+  .continuing-education-mock-check{min-height:40px;margin-top:8px;padding:8px 14px;border:2px solid #087774;border-radius:8px;background:#fff;color:#075f60;font-weight:750;cursor:pointer}.continuing-education-mock-check:hover{background:#eaf6f4}.continuing-education-mock-check:focus-visible{outline:3px solid #1769c2;outline-offset:2px}
   .continuing-education-mock-feedback{margin:10px 0 0;padding:10px 12px;border-radius:7px;background:#eef5f6}.continuing-education-mock-question.is-correct{border-color:#348153}.continuing-education-mock-question.is-correct .continuing-education-mock-feedback{background:#e9f6ed;color:#195b34}.continuing-education-mock-question.is-incorrect{border-color:#b45b43}.continuing-education-mock-question.is-incorrect .continuing-education-mock-feedback{background:#fff0eb;color:#7c2f1d}
   .continuing-education-mock-actions{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.continuing-education-mock-actions button{min-height:44px;padding:10px 16px;border:0;border-radius:9px;font-weight:750;cursor:pointer}.continuing-education-mock-actions button[type=submit]{background:#087774;color:#fff}.continuing-education-mock-actions button[type=reset]{background:#e7edf0;color:#183548}.continuing-education-mock-status{font-weight:800;color:#174f60}
-  @media(max-width:600px){.continuing-education-mock{margin:18px 0!important}.continuing-education-mock-question{padding:13px 10px}.continuing-education-mock-actions button{width:100%}}
+  @media(max-width:600px){.continuing-education-mock{margin:18px 0!important}.continuing-education-mock-question{padding:13px 10px}.continuing-education-mock-check,.continuing-education-mock-actions button{width:100%}}
  `;
 })();</script>
 <script id="student-notes-after-objective-return">(()=>{
