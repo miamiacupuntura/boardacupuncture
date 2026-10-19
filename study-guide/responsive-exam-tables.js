@@ -68,7 +68,8 @@
       container: study-guide-exams / inline-size;
       max-width: 100%;
       margin-block: 18px;
-      overflow: hidden !important;
+      overflow-x: auto !important;
+      overflow-y: hidden;
     }
 
     .study-guide-exam-table {
@@ -149,162 +150,84 @@
       outline-offset: 2px;
     }
 
-    /* Switch before a six-column table becomes cramped on landscape phones. */
-    @container study-guide-exams (max-width: 900px) {
-      .study-guide-exam-table {
-        display: block;
-        table-layout: auto;
+    /* Match the compact Moodle table on phones instead of converting rows
+       into cards. Landscape retains all six columns. */
+    @media (max-width: 900px) {
+      .preview-view-switch {
+        position: static;
       }
 
-      .study-guide-exam-table caption {
-        display: block;
+      .study-guide-exam-table {
+        display: table;
+        table-layout: fixed;
+        font-size: .82rem;
       }
 
       .study-guide-exam-table thead {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        white-space: nowrap;
+        position: static;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip: auto;
+        clip-path: none;
+        white-space: normal;
       }
 
       .study-guide-exam-table tbody {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
+        display: table-row-group;
       }
 
       .study-guide-exam-table tbody tr {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        align-content: start;
-        padding: 12px;
-        border: 1px solid #d4e0e4;
-        border-radius: 10px;
-        background: #fff;
+        display: table-row;
       }
 
-      .study-guide-exam-table tbody th {
-        grid-column: 1 / -1;
-        width: auto !important;
-        padding: 4px 4px 10px;
-        border-bottom: 1px solid #d4e0e4;
-      }
-
-      .study-guide-exam-table tbody td {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 8px;
-        padding: 8px 4px;
-        text-align: right;
-      }
-
-      .study-guide-exam-table tbody td::before {
-        content: attr(data-label);
-        color: #38525c;
-        font-weight: 750;
-        text-align: left;
-      }
-
+      .study-guide-exam-table th,
+      .study-guide-exam-table td,
+      .study-guide-exam-table tbody th,
+      .study-guide-exam-table tbody td,
       .study-guide-exam-table tbody .study-guide-exam-action-cell {
-        grid-column: 1 / -1;
-        display: block;
-        padding-top: 10px;
-        border-bottom: 0 !important;
+        display: table-cell;
+        padding: 10px 6px !important;
+        border-radius: 0;
       }
 
+      .study-guide-exam-table tbody td::before,
       .study-guide-exam-table tbody .study-guide-exam-action-cell::before {
         content: none;
       }
-    }
 
-    @container study-guide-exams (max-width: 520px) {
-      .study-guide-exam-table tbody {
-        grid-template-columns: 1fr;
+      .study-guide-exam-table th:first-child {
+        width: 34%;
+      }
+
+      .study-guide-exam-table th:last-child {
+        width: 17%;
+      }
+
+      .study-guide-exam-table .study-guide-exam-action {
+        width: 64px;
+        min-width: 0;
+        min-height: 58px;
+        padding: 8px 6px;
+        border-radius: 28px;
       }
     }
 
-    /* Viewport fallback also handles iOS in-app browsers whose container
-       query size can lag after rotating or switching chapters. */
-    @media (max-width: 900px) {
-        .preview-view-switch {
-          position: static;
-        }
-
-        .study-guide-exam-table {
-          display: block;
-          table-layout: auto;
-        }
-
-        .study-guide-exam-table caption {
-          display: block;
-        }
-
-        .study-guide-exam-table thead {
-          position: absolute;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-          clip: rect(0 0 0 0);
-          clip-path: inset(50%);
-          white-space: nowrap;
-        }
-
-        .study-guide-exam-table tbody {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-        }
-
-        .study-guide-exam-table tbody tr {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          padding: 12px;
-          border: 1px solid #d4e0e4;
-          border-radius: 10px;
-          background: #fff;
-        }
-
-        .study-guide-exam-table tbody th {
-          grid-column: 1 / -1;
-          width: auto !important;
-          padding: 4px 4px 10px;
-          border-bottom: 1px solid #d4e0e4;
-        }
-
-        .study-guide-exam-table tbody td {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
-          gap: 8px;
-          padding: 8px 4px;
-          text-align: right;
-        }
-
-        .study-guide-exam-table tbody td::before {
-          content: attr(data-label);
-          color: #38525c;
-          font-weight: 750;
-          text-align: left;
-        }
-
-        .study-guide-exam-table tbody .study-guide-exam-action-cell {
-          grid-column: 1 / -1;
-          display: block;
-          padding-top: 10px;
-          border-bottom: 0 !important;
-        }
-
-        .study-guide-exam-table tbody .study-guide-exam-action-cell::before {
-          content: none;
-        }
-
-    }
-
     @media (max-width: 520px) {
-      .study-guide-exam-table tbody {
-        grid-template-columns: 1fr;
+      .study-guide-exam-table {
+        font-size: .78rem;
+        min-width: 640px !important;
+      }
+
+      .study-guide-exam-table th,
+      .study-guide-exam-table td,
+      .study-guide-exam-table tbody th,
+      .study-guide-exam-table tbody td {
+        padding: 10px 5px !important;
+      }
+
+      .study-guide-exam-table th:first-child {
+        width: 34%;
       }
     }
   `;
