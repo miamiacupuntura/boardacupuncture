@@ -212,7 +212,7 @@
         grid-column: 1 / -1;
         display: block;
         padding-top: 10px;
-        border-bottom: 0;
+        border-bottom: 0 !important;
       }
 
       .study-guide-exam-table tbody .study-guide-exam-action-cell::before {
@@ -293,7 +293,7 @@
           grid-column: 1 / -1;
           display: block;
           padding-top: 10px;
-          border-bottom: 0;
+          border-bottom: 0 !important;
         }
 
         .study-guide-exam-table tbody .study-guide-exam-action-cell::before {
