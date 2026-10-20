@@ -1,0 +1,40 @@
+{
+  "templateVersion": 1,
+  "slug": "replace-with-chapter-slug",
+  "courseTitle": "Acupuncture & Point Location",
+  "chapterTitle": "Replace with chapter title",
+  "chapterDescription": "Replace with a concise learner-facing description.",
+  "backUrl": "https://www.acupuncturetests.com/study-guide/",
+  "heroImageUrl": "",
+  "heroImageAlt": "",
+  "chapterReading": "Add verified chapter reading and references.",
+  "ncbahmLearningPlan": "Explain Board relevance, expected question types, study materials, preparation and mastery criteria.",
+  "schoolExamUrl": "",
+  "boardExamUrl": "",
+  "continuingEducationPlan": "Explain the CE purpose, learning sequence and completion requirements.",
+  "continuingEducationReview": "Add ten review questions with feedback before the scored activity.",
+  "continuingEducationExamUrl": "",
+  "spanishChapterTitle": "",
+  "spanishChapterDescription": "",
+  "objectives": [
+    {
+      "title": "Objective 1 — Use a measurable verb.",
+      "subjectMatter": "Verified subject matter.",
+      "teachingMethod": "Reading, visual comparison, retrieval practice and feedback."
+    }
+  ],
+  "blockOrder": [
+    "Introduction and learning paths",
+    "Course overview and chapter reading",
+    "Learning objectives and resources",
+    "Visual review and flashcards",
+    "Self-test and Exam Chapter Review (Lecture)",
+    "Review objectives and My Student Notes",
+    "NCBAHM Exam Learning Plan",
+    "School Level Exam",
+    "Board Level Exam",
+    "Continuing Education Learning Plan",
+    "Continuing Education Review",
+    "Continuing Education Exam"
+  ]
+}
