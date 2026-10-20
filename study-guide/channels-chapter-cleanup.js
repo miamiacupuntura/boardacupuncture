@@ -65,7 +65,7 @@
   [...content.children].find(node=>node.matches('div:not([id]):not([class])')&&node.querySelector('a[href*="course/view.php"]'))?.remove();
 
   let cursor=lastObjective;
-  [gallery,lecture,board,alignment,history,mocks,final,notes,continuing,continuingExam].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
+  [gallery,lecture,board,final,notes,alignment,history,mocks,continuing,continuingExam].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
 
   const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#channels-ncbahm-alignment','#chapter-exam-history','#channels-mock-exams','#channels-continuing-education-exam','#sgv2-final-review'];
   [...nav.children].forEach(li=>{if(cleanupHrefs.includes(li.querySelector('a')?.getAttribute('href')))li.remove();if(li.classList.contains('channels-final-nav-label'))li.remove()});
@@ -73,7 +73,7 @@
   const navItem=(label,href,group=false)=>{const li=document.createElement('li');if(group){li.className='channels-nav-label channels-final-nav-label';li.textContent=label}else{const a=document.createElement('a');a.href=href;a.textContent=label;li.append(a)}navCursor.after(li);navCursor=li};
   navItem('Chapter Summary Image — Visual Review','#chapter-image-library');
   navItem('Practice & review','',true);navItem('Self-Test — Practice without score','#topic-questions-answers');
-  navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('How this Chapter aligns with the NCBAHM Exam','#channels-ncbahm-alignment');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');
+  navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');navItem('How this Chapter aligns with the NCBAHM Exam','#channels-ncbahm-alignment');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');
   navItem('Further reading','',true);navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');
 
   const style=document.createElement('style');style.textContent=`
