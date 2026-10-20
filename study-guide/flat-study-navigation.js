@@ -111,20 +111,20 @@
     addSection(nav, 'Start here', [
       makeLink(nav, links, '#sgv2-introduction', 'Introduction'),
       makeLink(nav, links, '#sgv2-course-overview', 'Course Overview'),
-      makeLink(nav, links, '#sgv2-formb', 'Learning Plan'),
       makeLink(nav, links, '#chapter-general-reading', 'Chapter Reading'),
       makeLink(nav, links, '#channels-ncbahm-alignment', 'NCBAHM Alignment')
     ]);
     addSection(nav, 'Objectives', currentObjectiveLinks(nav, links, 'details[id^="channels-objective-"]:not([id*="board"])'));
     addSection(nav, 'Chapter resources', [
       makeLink(nav, links, '#chapter-image-library', 'Visual Review Gallery'),
-      makeLink(nav, links, '#channels-chapter-continuing-education', 'Continuing Education')
+      makeLink(nav, links, '#sgv2-formb', 'Continuing Education')
     ]);
     addSection(nav, 'Practice & exams', [
       makeLink(nav, links, '#topic-questions-answers', 'Self-Test'),
       makeLink(nav, links, '#chapter-mock-review', 'Board Simulation'),
       makeLink(nav, links, '#chapter-exam-history', 'Exam History & Start Exam'),
       makeLink(nav, links, '#channels-mock-exams', 'Mock Exams'),
+      makeLink(nav, links, '#channels-continuing-education-exam', 'Continuing Education Exam'),
       makeLink(nav, links, '#sgv2-final-review', 'Review Objectives'),
       makeLink(nav, links, '#student_notes_form', 'My Student Notes')
     ]);

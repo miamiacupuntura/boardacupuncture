@@ -106,6 +106,19 @@
     target.scrollIntoView({behavior: 'smooth', block: 'start'});
     target.querySelector(':scope > summary')?.focus({preventScroll: true});
   });
+  const continuing = document.createElement('a');
+  continuing.href = '#sgv2-formb';
+  continuing.className = 'point-categories-hero-button channels-hero-continuing';
+  continuing.textContent = 'Continuing Education';
+  continuing.addEventListener('click', event => {
+    const target = document.getElementById('sgv2-formb');
+    if (!target) return;
+    event.preventDefault();
+    target.open = true;
+    history.replaceState(null, '', '#sgv2-formb');
+    target.scrollIntoView({behavior: 'smooth', block: 'start'});
+    target.querySelector(':scope > summary')?.focus({preventScroll: true});
+  });
   const continuingExam = document.createElement('a');
   continuingExam.href = '#channels-continuing-education-exam';
   continuingExam.className = 'point-categories-hero-button channels-hero-continuing-exam';
@@ -119,7 +132,7 @@
     target.scrollIntoView({behavior: 'smooth', block: 'start'});
     target.querySelector(':scope > summary')?.focus({preventScroll: true});
   });
-  actions.append(back, exam, boardExam, continuingExam);
+  actions.append(back, exam, boardExam, continuing, continuingExam);
   copy.append(eyebrow, h1, h2, lead, actions);
 
   const figure = document.createElement('figure');
@@ -146,6 +159,7 @@
     .study-guide-mobile-index-back{display:none}
     .shared-chapter-hero .point-categories-hero-exam{border:2px solid #f47e2c;background:#f47e2c;color:#17232a;box-shadow:0 5px 12px rgba(202,91,13,.18)}
     .shared-chapter-hero .channels-hero-board-exam{border:2px solid #087774;background:#087774;color:#fff;box-shadow:0 5px 12px rgba(8,119,116,.18)}
+    .shared-chapter-hero .channels-hero-continuing{border:2px solid #315f8f;background:#315f8f;color:#fff;box-shadow:0 5px 12px rgba(49,95,143,.18)}
     .shared-chapter-hero .channels-hero-continuing-exam{border:2px solid #7652a5;background:#7652a5;color:#fff;box-shadow:0 5px 12px rgba(118,82,165,.18)}
     .shared-chapter-hero .point-categories-hero-button:focus-visible{outline:3px solid #185cca;outline-offset:3px}
     .shared-chapter-hero .point-categories-hero-button:hover{transform:translateY(-1px)}
