@@ -107,11 +107,18 @@
     target.querySelector(':scope > summary')?.focus({preventScroll: true});
   });
   const continuingExam = document.createElement('a');
-  continuingExam.href = 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9356';
-  continuingExam.target = '_blank';
-  continuingExam.rel = 'noopener';
+  continuingExam.href = '#channels-continuing-education-exam';
   continuingExam.className = 'point-categories-hero-button channels-hero-continuing-exam';
   continuingExam.textContent = 'Continuing Education Exam';
+  continuingExam.addEventListener('click', event => {
+    const target = document.getElementById('channels-continuing-education-exam');
+    if (!target) return;
+    event.preventDefault();
+    target.open = true;
+    history.replaceState(null, '', '#channels-continuing-education-exam');
+    target.scrollIntoView({behavior: 'smooth', block: 'start'});
+    target.querySelector(':scope > summary')?.focus({preventScroll: true});
+  });
   actions.append(back, exam, boardExam, continuingExam);
   copy.append(eyebrow, h1, h2, lead, actions);
 

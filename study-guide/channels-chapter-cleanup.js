@@ -39,27 +39,44 @@
   let mocks=document.getElementById('channels-mock-exams');
   if(!mocks){mocks=document.createElement('details');mocks.id='channels-mock-exams';mocks.className='sgv2-card channels-mock-exams';const summary=document.createElement('summary');summary.textContent='Board Level Exam — Channels and Collaterals';const intro=document.createElement('p');const table=document.createElement('table');table.className='channels-mock-table';const caption=document.createElement('caption');caption.textContent='The Channels and Collaterals — 9 objectives';const thead=document.createElement('thead');const headRow=document.createElement('tr');['Exam',...examMetricLabels,'Action'].forEach(label=>{const th=document.createElement('th');th.scope='col';th.textContent=label;headRow.append(th)});thead.append(headRow);const tbody=document.createElement('tbody');let available=0;currentObjectives.forEach((objective,index)=>{const source=[...objective.querySelectorAll('.objective-exam a[href]')].find(a=>/Mock\s*10/i.test(a.textContent));const row=document.createElement('tr');const topic=document.createElement('th');topic.scope='row';topic.textContent=`${index+1}. ${titleOf(objective).replace(/^Objective \d+\s*[—–-]\s*/, '')}`;row.append(topic);examMetricLabels.forEach(label=>{const td=document.createElement('td');td.dataset.label=label;td.textContent='—';row.append(td)});const action=document.createElement('td');action.dataset.label='Action';if(source){available++;const a=document.createElement('a');a.href=source.href;a.target='_blank';a.rel='noopener noreferrer';a.className='channels-mock-start';a.textContent='Start Mock 10';a.setAttribute('aria-label',`Start Mock 10 — ${topic.textContent}`);action.append(a)}else{const pending=document.createElement('span');pending.className='channels-mock-pending';pending.textContent='Awaiting exam link';action.append(pending)}row.append(action);tbody.append(row)});intro.textContent=`Access the Mock 10 exams for all nine objectives here. ${available} have available links; personal attempts, dates and grades are available in Moodle. Exams open in another tab.`;table.append(caption,thead,tbody);mocks.append(summary,intro,table)}
 
+  let continuingExam=document.getElementById('channels-continuing-education-exam');
+  if(!continuingExam){
+    continuingExam=document.createElement('details');
+    continuingExam.id='channels-continuing-education-exam';
+    continuingExam.className='sgv2-card channels-mock-exams channels-continuing-exam';
+    const summary=document.createElement('summary');summary.textContent='Continuing Education Exam — Channels and Collaterals';
+    const intro=document.createElement('p');intro.textContent='Open the Channels and Collaterals Continuing Education exam here. Personal attempts, dates and grades are available in Moodle. The exam opens in another tab.';
+    const table=document.createElement('table');table.className='channels-mock-table channels-continuing-exam-table';
+    const caption=document.createElement('caption');caption.textContent='The Channels and Collaterals — Continuing Education';
+    const thead=document.createElement('thead');const headRow=document.createElement('tr');
+    ['Exam',...examMetricLabels,'Action'].forEach(label=>{const th=document.createElement('th');th.scope='col';th.textContent=label;headRow.append(th)});thead.append(headRow);
+    const tbody=document.createElement('tbody');const row=document.createElement('tr');const name=document.createElement('th');name.scope='row';name.textContent='Channels and Collaterals Continuing Education (Mock 10)';row.append(name);
+    examMetricLabels.forEach(label=>{const td=document.createElement('td');td.dataset.label=label;td.textContent='—';row.append(td)});
+    const action=document.createElement('td');action.dataset.label='Action';const link=document.createElement('a');link.href='https://www.acupuncturetests.com/mod/scorm/view.php?id=9356';link.target='_blank';link.rel='noopener noreferrer';link.className='channels-mock-start';link.textContent='Start Continuing Education Exam';action.append(link);row.append(action);tbody.append(row);
+    table.append(caption,thead,tbody);continuingExam.append(summary,intro,table);
+  }
+
   const final=document.getElementById('sgv2-final-review');
   if(final){let list=final.querySelector('ol');if(!list){list=document.createElement('ol');final.append(list)}list.replaceChildren();currentObjectives.forEach(objective=>{const li=document.createElement('li');const a=document.createElement('a');a.href='#'+objective.id;a.textContent=titleOf(objective);a.onclick=()=>objective.open=true;li.append(a);list.append(li)})}
   document.querySelectorAll('.preview-exam-action').forEach(node=>node.remove());
   [...content.children].find(node=>node.matches('div:not([id]):not([class])')&&node.querySelector('a[href*="course/view.php"]'))?.remove();
 
   let cursor=lastObjective;
-  [gallery,lecture,board,history,mocks,final,notes,continuing].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
+  [gallery,lecture,board,history,mocks,continuingExam,final,notes,continuing].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
 
-  const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#chapter-exam-history','#channels-mock-exams','#sgv2-final-review'];
+  const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#chapter-exam-history','#channels-mock-exams','#channels-continuing-education-exam','#sgv2-final-review'];
   [...nav.children].forEach(li=>{if(cleanupHrefs.includes(li.querySelector('a')?.getAttribute('href')))li.remove();if(li.classList.contains('channels-final-nav-label'))li.remove()});
   const objectiveNine=nav.querySelector('a[href="#channels-objective-9"]')?.closest('li');let navCursor=objectiveNine;
   const navItem=(label,href,group=false)=>{const li=document.createElement('li');if(group){li.className='channels-nav-label channels-final-nav-label';li.textContent=label}else{const a=document.createElement('a');a.href=href;a.textContent=label;li.append(a)}navCursor.after(li);navCursor=li};
   navItem('Chapter Summary Image — Visual Review','#chapter-image-library');
   navItem('Practice & review','',true);navItem('Self-Test — Practice without score','#topic-questions-answers');
-  navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');
+  navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');
   navItem('Further reading','',true);navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');
 
   const style=document.createElement('style');style.textContent=`
     .channels-chapter-continuing{margin-top:0}
     .channels-chapter-continuing>summary{cursor:pointer}
-    #chapter-image-library>details>summary,#chapter-exam-history>details>summary,#channels-mock-exams>summary,#channels-ncbahm-alignment>summary{cursor:pointer}
+    #chapter-image-library>details>summary,#chapter-exam-history>details>summary,#channels-mock-exams>summary,#channels-continuing-education-exam>summary,#channels-ncbahm-alignment>summary{cursor:pointer}
     .channels-chapter-continuing>h4{margin-top:26px;padding-top:18px;border-top:1px solid #c8dddd;color:#145264}
     .channels-chapter-continuing>h4:first-of-type{margin-top:16px;padding-top:0;border-top:0}
     .channels-chapter-continuing .source-note{color:#536872;font-size:.92rem}
