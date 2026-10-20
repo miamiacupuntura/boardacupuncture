@@ -19,7 +19,7 @@
   const gallery=document.getElementById('chapter-image-library');
   const learningPlan=document.getElementById('sgv2-formb');
   const learningPlanSummary=learningPlan?.querySelector(':scope>summary');
-  if(learningPlanSummary)learningPlanSummary.textContent='Continuing Education Learning Plan';
+  if(learningPlanSummary)learningPlanSummary.textContent='Continuing Education Learning Plan — Channels and Collaterals';
   let continuing=document.getElementById('channels-chapter-continuing-education');
   if(!continuing){continuing=document.createElement('details');continuing.id='channels-chapter-continuing-education';continuing.className='sgv2-card channels-chapter-continuing';const summary=document.createElement('summary');summary.textContent='How the Channels and Collaterals Chapter Aligns with Continuing Education';const intro=document.createElement('p');intro.textContent='This continuous reading extends comparison and clinical reasoning across the chapter. It does not award continuing-education credit or replace the assigned sources.';continuing.append(summary,intro);const fallback=[
     ['The functional network and relative depth','The functional network joins zangfu, channels, tissues and sense organs. Relative depth supports exterior–interior reasoning but is a conceptual relationship, not a measured anatomical ladder.','Deadman, Al-Khafaji and Baker, A Manual of Acupuncture, “The Functions of the Channels.”'],
