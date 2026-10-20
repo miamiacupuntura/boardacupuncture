@@ -88,7 +88,7 @@
   navItem('Chapter Summary Image — Visual Review','#chapter-image-library');
   navItem('Practice & review','',true);navItem('Self-Test — Practice without score','#topic-questions-answers');
   navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');navItem('How this Chapter aligns with the NCBAHM Exam','#channels-ncbahm-alignment');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');
-  navItem('Further reading','',true);navItem('Continuing Education Learning Plan','#sgv2-formb');navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');
+  navItem('Continuing Education','',true);navItem('Continuing Education','#sgv2-formb');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');
 
   const style=document.createElement('style');style.textContent=`
     .channels-chapter-continuing{margin-top:0}
