@@ -66,6 +66,17 @@
 
   let cursor=lastObjective;
   [gallery,lecture,board,final,notes,alignment,history,mocks,continuing,continuingExam].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
+  let continuingOrderQueued=false;
+  const enforceContinuingOrder=()=>{
+    if(!continuing||!continuingExam||continuing.nextElementSibling===continuingExam)return;
+    continuingExam.before(continuing);
+  };
+  new MutationObserver(()=>{
+    if(continuingOrderQueued)return;
+    continuingOrderQueued=true;
+    setTimeout(()=>{continuingOrderQueued=false;enforceContinuingOrder()},0);
+  }).observe(content,{childList:true});
+  enforceContinuingOrder();
 
   const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#channels-ncbahm-alignment','#chapter-exam-history','#channels-mock-exams','#channels-continuing-education-exam','#sgv2-final-review'];
   [...nav.children].forEach(li=>{if(cleanupHrefs.includes(li.querySelector('a')?.getAttribute('href')))li.remove();if(li.classList.contains('channels-final-nav-label'))li.remove()});
