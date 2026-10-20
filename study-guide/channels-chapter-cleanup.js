@@ -59,6 +59,7 @@
   const style=document.createElement('style');style.textContent=`
     .channels-chapter-continuing{margin-top:0}
     .channels-chapter-continuing>summary{cursor:pointer}
+    #chapter-image-library>details>summary,#chapter-exam-history>details>summary,#channels-mock-exams>summary{cursor:pointer}
     .channels-chapter-continuing>h4{margin-top:26px;padding-top:18px;border-top:1px solid #c8dddd;color:#145264}
     .channels-chapter-continuing>h4:first-of-type{margin-top:16px;padding-top:0;border-top:0}
     .channels-chapter-continuing .source-note{color:#536872;font-size:.92rem}
