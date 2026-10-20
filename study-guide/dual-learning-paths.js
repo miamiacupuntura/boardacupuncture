@@ -36,7 +36,7 @@
     {
       key: 'channels',
       hero: '#sgv2-introduction',
-      board: '#channels-mock-exams',
+      board: '#channels-ncbahm-alignment',
       continuing: '#sgv2-formb'
     },
     {
