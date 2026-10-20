@@ -11,7 +11,7 @@
       weight: 'There is no defensible fixed percentage for this chapter by itself: published examination outlines organize content by broader domains and do not guarantee a chapter-level question count. Treat this topic as having significant cross-domain weight because it supports several tasks at once—channel circulation, internal–external relationships, point location, system comparison and treatment reasoning.',
       goalTitle: 'How to master the nine objectives',
       stages: [
-        ['1. Build the framework', 'Master the functions of the network and the organization, names, circulation and internal connections of the Twelve Primary Channels. Reconstruct the main sequences without looking at the text.'],
+        ['1. Build the framework', 'Understand how channels and collaterals function. Then organize the names, circulation pathways, and internal connections of the Twelve Primary Channels. Reconstruct the main sequences without looking at the text.'],
         ['2. Separate similar systems', 'Compare Primary, Divergent, Extraordinary, Luo-Connecting, Sinew, Minute Collateral and Cutaneous systems by depth, pathway, function, connections and whether they have their own points.'],
         ['3. Retrieve and apply', 'Use diagrams, comparison tables and flashcards from memory. Then complete the unscored self-tests and explain why every incorrect option is wrong.'],
         ['4. Validate under exam conditions', 'Complete the Chapter Board Simulation and the nine Board Level Mock 10 activities without notes. Review errors by objective, return to the weak section and repeat with a different question set when available.']
@@ -58,7 +58,7 @@
       weight: 'No existe un porcentaje fijo defendible para este capítulo por sí solo: los esquemas publicados del examen organizan el contenido por dominios más amplios y no garantizan una cantidad de preguntas por capítulo. Trátalo como un tema de peso transversal significativo porque apoya varias tareas a la vez: circulación de canales, relaciones interior–exterior, localización de puntos, comparación de sistemas y razonamiento terapéutico.',
       goalTitle: 'Cómo dominar los nueve objetivos',
       stages: [
-        ['1. Construye el marco', 'Domina las funciones de la red y la organización, los nombres, la circulación y las conexiones internas de los doce canales principales. Reconstruye las secuencias principales sin mirar el texto.'],
+        ['1. Construye el marco', 'Comprende cómo funcionan los canales y colaterales. Después, organiza los nombres, los trayectos de circulación y las conexiones internas de los doce canales principales. Reconstruye las secuencias principales sin mirar el texto.'],
         ['2. Separa sistemas parecidos', 'Compara los sistemas Principal, Divergente, Extraordinario, Luo-Connecting, Sinew, Colaterales diminutos y Regiones cutáneas según profundidad, trayecto, función, conexiones y presencia de puntos propios.'],
         ['3. Recuerda y aplica', 'Usa de memoria los diagramas, tablas comparativas y flashcards. Después completa las autoevaluaciones sin puntuación y explica por qué cada opción incorrecta es incorrecta.'],
         ['4. Valida en condiciones de examen', 'Completa la simulación del Board del capítulo y las nueve actividades Board Level Mock 10 sin notas. Revisa los errores por objetivo, vuelve a la sección débil y repite con otro conjunto de preguntas cuando esté disponible.']
