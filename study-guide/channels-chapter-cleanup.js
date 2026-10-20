@@ -45,14 +45,14 @@
     continuingExam.id='channels-continuing-education-exam';
     continuingExam.className='sgv2-card channels-mock-exams channels-continuing-exam';
     const summary=document.createElement('summary');summary.textContent='Continuing Education Exam — Channels and Collaterals';
-    const intro=document.createElement('p');intro.textContent='Open the Channels and Collaterals Continuing Education exam here. Personal attempts, dates and grades are available in Moodle. The exam opens in another tab.';
+    const intro=document.createElement('p');intro.textContent='After reviewing the 10 questions and feedback above, open the SCORM activity here. Personal attempts, dates and grades are available in Moodle. The exam opens in another tab.';
     const table=document.createElement('table');table.className='channels-mock-table channels-continuing-exam-table';
     const caption=document.createElement('caption');caption.textContent='The Channels and Collaterals — Continuing Education';
     const thead=document.createElement('thead');const headRow=document.createElement('tr');
     ['Exam',...examMetricLabels,'Action'].forEach(label=>{const th=document.createElement('th');th.scope='col';th.textContent=label;headRow.append(th)});thead.append(headRow);
     const tbody=document.createElement('tbody');const row=document.createElement('tr');const name=document.createElement('th');name.scope='row';name.textContent='Channels and Collaterals Continuing Education (Mock 10)';row.append(name);
     examMetricLabels.forEach(label=>{const td=document.createElement('td');td.dataset.label=label;td.textContent='—';row.append(td)});
-    const action=document.createElement('td');action.dataset.label='Action';const link=document.createElement('a');link.href='https://www.acupuncturetests.com/mod/scorm/view.php?id=9356';link.target='_blank';link.rel='noopener noreferrer';link.className='channels-mock-start';link.textContent='Start Continuing Education Exam';action.append(link);row.append(action);tbody.append(row);
+    const action=document.createElement('td');action.dataset.label='Action';const link=document.createElement('a');link.href='https://www.acupuncturetests.com/mod/scorm/view.php?id=9356';link.target='_blank';link.rel='noopener noreferrer';link.className='channels-mock-start';link.textContent='Start Exam';action.append(link);row.append(action);tbody.append(row);
     table.append(caption,thead,tbody);continuingExam.append(summary,intro,table);
   }
 
@@ -62,7 +62,7 @@
   [...content.children].find(node=>node.matches('div:not([id]):not([class])')&&node.querySelector('a[href*="course/view.php"]'))?.remove();
 
   let cursor=lastObjective;
-  [gallery,lecture,board,history,mocks,continuingExam,final,notes,continuing].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
+  [gallery,lecture,board,history,mocks,final,notes,continuing,continuingExam].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
 
   const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#chapter-exam-history','#channels-mock-exams','#channels-continuing-education-exam','#sgv2-final-review'];
   [...nav.children].forEach(li=>{if(cleanupHrefs.includes(li.querySelector('a')?.getAttribute('href')))li.remove();if(li.classList.contains('channels-final-nav-label'))li.remove()});
@@ -70,8 +70,8 @@
   const navItem=(label,href,group=false)=>{const li=document.createElement('li');if(group){li.className='channels-nav-label channels-final-nav-label';li.textContent=label}else{const a=document.createElement('a');a.href=href;a.textContent=label;li.append(a)}navCursor.after(li);navCursor=li};
   navItem('Chapter Summary Image — Visual Review','#chapter-image-library');
   navItem('Practice & review','',true);navItem('Self-Test — Practice without score','#topic-questions-answers');
-  navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');
-  navItem('Further reading','',true);navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');
+  navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');
+  navItem('Further reading','',true);navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');
 
   const style=document.createElement('style');style.textContent=`
     .channels-chapter-continuing{margin-top:0}

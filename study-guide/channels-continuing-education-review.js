@@ -25,10 +25,4 @@
  questions.forEach((question,index)=>{const card=make('article','',list);card.className='continuing-education-review-question';make('h4',`${index+1}. ${question.stem}`,card);const options=make('ol','',card);options.type='A';options.className='continuing-education-review-options';question.options.forEach(option=>make('li',option,options));const panel=make('details','',card);panel.className='continuing-education-review-feedback';panels.push(panel);make('summary','Show answer and feedback',panel);const answer=make('p','',panel);answer.className='continuing-education-review-answer';make('strong',`Correct answer: ${String.fromCharCode(65+question.answer)}. ${question.options[question.answer]}`,answer);make('p',question.feedback,panel);make('h5','Why are the other options incorrect?',panel);const reasons=make('ul','',panel);question.options.forEach((option,optionIndex)=>{if(optionIndex===question.answer)return;const item=make('li','',reasons);make('strong',`${option} — `,item);item.append(document.createTextNode(question.reasons[optionIndex]));});});
  showAll.addEventListener('click',()=>{panels.forEach(panel=>panel.open=true);panels[0]?.querySelector('summary')?.focus();});
  hideAll.addEventListener('click',()=>{panels.forEach(panel=>panel.open=false);showAll.focus();});
- const scorm=make('section','',exam);scorm.className='continuing-education-scorm';
- make('h4','Ready for Channels and Collaterals Continuing Education (Mock 10)?',scorm);
- make('p','After reviewing the questions and feedback above, open the SCORM activity. The SCORM opens in a new tab.',scorm);
- const scormLink=make('a','Start Channels and Collaterals Continuing Education (Mock 10)',scorm);
- scormLink.href='https://www.acupuncturetests.com/mod/scorm/view.php?id=9356';
- scormLink.target='_blank';scormLink.rel='noopener';scormLink.className='continuing-education-scorm-button';
 })();
