@@ -17,6 +17,9 @@
   if(overview){const summary=overview.querySelector(':scope>summary');[...overview.children].filter(node=>node!==summary).forEach(node=>node.remove());const title=document.createElement('h3');title.textContent='The Channels and Collaterals';const heading=document.createElement('h4');heading.textContent='Description';const p1=document.createElement('p');p1.textContent='This chapter develops nine objectives: the functions of the channel network; the Twelve Primary, Divergent and Sinew Channels; the Eight Extraordinary Vessels; the Luo-Connecting Channels; the Minute Collaterals; the Twelve Cutaneous Regions; and an integrated comparison of the systems.';const p2=document.createElement('p');p2.textContent='Each objective combines source-based explanation, visual learning, guided recall, practice without score and its assigned Mock 10 or scored activity. The final chapter blocks gather the approved images, deeper reading, self-tests, exam history and review links in the same order used in Point Categories.';overview.append(title,heading,p1,p2)}
 
   const gallery=document.getElementById('chapter-image-library');
+  const learningPlan=document.getElementById('sgv2-formb');
+  const learningPlanSummary=learningPlan?.querySelector(':scope>summary');
+  if(learningPlanSummary)learningPlanSummary.textContent='Continuing Education Learning Plan';
   let continuing=document.getElementById('channels-chapter-continuing-education');
   if(!continuing){continuing=document.createElement('details');continuing.id='channels-chapter-continuing-education';continuing.className='sgv2-card channels-chapter-continuing';const summary=document.createElement('summary');summary.textContent='How the Channels and Collaterals Chapter Aligns with Continuing Education';const intro=document.createElement('p');intro.textContent='This continuous reading extends comparison and clinical reasoning across the chapter. It does not award continuing-education credit or replace the assigned sources.';continuing.append(summary,intro);const fallback=[
     ['The functional network and relative depth','The functional network joins zangfu, channels, tissues and sense organs. Relative depth supports exterior–interior reasoning but is a conceptual relationship, not a measured anatomical ladder.','Deadman, Al-Khafaji and Baker, A Manual of Acupuncture, “The Functions of the Channels.”'],
@@ -65,11 +68,11 @@
   [...content.children].find(node=>node.matches('div:not([id]):not([class])')&&node.querySelector('a[href*="course/view.php"]'))?.remove();
 
   let cursor=lastObjective;
-  [gallery,lecture,board,final,notes,alignment,history,mocks,continuing,continuingExam].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
+  [gallery,lecture,board,final,notes,alignment,history,mocks,learningPlan,continuing,continuingExam].filter(Boolean).forEach(node=>{cursor.after(node);cursor=node});
   let continuingOrderQueued=false;
   const enforceContinuingOrder=()=>{
-    if(!continuing||!continuingExam||continuing.nextElementSibling===continuingExam)return;
-    continuingExam.before(continuing);
+    if(learningPlan&&continuing&&learningPlan.nextElementSibling!==continuing)continuing.before(learningPlan);
+    if(continuing&&continuingExam&&continuing.nextElementSibling!==continuingExam)continuingExam.before(continuing);
   };
   new MutationObserver(()=>{
     if(continuingOrderQueued)return;
@@ -78,14 +81,14 @@
   }).observe(content,{childList:true});
   enforceContinuingOrder();
 
-  const cleanupHrefs=['#chapter-image-library','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#channels-ncbahm-alignment','#chapter-exam-history','#channels-mock-exams','#channels-continuing-education-exam','#sgv2-final-review'];
+  const cleanupHrefs=['#chapter-image-library','#sgv2-formb','#channels-chapter-continuing-education','#topic-questions-answers','#chapter-mock-review','#student_notes_form','#channels-ncbahm-alignment','#chapter-exam-history','#channels-mock-exams','#channels-continuing-education-exam','#sgv2-final-review'];
   [...nav.children].forEach(li=>{if(cleanupHrefs.includes(li.querySelector('a')?.getAttribute('href')))li.remove();if(li.classList.contains('channels-final-nav-label'))li.remove()});
   const objectiveNine=nav.querySelector('a[href="#channels-objective-9"]')?.closest('li');let navCursor=objectiveNine;
   const navItem=(label,href,group=false)=>{const li=document.createElement('li');if(group){li.className='channels-nav-label channels-final-nav-label';li.textContent=label}else{const a=document.createElement('a');a.href=href;a.textContent=label;li.append(a)}navCursor.after(li);navCursor=li};
   navItem('Chapter Summary Image — Visual Review','#chapter-image-library');
   navItem('Practice & review','',true);navItem('Self-Test — Practice without score','#topic-questions-answers');
   navItem('Exams','',true);navItem('Self-Test — Chapter Board Simulation','#chapter-mock-review');navItem('Review objectives','#sgv2-final-review');navItem('My study notes','#student_notes_form');navItem('How this Chapter aligns with the NCBAHM Exam','#channels-ncbahm-alignment');navItem('School Level Exam — Channels and Collaterals','#chapter-exam-history');navItem('Board Level Exam — Channels and Collaterals','#channels-mock-exams');
-  navItem('Further reading','',true);navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');
+  navItem('Further reading','',true);navItem('Continuing Education Learning Plan','#sgv2-formb');navItem('How the Channels and Collaterals Chapter Aligns with Continuing Education','#channels-chapter-continuing-education');navItem('Continuing Education Exam — Channels and Collaterals','#channels-continuing-education-exam');
 
   const style=document.createElement('style');style.textContent=`
     .channels-chapter-continuing{margin-top:0}
