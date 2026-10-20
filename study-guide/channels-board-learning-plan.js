@@ -46,6 +46,7 @@
       ],
       actionTitle: 'Recommended study sequence',
       action: 'Reading → visual comparison → flashcards → unscored self-test → Board simulation → objective-level Mock 10 → error review → delayed retest.',
+      readingButton: 'Go to Chapter Reading',
       examButton: 'Go to Board Level Exam',
       nav: 'NCBAHM Exam Learning Plan'
     },
@@ -92,6 +93,7 @@
       ],
       actionTitle: 'Secuencia de estudio recomendada',
       action: 'Lectura → comparación visual → flashcards → autoevaluación sin puntuación → simulación del Board → Mock 10 por objetivo → revisión de errores → repetición diferida.',
+      readingButton: 'Ir a la lectura del capítulo',
       examButton: 'Ir al Board Level Exam',
       nav: 'Plan de aprendizaje para el examen NCBAHM'
     }
@@ -161,22 +163,29 @@
 
     const action = make('section', 'channels-board-plan-action');
     action.append(make('h4', '', words.actionTitle), make('p', '', words.action));
-    const button = make('a', 'channels-board-plan-button', words.examButton);
-    button.href = '#channels-mock-exams';
-    button.addEventListener('click', event => {
-      const target = document.getElementById('channels-mock-exams');
+    const buttons = make('div', 'channels-board-plan-actions');
+    const navigate = (event, targetId) => {
+      const target = document.getElementById(targetId);
       if (!target) return;
       event.preventDefault();
-      target.open = true;
-      history.replaceState(null, '', '#channels-mock-exams');
+      if (target.tagName === 'DETAILS') target.open = true;
+      target.querySelector(':scope > details')?.setAttribute('open', '');
+      history.replaceState(null, '', `#${targetId}`);
       target.scrollIntoView({behavior: 'smooth', block: 'start'});
-      const summary = target.querySelector(':scope > summary');
-      if (summary) {
-        summary.tabIndex = -1;
-        summary.focus({preventScroll: true});
+      const heading = target.querySelector(':scope > summary, :scope > details > summary, :scope > h2, :scope > h3, :scope > h4');
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus({preventScroll: true});
       }
-    });
-    action.append(button);
+    };
+    const readingButton = make('a', 'channels-board-plan-button channels-board-plan-reading-button', words.readingButton);
+    readingButton.href = '#chapter-general-reading';
+    readingButton.addEventListener('click', event => navigate(event, 'chapter-general-reading'));
+    const examButton = make('a', 'channels-board-plan-button', words.examButton);
+    examButton.href = '#channels-mock-exams';
+    examButton.addEventListener('click', event => navigate(event, 'channels-mock-exams'));
+    buttons.append(readingButton, examButton);
+    action.append(buttons);
     body.append(action);
     alignment.append(body);
 
@@ -192,8 +201,8 @@
     .channels-board-plan-intro>h4{margin-top:10px}.channels-board-plan-weight{margin:18px 0 4px;padding:16px 18px;border-left:5px solid #e87824;border-radius:9px;background:#fff7ed}.channels-board-plan-weight h4{margin-top:0;color:#82400e}
     .channels-board-plan-section{margin-top:24px;padding-top:4px;border-top:1px solid #cbdcdf}.channels-board-plan-stages,.channels-board-plan-materials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.channels-board-plan-stage,.channels-board-plan-material{padding:15px;border:1px solid #c7dadd;border-radius:10px;background:#f7fbfb}.channels-board-plan-stage p,.channels-board-plan-material p{margin:0}
     .channels-board-plan-list,.channels-board-plan-checklist{display:grid;gap:9px;margin:10px 0 0;padding-left:23px}.channels-board-plan-list li,.channels-board-plan-checklist li{padding-left:4px;line-height:1.55}.channels-board-plan-checklist{list-style:none;padding-left:0}.channels-board-plan-checklist li{position:relative;padding:10px 12px 10px 39px;border:1px solid #c9dbd9;border-radius:9px;background:#f4faf8}.channels-board-plan-checklist li::before{content:'✓';position:absolute;left:13px;top:10px;color:#087774;font-weight:900}
-    .channels-board-plan-action{margin-top:24px;padding:18px;border-radius:11px;background:#e8f4f2}.channels-board-plan-action h4{margin-top:0}.channels-board-plan-button{display:inline-flex;min-height:44px;box-sizing:border-box;align-items:center;justify-content:center;margin-top:7px;padding:11px 18px;border-radius:9px;background:#087774;color:#fff!important;font-weight:800;text-decoration:none}.channels-board-plan-button:hover{background:#05635f}.channels-board-plan-button:focus-visible{outline:3px solid #1769c2;outline-offset:3px}
-    @media(max-width:680px){.channels-board-plan-stages,.channels-board-plan-materials{grid-template-columns:1fr}.channels-board-plan-weight,.channels-board-plan-action{padding:15px}.channels-board-plan-button{width:100%}}
+    .channels-board-plan-action{margin-top:24px;padding:18px;border-radius:11px;background:#e8f4f2}.channels-board-plan-action h4{margin-top:0}.channels-board-plan-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:7px}.channels-board-plan-button{display:inline-flex;min-height:44px;box-sizing:border-box;align-items:center;justify-content:center;padding:11px 18px;border-radius:9px;background:#087774;color:#fff!important;font-weight:800;text-decoration:none}.channels-board-plan-reading-button{background:#e87824}.channels-board-plan-button:hover{background:#05635f}.channels-board-plan-reading-button:hover{background:#cf641b}.channels-board-plan-button:focus-visible{outline:3px solid #1769c2;outline-offset:3px}
+    @media(max-width:680px){.channels-board-plan-stages,.channels-board-plan-materials{grid-template-columns:1fr}.channels-board-plan-weight,.channels-board-plan-action{padding:15px}.channels-board-plan-actions{display:grid;grid-template-columns:1fr}.channels-board-plan-button{width:100%}}
   `;
   document.head.append(style);
 
