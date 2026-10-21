@@ -9,6 +9,49 @@ $this->title = get_string('pluginname', 'block_menu');
 function get_content() {
 $details = false;
 
+global $USER, $SESSION, $OUTPUT, $CFG, $PAGE, $DB;
+
+if ($this->content !== NULL) {
+    return $this->content;
+}
+
+$this->content = new stdClass;
+
+if (!isloggedin() || isguestuser()) {
+    $loginurl = (new moodle_url('/login/index.php'))->out(false);
+    $signupurl = (new moodle_url('/login/signup.php'))->out(false);
+    $ceurl = (new moodle_url('/study-guide/continuing-education.html'))->out(false);
+    $this->content->text = <<<HTML
+<section class="public-learning-routes" aria-labelledby="public-learning-routes-title">
+  <p class="public-learning-routes__eyebrow">CHOOSE YOUR LEARNING PATH</p>
+  <h2 id="public-learning-routes-title">Board Preparation or Continuing Education</h2>
+  <p class="public-learning-routes__intro">Select the access that matches your professional goal. Board preparation and Continuing Education are purchased separately.</p>
+  <div class="public-learning-routes__grid">
+    <article class="public-learning-route public-learning-route--board">
+      <span class="public-learning-route__badge">MONTHLY MEMBERSHIP</span>
+      <h3>Board Exam Preparation</h3>
+      <p>Access the available Study Guides, learning resources and Board-level practice with one fixed membership.</p>
+      <p class="public-learning-route__price"><strong>$30</strong> per month</p>
+      <div class="public-learning-route__actions">
+        <a class="public-learning-route__button" href="{$signupurl}">Sign Up</a>
+        <a class="public-learning-route__button public-learning-route__button--secondary" href="{$loginurl}">Log In</a>
+      </div>
+    </article>
+    <article class="public-learning-route public-learning-route--ce">
+      <span class="public-learning-route__badge">PAY PER APPROVED CREDIT</span>
+      <h3>Continuing Education</h3>
+      <p>Browse courses that have been formally approved and activated for Continuing Education.</p>
+      <p class="public-learning-route__price"><strong>$10</strong> per approved credit</p>
+      <div class="public-learning-route__actions">
+        <a class="public-learning-route__button" href="{$ceurl}">View CE Courses</a>
+      </div>
+    </article>
+  </div>
+</section>
+HTML;
+    return $this->content;
+}
+
 if(!isset($_COOKIE["btnToggleDashboard"])) {
 $checkBox = <<<HTML
 <input class="course-input course-input2" onclick="Toggle2()" type="checkbox">
@@ -28,12 +71,10 @@ $details = false;
 }
 }
 
-global $USER, $SESSION, $OUTPUT, $CFG, $PAGE, $DB;
 require_once($CFG->dirroot.'/mod/scorm/locallib.php');
 require_once($CFG->libdir.'/gradelib.php');
 require_once($CFG->dirroot.'/grade/querylib.php');
 
-$this->content =  new stdClass;
 $categoryNames = array();
 $courseNames = array();
 $courseLinks = array();
