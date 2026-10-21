@@ -53,6 +53,19 @@ HTML;
 }
 
 $membershipurl = (new moodle_url('/enrol/index.php', ['id' => 116]))->out(false);
+$boardcatalogurl = (new moodle_url('/study-guide/board-courses.html'))->out(false);
+$cecatalogurl = (new moodle_url('/study-guide/continuing-education.html'))->out(false);
+$studyguideurl = (new moodle_url('/study-guide/index.html'))->out(false);
+$channelsurl = $studyguideurl . '#channels-chapter-introduction';
+$pointcategoriesurl = $studyguideurl . '#point-categories-draft';
+
+$hasboardmembership = false;
+$membershipcourse = $DB->get_record('course', ['id' => 116], 'id', IGNORE_MISSING);
+if ($membershipcourse) {
+    $membershipcontext = context_course::instance($membershipcourse->id);
+    $hasboardmembership = is_enrolled($membershipcontext, $USER->id, '', true)
+        || has_capability('moodle/course:view', $membershipcontext, $USER->id);
+}
 
 if(!isset($_COOKIE["btnToggleDashboard"])) {
 $checkBox = <<<HTML
@@ -326,12 +339,87 @@ $resultList2
 HTML;
 
 if ($details == true) {
-$allcontent = $htmlMainSectionAddToggle . $htmlMainSection;
+$examLibraryContent = $htmlMainSectionAddToggle . $htmlMainSection;
 } else {
-$allcontent = $htmlMainSectionAddToggle . $htmlMainSection2;
+$examLibraryContent = $htmlMainSectionAddToggle . $htmlMainSection2;
 }
 
-if ($noshow == true) {
+$boardactionurl = $hasboardmembership ? $boardcatalogurl : $membershipurl;
+$boardactionlabel = $hasboardmembership ? 'Continue Board Preparation' : 'Start $30 membership';
+$boardstatus = $hasboardmembership ? 'MEMBERSHIP ACTIVE' : 'MONTHLY MEMBERSHIP';
+
+$studentHub = <<<HTML
+<section class="student-learning-hub" aria-labelledby="student-learning-hub-title">
+  <div class="student-learning-hub__intro">
+    <p class="student-learning-hub__eyebrow">YOUR LEARNING DASHBOARD</p>
+    <h2 id="student-learning-hub-title">Choose where you want to continue</h2>
+    <p>Board Preparation and Continuing Education are two separate learning paths. Select the one that matches your goal today.</p>
+  </div>
+
+  <div class="student-learning-paths">
+    <article class="student-learning-path student-learning-path--board">
+      <span class="student-learning-path__badge">{$boardstatus}</span>
+      <h3>Board Preparation</h3>
+      <p>Study the available guides and practice with Board-level activities included in the monthly membership.</p>
+      <p class="student-learning-path__price"><strong>$30</strong> per month</p>
+      <a class="student-learning-path__button" href="{$boardactionurl}">{$boardactionlabel}</a>
+    </article>
+
+    <article class="student-learning-path student-learning-path--ce">
+      <span class="student-learning-path__badge">SEPARATE ENROLLMENT</span>
+      <h3>Continuing Education</h3>
+      <p>Choose an approved CE course. The final price depends on the number of formally approved credits.</p>
+      <p class="student-learning-path__price"><strong>$10</strong> per approved credit</p>
+      <a class="student-learning-path__button" href="{$cecatalogurl}">View Continuing Education</a>
+    </article>
+  </div>
+
+  <div class="student-ready-guides">
+    <div class="student-ready-guides__heading">
+      <div>
+        <p class="student-learning-hub__eyebrow">READY TO STUDY</p>
+        <h3>Available Study Guides</h3>
+      </div>
+      <a href="{$boardcatalogurl}">View all Board guides</a>
+    </div>
+    <div class="student-ready-guides__grid">
+      <article class="student-ready-guide">
+        <span>STUDY GUIDE READY</span>
+        <h4>The Channels and Collaterals</h4>
+        <p>Channel functions, pathways, relationships and organization.</p>
+        <div class="student-ready-guide__meta">9 learning objectives</div>
+        <a href="{$channelsurl}">Open Study Guide</a>
+      </article>
+      <article class="student-ready-guide">
+        <span>STUDY GUIDE READY</span>
+        <h4>Point Categories</h4>
+        <p>Point-category definitions, clinical relationships and key distinctions.</p>
+        <div class="student-ready-guide__meta">26 learning objectives</div>
+        <a href="{$pointcategoriesurl}">Open Study Guide</a>
+      </article>
+    </div>
+  </div>
+</section>
+HTML;
+
+$examLibrary = <<<HTML
+<details class="student-exam-library">
+  <summary>
+    <span>
+      <strong>Exam Library</strong>
+      <small>Open the complete exam, simulation and notes list</small>
+    </span>
+    <span class="student-exam-library__action">Open library</span>
+  </summary>
+  <div class="student-exam-library__content">
+    {$examLibraryContent}
+  </div>
+</details>
+HTML;
+
+$allcontent = $studentHub;
+
+if (!$hasboardmembership) {
 $purchase = <<<HTML
 <section class="membership-access-notice" aria-labelledby="membership-access-title-menu">
   <div>
@@ -341,8 +429,10 @@ $purchase = <<<HTML
   <a href="{$membershipurl}" class="link-retry link-retry2 link-retry3">Start membership</a>
 </section>
 HTML;
-	$allcontent = $purchase . $allcontent;
+		$allcontent .= $purchase;
 }
+
+$allcontent .= $examLibrary;
 ass:
 $this->content->text = $allcontent;
 if ($this->content !== NULL) {
