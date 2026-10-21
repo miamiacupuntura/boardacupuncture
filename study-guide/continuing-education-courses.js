@@ -19,8 +19,8 @@
       key: 'channels',
       title: 'The Channels and Collaterals',
       shortDescription: 'Channel functions, pathways, relationships and organization presented through guided reading, visual review and structured practice.',
-      boardUrl: 'index.html?track=board#sgv2-introduction',
-      continuingEducationUrl: 'index.html?track=continuing-education#sgv2-introduction',
+      boardUrl: 'index.html?track=board&return=board-catalog#sgv2-introduction',
+      continuingEducationUrl: 'index.html?track=continuing-education&return=ce-catalog#sgv2-introduction',
       objectiveCount: 9,
       minutesPerObjective: 15,
       classification: {
@@ -55,8 +55,8 @@
       key: 'point-categories',
       title: 'Point Categories',
       shortDescription: 'Point-category definitions, clinical relationships and key distinctions reinforced through chapter-wide review and Mock practice.',
-      boardUrl: 'index.html?track=board#point-categories-draft',
-      continuingEducationUrl: 'index.html?track=continuing-education#point-categories-draft',
+      boardUrl: 'index.html?track=board&return=board-catalog#point-categories-draft',
+      continuingEducationUrl: 'index.html?track=continuing-education&return=ce-catalog#point-categories-draft',
       objectiveCount: 26,
       minutesPerObjective: 15,
       classification: {

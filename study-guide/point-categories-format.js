@@ -89,6 +89,21 @@
 
   const language = () => document.documentElement.lang.toLowerCase().startsWith('es') ? 'es' : 'en';
   const text = () => labels[language()];
+  function backDestination() {
+    const params = new URLSearchParams(window.location.search);
+    const track = window.ACUPUNCTURE_ENTRY_TRACK || params.get('track') || 'board';
+    const spanish = language() === 'es';
+    const returnRoute = params.get('return') || window.ACUPUNCTURE_RETURN_ROUTE || '';
+    if (track === 'continuing-education') return {
+      href: returnRoute === 'ce-preview' ? 'continuing-education.html?preview=approved' : 'continuing-education.html',
+      label: spanish ? '← Volver a los cursos de Continuing Education' : '← Back to Continuing Education courses'
+    };
+    if (returnRoute === 'board-catalog') return {
+      href: 'board-courses.html',
+      label: spanish ? '← Volver a los cursos de preparación para el Board' : '← Back to Board preparation courses'
+    };
+    return {href: '/blocks/myprogress/study-guide.php?area=pointlocation', label: text().back};
+  }
 
   function openTarget(event) {
     const href = event.currentTarget.dataset.pointTarget || event.currentTarget.getAttribute('href');
@@ -118,9 +133,11 @@
   function ensureHeroButtons() {
     const actions = document.querySelector('#pc-introduction .point-categories-hero-actions');
     if (!actions) return;
-    const back = actions.querySelector('.point-categories-hero-back') || makeHeroButton('point-categories-hero-back', '/blocks/myprogress/study-guide.php?area=pointlocation', 'back');
-    back.href = '/blocks/myprogress/study-guide.php?area=pointlocation';
-    back.dataset.pointHeroLabel = 'back';
+    const backRoute = backDestination();
+    const back = actions.querySelector('.point-categories-hero-back') || makeHeroButton('point-categories-hero-back', backRoute.href, 'back');
+    back.href = backRoute.href;
+    back.textContent = backRoute.label;
+    delete back.dataset.pointHeroLabel;
     back.removeEventListener('click', openTarget);
     const school = makeHeroButton('point-categories-hero-exam', '#pc-exam-history', 'school');
     const board = makeHeroButton('channels-hero-board-exam', '#point-categories-mock-exams', 'board');
@@ -306,6 +323,11 @@
     document.querySelectorAll('[data-point-hero-label]').forEach(node => {
       const value = copy[node.dataset.pointHeroLabel];
       if (value) node.textContent = value;
+    });
+    const backRoute = backDestination();
+    document.querySelectorAll('.point-categories-hero-back').forEach(node => {
+      node.href = backRoute.href;
+      node.textContent = backRoute.label;
     });
     const cells = document.querySelectorAll('#pc-continuing-education-exam td[data-label]');
     const keys = ['attempts', 'lastAttempt', 'average', 'grade', 'action'];

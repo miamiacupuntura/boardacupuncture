@@ -75,6 +75,9 @@ echo $OUTPUT->header();
 .subject-study-guide__intro{max-width:720px;margin:0;color:#64748b;font-size:16px;line-height:1.55}
 .subject-study-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 15px;border:1px solid #ccd4da;border-radius:8px;background:#fff;color:#334155;font-weight:700;text-decoration:none;white-space:nowrap}
 .subject-study-guide__back:hover{background:#f1f5f9;text-decoration:none}
+.subject-study-guide__top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.subject-study-guide__catalog{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 15px;border-radius:8px;background:#13705c;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}
+.subject-study-guide__catalog--ce{background:#7652a5}.subject-study-guide__catalog:hover{background:#0d5a4a;color:#fff;text-decoration:none}.subject-study-guide__catalog--ce:hover{background:#654391}
 .subject-study-guide__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
@@ -89,7 +92,7 @@ echo $OUTPUT->header();
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
 .subject-study-guide__construction p{max-width:570px;margin:0 auto 26px;color:#64748b;line-height:1.65}
 .subject-study-guide a:focus-visible{outline:3px solid #185cca;outline-offset:3px}
-@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__back{margin-top:16px}.subject-study-guide__grid{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}}
+@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__grid{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}}
 </style>
 <main class="subject-study-guide">
 <?php if ($showconstruction): ?>
@@ -107,7 +110,11 @@ echo $OUTPUT->header();
             <h2><?php echo s($area['title']); ?></h2>
             <p class="subject-study-guide__intro"><?php echo s($area['description']); ?></p>
         </div>
-        <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>">← Back to Dashboard</a>
+        <nav class="subject-study-guide__top-actions" aria-label="Study Guide course catalogs">
+            <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>">← Back to Dashboard</a>
+            <a class="subject-study-guide__catalog" href="<?php echo (new moodle_url('/study-guide/board-courses.html'))->out(false); ?>">Board Courses</a>
+            <a class="subject-study-guide__catalog subject-study-guide__catalog--ce" href="<?php echo (new moodle_url('/study-guide/continuing-education.html'))->out(false); ?>">Continuing Education</a>
+        </nav>
     </header>
 
     <section class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
