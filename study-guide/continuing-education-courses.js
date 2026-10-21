@@ -9,6 +9,11 @@
     EXPIRED: 'expired'
   });
 
+  const PRICING = Object.freeze({
+    currency: 'USD',
+    amountPerCreditHour: 10
+  });
+
   const courses = [
     {
       key: 'channels',
@@ -43,8 +48,6 @@
         enabled: false
       },
       payment: {
-        currency: 'USD',
-        price: null,
         enrolmentUrl: ''
       }
     },
@@ -81,8 +84,6 @@
         enabled: false
       },
       payment: {
-        currency: 'USD',
-        price: null,
         enrolmentUrl: ''
       }
     }
@@ -90,6 +91,21 @@
 
   function estimatedHours(course) {
     return (Number(course.objectiveCount) * Number(course.minutesPerObjective)) / 60;
+  }
+
+  function coursePrice(course) {
+    const hours = Number(course && course.approval && course.approval.approvedCreditHours);
+    return hours > 0 ? hours * PRICING.amountPerCreditHour : null;
+  }
+
+  function formatPrice(course) {
+    const amount = coursePrice(course);
+    if (amount === null) return '';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: PRICING.currency,
+      minimumFractionDigits: 2
+    }).format(amount);
   }
 
   function isApprovedAndActive(course) {
@@ -115,10 +131,13 @@
   }
 
   window.AcupunctureContinuingEducation = Object.freeze({
-    schemaVersion: 1,
+    schemaVersion: 2,
     status: STATUS,
+    pricing: PRICING,
     courses: Object.freeze(courses),
     estimatedHours,
+    coursePrice,
+    formatPrice,
     isApprovedAndActive,
     getCourse
   });

@@ -21,6 +21,12 @@ The monthly AcupunctureTests membership provides the Board-preparation route. Co
 
 The learner may review the shared chapter before enrollment. The CE Start Exam control must verify the Moodle enrollment on the server and direct an unpaid learner to the course-specific payment process. Hiding a link in browser JavaScript is not an access control. Payment for one CE course must not unlock another CE course.
 
+The standard price is **$10 USD for each approved CE credit hour**. One approved instructional hour equals one credit for pricing purposes. The public price is calculated as:
+
+`approved CE credit hours × $10`
+
+Planning estimates do not create a public price. The calculation becomes authoritative only after the Board-approved credit hours are recorded. For example, 2.25 approved credit hours cost $22.50 and 6.5 approved credit hours cost $65.00.
+
 ## Approval gate
 
 A Form B-ready chapter is not automatically a Board-approved CE course. A course is listed publicly in the professional CE catalog only when all of these values are present:
