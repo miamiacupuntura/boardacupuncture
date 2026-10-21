@@ -382,22 +382,26 @@ $studentHub = <<<HTML
       </div>
       <a href="{$boardcatalogurl}">View all Board guides</a>
     </div>
-    <div class="student-ready-guides__grid">
-      <article class="student-ready-guide">
-        <span>STUDY GUIDE READY</span>
-        <h4>The Channels and Collaterals</h4>
-        <p>Channel functions, pathways, relationships and organization.</p>
-        <div class="student-ready-guide__meta">9 learning objectives</div>
+    <ul class="student-guide-list">
+      <li class="student-guide-list__item">
+        <div class="student-guide-list__content">
+          <span class="student-guide-list__status">STUDY GUIDE READY</span>
+          <h4>The Channels and Collaterals</h4>
+          <p>Channel functions, pathways, relationships and organization.</p>
+        </div>
+        <div class="student-guide-list__meta">9 learning objectives</div>
         <a href="{$channelsurl}">Open Study Guide</a>
-      </article>
-      <article class="student-ready-guide">
-        <span>STUDY GUIDE READY</span>
-        <h4>Point Categories</h4>
-        <p>Point-category definitions, clinical relationships and key distinctions.</p>
-        <div class="student-ready-guide__meta">26 learning objectives</div>
+      </li>
+      <li class="student-guide-list__item">
+        <div class="student-guide-list__content">
+          <span class="student-guide-list__status">STUDY GUIDE READY</span>
+          <h4>Point Categories</h4>
+          <p>Point-category definitions, clinical relationships and key distinctions.</p>
+        </div>
+        <div class="student-guide-list__meta">26 learning objectives</div>
         <a href="{$pointcategoriesurl}">Open Study Guide</a>
-      </article>
-    </div>
+      </li>
+    </ul>
   </div>
 </section>
 HTML;
