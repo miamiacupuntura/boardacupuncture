@@ -23,6 +23,9 @@
       continuingEducationUrl: 'index.html?track=continuing-education&return=ce-catalog#sgv2-introduction',
       objectiveCount: 9,
       minutesPerObjective: 15,
+      board: {
+        publiclyActive: true
+      },
       classification: {
         requirementGroup: 'General',
         subjectArea: 'General',
@@ -59,6 +62,9 @@
       continuingEducationUrl: 'index.html?track=continuing-education&return=ce-catalog#point-categories-draft',
       objectiveCount: 26,
       minutesPerObjective: 15,
+      board: {
+        publiclyActive: true
+      },
       classification: {
         requirementGroup: 'General',
         subjectArea: 'General',
