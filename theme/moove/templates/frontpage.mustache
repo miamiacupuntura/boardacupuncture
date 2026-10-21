@@ -224,6 +224,16 @@
                 </div>
             </div>
         </section>
+
+        {{!
+            Moodle requires every page layout to consume the main-content
+            placeholder. The legacy front-page content remains available to
+            Moodle internally, but is intentionally hidden from this landing
+            page so it cannot flash before the new design.
+        }}
+        <div class="at-moodle-source-content" hidden aria-hidden="true">
+            {{{ output.main_content }}}
+        </div>
     </main>
 
     <footer class="at-site-footer">
