@@ -5,6 +5,10 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 
+// Change this value whenever the Study Guide entry document changes. It keeps
+// browsers from reusing an older, partially transformed chapter page.
+$studyguideversion = '20261021-1';
+
 $areas = [
     'foundations' => [
         'title' => 'Foundations',
@@ -113,7 +117,10 @@ echo $OUTPUT->header();
     <section class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
         <?php foreach ($area['chapters'] as $chapter): ?>
             <?php
-            $chapterurl = new moodle_url($chapter['path']);
+            $chapterurl = new moodle_url($chapter['path'], [
+                'track' => 'board',
+                'release' => $studyguideversion,
+            ]);
             if ($chapter['anchor'] !== '') {
                 $chapterurl->set_anchor($chapter['anchor']);
             }
