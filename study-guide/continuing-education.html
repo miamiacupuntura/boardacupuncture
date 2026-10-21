@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Continuing Education Courses | AcupunctureTests</title>
+  <link rel="stylesheet" href="course-catalog.css?v=20261021-1">
+</head>
+<body data-catalog="continuing-education">
+  <header class="catalog-top">acupuncturetests.com</header>
+  <main class="catalog-shell">
+    <nav class="catalog-actions" aria-label="Continuing Education navigation">
+      <a class="catalog-button" href="/my/">← Back to Dashboard</a>
+      <a class="catalog-button primary" href="board-courses.html">Board Preparation Courses</a>
+    </nav>
+    <section class="catalog-hero">
+      <p class="catalog-eyebrow">PROFESSIONAL CONTINUING EDUCATION</p>
+      <h1>Continuing Education Courses</h1>
+      <p>This professional catalog lists only courses that have been approved and activated for Continuing Education. Core learning content remains synchronized with its Board-preparation chapter, while CE enrollment, assessment, completion record and certificate remain separate.</p>
+    </section>
+    <p id="preview-notice" class="catalog-preview" hidden>Design preview only: the sample card below does not represent Board approval, an active CE offering or a purchasable course.</p>
+    <section class="catalog-policy" aria-label="Continuing Education access rules">
+      <article><h2>Approved courses only</h2><p>A course appears here only after its approved hours, authorization number, provider and active dates are recorded.</p></article>
+      <article><h2>Course-specific enrollment</h2><p>Payment unlocks the CE examination, official completion record and certificate for this course only.</p></article>
+      <article><h2>No duplicate maintenance</h2><p>Shared chapter corrections update both learning routes without copying and editing the course twice.</p></article>
+    </section>
+    <section class="catalog-section" aria-labelledby="catalog-title">
+      <h2 id="catalog-title">Approved and active courses</h2>
+      <p class="catalog-intro">The chapter can be reviewed first. The Start CE Exam button will require course-specific enrollment and payment.</p>
+      <div id="course-list" class="catalog-grid"></div>
+    </section>
+    <p class="catalog-footnote">Internal planning estimates are never displayed as approved credit. Public credit values and purchase controls become available only from the official approval record.</p>
+  </main>
+  <script>if(new URLSearchParams(location.search).get('preview')==='approved')document.getElementById('preview-notice').hidden=false;</script>
+  <script src="continuing-education-courses.js?v=20261021-2"></script>
+  <script src="course-catalog.js?v=20261021-1"></script>
+</body>
+</html>

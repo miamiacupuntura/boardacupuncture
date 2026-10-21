@@ -1,0 +1,24 @@
+(function () {
+  'use strict';
+  const registry = window.AcupunctureContinuingEducation;
+  const list = document.getElementById('course-list');
+  if (!registry || !list) return;
+  const route = document.body.dataset.catalog === 'continuing-education' ? 'continuing-education' : 'board';
+  const preview = route === 'continuing-education' && new URLSearchParams(window.location.search).get('preview') === 'approved';
+  const sourceCourses = registry.courses.map(course => ({course, simulated: false}));
+  if (preview && sourceCourses.length) {
+    const sample = JSON.parse(JSON.stringify(sourceCourses[0].course));
+    sample.approval = {status: registry.status.APPROVED, publiclyActive: true, approvedCreditHours: registry.estimatedHours(sample), approvalNumber: 'PREVIEW-ONLY', approvedOn: '2026-01-01', expiresOn: '2099-12-31'};
+    sample.provider = {name: 'AcupunctureTests — preview', number: 'PREVIEW'};
+    sample.certificate = {enabled: true};
+    sample.payment = {currency: 'USD', price: null, enrolmentUrl: ''};
+    sourceCourses.splice(0, sourceCourses.length, {course: sample, simulated: true});
+  }
+  const visible = route === 'board' ? sourceCourses : sourceCourses.filter(item => item.simulated || registry.isApprovedAndActive(item.course));
+  function addDefinitionList(card, rows) {const details=document.createElement('dl');rows.forEach(([label,value])=>{const dt=document.createElement('dt');dt.textContent=label;const dd=document.createElement('dd');dd.textContent=value;details.append(dt,dd);});card.append(details);}
+  function addButton(parent,label,href,className,disabled){const link=document.createElement('a');link.className=`catalog-button ${className||''}`.trim();link.textContent=label;if(disabled){link.href='#';link.setAttribute('aria-disabled','true');link.addEventListener('click',event=>event.preventDefault());}else{link.href=href;}parent.append(link);}
+  function renderBoardCard(item){const course=item.course;const card=document.createElement('article');card.className='course-card';const status=document.createElement('span');status.className='course-card__status';status.textContent='INCLUDED WITH MEMBERSHIP';const title=document.createElement('h3');title.textContent=course.title;const description=document.createElement('p');description.className='course-card__description';description.textContent=course.shortDescription;card.append(status,title,description);addDefinitionList(card,[['Objectives',String(course.objectiveCount)],['Board preparation','Available'],['CE status',registry.isApprovedAndActive(course)?'Approved and active':'Not currently active']]);const actions=document.createElement('div');actions.className='course-card__actions';addButton(actions,'Open Board chapter',course.boardUrl,'primary',false);if(registry.isApprovedAndActive(course))addButton(actions,'View CE option','continuing-education.html','ce',false);card.append(actions);list.append(card);}
+  function renderCeCard(item){const course=item.course;const card=document.createElement('article');card.className=`course-card is-ce${item.simulated?' is-preview':''}`;const status=document.createElement('span');status.className='course-card__status';status.textContent=item.simulated?'DESIGN PREVIEW · NOT AN APPROVAL':'BOARD-APPROVED · ACTIVE';const title=document.createElement('h3');title.textContent=course.title;const description=document.createElement('p');description.className='course-card__description';description.textContent=course.shortDescription;card.append(status,title,description);addDefinitionList(card,[['Subject area',course.classification.subjectArea],['Delivery method',course.delivery.method],['CE credit hours',String(course.approval.approvedCreditHours)],['Approval number',course.approval.approvalNumber]]);const actions=document.createElement('div');actions.className='course-card__actions';addButton(actions,item.simulated?'Preview CE course':'Open CE course',course.continuingEducationUrl,'ce',false);addButton(actions,'Start CE exam / Enroll',course.payment&&course.payment.enrolmentUrl,'',item.simulated||!course.payment||!course.payment.enrolmentUrl);card.append(actions);list.append(card);}
+  if(!visible.length){const empty=document.createElement('section');empty.className='catalog-empty';empty.innerHTML='<h3>No Board-approved courses are active yet</h3><p>The catalog will populate automatically as individual courses receive formal approval and are activated. Board-preparation chapters remain available in the membership area.</p>';list.replaceWith(empty);return;}
+  visible.forEach(item=>route==='board'?renderBoardCard(item):renderCeCard(item));
+})();
