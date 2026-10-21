@@ -162,6 +162,8 @@
   document.head.append(style);
  };
  applyHierarchy();
+ window.addEventListener('load', () => setTimeout(applyHierarchy, 700), {once:true});
+ setTimeout(applyHierarchy, 1800);
  if(!window.__chapterTemplateObserver){
   let refreshTimer;
   window.__chapterTemplateObserver=new MutationObserver(()=>{
@@ -171,7 +173,7 @@
    window.__chapterTemplateObserver.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['aria-pressed']});
    document.body.addEventListener('click',event=>{
     if(!event.target.closest('.chapter-selector button,.chapter-navigation-link'))return;
-    setTimeout(applyHierarchy,0);
+    [0,100,400,900,1600].forEach(delay=>setTimeout(applyHierarchy,delay));
    },true);
   };
   if(document.body)startObserver();else window.addEventListener('DOMContentLoaded',startObserver,{once:true});

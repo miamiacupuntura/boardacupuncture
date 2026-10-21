@@ -21,8 +21,7 @@
     });
   }
 
-  const initialize = () => applyTitle();
-  applyTitle();
+  const initialize = () => [0, 500, 2000].forEach(delay => setTimeout(applyTitle, delay));
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialize, {once: true});
   } else {
