@@ -1219,3 +1219,491 @@ body#page-site-index.notloggedin {
         }
     }
 }
+
+// Authentication pages share the public site's visual system while leaving
+// Moodle's form controls and authentication processing intact.
+body.moove-login {
+    min-height: 100%;
+    color: $at-ink;
+    background: #f4f8f7 !important; /* stylelint-disable-line declaration-no-important */
+    font-family: Inter, Arial, system-ui, sans-serif;
+
+    .at-auth-wrapper,
+    .at-auth-wrapper * {
+        box-sizing: border-box;
+    }
+
+    .at-auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: radial-gradient(circle at 12% 18%, #e0f3ef 0, transparent 25%),
+            radial-gradient(circle at 90% 12%, #fff0dd 0, transparent 22%), #f7faf9;
+    }
+
+    .at-auth-shell {
+        width: calc(100% - 48px);
+        max-width: 1180px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .at-auth-header {
+        position: relative;
+        z-index: 5;
+        border-bottom: 1px solid rgba($at-line, .9);
+        background: rgba(255, 255, 255, .94);
+        backdrop-filter: blur(18px);
+    }
+
+    .at-auth-header-inner {
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .at-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        color: $at-ink;
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -.5px;
+        text-decoration: none;
+    }
+
+    .at-wordmark > span {
+        color: $at-orange;
+    }
+
+    .at-brand-mark {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid #f2d5c4;
+        border-radius: 50%;
+        background: #fff7f1;
+
+        img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+    }
+
+    .at-brand-symbol {
+        color: $at-orange;
+        font-size: 29px;
+        line-height: 1;
+    }
+
+    .at-auth-back {
+        margin-left: auto;
+        color: $at-muted;
+        font-weight: 700;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            color: $at-teal;
+        }
+    }
+
+    .at-button {
+        min-height: 52px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 23px;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1;
+        text-decoration: none;
+        transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+
+        &:hover,
+        &:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba($at-ink, .14);
+        }
+    }
+
+    .at-button-small {
+        min-height: 44px;
+        padding-right: 18px;
+        padding-left: 18px;
+        border-radius: 10px;
+    }
+
+    .at-button-orange {
+        color: #fff;
+        background: $at-orange;
+
+        &:hover,
+        &:focus {
+            color: #fff;
+            background: $at-orange-dark;
+        }
+    }
+
+    .at-button-outline {
+        border-color: $at-teal;
+        color: $at-teal-dark;
+        background: #fff;
+
+        &:hover,
+        &:focus {
+            color: $at-teal-dark;
+        }
+    }
+
+    #page.at-auth-page {
+        width: 100%;
+        max-width: none;
+        flex: 1 0 auto;
+        display: flex;
+        margin: 0;
+        padding: 62px 0;
+        background: transparent;
+    }
+
+    .at-auth-grid {
+        display: grid;
+        grid-template-columns: minmax(0, .9fr) minmax(480px, 1.1fr);
+        align-items: center;
+        gap: 72px;
+    }
+
+    .at-eyebrow {
+        margin: 0 0 14px;
+        color: $at-teal;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1.2;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .at-auth-intro {
+        h1 {
+            max-width: 560px;
+            margin: 0 0 20px;
+            color: $at-ink;
+            font-size: clamp(40px, 5vw, 60px);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -3px;
+        }
+
+        > p:not(.at-eyebrow) {
+            max-width: 560px;
+            color: $at-muted;
+            font-size: 17px;
+            line-height: 1.65;
+        }
+    }
+
+    .at-auth-paths {
+        display: grid;
+        gap: 10px;
+        margin: 28px 0;
+
+        > div {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        p,
+        strong,
+        small {
+            display: block;
+            margin: 0;
+        }
+
+        strong {
+            font-size: 14px;
+        }
+
+        small {
+            color: $at-muted;
+            font-size: 12px;
+        }
+    }
+
+    .at-auth-path-icon {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        font-size: 11px;
+        font-weight: 800;
+
+        &.at-board {
+            color: $at-teal;
+            background: $at-teal-pale;
+        }
+
+        &.at-ce {
+            color: $at-purple;
+            background: $at-purple-pale;
+        }
+    }
+
+    .at-auth-visual {
+        overflow: hidden;
+        max-width: 500px;
+        height: 180px;
+        border: 7px solid #fff;
+        border-radius: 50px 14px 50px 14px;
+        box-shadow: 0 18px 45px rgba($at-ink, .12);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+        }
+    }
+
+    .at-auth-card {
+        width: 100%;
+        padding: 38px;
+        border: 1px solid $at-line;
+        border-top: 5px solid $at-teal;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, .98);
+        box-shadow: 0 24px 60px rgba($at-ink, .12);
+
+        .loginform,
+        .loginform.hastwocolumns {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .login-logo {
+            margin-bottom: 26px;
+            text-align: left;
+
+            img {
+                max-width: 180px;
+                max-height: 72px;
+            }
+        }
+
+        .form-control {
+            min-height: 52px;
+            border: 1px solid #bdcdd1;
+            border-radius: 10px;
+            color: $at-ink;
+            background: #fbfdfd;
+
+            &:focus {
+                border-color: $at-teal;
+                box-shadow: 0 0 0 .2rem rgba($at-teal, .15);
+            }
+        }
+
+        .btn-primary,
+        #id_submitbutton {
+            min-height: 50px;
+            border-color: $at-teal;
+            border-radius: 10px;
+            color: #fff;
+            background: $at-teal;
+            font-weight: 800;
+
+            &:hover,
+            &:focus {
+                border-color: $at-teal-dark;
+                background: $at-teal-dark;
+            }
+        }
+
+        .login-form-forgotpassword a,
+        .login-signup a,
+        a {
+            color: $at-teal-dark;
+        }
+
+        .mform {
+            width: 100%;
+            padding: 0;
+
+            fieldset {
+                margin-bottom: 20px;
+                padding: 20px;
+                border: 1px solid $at-line;
+                border-radius: 14px;
+                background: #fbfdfd;
+            }
+
+            legend {
+                color: $at-ink;
+                font-size: 20px;
+                font-weight: 800;
+            }
+        }
+
+        .right-column {
+            border-color: $at-line;
+        }
+    }
+
+    .at-auth-help {
+        margin: 26px 0 0;
+        padding-top: 18px;
+        border-top: 1px solid $at-line;
+        color: $at-muted;
+        text-align: center;
+
+        a {
+            color: $at-teal-dark;
+            font-weight: 700;
+        }
+    }
+
+    .at-auth-footer {
+        padding: 24px 0;
+        color: #81979f;
+        background: #0b252f;
+        font-size: 13px;
+
+        .at-auth-shell {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+        }
+
+        a {
+            color: #b8c9cf;
+            text-decoration: none;
+
+            &:hover,
+            &:focus {
+                color: #fff;
+            }
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    body.moove-login {
+        .at-auth-grid {
+            grid-template-columns: 1fr;
+            gap: 38px;
+        }
+
+        .at-auth-intro {
+            text-align: center;
+
+            h1,
+            > p:not(.at-eyebrow),
+            .at-auth-visual {
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+
+        .at-auth-paths {
+            max-width: 430px;
+            margin-right: auto;
+            margin-left: auto;
+            text-align: left;
+        }
+    }
+}
+
+@media (max-width: 560px) {
+    body.moove-login {
+        .at-auth-shell {
+            width: calc(100% - 28px);
+        }
+
+        .at-auth-header-inner {
+            min-height: 70px;
+        }
+
+        .at-brand {
+            font-size: 17px;
+        }
+
+        .at-brand-mark {
+            width: 38px;
+            height: 38px;
+            flex-basis: 38px;
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        .at-auth-back {
+            display: none;
+        }
+
+        .at-auth-header .at-button {
+            min-height: 40px;
+            margin-left: auto;
+            padding-right: 12px;
+            padding-left: 12px;
+            font-size: 12px;
+        }
+
+        #page.at-auth-page {
+            padding: 38px 0;
+        }
+
+        .at-auth-intro h1 {
+            font-size: 38px;
+            letter-spacing: -2px;
+        }
+
+        .at-auth-visual {
+            height: 145px;
+            border-width: 5px;
+            border-radius: 36px 12px 36px 12px;
+        }
+
+        .at-auth-card {
+            padding: 25px 20px;
+
+            .loginform .left-column,
+            .loginform .right-column {
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .mform fieldset {
+                padding: 14px;
+            }
+        }
+
+        .at-auth-footer .at-auth-shell {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+}

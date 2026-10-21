@@ -30,6 +30,12 @@ $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => \core\context\course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'bodyattributes' => $bodyattributes,
+    'wwwroot' => $CFG->wwwroot,
+    'loginurl' => (new moodle_url('/login/index.php'))->out(false),
+    'signupurl' => (new moodle_url('/login/signup.php'))->out(false),
+    'supporturl' => (new moodle_url('/user/contactsitesupport.php'))->out(false),
+    'isloginpage' => $PAGE->pagetype === 'login-index',
+    'issignuppage' => $PAGE->pagetype === 'login-signup',
 ];
 
 echo $OUTPUT->render_from_template('theme_moove/login', $templatecontext);
