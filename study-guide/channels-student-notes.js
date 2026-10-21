@@ -235,11 +235,14 @@
     }
   });
 
-  const closeWorkspace = () => {
+  const closeWorkspace = event => {
     revokeObjectUrls();
-    db?.close();
+    if (!event.persisted) db?.close();
   };
   window.addEventListener('pagehide', closeWorkspace);
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) render();
+  });
   (async () => {
     try {
       db = await openDatabase();
