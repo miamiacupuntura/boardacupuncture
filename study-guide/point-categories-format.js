@@ -329,7 +329,6 @@
 
   apply();
   requestAnimationFrame(apply);
-  window.addEventListener('load', () => setTimeout(apply, 1200), {once: true});
   new MutationObserver(() => setTimeout(() => {
     renameBlocks();
     orderBlocks();
