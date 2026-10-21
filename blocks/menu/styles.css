@@ -119,6 +119,41 @@
     color: #075f60 !important;
 }
 
+.membership-access-notice {
+    display: flex;
+    max-width: 1120px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    box-sizing: border-box;
+    margin: 18px auto;
+    padding: 18px 20px;
+    border: 1px solid #efc18f;
+    border-left: 5px solid #f47e2c;
+    border-radius: 12px;
+    background: #fff8f0;
+    color: #142f3d;
+}
+
+.membership-access-notice strong,
+.membership-access-notice span {
+    display: block;
+}
+
+.membership-access-notice strong {
+    margin-bottom: 3px;
+    font-size: 1.1rem;
+}
+
+.membership-access-notice .link-retry3 {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.link-retry--locked {
+    min-width: 138px;
+}
+
 @media (max-width: 680px) {
     .public-learning-routes {
         margin: 12px 0;
@@ -140,5 +175,16 @@
 
     .public-learning-route__button {
         width: 100%;
+    }
+
+    .membership-access-notice {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .membership-access-notice .link-retry3 {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
     }
 }

@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-class block_menu_course extends block_base { 
- 
+class block_menu_course extends block_base {
+
 function init() {
 $this->title = get_string('pluginname', 'block_menu_course');
 }
@@ -49,6 +49,8 @@ if (!isloggedin() || isguestuser()) {
 HTML;
     return $this->content;
 }
+
+$membershipurl = (new moodle_url('/enrol/index.php', ['id' => 116]))->out(false);
 
 require_once($CFG->dirroot.'/mod/scorm/locallib.php');
 require_once($CFG->libdir.'/gradelib.php');
@@ -113,19 +115,23 @@ foreach ($courses as $course) {
 if ($course->visible == false) {
 	continue;
 }
-if ($noshow == false) {
 $context = context_course::instance($course->id);
-if (is_enrolled($context, $USER->id, '', true) == false) {
+$hascourseaccess = is_enrolled($context, $USER->id, '', true)
+	|| has_capability('moodle/course:view', $context, $USER->id);
+if (!$hascourseaccess) {
 	$noshow = true;
-}
 }
 $categoryNames[$counting2] = $category->name;
 $courseNames[$counting2] = $rowHTML6 . $course->fullname . $rowHTMLend;
 //$courseSummary[$counting2] = $rowHTML6. $course->summary . $rowHTMLend;
 
-$courseURL = "https://" . $_SERVER['HTTP_HOST'] . "/course/view.php?id=" . $course->id;
+$courseURL = $hascourseaccess
+	? (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false)
+	: $membershipurl;
+$courseAction = $hascourseaccess ? 'Study' : 'Subscribe to access';
+$courseActionClass = $hascourseaccess ? '' : ' link-retry--locked';
 $examLink = <<<HTML
-<a href="$courseURL" class="link-retry link-retry2">Study</a>
+<a href="$courseURL" class="link-retry link-retry2{$courseActionClass}">{$courseAction}</a>
 HTML;
 
 $courseLinks[$counting2] = $rowHTML4 . $examLink . $rowHTMLend4;
@@ -154,6 +160,19 @@ HTML;
 
 
 $allcontent = $htmlMainSection;
+
+if ($noshow == true) {
+$purchase = <<<HTML
+<section class="membership-access-notice" aria-labelledby="membership-access-title-course">
+  <div>
+    <strong id="membership-access-title-course">Your account is ready.</strong>
+    <span>Activate the $30 monthly Board Preparation membership to open the courses below.</span>
+  </div>
+  <a href="{$membershipurl}" class="link-retry link-retry2 link-retry3">Start membership</a>
+</section>
+HTML;
+	$allcontent = $purchase . $allcontent;
+}
 
 $this->content->text = $allcontent;
 if ($this->content !== NULL) {

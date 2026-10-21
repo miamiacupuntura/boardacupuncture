@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-class block_menu extends block_base { 
- 
+class block_menu extends block_base {
+
 function init() {
 $this->title = get_string('pluginname', 'block_menu');
 }
@@ -51,6 +51,8 @@ if (!isloggedin() || isguestuser()) {
 HTML;
     return $this->content;
 }
+
+$membershipurl = (new moodle_url('/enrol/index.php', ['id' => 116]))->out(false);
 
 if(!isset($_COOKIE["btnToggleDashboard"])) {
 $checkBox = <<<HTML
@@ -144,11 +146,11 @@ foreach ($courses as $course) {
 if ($course->visible == false) {
 	continue;
 }
-if ($noshow == false) {
 $context = context_course::instance($course->id);
-if (is_enrolled($context, $USER->id, '', true) == false) {
+$hascourseaccess = is_enrolled($context, $USER->id, '', true)
+	|| has_capability('moodle/course:view', $context, $USER->id);
+if (!$hascourseaccess) {
 	$noshow = true;
-}
 }
 $average = 0;
 $count = 0;
@@ -167,24 +169,28 @@ $attemptScores[] = $tracks->value;
 $tempAttempt = $tempAttempt + 1;
 }
 
-if ($tempAttempt >= 1) { 
+if ($tempAttempt >= 1) {
 if (max($attemptScores) > 0) {
 $average = $average + max($attemptScores);
 $count = $count + 1;
 }
 if (max($attemptScores) >= 70) {
-$countCompleted = $countCompleted + 1;	
+$countCompleted = $countCompleted + 1;
 }
 }
 $overallcount = $overallcount + 1;
 }
 
-$categoryNames[$counting] = $category->name; 
+$categoryNames[$counting] = $category->name;
 $courseNames[$counting] = $rowHTML6 . $course->fullname . $rowHTMLend;
 
-$courseURL = "https://" . $_SERVER['HTTP_HOST'] . "/course/view.php?id=" . $course->id;
+$courseURL = $hascourseaccess
+	? (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false)
+	: $membershipurl;
+$courseAction = $hascourseaccess ? 'Study' : 'Subscribe to access';
+$courseActionClass = $hascourseaccess ? '' : ' link-retry--locked';
 $examLink = <<<HTML
-<a href="$courseURL" class="link-retry link-retry2">Study</a>
+<a href="$courseURL" class="link-retry link-retry2{$courseActionClass}">{$courseAction}</a>
 HTML;
 
 if ($count > 0) {
@@ -250,19 +256,23 @@ foreach ($courses as $course) {
 if ($course->visible == false) {
 	continue;
 }
-if ($noshow == false) {
 $context = context_course::instance($course->id);
-if (is_enrolled($context, $USER->id, '', true) == false) {
+$hascourseaccess = is_enrolled($context, $USER->id, '', true)
+	|| has_capability('moodle/course:view', $context, $USER->id);
+if (!$hascourseaccess) {
 	$noshow = true;
-}
 }
 $categoryNames[$counting2] = $category->name;
 $courseNames[$counting2] = $rowHTML6 . $course->fullname . $rowHTMLend;
 //$courseSummary[$counting2] = $rowHTML6. $course->summary . $rowHTMLend;
 
-$courseURL = "https://" . $_SERVER['HTTP_HOST'] . "/course/view.php?id=" . $course->id;
+$courseURL = $hascourseaccess
+	? (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false)
+	: $membershipurl;
+$courseAction = $hascourseaccess ? 'Study' : 'Subscribe to access';
+$courseActionClass = $hascourseaccess ? '' : ' link-retry--locked';
 $examLink = <<<HTML
-<a href="$courseURL" class="link-retry link-retry2">Study</a>
+<a href="$courseURL" class="link-retry link-retry2{$courseActionClass}">{$courseAction}</a>
 HTML;
 
 $courseLinks[$counting2] = $rowHTML4 . $examLink . $rowHTMLend4;
@@ -323,7 +333,13 @@ $allcontent = $htmlMainSectionAddToggle . $htmlMainSection2;
 
 if ($noshow == true) {
 $purchase = <<<HTML
-<a href="/enrol/index.php?id=116" class="link-retry link-retry2 link-retry3">Register Now</a>
+<section class="membership-access-notice" aria-labelledby="membership-access-title-menu">
+  <div>
+    <strong id="membership-access-title-menu">Your account is ready.</strong>
+    <span>Activate the $30 monthly Board Preparation membership to open the courses below.</span>
+  </div>
+  <a href="{$membershipurl}" class="link-retry link-retry2 link-retry3">Start membership</a>
+</section>
 HTML;
 	$allcontent = $purchase . $allcontent;
 }
