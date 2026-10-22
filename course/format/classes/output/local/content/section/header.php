@@ -501,7 +501,7 @@ $lastAttemptStatus = array();
 $sectionNames = array();
 $sectionIds = array();
 $mainRowHTML = <<<HTML
-<td class="all-columns" style="font-size:12px;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;vertical-align:middle !important;">
+<td class="all-columns exam-metric-value" style="font-size:16px !important;font-weight:700 !important;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;vertical-align:middle !important;">
 HTML;
 $mainRowHTMLB = <<<HTML
 <td class="all-columns exam-name-cell" style="font-size:12px;text-align:left !important;white-space:normal !important;word-break:normal !important;overflow-wrap:break-word !important;vertical-align:middle !important;">
