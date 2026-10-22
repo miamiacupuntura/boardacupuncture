@@ -1056,6 +1056,9 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     .main-exams-list .exam-topic-row .exam-action-cell {
+        display: flex !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
         flex: 0 0 100% !important;
         width: 100% !important;
         max-width: 100% !important;
@@ -1063,9 +1066,15 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
         border-bottom: 0 !important;
     }
 
-    .main-exams-list .exam-action-cell .link-retry {
+    table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.exam-action-cell a.link-retry {
+        display: flex !important;
+        flex: 1 1 100% !important;
         width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
         min-height: 40px !important;
+        box-sizing: border-box !important;
+        border-radius: 10px !important;
         font-size: 13px !important;
     }
 
