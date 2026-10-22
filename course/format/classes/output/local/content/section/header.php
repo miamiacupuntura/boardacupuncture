@@ -821,6 +821,13 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     line-height: 1.4 !important;
 }
 
+.main-exams-list .exam-topic-row td:nth-child(2),
+.main-exams-list .exam-topic-row td:nth-child(3),
+.main-exams-list .exam-topic-row td:nth-child(4) {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
 .main-exams-list .exam-history-link {
     display: inline-flex !important;
     align-items: center !important;
