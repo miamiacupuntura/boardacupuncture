@@ -986,9 +986,9 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     .main-exams-list .exam-topic-row.exam-topic-visible {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 0 !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
         width: calc(100% - 20px) !important;
         max-width: calc(100% - 20px) !important;
         margin: 0 10px 12px !important;
@@ -1002,9 +1002,10 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
 
     .main-exams-list .exam-topic-row td {
         display: block !important;
-        width: auto !important;
+        flex: 0 0 50% !important;
+        width: 50% !important;
         min-width: 0 !important;
-        max-width: none !important;
+        max-width: 50% !important;
         padding: 10px 12px !important;
         border-right: 0 !important;
         border-bottom: 1px solid #edf1f5 !important;
@@ -1043,7 +1044,9 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
-        grid-column: 1 / -1 !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
         padding: 15px 14px !important;
         background: #f4f8fc !important;
         color: #102a43 !important;
@@ -1053,7 +1056,9 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     .main-exams-list .exam-topic-row .exam-action-cell {
-        grid-column: 1 / -1 !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
         padding: 10px 12px 12px !important;
         border-bottom: 0 !important;
     }
