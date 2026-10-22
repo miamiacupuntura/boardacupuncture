@@ -924,11 +924,34 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
         display: none !important;
     }
 
+    .main-exams-list > tbody {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .main-exams-list .exams-list-title-row,
+    .main-exams-list .exams-list-help-row {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .main-exams-list .exams-list-title-row .first-column {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
     .main-exams-list .exam-topic-header {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) auto !important;
         align-items: stretch !important;
-        width: 100% !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+        margin: 0 10px !important;
+        box-sizing: border-box !important;
         border-top-width: 10px !important;
     }
 
@@ -966,7 +989,10 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 0 !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
         margin: 0 10px 12px !important;
+        box-sizing: border-box !important;
         border: 1px solid #dce4ec !important;
         border-radius: 12px !important;
         background: #ffffff !important;
@@ -1046,9 +1072,11 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
 
     .main-exams-list .exams-list-explanation {
         display: block !important;
-        width: auto !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
         margin: 10px !important;
         padding: 14px !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -1144,11 +1172,11 @@ $htmlMainSectionAdd = <<<HTML
     <col style="width:12%;">
     <col style="width:18%;">
   </colgroup>
-  <tr>
+  <tr class="exams-list-title-row">
     <th colspan = "6" class="first-column">Exams List</th>
   </tr>
 $resultExams
-  <tr>
+  <tr class="exams-list-help-row">
     <td colspan="6" class="exams-list-explanation" style="background:#eef6ff !important; color:#34445a !important; text-align:left !important; padding:16px 18px !important; font-size:12px !important; line-height:1.5 !important; white-space:normal !important; overflow-wrap:break-word !important;">
       <strong style="font-size:14px;">How Attempts and Scores Are Shown</strong><br><br>
       <strong>Started / Completed:</strong> Shows the number of times you have started and completed the exam.<br>
