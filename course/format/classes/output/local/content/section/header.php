@@ -713,7 +713,7 @@ $topicHeaderText = '#ffffff';
 
 $topicExamHeaders = <<<HTML
 <tr class="exam-topic-header" data-topic="{$sectionNames[$x]}" style="background-color:{$topicHeaderBg} !important;">
-<td style="text-align:left;font-size:13px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:14px 16px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong>{$sectionNames[$x]}</strong></td>
+<td style="text-align:left;font-size:13px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:14px 16px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong style="font-size:15px !important;font-weight:700 !important;line-height:1.3 !important;white-space:normal !important;word-break:normal !important;overflow-wrap:break-word !important;-webkit-text-size-adjust:100% !important;text-size-adjust:100% !important;">{$sectionNames[$x]}</strong></td>
 <td style="text-align:center;font-size:11px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:11px 8px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong>Attempts<br><span style="white-space:nowrap;font-size:9px;">Started / Completed</span></strong></td>
 <!-- REMOVED SECOND ATTEMPTS HEADER -->
 <td style="text-align:center;font-size:11px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:11px 8px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong>Last Attempt</strong></td>
@@ -1211,7 +1211,7 @@ $htmlMainSectionAdd = <<<HTML
     <col style="width:18%;">
   </colgroup>
   <tr class="exams-list-title-row">
-    <th colspan = "6" class="first-column">Exams List</th>
+    <th colspan = "6" class="first-column" style="display:block !important;width:100% !important;min-width:100% !important;max-width:100% !important;box-sizing:border-box !important;white-space:nowrap !important;font-size:20px !important;line-height:1.25 !important;-webkit-text-size-adjust:100% !important;text-size-adjust:100% !important;">Exams List</th>
   </tr>
 $resultExams
   <tr class="exams-list-help-row">
