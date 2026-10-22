@@ -813,11 +813,11 @@ $examTopicDropdownJS = <<<HTML
     background: #f7fafc !important;
 }
 
-.main-exams-list .exam-topic-row .exam-name-cell {
+table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
     padding-left: 18px !important;
     color: #102a43 !important;
-    font-size: 16px !important;
-    font-weight: 600 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
     line-height: 1.4 !important;
 }
 
@@ -901,8 +901,8 @@ $examTopicDropdownJS = <<<HTML
         font-size: 9px !important;
     }
 
-    .main-exams-list.course-stats .exam-topic-row .exam-name-cell {
-        font-size: 13px !important;
+    table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
+        font-size: 14px !important;
         line-height: 1.35 !important;
     }
 
