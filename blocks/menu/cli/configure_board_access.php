@@ -87,8 +87,24 @@ foreach ($resolvedcourses as $course) {
         'courseid' => $course->id,
         'customint1' => $parentcourseid,
     ];
-    if ($DB->record_exists('enrol', $conditions)) {
-        mtrace('[EXISTS] ' . $course->fullname . ' (ID ' . $course->id . ')');
+    $instance = $DB->get_record('enrol', $conditions);
+    if ($instance) {
+        if ((int) $instance->status !== ENROL_INSTANCE_ENABLED) {
+            if (!$options['apply']) {
+                mtrace('[DISABLED] ' . $course->fullname . ' (ID ' . $course->id . ')');
+                continue;
+            }
+            $metaplugin->update_status($instance, ENROL_INSTANCE_ENABLED);
+            mtrace('[ENABLED] ' . $course->fullname . ' (ID ' . $course->id . ')');
+            continue;
+        }
+        if ($options['apply']) {
+            require_once($CFG->dirroot . '/enrol/meta/locallib.php');
+            enrol_meta_sync($course->id);
+            mtrace('[SYNCED] ' . $course->fullname . ' (ID ' . $course->id . ')');
+        } else {
+            mtrace('[EXISTS] ' . $course->fullname . ' (ID ' . $course->id . ')');
+        }
         continue;
     }
     if (!$options['apply']) {

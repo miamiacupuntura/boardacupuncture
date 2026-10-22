@@ -234,7 +234,7 @@ class block_menu extends block_base {
                 $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
                     'area' => $subject['area'],
                 ]);
-                $actions .= '<a class="board-hub__action board-hub__action--guide" href="'
+                $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
                     . $studyguideurl->out(false) . '">Study Guide</a>';
 
                 $lastexam = 'No exam taken yet';
