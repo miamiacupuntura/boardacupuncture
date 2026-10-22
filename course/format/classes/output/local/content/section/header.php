@@ -971,6 +971,23 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
         padding: 14px 12px !important;
         font-size: 15px !important;
         line-height: 1.3 !important;
+        font-weight: 700 !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        -webkit-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
+    }
+
+    .main-exams-list .exam-topic-header td:first-child strong {
+        display: block !important;
+        width: 100% !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        -webkit-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
     }
 
     .main-exams-list .exam-topic-header td:last-child {
