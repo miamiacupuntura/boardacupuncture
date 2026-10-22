@@ -816,8 +816,9 @@ $examTopicDropdownJS = <<<HTML
 .main-exams-list .exam-topic-row .exam-name-cell {
     padding-left: 18px !important;
     color: #102a43 !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
+    line-height: 1.4 !important;
 }
 
 .main-exams-list .exam-history-link {
