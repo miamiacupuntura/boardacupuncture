@@ -12,7 +12,7 @@ $boards = [
         'area' => 'foundations',
         'questions' => ['Foundation Exams', 'Foundations Exams'],
         'simulation' => ['Foundation Simulation Exams', 'Foundations Simulation Exams'],
-        'games' => ['Playing Foundation Module Exams', 'Playing Foundations Module Exams'],
+        'games' => ['Playing Foundation Module Exams', 'Playing Foundations Module Exams', 'Playing Foundation'],
         'notes' => ['Foundation Notes', 'Foundations Notes'],
     ],
     'pointlocation' => [
@@ -20,7 +20,7 @@ $boards = [
         'courseid' => 34,
         'area' => 'pointlocation',
         'questions' => ['Point Location and Point Indication Exams'],
-        'simulation' => ['Point Location and Point Indication Simulation Exams'],
+        'simulation' => ['Point Location and Point Indication Simulation Exams', 'Point Location Simulation'],
         'games' => ['Playing Point Location Module Exams'],
         'notes' => ['Point Location Notes'],
     ],
@@ -28,18 +28,18 @@ $boards = [
         'name' => 'Chinese Herbology',
         'courseid' => 45,
         'area' => 'herbology',
-        'questions' => ['Single Herbs Exams'],
+        'questions' => ['Single Herbs Exams', 'Single Herbs'],
         'simulation' => ['Herbal Medicine Simulation Exams'],
         'games' => ['Playing Herbology Module Exams'],
         'notes' => ['Herbology Notes'],
-        'formulas' => ['Formulas Exams'],
+        'formulas' => ['Formulas Exams', 'Herbal Formulas'],
     ],
     'biomedicine' => [
         'name' => 'Biomedicine',
         'courseid' => 36,
         'area' => 'biomedicine',
         'questions' => ['Biomedicine Exams'],
-        'simulation' => ['Biomedicine Simulation Exams'],
+        'simulation' => ['Biomedicine Simulation Exams', 'Biomedicine Simulation'],
         'games' => ['Playing Biomedicine Module Exams'],
         'notes' => ['Biomedicine Notes'],
     ],
@@ -47,10 +47,14 @@ $boards = [
         'name' => 'Clean Needle Techniques',
         'courseid' => 113,
         'area' => 'cleanneedle',
-        'questions' => ['Clean Needle Techniques Exams'],
-        'simulation' => ['Clean Needle Simulation', 'Clean Needle Simulation Exams'],
-        'games' => ['Playing Clean Needle Techniques Module Exams'],
-        'notes' => ['Clean Needle Techniques Notes'],
+        'questions' => ['Clean Needle Techniques Exams', 'Clean Needle Techniques'],
+        'simulation' => [
+            'Clean Needle Simulation',
+            'Clean Needle Simulation Exams',
+            'Clean Needle Techniques Simulation',
+        ],
+        'games' => ['Playing Clean Needle Techniques Module Exams', 'Playing Clean Needle'],
+        'notes' => ['Clean Needle Techniques Notes', 'Clean Needle Notes'],
     ],
 ];
 
@@ -61,13 +65,15 @@ if (!isset($boards[$boardid])) {
 
 $board = $boards[$boardid];
 $context = context_course::instance($board['courseid']);
-$hasaccess = is_enrolled($context, $USER->id, '', true)
-    || has_capability('moodle/course:view', $context, $USER->id);
+$membershipcourseid = 116;
+$membershipcontext = context_course::instance($membershipcourseid);
+$hasaccess = is_enrolled($membershipcontext, $USER->id, '', true)
+    || has_capability('moodle/course:view', $membershipcontext, $USER->id);
 
 if (!$hasaccess) {
     redirect(
         new moodle_url('/my/'),
-        'Purchase this Board before opening its learning resources.',
+        'Purchase the 30-day Board access before opening these learning resources.',
         null,
         \core\output\notification::NOTIFY_ERROR
     );
@@ -190,7 +196,7 @@ echo $OUTPUT->header();
     <header class="board-workspace__hero">
         <p>YOUR BOARD</p>
         <h2><?php echo s($board['name']); ?></h2>
-        <span>Choose the learning activity you want to continue.</span>
+        <span>Included with your 30-day access to all five Boards. Choose the learning activity you want to continue.</span>
     </header>
     <section class="board-workspace__grid" aria-label="<?php echo s($board['name']); ?> learning resources">
         <?php echo $resourcehtml; ?>

@@ -313,6 +313,45 @@
     list-style: none;
 }
 
+.board-membership-purchase {
+    display: flex;
+    justify-content: flex-end;
+    margin: -4px 0 18px;
+}
+
+.board-membership-action {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 10px 18px;
+    border: 2px solid #087774;
+    border-radius: 8px;
+    background: #087774;
+    color: #fff !important;
+    font-weight: 850;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.board-membership-action:hover,
+.board-membership-action:focus {
+    background: #056764;
+    text-decoration: none;
+}
+
+.board-membership-action--active {
+    background: #dff3f1;
+    color: #075f60 !important;
+}
+
+.board-membership-action--pending {
+    border-color: #c9d3d7;
+    background: #eef2f4;
+    color: #5d7079 !important;
+}
+
 .board-product-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(155px, 190px);
@@ -909,6 +948,14 @@
         grid-template-columns: 1fr;
         gap: 10px;
         padding: 15px 14px;
+    }
+
+    .board-membership-purchase {
+        justify-content: stretch;
+    }
+
+    .board-membership-action {
+        width: 100%;
     }
 
     .board-product-row__price {
