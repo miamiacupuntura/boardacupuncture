@@ -19,7 +19,6 @@ class block_menu extends block_base {
 
         $loginurl = (new moodle_url('/login/index.php'))->out(false);
         $signupurl = (new moodle_url('/login/signup.php'))->out(false);
-        $cecatalogurl = (new moodle_url('/study-guide/continuing-education.html'))->out(false);
         $isguestview = !isloggedin() || isguestuser();
 
         // One 30-day purchase unlocks all five Board areas.
@@ -171,7 +170,6 @@ class block_menu extends block_base {
         <tbody>{$cerows}</tbody>
       </table>
     </div>
-    <a class="learning-product-section__catalog-link" href="{$cecatalogurl}">View Continuing Education catalog</a>
   </section>
 </section>
 HTML;

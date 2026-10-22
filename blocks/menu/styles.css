@@ -198,8 +198,7 @@
 }
 
 .learning-catalog-action,
-.board-product-row > a,
-.learning-product-section__catalog-link {
+.board-product-row > a {
     display: inline-flex;
     min-height: 42px;
     align-items: center;
@@ -237,14 +236,12 @@
 }
 
 .learning-catalog-action:hover,
-.board-product-row > a:hover,
-.learning-product-section__catalog-link:hover {
+.board-product-row > a:hover {
     filter: brightness(.92);
 }
 
 .learning-catalog-action:focus-visible,
-.board-product-row > a:focus-visible,
-.learning-product-section__catalog-link:focus-visible {
+.board-product-row > a:focus-visible {
     outline: 3px solid #f47e2c;
     outline-offset: 3px;
 }
@@ -460,12 +457,6 @@
     background: #7652a5;
     color: #fff !important;
     text-decoration: none;
-}
-
-.learning-product-section__catalog-link {
-    margin-top: 16px;
-    border-color: #7652a5;
-    background: #7652a5;
 }
 
 .student-learning-hub,
@@ -963,8 +954,7 @@
     }
 
     .board-product-row > a,
-    .board-product-row__pending,
-    .learning-product-section__catalog-link {
+    .board-product-row__pending {
         width: 100%;
     }
 
