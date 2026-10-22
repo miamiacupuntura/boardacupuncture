@@ -8,6 +8,95 @@ class block_menu extends block_base {
         $this->title = get_string('pluginname', 'block_menu');
     }
 
+    /**
+     * Return compact SCORM progress for a Board's question courses.
+     *
+     * @param array $courseids Course IDs included in the progress calculation.
+     * @return array
+     */
+    private function get_board_progress(array $courseids): array {
+        global $DB, $USER;
+
+        $scoresum = 0;
+        $attempted = 0;
+        $passed = 0;
+        $total = 0;
+        $lastexam = '';
+        $lasttime = 0;
+
+        foreach ($courseids as $courseid) {
+            $scorms = $DB->get_records('scorm', ['course' => (int) $courseid]);
+            $total += count($scorms);
+
+            foreach ($scorms as $scorm) {
+                $bestscores = [];
+                $attempts = $DB->get_records('scorm_attempt', [
+                    'scormid' => $scorm->id,
+                    'userid' => $USER->id,
+                ]);
+                foreach ($attempts as $attempt) {
+                    $track = $DB->get_record('scorm_scoes_value', [
+                        'attemptid' => $attempt->id,
+                        'elementid' => 8,
+                    ]);
+                    if (!$track || $track->value === null || $track->value === '') {
+                        continue;
+                    }
+                    $bestscores[] = (float) $track->value;
+                    if ((int) $track->timemodified > $lasttime) {
+                        $lasttime = (int) $track->timemodified;
+                        $lastexam = $scorm->name;
+                    }
+                }
+
+                if ($bestscores) {
+                    $best = max($bestscores);
+                    $scoresum += $best;
+                    $attempted++;
+                    if ($best >= 70) {
+                        $passed++;
+                    }
+                }
+            }
+        }
+
+        return [
+            'grade' => $attempted ? round($scoresum / $attempted, 2) : 0,
+            'passed' => $passed,
+            'total' => $total,
+            'lastexam' => $lastexam,
+            'lasttime' => $lasttime,
+        ];
+    }
+
+    /**
+     * Render a direct Board resource button when the user can access its course.
+     *
+     * @param int $courseid Moodle course ID.
+     * @param string $label Button label.
+     * @param string $type Visual button type.
+     * @return string
+     */
+    private function board_resource_button(int $courseid, string $label, string $type): string {
+        global $DB, $USER;
+
+        $course = $DB->get_record('course', ['id' => $courseid, 'visible' => 1], 'id');
+        if (!$course) {
+            return '<span class="board-hub__action board-hub__action--pending">' . s($label) . '</span>';
+        }
+
+        $context = context_course::instance($courseid);
+        $hasaccess = is_enrolled($context, $USER->id, '', true)
+            || has_capability('moodle/course:view', $context, $USER->id);
+        if (!$hasaccess) {
+            return '<span class="board-hub__action board-hub__action--pending">' . s($label) . '</span>';
+        }
+
+        $url = new moodle_url('/course/view.php', ['id' => $courseid]);
+        return '<a class="board-hub__action board-hub__action--' . s($type) . '" href="'
+            . $url->out(false) . '">' . s($label) . '</a>';
+    }
+
     public function get_content() {
         global $USER, $DB;
 
@@ -68,6 +157,116 @@ class block_menu extends block_base {
                 'openurl' => (new moodle_url('/blocks/menu/board.php', ['board' => 'cleanneedle']))->out(false),
             ],
         ];
+
+        if ($hasboardaccess) {
+            $boarddashboard = [
+                [
+                    'name' => 'Foundations',
+                    'description' => 'Build a strong foundation in Oriental Medicine.',
+                    'progressids' => [30],
+                    'area' => 'foundations',
+                    'resources' => [
+                        [30, 'Questions', 'questions'],
+                        [43, 'Simulation', 'simulation'],
+                        [93, 'Notes', 'notes'],
+                        [48, 'Games', 'games'],
+                    ],
+                ],
+                [
+                    'name' => 'Acupuncture & Point Location',
+                    'description' => 'Master point location, indications and acupuncture knowledge.',
+                    'progressids' => [34],
+                    'area' => 'pointlocation',
+                    'resources' => [
+                        [34, 'Questions', 'questions'],
+                        [40, 'Simulation', 'simulation'],
+                        [94, 'Notes', 'notes'],
+                        [83, 'Games', 'games'],
+                    ],
+                ],
+                [
+                    'name' => 'Chinese Herbology',
+                    'description' => 'Master Chinese herbs and classical formulas.',
+                    'progressids' => [45, 44],
+                    'area' => 'herbology',
+                    'resources' => [
+                        [45, 'Single Herbs', 'questions'],
+                        [44, 'Formulas', 'questions'],
+                        [41, 'Simulation', 'simulation'],
+                        [92, 'Notes', 'notes'],
+                        [82, 'Games', 'games'],
+                    ],
+                ],
+                [
+                    'name' => 'Biomedicine',
+                    'description' => 'Prepare for biomedical concepts and clinical knowledge.',
+                    'progressids' => [36],
+                    'area' => 'biomedicine',
+                    'resources' => [
+                        [36, 'Questions', 'questions'],
+                        [42, 'Simulation', 'simulation'],
+                        [91, 'Notes', 'notes'],
+                        [84, 'Games', 'games'],
+                    ],
+                ],
+                [
+                    'name' => 'Clean Needle Techniques',
+                    'description' => 'Review clean needle technique and safety principles.',
+                    'progressids' => [113],
+                    'area' => 'cleanneedle',
+                    'resources' => [
+                        [113, 'Questions', 'questions'],
+                        [118, 'Simulation', 'simulation'],
+                        [120, 'Notes', 'notes'],
+                        [119, 'Games', 'games'],
+                    ],
+                ],
+            ];
+
+            $boardcards = '';
+            foreach ($boarddashboard as $subject) {
+                $progress = $this->get_board_progress($subject['progressids']);
+                $grade = min(100, max(0, (float) $progress['grade']));
+                $actions = '';
+                foreach ($subject['resources'] as $resource) {
+                    $actions .= $this->board_resource_button($resource[0], $resource[1], $resource[2]);
+                }
+                $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
+                    'area' => $subject['area'],
+                ]);
+                $actions .= '<a class="board-hub__action board-hub__action--guide" href="'
+                    . $studyguideurl->out(false) . '">Study Guide</a>';
+
+                $lastexam = 'No exam taken yet';
+                if ($progress['lastexam'] !== '') {
+                    $lastexam = s($progress['lastexam']) . '<br><small>'
+                        . userdate($progress['lasttime'], '%b %d, %Y · %I:%M %p') . '</small>';
+                }
+
+                $boardcards .= '<article class="board-hub__card">'
+                    . '<h3>' . s($subject['name']) . '</h3>'
+                    . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
+                    . '<div class="board-hub__progress"><strong>' . format_float($progress['grade'], 2, true)
+                    . '%</strong><span>' . $progress['passed'] . ' of ' . number_format($progress['total'])
+                    . ' exams passed</span></div>'
+                    . '<div class="board-hub__bar"><span style="width:' . $grade . '%"></span></div>'
+                    . '<p class="board-hub__last"><strong>Last exam:</strong><br>' . $lastexam . '</p>'
+                    . '<div class="board-hub__actions">' . $actions . '</div>'
+                    . '</article>';
+            }
+
+            $this->content->text = <<<HTML
+<section class="board-hub" aria-labelledby="board-hub-title">
+  <header class="board-hub__heading">
+    <p>BOARD PREPARATION</p>
+    <h2 id="board-hub-title">Your NCBAHM Board Preparation</h2>
+    <span>Track your progress and open Questions, Simulation, Notes, Games or Study Guides directly from one screen.</span>
+  </header>
+  <div class="board-hub__grid">{$boardcards}</div>
+</section>
+HTML;
+            return $this->content;
+        }
 
         $boardrows = '';
         foreach ($boardproducts as $boardproduct) {
