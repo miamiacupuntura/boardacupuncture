@@ -102,25 +102,49 @@ class block_menu extends block_base {
         $ceproducts = [
             [
                 'title' => 'The Channels and Collaterals',
+                'courseid' => null,
                 'credits' => null,
                 'enrolmenturl' => '',
             ],
             [
                 'title' => 'Point Categories',
+                'courseid' => null,
                 'credits' => null,
                 'enrolmenturl' => '',
             ],
         ];
 
+        $hasceaccess = false;
+        foreach ($ceproducts as $index => $ceproduct) {
+            $courseid = (int) ($ceproduct['courseid'] ?? 0);
+            $courseaccess = false;
+            if (!$isguestview && $courseid && $DB->record_exists('course', ['id' => $courseid])) {
+                $coursecontext = context_course::instance($courseid);
+                $courseaccess = is_enrolled($coursecontext, $USER->id, '', true)
+                    || has_capability('moodle/course:view', $coursecontext, $USER->id);
+            }
+            $ceproducts[$index]['hasaccess'] = $courseaccess;
+            $hasceaccess = $hasceaccess || $courseaccess;
+        }
+
         $cerows = '';
         foreach ($ceproducts as $ceproduct) {
+            if ($hasceaccess && !$ceproduct['hasaccess']) {
+                continue;
+            }
+
             $credits = (float) ($ceproduct['credits'] ?? 0);
             $isavailable = $credits > 0 && !empty($ceproduct['enrolmenturl']);
             $creditlabel = $isavailable ? format_float($credits, 2, true) : 'Pending approval';
             $pricelabel = $isavailable ? '$' . number_format($credits * 10, 2) : '—';
-            $access = $isavailable
-                ? '<a href="' . s($ceproduct['enrolmenturl']) . '">Buy CE course</a>'
-                : '<span>Not available yet</span>';
+            if ($ceproduct['hasaccess']) {
+                $courseurl = new moodle_url('/course/view.php', ['id' => $ceproduct['courseid']]);
+                $access = '<a href="' . $courseurl->out(false) . '">Open CE course</a>';
+            } else {
+                $access = $isavailable
+                    ? '<a href="' . s($ceproduct['enrolmenturl']) . '">Buy CE course</a>'
+                    : '<span>Not available yet</span>';
+            }
 
             $cerows .= '<tr><th scope="row">' . s($ceproduct['title']) . '</th>'
                 . '<td>' . $creditlabel . '</td><td>' . $pricelabel . '</td><td>' . $access . '</td></tr>';
@@ -131,15 +155,12 @@ class block_menu extends block_base {
                 . '<a class="learning-catalog-action" href="' . $signupurl . '">Create Account</a>'
             : '';
 
-        $this->content->text = <<<HTML
-<section class="learning-product-catalog" aria-labelledby="learning-product-catalog-title">
-  <header class="learning-product-catalog__hero">
-    <p class="public-learning-routes__eyebrow">CHOOSE YOUR LEARNING PATH</p>
-    <h2 id="learning-product-catalog-title">Board Preparation or Continuing Education</h2>
-    <p>One $30 payment provides 30 days of access to all five Board preparation areas. The payment does not renew automatically. Continuing Education courses are purchased separately according to their approved credits.</p>
-    <div class="learning-product-catalog__account-actions">{$accountactions}</div>
-  </header>
+        $showboardsection = !$hasceaccess || $hasboardaccess;
+        $showcesection = !$hasboardaccess || $hasceaccess;
 
+        $boardsection = '';
+        if ($showboardsection) {
+            $boardsection = <<<HTML
   <section class="learning-product-section" id="board-access-options" aria-labelledby="board-access-options-title">
     <div class="learning-product-section__heading">
       <div>
@@ -152,7 +173,12 @@ class block_menu extends block_base {
     <div class="board-membership-purchase">{$membershipaction}</div>
     <ul class="board-product-list">{$boardrows}</ul>
   </section>
+HTML;
+        }
 
+        $cesection = '';
+        if ($showcesection) {
+            $cesection = <<<HTML
   <section class="learning-product-section learning-product-section--ce" id="continuing-education-courses" aria-labelledby="continuing-education-title">
     <div class="learning-product-section__heading">
       <div>
@@ -171,6 +197,33 @@ class block_menu extends block_base {
       </table>
     </div>
   </section>
+HTML;
+        }
+
+        if ($hasboardaccess && !$hasceaccess) {
+            $catalogeyebrow = 'BOARD PREPARATION';
+            $catalogtitle = 'Your Board Preparation';
+            $catalogintro = 'Your $30 payment provides 30 days of access to all five Board preparation areas. The payment does not renew automatically.';
+        } else if ($hasceaccess && !$hasboardaccess) {
+            $catalogeyebrow = 'CONTINUING EDUCATION';
+            $catalogtitle = 'Your Continuing Education';
+            $catalogintro = 'Continue the approved Continuing Education courses you purchased.';
+        } else {
+            $catalogeyebrow = 'CHOOSE YOUR LEARNING PATH';
+            $catalogtitle = 'Board Preparation or Continuing Education';
+            $catalogintro = 'One $30 payment provides 30 days of access to all five Board preparation areas. The payment does not renew automatically. Continuing Education courses are purchased separately according to their approved credits.';
+        }
+
+        $this->content->text = <<<HTML
+<section class="learning-product-catalog" aria-labelledby="learning-product-catalog-title">
+  <header class="learning-product-catalog__hero">
+    <p class="public-learning-routes__eyebrow">{$catalogeyebrow}</p>
+    <h2 id="learning-product-catalog-title">{$catalogtitle}</h2>
+    <p>{$catalogintro}</p>
+    <div class="learning-product-catalog__account-actions">{$accountactions}</div>
+  </header>
+{$boardsection}
+{$cesection}
 </section>
 HTML;
 
