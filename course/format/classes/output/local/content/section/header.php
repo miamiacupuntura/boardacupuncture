@@ -878,42 +878,6 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     transform: translateY(-1px);
 }
 
-@media (max-width: 767px) {
-    .main-exams-list {
-        table-layout: fixed !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    .main-exams-list .exam-topic-header td,
-    .main-exams-list .exam-topic-row td {
-        font-size: 9px !important;
-        padding: 6px 3px !important;
-    }
-
-/* Reduce only Pending in Last Status */
-.main-exams-list .exam-topic-row td:nth-child(5) {
-    font-size: 8px !important;
-}
-
-    .main-exams-list.course-stats .exam-topic-row td {
-        font-size: 9px !important;
-    }
-
-    table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
-        font-size: 14px !important;
-        line-height: 1.35 !important;
-    }
-
-    /* Mobile: column widths are controlled only by the table colgroup */
-    .main-exams-list .exam-topic-header td,
-    .main-exams-list .exam-topic-row td {
-        width: auto !important;
-        min-width: 0 !important;
-    }
-}
-
 /* Last Status pills */
 .main-exams-list .last-status-pill {
     display: inline-block !important;
@@ -947,81 +911,144 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     border-top: 12px solid #ffffff !important;
 }
 
+/* Mobile: display each exam as a readable card instead of six narrow columns. */
 @media (max-width: 767px) {
-    .main-exams-list .last-status-pill {
-        padding: 3px 5px !important;
-        min-width: 48px !important;
-        font-size: 8px !important;
-    }
-}
-
-/* Mobile fix: final content alignment for main Exams List */
-@media (max-width: 767px) {
-    .main-exams-list .exam-topic-row td:nth-child(4) {
-        white-space:normal !important;
-        word-break:normal !important;
-        overflow-wrap:normal !important;
-        line-height:1.2 !important;
+    .main-exams-list {
+        table-layout: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(5) {
-        white-space:nowrap !important;
-        word-break:normal !important;
+    .main-exams-list colgroup {
+        display: none !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(6) {
-        white-space:normal !important;
-        word-break:normal !important;
-        overflow-wrap:break-word !important;
-        line-height:1.2 !important;
+    .main-exams-list .exam-topic-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        border-top-width: 10px !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(6) {
-        overflow:hidden !important;
-        text-align:center !important;
-        padding-left:2px !important;
-        padding-right:2px !important;
+    .main-exams-list .exam-topic-header td {
+        display: none !important;
+        width: auto !important;
+        min-width: 0 !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(6) .link-retry {
-        display:inline-block !important;
-        width:auto !important;
-        max-width:100% !important;
-        box-sizing:border-box !important;
-        white-space:nowrap !important;
-        font-size:10px !important;
-        padding:6px 9px !important;
-        overflow:hidden !important;
+    .main-exams-list .exam-topic-header td:first-child,
+    .main-exams-list .exam-topic-header td:last-child {
+        display: flex !important;
+        align-items: center !important;
     }
 
-    /* Mobile: allow exam-row cells to wrap inside their assigned columns */
+    .main-exams-list .exam-topic-header td:first-child {
+        padding: 14px 12px !important;
+        font-size: 15px !important;
+        line-height: 1.3 !important;
+    }
+
+    .main-exams-list .exam-topic-header td:last-child {
+        justify-content: center !important;
+        padding: 9px !important;
+        border-left: 1px solid rgba(255,255,255,.35) !important;
+    }
+
+    .main-exams-list .exam-history-link {
+        min-height: 36px !important;
+        padding: 7px 9px !important;
+        font-size: 10px !important;
+    }
+
+    .main-exams-list .exam-topic-row.exam-topic-visible {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0 !important;
+        margin: 0 10px 12px !important;
+        border: 1px solid #dce4ec !important;
+        border-radius: 12px !important;
+        background: #ffffff !important;
+        box-shadow: 0 3px 10px rgba(25, 50, 74, .06) !important;
+        overflow: hidden !important;
+    }
+
     .main-exams-list .exam-topic-row td {
-        white-space:normal !important;
-        word-break:normal !important;
-        overflow-wrap:break-word !important;
-        min-width:0 !important;
-        max-width:100% !important;
-        box-sizing:border-box !important;
-        vertical-align:top !important;
+        display: block !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        padding: 10px 12px !important;
+        border-right: 0 !important;
+        border-bottom: 1px solid #edf1f5 !important;
+        box-sizing: border-box !important;
+        text-align: left !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow: visible !important;
     }
 
-    .main-exams-list .exam-topic-row td:first-child {
-        white-space:normal !important;
-        overflow-wrap:break-word !important;
+    .main-exams-list .exam-topic-row td::before {
+        display: block !important;
+        margin-bottom: 4px !important;
+        color: #60758a !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: .04em !important;
+        line-height: 1.2 !important;
+        text-transform: uppercase !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(2),
-    .main-exams-list .exam-topic-row td:nth-child(3),
-    .main-exams-list .exam-topic-row td:nth-child(5) {
-        white-space:nowrap !important;
-        overflow:hidden !important;
+    .main-exams-list .exam-topic-row td:nth-child(2)::before {
+        content: "Attempts";
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(4),
-    .main-exams-list .exam-topic-row td:nth-child(6) {
-        white-space:normal !important;
-        word-break:break-word !important;
-        overflow-wrap:anywhere !important;
+    .main-exams-list .exam-topic-row td:nth-child(3)::before {
+        content: "Last Attempt";
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(4)::before {
+        content: "Last Score";
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(5)::before {
+        content: "Last Status";
+    }
+
+    table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
+        grid-column: 1 / -1 !important;
+        padding: 15px 14px !important;
+        background: #f4f8fc !important;
+        color: #102a43 !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+    }
+
+    .main-exams-list .exam-topic-row .exam-action-cell {
+        grid-column: 1 / -1 !important;
+        padding: 10px 12px 12px !important;
+        border-bottom: 0 !important;
+    }
+
+    .main-exams-list .exam-action-cell .link-retry {
+        width: 100% !important;
+        min-height: 40px !important;
+        font-size: 13px !important;
+    }
+
+    .main-exams-list .last-status-pill {
+        padding: 5px 9px !important;
+        min-width: 64px !important;
+        font-size: 10px !important;
+    }
+
+    .main-exams-list .exams-list-explanation {
+        display: block !important;
+        width: auto !important;
+        margin: 10px !important;
+        padding: 14px !important;
     }
 }
 
