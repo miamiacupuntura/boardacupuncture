@@ -154,6 +154,281 @@
     min-width: 138px;
 }
 
+.learning-product-catalog {
+    box-sizing: border-box;
+    width: min(100%, 1180px);
+    margin: 20px auto 30px;
+    overflow: hidden;
+    border: 1px solid #d4e1e4;
+    border-top: 6px solid #087774;
+    border-radius: 16px;
+    background: #fff;
+    color: #142f3d;
+    box-shadow: 0 8px 28px rgba(22, 59, 70, .08);
+}
+
+.learning-product-catalog__hero {
+    padding: clamp(24px, 4vw, 42px);
+    background: linear-gradient(125deg, #eff9f8, #fff 58%, #faf7fd);
+}
+
+.learning-product-catalog__hero h2 {
+    margin: 0 0 10px;
+    color: #142f3d;
+    font-size: clamp(1.65rem, 3vw, 2.35rem);
+    line-height: 1.15;
+}
+
+.learning-product-catalog__hero > p:not(.public-learning-routes__eyebrow) {
+    max-width: 790px;
+    margin: 0;
+    color: #526873;
+    line-height: 1.6;
+}
+
+.learning-product-catalog__account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.learning-product-catalog__account-actions:empty {
+    display: none;
+}
+
+.learning-catalog-action,
+.board-product-row > a,
+.learning-product-section__catalog-link {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 9px 15px;
+    border: 2px solid #087774;
+    border-radius: 8px;
+    background: #087774;
+    color: #fff !important;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.board-product-row__pending {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 9px 13px;
+    border: 1px solid #c9d3d7;
+    border-radius: 8px;
+    background: #eef2f4;
+    color: #5d7079;
+    font-size: .82rem;
+    font-weight: 750;
+    text-align: center;
+}
+
+.learning-catalog-action--secondary {
+    background: #fff;
+    color: #075f60 !important;
+}
+
+.learning-catalog-action:hover,
+.board-product-row > a:hover,
+.learning-product-section__catalog-link:hover {
+    filter: brightness(.92);
+}
+
+.learning-catalog-action:focus-visible,
+.board-product-row > a:focus-visible,
+.learning-product-section__catalog-link:focus-visible {
+    outline: 3px solid #f47e2c;
+    outline-offset: 3px;
+}
+
+.learning-product-section {
+    padding: clamp(22px, 4vw, 40px);
+    border-top: 1px solid #dce5e7;
+}
+
+.learning-product-section--ce {
+    background: #fcfaff;
+}
+
+.learning-product-section__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 18px;
+}
+
+.learning-product-section__heading span {
+    color: #08706c;
+    font-size: .73rem;
+    font-weight: 850;
+    letter-spacing: .11em;
+}
+
+.learning-product-section--ce .learning-product-section__heading span {
+    color: #654391;
+}
+
+.learning-product-section__heading h3 {
+    margin: 5px 0 5px;
+    color: #142f3d;
+    font-size: 1.45rem;
+}
+
+.learning-product-section__heading p {
+    max-width: 760px;
+    margin: 0;
+    color: #526873;
+    line-height: 1.5;
+}
+
+.learning-product-section__heading > strong {
+    flex: 0 0 auto;
+    color: #142f3d;
+    font-size: 1.55rem;
+    white-space: nowrap;
+}
+
+.learning-product-section__heading > strong small,
+.board-product-row__price small {
+    display: block;
+    color: #5d7079;
+    font-size: .75rem;
+    font-weight: 650;
+}
+
+.board-product-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.board-product-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(155px, 190px);
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid #cbdadd;
+    border-left: 5px solid #087774;
+    border-radius: 10px;
+    background: #fbfdfd;
+}
+
+.board-product-row h4 {
+    margin: 5px 0 3px;
+    color: #142f3d;
+    font-size: 1.08rem;
+}
+
+.board-product-row p {
+    margin: 0;
+    color: #526873;
+    font-size: .9rem;
+    line-height: 1.4;
+}
+
+.board-product-row__status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #e9eef1;
+    color: #435862;
+    font-size: .68rem;
+    font-weight: 850;
+    letter-spacing: .04em;
+}
+
+.board-product-row__status--active {
+    background: #dff3f1;
+    color: #075f60;
+}
+
+.board-product-row__price {
+    color: #142f3d;
+    font-size: 1.3rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.ce-product-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid #d4c6e7;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.ce-product-table {
+    width: 100%;
+    min-width: 690px;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+.ce-product-table th,
+.ce-product-table td {
+    padding: 13px 15px;
+    border-bottom: 1px solid #e4dced;
+    color: #344f5b;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.ce-product-table thead th {
+    background: #f2ecf8;
+    color: #493268;
+    font-size: .82rem;
+    letter-spacing: .02em;
+}
+
+.ce-product-table tbody th {
+    color: #142f3d;
+}
+
+.ce-product-table tbody tr:last-child th,
+.ce-product-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.ce-product-table td span,
+.ce-product-table td a {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.ce-product-table td span {
+    background: #fff3dc;
+    color: #805300;
+}
+
+.ce-product-table td a {
+    background: #7652a5;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.learning-product-section__catalog-link {
+    margin-top: 16px;
+    border-color: #7652a5;
+    background: #7652a5;
+}
+
 .student-learning-hub,
 .student-exam-library {
     box-sizing: border-box;
@@ -449,6 +724,51 @@
 }
 
 @media (max-width: 680px) {
+    .learning-product-catalog {
+        margin: 12px 0 22px;
+        border-radius: 13px;
+    }
+
+    .learning-product-catalog__hero,
+    .learning-product-section {
+        padding: 20px 16px;
+    }
+
+    .learning-product-catalog__account-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .learning-catalog-action {
+        width: 100%;
+    }
+
+    .learning-product-section__heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .learning-product-section__heading > strong {
+        font-size: 1.35rem;
+    }
+
+    .board-product-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 15px 14px;
+    }
+
+    .board-product-row__price {
+        text-align: left;
+    }
+
+    .board-product-row > a,
+    .board-product-row__pending,
+    .learning-product-section__catalog-link {
+        width: 100%;
+    }
+
     .public-learning-routes {
         margin: 12px 0;
         padding: 18px 14px;
