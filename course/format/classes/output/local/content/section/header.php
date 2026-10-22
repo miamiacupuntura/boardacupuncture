@@ -945,8 +945,8 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     .main-exams-list .exam-topic-header {
-        display: grid !important;
-        grid-template-columns: minmax(0, 1fr) auto !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
         align-items: stretch !important;
         width: calc(100% - 20px) !important;
         max-width: calc(100% - 20px) !important;
@@ -968,6 +968,10 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     .main-exams-list .exam-topic-header td:first-child {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
         padding: 14px 12px !important;
         font-size: 15px !important;
         line-height: 1.3 !important;
@@ -991,6 +995,9 @@ table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-column
     }
 
     .main-exams-list .exam-topic-header td:last-child {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: none !important;
         justify-content: center !important;
         padding: 9px !important;
         border-left: 1px solid rgba(255,255,255,.35) !important;
