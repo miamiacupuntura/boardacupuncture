@@ -816,7 +816,7 @@ $examTopicDropdownJS = <<<HTML
 .main-exams-list .exam-topic-row .exam-name-cell {
     padding-left: 18px !important;
     color: #102a43 !important;
-    font-size: 14px !important;
+    font-size: 16px !important;
     font-weight: 600 !important;
     line-height: 1.4 !important;
 }
@@ -899,6 +899,11 @@ $examTopicDropdownJS = <<<HTML
 
     .main-exams-list.course-stats .exam-topic-row td {
         font-size: 9px !important;
+    }
+
+    .main-exams-list.course-stats .exam-topic-row .exam-name-cell {
+        font-size: 13px !important;
+        line-height: 1.35 !important;
     }
 
     /* Mobile: column widths are controlled only by the table colgroup */
