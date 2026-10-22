@@ -27,27 +27,27 @@ class block_menu extends block_base {
             [
                 'name' => 'Foundations of Oriental Medicine',
                 'courseid' => 30,
-                'openurl' => (new moodle_url('/course/view.php', ['id' => 30]))->out(false),
+                'openurl' => (new moodle_url('/blocks/menu/board.php', ['board' => 'foundations']))->out(false),
             ],
             [
                 'name' => 'Acupuncture & Point Location',
                 'courseid' => 34,
-                'openurl' => (new moodle_url('/course/view.php', ['id' => 34]))->out(false),
+                'openurl' => (new moodle_url('/blocks/menu/board.php', ['board' => 'pointlocation']))->out(false),
             ],
             [
                 'name' => 'Chinese Herbology',
                 'courseid' => 45,
-                'openurl' => (new moodle_url('/blocks/myprogress/herbology.php'))->out(false),
+                'openurl' => (new moodle_url('/blocks/menu/board.php', ['board' => 'herbology']))->out(false),
             ],
             [
                 'name' => 'Biomedicine',
                 'courseid' => 36,
-                'openurl' => (new moodle_url('/course/view.php', ['id' => 36]))->out(false),
+                'openurl' => (new moodle_url('/blocks/menu/board.php', ['board' => 'biomedicine']))->out(false),
             ],
             [
                 'name' => 'Clean Needle Techniques',
                 'courseid' => 113,
-                'openurl' => (new moodle_url('/course/view.php', ['id' => 113]))->out(false),
+                'openurl' => (new moodle_url('/blocks/menu/board.php', ['board' => 'cleanneedle']))->out(false),
             ],
         ];
 
