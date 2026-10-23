@@ -118,12 +118,11 @@ echo $OUTPUT->header();
         </div>
         <nav class="subject-study-guide__top-actions" aria-label="Study Guide course catalogs">
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>">← Back to Dashboard</a>
-            <a class="subject-study-guide__catalog" href="<?php echo (new moodle_url('/study-guide/board-courses.html'))->out(false); ?>">Board Courses</a>
             <a class="subject-study-guide__catalog subject-study-guide__catalog--ce" href="<?php echo (new moodle_url('/study-guide/continuing-education.html'))->out(false); ?>">Continuing Education</a>
         </nav>
     </header>
 
-    <section class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
+    <section id="study-guide-chapters" class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
         <?php foreach ($area['chapters'] as $chapter): ?>
             <?php
             $chapterurl = new moodle_url($chapter['path']);

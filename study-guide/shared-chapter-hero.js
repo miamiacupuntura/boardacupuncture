@@ -4,10 +4,10 @@
   const track = window.ACUPUNCTURE_ENTRY_TRACK || params.get('track') || 'board';
   const chapterIndexUrl = track === 'continuing-education'
     ? (params.get('return') === 'ce-preview' ? 'continuing-education.html?preview=approved' : 'continuing-education.html')
-    : (params.get('return') === 'board-catalog' ? 'board-courses.html' : '/blocks/myprogress/study-guide.php?area=pointlocation');
+    : '/blocks/myprogress/study-guide.php?area=pointlocation';
   const chapterIndexLabel = track === 'continuing-education'
     ? '← Back to Continuing Education courses'
-    : (params.get('return') === 'board-catalog' ? '← Back to Board preparation courses' : '← Back to Study Guide index');
+    : '← Back to Study Guide index';
   function ensureMobileIndexBack() {
     const selector = document.querySelector('.chapter-selector');
     if (!selector) return;
