@@ -16,20 +16,29 @@ $areas = [
         'description' => 'Choose one of the currently available Point Location Study Guide chapters.',
         'chapters' => [
             [
-                'title' => 'The Channels and Collaterals. Introduction',
-                'description' => 'Channel functions, pathways, circulation and internal relationships.',
+                'title' => 'The Channels and Collaterals',
+                'description' => 'Study channel functions, pathways, circulation, relationships and organization through guided reading, visual review and structured Board practice.',
+                'objectives' => 9,
+                'guide_status' => 'Ready',
+                'board_practice' => 'Included',
                 'path' => '/study-guide/index.html',
                 'anchor' => '',
             ],
             [
                 'title' => 'Point Categories',
-                'description' => 'Back-Shu, Front-Mu, Five Shu, Luo-Connecting and other point categories.',
+                'description' => 'Review Back-Shu, Front-Mu, Five Shu, Luo-Connecting and other point categories through clinical relationships, key distinctions and practice exams.',
+                'objectives' => 26,
+                'guide_status' => 'Ready',
+                'board_practice' => 'Included',
                 'path' => '/study-guide/index.html',
                 'anchor' => 'point-categories-draft',
             ],
             [
                 'title' => 'Channel Pathway Identification',
-                'description' => 'Identify and compare Primary, Divergent, Luo-Connecting, Sinew and Extraordinary pathways.',
+                'description' => 'Identify and compare Primary, Divergent, Luo-Connecting, Sinew and Extraordinary pathways using visual evidence, anatomical landmarks and Board-level practice.',
+                'objectives' => 12,
+                'guide_status' => 'Ready',
+                'board_practice' => 'Included',
                 'path' => '/study-guide/channel-pathways/index.html',
                 'anchor' => '',
             ],
@@ -88,7 +97,10 @@ echo $OUTPUT->header();
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
 .subject-study-guide__card h3{margin:0 0 9px;color:#17232a;font-size:21px;line-height:1.25}
-.subject-study-guide__card p{margin:0 0 20px;color:#64748b;line-height:1.55}
+.subject-study-guide__card p{margin:0 0 18px;color:#64748b;line-height:1.55}
+.subject-study-guide__facts{display:grid;grid-template-columns:max-content 1fr;gap:6px 12px;margin:0 0 20px;color:#52677a;font-size:14px;line-height:1.35}
+.subject-study-guide__facts dt{color:#17232a;font-weight:800}
+.subject-study-guide__facts dd{margin:0}
 .subject-study-guide__open{display:inline-flex;min-height:43px;align-items:center;align-self:flex-start;justify-content:center;margin-top:auto;padding:9px 15px;border-radius:8px;background:#2563eb;color:#fff;font-weight:800;text-decoration:none}
 .subject-study-guide__open:hover{background:#1d4ed8;color:#fff;text-decoration:none}
 .subject-study-guide__future{grid-column:1/-1;min-height:180px;border-top-color:#94a3b8;border-style:dashed;text-align:center}
@@ -134,6 +146,16 @@ echo $OUTPUT->header();
                 <span class="subject-study-guide__status">AVAILABLE</span>
                 <h3><?php echo s($chapter['title']); ?></h3>
                 <p><?php echo s($chapter['description']); ?></p>
+                <?php if (isset($chapter['objectives'])): ?>
+                    <dl class="subject-study-guide__facts">
+                        <dt>Learning objectives</dt>
+                        <dd><?php echo (int) $chapter['objectives']; ?></dd>
+                        <dt>Study Guide</dt>
+                        <dd><?php echo s($chapter['guide_status']); ?></dd>
+                        <dt>Board-level practice</dt>
+                        <dd><?php echo s($chapter['board_practice']); ?></dd>
+                    </dl>
+                <?php endif; ?>
                 <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
             </article>
         <?php endforeach; ?>
