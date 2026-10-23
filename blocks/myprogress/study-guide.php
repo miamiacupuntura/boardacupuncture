@@ -93,6 +93,14 @@ echo $OUTPUT->header();
 .subject-study-guide__top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 .subject-study-guide__catalog{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 15px;border-radius:8px;background:#13705c;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}
 .subject-study-guide__catalog--ce{background:#7652a5}.subject-study-guide__catalog:hover{background:#0d5a4a;color:#fff;text-decoration:none}.subject-study-guide__catalog--ce:hover{background:#654391}
+.subject-study-guide__board-overview{margin:0 0 18px;padding:34px 40px;border-top:5px solid #0b817d;border-radius:13px;background:linear-gradient(135deg,#f8fcfb 0%,#fbf8fd 100%);box-shadow:0 3px 12px rgba(15,23,42,.05)}
+.subject-study-guide__board-overview .subject-study-guide__eyebrow{margin-bottom:8px;color:#08746f}
+.subject-study-guide__board-overview h3{margin:0 0 10px;color:#123246;font-size:clamp(28px,4vw,42px);line-height:1.12}
+.subject-study-guide__board-overview p:last-child{max-width:760px;margin:0;color:#52677a;line-height:1.55}
+.subject-study-guide__benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 26px}
+.subject-study-guide__benefit{padding:18px;border:1px solid #cfdae0;border-radius:10px;background:#fff}
+.subject-study-guide__benefit h3{margin:0 0 8px;color:#17232a;font-size:16px}
+.subject-study-guide__benefit p{margin:0;color:#52677a;font-size:14px;line-height:1.5}
 .subject-study-guide__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
@@ -110,7 +118,7 @@ echo $OUTPUT->header();
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
 .subject-study-guide__construction p{max-width:570px;margin:0 auto 26px;color:#64748b;line-height:1.65}
 .subject-study-guide a:focus-visible{outline:3px solid #185cca;outline-offset:3px}
-@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__grid{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}}
+@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}}
 </style>
 <main class="subject-study-guide">
 <?php if ($showconstruction): ?>
@@ -133,6 +141,29 @@ echo $OUTPUT->header();
             <a class="subject-study-guide__catalog subject-study-guide__catalog--ce" href="<?php echo (new moodle_url('/study-guide/continuing-education.html'))->out(false); ?>">Continuing Education</a>
         </nav>
     </header>
+
+    <?php if ($areaid === 'pointlocation'): ?>
+        <section class="subject-study-guide__board-overview" aria-labelledby="board-preparation-title">
+            <p class="subject-study-guide__eyebrow">Monthly Membership</p>
+            <h3 id="board-preparation-title">Board Preparation Courses</h3>
+            <p>Choose from the Study Guides that are ready in your AcupunctureTests membership. Each guide combines chapter reading, learning objectives, visual review and Board-level practice.</p>
+        </section>
+
+        <section class="subject-study-guide__benefits" aria-label="Board Study Guide features">
+            <article class="subject-study-guide__benefit">
+                <h3>Ready Study Guides</h3>
+                <p>Only Study Guides that are ready for students appear in this catalog.</p>
+            </article>
+            <article class="subject-study-guide__benefit">
+                <h3>Objective-based learning</h3>
+                <p>Each chapter is organized around focused objectives, readings and review resources.</p>
+            </article>
+            <article class="subject-study-guide__benefit">
+                <h3>Board preparation</h3>
+                <p>Use the practice activities and Board-level exams to evaluate your progress.</p>
+            </article>
+        </section>
+    <?php endif; ?>
 
     <section id="study-guide-chapters" class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
         <?php foreach ($area['chapters'] as $chapter): ?>
