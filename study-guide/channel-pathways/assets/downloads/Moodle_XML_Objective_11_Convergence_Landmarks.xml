@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 1</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>1) Which pathways meet the Governing Vessel at Dazhui DU-14?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The six Yang Channels meet the Governing Vessel at Dazhui DU-14. Why are the other options incorrect? The six Yin Channels — The regional statement specifies the Yang rather than the Yin Channels. Only the Bladder and Kidney Channels — The meeting is broader than the Bladder–Kidney pair. Only the Liver and Gall Bladder Channels — The meeting is broader than the Liver–Gall Bladder pair.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>The six Yang Channels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The six Yang Channels meet the Governing Vessel at Dazhui DU-14.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>The six Yin Channels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The regional statement specifies the Yang rather than the Yin Channels.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only the Bladder and Kidney Channels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The meeting is broader than the Bladder–Kidney pair.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only the Liver and Gall Bladder Channels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The meeting is broader than the Liver–Gall Bladder pair.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 2</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>2) Which vessels meet the Bladder Channel at Jingming BL-1?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Yang Qiao and Yin Qiao meet the Bladder Channel at the inner canthus at Jingming BL-1. Why are the other options incorrect? Girdling and Penetrating vessels — Dai and Chong do not form this named BL-1 meeting. Yang Linking and Yin Linking vessels — The Linking vessels are not the pair specified at BL-1. Governing and Conception vessels only — The BL-1 relationship specifically includes the two Motility vessels and Bladder.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Yang Motility and Yin Motility vessels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Yang Qiao and Yin Qiao meet the Bladder Channel at the inner canthus at Jingming BL-1.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Girdling and Penetrating vessels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Dai and Chong do not form this named BL-1 meeting.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Yang Linking and Yin Linking vessels</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Linking vessels are not the pair specified at BL-1.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Governing and Conception vessels only</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The BL-1 relationship specifically includes the two Motility vessels and Bladder.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 3</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>3) Which group meets at Jianyu LI-15 according to the regional atlas?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Jianyu LI-15 is shared by Large Intestine Primary and Divergent, Small Intestine Luo and Bladder Sinew relationships. Why are the other options incorrect? Heart Primary, Kidney Luo, Liver Sinew and Dai Mai — This combination does not match the listed LI-15 convergence. Stomach Luo, Spleen Primary, Yin Qiao and Chong Mai — These routes are associated with other regions and systems. Lung Sinew, Pericardium Luo, Gall Bladder Luo and Du Luo — This group is not the supplied meeting at Jianyu LI-15.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Large Intestine Primary and Divergent, Small Intestine Luo and Bladder Sinew</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Jianyu LI-15 is shared by Large Intestine Primary and Divergent, Small Intestine Luo and Bladder Sinew relationships.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Primary, Kidney Luo, Liver Sinew and Dai Mai</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This combination does not match the listed LI-15 convergence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Stomach Luo, Spleen Primary, Yin Qiao and Chong Mai</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>These routes are associated with other regions and systems.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Sinew, Pericardium Luo, Gall Bladder Luo and Du Luo</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This group is not the supplied meeting at Jianyu LI-15.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 4</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>4) Which comparison is most useful at Huantiao GB-30?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>At GB-30, compare the Bladder crossing relationship with Gall Bladder emergence and deep hip entry. Why are the other options incorrect? Heart and Pericardium both originate at the heel. — Heart and Pericardium do not originate at the heel. Lung and Large Intestine both circle the waist. — Lung and Large Intestine do not form the Dai Mai waist pattern. Spleen and Kidney both terminate at the outer canthus. — Spleen and Kidney do not terminate at the outer canthus.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Bladder crosses the buttock while Gall Bladder emerges or enters deeply at the hip.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>At GB-30, compare the Bladder crossing relationship with Gall Bladder emergence and deep hip entry.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart and Pericardium both originate at the heel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart and Pericardium do not originate at the heel.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung and Large Intestine both circle the waist.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung and Large Intestine do not form the Dai Mai waist pattern.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Spleen and Kidney both terminate at the outer canthus.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Spleen and Kidney do not terminate at the outer canthus.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 5</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>5) Which channels are included in the ear gathering region known as the zong mai?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The ear gathering region includes Large Intestine, Stomach, Small Intestine, Gall Bladder and Sanjiao relationships. Why are the other options incorrect? Lung, Spleen, Heart, Kidney and Liver — This is a Yin-organ grouping rather than the supplied ear gathering group. Bladder, Kidney, Pericardium and Liver only — The list is incomplete and does not match the zong mai description. Governing, Conception and Girdling vessels only — The ear gathering region is not limited to these Extraordinary Vessels.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Large Intestine, Stomach, Small Intestine, Gall Bladder and Sanjiao</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The ear gathering region includes Large Intestine, Stomach, Small Intestine, Gall Bladder and Sanjiao relationships.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung, Spleen, Heart, Kidney and Liver</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This is a Yin-organ grouping rather than the supplied ear gathering group.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder, Kidney, Pericardium and Liver only</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The list is incomplete and does not match the zong mai description.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Governing, Conception and Girdling vessels only</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The ear gathering region is not limited to these Extraordinary Vessels.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 6</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>6) Why is the supraclavicular fossa a high-value comparison area?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The supraclavicular fossa contains routes from several systems, making depth, action and next destination decisive. Why are the other options incorrect? Only one channel reaches it. — Many pathways reach this area. It identifies every route as Lung Primary. — Lung Primary is only one possible relationship. It contains no transition between depth and surface. — The area is important precisely because routes emerge, pass or transition there.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Primary, Divergent, Sinew and Extraordinary routes all reach it.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The supraclavicular fossa contains routes from several systems, making depth, action and next destination decisive.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only one channel reaches it.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Many pathways reach this area.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It identifies every route as Lung Primary.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung Primary is only one possible relationship.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It contains no transition between depth and surface.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The area is important precisely because routes emerge, pass or transition there.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 7</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>7) Which Sanjiao Primary relationship occurs near Shanzhong REN-17?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Sanjiao Primary Channel disperses in the chest midway between the breasts near Shanzhong REN-17. Why are the other options incorrect? It originates at the medial heel. — Sanjiao Primary begins at the ring finger, not the medial heel. It binds at the medial knee. — Medial-knee binding belongs to lower-limb relationships. It terminates at the great toe. — Sanjiao Primary does not terminate at the great toe.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>It disperses midway between the breasts.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Sanjiao Primary Channel disperses in the chest midway between the breasts near Shanzhong REN-17.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It originates at the medial heel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Sanjiao Primary begins at the ring finger, not the medial heel.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It binds at the medial knee.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Medial-knee binding belongs to lower-limb relationships.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It terminates at the great toe.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Sanjiao Primary does not terminate at the great toe.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 8</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>8) Which Primary Channel enters the ear at Tinggong SI-19?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Small Intestine Primary enters the ear at Tinggong SI-19. Why are the other options incorrect? Gall Bladder Luo-Connecting Channel — Gall Bladder Luo disperses over the dorsum of the foot. Heart Primary Channel — Heart Primary connects with the eye tissues but does not enter at SI-19. Liver Primary Channel — Liver Primary links with the eye system and vertex rather than entering at SI-19.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Small Intestine Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Small Intestine Primary enters the ear at Tinggong SI-19.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Gall Bladder Luo disperses over the dorsum of the foot.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart Primary connects with the eye tissues but does not enter at SI-19.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Liver Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Liver Primary links with the eye system and vertex rather than entering at SI-19.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 9</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>9) What is the best three-part method for studying a convergence hub?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Incoming route, event at the hub and outgoing route distinguish pathways sharing one landmark. Why are the other options incorrect? Memorize only the point name. — A point name alone does not distinguish all converging routes. Choose the channel with the same color. — Color is not pathway evidence. Ignore what happens before and after the hub. — The surrounding route is required to identify the system and direction.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Trace the incoming route, name the event at the hub and follow the outgoing route.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Incoming route, event at the hub and outgoing route distinguish pathways sharing one landmark.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Memorize only the point name.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A point name alone does not distinguish all converging routes.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Choose the channel with the same color.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color is not pathway evidence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Ignore what happens before and after the hub.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The surrounding route is required to identify the system and direction.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 11 — Convergence Landmarks — 10</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>10) Why is a shared landmark not sufficient by itself to identify one channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>A hub may contain several channel systems, so the complete route and exact regional action are required. Why are the other options incorrect? Every landmark belongs to one channel only. — Many landmarks are shared. Landmarks are used only for Sinew Channels. — Primary, Divergent, Luo, Sinew and Extraordinary routes can share regions. The option listed first is always correct. — Option order has no anatomical significance.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Several systems may meet there and must be separated by origin, action, direction and destination.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A hub may contain several channel systems, so the complete route and exact regional action are required.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Every landmark belongs to one channel only.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Many landmarks are shared.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Landmarks are used only for Sinew Channels.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Primary, Divergent, Luo, Sinew and Extraordinary routes can share regions.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>The option listed first is always correct.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Option order has no anatomical significance.</p>]]></text></feedback>
+    </answer>
+  </question>
+</quiz>

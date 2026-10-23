@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 1</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>1) Which channel originates in the center of the chest?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Pericardium Primary Channel originates in the center of the chest. Why are the other options incorrect? Bladder Primary Channel — Bladder Primary begins at the inner canthus. Gall Bladder Luo-Connecting Channel — Gall Bladder Luo begins at GB-37 on the lower leg. Large Intestine Sinew Channel — Large Intestine Sinew begins at the index finger.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Pericardium Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Pericardium Primary Channel originates in the center of the chest.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder Primary begins at the inner canthus.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Gall Bladder Luo begins at GB-37 on the lower leg.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Large Intestine Sinew Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Large Intestine Sinew begins at the index finger.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 2</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>2) Which Primary Channel is the listed exception to the group that traverses the diaphragm?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The supplied regional list identifies eleven Primary Channels that traverse the diaphragm; Bladder Primary is the exception. Why are the other options incorrect? Lung Primary Channel — Lung Primary is listed among the channels traversing the diaphragm. Heart Primary Channel — Heart Primary is listed among the channels traversing the diaphragm. Liver Primary Channel — Liver Primary is listed among the channels traversing the diaphragm.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Bladder Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The supplied regional list identifies eleven Primary Channels that traverse the diaphragm; Bladder Primary is the exception.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung Primary is listed among the channels traversing the diaphragm.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart Primary is listed among the channels traversing the diaphragm.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Liver Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Liver Primary is listed among the channels traversing the diaphragm.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 3</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>3) Which group is described as dispersing in the chest?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Kidney Primary, Pericardium Sinew, Sanjiao Divergent and the Penetrating Vessel are grouped as dispersing in the chest. Why are the other options incorrect? Bladder Luo, Liver Sinew, Large Intestine Primary and Girdling Vessel — These pathways are not the atlas group labeled as dispersing in the chest. Heart Sinew, Small Intestine Luo, Yang Qiao and Governing Luo — These pathways have other regional relationships and do not form the listed dispersing group. Stomach Luo, Spleen Divergent, Gall Bladder Luo and Yin Qiao — This combination does not match the supplied chest classification.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Kidney Primary, Pericardium Sinew, Sanjiao Divergent and Penetrating Vessel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Kidney Primary, Pericardium Sinew, Sanjiao Divergent and the Penetrating Vessel are grouped as dispersing in the chest.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder Luo, Liver Sinew, Large Intestine Primary and Girdling Vessel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>These pathways are not the atlas group labeled as dispersing in the chest.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Sinew, Small Intestine Luo, Yang Qiao and Governing Luo</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>These pathways have other regional relationships and do not form the listed dispersing group.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Stomach Luo, Spleen Divergent, Gall Bladder Luo and Yin Qiao</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This combination does not match the supplied chest classification.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 4</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>4) Which statement correctly describes the Heart Primary Channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Heart Primary Channel originates in the Heart and has an internal connection with the Small Intestine. Why are the other options incorrect? It originates at the index finger and connects with the Large Intestine. — Index-finger origin belongs to Large Intestine Primary. It begins at the lateral heel and reaches the eye. — Lateral heel-to-eye geometry identifies Yang Qiao. It circles the waist transversely. — A transverse waist course identifies Dai Mai.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>It originates in the Heart and connects internally with the Small Intestine.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Heart Primary Channel originates in the Heart and has an internal connection with the Small Intestine.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It originates at the index finger and connects with the Large Intestine.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Index-finger origin belongs to Large Intestine Primary.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It begins at the lateral heel and reaches the eye.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lateral heel-to-eye geometry identifies Yang Qiao.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It circles the waist transversely.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A transverse waist course identifies Dai Mai.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 5</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>5) Which Lung-family pathway enters the Large Intestine?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Lung Primary Channel has an internal relationship with the Large Intestine. Why are the other options incorrect? Lung Sinew Channel — Lung Sinew is a superficial musculotendinous route. Lung Luo-Connecting Channel — Lung Luo links from LU-7 toward the paired channel and thenar region but is not the principal zangfu route described here. Lung Cutaneous Region — A cutaneous region does not provide the Primary internal organ course.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Lung Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Lung Primary Channel has an internal relationship with the Large Intestine.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Sinew Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung Sinew is a superficial musculotendinous route.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung Luo links from LU-7 toward the paired channel and thenar region but is not the principal zangfu route described here.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Cutaneous Region</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A cutaneous region does not provide the Primary internal organ course.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 6</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>6) Which channel originates in the middle jiao and ascends past the cardiac orifice of the Stomach?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Lung Primary Channel originates internally in the middle jiao and ascends past the cardiac orifice of the Stomach. Why are the other options incorrect? Stomach Sinew Channel — Stomach Sinew is a superficial body-chain pathway. Bladder Divergent Channel — Bladder Divergent separates in the popliteal region and follows a deep posterior relationship. Gall Bladder Luo-Connecting Channel — Gall Bladder Luo begins at GB-37 and disperses over the dorsum of the foot.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Lung Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Lung Primary Channel originates internally in the middle jiao and ascends past the cardiac orifice of the Stomach.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Stomach Sinew Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Stomach Sinew is a superficial body-chain pathway.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder Divergent Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder Divergent separates in the popliteal region and follows a deep posterior relationship.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Gall Bladder Luo begins at GB-37 and disperses over the dorsum of the foot.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 7</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>7) Which pathway relationship supports identification of a Heart Divergent Channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Deep entry into the chest with connection to the Heart supports a Heart Divergent identification. Why are the other options incorrect? It begins at HT-5 and travels to the tongue root. — Beginning at HT-5 describes Heart Luo. It binds at the medial elbow and center of the chest. — Binding at the medial elbow and chest describes Heart Sinew. It forms a point-bearing route to the little finger. — The point-bearing route to the little finger describes Heart Primary.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>It enters the chest and connects with the Heart.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Deep entry into the chest with connection to the Heart supports a Heart Divergent identification.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It begins at HT-5 and travels to the tongue root.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Beginning at HT-5 describes Heart Luo.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It binds at the medial elbow and center of the chest.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Binding at the medial elbow and chest describes Heart Sinew.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It forms a point-bearing route to the little finger.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The point-bearing route to the little finger describes Heart Primary.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 8</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>8) Why is the verb “traverses” different from “connects”?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Passage through a region and a specific organ or paired-channel connection are distinct pathway relationships. Why are the other options incorrect? They are always interchangeable. — Using the terms interchangeably removes an important identification clue. Traverses means the route is a Sinew Channel. — Many channel systems can traverse a region. Connects means the route must be an Extraordinary Vessel. — Primary, Divergent and Luo pathways can form connections.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Traverses indicates passage through a region, while connects identifies a specific relationship with a structure or paired organ.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Passage through a region and a specific organ or paired-channel connection are distinct pathway relationships.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>They are always interchangeable.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Using the terms interchangeably removes an important identification clue.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Traverses means the route is a Sinew Channel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Many channel systems can traverse a region.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Connects means the route must be an Extraordinary Vessel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Primary, Divergent and Luo pathways can form connections.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 9</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>9) Which sequence best reconstructs an internal connection chain?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The internal connection chain preserves origin, organ entry, paired relationship, cavity passage and re-emergence. Why are the other options incorrect? Color, line thickness, title length, option position, guess — Illustration style does not reconstruct anatomy. Point number only, then stop — One point number cannot explain a complete internal route. Region name, organ name, treatment decision — A region and organ name alone do not establish treatment or complete pathway identity.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Origin, organ entered, paired connection, cavity crossed, region of re-emergence</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The internal connection chain preserves origin, organ entry, paired relationship, cavity passage and re-emergence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Color, line thickness, title length, option position, guess</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Illustration style does not reconstruct anatomy.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Point number only, then stop</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>One point number cannot explain a complete internal route.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Region name, organ name, treatment decision</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A region and organ name alone do not establish treatment or complete pathway identity.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 10 — Internal Connections — 10</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>10) Which feature most strongly separates a Divergent internal route from an ordinary Primary internal branch?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The separation–deep entry–paired convergence–rejoining sequence defines Divergent organization. Why are the other options incorrect? Any line drawn inside the torso — Many channel systems include internal torso lines. Any relationship with the chest — Primary, Divergent, Sinew and Extraordinary routes can relate to the chest. Absence of a visible color legend — A missing color legend does not classify a pathway.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Separation followed by deep entry, paired convergence and rejoining a Yang pathway</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The separation–deep entry–paired convergence–rejoining sequence defines Divergent organization.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Any line drawn inside the torso</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Many channel systems include internal torso lines.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Any relationship with the chest</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Primary, Divergent, Sinew and Extraordinary routes can relate to the chest.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Absence of a visible color legend</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A missing color legend does not classify a pathway.</p>]]></text></feedback>
+    </answer>
+  </question>
+</quiz>

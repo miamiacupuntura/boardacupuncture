@@ -27,6 +27,12 @@ $areas = [
                 'path' => '/study-guide/index.html',
                 'anchor' => 'point-categories-draft',
             ],
+            [
+                'title' => 'Channel Pathway Identification',
+                'description' => 'Identify and compare Primary, Divergent, Luo-Connecting, Sinew and Extraordinary pathways.',
+                'path' => '/study-guide/channel-pathways/index.html',
+                'anchor' => '',
+            ],
         ],
     ],
     'herbology' => [
@@ -78,7 +84,7 @@ echo $OUTPUT->header();
 .subject-study-guide__top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 .subject-study-guide__catalog{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 15px;border-radius:8px;background:#13705c;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}
 .subject-study-guide__catalog--ce{background:#7652a5}.subject-study-guide__catalog:hover{background:#0d5a4a;color:#fff;text-decoration:none}.subject-study-guide__catalog--ce:hover{background:#654391}
-.subject-study-guide__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.subject-study-guide__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
 .subject-study-guide__card h3{margin:0 0 9px;color:#17232a;font-size:21px;line-height:1.25}
