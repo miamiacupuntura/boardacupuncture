@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 1</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>1) Which sequence best constructs an integrated pathway map?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>An integrated map inventories all routes, groups them by system, maps their relationships and defends the final identification. Why are the other options incorrect? Guess, color, rename, stop — Illustration color and guessing do not create an evidence map. Treat, diagnose, prescribe, confirm — This educational pathway exercise does not independently establish diagnosis or treatment. Choose, ignore, shorten, memorize — Ignoring evidence prevents accurate comparison.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Inventory, group, map, defend</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>An integrated map inventories all routes, groups them by system, maps their relationships and defends the final identification.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Guess, color, rename, stop</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Illustration color and guessing do not create an evidence map.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Treat, diagnose, prescribe, confirm</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This educational pathway exercise does not independently establish diagnosis or treatment.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Choose, ignore, shorten, memorize</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Ignoring evidence prevents accurate comparison.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 2</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>2) In an eye-region map, which relationship correctly distinguishes two Sinew Channels?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Bladder Sinew forms the upper muscular net and Stomach Sinew forms the lower muscular net around the eye. Why are the other options incorrect? Stomach forms the upper net and Bladder forms the lower net. — The upper and lower assignments are reversed. Heart forms both nets. — Heart has eye relationships but does not form both named nets. Gall Bladder Luo forms both nets. — Gall Bladder Luo does not form the two muscular nets.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Bladder forms the upper net and Stomach forms the lower net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder Sinew forms the upper muscular net and Stomach Sinew forms the lower muscular net around the eye.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Stomach forms the upper net and Bladder forms the lower net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The upper and lower assignments are reversed.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart forms both nets.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart has eye relationships but does not form both named nets.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo forms both nets.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Gall Bladder Luo does not form the two muscular nets.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 3</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>3) Which statement belongs in an integrated shoulder map?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The shoulder map separates posterior Small Intestine, Sanjiao at SJ-14 and the Yang Qiao zig-zag across the superior shoulder. Why are the other options incorrect? All shoulder pathways are Lung Primary. — Several channel systems reach the shoulder. Every shoulder route begins at LI-15. — LI-15 is a convergence landmark, not the origin of every shoulder route. The shoulder contains only Yin channels. — Several Yang pathways reach the shoulder.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Small Intestine ascends to the posterior shoulder, Sanjiao reaches SJ-14 and Yang Qiao zig-zags across the top.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The shoulder map separates posterior Small Intestine, Sanjiao at SJ-14 and the Yang Qiao zig-zag across the superior shoulder.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>All shoulder pathways are Lung Primary.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Several channel systems reach the shoulder.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Every shoulder route begins at LI-15.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>LI-15 is a convergence landmark, not the origin of every shoulder route.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>The shoulder contains only Yin channels.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Several Yang pathways reach the shoulder.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 4</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>4) Where does the Yin Linking Vessel meet the Conception Vessel in the throat region?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Yin Wei meets the Conception Vessel at Tiantu REN-22 and Lianquan REN-23 in the throat region. Why are the other options incorrect? At Huantiao GB-30 only — GB-30 is a hip and buttock landmark. At Tinggong SI-19 only — SI-19 is an ear landmark. At Yongquan KID-1 only — KID-1 is on the sole of the foot.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>At Tiantu REN-22 and Lianquan REN-23</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Yin Wei meets the Conception Vessel at Tiantu REN-22 and Lianquan REN-23 in the throat region.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>At Huantiao GB-30 only</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>GB-30 is a hip and buttock landmark.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>At Tinggong SI-19 only</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>SI-19 is an ear landmark.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>At Yongquan KID-1 only</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>KID-1 is on the sole of the foot.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 5</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>5) Which response most completely defends a pathway identification?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>A complete defense states the pathway and system, provides two independent landmarks and explains why the closest alternative fails. Why are the other options incorrect? Name only the organ family. — The organ family can be shared across several systems. Mention only the line color. — Color alone is not dependable. Choose the longest option. — Option length is unrelated to anatomy.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Name the pathway and system, cite two landmarks, and reject one plausible alternative.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A complete defense states the pathway and system, provides two independent landmarks and explains why the closest alternative fails.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Name only the organ family.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The organ family can be shared across several systems.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Mention only the line color.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color alone is not dependable.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Choose the longest option.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Option length is unrelated to anatomy.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 6</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>6) What should be recorded under “route” in the response template?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The route component records where the pathway begins, which direction it travels and where it continues. Why are the other options incorrect? Only the drawing color — Color is not route information. Only the option letter — An option letter contains no anatomical evidence. Only the organ name — The organ name alone does not reconstruct a course.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Origin, direction and continuation or destination</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The route component records where the pathway begins, which direction it travels and where it continues.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only the drawing color</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color is not route information.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only the option letter</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>An option letter contains no anatomical evidence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only the organ name</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The organ name alone does not reconstruct a course.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 7</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>7) What can regional pathway correspondence establish by itself?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Regional correspondence is educational evidence that must remain separate from complete diagnosis, treatment planning and safety assessment. Why are the other options incorrect? It proves a complete diagnosis. — A full diagnosis requires broader pattern differentiation. It determines an automatic prescription. — A point prescription cannot be determined from one regional overlap. It replaces anatomy and safety assessment. — Anatomy and safety remain necessary.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>It supports study and examination but does not independently establish a zangfu diagnosis or treatment.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Regional correspondence is educational evidence that must remain separate from complete diagnosis, treatment planning and safety assessment.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It proves a complete diagnosis.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A full diagnosis requires broader pattern differentiation.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It determines an automatic prescription.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A point prescription cannot be determined from one regional overlap.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It replaces anatomy and safety assessment.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Anatomy and safety remain necessary.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 8</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>8) How should the closest alternative be rejected in an unfamiliar image?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>A precise missing or contradictory feature demonstrates why the alternative fails the same evidence test. Why are the other options incorrect? Say only that it looks wrong. — Appearance without anatomical reasoning is insufficient. Refer to its option position. — Option order is not pathway evidence. Choose another color. — Color does not resolve a close anatomical comparison.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Identify the specific system feature or landmark it lacks or contradicts.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A precise missing or contradictory feature demonstrates why the alternative fails the same evidence test.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Say only that it looks wrong.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Appearance without anatomical reasoning is insufficient.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Refer to its option position.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Option order is not pathway evidence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Choose another color.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color does not resolve a close anatomical comparison.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 9</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>9) Which set contains the essential dimensions of an integrated map?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>System, family, depth, direction, regional action and landmarks form the evidence structure of an integrated pathway map. Why are the other options incorrect? Color, font, line thickness and title length — Design choices do not define channel identity. Score, date, browser and device — Administrative details do not reconstruct a pathway. Option letter, page number and filename — File and option metadata are not anatomical evidence.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>System, family, depth, direction, regional action and landmarks</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>System, family, depth, direction, regional action and landmarks form the evidence structure of an integrated pathway map.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Color, font, line thickness and title length</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Design choices do not define channel identity.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Score, date, browser and device</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Administrative details do not reconstruct a pathway.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Option letter, page number and filename</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>File and option metadata are not anatomical evidence.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 12 — Integrated Pathway Mapping — 10</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>10) What is the appropriate response when a diagram and a reputable reference emphasize different pathway details?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Transparent source comparison preserves the selected framework and prevents unsupported hybrid pathways. Why are the other options incorrect? Silently merge all details into one new pathway. — Silently merging sources can create an inaccurate hybrid. Assume the brighter diagram is correct. — Brightness does not establish authority. Ignore both sources. — Ignoring the sources removes the evidence needed for verification.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>State the convention being used, compare the sources and keep the identification provisional until the route is confirmed.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Transparent source comparison preserves the selected framework and prevents unsupported hybrid pathways.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Silently merge all details into one new pathway.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Silently merging sources can create an inaccurate hybrid.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Assume the brighter diagram is correct.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Brightness does not establish authority.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Ignore both sources.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Ignoring the sources removes the evidence needed for verification.</p>]]></text></feedback>
+    </answer>
+  </question>
+</quiz>

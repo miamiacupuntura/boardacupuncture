@@ -42,8 +42,8 @@
     {
       key: 'point-categories',
       hero: '#pc-introduction',
-      board: '#point-categories-mock-exams',
-      continuing: '#pc-continuing-reading'
+      board: '#pc-board-alignment',
+      continuing: '#pc-learning-plan'
     }
   ];
 

@@ -11,6 +11,18 @@ The study guide includes an instructor-only chapter template. Open the **Instruc
 5. Select **Save draft** to keep a browser-only working copy.
 6. Select **Export JSON** to download the completed chapter specification.
 
+## Continuing Education approval record
+
+Each chapter can be prepared with the Form B fields without being advertised as an approved Continuing Education course. Keep **CE approval status** as `preparation` or `submitted` and **Public CE catalog status** as `false` until formal Board approval has been recorded.
+
+- Use **CE requirement group** for the broad internal grouping: General, Biomedical Sciences or Mandatory.
+- Use **CE Broker subject area** for the exact reporting category. Mandatory topics must retain their specific subject area, such as Medical Errors or Laws and Rules of the Board.
+- Use the exact **CE Broker delivery method**. The current online, asynchronous chapters use `Computer-Based Training`.
+- The planning estimate uses 15 minutes per objective by default. It is not an approved credit value.
+- Enter **Board-approved CE credit hours** and the approval number only after approval.
+- Record the approved provider name and provider number. The certificate location for these courses is `Online`.
+- Set the public catalog status and certificate to `true` only after approval is active.
+
 The exported JSON follows [chapter-template.example.json](chapter-template.example.json). It does not publish a chapter or modify Moodle. A developer can use the reviewed specification to create the new chapter while retaining the established responsive layout and block order.
 
 ## Required quality checks
@@ -19,5 +31,7 @@ The exported JSON follows [chapter-template.example.json](chapter-template.examp
 - Supply descriptive alternative text for every instructional image.
 - Add separate School, Board and Continuing Education exam links.
 - Include feedback in the Continuing Education review before the scored SCORM activity.
+- Confirm that a pending chapter does not display an approved credit value or appear in the professional CE catalog.
+- Confirm that approved hours, subject area, delivery method and approval number match the Board/CE Broker record.
 - Review the English and Spanish views on desktop and a phone-width screen.
 - Confirm that the page has no horizontal scrolling and all touch targets are at least 44 pixels high.

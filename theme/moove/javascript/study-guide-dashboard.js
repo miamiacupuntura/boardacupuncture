@@ -58,6 +58,28 @@
         });
     }
 
+    function addContinuingEducationPortal() {
+        const heading = [...document.querySelectorAll('h1, h2, h3')]
+            .find(element => normalise(element.textContent) === 'Your NCBAHM Board Preparation');
+        if (!heading || document.querySelector('.continuing-education-dashboard-link')) {
+            return;
+        }
+
+        const panel = document.createElement('aside');
+        panel.className = 'continuing-education-dashboard-panel';
+        panel.setAttribute('aria-label', 'Continuing Education courses');
+        const text = document.createElement('div');
+        text.innerHTML = '<strong>Continuing Education for licensed acupuncturists</strong><span>Open the separate catalog of Board-approved and active CE courses.</span>';
+        const link = document.createElement('a');
+        link.className = 'continuing-education-dashboard-link';
+        link.href = '/study-guide/continuing-education.html';
+        link.textContent = 'Continuing Education Courses';
+        panel.append(text, link);
+
+        const description = heading.nextElementSibling;
+        (description || heading).insertAdjacentElement('afterend', panel);
+    }
+
     const style = document.createElement('style');
     style.textContent = `
         .study-guide-dashboard-link {
@@ -83,16 +105,56 @@
             outline: 3px solid #185cca;
             outline-offset: 2px;
         }
+        .continuing-education-dashboard-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            max-width: 1040px;
+            box-sizing: border-box;
+            margin: 18px auto 22px;
+            padding: 16px 18px;
+            border: 1px solid #d4c6e7;
+            border-left: 5px solid #7652a5;
+            border-radius: 11px;
+            background: #faf7fd;
+            text-align: left;
+        }
+        .continuing-education-dashboard-panel strong,
+        .continuing-education-dashboard-panel span { display: block; }
+        .continuing-education-dashboard-panel span { margin-top: 3px; color: #5e6874; font-size: .9rem; }
+        .continuing-education-dashboard-link {
+            display: inline-flex;
+            box-sizing: border-box;
+            min-height: 44px;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: #7652a5;
+            color: #fff !important;
+            font-weight: 800;
+            text-decoration: none !important;
+        }
+        .continuing-education-dashboard-link:hover,
+        .continuing-education-dashboard-link:focus { background: #654391; }
+        .continuing-education-dashboard-link:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
+        @media (max-width: 650px) {
+            .continuing-education-dashboard-panel { align-items: stretch; flex-direction: column; margin: 16px 0 20px; }
+            .continuing-education-dashboard-link { width: 100%; }
+        }
     `;
     document.head.append(style);
 
     addStudyGuideLinks();
-    document.addEventListener('DOMContentLoaded', addStudyGuideLinks, {once: true});
+    addContinuingEducationPortal();
+    document.addEventListener('DOMContentLoaded', () => { addStudyGuideLinks(); addContinuingEducationPortal(); }, {once: true});
 
     let refreshTimer;
     const observer = new MutationObserver(() => {
         window.clearTimeout(refreshTimer);
-        refreshTimer = window.setTimeout(addStudyGuideLinks, 80);
+        refreshTimer = window.setTimeout(() => { addStudyGuideLinks(); addContinuingEducationPortal(); }, 80);
     });
     observer.observe(document.documentElement, {childList: true, subtree: true});
 })();

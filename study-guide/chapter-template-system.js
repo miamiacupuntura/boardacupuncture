@@ -17,7 +17,7 @@
   ];
 
   const defaults = {
-    templateVersion: 1,
+    templateVersion: 2,
     slug: 'new-chapter',
     courseTitle: 'Acupuncture & Point Location',
     chapterTitle: 'New Chapter',
@@ -32,6 +32,22 @@
     continuingEducationPlan: 'Explain the continuing-education purpose, learning sequence and completion requirements.',
     continuingEducationReview: 'Add the ten-question review with answer-specific feedback before the scored activity.',
     continuingEducationExamUrl: '',
+    ceApprovalStatus: 'preparation',
+    cePubliclyActive: false,
+    ceRequirementGroup: 'General',
+    ceSubjectArea: 'General',
+    ceBrokerSubjectCode: 'GN',
+    ceDeliveryMethod: 'Computer-Based Training',
+    ceDeliveryFormat: 'Online, asynchronous and self-paced',
+    minutesPerObjective: 15,
+    approvedCeCreditHours: '',
+    ceApprovalNumber: '',
+    ceApprovedOn: '',
+    ceExpiresOn: '',
+    ceProviderName: '',
+    ceProviderNumber: '',
+    ceCourseLocation: 'Online',
+    ceCertificateEnabled: false,
     spanishChapterTitle: '',
     spanishChapterDescription: '',
     objectives: [
@@ -47,7 +63,16 @@
       ? config.objectives.map(item => Object.assign({}, defaults.objectives[0], item))
       : copy(defaults.objectives);
     value.blockOrder = blockOrder.slice();
+    value.minutesPerObjective = Math.max(1, Number(value.minutesPerObjective) || 15);
+    value.approvedCeCreditHours = value.approvedCeCreditHours === '' || value.approvedCeCreditHours === null
+      ? '' : Number(value.approvedCeCreditHours);
+    value.cePubliclyActive = value.cePubliclyActive === true || value.cePubliclyActive === 'true';
+    value.ceCertificateEnabled = value.ceCertificateEnabled === true || value.ceCertificateEnabled === 'true';
     return value;
+  }
+  function estimatedStudyHours(config) {
+    const value = normalize(config);
+    return (value.objectives.length * value.minutesPerObjective) / 60;
   }
   function validate(config) {
     const value = normalize(config);
@@ -61,6 +86,16 @@
     if (!value.boardExamUrl.trim()) warnings.push('Board Level Exam link is missing.');
     if (!value.continuingEducationExamUrl.trim()) warnings.push('Continuing Education Exam link is missing.');
     if (!value.spanishChapterTitle.trim()) warnings.push('Spanish chapter title is missing.');
+    if (value.cePubliclyActive && value.ceApprovalStatus !== 'approved') errors.push('A CE course cannot be publicly active until its approval status is Approved.');
+    if (value.ceApprovalStatus === 'approved') {
+      if (!(Number(value.approvedCeCreditHours) > 0)) errors.push('Approved CE credit hours are required for an approved course.');
+      if (!value.ceApprovalNumber.trim()) errors.push('The Board approval number is required for an approved course.');
+      if (!value.ceSubjectArea.trim()) errors.push('The CE Broker subject area is required for an approved course.');
+      if (!value.ceDeliveryMethod.trim()) errors.push('The CE Broker delivery method is required for an approved course.');
+      if (!value.ceProviderName.trim()) errors.push('The approved provider name is required for an approved course.');
+    }
+    if (value.ceCertificateEnabled && !value.cePubliclyActive) errors.push('Certificates can be enabled only for an approved and publicly active course.');
+    if (value.ceApprovalStatus !== 'approved') warnings.push('Estimated study time is internal planning only and will not be displayed as approved CE credit.');
     return { value, errors, warnings };
   }
   function download(config) {
@@ -75,5 +110,5 @@
     return result;
   }
 
-  window.StudyGuideChapterTemplate = { version: 1, blockOrder, defaults, normalize, validate, download };
+  window.StudyGuideChapterTemplate = { version: 2, blockOrder, defaults, normalize, validate, estimatedStudyHours, download };
 })();

@@ -1,216 +1,297 @@
 {{!
-    This file is part of Moodle - http://moodle.org/
+    Public landing page for AcupunctureTests.
 
-    Moodle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Moodle is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-}}
-{{!
-    @template theme_moove/drawers
-
-    Boost drawer template.
-
-    Context variables required for this template:
-    * sitename - The name of the site
-    * output - The core renderer for the page
-    * bodyattributes - attributes for the body tag as a string of html attributes
-    * sidepreblocks - HTML for the blocks
-    * hasblocks - true if there are blocks on this page
-    * courseindexopen - true if the nav drawer should be open on page load
-    * regionmainsettingsmenu - HTML for the region main settings menu
-    * hasregionmainsettingsmenu - There is a region main settings menu on this page.
-
-    Example context (json):
-    {
-        "sitename": "Moodle",
-        "output": {
-            "doctype": "<!DOCTYPE html>",
-            "page_title": "Test page",
-            "favicon": "favicon.ico",
-            "main_content": "<h1>Headings make html validators happier</h1>"
-         },
-        "bodyattributes":"",
-        "sidepreblocks": "<h2>Blocks html goes here</h2>",
-        "hasblocks":true,
-        "courseindexopen": true,
-        "navdraweropen": false,
-        "blockdraweropen": true,
-        "regionmainsettingsmenu": "",
-        "hasregionmainsettingsmenu": false,
-        "addblockbutton": ""
-    }
+    The authenticated Moodle experience continues to use the drawers layout.
+    This template is rendered only for visitors who are not logged in.
 }}
 {{> theme_moove/head }}
 
 <body {{{ bodyattributes }}}>
 {{> core/local/toast/wrapper}}
-<div id="page-wrapper" class="d-print-block">
-
+<div id="page-wrapper" class="d-print-block at-public-home-wrapper">
     {{{ output.standard_top_of_body_html }}}
 
-    {{> theme_moove/navbar }}
+    <header class="at-site-header">
+        <div class="at-shell at-header-inner">
+            <a class="at-brand" href="{{{wwwroot}}}/" aria-label="AcupunctureTests home">
+                <span class="at-brand-mark" aria-hidden="true">
+                    {{# output.should_display_logo }}
+                        <img src="{{output.get_logo}}" alt="">
+                    {{/ output.should_display_logo }}
+                    {{^ output.should_display_logo }}
+                        <span class="at-brand-symbol">☯</span>
+                    {{/ output.should_display_logo }}
+                </span>
+                <span class="at-wordmark">Acupuncture<span>Tests</span></span>
+            </a>
 
-    <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container bg-white">
-        {{#slidercount}}
-            <div id="mooveslideshow" class="container-fluid">
-                <div id="carousel-indicators" class="carousel slide carousel-fade" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        {{#slides}}
-                            <li data-target="#carousel-indicators" data-slide-to="{{{ key }}}" {{#active}}class="active"{{/active}}></li>
-                        {{/slides}}
-                    </ol>
-                    <div class="carousel-inner">
-                        {{#slides}}
-                            <div class="carousel-item {{#active}}active{{/active}}">
-                                <img src="{{image}}" alt="{{slidertitle}}" class="w-100">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 class="title">{{{title}}}</h5>
-                                    <div class="caption">
-                                        {{{caption}}}
-                                    </div>
-                                </div>
-                            </div>
-                        {{/slides}}
-                    </div>
-                    <a class="carousel-control-prev" href="#carousel-indicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">{{#str}}previous{{/str}}</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carousel-indicators" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">{{#str}}next{{/str}}</span>
-                    </a>
-                </div>
-            </div>
-        {{/slidercount}}
+            <button class="at-menu-button" type="button" aria-controls="at-primary-nav" aria-expanded="false">
+                <span class="sr-only">Open navigation</span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </button>
 
-        {{#displaymarketingbox}}
-            <section id="feature">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 my-3">
-                            <h3 class="h1 mt-3 mb-3">{{{marketingheading}}}</h3>
-                            <div class="marketing-content">{{{marketingcontent}}}</div>
-                        </div>
-                        <div class="col-lg-8 ps-xl-8">
-                            <div class="row">
-                                {{#marketingboxes}}
-                                    <div class="col-sm-6 mt-4">
-                                        <div class="card card-body shadow">
-                                            <div class="d-flex">
-                                                <div class="icon-lg text-white rounded-circle">
-                                                    <img src="{{{icon}}}">
-                                                </div>
-                                                <div class="col ps-3">
-                                                    <h5>{{{heading}}}</h5>
-                                                    <div class="box-content">{{{content}}}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{/marketingboxes}}
-                            </div>
-                        </div>
-                    </div>
+            <nav class="at-primary-nav" id="at-primary-nav" aria-label="Primary navigation">
+                <a href="#learning-paths">Learning Paths</a>
+                <a href="#study-guides">Study Guides</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="{{{supporturl}}}">Contact</a>
+                <div class="at-mobile-account-actions">
+                    <a class="at-text-link" href="{{{loginurl}}}">Log in</a>
+                    <a class="at-button at-button-small at-button-orange" href="{{{signupurl}}}">Create account</a>
                 </div>
-            </section>
-        {{/displaymarketingbox}}
+            </nav>
 
-        {{#numbersfrontpage}}
-            <section id="numbers">
-                <div class="moove-container-fluid">
-                    <div class="row customer-area-l1 justify-content-center align-items-center ">
-                        <div class="col-xl-5 col-lg-5 col-md-10">
-                            <div class="sectionheading">
-                                {{{numberscontent}}}
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-7 col-md-10 offset-xl-1">
-                            <div class="row user-rating-box-area">
-                                <div class="col-sm-6 col-xs-8">
-                                    <div class="h-100 rate-box bg-primary">
-                                        <h3>
-                                            {{{numbersusers}}}
-                                        </h3>
-                                        <p>{{#str}}numbersusers, theme_moove{{/str}}</p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-xs-8">
-                                    <div class="h-100 rate-box rate-box-2 bg-cloudburst">
-                                        <h3>
-                                            
-                                        </h3>
-                                        <p>{{#str}}numberscourses, theme_moove{{/str}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        {{/numbersfrontpage}}
-{{{addblockbutton}}}
-        <div id="topofscroll">
-            <div id="page-content" class="d-print-block main-inner">
-                <div id="region-main-box">
-                    <section id="region-main" aria-label="{{#str}}content{{/str}}">
-                        {{{ output.course_content_header }}}
-                        {{{ output.main_content }}}
-						{{{sidepreblocks}}}
-                        {{{ output.course_content_footer }}}
-                    </section>
-                </div>
+            <div class="at-account-actions">
+                <a class="at-text-link" href="{{{loginurl}}}">Log in</a>
+                <a class="at-button at-button-small at-button-orange" href="{{{signupurl}}}">Create account</a>
             </div>
         </div>
+    </header>
 
-        {{#faqenabled}}
-            <section id="faq" class="scale-up scale-up-show">
-                <div class="moove-container-fluid">
-                    <h2>{{#str}}faq, theme_moove{{/str}}</h2>
+    <main id="page" class="at-public-home" data-region="mainpage">
+        <section class="at-hero">
+            <div class="at-shell at-hero-grid">
+                <div class="at-hero-copy">
+                    <p class="at-eyebrow">Acupuncture education, organized around your goal</p>
+                    <h1>Prepare for the Board.<br><span>Keep growing in practice.</span></h1>
+                    <p class="at-hero-lead">Focused Study Guides for acupuncture Board preparation, plus a separate pathway for approved professional Continuing Education courses.</p>
 
-                    <div class="accordion" id="accordionFaq">
-                        {{#faq}}
-                            <div class="card shadow">
-                                <div class="card-header" id="heading-{{{id}}}">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{{id}}}" aria-expanded="false" aria-controls="collapse-{{{id}}}">
-                                            {{{question}}}
-                                        </button>
-                                    </h2>
-                                </div>
+                    <div class="at-hero-actions">
+                        <a class="at-button at-button-teal" href="{{{wwwroot}}}/study-guide/board-courses.html">Explore Board Preparation</a>
+                        <a class="at-button at-button-outline" href="{{{wwwroot}}}/study-guide/continuing-education.html">View Continuing Education</a>
+                    </div>
 
-                                <div id="collapse-{{{id}}}" class="collapse" aria-labelledby="heading-{{{id}}}" data-parent="#accordionFaq">
-                                    <div class="card-body">
-                                        {{{answer}}}
-                                    </div>
-                                </div>
-                            </div>
-                        {{/faq}}
+                    <div class="at-hero-note" aria-label="Program highlights">
+                        <span><i aria-hidden="true">✓</i> Self-paced learning</span>
+                        <span><i aria-hidden="true">✓</i> Objective-based Study Guides</span>
+                        <span><i aria-hidden="true">✓</i> Mobile friendly</span>
                     </div>
                 </div>
-            </section>
-        {{/faqenabled}}
 
-        {{> theme_moove/footer }}
-    </div>
+                <div class="at-hero-visual">
+                    <img src="{{{wwwroot}}}/study-guide/assets/point-categories-chapter-cover.webp"
+                         alt="Conceptual illustration of acupuncture channels and point pathways"
+                         width="1599" height="900" fetchpriority="high">
+                    <div class="at-visual-card">
+                        <span class="at-visual-icon" aria-hidden="true">◎</span>
+                        <div>
+                            <strong>Learn with direction</strong>
+                            <small>Reading, visual review and targeted practice</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="at-quick-facts" aria-label="Membership and pricing">
+            <div class="at-shell at-facts-grid">
+                <div>
+                    <span class="at-fact-icon at-teal">B</span>
+                    <p><strong>Board Preparation</strong><small>$30 monthly membership</small></p>
+                </div>
+                <div>
+                    <span class="at-fact-icon at-purple">CE</span>
+                    <p><strong>Continuing Education</strong><small>$10 per approved credit</small></p>
+                </div>
+                <div>
+                    <span class="at-fact-icon at-orange">24/7</span>
+                    <p><strong>Study on your schedule</strong><small>Desktop, tablet or phone</small></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="at-section at-paths-section" id="learning-paths">
+            <div class="at-shell">
+                <div class="at-section-heading">
+                    <p class="at-eyebrow">Choose your learning path</p>
+                    <h2>One platform. Two distinct goals.</h2>
+                    <p>Use the same carefully organized subject matter in the path that fits where you are professionally.</p>
+                </div>
+
+                <div class="at-path-grid">
+                    <article class="at-path-card at-board-card">
+                        <div class="at-path-topline">
+                            <span class="at-path-number">01</span>
+                            <span class="at-pill at-pill-teal">Monthly membership</span>
+                        </div>
+                        <h3>Board Exam Preparation</h3>
+                        <p>Build confidence through guided chapter reading, focused learning objectives, visual review and Board-level practice.</p>
+                        <ul>
+                            <li>Ready-to-study chapter guides</li>
+                            <li>School- and Board-level practice</li>
+                            <li>Progressive review by objective</li>
+                        </ul>
+                        <div class="at-path-footer">
+                            <p><small>Full membership</small><strong>$30 <span>/ month</span></strong></p>
+                            <a class="at-arrow-link" href="{{{wwwroot}}}/study-guide/board-courses.html">View Study Guides <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+
+                    <article class="at-path-card at-ce-card">
+                        <div class="at-path-topline">
+                            <span class="at-path-number">02</span>
+                            <span class="at-pill at-pill-purple">Professional education</span>
+                        </div>
+                        <h3>Continuing Education</h3>
+                        <p>Access Board-approved courses individually, complete the required assessment and earn a course-specific certificate.</p>
+                        <ul>
+                            <li>Only approved and active courses appear</li>
+                            <li>Separate enrollment by course</li>
+                            <li>Completion record and certificate</li>
+                        </ul>
+                        <div class="at-path-footer">
+                            <p><small>Course-specific price</small><strong>$10 <span>/ approved credit</span></strong></p>
+                            <a class="at-arrow-link at-purple-link" href="{{{wwwroot}}}/study-guide/continuing-education.html">View CE Courses <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="at-section at-guides-section" id="study-guides">
+            <div class="at-shell">
+                <div class="at-heading-row">
+                    <div class="at-section-heading at-left">
+                        <p class="at-eyebrow">Available now</p>
+                        <h2>Focused Study Guides</h2>
+                        <p>Each guide brings reading, learning objectives and targeted practice together in one clear sequence.</p>
+                    </div>
+                    <a class="at-quiet-link" href="{{{wwwroot}}}/study-guide/board-courses.html">View all Study Guides →</a>
+                </div>
+
+                <div class="at-guide-grid">
+                    <article class="at-guide-card">
+                        <div class="at-guide-art at-channels-art">
+                            <span class="at-guide-kicker">9 objectives</span>
+                            <span class="at-orbit at-one" aria-hidden="true"></span>
+                            <span class="at-orbit at-two" aria-hidden="true"></span>
+                            <span class="at-orbit at-three" aria-hidden="true"></span>
+                            <span class="at-channel-symbol" aria-hidden="true">☯</span>
+                        </div>
+                        <div class="at-guide-content">
+                            <span class="at-pill at-pill-teal">Study Guide ready</span>
+                            <h3>The Channels and Collaterals</h3>
+                            <p>Master channel functions, pathways, relationships and organization through guided reading and structured practice.</p>
+                            <a class="at-arrow-link" href="{{{wwwroot}}}/study-guide/index.html#channels-chapter-introduction">Open Study Guide <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+
+                    <article class="at-guide-card">
+                        <div class="at-guide-art at-image-art">
+                            <span class="at-guide-kicker">26 objectives</span>
+                            <img src="{{{wwwroot}}}/study-guide/assets/point-categories-chapter-cover.webp"
+                                 alt="Point Categories conceptual chapter cover" width="1599" height="900" loading="lazy">
+                        </div>
+                        <div class="at-guide-content">
+                            <span class="at-pill at-pill-teal">Study Guide ready</span>
+                            <h3>Point Categories</h3>
+                            <p>Connect point classifications, channel correspondences and clinical reasoning through focused objective-level review.</p>
+                            <a class="at-arrow-link" href="{{{wwwroot}}}/study-guide/index.html#point-categories-draft">Open Study Guide <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="at-section at-process-section" id="how-it-works">
+            <div class="at-shell at-process-grid">
+                <div class="at-process-intro">
+                    <p class="at-eyebrow">A clearer way to study</p>
+                    <h2>Know what to learn and what to do next.</h2>
+                    <p>Move through a consistent learning sequence designed to reduce guesswork and make progress visible.</p>
+                    <a class="at-button at-button-orange" href="{{{signupurl}}}">Start your preparation</a>
+                </div>
+
+                <ol class="at-steps">
+                    <li><span>1</span><div><h3>Choose your path</h3><p>Select Board Preparation or an approved Continuing Education course.</p></div></li>
+                    <li><span>2</span><div><h3>Follow the learning plan</h3><p>Study each objective with reading, visual resources and guided review.</p></div></li>
+                    <li><span>3</span><div><h3>Confirm your progress</h3><p>Use practice and assessments to determine when you have mastered the material.</p></div></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="at-final-cta">
+            <div class="at-shell at-cta-inner">
+                <div>
+                    <p class="at-eyebrow at-light">Start with a clear plan</p>
+                    <h2>Your next chapter begins here.</h2>
+                </div>
+                <div class="at-cta-actions">
+                    <a class="at-button at-button-white" href="{{{wwwroot}}}/study-guide/board-courses.html">Explore Board Preparation</a>
+                    <a class="at-button at-button-ghost" href="{{{loginurl}}}">Log in</a>
+                </div>
+            </div>
+        </section>
+
+        {{!
+            Moodle requires every page layout to consume the main-content
+            placeholder. The legacy front-page content remains available to
+            Moodle internally, but is intentionally hidden from this landing
+            page so it cannot flash before the new design.
+        }}
+        <div class="at-moodle-source-content" hidden aria-hidden="true">
+            {{{ output.main_content }}}
+        </div>
+    </main>
+
+    <footer class="at-site-footer">
+        <div class="at-shell at-footer-grid">
+            <div>
+                <a class="at-brand at-footer-brand" href="{{{wwwroot}}}/">
+                    <span class="at-brand-mark" aria-hidden="true">
+                        {{# output.should_display_logo }}
+                            <img src="{{output.get_logo}}" alt="">
+                        {{/ output.should_display_logo }}
+                        {{^ output.should_display_logo }}
+                            <span class="at-brand-symbol">☯</span>
+                        {{/ output.should_display_logo }}
+                    </span>
+                    <span class="at-wordmark">Acupuncture<span>Tests</span></span>
+                </a>
+                <p>Structured learning for acupuncture Board preparation and professional development.</p>
+            </div>
+            <div>
+                <h2>Learning</h2>
+                <a href="{{{wwwroot}}}/study-guide/board-courses.html">Board Preparation</a>
+                <a href="{{{wwwroot}}}/study-guide/continuing-education.html">Continuing Education</a>
+                <a href="#study-guides">Study Guides</a>
+            </div>
+            <div>
+                <h2>Support</h2>
+                <a href="{{{supporturl}}}">Contact Us</a>
+                <a href="{{{loginurl}}}">Log in</a>
+                <a href="{{{signupurl}}}">Create account</a>
+            </div>
+        </div>
+        <div class="at-shell at-footer-bottom">
+            <span>© 2026 AcupunctureTests</span>
+            <span>Education designed for focused progress.</span>
+        </div>
+    </footer>
+
     {{{ output.standard_after_main_region_html }}}
 </div>
 
+{{#js}}
+const menuButton = document.querySelector('.at-menu-button');
+const primaryNav = document.querySelector('.at-primary-nav');
+
+if (menuButton && primaryNav) {
+    menuButton.addEventListener('click', function() {
+        const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!isOpen));
+        primaryNav.classList.toggle('is-open');
+    });
+
+    primaryNav.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            menuButton.setAttribute('aria-expanded', 'false');
+            primaryNav.classList.remove('is-open');
+        });
+    });
+}
+{{/js}}
 </body>
 </html>
-{{#js}}
-M.util.js_pending('theme_boost/loader');
-require(['theme_boost/loader', 'theme_boost/drawer'], function(Loader, Drawer) {
-    Drawer.init();
-    M.util.js_complete('theme_boost/loader');
-});
-{{/js}}

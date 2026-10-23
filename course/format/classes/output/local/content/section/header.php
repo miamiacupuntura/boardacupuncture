@@ -501,16 +501,16 @@ $lastAttemptStatus = array();
 $sectionNames = array();
 $sectionIds = array();
 $mainRowHTML = <<<HTML
-<td class="all-columns" style="font-size:12px;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;background-color:#ffffff !important;border-bottom:1px solid #D9D9D9 !important;vertical-align:top !important;">
+<td class="all-columns exam-metric-value" style="font-size:16px !important;font-weight:700 !important;text-align:center;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;vertical-align:middle !important;">
 HTML;
 $mainRowHTMLB = <<<HTML
-<td class="all-columns" style="font-size:12px;text-align:left !important;padding-left:0 !important;background-color:#ffffff !important;border-bottom:1px solid #D9D9D9 !important;white-space:normal !important;word-break:normal !important;overflow-wrap:break-word !important;vertical-align:top !important;">
+<td class="all-columns exam-name-cell" style="font-size:12px;text-align:left !important;white-space:normal !important;word-break:normal !important;overflow-wrap:break-word !important;vertical-align:middle !important;">
 HTML;
 $mainRowHTMLLink = <<<HTML
-<td class="all-columns2" style="font-size:10px;text-align:center;word-break:break-word;overflow-wrap:anywhere;background-color:#ffffff !important;border-bottom:1px solid #D9D9D9 !important;">
+<td class="all-columns2 exam-action-cell" style="font-size:10px;text-align:center;word-break:break-word;overflow-wrap:anywhere;vertical-align:middle !important;">
 HTML;
 $mainRowHTML2 = <<<HTML
-<tr style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">
+<tr>
 HTML;
 
 $sectionName = "";
@@ -627,8 +627,10 @@ $btnValue = "Study Guide";
 $tempAttempt = 0;
 }
 
+$examActionClass = ($btnValue === "Study Guide") ? "exam-action-guide" : "exam-action-retry";
+
 $examLink = <<<HTML
-<a href="$scormurlValue" class="link-retry">$btnValue
+<a href="$scormurlValue" class="link-retry $examActionClass">$btnValue
 HTML;
 
 error_log("ACUP_NAME_DEBUG: " . $tempName);
@@ -706,27 +708,27 @@ for ($x = 0; $x <= count($sectionNames)-1; $x++) {
 if ($format->get_section_name($z) == $sectionNames[$x]) {
 if ($tempSectionName !== $sectionNames[$x]) {
 /* Todos los Topics usan el mismo color naranja */
-$topicHeaderBg = '#F4A261';
+$topicHeaderBg = '#F47E2C';
 $topicHeaderText = '#ffffff';
 
 $topicExamHeaders = <<<HTML
 <tr class="exam-topic-header" data-topic="{$sectionNames[$x]}" style="background-color:{$topicHeaderBg} !important;">
-<td style="text-align:left;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 8px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>{$sectionNames[$x]}</strong></td>
-<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>Attempts<br><span style="white-space:nowrap;font-size:9px;">Started /</span><br><span style="white-space:nowrap;font-size:9px;">Completed</span></strong></td>
+<td style="text-align:left;font-size:13px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:14px 16px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong style="font-size:15px !important;font-weight:700 !important;line-height:1.3 !important;white-space:normal !important;word-break:normal !important;overflow-wrap:break-word !important;-webkit-text-size-adjust:100% !important;text-size-adjust:100% !important;">{$sectionNames[$x]}</strong></td>
+<td style="text-align:center;font-size:11px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:11px 8px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong>Attempts<br><span style="white-space:nowrap;font-size:9px;">Started / Completed</span></strong></td>
 <!-- REMOVED SECOND ATTEMPTS HEADER -->
-<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>Last Attempt</strong></td>
-<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong><span style="white-space:normal;">Last Score</span></strong></td>
-<td style="text-align:center;font-size:10px;white-space:normal;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:8px 6px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns" style="border-right:1px solid #ffffff !important;"><strong>Last Status</strong></td>
-<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:6px 4px !important;border-bottom:1px solid #D9D9D9 !important;border-right:1px solid #ffffff !important;" class="all-columns">
-<a href="/mod/scorm/examhistory/?courseid={$COURSE->id}&sectionid={$sectionIds[$x]}" style="display:inline-block;background-color:#ffffff !important;color:#333333 !important;border:1px solid #d0d0d0 !important;border-radius:4px !important;padding:4px 7px !important;font-size:9px !important;font-weight:bold !important;text-decoration:none !important;white-space:nowrap !important;">Exam History</a>
+<td style="text-align:center;font-size:11px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:11px 8px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong>Last Attempt</strong></td>
+<td style="text-align:center;font-size:11px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:11px 8px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong><span style="white-space:normal;">Last Score</span></strong></td>
+<td style="text-align:center;font-size:11px;white-space:normal;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:11px 8px !important;border-right:1px solid rgba(255,255,255,.35) !important;" class="all-columns"><strong>Last Status</strong></td>
+<td style="text-align:center;font-size:10px;background-color:{$topicHeaderBg} !important;color:{$topicHeaderText} !important;padding:9px 8px !important;" class="all-columns">
+<a class="exam-history-link" href="/mod/scorm/examhistory/?courseid={$COURSE->id}&sectionid={$sectionIds[$x]}">Exam History</a>
 </td>
 </tr>
 HTML;
 
-$resultExams = $resultExams . $topicExamHeaders . str_replace('<tr style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', '<tr class="exam-topic-row" data-topic="' . s($sectionNames[$x]) . '" style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', $mainRowHTML2) . $scormName[$x] . $attemptsCombined[$x] . $lastAttemptDate[$x] . $lastAttemptScore[$x] . $lastAttemptStatus[$x] . $examLinks[$x] . $rowHTMLend2;	
+$resultExams = $resultExams . $topicExamHeaders . str_replace('<tr>', '<tr class="exam-topic-row" data-topic="' . s($sectionNames[$x]) . '">', $mainRowHTML2) . $scormName[$x] . $attemptsCombined[$x] . $lastAttemptDate[$x] . $lastAttemptScore[$x] . $lastAttemptStatus[$x] . $examLinks[$x] . $rowHTMLend2;
 $tempSectionName = $sectionNames[$x];
 } else {
-$resultExams = $resultExams . str_replace('<tr style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', '<tr class="exam-topic-row" data-topic="' . s($sectionNames[$x]) . '" style="background-color:#ffffff !important;border-bottom:1px solid #d9d9d9 !important;">', $mainRowHTML2) . $scormName[$x] . $attemptsCombined[$x] . $lastAttemptDate[$x] . $lastAttemptScore[$x] . $lastAttemptStatus[$x] . $examLinks[$x] . $rowHTMLend2;
+$resultExams = $resultExams . str_replace('<tr>', '<tr class="exam-topic-row" data-topic="' . s($sectionNames[$x]) . '">', $mainRowHTML2) . $scormName[$x] . $attemptsCombined[$x] . $lastAttemptDate[$x] . $lastAttemptScore[$x] . $lastAttemptStatus[$x] . $examLinks[$x] . $rowHTMLend2;
 }
 }
 }
@@ -735,14 +737,34 @@ $resultExams = $resultExams . str_replace('<tr style="background-color:#ffffff !
 /* Exams List: Topics desplegables */
 $examTopicDropdownJS = <<<HTML
 <style>
+.main-exams-list {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border: 1px solid #dce4ec !important;
+    border-radius: 14px !important;
+    background: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(25, 50, 74, 0.08) !important;
+    overflow: hidden !important;
+}
+
+.main-exams-list > tbody > tr > .first-column {
+    background: #fff7ef !important;
+    color: #17324d !important;
+    padding: 18px 20px !important;
+    border-bottom: 1px solid #f4d8c2 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+}
+
 .main-exams-list .exam-topic-header {
-    border-top: 2px solid #000000 !important;
-    border-bottom: 2px solid #000000 !important;
+    border-top: 12px solid #ffffff !important;
+    border-bottom: 0 !important;
 }
 
 .main-exams-list .exam-topic-header td {
-    border-top: 2px solid #000000 !important;
-    border-bottom: 2px solid #000000 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
 }
 
 .main-exams-list .exam-topic-header td:first-child {
@@ -751,12 +773,18 @@ $examTopicDropdownJS = <<<HTML
 
 .main-exams-list .exam-topic-header {
     cursor: pointer;
+    transition: filter 0.18s ease;
+}
+
+.main-exams-list .exam-topic-header:hover {
+    filter: brightness(0.97);
 }
 
 .main-exams-list .exam-topic-header td:first-child strong::before {
     content: "▶ ";
     display: inline-block;
-    font-size: 9px;
+    margin-right: 6px;
+    font-size: 10px;
     transition: transform 0.2s ease;
 }
 
@@ -772,48 +800,102 @@ $examTopicDropdownJS = <<<HTML
     display: table-row;
 }
 
-@media (max-width: 767px) {
-    .main-exams-list {
-        table-layout: fixed !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    .main-exams-list .exam-topic-header td,
-    .main-exams-list .exam-topic-row td {
-        font-size: 9px !important;
-        padding: 6px 3px !important;
-    }
-
-/* Reduce only Pending in Last Status */
-.main-exams-list .exam-topic-row td:nth-child(5) {
-    font-size: 8px !important;
+.main-exams-list .exam-topic-row td {
+    padding: 12px 10px !important;
+    border-bottom: 1px solid #e5ebf1 !important;
+    background: #ffffff !important;
+    color: #243b53 !important;
+    line-height: 1.35 !important;
+    transition: background-color 0.16s ease;
 }
 
-    .main-exams-list.course-stats .exam-topic-row td {
-        font-size: 9px !important;
-    }
+.main-exams-list .exam-topic-row:hover td {
+    background: #f7fafc !important;
+}
 
-    /* Mobile: column widths are controlled only by the table colgroup */
-    .main-exams-list .exam-topic-header td,
-    .main-exams-list .exam-topic-row td {
-        width: auto !important;
-        min-width: 0 !important;
-    }
+table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
+    padding-left: 18px !important;
+    color: #102a43 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+}
+
+.main-exams-list .exam-topic-row td:nth-child(2),
+.main-exams-list .exam-topic-row td:nth-child(3),
+.main-exams-list .exam-topic-row td:nth-child(4) {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.main-exams-list .exam-history-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 32px !important;
+    padding: 6px 11px !important;
+    border: 1px solid rgba(255,255,255,.85) !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    box-shadow: 0 2px 5px rgba(91, 48, 17, .18) !important;
+    color: #8f3f0d !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+
+.main-exams-list .exam-history-link:hover,
+.main-exams-list .exam-history-link:focus {
+    background: #fff6ed !important;
+    color: #6f2f08 !important;
+    text-decoration: none !important;
+}
+
+.main-exams-list .exam-action-cell .link-retry {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 92px !important;
+    min-height: 34px !important;
+    padding: 7px 14px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    box-shadow: 0 3px 7px rgba(25, 50, 74, .16) !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+
+.main-exams-list .exam-action-cell .exam-action-retry {
+    background: #f47e2c !important;
+}
+
+.main-exams-list .exam-action-cell .exam-action-guide {
+    background: #0f857d !important;
+}
+
+.main-exams-list .exam-action-cell .link-retry:hover,
+.main-exams-list .exam-action-cell .link-retry:focus {
+    filter: brightness(.93);
+    transform: translateY(-1px);
 }
 
 /* Last Status pills */
 .main-exams-list .last-status-pill {
     display: inline-block !important;
-    padding: 4px 8px !important;
+    padding: 5px 10px !important;
     border-radius: 999px !important;
-    font-size: 8px !important;
+    font-size: 10px !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
     text-align: center !important;
-    min-width: 52px !important;
+    min-width: 64px !important;
     box-sizing: border-box !important;
 }
 
@@ -828,85 +910,225 @@ $examTopicDropdownJS = <<<HTML
 }
 
 .main-exams-list .last-status-incomplete {
-    background: #dbeafe !important;
-    color: #2563a6 !important;
+    background: #e7f0ff !important;
+    color: #245b9e !important;
 }
 
-@media (max-width: 767px) {
-    .main-exams-list .last-status-pill {
-        padding: 3px 5px !important;
-        min-width: 48px !important;
-        font-size: 8px !important;
-    }
+.main-exams-list .exams-list-explanation {
+    border-top: 12px solid #ffffff !important;
 }
 
-/* Mobile fix: final content alignment for main Exams List */
+/* Mobile: display each exam as a readable card instead of six narrow columns. */
 @media (max-width: 767px) {
-    .main-exams-list .exam-topic-row td:nth-child(4) {
-        white-space:normal !important;
-        word-break:normal !important;
-        overflow-wrap:normal !important;
-        line-height:1.2 !important;
+    .main-exams-list {
+        table-layout: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(5) {
-        white-space:nowrap !important;
-        word-break:normal !important;
+    .main-exams-list colgroup {
+        display: none !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(6) {
-        white-space:normal !important;
-        word-break:normal !important;
-        overflow-wrap:break-word !important;
-        line-height:1.2 !important;
+    .main-exams-list > tbody {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(6) {
-        overflow:hidden !important;
-        text-align:center !important;
-        padding-left:2px !important;
-        padding-right:2px !important;
+    .main-exams-list .exams-list-title-row,
+    .main-exams-list .exams-list-help-row {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(6) .link-retry {
-        display:inline-block !important;
-        width:auto !important;
-        max-width:100% !important;
-        box-sizing:border-box !important;
-        white-space:nowrap !important;
-        font-size:10px !important;
-        padding:6px 9px !important;
-        overflow:hidden !important;
+    .main-exams-list .exams-list-title-row .first-column {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    /* Mobile: allow exam-row cells to wrap inside their assigned columns */
+    .main-exams-list .exam-topic-header {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+        margin: 0 10px !important;
+        box-sizing: border-box !important;
+        border-top-width: 10px !important;
+        overflow: hidden !important;
+    }
+
+    .main-exams-list .exam-topic-header td {
+        display: none !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    .main-exams-list .exam-topic-header td:first-child,
+    .main-exams-list .exam-topic-header td:last-child {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .main-exams-list .exam-topic-header td:first-child {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        padding: 14px 12px !important;
+        font-size: 15px !important;
+        line-height: 1.3 !important;
+        font-weight: 700 !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        -webkit-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
+    }
+
+    .main-exams-list .exam-topic-header td:first-child strong {
+        display: block !important;
+        width: 100% !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        -webkit-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
+    }
+
+    .main-exams-list .exam-topic-header td:last-child {
+        flex: 0 0 122px !important;
+        width: 122px !important;
+        max-width: 122px !important;
+        min-width: 122px !important;
+        justify-content: center !important;
+        padding: 9px !important;
+        box-sizing: border-box !important;
+        border-left: 1px solid rgba(255,255,255,.35) !important;
+    }
+
+    .main-exams-list .exam-history-link {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        min-height: 36px !important;
+        padding: 7px 9px !important;
+        box-sizing: border-box !important;
+        font-size: 10px !important;
+    }
+
+    .main-exams-list .exam-topic-row.exam-topic-visible {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+        margin: 0 10px 12px !important;
+        box-sizing: border-box !important;
+        border: 1px solid #dce4ec !important;
+        border-radius: 12px !important;
+        background: #ffffff !important;
+        box-shadow: 0 3px 10px rgba(25, 50, 74, .06) !important;
+        overflow: hidden !important;
+    }
+
     .main-exams-list .exam-topic-row td {
-        white-space:normal !important;
-        word-break:normal !important;
-        overflow-wrap:break-word !important;
-        min-width:0 !important;
-        max-width:100% !important;
-        box-sizing:border-box !important;
-        vertical-align:top !important;
+        display: block !important;
+        flex: 0 0 50% !important;
+        width: 50% !important;
+        min-width: 0 !important;
+        max-width: 50% !important;
+        padding: 10px 12px !important;
+        border-right: 0 !important;
+        border-bottom: 1px solid #edf1f5 !important;
+        box-sizing: border-box !important;
+        text-align: left !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow: visible !important;
     }
 
-    .main-exams-list .exam-topic-row td:first-child {
-        white-space:normal !important;
-        overflow-wrap:break-word !important;
+    .main-exams-list .exam-topic-row td::before {
+        display: block !important;
+        margin-bottom: 4px !important;
+        color: #60758a !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: .04em !important;
+        line-height: 1.2 !important;
+        text-transform: uppercase !important;
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(2),
-    .main-exams-list .exam-topic-row td:nth-child(3),
-    .main-exams-list .exam-topic-row td:nth-child(5) {
-        white-space:nowrap !important;
-        overflow:hidden !important;
+    .main-exams-list .exam-topic-row td:nth-child(2)::before {
+        content: "Attempts";
     }
 
-    .main-exams-list .exam-topic-row td:nth-child(4),
-    .main-exams-list .exam-topic-row td:nth-child(6) {
-        white-space:normal !important;
-        word-break:break-word !important;
-        overflow-wrap:anywhere !important;
+    .main-exams-list .exam-topic-row td:nth-child(3)::before {
+        content: "Last Attempt";
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(4)::before {
+        content: "Last Score";
+    }
+
+    .main-exams-list .exam-topic-row td:nth-child(5)::before {
+        content: "Last Status";
+    }
+
+    table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.all-columns.exam-name-cell {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 15px 14px !important;
+        background: #f4f8fc !important;
+        color: #102a43 !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+    }
+
+    .main-exams-list .exam-topic-row .exam-action-cell {
+        display: flex !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px 12px 12px !important;
+        border-bottom: 0 !important;
+    }
+
+    table.course-stats.course-stats2.main-exams-list tr.exam-topic-row td.exam-action-cell a.link-retry {
+        display: flex !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        min-height: 40px !important;
+        box-sizing: border-box !important;
+        border-radius: 10px !important;
+        font-size: 13px !important;
+    }
+
+    .main-exams-list .last-status-pill {
+        padding: 5px 9px !important;
+        min-width: 64px !important;
+        font-size: 10px !important;
+    }
+
+    .main-exams-list .exams-list-explanation {
+        display: block !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+        margin: 10px !important;
+        padding: 14px !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -1002,11 +1224,11 @@ $htmlMainSectionAdd = <<<HTML
     <col style="width:12%;">
     <col style="width:18%;">
   </colgroup>
-  <tr>
-    <th colspan = "6" class="first-column">Exams List</th>
+  <tr class="exams-list-title-row">
+    <th colspan = "6" class="first-column" style="display:block !important;width:100% !important;min-width:100% !important;max-width:100% !important;box-sizing:border-box !important;white-space:nowrap !important;font-size:20px !important;line-height:1.25 !important;-webkit-text-size-adjust:100% !important;text-size-adjust:100% !important;">Exams List</th>
   </tr>
 $resultExams
-  <tr>
+  <tr class="exams-list-help-row">
     <td colspan="6" class="exams-list-explanation" style="background:#eef6ff !important; color:#34445a !important; text-align:left !important; padding:16px 18px !important; font-size:12px !important; line-height:1.5 !important; white-space:normal !important; overflow-wrap:break-word !important;">
       <strong style="font-size:14px;">How Attempts and Scores Are Shown</strong><br><br>
       <strong>Started / Completed:</strong> Shows the number of times you have started and completed the exam.<br>

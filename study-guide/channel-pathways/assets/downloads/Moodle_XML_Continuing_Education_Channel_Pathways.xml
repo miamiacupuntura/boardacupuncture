@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 1</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>1) Which directional cycle correctly organizes the Twelve Primary Channels?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Primary Channel cycle is chest to hand for Hand Yin, hand to head for Hand Yang, head to foot for Foot Yang and foot to chest for Foot Yin. Why are the other options incorrect? Hand to foot, foot to head, head to chest, chest to hand — This sequence does not match the four Primary directional groups. Chest to head, head to hand, hand to foot, foot to chest — This arrangement reverses and mixes the established group directions. Foot to hand, hand to chest, chest to head, head to foot — This sequence does not preserve the Hand and Foot Yin–Yang cycle.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Chest to hand, hand to head, head to foot, foot to chest</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Primary Channel cycle is chest to hand for Hand Yin, hand to head for Hand Yang, head to foot for Foot Yang and foot to chest for Foot Yin.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Hand to foot, foot to head, head to chest, chest to hand</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This sequence does not match the four Primary directional groups.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Chest to head, head to hand, hand to foot, foot to chest</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This arrangement reverses and mixes the established group directions.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Foot to hand, hand to chest, chest to head, head to foot</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This sequence does not preserve the Hand and Foot Yin–Yang cycle.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 2</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>2) Which sequence identifies Divergent Channel organization?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Divergent Channels are recognized by separation, deep entry, paired convergence and rejoining a Yang Primary pathway. Why are the other options incorrect? Begin at a Luo point, cross once, end at the skin — A named Luo-point origin belongs to Luo-Connecting organization. Begin at a digit, bind at joints, remain superficial — Distal origin and joint binding describe Sinew organization. Circle the waist, rise from the heel, end at the eye — This combines features of selected Extraordinary Vessels.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Separate, enter deeply, converge with the pair, rejoin</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Divergent Channels are recognized by separation, deep entry, paired convergence and rejoining a Yang Primary pathway.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Begin at a Luo point, cross once, end at the skin</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A named Luo-point origin belongs to Luo-Connecting organization.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Begin at a digit, bind at joints, remain superficial</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Distal origin and joint binding describe Sinew organization.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Circle the waist, rise from the heel, end at the eye</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>This combines features of selected Extraordinary Vessels.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 3</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>3) What is the correct relationship between a Luo point and its Luo-Connecting Channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>A Luo point is the named origin; the Luo-Connecting Channel is the route that departs from it toward its connection and destination. Why are the other options incorrect? They are two names for the same point. — A point and the pathway arising from it are related but not interchangeable. The channel must begin at a Jing-Well point. — Luo routes are not defined by a Jing-Well origin. Every Luo route is a Divergent Channel. — Luo and Divergent pathways have different organization.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>The point is the origin and the channel is the pathway leaving it.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A Luo point is the named origin; the Luo-Connecting Channel is the route that departs from it toward its connection and destination.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>They are two names for the same point.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A point and the pathway arising from it are related but not interchangeable.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>The channel must begin at a Jing-Well point.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Luo routes are not defined by a Jing-Well origin.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Every Luo route is a Divergent Channel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Luo and Divergent pathways have different organization.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 4</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>4) Which feature most strongly identifies a Sinew Channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Sinew Channels begin distally and spread superficially through muscles, tendons and binding regions without entering the zangfu. Why are the other options incorrect? A deep paired-organ route that rejoins a Yang channel — Deep paired-organ convergence identifies a Divergent route. A branch originating at a Luo point — A Luo-point origin identifies a Luo-Connecting route. A regular point-bearing internal and external course — A regular point-bearing route identifies a Primary Channel.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>A broad superficial musculotendinous route with joint bindings and no zangfu entry</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Sinew Channels begin distally and spread superficially through muscles, tendons and binding regions without entering the zangfu.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>A deep paired-organ route that rejoins a Yang channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Deep paired-organ convergence identifies a Divergent route.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>A branch originating at a Luo point</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A Luo-point origin identifies a Luo-Connecting route.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>A regular point-bearing internal and external course</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A regular point-bearing route identifies a Primary Channel.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 5</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>5) Which geometry identifies the Girdling Vessel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Dai Mai is distinguished by its transverse course encircling the waist like a belt. Why are the other options incorrect? A posterior point-bearing line from eye to little toe — The posterior eye-to-toe route describes Bladder Primary. A short branch from the lateral lower leg — A short lateral-leg branch may describe Gall Bladder Luo. A medial arm route from chest to little finger — A medial chest-to-little-finger route describes Heart Primary.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>A transverse belt-like course around the waist</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Dai Mai is distinguished by its transverse course encircling the waist like a belt.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>A posterior point-bearing line from eye to little toe</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The posterior eye-to-toe route describes Bladder Primary.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>A short branch from the lateral lower leg</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A short lateral-leg branch may describe Gall Bladder Luo.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>A medial arm route from chest to little finger</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A medial chest-to-little-finger route describes Heart Primary.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 6</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>6) At the heel, which action correctly identifies the Kidney Luo-Connecting Channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Kidney Luo-Connecting Channel is regionally distinguished by encircling the heel. Why are the other options incorrect? It forms the upper eye net. — The upper eye net belongs to Bladder Sinew. It enters the ear at SI-19. — Ear entry at SI-19 belongs to Small Intestine Primary. It disperses midway between the breasts. — Chest dispersal near REN-17 belongs to Sanjiao Primary.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>It encircles the heel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Kidney Luo-Connecting Channel is regionally distinguished by encircling the heel.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It forms the upper eye net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The upper eye net belongs to Bladder Sinew.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It enters the ear at SI-19.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Ear entry at SI-19 belongs to Small Intestine Primary.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It disperses midway between the breasts.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Chest dispersal near REN-17 belongs to Sanjiao Primary.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 7</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>7) Which statement correctly distinguishes the Sinew Channels around the eye?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Bladder Sinew forms the upper muscular net and Stomach Sinew forms the lower muscular net. Why are the other options incorrect? Stomach forms both nets. — The nets are divided between two Sinew pathways. Gall Bladder Luo forms the upper net. — Gall Bladder Luo does not form the upper muscular net. Heart Divergent forms the lower net. — Heart Divergent has eye relationships but does not form the named lower net.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Bladder forms the upper net and Stomach forms the lower net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder Sinew forms the upper muscular net and Stomach Sinew forms the lower muscular net.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Stomach forms both nets.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The nets are divided between two Sinew pathways.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo forms the upper net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Gall Bladder Luo does not form the upper muscular net.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Divergent forms the lower net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart Divergent has eye relationships but does not form the named lower net.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 8</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>8) Which Primary Channel is the listed exception to the channels that traverse the diaphragm?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The supplied regional atlas lists eleven Primary Channels traversing the diaphragm and omits Bladder Primary. Why are the other options incorrect? Lung Primary Channel — Lung Primary is included in the diaphragm group. Heart Primary Channel — Heart Primary is included in the diaphragm group. Liver Primary Channel — Liver Primary is included in the diaphragm group.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Bladder Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The supplied regional atlas lists eleven Primary Channels traversing the diaphragm and omits Bladder Primary.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung Primary is included in the diaphragm group.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart Primary is included in the diaphragm group.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Liver Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Liver Primary is included in the diaphragm group.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 9</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>9) What occurs at Dazhui DU-14?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Dazhui DU-14 is a major convergence hub where the six Yang Channels meet the Governing Vessel. Why are the other options incorrect? The six Yin Channels meet the Conception Vessel. — The supplied relationship specifies Yang rather than Yin channels. Only Kidney and Bladder meet. — The convergence includes more than the Kidney–Bladder pair. Only Liver and Gall Bladder meet. — The convergence includes more than the Liver–Gall Bladder pair.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>The six Yang Channels meet the Governing Vessel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Dazhui DU-14 is a major convergence hub where the six Yang Channels meet the Governing Vessel.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>The six Yin Channels meet the Conception Vessel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The supplied relationship specifies Yang rather than Yin channels.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only Kidney and Bladder meet.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The convergence includes more than the Kidney–Bladder pair.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Only Liver and Gall Bladder meet.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The convergence includes more than the Liver–Gall Bladder pair.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Continuing Education — Channel Pathways — 10</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>10) Which final response demonstrates mastery of the twelve-objective course?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Mastery requires system classification, regional action, two independent landmarks and explicit rejection of the closest alternative. Why are the other options incorrect? It chooses an organ name from one familiar area. — One region and an organ name cannot distinguish several related systems. It relies on line color and option order. — Color and option position are not anatomical evidence. It turns a regional overlap directly into a diagnosis and treatment. — Regional correspondence alone does not establish diagnosis or treatment.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>It names the pathway and system, explains the regional action, cites two landmarks and rejects a plausible alternative.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Mastery requires system classification, regional action, two independent landmarks and explicit rejection of the closest alternative.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It chooses an organ name from one familiar area.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>One region and an organ name cannot distinguish several related systems.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It relies on line color and option order.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color and option position are not anatomical evidence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>It turns a regional overlap directly into a diagnosis and treatment.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Regional correspondence alone does not establish diagnosis or treatment.</p>]]></text></feedback>
+    </answer>
+  </question>
+</quiz>

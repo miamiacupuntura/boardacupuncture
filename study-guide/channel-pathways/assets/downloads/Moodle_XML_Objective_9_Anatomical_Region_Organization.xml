@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 1</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>1) What is the first step in region-first pathway analysis?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Region-first analysis begins by inventorying every pathway documented for the anatomical area before narrowing the possibilities. Why are the other options incorrect? Choose the organ name that appears most familiar. — A familiar organ name can appear in several channel systems. Identify the color used most often. — Color conventions are not dependable anatomical evidence. Assume every route in the area belongs to one system. — One anatomical area can contain Primary, Divergent, Luo, Sinew and Extraordinary routes.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>List every pathway documented for the selected anatomical area.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Region-first analysis begins by inventorying every pathway documented for the anatomical area before narrowing the possibilities.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Choose the organ name that appears most familiar.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>A familiar organ name can appear in several channel systems.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Identify the color used most often.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color conventions are not dependable anatomical evidence.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Assume every route in the area belongs to one system.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>One anatomical area can contain Primary, Divergent, Luo, Sinew and Extraordinary routes.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 2</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>2) Which relationship correctly distinguishes the muscular nets around the eye?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The regional eye map distinguishes Bladder Sinew as the upper muscular net and Stomach Sinew as the lower muscular net. Why are the other options incorrect? Stomach Sinew forms both nets. — The two nets are divided between Bladder and Stomach Sinew pathways. Gall Bladder Luo forms the upper net and Liver Luo forms the lower net. — The Luo routes do not define these upper and lower muscular nets. Yang Qiao forms both muscular nets by itself. — Yang Qiao reaches the inner canthus but does not independently form both named Sinew nets.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Bladder Sinew forms the upper net and Stomach Sinew forms the lower net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The regional eye map distinguishes Bladder Sinew as the upper muscular net and Stomach Sinew as the lower muscular net.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Stomach Sinew forms both nets.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The two nets are divided between Bladder and Stomach Sinew pathways.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo forms the upper net and Liver Luo forms the lower net.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Luo routes do not define these upper and lower muscular nets.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Yang Qiao forms both muscular nets by itself.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Yang Qiao reaches the inner canthus but does not independently form both named Sinew nets.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 3</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>3) Which Primary Channel is the principal anterior landmark at the knee?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Stomach Primary Channel marks the anterior aspect of the knee in the regional comparison. Why are the other options incorrect? Gall Bladder Primary Channel — Gall Bladder is associated with the lateral aspect of the knee. Bladder Primary Channel — Bladder is associated with the posterior knee and popliteal region. Spleen Primary Channel — Spleen belongs to the medial knee group.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Stomach Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Stomach Primary Channel marks the anterior aspect of the knee in the regional comparison.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Gall Bladder Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Gall Bladder is associated with the lateral aspect of the knee.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder is associated with the posterior knee and popliteal region.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Spleen Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Spleen belongs to the medial knee group.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 4</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>4) Which Kidney-family action occurs at the heel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>At the heel, the Kidney Luo-Connecting Channel is distinguished by the action “encircles.” Why are the other options incorrect? Kidney Luo-Connecting Channel originates at the outer canthus. — The outer canthus is a head landmark, not the origin of Kidney Luo. Kidney Primary Channel binds at the lateral elbow. — The lateral elbow belongs to upper-limb channel relationships. Kidney Sinew Channel disperses over the dorsum of the hand. — The Kidney Sinew route is associated with the medial lower limb and heel rather than the dorsum of the hand.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Kidney Luo-Connecting Channel encircles the heel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>At the heel, the Kidney Luo-Connecting Channel is distinguished by the action “encircles.”</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Kidney Luo-Connecting Channel originates at the outer canthus.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The outer canthus is a head landmark, not the origin of Kidney Luo.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Kidney Primary Channel binds at the lateral elbow.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The lateral elbow belongs to upper-limb channel relationships.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Kidney Sinew Channel disperses over the dorsum of the hand.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Kidney Sinew route is associated with the medial lower limb and heel rather than the dorsum of the hand.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 5</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>5) Which pathway descends and disperses over the dorsum of the foot?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Gall Bladder Luo-Connecting Channel descends and disperses over the dorsum of the foot. Why are the other options incorrect? Heart Luo-Connecting Channel — Heart Luo travels internally toward the tongue root and eye. Large Intestine Divergent Channel — Large Intestine Divergent follows a deep upper-body relationship. Governing Vessel Luo — Governing Vessel Luo distributes along the posterior trunk and occipital region.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Gall Bladder Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Gall Bladder Luo-Connecting Channel descends and disperses over the dorsum of the foot.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Heart Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Heart Luo travels internally toward the tongue root and eye.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Large Intestine Divergent Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Large Intestine Divergent follows a deep upper-body relationship.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Governing Vessel Luo</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Governing Vessel Luo distributes along the posterior trunk and occipital region.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 6</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>6) Which Primary Channel emerges from the axilla?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Heart Primary Channel emerges from the axilla before descending the medial arm. Why are the other options incorrect? Lung Primary Channel — Lung Primary emerges on the chest and travels toward the arm. Sanjiao Primary Channel — Sanjiao Primary travels from the ring finger toward the shoulder, neck and head. Bladder Primary Channel — Bladder Primary is a posterior Foot Yang route.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Heart Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Heart Primary Channel emerges from the axilla before descending the medial arm.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lung Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lung Primary emerges on the chest and travels toward the arm.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Sanjiao Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Sanjiao Primary travels from the ring finger toward the shoulder, neck and head.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder Primary is a posterior Foot Yang route.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 7</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>7) Which description best uses the regional atlas without over-identifying a channel?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>An anatomical region narrows the candidate set but must be combined with system, action, direction and confirming landmarks. Why are the other options incorrect? Any route reaching the cheek must be the Stomach Primary Channel. — Many pathways reach the cheek, so Stomach Primary is not the only candidate. The cheek identifies a channel by color alone. — Color is not a regional or system-defining feature. All cheek pathways are Sinew Channels. — Primary, Luo, Divergent, Sinew and Extraordinary relationships can reach the cheek.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>The cheek narrows the choices, but system, action, direction and another landmark are still required.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>An anatomical region narrows the candidate set but must be combined with system, action, direction and confirming landmarks.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Any route reaching the cheek must be the Stomach Primary Channel.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Many pathways reach the cheek, so Stomach Primary is not the only candidate.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>The cheek identifies a channel by color alone.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Color is not a regional or system-defining feature.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>All cheek pathways are Sinew Channels.</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Primary, Luo, Divergent, Sinew and Extraordinary relationships can reach the cheek.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 8</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>8) In the six-zone framework, where are the Heart, Lung, Liver, Spleen, Kidneys, Stomach and intestines grouped?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The six-zone framework groups zangfu and intestinal relationships under internal organs. Why are the other options incorrect? Upper limb — Upper limb includes areas such as fingers, palm, elbow, shoulder and axilla. Lower limb — Lower limb includes hip, knee, heel, foot and toes. Head and neck — Head and neck includes the sensory organs, face, throat and cranial regions.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Internal organs</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The six-zone framework groups zangfu and intestinal relationships under internal organs.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Upper limb</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Upper limb includes areas such as fingers, palm, elbow, shoulder and axilla.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Lower limb</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Lower limb includes hip, knee, heel, foot and toes.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Head and neck</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Head and neck includes the sensory organs, face, throat and cranial regions.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 9</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>9) Which question is most useful when comparing pathways in the thorax and back zone?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>Action and direction words distinguish pathways that share the thorax and back. Why are the other options incorrect? Which option has the shortest title? — Title length has no anatomical meaning. Which line is brightest? — Brightness is an illustration choice. Which organ name occurs first alphabetically? — Alphabetical order does not identify a pathway.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Does the route enter, disperse, ascend, descend, cross or attach?</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Action and direction words distinguish pathways that share the thorax and back.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Which option has the shortest title?</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Title length has no anatomical meaning.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Which line is brightest?</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Brightness is an illustration choice.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Which organ name occurs first alphabetically?</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Alphabetical order does not identify a pathway.</p>]]></text></feedback>
+    </answer>
+  </question>
+  <question type="multichoice">
+    <name><text>Objective 9 — Anatomical Region Organization — 10</text></name>
+    <questiontext format="html">
+      <text><![CDATA[<p><strong>10) Which pathway enters the ear at Tinggong SI-19?</strong></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html"><text><![CDATA[<p>The Small Intestine Primary Channel enters the ear at Tinggong SI-19. Why are the other options incorrect? Small Intestine Luo-Connecting Channel — Small Intestine Luo continues toward the shoulder rather than entering the ear at SI-19. Bladder Sinew Channel — Bladder Sinew binds behind the ear but does not enter at SI-19. Liver Primary Channel — Liver Primary reaches the eye, forehead and vertex rather than entering the ear at SI-19.</p>]]></text></generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<p>Small Intestine Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>The Small Intestine Primary Channel enters the ear at Tinggong SI-19.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Small Intestine Luo-Connecting Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Small Intestine Luo continues toward the shoulder rather than entering the ear at SI-19.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Bladder Sinew Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Bladder Sinew binds behind the ear but does not enter at SI-19.</p>]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<p>Liver Primary Channel</p>]]></text>
+      <feedback format="html"><text><![CDATA[<p>Liver Primary reaches the eye, forehead and vertex rather than entering the ear at SI-19.</p>]]></text></feedback>
+    </answer>
+  </question>
+</quiz>

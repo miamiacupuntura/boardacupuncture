@@ -3,8 +3,28 @@
 
   const PHONE_QUERY = '(max-width:600px)';
   const CHAPTER_ROOT_SELECTOR = '[data-chapter-pattern],.sgv2-layout,#point-categories-draft';
-  const INDEX_URL = '/blocks/myprogress/study-guide.php?area=pointlocation';
-  const INDEX_LABEL = '← Back to Study Guide index';
+  function indexDestination() {
+    const params = new URLSearchParams(window.location.search);
+    const track = window.ACUPUNCTURE_ENTRY_TRACK || params.get('track') || 'board';
+    const spanish = document.documentElement.lang.toLowerCase().startsWith('es');
+    const returnRoute = params.get('return') || window.ACUPUNCTURE_RETURN_ROUTE || '';
+    if (track === 'continuing-education') {
+      return {
+        url: returnRoute === 'ce-preview' ? 'continuing-education.html?preview=approved' : 'continuing-education.html',
+        label: spanish ? '← Volver a los cursos de Continuing Education' : '← Back to Continuing Education courses'
+      };
+    }
+    if (returnRoute === 'board-catalog') {
+      return {
+        url: 'board-courses.html',
+        label: spanish ? '← Volver a los cursos de preparación para el Board' : '← Back to Board preparation courses'
+      };
+    }
+    return {
+      url: '/blocks/myprogress/study-guide.php?area=pointlocation',
+      label: spanish ? '← Volver al índice de Study Guide' : '← Back to Study Guide index'
+    };
+  }
   const reusableShellClasses = [
     'study-guide-mobile-table-shell',
     'point-category-mobile-table-shell',
@@ -32,9 +52,10 @@
       anchor.before(bar);
     }
     const link = bar.querySelector('a') || bar.appendChild(document.createElement('a'));
+    const destination = indexDestination();
     link.classList.add('point-categories-hero-button', 'point-categories-hero-back');
-    if (link.getAttribute('href') !== INDEX_URL) link.href = INDEX_URL;
-    if (link.textContent !== INDEX_LABEL) link.textContent = INDEX_LABEL;
+    if (link.getAttribute('href') !== destination.url) link.href = destination.url;
+    if (link.textContent !== destination.label) link.textContent = destination.label;
   }
 
   function markObjectiveNavigation(root) {

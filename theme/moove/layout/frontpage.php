@@ -118,7 +118,13 @@ $templatecontext = array_merge($templatecontext, $themesettings->footer());
 if (isloggedin()) {
     echo $OUTPUT->render_from_template('theme_moove/drawers', $templatecontext);
 } else {
-    $templatecontext = array_merge($templatecontext, $themesettings->frontpage());
+    // The public home page uses a purpose-built landing page. Keeping these
+    // URLs in the template context avoids coupling the design to a domain or
+    // Moodle installation path.
+    $templatecontext['wwwroot'] = $CFG->wwwroot;
+    $templatecontext['loginurl'] = (new moodle_url('/login/index.php'))->out(false);
+    $templatecontext['signupurl'] = (new moodle_url('/login/signup.php'))->out(false);
+    $templatecontext['supporturl'] = (new moodle_url('/user/contactsitesupport.php'))->out(false);
 
     echo $OUTPUT->render_from_template('theme_moove/frontpage', $templatecontext);
 }
