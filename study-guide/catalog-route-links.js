@@ -22,10 +22,10 @@
     }
     if (returnRoute === 'board-catalog') {
       return {
-        href: 'board-courses.html',
+        href: '/blocks/myprogress/study-guide.php?area=pointlocation',
         label: spanish
-          ? '← Volver a los cursos de preparación para el Board'
-          : '← Back to Board preparation courses'
+          ? '← Volver al índice de Study Guide'
+          : '← Back to Study Guide index'
       };
     }
     return {

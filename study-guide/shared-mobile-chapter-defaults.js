@@ -16,8 +16,8 @@
     }
     if (returnRoute === 'board-catalog') {
       return {
-        url: 'board-courses.html',
-        label: spanish ? '← Volver a los cursos de preparación para el Board' : '← Back to Board preparation courses'
+        url: '/blocks/myprogress/study-guide.php?area=pointlocation',
+        label: spanish ? '← Volver al índice de Study Guide' : '← Back to Study Guide index'
       };
     }
     return {
