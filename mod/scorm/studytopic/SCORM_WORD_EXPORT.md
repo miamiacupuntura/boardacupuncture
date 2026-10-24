@@ -83,7 +83,10 @@ groups attaches the source relationships to the wrong item.
 When a Matching prompt contains shared actions or item-specific symptoms, the
 exporter separates those lines from the actual question and places them in a
 blue `Study tip · Clues to help answer` card. Shared clues and each item's clues
-receive their own labelled row and symptom lists are converted to bullets.
+receive their own labelled row and symptom lists are converted to bullets. For
+two-item comparisons, the tips use the same side-by-side columns as the answer
+key: shared clues span both columns and item-specific symptoms align in one
+comparison row.
 
 ## Validate before publishing
 

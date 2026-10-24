@@ -324,6 +324,9 @@ class DocxBuilder:
         title: str,
         columns: list[str],
         rows: list[tuple[str, list[str]]],
+        *,
+        header_fill: str = "F47E2C",
+        corner_label: str = "Compare",
     ) -> None:
         """Add a side-by-side comparison table for two keyed Matching items."""
         if len(columns) != 2:
@@ -364,7 +367,7 @@ class DocxBuilder:
             + cell(
                 title,
                 sum(widths),
-                fill="F47E2C",
+                fill=header_fill,
                 bold=True,
                 color="FFFFFF",
                 span=3,
@@ -374,7 +377,7 @@ class DocxBuilder:
         )
         heading_row = (
             '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
-            + cell("Compare", widths[0], fill="DDEAF0", bold=True, keep_next=True)
+            + cell(corner_label, widths[0], fill="DDEAF0", bold=True, keep_next=True)
             + cell(columns[0], widths[1], fill="DDEAF0", bold=True, keep_next=True)
             + cell(columns[1], widths[2], fill="DDEAF0", bold=True, keep_next=True)
             + '</w:tr>'
@@ -382,13 +385,22 @@ class DocxBuilder:
         datarows = []
         for rownumber, (label, values) in enumerate(rows):
             keepwithnext = rownumber < len(rows) - 1
-            datarows.append(
+            rowxml = (
                 '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
                 + cell(label, widths[0], fill="F2F6F8", bold=True, keep_next=keepwithnext)
-                + cell(values[0], widths[1], fill="FFFFFF", keep_next=keepwithnext)
-                + cell(values[1], widths[2], fill="FFFFFF", keep_next=keepwithnext)
-                + '</w:tr>'
             )
+            if len(values) == 1:
+                rowxml += cell(
+                    values[0],
+                    widths[1] + widths[2],
+                    fill="FFFFFF",
+                    span=2,
+                    keep_next=keepwithnext,
+                )
+            else:
+                rowxml += cell(values[0], widths[1], fill="FFFFFF", keep_next=keepwithnext)
+                rowxml += cell(values[1], widths[2], fill="FFFFFF", keep_next=keepwithnext)
+            datarows.append(rowxml + '</w:tr>')
 
         table = (
             '<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/>'
@@ -880,6 +892,23 @@ def matching_prompt_and_tips(questiontext: Any) -> tuple[str, list[tuple[str, st
     return prompt, tips
 
 
+def matching_tip_comparison_data(
+    tips: list[tuple[str, str]],
+) -> tuple[list[str], list[tuple[str, list[str]]]] | None:
+    """Align two item-specific tip lists and any shared clues side by side."""
+    shared = [value for label, value in tips if label in {"Shared clues", "Helpful clue"}]
+    itemtips = [(label, value) for label, value in tips if label not in {"Shared clues", "Helpful clue"}]
+    if len(itemtips) != 2:
+        return None
+
+    columns = [label for label, _value in itemtips]
+    rows = []
+    if shared:
+        rows.append(("Shared clues", ["\n".join(shared)]))
+    rows.append(("Symptoms / conditions", [itemtips[0][1], itemtips[1][1]]))
+    return columns, rows
+
+
 def matching_feedback_summary(question: dict[str, Any], target: str) -> str:
     """Explain the evidence used by a Matching key without restating its long lists."""
     details = matching_pair_details(question)
@@ -1339,11 +1368,21 @@ def add_question(
             keep_lines=True,
         )
         if studytips:
-            builder.add_key_value_card(
-                "Study tip · Clues to help answer",
-                studytips,
-                header_fill="527286",
-            )
+            tipcomparison = matching_tip_comparison_data(studytips)
+            if tipcomparison:
+                builder.add_comparison_table(
+                    "Study tip · Clues to help answer",
+                    tipcomparison[0],
+                    tipcomparison[1],
+                    header_fill="527286",
+                    corner_label="Clue",
+                )
+            else:
+                builder.add_key_value_card(
+                    "Study tip · Clues to help answer",
+                    studytips,
+                    header_fill="527286",
+                )
     else:
         builder.add_paragraph(
             question.get("QuestionText", ""),

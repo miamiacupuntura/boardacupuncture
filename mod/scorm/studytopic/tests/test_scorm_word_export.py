@@ -217,6 +217,15 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertEqual("Herb B", tips[2][0])
         self.assertEqual("• Coughing\n• Phlegm", tips[2][1])
 
+        comparison = EXPORTER.matching_tip_comparison_data(tips)
+        self.assertIsNotNone(comparison)
+        columns, rows = comparison
+        self.assertEqual(["Herb A", "Herb B"], columns)
+        self.assertEqual(("Shared clues", ["Both herbs settle nausea."]), rows[0])
+        self.assertEqual("Symptoms / conditions", rows[1][0])
+        self.assertEqual("• Pain\n• Vomiting", rows[1][1][0])
+        self.assertEqual("• Coughing\n• Phlegm", rows[1][1][1])
+
     def test_two_matching_items_are_aligned_as_comparison_data(self) -> None:
         question = {
             "LeftColumn": [
