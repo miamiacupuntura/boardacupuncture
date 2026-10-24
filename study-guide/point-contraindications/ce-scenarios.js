@@ -7,9 +7,9 @@
   const cases = [
     {
       number: 1,
-      title: 'Pregnancy screening was not updated',
+      title: 'Pregnancy screening was not updated before point selection',
       tag: 'Pregnancy · screening · escalation',
-      scenario: 'A patient at 34 weeks of pregnancy presents with severe low-back pain and swelling. The practitioner proceeds without updating the obstetric history or checking current pregnancy-specific guidance. Later, the patient reports contractions and bleeding.',
+      scenario: 'A patient at 34 weeks of pregnancy presents with severe low-back pain and swelling. Without updating the obstetric history or checking current pregnancy-specific guidance, the practitioner includes LI-4 and SP-6 in the treatment plan. Later, the patient reports contractions and bleeding.',
       error: 'The failure is not a single memorized point name. It is the missing pregnancy screen, failure to identify obstetric warning signs, and failure to verify the complete point and modality guidance before proceeding.',
       consequence: 'Contractions and bleeding during pregnancy require urgent obstetric assessment. The timing raises a possible treatment-related concern, but causation cannot be established from sequence alone. Complete documentation and incident review are essential.',
       prevention: 'Use an updated pregnancy and symptom screen, identify urgent referral criteria, verify current point- and modality-specific guidance, obtain appropriate consent, and remain within training and jurisdictional scope.',
@@ -17,9 +17,9 @@
     },
     {
       number: 2,
-      title: 'Thoracic warning signs were dismissed',
+      title: 'Thoracic warning signs after ST-12 were dismissed',
       tag: 'Pleura · delayed symptoms · emergency',
-      scenario: 'After treatment in an anterior thoracic and supraclavicular region, a patient develops sudden sharp chest pain and a dry cough. The symptoms are dismissed. Several hours later, the patient develops severe shortness of breath and increasing distress.',
+      scenario: 'After treatment involving ST-12 and an anterior intercostal region, a patient develops sudden sharp chest pain and a dry cough. The symptoms are dismissed as an expected sensation. Several hours later, the patient develops severe shortness of breath and increasing distress.',
       error: 'The practitioner failed to connect the anatomical region with pleural risk and misclassified new chest symptoms as an expected treatment sensation instead of a possible adverse event.',
       consequence: 'Chest pain, cough and shortness of breath after treatment near the thorax can indicate pneumothorax. Symptoms may be delayed, and deterioration can become life-threatening.',
       prevention: 'Recognize the thoracic risk family before treatment, screen new symptoms promptly, stop the activity, follow the current emergency protocol and obtain urgent medical evaluation when pneumothorax is suspected.',
@@ -27,9 +27,9 @@
     },
     {
       number: 3,
-      title: 'An orbital-risk point was treated as routine',
+      title: 'BL-1 was treated as a routine orbital point',
       tag: 'Orbit · vascular/optic structures · urgent referral',
-      scenario: 'During work near an orbital point, the patient moves unexpectedly. Rapid swelling, severe orbital pain, protrusion of the eye or a visual change develops soon afterward.',
+      scenario: 'During treatment near BL-1, the patient moves unexpectedly. Rapid swelling, severe orbital pain, protrusion of the eye or a visual change develops soon afterward.',
       error: 'The practitioner failed to treat the orbit as an advanced high-risk region, did not adequately control for movement, or continued despite findings that required immediate reassessment.',
       consequence: 'Rapid orbital swelling, severe pain, proptosis or vision change may indicate significant bleeding or pressure threatening ocular and optic structures. Delay can increase the risk of permanent harm.',
       prevention: 'Limit orbital work to appropriately trained practitioners using complete current guidance. Stop when concerning symptoms appear, protect the patient, and activate urgent ophthalmic or emergency evaluation.',
@@ -37,9 +37,9 @@
     },
     {
       number: 4,
-      title: 'Bladder state was overlooked',
+      title: 'Bladder state was overlooked before REN-3 and REN-4',
       tag: 'Lower abdomen · organ state · hematuria',
-      scenario: 'A patient with urinary retention receives treatment in the lower anterior midline without an updated bladder-status check. New pelvic pain and visible blood in the urine occur afterward.',
+      scenario: 'A patient with urinary retention receives treatment near REN-3 and REN-4 without an updated bladder-status check. New pelvic pain and visible blood in the urine occur afterward.',
       error: 'The fixed point location was considered without the changing organ state. A distended bladder can rise above the pubic symphysis and alter lower-abdominal relationships.',
       consequence: 'New pelvic pain or hematuria after treatment requires prompt medical assessment for possible urinary-tract or bladder injury and other causes. The event must be documented without assuming a diagnosis beyond the evidence.',
       prevention: 'Screen urinary symptoms and bladder status, recognize when organ distension changes anatomy, verify the complete current point reference, and refer or escalate when findings exceed the practitioner’s scope.',
@@ -47,9 +47,9 @@
     },
     {
       number: 5,
-      title: 'Suboccipital neural risk was underestimated',
+      title: 'DU-15 / DU-16 central neural risk was underestimated',
       tag: 'Foramen magnum · central neural anatomy · emergency',
-      scenario: 'During treatment in the lower occipital region, a patient develops sudden loss of consciousness, respiratory difficulty or new neurological findings.',
+      scenario: 'During treatment in the DU-15 / DU-16 region, a patient develops sudden loss of consciousness, respiratory difficulty or new neurological findings.',
       error: 'The practitioner failed to recognize the relationship of the region to the foramen magnum, medulla and upper spinal canal, or continued despite an acute neurological or respiratory warning sign.',
       consequence: 'Loss of consciousness, respiratory compromise or an acute neurological deficit is a medical emergency. These findings require immediate activation of the clinic emergency plan and emergency medical services.',
       prevention: 'Treat the suboccipital region as critical central neural anatomy, use only complete current guidance and formal supervised training, and rehearse emergency activation, documentation and transfer procedures.',
@@ -61,18 +61,27 @@
   section.className = 'ce-case-lab';
   section.id = 'ce-safety-scenarios-content';
   section.innerHTML = `
-    <header class="section-heading"><div><span class="eyebrow">CONTINUING EDUCATION · CASE APPLICATION LAB</span><h2>Analyze five safety breakdowns with SAFER</h2><p>Work through each scenario before opening its model analysis. Focus on screening, risk classification, warning signs, source limits, escalation and documentation.</p></div><span class="score-pill" id="ce-case-progress">0 / ${cases.length} analyzed</span></header>
+    <header class="section-heading"><div><span class="eyebrow">CONTINUING EDUCATION · PROFESSIONAL PRACTICE CASE LAB</span><h2>Analyze five safety breakdowns with SAFER</h2><p>Apply the same four-part analysis to every case, then complete your own SAFER note before opening the model response.</p></div><span class="score-pill" id="ce-case-progress">0 / ${cases.length} analyzed</span></header>
     <aside class="case-disclaimer"><b>Fictional composite scenarios</b><span>These cases illustrate common safety-failure patterns. They are not verified reports, legal opinions or proof that a named intervention caused an outcome. Legal duties and clinical protocols vary by jurisdiction and current standard.</span></aside>
+    <section class="case-analysis-framework" aria-labelledby="case-analysis-framework-title">
+      <h3 id="case-analysis-framework-title">Required case-analysis sequence</h3>
+      <ol>
+        <li><b>Case</b><span>Identify the patient context, point or region, timing and warning cues.</span></li>
+        <li><b>Anatomical / clinical error</b><span>Name the missed screen, vulnerable structure or broken safety rule.</span></li>
+        <li><b>Medical / professional impact</b><span>Recognize urgency, document facts and avoid claiming causation beyond the evidence.</span></li>
+        <li><b>Required prevention / response</b><span>State the current protocol, escalation and documentation step within scope.</span></li>
+      </ol>
+    </section>
     <div class="ce-case-list">
       ${cases.map(item => `
         <details class="ce-case" data-case="${item.number}">
           <summary><span>Case ${item.number}</span><strong>${item.title}</strong><small>${item.tag}</small></summary>
           <div class="ce-case-body">
             <div class="ce-case-grid">
-              <article><span>1 · COMPOSITE SCENARIO</span><p>${item.scenario}</p></article>
-              <article><span>2 · MISSED SAFEGUARD</span><p>${item.error}</p></article>
-              <article><span>3 · POTENTIAL IMPACT</span><p>${item.consequence}</p></article>
-              <article><span>4 · PREVENTION / RESPONSE</span><p>${item.prevention}</p></article>
+              <article><span>1 · CASE</span><p>${item.scenario}</p></article>
+              <article><span>2 · ANATOMICAL / CLINICAL ERROR</span><p>${item.error}</p></article>
+              <article><span>3 · MEDICAL / PROFESSIONAL IMPACT</span><p>${item.consequence}</p></article>
+              <article><span>4 · REQUIRED PREVENTION / RESPONSE</span><p>${item.prevention}</p></article>
             </div>
             <fieldset class="case-workbook"><legend>Your SAFER analysis</legend><div class="case-workbook-grid"><label><span>Risk family and vulnerable structure/context</span><textarea rows="2" data-field="risk" placeholder="Name the category and the specific anatomy or patient factor."></textarea></label><label><span>Most important warning sign or missed screen</span><textarea rows="2" data-field="warning" placeholder="Identify the cue that should change the decision."></textarea></label><label><span>Safe next action within scope</span><textarea rows="2" data-field="action" placeholder="State the escalation, source check or documentation step."></textarea></label><label><span>Why the closest alternative explanation is weaker</span><textarea rows="2" data-field="alternative" placeholder="Explain the evidence and its limits."></textarea></label></div><label class="case-complete"><input type="checkbox" data-field="complete"><span>I completed and checked this case analysis.</span></label><p class="case-save-status" role="status">Responses save automatically in this browser.</p></fieldset>
             <details class="model-analysis"><summary>Compare with the model SAFER analysis</summary><p>${item.model}</p></details>
