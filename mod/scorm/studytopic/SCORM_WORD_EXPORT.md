@@ -104,6 +104,9 @@ secure in-Moodle preview of their questions, answers, feedback, and images; the
 original Word download remains available from the preview. On generated Book
 and preview pages, the old course-index drawer is hidden so the native Book
 table of contents is the only side navigation.
+The document preview keeps that Book table of contents visible and provides
+sticky `Book Index`, `Back to Exam List`, `Previous Exam`, and `Next Exam`
+controls for long documents.
 
 Run the validation first:
 

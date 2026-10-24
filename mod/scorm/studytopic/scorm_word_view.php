@@ -15,6 +15,7 @@
  */
 
 require(__DIR__ . '/../../../config.php');
+require_once($CFG->dirroot . '/mod/book/locallib.php');
 
 const SCORM_WORD_MAX_DOCX_BYTES = 32 * 1024 * 1024;
 const SCORM_WORD_MAX_XML_BYTES = 16 * 1024 * 1024;
@@ -244,14 +245,91 @@ if ($file->get_filesize() > SCORM_WORD_MAX_DOCX_BYTES) {
 }
 
 $returnurl = new moodle_url('/mod/folder/view.php', ['id' => $cm->id]);
+$indexurl = null;
+$bookcm = null;
+$book = null;
+$bookcontext = null;
+$bookchapters = [];
+$bookchapter = null;
 if ($bookcmid && $chapterid) {
-    $bookcm = get_coursemodule_from_id('book', $bookcmid, $course->id, false, IGNORE_MISSING);
-    if ($bookcm) {
+    $candidatecm = get_coursemodule_from_id('book', $bookcmid, $course->id, false, IGNORE_MISSING);
+    if ($candidatecm) {
+        $candidatebook = $DB->get_record('book', ['id' => $candidatecm->instance]);
+        $candidatecontext = context_module::instance($candidatecm->id);
+        if ($candidatebook &&
+                str_contains((string)$candidatebook->intro, 'data-scorm-word-book') &&
+                has_capability('mod/book:read', $candidatecontext)) {
+            $candidatechapters = book_preload_chapters($candidatebook);
+            $candidatechapter = $candidatechapters[$chapterid] ?? null;
+        } else {
+            $candidatechapter = null;
+        }
+    } else {
+        $candidatechapter = null;
+    }
+
+    if ($candidatechapter && !$candidatechapter->hidden) {
+        $bookcm = $candidatecm;
+        $book = $candidatebook;
+        $bookcontext = $candidatecontext;
+        $bookchapters = $candidatechapters;
+        $bookchapter = $candidatechapter;
         $returnurl = new moodle_url('/mod/book/view.php', [
             'id' => $bookcmid,
             'chapterid' => $chapterid,
         ]);
+        foreach ($bookchapters as $candidateindex) {
+            if (!$candidateindex->hidden) {
+                $indexurl = new moodle_url('/mod/book/view.php', [
+                    'id' => $bookcmid,
+                    'chapterid' => $candidateindex->id,
+                ]);
+                break;
+            }
+        }
     }
+}
+
+$previousurl = null;
+$nexturl = null;
+$topicfiles = get_file_storage()->get_directory_files(
+    $context->id,
+    'mod_folder',
+    'content',
+    0,
+    $file->get_filepath(),
+    false,
+    false,
+    'filename'
+);
+$topicfiles = array_values(array_filter(
+    $topicfiles,
+    static function(stored_file $topicfile): bool {
+        return strtolower(pathinfo($topicfile->get_filename(), PATHINFO_EXTENSION)) === 'docx';
+    }
+));
+foreach ($topicfiles as $position => $topicfile) {
+    if ((int)$topicfile->get_id() !== (int)$file->get_id()) {
+        continue;
+    }
+    $baseparams = [
+        'cmid' => $cmid,
+        'bookcmid' => $bookchapter ? $bookcmid : 0,
+        'chapterid' => $bookchapter ? $chapterid : 0,
+    ];
+    if ($position > 0) {
+        $previousurl = new moodle_url(
+            '/mod/scorm/studytopic/scorm_word_view.php',
+            ['fileid' => $topicfiles[$position - 1]->get_id()] + $baseparams
+        );
+    }
+    if ($position + 1 < count($topicfiles)) {
+        $nexturl = new moodle_url(
+            '/mod/scorm/studytopic/scorm_word_view.php',
+            ['fileid' => $topicfiles[$position + 1]->get_id()] + $baseparams
+        );
+    }
+    break;
 }
 
 $downloadurl = moodle_url::make_pluginfile_url(
@@ -269,13 +347,16 @@ $PAGE->set_url('/mod/scorm/studytopic/scorm_word_view.php', [
     'bookcmid' => $bookcmid,
     'chapterid' => $chapterid,
 ]);
-$PAGE->set_context($context);
-$PAGE->set_cm($cm, $course);
+$PAGE->set_context($bookcontext ?? $context);
+$PAGE->set_cm($bookcm ?? $cm, $course);
 $PAGE->set_title($file->get_filename());
 $PAGE->set_heading($course->fullname);
 $PAGE->add_body_class('limitedwidth');
 $PAGE->add_body_class('scorm-word-library');
 $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
+if ($bookchapter) {
+    book_add_fake_block($bookchapters, $bookchapter, $book, $bookcm, false);
+}
 
 $requestdirectory = make_request_directory();
 $temppath = $requestdirectory . DIRECTORY_SEPARATOR . 'preview.docx';
@@ -286,8 +367,19 @@ $content = scorm_word_document_html($temppath);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(s(pathinfo($file->get_filename(), PATHINFO_FILENAME)), 2);
-echo html_writer::start_div('d-flex flex-wrap gap-2 mb-4');
-echo html_writer::link($returnurl, get_string('back'), ['class' => 'btn btn-secondary']);
+echo html_writer::start_div('scorm-word-preview-toolbar d-flex flex-wrap gap-2 mb-4');
+if ($indexurl) {
+    echo html_writer::link($indexurl, 'Book Index', ['class' => 'btn btn-secondary']);
+    echo html_writer::link($returnurl, 'Back to Exam List', ['class' => 'btn btn-secondary']);
+} else {
+    echo html_writer::link($returnurl, get_string('back'), ['class' => 'btn btn-secondary']);
+}
+if ($previousurl) {
+    echo html_writer::link($previousurl, 'Previous Exam', ['class' => 'btn btn-outline-primary']);
+}
+if ($nexturl) {
+    echo html_writer::link($nexturl, 'Next Exam', ['class' => 'btn btn-outline-primary']);
+}
 echo html_writer::link($downloadurl, 'Download Word', ['class' => 'btn btn-primary']);
 echo html_writer::end_div();
 echo html_writer::div($content, 'card card-body scorm-word-preview');
