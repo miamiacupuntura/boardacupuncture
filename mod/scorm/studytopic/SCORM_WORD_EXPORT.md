@@ -31,6 +31,9 @@ formula-herb-word-export/
 ├── Formulas/
 │   ├── manifest.csv
 │   ├── manifest.json
+│   ├── matching-study-guide-index.html
+│   ├── matching-study-guide-index.csv
+│   ├── matching-study-guide-index.json
 │   ├── errors.json
 │   └── ... true .docx files grouped by course and section
 ├── Herbs/
@@ -45,10 +48,26 @@ Each Word document includes the question wording, available images, answer
 choices or matches, the correct answer, question notes, and source feedback.
 Legacy click-map questions include the source image and correct hotspot data.
 
-Each document uses the standard study-book layout: branded cover, contents
-page, chapters of up to ten questions, running header, page numbers, readable
-question typography, shaded options, green correct-answer boxes, orange note
-boxes, and structured Mock-style feedback. Combined legacy feedback is divided
+Documents that contain Matching study cards now open with a concise `Matching
+Study Guide Index`. It reports the number of Matching questions, groups them by
+the source category of the first herb, and uses the short parenthetical names
+for readable entries such as `(gao liang jiang) vs. (sheng jiang)`. The former
+branded cover, instructor metadata, generic Contents/Chapter pages, and generic
+`Question / Matching` labels are omitted from this view. The actual comparison
+title leads directly into the study card. Other documents also omit the former
+administrative cover and chapter contents.
+
+Every category export also creates `matching-study-guide-index.html`, `.csv`,
+and `.json`. The browser index reports total Matching occurrences, unique
+comparisons, and first-herb categories. Repeated comparisons from category and
+simulation modules are combined under one readable title with an occurrence
+count, while CSV/JSON preserve every source exam and question number for later
+deduplication work. These totals are included in `export-summary.json` and the
+CLI completion message.
+
+Each document uses readable question typography, shaded options, green
+correct-answer boxes, orange note boxes, running headers, page numbers, and
+structured Mock-style feedback. Combined legacy feedback is divided
 into `Why the correct answer is correct` and a separate explanation for every
 incorrect option. This layout is generated automatically and must not be
 recreated manually in individual files.
@@ -88,11 +107,19 @@ two-item comparisons, the tips use the same side-by-side columns as the answer
 key: shared clues span both columns and item-specific symptoms align in one
 comparison row. The shared-clue row uses an amber background and bold accent
 text so the common feature is immediately distinguishable from the contrasts.
-Two-item Matching comparisons also include a compact purple `Exam strategy`
-card derived from the source categories and clue lists. It explains why the
-distinction matters, identifies overlapping findings that can cause confusion,
-shows how each side could become an exam vignette, and lists related question
-patterns without inventing new answer-key facts.
+Two-item Matching comparisons also include a compact purple `Study guide ·
+Exam focus` card derived from the source categories and clue lists. It appears
+after the comparative answer key and explains why the distinction matters,
+identifies overlapping findings that can cause confusion, and shows how each
+side could become an exam vignette without inventing new answer-key facts. A
+final row explains why reversing the two groups is incorrect. When this complete
+card is available, duplicated legacy Matching feedback is suppressed so the
+same categories and associations are not printed a second time. The Study Guide
+card begins on a dedicated page so none of its four explanation rows is orphaned
+by pagination.
+Related-question surveys, progress scoring, and student checklists are deferred
+to a later reporting phase so the current work can prioritize Study Guide card
+quality and source accuracy.
 
 ## Validate before publishing
 

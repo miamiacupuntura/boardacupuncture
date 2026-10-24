@@ -192,8 +192,9 @@ def image_dimensions(data: bytes, extension: str) -> tuple[int, int]:
 class DocxBuilder:
     """Small OOXML writer with no third-party dependencies."""
 
-    def __init__(self, title: str):
+    def __init__(self, title: str, *, study_guide: bool = False):
         self.title = title
+        self.study_guide = study_guide
         self.body: list[str] = []
         self.media: list[tuple[str, bytes, str]] = []
         self.image_relationships: list[tuple[str, str]] = []
@@ -528,17 +529,18 @@ class DocxBuilder:
  <dcterms:created xsi:type="dcterms:W3CDTF">{timestamp}</dcterms:created>
  <dcterms:modified xsi:type="dcterms:W3CDTF">{timestamp}</dcterms:modified>
 </cp:coreProperties>'''
-        shorttitle = xml_escape(self.title[:90])
+        shorttitle = "" if self.study_guide else xml_escape(self.title[:90])
         header = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
  <w:p><w:pPr><w:jc w:val="right"/><w:spacing w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="12" w:space="6" w:color="F47E2C"/></w:pBdr></w:pPr>
   <w:r><w:rPr><w:b/><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t>{shorttitle}</w:t></w:r>
  </w:p>
 </w:hdr>'''
-        footer = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        footerbrand = "" if self.study_guide else "AcupunctureTests  •  "
+        footer = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
  <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80"/><w:pBdr><w:top w:val="single" w:sz="8" w:space="6" w:color="D8E2E8"/></w:pBdr></w:pPr>
-  <w:r><w:rPr><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t xml:space="preserve">AcupunctureTests  •  Page </w:t></w:r>
+  <w:r><w:rPr><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t xml:space="preserve">{footerbrand}Page </w:t></w:r>
   <w:fldSimple w:instr=" PAGE "><w:r><w:rPr><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple>
  </w:p>
 </w:ftr>'''
@@ -822,6 +824,47 @@ def matching_pair_details(question: dict[str, Any]) -> list[tuple[str, str, str,
     return details
 
 
+def matching_index_name(value: str) -> str:
+    """Prefer the concise parenthetical herb name in the Matching index."""
+    name = normalise_text(value)
+    parenthetical = [item.strip() for item in re.findall(r"\(([^()]+)\)", name) if item.strip()]
+    if parenthetical:
+        return f"({parenthetical[-1]})"
+    return name or "[unnamed item]"
+
+
+def matching_index_entries(questions: list[Any]) -> list[dict[str, Any]]:
+    """List Matching questions, sorted by the first item's source category."""
+    entries = []
+    for number, question in enumerate(questions, start=1):
+        if not isinstance(question, dict) or question.get("__type") != "MatchingQuestion":
+            continue
+        details = matching_pair_details(question)
+        names = [matching_index_name(detail[0]) for detail in details]
+        if not names:
+            prompt, _tips = matching_prompt_and_tips(question.get("QuestionText", ""))
+            names = [prompt or "[unnamed Matching question]"]
+        separator = " vs. " if len(names) == 2 else " · "
+        firstcategory = details[0][1] if details else "Uncategorized"
+        if firstcategory == "the category shown in the keyed match":
+            firstcategory = "Uncategorized"
+        entries.append(
+            {
+                "question": number,
+                "first_item_category": firstcategory,
+                "comparison": separator.join(names),
+            }
+        )
+    entries.sort(
+        key=lambda item: (
+            str(item["first_item_category"]).casefold(),
+            str(item["comparison"]).casefold(),
+            int(item["question"]),
+        )
+    )
+    return entries
+
+
 def matching_card_rows(lefttext: str, righttext: str) -> list[tuple[str, str]]:
     """Turn a potentially multiline matching pair into compact labelled rows."""
     leftlines = [line.strip() for line in lefttext.splitlines() if line.strip()]
@@ -986,17 +1029,16 @@ def matching_exam_strategy(
         f"A second vignette emphasizing {secondunique} could point to {names[1]}. The same "
         "distinction may also appear as a category or formula-association question."
     )
-    related = (
-        f"• Which category belongs to {names[0]} and which belongs to {names[1]}?\n"
-        "• Which findings are shared and therefore least useful for distinguishing them?\n"
-        "• Which symptom cluster most strongly favors each item?\n"
-        "• Which formula associations belong in each comparison column?"
+    switched = (
+        f"Reversing the match would attach the {categories[0]} associations to {names[1]} "
+        f"and the {categories[1]} associations to {names[0]}. That changes the source "
+        "classification and makes the pairing incorrect."
     )
     return [
         ("Why it matters", why),
         ("Common confusion", confusion),
         ("How it may appear", examformat),
-        ("Related questions", related),
+        ("Why a switched match is wrong", switched),
     ]
 
 
@@ -1366,6 +1408,10 @@ def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
 
     feedbacktexts = [normalise_text(value) for value in feedback if normalise_text(value)]
     if len(feedbacktexts) >= 2 and len(set(feedbacktexts)) == 1:
+        if str(question.get("__type") or "") == "MatchingQuestion":
+            _prompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
+            if matching_exam_strategy(question, studytips):
+                return
         add_duplicate_source_feedback(builder, question, feedbacktexts[0])
         return
 
@@ -1437,24 +1483,12 @@ def add_question(
     images: PackageImages,
 ) -> None:
     qtype = str(question.get("__type") or "Unknown")
-    builder.add_paragraph(f"Question {number}", style="Heading2", space_after=70)
-    builder.add_paragraph(
-        question_type_label(qtype),
-        italic=True,
-        color="527286",
-        size=18,
-        left_indent=180,
-        space_after=70,
-        keep_next=True,
-    )
+    matchingstrategy: list[tuple[str, str]] = []
     if qtype == "MatchingQuestion":
         questionprompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
         builder.add_paragraph(
             questionprompt,
-            bold=True,
-            size=22,
-            left_indent=180,
-            right_indent=120,
+            style="Heading1",
             space_after=120,
             keep_lines=True,
         )
@@ -1474,14 +1508,18 @@ def add_question(
                     studytips,
                     header_fill="527286",
                 )
-            examstrategy = matching_exam_strategy(question, studytips)
-            if examstrategy:
-                builder.add_key_value_card(
-                    "Exam strategy · Why this distinction matters",
-                    examstrategy,
-                    header_fill="6B4BA1",
-                )
+            matchingstrategy = matching_exam_strategy(question, studytips)
     else:
+        builder.add_paragraph(f"Question {number}", style="Heading2", space_after=70)
+        builder.add_paragraph(
+            question_type_label(qtype),
+            italic=True,
+            color="527286",
+            size=18,
+            left_indent=180,
+            space_after=70,
+            keep_next=True,
+        )
         builder.add_paragraph(
             question.get("QuestionText", ""),
             bold=True,
@@ -1517,6 +1555,13 @@ def add_question(
                         right.get(itemid, "[missing match]"),
                     ),
                 )
+        if matchingstrategy:
+            builder.add_page_break()
+            builder.add_key_value_card(
+                "Study guide · Exam focus",
+                matchingstrategy,
+                header_fill="6B4BA1",
+            )
     elif qtype == "MultipleResponseQuestion":
         answers = question.get("Answers") or []
         builder.add_paragraph("Options", bold=True, color="17324D", keep_next=True)
@@ -1612,10 +1657,62 @@ def book_chapters(question_count: int, chapter_size: int = 10) -> list[tuple[int
     return chapters
 
 
+def add_matching_document_index(
+    builder: DocxBuilder,
+    entries: list[dict[str, Any]],
+) -> None:
+    """Add a concise, category-first index for Matching study cards."""
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for entry in entries:
+        grouped[str(entry["first_item_category"])].append(entry)
+
+    builder.add_paragraph("Matching Study Guide Index", style="Title", space_after=120)
+    builder.add_paragraph(
+        f"{len(entries)} Matching question{'s' if len(entries) != 1 else ''} · "
+        f"{len(grouped)} categor{'ies' if len(grouped) != 1 else 'y'}",
+        color="527286",
+        size=22,
+        space_after=180,
+    )
+    builder.add_paragraph(
+        "Comparisons are grouped and sorted by the category of the first herb.",
+        italic=True,
+        color="31586B",
+        fill="E8F3F5",
+        border_color="F47E2C",
+        left_indent=180,
+        right_indent=120,
+        space_after=180,
+        keep_lines=True,
+    )
+    for category, categoryentries in grouped.items():
+        builder.add_paragraph(
+            f"{category} ({len(categoryentries)})",
+            style="Heading2",
+            color="17324D",
+            space_before=120,
+            space_after=70,
+            keep_next=True,
+        )
+        for entry in categoryentries:
+            builder.add_paragraph(
+                str(entry["comparison"]),
+                bold=True,
+                color="8A3F0A",
+                fill="FFF6E8",
+                border_color="F47E2C",
+                left_indent=180,
+                right_indent=120,
+                space_after=70,
+                keep_lines=True,
+            )
+
+
 def build_document(
     package_path: Path,
     destination: Path,
     placement: dict[str, Any],
+    report: dict[str, Any] | None = None,
 ) -> int:
     with zipfile.ZipFile(package_path, "r") as package:
         member = find_quizdata_member(package)
@@ -1629,86 +1726,25 @@ def build_document(
         if not isinstance(questions, list):
             raise ValueError("QUIZDATA.json has no Questions array")
         annotate_related_answer_targets(questions)
+        matchingindex = matching_index_entries(questions)
+        if report is not None:
+            report["matching_questions"] = len(matchingindex)
+            report["matching_index"] = matchingindex
 
         title = str(placement.get("scormname") or "SCORM Exam")
-        builder = DocxBuilder(title)
-        builder.add_paragraph("", space_after=420)
-        builder.add_paragraph(
-            "ACUPUNCTURETESTS",
-            style="BookBrand",
-            alignment="center",
-            space_after=260,
-        )
-        builder.add_paragraph(
-            title,
-            style="Title",
-            alignment="center",
-            space_before=180,
-            space_after=220,
-            keep_lines=True,
-        )
-        builder.add_paragraph(
-            "Exam Review Book · Instructor Edition",
-            style="BookSubtitle",
-            alignment="center",
-            color="527286",
-            size=26,
-            space_after=420,
-        )
-        builder.add_paragraph(
-            f"Course: {placement.get('coursename', '')}\n"
-            f"Section: {placement.get('sectionname') or 'Unlabelled section'}\n"
-            f"Questions: {len(questions)}\n"
-            f"Source CMID: {placement.get('cmid', '')}",
-            color="31586B",
-            fill="E8F3F5",
-            border_color="F47E2C",
-            left_indent=720,
-            right_indent=720,
-            space_before=120,
-            space_after=220,
-            keep_lines=True,
-        )
-        builder.add_paragraph(
-            "Answer key and source feedback are included for instructor review.",
-            italic=True,
-            color="8A3F0A",
-            alignment="center",
-            space_after=240,
-        )
-
-        chapters = book_chapters(len(questions))
-        builder.add_page_break()
-        builder.add_paragraph("Contents", style="Heading1", space_after=180)
-        builder.add_paragraph(
-            "This study book is arranged in groups of up to ten questions for easier reading and review.",
-            color="527286",
-            space_after=180,
-        )
-        for chapter, start, end in chapters:
-            builder.add_paragraph(
-                f"Chapter {chapter}  ·  Questions {start}–{end}",
-                bold=True,
-                color="17324D",
-                fill="F7F9FB",
-                border_color="F47E2C",
-                left_indent=180,
-                right_indent=120,
-                space_after=80,
-                keep_lines=True,
-            )
+        builder = DocxBuilder(title, study_guide=bool(matchingindex))
+        if matchingindex:
+            add_matching_document_index(builder, matchingindex)
+            builder.add_page_break()
+        else:
+            builder.add_paragraph(title, style="Title", space_after=180)
 
         images = PackageImages(package)
         for number, question in enumerate(questions, start=1):
-            if (number - 1) % 10 == 0:
+            if matchingindex and number > 1:
                 builder.add_page_break()
-                chapter = ((number - 1) // 10) + 1
-                end = min(number + 9, len(questions))
-                builder.add_paragraph(
-                    f"Chapter {chapter} · Questions {number}–{end}",
-                    style="Heading1",
-                    space_after=220,
-                )
+            elif not matchingindex and number > 1 and (number - 1) % 10 == 0:
+                builder.add_page_break()
             if isinstance(question, dict):
                 add_question(builder, question, number, images)
             else:
@@ -1788,6 +1824,140 @@ def write_zip(source: Path, destination: Path) -> None:
                 archive.write(path, path.relative_to(source.parent))
 
 
+def matching_library_groups(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Group repeated Matching comparisons by the first herb's category."""
+    categories: dict[str, dict[str, list[dict[str, Any]]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    categorylabels: dict[str, str] = {}
+    comparisonlabels: dict[tuple[str, str], str] = {}
+    for row in rows:
+        category = str(row["first_item_category"])
+        comparison = str(row["comparison"])
+        categorykey = category.casefold()
+        comparisonkey = comparison.casefold()
+        categorylabels.setdefault(categorykey, category)
+        comparisonlabels.setdefault((categorykey, comparisonkey), comparison)
+        categories[categorykey][comparisonkey].append(row)
+
+    groups = []
+    for categorykey in sorted(categories, key=lambda key: categorylabels[key].casefold()):
+        comparisons = []
+        for comparisonkey in sorted(
+            categories[categorykey],
+            key=lambda key: comparisonlabels[(categorykey, key)].casefold(),
+        ):
+            sources = sorted(
+                categories[categorykey][comparisonkey],
+                key=lambda item: (
+                    str(item["course"]).casefold(),
+                    str(item["section"]).casefold(),
+                    str(item["exam"]).casefold(),
+                    int(item["question"]),
+                ),
+            )
+            comparisons.append(
+                {
+                    "comparison": comparisonlabels[(categorykey, comparisonkey)],
+                    "occurrences": len(sources),
+                    "sources": sources,
+                }
+            )
+        groups.append(
+            {
+                "first_item_category": categorylabels[categorykey],
+                "matching_questions": sum(item["occurrences"] for item in comparisons),
+                "unique_comparisons": len(comparisons),
+                "comparisons": comparisons,
+            }
+        )
+    return groups
+
+
+def write_matching_library_index(category_root: Path, rows: list[dict[str, Any]]) -> dict[str, int]:
+    """Write machine-readable and browser-readable Matching indexes."""
+    rows.sort(
+        key=lambda item: (
+            str(item["first_item_category"]).casefold(),
+            str(item["comparison"]).casefold(),
+            str(item["course"]).casefold(),
+            str(item["section"]).casefold(),
+            str(item["exam"]).casefold(),
+            int(item["question"]),
+        )
+    )
+    groups = matching_library_groups(rows)
+    uniquecomparisons = sum(group["unique_comparisons"] for group in groups)
+    indexdata = {
+        "matching_questions": len(rows),
+        "unique_comparisons": uniquecomparisons,
+        "categories": groups,
+    }
+    (category_root / "matching-study-guide-index.json").write_text(
+        json.dumps(indexdata, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    with (category_root / "matching-study-guide-index.csv").open(
+        "w", encoding="utf-8-sig", newline=""
+    ) as handle:
+        fields = [
+            "first_item_category",
+            "comparison",
+            "course",
+            "section",
+            "exam",
+            "question",
+            "docx",
+        ]
+        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+
+    sections = []
+    for group in groups:
+        comparisons = []
+        for comparison in group["comparisons"]:
+            count = comparison["occurrences"]
+            badge = f"<span>{count} occurrence{'s' if count != 1 else ''}</span>"
+            comparisons.append(
+                "<li><strong>"
+                + html.escape(comparison["comparison"])
+                + "</strong>"
+                + badge
+                + "</li>"
+            )
+        sections.append(
+            "<section><h2>"
+            + html.escape(group["first_item_category"])
+            + f" <small>{group['matching_questions']} questions · "
+            + f"{group['unique_comparisons']} unique comparisons</small></h2>"
+            + "<ul>"
+            + "".join(comparisons)
+            + "</ul></section>"
+        )
+    htmlpage = f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Matching Study Guide Index</title><style>
+body{{font-family:Arial,sans-serif;max-width:1000px;margin:2rem auto;padding:0 1rem;color:#17324d}}
+h1{{border-bottom:4px solid #f47e2c;padding-bottom:.5rem}}h2{{margin-top:2rem;background:#e8f3f5;padding:.75rem}}
+small{{font-size:.65em;color:#527286}}ul{{list-style:none;padding:0}}li{{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid #d7e2e8;padding:.7rem}}
+li span{{white-space:nowrap;color:#8a3f0a}}.summary{{background:#fff6e8;border-left:5px solid #f47e2c;padding:1rem}}
+</style></head><body><h1>Matching Study Guide Index</h1>
+<p class="summary"><strong>{len(rows)}</strong> Matching questions · <strong>{uniquecomparisons}</strong> unique comparisons · <strong>{len(groups)}</strong> first-herb categories</p>
+<p>Comparisons are grouped and sorted by the category of the first herb.</p>{''.join(sections)}</body></html>
+"""
+    (category_root / "matching-study-guide-index.html").write_text(
+        htmlpage,
+        encoding="utf-8",
+    )
+    return {
+        "matching_questions": len(rows),
+        "unique_matching_comparisons": uniquecomparisons,
+        "matching_categories": len(groups),
+    }
+
+
 def export_category(
     category: str,
     records: list[dict[str, Any]],
@@ -1799,6 +1969,7 @@ def export_category(
     category_root = root / category
     category_root.mkdir(parents=True, exist_ok=True)
     manifest_rows: list[dict[str, Any]] = []
+    matching_rows: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
     used: set[Path] = set()
 
@@ -1821,7 +1992,21 @@ def export_category(
         try:
             if not source.is_file():
                 raise FileNotFoundError(f"Moodle file-pool object not found: {source}")
-            row["questions"] = build_document(source, destination, primary)
+            buildreport: dict[str, Any] = {}
+            row["questions"] = build_document(source, destination, primary, buildreport)
+            row["matching_questions"] = buildreport.get("matching_questions", 0)
+            for matchingentry in buildreport.get("matching_index", []):
+                matching_rows.append(
+                    {
+                        "first_item_category": matchingentry["first_item_category"],
+                        "comparison": matchingentry["comparison"],
+                        "course": primary.get("coursename"),
+                        "section": primary.get("sectionname"),
+                        "exam": primary.get("scormname"),
+                        "question": matchingentry["question"],
+                        "docx": str(destination.relative_to(root)),
+                    }
+                )
             manifest_rows.append(row)
         except Exception as exc:  # Continue so one damaged legacy package does not lose the rest.
             row["error"] = f"{type(exc).__name__}: {exc}"
@@ -1841,6 +2026,7 @@ def export_category(
             "package",
             "contenthash",
             "questions",
+            "matching_questions",
             "docx",
         ]
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
@@ -1855,13 +2041,18 @@ def export_category(
         json.dumps(errors, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    matchingstats = write_matching_library_index(category_root, matching_rows)
     (category_root / "README.txt").write_text(
         "AcupunctureTests SCORM Word Export\n"
         f"Category: {category}\n"
         f"Unique packages discovered: {len(grouped)}\n"
         f"DOCX files generated: {len(manifest_rows)}\n"
+        f"Matching questions: {matchingstats['matching_questions']}\n"
+        f"Unique Matching comparisons: {matchingstats['unique_matching_comparisons']}\n"
+        f"First-herb categories: {matchingstats['matching_categories']}\n"
         f"Packages with errors: {len(errors)}\n\n"
         "Each document includes the source questions, answer key, and available feedback.\n"
+        "Open matching-study-guide-index.html for the category-first Matching index.\n"
         "Duplicate Moodle activities that use the same package are represented once.\n",
         encoding="utf-8",
     )
@@ -1872,6 +2063,8 @@ def export_category(
         "courseids": courseids,
         "unique_packages": len(grouped),
         "documents": len(manifest_rows),
+        **matchingstats,
+        "matching_index": f"{category}/matching-study-guide-index.html",
         "errors": len(errors),
         "zip": zip_path.name,
     }
@@ -1951,6 +2144,8 @@ def main() -> int:
         final_zip = output / summary["zip"]
         print(
             f"{summary['category']}: {summary['documents']} DOCX, "
+            f"{summary['matching_questions']} Matching questions, "
+            f"{summary['unique_matching_comparisons']} unique comparisons, "
             f"{summary['errors']} errors, ZIP {final_zip}"
         )
     return 0

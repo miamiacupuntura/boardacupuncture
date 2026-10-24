@@ -72,7 +72,10 @@ class ScormWordExportTest(unittest.TestCase):
                 self.assertIn("word/document.xml", names)
                 self.assertIn("word/media/image1.png", names)
                 xml = archive.read("word/document.xml").decode("utf-8")
-                self.assertIn("Formula Mock Exam", xml)
+                self.assertIn("Matching Study Guide Index", xml)
+                self.assertNotIn("Exam Review Book", xml)
+                self.assertNotIn(">Contents</w:t>", xml)
+                self.assertNotIn(">Chapter 1", xml)
                 self.assertIn("Correct answer: Formula B", xml)
                 self.assertIn("Correct feedback", xml)
                 self.assertIn("Herb A", xml)
@@ -199,6 +202,32 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn("2 formula associations", xml)
         self.assertNotIn("Herb A → Function A", xml)
 
+    def test_complete_matching_study_guide_suppresses_duplicate_feedback(self) -> None:
+        question = {
+            "__type": "MatchingQuestion",
+            "QuestionText": (
+                "Comparison Herb A Vs. Herb B\n"
+                "Both herbs settle nausea.\n"
+                "Primary conditions or symptoms for which Herb A may be prescribed: "
+                "Pain. Vomiting.\n"
+                "Primary conditions or symptoms for which Herb B may be prescribed: "
+                "Coughing. Phlegm."
+            ),
+            "LeftColumn": [
+                {"Id": 1, "Content": "Herb A\nCategory: Warm herbs"},
+                {"Id": 2, "Content": "Herb B\nCategory: Cool herbs"},
+            ],
+            "RightColumn": [
+                {"Id": 1, "Content": "Formulas:\nFormula A"},
+                {"Id": 2, "Content": "Formulas:\nFormula B"},
+            ],
+            "Feedback": ["Duplicated source text", "Duplicated source text"],
+        }
+        builder = EXPORTER.DocxBuilder("Test")
+        EXPORTER.add_feedback(builder, question)
+
+        self.assertEqual([], builder.body)
+
     def test_matching_clues_are_separated_into_a_study_tip_card(self) -> None:
         prompt, tips = EXPORTER.matching_prompt_and_tips(
             "Comparison Herb A Vs. Herb B\n"
@@ -259,7 +288,66 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertEqual("Common confusion", strategy[1][0])
         self.assertIn("Pain", strategy[1][1])
         self.assertEqual("How it may appear", strategy[2][0])
-        self.assertEqual("Related questions", strategy[3][0])
+        self.assertEqual("Why a switched match is wrong", strategy[3][0])
+        self.assertIn("Cool herbs associations to Herb A", strategy[3][1])
+
+    def test_matching_index_prefers_parenthetical_names_and_first_category(self) -> None:
+        entries = EXPORTER.matching_index_entries(
+            [
+                {
+                    "__type": "MatchingQuestion",
+                    "QuestionText": "Comparison",
+                    "LeftColumn": [
+                        {
+                            "Id": 1,
+                            "Content": (
+                                "Alpiniae officinarum Rhizoma (gao liang jiang)\n"
+                                "Category: Herbs that Warm the Interior and Expel Cold."
+                            ),
+                        },
+                        {
+                            "Id": 2,
+                            "Content": "Zingiberis Rhizoma recens (sheng jiang)\nCategory: Exterior herbs.",
+                        },
+                    ],
+                    "RightColumn": [],
+                },
+                {"__type": "MultipleChoiceQuestion", "QuestionText": "Ignore me"},
+            ]
+        )
+
+        self.assertEqual(1, len(entries))
+        self.assertEqual("(gao liang jiang) vs. (sheng jiang)", entries[0]["comparison"])
+        self.assertEqual(
+            "Herbs that Warm the Interior and Expel Cold",
+            entries[0]["first_item_category"],
+        )
+
+    def test_matching_library_groups_count_repeated_comparisons(self) -> None:
+        rows = [
+            {
+                "first_item_category": "Warm Interior",
+                "comparison": "(gao liang jiang) vs. (sheng jiang)",
+                "course": "Course B",
+                "section": "Section",
+                "exam": "Exam 2",
+                "question": 2,
+            },
+            {
+                "first_item_category": "Warm Interior",
+                "comparison": "(gao liang jiang) vs. (sheng jiang)",
+                "course": "Course A",
+                "section": "Section",
+                "exam": "Exam 1",
+                "question": 1,
+            },
+        ]
+
+        groups = EXPORTER.matching_library_groups(rows)
+        self.assertEqual(1, len(groups))
+        self.assertEqual(2, groups[0]["matching_questions"])
+        self.assertEqual(1, groups[0]["unique_comparisons"])
+        self.assertEqual(2, groups[0]["comparisons"][0]["occurrences"])
 
     def test_two_matching_items_are_aligned_as_comparison_data(self) -> None:
         question = {
@@ -328,6 +416,8 @@ class ScormWordExportTest(unittest.TestCase):
             )
 
             self.assertEqual(1, summary["documents"])
+            self.assertEqual(0, summary["matching_questions"])
+            self.assertEqual(0, summary["unique_matching_comparisons"])
             self.assertEqual(0, summary["errors"])
             self.assertEqual("Herbs_Exams_Word.zip", summary["zip"])
             self.assertTrue((output / summary["zip"]).is_file())
@@ -335,7 +425,11 @@ class ScormWordExportTest(unittest.TestCase):
                 (output / "Herbs" / "manifest.json").read_text(encoding="utf-8")
             )
             self.assertEqual(1, manifest[0]["questions"])
+            self.assertEqual(0, manifest[0]["matching_questions"])
             self.assertTrue((output / manifest[0]["docx"]).is_file())
+            self.assertTrue(
+                (output / "Herbs" / "matching-study-guide-index.html").is_file()
+            )
 
 
 if __name__ == "__main__":
