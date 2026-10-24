@@ -180,6 +180,10 @@ foreach ($categories as $category) {
 if ($category->name == "ALL-IN-ONE") {
 	continue;
 }
+$normalizedcategoryname = core_text::strtolower(trim($category->name));
+if ($normalizedcategoryname === 'formulas' || $normalizedcategoryname === 'herbal formulas') {
+	continue;
+}
 $courses = $DB->get_records('course', ['category' => $category->id]);
 if (count($courses) == 0) {
 	continue;
