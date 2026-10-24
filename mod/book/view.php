@@ -107,6 +107,29 @@ if ($iswordlibrary) {
     $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
 }
 
+// A single generated clinical-case document does not need the normal Book
+// index/category steps. Keep the Book activity as the stable course entry and
+// send learners directly to its generated Word preview. Editing mode retains
+// the normal Book page so administrators can still manage the activity.
+if ($iswordlibrary && !$edit && $chapter &&
+        str_starts_with($book->name, 'Handbook of Oriental Medicine')) {
+    if (preg_match(
+        '~href="([^"]*/mod/scorm/studytopic/scorm_word_view\.php\?[^"]+)"~',
+        (string)$chapter->content,
+        $directmatch
+    )) {
+        $directtarget = html_entity_decode($directmatch[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $targetparts = parse_url($directtarget);
+        $siteparts = parse_url($CFG->wwwroot);
+        $samehost = empty($targetparts['host']) ||
+            (!empty($siteparts['host']) && $targetparts['host'] === $siteparts['host']);
+        if ($samehost && ($targetparts['path'] ?? '') ===
+                '/mod/scorm/studytopic/scorm_word_view.php') {
+            redirect($directtarget);
+        }
+    }
+}
+
 // No content in the book.
 if (!$chapterid) {
     $PAGE->set_url('/mod/book/view.php', array('id' => $id));

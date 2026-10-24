@@ -284,6 +284,7 @@ $book = null;
 $bookcontext = null;
 $bookchapters = [];
 $bookchapter = null;
+$isdirectclinicalbook = false;
 if ($bookcmid && $chapterid) {
     $candidatecm = get_coursemodule_from_id('book', $bookcmid, $course->id, false, IGNORE_MISSING);
     if ($candidatecm) {
@@ -307,6 +308,10 @@ if ($bookcmid && $chapterid) {
         $bookcontext = $candidatecontext;
         $bookchapters = $candidatechapters;
         $bookchapter = $candidatechapter;
+        $isdirectclinicalbook = str_starts_with(
+            (string)$candidatebook->name,
+            'Handbook of Oriental Medicine'
+        );
         $returnurl = new moodle_url('/mod/book/view.php', [
             'id' => $bookcmid,
             'chapterid' => $chapterid,
@@ -387,7 +392,7 @@ $PAGE->set_heading($course->fullname);
 $PAGE->add_body_class('limitedwidth');
 $PAGE->add_body_class('scorm-word-library');
 $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
-if ($bookchapter) {
+if ($bookchapter && !$isdirectclinicalbook) {
     scorm_word_add_book_toc($bookchapters, $bookchapter, $book, $bookcm);
 }
 
@@ -402,10 +407,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(s(pathinfo($file->get_filename(), PATHINFO_FILENAME)), 2);
 echo html_writer::start_div('scorm-word-preview-toolbar d-flex flex-wrap gap-2 mb-4');
 echo html_writer::link($examkeyurl, '← Back to Exam Key', ['class' => 'btn btn-secondary']);
-if ($indexurl) {
+if ($indexurl && !$isdirectclinicalbook) {
     echo html_writer::link($indexurl, 'Book Index', ['class' => 'btn btn-secondary']);
     echo html_writer::link($returnurl, 'Back to Exam List', ['class' => 'btn btn-secondary']);
-} else {
+} else if (!$isdirectclinicalbook) {
     echo html_writer::link($returnurl, get_string('back'), ['class' => 'btn btn-secondary']);
 }
 if ($previousurl) {
