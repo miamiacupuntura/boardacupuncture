@@ -23,6 +23,7 @@
       'objective-2': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9383',
       'objective-3': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9384',
       'objective-4': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9387',
+      'objective-5': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9380',
       'objective-6': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9381',
       'objective-7': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9390',
       'objective-8': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9391',
