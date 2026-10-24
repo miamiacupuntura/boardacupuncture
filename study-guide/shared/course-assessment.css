@@ -109,6 +109,12 @@
 .history-empty { margin: 14px 0; padding: 13px; border-radius: 8px; background: #fff; color: #587080; }
 .history-table { width: 100%; border-collapse: collapse; background: #fff; }
 .history-table th, .history-table td { padding: 10px; border: 1px solid var(--assessment-line); text-align: left; font-size: .88rem; }
+.history-table thead { background: #e8f3f4; }
+.history-table tbody th { min-width: 260px; font-weight: 750; }
+.history-action { min-width: 124px; text-align: center !important; }
+.history-exam-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 8px 12px; border-radius: 999px; background: #087f7b; color: #fff; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.history-exam-button:hover { background: #056864; color: #fff; text-decoration: none; }
+.history-exam-button:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
 .history-note { margin-top: 12px; padding: 12px 14px; border-left: 4px solid #087f7b; background: #edf8f7; }
 
 .assessment-directory { margin-top: 18px; }
@@ -138,6 +144,7 @@
   .assessment-directory-grid, .certificate-meta { grid-template-columns: 1fr; }
   .assessment-progress { width: 100%; margin-left: 0; }
   .history-table-wrap { overflow-x: auto; }
+  .history-table { min-width: 840px; }
 }
 
 @media print {

@@ -221,7 +221,22 @@
       const tr = document.createElement('tr');
       const latest = row.latest ? `${row.latest.correct}/${row.total} (${Math.round(row.latest.correct / row.total * 100)}%)` : '—';
       const best = row.best === null ? '—' : `${row.best}/${row.total}`;
-      [row.title, `${row.checked}/${row.total}`, latest, best].forEach(value => tr.append(el('td', '', value)));
+      const name = el('th', '', row.title);
+      name.scope = 'row';
+      tr.append(name);
+      [`${row.checked}/${row.total}`, latest, best].forEach(value => tr.append(el('td', '', value)));
+      const action = el('td', 'history-action');
+      const moodleUrl = row.bankId === 'continuing-education'
+        ? config.ceExamLink
+        : config.moodleMockLinks?.[row.bankId];
+      if (moodleUrl) {
+        const link = el('a', 'history-exam-button', row.latest ? `Retry Mock ${row.total}` : `Start Mock ${row.total}`);
+        link.href = moodleUrl;
+        action.append(link);
+      } else {
+        action.textContent = 'Not connected';
+      }
+      tr.append(action);
       tbody.append(tr);
     });
     host.querySelector('.history-empty').hidden = data.completed.length > 0 || data.inProgress > 0;
@@ -230,7 +245,7 @@
   function buildHistory() {
     const section = el('section', 'card exam-history');
     section.id = 'automatic-exam-history';
-    section.innerHTML = `<span class="eyebrow">AUTOMATIC EXAM HISTORY</span><h2>Your saved practice-exam results by objective</h2><p>Each checked answer is saved in this browser. Complete an exam to record its latest and best result.</p><div id="assessment-history-content"><div class="history-metrics"><article><strong data-metric="completed">—</strong><span>Objective exams completed</span></article><article><strong data-metric="average">—</strong><span>Completed-exam average</span></article><article><strong data-metric="progress">0</strong><span>Exams in progress</span></article><article><strong data-metric="weakest">—</strong><span>Lowest completed result</span></article></div><p class="history-empty">No practice-exam activity has been recorded yet.</p><div class="history-table-wrap"><table class="history-table"><thead><tr><th>Exam</th><th>Current attempt</th><th>Latest result</th><th>Best score</th></tr></thead><tbody></tbody></table></div><p class="history-note"><b>Saved automatically:</b> these practice results remain in this browser. Official Moodle examination attempts and scores remain in Moodle Exam History and are not transmitted to this page.</p></div>`;
+    section.innerHTML = `<span class="eyebrow">EXAM HISTORY</span><h2>Exam History — ${config.title}</h2><p>Use one table to open all 12 objective exams and the Continuing Education exam. Practice completed inside this guide is saved automatically in this browser.</p><div id="assessment-history-content"><div class="history-metrics"><article><strong data-metric="completed">—</strong><span>Objective exams completed</span></article><article><strong data-metric="average">—</strong><span>Completed-exam average</span></article><article><strong data-metric="progress">0</strong><span>Exams in progress</span></article><article><strong data-metric="weakest">—</strong><span>Lowest completed result</span></article></div><p class="history-empty">No local practice-exam activity has been recorded yet. You can start any Moodle Mock 10 from the table below.</p><div class="history-table-wrap" tabindex="0" aria-label="Exam History table — scroll horizontally on small screens"><table class="history-table"><thead><tr><th scope="col">Exam</th><th scope="col">Local progress</th><th scope="col">Latest local result</th><th scope="col">Best local score</th><th scope="col">Action</th></tr></thead><tbody></tbody></table></div><p class="history-note"><b>Two separate records:</b> the progress columns show only practice completed inside this guide. Official SCORM attempts, dates and scores remain in Moodle Exam History and are not transmitted to this page.</p></div>`;
     const directory = el('section', 'assessment-directory');
     directory.innerHTML = '<h3>Objective practice directory</h3><p>Use this directory after reading the objectives in order.</p>';
     const grid = el('div', 'assessment-directory-grid');
