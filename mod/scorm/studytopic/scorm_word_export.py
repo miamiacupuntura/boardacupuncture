@@ -244,24 +244,32 @@ class DocxBuilder:
 </wp:inline></w:drawing></w:r></w:p>"""
         self.body.append(drawing)
 
-    def add_key_value_card(self, title: str, rows: list[tuple[str, str]]) -> None:
+    def add_key_value_card(
+        self,
+        title: str,
+        rows: list[tuple[str, str]],
+        *,
+        header_fill: str = "F47E2C",
+    ) -> None:
         """Add a compact full-width card with aligned labels and values."""
         header = (
             '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
             '<w:tc><w:tcPr><w:gridSpan w:val="2"/><w:shd w:val="clear" '
-            'w:color="auto" w:fill="F47E2C"/></w:tcPr>'
+            f'w:color="auto" w:fill="{header_fill}"/></w:tcPr>'
             + paragraph_xml(
                 title,
                 bold=True,
                 color="FFFFFF",
                 size=22,
                 space_after=0,
+                keep_next=True,
                 keep_lines=True,
             )
             + '</w:tc></w:tr>'
         )
         bodyrows = []
-        for label, value in rows:
+        for rownumber, (label, value) in enumerate(rows):
+            keepwithnext = rownumber < len(rows) - 1
             bodyrows.append(
                 '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
                 '<w:tc><w:tcPr><w:tcW w:w="1900" w:type="dxa"/>'
@@ -272,6 +280,7 @@ class DocxBuilder:
                     bold=True,
                     color="17324D",
                     space_after=0,
+                    keep_next=keepwithnext,
                     keep_lines=True,
                 )
                 + '</w:tc>'
@@ -282,6 +291,7 @@ class DocxBuilder:
                     value,
                     color="203040",
                     space_after=0,
+                    keep_next=keepwithnext,
                     keep_lines=True,
                 )
                 + '</w:tc></w:tr>'
@@ -704,6 +714,34 @@ def matching_card_rows(lefttext: str, righttext: str) -> list[tuple[str, str]]:
         label += f" ({len(values)})"
     rows.append((label, "\n".join(f"• {value}" for value in values)))
     return rows
+
+
+def matching_prompt_and_tips(questiontext: Any) -> tuple[str, list[tuple[str, str]]]:
+    """Separate the Matching prompt from embedded clues intended as study tips."""
+    lines = [line.strip() for line in normalise_text(questiontext).splitlines() if line.strip()]
+    if not lines:
+        return "", []
+    prompt = lines[0]
+    tips = []
+    for line in lines[1:]:
+        primary = re.match(
+            r"Primary conditions or symptoms for which (.+?) may be prescribed:\s*(.*)",
+            line,
+            flags=re.IGNORECASE,
+        )
+        if primary:
+            itemname = primary.group(1).strip()
+            clues = [
+                clue.strip()
+                for clue in re.split(r"\.\s*", primary.group(2).strip())
+                if clue.strip()
+            ]
+            tips.append((itemname, "\n".join(f"• {clue}" for clue in clues)))
+        elif line.casefold().startswith("both "):
+            tips.append(("Shared clues", line))
+        else:
+            tips.append(("Helpful clue", line))
+    return prompt, tips
 
 
 def matching_feedback_summary(question: dict[str, Any], target: str) -> str:
@@ -1151,15 +1189,33 @@ def add_question(
         space_after=70,
         keep_next=True,
     )
-    builder.add_paragraph(
-        question.get("QuestionText", ""),
-        bold=True,
-        size=22,
-        left_indent=180,
-        right_indent=120,
-        space_after=150,
-        keep_lines=True,
-    )
+    if qtype == "MatchingQuestion":
+        questionprompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
+        builder.add_paragraph(
+            questionprompt,
+            bold=True,
+            size=22,
+            left_indent=180,
+            right_indent=120,
+            space_after=120,
+            keep_lines=True,
+        )
+        if studytips:
+            builder.add_key_value_card(
+                "Study tip · Clues to help answer",
+                studytips,
+                header_fill="527286",
+            )
+    else:
+        builder.add_paragraph(
+            question.get("QuestionText", ""),
+            bold=True,
+            size=22,
+            left_indent=180,
+            right_indent=120,
+            space_after=150,
+            keep_lines=True,
+        )
 
     question_images: list[Any] = []
     imageurl = question.get("ImageURL")

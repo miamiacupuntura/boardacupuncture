@@ -199,6 +199,24 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn("2 formula associations", xml)
         self.assertNotIn("Herb A → Function A", xml)
 
+    def test_matching_clues_are_separated_into_a_study_tip_card(self) -> None:
+        prompt, tips = EXPORTER.matching_prompt_and_tips(
+            "Comparison Herb A Vs. Herb B\n"
+            "Both herbs settle nausea.\n"
+            "Primary conditions or symptoms for which Herb A may be prescribed: "
+            "Pain. Vomiting.\n"
+            "Primary conditions or symptoms for which Herb B may be prescribed: "
+            "Coughing. Phlegm."
+        )
+
+        self.assertEqual("Comparison Herb A Vs. Herb B", prompt)
+        self.assertEqual("Shared clues", tips[0][0])
+        self.assertEqual("Both herbs settle nausea.", tips[0][1])
+        self.assertEqual("Herb A", tips[1][0])
+        self.assertEqual("• Pain\n• Vomiting", tips[1][1])
+        self.assertEqual("Herb B", tips[2][0])
+        self.assertEqual("• Coughing\n• Phlegm", tips[2][1])
+
     def test_safe_segment_removes_path_characters(self) -> None:
         self.assertEqual("Herbs - Final - Exam", EXPORTER.safe_segment("Herbs/Final:Exam", "Exam"))
 

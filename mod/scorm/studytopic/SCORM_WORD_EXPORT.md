@@ -79,6 +79,10 @@ with separate `Item` and `Correct match` fields so long multiline values do not
 run together around a single arrow. Its feedback then states each item's
 classification and the number/type of keyed associations, and explains that
 swapping those groups attaches the source relationships to the wrong item.
+When a Matching prompt contains shared actions or item-specific symptoms, the
+exporter separates those lines from the actual question and places them in a
+blue `Study tip · Clues to help answer` card. Shared clues and each item's clues
+receive their own labelled row and symptom lists are converted to bullets.
 
 ## Validate before publishing
 
