@@ -39,7 +39,9 @@ Use the shared assessment layer for new or standardized chapters:
 The chapter-specific `mock-data.js` is the only file that should need substantial content work. It defines:
 
 - `STUDY_GUIDE_ASSESSMENT_CONFIG`: stable course key, public title, certificate title and planning hours.
+- `moodleMockLinks`: the Moodle SCORM URL for every `objective-N`; use `ceExamLink` for the Continuing Education Mock 10.
 - `STUDY_GUIDE_ASSESSMENT_BANKS`: one 10-question bank for every `objective-N` section plus one `continuing-education` bank.
+- The visible objective-exam button must use the bank's complete title in the format **Exam Name (Mock 10)**, never the generic label “Open 10-question mock exam.” The shared template renders this button in orange.
 - Question names in the format `COURSE-O01-Q01` through `COURSE-O12-Q10`; use `COURSE-CE-Q01` through `COURSE-CE-Q10` for the CE assessment.
 - Each question as single-answer multiple choice with four options, a correct answer, general rationale and specific feedback for all three distractors.
 
