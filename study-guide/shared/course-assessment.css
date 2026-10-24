@@ -57,6 +57,9 @@
 .assessment-bank[open] > summary { border-bottom: 1px solid var(--assessment-line); }
 .assessment-body { padding: 18px; }
 .assessment-intro { margin: 0 0 14px; color: #486477; }
+.objective-actions a.objective-mock-button { background: #f77e25; color: #17232a; }
+.objective-actions a.objective-mock-button:hover { background: #df6814; color: #17232a; }
+.objective-actions a.objective-mock-button:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
 .assessment-tools { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0 18px; }
 .assessment-tools button,
 .assessment-question button,
