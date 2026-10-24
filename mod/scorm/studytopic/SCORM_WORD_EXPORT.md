@@ -242,17 +242,20 @@ The command creates:
 
 - `Formula Exam Key Library`
 - `Herb Exam Key Library`
-- `Clinical Cases Exam Key Library`
+- `Combination Exam Key Library`
 - `Simulation Exam Key Library`
+- `Herbology Mnemonic Resources`
 
 It never replaces or deletes an existing activity. Repeated execution safely
 refreshes Books previously created by this tool. Books created by the first
 version are upgraded in place with a main index; chapter and document links are
-preserved and regenerated from the source folders. The Handbook of Oriental
-Medicine clinical cases are promoted from the general Herb index into the
-standalone Clinical Cases library. Herbal Medicine simulations are likewise
-promoted into the standalone Simulation library. The source Word documents are
-not moved or deleted.
+preserved and regenerated from the source folders. The Formula-only review is
+placed in the Formula library, while the Single Herbs review remains in the
+Herb library. The one mixed Herbs-and-Formulas clinical collection is promoted
+to the standalone Combination library. Herbal Medicine simulations are likewise
+promoted into the standalone Simulation library, and the numbered-plate memory
+aids are promoted into Herbology Mnemonic Resources. The source Word documents
+are not moved or deleted.
 
 ## Custom course selection
 
