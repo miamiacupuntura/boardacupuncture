@@ -446,6 +446,109 @@ def add_correct_answer(builder: DocxBuilder, text: str) -> None:
     )
 
 
+def split_combined_feedback(
+    question: dict[str, Any],
+    text: str,
+) -> tuple[str, list[tuple[str, str, str]]] | None:
+    """Split legacy combined feedback into a rationale and per-option explanations."""
+    marker = "Why are the other options incorrect?"
+    if marker not in text:
+        return None
+
+    correct_feedback, incorrect_feedback = text.split(marker, 1)
+    correct_feedback = correct_feedback.strip()
+    incorrect_feedback = incorrect_feedback.strip()
+    answers = question.get("Answers") or []
+    rightanswer = answer_text(question.get("RightAnswer"))
+    positions = []
+    for index, answer in enumerate(answers):
+        value = answer_text(answer)
+        if not value or value == rightanswer:
+            continue
+        needle = value + " —"
+        position = incorrect_feedback.find(needle)
+        if position >= 0:
+            label = chr(65 + index) if index < 26 else str(index + 1)
+            positions.append((position, label, value, len(needle)))
+
+    positions.sort(key=lambda item: item[0])
+    explanations = []
+    for index, (position, label, value, needlelength) in enumerate(positions):
+        start = position + needlelength
+        end = positions[index + 1][0] if index + 1 < len(positions) else len(incorrect_feedback)
+        explanation = incorrect_feedback[start:end].strip()
+        if explanation:
+            explanations.append((label, value, explanation))
+    return correct_feedback, explanations
+
+
+def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
+    """Render source feedback as clearly labelled study-book callouts."""
+    feedback = question.get("Feedback") or []
+    if not isinstance(feedback, list):
+        return
+
+    for index, value in enumerate(feedback):
+        text = normalise_text(value)
+        if not text:
+            continue
+        combined = split_combined_feedback(question, text)
+        if combined:
+            correct_feedback, explanations = combined
+            if correct_feedback:
+                builder.add_paragraph(
+                    "Why the correct answer is correct",
+                    bold=True,
+                    color="17324D",
+                    space_before=100,
+                    space_after=50,
+                    keep_next=True,
+                )
+                builder.add_paragraph(
+                    correct_feedback,
+                    color="245B38",
+                    fill="EAF6EE",
+                    border_color="2E8B57",
+                    left_indent=180,
+                    right_indent=120,
+                    space_after=100,
+                    keep_lines=True,
+                )
+            if explanations:
+                builder.add_paragraph(
+                    "Why the other options are incorrect",
+                    bold=True,
+                    color="17324D",
+                    space_before=100,
+                    space_after=50,
+                    keep_next=True,
+                )
+                for label, answer, explanation in explanations:
+                    builder.add_paragraph(
+                        f"{label}) {answer}\n{explanation}",
+                        color="6B3030",
+                        fill="FDF1F1",
+                        border_color="C96D6D",
+                        left_indent=180,
+                        right_indent=120,
+                        space_after=80,
+                        keep_lines=True,
+                    )
+            continue
+
+        label = "Correct-answer feedback" if index == 0 else "Incorrect-answer feedback"
+        builder.add_paragraph(
+            f"{label}: {text}",
+            color="31586B",
+            fill="EEF7FA",
+            border_color="58A6B8",
+            left_indent=180,
+            right_indent=120,
+            space_after=100,
+            keep_lines=True,
+        )
+
+
 def add_question(
     builder: DocxBuilder,
     question: dict[str, Any],
@@ -558,24 +661,7 @@ def add_question(
             keep_lines=True,
         )
 
-    feedback = question.get("Feedback") or []
-    if isinstance(feedback, list):
-        labels = ["Correct-answer feedback", "Incorrect-answer feedback"]
-        for index, value in enumerate(feedback):
-            text = normalise_text(value)
-            if text:
-                label = labels[index] if index < len(labels) else f"Feedback {index + 1}"
-                builder.add_paragraph(
-                    f"{label}: {text}",
-                    italic=True,
-                    color="31586B",
-                    fill="EEF7FA",
-                    border_color="58A6B8",
-                    left_indent=180,
-                    right_indent=120,
-                    space_after=100,
-                    keep_lines=True,
-                )
+    add_feedback(builder, question)
 
     builder.add_paragraph("", space_after=160)
 

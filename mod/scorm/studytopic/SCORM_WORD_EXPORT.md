@@ -48,8 +48,10 @@ Legacy click-map questions include the source image and correct hotspot data.
 Each document uses the standard study-book layout: branded cover, contents
 page, chapters of up to ten questions, running header, page numbers, readable
 question typography, shaded options, green correct-answer boxes, orange note
-boxes, and blue feedback boxes. This layout is generated automatically and
-must not be recreated manually in individual files.
+boxes, and structured Mock-style feedback. Combined legacy feedback is divided
+into `Why the correct answer is correct` and a separate explanation for every
+incorrect option. This layout is generated automatically and must not be
+recreated manually in individual files.
 
 ## Validate before publishing
 
