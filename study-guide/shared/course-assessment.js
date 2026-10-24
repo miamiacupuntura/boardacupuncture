@@ -6,6 +6,7 @@
   if (!config || !banks) return;
 
   const letters = ['A', 'B', 'C', 'D'];
+  const resultColumns = ['Exam', 'Attempts', 'Last Attempt', 'Average', 'Grade', 'Action'];
   const storageKey = `study-guide-assessment:${config.courseId}:v1`;
   let store = loadStore();
 
@@ -37,6 +38,47 @@
     if (className) node.className = className;
     if (text !== undefined) node.textContent = text;
     return node;
+  }
+
+  function buildExamTable(rows, label) {
+    const wrap = el('div', 'history-table-wrap');
+    wrap.tabIndex = 0;
+    wrap.setAttribute('aria-label', `${label} — scroll horizontally on small screens`);
+    const table = el('table', 'history-table exam-level-table');
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    resultColumns.forEach(column => {
+      const th = el('th', '', column);
+      th.scope = 'col';
+      headerRow.append(th);
+    });
+    thead.append(headerRow);
+    const tbody = document.createElement('tbody');
+    rows.forEach(item => {
+      const row = document.createElement('tr');
+      const name = el('th', '', item.title);
+      name.scope = 'row';
+      row.append(name);
+      (item.values || ['—', '—', '—', '—']).forEach(value => row.append(el('td', '', String(value))));
+      const action = el('td', 'history-action');
+      if (item.href) {
+        const link = el('a', 'history-exam-button', item.actionLabel);
+        link.href = item.href;
+        if (item.newTab) {
+          link.target = '_blank';
+          link.rel = 'noopener';
+        }
+        link.setAttribute('aria-label', item.ariaLabel || `${item.actionLabel} — ${item.title}`);
+        action.append(link);
+      } else {
+        action.textContent = item.missingLabel || 'Not connected';
+      }
+      row.append(action);
+      tbody.append(row);
+    });
+    table.append(thead, tbody);
+    wrap.append(table);
+    return wrap;
   }
 
   function ordered(question, index) {
@@ -170,7 +212,7 @@
     const shell = el('details', 'assessment-bank course-assessment');
     shell.id = `${bankId}-mock-exam`;
     shell.open = Boolean(open);
-    const summaryTitle = /\(Mock \d+\)$/.test(bank.title) ? bank.title : `${bank.title} (${bank.questions.length} Questions)`;
+    const summaryTitle = bank.reviewTitle || (/\(Mock \d+\)$/.test(bank.title) ? bank.title : `${bank.title} (${bank.questions.length} Questions)`);
     shell.append(el('summary', '', summaryTitle));
     const body = el('div', 'assessment-body');
     body.append(el('p', 'assessment-intro', bank.intro));
@@ -198,7 +240,7 @@
       const state = stateFor(bankId);
       const latest = state.attempts[state.attempts.length - 1];
       const best = state.attempts.length ? Math.max(...state.attempts.map(attempt => attempt.correct)) : null;
-      return {bankId, title: bank.title, total: bank.questions.length, checked: Object.keys(state.answers).length, latest, best};
+      return {bankId, title: bank.title, shortTitle: bank.shortTitle, total: bank.questions.length, checked: Object.keys(state.answers).length, attempts: state.attempts, latest, best};
     });
     const completed = rows.filter(row => row.latest);
     const average = completed.length ? Math.round(completed.reduce((sum, row) => sum + (row.latest.correct / row.total) * 100, 0) / completed.length) : null;
@@ -208,30 +250,29 @@
   function renderHistory() {
     const host = document.getElementById('assessment-history-content');
     if (!host) return;
-    const data = summary();
-    const objectiveRows = data.rows.filter(row => row.bankId !== 'continuing-education');
-    const weakest = data.completed.slice().sort((a, b) => (a.latest.correct / a.total) - (b.latest.correct / b.total))[0];
-    host.querySelector('[data-metric="completed"]').textContent = `${objectiveRows.filter(row => row.latest).length} / ${objectiveRows.length}`;
-    host.querySelector('[data-metric="average"]').textContent = data.average === null ? '—' : `${data.average}%`;
-    host.querySelector('[data-metric="progress"]').textContent = String(data.inProgress);
-    host.querySelector('[data-metric="weakest"]').textContent = weakest ? weakest.title.replace(/^Practice Exam — /, '') : '—';
+    const objectiveRows = summary().rows.filter(row => row.bankId !== 'continuing-education');
     const tbody = host.querySelector('tbody');
     tbody.replaceChildren();
-    data.rows.forEach(row => {
+    objectiveRows.forEach(row => {
       const tr = document.createElement('tr');
-      const latest = row.latest ? `${row.latest.correct}/${row.total} (${Math.round(row.latest.correct / row.total * 100)}%)` : '—';
-      const best = row.best === null ? '—' : `${row.best}/${row.total}`;
-      const name = el('th', '', row.title);
+      const average = row.attempts.length
+        ? `${Math.round(row.attempts.reduce((sum, attempt) => sum + (attempt.correct / row.total) * 100, 0) / row.attempts.length)}%`
+        : '—';
+      const latestGrade = row.latest ? `${Math.round(row.latest.correct / row.total * 100)}%` : '—';
+      const lastAttempt = row.latest
+        ? new Date(row.latest.completedAt).toLocaleString([], {dateStyle: 'short', timeStyle: 'short'})
+        : '—';
+      const displayTitle = (row.shortTitle || row.title).replace(/^Objective (\d+) · /, '$1. ');
+      const name = el('th', '', displayTitle);
       name.scope = 'row';
       tr.append(name);
-      [`${row.checked}/${row.total}`, latest, best].forEach(value => tr.append(el('td', '', value)));
+      [row.attempts.length || '—', lastAttempt, average, latestGrade].forEach(value => tr.append(el('td', '', String(value))));
       const action = el('td', 'history-action');
-      const moodleUrl = row.bankId === 'continuing-education'
-        ? config.ceExamLink
-        : config.moodleMockLinks?.[row.bankId];
+      const moodleUrl = config.moodleMockLinks?.[row.bankId];
       if (moodleUrl) {
-        const link = el('a', 'history-exam-button', row.latest ? `Retry Mock ${row.total}` : `Start Mock ${row.total}`);
+        const link = el('a', 'history-exam-button', `Start Mock ${row.total}`);
         link.href = moodleUrl;
+        link.setAttribute('aria-label', `Start Mock ${row.total} — ${displayTitle}`);
         action.append(link);
       } else {
         action.textContent = 'Not connected';
@@ -239,23 +280,49 @@
       tr.append(action);
       tbody.append(tr);
     });
-    host.querySelector('.history-empty').hidden = data.completed.length > 0 || data.inProgress > 0;
+  }
+
+  function buildSchoolHistory() {
+    const section = el('details', 'card exam-history exam-level-panel school-exam-panel');
+    section.id = 'school-level-exams';
+    section.open = true;
+    section.append(el('summary', '', config.schoolExamTitle || `School Level Exam — ${config.chapterTitle || config.title}`));
+    const body = el('div', 'exam-level-body');
+    body.append(el('p', 'exam-level-intro', 'Personal attempts, dates and grades are available through View Exam History in Moodle.'));
+    const rows = (config.schoolExams || []).map(exam => ({
+      title: exam.title,
+      href: exam.url,
+      actionLabel: 'Start Exam'
+    }));
+    const wrap = buildExamTable(rows, 'School Level Exam table');
+    body.append(wrap);
+    if (config.moodleExamHistoryLink) {
+      const footer = el('div', 'exam-history-footer');
+      const link = el('a', 'moodle-history-button', 'View Exam History');
+      link.href = config.moodleExamHistoryLink;
+      footer.append(link);
+      body.append(footer);
+    }
+    section.append(body);
+    return section;
   }
 
   function buildHistory() {
-    const section = el('section', 'card exam-history');
-    section.id = 'automatic-exam-history';
-    section.innerHTML = `<span class="eyebrow">EXAM HISTORY</span><h2>Exam History — ${config.title}</h2><p>Use one table to open all 12 objective exams and the Continuing Education exam. Practice completed inside this guide is saved automatically in this browser.</p><div id="assessment-history-content"><div class="history-metrics"><article><strong data-metric="completed">—</strong><span>Objective exams completed</span></article><article><strong data-metric="average">—</strong><span>Completed-exam average</span></article><article><strong data-metric="progress">0</strong><span>Exams in progress</span></article><article><strong data-metric="weakest">—</strong><span>Lowest completed result</span></article></div><p class="history-empty">No local practice-exam activity has been recorded yet. You can start any Moodle Mock 10 from the table below.</p><div class="history-table-wrap" tabindex="0" aria-label="Exam History table — scroll horizontally on small screens"><table class="history-table"><thead><tr><th scope="col">Exam</th><th scope="col">Local progress</th><th scope="col">Latest local result</th><th scope="col">Best local score</th><th scope="col">Action</th></tr></thead><tbody></tbody></table></div><p class="history-note"><b>Two separate records:</b> the progress columns show only practice completed inside this guide. Official SCORM attempts, dates and scores remain in Moodle Exam History and are not transmitted to this page.</p></div>`;
-    const directory = el('section', 'assessment-directory');
-    directory.innerHTML = '<h3>Objective practice directory</h3><p>Use this directory after reading the objectives in order.</p>';
-    const grid = el('div', 'assessment-directory-grid');
-    Object.entries(banks).filter(([id]) => id !== 'continuing-education').forEach(([id, bank]) => {
-      const link = el('a', '', bank.shortTitle || bank.title);
-      link.href = `#${id}-mock-exam`;
-      grid.append(link);
-    });
-    directory.append(grid);
-    section.append(directory);
+    const section = el('details', 'card exam-history exam-level-panel board-exam-panel');
+    section.id = 'board-level-exams';
+    section.open = true;
+    section.append(el('summary', '', config.boardExamTitle || `Board Level Exam — ${config.chapterTitle || config.title}`));
+    const body = el('div', 'exam-level-body');
+    const objectiveCount = Object.keys(banks).filter(id => id !== 'continuing-education').length;
+    const availableCount = Object.keys(config.moodleMockLinks || {}).length;
+    body.append(el('p', 'exam-level-intro', `Access the Mock 10 exams for all objectives here. ${availableCount} of ${objectiveCount} have available links; personal attempts, dates and grades are available in Moodle.`));
+    body.append(el('h3', 'exam-level-heading', `${config.chapterTitle || config.title} — ${objectiveCount} objectives`));
+    const wrap = buildExamTable([], 'Board Level Exam table');
+    const history = el('div', '');
+    history.id = 'assessment-history-content';
+    history.append(wrap);
+    body.append(history);
+    section.append(body);
     return section;
   }
 
@@ -263,6 +330,27 @@
     const section = el('section', 'ce-certificate');
     section.id = 'certificate-preview';
     section.innerHTML = `<span class="certificate-status">PREVIEW ONLY · NOT ENABLED</span><p>Certificate of Completion</p><h3>${config.certificateTitle || config.title}</h3><p>This preview shows the certificate layout that can be activated only after the course is approved and its required Moodle completion conditions are connected.</p><div class="certificate-name">Student Name</div><p>has completed the required learning activities and assessment for</p><b>${config.title}</b><div class="certificate-meta"><div><b>Completion date</b><span>Generated by approved Moodle completion</span></div><div><b>Certificate ID</b><span>Generated after verified completion</span></div><div><b>Provider / approval</b><span>Pending confirmation</span></div></div><p class="certificate-boundary"><b>Planning framework:</b> ${config.planningHours || 3} hours. This preview does not award Continuing Education credit and is not a valid certificate.</p>`;
+    return section;
+  }
+
+  function buildCeExam() {
+    const bank = banks['continuing-education'];
+    const section = el('details', 'card ce-exam-panel exam-level-panel');
+    section.id = 'continuing-education-exam';
+    section.open = true;
+    section.append(el('summary', '', config.ceExamTitle || `Continuing Education Exam — ${config.chapterTitle || config.title}`));
+    const body = el('div', 'exam-level-body');
+    body.append(el('p', 'exam-level-intro', `After reviewing the ${bank.questions.length} questions and feedback above, open the SCORM activity here. Personal attempts, dates and grades are available in Moodle. The exam opens in another tab.`));
+    body.append(el('h3', 'exam-level-heading', `${config.chapterTitle || config.title} — Continuing Education`));
+    const wrap = buildExamTable([{
+      title: bank.title,
+      href: config.ceExamLink,
+      actionLabel: 'Start Exam',
+      newTab: true,
+      ariaLabel: `Start Exam — ${bank.title} (opens in a new tab)`
+    }], 'Continuing Education Exam table');
+    body.append(wrap);
+    section.append(body);
     return section;
   }
 
@@ -288,8 +376,30 @@
     }
   });
 
-  const practiceExams = document.getElementById('practice-exams');
-  if (practiceExams) practiceExams.before(buildHistory());
+  document.querySelectorAll('.hero-actions .school, .hero-button.school').forEach(link => link.href = '#school-level-exams');
+  document.querySelectorAll('.hero-actions .board, .hero-button.board').forEach(link => link.href = '#board-level-exams');
+  const languageToggle = document.getElementById('language-toggle');
+  if (languageToggle && config.spanishChapterLink) {
+    languageToggle.addEventListener('click', () => { window.location.href = config.spanishChapterLink; });
+  }
+
+  const schoolHost = document.getElementById('school-level-exams') || document.getElementById('practice-exams') || document.querySelector('[data-assessment-exam-directory]');
+  const boardHistory = buildHistory();
+  if (schoolHost && config.schoolExams?.length) {
+    const schoolHistory = buildSchoolHistory();
+    schoolHost.replaceWith(schoolHistory);
+    schoolHistory.after(boardHistory);
+  } else if (schoolHost) {
+    schoolHost.before(boardHistory);
+  } else {
+    const insertionAnchor = document.querySelector(config.examDirectoryAfterSelector || '#quick-check');
+    if (insertionAnchor && config.schoolExams?.length) {
+      const schoolHistory = buildSchoolHistory();
+      insertionAnchor.after(schoolHistory, boardHistory);
+    } else if (insertionAnchor) {
+      insertionAnchor.after(boardHistory);
+    }
+  }
 
   const cePlan = document.getElementById('continuing-education-plan');
   if (cePlan) {
@@ -301,32 +411,18 @@
       tab.id = 'continuing-education-start';
       cePlan.before(tab);
     }
-    const ceHost = document.getElementById('continuing-education-exam');
-    if (ceHost && banks['continuing-education']) {
-      const examPanel = el('details', 'card ce-exam-panel');
-      examPanel.id = 'continuing-education-exam';
-      examPanel.append(el('summary', '', config.ceExamTitle || 'Continuing Education Exam'));
-      if (config.ceExamLink) {
-        const access = el('aside', 'ce-exam-status');
-        const copy = el('div', '');
-        copy.append(
-          el('span', 'eyebrow', 'MOODLE CONTINUING EDUCATION MOCK'),
-          el('h3', '', banks['continuing-education'].title),
-          el('p', '', `Open the ${banks['continuing-education'].questions.length}-question Moodle activity. Official attempts and results remain in Moodle Exam History.`)
-        );
-        const link = el('a', '', `Open Continuing Education Mock ${banks['continuing-education'].questions.length}`);
-        link.href = config.ceExamLink;
-        access.append(copy, link);
-        examPanel.append(access);
-      }
+    const ceHost = document.getElementById('continuing-education-exam') || document.querySelector('[data-assessment-ce-exam]');
+    if (banks['continuing-education']) {
       const examBank = buildBank('continuing-education', banks['continuing-education'], true);
       examBank.classList.add('ce-assessment-bank');
-      examPanel.append(examBank);
-      ceHost.remove();
+      const examPanel = buildCeExam();
+      if (ceHost) ceHost.remove();
       const alignment = document.getElementById('ce-safety-scenarios');
-      if (alignment) alignment.after(examPanel);
-      else cePlan.after(examPanel);
-      examPanel.after(buildCertificate());
+      const insertAfter = alignment || cePlan;
+      insertAfter.after(examBank);
+      const certificate = buildCertificate();
+      examBank.after(certificate);
+      certificate.after(examPanel);
     }
   }
 

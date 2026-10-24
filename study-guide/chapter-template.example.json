@@ -1,5 +1,5 @@
 {
-  "templateVersion": 2,
+  "templateVersion": 3,
   "slug": "replace-with-chapter-slug",
   "courseTitle": "Acupuncture & Point Location",
   "chapterTitle": "Replace with chapter title",
@@ -9,11 +9,18 @@
   "heroImageAlt": "",
   "chapterReading": "Add verified chapter reading and references.",
   "ncbahmLearningPlan": "Explain Board relevance, expected question types, study materials, preparation and mastery criteria.",
-  "schoolExamUrl": "",
-  "boardExamUrl": "",
+  "moodleExamHistoryUrl": "https://www.acupuncturetests.com/mod/scorm/examhistory/?courseid=COURSE_ID&sectionid=SECTION_ID",
+  "schoolExams": [
+    {
+      "title": "Exact Moodle School Level activity name MC 10",
+      "url": "https://www.acupuncturetests.com/mod/scorm/view.php?id=ACTIVITY_ID"
+    }
+  ],
   "continuingEducationPlan": "Explain the CE purpose, learning sequence and completion requirements.",
   "continuingEducationReview": "Add ten review questions with feedback before the scored activity.",
-  "continuingEducationExamUrl": "",
+  "continuingEducationReviewQuestionCount": 10,
+  "continuingEducationExamTitle": "Replace with chapter title Continuing Education (Mock 10)",
+  "continuingEducationExamUrl": "https://www.acupuncturetests.com/mod/scorm/view.php?id=ACTIVITY_ID",
   "ceApprovalStatus": "preparation",
   "cePubliclyActive": false,
   "ceRequirementGroup": "General",
@@ -32,11 +39,16 @@
   "ceCertificateEnabled": false,
   "spanishChapterTitle": "",
   "spanishChapterDescription": "",
+  "spanishChapterUrl": "https://www.acupuncturetests.com/replace-with-spanish-chapter-url",
   "objectives": [
     {
       "title": "Objective 1 — Use a measurable verb.",
       "subjectMatter": "Verified subject matter.",
-      "teachingMethod": "Reading, visual comparison, retrieval practice and feedback."
+      "teachingMethod": "Reading, visual comparison, retrieval practice and feedback.",
+      "mockTitle": "Replace with objective exam name (Mock 10)",
+      "mockUrl": "https://www.acupuncturetests.com/mod/scorm/view.php?id=ACTIVITY_ID",
+      "legacyExamTitle": "Optional exact legacy Moodle activity name MC 10",
+      "legacyExamUrl": "https://www.acupuncturetests.com/mod/scorm/view.php?id=ACTIVITY_ID"
     }
   ],
   "blockOrder": [
@@ -51,6 +63,7 @@
     "Board Level Exam",
     "Continuing Education Learning Plan",
     "Continuing Education Review",
+    "Certificate preview and completion status",
     "Continuing Education Exam"
   ]
 }

@@ -3,21 +3,21 @@
   const api = window.StudyGuideChapterTemplate;
   const bar = document.querySelector('.preview-view-switch');
   if (!api || !bar || document.getElementById('instructor-chapter-template')) return;
-  const storageKey = 'acupuncturetests:chapter-template:draft:v2';
+  const storageKey = 'acupuncturetests:chapter-template:draft:v3';
   const panel = document.createElement('section');
   panel.id = 'instructor-chapter-template';
   panel.className = 'chapter-template-editor';
   panel.hidden = true;
-  panel.innerHTML = '<details><summary>Instructor Chapter Template — Create the next chapter</summary><div class="chapter-template-body"><p class="chapter-template-note">Complete the editable fields, preview the standard chapter structure, and export the JSON file. This draft stays in this browser and does not publish anything to Moodle.</p><div class="chapter-template-fields"></div><div class="chapter-template-actions"><button type="button" data-action="preview">Preview template</button><button type="button" data-action="save">Save draft</button><button type="button" data-action="export">Export JSON</button><button type="button" data-action="reset" class="secondary">Reset fields</button></div><p class="chapter-template-status" role="status"></p><section class="chapter-template-preview" hidden aria-live="polite"></section></div></details>';
+  panel.innerHTML = '<details><summary>Instructor Chapter Template — Create the next chapter</summary><div class="chapter-template-body"><p class="chapter-template-note">Complete the editable fields, preview the standard chapter structure, and export the JSON file. Exam directories, action buttons and the final CE table are generated from this configuration. This draft stays in this browser and does not publish anything to Moodle.</p><div class="chapter-template-fields"></div><div class="chapter-template-actions"><button type="button" data-action="preview">Preview template</button><button type="button" data-action="save">Save draft</button><button type="button" data-action="config">Copy assessment config</button><button type="button" data-action="export">Export JSON</button><button type="button" data-action="reset" class="secondary">Reset fields</button></div><p class="chapter-template-status" role="status"></p><section class="chapter-template-preview" hidden aria-live="polite"></section></div></details>';
   bar.insertAdjacentElement('afterend', panel);
   const fields = panel.querySelector('.chapter-template-fields');
   const definitions = [
     ['slug','Chapter slug','text'],['courseTitle','Course title','text'],['chapterTitle','Chapter title','text'],['chapterDescription','Chapter description','textarea'],
     ['backUrl','Back / course URL','url'],['heroImageUrl','Hero image URL','url'],['heroImageAlt','Hero image alternative text','text'],
     ['chapterReading','Chapter reading and references','textarea'],['ncbahmLearningPlan','NCBAHM Exam Learning Plan','textarea'],
-    ['schoolExamUrl','School Level Exam URL','url'],['boardExamUrl','Board Level Exam URL','url'],
+    ['moodleExamHistoryUrl','Moodle Exam History URL','url'],['schoolExamsText','School Level exams (exact title | URL)','textarea'],
     ['continuingEducationPlan','Continuing Education Learning Plan','textarea'],['continuingEducationReview','Continuing Education Review','textarea'],
-    ['continuingEducationExamUrl','Continuing Education Exam URL','url'],
+    ['continuingEducationReviewQuestionCount','CE review question count','number'],['continuingEducationExamTitle','Continuing Education Mock 10 title','text'],['continuingEducationExamUrl','Continuing Education Exam URL','url'],
     ['ceApprovalStatus','CE approval status','select',['preparation','submitted','approved','inactive','expired']],
     ['cePubliclyActive','Public CE catalog status','select',['false','true']],
     ['ceRequirementGroup','CE requirement group','select',['General','Biomedical Sciences','Mandatory']],
@@ -29,8 +29,8 @@
     ['ceProviderName','Approved CE provider name','text'],['ceProviderNumber','CE provider number','text'],
     ['ceCourseLocation','Certificate course location','text'],
     ['ceCertificateEnabled','Certificate enabled','select',['false','true']],
-    ['spanishChapterTitle','Spanish chapter title','text'],
-    ['spanishChapterDescription','Spanish chapter description','textarea'],['objectivesText','Objectives (one per line)','textarea']
+    ['spanishChapterTitle','Spanish chapter title','text'],['spanishChapterUrl','Spanish chapter URL','url'],
+    ['spanishChapterDescription','Spanish chapter description','textarea'],['objectivesText','Objectives (objective | subject | method | Mock 10 title | Mock URL | legacy title | legacy URL)','textarea']
   ];
   definitions.forEach(([name,label,type,options]) => {
     const wrapper = document.createElement('label');
@@ -42,31 +42,47 @@
     if (type === 'select') options.forEach(value => { const option=document.createElement('option'); option.value=value; option.textContent=value; input.append(option); });
     if (name === 'approvedCeCreditHours') { input.min='0'; input.step='0.25'; input.placeholder='Leave blank until approved'; }
     if (name === 'minutesPerObjective') { input.min='1'; input.step='1'; }
-    if (name === 'objectivesText') input.placeholder = 'Objective | Subject matter | Teaching method';
+    if (name === 'schoolExamsText') input.placeholder = 'Exact Moodle activity name | https://www.acupuncturetests.com/mod/scorm/view.php?id=0000';
+    if (name === 'objectivesText') input.placeholder = 'Objective | Subject matter | Teaching method | Exam Name (Mock 10) | Mock URL | optional legacy exam title | optional legacy URL';
     wrapper.append(input); fields.append(wrapper);
   });
-  function objectiveText(items) { return items.map(item => [item.title,item.subjectMatter,item.teachingMethod].join(' | ')).join('\n'); }
+  function objectiveText(items) { return items.map(item => [item.title,item.subjectMatter,item.teachingMethod,item.mockTitle,item.mockUrl,item.legacyExamTitle,item.legacyExamUrl].join(' | ')).join('\n'); }
+  function schoolExamText(items) { return items.map(item => [item.title,item.url].join(' | ')).join('\n'); }
   function fill(config) {
     const value = api.normalize(config);
     definitions.forEach(([name]) => {
       const input = fields.elements ? fields.elements[name] : fields.querySelector('[name="'+name+'"]');
-      if (input) input.value = name === 'objectivesText' ? objectiveText(value.objectives) : (value[name] === null || value[name] === undefined ? '' : String(value[name]));
+      if (input) input.value = name === 'objectivesText' ? objectiveText(value.objectives) : name === 'schoolExamsText' ? schoolExamText(value.schoolExams) : (value[name] === null || value[name] === undefined ? '' : String(value[name]));
     });
   }
   function read() {
     const config = {};
     definitions.forEach(([name,,type]) => {
-      if (name === 'objectivesText') return;
+      if (name === 'objectivesText' || name === 'schoolExamsText') return;
       const raw = fields.querySelector('[name="'+name+'"]').value.trim();
       config[name] = type === 'number' && raw !== '' ? Number(raw) : raw;
     });
     config.objectives = fields.querySelector('[name="objectivesText"]').value.split(/\n+/).map(line => line.trim()).filter(Boolean).map(line => {
       const parts = line.split('|').map(part => part.trim());
-      return { title: parts[0] || '', subjectMatter: parts[1] || '', teachingMethod: parts[2] || '' };
+      return { title: parts[0] || '', subjectMatter: parts[1] || '', teachingMethod: parts[2] || '', mockTitle: parts[3] || '', mockUrl: parts[4] || '', legacyExamTitle: parts[5] || '', legacyExamUrl: parts[6] || '' };
+    });
+    config.schoolExams = fields.querySelector('[name="schoolExamsText"]').value.split(/\n+/).map(line => line.trim()).filter(Boolean).map(line => {
+      const parts = line.split('|').map(part => part.trim());
+      return {title: parts[0] || '', url: parts[1] || ''};
     });
     return api.normalize(config);
   }
   function status(message, bad) { const node=panel.querySelector('.chapter-template-status'); node.textContent=message; node.classList.toggle('is-error',!!bad); }
+  async function copyAssessmentConfig() {
+    const result = api.validate(read());
+    const source = 'window.STUDY_GUIDE_ASSESSMENT_CONFIG = ' + JSON.stringify(api.assessmentConfig(result.value), null, 2) + ';';
+    try {
+      await navigator.clipboard.writeText(source);
+      status(result.errors.length ? 'Assessment config copied with validation errors: '+result.errors.join(' ') : 'Ready-to-use STUDY_GUIDE_ASSESSMENT_CONFIG copied.', result.errors.length);
+    } catch (_) {
+      status('The browser could not copy the assessment config. Use Export JSON instead.', true);
+    }
+  }
   function preview() {
     const result = api.validate(read());
     const target = panel.querySelector('.chapter-template-preview'); target.hidden=false; target.replaceChildren();
@@ -79,7 +95,9 @@
     ceSummary.textContent='Status: '+result.value.ceApprovalStatus+' · Classification: '+result.value.ceRequirementGroup+' / '+result.value.ceSubjectArea+' · Delivery: '+result.value.ceDeliveryMethod+' · Internal estimate: '+estimate+' hours · '+publicHours;
     target.append(ceSummary);
     const heading=document.createElement('h4'); heading.textContent='Learning objectives'; target.append(heading);
-    const list=document.createElement('ol'); result.value.objectives.forEach(item=>{const li=document.createElement('li');li.textContent=item.title;list.append(li);}); target.append(list);
+    const list=document.createElement('ol'); result.value.objectives.forEach(item=>{const li=document.createElement('li');li.textContent=item.title+' — '+(item.mockTitle||'Mock title missing')+(item.mockUrl?' · connected':' · link missing');list.append(li);}); target.append(list);
+    const exams=document.createElement('h4'); exams.textContent='Automatic examination blocks'; target.append(exams);
+    const examSummary=document.createElement('p'); examSummary.textContent='School Level: '+result.value.schoolExams.length+' activities · Board Level: '+result.value.objectives.filter(item=>item.mockUrl).length+' of '+result.value.objectives.length+' Mock 10 links · CE review: '+result.value.continuingEducationReviewQuestionCount+' questions · CE exam: '+(result.value.continuingEducationExamUrl?'connected':'link missing')+' · Exam History: '+(result.value.moodleExamHistoryUrl?'connected':'link missing'); target.append(examSummary);
     const sequence=document.createElement('h4'); sequence.textContent='Standard chapter order'; target.append(sequence);
     const order=document.createElement('ol'); order.className='chapter-template-order'; result.value.blockOrder.forEach(item=>{const li=document.createElement('li');li.textContent=item;order.append(li);}); target.append(order);
     status(result.errors.length ? result.errors.join(' ') : (result.warnings.length ? 'Preview ready. Before publishing: '+result.warnings.join(' ') : 'Preview ready. All required links and translations are present.'),result.errors.length);
@@ -88,6 +106,7 @@
     const action=event.target.closest('button[data-action]')?.dataset.action; if(!action)return;
     if(action==='preview') preview();
     if(action==='save'){localStorage.setItem(storageKey,JSON.stringify(read()));status('Draft saved in this browser.');}
+    if(action==='config') copyAssessmentConfig();
     if(action==='export'){const result=api.download(read());status(result.errors.length?'Exported with validation errors: '+result.errors.join(' '):'Template exported as JSON.',result.errors.length);}
     if(action==='reset'){localStorage.removeItem(storageKey);fill(api.defaults);panel.querySelector('.chapter-template-preview').hidden=true;status('Fields reset to the reusable template.');}
   });
