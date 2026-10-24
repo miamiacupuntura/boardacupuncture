@@ -55,6 +55,21 @@ The shared script automatically adds the following standard blocks:
 6. A certificate preview that remains disabled until approval and Moodle completion are configured.
 7. Copy and TXT export controls using the standard authoring format: question name, type, text, A–D options, correct answer, general feedback and distractor feedback.
 
+## Exam buttons and Exam History
+
+Apply these rules consistently in every chapter:
+
+1. The first exam action inside each objective is the new SCORM activity from `moodleMockLinks`.
+2. Label that button with the complete bank title in the format **Exam Name (Mock 10)**. Do not use generic labels such as **Open 10-question mock exam**.
+3. Render the Mock 10 button in orange. Keep its accessible focus state and a minimum 44-pixel touch target.
+4. If an objective also links to an older Moodle question bank, place it after the Mock 10 button and use the activity's exact Moodle name, including its question-count suffix when present. For example: **Points Du Mai Channel Caution or Contraindication MC 15**. Do not replace the activity name with **Open 15-question Moodle bank** or another generic label.
+5. Use the secondary purple style for an older Moodle bank when it appears next to the orange Mock 10 button.
+6. Do not place an **Exam History** button inside an individual objective. There must be only one chapter-wide Exam History block.
+7. Place the chapter-wide Exam History after the objectives and before the directory of older Moodle examinations. Include all objective Mock 10 activities and the Continuing Education Mock 10.
+8. Keep browser-saved practice results separate from official Moodle records. State clearly that Moodle attempts, dates and scores are not transmitted to the static guide.
+9. Use `ceExamLink` for the Continuing Education SCORM activity and display its complete **Course Name Continuing Education (Mock 10)** title.
+10. When shared JavaScript or CSS changes, update its cache-version query string in the chapter HTML so browsers receive the new button text and styling.
+
 The Continuing Education blocks must keep the same chapter-wide order:
 
 1. **Continuing Education Learning Plan — Course Title** with the objective table first.
@@ -73,7 +88,7 @@ When a chapter includes a professional-practice case lab, place it inside block 
 
 Have learners complete their own analysis before revealing a model response. Mark reconstructed examples as fictional composites unless a complete, verifiable case source is cited.
 
-Do not place forward-jump links inside objective reading. Navigation can remain in the chapter sidebar, but the instructional body should preserve the reading sequence. Existing Moodle question banks belong in one separate post-reading directory, and official results remain in Moodle Exam History.
+Do not place forward-jump links inside objective reading. Navigation can remain in the chapter sidebar, but the instructional body should preserve the reading sequence. Keep one complete post-reading directory for older Moodle question banks; when an older bank is also shown inside its matching objective, place it only in the final objective action row after the orange Mock 10 button. Official results remain in Moodle Exam History.
 
 ## Required quality checks
 
@@ -85,3 +100,14 @@ Do not place forward-jump links inside objective reading. Navigation can remain 
 - Confirm that approved hours, subject area, delivery method and approval number match the Board/CE Broker record.
 - Review the English and Spanish views on desktop and a phone-width screen.
 - Confirm that the page has no horizontal scrolling and all touch targets are at least 44 pixels high.
+
+## GitHub publication checklist
+
+1. Create the working branch from the latest `origin/main`. Do not reuse a stale branch when it would reintroduce older shared files.
+2. Validate JavaScript syntax, every SCORM mapping, the visible exam titles, the Exam History row count and the orange Mock 10 style.
+3. Run `deploy/study-guide/build-release.sh` before publishing whenever the shared assessment layer changes.
+4. Push the branch, open a pull request with `main` as the base and merge it before starting production deployment.
+5. A commit pushed after its earlier pull request was merged requires another pull request. Pushing to the old branch does not place the new commit in `main` automatically.
+6. Start a new **Deploy Study Guide to production** workflow with **Run workflow** on `main`. Do not use **Re-run jobs** for an older release when newer changes are required.
+7. Confirm that the workflow SHA is the new merge commit. If the deploy log says **Release already exists**, the workflow is attempting to deploy an immutable commit that was already released; merge the new commit into `main` and start a new workflow instead of rerunning the old job.
+8. After deployment succeeds, refresh the chapter without cache and confirm the exact button names, colors, links and Exam History placement in production.
