@@ -68,6 +68,13 @@ accepted responses and explain matching rules; Matching questions show the
 keyed pairs; Multiple Response questions identify every correct selection;
 Sequence questions preserve the keyed order; and Click Map questions retain
 the source hotspot information.
+For non-choice interactions, the feedback refers back to the answer key already
+printed above instead of repeating long accepted-answer, matching, sequence, or
+hotspot data. Long retained feedback is labelled `Detailed source review`, and
+Matching explanations identify the comparison title rather than using a generic
+`question prompt` label. Each matching pair is displayed as a numbered card with
+separate `Item` and `Correct match` fields so long multiline values do not run
+together around a single arrow.
 
 ## Validate before publishing
 

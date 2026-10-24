@@ -485,6 +485,11 @@ def split_combined_feedback(
 def question_learning_target(question: dict[str, Any]) -> str:
     """Extract a concise learning focus from a question stem."""
     text = normalise_text(question.get("QuestionText"))
+    questiontype = str(question.get("__type") or "")
+    if questiontype == "MatchingQuestion" and text:
+        title = text.splitlines()[0].strip().rstrip(".")
+        if title:
+            return f'the matching exercise “{title}”'
     matches = re.findall(
         r"What (?:is|are) the modifications? for\s+([^?]+)",
         text,
@@ -577,6 +582,47 @@ def feedback_headings(question: dict[str, Any]) -> tuple[str, str]:
     if questiontype == "ClickMapQuestion":
         return "Why this location is correct", "How other locations are evaluated"
     return "Why the correct answer is correct", "Why the other options are incorrect"
+
+
+def correct_feedback_summary(
+    question: dict[str, Any],
+    target: str,
+    answerkey: str,
+    hassourcereview: bool,
+) -> str:
+    """Explain the keyed response without repeating long keys already printed above."""
+    questiontype = str(question.get("__type") or "")
+    if questiontype == "FillInTheBlankQuestion":
+        summary = (
+            "The response or responses shown under Accepted answer(s) are the values keyed "
+            "by the source activity."
+        )
+    elif questiontype == "MatchingQuestion":
+        summary = (
+            f"For {target}, the pairings shown under Correct matches are the keyed "
+            "relationships from the source activity."
+        )
+    elif questiontype == "MultipleResponseQuestion":
+        summary = (
+            "The selections shown under Correct answer(s) are the complete set keyed by "
+            "the source activity."
+        )
+    elif questiontype == "SequenceQuestion":
+        summary = (
+            "The numbered items shown under Correct sequence are the order keyed by the "
+            "source activity."
+        )
+    elif questiontype == "ClickMapQuestion":
+        summary = (
+            "The hotspot shown under Correct hotspot is the location keyed by the source "
+            "activity."
+        )
+    else:
+        summary = f"For {target}, the source bank answer key is {answerkey}."
+
+    if hassourcereview:
+        return summary + " The detailed source review above supplies the retained rationale."
+    return summary + " The original SCORM question does not contain a more detailed rationale."
 
 
 def question_incorrect_options(question: dict[str, Any]) -> list[tuple[str, str]]:
@@ -677,8 +723,9 @@ def add_duplicate_source_feedback(
     rightanswer = question_answer_key(question)
     correctheading, incorrectheading = feedback_headings(question)
 
+    sourcereviewheading = "Detailed source review" if len(source_feedback) > 1200 else "Source review"
     builder.add_paragraph(
-        "Source review",
+        sourcereviewheading,
         bold=True,
         color="17324D",
         space_before=100,
@@ -705,8 +752,7 @@ def add_duplicate_source_feedback(
         keep_next=True,
     )
     builder.add_paragraph(
-        f"For {target}, the source bank answer key is {rightanswer}. "
-        "The source review above is the rationale stored with this question.",
+        correct_feedback_summary(question, target, rightanswer, True),
         color="245B38",
         fill="EAF6EE",
         border_color="2E8B57",
@@ -792,8 +838,7 @@ def add_missing_source_feedback(builder: DocxBuilder, question: dict[str, Any]) 
         keep_next=True,
     )
     builder.add_paragraph(
-        f"For {target}, the source bank answer key is {rightanswer}. "
-        "The original SCORM question does not contain a more detailed rationale.",
+        correct_feedback_summary(question, target, rightanswer, False),
         color="245B38",
         fill="EAF6EE",
         border_color="2E8B57",
@@ -978,8 +1023,13 @@ def add_question(
         left = {item.get("Id"): answer_text(item) for item in question.get("LeftColumn", [])}
         right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
         builder.add_paragraph("Correct matches", bold=True, color="17324D", keep_next=True)
-        for itemid, leftvalue in left.items():
-            add_correct_answer(builder, f"{leftvalue} → {right.get(itemid, '[missing match]')}")
+        for matchnumber, (itemid, leftvalue) in enumerate(left.items(), start=1):
+            add_correct_answer(
+                builder,
+                f"Match {matchnumber}\n"
+                f"Item: {leftvalue}\n"
+                f"Correct match: {right.get(itemid, '[missing match]')}",
+            )
     elif qtype == "MultipleResponseQuestion":
         answers = question.get("Answers") or []
         builder.add_paragraph("Options", bold=True, color="17324D", keep_next=True)

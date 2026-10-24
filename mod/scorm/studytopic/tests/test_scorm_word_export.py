@@ -77,6 +77,9 @@ class ScormWordExportTest(unittest.TestCase):
                 self.assertIn("Correct feedback", xml)
                 self.assertIn("Herb A", xml)
                 self.assertIn("Function A", xml)
+                self.assertIn("Match 1", xml)
+                self.assertIn("Item: Herb A", xml)
+                self.assertIn("Correct match: Function A", xml)
                 for name in names:
                     if name.endswith(".xml") or name.endswith(".rels"):
                         ElementTree.fromstring(archive.read(name))
@@ -139,7 +142,8 @@ class ScormWordExportTest(unittest.TestCase):
         xml = "".join(builder.body)
 
         self.assertIn("Why the accepted answer is correct", xml)
-        self.assertIn("Formula A; Formula A Decoction", xml)
+        self.assertIn("shown under Accepted answer(s)", xml)
+        self.assertNotIn("Formula A; Formula A Decoction", xml)
         self.assertIn("How other responses are evaluated", xml)
         self.assertIn("matches one of the accepted answers", xml)
 
@@ -162,10 +166,29 @@ class ScormWordExportTest(unittest.TestCase):
         xml = "".join(builder.body)
 
         self.assertIn("Why these matches are correct", xml)
-        self.assertIn("Herb A → Function A", xml)
-        self.assertIn("Herb B → Function B", xml)
+        self.assertIn("the matching exercise", xml)
+        self.assertIn("shown under Correct matches", xml)
+        self.assertNotIn("Herb A → Function A", xml)
+        self.assertNotIn("Herb B → Function B", xml)
         self.assertIn("How incorrect matches are evaluated", xml)
         self.assertIn("must be paired with its keyed match", xml)
+
+    def test_long_duplicate_matching_feedback_is_presented_as_reference(self) -> None:
+        question = {
+            "__type": "MatchingQuestion",
+            "QuestionText": "Comparison Herb A Vs. Herb B\nMatch each herb.",
+            "LeftColumn": [{"Id": 1, "Content": "Herb A"}],
+            "RightColumn": [{"Id": 1, "Content": "Function A"}],
+            "Feedback": ["Long source " * 150, "Long source " * 150],
+        }
+        builder = EXPORTER.DocxBuilder("Test")
+        EXPORTER.add_feedback(builder, question)
+        xml = "".join(builder.body)
+
+        self.assertIn("Detailed source review", xml)
+        self.assertIn("Comparison Herb A Vs. Herb B", xml)
+        self.assertIn("shown under Correct matches", xml)
+        self.assertNotIn("Herb A → Function A", xml)
 
     def test_safe_segment_removes_path_characters(self) -> None:
         self.assertEqual("Herbs - Final - Exam", EXPORTER.safe_segment("Herbs/Final:Exam", "Exam"))
