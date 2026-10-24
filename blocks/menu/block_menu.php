@@ -70,7 +70,11 @@ class block_menu extends block_base {
     }
 
     /**
-     * Render a direct Board resource button when the user can access its course.
+     * Render a direct Board resource button when its course is available.
+     *
+     * This method is only called after the Board membership check has passed,
+     * so requiring a second enrolment for every linked resource would disable
+     * valid buttons for members of the combined Board product.
      *
      * @param int $courseid Moodle course ID.
      * @param string $label Button label.
@@ -78,17 +82,10 @@ class block_menu extends block_base {
      * @return string
      */
     private function board_resource_button(int $courseid, string $label, string $type): string {
-        global $DB, $USER;
+        global $DB;
 
         $course = $DB->get_record('course', ['id' => $courseid, 'visible' => 1], 'id');
         if (!$course) {
-            return '<span class="board-hub__action board-hub__action--pending">' . s($label) . '</span>';
-        }
-
-        $context = context_course::instance($courseid);
-        $hasaccess = is_enrolled($context, $USER->id, '', true)
-            || has_capability('moodle/course:view', $context, $USER->id);
-        if (!$hasaccess) {
             return '<span class="board-hub__action board-hub__action--pending">' . s($label) . '</span>';
         }
 
