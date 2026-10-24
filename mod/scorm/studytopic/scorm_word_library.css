@@ -13,6 +13,16 @@ body.scorm-word-library-course #page.drawers.show-drawer-left {
     margin-left: 0;
 }
 
+/*
+ * Generated Exam Key books provide their own subject-aware navigation.
+ * Moodle's generic activity navigation crosses from the Formula library into
+ * the Herb library (and vice versa), which makes the two subjects look like a
+ * single sequence. Keep each library self-contained instead.
+ */
+body.scorm-word-library .activity-navigation {
+    display: none !important;
+}
+
 .scorm-word-library-index .card,
 .scorm-word-category-index .list-group-item {
     border-color: #d8e2e8;
