@@ -154,6 +154,86 @@
     min-width: 138px;
 }
 
+/* Basic View resource table: make every button describe what it opens. */
+.block_menu_course .course-stats3 {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.block_menu_course .course-stats3 td:first-child {
+    width: 63%;
+    overflow-wrap: anywhere;
+}
+
+.block_menu_course .course-stats3 td:last-child {
+    width: 37%;
+}
+
+.block_menu_course .course-stats3 .link-retry2 {
+    display: inline-flex;
+    width: calc(100% - 8px);
+    min-width: 0;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 6px 5px;
+    border: 2px solid #f47e2c;
+    border-radius: 999px;
+    background: #f47e2c;
+    color: #fff !important;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.15;
+    text-align: center;
+    text-decoration: none !important;
+    white-space: normal;
+    box-shadow: 0 3px 7px rgba(32, 52, 61, .22);
+}
+
+.block_menu_course .course-stats3 .link-retry2:hover,
+.block_menu_course .course-stats3 .link-retry2:focus-visible {
+    filter: brightness(.92);
+    transform: translateY(-1px);
+}
+
+.block_menu_course .course-stats3 .link-retry2:focus-visible {
+    outline: 3px solid #185cca;
+    outline-offset: 2px;
+}
+
+.block_menu_course .course-stats3 .link-retry--questions,
+.block_menu_course .course-stats3 .link-retry--formulas {
+    border-color: #2c63eb;
+    background: #2c63eb;
+}
+
+.block_menu_course .course-stats3 .link-retry--simulation {
+    border-color: #33465f;
+    background: #33465f;
+}
+
+.block_menu_course .course-stats3 .link-retry--notes {
+    border-color: #c7d3e0;
+    background: #fff;
+    color: #142f3d !important;
+}
+
+.block_menu_course .course-stats3 .link-retry--games {
+    border-color: #fb9500;
+    background: #fb9500;
+}
+
+.block_menu_course .course-stats3 .link-retry--guide {
+    border-color: #107b65;
+    background: #107b65;
+}
+
+.block_menu_course .course-stats3 .link-retry--locked {
+    border-color: #6d7780;
+    background: #6d7780;
+}
+
 @media (max-width: 680px) {
     .public-learning-routes {
         margin: 12px 0;

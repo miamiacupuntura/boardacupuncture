@@ -6,6 +6,80 @@ function init() {
 $this->title = get_string('pluginname', 'block_menu_course');
 }
 
+/**
+ * Return the short, meaningful action shown beside a Board resource.
+ *
+ * The Basic View contains several different resource types. A generic
+ * "Study" label makes it difficult to know what each button opens, so the
+ * label is resolved from the known course IDs and retained course names.
+ *
+ * @param stdClass $course Moodle course record.
+ * @return array Button label and modifier class.
+ */
+private function get_course_action($course) {
+    $courseid = (int) $course->id;
+    $name = core_text::strtolower($course->fullname);
+
+    $knownresources = [
+        'notes' => [91, 92, 93, 94, 120],
+        'simulation' => [40, 41, 42, 43, 118],
+        'games' => [48, 82, 83, 84, 119],
+        'formulas' => [44, 117],
+        'questions' => [30, 34, 36, 45, 113],
+    ];
+
+    if (in_array($courseid, $knownresources['notes'], true) || strpos($name, 'notes') !== false) {
+        return ['Notes', 'notes'];
+    }
+    if (in_array($courseid, $knownresources['simulation'], true) || strpos($name, 'simulation') !== false) {
+        return ['Simulation', 'simulation'];
+    }
+    if (in_array($courseid, $knownresources['games'], true)
+            || strpos($name, 'playing') !== false
+            || strpos($name, 'games') !== false) {
+        return ['Games', 'games'];
+    }
+    if (in_array($courseid, $knownresources['formulas'], true) || strpos($name, 'formula') !== false) {
+        return ['Formulas', 'formulas'];
+    }
+    if ($courseid === 45 || strpos($name, 'single herbs') !== false) {
+        return ['Single Herbs', 'questions'];
+    }
+    if (in_array($courseid, $knownresources['questions'], true) || strpos($name, 'exam') !== false) {
+        return ['Questions', 'questions'];
+    }
+
+    return ['Open', 'course'];
+}
+
+/**
+ * Match a Board category with its Study Guide area.
+ *
+ * @param string $categoryname Moodle course-category name.
+ * @return string|null Study Guide area key.
+ */
+private function get_study_guide_area($categoryname) {
+    $name = core_text::strtolower($categoryname);
+
+    if (strpos($name, 'foundation') !== false) {
+        return 'foundations';
+    }
+    if (strpos($name, 'point location') !== false || strpos($name, 'acupuncture') !== false) {
+        return 'pointlocation';
+    }
+    if (strpos($name, 'herb') !== false) {
+        return 'herbology';
+    }
+    if (strpos($name, 'biomedicine') !== false) {
+        return 'biomedicine';
+    }
+    if (strpos($name, 'clean needle') !== false) {
+        return 'cleanneedle';
+    }
+
+    return null;
+}
+
 function get_content() {
 global $USER, $SESSION, $OUTPUT, $CFG, $PAGE, $DB;
 
@@ -111,27 +185,39 @@ if (count($courses) == 0) {
 	continue;
 }
 $tempCategoryName = "";
+$categoryhasvisiblecourse = false;
+$categoryhasaccess = false;
 foreach ($courses as $course) {
 if ($course->visible == false) {
 	continue;
 }
+$categoryhasvisiblecourse = true;
 $context = context_course::instance($course->id);
 $hascourseaccess = is_enrolled($context, $USER->id, '', true)
 	|| has_capability('moodle/course:view', $context, $USER->id);
+$categoryhasaccess = $categoryhasaccess || $hascourseaccess;
 if (!$hascourseaccess) {
 	$noshow = true;
 }
 $categoryNames[$counting2] = $category->name;
-$courseNames[$counting2] = $rowHTML6 . $course->fullname . $rowHTMLend;
+$coursename = format_string($course->fullname, true, ['context' => $context]);
+$courseNames[$counting2] = $rowHTML6 . $coursename . $rowHTMLend;
 //$courseSummary[$counting2] = $rowHTML6. $course->summary . $rowHTMLend;
 
 $courseURL = $hascourseaccess
 	? (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false)
 	: $membershipurl;
-$courseAction = $hascourseaccess ? 'Study' : 'Subscribe to access';
-$courseActionClass = $hascourseaccess ? '' : ' link-retry--locked';
+$resourceaction = $this->get_course_action($course);
+$courseAction = $hascourseaccess ? $resourceaction[0] : 'Subscribe';
+$courseActionClass = $hascourseaccess
+	? ' link-retry--' . $resourceaction[1]
+	: ' link-retry--locked';
+$courseActionLabel = $hascourseaccess
+	? 'Open ' . $coursename
+	: 'Subscribe to access ' . $coursename;
+$courseActionLabel = s($courseActionLabel);
 $examLink = <<<HTML
-<a href="$courseURL" class="link-retry link-retry2{$courseActionClass}">{$courseAction}</a>
+<a href="$courseURL" class="link-retry link-retry2{$courseActionClass}" aria-label="{$courseActionLabel}" title="{$courseActionLabel}">{$courseAction}</a>
 HTML;
 
 $courseLinks[$counting2] = $rowHTML4 . $examLink . $rowHTMLend4;
@@ -144,6 +230,25 @@ $resultList2 = $resultList2 . $rowHTML2 . $courseNames[$counting2] . $courseLink
 }
 $counting2 = $counting2 + 1;
 }
+$studyguidearea = $this->get_study_guide_area($category->name);
+if ($categoryhasvisiblecourse && $studyguidearea !== null) {
+	$studyguideurl = $categoryhasaccess
+		? (new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $studyguidearea]))->out(false)
+		: $membershipurl;
+	$studyguideaction = $categoryhasaccess ? 'Study Guide' : 'Subscribe';
+	$studyguideclass = $categoryhasaccess ? ' link-retry--guide' : ' link-retry--locked';
+	$studyguidearia = $categoryhasaccess
+		? 'Open the ' . format_string($category->name) . ' Study Guide'
+		: 'Subscribe to access the ' . format_string($category->name) . ' Study Guide';
+	$studyguidearia = s($studyguidearia);
+	$resultList2 .= $rowHTML2
+		. $rowHTML6 . 'Study Guide' . $rowHTMLend
+		. $rowHTML4
+		. '<a href="' . $studyguideurl . '" class="link-retry link-retry2' . $studyguideclass
+		. '" aria-label="' . $studyguidearia . '" title="' . $studyguidearia . '">'
+		. $studyguideaction . '</a>'
+		. $rowHTMLend4 . $rowHTMLend2;
+}
 }
 //array_multisort($categoryNames, $courseNames, $courseLinks, $courseAverage, $courseCompleted, $courseTotalScorms, $Lecture, $isLecture);
 
@@ -152,8 +257,8 @@ $htmlMainSection = <<<HTML
   <tr>
     <th colspan = "2" class="first-column">Study Guide | Basic View</th>
   </tr>
-    <td style="text-align:left;font-size:14px;" class="all-columns"><strong>Course Name</strong></td>
-	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Course Link</strong></td>
+    <td style="text-align:left;font-size:14px;" class="all-columns"><strong>Resource</strong></td>
+	<td style="text-align:center;font-size:14px;" class="all-columns"><strong>Open</strong></td>
 $resultList2
 </table>
 HTML;
