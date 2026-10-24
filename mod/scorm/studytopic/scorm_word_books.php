@@ -802,6 +802,7 @@ function scorm_word_refresh_book(
  * @param context_module $context Book context.
  * @param array $library Library containing exactly one topic.
  * @param string $bookname Student-facing Book name.
+ * @param string $chaptertitle Title of the direct list page.
  * @return void
  */
 function scorm_word_refresh_flat_book(
@@ -809,7 +810,8 @@ function scorm_word_refresh_flat_book(
     int $bookcmid,
     context_module $context,
     array $library,
-    string $bookname
+    string $bookname,
+    string $chaptertitle
 ): void {
     global $DB;
 
@@ -829,7 +831,7 @@ function scorm_word_refresh_flat_book(
         'pagenum ASC'
     ));
     if (!$chapters) {
-        $chapter = scorm_word_add_chapter($book, 1, false, $bookname, '');
+        $chapter = scorm_word_add_chapter($book, 1, false, $chaptertitle, '');
         $chapter->importsrc = 'scorm-word-library-index';
         \mod_book\event\chapter_created::create_from_chapter($book, $context, $chapter)->trigger();
     } else if (count($chapters) === 1 &&
@@ -842,7 +844,7 @@ function scorm_word_refresh_flat_book(
     $now = time();
     $chapter->pagenum = 1;
     $chapter->subchapter = 0;
-    $chapter->title = $bookname;
+    $chapter->title = $chaptertitle;
     $chapter->content = scorm_word_exam_links($files, $bookcmid, $chapter->id);
     $chapter->contentformat = FORMAT_HTML;
     $chapter->timemodified = $now;
@@ -884,6 +886,7 @@ $definitions = [
         'expected' => 432,
         'scope' => 'formulas',
         'flat' => false,
+        'flattitle' => '',
         'visibleoncoursepage' => 1,
     ],
     [
@@ -893,6 +896,7 @@ $definitions = [
         'expected' => 950,
         'scope' => 'herbs',
         'flat' => false,
+        'flattitle' => '',
         'visibleoncoursepage' => 1,
     ],
     [
@@ -903,6 +907,7 @@ $definitions = [
         'expected' => 950,
         'scope' => 'clinicalcases',
         'flat' => true,
+        'flattitle' => 'Handbook of Oriental Medicine — Clinical Cases',
         'visibleoncoursepage' => 1,
     ],
     [
@@ -912,6 +917,7 @@ $definitions = [
         'expected' => 950,
         'scope' => 'simulations',
         'flat' => false,
+        'flattitle' => '',
         'visibleoncoursepage' => 1,
     ],
     [
@@ -920,7 +926,8 @@ $definitions = [
         'legacybookname' => 'Herbology Mnemonic Resources',
         'expected' => 950,
         'scope' => 'mnemonics',
-        'flat' => false,
+        'flat' => true,
+        'flattitle' => 'Herbs Licence Plate',
         'visibleoncoursepage' => 1,
     ],
 ];
@@ -1096,6 +1103,7 @@ foreach ($definitions as $definition) {
         'stalechapters' => $stalechapters,
         'rebuildstructure' => $rebuildstructure,
         'flat' => $definition['flat'],
+        'flattitle' => $definition['flattitle'],
         'visibleoncoursepage' => $definition['visibleoncoursepage'],
     ];
 }
@@ -1165,11 +1173,14 @@ foreach ($plans as $plan) {
                         "Refusing to rebuild unrecognised chapter '{$chapter->title}'."
                     );
                 }
+                $preservetitles = array_filter([
+                    $plan['flattitle'],
+                    'Handbook of Oriental Medicine — Clinical Cases',
+                    'Handbook-of-Oriental-Medicine. Clinical Cases',
+                    'Herbs Licence Plate',
+                ]);
                 if ($plan['flat'] && $chapter->importsrc === 'scorm-word-library' &&
-                        in_array($chapter->title, [
-                            'Handbook of Oriental Medicine — Clinical Cases',
-                            'Handbook-of-Oriental-Medicine. Clinical Cases',
-                        ], true)) {
+                        in_array($chapter->title, $preservetitles, true)) {
                     $preservedflatchapter = $chapter;
                 }
             }
@@ -1200,7 +1211,7 @@ foreach ($plans as $plan) {
         if ($preservedflatchapter) {
             $preservedflatchapter->pagenum = 1;
             $preservedflatchapter->subchapter = 0;
-            $preservedflatchapter->title = $plan['bookname'];
+            $preservedflatchapter->title = $plan['flattitle'];
             $preservedflatchapter->importsrc = 'scorm-word-library-index';
             $preservedflatchapter->timemodified = time();
             $DB->update_record('book_chapters', $preservedflatchapter);
@@ -1212,7 +1223,8 @@ foreach ($plans as $plan) {
                 $bookcmid,
                 $context,
                 $plan['library'],
-                $plan['bookname']
+                $plan['bookname'],
+                $plan['flattitle']
             );
         } else {
             scorm_word_refresh_book(

@@ -255,8 +255,9 @@ Herb library. The one mixed Herbs-and-Formulas clinical collection is promoted
 to the standalone Handbook of Oriental Medicine — Clinical Cases entry, which
 opens directly without intermediate category pages. Herbal Medicine simulations are likewise
 promoted into the standalone Simulation library, and the numbered-plate memory
-aids are promoted into Herbology Mnemonic Resources. The source Word documents
-are not moved or deleted.
+aids are promoted into Herbology Mnemonic Resources. Its activity opens the
+Herbs Licence Plate list directly without an intermediate collection page. The
+source Word documents are not moved or deleted.
 
 ## Custom course selection
 
