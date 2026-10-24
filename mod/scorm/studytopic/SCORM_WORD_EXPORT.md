@@ -53,6 +53,13 @@ into `Why the correct answer is correct` and a separate explanation for every
 incorrect option. This layout is generated automatically and must not be
 recreated manually in individual files.
 
+Some legacy packages store the same formula-and-pattern text as both correct
+and incorrect feedback. The exporter prints that source text once, then creates
+separate Mock-style answer guidance. When an answer choice is correct in a
+related question from the same document, the distractor explanation names the
+symptom for which that choice is actually keyed; otherwise it clearly states
+that the source bank does not key the choice for the symptom in the stem.
+
 ## Validate before publishing
 
 Inspect the summary and errors first:

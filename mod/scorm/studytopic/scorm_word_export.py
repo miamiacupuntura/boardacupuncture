@@ -482,10 +482,145 @@ def split_combined_feedback(
     return correct_feedback, explanations
 
 
+def question_learning_target(question: dict[str, Any]) -> str:
+    """Extract the symptom or modification target from a question stem."""
+    text = normalise_text(question.get("QuestionText"))
+    matches = re.findall(
+        r"What (?:is|are) the modifications? for\s+([^?]+)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if matches:
+        return matches[-1].strip().rstrip(".")
+    return "the modification described in the question"
+
+
+def annotate_related_answer_targets(questions: list[Any]) -> None:
+    """Link repeated answer choices to the symptom they answer elsewhere.
+
+    Several legacy banks repeat the same option set across a family of Mock
+    questions.  When an option is correct in a related question, that gives us
+    a useful, source-backed explanation for why it is a distractor here.
+    """
+    targets_by_answer: dict[str, set[str]] = defaultdict(set)
+    for question in questions:
+        if not isinstance(question, dict):
+            continue
+        target = question_learning_target(question)
+        rightanswer = answer_text(question.get("RightAnswer"))
+        if rightanswer and target != "the modification described in the question":
+            targets_by_answer[normalise_text(rightanswer).casefold()].add(target)
+
+    unique_targets = {
+        answer: next(iter(targets))
+        for answer, targets in targets_by_answer.items()
+        if len(targets) == 1
+    }
+    for question in questions:
+        if isinstance(question, dict):
+            question["__related_answer_targets"] = unique_targets
+
+
+def add_duplicate_source_feedback(
+    builder: DocxBuilder,
+    question: dict[str, Any],
+    source_feedback: str,
+) -> None:
+    """Replace duplicated correct/incorrect source feedback with Mock-style guidance."""
+    target = question_learning_target(question)
+    rightanswer = answer_text(question.get("RightAnswer"))
+
+    builder.add_paragraph(
+        "Formula and pattern review",
+        bold=True,
+        color="17324D",
+        space_before=100,
+        space_after=50,
+        keep_next=True,
+    )
+    builder.add_paragraph(
+        source_feedback,
+        color="31586B",
+        fill="EEF7FA",
+        border_color="58A6B8",
+        left_indent=180,
+        right_indent=120,
+        space_after=100,
+        keep_lines=True,
+    )
+
+    builder.add_paragraph(
+        "Why the correct answer is correct",
+        bold=True,
+        color="17324D",
+        space_before=100,
+        space_after=50,
+        keep_next=True,
+    )
+    builder.add_paragraph(
+        f"For {target}, the keyed modification is {rightanswer}. "
+        "This is the symptom-specific change tested by the question.",
+        color="245B38",
+        fill="EAF6EE",
+        border_color="2E8B57",
+        left_indent=180,
+        right_indent=120,
+        space_after=100,
+        keep_lines=True,
+    )
+
+    answers = question.get("Answers") or []
+    related_targets = question.get("__related_answer_targets") or {}
+    incorrect = []
+    for index, answer in enumerate(answers):
+        value = answer_text(answer)
+        if not value or value == rightanswer:
+            continue
+        label = chr(65 + index) if index < 26 else str(index + 1)
+        related_target = related_targets.get(normalise_text(value).casefold())
+        incorrect.append((label, value, related_target))
+    if incorrect:
+        builder.add_paragraph(
+            "Why the other options are incorrect",
+            bold=True,
+            color="17324D",
+            space_before=100,
+            space_after=50,
+            keep_next=True,
+        )
+        for label, value, related_target in incorrect:
+            if related_target and related_target.casefold() != target.casefold():
+                explanation = (
+                    f"This option is keyed elsewhere in this review for {related_target}, "
+                    f"not for {target}."
+                )
+            else:
+                explanation = (
+                    f"The source bank does not key this option for {target}. It represents "
+                    "a different formula-modification distinction, so match the symptom "
+                    "asked in the stem to its specific modification."
+                )
+            builder.add_paragraph(
+                f"{label}) {value}\n{explanation}",
+                color="6B3030",
+                fill="FDF1F1",
+                border_color="C96D6D",
+                left_indent=180,
+                right_indent=120,
+                space_after=80,
+                keep_lines=True,
+            )
+
+
 def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
     """Render source feedback as clearly labelled study-book callouts."""
     feedback = question.get("Feedback") or []
     if not isinstance(feedback, list):
+        return
+
+    feedbacktexts = [normalise_text(value) for value in feedback if normalise_text(value)]
+    if len(feedbacktexts) >= 2 and len(set(feedbacktexts)) == 1:
+        add_duplicate_source_feedback(builder, question, feedbacktexts[0])
         return
 
     for index, value in enumerate(feedback):
@@ -702,6 +837,7 @@ def build_document(
         questions = quizdata.get("Questions")
         if not isinstance(questions, list):
             raise ValueError("QUIZDATA.json has no Questions array")
+        annotate_related_answer_targets(questions)
 
         title = str(placement.get("scormname") or "SCORM Exam")
         builder = DocxBuilder(title)

@@ -92,6 +92,25 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertEqual(117, int(grouped["b" * 40][0]["courseid"]))
         self.assertEqual(2, len(grouped["b" * 40]))
 
+    def test_duplicate_feedback_uses_related_mock_question_to_explain_distractor(self) -> None:
+        questions = [
+            {
+                "QuestionText": "What is the modification for cough?",
+                "Answers": ["Add Herb A", "Add Herb B"],
+                "RightAnswer": "Add Herb A",
+            },
+            {
+                "QuestionText": "What is the modification for palpitation?",
+                "Answers": ["Add Herb A", "Add Herb B"],
+                "RightAnswer": "Add Herb B",
+            },
+        ]
+        EXPORTER.annotate_related_answer_targets(questions)
+
+        related = questions[0]["__related_answer_targets"]
+        self.assertEqual("cough", related["add herb a"])
+        self.assertEqual("palpitation", related["add herb b"])
+
     def test_safe_segment_removes_path_characters(self) -> None:
         self.assertEqual("Herbs - Final - Exam", EXPORTER.safe_segment("Herbs/Final:Exam", "Exam"))
 
