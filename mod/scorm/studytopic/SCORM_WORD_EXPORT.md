@@ -86,7 +86,8 @@ blue `Study tip · Clues to help answer` card. Shared clues and each item's clue
 receive their own labelled row and symptom lists are converted to bullets. For
 two-item comparisons, the tips use the same side-by-side columns as the answer
 key: shared clues span both columns and item-specific symptoms align in one
-comparison row.
+comparison row. The shared-clue row uses an amber background and bold accent
+text so the common feature is immediately distinguishable from the contrasts.
 
 ## Validate before publishing
 

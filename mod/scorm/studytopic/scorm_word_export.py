@@ -385,21 +385,48 @@ class DocxBuilder:
         datarows = []
         for rownumber, (label, values) in enumerate(rows):
             keepwithnext = rownumber < len(rows) - 1
+            highlightshared = label.casefold() == "shared clues"
+            labelfill = "FFE4B8" if highlightshared else "F2F6F8"
+            valuefill = "FFF6E8" if highlightshared else "FFFFFF"
+            valuecolor = "8A3F0A" if highlightshared else "203040"
             rowxml = (
                 '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
-                + cell(label, widths[0], fill="F2F6F8", bold=True, keep_next=keepwithnext)
+                + cell(
+                    label,
+                    widths[0],
+                    fill=labelfill,
+                    bold=True,
+                    color="8A3F0A" if highlightshared else "17324D",
+                    keep_next=keepwithnext,
+                )
             )
             if len(values) == 1:
                 rowxml += cell(
                     values[0],
                     widths[1] + widths[2],
-                    fill="FFFFFF",
+                    fill=valuefill,
+                    bold=highlightshared,
+                    color=valuecolor,
                     span=2,
                     keep_next=keepwithnext,
                 )
             else:
-                rowxml += cell(values[0], widths[1], fill="FFFFFF", keep_next=keepwithnext)
-                rowxml += cell(values[1], widths[2], fill="FFFFFF", keep_next=keepwithnext)
+                rowxml += cell(
+                    values[0],
+                    widths[1],
+                    fill=valuefill,
+                    bold=highlightshared,
+                    color=valuecolor,
+                    keep_next=keepwithnext,
+                )
+                rowxml += cell(
+                    values[1],
+                    widths[2],
+                    fill=valuefill,
+                    bold=highlightshared,
+                    color=valuecolor,
+                    keep_next=keepwithnext,
+                )
             datarows.append(rowxml + '</w:tr>')
 
         table = (
