@@ -77,6 +77,25 @@
     }
   ];
 
+  const flashcards = [
+    { category: 'General safety', question: 'Which findings suggest a possible fainting response?', answer: 'Dizziness, nausea, pallor, cold sweating, weak pulse or loss of consciousness.', explanation: 'Recognize the event, stop the activity, protect the patient and follow the current clinic emergency-response protocol.' },
+    { category: 'General safety', question: 'What is the central rule when a needle is difficult to manipulate or withdraw?', answer: 'Do not use force.', explanation: 'Keep the patient safe and follow the current supervised protocol for assessing and resolving the situation.' },
+    { category: 'General safety', question: 'How do hematoma and a persistent after-effect differ?', answer: 'Hematoma involves localized swelling or pain associated with vessel injury; an after-effect is persistent soreness or pain after stimulation.', explanation: 'Both require reassessment. Significant, worsening or neurologically associated findings require appropriate escalation.' },
+    { category: 'Regional anatomy', question: 'How should Du Mai cautions be grouped for recall?', answer: 'Posterior spinal, upper-neck or cranial, and source-specific method restrictions.', explanation: 'Group by the vulnerable anatomical region first, then verify the complete point entry.' },
+    { category: 'Regional anatomy', question: 'What repeated risk pattern should you expect in a thoracic region?', answer: 'Pleura and lung relationship, commonly tested through pneumothorax risk.', explanation: 'The channel name alone does not determine the risk; the local anatomy does.' },
+    { category: 'Regional anatomy', question: 'What risk transition appears along the Kidney channel from lower abdomen to chest?', answer: 'Pelvic or bladder context → peritoneal cavity and viscera → side-dependent organs → pleura and lung.', explanation: 'Use regional progression instead of memorizing isolated point numbers.' },
+    { category: 'Regional anatomy', question: 'What does C-E-W help you recall for the Pericardium channel?', answer: 'Chest, Elbow, Wrist.', explanation: 'Then name the local structure: pleura or lung at the chest, major vessels at the elbow and median nerve at the wrist.' },
+    { category: 'Regional anatomy', question: 'How should the large Urinary Bladder caution bank be organized?', answer: 'Head, thoracic back, lumbar back and distal clusters.', explanation: 'Regional clusters reveal recurring eye, pleural, kidney and contextual pregnancy patterns.' },
+    { category: 'Patient and modality context', question: 'Why is pregnancy not classified as the same risk as a vessel or nerve warning?', answer: 'Pregnancy is a patient-context precaution rather than a direct anatomical injury mechanism.', explanation: 'It requires individual assessment and should remain distinct from local tissue risk.' },
+    { category: 'Patient and modality context', question: 'A warning names moxibustion. What must remain attached to the warning?', answer: 'The named modality.', explanation: 'Do not automatically convert a method-specific restriction into a prohibition of every treatment method.' },
+    { category: 'Patient and modality context', question: 'Which three questions separate a modality precaution correctly?', answer: 'What is the patient condition? What tissue or region is involved? Which modality is named?', explanation: 'Then ask whether the wording is current or historical before generalizing it.' },
+    { category: 'Source reasoning', question: 'What can you conclude when a point is absent from a short caution table?', answer: 'Nothing definitive about safety.', explanation: 'Absence from a selected table is not evidence of safety; verify the complete point entry and current guidance.' },
+    { category: 'Source reasoning', question: 'How should a brief historical “contraindicated” label be studied?', answer: 'Preserve its source context and compare it with the complete point entry and current safety guidance.', explanation: 'Do not treat an unexplained legacy phrase as a universal current rule.' },
+    { category: 'Source reasoning', question: 'What does the F in SAFER require?', answer: 'Find the complete source.', explanation: 'Check the full point entry and current safety material instead of relying on a short quiz phrase.' },
+    { category: 'Integrated reasoning', question: 'What evidence makes a two-sided safety flashcard strong?', answer: 'Risk family, structure or context, source, and why the closest distractor fails.', explanation: 'This supports classification and discrimination, not keyword memorization.' },
+    { category: 'Integrated reasoning', question: 'What should an integrated safety case document?', answer: 'Screening, risk classification, verified source, rationale and an appropriate next action within scope.', explanation: 'This applies the complete SAFER sequence without turning conceptual review into procedural instruction.' }
+  ];
+
   const quizForm = document.getElementById('quick-check-form');
   const scoreLabel = document.getElementById('quiz-score');
   const resultBox = document.getElementById('quiz-result');
@@ -128,6 +147,94 @@
       }
     });
   }
+
+  let flashcardPool = flashcards.map((_, index) => index);
+  let flashcardIndex = 0;
+  let flashcardRevealed = false;
+  const flashcardCategory = document.getElementById('flashcard-category');
+
+  function knownFlashcards() {
+    const known = loadState().knownFlashcards;
+    return Array.isArray(known) ? known.map(Number).filter(Number.isInteger) : [];
+  }
+
+  function updateFlashcardProgress() {
+    const known = knownFlashcards();
+    document.getElementById('flashcard-progress').textContent = `${known.length} / ${flashcards.length} known`;
+  }
+
+  function renderFlashcard() {
+    const originalIndex = flashcardPool[flashcardIndex];
+    const card = flashcards[originalIndex];
+    flashcardRevealed = false;
+    document.getElementById('flashcard-label').textContent = card.category;
+    document.getElementById('flashcard-counter').textContent = `${flashcardIndex + 1} of ${flashcardPool.length}`;
+    document.getElementById('flashcard-question').textContent = card.question;
+    document.getElementById('flashcard-answer').textContent = card.answer;
+    document.getElementById('flashcard-explanation').textContent = card.explanation;
+    document.getElementById('flashcard-front').hidden = false;
+    document.getElementById('flashcard-back').hidden = true;
+    document.getElementById('flip-flashcard').textContent = 'Show answer';
+    document.querySelector('.study-flashcard').classList.toggle('known', knownFlashcards().includes(originalIndex));
+    updateFlashcardProgress();
+  }
+
+  function moveFlashcard(step) {
+    flashcardIndex = (flashcardIndex + step + flashcardPool.length) % flashcardPool.length;
+    renderFlashcard();
+  }
+
+  function setFlashcardConfidence(isKnown) {
+    const originalIndex = flashcardPool[flashcardIndex];
+    const known = new Set(knownFlashcards());
+    if (isKnown) known.add(originalIndex); else known.delete(originalIndex);
+    saveState({ knownFlashcards: [...known].sort((a, b) => a - b) });
+    document.querySelector('.study-flashcard').classList.toggle('known', isKnown);
+    updateFlashcardProgress();
+    moveFlashcard(1);
+  }
+
+  flashcardCategory.addEventListener('change', () => {
+    flashcardPool = flashcards.map((card, index) => ({ card, index }))
+      .filter(({ card }) => flashcardCategory.value === 'All' || card.category === flashcardCategory.value)
+      .map(({ index }) => index);
+    flashcardIndex = 0;
+    renderFlashcard();
+  });
+
+  document.getElementById('flip-flashcard').addEventListener('click', () => {
+    flashcardRevealed = !flashcardRevealed;
+    document.getElementById('flashcard-front').hidden = flashcardRevealed;
+    document.getElementById('flashcard-back').hidden = !flashcardRevealed;
+    document.getElementById('flip-flashcard').textContent = flashcardRevealed ? 'Show question' : 'Show answer';
+  });
+  document.getElementById('previous-flashcard').addEventListener('click', () => moveFlashcard(-1));
+  document.getElementById('next-flashcard').addEventListener('click', () => moveFlashcard(1));
+  document.getElementById('shuffle-flashcards').addEventListener('click', () => {
+    for (let index = flashcardPool.length - 1; index > 0; index -= 1) {
+      const swap = Math.floor(Math.random() * (index + 1));
+      [flashcardPool[index], flashcardPool[swap]] = [flashcardPool[swap], flashcardPool[index]];
+    }
+    flashcardIndex = 0;
+    renderFlashcard();
+  });
+  document.getElementById('review-flashcard').addEventListener('click', () => setFlashcardConfidence(false));
+  document.getElementById('know-flashcard').addEventListener('click', () => setFlashcardConfidence(true));
+
+  const ceCheckboxes = [...document.querySelectorAll('.ce-objectives input[type="checkbox"]')];
+  const savedCeObjectives = Array.isArray(loadState().ceObjectives) ? loadState().ceObjectives : [];
+  ceCheckboxes.forEach(checkbox => { checkbox.checked = savedCeObjectives.includes(checkbox.value); });
+
+  function updateCeProgress() {
+    const completed = ceCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+    document.getElementById('ce-progress').textContent = `${completed.length} / ${ceCheckboxes.length} objectives`;
+    document.getElementById('ce-minutes').textContent = String(completed.length * 15);
+    return completed;
+  }
+
+  ceCheckboxes.forEach(checkbox => checkbox.addEventListener('change', () => {
+    saveState({ ceObjectives: updateCeProgress() });
+  }));
 
   function renderQuiz() {
     const saved = loadState().quizAnswers || {};
@@ -258,5 +365,7 @@
     evaluation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
+  renderFlashcard();
+  updateCeProgress();
   renderQuiz();
 })();
