@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/studyguideai/db" VERSION="20261008" COMMENT="Study Guide illustration review and audit">
+  <TABLES>
+    <TABLE NAME="local_studyguideai_image" COMMENT="local_studyguideai_image">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" NOTNULL="true" SEQUENCE="true" LENGTH="10" />
+        <FIELD NAME="cmid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" />
+        <FIELD NAME="scormid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" />
+        <FIELD NAME="topic" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="100" />
+        <FIELD NAME="objective" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="100" />
+        <FIELD NAME="status" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="16" DEFAULT="pending" />
+        <FIELD NAME="activekey" TYPE="char" NOTNULL="false" SEQUENCE="false" LENGTH="64" />
+        <FIELD NAME="generatedby" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="reviewedby" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="draftitemid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="draftfilename" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="255" DEFAULT="" />
+        <FIELD NAME="title" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="255" DEFAULT="" />
+        <FIELD NAME="alttext" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+        <FIELD NAME="contenthash" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="40" DEFAULT="" />
+        <FIELD NAME="replacedby" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="revision" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="1" />
+        <FIELD NAME="timecreated" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="timemodified" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="expires" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        <KEY NAME="cmid" TYPE="foreign" FIELDS="cmid" REFTABLE="course_modules" REFFIELDS="id" />
+        <KEY NAME="scormid" TYPE="foreign" FIELDS="scormid" REFTABLE="scorm" REFFIELDS="id" />
+        <KEY NAME="activekey" TYPE="unique" FIELDS="activekey" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="scope" UNIQUE="false" FIELDS="cmid, topic, objective" />
+        <INDEX NAME="pending" UNIQUE="false" FIELDS="status, expires" />
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_studyguideai_audit" COMMENT="local_studyguideai_audit">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" NOTNULL="true" SEQUENCE="true" LENGTH="10" />
+        <FIELD NAME="imageid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" />
+        <FIELD NAME="cmid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" />
+        <FIELD NAME="actorid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="action" TYPE="char" NOTNULL="true" SEQUENCE="false" LENGTH="16" />
+        <FIELD NAME="relatedid" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+        <FIELD NAME="snapshot" TYPE="text" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="timecreated" TYPE="int" NOTNULL="true" SEQUENCE="false" LENGTH="10" DEFAULT="0" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        <KEY NAME="imageid" TYPE="foreign" FIELDS="imageid" REFTABLE="local_studyguideai_image" REFFIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="imagehistory" UNIQUE="false" FIELDS="imageid, id" />
+        <INDEX NAME="activity" UNIQUE="false" FIELDS="cmid" />
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

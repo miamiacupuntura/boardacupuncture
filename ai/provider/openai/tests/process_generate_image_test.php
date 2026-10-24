@@ -273,7 +273,10 @@ final class process_generate_image_test extends \advanced_testcase {
         $method = new \ReflectionMethod($processor, 'url_to_file');
 
         $contextid = 1;
-        $url = $this->getExternalTestFileUrl('/test.jpg', false);
+        ['mock' => $mock] = $this->get_mocked_http_client();
+        $url = 'https://example.com/test.jpg';
+        $mock->append(new Response(200, ['Content-Type' => 'image/jpeg'],
+            file_get_contents(self::get_fixture_path('aiprovider_openai', 'test.jpg'))));
         $filenobj = $method->invoke($processor, $contextid, $url);
 
         $this->assertEquals('test.jpg', $filenobj->get_filename());
@@ -340,6 +343,71 @@ final class process_generate_image_test extends \advanced_testcase {
         $this->assertEquals('generate_image', $result->get_actionname());
         $this->assertEquals('An image that represents the concept of a \'test\'.', $result->get_response_data()['revisedprompt']);
         $this->assertEquals($url, $result->get_response_data()['sourceurl']);
+    }
+
+    /**
+     * Exercise both image response formats without contacting OpenAI.
+     *
+     * @dataProvider draft_response_provider
+     * @param bool $base64 Whether the provider returns Base64 instead of a URL.
+     */
+    public function test_generated_image_draft(bool $base64): void {
+        global $USER, $DB;
+        $this->resetAfterTest();
+        $this->setUser($this->getDataGenerator()->create_user());
+        $this->create_action($USER->id);
+        set_config('action_generate_image_model', $base64 ? 'gpt-image-1-mini' : 'dall-e-3', 'aiprovider_openai');
+        set_config('enabled', 1, 'aiprovider_openai');
+        set_config('apikey', 'fake-key-no-network', 'aiprovider_openai');
+        ['mock' => $mock] = $this->get_mocked_http_client();
+        $fixture = file_get_contents(self::get_fixture_path('core_ai', 'white.png'));
+        $data = $base64 ? ['b64_json' => base64_encode($fixture)] : ['url' => 'https://example.com/image.png'];
+        $mock->append(new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => [$data]])));
+        if (!$base64) {
+            $mock->append(new Response(200, ['Content-Type' => 'image/png'], $fixture));
+        }
+
+        $response = \core\di::get(\core_ai\manager::class)->process_action($this->action);
+        $this->assertTrue($response->get_success());
+        $this->assertTrue($DB->record_exists('ai_action_register', [
+            'actionname' => 'generate_image', 'userid' => $USER->id, 'success' => 1,
+        ]));
+        $file = $response->get_response_data()['draftfile'];
+        $this->assertInstanceOf(\stored_file::class, $file);
+        $this->assertEquals(\context_user::instance($USER->id)->id, $file->get_contextid());
+        $this->assertEquals('user', $file->get_component());
+        $this->assertEquals('draft', $file->get_filearea());
+        $this->assertGreaterThan(0, $file->get_itemid());
+        $this->assertEquals('image/png', $file->get_mimetype());
+        $this->assertNotEquals($fixture, $file->get_content(), 'The watermark must be applied.');
+        $info = getimagesizefromstring($file->get_content());
+        $this->assertEquals('image/png', $info['mime']);
+
+        // The Study Guide endpoint builds this URL for the currently logged-in instructor.
+        $url = \moodle_url::make_draftfile_url($file->get_itemid(), $file->get_filepath(), $file->get_filename());
+        $this->assertStringContainsString('draftfile.php', $url->out(false));
+        $path = '/' . $file->get_contextid() . '/user/draft/' . $file->get_itemid() .
+            $file->get_filepath() . $file->get_filename();
+        // draftfile.php resolves this exact hash after checking the session owner.
+        $servedfile = get_file_storage()->get_file_by_hash(sha1($path));
+        $this->assertEquals($file->get_content(), $servedfile->get_content());
+        $this->assertEquals(0, $mock->count(), 'Only queued fake HTTP responses may be consumed.');
+    }
+
+    /** @return array Test both supported provider response formats. */
+    public static function draft_response_provider(): array {
+        return ['base64' => [true], 'url' => [false]];
+    }
+
+    /** Invalid Base64 must not create a stored file. */
+    public function test_invalid_base64(): void {
+        global $USER;
+        $this->resetAfterTest();
+        $this->setUser($this->getDataGenerator()->create_user());
+        $processor = new process_generate_image($this->provider, $this->action);
+        $method = new \ReflectionMethod($processor, 'base64_to_file');
+        $this->expectException(\moodle_exception::class);
+        $method->invoke($processor, $USER->id, '%%%invalid-base64%%%');
     }
 
     /**

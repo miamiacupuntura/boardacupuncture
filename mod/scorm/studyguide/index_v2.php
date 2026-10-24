@@ -22,6 +22,13 @@ if (!$cmid) {
     }
 }
 
+// Resolve a real SCORM module and check enrolment/availability before reading guide data.
+[$studyguidecm, $studyguidecourse, $studyguidecontext] = \local_studyguideai\service::access((int)$cmid);
+if ((int)$studyguidecm->instance !== $scormid) {
+    throw new invalid_parameter_exception('SCORM activity mismatch');
+}
+$PAGE->requires->js('/local/studyguideai/review.js');
+
 $studysection = $cmid ? $DB->get_record('course_modules', ['id' => $cmid], 'id,course,section,instance') : false;
 $studysectionname = '';
 $studymodule = '';
@@ -323,7 +330,7 @@ if (
     }
 }
 
-$PAGE->set_url(new moodle_url('/mod/scorm/studyguide/index.php', ['id' => $scormid]));
+$PAGE->set_url(new moodle_url('/mod/scorm/studyguide/index_v2.php', ['id' => $scormid, 'cmid' => $cmid]));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title('Optional Study Guide');
 $PAGE->set_heading('');
@@ -845,19 +852,7 @@ document.querySelectorAll('.instructor_generate_qa_button').forEach(function(but
                 <div id="objective1_flashcards_result"
                      style="margin-top:14px;display:none;"></div>
 
-                <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e4e7ec;">
-                    <button type="button"
-                            id="objective1_generate_illustration"
-                            style="padding:9px 16px;border:0;border-radius:6px;background:#198754;color:white;font-weight:600;cursor:pointer;">
-                        Generate Illustration
-                    </button>
-
-                    <span id="objective1_illustration_status"
-                          style="margin-left:10px;color:#667085;"></span>
-
-                    <div id="objective1_illustration_preview"
-                         style="margin-top:14px;display:none;"></div>
-                </div>
+                <?php echo \local_studyguideai\ui::render((int)$cmid); ?>
             </div>
 
             <div style="margin-bottom:12px;padding:16px;background:#ffffff;border:1px solid #e4e7ec;border-radius:9px;">
@@ -1040,81 +1035,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- objective1_image_generation_handler -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('objective1_generate_illustration');
-    const status = document.getElementById('objective1_illustration_status');
-    const preview = document.getElementById('objective1_illustration_preview');
 
-    if (!button || !status || !preview) {
-        return;
-    }
-
-    button.addEventListener('click', async function() {
-        if (!confirm('Generate one AI illustration? This may incur an OpenAI API charge.')) {
-            return;
-        }
-
-        button.disabled = true;
-        status.textContent = 'Generating illustration...';
-        preview.style.display = 'none';
-        preview.replaceChildren();
-
-        try {
-            const params = new URLSearchParams({
-                id: '<?php echo (int)$scormid; ?>',
-                cmid: '<?php echo (int)$cmid; ?>',
-                mode: 'image',
-                prompt: 'Hand Yin Channels — Chest to Hands',
-                sesskey: M.cfg.sesskey
-            });
-
-            const response = await fetch(
-                '<?php echo (new moodle_url('/mod/scorm/studyguide/instructor_ai.php'))->out(false); ?>',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: params.toString()
-                }
-            );
-
-            const raw = await response.text();
-            let data;
-            try {
-                data = JSON.parse(raw);
-            } catch (parseError) {
-                throw new Error(
-                    'HTTP ' + response.status +
-                    ' — Server returned HTML/text: ' +
-                    raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 350)
-                );
-            }
-
-            if (data.success && data.drafturl) {
-                const img = document.createElement('img');
-                img.src = data.drafturl;
-                img.alt = 'Hand Yin Channels educational illustration';
-                img.style.maxWidth = '100%';
-                img.style.height = 'auto';
-                img.style.borderRadius = '10px';
-
-                preview.appendChild(img);
-                preview.style.display = 'block';
-                status.textContent = 'Illustration generated — instructor review required.';
-            } else {
-                status.textContent = data.error || 'Image generation failed.';
-            }
-        } catch (error) {
-            status.textContent = 'Illustration error: ' + (error.message || String(error));
-        } finally {
-            button.disabled = false;
-        }
-    });
-});
-</script>
 
 <!-- OLD STUDY GUIDE BELOW - TEMPORARILY PRESERVED -->
 
