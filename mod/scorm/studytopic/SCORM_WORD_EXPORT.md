@@ -149,7 +149,7 @@ cat /var/tmp/formula-herb-word-export/export-summary.json
 ```
 
 Open a sample of Word documents from each question type before placing either ZIP
-in Moodle. Publishing the ZIP files into the `Formulas Tips` section is a
+in Moodle. Publishing the ZIP files into the `Herbology Exam Key` section is a
 separate, deliberate step.
 
 `--overwrite` only replaces a directory that contains the exporter marker
@@ -177,7 +177,7 @@ sudo -u www-data php mod/scorm/studytopic/scorm_word_publish.php \
   --execute
 ```
 
-This initially creates two visible Moodle folder activities in `Formulas Tips`:
+This initially creates two visible Moodle folder activities in `Herbology Exam Key`:
 
 - `Formula Exams — Word Downloads`
 - `Herb Exams — Word Downloads`
