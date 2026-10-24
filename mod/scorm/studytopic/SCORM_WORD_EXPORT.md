@@ -34,6 +34,9 @@ formula-herb-word-export/
 │   ├── matching-study-guide-index.html
 │   ├── matching-study-guide-index.csv
 │   ├── matching-study-guide-index.json
+│   ├── comparative-study-note.html
+│   ├── comparative-study-note.csv
+│   ├── comparative-study-note.json
 │   ├── errors.json
 │   └── ... true .docx files grouped by course and section
 ├── Herbs/
@@ -71,6 +74,12 @@ count, while CSV/JSON preserve every source exam and question number for later
 deduplication work. These totals are included in `export-summary.json` and the
 CLI completion message.
 
+The additional `Comparative Study Note` index is student-facing and independent
+of the source questions. It lists each unique comparison once, grouped by the
+category of the first item, without question numbers, exam names, attempt data,
+or source occurrences. It supplements rather than replaces the existing exam
+documents, complete lists, and Mock feedback.
+
 Each document uses readable question typography, shaded options, green
 correct-answer boxes, orange note boxes, running headers, page numbers, and
 structured Mock-style feedback. Combined legacy feedback is divided
@@ -97,9 +106,10 @@ For non-choice interactions, the feedback refers back to the answer key already
 printed above instead of repeating long accepted-answer, matching, sequence, or
 hotspot data. Long retained feedback is labelled `Detailed source review` for
 question types where it is relevant. Duplicate legacy formula-reference lists
-are omitted from Matching questions because they are not match-specific
-feedback. Matching explanations identify the comparison title rather than using
-a generic `question prompt` label. Two-item comparisons use one side-by-side
+are omitted from Matching study cards because they remain available in the
+separate original question-bank library. Matching explanations identify the
+comparison title rather than using a generic `question prompt` label. Two-item
+comparisons use one side-by-side
 table with shared `Category`, `Details`, and answer-group rows; Matching sets of
 other sizes fall back to numbered cards. Long multiline values no longer run
 together around a single arrow. The feedback states each item's classification
@@ -119,10 +129,10 @@ after the comparative answer key and explains why the distinction matters,
 identifies overlapping findings that can cause confusion, and shows how each
 side could become an exam vignette without inventing new answer-key facts. A
 final row explains why reversing the two groups is incorrect. When this complete
-card is available, duplicated legacy Matching feedback is suppressed so the
-same categories and associations are not printed a second time. Compact fonts,
-cell padding, margins, and landscape width keep the entire Matching study card
-on one sheet without dropping any of its four explanation rows. A final
+card is available, duplicated legacy Matching feedback is not copied into the
+independent Study Note. The complete previous list and Mock-style feedback stay
+unchanged in the original question-bank library. Compact fonts, cell padding,
+margins, and landscape width keep the entire Study Note together. A final
 `Possible exam questions · Study prompts` block motivates active review of the
 two categories, shared findings, distinguishing symptom clusters, and formula
 associations. These are study prompts only and are not yet scored or reported.

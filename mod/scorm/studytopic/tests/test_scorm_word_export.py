@@ -360,6 +360,17 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertEqual(1, groups[0]["unique_comparisons"])
         self.assertEqual(2, groups[0]["comparisons"][0]["occurrences"])
 
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory)
+            EXPORTER.write_comparative_study_note_index(destination, groups)
+            page = (destination / "comparative-study-note.html").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("Comparative Study Note", page)
+            self.assertIn("(gao liang jiang) vs. (sheng jiang)", page)
+            self.assertNotIn("Exam 1", page)
+            self.assertNotIn("question", page.casefold())
+
     def test_two_matching_items_are_aligned_as_comparison_data(self) -> None:
         question = {
             "LeftColumn": [
@@ -441,6 +452,16 @@ class ScormWordExportTest(unittest.TestCase):
             self.assertTrue(
                 (output / "Herbs" / "matching-study-guide-index.html").is_file()
             )
+            self.assertTrue(
+                (output / "Herbs" / "comparative-study-note.html").is_file()
+            )
+            comparative = json.loads(
+                (output / "Herbs" / "comparative-study-note.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual("Comparative Study Note", comparative["title"])
+            self.assertEqual(0, comparative["study_notes"])
 
 
 if __name__ == "__main__":

@@ -1882,6 +1882,77 @@ def matching_library_groups(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return groups
 
 
+def write_comparative_study_note_index(
+    category_root: Path,
+    groups: list[dict[str, Any]],
+) -> None:
+    """Write a question-independent index of unique comparative study notes."""
+    notes = [
+        {
+            "first_item_category": group["first_item_category"],
+            "comparative_study_note": comparison["comparison"],
+        }
+        for group in groups
+        for comparison in group["comparisons"]
+    ]
+    data = {
+        "title": "Comparative Study Note",
+        "study_notes": len(notes),
+        "categories": [
+            {
+                "first_item_category": group["first_item_category"],
+                "study_notes": [
+                    comparison["comparison"] for comparison in group["comparisons"]
+                ],
+            }
+            for group in groups
+        ],
+    }
+    (category_root / "comparative-study-note.json").write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    with (category_root / "comparative-study-note.csv").open(
+        "w", encoding="utf-8-sig", newline=""
+    ) as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["first_item_category", "comparative_study_note"],
+        )
+        writer.writeheader()
+        writer.writerows(notes)
+
+    sections = []
+    for group in groups:
+        items = "".join(
+            "<li><strong>" + html.escape(comparison["comparison"]) + "</strong></li>"
+            for comparison in group["comparisons"]
+        )
+        sections.append(
+            "<section><h2>"
+            + html.escape(group["first_item_category"])
+            + f" <small>{group['unique_comparisons']} study notes</small></h2>"
+            + "<ul>"
+            + items
+            + "</ul></section>"
+        )
+    htmlpage = f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Comparative Study Note</title><style>
+body{{font-family:Arial,sans-serif;max-width:1000px;margin:2rem auto;padding:0 1rem;color:#17324d}}
+h1{{border-bottom:4px solid #f47e2c;padding-bottom:.5rem}}h2{{margin-top:2rem;background:#e8f3f5;padding:.75rem}}
+small{{font-size:.65em;color:#527286}}ul{{list-style:none;padding:0}}li{{border-bottom:1px solid #d7e2e8;padding:.7rem}}
+.summary{{background:#fff6e8;border-left:5px solid #f47e2c;padding:1rem}}
+</style></head><body><h1>Comparative Study Note</h1>
+<p class="summary"><strong>{len(notes)}</strong> independent study notes · <strong>{len(groups)}</strong> categories</p>
+<p>This library is organized as independent comparative study material.</p>{''.join(sections)}</body></html>
+"""
+    (category_root / "comparative-study-note.html").write_text(
+        htmlpage,
+        encoding="utf-8",
+    )
+
+
 def write_matching_library_index(category_root: Path, rows: list[dict[str, Any]]) -> dict[str, int]:
     """Write machine-readable and browser-readable Matching indexes."""
     rows.sort(
@@ -1895,6 +1966,7 @@ def write_matching_library_index(category_root: Path, rows: list[dict[str, Any]]
         )
     )
     groups = matching_library_groups(rows)
+    write_comparative_study_note_index(category_root, groups)
     uniquecomparisons = sum(group["unique_comparisons"] for group in groups)
     indexdata = {
         "matching_questions": len(rows),
@@ -2061,6 +2133,7 @@ def export_category(
         f"Packages with errors: {len(errors)}\n\n"
         "Each document includes the source questions, answer key, and available feedback.\n"
         "Open matching-study-guide-index.html for the category-first Matching index.\n"
+        "Open comparative-study-note.html for the independent study-note library.\n"
         "Duplicate Moodle activities that use the same package are represented once.\n",
         encoding="utf-8",
     )
@@ -2073,6 +2146,7 @@ def export_category(
         "documents": len(manifest_rows),
         **matchingstats,
         "matching_index": f"{category}/matching-study-guide-index.html",
+        "comparative_study_note_index": f"{category}/comparative-study-note.html",
         "errors": len(errors),
         "zip": zip_path.name,
     }

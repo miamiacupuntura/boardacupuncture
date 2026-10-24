@@ -59,10 +59,22 @@ The preferred two-sheet split is:
 - Card 2: formula or herb associations, Study Guide exam focus, and possible
   exam questions.
 
+## Independent library
+
+`Comparative Study Note` is an independent study library. The source questions
+may be used to extract and verify facts, but question numbers, attempts, exam
+status, and exam-history presentation do not appear in this library.
+
+The existing exam documents, complete source lists, and Mock-style feedback are
+preserved in their original question-bank library. Creating or refreshing
+Comparative Study Notes must never delete, replace, shorten, or republish those
+existing materials. The new cards are supplementary study notes.
+
 ## Index and reporting
 
-The separate Matching index groups comparisons by the category of the first
-item and lists concise pinyin names. It reports source-question occurrences and
-unique comparisons. Study prompts are not surveys and are not scored; survey,
+The technical Matching index may retain source provenance for auditing. The
+student-facing `Comparative Study Note` index groups unique comparisons by the
+category of the first item, lists concise pinyin names, and does not expose the
+source question list. Study prompts are not surveys and are not scored; survey,
 checklist, and student weakness reporting remain a later phase.
 
