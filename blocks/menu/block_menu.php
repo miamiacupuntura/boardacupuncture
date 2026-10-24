@@ -79,9 +79,15 @@ class block_menu extends block_base {
      * @param int $courseid Moodle course ID.
      * @param string $label Button label.
      * @param string $type Visual button type.
+     * @param int|null $sectionid Optional section database ID for a direct entry point.
      * @return string
      */
-    private function board_resource_button(int $courseid, string $label, string $type): string {
+    private function board_resource_button(
+        int $courseid,
+        string $label,
+        string $type,
+        ?int $sectionid = null
+    ): string {
         global $DB;
 
         $course = $DB->get_record('course', ['id' => $courseid, 'visible' => 1], 'id');
@@ -89,7 +95,11 @@ class block_menu extends block_base {
             return '<span class="board-hub__action board-hub__action--pending">' . s($label) . '</span>';
         }
 
-        $url = new moodle_url('/course/view.php', ['id' => $courseid]);
+        if ($sectionid !== null) {
+            $url = new moodle_url('/course/section.php', ['id' => $sectionid]);
+        } else {
+            $url = new moodle_url('/course/view.php', ['id' => $courseid]);
+        }
         return '<a class="board-hub__action board-hub__action--' . s($type) . '" href="'
             . $url->out(false) . '">' . s($label) . '</a>';
     }
@@ -190,7 +200,7 @@ class block_menu extends block_base {
                         [45, 'Single Herbs', 'questions'],
                         [44, 'Formulas', 'questions'],
                         [41, 'Simulation', 'simulation'],
-                        [92, 'Exam Key', 'notes'],
+                        [92, 'Exam Key', 'notes', 2020],
                         [82, 'Games', 'games'],
                     ],
                 ],
@@ -226,7 +236,12 @@ class block_menu extends block_base {
                 $grade = min(100, max(0, (float) $progress['grade']));
                 $actions = '';
                 foreach ($subject['resources'] as $resource) {
-                    $actions .= $this->board_resource_button($resource[0], $resource[1], $resource[2]);
+                    $actions .= $this->board_resource_button(
+                        $resource[0],
+                        $resource[1],
+                        $resource[2],
+                        $resource[3] ?? null
+                    );
                 }
                 $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
                     'area' => $subject['area'],
