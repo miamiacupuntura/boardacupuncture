@@ -261,11 +261,25 @@ function scorm_word_collection_name(string $sourcecourse): string {
     $names = [
         'Herbal Comp Review Module Exams' => 'Herbal Combinations Review',
         'Herbal Medicine Simulation Exams' => 'Herbal Medicine Simulations',
-        'Playing Herbology Module Exams' => 'Interactive Herbology Review',
+        'Playing Herbology Module Exams' => 'Herbology Mnemonic Resources',
         'Single Herbs Exams' => 'Single Herbs',
         'Formulas Exams' => 'Formulas',
     ];
     return $names[$sourcecourse] ?? $sourcecourse;
+}
+
+/**
+ * Return a short explanation for a student-facing collection.
+ *
+ * @param string $sourcecourse Original source course name.
+ * @return string
+ */
+function scorm_word_collection_description(string $sourcecourse): string {
+    $descriptions = [
+        'Playing Herbology Module Exams' =>
+            'Memory aids connecting numbered plates, herb properties, pinyin and formula maps.',
+    ];
+    return $descriptions[$sourcecourse] ?? '';
 }
 
 /**
@@ -320,6 +334,10 @@ function scorm_word_main_index(array $library, int $bookcmid, array $coursechapt
             s(scorm_word_collection_name($sourcecourse)),
             ['class' => 'mb-0']
         );
+        $description = scorm_word_collection_description($sourcecourse);
+        $descriptionhtml = $description === ''
+            ? ''
+            : html_writer::tag('p', s($description), ['class' => 'card-text mb-2']);
         $summary = html_writer::tag(
             'p',
             "{$examcount} answer keys organized into {$sectioncount} topics",
@@ -333,7 +351,7 @@ function scorm_word_main_index(array $library, int $bookcmid, array $coursechapt
         );
         $cards[] = html_writer::div(
             html_writer::div($header, 'card-header') .
-            html_writer::div($summary . $button, 'card-body'),
+            html_writer::div($descriptionhtml . $summary . $button, 'card-body'),
             'card h-100'
         );
     }
@@ -412,9 +430,13 @@ function scorm_word_map_chapters(stdClass $book, array $library): array {
     foreach ($library as $sourcecourse => $sections) {
         $coursechapter = array_shift($chapters);
         $collectionname = scorm_word_collection_name($sourcecourse);
+        $validtitles = [$sourcecourse, $collectionname];
+        if ($sourcecourse === 'Playing Herbology Module Exams') {
+            $validtitles[] = 'Interactive Herbology Review';
+        }
         if (!$coursechapter || $coursechapter->subchapter ||
                 $coursechapter->importsrc !== 'scorm-word-library' ||
-                !in_array($coursechapter->title, [$sourcecourse, $collectionname], true)) {
+                !in_array($coursechapter->title, $validtitles, true)) {
             cli_error("Generated Book '{$book->name}' has an unexpected category structure.");
         }
         $coursechapters[$sourcecourse] = $coursechapter;
