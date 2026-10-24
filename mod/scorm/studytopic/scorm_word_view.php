@@ -32,6 +32,38 @@ function scorm_word_exception(string $message): moodle_exception {
 }
 
 /**
+ * Add the native Book table of contents with absolute Book links.
+ *
+ * Moodle's Book helper normally emits view.php links relative to mod/book.
+ * This preview lives in mod/scorm/studytopic, so those links must be made
+ * absolute before the table of contents is added to the page.
+ *
+ * @param array $chapters Book chapters.
+ * @param stdClass $chapter Current Book chapter.
+ * @param stdClass $book Book record.
+ * @param stdClass $cm Book course module.
+ * @return void
+ */
+function scorm_word_add_book_toc(
+    array $chapters,
+    stdClass $chapter,
+    stdClass $book,
+    stdClass $cm
+): void {
+    global $PAGE;
+
+    $toc = book_get_toc($chapters, $chapter, $book, $cm, false);
+    $bookviewurl = (new moodle_url('/mod/book/view.php'))->out(false);
+    $toc = str_replace('href="view.php?', 'href="' . $bookviewurl . '?', $toc);
+
+    $block = new block_contents();
+    $block->title = get_string('toc', 'mod_book');
+    $block->attributes['class'] = 'block block_book_toc';
+    $block->content = $toc;
+    $PAGE->blocks->add_fake_block($block, $PAGE->blocks->get_default_region());
+}
+
+/**
  * Read text and line breaks from a Word run.
  *
  * @param DOMXPath $xpath XML query helper.
@@ -355,7 +387,7 @@ $PAGE->add_body_class('limitedwidth');
 $PAGE->add_body_class('scorm-word-library');
 $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
 if ($bookchapter) {
-    book_add_fake_block($bookchapters, $bookchapter, $book, $bookcm, false);
+    scorm_word_add_book_toc($bookchapters, $bookchapter, $book, $bookcm);
 }
 
 $requestdirectory = make_request_directory();
