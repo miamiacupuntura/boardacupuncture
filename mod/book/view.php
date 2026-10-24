@@ -101,7 +101,8 @@ $PAGE->set_other_editing_capability('mod/book:edit');
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($course->fullname);
 $PAGE->add_body_class('limitedwidth');
-if (str_contains((string)$book->intro, 'data-scorm-word-book')) {
+$iswordlibrary = str_contains((string)$book->intro, 'data-scorm-word-book');
+if ($iswordlibrary) {
     $PAGE->add_body_class('scorm-word-library');
     $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
 }
@@ -123,6 +124,14 @@ if (!$chapterid) {
     book_view($book, $chapter, \mod_book\helper::is_last_visible_chapter($chapter->id, $chapters), $course, $cm, $context);
 
     echo $OUTPUT->header();
+
+    if ($iswordlibrary) {
+        $examkeyurl = new moodle_url('/course/section.php', ['id' => $cm->section]);
+        echo html_writer::div(
+            html_writer::link($examkeyurl, '← Back to Exam Key', ['class' => 'btn btn-secondary']),
+            'scorm-word-exam-key-home mb-3'
+        );
+    }
 
     $renderer = $PAGE->get_renderer('mod_book');
     $actionmenu = new \mod_book\output\main_action_menu($cm->id, $chapters, $chapter, $book);

@@ -277,6 +277,7 @@ if ($file->get_filesize() > SCORM_WORD_MAX_DOCX_BYTES) {
 }
 
 $returnurl = new moodle_url('/mod/folder/view.php', ['id' => $cm->id]);
+$examkeyurl = new moodle_url('/course/section.php', ['id' => $cm->section]);
 $indexurl = null;
 $bookcm = null;
 $book = null;
@@ -400,6 +401,7 @@ $content = scorm_word_document_html($temppath);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(s(pathinfo($file->get_filename(), PATHINFO_FILENAME)), 2);
 echo html_writer::start_div('scorm-word-preview-toolbar d-flex flex-wrap gap-2 mb-4');
+echo html_writer::link($examkeyurl, '← Back to Exam Key', ['class' => 'btn btn-secondary']);
 if ($indexurl) {
     echo html_writer::link($indexurl, 'Book Index', ['class' => 'btn btn-secondary']);
     echo html_writer::link($returnurl, 'Back to Exam List', ['class' => 'btn btn-secondary']);
