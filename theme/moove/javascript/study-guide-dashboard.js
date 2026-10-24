@@ -71,7 +71,7 @@
                 comparisons.href = '/study-guide/comparisons/index.html';
                 comparisons.textContent = 'Comparisons';
                 comparisons.setAttribute('aria-label', 'Open Comparative Study Notes');
-                link.insertAdjacentElement('afterend', comparisons);
+                link.insertAdjacentElement('beforebegin', comparisons);
             }
         });
     }

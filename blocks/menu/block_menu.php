@@ -234,13 +234,13 @@ class block_menu extends block_base {
                 $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
                     'area' => $subject['area'],
                 ]);
-                $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
-                    . $studyguideurl->out(false) . '">Study Guide</a>';
                 if ($subject['area'] === 'herbology') {
                     $comparisonsurl = new moodle_url('/study-guide/comparisons/index.html');
                     $actions .= '<a class="board-hub__action comparisons-dashboard-link" href="'
                         . $comparisonsurl->out(false) . '">Comparisons</a>';
                 }
+                $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
+                    . $studyguideurl->out(false) . '">Study Guide</a>';
 
                 $lastexam = 'No exam taken yet';
                 if ($progress['lastexam'] !== '') {
