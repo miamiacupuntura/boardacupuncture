@@ -62,6 +62,15 @@ The Continuing Education blocks must keep the same chapter-wide order:
 
 Use separate collapsible cards for the first three blocks. Do not insert cases, an exam link or a certificate before the Learning Plan table.
 
+When a chapter includes a professional-practice case lab, place it inside block 2 and use the same four-part sequence for every scenario:
+
+1. Case: patient context, relevant content or region, timing and warning cues.
+2. Anatomical or clinical error: missed screen, vulnerable structure or broken safety rule.
+3. Medical or professional impact: urgency, factual documentation and limits of causal claims.
+4. Required prevention or response: current protocol, escalation and documentation within scope.
+
+Have learners complete their own analysis before revealing a model response. Mark reconstructed examples as fictional composites unless a complete, verifiable case source is cited.
+
 Do not place forward-jump links inside objective reading. Navigation can remain in the chapter sidebar, but the instructional body should preserve the reading sequence. Existing Moodle question banks belong in one separate post-reading directory, and official results remain in Moodle Exam History.
 
 ## Required quality checks
