@@ -18,6 +18,16 @@ body.scorm-word-library-course #page.drawers.show-drawer-left {
     border-color: #d8e2e8;
 }
 
+.scorm-word-library-index {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.scorm-word-library .book_content,
+.scorm-word-library #mod_book-chapter {
+    overflow-x: hidden;
+}
+
 .scorm-word-library-index .card-header {
     background: #e8f3f5;
 }

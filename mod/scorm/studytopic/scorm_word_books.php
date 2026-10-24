@@ -233,7 +233,7 @@ function scorm_word_exam_links(array $files, int $foldercmid, int $bookcmid, int
     }
     return html_writer::tag(
         'p',
-        'Select an exam to read its questions, correct answers and feedback directly in Moodle.'
+        'Select an exam key to review its questions, correct answers and available feedback.'
     ) . html_writer::tag('ul', implode('', $items), ['class' => 'list-unstyled']);
 }
 
@@ -249,6 +249,35 @@ function scorm_word_source_course_count(array $sections): int {
         $count += count($files);
     }
     return $count;
+}
+
+/**
+ * Return a student-facing collection name for a source course.
+ *
+ * @param string $sourcecourse Original source course name.
+ * @return string
+ */
+function scorm_word_collection_name(string $sourcecourse): string {
+    $names = [
+        'Herbal Comp Review Module Exams' => 'Herbal Combinations Review',
+        'Herbal Medicine Simulation Exams' => 'Herbal Medicine Simulations',
+        'Playing Herbology Module Exams' => 'Interactive Herbology Review',
+        'Single Herbs Exams' => 'Single Herbs',
+        'Formulas Exams' => 'Formulas',
+    ];
+    return $names[$sourcecourse] ?? $sourcecourse;
+}
+
+/**
+ * Build the student-facing description shown on generated Exam Key Books.
+ *
+ * @param string $bookname Book activity name.
+ * @return string
+ */
+function scorm_word_book_intro(string $bookname): string {
+    $subject = str_starts_with($bookname, 'Herb') ? 'Herb' : 'Formula';
+    return '<p data-scorm-word-book="2"><strong>' . $subject . ' Exam Key Library.</strong> ' .
+        'Choose a collection, then a topic, to review questions, correct answers and available feedback.</p>';
 }
 
 /**
@@ -286,16 +315,20 @@ function scorm_word_main_index(array $library, int $bookcmid, array $coursechapt
     foreach ($library as $sourcecourse => $sections) {
         $examcount = scorm_word_source_course_count($sections);
         $sectioncount = count($sections);
-        $header = html_writer::tag('h4', s($sourcecourse), ['class' => 'mb-0']);
+        $header = html_writer::tag(
+            'h4',
+            s(scorm_word_collection_name($sourcecourse)),
+            ['class' => 'mb-0']
+        );
         $summary = html_writer::tag(
             'p',
-            "{$examcount} exams in {$sectioncount} topics",
+            "{$examcount} answer keys organized into {$sectioncount} topics",
             ['class' => 'card-text text-muted']
         );
         $button = scorm_word_chapter_link(
             $bookcmid,
             $coursechapters[$sourcecourse]->id,
-            'Open category',
+            'View topics',
             ['class' => 'btn btn-primary']
         );
         $cards[] = html_writer::div(
@@ -311,7 +344,7 @@ function scorm_word_main_index(array $library, int $bookcmid, array $coursechapt
     }
     return html_writer::tag(
         'p',
-        'Choose a category. The next page lists its topics and the number of available exams.'
+        'Choose a collection. Then select a topic to find the exam key you want to review.'
     ) . html_writer::div(implode('', $columns), 'row scorm-word-library-index');
 }
 
@@ -334,7 +367,7 @@ function scorm_word_category_index(array $sections, int $bookcmid, array $sectio
         );
         $count = html_writer::tag(
             'span',
-            count($files) . ' exams',
+            count($files) . ' answer keys',
             ['class' => 'badge badge-light ml-2']
         );
         $items[] = html_writer::tag(
@@ -343,7 +376,7 @@ function scorm_word_category_index(array $sections, int $bookcmid, array $sectio
             ['class' => 'list-group-item d-flex justify-content-between align-items-center']
         );
     }
-    return html_writer::tag('p', 'Choose a topic to see all its exams.') .
+    return html_writer::tag('p', 'Choose a topic to see its available exam keys.') .
         html_writer::tag('ul', implode('', $items), [
             'class' => 'list-group scorm-word-category-index',
         ]);
@@ -378,9 +411,10 @@ function scorm_word_map_chapters(stdClass $book, array $library): array {
     $sectionchapters = [];
     foreach ($library as $sourcecourse => $sections) {
         $coursechapter = array_shift($chapters);
+        $collectionname = scorm_word_collection_name($sourcecourse);
         if (!$coursechapter || $coursechapter->subchapter ||
                 $coursechapter->importsrc !== 'scorm-word-library' ||
-                $coursechapter->title !== $sourcecourse) {
+                !in_array($coursechapter->title, [$sourcecourse, $collectionname], true)) {
             cli_error("Generated Book '{$book->name}' has an unexpected category structure.");
         }
         $coursechapters[$sourcecourse] = $coursechapter;
@@ -421,7 +455,13 @@ function scorm_word_create_chapters(stdClass $book, context_module $context, arr
     \mod_book\event\chapter_created::create_from_chapter($book, $context, $index)->trigger();
 
     foreach ($library as $sourcecourse => $sections) {
-        $coursechapter = scorm_word_add_chapter($book, $pagenum++, false, $sourcecourse, '');
+        $coursechapter = scorm_word_add_chapter(
+            $book,
+            $pagenum++,
+            false,
+            scorm_word_collection_name($sourcecourse),
+            ''
+        );
         \mod_book\event\chapter_created::create_from_chapter($book, $context, $coursechapter)->trigger();
         foreach ($sections as $sourcesection => $files) {
             $chapter = scorm_word_add_chapter($book, $pagenum++, true, $sourcesection, '');
@@ -463,6 +503,7 @@ function scorm_word_add_main_index(stdClass $book, context_module $context): voi
  * @param context_module $context Book context.
  * @param stdClass $folder Source folder record.
  * @param array $library Grouped Word library.
+ * @param string $bookname Student-facing Book name.
  * @return void
  */
 function scorm_word_refresh_book(
@@ -470,7 +511,8 @@ function scorm_word_refresh_book(
     int $bookcmid,
     context_module $context,
     stdClass $folder,
-    array $library
+    array $library,
+    string $bookname
 ): void {
     global $DB;
 
@@ -486,12 +528,16 @@ function scorm_word_refresh_book(
 
     $map = scorm_word_map_chapters($book, $library);
     $now = time();
+    $map['index']->title = str_starts_with($bookname, 'Herb')
+        ? 'Herb Exam Key Index'
+        : 'Formula Exam Key Index';
     $map['index']->content = scorm_word_main_index($library, $bookcmid, $map['courses']);
     $map['index']->timemodified = $now;
     $DB->update_record('book_chapters', $map['index']);
 
     foreach ($library as $sourcecourse => $sections) {
         $coursechapter = $map['courses'][$sourcecourse];
+        $coursechapter->title = scorm_word_collection_name($sourcecourse);
         $coursechapter->content = scorm_word_category_index(
             $sections,
             $bookcmid,
@@ -513,8 +559,8 @@ function scorm_word_refresh_book(
         }
     }
 
-    $book->intro = '<p data-scorm-word-book="2">Online index of the generated SCORM exam ' .
-        'library. Select a category, topic and exam to read it in Moodle.</p>';
+    $book->name = $bookname;
+    $book->intro = scorm_word_book_intro($bookname);
     $book->introformat = FORMAT_HTML;
     $book->revision++;
     $book->timemodified = $now;
@@ -544,12 +590,14 @@ if (!class_exists('ZipArchive') || !class_exists('DOMDocument')) {
 $definitions = [
     [
         'foldername' => 'Formula Exams — Word Downloads',
-        'bookname' => 'Formula Exams — Online Book',
+        'bookname' => 'Formula Exam Key Library',
+        'legacybookname' => 'Formula Exams — Online Book',
         'expected' => 432,
     ],
     [
         'foldername' => 'Herb Exams — Word Downloads',
-        'bookname' => 'Herb Exams — Online Book',
+        'bookname' => 'Herb Exam Key Library',
+        'legacybookname' => 'Herb Exams — Online Book',
         'expected' => 952,
     ],
 ];
@@ -579,12 +627,13 @@ foreach ($definitions as $definition) {
             AND cm.section = :sectionid
             AND cm.module = :moduleid
             AND cm.deletioninprogress = 0
-            AND b.name = :name",
+            AND (b.name = :name OR b.name = :legacyname)",
         [
             'courseid' => $courseid,
             'sectionid' => $sectionid,
             'moduleid' => $bookmodule->id,
             'name' => $definition['bookname'],
+            'legacyname' => $definition['legacybookname'],
         ],
         IGNORE_MULTIPLE
     );
@@ -635,7 +684,7 @@ foreach ($definitions as $definition) {
 echo "Course: {$course->fullname} ({$course->id})\n";
 echo "Section: {$section->name} (database ID {$section->id}, section {$section->section})\n";
 foreach ($plans as $plan) {
-    echo "{$plan['bookname']}: {$plan['documents']} exams, {$plan['chapters']} chapters — " .
+    echo "{$plan['bookname']}: {$plan['documents']} answer keys, {$plan['chapters']} chapters — " .
         "{$plan['status']}\n";
 }
 
@@ -663,8 +712,7 @@ foreach ($plans as $plan) {
                 'module' => $bookmodule->id,
                 'section' => (int)$section->section,
                 'name' => $plan['bookname'],
-                'intro' => '<p data-scorm-word-book="2">Online index of the generated SCORM exam ' .
-                    'library. Select a category, topic and exam to read it in Moodle.</p>',
+                'intro' => scorm_word_book_intro($plan['bookname']),
                 'introformat' => FORMAT_HTML,
                 'numbering' => BOOK_NUM_BULLETS,
                 'customtitles' => 0,
@@ -689,7 +737,8 @@ foreach ($plans as $plan) {
             $bookcmid,
             $context,
             $plan['folder'],
-            $plan['library']
+            $plan['library'],
+            $plan['bookname']
         );
         $DB->set_field(
             'course_modules',
