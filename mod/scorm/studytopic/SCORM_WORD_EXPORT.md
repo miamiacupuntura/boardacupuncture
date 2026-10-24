@@ -45,6 +45,12 @@ Each Word document includes the question wording, available images, answer
 choices or matches, the correct answer, question notes, and source feedback.
 Legacy click-map questions include the source image and correct hotspot data.
 
+Each document uses the standard study-book layout: branded cover, contents
+page, chapters of up to ten questions, running header, page numbers, readable
+question typography, shaded options, green correct-answer boxes, orange note
+boxes, and blue feedback boxes. This layout is generated automatically and
+must not be recreated manually in individual files.
+
 ## Validate before publishing
 
 Inspect the summary and errors first:
@@ -90,6 +96,21 @@ This initially creates two visible Moodle folder activities in `Formulas Tips`:
 Each activity preserves the course and section subfolders and provides Moodle's
 folder-download button. Existing activities are never replaced or deleted. A
 repeat run only skips a generated activity after verifying its DOCX count.
+
+To replace the files inside the two verified generated folders after a template
+change, first run a dry run with the explicit refresh flag:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/scorm_word_publish.php \
+  --output=/var/tmp/formula-herb-word-export \
+  --course=92 \
+  --section=2020 \
+  --refresh-existing
+```
+
+After reviewing the counts, add `--execute`. The refresh preserves the Folder
+course-module IDs. Run `scorm_word_books.php --execute` immediately afterward
+so every Book preview link is regenerated with the refreshed Moodle file IDs.
 
 After the Online Books are created, the Book builder changes these source
 folders to stealth activities (`visible=1`, `visibleoncoursepage=0`). Students

@@ -89,13 +89,42 @@ def paragraph_xml(
     italic: bool = False,
     color: str | None = None,
     size: int | None = None,
+    space_before: int = 0,
     space_after: int = 100,
+    keep_next: bool = False,
+    keep_lines: bool = False,
+    page_break_before: bool = False,
+    alignment: str | None = None,
+    fill: str | None = None,
+    border_color: str | None = None,
+    left_indent: int | None = None,
+    right_indent: int | None = None,
 ) -> str:
     value = normalise_text(text)
     properties = []
     if style:
         properties.append(f'<w:pStyle w:val="{xml_escape(style)}"/>')
-    properties.append(f'<w:spacing w:after="{space_after}"/>')
+    if keep_next:
+        properties.append('<w:keepNext/>')
+    if keep_lines:
+        properties.append('<w:keepLines/>')
+    if page_break_before:
+        properties.append('<w:pageBreakBefore/>')
+    properties.append(f'<w:spacing w:before="{space_before}" w:after="{space_after}"/>')
+    if alignment:
+        properties.append(f'<w:jc w:val="{xml_escape(alignment)}"/>')
+    if left_indent is not None or right_indent is not None:
+        properties.append(
+            f'<w:ind w:left="{left_indent or 0}" w:right="{right_indent or 0}"/>'
+        )
+    if fill:
+        properties.append(f'<w:shd w:val="clear" w:color="auto" w:fill="{xml_escape(fill)}"/>')
+    if border_color:
+        properties.append(
+            '<w:pBdr>'
+            f'<w:left w:val="single" w:sz="20" w:space="8" w:color="{xml_escape(border_color)}"/>'
+            '</w:pBdr>'
+        )
     ppr = f"<w:pPr>{''.join(properties)}</w:pPr>"
 
     run_properties = []
@@ -172,6 +201,9 @@ class DocxBuilder:
     def add_paragraph(self, text: Any, **kwargs: Any) -> None:
         self.body.append(paragraph_xml(text, **kwargs))
 
+    def add_page_break(self) -> None:
+        self.body.append('<w:p><w:r><w:br w:type="page"/></w:r></w:p>')
+
     def add_image(self, data: bytes, extension: str, description: str) -> None:
         extension = extension.lower().lstrip(".")
         if extension == "jpeg":
@@ -181,7 +213,7 @@ class DocxBuilder:
 
         number = len(self.media) + 1
         filename = f"image{number}.{extension}"
-        relationship = f"rId{number + 1}"
+        relationship = f"rId{number + 4}"
         width, height = image_dimensions(data, extension)
         cx = max(width, 1) * EMU_PER_PIXEL
         cy = max(height, 1) * EMU_PER_PIXEL
@@ -220,20 +252,27 @@ class DocxBuilder:
  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
  <w:body>{''.join(self.body)}
   <w:sectPr><w:pgSz w:w="12240" w:h="15840"/>
-   <w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080" w:header="720" w:footer="720" w:gutter="0"/>
+   <w:pgMar w:top="1080" w:right="900" w:bottom="1080" w:left="900" w:header="540" w:footer="540" w:gutter="0"/>
+   <w:headerReference w:type="default" r:id="rId2"/>
+   <w:footerReference w:type="default" r:id="rId3"/>
   </w:sectPr>
  </w:body>
 </w:document>'''
         styles = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
- <w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos"/><w:sz w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults>
- <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>
- <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="36"/></w:rPr></w:style>
- <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="28"/></w:rPr></w:style>
- <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:color w:val="F47E2C"/><w:sz w:val="24"/></w:rPr></w:style>
+ <w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos"/><w:color w:val="203040"/><w:sz w:val="21"/></w:rPr></w:rPrDefault></w:docDefaults>
+ <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:pPr><w:spacing w:after="100" w:line="276" w:lineRule="auto"/></w:pPr></w:style>
+ <w:style w:type="paragraph" w:styleId="BookBrand"><w:name w:val="Book Brand"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="260"/><w:jc w:val="center"/></w:pPr><w:rPr><w:b/><w:color w:val="F47E2C"/><w:sz w:val="22"/><w:caps/></w:rPr></w:style>
+ <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="BookSubtitle"/><w:pPr><w:spacing w:before="240" w:after="240"/><w:jc w:val="center"/><w:keepNext/></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="48"/></w:rPr></w:style>
+ <w:style w:type="paragraph" w:styleId="BookSubtitle"><w:name w:val="Book Subtitle"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="360"/><w:jc w:val="center"/></w:pPr><w:rPr><w:color w:val="527286"/><w:sz w:val="26"/></w:rPr></w:style>
+ <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="180" w:after="180"/><w:pBdr><w:bottom w:val="single" w:sz="16" w:space="8" w:color="F47E2C"/></w:pBdr></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="32"/></w:rPr></w:style>
+ <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="220" w:after="100"/><w:shd w:val="clear" w:color="auto" w:fill="E8F3F5"/><w:pBdr><w:left w:val="single" w:sz="28" w:space="8" w:color="F47E2C"/></w:pBdr></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="26"/></w:rPr></w:style>
 </w:styles>'''
         relationships = [
-            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>',
+            '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>',
+            '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>',
+            '<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>',
         ]
         for relationship, filename in self.image_relationships:
             relationships.append(
@@ -258,6 +297,9 @@ class DocxBuilder:
  {''.join(image_types)}
  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+ <Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>
+ <Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>
+ <Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>
  <Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
  <Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
 </Types>'''
@@ -276,6 +318,24 @@ class DocxBuilder:
  <dcterms:created xsi:type="dcterms:W3CDTF">{timestamp}</dcterms:created>
  <dcterms:modified xsi:type="dcterms:W3CDTF">{timestamp}</dcterms:modified>
 </cp:coreProperties>'''
+        shorttitle = xml_escape(self.title[:90])
+        header = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+ <w:p><w:pPr><w:jc w:val="right"/><w:spacing w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="12" w:space="6" w:color="F47E2C"/></w:pBdr></w:pPr>
+  <w:r><w:rPr><w:b/><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t>{shorttitle}</w:t></w:r>
+ </w:p>
+</w:hdr>'''
+        footer = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+ <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80"/><w:pBdr><w:top w:val="single" w:sz="8" w:space="6" w:color="D8E2E8"/></w:pBdr></w:pPr>
+  <w:r><w:rPr><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t xml:space="preserve">AcupunctureTests  •  Page </w:t></w:r>
+  <w:fldSimple w:instr=" PAGE "><w:r><w:rPr><w:color w:val="527286"/><w:sz w:val="17"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple>
+ </w:p>
+</w:ftr>'''
+        settings = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+ <w:compat/><w:doNotTrackMoves/><w:doNotTrackFormatting/>
+</w:settings>'''
         app = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"
  xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
@@ -287,6 +347,9 @@ class DocxBuilder:
             docx.writestr("_rels/.rels", package_relationships)
             docx.writestr("word/document.xml", document)
             docx.writestr("word/styles.xml", styles)
+            docx.writestr("word/header1.xml", header)
+            docx.writestr("word/footer1.xml", footer)
+            docx.writestr("word/settings.xml", settings)
             docx.writestr("word/_rels/document.xml.rels", document_relationships)
             docx.writestr("docProps/core.xml", core)
             docx.writestr("docProps/app.xml", app)
@@ -350,6 +413,39 @@ def answer_text(answer: Any) -> str:
     return normalise_text(answer)
 
 
+def question_type_label(value: str) -> str:
+    """Convert SCORM class names into reader-friendly labels."""
+    label = re.sub(r"Question$", "", value)
+    label = re.sub(r"(?<!^)(?=[A-Z])", " ", label)
+    return label.strip() or "Question"
+
+
+def add_option(builder: DocxBuilder, label: str, value: Any) -> None:
+    builder.add_paragraph(
+        f"{label}) {answer_text(value)}",
+        fill="F7F9FB",
+        left_indent=180,
+        right_indent=120,
+        space_after=55,
+        keep_lines=True,
+    )
+
+
+def add_correct_answer(builder: DocxBuilder, text: str) -> None:
+    builder.add_paragraph(
+        text,
+        bold=True,
+        color="167A3A",
+        fill="EAF6EE",
+        border_color="2E8B57",
+        left_indent=180,
+        right_indent=120,
+        space_before=80,
+        space_after=120,
+        keep_lines=True,
+    )
+
+
 def add_question(
     builder: DocxBuilder,
     question: dict[str, Any],
@@ -357,9 +453,25 @@ def add_question(
     images: PackageImages,
 ) -> None:
     qtype = str(question.get("__type") or "Unknown")
-    builder.add_paragraph(f"Question {number}", style="Heading2", space_after=60)
-    builder.add_paragraph(f"Type: {qtype}", italic=True, color="666666", size=18)
-    builder.add_paragraph(question.get("QuestionText", ""), space_after=140)
+    builder.add_paragraph(f"Question {number}", style="Heading2", space_after=70)
+    builder.add_paragraph(
+        question_type_label(qtype),
+        italic=True,
+        color="527286",
+        size=18,
+        left_indent=180,
+        space_after=70,
+        keep_next=True,
+    )
+    builder.add_paragraph(
+        question.get("QuestionText", ""),
+        bold=True,
+        size=22,
+        left_indent=180,
+        right_indent=120,
+        space_after=150,
+        keep_lines=True,
+    )
 
     question_images: list[Any] = []
     imageurl = question.get("ImageURL")
@@ -373,12 +485,12 @@ def add_question(
     if qtype == "MatchingQuestion":
         left = {item.get("Id"): answer_text(item) for item in question.get("LeftColumn", [])}
         right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
-        builder.add_paragraph("Correct matches:", bold=True)
+        builder.add_paragraph("Correct matches", bold=True, color="17324D", keep_next=True)
         for itemid, leftvalue in left.items():
-            builder.add_paragraph(f"{leftvalue} → {right.get(itemid, '[missing match]')}")
+            add_correct_answer(builder, f"{leftvalue} → {right.get(itemid, '[missing match]')}")
     elif qtype == "MultipleResponseQuestion":
         answers = question.get("Answers") or []
-        builder.add_paragraph("Options:", bold=True)
+        builder.add_paragraph("Options", bold=True, color="17324D", keep_next=True)
         correct = []
         for index, item in enumerate(answers):
             iscorrect = False
@@ -390,15 +502,15 @@ def add_question(
                 iscorrect = bool(item.get("Correct"))
                 value = item.get("Content", item)
             label = chr(65 + index) if index < 26 else str(index + 1)
-            builder.add_paragraph(f"{label}) {answer_text(value)}")
+            add_option(builder, label, value)
             if iscorrect:
                 correct.append(answer_text(value))
-        builder.add_paragraph("Correct answer(s): " + "; ".join(correct), bold=True, color="167A3A")
+        add_correct_answer(builder, "Correct answer(s): " + "; ".join(correct))
     elif qtype == "SequenceQuestion":
         items = question.get("Items") or []
-        builder.add_paragraph("Correct sequence:", bold=True)
+        builder.add_paragraph("Correct sequence", bold=True, color="17324D", keep_next=True)
         for index, item in enumerate(items, start=1):
-            builder.add_paragraph(f"{index}. {answer_text(item)}")
+            add_correct_answer(builder, f"{index}. {answer_text(item)}")
     elif qtype == "ClickMapQuestion":
         correct = [item for item in question.get("Answers", []) if item.get("Correct")]
         if correct:
@@ -406,15 +518,15 @@ def add_question(
             for item in correct:
                 data = item.get("Data") or []
                 values.append(f"{item.get('Name', 'Region')} at {data}")
-            builder.add_paragraph("Correct hotspot: " + "; ".join(values), bold=True, color="167A3A")
+            add_correct_answer(builder, "Correct hotspot: " + "; ".join(values))
     else:
         answers = question.get("Answers") or []
         if isinstance(answers, list) and answers:
-            builder.add_paragraph("Options:", bold=True)
+            builder.add_paragraph("Options", bold=True, color="17324D", keep_next=True)
             answer_images = question.get("AnswerImageURLs") or []
             for index, item in enumerate(answers):
                 label = chr(65 + index) if index < 26 else str(index + 1)
-                builder.add_paragraph(f"{label}) {answer_text(item)}")
+                add_option(builder, label, item)
                 if isinstance(answer_images, list) and index < len(answer_images):
                     add_referenced_images(
                         builder,
@@ -424,21 +536,27 @@ def add_question(
                     )
         rightanswer = question.get("RightAnswer")
         if rightanswer not in (None, ""):
-            builder.add_paragraph(
-                "Correct answer: " + answer_text(rightanswer),
-                bold=True,
-                color="167A3A",
-            )
+            add_correct_answer(builder, "Correct answer: " + answer_text(rightanswer))
         elif qtype == "FillInTheBlankQuestion" and answers:
-            builder.add_paragraph(
+            add_correct_answer(
+                builder,
                 "Accepted answer(s): " + "; ".join(answer_text(item) for item in answers),
-                bold=True,
-                color="167A3A",
             )
 
     notes = normalise_text(question.get("QuestionNotes"))
     if notes:
-        builder.add_paragraph("Notes: " + notes, italic=True)
+        builder.add_paragraph(
+            "Notes: " + notes,
+            italic=True,
+            color="8A3F0A",
+            fill="FFF6E8",
+            border_color="F4A261",
+            left_indent=180,
+            right_indent=120,
+            space_before=80,
+            space_after=100,
+            keep_lines=True,
+        )
 
     feedback = question.get("Feedback") or []
     if isinstance(feedback, list):
@@ -447,9 +565,19 @@ def add_question(
             text = normalise_text(value)
             if text:
                 label = labels[index] if index < len(labels) else f"Feedback {index + 1}"
-                builder.add_paragraph(f"{label}: {text}", italic=True, color="555555")
+                builder.add_paragraph(
+                    f"{label}: {text}",
+                    italic=True,
+                    color="31586B",
+                    fill="EEF7FA",
+                    border_color="58A6B8",
+                    left_indent=180,
+                    right_indent=120,
+                    space_after=100,
+                    keep_lines=True,
+                )
 
-    builder.add_paragraph("", space_after=180)
+    builder.add_paragraph("", space_after=160)
 
 
 def find_quizdata_member(package: zipfile.ZipFile) -> str | None:
@@ -461,6 +589,15 @@ def find_quizdata_member(package: zipfile.ZipFile) -> str | None:
     if not candidates:
         return None
     return sorted(candidates, key=lambda item: (item.count("/"), len(item)))[0]
+
+
+def book_chapters(question_count: int, chapter_size: int = 10) -> list[tuple[int, int, int]]:
+    """Return chapter number and inclusive question ranges."""
+    chapters = []
+    for start in range(1, question_count + 1, chapter_size):
+        end = min(start + chapter_size - 1, question_count)
+        chapters.append((len(chapters) + 1, start, end))
+    return chapters
 
 
 def build_document(
@@ -482,22 +619,83 @@ def build_document(
 
         title = str(placement.get("scormname") or "SCORM Exam")
         builder = DocxBuilder(title)
-        builder.add_paragraph(title, style="Title", space_after=160)
+        builder.add_paragraph("", space_after=420)
+        builder.add_paragraph(
+            "ACUPUNCTURETESTS",
+            style="BookBrand",
+            alignment="center",
+            space_after=260,
+        )
+        builder.add_paragraph(
+            title,
+            style="Title",
+            alignment="center",
+            space_before=180,
+            space_after=220,
+            keep_lines=True,
+        )
+        builder.add_paragraph(
+            "Exam Review Book · Instructor Edition",
+            style="BookSubtitle",
+            alignment="center",
+            color="527286",
+            size=26,
+            space_after=420,
+        )
         builder.add_paragraph(
             f"Course: {placement.get('coursename', '')}\n"
             f"Section: {placement.get('sectionname') or 'Unlabelled section'}\n"
             f"Questions: {len(questions)}\n"
             f"Source CMID: {placement.get('cmid', '')}",
-            color="555555",
+            color="31586B",
+            fill="E8F3F5",
+            border_color="F47E2C",
+            left_indent=720,
+            right_indent=720,
+            space_before=120,
+            space_after=220,
+            keep_lines=True,
         )
         builder.add_paragraph(
             "Answer key and source feedback are included for instructor review.",
             italic=True,
             color="8A3F0A",
-            space_after=200,
+            alignment="center",
+            space_after=240,
         )
+
+        chapters = book_chapters(len(questions))
+        builder.add_page_break()
+        builder.add_paragraph("Contents", style="Heading1", space_after=180)
+        builder.add_paragraph(
+            "This study book is arranged in groups of up to ten questions for easier reading and review.",
+            color="527286",
+            space_after=180,
+        )
+        for chapter, start, end in chapters:
+            builder.add_paragraph(
+                f"Chapter {chapter}  ·  Questions {start}–{end}",
+                bold=True,
+                color="17324D",
+                fill="F7F9FB",
+                border_color="F47E2C",
+                left_indent=180,
+                right_indent=120,
+                space_after=80,
+                keep_lines=True,
+            )
+
         images = PackageImages(package)
         for number, question in enumerate(questions, start=1):
+            if (number - 1) % 10 == 0:
+                builder.add_page_break()
+                chapter = ((number - 1) // 10) + 1
+                end = min(number + 9, len(questions))
+                builder.add_paragraph(
+                    f"Chapter {chapter} · Questions {number}–{end}",
+                    style="Heading1",
+                    space_after=220,
+                )
             if isinstance(question, dict):
                 add_question(builder, question, number, images)
             else:

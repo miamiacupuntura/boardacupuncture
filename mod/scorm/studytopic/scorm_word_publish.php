@@ -9,8 +9,8 @@
 /**
  * Publish a completed SCORM Word export as Moodle folder activities.
  *
- * The command is a dry run unless --execute is supplied. Existing activities
- * are never replaced or deleted.
+ * The command is a dry run unless --execute is supplied. Existing generated
+ * activities can be refreshed explicitly without changing their module IDs.
  *
  * @package    mod_scorm
  * @copyright  2026 Miami Acupuncture
@@ -30,12 +30,14 @@ global $CFG, $DB;
     'output' => '/var/tmp/formula-herb-word-export',
     'course' => 92,
     'section' => 2020,
+    'refresh-existing' => false,
     'execute' => false,
     'help' => false,
 ], [
     'o' => 'output',
     'c' => 'course',
     's' => 'section',
+    'r' => 'refresh-existing',
     'x' => 'execute',
     'h' => 'help',
 ]);
@@ -55,12 +57,14 @@ Options:
   -o, --output=PATH   Completed export directory
   -c, --course=ID     Target Moodle course ID (default: 92)
   -s, --section=ID    Target course_sections database ID (default: 2020)
-  -x, --execute       Create the two folder activities
+  -r, --refresh-existing
+                      Refresh files in verified generated folders
+  -x, --execute       Create folders or perform the requested refresh
   -h, --help          Show this help
 
 Example:
   php scorm_word_publish.php --output=/var/tmp/formula-herb-word-export \\
-      --course=92 --section=2020 --execute
+      --course=92 --section=2020 --refresh-existing --execute
 
 HELP;
     exit(0);
@@ -178,13 +182,13 @@ foreach ($definitions as $category => $activityname) {
         $storeddocx = array_filter($storedfiles, static function(stored_file $file): bool {
             return strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION)) === 'docx';
         });
-        if (count($storeddocx) !== $expected) {
+        if (!$options['refresh-existing'] && count($storeddocx) !== $expected) {
             cli_error(
                 "Generated activity '{$activityname}' exists but contains " . count($storeddocx) .
                 " of {$expected} DOCX files. It was not changed."
             );
         }
-        $status = 'already published';
+        $status = $options['refresh-existing'] ? 'refresh existing' : 'already published';
     }
 
     $plans[] = [
@@ -206,7 +210,7 @@ foreach ($plans as $plan) {
 
 if (!$options['execute']) {
     echo "Dry run complete. No Moodle data was changed.\n";
-    echo "Run the same command with --execute to publish.\n";
+    echo "Run the same command with --execute to publish or refresh.\n";
     exit(0);
 }
 
@@ -242,6 +246,41 @@ foreach ($plans as $plan) {
             $fs->create_file_from_pathname($filerecord, $pathname);
         }
 
+        if ($plan['status'] === 'refresh existing') {
+            $context = context_module::instance($plan['existing']->cmid);
+            file_save_draft_area_files(
+                $draftitemid,
+                $context->id,
+                'mod_folder',
+                'content',
+                0,
+                ['subdirs' => true, 'maxfiles' => -1]
+            );
+            $storedfiles = $fs->get_area_files(
+                $context->id,
+                'mod_folder',
+                'content',
+                0,
+                'id',
+                false
+            );
+            $storeddocx = array_filter($storedfiles, static function(stored_file $file): bool {
+                return strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION)) === 'docx';
+            });
+            if (count($storeddocx) !== $plan['expected']) {
+                throw new moodle_exception(
+                    'generalexceptionmessage',
+                    'error',
+                    '',
+                    'Refreshed folder contains ' . count($storeddocx) .
+                    " of {$plan['expected']} expected DOCX files."
+                );
+            }
+            $fs->delete_area_files($usercontext->id, 'user', 'draft', $draftitemid);
+            echo "Refreshed {$plan['name']} (CM {$plan['existing']->cmid}).\n";
+            continue;
+        }
+
         $moduleinfo = (object)[
             'modulename' => 'folder',
             'module' => $foldermodule->id,
@@ -274,4 +313,4 @@ foreach ($plans as $plan) {
 }
 
 rebuild_course_cache($courseid, true);
-echo "Publishing complete. No existing activities were replaced or deleted.\n";
+echo "Publishing complete. Activity IDs were preserved and no activities were deleted.\n";
