@@ -91,6 +91,39 @@ Each activity preserves the course and section subfolders and provides Moodle's
 folder-download button. Existing activities are never replaced or deleted. A
 repeat run only skips a generated activity after verifying its DOCX count.
 
+## Create online Moodle Books
+
+The Book builder uses the generated Word folders as its source. It creates one
+Formula Book and one Herb Book, with source courses as chapters and source
+sections as subchapters. Exam names open a secure in-Moodle preview of their
+questions, answers, feedback, and images; the original Word download remains
+available from the preview.
+
+Run the validation first:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/scorm_word_books.php \
+  --course=92 \
+  --section=2020
+```
+
+Then create the Books explicitly:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/scorm_word_books.php \
+  --course=92 \
+  --section=2020 \
+  --execute
+```
+
+The command creates:
+
+- `Formula Exams — Online Book`
+- `Herb Exams — Online Book`
+
+It never replaces or deletes an existing activity. Repeated execution verifies
+and skips Books previously created by this tool.
+
 ## Custom course selection
 
 ```bash
