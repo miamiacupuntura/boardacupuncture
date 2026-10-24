@@ -59,6 +59,9 @@ key, and exam-focused guidance remain together. Card titles retain each full
 botanical name plus its pinyin; only the separate library index shortens entries
 to the parenthetical pinyin names. Other documents also omit the
 former administrative cover and chapter contents.
+For larger comparisons, content clarity overrides the one-sheet target: the
+exporter should use a clearly labelled two-sheet card rather than shrink or
+remove useful content, and should never exceed two sheets for one comparison.
 
 Every category export also creates `matching-study-guide-index.html`, `.csv`,
 and `.json`. The browser index reports total Matching occurrences, unique

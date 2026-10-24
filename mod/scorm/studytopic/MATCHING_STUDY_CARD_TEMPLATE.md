@@ -40,13 +40,24 @@ Do not force a multi-item question into the two-column layout.
 - Possible exam questions remain at the bottom as unscored study prompts.
 - Full names remain on the card; concise pinyin names remain in the external
   index.
-- Text must remain readable. Do not reduce the body below 8 pt merely to force
-  an oversized comparison onto one sheet.
+- Content clarity takes priority over page count. Target one landscape sheet,
+  but never shorten a necessary explanation, collapse meaningful distinctions,
+  or tighten tables until they are difficult to scan merely to force one page.
+- Keep body text at a readable size; 8 pt is the absolute lower limit, not the
+  default target.
 
-When five or more items, unusually long formula lists, or images make one sheet
-unreadable, divide the source question into a clearly numbered card set such as
-`Card 1 of 2` and `Card 2 of 2`. Keep the original Matching question ID in the
-export metadata so the set can be traced and counted as one source question.
+When several items, unusually long formula lists, or images make one sheet
+unclear, use exactly two coordinated sheets labelled `Card 1 of 2` and `Card 2
+of 2`. Do not exceed two sheets. Keep the original Matching question ID in the
+export metadata so both sheets remain traceable and are counted as one source
+question.
+
+The preferred two-sheet split is:
+
+- Card 1: full comparison title, shared clues, distinguishing clues, categories,
+  and comparative answer key.
+- Card 2: formula or herb associations, Study Guide exam focus, and possible
+  exam questions.
 
 ## Index and reporting
 
