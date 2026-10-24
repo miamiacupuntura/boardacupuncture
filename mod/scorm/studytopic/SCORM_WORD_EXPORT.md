@@ -88,6 +88,11 @@ two-item comparisons, the tips use the same side-by-side columns as the answer
 key: shared clues span both columns and item-specific symptoms align in one
 comparison row. The shared-clue row uses an amber background and bold accent
 text so the common feature is immediately distinguishable from the contrasts.
+Two-item Matching comparisons also include a compact purple `Exam strategy`
+card derived from the source categories and clue lists. It explains why the
+distinction matters, identifies overlapping findings that can cause confusion,
+shows how each side could become an exam vignette, and lists related question
+patterns without inventing new answer-key facts.
 
 ## Validate before publishing
 

@@ -936,6 +936,70 @@ def matching_tip_comparison_data(
     return columns, rows
 
 
+def matching_exam_strategy(
+    question: dict[str, Any],
+    tips: list[tuple[str, str]],
+) -> list[tuple[str, str]]:
+    """Build source-grounded coaching for a two-item Matching comparison."""
+    itemtips = [(label, value) for label, value in tips if label not in {"Shared clues", "Helpful clue"}]
+    if len(itemtips) != 2:
+        return []
+
+    names = [label for label, _value in itemtips]
+    symptomlists = [
+        [line.lstrip("• ").strip().rstrip(".") for line in value.splitlines() if line.strip()]
+        for _label, value in itemtips
+    ]
+    normalizedsecond = {value.casefold() for value in symptomlists[1]}
+    sharedsymptoms = [value for value in symptomlists[0] if value.casefold() in normalizedsecond]
+    uniques = []
+    for index, values in enumerate(symptomlists):
+        other = {value.casefold() for value in symptomlists[1 - index]}
+        uniques.append([value for value in values if value.casefold() not in other])
+
+    details = matching_pair_details(question)
+    categories = [detail[1] for detail in details[:2]]
+    while len(categories) < 2:
+        categories.append("the category shown in the answer key")
+
+    sharedclues = [value for label, value in tips if label == "Shared clues"]
+    sharedstatement = sharedclues[0] if sharedclues else "The items have overlapping actions."
+    why = (
+        f"{sharedstatement} The distinction matters because {names[0]} is classified as "
+        f"{categories[0]}, while {names[1]} is classified as {categories[1]}. The exam may "
+        "test whether you move beyond the shared action and identify the correct clinical context."
+    )
+
+    if sharedsymptoms:
+        overlap = ", ".join(sharedsymptoms)
+        confusion = f"{overlap} appear in both clue sets, so those findings alone do not separate the herbs."
+    else:
+        confusion = "The shared action can make both choices look plausible at first glance."
+    firstunique = ", ".join(uniques[0][:3]) or "the first item's distinguishing clues"
+    secondunique = ", ".join(uniques[1][:3]) or "the second item's distinguishing clues"
+    confusion += (
+        f" Look for {firstunique} to favor {names[0]}, versus {secondunique} to favor {names[1]}."
+    )
+
+    examformat = (
+        f"A vignette emphasizing {firstunique} could ask for the better match: {names[0]}. "
+        f"A second vignette emphasizing {secondunique} could point to {names[1]}. The same "
+        "distinction may also appear as a category or formula-association question."
+    )
+    related = (
+        f"• Which category belongs to {names[0]} and which belongs to {names[1]}?\n"
+        "• Which findings are shared and therefore least useful for distinguishing them?\n"
+        "• Which symptom cluster most strongly favors each item?\n"
+        "• Which formula associations belong in each comparison column?"
+    )
+    return [
+        ("Why it matters", why),
+        ("Common confusion", confusion),
+        ("How it may appear", examformat),
+        ("Related questions", related),
+    ]
+
+
 def matching_feedback_summary(question: dict[str, Any], target: str) -> str:
     """Explain the evidence used by a Matching key without restating its long lists."""
     details = matching_pair_details(question)
@@ -1409,6 +1473,13 @@ def add_question(
                     "Study tip · Clues to help answer",
                     studytips,
                     header_fill="527286",
+                )
+            examstrategy = matching_exam_strategy(question, studytips)
+            if examstrategy:
+                builder.add_key_value_card(
+                    "Exam strategy · Why this distinction matters",
+                    examstrategy,
+                    header_fill="6B4BA1",
                 )
     else:
         builder.add_paragraph(

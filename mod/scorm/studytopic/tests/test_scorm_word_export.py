@@ -239,6 +239,28 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn('w:fill="FFF6E8"', xml)
         self.assertIn('w:color w:val="8A3F0A"', xml)
 
+        strategy = EXPORTER.matching_exam_strategy(
+            {
+                "LeftColumn": [
+                    {"Id": 1, "Content": "Herb A\nCategory: Warm herbs"},
+                    {"Id": 2, "Content": "Herb B\nCategory: Cool herbs"},
+                ],
+                "RightColumn": [
+                    {"Id": 1, "Content": "Formulas:\nFormula A"},
+                    {"Id": 2, "Content": "Formulas:\nFormula B"},
+                ],
+            },
+            tips,
+        )
+        self.assertEqual(4, len(strategy))
+        self.assertEqual("Why it matters", strategy[0][0])
+        self.assertIn("Herb A is classified as Warm herbs", strategy[0][1])
+        self.assertIn("Herb B is classified as Cool herbs", strategy[0][1])
+        self.assertEqual("Common confusion", strategy[1][0])
+        self.assertIn("Pain", strategy[1][1])
+        self.assertEqual("How it may appear", strategy[2][0])
+        self.assertEqual("Related questions", strategy[3][0])
+
     def test_two_matching_items_are_aligned_as_comparison_data(self) -> None:
         question = {
             "LeftColumn": [
