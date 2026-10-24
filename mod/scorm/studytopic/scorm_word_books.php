@@ -141,6 +141,40 @@ function scorm_word_library(stdClass $folder): array {
 }
 
 /**
+ * Topics whose source is a Word Bank rather than a readable answer key.
+ *
+ * @return array<string, array<int, string>> Topics grouped by source course.
+ */
+function scorm_word_excluded_topics(): array {
+    return [
+        'Playing Herbology Module Exams' => [
+            'Formulas Groups. Pinyin Name',
+            'NCCAOM FORMULA MAP. Word Bank',
+        ],
+    ];
+}
+
+/**
+ * Exclude unsupported Word Bank topics from the student-facing Book.
+ *
+ * The source DOCX files remain untouched in the download folder.
+ *
+ * @param array $library Grouped library.
+ * @return array Filtered library.
+ */
+function scorm_word_filter_unsupported_topics(array $library): array {
+    foreach (scorm_word_excluded_topics() as $sourcecourse => $topics) {
+        foreach ($topics as $topic) {
+            unset($library[$sourcecourse][$topic]);
+        }
+        if (isset($library[$sourcecourse]) && !$library[$sourcecourse]) {
+            unset($library[$sourcecourse]);
+        }
+    }
+    return $library;
+}
+
+/**
  * Count all Word files in a library plan.
  *
  * @param array $library Grouped library.
@@ -620,14 +654,14 @@ $definitions = [
         'foldername' => 'Herb Exams — Word Downloads',
         'bookname' => 'Herb Exam Key Library',
         'legacybookname' => 'Herb Exams — Online Book',
-        'expected' => 952,
+        'expected' => 950,
     ],
 ];
 $plans = [];
 
 foreach ($definitions as $definition) {
     $folder = scorm_word_find_folder($courseid, $sectionid, $definition['foldername']);
-    $library = scorm_word_library($folder);
+    $library = scorm_word_filter_unsupported_topics(scorm_word_library($folder));
     $documents = scorm_word_library_count($library);
     $contentchapters = scorm_word_chapter_count($library);
     $chapters = $contentchapters + 1;
@@ -660,6 +694,7 @@ foreach ($definitions as $definition) {
         IGNORE_MULTIPLE
     );
     $status = 'create';
+    $stalechapters = [];
     if ($existing) {
         if (!str_contains((string)$existing->intro, 'data-scorm-word-book')) {
             cli_error(
@@ -667,10 +702,26 @@ foreach ($definitions as $definition) {
                 "(CM {$existing->cmid})."
             );
         }
+        $excludedtopics = str_starts_with($definition['bookname'], 'Herb')
+            ? scorm_word_excluded_topics()
+            : [];
+        foreach ($excludedtopics as $topics) {
+            foreach ($topics as $topic) {
+                $stalechapter = $DB->get_record('book_chapters', [
+                    'bookid' => $existing->id,
+                    'title' => $topic,
+                    'importsrc' => 'scorm-word-library',
+                ]);
+                if ($stalechapter) {
+                    $stalechapters[$stalechapter->id] = $stalechapter;
+                }
+            }
+        }
         $existingchapters = $DB->count_records('book_chapters', ['bookid' => $existing->id]);
-        if ($existingchapters === $contentchapters) {
+        $remainingchapters = $existingchapters - count($stalechapters);
+        if ($remainingchapters === $contentchapters) {
             $status = 'add clear index';
-        } else if ($existingchapters === $chapters) {
+        } else if ($remainingchapters === $chapters) {
             $firstchapter = $DB->get_record(
                 'book_chapters',
                 ['bookid' => $existing->id, 'pagenum' => 1],
@@ -685,10 +736,14 @@ foreach ($definitions as $definition) {
             $status = 'refresh clear index';
         } else {
             cli_error(
-                "Generated Book '{$definition['bookname']}' has {$existingchapters} chapters; " .
+                "Generated Book '{$definition['bookname']}' has {$existingchapters} chapters " .
+                'including ' . count($stalechapters) . ' removable Word Bank topics; ' .
                 "expected {$contentchapters} before upgrade or {$chapters} after upgrade. " .
                 'It was not changed.'
             );
+        }
+        if ($stalechapters) {
+            $status = 'remove ' . count($stalechapters) . ' unsupported Word Bank topics and refresh';
         }
     }
 
@@ -700,6 +755,7 @@ foreach ($definitions as $definition) {
         'chapters' => $chapters,
         'status' => $status,
         'existing' => $existing,
+        'stalechapters' => $stalechapters,
     ];
 }
 
@@ -754,6 +810,31 @@ foreach ($plans as $plan) {
         }
 
         $context = context_module::instance($bookcmid);
+        if ($plan['stalechapters']) {
+            $filestorage = get_file_storage();
+            foreach ($plan['stalechapters'] as $stalechapter) {
+                if (!$stalechapter->subchapter) {
+                    throw new coding_exception(
+                        "Refusing to remove top-level Book chapter '{$stalechapter->title}'."
+                    );
+                }
+                core_tag_tag::remove_all_item_tags('mod_book', 'book_chapters', $stalechapter->id);
+                $filestorage->delete_area_files(
+                    $context->id,
+                    'mod_book',
+                    'chapter',
+                    $stalechapter->id
+                );
+                $DB->delete_records('book_chapters', ['id' => $stalechapter->id]);
+                \mod_book\event\chapter_deleted::create_from_chapter(
+                    $book,
+                    $context,
+                    $stalechapter
+                )->trigger();
+                echo "Removed unsupported Word Bank topic: {$stalechapter->title}\n";
+            }
+            book_preload_chapters($book);
+        }
         scorm_word_refresh_book(
             $book,
             $bookcmid,
