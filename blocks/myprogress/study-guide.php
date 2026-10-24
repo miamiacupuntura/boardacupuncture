@@ -42,6 +42,15 @@ $areas = [
                 'path' => '/study-guide/channel-pathways/index.html',
                 'anchor' => '',
             ],
+            [
+                'title' => 'Point Contraindications',
+                'description' => 'Classify anatomical risks, patient and pregnancy considerations, modality precautions and source-specific restrictions through ten focused safety objectives.',
+                'objectives' => 10,
+                'guide_status' => 'Ready',
+                'board_practice' => '125 questions',
+                'path' => '/study-guide/point-contraindications/index.html',
+                'anchor' => '',
+            ],
         ],
     ],
     'herbology' => [
