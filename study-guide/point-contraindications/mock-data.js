@@ -21,6 +21,7 @@
       'objective-7': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9390',
       'objective-8': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9391',
       'objective-9': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9392',
+      'objective-10': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9388',
       'objective-11': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9389'
     }
   };
