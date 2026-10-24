@@ -240,13 +240,19 @@ sudo -u www-data php mod/scorm/studytopic/scorm_word_books.php \
 
 The command creates:
 
-- `Formula Exams — Online Book`
-- `Herb Exams — Online Book`
+- `Formula Exam Key Library`
+- `Herb Exam Key Library`
+- `Clinical Cases Exam Key Library`
+- `Simulation Exam Key Library`
 
 It never replaces or deletes an existing activity. Repeated execution safely
 refreshes Books previously created by this tool. Books created by the first
 version are upgraded in place with a main index; chapter and document links are
-preserved and regenerated from the source folders.
+preserved and regenerated from the source folders. The Handbook of Oriental
+Medicine clinical cases are promoted from the general Herb index into the
+standalone Clinical Cases library. Herbal Medicine simulations are likewise
+promoted into the standalone Simulation library. The source Word documents are
+not moved or deleted.
 
 ## Custom course selection
 

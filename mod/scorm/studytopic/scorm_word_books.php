@@ -53,7 +53,7 @@ The command performs a dry run unless --execute is provided.
 Options:
   -c, --course=ID     Target Moodle course ID (default: 92)
   -s, --section=ID    Target course_sections database ID (default: 2020)
-  -x, --execute       Create or update the two Book activities
+  -x, --execute       Create or update the four Book activities
   -h, --help          Show this help
 
 Example:
@@ -172,6 +172,77 @@ function scorm_word_filter_unsupported_topics(array $library): array {
         }
     }
     return $library;
+}
+
+/**
+ * Topic promoted from the Herb library to its own Clinical Cases library.
+ *
+ * @return array{course: string, topic: string}
+ */
+function scorm_word_clinical_cases_topic(): array {
+    return [
+        'course' => 'Herbal Comp Review Module Exams',
+        'topic' => 'Handbook-of-Oriental-Medicine. Clinical Cases',
+    ];
+}
+
+/**
+ * Remove Clinical Cases from the general Herb library.
+ *
+ * @param array $library Grouped library.
+ * @return array Filtered library.
+ */
+function scorm_word_without_clinical_cases(array $library): array {
+    $clinical = scorm_word_clinical_cases_topic();
+    unset($library[$clinical['course']][$clinical['topic']]);
+    if (isset($library[$clinical['course']]) && !$library[$clinical['course']]) {
+        unset($library[$clinical['course']]);
+    }
+    return $library;
+}
+
+/**
+ * Build the standalone Clinical Cases library from the Herb source folder.
+ *
+ * @param array $library Grouped Herb library.
+ * @return array Standalone Clinical Cases library.
+ */
+function scorm_word_only_clinical_cases(array $library): array {
+    $clinical = scorm_word_clinical_cases_topic();
+    if (empty($library[$clinical['course']][$clinical['topic']])) {
+        cli_error("Clinical Cases source topic '{$clinical['topic']}' was not found.");
+    }
+    return [
+        'Clinical Cases' => [
+            'Handbook of Oriental Medicine — Clinical Cases' =>
+                $library[$clinical['course']][$clinical['topic']],
+        ],
+    ];
+}
+
+/**
+ * Remove the Simulation collection from the general Herb library.
+ *
+ * @param array $library Grouped library.
+ * @return array Filtered library.
+ */
+function scorm_word_without_simulations(array $library): array {
+    unset($library['Herbal Medicine Simulation Exams']);
+    return $library;
+}
+
+/**
+ * Build the standalone Simulation library from the Herb source folder.
+ *
+ * @param array $library Grouped Herb library.
+ * @return array Standalone Simulation library.
+ */
+function scorm_word_only_simulations(array $library): array {
+    $sourcecourse = 'Herbal Medicine Simulation Exams';
+    if (empty($library[$sourcecourse])) {
+        cli_error("Simulation source collection '{$sourcecourse}' was not found.");
+    }
+    return [$sourcecourse => $library[$sourcecourse]];
 }
 
 /**
@@ -323,7 +394,13 @@ function scorm_word_collection_description(string $sourcecourse): string {
  * @return string
  */
 function scorm_word_book_intro(string $bookname): string {
-    $subject = str_starts_with($bookname, 'Herb') ? 'Herb' : 'Formula';
+    if (str_starts_with($bookname, 'Clinical Cases')) {
+        $subject = 'Clinical Cases';
+    } else if (str_starts_with($bookname, 'Simulation')) {
+        $subject = 'Simulation';
+    } else {
+        $subject = str_starts_with($bookname, 'Herb') ? 'Herb' : 'Formula';
+    }
     return '<p data-scorm-word-book="2"><strong>' . $subject . ' Exam Key Library.</strong> ' .
         'Choose a collection, then a topic, to review questions, correct answers and available feedback.</p>';
 }
@@ -584,9 +661,15 @@ function scorm_word_refresh_book(
 
     $map = scorm_word_map_chapters($book, $library);
     $now = time();
-    $map['index']->title = str_starts_with($bookname, 'Herb')
-        ? 'Herb Exam Key Index'
-        : 'Formula Exam Key Index';
+    if (str_starts_with($bookname, 'Clinical Cases')) {
+        $map['index']->title = 'Clinical Cases Exam Key Index';
+    } else if (str_starts_with($bookname, 'Simulation')) {
+        $map['index']->title = 'Simulation Exam Key Index';
+    } else {
+        $map['index']->title = str_starts_with($bookname, 'Herb')
+            ? 'Herb Exam Key Index'
+            : 'Formula Exam Key Index';
+    }
     $map['index']->content = scorm_word_main_index($library, $bookcmid, $map['courses']);
     $map['index']->timemodified = $now;
     $DB->update_record('book_chapters', $map['index']);
@@ -649,28 +732,60 @@ $definitions = [
         'bookname' => 'Formula Exam Key Library',
         'legacybookname' => 'Formula Exams — Online Book',
         'expected' => 432,
+        'scope' => 'all',
+        'visibleoncoursepage' => 1,
     ],
     [
         'foldername' => 'Herb Exams — Word Downloads',
         'bookname' => 'Herb Exam Key Library',
         'legacybookname' => 'Herb Exams — Online Book',
         'expected' => 950,
+        'scope' => 'herbs',
+        'visibleoncoursepage' => 1,
+    ],
+    [
+        'foldername' => 'Herb Exams — Word Downloads',
+        'bookname' => 'Clinical Cases Exam Key Library',
+        'legacybookname' => 'Clinical Cases Exam Key Library',
+        'expected' => 950,
+        'scope' => 'clinicalcases',
+        'visibleoncoursepage' => 1,
+    ],
+    [
+        'foldername' => 'Herb Exams — Word Downloads',
+        'bookname' => 'Simulation Exam Key Library',
+        'legacybookname' => 'Simulation Exam Key Library',
+        'expected' => 950,
+        'scope' => 'simulations',
+        'visibleoncoursepage' => 1,
     ],
 ];
 $plans = [];
 
 foreach ($definitions as $definition) {
     $folder = scorm_word_find_folder($courseid, $sectionid, $definition['foldername']);
-    $library = scorm_word_filter_unsupported_topics(scorm_word_library($folder));
-    $documents = scorm_word_library_count($library);
-    $contentchapters = scorm_word_chapter_count($library);
-    $chapters = $contentchapters + 1;
-    if ($documents !== $definition['expected']) {
+    $sourcelibrary = scorm_word_filter_unsupported_topics(scorm_word_library($folder));
+    $sourcedocuments = scorm_word_library_count($sourcelibrary);
+    if ($sourcedocuments !== $definition['expected']) {
         cli_error(
-            "{$definition['foldername']} contains {$documents} DOCX files; " .
+            "{$definition['foldername']} contains {$sourcedocuments} supported DOCX files; " .
             "expected {$definition['expected']}."
         );
     }
+    if ($definition['scope'] === 'herbs') {
+        $library = scorm_word_without_simulations(
+            scorm_word_without_clinical_cases($sourcelibrary)
+        );
+    } else if ($definition['scope'] === 'clinicalcases') {
+        $library = scorm_word_only_clinical_cases($sourcelibrary);
+    } else if ($definition['scope'] === 'simulations') {
+        $library = scorm_word_only_simulations($sourcelibrary);
+    } else {
+        $library = $sourcelibrary;
+    }
+    $documents = scorm_word_library_count($library);
+    $contentchapters = scorm_word_chapter_count($library);
+    $chapters = $contentchapters + 1;
     if ($contentchapters === 0) {
         cli_error("No Book chapters could be planned for {$definition['bookname']}.");
     }
@@ -702,19 +817,30 @@ foreach ($definitions as $definition) {
                 "(CM {$existing->cmid})."
             );
         }
-        $excludedtopics = str_starts_with($definition['bookname'], 'Herb')
-            ? scorm_word_excluded_topics()
-            : [];
-        foreach ($excludedtopics as $topics) {
-            foreach ($topics as $topic) {
-                $stalechapter = $DB->get_record('book_chapters', [
-                    'bookid' => $existing->id,
-                    'title' => $topic,
-                    'importsrc' => 'scorm-word-library',
-                ]);
-                if ($stalechapter) {
-                    $stalechapters[$stalechapter->id] = $stalechapter;
-                }
+        $stalechaptertitles = [];
+        if (str_starts_with($definition['bookname'], 'Herb')) {
+            foreach (scorm_word_excluded_topics() as $topics) {
+                $stalechaptertitles = array_merge($stalechaptertitles, $topics);
+            }
+        }
+        if ($definition['scope'] === 'herbs') {
+            $clinical = scorm_word_clinical_cases_topic();
+            $stalechaptertitles[] = $clinical['topic'];
+            $simulationcourse = 'Herbal Medicine Simulation Exams';
+            $stalechaptertitles[] = $simulationcourse;
+            $stalechaptertitles[] = scorm_word_collection_name($simulationcourse);
+            $stalechaptertitles = array_merge(
+                $stalechaptertitles,
+                array_keys($sourcelibrary[$simulationcourse] ?? [])
+            );
+        }
+        $generatedchapters = $DB->get_records('book_chapters', [
+            'bookid' => $existing->id,
+            'importsrc' => 'scorm-word-library',
+        ]);
+        foreach ($generatedchapters as $generatedchapter) {
+            if (in_array($generatedchapter->title, $stalechaptertitles, true)) {
+                $stalechapters[$generatedchapter->id] = $generatedchapter;
             }
         }
         $existingchapters = $DB->count_records('book_chapters', ['bookid' => $existing->id]);
@@ -737,13 +863,13 @@ foreach ($definitions as $definition) {
         } else {
             cli_error(
                 "Generated Book '{$definition['bookname']}' has {$existingchapters} chapters " .
-                'including ' . count($stalechapters) . ' removable Word Bank topics; ' .
+                'including ' . count($stalechapters) . ' topics to move or exclude; ' .
                 "expected {$contentchapters} before upgrade or {$chapters} after upgrade. " .
                 'It was not changed.'
             );
         }
         if ($stalechapters) {
-            $status = 'remove ' . count($stalechapters) . ' unsupported Word Bank topics and refresh';
+            $status = 'move or exclude ' . count($stalechapters) . ' topics and refresh';
         }
     }
 
@@ -756,6 +882,7 @@ foreach ($definitions as $definition) {
         'status' => $status,
         'existing' => $existing,
         'stalechapters' => $stalechapters,
+        'visibleoncoursepage' => $definition['visibleoncoursepage'],
     ];
 }
 
@@ -795,7 +922,7 @@ foreach ($plans as $plan) {
                 'numbering' => BOOK_NUM_BULLETS,
                 'customtitles' => 0,
                 'visible' => 1,
-                'visibleoncoursepage' => 1,
+                'visibleoncoursepage' => $plan['visibleoncoursepage'],
                 'groupmode' => 0,
                 'groupingid' => 0,
                 'completion' => COMPLETION_DISABLED,
@@ -813,11 +940,6 @@ foreach ($plans as $plan) {
         if ($plan['stalechapters']) {
             $filestorage = get_file_storage();
             foreach ($plan['stalechapters'] as $stalechapter) {
-                if (!$stalechapter->subchapter) {
-                    throw new coding_exception(
-                        "Refusing to remove top-level Book chapter '{$stalechapter->title}'."
-                    );
-                }
                 core_tag_tag::remove_all_item_tags('mod_book', 'book_chapters', $stalechapter->id);
                 $filestorage->delete_area_files(
                     $context->id,
@@ -831,7 +953,7 @@ foreach ($plans as $plan) {
                     $context,
                     $stalechapter
                 )->trigger();
-                echo "Removed unsupported Word Bank topic: {$stalechapter->title}\n";
+                echo "Removed topic from {$plan['bookname']}: {$stalechapter->title}\n";
             }
             book_preload_chapters($book);
         }
@@ -849,8 +971,15 @@ foreach ($plans as $plan) {
             0,
             ['id' => $plan['folder']->cmid]
         );
+        $DB->set_field(
+            'course_modules',
+            'visibleoncoursepage',
+            $plan['visibleoncoursepage'],
+            ['id' => $bookcmid]
+        );
         $transaction->allow_commit();
-        echo "Updated {$plan['bookname']} (CM {$bookcmid}); source folder is now stealth.\n";
+        $placement = $plan['visibleoncoursepage'] ? 'listed on the Exam Key page' : 'linked from Formulas';
+        echo "Updated {$plan['bookname']} (CM {$bookcmid}); {$placement}; source folder is stealth.\n";
     } catch (Throwable $exception) {
         $transaction->rollback($exception);
     }
