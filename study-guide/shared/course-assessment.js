@@ -5,6 +5,10 @@
   const banks = window.STUDY_GUIDE_ASSESSMENT_BANKS;
   if (!config || !banks) return;
 
+  document.querySelectorAll('.objective .source-note').forEach(note => {
+    if (/^Related Moodle bank:/i.test(note.textContent.trim())) note.remove();
+  });
+
   const letters = ['A', 'B', 'C', 'D'];
   const resultColumns = ['Exam', 'Attempts', 'Last Attempt', 'Average', 'Grade', 'Action'];
   const storageKey = `study-guide-assessment:${config.courseId}:v1`;
