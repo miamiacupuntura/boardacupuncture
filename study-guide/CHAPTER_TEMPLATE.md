@@ -69,6 +69,7 @@ Apply these rules consistently in every chapter:
 8. Keep browser-saved practice results separate from official Moodle records. State clearly that Moodle attempts, dates and scores are not transmitted to the static guide.
 9. Use `ceExamLink` for the Continuing Education SCORM activity and display its complete **Course Name Continuing Education (Mock 10)** title.
 10. When shared JavaScript or CSS changes, update its cache-version query string in the chapter HTML so browsers receive the new button text and styling.
+11. The top **School Level Exam** button must link to the chapter-wide **Exam History & Start Exam** block, not directly to one SCORM activity or to the older-bank directory. Use the block's stable anchor, such as `#automatic-exam-history`.
 
 The Continuing Education blocks must keep the same chapter-wide order:
 
