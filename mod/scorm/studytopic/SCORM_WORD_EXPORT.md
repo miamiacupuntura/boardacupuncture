@@ -60,6 +60,37 @@ separate, deliberate step.
 `--overwrite` only replaces a directory that contains the exporter marker
 `.scorm-word-export`; it refuses to remove any unrelated directory.
 
+## Publish as Moodle folders
+
+The publisher validates the completed export, target course, target section,
+document totals, and existing activities. Its default invocation is a dry run:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/scorm_word_publish.php \
+  --output=/var/tmp/formula-herb-word-export \
+  --course=92 \
+  --section=2020
+```
+
+After reviewing the dry-run output, publish with the explicit flag:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/scorm_word_publish.php \
+  --output=/var/tmp/formula-herb-word-export \
+  --course=92 \
+  --section=2020 \
+  --execute
+```
+
+This creates two visible Moodle folder activities in `Formulas Tips`:
+
+- `Formula Exams — Word Downloads`
+- `Herb Exams — Word Downloads`
+
+Each activity preserves the course and section subfolders and provides Moodle's
+folder-download button. Existing activities are never replaced or deleted. A
+repeat run only skips a generated activity after verifying its DOCX count.
+
 ## Custom course selection
 
 ```bash
