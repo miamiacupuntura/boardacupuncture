@@ -476,7 +476,10 @@ function scorm_word_collection_description(string $sourcecourse): string {
  * @return string
  */
 function scorm_word_book_intro(string $bookname): string {
-    if (str_starts_with($bookname, 'Herbology Mnemonic')) {
+    if (str_starts_with($bookname, 'Handbook of Oriental Medicine')) {
+        return '<p data-scorm-word-book="2"><strong>Handbook of Oriental Medicine — Clinical Cases.</strong> ' .
+            'Open the available clinical case answer key directly.</p>';
+    } else if (str_starts_with($bookname, 'Herbology Mnemonic')) {
         return '<p data-scorm-word-book="2"><strong>Herbology Mnemonic Resources.</strong> ' .
             'Review memory aids connecting numbered plates, herb properties and pinyin.</p>';
     } else if (str_starts_with($bookname, 'Combination')) {
@@ -791,6 +794,69 @@ function scorm_word_refresh_book(
     book_preload_chapters($book);
 }
 
+/**
+ * Refresh a one-page Book that opens directly to its answer-key list.
+ *
+ * @param stdClass $book Book record.
+ * @param int $bookcmid Book course-module ID.
+ * @param context_module $context Book context.
+ * @param array $library Library containing exactly one topic.
+ * @param string $bookname Student-facing Book name.
+ * @return void
+ */
+function scorm_word_refresh_flat_book(
+    stdClass $book,
+    int $bookcmid,
+    context_module $context,
+    array $library,
+    string $bookname
+): void {
+    global $DB;
+
+    $files = [];
+    foreach ($library as $sections) {
+        foreach ($sections as $topicfiles) {
+            $files = array_merge($files, $topicfiles);
+        }
+    }
+    if (!$files) {
+        cli_error("Flat Book '{$bookname}' does not contain any answer keys.");
+    }
+
+    $chapters = array_values($DB->get_records(
+        'book_chapters',
+        ['bookid' => $book->id],
+        'pagenum ASC'
+    ));
+    if (!$chapters) {
+        $chapter = scorm_word_add_chapter($book, 1, false, $bookname, '');
+        $chapter->importsrc = 'scorm-word-library-index';
+        \mod_book\event\chapter_created::create_from_chapter($book, $context, $chapter)->trigger();
+    } else if (count($chapters) === 1 &&
+            $chapters[0]->importsrc === 'scorm-word-library-index') {
+        $chapter = $chapters[0];
+    } else {
+        cli_error("Flat Book '{$bookname}' has an unexpected generated structure.");
+    }
+
+    $now = time();
+    $chapter->pagenum = 1;
+    $chapter->subchapter = 0;
+    $chapter->title = $bookname;
+    $chapter->content = scorm_word_exam_links($files, $bookcmid, $chapter->id);
+    $chapter->contentformat = FORMAT_HTML;
+    $chapter->timemodified = $now;
+    $DB->update_record('book_chapters', $chapter);
+
+    $book->name = $bookname;
+    $book->intro = scorm_word_book_intro($bookname);
+    $book->introformat = FORMAT_HTML;
+    $book->revision++;
+    $book->timemodified = $now;
+    $DB->update_record('book', $book);
+    book_preload_chapters($book);
+}
+
 $courseid = clean_param($options['course'], PARAM_INT);
 $sectionid = clean_param($options['section'], PARAM_INT);
 if ($courseid <= 0 || $sectionid <= 0) {
@@ -817,6 +883,7 @@ $definitions = [
         'legacybookname' => 'Formula Exams — Online Book',
         'expected' => 432,
         'scope' => 'formulas',
+        'flat' => false,
         'visibleoncoursepage' => 1,
     ],
     [
@@ -825,14 +892,17 @@ $definitions = [
         'legacybookname' => 'Herb Exams — Online Book',
         'expected' => 950,
         'scope' => 'herbs',
+        'flat' => false,
         'visibleoncoursepage' => 1,
     ],
     [
         'foldername' => 'Herb Exams — Word Downloads',
-        'bookname' => 'Combination Exam Key Library',
-        'legacybookname' => 'Clinical Cases Exam Key Library',
+        'bookname' => 'Handbook of Oriental Medicine — Clinical Cases',
+        'legacybookname' => 'Combination Exam Key Library',
+        'legacybookname2' => 'Clinical Cases Exam Key Library',
         'expected' => 950,
         'scope' => 'clinicalcases',
+        'flat' => true,
         'visibleoncoursepage' => 1,
     ],
     [
@@ -841,6 +911,7 @@ $definitions = [
         'legacybookname' => 'Simulation Exam Key Library',
         'expected' => 950,
         'scope' => 'simulations',
+        'flat' => false,
         'visibleoncoursepage' => 1,
     ],
     [
@@ -849,6 +920,7 @@ $definitions = [
         'legacybookname' => 'Herbology Mnemonic Resources',
         'expected' => 950,
         'scope' => 'mnemonics',
+        'flat' => false,
         'visibleoncoursepage' => 1,
     ],
 ];
@@ -897,9 +969,9 @@ foreach ($definitions as $definition) {
         $library = $sourcelibrary;
     }
     $documents = scorm_word_library_count($library);
-    $contentchapters = scorm_word_chapter_count($library);
-    $chapters = $contentchapters + 1;
-    if ($contentchapters === 0) {
+    $contentchapters = $definition['flat'] ? 0 : scorm_word_chapter_count($library);
+    $chapters = $definition['flat'] ? 1 : $contentchapters + 1;
+    if (!$definition['flat'] && $contentchapters === 0) {
         cli_error("No Book chapters could be planned for {$definition['bookname']}.");
     }
 
@@ -911,13 +983,14 @@ foreach ($definitions as $definition) {
             AND cm.section = :sectionid
             AND cm.module = :moduleid
             AND cm.deletioninprogress = 0
-            AND (b.name = :name OR b.name = :legacyname)",
+            AND (b.name = :name OR b.name = :legacyname OR b.name = :legacyname2)",
         [
             'courseid' => $courseid,
             'sectionid' => $sectionid,
             'moduleid' => $bookmodule->id,
             'name' => $definition['bookname'],
             'legacyname' => $definition['legacybookname'],
+            'legacyname2' => $definition['legacybookname2'] ?? $definition['legacybookname'],
         ],
         IGNORE_MULTIPLE
     );
@@ -970,9 +1043,11 @@ foreach ($definitions as $definition) {
         }
 
         $plannedtitles = [];
-        foreach ($library as $sourcecourse => $sections) {
-            $plannedtitles[] = scorm_word_collection_name($sourcecourse);
-            $plannedtitles = array_merge($plannedtitles, array_keys($sections));
+        if (!$definition['flat']) {
+            foreach ($library as $sourcecourse => $sections) {
+                $plannedtitles[] = scorm_word_collection_name($sourcecourse);
+                $plannedtitles = array_merge($plannedtitles, array_keys($sections));
+            }
         }
         $currenttitles = [];
         foreach ($generatedchapters as $generatedchapter) {
@@ -1020,6 +1095,7 @@ foreach ($definitions as $definition) {
         'existing' => $existing,
         'stalechapters' => $stalechapters,
         'rebuildstructure' => $rebuildstructure,
+        'flat' => $definition['flat'],
         'visibleoncoursepage' => $definition['visibleoncoursepage'],
     ];
 }
@@ -1110,13 +1186,23 @@ foreach ($plans as $plan) {
             }
             book_preload_chapters($book);
         }
-        scorm_word_refresh_book(
-            $book,
-            $bookcmid,
-            $context,
-            $plan['library'],
-            $plan['bookname']
-        );
+        if ($plan['flat']) {
+            scorm_word_refresh_flat_book(
+                $book,
+                $bookcmid,
+                $context,
+                $plan['library'],
+                $plan['bookname']
+            );
+        } else {
+            scorm_word_refresh_book(
+                $book,
+                $bookcmid,
+                $context,
+                $plan['library'],
+                $plan['bookname']
+            );
+        }
         $DB->set_field(
             'course_modules',
             'visibleoncoursepage',

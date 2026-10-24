@@ -242,7 +242,7 @@ The command creates:
 
 - `Formula Exam Key Library`
 - `Herb Exam Key Library`
-- `Combination Exam Key Library`
+- `Handbook of Oriental Medicine — Clinical Cases`
 - `Simulation Exam Key Library`
 - `Herbology Mnemonic Resources`
 
@@ -252,7 +252,8 @@ version are upgraded in place with a main index; chapter and document links are
 preserved and regenerated from the source folders. The Formula-only review is
 placed in the Formula library, while the Single Herbs review remains in the
 Herb library. The one mixed Herbs-and-Formulas clinical collection is promoted
-to the standalone Combination library. Herbal Medicine simulations are likewise
+to the standalone Handbook of Oriental Medicine — Clinical Cases entry, which
+opens directly without intermediate category pages. Herbal Medicine simulations are likewise
 promoted into the standalone Simulation library, and the numbered-plate memory
 aids are promoted into Herbology Mnemonic Resources. The source Word documents
 are not moved or deleted.
