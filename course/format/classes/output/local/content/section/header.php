@@ -268,6 +268,8 @@ $lastAttemptScore = array();
 $lastAttemptStatus = array();
 $scormName = array();
 $examLink = array();
+$resultExamsAB = "";
+$sectionScormCount = 0;
 
 $scorms = $DB->get_records('scorm', ['course' => $COURSE->id]);
 $currentSection = $DB->get_record('course_sections', ['course' => $COURSE->id, 'section' => $format->get_section_number()]);
@@ -289,12 +291,14 @@ $tempAttempt = 0;
 $tempScore = "";
 $attemptScores = array();
 
-$scormurl = $DB->get_record('course_modules', ['instance' => $scorm->id]);
-$courseSections = $DB->get_records('course_sections', ['course' => $COURSE->id, 'id' => $scormurl->section]);
-$sectionName = $courseSections[$scormurl->section]->name;
+$scormurl = get_coursemodule_from_instance('scorm', $scorm->id, $COURSE->id, false, IGNORE_MISSING);
+if (!$scormurl) {
+    continue;
+}
 $scormurlValue = "/mod/scorm/studyguide/?id=" . $scormurl->instance . "&cmid=" . $scormurl->id;
 
-if (($currentSection->name) == $sectionName) {
+if ($currentSection && (int)$scormurl->section === (int)$currentSection->id) {
+$sectionScormCount++;
 $attempts = $DB->get_records('scorm_attempt', ['scormid' => $scorm->id, 'userid' => $USER->id]);
 
 $tempAttempt = count($attempts);
@@ -465,9 +469,18 @@ $htmlContentCourseGradeEND = <<<HTML
 HTML;
 $coursegrade = $htmlContentCourseGrade . $currentGrade . "%" . $htmlContentCourseGradeEND;	
 }
-$navigationTopic = $htmlContent3 . "Main Page" . $htmlContentEND . $htmlContent6 . $htmlContent1 . "<< Prev" . $htmlContentEND . $htmlContent2 . "Next >>" . $htmlContentEND . $htmlContent5 . $coursegrade . $htmlContentEND2 . $htmlContent4 . $finalaverage . $htmlContentEND2;
+$navigationTopic = $htmlContent3 . "Main Page" . $htmlContentEND . $htmlContent6 . $htmlContent1 . "<< Prev" . $htmlContentEND . $htmlContent2 . "Next >>" . $htmlContentEND;
+
+// Notes, Word resources, pages and other study-only sections do not have an
+// exam result to display. Only append grading information when this section
+// actually contains a SCORM activity.
+if ($sectionScormCount > 0) {
+    $navigationTopic .= $htmlContent5 . $coursegrade . $htmlContentEND2 . $htmlContent4 . $finalaverage . $htmlContentEND2;
+}
 ///NAVIGATION INSIDE TOPIC END
 
+$htmlMainSectionExams = "";
+if ($sectionScormCount > 0) {
 $htmlMainSectionExams = <<<HTML
 <table class="course-stats course-stats2 exams-list-main show-table" style="width:100%;max-width:100%;table-layout:fixed;box-sizing:border-box;">
   <tr>
@@ -484,6 +497,7 @@ $htmlMainSectionExams = <<<HTML
 $resultExamsAB
 </table>
 HTML;
+}
 }///EXAM LIST INSIDE TOPICS END
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if ($outside == true) { ///COURSE MAIN PAGE INFORMATION BEGIN
