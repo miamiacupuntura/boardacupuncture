@@ -9,7 +9,7 @@
         ['Clean Needle Techniques', 'cleanneedle'],
     ]);
 
-    const actionLabels = new Set(['Modules', 'Simulation', 'Notes', 'Games']);
+    const actionLabels = new Set(['Modules', 'Simulation', 'Notes', 'Exam Key', 'Games']);
 
     function normalise(value) {
         return String(value || '').replace(/\s+/g, ' ').trim();
@@ -46,6 +46,12 @@
                 return;
             }
 
+            const notesAction = result.actions.find(element => normalise(element.textContent) === 'Notes');
+            if (notesAction) {
+                notesAction.textContent = 'Exam Key';
+                notesAction.setAttribute('aria-label', `Open ${subject} exam keys and feedback`);
+            }
+
             const link = document.createElement('a');
             const example = result.actions[0];
             link.className = `${example.className || ''} study-guide-dashboard-link`.trim();
@@ -55,6 +61,15 @@
 
             const lastAction = result.actions[result.actions.length - 1];
             lastAction.insertAdjacentElement('afterend', link);
+
+            if (area === 'herbology' && !result.card.querySelector(':scope .comparisons-dashboard-link')) {
+                const comparisons = document.createElement('a');
+                comparisons.className = `${example.className || ''} comparisons-dashboard-link`.trim();
+                comparisons.href = '/study-guide/comparisons/index.html';
+                comparisons.textContent = 'Comparisons';
+                comparisons.setAttribute('aria-label', 'Open Comparative Study Notes');
+                link.insertAdjacentElement('afterend', comparisons);
+            }
         });
     }
 
@@ -102,6 +117,29 @@
             color: #fff !important;
         }
         .study-guide-dashboard-link:focus-visible {
+            outline: 3px solid #185cca;
+            outline-offset: 2px;
+        }
+        .comparisons-dashboard-link {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            margin: 4px;
+            padding: 8px 13px !important;
+            border: 0 !important;
+            border-radius: 6px !important;
+            background: #b45309 !important;
+            color: #fff !important;
+            font-weight: 700;
+            text-decoration: none !important;
+        }
+        .comparisons-dashboard-link:hover,
+        .comparisons-dashboard-link:focus {
+            background: #92400e !important;
+            color: #fff !important;
+        }
+        .comparisons-dashboard-link:focus-visible {
             outline: 3px solid #185cca;
             outline-offset: 2px;
         }

@@ -1,0 +1,48 @@
+(function () {
+  'use strict';
+
+  const search = document.querySelector('[data-comparison-search]');
+  const filters = [...document.querySelectorAll('[data-filter]')];
+  const cards = [...document.querySelectorAll('.comparison-card')];
+  const count = document.querySelector('[data-visible-count]');
+  const empty = document.querySelector('[data-comparison-empty]');
+  let activeFilter = 'all';
+
+  function normalise(value) {
+    return String(value || '').toLocaleLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function refresh() {
+    const query = normalise(search ? search.value : '');
+    let visible = 0;
+    cards.forEach(card => {
+      const typeMatches = activeFilter === 'all' || card.dataset.type === activeFilter;
+      const textMatches = !query || normalise(card.dataset.search + ' ' + card.textContent).includes(query);
+      card.hidden = !(typeMatches && textMatches);
+      if (!card.hidden) {
+        visible++;
+      }
+    });
+    if (count) {
+      count.textContent = String(visible);
+    }
+    if (empty) {
+      empty.hidden = visible !== 0;
+    }
+  }
+
+  filters.forEach(button => {
+    button.addEventListener('click', () => {
+      activeFilter = button.dataset.filter || 'all';
+      filters.forEach(candidate => {
+        candidate.setAttribute('aria-pressed', candidate === button ? 'true' : 'false');
+      });
+      refresh();
+    });
+  });
+  if (search) {
+    search.addEventListener('input', refresh);
+  }
+  refresh();
+})();
