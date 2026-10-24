@@ -78,8 +78,9 @@ class ScormWordExportTest(unittest.TestCase):
                 self.assertIn("Herb A", xml)
                 self.assertIn("Function A", xml)
                 self.assertIn("Match 1", xml)
-                self.assertIn("Item: Herb A", xml)
-                self.assertIn("Correct match: Function A", xml)
+                self.assertIn("<w:tbl>", xml)
+                self.assertIn(">Item</w:t>", xml)
+                self.assertIn(">Correct match</w:t>", xml)
                 for name in names:
                     if name.endswith(".xml") or name.endswith(".rels"):
                         ElementTree.fromstring(archive.read(name))

@@ -244,6 +244,71 @@ class DocxBuilder:
 </wp:inline></w:drawing></w:r></w:p>"""
         self.body.append(drawing)
 
+    def add_key_value_card(self, title: str, rows: list[tuple[str, str]]) -> None:
+        """Add a compact full-width card with aligned labels and values."""
+        header = (
+            '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
+            '<w:tc><w:tcPr><w:gridSpan w:val="2"/><w:shd w:val="clear" '
+            'w:color="auto" w:fill="F47E2C"/></w:tcPr>'
+            + paragraph_xml(
+                title,
+                bold=True,
+                color="FFFFFF",
+                size=22,
+                space_after=0,
+                keep_lines=True,
+            )
+            + '</w:tc></w:tr>'
+        )
+        bodyrows = []
+        for label, value in rows:
+            bodyrows.append(
+                '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
+                '<w:tc><w:tcPr><w:tcW w:w="1900" w:type="dxa"/>'
+                '<w:shd w:val="clear" w:color="auto" w:fill="F2F6F8"/>'
+                '<w:vAlign w:val="top"/></w:tcPr>'
+                + paragraph_xml(
+                    label,
+                    bold=True,
+                    color="17324D",
+                    space_after=0,
+                    keep_lines=True,
+                )
+                + '</w:tc>'
+                '<w:tc><w:tcPr><w:tcW w:w="7100" w:type="dxa"/>'
+                '<w:shd w:val="clear" w:color="auto" w:fill="FFFFFF"/>'
+                '<w:vAlign w:val="top"/></w:tcPr>'
+                + paragraph_xml(
+                    value,
+                    color="203040",
+                    space_after=0,
+                    keep_lines=True,
+                )
+                + '</w:tc></w:tr>'
+            )
+        table = (
+            '<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/>'
+            '<w:tblLayout w:type="fixed"/>'
+            '<w:tblBorders>'
+            '<w:top w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:left w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:bottom w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:right w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:insideH w:val="single" w:sz="6" w:color="D6E1E7"/>'
+            '<w:insideV w:val="single" w:sz="6" w:color="D6E1E7"/>'
+            '</w:tblBorders>'
+            '<w:tblCellMar>'
+            '<w:top w:w="100" w:type="dxa"/><w:left w:w="120" w:type="dxa"/>'
+            '<w:bottom w:w="100" w:type="dxa"/><w:right w:w="120" w:type="dxa"/>'
+            '</w:tblCellMar></w:tblPr>'
+            '<w:tblGrid><w:gridCol w:w="1900"/><w:gridCol w:w="7100"/></w:tblGrid>'
+            + header
+            + ''.join(bodyrows)
+            + '</w:tbl>'
+        )
+        self.body.append(table)
+        self.add_paragraph("", space_after=120)
+
     def write(self, destination: Path) -> None:
         destination.parent.mkdir(parents=True, exist_ok=True)
         timestamp = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
@@ -610,6 +675,35 @@ def matching_pair_details(question: dict[str, Any]) -> list[tuple[str, str, str,
         associationlabel = "formula association" if header in {"formula", "formulas"} else "keyed association"
         details.append((name, category, associationlabel, len(associations)))
     return details
+
+
+def matching_card_rows(lefttext: str, righttext: str) -> list[tuple[str, str]]:
+    """Turn a potentially multiline matching pair into compact labelled rows."""
+    leftlines = [line.strip() for line in lefttext.splitlines() if line.strip()]
+    rows = [("Item", leftlines[0] if leftlines else "[missing item]")]
+    details = []
+    for line in leftlines[1:]:
+        if line.casefold().startswith("category:") and ":" in line:
+            rows.append(("Category", line.split(":", 1)[1].strip()))
+        else:
+            details.append(line)
+    if details:
+        rows.append(("Details", "\n".join(details)))
+
+    rightlines = [line.strip() for line in righttext.splitlines() if line.strip()]
+    if rightlines and rightlines[0].endswith(":"):
+        heading = rightlines[0].rstrip(":").strip()
+        values = rightlines[1:]
+    else:
+        heading = "Correct match"
+        values = rightlines
+    if not values:
+        values = ["[missing match]"]
+    label = heading
+    if len(values) > 1:
+        label += f" ({len(values)})"
+    rows.append((label, "\n".join(f"• {value}" for value in values)))
+    return rows
 
 
 def matching_feedback_summary(question: dict[str, Any], target: str) -> str:
@@ -1081,11 +1175,12 @@ def add_question(
         right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
         builder.add_paragraph("Correct matches", bold=True, color="17324D", keep_next=True)
         for matchnumber, (itemid, leftvalue) in enumerate(left.items(), start=1):
-            add_correct_answer(
-                builder,
-                f"Match {matchnumber}\n"
-                f"Item: {leftvalue}\n"
-                f"Correct match: {right.get(itemid, '[missing match]')}",
+            builder.add_key_value_card(
+                f"Match {matchnumber}",
+                matching_card_rows(
+                    leftvalue,
+                    right.get(itemid, "[missing match]"),
+                ),
             )
     elif qtype == "MultipleResponseQuestion":
         answers = question.get("Answers") or []
