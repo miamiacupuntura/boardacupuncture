@@ -170,7 +170,8 @@
     const shell = el('details', 'assessment-bank course-assessment');
     shell.id = `${bankId}-mock-exam`;
     shell.open = Boolean(open);
-    shell.append(el('summary', '', `${bank.title} (${bank.questions.length} Questions)`));
+    const summaryTitle = /\(Mock \d+\)$/.test(bank.title) ? bank.title : `${bank.title} (${bank.questions.length} Questions)`;
+    shell.append(el('summary', '', summaryTitle));
     const body = el('div', 'assessment-body');
     body.append(el('p', 'assessment-intro', bank.intro));
     const note = el('p', 'assessment-format-note');
