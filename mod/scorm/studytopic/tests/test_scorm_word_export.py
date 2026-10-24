@@ -111,6 +111,22 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertEqual("cough", related["add herb a"])
         self.assertEqual("palpitation", related["add herb b"])
 
+    def test_missing_feedback_still_produces_transparent_mock_guidance(self) -> None:
+        question = {
+            "QuestionText": "What are the ingredients of Formula A?",
+            "Answers": ["Ingredient set A", "Ingredient set B"],
+            "RightAnswer": "Ingredient set A",
+        }
+        builder = EXPORTER.DocxBuilder("Test")
+        EXPORTER.add_missing_source_feedback(builder, question)
+        xml = "".join(builder.body)
+
+        self.assertIn("Why the correct answer is correct", xml)
+        self.assertIn("the ingredients of Formula A", xml)
+        self.assertIn("does not contain a more detailed rationale", xml)
+        self.assertIn("Why the other options are incorrect", xml)
+        self.assertIn("No option-specific rationale was stored", xml)
+
     def test_safe_segment_removes_path_characters(self) -> None:
         self.assertEqual("Herbs - Final - Exam", EXPORTER.safe_segment("Herbs/Final:Exam", "Exam"))
 

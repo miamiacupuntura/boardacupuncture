@@ -483,7 +483,7 @@ def split_combined_feedback(
 
 
 def question_learning_target(question: dict[str, Any]) -> str:
-    """Extract the symptom or modification target from a question stem."""
+    """Extract a concise learning focus from a question stem."""
     text = normalise_text(question.get("QuestionText"))
     matches = re.findall(
         r"What (?:is|are) the modifications? for\s+([^?]+)",
@@ -492,7 +492,29 @@ def question_learning_target(question: dict[str, Any]) -> str:
     )
     if matches:
         return matches[-1].strip().rstrip(".")
-    return "the modification described in the question"
+
+    ingredients = re.search(
+        r"What (?:is|are) the ingredients of\s+([^?]+)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if ingredients:
+        return f"the ingredients of {ingredients.group(1).strip().rstrip('.')}"
+
+    presentation = re.search(
+        r"Which of the following formula (?:can be used|is suitable) for\s+(.+?)"
+        r"(?:\s+(?:manifested|marked) by|\?|$)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if presentation:
+        return presentation.group(1).strip().rstrip(".")
+
+    if re.search(r"\bNOT correct\b", text, flags=re.IGNORECASE):
+        return "the NOT-correct statement requested in the question"
+    if re.search(r"suitable (?:far|for) the case", text, flags=re.IGNORECASE):
+        return "the clinical case described in the question"
+    return "the question prompt"
 
 
 def annotate_related_answer_targets(questions: list[Any]) -> None:
@@ -508,7 +530,7 @@ def annotate_related_answer_targets(questions: list[Any]) -> None:
             continue
         target = question_learning_target(question)
         rightanswer = answer_text(question.get("RightAnswer"))
-        if rightanswer and target != "the modification described in the question":
+        if rightanswer and target != "the question prompt":
             targets_by_answer[normalise_text(rightanswer).casefold()].add(target)
 
     unique_targets = {
@@ -558,8 +580,8 @@ def add_duplicate_source_feedback(
         keep_next=True,
     )
     builder.add_paragraph(
-        f"For {target}, the keyed modification is {rightanswer}. "
-        "This is the symptom-specific change tested by the question.",
+        f"For {target}, the source bank keys {rightanswer} as the correct answer. "
+        "The formula-and-pattern review above is the rationale stored with this question.",
         color="245B38",
         fill="EAF6EE",
         border_color="2E8B57",
@@ -596,9 +618,9 @@ def add_duplicate_source_feedback(
                 )
             else:
                 explanation = (
-                    f"The source bank does not key this option for {target}. It represents "
-                    "a different formula-modification distinction, so match the symptom "
-                    "asked in the stem to its specific modification."
+                    f"The source bank does not key this option as correct for {target}. "
+                    "It represents a different answer distinction; compare the specific "
+                    "pattern, symptom, ingredients, or analysis requested in the stem."
                 )
             builder.add_paragraph(
                 f"{label}) {value}\n{explanation}",
@@ -612,10 +634,83 @@ def add_duplicate_source_feedback(
             )
 
 
+def add_missing_source_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
+    """Supply transparent Mock-style guidance when legacy feedback is absent."""
+    target = question_learning_target(question)
+    rightanswer = answer_text(question.get("RightAnswer"))
+    if not rightanswer:
+        return
+
+    builder.add_paragraph(
+        "Why the correct answer is correct",
+        bold=True,
+        color="17324D",
+        space_before=100,
+        space_after=50,
+        keep_next=True,
+    )
+    builder.add_paragraph(
+        f"For {target}, the source bank identifies {rightanswer} as the correct answer. "
+        "The original SCORM question does not contain a more detailed rationale.",
+        color="245B38",
+        fill="EAF6EE",
+        border_color="2E8B57",
+        left_indent=180,
+        right_indent=120,
+        space_after=100,
+        keep_lines=True,
+    )
+
+    answers = question.get("Answers") or []
+    related_targets = question.get("__related_answer_targets") or {}
+    incorrect = []
+    for index, answer in enumerate(answers):
+        value = answer_text(answer)
+        if not value or value == rightanswer:
+            continue
+        label = chr(65 + index) if index < 26 else str(index + 1)
+        incorrect.append(
+            (label, value, related_targets.get(normalise_text(value).casefold()))
+        )
+    if not incorrect:
+        return
+
+    builder.add_paragraph(
+        "Why the other options are incorrect",
+        bold=True,
+        color="17324D",
+        space_before=100,
+        space_after=50,
+        keep_next=True,
+    )
+    for label, value, related_target in incorrect:
+        if related_target and related_target.casefold() != target.casefold():
+            explanation = (
+                f"This answer is keyed elsewhere in this review for {related_target}, "
+                f"not for {target}."
+            )
+        else:
+            explanation = (
+                f"The source bank does not identify this option as correct for {target}. "
+                "No option-specific rationale was stored in the original SCORM question."
+            )
+        builder.add_paragraph(
+            f"{label}) {value}\n{explanation}",
+            color="6B3030",
+            fill="FDF1F1",
+            border_color="C96D6D",
+            left_indent=180,
+            right_indent=120,
+            space_after=80,
+            keep_lines=True,
+        )
+
+
 def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
     """Render source feedback as clearly labelled study-book callouts."""
     feedback = question.get("Feedback") or []
-    if not isinstance(feedback, list):
+    if not isinstance(feedback, list) or not any(normalise_text(value) for value in feedback):
+        add_missing_source_feedback(builder, question)
         return
 
     feedbacktexts = [normalise_text(value) for value in feedback if normalise_text(value)]

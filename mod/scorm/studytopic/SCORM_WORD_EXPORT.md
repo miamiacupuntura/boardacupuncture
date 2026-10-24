@@ -59,6 +59,10 @@ separate Mock-style answer guidance. When an answer choice is correct in a
 related question from the same document, the distractor explanation names the
 symptom for which that choice is actually keyed; otherwise it clearly states
 that the source bank does not key the choice for the symptom in the stem.
+Questions that contain no source feedback still receive the two Mock-style
+answer sections. Those sections identify the keyed answer and each distractor,
+while explicitly noting that the original package supplied no detailed or
+option-specific rationale instead of inventing clinical content.
 
 ## Validate before publishing
 
