@@ -107,6 +107,22 @@ if ($iswordlibrary) {
     $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
 }
 
+// Simulation contains a single collection. Skip its redundant main index and
+// open the collection's three-topic list directly from the course activity.
+if ($iswordlibrary && !$edit && $chapter &&
+        str_starts_with($book->name, 'Simulation Exam Key') &&
+        $chapter->importsrc === 'scorm-word-library-index') {
+    foreach ($chapters as $directchapter) {
+        if (!$directchapter->hidden && !$directchapter->subchapter &&
+                $directchapter->importsrc === 'scorm-word-library') {
+            redirect(new moodle_url('/mod/book/view.php', [
+                'id' => $cm->id,
+                'chapterid' => $directchapter->id,
+            ]));
+        }
+    }
+}
+
 // A single generated clinical-case document does not need the normal Book
 // index/category steps. Keep the Book activity as the stable course entry and
 // send learners directly to its generated Word preview. Editing mode retains
