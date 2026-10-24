@@ -18,6 +18,7 @@
     certificateTitle: 'Point Contraindications and Anatomical Safety',
     planningHours: 3,
     moodleMockLinks: {
+      'objective-1': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9385',
       'objective-4': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9387',
       'objective-7': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9390',
       'objective-8': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9391',
