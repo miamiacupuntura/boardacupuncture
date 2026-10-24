@@ -146,7 +146,7 @@ $rowHTMLendAB = <<<HTML
 </td>
 HTML;
 $rowHTML2AB = <<<HTML
-<tr>
+<tr class="exam-result-row">
 HTML;
 $rowHTMLend2AB = <<<HTML
 </tr>
@@ -269,7 +269,6 @@ $lastAttemptStatus = array();
 $scormName = array();
 $examLink = array();
 $resultExamsAB = "";
-$sectionScormCount = 0;
 
 $scorms = $DB->get_records('scorm', ['course' => $COURSE->id]);
 $currentSection = $DB->get_record('course_sections', ['course' => $COURSE->id, 'section' => $format->get_section_number()]);
@@ -298,7 +297,6 @@ if (!$scormurl) {
 $scormurlValue = "/mod/scorm/studyguide/?id=" . $scormurl->instance . "&cmid=" . $scormurl->id;
 
 if ($currentSection && (int)$scormurl->section === (int)$currentSection->id) {
-$sectionScormCount++;
 $attempts = $DB->get_records('scorm_attempt', ['scormid' => $scorm->id, 'userid' => $USER->id]);
 
 $tempAttempt = count($attempts);
@@ -404,6 +402,7 @@ array_multisort($scormName, $maxAttempt, $maxScore, $Passed, $examLink);
 for ($x = 0; $x <= count($scormName)-1; $x++) {
 $resultExamsAB =  $resultExamsAB . $rowHTML2AB . $rowHTMLAB . ($x+1) . $rowHTMLendAB . $rowHTML3AB . $scormName[$x] . $rowHTMLendAB . $rowHTMLAB . $maxAttempt[$x] . $rowHTMLendAB . $rowHTMLAB . $maxScore[$x] . $rowHTMLendAB . $rowHTMLAB . $Passed[$x] . $rowHTMLendAB . $rowHTMLLinkAB . $examLink[$x] . $rowHTMLendAB . $rowHTMLend2AB;
 }
+$hasExamRows = trim($resultExamsAB) !== '';
 ///COURSE AVERAGE BEGIN
 if ($overallcount > 0) {
 if (Round(($overallgrade / $overallcount), 2) < 70) {
@@ -472,15 +471,15 @@ $coursegrade = $htmlContentCourseGrade . $currentGrade . "%" . $htmlContentCours
 $navigationTopic = $htmlContent3 . "Main Page" . $htmlContentEND . $htmlContent6 . $htmlContent1 . "<< Prev" . $htmlContentEND . $htmlContent2 . "Next >>" . $htmlContentEND;
 
 // Notes, Word resources, pages and other study-only sections do not have an
-// exam result to display. Only append grading information when this section
-// actually contains a SCORM activity.
-if ($sectionScormCount > 0) {
+// exam result to display. Only append grading information when the section
+// produced at least one exam row.
+if ($hasExamRows) {
     $navigationTopic .= $htmlContent5 . $coursegrade . $htmlContentEND2 . $htmlContent4 . $finalaverage . $htmlContentEND2;
 }
 ///NAVIGATION INSIDE TOPIC END
 
 $htmlMainSectionExams = "";
-if ($sectionScormCount > 0) {
+if ($hasExamRows) {
 $htmlMainSectionExams = <<<HTML
 <table class="course-stats course-stats2 exams-list-main show-table" style="width:100%;max-width:100%;table-layout:fixed;box-sizing:border-box;">
   <tr>
@@ -496,6 +495,39 @@ $htmlMainSectionExams = <<<HTML
   </tr>
 $resultExamsAB
 </table>
+<script>
+(function() {
+    var script = document.currentScript;
+    var table = script ? script.previousElementSibling : null;
+
+    if (!table || !table.classList.contains('exams-list-main')) {
+        return;
+    }
+
+    var rows = Array.prototype.slice.call(table.querySelectorAll('.exam-result-row'));
+    var hasVisibleRow = rows.some(function(row) {
+        return window.getComputedStyle(row).display !== 'none' &&
+            row.getClientRects().length > 0 &&
+            row.offsetHeight > 0 &&
+            row.textContent.trim() !== '';
+    });
+
+    if (hasVisibleRow) {
+        return;
+    }
+
+    var wrapper = table.closest('.exam-table');
+    var section = table.closest('.course-section') || document;
+
+    if (wrapper) {
+        wrapper.style.display = 'none';
+    }
+
+    section.querySelectorAll('.navsection .course-grade, .navsection .section-average').forEach(function(element) {
+        element.style.display = 'none';
+    });
+})();
+</script>
 HTML;
 }
 }///EXAM LIST INSIDE TOPICS END
