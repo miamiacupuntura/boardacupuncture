@@ -12,7 +12,7 @@ The study guide includes an instructor-only chapter template. Open the **Instruc
 6. Select **Copy assessment config** to copy the ready-to-use `STUDY_GUIDE_ASSESSMENT_CONFIG` object for the chapter's `mock-data.js`.
 7. Select **Save draft** to keep a browser-only working copy or **Export JSON** to download the completed chapter specification.
 
-Every chapter hero must also include the visible **Español** language button in the lower-right position used by the established chapter design. On phone-width screens it becomes a full-width control. Connect it to the chapter's Spanish view; do not hide it inside an objective or exam block.
+Every chapter hero must also include the visible **Español** language button in the lower-right position used by the established chapter design. On phone-width screens it becomes a full-width control. It must switch the current chapter in place and offer **English** to return; it must never send the learner back to the catalog. Keep official Moodle activity names unchanged in both language views.
 
 ## Continuing Education approval record
 

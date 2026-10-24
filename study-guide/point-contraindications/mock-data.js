@@ -16,7 +16,7 @@
     chapterTitle: 'Point Contraindications',
     schoolExamTitle: 'School Level Exam — Point Contraindications',
     boardExamTitle: 'Board Level Exam — Point Contraindications',
-    spanishChapterLink: '/blocks/myprogress/study-guide.php?area=pointlocation&lang=es#point-contraindications',
+    inlineLanguageToggle: true,
     moodleExamHistoryLink: 'https://www.acupuncturetests.com/mod/scorm/examhistory/?courseid=34&sectionid=2266',
     cePlanTitle: 'Continuing Education Learning Plan — Point Contraindications',
     ceExamTitle: 'Continuing Education Exam — Point Contraindications',

@@ -383,7 +383,7 @@
   document.querySelectorAll('.hero-actions .school, .hero-button.school').forEach(link => link.href = '#school-level-exams');
   document.querySelectorAll('.hero-actions .board, .hero-button.board').forEach(link => link.href = '#board-level-exams');
   const languageToggle = document.getElementById('language-toggle');
-  if (languageToggle && config.spanishChapterLink) {
+  if (languageToggle && config.spanishChapterLink && !config.inlineLanguageToggle) {
     languageToggle.addEventListener('click', () => { window.location.href = config.spanishChapterLink; });
   }
 

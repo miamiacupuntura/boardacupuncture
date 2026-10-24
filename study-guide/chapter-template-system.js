@@ -53,6 +53,7 @@
     ceCertificateEnabled: false,
     spanishChapterTitle: '',
     spanishChapterDescription: '',
+    inlineLanguageToggle: true,
     spanishChapterUrl: '',
     objectives: [
       { title: 'Objective 1 — Add a measurable learner objective.', subjectMatter: 'Add the verified subject matter.', teachingMethod: 'Reading, visual comparison, retrieval practice and feedback.', mockTitle: 'Objective 1 (Mock 10)', mockUrl: '', legacyExamTitle: '', legacyExamUrl: '' }
@@ -80,6 +81,7 @@
       ? '' : Number(value.approvedCeCreditHours);
     value.cePubliclyActive = value.cePubliclyActive === true || value.cePubliclyActive === 'true';
     value.ceCertificateEnabled = value.ceCertificateEnabled === true || value.ceCertificateEnabled === 'true';
+    value.inlineLanguageToggle = value.inlineLanguageToggle === true || value.inlineLanguageToggle === 'true';
     return value;
   }
   function estimatedStudyHours(config) {
@@ -98,6 +100,7 @@
       chapterTitle: value.chapterTitle,
       schoolExamTitle: `School Level Exam — ${value.chapterTitle}`,
       boardExamTitle: `Board Level Exam — ${value.chapterTitle}`,
+      inlineLanguageToggle: value.inlineLanguageToggle,
       spanishChapterLink: value.spanishChapterUrl,
       moodleExamHistoryLink: value.moodleExamHistoryUrl,
       cePlanTitle: `Continuing Education Learning Plan — ${value.chapterTitle}`,
@@ -132,7 +135,7 @@
     if (!value.continuingEducationExamTitle.trim()) errors.push('The complete Continuing Education Mock 10 activity name is required.');
     if (!value.continuingEducationExamUrl.trim()) warnings.push('Continuing Education Exam link is missing.');
     if (!value.spanishChapterTitle.trim()) warnings.push('Spanish chapter title is missing.');
-    if (!value.spanishChapterUrl.trim()) warnings.push('Spanish chapter URL is missing; the Español hero button cannot be connected.');
+    if (!value.inlineLanguageToggle && !value.spanishChapterUrl.trim()) warnings.push('Spanish chapter URL is missing; the Español hero button cannot be connected.');
     if (value.cePubliclyActive && value.ceApprovalStatus !== 'approved') errors.push('A CE course cannot be publicly active until its approval status is Approved.');
     if (value.ceApprovalStatus === 'approved') {
       if (!(Number(value.approvedCeCreditHours) > 0)) errors.push('Approved CE credit hours are required for an approved course.');
