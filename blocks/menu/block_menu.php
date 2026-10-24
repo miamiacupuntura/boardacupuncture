@@ -168,7 +168,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [30, 'Questions', 'questions'],
                         [43, 'Simulation', 'simulation'],
-                        [93, 'Notes', 'notes'],
+                        [93, 'Exam Key', 'notes'],
                         [48, 'Games', 'games'],
                     ],
                 ],
@@ -180,7 +180,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [34, 'Questions', 'questions'],
                         [40, 'Simulation', 'simulation'],
-                        [94, 'Notes', 'notes'],
+                        [94, 'Exam Key', 'notes'],
                         [83, 'Games', 'games'],
                     ],
                 ],
@@ -193,7 +193,7 @@ class block_menu extends block_base {
                         [45, 'Single Herbs', 'questions'],
                         [44, 'Formulas', 'questions'],
                         [41, 'Simulation', 'simulation'],
-                        [92, 'Notes', 'notes'],
+                        [92, 'Exam Key', 'notes'],
                         [82, 'Games', 'games'],
                     ],
                 ],
@@ -205,7 +205,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [36, 'Questions', 'questions'],
                         [42, 'Simulation', 'simulation'],
-                        [91, 'Notes', 'notes'],
+                        [91, 'Exam Key', 'notes'],
                         [84, 'Games', 'games'],
                     ],
                 ],
@@ -217,7 +217,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [113, 'Questions', 'questions'],
                         [118, 'Simulation', 'simulation'],
-                        [120, 'Notes', 'notes'],
+                        [120, 'Exam Key', 'notes'],
                         [119, 'Games', 'games'],
                     ],
                 ],
@@ -236,6 +236,11 @@ class block_menu extends block_base {
                 ]);
                 $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
                     . $studyguideurl->out(false) . '">Study Guide</a>';
+                if ($subject['area'] === 'herbology') {
+                    $comparisonsurl = new moodle_url('/study-guide/comparisons/index.html');
+                    $actions .= '<a class="board-hub__action comparisons-dashboard-link" href="'
+                        . $comparisonsurl->out(false) . '">Comparisons</a>';
+                }
 
                 $lastexam = 'No exam taken yet';
                 if ($progress['lastexam'] !== '') {
@@ -260,7 +265,7 @@ class block_menu extends block_base {
   <header class="board-hub__heading">
     <p>BOARD PREPARATION</p>
     <h2 id="board-hub-title">Your NCBAHM Board Preparation</h2>
-    <span>Track your progress and open Questions, Simulation, Notes, Games or Study Guides directly from one screen.</span>
+    <span>Track your progress and open Questions, Simulation, Exam Keys, Games, Study Guides or Comparisons directly from one screen.</span>
   </header>
   <div class="board-hub__grid">{$boardcards}</div>
 </section>

@@ -42,7 +42,7 @@
             }
 
             const result = findSubjectCard(heading);
-            if (!result || result.card.querySelector(':scope .study-guide-dashboard-link')) {
+            if (!result) {
                 return;
             }
 
@@ -52,15 +52,18 @@
                 notesAction.setAttribute('aria-label', `Open ${subject} exam keys and feedback`);
             }
 
-            const link = document.createElement('a');
             const example = result.actions[0];
-            link.className = `${example.className || ''} study-guide-dashboard-link`.trim();
-            link.href = `/blocks/myprogress/study-guide.php?area=${encodeURIComponent(area)}`;
-            link.textContent = 'Study Guide';
-            link.setAttribute('aria-label', `Open ${subject} Study Guide chapters`);
+            let link = result.card.querySelector(':scope .study-guide-dashboard-link');
+            if (!link) {
+                link = document.createElement('a');
+                link.className = `${example.className || ''} study-guide-dashboard-link`.trim();
+                link.href = `/blocks/myprogress/study-guide.php?area=${encodeURIComponent(area)}`;
+                link.textContent = 'Study Guide';
+                link.setAttribute('aria-label', `Open ${subject} Study Guide chapters`);
 
-            const lastAction = result.actions[result.actions.length - 1];
-            lastAction.insertAdjacentElement('afterend', link);
+                const lastAction = result.actions[result.actions.length - 1];
+                lastAction.insertAdjacentElement('afterend', link);
+            }
 
             if (area === 'herbology' && !result.card.querySelector(':scope .comparisons-dashboard-link')) {
                 const comparisons = document.createElement('a');
