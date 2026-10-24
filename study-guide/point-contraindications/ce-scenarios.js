@@ -58,8 +58,8 @@
   ];
 
   const section = document.createElement('section');
-  section.className = 'card ce-case-lab';
-  section.id = 'ce-safety-scenarios';
+  section.className = 'ce-case-lab';
+  section.id = 'ce-safety-scenarios-content';
   section.innerHTML = `
     <header class="section-heading"><div><span class="eyebrow">CONTINUING EDUCATION · CASE APPLICATION LAB</span><h2>Analyze five safety breakdowns with SAFER</h2><p>Work through each scenario before opening its model analysis. Focus on screening, risk classification, warning signs, source limits, escalation and documentation.</p></div><span class="score-pill" id="ce-case-progress">0 / ${cases.length} analyzed</span></header>
     <aside class="case-disclaimer"><b>Fictional composite scenarios</b><span>These cases illustrate common safety-failure patterns. They are not verified reports, legal opinions or proof that a named intervention caused an outcome. Legal duties and clinical protocols vary by jurisdiction and current standard.</span></aside>
@@ -81,15 +81,21 @@
     </div>
     <p class="case-time-note">This application lab reinforces Objectives 1, 10, 11 and 12. It does not independently award credit or change the chapter’s 180-minute planning framework.</p>`;
 
-  cePlan.before(section);
+  const alignment = document.createElement('details');
+  alignment.className = 'card ce-alignment-panel';
+  alignment.id = 'ce-safety-scenarios';
+  const alignmentSummary = document.createElement('summary');
+  alignmentSummary.textContent = 'How Point Contraindications Aligns with Continuing Education';
+  alignment.append(alignmentSummary, section);
+  cePlan.after(alignment);
 
   const practiceNav = document.querySelector('.study-nav details:last-of-type');
-  const cePlanLink = practiceNav?.querySelector('a[href="#continuing-education-plan"]');
+  const cePlanLink = practiceNav?.querySelector('a[href="#continuing-education-start"]');
   if (practiceNav && cePlanLink && !practiceNav.querySelector('a[href="#ce-safety-scenarios"]')) {
     const link = document.createElement('a');
     link.href = '#ce-safety-scenarios';
-    link.textContent = 'CE safety case lab';
-    practiceNav.insertBefore(link, cePlanLink);
+    link.textContent = 'How this chapter aligns with CE';
+    cePlanLink.after(link);
   }
 
   const storageKey = 'acupuncturetests-point-contraindications-ce-cases-v1';

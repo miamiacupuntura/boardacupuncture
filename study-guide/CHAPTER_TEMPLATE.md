@@ -53,6 +53,15 @@ The shared script automatically adds the following standard blocks:
 6. A certificate preview that remains disabled until approval and Moodle completion are configured.
 7. Copy and TXT export controls using the standard authoring format: question name, type, text, A–D options, correct answer, general feedback and distractor feedback.
 
+The Continuing Education blocks must keep the same chapter-wide order:
+
+1. **Continuing Education Learning Plan — Course Title** with the objective table first.
+2. **How the Course Chapter Aligns with Continuing Education** with extended reading or case application.
+3. **Continuing Education Exam — Course Title** with the required assessment or its preparation bank.
+4. Certificate and completion status, gated by the approval record and Moodle completion rules.
+
+Use separate collapsible cards for the first three blocks. Do not insert cases, an exam link or a certificate before the Learning Plan table.
+
 Do not place forward-jump links inside objective reading. Navigation can remain in the chapter sidebar, but the instructional body should preserve the reading sequence. Existing Moodle question banks belong in one separate post-reading directory, and official results remain in Moodle Exam History.
 
 ## Required quality checks

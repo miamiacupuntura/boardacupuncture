@@ -13,6 +13,8 @@
   window.STUDY_GUIDE_ASSESSMENT_CONFIG = {
     courseId: 'point-contraindications',
     title: 'Point Contraindications and Anatomical Safety',
+    cePlanTitle: 'Continuing Education Learning Plan — Point Contraindications',
+    ceExamTitle: 'Continuing Education Exam — Point Contraindications',
     certificateTitle: 'Point Contraindications and Anatomical Safety',
     planningHours: 3
   };
