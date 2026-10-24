@@ -63,6 +63,11 @@ Questions that contain no source feedback still receive the two Mock-style
 answer sections. Those sections identify the keyed answer and each distractor,
 while explicitly noting that the original package supplied no detailed or
 option-specific rationale instead of inventing clinical content.
+The answer guidance is interaction-aware: Fill in the Blank questions list all
+accepted responses and explain matching rules; Matching questions show the
+keyed pairs; Multiple Response questions identify every correct selection;
+Sequence questions preserve the keyed order; and Click Map questions retain
+the source hotspot information.
 
 ## Validate before publishing
 

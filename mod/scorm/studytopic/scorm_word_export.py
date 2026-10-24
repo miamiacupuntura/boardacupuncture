@@ -517,6 +517,130 @@ def question_learning_target(question: dict[str, Any]) -> str:
     return "the question prompt"
 
 
+def question_answer_key(question: dict[str, Any]) -> str:
+    """Return a readable answer key for every supported SCORM question type."""
+    questiontype = str(question.get("__type") or "")
+    if questiontype == "MatchingQuestion":
+        left = {item.get("Id"): answer_text(item) for item in question.get("LeftColumn", [])}
+        right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
+        return "; ".join(
+            f"{leftvalue} → {right.get(itemid, '[missing match]')}"
+            for itemid, leftvalue in left.items()
+        )
+    if questiontype == "MultipleResponseQuestion":
+        correct = []
+        for item in question.get("Answers", []):
+            iscorrect = False
+            value: Any = item
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                iscorrect = bool(item[0])
+                value = item[1]
+            elif isinstance(item, dict):
+                iscorrect = bool(item.get("Correct"))
+                value = item.get("Content", item)
+            if iscorrect:
+                correct.append(answer_text(value))
+        return "; ".join(correct)
+    if questiontype == "SequenceQuestion":
+        return "; ".join(
+            f"{index}. {answer_text(item)}"
+            for index, item in enumerate(question.get("Items", []), start=1)
+        )
+    if questiontype == "ClickMapQuestion":
+        return "; ".join(
+            f"{item.get('Name', 'Region')} at {item.get('Data') or []}"
+            for item in question.get("Answers", [])
+            if item.get("Correct")
+        )
+
+    rightanswer = answer_text(question.get("RightAnswer"))
+    if rightanswer:
+        return rightanswer
+    if questiontype == "FillInTheBlankQuestion":
+        return "; ".join(
+            answer_text(item) for item in question.get("Answers", []) if answer_text(item)
+        )
+    return ""
+
+
+def feedback_headings(question: dict[str, Any]) -> tuple[str, str]:
+    """Use labels that make sense for the current interaction type."""
+    questiontype = str(question.get("__type") or "")
+    if questiontype == "FillInTheBlankQuestion":
+        return "Why the accepted answer is correct", "How other responses are evaluated"
+    if questiontype == "MatchingQuestion":
+        return "Why these matches are correct", "How incorrect matches are evaluated"
+    if questiontype == "MultipleResponseQuestion":
+        return "Why these selections are correct", "Why the other options are incorrect"
+    if questiontype == "SequenceQuestion":
+        return "Why this sequence is correct", "How an incorrect sequence is evaluated"
+    if questiontype == "ClickMapQuestion":
+        return "Why this location is correct", "How other locations are evaluated"
+    return "Why the correct answer is correct", "Why the other options are incorrect"
+
+
+def question_incorrect_options(question: dict[str, Any]) -> list[tuple[str, str]]:
+    """Return labelled distractors only for question types that expose options."""
+    questiontype = str(question.get("__type") or "")
+    if questiontype == "MultipleResponseQuestion":
+        incorrect = []
+        for index, item in enumerate(question.get("Answers", [])):
+            iscorrect = False
+            value: Any = item
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                iscorrect = bool(item[0])
+                value = item[1]
+            elif isinstance(item, dict):
+                iscorrect = bool(item.get("Correct"))
+                value = item.get("Content", item)
+            if not iscorrect:
+                label = chr(65 + index) if index < 26 else str(index + 1)
+                incorrect.append((label, answer_text(value)))
+        return incorrect
+    if questiontype in {
+        "FillInTheBlankQuestion",
+        "MatchingQuestion",
+        "SequenceQuestion",
+        "ClickMapQuestion",
+    }:
+        return []
+
+    rightanswer = answer_text(question.get("RightAnswer"))
+    incorrect = []
+    for index, answer in enumerate(question.get("Answers", [])):
+        value = answer_text(answer)
+        if value and value != rightanswer:
+            label = chr(65 + index) if index < 26 else str(index + 1)
+            incorrect.append((label, value))
+    return incorrect
+
+
+def nonchoice_evaluation_guidance(question: dict[str, Any]) -> str:
+    """Explain evaluation when a question has no selectable distractor list."""
+    questiontype = str(question.get("__type") or "")
+    if questiontype == "FillInTheBlankQuestion":
+        return (
+            "A response is accepted only when it matches one of the accepted answers "
+            "shown above, subject to the matching rules configured in the source activity."
+        )
+    if questiontype == "MatchingQuestion":
+        return (
+            "Each item must be paired with its keyed match shown above. A different pairing "
+            "is evaluated as incorrect by the source activity."
+        )
+    if questiontype == "SequenceQuestion":
+        return (
+            "The items must follow the keyed order shown above. A different order is "
+            "evaluated as incorrect by the source activity."
+        )
+    if questiontype == "ClickMapQuestion":
+        return (
+            "The selected point must fall within the keyed hotspot region. Locations outside "
+            "that source region are evaluated as incorrect."
+        )
+    return ""
+
+
 def annotate_related_answer_targets(questions: list[Any]) -> None:
     """Link repeated answer choices to the symptom they answer elsewhere.
 
@@ -529,7 +653,7 @@ def annotate_related_answer_targets(questions: list[Any]) -> None:
         if not isinstance(question, dict):
             continue
         target = question_learning_target(question)
-        rightanswer = answer_text(question.get("RightAnswer"))
+        rightanswer = question_answer_key(question)
         if rightanswer and target != "the question prompt":
             targets_by_answer[normalise_text(rightanswer).casefold()].add(target)
 
@@ -550,10 +674,11 @@ def add_duplicate_source_feedback(
 ) -> None:
     """Replace duplicated correct/incorrect source feedback with Mock-style guidance."""
     target = question_learning_target(question)
-    rightanswer = answer_text(question.get("RightAnswer"))
+    rightanswer = question_answer_key(question)
+    correctheading, incorrectheading = feedback_headings(question)
 
     builder.add_paragraph(
-        "Formula and pattern review",
+        "Source review",
         bold=True,
         color="17324D",
         space_before=100,
@@ -572,7 +697,7 @@ def add_duplicate_source_feedback(
     )
 
     builder.add_paragraph(
-        "Why the correct answer is correct",
+        correctheading,
         bold=True,
         color="17324D",
         space_before=100,
@@ -580,8 +705,8 @@ def add_duplicate_source_feedback(
         keep_next=True,
     )
     builder.add_paragraph(
-        f"For {target}, the source bank keys {rightanswer} as the correct answer. "
-        "The formula-and-pattern review above is the rationale stored with this question.",
+        f"For {target}, the source bank answer key is {rightanswer}. "
+        "The source review above is the rationale stored with this question.",
         color="245B38",
         fill="EAF6EE",
         border_color="2E8B57",
@@ -591,19 +716,14 @@ def add_duplicate_source_feedback(
         keep_lines=True,
     )
 
-    answers = question.get("Answers") or []
     related_targets = question.get("__related_answer_targets") or {}
-    incorrect = []
-    for index, answer in enumerate(answers):
-        value = answer_text(answer)
-        if not value or value == rightanswer:
-            continue
-        label = chr(65 + index) if index < 26 else str(index + 1)
-        related_target = related_targets.get(normalise_text(value).casefold())
-        incorrect.append((label, value, related_target))
+    incorrect = [
+        (label, value, related_targets.get(normalise_text(value).casefold()))
+        for label, value in question_incorrect_options(question)
+    ]
     if incorrect:
         builder.add_paragraph(
-            "Why the other options are incorrect",
+            incorrectheading,
             bold=True,
             color="17324D",
             space_before=100,
@@ -632,17 +752,39 @@ def add_duplicate_source_feedback(
                 space_after=80,
                 keep_lines=True,
             )
+    else:
+        evaluation = nonchoice_evaluation_guidance(question)
+        if evaluation:
+            builder.add_paragraph(
+                incorrectheading,
+                bold=True,
+                color="17324D",
+                space_before=100,
+                space_after=50,
+                keep_next=True,
+            )
+            builder.add_paragraph(
+                evaluation,
+                color="6B3030",
+                fill="FDF1F1",
+                border_color="C96D6D",
+                left_indent=180,
+                right_indent=120,
+                space_after=80,
+                keep_lines=True,
+            )
 
 
 def add_missing_source_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
     """Supply transparent Mock-style guidance when legacy feedback is absent."""
     target = question_learning_target(question)
-    rightanswer = answer_text(question.get("RightAnswer"))
+    rightanswer = question_answer_key(question)
     if not rightanswer:
         return
+    correctheading, incorrectheading = feedback_headings(question)
 
     builder.add_paragraph(
-        "Why the correct answer is correct",
+        correctheading,
         bold=True,
         color="17324D",
         space_before=100,
@@ -650,7 +792,7 @@ def add_missing_source_feedback(builder: DocxBuilder, question: dict[str, Any]) 
         keep_next=True,
     )
     builder.add_paragraph(
-        f"For {target}, the source bank identifies {rightanswer} as the correct answer. "
+        f"For {target}, the source bank answer key is {rightanswer}. "
         "The original SCORM question does not contain a more detailed rationale.",
         color="245B38",
         fill="EAF6EE",
@@ -661,41 +803,57 @@ def add_missing_source_feedback(builder: DocxBuilder, question: dict[str, Any]) 
         keep_lines=True,
     )
 
-    answers = question.get("Answers") or []
     related_targets = question.get("__related_answer_targets") or {}
-    incorrect = []
-    for index, answer in enumerate(answers):
-        value = answer_text(answer)
-        if not value or value == rightanswer:
-            continue
-        label = chr(65 + index) if index < 26 else str(index + 1)
-        incorrect.append(
-            (label, value, related_targets.get(normalise_text(value).casefold()))
-        )
-    if not incorrect:
-        return
+    incorrect = [
+        (label, value, related_targets.get(normalise_text(value).casefold()))
+        for label, value in question_incorrect_options(question)
+    ]
 
-    builder.add_paragraph(
-        "Why the other options are incorrect",
-        bold=True,
-        color="17324D",
-        space_before=100,
-        space_after=50,
-        keep_next=True,
-    )
-    for label, value, related_target in incorrect:
-        if related_target and related_target.casefold() != target.casefold():
-            explanation = (
-                f"This answer is keyed elsewhere in this review for {related_target}, "
-                f"not for {target}."
-            )
-        else:
-            explanation = (
-                f"The source bank does not identify this option as correct for {target}. "
-                "No option-specific rationale was stored in the original SCORM question."
-            )
+    if incorrect:
         builder.add_paragraph(
-            f"{label}) {value}\n{explanation}",
+            incorrectheading,
+            bold=True,
+            color="17324D",
+            space_before=100,
+            space_after=50,
+            keep_next=True,
+        )
+        for label, value, related_target in incorrect:
+            if related_target and related_target.casefold() != target.casefold():
+                explanation = (
+                    f"This answer is keyed elsewhere in this review for {related_target}, "
+                    f"not for {target}."
+                )
+            else:
+                explanation = (
+                    f"The source bank does not identify this option as correct for {target}. "
+                    "No option-specific rationale was stored in the original SCORM question."
+                )
+            builder.add_paragraph(
+                f"{label}) {value}\n{explanation}",
+                color="6B3030",
+                fill="FDF1F1",
+                border_color="C96D6D",
+                left_indent=180,
+                right_indent=120,
+                space_after=80,
+                keep_lines=True,
+            )
+    else:
+        evaluation = nonchoice_evaluation_guidance(question)
+        if not evaluation:
+            return
+        builder.add_paragraph(
+            incorrectheading,
+            bold=True,
+            color="17324D",
+            space_before=100,
+            space_after=50,
+            keep_next=True,
+        )
+        builder.add_paragraph(
+            evaluation
+            + " No option-specific rationale was stored in the original SCORM question.",
             color="6B3030",
             fill="FDF1F1",
             border_color="C96D6D",
@@ -708,6 +866,7 @@ def add_missing_source_feedback(builder: DocxBuilder, question: dict[str, Any]) 
 
 def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
     """Render source feedback as clearly labelled study-book callouts."""
+    correctheading, incorrectheading = feedback_headings(question)
     feedback = question.get("Feedback") or []
     if not isinstance(feedback, list) or not any(normalise_text(value) for value in feedback):
         add_missing_source_feedback(builder, question)
@@ -727,7 +886,7 @@ def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
             correct_feedback, explanations = combined
             if correct_feedback:
                 builder.add_paragraph(
-                    "Why the correct answer is correct",
+                    correctheading,
                     bold=True,
                     color="17324D",
                     space_before=100,
@@ -746,7 +905,7 @@ def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
                 )
             if explanations:
                 builder.add_paragraph(
-                    "Why the other options are incorrect",
+                    incorrectheading,
                     bold=True,
                     color="17324D",
                     space_before=100,

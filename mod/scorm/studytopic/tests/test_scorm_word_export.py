@@ -127,6 +127,46 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn("Why the other options are incorrect", xml)
         self.assertIn("No option-specific rationale was stored", xml)
 
+    def test_fill_in_blank_feedback_uses_accepted_answers(self) -> None:
+        question = {
+            "__type": "FillInTheBlankQuestion",
+            "QuestionText": "Name the formula: ____",
+            "Answers": ["Formula A", "Formula A Decoction"],
+            "Feedback": [],
+        }
+        builder = EXPORTER.DocxBuilder("Test")
+        EXPORTER.add_feedback(builder, question)
+        xml = "".join(builder.body)
+
+        self.assertIn("Why the accepted answer is correct", xml)
+        self.assertIn("Formula A; Formula A Decoction", xml)
+        self.assertIn("How other responses are evaluated", xml)
+        self.assertIn("matches one of the accepted answers", xml)
+
+    def test_matching_feedback_uses_keyed_pairs(self) -> None:
+        question = {
+            "__type": "MatchingQuestion",
+            "QuestionText": "Match each herb to its function.",
+            "LeftColumn": [
+                {"Id": 1, "Content": "Herb A"},
+                {"Id": 2, "Content": "Herb B"},
+            ],
+            "RightColumn": [
+                {"Id": 1, "Content": "Function A"},
+                {"Id": 2, "Content": "Function B"},
+            ],
+            "Feedback": [],
+        }
+        builder = EXPORTER.DocxBuilder("Test")
+        EXPORTER.add_feedback(builder, question)
+        xml = "".join(builder.body)
+
+        self.assertIn("Why these matches are correct", xml)
+        self.assertIn("Herb A → Function A", xml)
+        self.assertIn("Herb B → Function B", xml)
+        self.assertIn("How incorrect matches are evaluated", xml)
+        self.assertIn("must be paired with its keyed match", xml)
+
     def test_safe_segment_removes_path_characters(self) -> None:
         self.assertEqual("Herbs - Final - Exam", EXPORTER.safe_segment("Herbs/Final:Exam", "Exam"))
 
