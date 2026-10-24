@@ -88,6 +88,7 @@ Apply these rules consistently in every chapter:
 14. When shared JavaScript or CSS changes, update its cache-version query string in the chapter HTML so browsers receive the new table structure, button text and styling.
 15. Before the Continuing Education exam access, include **10 Continuing Education Review Questions**. Render them with the same interaction and feedback format as every objective Mock 10: four single-answer choices, **Check answer**, correct-answer identification, general rationale and an explanation for every incorrect option. Label this local practice clearly as review and keep it separate from the official Moodle attempt.
 16. End the Continuing Education sequence with a collapsible **Continuing Education Exam — Course Title** block. Its six-column table uses **Exam**, **Attempts**, **Last Attempt**, **Average**, **Grade** and **Action**, contains the complete **Course Name Continuing Education (Mock 10)** activity name, and ends with an orange **Start Exam** button that opens the SCORM activity in a new tab.
+17. Never show an exam-like label, card, button or note without a working destination. Remove plain-text placeholders such as **Related Moodle bank: 12 questions** when no link is attached. The shared assessment layer automatically removes legacy `source-note` placeholders beginning with **Related Moodle bank:**; real linked actions remain available in the upper directories and objective action rows.
 
 The Continuing Education blocks must keep the same chapter-wide order:
 
