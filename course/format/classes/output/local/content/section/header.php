@@ -470,6 +470,13 @@ $coursegrade = $htmlContentCourseGrade . $currentGrade . "%" . $htmlContentCours
 }
 $navigationTopic = $htmlContent3 . "Main Page" . $htmlContentEND . $htmlContent6 . $htmlContent1 . "<< Prev" . $htmlContentEND . $htmlContent2 . "Next >>" . $htmlContentEND;
 
+// The Herbology Exam Key landing section is a self-contained portal. Its
+// legacy course navigation points back to the obsolete course front page and
+// unrelated note sections, so keep only the four curated resources.
+if ((int) $COURSE->id === 92 && (int) $section->id === 2020) {
+    $navigationTopic = '';
+}
+
 // Notes, Word resources, pages and other study-only sections do not have an
 // exam result to display. Only append grading information when the section
 // produced at least one exam row.
@@ -1306,6 +1313,7 @@ $_SESSION["mainsection"] = $_SESSION["mainsection"] + 1;
 			'inside' => $inside,
 			'outside' => $outside,
 			'navsection' => $navigationTopic,
+			'hasnavigation' => !empty($navigationTopic),
 			'exam_table' => $htmlMainSectionExams,
 			'coursestats' => $coursestats, //$coursestats
 		];

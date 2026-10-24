@@ -27,11 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
+$isexamkeycourse = !empty($COURSE->id) && (int) $COURSE->id === 92;
+
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
 if (isloggedin()) {
-    $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
+    $courseindexopen = !$isexamkeycourse && (get_user_preferences('drawer-open-index', true) == true);
     $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
 } else {
     $courseindexopen = false;
@@ -59,7 +61,7 @@ if (!$hasblocks) {
 
 $themesettings = new \theme_moove\util\settings();
 
-if (!$themesettings->enablecourseindex) {
+if (!$themesettings->enablecourseindex || $isexamkeycourse) {
     $courseindex = '';
 } else {
     $courseindex = core_course_drawer();
