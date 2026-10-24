@@ -104,6 +104,28 @@
 .assessment-feedback li + li { margin-top: 6px; }
 
 .exam-history { margin-top: 24px; }
+.exam-level-panel > summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #9fcfd0;
+  border-radius: 7px;
+  background: #e2f1f2;
+  color: #145264;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 800;
+  list-style: none;
+}
+.exam-level-panel > summary::-webkit-details-marker { display: none; }
+.exam-level-panel > summary::before { content: "▸"; font-size: .8rem; }
+.exam-level-panel[open] > summary::before { content: "▾"; }
+.board-exam-panel > summary { border-color: #2367c9; }
+.exam-level-body { padding-top: 15px; }
+.exam-level-intro { margin-bottom: 18px; color: #486477; }
+.exam-level-heading { margin: 0 0 12px; }
 .history-metrics { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--assessment-line); border-radius: 10px; overflow: hidden; }
 .history-metrics article { padding: 15px; text-align: center; background: #fff; }
 .history-metrics article + article { border-left: 1px solid var(--assessment-line); }
@@ -115,10 +137,13 @@
 .history-table thead { background: #e8f3f4; }
 .history-table tbody th { min-width: 260px; font-weight: 750; }
 .history-action { min-width: 124px; text-align: center !important; }
-.history-exam-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 8px 12px; border-radius: 999px; background: #087f7b; color: #fff; font-weight: 800; text-decoration: none; white-space: nowrap; }
-.history-exam-button:hover { background: #056864; color: #fff; text-decoration: none; }
+.history-exam-button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; padding: 8px 14px; border-radius: 10px; background: #f77e25; color: #17232a; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.history-exam-button:hover { background: #df6814; color: #17232a; text-decoration: none; }
 .history-exam-button:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
 .history-note { margin-top: 12px; padding: 12px 14px; border-left: 4px solid #087f7b; background: #edf8f7; }
+.exam-history-footer { display: flex; justify-content: flex-end; margin-top: 14px; }
+.moodle-history-button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 9px 15px; border-radius: 10px; background: #f77e25; color: #17232a; font-weight: 800; text-decoration: none; }
+.moodle-history-button:hover { background: #df6814; color: #17232a; text-decoration: none; }
 
 .assessment-directory { margin-top: 18px; }
 .assessment-directory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }

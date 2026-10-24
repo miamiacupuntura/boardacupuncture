@@ -13,6 +13,11 @@
   window.STUDY_GUIDE_ASSESSMENT_CONFIG = {
     courseId: 'point-contraindications',
     title: 'Point Contraindications and Anatomical Safety',
+    chapterTitle: 'Point Contraindications',
+    schoolExamTitle: 'School Level Exam — Point Contraindications',
+    boardExamTitle: 'Board Level Exam — Point Contraindications',
+    spanishChapterLink: '/blocks/myprogress/study-guide.php?area=pointlocation&lang=es#point-contraindications',
+    moodleExamHistoryLink: 'https://www.acupuncturetests.com/mod/scorm/examhistory/?courseid=34&sectionid=2266',
     cePlanTitle: 'Continuing Education Learning Plan — Point Contraindications',
     ceExamTitle: 'Continuing Education Exam — Point Contraindications',
     ceExamLink: 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9382',
@@ -31,7 +36,19 @@
       'objective-10': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9388',
       'objective-11': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9389',
       'objective-12': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9386'
-    }
+    },
+    schoolExams: [
+      {title: 'General Points Cautions and Contraindications MC 11', url: '/mod/scorm/view.php?id=637'},
+      {title: 'Points Du Mai Channel Caution or Contraindication MC 15', url: '/mod/scorm/view.php?id=708'},
+      {title: 'Points Gall Bladder Channel Caution or Contraindication MC 12', url: '/mod/scorm/view.php?id=709'},
+      {title: 'Points Kidney Channel Caution or Contraindication MC 17', url: '/mod/scorm/view.php?id=734'},
+      {title: 'Points Liver Channel Caution or Contraindication MC 3', url: '/mod/scorm/view.php?id=737'},
+      {title: 'Points Pericardium Channel Caution or Contraindication MC 3', url: '/mod/scorm/view.php?id=733'},
+      {title: 'Points Ren Mai Channel Caution or Contraindication MC 18', url: '/mod/scorm/view.php?id=742'},
+      {title: 'Points San Jiao Channel Caution or Contraindication MC 8', url: '/mod/scorm/view.php?id=743'},
+      {title: 'Points Urinary Bladder Channel Caution or Contraindication MC 32', url: '/mod/scorm/view.php?id=741'},
+      {title: 'Precautions For Modalities TF 6', url: '/mod/scorm/view.php?id=745'}
+    ]
   };
 
   window.STUDY_GUIDE_ASSESSMENT_BANKS = {
@@ -191,7 +208,8 @@
       ['Which completion claim is accurate for this guide?', 'Practice progress is saved locally; formal CE completion requires the approved Moodle course.', 'The browser tool and the official learning record are separate.', ['Checking all boxes awards three approved credits.', 'Planning time is not approval or credit.'], ['The preview certificate is immediately valid.', 'It is explicitly disabled.'], ['Mock results replace Moodle Exam History.', 'Official Moodle records remain separate.']]
     ]),
 
-    'continuing-education': bank('Point Contraindications Continuing Education (Mock 10)', 'Continuing Education practice', 'Ten integrative questions for the CE learning path. This is formative practice; the official graded assessment will be connected in Moodle after approval.', 'PC-CE', [
+    'continuing-education': {
+      ...bank('Point Contraindications Continuing Education (Mock 10)', 'Continuing Education practice', 'Ten integrative review questions for the CE learning path. Check each answer to see the correct response, the general rationale and feedback for every distractor. These questions are formative practice; official attempts and grades remain in Moodle.', 'PC-CE', [
       ['Before considering LI-4 and SP-6 for a pregnant patient, which CE action is most defensible?', 'Update the obstetric and symptom screen, then verify current point- and modality-specific guidance.', 'The pregnancy case begins with patient-specific screening and an authoritative source check.', ['Use the point names alone to make every decision.', 'A name does not replace current patient-specific guidance.'], ['Skip screening because pregnancy is already known.', 'Gestational stage and warning symptoms still matter.'], ['Rely only on a mnemonic.', 'A memory aid is not an authoritative clinical protocol.']],
       ['After treatment involving ST-12, which finding requires emergency assessment for possible pleural injury?', 'Progressive chest pain, cough and shortness of breath.', 'This cluster and its timing are compatible with a serious pleural complication such as pneumothorax.', ['Uncertainty about a quiz answer.', 'That is not a clinical emergency.'], ['A low flashcard confidence rating.', 'That is educational data.'], ['A missing certificate ID.', 'That is administrative.']],
       ['What belongs in the professional record after a concerning event?', 'Observed facts, timing, assessment, actions, communication and transfer—without claiming causation beyond the evidence.', 'Accurate documentation separates observations from unsupported legal or medical conclusions.', ['Only the practitioner’s preferred diagnosis.', 'A diagnosis outside the evidence or scope is not an adequate event record.'], ['A rewritten timeline that removes uncertainty.', 'The record should preserve facts and uncertainty.'], ['No note unless a lawsuit is filed.', 'Timely documentation is part of incident response.']],
@@ -199,9 +217,11 @@
       ['Which post-treatment finding near BL-1 calls for urgent ophthalmic or emergency assessment?', 'Rapid orbital swelling with severe pain, proptosis or visual change.', 'This pattern can threaten ocular and optic structures and should not be treated as routine soreness.', ['A corrected flashcard answer.', 'That is unrelated to an orbital event.'], ['Mild uncertainty about the point name.', 'Naming uncertainty is not the urgent clinical cue.'], ['A missing study reflection.', 'That is educational administration.']],
       ['During work near DU-15 or DU-16, which development requires immediate emergency activation?', 'Loss of consciousness, respiratory compromise or a new neurological deficit.', 'These are critical central neurological or respiratory warning signs.', ['A request to review the source later.', 'Source review does not replace emergency activation for acute warning signs.'], ['A learner choosing the wrong distractor.', 'That is not a patient emergency.'], ['A delayed certificate preview.', 'That is administrative.']],
       ['What should a CE learner do with exact technique details found in a short excerpt?', 'Use only the complete current protocol and supervised training for procedural decisions.', 'The chapter is limited to conceptual recognition and escalation.', ['Apply them independently from memory.', 'That exceeds the course boundary.'], ['Transfer them to neighboring points.', 'Point-specific instructions cannot be generalized.'], ['Treat them as optional trivia.', 'Procedural safety information needs authoritative context.']],
-      ['What is the purpose of Exam History on this page?', 'To save formative results in this browser while keeping official Moodle records separate.', 'The two record systems serve different purposes.', ['To issue approved credits automatically.', 'Local results cannot award formal credit.'], ['To replace identity verification.', 'It does not verify identity.'], ['To transmit every answer to Moodle.', 'The page states that local results are not transmitted.']],
+      ['What is the purpose of the Continuing Education review questions on this page?', 'To provide formative practice with immediate feedback while keeping official Moodle records separate.', 'The review questions support learning locally; the Moodle activity maintains official attempts and grades.', ['To issue approved credits automatically.', 'Local review results cannot award formal credit.'], ['To replace identity verification.', 'The review does not verify identity.'], ['To transmit every answer to Moodle.', 'Answers checked in the static guide are not transmitted to Moodle.']],
       ['When is the certificate preview valid as a completion certificate?', 'Only after approval, Moodle completion rules and certificate issuance are formally enabled.', 'The current artifact is a layout preview, not a credential.', ['As soon as the page loads.', 'Loading does not prove completion.'], ['After one mock question.', 'A formative item is not full completion.'], ['Whenever the learner prints it.', 'Printing does not confer validity.']],
       ['Which final reflection shows the strongest CE outcome?', '“I can classify the risk, cite the source limit, explain the closest distractor and state an in-scope next step.”', 'This demonstrates integrated knowledge, evidence awareness and professional boundaries.', ['“I memorized the answer letters.”', 'Letters can change and do not show understanding.'], ['“I skip conflicting sources.”', 'Conflicts should be resolved transparently.'], ['“I use one rule for every region.”', 'Regional anatomy is central to the course.']]
-    ])
+      ]),
+      reviewTitle: 'Continuing Education Review Questions (10)'
+    }
   };
 })();
