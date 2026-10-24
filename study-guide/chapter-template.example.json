@@ -39,6 +39,7 @@
   "ceCertificateEnabled": false,
   "spanishChapterTitle": "",
   "spanishChapterDescription": "",
+  "inlineLanguageToggle": true,
   "spanishChapterUrl": "https://www.acupuncturetests.com/replace-with-spanish-chapter-url",
   "objectives": [
     {

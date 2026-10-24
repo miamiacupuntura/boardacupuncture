@@ -29,7 +29,7 @@
     ['ceProviderName','Approved CE provider name','text'],['ceProviderNumber','CE provider number','text'],
     ['ceCourseLocation','Certificate course location','text'],
     ['ceCertificateEnabled','Certificate enabled','select',['false','true']],
-    ['spanishChapterTitle','Spanish chapter title','text'],['spanishChapterUrl','Spanish chapter URL','url'],
+    ['spanishChapterTitle','Spanish chapter title','text'],['inlineLanguageToggle','Spanish changes current chapter','select',['true','false']],['spanishChapterUrl','Spanish chapter URL (only for a separate Spanish page)','url'],
     ['spanishChapterDescription','Spanish chapter description','textarea'],['objectivesText','Objectives (objective | subject | method | Mock 10 title | Mock URL | legacy title | legacy URL)','textarea']
   ];
   definitions.forEach(([name,label,type,options]) => {
