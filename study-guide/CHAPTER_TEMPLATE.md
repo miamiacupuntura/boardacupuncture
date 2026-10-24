@@ -25,6 +25,36 @@ Each chapter can be prepared with the Form B fields without being advertised as 
 
 The exported JSON follows [chapter-template.example.json](chapter-template.example.json). It does not publish a chapter or modify Moodle. A developer can use the reviewed specification to create the new chapter while retaining the established responsive layout and block order.
 
+## Shared assessment and certificate template
+
+Use the shared assessment layer for new or standardized chapters:
+
+```html
+<link rel="stylesheet" href="../shared/course-assessment.css">
+<!-- Chapter content and chapter-specific scripts -->
+<script src="mock-data.js"></script>
+<script src="../shared/course-assessment.js"></script>
+```
+
+The chapter-specific `mock-data.js` is the only file that should need substantial content work. It defines:
+
+- `STUDY_GUIDE_ASSESSMENT_CONFIG`: stable course key, public title, certificate title and planning hours.
+- `STUDY_GUIDE_ASSESSMENT_BANKS`: one 10-question bank for every `objective-N` section plus one `continuing-education` bank.
+- Question names in the format `COURSE-O01-Q01` through `COURSE-O12-Q10`; use `COURSE-CE-Q01` through `COURSE-CE-Q10` for the CE assessment.
+- Each question as single-answer multiple choice with four options, a correct answer, general rationale and specific feedback for all three distractors.
+
+The shared script automatically adds the following standard blocks:
+
+1. A collapsible 10-question practice exam at the end of each objective.
+2. Browser-saved Exam History with latest, best, average and in-progress results.
+3. A post-reading objective exam directory.
+4. A visible **Continuing Education begins here** divider.
+5. The 10-question formative Continuing Education assessment.
+6. A certificate preview that remains disabled until approval and Moodle completion are configured.
+7. Copy and TXT export controls using the standard authoring format: question name, type, text, A–D options, correct answer, general feedback and distractor feedback.
+
+Do not place forward-jump links inside objective reading. Navigation can remain in the chapter sidebar, but the instructional body should preserve the reading sequence. Existing Moodle question banks belong in one separate post-reading directory, and official results remain in Moodle Exam History.
+
 ## Required quality checks
 
 - Use measurable objectives and verified source material.
