@@ -1152,6 +1152,7 @@ foreach ($plans as $plan) {
 
         $context = context_module::instance($bookcmid);
         $chapterstodelete = $plan['stalechapters'];
+        $preservedflatchapter = null;
         if ($plan['rebuildstructure']) {
             $chapterstodelete = $DB->get_records('book_chapters', ['bookid' => $book->id]);
             foreach ($chapterstodelete as $chapter) {
@@ -1164,6 +1165,16 @@ foreach ($plans as $plan) {
                         "Refusing to rebuild unrecognised chapter '{$chapter->title}'."
                     );
                 }
+                if ($plan['flat'] && $chapter->importsrc === 'scorm-word-library' &&
+                        in_array($chapter->title, [
+                            'Handbook of Oriental Medicine — Clinical Cases',
+                            'Handbook-of-Oriental-Medicine. Clinical Cases',
+                        ], true)) {
+                    $preservedflatchapter = $chapter;
+                }
+            }
+            if ($preservedflatchapter) {
+                unset($chapterstodelete[$preservedflatchapter->id]);
             }
         }
         if ($chapterstodelete) {
@@ -1184,6 +1195,15 @@ foreach ($plans as $plan) {
                 )->trigger();
                 echo "Removed topic from {$plan['bookname']}: {$stalechapter->title}\n";
             }
+            book_preload_chapters($book);
+        }
+        if ($preservedflatchapter) {
+            $preservedflatchapter->pagenum = 1;
+            $preservedflatchapter->subchapter = 0;
+            $preservedflatchapter->title = $plan['bookname'];
+            $preservedflatchapter->importsrc = 'scorm-word-library-index';
+            $preservedflatchapter->timemodified = time();
+            $DB->update_record('book_chapters', $preservedflatchapter);
             book_preload_chapters($book);
         }
         if ($plan['flat']) {
