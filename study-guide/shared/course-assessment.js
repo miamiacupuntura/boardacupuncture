@@ -261,15 +261,27 @@
 
   const cePlan = document.getElementById('continuing-education-plan');
   if (cePlan) {
-    const firstCeSection = document.getElementById('ce-safety-scenarios') || cePlan;
-    const tab = el('div', 'ce-start-tab', 'Continuing Education begins here');
-    tab.id = 'continuing-education-start';
-    firstCeSection.before(tab);
+    const ceTable = cePlan.querySelector('.ce-learning-table');
+    const ceSummary = cePlan.querySelector(':scope > summary');
+    if (ceTable && ceSummary) ceSummary.after(ceTable);
+    if (!document.getElementById('continuing-education-start')) {
+      const tab = el('div', 'ce-start-tab', config.cePlanTitle || 'Continuing Education begins here');
+      tab.id = 'continuing-education-start';
+      cePlan.before(tab);
+    }
     const ceHost = document.getElementById('continuing-education-exam');
     if (ceHost && banks['continuing-education']) {
-      ceHost.replaceChildren();
-      ceHost.append(buildBank('continuing-education', banks['continuing-education'], true));
-      ceHost.after(buildCertificate());
+      const examPanel = el('details', 'card ce-exam-panel');
+      examPanel.id = 'continuing-education-exam';
+      examPanel.append(el('summary', '', config.ceExamTitle || 'Continuing Education Exam'));
+      const examBank = buildBank('continuing-education', banks['continuing-education'], true);
+      examBank.classList.add('ce-assessment-bank');
+      examPanel.append(examBank);
+      ceHost.remove();
+      const alignment = document.getElementById('ce-safety-scenarios');
+      if (alignment) alignment.after(examPanel);
+      else cePlan.after(examPanel);
+      examPanel.after(buildCertificate());
     }
   }
 
