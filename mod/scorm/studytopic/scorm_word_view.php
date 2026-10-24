@@ -234,7 +234,7 @@ if (!str_contains((string)$folder->intro, 'data-scorm-word-export')) {
 }
 
 $file = get_file_storage()->get_file_by_id($fileid);
-if (!$file || $file->is_directory() || $file->get_contextid() !== $context->id ||
+if (!$file || $file->is_directory() || (int)$file->get_contextid() !== (int)$context->id ||
         $file->get_component() !== 'mod_folder' || $file->get_filearea() !== 'content' ||
         strtolower(pathinfo($file->get_filename(), PATHINFO_EXTENSION)) !== 'docx') {
     throw scorm_word_exception('The requested Word document is not available in this library.');
