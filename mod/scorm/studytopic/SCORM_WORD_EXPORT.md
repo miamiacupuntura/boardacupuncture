@@ -47,6 +47,8 @@ formula-herb-word-export/
 Each Word document includes the question wording, available images, answer
 choices or matches, the correct answer, question notes, and source feedback.
 Legacy click-map questions include the source image and correct hotspot data.
+The approved Matching-card specification, including the multi-item layout
+rules, is maintained in `MATCHING_STUDY_CARD_TEMPLATE.md`.
 
 Documents that contain Matching study cards open directly with the actual
 comparison title. The former branded cover, instructor metadata, generic
