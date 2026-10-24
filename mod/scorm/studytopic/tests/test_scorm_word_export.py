@@ -293,26 +293,27 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn("Cool herbs associations to Herb A", strategy[3][1])
 
     def test_matching_index_prefers_parenthetical_names_and_first_category(self) -> None:
+        question = {
+            "__type": "MatchingQuestion",
+            "QuestionText": "Comparison",
+            "LeftColumn": [
+                {
+                    "Id": 1,
+                    "Content": (
+                        "Alpiniae officinarum Rhizoma (gao liang jiang)\n"
+                        "Category: Herbs that Warm the Interior and Expel Cold."
+                    ),
+                },
+                {
+                    "Id": 2,
+                    "Content": "Zingiberis Rhizoma recens (sheng jiang)\nCategory: Exterior herbs.",
+                },
+            ],
+            "RightColumn": [],
+        }
         entries = EXPORTER.matching_index_entries(
             [
-                {
-                    "__type": "MatchingQuestion",
-                    "QuestionText": "Comparison",
-                    "LeftColumn": [
-                        {
-                            "Id": 1,
-                            "Content": (
-                                "Alpiniae officinarum Rhizoma (gao liang jiang)\n"
-                                "Category: Herbs that Warm the Interior and Expel Cold."
-                            ),
-                        },
-                        {
-                            "Id": 2,
-                            "Content": "Zingiberis Rhizoma recens (sheng jiang)\nCategory: Exterior herbs.",
-                        },
-                    ],
-                    "RightColumn": [],
-                },
+                question,
                 {"__type": "MultipleChoiceQuestion", "QuestionText": "Ignore me"},
             ]
         )
@@ -323,6 +324,15 @@ class ScormWordExportTest(unittest.TestCase):
             "Herbs that Warm the Interior and Expel Cold",
             entries[0]["first_item_category"],
         )
+        self.assertEqual(
+            "Alpiniae officinarum Rhizoma (gao liang jiang) vs. "
+            "Zingiberis Rhizoma recens (sheng jiang)",
+            EXPORTER.matching_card_title(question, "Comparison"),
+        )
+        prompts = EXPORTER.matching_study_questions(question)
+        self.assertEqual(4, len(prompts))
+        self.assertIn("Alpiniae officinarum Rhizoma (gao liang jiang)", prompts[0])
+        self.assertIn("Which symptom cluster", prompts[2])
 
     def test_matching_library_groups_count_repeated_comparisons(self) -> None:
         rows = [

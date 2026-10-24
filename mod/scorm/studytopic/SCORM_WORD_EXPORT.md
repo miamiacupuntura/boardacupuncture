@@ -53,7 +53,9 @@ comparison title. The former branded cover, instructor metadata, generic
 Contents/Chapter pages, internal index sheet, and generic `Question / Matching`
 labels are omitted. Each Matching comparison is formatted as a compact
 landscape card intended to fit on one printed sheet: clues, comparative answer
-key, and exam-focused guidance remain together. Other documents also omit the
+key, and exam-focused guidance remain together. Card titles retain each full
+botanical name plus its pinyin; only the separate library index shortens entries
+to the parenthetical pinyin names. Other documents also omit the
 former administrative cover and chapter contents.
 
 Every category export also creates `matching-study-guide-index.html`, `.csv`,
@@ -115,7 +117,10 @@ final row explains why reversing the two groups is incorrect. When this complete
 card is available, duplicated legacy Matching feedback is suppressed so the
 same categories and associations are not printed a second time. Compact fonts,
 cell padding, margins, and landscape width keep the entire Matching study card
-on one sheet without dropping any of its four explanation rows.
+on one sheet without dropping any of its four explanation rows. A final
+`Possible exam questions · Study prompts` block motivates active review of the
+two categories, shared findings, distinguishing symptom clusters, and formula
+associations. These are study prompts only and are not yet scored or reported.
 Related-question surveys, progress scoring, and student checklists are deferred
 to a later reporting phase so the current work can prioritize Study Guide card
 quality and source accuracy.

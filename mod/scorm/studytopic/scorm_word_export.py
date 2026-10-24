@@ -868,6 +868,12 @@ def matching_index_name(value: str) -> str:
     return name or "[unnamed item]"
 
 
+def matching_card_title(question: dict[str, Any], fallback: str) -> str:
+    """Use full source item names on the card; pinyin-only names belong in the index."""
+    names = [detail[0] for detail in matching_pair_details(question)]
+    return " vs. ".join(names) if len(names) == 2 else fallback
+
+
 def matching_index_entries(questions: list[Any]) -> list[dict[str, Any]]:
     """List Matching questions, sorted by the first item's source category."""
     entries = []
@@ -1074,6 +1080,20 @@ def matching_exam_strategy(
         ("Common confusion", confusion),
         ("How it may appear", examformat),
         ("Why a switched match is wrong", switched),
+    ]
+
+
+def matching_study_questions(question: dict[str, Any]) -> list[str]:
+    """Create source-grounded review prompts without turning them into a survey."""
+    details = matching_pair_details(question)
+    if len(details) != 2:
+        return []
+    first, second = details[0][0], details[1][0]
+    return [
+        f"Which category belongs to {first}, and which belongs to {second}?",
+        "Which shared findings are least useful for distinguishing these two herbs?",
+        "Which symptom cluster most strongly favors each herb?",
+        "Which formula associations belong in each comparison column?",
     ]
 
 
@@ -1519,10 +1539,10 @@ def add_question(
 ) -> None:
     qtype = str(question.get("__type") or "Unknown")
     matchingstrategy: list[tuple[str, str]] = []
+    matchingquestions: list[str] = []
     if qtype == "MatchingQuestion":
         questionprompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
-        cardindex = matching_index_entries([question])
-        cardtitle = cardindex[0]["comparison"] if cardindex else questionprompt
+        cardtitle = matching_card_title(question, questionprompt)
         builder.add_paragraph(
             cardtitle,
             style="Heading1",
@@ -1546,6 +1566,7 @@ def add_question(
                     header_fill="527286",
                 )
             matchingstrategy = matching_exam_strategy(question, studytips)
+            matchingquestions = matching_study_questions(question)
     else:
         builder.add_paragraph(f"Question {number}", style="Heading2", space_after=70)
         builder.add_paragraph(
@@ -1596,6 +1617,12 @@ def add_question(
                 "Study guide · Exam focus",
                 matchingstrategy,
                 header_fill="6B4BA1",
+            )
+        if matchingquestions:
+            builder.add_key_value_card(
+                "Possible exam questions · Study prompts",
+                [("Practice", "\n".join(f"• {item}" for item in matchingquestions))],
+                header_fill="2E7D6B",
             )
     elif qtype == "MultipleResponseQuestion":
         answers = question.get("Answers") or []
