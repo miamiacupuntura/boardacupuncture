@@ -319,6 +319,102 @@ class DocxBuilder:
         self.body.append(table)
         self.add_paragraph("", space_after=120)
 
+    def add_comparison_table(
+        self,
+        title: str,
+        columns: list[str],
+        rows: list[tuple[str, list[str]]],
+    ) -> None:
+        """Add a side-by-side comparison table for two keyed Matching items."""
+        if len(columns) != 2:
+            raise ValueError("Comparison tables require exactly two item columns")
+
+        widths = [1500, 3750, 3750]
+
+        def cell(
+            value: str,
+            width: int,
+            *,
+            fill: str,
+            bold: bool = False,
+            color: str = "203040",
+            span: int = 1,
+            keep_next: bool = False,
+        ) -> str:
+            spanxml = f'<w:gridSpan w:val="{span}"/>' if span > 1 else ""
+            return (
+                '<w:tc><w:tcPr>'
+                + spanxml
+                + f'<w:tcW w:w="{width}" w:type="dxa"/>'
+                + f'<w:shd w:val="clear" w:color="auto" w:fill="{fill}"/>'
+                + '<w:vAlign w:val="top"/></w:tcPr>'
+                + paragraph_xml(
+                    value,
+                    bold=bold,
+                    color=color,
+                    space_after=0,
+                    keep_next=keep_next,
+                    keep_lines=True,
+                )
+                + '</w:tc>'
+            )
+
+        title_row = (
+            '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
+            + cell(
+                title,
+                sum(widths),
+                fill="F47E2C",
+                bold=True,
+                color="FFFFFF",
+                span=3,
+                keep_next=True,
+            )
+            + '</w:tr>'
+        )
+        heading_row = (
+            '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
+            + cell("Compare", widths[0], fill="DDEAF0", bold=True, keep_next=True)
+            + cell(columns[0], widths[1], fill="DDEAF0", bold=True, keep_next=True)
+            + cell(columns[1], widths[2], fill="DDEAF0", bold=True, keep_next=True)
+            + '</w:tr>'
+        )
+        datarows = []
+        for rownumber, (label, values) in enumerate(rows):
+            keepwithnext = rownumber < len(rows) - 1
+            datarows.append(
+                '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
+                + cell(label, widths[0], fill="F2F6F8", bold=True, keep_next=keepwithnext)
+                + cell(values[0], widths[1], fill="FFFFFF", keep_next=keepwithnext)
+                + cell(values[1], widths[2], fill="FFFFFF", keep_next=keepwithnext)
+                + '</w:tr>'
+            )
+
+        table = (
+            '<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/>'
+            '<w:tblLayout w:type="fixed"/>'
+            '<w:tblBorders>'
+            '<w:top w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:left w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:bottom w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:right w:val="single" w:sz="8" w:color="D6E1E7"/>'
+            '<w:insideH w:val="single" w:sz="6" w:color="D6E1E7"/>'
+            '<w:insideV w:val="single" w:sz="6" w:color="D6E1E7"/>'
+            '</w:tblBorders>'
+            '<w:tblCellMar>'
+            '<w:top w:w="100" w:type="dxa"/><w:left w:w="110" w:type="dxa"/>'
+            '<w:bottom w:w="100" w:type="dxa"/><w:right w:w="110" w:type="dxa"/>'
+            '</w:tblCellMar></w:tblPr>'
+            '<w:tblGrid><w:gridCol w:w="1500"/><w:gridCol w:w="3750"/>'
+            '<w:gridCol w:w="3750"/></w:tblGrid>'
+            + title_row
+            + heading_row
+            + ''.join(datarows)
+            + '</w:tbl>'
+        )
+        self.body.append(table)
+        self.add_paragraph("", space_after=120)
+
     def write(self, destination: Path) -> None:
         destination.parent.mkdir(parents=True, exist_ok=True)
         timestamp = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
@@ -716,6 +812,46 @@ def matching_card_rows(lefttext: str, righttext: str) -> list[tuple[str, str]]:
     return rows
 
 
+def matching_comparison_data(
+    question: dict[str, Any],
+) -> tuple[list[str], list[tuple[str, list[str]]]] | None:
+    """Return aligned columns and rows when a Matching question compares two items."""
+    leftitems = question.get("LeftColumn", [])
+    rightitems = {
+        item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])
+    }
+    if len(leftitems) != 2:
+        return None
+
+    cards = []
+    for item in leftitems:
+        rows = matching_card_rows(
+            answer_text(item),
+            rightitems.get(item.get("Id"), "[missing match]"),
+        )
+        cards.append(rows)
+
+    columns = [next(value for label, value in card if label == "Item") for card in cards]
+    rowlabels = []
+    valuesbycard = []
+    for card in cards:
+        cardvalues = {}
+        for label, value in card:
+            if label == "Item":
+                continue
+            normalizedlabel = re.sub(r"\s+\(\d+\)$", "", label)
+            if normalizedlabel not in rowlabels:
+                rowlabels.append(normalizedlabel)
+            cardvalues[normalizedlabel] = value
+        valuesbycard.append(cardvalues)
+
+    rows = [
+        (label, [valuesbycard[0].get(label, "—"), valuesbycard[1].get(label, "—")])
+        for label in rowlabels
+    ]
+    return columns, rows
+
+
 def matching_prompt_and_tips(questiontext: Any) -> tuple[str, list[tuple[str, str]]]:
     """Separate the Matching prompt from embedded clues intended as study tips."""
     lines = [line.strip() for line in normalise_text(questiontext).splitlines() if line.strip()]
@@ -759,9 +895,10 @@ def matching_feedback_summary(question: dict[str, Any], target: str) -> str:
             if associationcount == 1
             else f"{associationcount} {associationlabel}s"
         )
+        location = "comparison column" if len(details) == 2 else "Correct match card"
         lines.append(
             f"Match {index} — {name}: classified as {category}; paired with the "
-            f"{counttext} shown in its Correct match card."
+            f"{counttext} shown in its {location}."
         )
     return "\n".join(lines)
 
@@ -852,9 +989,10 @@ def nonchoice_evaluation_guidance(question: dict[str, Any]) -> str:
         details = matching_pair_details(question)
         names = [name for name, _category, _label, _count in details]
         distinction = " and ".join(names[:2]) if len(names) == 2 else "the matched items"
+        location = "comparison table" if len(details) == 2 else "numbered card"
         return (
             "Keep each item with the classification and association group shown in its "
-            "numbered card. "
+            f"{location}. "
             f"Interchanging the groups for {distinction} would attach the source associations "
             "to the wrong item and is evaluated as an incorrect match."
         )
@@ -1230,14 +1368,18 @@ def add_question(
         left = {item.get("Id"): answer_text(item) for item in question.get("LeftColumn", [])}
         right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
         builder.add_paragraph("Correct matches", bold=True, color="17324D", keep_next=True)
-        for matchnumber, (itemid, leftvalue) in enumerate(left.items(), start=1):
-            builder.add_key_value_card(
-                f"Match {matchnumber}",
-                matching_card_rows(
-                    leftvalue,
-                    right.get(itemid, "[missing match]"),
-                ),
-            )
+        comparison = matching_comparison_data(question)
+        if comparison:
+            builder.add_comparison_table("Comparative answer key", comparison[0], comparison[1])
+        else:
+            for matchnumber, (itemid, leftvalue) in enumerate(left.items(), start=1):
+                builder.add_key_value_card(
+                    f"Match {matchnumber}",
+                    matching_card_rows(
+                        leftvalue,
+                        right.get(itemid, "[missing match]"),
+                    ),
+                )
     elif qtype == "MultipleResponseQuestion":
         answers = question.get("Answers") or []
         builder.add_paragraph("Options", bold=True, color="17324D", keep_next=True)

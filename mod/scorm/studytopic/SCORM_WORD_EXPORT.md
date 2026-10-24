@@ -74,11 +74,12 @@ hotspot data. Long retained feedback is labelled `Detailed source review` for
 question types where it is relevant. Duplicate legacy formula-reference lists
 are omitted from Matching questions because they are not match-specific
 feedback. Matching explanations identify the comparison title rather than using
-a generic `question prompt` label. Each pair is displayed as a numbered card
-with separate `Item` and `Correct match` fields so long multiline values do not
-run together around a single arrow. Its feedback then states each item's
-classification and the number/type of keyed associations, and explains that
-swapping those groups attaches the source relationships to the wrong item.
+a generic `question prompt` label. Two-item comparisons use one side-by-side
+table with shared `Category`, `Details`, and answer-group rows; Matching sets of
+other sizes fall back to numbered cards. Long multiline values no longer run
+together around a single arrow. The feedback states each item's classification
+and the number/type of keyed associations, and explains that swapping those
+groups attaches the source relationships to the wrong item.
 When a Matching prompt contains shared actions or item-specific symptoms, the
 exporter separates those lines from the actual question and places them in a
 blue `Study tip · Clues to help answer` card. Shared clues and each item's clues

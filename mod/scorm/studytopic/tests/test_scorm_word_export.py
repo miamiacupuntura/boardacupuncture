@@ -217,6 +217,28 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertEqual("Herb B", tips[2][0])
         self.assertEqual("• Coughing\n• Phlegm", tips[2][1])
 
+    def test_two_matching_items_are_aligned_as_comparison_data(self) -> None:
+        question = {
+            "LeftColumn": [
+                {"Id": 1, "Content": "Herb A\nCategory: Warm herbs"},
+                {"Id": 2, "Content": "Herb B\nCategory: Cool herbs"},
+            ],
+            "RightColumn": [
+                {"Id": 1, "Content": "Formulas:\nFormula A1\nFormula A2"},
+                {"Id": 2, "Content": "Formulas:\nFormula B1"},
+            ],
+        }
+        comparison = EXPORTER.matching_comparison_data(question)
+
+        self.assertIsNotNone(comparison)
+        columns, rows = comparison
+        self.assertEqual(["Herb A", "Herb B"], columns)
+        self.assertEqual("Category", rows[0][0])
+        self.assertEqual(["Warm herbs", "Cool herbs"], rows[0][1])
+        self.assertEqual("Formulas", rows[1][0])
+        self.assertEqual("• Formula A1\n• Formula A2", rows[1][1][0])
+        self.assertEqual("• Formula B1", rows[1][1][1])
+
     def test_safe_segment_removes_path_characters(self) -> None:
         self.assertEqual("Herbs - Final - Exam", EXPORTER.safe_segment("Herbs/Final:Exam", "Exam"))
 
