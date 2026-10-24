@@ -1457,16 +1457,32 @@ def add_feedback(builder: DocxBuilder, question: dict[str, Any]) -> None:
     """Render source feedback as clearly labelled study-book callouts."""
     correctheading, incorrectheading = feedback_headings(question)
     feedback = question.get("Feedback") or []
-    if not isinstance(feedback, list) or not any(normalise_text(value) for value in feedback):
+    feedbacktexts = (
+        [normalise_text(value) for value in feedback if normalise_text(value)]
+        if isinstance(feedback, list)
+        else []
+    )
+
+    # Matching cards already present the source key in their comparison table.
+    # Never repeat the legacy source-review prose below the card: those long
+    # lists obscure the actual distinction and can appear to belong to only one
+    # of the matched items. Keep only the concise, source-grounded explanation
+    # when the card does not already include a complete exam strategy.
+    if str(question.get("__type") or "") == "MatchingQuestion":
+        _prompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
+        if matching_exam_strategy(question, studytips):
+            return
+        if feedbacktexts:
+            add_duplicate_source_feedback(builder, question, feedbacktexts[0])
+        else:
+            add_missing_source_feedback(builder, question)
+        return
+
+    if not feedbacktexts:
         add_missing_source_feedback(builder, question)
         return
 
-    feedbacktexts = [normalise_text(value) for value in feedback if normalise_text(value)]
     if len(feedbacktexts) >= 2 and len(set(feedbacktexts)) == 1:
-        if str(question.get("__type") or "") == "MatchingQuestion":
-            _prompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
-            if matching_exam_strategy(question, studytips):
-                return
         add_duplicate_source_feedback(builder, question, feedbacktexts[0])
         return
 

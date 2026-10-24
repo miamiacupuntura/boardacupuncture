@@ -203,6 +203,33 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn("2 formula associations", xml)
         self.assertNotIn("Herb A → Function A", xml)
 
+    def test_distinct_matching_source_reviews_are_not_rendered(self) -> None:
+        question = {
+            "__type": "MatchingQuestion",
+            "QuestionText": "Comparison Herb A Vs. Herb B\nMatch each herb.",
+            "LeftColumn": [
+                {"Id": 1, "Content": "Herb A\nCategory: Warm interior herbs"},
+                {"Id": 2, "Content": "Herb B\nCategory: Exterior-releasing herbs"},
+            ],
+            "RightColumn": [
+                {"Id": 1, "Content": "Formulas:\nFormula A"},
+                {"Id": 2, "Content": "Formulas:\nFormula B"},
+            ],
+            "Feedback": [
+                "Source review for the first matched herb.",
+                "Different source review for the second matched herb.",
+            ],
+        }
+        builder = EXPORTER.DocxBuilder("Test")
+        EXPORTER.add_feedback(builder, question)
+        xml = "".join(builder.body)
+
+        self.assertNotIn("Source review", xml)
+        self.assertNotIn("source review for the first", xml.casefold())
+        self.assertNotIn("source review for the second", xml.casefold())
+        self.assertIn("Why these matches are correct", xml)
+        self.assertIn("How incorrect matches are evaluated", xml)
+
     def test_complete_matching_study_guide_suppresses_duplicate_feedback(self) -> None:
         question = {
             "__type": "MatchingQuestion",
