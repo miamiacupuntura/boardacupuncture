@@ -1,11 +1,15 @@
 /* Navigation and index presentation for generated SCORM Word libraries. */
 body.scorm-word-library #theme_boost-drawers-courseindex,
 body.scorm-word-library .drawer-left,
-body.scorm-word-library .drawer-left-toggle {
+body.scorm-word-library .drawer-left-toggle,
+body.scorm-word-library-course #theme_boost-drawers-courseindex,
+body.scorm-word-library-course .drawer-left,
+body.scorm-word-library-course .drawer-left-toggle {
     display: none !important;
 }
 
-body.scorm-word-library #page.drawers.show-drawer-left {
+body.scorm-word-library #page.drawers.show-drawer-left,
+body.scorm-word-library-course #page.drawers.show-drawer-left {
     margin-left: 0;
 }
 

@@ -107,6 +107,9 @@ table of contents is the only side navigation.
 The document preview keeps that Book table of contents visible and provides
 sticky `Book Index`, `Back to Exam List`, `Previous Exam`, and `Next Exam`
 controls for long documents.
+On a course containing generated Word Books, the legacy course-index drawer is
+also hidden while edit mode is off. Teachers can turn edit mode on whenever
+they need the original course navigation for maintenance.
 
 Run the validation first:
 

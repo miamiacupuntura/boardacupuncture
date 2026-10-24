@@ -122,6 +122,19 @@ require_once($CFG->dirroot.'/calendar/lib.php'); // This is after login because 
 $PAGE->set_pagelayout('course');
 $PAGE->add_body_class('limitedwidth');
 
+$hasgeneratedwordbooks = $DB->record_exists_select(
+    'book',
+    'course = :courseid AND ' . $DB->sql_like('intro', ':marker'),
+    [
+        'courseid' => $course->id,
+        'marker' => '%data-scorm-word-book%',
+    ]
+);
+if ($hasgeneratedwordbooks && empty($USER->editing)) {
+    $PAGE->add_body_class('scorm-word-library-course');
+    $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
+}
+
 if ($section && $section > 0) {
 
     // Get section details and check it exists.
