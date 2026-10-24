@@ -15,6 +15,7 @@
     title: 'Point Contraindications and Anatomical Safety',
     cePlanTitle: 'Continuing Education Learning Plan — Point Contraindications',
     ceExamTitle: 'Continuing Education Exam — Point Contraindications',
+    ceExamLink: 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9382',
     certificateTitle: 'Point Contraindications and Anatomical Safety',
     planningHours: 3,
     moodleMockLinks: {

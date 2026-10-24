@@ -291,6 +291,19 @@
       const examPanel = el('details', 'card ce-exam-panel');
       examPanel.id = 'continuing-education-exam';
       examPanel.append(el('summary', '', config.ceExamTitle || 'Continuing Education Exam'));
+      if (config.ceExamLink) {
+        const access = el('aside', 'ce-exam-status');
+        const copy = el('div', '');
+        copy.append(
+          el('span', 'eyebrow', 'MOODLE CONTINUING EDUCATION MOCK'),
+          el('h3', '', banks['continuing-education'].title),
+          el('p', '', `Open the ${banks['continuing-education'].questions.length}-question Moodle activity. Official attempts and results remain in Moodle Exam History.`)
+        );
+        const link = el('a', '', `Open Continuing Education Mock ${banks['continuing-education'].questions.length}`);
+        link.href = config.ceExamLink;
+        access.append(copy, link);
+        examPanel.append(access);
+      }
       const examBank = buildBank('continuing-education', banks['continuing-education'], true);
       examBank.classList.add('ce-assessment-bank');
       examPanel.append(examBank);
