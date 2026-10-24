@@ -16,7 +16,10 @@
     cePlanTitle: 'Continuing Education Learning Plan — Point Contraindications',
     ceExamTitle: 'Continuing Education Exam — Point Contraindications',
     certificateTitle: 'Point Contraindications and Anatomical Safety',
-    planningHours: 3
+    planningHours: 3,
+    moodleMockLinks: {
+      'objective-9': 'https://www.acupuncturetests.com/mod/scorm/view.php?id=9392'
+    }
   };
 
   window.STUDY_GUIDE_ASSESSMENT_BANKS = {

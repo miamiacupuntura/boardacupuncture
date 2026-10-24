@@ -264,8 +264,9 @@
           body.append(actions);
         }
         const openExam = el('a', 'objective-mock-button', `Open ${bank.questions.length}-question mock exam`);
-        openExam.href = `#${exam.id}`;
-        openExam.addEventListener('click', () => { exam.open = true; });
+        const moodleMockUrl = config.moodleMockLinks?.[bankId];
+        openExam.href = moodleMockUrl || `#${exam.id}`;
+        if (!moodleMockUrl) openExam.addEventListener('click', () => { exam.open = true; });
         actions.prepend(openExam);
       }
       objective.append(exam);
