@@ -173,7 +173,7 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertIn("How incorrect matches are evaluated", xml)
         self.assertIn("must be paired with its keyed match", xml)
 
-    def test_long_duplicate_matching_feedback_is_presented_as_reference(self) -> None:
+    def test_long_duplicate_matching_reference_list_is_not_rendered(self) -> None:
         question = {
             "__type": "MatchingQuestion",
             "QuestionText": "Comparison Herb A Vs. Herb B\nMatch each herb.",
@@ -185,7 +185,8 @@ class ScormWordExportTest(unittest.TestCase):
         EXPORTER.add_feedback(builder, question)
         xml = "".join(builder.body)
 
-        self.assertIn("Detailed source review", xml)
+        self.assertNotIn("Detailed source review", xml)
+        self.assertNotIn("Long source", xml)
         self.assertIn("Comparison Herb A Vs. Herb B", xml)
         self.assertIn("shown under Correct matches", xml)
         self.assertNotIn("Herb A → Function A", xml)

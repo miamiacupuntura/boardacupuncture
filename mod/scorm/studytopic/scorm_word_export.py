@@ -620,6 +620,8 @@ def correct_feedback_summary(
     else:
         summary = f"For {target}, the source bank answer key is {answerkey}."
 
+    if questiontype == "MatchingQuestion" and not hassourcereview:
+        return summary
     if hassourcereview:
         return summary + " The detailed source review above supplies the retained rationale."
     return summary + " The original SCORM question does not contain a more detailed rationale."
@@ -722,26 +724,31 @@ def add_duplicate_source_feedback(
     target = question_learning_target(question)
     rightanswer = question_answer_key(question)
     correctheading, incorrectheading = feedback_headings(question)
+    questiontype = str(question.get("__type") or "")
 
-    sourcereviewheading = "Detailed source review" if len(source_feedback) > 1200 else "Source review"
-    builder.add_paragraph(
-        sourcereviewheading,
-        bold=True,
-        color="17324D",
-        space_before=100,
-        space_after=50,
-        keep_next=True,
-    )
-    builder.add_paragraph(
-        source_feedback,
-        color="31586B",
-        fill="EEF7FA",
-        border_color="58A6B8",
-        left_indent=180,
-        right_indent=120,
-        space_after=100,
-        keep_lines=True,
-    )
+    showsourcereview = questiontype != "MatchingQuestion"
+    if showsourcereview:
+        sourcereviewheading = (
+            "Detailed source review" if len(source_feedback) > 1200 else "Source review"
+        )
+        builder.add_paragraph(
+            sourcereviewheading,
+            bold=True,
+            color="17324D",
+            space_before=100,
+            space_after=50,
+            keep_next=True,
+        )
+        builder.add_paragraph(
+            source_feedback,
+            color="31586B",
+            fill="EEF7FA",
+            border_color="58A6B8",
+            left_indent=180,
+            right_indent=120,
+            space_after=100,
+            keep_lines=True,
+        )
 
     builder.add_paragraph(
         correctheading,
@@ -752,7 +759,7 @@ def add_duplicate_source_feedback(
         keep_next=True,
     )
     builder.add_paragraph(
-        correct_feedback_summary(question, target, rightanswer, True),
+        correct_feedback_summary(question, target, rightanswer, showsourcereview),
         color="245B38",
         fill="EAF6EE",
         border_color="2E8B57",
