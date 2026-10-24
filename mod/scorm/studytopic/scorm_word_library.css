@@ -1,0 +1,28 @@
+/* Navigation and index presentation for generated SCORM Word libraries. */
+body.scorm-word-library #theme_boost-drawers-courseindex,
+body.scorm-word-library .drawer-left,
+body.scorm-word-library .drawer-left-toggle {
+    display: none !important;
+}
+
+body.scorm-word-library #page.drawers.show-drawer-left {
+    margin-left: 0;
+}
+
+.scorm-word-library-index .card,
+.scorm-word-category-index .list-group-item {
+    border-color: #d8e2e8;
+}
+
+.scorm-word-library-index .card-header {
+    background: #e8f3f5;
+}
+
+.scorm-word-library-index .badge,
+.scorm-word-category-index .badge {
+    font-size: .85rem;
+}
+
+.scorm-word-preview {
+    max-width: 1100px;
+}

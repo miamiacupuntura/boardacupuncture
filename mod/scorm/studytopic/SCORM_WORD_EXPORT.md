@@ -82,7 +82,7 @@ sudo -u www-data php mod/scorm/studytopic/scorm_word_publish.php \
   --execute
 ```
 
-This creates two visible Moodle folder activities in `Formulas Tips`:
+This initially creates two visible Moodle folder activities in `Formulas Tips`:
 
 - `Formula Exams — Word Downloads`
 - `Herb Exams — Word Downloads`
@@ -91,13 +91,19 @@ Each activity preserves the course and section subfolders and provides Moodle's
 folder-download button. Existing activities are never replaced or deleted. A
 repeat run only skips a generated activity after verifying its DOCX count.
 
+After the Online Books are created, the Book builder changes these source
+folders to stealth activities (`visible=1`, `visibleoncoursepage=0`). Students
+use the Books, while secure preview and Word-download links continue to work.
+
 ## Create online Moodle Books
 
 The Book builder uses the generated Word folders as its source. It creates one
-Formula Book and one Herb Book, with source courses as chapters and source
-sections as subchapters. Exam names open a secure in-Moodle preview of their
-questions, answers, feedback, and images; the original Word download remains
-available from the preview.
+Formula Book and one Herb Book with a main index, category indexes, source
+courses as chapters, and source sections as subchapters. Exam names open a
+secure in-Moodle preview of their questions, answers, feedback, and images; the
+original Word download remains available from the preview. On generated Book
+and preview pages, the old course-index drawer is hidden so the native Book
+table of contents is the only side navigation.
 
 Run the validation first:
 
@@ -107,7 +113,7 @@ sudo -u www-data php mod/scorm/studytopic/scorm_word_books.php \
   --section=2020
 ```
 
-Then create the Books explicitly:
+Then create or update the Books explicitly:
 
 ```bash
 sudo -u www-data php mod/scorm/studytopic/scorm_word_books.php \
@@ -121,8 +127,10 @@ The command creates:
 - `Formula Exams — Online Book`
 - `Herb Exams — Online Book`
 
-It never replaces or deletes an existing activity. Repeated execution verifies
-and skips Books previously created by this tool.
+It never replaces or deletes an existing activity. Repeated execution safely
+refreshes Books previously created by this tool. Books created by the first
+version are upgraded in place with a main index; chapter and document links are
+preserved and regenerated from the source folders.
 
 ## Custom course selection
 
