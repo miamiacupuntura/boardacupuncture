@@ -92,6 +92,45 @@
       payment: {
         enrolmentUrl: ''
       }
+    },
+    {
+      key: 'point-contraindications',
+      title: 'Point Contraindications and Anatomical Safety',
+      shortDescription: 'Region-based safety recognition, source verification, adverse-event awareness and integrated clinical reasoning across 12 learning objectives.',
+      boardUrl: 'point-contraindications/index.html?track=board&return=board-catalog',
+      continuingEducationUrl: 'point-contraindications/index.html?track=continuing-education&return=ce-catalog#continuing-education-start',
+      objectiveCount: 12,
+      minutesPerObjective: 15,
+      board: {
+        publiclyActive: true
+      },
+      classification: {
+        requirementGroup: 'General',
+        subjectArea: 'General',
+        ceBrokerSubjectCode: 'GN'
+      },
+      delivery: {
+        method: 'Computer-Based Training',
+        format: 'Online, asynchronous and self-paced'
+      },
+      provider: {
+        name: '',
+        number: ''
+      },
+      approval: {
+        status: STATUS.PREPARATION,
+        publiclyActive: false,
+        approvedCreditHours: null,
+        approvalNumber: '',
+        approvedOn: '',
+        expiresOn: ''
+      },
+      certificate: {
+        enabled: false
+      },
+      payment: {
+        enrolmentUrl: ''
+      }
     }
   ];
 
