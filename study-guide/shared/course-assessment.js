@@ -253,7 +253,22 @@
   Object.entries(banks).forEach(([bankId, bank]) => {
     if (bankId === 'continuing-education') return;
     const objective = document.getElementById(bankId);
-    if (objective) objective.append(buildBank(bankId, bank, false));
+    if (objective) {
+      const exam = buildBank(bankId, bank, false);
+      const body = objective.querySelector(':scope > div');
+      if (body) {
+        let actions = body.querySelector(':scope > .objective-actions');
+        if (!actions) {
+          actions = el('div', 'objective-actions');
+          body.append(actions);
+        }
+        const openExam = el('a', 'objective-mock-button', `Open ${bank.questions.length}-question mock exam`);
+        openExam.href = `#${exam.id}`;
+        openExam.addEventListener('click', () => { exam.open = true; });
+        actions.prepend(openExam);
+      }
+      objective.append(exam);
+    }
   });
 
   const practiceExams = document.getElementById('practice-exams');

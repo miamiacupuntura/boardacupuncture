@@ -158,7 +158,7 @@
     if (!body || body.querySelector('.objective-development')) return;
     const template = document.createElement('template');
     template.innerHTML = html.trim();
-    const insertBefore = body.querySelector('.source-reading') || body.querySelector('.source-note');
+    const insertBefore = body.querySelector('.source-reading') || body.querySelector('.source-note') || body.querySelector('.objective-actions');
     if (insertBefore) body.insertBefore(template.content, insertBefore);
     else body.append(template.content);
   });
