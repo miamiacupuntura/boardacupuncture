@@ -253,6 +253,13 @@ class DocxBuilder:
         header_fill: str = "F47E2C",
     ) -> None:
         """Add a compact full-width card with aligned labels and values."""
+        tablewidth = 14000 if self.study_guide else 9000
+        labelwidth = 2500 if self.study_guide else 1900
+        valuewidth = tablewidth - labelwidth
+        textsize = 16 if self.study_guide else None
+        headersize = 18 if self.study_guide else 22
+        cellpadding = 45 if self.study_guide else 100
+        sidepadding = 60 if self.study_guide else 120
         header = (
             '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
             '<w:tc><w:tcPr><w:gridSpan w:val="2"/><w:shd w:val="clear" '
@@ -261,7 +268,7 @@ class DocxBuilder:
                 title,
                 bold=True,
                 color="FFFFFF",
-                size=22,
+                size=headersize,
                 space_after=0,
                 keep_next=True,
                 keep_lines=True,
@@ -273,24 +280,26 @@ class DocxBuilder:
             keepwithnext = rownumber < len(rows) - 1
             bodyrows.append(
                 '<w:tr><w:trPr><w:cantSplit/></w:trPr>'
-                '<w:tc><w:tcPr><w:tcW w:w="1900" w:type="dxa"/>'
+                f'<w:tc><w:tcPr><w:tcW w:w="{labelwidth}" w:type="dxa"/>'
                 '<w:shd w:val="clear" w:color="auto" w:fill="F2F6F8"/>'
                 '<w:vAlign w:val="top"/></w:tcPr>'
                 + paragraph_xml(
                     label,
                     bold=True,
                     color="17324D",
+                    size=textsize,
                     space_after=0,
                     keep_next=keepwithnext,
                     keep_lines=True,
                 )
                 + '</w:tc>'
-                '<w:tc><w:tcPr><w:tcW w:w="7100" w:type="dxa"/>'
+                f'<w:tc><w:tcPr><w:tcW w:w="{valuewidth}" w:type="dxa"/>'
                 '<w:shd w:val="clear" w:color="auto" w:fill="FFFFFF"/>'
                 '<w:vAlign w:val="top"/></w:tcPr>'
                 + paragraph_xml(
                     value,
                     color="203040",
+                    size=textsize,
                     space_after=0,
                     keep_next=keepwithnext,
                     keep_lines=True,
@@ -298,7 +307,7 @@ class DocxBuilder:
                 + '</w:tc></w:tr>'
             )
         table = (
-            '<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/>'
+            f'<w:tbl><w:tblPr><w:tblW w:w="{tablewidth}" w:type="dxa"/>'
             '<w:tblLayout w:type="fixed"/>'
             '<w:tblBorders>'
             '<w:top w:val="single" w:sz="8" w:color="D6E1E7"/>'
@@ -309,16 +318,16 @@ class DocxBuilder:
             '<w:insideV w:val="single" w:sz="6" w:color="D6E1E7"/>'
             '</w:tblBorders>'
             '<w:tblCellMar>'
-            '<w:top w:w="100" w:type="dxa"/><w:left w:w="120" w:type="dxa"/>'
-            '<w:bottom w:w="100" w:type="dxa"/><w:right w:w="120" w:type="dxa"/>'
+            f'<w:top w:w="{cellpadding}" w:type="dxa"/><w:left w:w="{sidepadding}" w:type="dxa"/>'
+            f'<w:bottom w:w="{cellpadding}" w:type="dxa"/><w:right w:w="{sidepadding}" w:type="dxa"/>'
             '</w:tblCellMar></w:tblPr>'
-            '<w:tblGrid><w:gridCol w:w="1900"/><w:gridCol w:w="7100"/></w:tblGrid>'
+            f'<w:tblGrid><w:gridCol w:w="{labelwidth}"/><w:gridCol w:w="{valuewidth}"/></w:tblGrid>'
             + header
             + ''.join(bodyrows)
             + '</w:tbl>'
         )
         self.body.append(table)
-        self.add_paragraph("", space_after=120)
+        self.add_paragraph("", space_after=30 if self.study_guide else 120)
 
     def add_comparison_table(
         self,
@@ -333,7 +342,10 @@ class DocxBuilder:
         if len(columns) != 2:
             raise ValueError("Comparison tables require exactly two item columns")
 
-        widths = [1500, 3750, 3750]
+        widths = [1800, 6100, 6100] if self.study_guide else [1500, 3750, 3750]
+        textsize = 16 if self.study_guide else None
+        cellpadding = 45 if self.study_guide else 100
+        sidepadding = 60 if self.study_guide else 110
 
         def cell(
             value: str,
@@ -356,6 +368,7 @@ class DocxBuilder:
                     value,
                     bold=bold,
                     color=color,
+                    size=textsize,
                     space_after=0,
                     keep_next=keep_next,
                     keep_lines=True,
@@ -431,7 +444,7 @@ class DocxBuilder:
             datarows.append(rowxml + '</w:tr>')
 
         table = (
-            '<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/>'
+            f'<w:tbl><w:tblPr><w:tblW w:w="{sum(widths)}" w:type="dxa"/>'
             '<w:tblLayout w:type="fixed"/>'
             '<w:tblBorders>'
             '<w:top w:val="single" w:sz="8" w:color="D6E1E7"/>'
@@ -442,41 +455,63 @@ class DocxBuilder:
             '<w:insideV w:val="single" w:sz="6" w:color="D6E1E7"/>'
             '</w:tblBorders>'
             '<w:tblCellMar>'
-            '<w:top w:w="100" w:type="dxa"/><w:left w:w="110" w:type="dxa"/>'
-            '<w:bottom w:w="100" w:type="dxa"/><w:right w:w="110" w:type="dxa"/>'
+            f'<w:top w:w="{cellpadding}" w:type="dxa"/><w:left w:w="{sidepadding}" w:type="dxa"/>'
+            f'<w:bottom w:w="{cellpadding}" w:type="dxa"/><w:right w:w="{sidepadding}" w:type="dxa"/>'
             '</w:tblCellMar></w:tblPr>'
-            '<w:tblGrid><w:gridCol w:w="1500"/><w:gridCol w:w="3750"/>'
-            '<w:gridCol w:w="3750"/></w:tblGrid>'
+            f'<w:tblGrid><w:gridCol w:w="{widths[0]}"/><w:gridCol w:w="{widths[1]}"/>'
+            f'<w:gridCol w:w="{widths[2]}"/></w:tblGrid>'
             + title_row
             + heading_row
             + ''.join(datarows)
             + '</w:tbl>'
         )
         self.body.append(table)
-        self.add_paragraph("", space_after=120)
+        self.add_paragraph("", space_after=30 if self.study_guide else 120)
 
     def write(self, destination: Path) -> None:
         destination.parent.mkdir(parents=True, exist_ok=True)
         timestamp = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        if self.study_guide:
+            pagesize = '<w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/>'
+            pagemargins = (
+                '<w:pgMar w:top="420" w:right="600" w:bottom="480" w:left="600" '
+                'w:header="240" w:footer="240" w:gutter="0"/>'
+            )
+            defaultsize = 16
+            normalline = 205
+            headingonesize = 24
+            headingonebefore = 30
+            headingoneafter = 60
+        else:
+            pagesize = '<w:pgSz w:w="12240" w:h="15840"/>'
+            pagemargins = (
+                '<w:pgMar w:top="1080" w:right="900" w:bottom="1080" w:left="900" '
+                'w:header="540" w:footer="540" w:gutter="0"/>'
+            )
+            defaultsize = 21
+            normalline = 276
+            headingonesize = 32
+            headingonebefore = 180
+            headingoneafter = 180
         document = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
  <w:body>{''.join(self.body)}
-  <w:sectPr><w:pgSz w:w="12240" w:h="15840"/>
-   <w:pgMar w:top="1080" w:right="900" w:bottom="1080" w:left="900" w:header="540" w:footer="540" w:gutter="0"/>
+  <w:sectPr>{pagesize}
+   {pagemargins}
    <w:headerReference w:type="default" r:id="rId2"/>
    <w:footerReference w:type="default" r:id="rId3"/>
   </w:sectPr>
  </w:body>
 </w:document>'''
-        styles = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        styles = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
- <w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos"/><w:color w:val="203040"/><w:sz w:val="21"/></w:rPr></w:rPrDefault></w:docDefaults>
- <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:pPr><w:spacing w:after="100" w:line="276" w:lineRule="auto"/></w:pPr></w:style>
+ <w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos"/><w:color w:val="203040"/><w:sz w:val="{defaultsize}"/></w:rPr></w:rPrDefault></w:docDefaults>
+ <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:pPr><w:spacing w:after="100" w:line="{normalline}" w:lineRule="auto"/></w:pPr></w:style>
  <w:style w:type="paragraph" w:styleId="BookBrand"><w:name w:val="Book Brand"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="260"/><w:jc w:val="center"/></w:pPr><w:rPr><w:b/><w:color w:val="F47E2C"/><w:sz w:val="22"/><w:caps/></w:rPr></w:style>
  <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="BookSubtitle"/><w:pPr><w:spacing w:before="240" w:after="240"/><w:jc w:val="center"/><w:keepNext/></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="48"/></w:rPr></w:style>
  <w:style w:type="paragraph" w:styleId="BookSubtitle"><w:name w:val="Book Subtitle"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="360"/><w:jc w:val="center"/></w:pPr><w:rPr><w:color w:val="527286"/><w:sz w:val="26"/></w:rPr></w:style>
- <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="180" w:after="180"/><w:pBdr><w:bottom w:val="single" w:sz="16" w:space="8" w:color="F47E2C"/></w:pBdr></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="32"/></w:rPr></w:style>
+ <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="{headingonebefore}" w:after="{headingoneafter}"/><w:pBdr><w:bottom w:val="single" w:sz="16" w:space="8" w:color="F47E2C"/></w:pBdr></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="{headingonesize}"/></w:rPr></w:style>
  <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="220" w:after="100"/><w:shd w:val="clear" w:color="auto" w:fill="E8F3F5"/><w:pBdr><w:left w:val="single" w:sz="28" w:space="8" w:color="F47E2C"/></w:pBdr></w:pPr><w:rPr><w:b/><w:color w:val="17324D"/><w:sz w:val="26"/></w:rPr></w:style>
 </w:styles>'''
         relationships = [
@@ -1486,10 +1521,12 @@ def add_question(
     matchingstrategy: list[tuple[str, str]] = []
     if qtype == "MatchingQuestion":
         questionprompt, studytips = matching_prompt_and_tips(question.get("QuestionText", ""))
+        cardindex = matching_index_entries([question])
+        cardtitle = cardindex[0]["comparison"] if cardindex else questionprompt
         builder.add_paragraph(
-            questionprompt,
+            cardtitle,
             style="Heading1",
-            space_after=120,
+            space_after=50,
             keep_lines=True,
         )
         if studytips:
@@ -1542,7 +1579,6 @@ def add_question(
     if qtype == "MatchingQuestion":
         left = {item.get("Id"): answer_text(item) for item in question.get("LeftColumn", [])}
         right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
-        builder.add_paragraph("Correct matches", bold=True, color="17324D", keep_next=True)
         comparison = matching_comparison_data(question)
         if comparison:
             builder.add_comparison_table("Comparative answer key", comparison[0], comparison[1])
@@ -1556,7 +1592,6 @@ def add_question(
                     ),
                 )
         if matchingstrategy:
-            builder.add_page_break()
             builder.add_key_value_card(
                 "Study guide · Exam focus",
                 matchingstrategy,
@@ -1634,7 +1669,7 @@ def add_question(
 
     add_feedback(builder, question)
 
-    builder.add_paragraph("", space_after=160)
+    builder.add_paragraph("", space_after=20 if qtype == "MatchingQuestion" else 160)
 
 
 def find_quizdata_member(package: zipfile.ZipFile) -> str | None:
@@ -1655,57 +1690,6 @@ def book_chapters(question_count: int, chapter_size: int = 10) -> list[tuple[int
         end = min(start + chapter_size - 1, question_count)
         chapters.append((len(chapters) + 1, start, end))
     return chapters
-
-
-def add_matching_document_index(
-    builder: DocxBuilder,
-    entries: list[dict[str, Any]],
-) -> None:
-    """Add a concise, category-first index for Matching study cards."""
-    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for entry in entries:
-        grouped[str(entry["first_item_category"])].append(entry)
-
-    builder.add_paragraph("Matching Study Guide Index", style="Title", space_after=120)
-    builder.add_paragraph(
-        f"{len(entries)} Matching question{'s' if len(entries) != 1 else ''} · "
-        f"{len(grouped)} categor{'ies' if len(grouped) != 1 else 'y'}",
-        color="527286",
-        size=22,
-        space_after=180,
-    )
-    builder.add_paragraph(
-        "Comparisons are grouped and sorted by the category of the first herb.",
-        italic=True,
-        color="31586B",
-        fill="E8F3F5",
-        border_color="F47E2C",
-        left_indent=180,
-        right_indent=120,
-        space_after=180,
-        keep_lines=True,
-    )
-    for category, categoryentries in grouped.items():
-        builder.add_paragraph(
-            f"{category} ({len(categoryentries)})",
-            style="Heading2",
-            color="17324D",
-            space_before=120,
-            space_after=70,
-            keep_next=True,
-        )
-        for entry in categoryentries:
-            builder.add_paragraph(
-                str(entry["comparison"]),
-                bold=True,
-                color="8A3F0A",
-                fill="FFF6E8",
-                border_color="F47E2C",
-                left_indent=180,
-                right_indent=120,
-                space_after=70,
-                keep_lines=True,
-            )
 
 
 def build_document(
@@ -1733,10 +1717,7 @@ def build_document(
 
         title = str(placement.get("scormname") or "SCORM Exam")
         builder = DocxBuilder(title, study_guide=bool(matchingindex))
-        if matchingindex:
-            add_matching_document_index(builder, matchingindex)
-            builder.add_page_break()
-        else:
+        if not matchingindex:
             builder.add_paragraph(title, style="Title", space_after=180)
 
         images = PackageImages(package)

@@ -48,14 +48,13 @@ Each Word document includes the question wording, available images, answer
 choices or matches, the correct answer, question notes, and source feedback.
 Legacy click-map questions include the source image and correct hotspot data.
 
-Documents that contain Matching study cards now open with a concise `Matching
-Study Guide Index`. It reports the number of Matching questions, groups them by
-the source category of the first herb, and uses the short parenthetical names
-for readable entries such as `(gao liang jiang) vs. (sheng jiang)`. The former
-branded cover, instructor metadata, generic Contents/Chapter pages, and generic
-`Question / Matching` labels are omitted from this view. The actual comparison
-title leads directly into the study card. Other documents also omit the former
-administrative cover and chapter contents.
+Documents that contain Matching study cards open directly with the actual
+comparison title. The former branded cover, instructor metadata, generic
+Contents/Chapter pages, internal index sheet, and generic `Question / Matching`
+labels are omitted. Each Matching comparison is formatted as a compact
+landscape card intended to fit on one printed sheet: clues, comparative answer
+key, and exam-focused guidance remain together. Other documents also omit the
+former administrative cover and chapter contents.
 
 Every category export also creates `matching-study-guide-index.html`, `.csv`,
 and `.json`. The browser index reports total Matching occurrences, unique
@@ -114,9 +113,9 @@ identifies overlapping findings that can cause confusion, and shows how each
 side could become an exam vignette without inventing new answer-key facts. A
 final row explains why reversing the two groups is incorrect. When this complete
 card is available, duplicated legacy Matching feedback is suppressed so the
-same categories and associations are not printed a second time. The Study Guide
-card begins on a dedicated page so none of its four explanation rows is orphaned
-by pagination.
+same categories and associations are not printed a second time. Compact fonts,
+cell padding, margins, and landscape width keep the entire Matching study card
+on one sheet without dropping any of its four explanation rows.
 Related-question surveys, progress scoring, and student checklists are deferred
 to a later reporting phase so the current work can prioritize Study Guide card
 quality and source accuracy.
