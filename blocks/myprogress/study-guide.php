@@ -44,8 +44,8 @@ $areas = [
             ],
             [
                 'title' => 'Point Contraindications',
-                'description' => 'Classify anatomical risks, patient and pregnancy considerations, modality precautions and source-specific restrictions through ten focused safety objectives.',
-                'objectives' => 10,
+                'description' => 'Classify anatomical risks, patient and pregnancy considerations, modality precautions and source-specific restrictions through twelve focused safety objectives.',
+                'objectives' => 12,
                 'guide_status' => 'Ready',
                 'board_practice' => '125 questions',
                 'path' => '/study-guide/point-contraindications/index.html',
