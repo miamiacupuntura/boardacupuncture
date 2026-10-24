@@ -62,6 +62,18 @@
       options: ['It replaces supervised needling instruction.', 'It authorizes procedures outside scope.', 'It teaches conceptual recognition and source-based safety reasoning.', 'It proves every historical rule is current.'],
       answer: 2,
       feedback: 'This is conceptual education. Technique requires formal training, supervision, current references and appropriate scope.'
+    },
+    {
+      prompt: 'When comparing a thoracic point warning with a pregnancy-related warning, what should you do first?',
+      options: ['Rank both as the same kind of danger.', 'Classify the thoracic anatomical structure and the pregnancy context separately.', 'Use the channel name as the only evidence.', 'Ignore patient context until after treatment.'],
+      answer: 1,
+      feedback: 'Objective 11 requires classification before comparison: direct anatomical risk and patient-context precautions use different reasoning.'
+    },
+    {
+      prompt: 'Which record best demonstrates completion of an integrated safety case?',
+      options: ['A point code with no explanation.', 'A memorized historical phrase.', 'SAFER screening, risk classification, verified source, rationale and appropriate next action.', 'An insertion instruction copied without context.'],
+      answer: 2,
+      feedback: 'Objective 12 requires a documented, source-based rationale and a safe next action within training and scope.'
     }
   ];
 
@@ -184,8 +196,8 @@
     const answered = Object.keys(answers).length;
     saveState({ quizAnswers: answers, quizScore: correct, quizAnswered: answered });
     resultBox.innerHTML = answered < questions.length
-      ? `<b>${correct} correct from ${answered} answered.</b> Complete all ten items for a full recommendation.`
-      : `<b>${correct} / ${questions.length} correct.</b> ${correct >= 8 ? 'Strong safety reasoning. Continue with the Moodle examinations and verify every point entry.' : correct >= 6 ? 'Developing well. Review the feedback for missed risk categories before the examinations.' : 'Return to SAFER and the seven risk families, then repeat this check without notes.'}`;
+      ? `<b>${correct} correct from ${answered} answered.</b> Complete all twelve items for a full recommendation.`
+      : `<b>${correct} / ${questions.length} correct.</b> ${correct >= 10 ? 'Strong safety reasoning. Continue with the Moodle examinations and verify every point entry.' : correct >= 7 ? 'Developing well. Review the feedback for missed risk categories before the examinations.' : 'Return to SAFER and the seven risk families, then repeat this check without notes.'}`;
     resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
@@ -225,15 +237,15 @@
     const topics = Array.isArray(final['review-topic']) ? final['review-topic'] : final['review-topic'] ? [final['review-topic']] : [];
     let heading = 'Targeted review recommended';
     let summary = 'You have a useful foundation. Consolidate the weakest categories before relying on point-by-point recall.';
-    if (answered === 10 && score >= 8 && depth >= 3 && review >= 3 && result >= 3) {
+    if (answered === 12 && score >= 10 && depth >= 3 && review >= 3 && result >= 3) {
       heading = 'Ready for focused examination practice';
       summary = 'Your reasoning check and reflection indicate good conceptual readiness. Continue with the Moodle banks and verify errors against complete sources.';
-    } else if (answered < 10 || score < 6 || depth < 2 || review < 2) {
+    } else if (answered < 12 || score < 7 || depth < 2 || review < 2) {
       heading = 'Rebuild the safety framework first';
-      summary = 'Review SAFER and the seven risk families, then repeat the ten-item check before moving to the larger Moodle banks.';
+      summary = 'Review SAFER and the seven risk families, then repeat the twelve-item check before moving to the larger Moodle banks.';
     }
     const recommendations = [];
-    if (answered < 10) recommendations.push('Complete all ten safety reasoning questions so the result includes objective evidence.');
+    if (answered < 12) recommendations.push('Complete all twelve safety reasoning questions so the result includes evidence from every objective.');
     else if (score < 8) recommendations.push('Review every missed item and write the correct risk family in an error log.');
     else recommendations.push('Use the ten Moodle banks for point-level retrieval and record errors by risk family.');
     if (topics.length) recommendations.push(`Prioritize: ${topics.join(', ')}.`);
@@ -241,7 +253,7 @@
     if (depth < 3) recommendations.push('Create at least five two-sided safety cards and complete one recall round without notes.');
     if (useful < 3) recommendations.push('Use the region-first worksheet rather than rereading the chapter from beginning to end.');
     recommendations.push('Confirm legacy or historical wording with current full point entries and safety guidance.');
-    evaluation.innerHTML = `<span class="eyebrow">YOUR STUDY EVALUATION</span><h3>${heading}</h3><p>${summary}</p><p><b>Reasoning check:</b> ${answered === 10 && Number.isFinite(score) ? `${score} / 10` : 'not yet completed'}. <b>Reported study depth:</b> ${depth} / 4. <b>Expected result:</b> ${result} / 4.</p><h4>Recommended next steps</h4><ul>${recommendations.map(item => `<li>${item}</li>`).join('')}</ul>`;
+    evaluation.innerHTML = `<span class="eyebrow">YOUR STUDY EVALUATION</span><h3>${heading}</h3><p>${summary}</p><p><b>Reasoning check:</b> ${answered === 12 && Number.isFinite(score) ? `${score} / 12` : 'not yet completed'}. <b>Reported study depth:</b> ${depth} / 4. <b>Expected result:</b> ${result} / 4.</p><h4>Recommended next steps</h4><ul>${recommendations.map(item => `<li>${item}</li>`).join('')}</ul>`;
     saveState({ evaluation: { heading, generatedAt: new Date().toISOString() } });
     evaluation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
