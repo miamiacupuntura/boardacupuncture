@@ -274,6 +274,8 @@ $PAGE->set_cm($cm, $course);
 $PAGE->set_title($file->get_filename());
 $PAGE->set_heading($course->fullname);
 $PAGE->add_body_class('limitedwidth');
+$PAGE->add_body_class('scorm-word-library');
+$PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
 
 $requestdirectory = make_request_directory();
 $temppath = $requestdirectory . DIRECTORY_SEPARATOR . 'preview.docx';

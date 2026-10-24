@@ -101,6 +101,10 @@ $PAGE->set_other_editing_capability('mod/book:edit');
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($course->fullname);
 $PAGE->add_body_class('limitedwidth');
+if (str_contains((string)$book->intro, 'data-scorm-word-book')) {
+    $PAGE->add_body_class('scorm-word-library');
+    $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
+}
 
 // No content in the book.
 if (!$chapterid) {

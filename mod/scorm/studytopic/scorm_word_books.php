@@ -9,8 +9,9 @@
 /**
  * Build native Moodle Books that index generated SCORM Word documents.
  *
- * The command is a dry run unless --execute is supplied. Existing activities
- * are never replaced or deleted.
+ * The command is a dry run unless --execute is supplied. Existing generated
+ * Books are upgraded in place; activities and source documents are never
+ * replaced or deleted.
  *
  * @package    mod_scorm
  * @copyright  2026 Miami Acupuncture
@@ -52,7 +53,7 @@ The command performs a dry run unless --execute is provided.
 Options:
   -c, --course=ID     Target Moodle course ID (default: 92)
   -s, --section=ID    Target course_sections database ID (default: 2020)
-  -x, --execute       Create the two Book activities
+  -x, --execute       Create or update the two Book activities
   -h, --help          Show this help
 
 Example:
@@ -236,6 +237,291 @@ function scorm_word_exam_links(array $files, int $foldercmid, int $bookcmid, int
     ) . html_writer::tag('ul', implode('', $items), ['class' => 'list-unstyled']);
 }
 
+/**
+ * Count the Word files in all sections of one source course.
+ *
+ * @param array<string, array<int, stored_file>> $sections Source sections.
+ * @return int
+ */
+function scorm_word_source_course_count(array $sections): int {
+    $count = 0;
+    foreach ($sections as $files) {
+        $count += count($files);
+    }
+    return $count;
+}
+
+/**
+ * Build a link to a specific chapter in a generated Book.
+ *
+ * @param int $bookcmid Book course-module ID.
+ * @param int $chapterid Chapter ID.
+ * @param string $label Link label.
+ * @param array $attributes HTML attributes.
+ * @return string
+ */
+function scorm_word_chapter_link(
+    int $bookcmid,
+    int $chapterid,
+    string $label,
+    array $attributes = []
+): string {
+    $url = new moodle_url('/mod/book/view.php', [
+        'id' => $bookcmid,
+        'chapterid' => $chapterid,
+    ]);
+    return html_writer::link($url, s($label), $attributes);
+}
+
+/**
+ * Build the main, compact library index.
+ *
+ * @param array $library Grouped Word library.
+ * @param int $bookcmid Book course-module ID.
+ * @param array<string, stdClass> $coursechapters Parent chapters by source course.
+ * @return string
+ */
+function scorm_word_main_index(array $library, int $bookcmid, array $coursechapters): string {
+    $cards = [];
+    foreach ($library as $sourcecourse => $sections) {
+        $examcount = scorm_word_source_course_count($sections);
+        $sectioncount = count($sections);
+        $header = html_writer::tag('h4', s($sourcecourse), ['class' => 'mb-0']);
+        $summary = html_writer::tag(
+            'p',
+            "{$examcount} exams in {$sectioncount} topics",
+            ['class' => 'card-text text-muted']
+        );
+        $button = scorm_word_chapter_link(
+            $bookcmid,
+            $coursechapters[$sourcecourse]->id,
+            'Open category',
+            ['class' => 'btn btn-primary']
+        );
+        $cards[] = html_writer::div(
+            html_writer::div($header, 'card-header') .
+            html_writer::div($summary . $button, 'card-body'),
+            'card h-100'
+        );
+    }
+
+    $columns = [];
+    foreach ($cards as $card) {
+        $columns[] = html_writer::div($card, 'col-12 col-md-6 mb-3');
+    }
+    return html_writer::tag(
+        'p',
+        'Choose a category. The next page lists its topics and the number of available exams.'
+    ) . html_writer::div(implode('', $columns), 'row scorm-word-library-index');
+}
+
+/**
+ * Build a topic index for one source course.
+ *
+ * @param array<string, array<int, stored_file>> $sections Source sections.
+ * @param int $bookcmid Book course-module ID.
+ * @param array<string, stdClass> $sectionchapters Section chapters by title.
+ * @return string
+ */
+function scorm_word_category_index(array $sections, int $bookcmid, array $sectionchapters): string {
+    $items = [];
+    foreach ($sections as $title => $files) {
+        $label = scorm_word_chapter_link(
+            $bookcmid,
+            $sectionchapters[$title]->id,
+            $title,
+            ['class' => 'font-weight-bold']
+        );
+        $count = html_writer::tag(
+            'span',
+            count($files) . ' exams',
+            ['class' => 'badge badge-light ml-2']
+        );
+        $items[] = html_writer::tag(
+            'li',
+            $label . $count,
+            ['class' => 'list-group-item d-flex justify-content-between align-items-center']
+        );
+    }
+    return html_writer::tag('p', 'Choose a topic to see all its exams.') .
+        html_writer::tag('ul', implode('', $items), [
+            'class' => 'list-group scorm-word-category-index',
+        ]);
+}
+
+/**
+ * Load and validate a generated Book's chapter structure.
+ *
+ * @param stdClass $book Book record.
+ * @param array $library Grouped Word library.
+ * @return array{index: stdClass, courses: array, sections: array}
+ */
+function scorm_word_map_chapters(stdClass $book, array $library): array {
+    global $DB;
+
+    $chapters = array_values($DB->get_records(
+        'book_chapters',
+        ['bookid' => $book->id],
+        'pagenum ASC'
+    ));
+    $expected = scorm_word_chapter_count($library) + 1;
+    if (count($chapters) !== $expected) {
+        cli_error("Generated Book '{$book->name}' has an unexpected chapter count.");
+    }
+
+    $index = array_shift($chapters);
+    if ($index->importsrc !== 'scorm-word-library-index' || $index->subchapter) {
+        cli_error("Generated Book '{$book->name}' does not have the expected main index.");
+    }
+
+    $coursechapters = [];
+    $sectionchapters = [];
+    foreach ($library as $sourcecourse => $sections) {
+        $coursechapter = array_shift($chapters);
+        if (!$coursechapter || $coursechapter->subchapter ||
+                $coursechapter->importsrc !== 'scorm-word-library' ||
+                $coursechapter->title !== $sourcecourse) {
+            cli_error("Generated Book '{$book->name}' has an unexpected category structure.");
+        }
+        $coursechapters[$sourcecourse] = $coursechapter;
+        $sectionchapters[$sourcecourse] = [];
+        foreach ($sections as $sourcesection => $files) {
+            $sectionchapter = array_shift($chapters);
+            if (!$sectionchapter || !$sectionchapter->subchapter ||
+                    $sectionchapter->importsrc !== 'scorm-word-library' ||
+                    $sectionchapter->title !== $sourcesection) {
+                cli_error("Generated Book '{$book->name}' has an unexpected topic structure.");
+            }
+            $sectionchapters[$sourcecourse][$sourcesection] = $sectionchapter;
+        }
+    }
+    return [
+        'index' => $index,
+        'courses' => $coursechapters,
+        'sections' => $sectionchapters,
+    ];
+}
+
+/**
+ * Add the initial chapter structure for a new generated Book.
+ *
+ * @param stdClass $book Book record.
+ * @param context_module $context Book context.
+ * @param array $library Grouped Word library.
+ * @return void
+ */
+function scorm_word_create_chapters(stdClass $book, context_module $context, array $library): void {
+    global $DB;
+
+    $pagenum = 1;
+    $index = scorm_word_add_chapter($book, $pagenum++, false, 'Exam Library Index', '');
+    $index->importsrc = 'scorm-word-library-index';
+    $index->timemodified = time();
+    $DB->update_record('book_chapters', $index);
+    \mod_book\event\chapter_created::create_from_chapter($book, $context, $index)->trigger();
+
+    foreach ($library as $sourcecourse => $sections) {
+        $coursechapter = scorm_word_add_chapter($book, $pagenum++, false, $sourcecourse, '');
+        \mod_book\event\chapter_created::create_from_chapter($book, $context, $coursechapter)->trigger();
+        foreach ($sections as $sourcesection => $files) {
+            $chapter = scorm_word_add_chapter($book, $pagenum++, true, $sourcesection, '');
+            \mod_book\event\chapter_created::create_from_chapter($book, $context, $chapter)->trigger();
+        }
+    }
+}
+
+/**
+ * Add a main index to a previously generated Book.
+ *
+ * @param stdClass $book Book record.
+ * @param context_module $context Book context.
+ * @return void
+ */
+function scorm_word_add_main_index(stdClass $book, context_module $context): void {
+    global $DB;
+
+    $chapters = $DB->get_records('book_chapters', ['bookid' => $book->id], 'pagenum DESC');
+    foreach ($chapters as $chapter) {
+        if ($chapter->importsrc !== 'scorm-word-library') {
+            cli_error("Book '{$book->name}' contains a chapter not owned by this generator.");
+        }
+        $chapter->pagenum++;
+        $DB->update_record('book_chapters', $chapter);
+    }
+    $index = scorm_word_add_chapter($book, 1, false, 'Exam Library Index', '');
+    $index->importsrc = 'scorm-word-library-index';
+    $index->timemodified = time();
+    $DB->update_record('book_chapters', $index);
+    \mod_book\event\chapter_created::create_from_chapter($book, $context, $index)->trigger();
+}
+
+/**
+ * Refresh all generated chapter content and links.
+ *
+ * @param stdClass $book Book record.
+ * @param int $bookcmid Book course-module ID.
+ * @param context_module $context Book context.
+ * @param stdClass $folder Source folder record.
+ * @param array $library Grouped Word library.
+ * @return void
+ */
+function scorm_word_refresh_book(
+    stdClass $book,
+    int $bookcmid,
+    context_module $context,
+    stdClass $folder,
+    array $library
+): void {
+    global $DB;
+
+    $existingcount = $DB->count_records('book_chapters', ['bookid' => $book->id]);
+    $contentcount = scorm_word_chapter_count($library);
+    if ($existingcount === 0) {
+        scorm_word_create_chapters($book, $context, $library);
+    } else if ($existingcount === $contentcount) {
+        scorm_word_add_main_index($book, $context);
+    } else if ($existingcount !== $contentcount + 1) {
+        cli_error("Generated Book '{$book->name}' has an unexpected chapter count.");
+    }
+
+    $map = scorm_word_map_chapters($book, $library);
+    $now = time();
+    $map['index']->content = scorm_word_main_index($library, $bookcmid, $map['courses']);
+    $map['index']->timemodified = $now;
+    $DB->update_record('book_chapters', $map['index']);
+
+    foreach ($library as $sourcecourse => $sections) {
+        $coursechapter = $map['courses'][$sourcecourse];
+        $coursechapter->content = scorm_word_category_index(
+            $sections,
+            $bookcmid,
+            $map['sections'][$sourcecourse]
+        );
+        $coursechapter->timemodified = $now;
+        $DB->update_record('book_chapters', $coursechapter);
+
+        foreach ($sections as $sourcesection => $files) {
+            $sectionchapter = $map['sections'][$sourcecourse][$sourcesection];
+            $sectionchapter->content = scorm_word_exam_links(
+                $files,
+                $folder->cmid,
+                $bookcmid,
+                $sectionchapter->id
+            );
+            $sectionchapter->timemodified = $now;
+            $DB->update_record('book_chapters', $sectionchapter);
+        }
+    }
+
+    $book->intro = '<p data-scorm-word-book="2">Online index of the generated SCORM exam ' .
+        'library. Select a category, topic and exam to read it in Moodle.</p>';
+    $book->introformat = FORMAT_HTML;
+    $book->revision++;
+    $book->timemodified = $now;
+    $DB->update_record('book', $book);
+    book_preload_chapters($book);
+}
+
 $courseid = clean_param($options['course'], PARAM_INT);
 $sectionid = clean_param($options['section'], PARAM_INT);
 if ($courseid <= 0 || $sectionid <= 0) {
@@ -273,14 +559,15 @@ foreach ($definitions as $definition) {
     $folder = scorm_word_find_folder($courseid, $sectionid, $definition['foldername']);
     $library = scorm_word_library($folder);
     $documents = scorm_word_library_count($library);
-    $chapters = scorm_word_chapter_count($library);
+    $contentchapters = scorm_word_chapter_count($library);
+    $chapters = $contentchapters + 1;
     if ($documents !== $definition['expected']) {
         cli_error(
             "{$definition['foldername']} contains {$documents} DOCX files; " .
             "expected {$definition['expected']}."
         );
     }
-    if ($chapters === 0) {
+    if ($contentchapters === 0) {
         cli_error("No Book chapters could be planned for {$definition['bookname']}.");
     }
 
@@ -310,13 +597,28 @@ foreach ($definitions as $definition) {
             );
         }
         $existingchapters = $DB->count_records('book_chapters', ['bookid' => $existing->id]);
-        if ($existingchapters !== $chapters) {
+        if ($existingchapters === $contentchapters) {
+            $status = 'add clear index';
+        } else if ($existingchapters === $chapters) {
+            $firstchapter = $DB->get_record(
+                'book_chapters',
+                ['bookid' => $existing->id, 'pagenum' => 1],
+                '*',
+                MUST_EXIST
+            );
+            if ($firstchapter->importsrc !== 'scorm-word-library-index') {
+                cli_error(
+                    "Generated Book '{$definition['bookname']}' has an unrecognised first chapter."
+                );
+            }
+            $status = 'refresh clear index';
+        } else {
             cli_error(
-                "Generated Book '{$definition['bookname']}' has {$existingchapters} of " .
-                "{$chapters} expected chapters. It was not changed."
+                "Generated Book '{$definition['bookname']}' has {$existingchapters} chapters; " .
+                "expected {$contentchapters} before upgrade or {$chapters} after upgrade. " .
+                'It was not changed.'
             );
         }
-        $status = 'already published';
     }
 
     $plans[] = [
@@ -326,6 +628,7 @@ foreach ($definitions as $definition) {
         'documents' => $documents,
         'chapters' => $chapters,
         'status' => $status,
+        'existing' => $existing,
     ];
 }
 
@@ -338,7 +641,7 @@ foreach ($plans as $plan) {
 
 if (!$options['execute']) {
     echo "Dry run complete. No Moodle data was changed.\n";
-    echo "Run the same command with --execute to create the Books.\n";
+    echo "Run the same command with --execute to create or update the Books.\n";
     exit(0);
 }
 
@@ -349,87 +652,57 @@ if (!$admin) {
 \core\session\manager::set_user($admin);
 
 foreach ($plans as $plan) {
-    if ($plan['status'] === 'already published') {
-        echo "Skipping existing verified Book: {$plan['bookname']}\n";
-        continue;
-    }
-
     $transaction = $DB->start_delegated_transaction();
     try {
-        $moduleinfo = (object)[
-            'modulename' => 'book',
-            'module' => $bookmodule->id,
-            'section' => (int)$section->section,
-            'name' => $plan['bookname'],
-            'intro' => '<p data-scorm-word-book="1">Online index of the generated SCORM exam ' .
-                'library. Select a category and then an exam to read it in Moodle.</p>',
-            'introformat' => FORMAT_HTML,
-            'numbering' => BOOK_NUM_BULLETS,
-            'customtitles' => 0,
-            'visible' => 1,
-            'visibleoncoursepage' => 1,
-            'groupmode' => 0,
-            'groupingid' => 0,
-            'completion' => COMPLETION_DISABLED,
-            'completionview' => COMPLETION_VIEW_NOT_REQUIRED,
-            'completionexpected' => 0,
-            'availability' => null,
-            'showdescription' => 0,
-        ];
-        $created = add_moduleinfo($moduleinfo, $course);
-        $book = $DB->get_record('book', ['id' => $created->instance], '*', MUST_EXIST);
-        $context = context_module::instance($created->coursemodule);
-        $pagenum = 1;
-
-        foreach ($plan['library'] as $sourcecourse => $sections) {
-            $coursecontent = html_writer::tag(
-                'p',
-                'Choose a topic from the Book table of contents. Each topic lists the available exams.'
-            );
-            $coursechapter = scorm_word_add_chapter(
-                $book,
-                $pagenum++,
-                false,
-                $sourcecourse,
-                $coursecontent
-            );
-            \mod_book\event\chapter_created::create_from_chapter(
-                $book,
-                $context,
-                $coursechapter
-            )->trigger();
-            foreach ($sections as $sourcesection => $files) {
-                $chapter = scorm_word_add_chapter(
-                    $book,
-                    $pagenum++,
-                    true,
-                    $sourcesection,
-                    ''
-                );
-                $chapter->content = scorm_word_exam_links(
-                    $files,
-                    $plan['folder']->cmid,
-                    $created->coursemodule,
-                    $chapter->id
-                );
-                $chapter->timemodified = time();
-                $DB->update_record('book_chapters', $chapter);
-                \mod_book\event\chapter_created::create_from_chapter(
-                    $book,
-                    $context,
-                    $chapter
-                )->trigger();
-            }
+        if ($plan['existing']) {
+            $book = $plan['existing'];
+            $bookcmid = (int)$book->cmid;
+        } else {
+            $moduleinfo = (object)[
+                'modulename' => 'book',
+                'module' => $bookmodule->id,
+                'section' => (int)$section->section,
+                'name' => $plan['bookname'],
+                'intro' => '<p data-scorm-word-book="2">Online index of the generated SCORM exam ' .
+                    'library. Select a category, topic and exam to read it in Moodle.</p>',
+                'introformat' => FORMAT_HTML,
+                'numbering' => BOOK_NUM_BULLETS,
+                'customtitles' => 0,
+                'visible' => 1,
+                'visibleoncoursepage' => 1,
+                'groupmode' => 0,
+                'groupingid' => 0,
+                'completion' => COMPLETION_DISABLED,
+                'completionview' => COMPLETION_VIEW_NOT_REQUIRED,
+                'completionexpected' => 0,
+                'availability' => null,
+                'showdescription' => 0,
+            ];
+            $created = add_moduleinfo($moduleinfo, $course);
+            $bookcmid = (int)$created->coursemodule;
+            $book = $DB->get_record('book', ['id' => $created->instance], '*', MUST_EXIST);
         }
 
-        $DB->set_field('book', 'revision', $book->revision + 1, ['id' => $book->id]);
-        book_preload_chapters($book);
+        $context = context_module::instance($bookcmid);
+        scorm_word_refresh_book(
+            $book,
+            $bookcmid,
+            $context,
+            $plan['folder'],
+            $plan['library']
+        );
+        $DB->set_field(
+            'course_modules',
+            'visibleoncoursepage',
+            0,
+            ['id' => $plan['folder']->cmid]
+        );
         $transaction->allow_commit();
-        echo "Created {$plan['bookname']} (CM {$created->coursemodule}).\n";
+        echo "Updated {$plan['bookname']} (CM {$bookcmid}); source folder is now stealth.\n";
     } catch (Throwable $exception) {
         $transaction->rollback($exception);
     }
 }
 
 rebuild_course_cache($courseid, true);
-echo "Online Books published. Existing folders and Word files were not changed.\n";
+echo "Online Books published with clear indexes. Source Word files were not changed.\n";
