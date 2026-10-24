@@ -167,18 +167,24 @@ class ScormWordExportTest(unittest.TestCase):
 
         self.assertIn("Why these matches are correct", xml)
         self.assertIn("the matching exercise", xml)
-        self.assertIn("shown under Correct matches", xml)
+        self.assertIn("source key distinguishes the items", xml)
+        self.assertIn("Match 1 — Herb A", xml)
+        self.assertIn("1 keyed association", xml)
         self.assertNotIn("Herb A → Function A", xml)
         self.assertNotIn("Herb B → Function B", xml)
         self.assertIn("How incorrect matches are evaluated", xml)
-        self.assertIn("must be paired with its keyed match", xml)
+        self.assertIn("Interchanging the groups for Herb A and Herb B", xml)
 
     def test_long_duplicate_matching_reference_list_is_not_rendered(self) -> None:
         question = {
             "__type": "MatchingQuestion",
             "QuestionText": "Comparison Herb A Vs. Herb B\nMatch each herb.",
-            "LeftColumn": [{"Id": 1, "Content": "Herb A"}],
-            "RightColumn": [{"Id": 1, "Content": "Function A"}],
+            "LeftColumn": [
+                {"Id": 1, "Content": "Herb A\nCategory: Warm interior herbs"}
+            ],
+            "RightColumn": [
+                {"Id": 1, "Content": "Formulas:\nFormula A\nFormula B"}
+            ],
             "Feedback": ["Long source " * 150, "Long source " * 150],
         }
         builder = EXPORTER.DocxBuilder("Test")
@@ -188,7 +194,8 @@ class ScormWordExportTest(unittest.TestCase):
         self.assertNotIn("Detailed source review", xml)
         self.assertNotIn("Long source", xml)
         self.assertIn("Comparison Herb A Vs. Herb B", xml)
-        self.assertIn("shown under Correct matches", xml)
+        self.assertIn("classified as Warm interior herbs", xml)
+        self.assertIn("2 formula associations", xml)
         self.assertNotIn("Herb A → Function A", xml)
 
     def test_safe_segment_removes_path_characters(self) -> None:

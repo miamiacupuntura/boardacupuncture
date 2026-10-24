@@ -584,6 +584,56 @@ def feedback_headings(question: dict[str, Any]) -> tuple[str, str]:
     return "Why the correct answer is correct", "Why the other options are incorrect"
 
 
+def matching_pair_details(question: dict[str, Any]) -> list[tuple[str, str, str, int]]:
+    """Extract a short name, category, association label, and count for each pair."""
+    right = {item.get("Id"): answer_text(item) for item in question.get("RightColumn", [])}
+    details = []
+    for item in question.get("LeftColumn", []):
+        lefttext = answer_text(item)
+        leftlines = [line.strip() for line in lefttext.splitlines() if line.strip()]
+        name = leftlines[0] if leftlines else "Item"
+        category = next(
+            (
+                line.split(":", 1)[1].strip().rstrip(".")
+                for line in leftlines
+                if line.casefold().startswith("category:") and ":" in line
+            ),
+            "the category shown in the keyed match",
+        )
+        righttext = right.get(item.get("Id"), "")
+        rightlines = [line.strip() for line in righttext.splitlines() if line.strip()]
+        header = rightlines[0].rstrip(":").casefold() if rightlines else ""
+        if rightlines and rightlines[0].endswith(":"):
+            associations = rightlines[1:]
+        else:
+            associations = rightlines
+        associationlabel = "formula association" if header in {"formula", "formulas"} else "keyed association"
+        details.append((name, category, associationlabel, len(associations)))
+    return details
+
+
+def matching_feedback_summary(question: dict[str, Any], target: str) -> str:
+    """Explain the evidence used by a Matching key without restating its long lists."""
+    details = matching_pair_details(question)
+    lines = [
+        f"For {target}, the source key distinguishes the items by their classification "
+        "and keyed associations, not by shared symptoms or actions alone."
+    ]
+    for index, (name, category, associationlabel, associationcount) in enumerate(
+        details, start=1
+    ):
+        counttext = (
+            f"{associationcount} {associationlabel}"
+            if associationcount == 1
+            else f"{associationcount} {associationlabel}s"
+        )
+        lines.append(
+            f"Match {index} — {name}: classified as {category}; paired with the "
+            f"{counttext} shown in its Correct match card."
+        )
+    return "\n".join(lines)
+
+
 def correct_feedback_summary(
     question: dict[str, Any],
     target: str,
@@ -598,10 +648,7 @@ def correct_feedback_summary(
             "by the source activity."
         )
     elif questiontype == "MatchingQuestion":
-        summary = (
-            f"For {target}, the pairings shown under Correct matches are the keyed "
-            "relationships from the source activity."
-        )
+        return matching_feedback_summary(question, target)
     elif questiontype == "MultipleResponseQuestion":
         summary = (
             "The selections shown under Correct answer(s) are the complete set keyed by "
@@ -620,8 +667,6 @@ def correct_feedback_summary(
     else:
         summary = f"For {target}, the source bank answer key is {answerkey}."
 
-    if questiontype == "MatchingQuestion" and not hassourcereview:
-        return summary
     if hassourcereview:
         return summary + " The detailed source review above supplies the retained rationale."
     return summary + " The original SCORM question does not contain a more detailed rationale."
@@ -672,9 +717,14 @@ def nonchoice_evaluation_guidance(question: dict[str, Any]) -> str:
             "shown above, subject to the matching rules configured in the source activity."
         )
     if questiontype == "MatchingQuestion":
+        details = matching_pair_details(question)
+        names = [name for name, _category, _label, _count in details]
+        distinction = " and ".join(names[:2]) if len(names) == 2 else "the matched items"
         return (
-            "Each item must be paired with its keyed match shown above. A different pairing "
-            "is evaluated as incorrect by the source activity."
+            "Keep each item with the classification and association group shown in its "
+            "numbered card. "
+            f"Interchanging the groups for {distinction} would attach the source associations "
+            "to the wrong item and is evaluated as an incorrect match."
         )
     if questiontype == "SequenceQuestion":
         return (

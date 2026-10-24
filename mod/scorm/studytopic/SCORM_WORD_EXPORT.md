@@ -76,7 +76,9 @@ are omitted from Matching questions because they are not match-specific
 feedback. Matching explanations identify the comparison title rather than using
 a generic `question prompt` label. Each pair is displayed as a numbered card
 with separate `Item` and `Correct match` fields so long multiline values do not
-run together around a single arrow.
+run together around a single arrow. Its feedback then states each item's
+classification and the number/type of keyed associations, and explains that
+swapping those groups attaches the source relationships to the wrong item.
 
 ## Validate before publishing
 
