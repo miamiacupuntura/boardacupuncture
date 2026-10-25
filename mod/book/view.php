@@ -115,6 +115,11 @@ if (str_starts_with($book->name, 'Simulation Exam Key')) {
         'index' => 'Simulation Exam Key Index',
         'collection' => 'Herbal Medicine Simulations',
     ];
+} else if (str_starts_with($book->name, 'Formula Exam Key')) {
+    $directcollection = [
+        'index' => 'Formula Exam Key Index',
+        'collection' => 'Formulas',
+    ];
 } else if (str_starts_with($book->name, 'Single Herb Exam Key')) {
     $directcollection = [
         'index' => 'Single Herb Exam Key Index',
