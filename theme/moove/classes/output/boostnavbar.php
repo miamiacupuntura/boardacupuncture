@@ -65,6 +65,7 @@ class boostnavbar implements \renderable {
             $coursenode = $this->get_item($this->page->course->id);
             if ($coursenode !== null) {
                 $coursenode->action = new moodle_url('/my/');
+                $coursenode->text = 'Exam Key';
             }
         }
     }
