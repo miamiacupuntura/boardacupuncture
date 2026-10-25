@@ -754,8 +754,9 @@ function scorm_word_refresh_book(
     } else if (str_starts_with($bookname, 'Simulation')) {
         $map['index']->title = 'Simulation Exam Key Index';
     } else {
-        $map['index']->title = str_starts_with($bookname, 'Herb')
-            ? 'Herb Exam Key Index'
+        $map['index']->title = (str_starts_with($bookname, 'Herb') ||
+                str_starts_with($bookname, 'Single Herb'))
+            ? 'Single Herb Exam Key Index'
             : 'Formula Exam Key Index';
     }
     $map['index']->content = scorm_word_main_index($library, $bookcmid, $map['courses']);
@@ -891,8 +892,9 @@ $definitions = [
     ],
     [
         'foldername' => 'Herb Exams — Word Downloads',
-        'bookname' => 'Herb Exam Key Library',
-        'legacybookname' => 'Herb Exams — Online Book',
+        'bookname' => 'Single Herb Exam Key Library',
+        'legacybookname' => 'Herb Exam Key Library',
+        'legacybookname2' => 'Herb Exams — Online Book',
         'expected' => 950,
         'scope' => 'herbs',
         'flat' => false,
@@ -1011,7 +1013,7 @@ foreach ($definitions as $definition) {
             );
         }
         $stalechaptertitles = [];
-        if (str_starts_with($definition['bookname'], 'Herb')) {
+        if ($definition['scope'] === 'herbs') {
             foreach (scorm_word_excluded_topics() as $topics) {
                 $stalechaptertitles = array_merge($stalechaptertitles, $topics);
             }

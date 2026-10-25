@@ -241,7 +241,7 @@ sudo -u www-data php mod/scorm/studytopic/scorm_word_books.php \
 The command creates:
 
 - `Formula Exam Key Library`
-- `Herb Exam Key Library`
+- `Single Herb Exam Key Library`
 - `Handbook of Oriental Medicine — Clinical Cases`
 - `Simulation Exam Key Library`
 - `Herbology Mnemonic Resources`
