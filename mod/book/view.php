@@ -107,19 +107,30 @@ if ($iswordlibrary) {
     $PAGE->requires->css('/mod/scorm/studytopic/scorm_word_library.css');
 }
 
-// Simulation contains a single collection. Skip its redundant main index and
-// open the collection's three-topic list directly from the course activity.
-if ($iswordlibrary && !$edit && $chapter &&
-        str_starts_with($book->name, 'Simulation Exam Key') &&
+// These Books contain a single collection. Skip their redundant main indexes
+// and open the collection's topic list directly from the course activity.
+$directcollection = null;
+if (str_starts_with($book->name, 'Simulation Exam Key')) {
+    $directcollection = [
+        'index' => 'Simulation Exam Key Index',
+        'collection' => 'Herbal Medicine Simulations',
+    ];
+} else if (str_starts_with($book->name, 'Herb Exam Key')) {
+    $directcollection = [
+        'index' => 'Herb Exam Key Index',
+        'collection' => 'Single Herbs',
+    ];
+}
+if ($iswordlibrary && !$edit && $chapter && $directcollection &&
         ($chapter->importsrc === 'scorm-word-library-index' ||
-            $chapter->title === 'Simulation Exam Key Index')) {
+            $chapter->title === $directcollection['index'])) {
     foreach ($chapters as $directchapter) {
-        $issimulationcollection =
-            $directchapter->title === 'Herbal Medicine Simulations' ||
+        $issinglecollection =
+            $directchapter->title === $directcollection['collection'] ||
             (!$directchapter->subchapter &&
                 $directchapter->importsrc === 'scorm-word-library');
         if (!$directchapter->hidden && $directchapter->id !== $chapter->id &&
-                $issimulationcollection) {
+                $issinglecollection) {
             redirect(new moodle_url('/mod/book/view.php', [
                 'id' => $cm->id,
                 'chapterid' => $directchapter->id,
