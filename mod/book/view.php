@@ -111,10 +111,15 @@ if ($iswordlibrary) {
 // open the collection's three-topic list directly from the course activity.
 if ($iswordlibrary && !$edit && $chapter &&
         str_starts_with($book->name, 'Simulation Exam Key') &&
-        $chapter->importsrc === 'scorm-word-library-index') {
+        ($chapter->importsrc === 'scorm-word-library-index' ||
+            $chapter->title === 'Simulation Exam Key Index')) {
     foreach ($chapters as $directchapter) {
-        if (!$directchapter->hidden && !$directchapter->subchapter &&
-                $directchapter->importsrc === 'scorm-word-library') {
+        $issimulationcollection =
+            $directchapter->title === 'Herbal Medicine Simulations' ||
+            (!$directchapter->subchapter &&
+                $directchapter->importsrc === 'scorm-word-library');
+        if (!$directchapter->hidden && $directchapter->id !== $chapter->id &&
+                $issimulationcollection) {
             redirect(new moodle_url('/mod/book/view.php', [
                 'id' => $cm->id,
                 'chapterid' => $directchapter->id,
