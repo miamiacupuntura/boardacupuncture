@@ -183,6 +183,15 @@ if ($format->show_editor()) {
     $PAGE->set_heading($sectiontitle);
 }
 
+// The custom Board dashboard is the real main page for these section views.
+// Rewrite the legacy course breadcrumb before the theme renders it so the
+// small "Main Page" link cannot lead to the circular course Continue screen.
+foreach ($PAGE->navbar->get_items() as $navbaritem) {
+    if (strcasecmp(trim($navbaritem->get_content()), 'Main Page') === 0) {
+        $navbaritem->action = new moodle_url('/my/');
+    }
+}
+
 $PAGE->set_secondary_navigation(false);
 
 echo $OUTPUT->header();
