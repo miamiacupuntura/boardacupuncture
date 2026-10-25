@@ -27,6 +27,10 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/behat/lib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 
+$PAGE->requires->js(new moodle_url('/theme/moove/javascript/main-page-dashboard.js', [
+    'v' => '20261025-1',
+]), true);
+
 $isexamkeycourse = !empty($COURSE->id) && (int) $COURSE->id === 92;
 
 // Add block button in editing mode.
