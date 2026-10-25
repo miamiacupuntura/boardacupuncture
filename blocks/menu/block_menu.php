@@ -82,6 +82,7 @@ class block_menu extends block_base {
      * @param int|null $sectionid Optional section database ID for a direct entry point.
      * @param string|null $activityname Optional Book activity name for a direct entry point.
      * @param string|null $sectionname Optional course-section name for a direct entry point.
+     * @param string|null $custompath Optional local placeholder or curated resource path.
      * @return string
      */
     private function board_resource_button(
@@ -90,9 +91,16 @@ class block_menu extends block_base {
         string $type,
         ?int $sectionid = null,
         ?string $activityname = null,
-        ?string $sectionname = null
+        ?string $sectionname = null,
+        ?string $custompath = null
     ): string {
         global $DB;
+
+        if ($custompath !== null) {
+            $url = new moodle_url($custompath);
+            return '<a class="board-hub__action board-hub__action--' . s($type) . '" href="'
+                . $url->out(false) . '">' . s($label) . '</a>';
+        }
 
         $course = $DB->get_record('course', ['id' => $courseid, 'visible' => 1], 'id');
         if (!$course) {
@@ -267,7 +275,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [113, 'Questions', 'questions'],
                         [118, 'Simulation', 'simulation'],
-                        [120, 'Exam Key', 'notes'],
+                        [120, 'Exam Key', 'notes', null, null, null, '/blocks/menu/clean-needle-exam-key.php'],
                         [119, 'Games', 'games'],
                     ],
                 ],
@@ -285,7 +293,8 @@ class block_menu extends block_base {
                         $resource[2],
                         $resource[3] ?? null,
                         $resource[4] ?? null,
-                        $resource[5] ?? null
+                        $resource[5] ?? null,
+                        $resource[6] ?? null
                     );
                 }
                 $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
