@@ -255,7 +255,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [36, 'Questions', 'questions'],
                         [42, 'Simulation', 'simulation'],
-                        [91, 'Exam Key', 'notes'],
+                        [91, 'Exam Key', 'notes', null, null, 'Cells and Tissue. Feed Back'],
                         [84, 'Games', 'games'],
                     ],
                 ],
