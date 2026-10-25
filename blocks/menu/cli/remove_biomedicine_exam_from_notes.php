@@ -26,8 +26,9 @@ if ($options['help']) {
     echo "Options:\n";
     echo "  --execute, -x    Apply the change. Without this option, only show the plan.\n";
     echo "  --delete-source, -d\n";
-    echo "                   Permanently delete the Notes copy only when a Questions copy exists\n";
-    echo "                   and the Notes copy has no attempts. Requires --execute.\n";
+    echo "                   Permanently delete the Notes copy only when a Questions copy exists.\n";
+    echo "                   Existing Notes attempts must also exist in Questions and are archived\n";
+    echo "                   to JSON before deletion. Requires --execute.\n";
     echo "  --help, -h       Show this help.\n";
     exit(0);
 }
@@ -42,6 +43,7 @@ $source = $DB->get_record_sql(
             cm.visibleoncoursepage,
             s.id AS scormid,
             s.name,
+            s.sha1hash,
             c.fullname AS coursename
        FROM {scorm} s
        JOIN {course_modules} cm ON cm.instance = s.id
@@ -59,7 +61,7 @@ $source = $DB->get_record_sql(
 );
 
 $examcopies = $DB->get_records_sql(
-    "SELECT cm.id AS cmid, s.id AS scormid, s.name
+    "SELECT cm.id AS cmid, s.id AS scormid, s.name, s.sha1hash
        FROM {scorm} s
        JOIN {course_modules} cm ON cm.instance = s.id
        JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
@@ -83,23 +85,91 @@ if ($options['delete-source']) {
     if (!$examcopies) {
         cli_error('Refusing deletion: no matching copy exists in Biomedicine Exams.');
     }
-    if ($sourceattempts > 0) {
-        cli_error(
-            'Refusing deletion: the Notes copy has learner attempts. ' .
-            'Review or migrate them before deleting this activity.'
-        );
+    $target = reset($examcopies);
+    $sourceattemptrecords = $DB->get_records(
+        'scorm_attempt',
+        ['scormid' => $source->scormid],
+        'userid ASC, attempt ASC'
+    );
+    foreach ($sourceattemptrecords as $attempt) {
+        if (!$DB->record_exists('scorm_attempt', [
+            'scormid' => $target->scormid,
+            'userid' => $attempt->userid,
+        ])) {
+            cli_error(
+                "Refusing deletion: user {$attempt->userid} has an attempt in Notes " .
+                'but none in Biomedicine Exams.'
+            );
+        }
     }
 
+    $archivepath = '/var/tmp/biomedicine-notes-cm' . $source->cmid . '-attempts.json';
     if (!$options['execute']) {
         mtrace("PLAN: permanently delete duplicate CM {$source->cmid} from Biomedicine Notes.");
+        mtrace("PLAN: archive {$sourceattempts} Notes attempts to {$archivepath}.");
         mtrace('The matching activity in Biomedicine Exams will not be changed.');
         mtrace('Run again with --delete-source --execute after reviewing this plan.');
         exit(0);
     }
 
+    $archive = [
+        'created_at' => gmdate('c'),
+        'source' => [
+            'courseid' => $notescourseid,
+            'cmid' => (int) $source->cmid,
+            'scormid' => (int) $source->scormid,
+            'name' => $source->name,
+            'sha1hash' => $source->sha1hash,
+        ],
+        'target' => [
+            'courseid' => $examcourseid,
+            'cmid' => (int) $target->cmid,
+            'scormid' => (int) $target->scormid,
+            'name' => $target->name,
+            'sha1hash' => $target->sha1hash,
+        ],
+        'attempts' => [],
+    ];
+    foreach ($sourceattemptrecords as $attempt) {
+        $user = $DB->get_record('user', ['id' => $attempt->userid], 'id,username', MUST_EXIST);
+        $values = $DB->get_records_sql(
+            "SELECT v.id,
+                    v.scoid,
+                    sco.identifier AS scoidentifier,
+                    sco.title AS scotitle,
+                    e.element,
+                    v.value,
+                    v.timemodified
+               FROM {scorm_scoes_value} v
+               JOIN {scorm_scoes} sco ON sco.id = v.scoid
+               JOIN {scorm_element} e ON e.id = v.elementid
+              WHERE v.attemptid = :attemptid
+           ORDER BY v.id ASC",
+            ['attemptid' => $attempt->id]
+        );
+        $archive['attempts'][] = [
+            'id' => (int) $attempt->id,
+            'userid' => (int) $attempt->userid,
+            'username' => $user->username,
+            'attempt' => (int) $attempt->attempt,
+            'values' => array_values(array_map(
+                static fn(stdClass $value): array => (array) $value,
+                $values
+            )),
+        ];
+    }
+    $archivejson = json_encode(
+        $archive,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+    );
+    if ($archivejson === false || file_put_contents($archivepath, $archivejson, LOCK_EX) === false) {
+        cli_error("Could not write the attempt archive to {$archivepath}; nothing was deleted.");
+    }
+
     course_delete_module((int) $source->cmid, false);
     rebuild_course_cache($notescourseid, true);
     mtrace("Deleted duplicate CM {$source->cmid} from Biomedicine Notes.");
+    mtrace("Archived {$sourceattempts} Notes attempts to {$archivepath}.");
     mtrace('The matching activity in Biomedicine Exams was not changed.');
     exit(0);
 }
