@@ -4,6 +4,7 @@
   const search = document.querySelector('[data-comparison-search]');
   const filters = [...document.querySelectorAll('[data-filter]')];
   const cards = [...document.querySelectorAll('.comparison-card')];
+  const grid = document.querySelector('[data-comparison-grid]');
   const count = document.querySelector('[data-visible-count]');
   const empty = document.querySelector('[data-comparison-empty]');
   let activeFilter = 'all';
@@ -11,6 +12,20 @@
   function normalise(value) {
     return String(value || '').toLocaleLowerCase().normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function alphabeticalTitle(card) {
+    const heading = card.querySelector('h3');
+    return normalise(heading ? heading.textContent : card.textContent)
+      .replace(/^[^a-z0-9]+/, '');
+  }
+
+  if (grid) {
+    cards.sort((first, second) => alphabeticalTitle(first).localeCompare(
+      alphabeticalTitle(second),
+      'en',
+      {numeric: true, sensitivity: 'base'}
+    )).forEach(card => grid.appendChild(card));
   }
 
   function refresh() {
