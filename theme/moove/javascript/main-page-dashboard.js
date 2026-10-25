@@ -1,21 +1,24 @@
 (function () {
     'use strict';
 
-    const label = 'Main Page';
+    const dashboardLabels = new Set([
+        'Main Page',
+        'Foundation Notes',
+    ]);
     const siteRoot = window.M && M.cfg && M.cfg.wwwroot
         ? M.cfg.wwwroot.replace(/\/$/, '')
         : '';
     const dashboardUrl = `${siteRoot}/my/`;
 
-    function isMainPageBreadcrumb(link) {
+    function isDashboardBreadcrumb(link) {
         return link instanceof HTMLAnchorElement &&
             link.closest('.breadcrumb') !== null &&
-            link.textContent.replace(/\s+/g, ' ').trim() === label;
+            dashboardLabels.has(link.textContent.replace(/\s+/g, ' ').trim());
     }
 
     function rewriteMainPageBreadcrumb() {
         document.querySelectorAll('.breadcrumb a').forEach(link => {
-            if (isMainPageBreadcrumb(link)) {
+            if (isDashboardBreadcrumb(link)) {
                 link.href = dashboardUrl;
             }
         });
@@ -23,7 +26,7 @@
 
     document.addEventListener('click', event => {
         const link = event.target.closest('.breadcrumb a');
-        if (!isMainPageBreadcrumb(link)) {
+        if (!isDashboardBreadcrumb(link)) {
             return;
         }
         event.preventDefault();
