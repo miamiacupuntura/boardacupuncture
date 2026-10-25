@@ -54,11 +54,14 @@ class boostnavbar implements \renderable {
         }
 
         // The Herbology Exam Key section is entered from the custom dashboard.
-        // Its "Main Page" breadcrumb must return there instead of reopening
-        // the legacy Herbology Notes course front page.
-        if ($this->page->context->contextlevel === CONTEXT_COURSE &&
-                (int) $this->page->course->id === 92 &&
-                (int) $this->page->url->get_param('id') === 2020) {
+        // Its course breadcrumb must return there instead of reopening the
+        // legacy course front page and its circular "Continue" prompt.
+        $isexamkeysection =
+            ($this->page->context->contextlevel === CONTEXT_COURSE &&
+                (int) $this->page->url->get_param('id') === 2020) ||
+            ($this->page->context->contextlevel === CONTEXT_MODULE &&
+                (int) $this->page->cm->section === 2020);
+        if ((int) $this->page->course->id === 92 && $isexamkeysection) {
             $coursenode = $this->get_item($this->page->course->id);
             if ($coursenode !== null) {
                 $coursenode->action = new moodle_url('/my/');
