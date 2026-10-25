@@ -245,6 +245,7 @@ The command creates:
 - `Handbook of Oriental Medicine — Clinical Cases`
 - `Simulation Exam Key Library`
 - `Herbology Mnemonic Resources`
+- `Single Herbs A-Z — Comparative Functions`
 
 It never replaces or deletes an existing activity. Repeated execution safely
 refreshes Books previously created by this tool. Books created by the first
@@ -257,7 +258,9 @@ opens directly without intermediate category pages. Herbal Medicine simulations 
 promoted into the standalone Simulation library, and the numbered-plate memory
 aids are promoted into Herbology Mnemonic Resources. Its activity opens the
 Herbs Licence Plate list directly without an intermediate collection page. The
-source Word documents are not moved or deleted.
+Single Herbs A-Z comparative-function topic is likewise promoted into its own
+Book and opens directly to its alphabetical answer-key list. The source Word
+documents are not moved or deleted.
 
 ## Custom course selection
 

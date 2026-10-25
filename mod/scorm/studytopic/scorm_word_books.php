@@ -53,7 +53,7 @@ The command performs a dry run unless --execute is provided.
 Options:
   -c, --course=ID     Target Moodle course ID (default: 92)
   -s, --section=ID    Target course_sections database ID (default: 2020)
-  -x, --execute       Create or update the five Book activities
+  -x, --execute       Create or update the six Book activities
   -h, --help          Show this help
 
 Example:
@@ -214,6 +214,52 @@ function scorm_word_without_formula_review(array $library): array {
         unset($library[$sourcecourse]);
     }
     return $library;
+}
+
+/**
+ * Topic promoted from the Single Herb library to its own comparison library.
+ *
+ * @return array{course: string, topic: string}
+ */
+function scorm_word_single_herb_comparisons_topic(): array {
+    return [
+        'course' => 'Single Herbs Exams',
+        'topic' => 'Single Herbs A-Z (Comparative Functions)',
+    ];
+}
+
+/**
+ * Remove the A-Z comparative-function topic from the general Herb library.
+ *
+ * @param array $library Grouped Herb library.
+ * @return array Filtered library.
+ */
+function scorm_word_without_single_herb_comparisons(array $library): array {
+    $comparisons = scorm_word_single_herb_comparisons_topic();
+    unset($library[$comparisons['course']][$comparisons['topic']]);
+    if (isset($library[$comparisons['course']]) && !$library[$comparisons['course']]) {
+        unset($library[$comparisons['course']]);
+    }
+    return $library;
+}
+
+/**
+ * Build the standalone A-Z comparative-function library.
+ *
+ * @param array $library Grouped Herb library.
+ * @return array Standalone comparison library.
+ */
+function scorm_word_only_single_herb_comparisons(array $library): array {
+    $comparisons = scorm_word_single_herb_comparisons_topic();
+    $files = $library[$comparisons['course']][$comparisons['topic']] ?? [];
+    if (!$files) {
+        cli_error("Comparison source topic '{$comparisons['topic']}' was not found.");
+    }
+    return [
+        'Single Herb Comparisons' => [
+            $comparisons['topic'] => $files,
+        ],
+    ];
 }
 
 /**
@@ -482,6 +528,9 @@ function scorm_word_book_intro(string $bookname): string {
     } else if (str_starts_with($bookname, 'Herbology Mnemonic')) {
         return '<p data-scorm-word-book="2"><strong>Herbology Mnemonic Resources.</strong> ' .
             'Review memory aids connecting numbered plates, herb properties and pinyin.</p>';
+    } else if (str_starts_with($bookname, 'Single Herbs A-Z')) {
+        return '<p data-scorm-word-book="2"><strong>Single Herbs A-Z — Comparative Functions.</strong> ' .
+            'Review comparative-function answer keys in one dedicated library.</p>';
     } else if (str_starts_with($bookname, 'Combination')) {
         $subject = 'Combination';
     } else if (str_starts_with($bookname, 'Simulation')) {
@@ -932,6 +981,16 @@ $definitions = [
         'flattitle' => 'Herbs Licence Plate',
         'visibleoncoursepage' => 1,
     ],
+    [
+        'foldername' => 'Herb Exams — Word Downloads',
+        'bookname' => 'Single Herbs A-Z — Comparative Functions',
+        'legacybookname' => 'Single Herbs A-Z — Comparative Functions',
+        'expected' => 950,
+        'scope' => 'comparisons',
+        'flat' => true,
+        'flattitle' => 'Single Herbs A-Z (Comparative Functions)',
+        'visibleoncoursepage' => 1,
+    ],
 ];
 $plans = [];
 
@@ -959,11 +1018,13 @@ foreach ($definitions as $definition) {
         }
         $library = scorm_word_add_formula_review($sourcelibrary, $herbsourcelibrary);
     } else if ($definition['scope'] === 'herbs') {
-        $library = scorm_word_rehome_single_herbs_review(
-            scorm_word_without_mnemonics(
-                scorm_word_without_simulations(
-                    scorm_word_without_formula_review(
-                        scorm_word_without_clinical_cases($sourcelibrary)
+        $library = scorm_word_without_single_herb_comparisons(
+            scorm_word_rehome_single_herbs_review(
+                scorm_word_without_mnemonics(
+                    scorm_word_without_simulations(
+                        scorm_word_without_formula_review(
+                            scorm_word_without_clinical_cases($sourcelibrary)
+                        )
                     )
                 )
             )
@@ -974,6 +1035,8 @@ foreach ($definitions as $definition) {
         $library = scorm_word_only_simulations($sourcelibrary);
     } else if ($definition['scope'] === 'mnemonics') {
         $library = scorm_word_only_mnemonics($sourcelibrary);
+    } else if ($definition['scope'] === 'comparisons') {
+        $library = scorm_word_only_single_herb_comparisons($sourcelibrary);
     } else {
         $library = $sourcelibrary;
     }
@@ -1036,6 +1099,8 @@ foreach ($definitions as $definition) {
                 $stalechaptertitles,
                 array_keys($sourcelibrary[$mnemoniccourse] ?? [])
             );
+            $comparisons = scorm_word_single_herb_comparisons_topic();
+            $stalechaptertitles[] = $comparisons['topic'];
         }
         $generatedchapters = $DB->get_records(
             'book_chapters',
