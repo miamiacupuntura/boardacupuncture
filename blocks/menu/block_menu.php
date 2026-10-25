@@ -80,13 +80,15 @@ class block_menu extends block_base {
      * @param string $label Button label.
      * @param string $type Visual button type.
      * @param int|null $sectionid Optional section database ID for a direct entry point.
+     * @param string|null $activityname Optional Book activity name for a direct entry point.
      * @return string
      */
     private function board_resource_button(
         int $courseid,
         string $label,
         string $type,
-        ?int $sectionid = null
+        ?int $sectionid = null,
+        ?string $activityname = null
     ): string {
         global $DB;
 
@@ -95,7 +97,30 @@ class block_menu extends block_base {
             return '<span class="board-hub__action board-hub__action--pending">' . s($label) . '</span>';
         }
 
-        if ($sectionid !== null) {
+        if ($activityname !== null) {
+            $activity = $DB->get_record_sql(
+                "SELECT cm.id
+                   FROM {course_modules} cm
+                   JOIN {modules} m ON m.id = cm.module
+                   JOIN {book} b ON b.id = cm.instance
+                  WHERE cm.course = :courseid
+                    AND cm.visible = 1
+                    AND cm.deletioninprogress = 0
+                    AND m.name = :modulename
+                    AND b.name = :activityname",
+                [
+                    'courseid' => $courseid,
+                    'modulename' => 'book',
+                    'activityname' => $activityname,
+                ],
+                IGNORE_MULTIPLE
+            );
+            if ($activity) {
+                $url = new moodle_url('/mod/book/view.php', ['id' => $activity->id]);
+            } else {
+                $url = new moodle_url('/course/view.php', ['id' => $courseid]);
+            }
+        } else if ($sectionid !== null) {
             $url = new moodle_url('/course/section.php', ['id' => $sectionid]);
         } else {
             $url = new moodle_url('/course/view.php', ['id' => $courseid]);
@@ -175,7 +200,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [30, 'Questions', 'questions'],
                         [43, 'Simulation', 'simulation'],
-                        [93, 'Exam Key', 'notes'],
+                        [93, 'Exam Key', 'notes', null, 'Book Notes'],
                         [48, 'Games', 'games'],
                     ],
                 ],
@@ -240,7 +265,8 @@ class block_menu extends block_base {
                         $resource[0],
                         $resource[1],
                         $resource[2],
-                        $resource[3] ?? null
+                        $resource[3] ?? null,
+                        $resource[4] ?? null
                     );
                 }
                 $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
