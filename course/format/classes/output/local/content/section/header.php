@@ -82,7 +82,7 @@ error_log("ACUP_DEBUG: section=" . $section->section .
     " currentsection=" . $currentsection .
     " mainsection=" . ($_SESSION["mainsection"] ?? "NULL") .
     " outside_before=" . ($outside ? "true" : "false"));
-		$courseurl = $format->get_view_url(null);
+		$courseurl = new \moodle_url('/my/');
 		$modinfo = $format->get_modinfo();
 
 		$finalaverage = "";
