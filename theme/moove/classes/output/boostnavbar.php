@@ -52,6 +52,18 @@ class boostnavbar implements \renderable {
         if (!$settings->enableclassicbreadcrumb) {
             $this->prepare_nodes_for_boost();
         }
+
+        // The Herbology Exam Key section is entered from the custom dashboard.
+        // Its "Main Page" breadcrumb must return there instead of reopening
+        // the legacy Herbology Notes course front page.
+        if ($this->page->context->contextlevel === CONTEXT_COURSE &&
+                (int) $this->page->course->id === 92 &&
+                (int) $this->page->url->get_param('id') === 2020) {
+            $coursenode = $this->get_item($this->page->course->id);
+            if ($coursenode !== null) {
+                $coursenode->action = new moodle_url('/my/');
+            }
+        }
     }
 
     /**
