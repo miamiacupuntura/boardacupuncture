@@ -54,9 +54,10 @@ class boostnavbar implements \renderable {
         }
 
         $coursenode = $this->get_item($this->page->course->id);
-        if ($coursenode !== null &&
-                strcasecmp(trim((string) $coursenode->text), 'Main Page') === 0) {
-            $coursenode->action = new moodle_url('/my/');
+        foreach ($this->items as $item) {
+            if (strcasecmp(trim((string) $item->text), 'Main Page') === 0) {
+                $item->action = new moodle_url('/my/');
+            }
         }
 
         // The Herbology Exam Key section is entered from the custom dashboard.
