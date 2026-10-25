@@ -81,6 +81,7 @@ class block_menu extends block_base {
      * @param string $type Visual button type.
      * @param int|null $sectionid Optional section database ID for a direct entry point.
      * @param string|null $activityname Optional Book activity name for a direct entry point.
+     * @param string|null $sectionname Optional course-section name for a direct entry point.
      * @return string
      */
     private function board_resource_button(
@@ -88,7 +89,8 @@ class block_menu extends block_base {
         string $label,
         string $type,
         ?int $sectionid = null,
-        ?string $activityname = null
+        ?string $activityname = null,
+        ?string $sectionname = null
     ): string {
         global $DB;
 
@@ -117,6 +119,22 @@ class block_menu extends block_base {
             );
             if ($activity) {
                 $url = new moodle_url('/mod/book/view.php', ['id' => $activity->id]);
+            } else {
+                $url = new moodle_url('/course/view.php', ['id' => $courseid]);
+            }
+        } else if ($sectionname !== null) {
+            $section = $DB->get_record(
+                'course_sections',
+                [
+                    'course' => $courseid,
+                    'name' => $sectionname,
+                    'visible' => 1,
+                ],
+                'id',
+                IGNORE_MULTIPLE
+            );
+            if ($section) {
+                $url = new moodle_url('/course/section.php', ['id' => $section->id]);
             } else {
                 $url = new moodle_url('/course/view.php', ['id' => $courseid]);
             }
@@ -212,7 +230,7 @@ class block_menu extends block_base {
                     'resources' => [
                         [34, 'Questions', 'questions'],
                         [40, 'Simulation', 'simulation'],
-                        [94, 'Exam Key', 'notes'],
+                        [94, 'Exam Key', 'notes', null, null, 'Point Indication. Miscelaneous'],
                         [83, 'Games', 'games'],
                     ],
                 ],
@@ -266,7 +284,8 @@ class block_menu extends block_base {
                         $resource[1],
                         $resource[2],
                         $resource[3] ?? null,
-                        $resource[4] ?? null
+                        $resource[4] ?? null,
+                        $resource[5] ?? null
                     );
                 }
                 $studyguideurl = new moodle_url('/blocks/myprogress/study-guide.php', [
