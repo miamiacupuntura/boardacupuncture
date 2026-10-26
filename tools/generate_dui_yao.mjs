@@ -755,6 +755,256 @@ const pairs = [
       prep: 'Triturar ambas conchas y decoctarlas primero antes de añadir medicinas más blandas.',
       safety: 'Ambas exigen cautela en embarazo y procedencia autenticada, legal y ética. Temblor nuevo, debilidad, confusión o convulsión requiere urgencia.'
     }
+  },
+  {
+    number: 31, slug: 'du-zhong-xu-duan-dui-yao', title: 'Dù Zhòng + Xù Duàn', characters: '杜仲 + 续断',
+    category: { en: 'Strengthen the Back · Calm the Fetus', es: 'Fortalecer Espalda · Calmar Feto' },
+    search: 'du zhong xu duan eucommia dipsacus liver kidney yang sinews bones low back knees fetus pregnancy shou tai wan du huo ji sheng tang',
+    en: {
+      mnemonic: 'Rubber-thread bark plus “reconnect the broken.”',
+      job: 'Supplement Liver and Kidney, strengthen sinews and bones and stabilize pregnancy.',
+      roles: [['Dù Zhòng', 'Tonifies Liver–Kidney Yang and strongly supports the low back and knees.'], ['Xù Duàn', 'Tonifies without excessive cloying, reconnects injured sinews/bones and calms the fetus.']],
+      clues: 'Sore weak low back and knees from deficiency; classically also threatened miscarriage.',
+      formulas: 'Shòu Tāi Wán emphasizes Xù Duàn; Dú Huó Jì Shēng Tāng emphasizes Dù Zhòng.',
+      trap: 'Dù Zhòng leans toward pure deficiency; Xù Duàn also addresses injury and Blood stasis around damaged tissue.',
+      prep: 'Salt-processing may direct either medicinal more strongly toward the Kidney when specified by the source.',
+      safety: 'Pain or bleeding during pregnancy requires obstetric evaluation. Trauma with weakness, numbness or bowel/bladder change requires urgent assessment.'
+    },
+    es: {
+      mnemonic: 'Corteza con hilos de goma más “reconectar lo roto”.',
+      job: 'Suplementar Hígado/Riñón, fortalecer tendones/huesos y estabilizar embarazo.',
+      roles: [['Dù Zhòng', 'Tonifica Yang de Hígado–Riñón y apoya con fuerza espalda baja/rodillas.'], ['Xù Duàn', 'Tonifica sin empalagar demasiado, reconecta tejidos/huesos lesionados y calma feto.']],
+      clues: 'Espalda baja y rodillas doloridas/débiles por deficiencia; clásicamente amenaza de aborto.',
+      formulas: 'Shòu Tāi Wán enfatiza Xù Duàn; Dú Huó Jì Shēng Tāng enfatiza Dù Zhòng.',
+      trap: 'Dù Zhòng se inclina a deficiencia pura; Xù Duàn también aborda lesión y estasis alrededor del tejido dañado.',
+      prep: 'Procesamiento con sal puede dirigir ambas medicinas más al Riñón cuando la fuente lo especifica.',
+      safety: 'Dolor o sangrado en embarazo exige evaluación obstétrica. Trauma con debilidad, entumecimiento o cambio intestinal/vesical requiere urgencia.'
+    }
+  },
+  {
+    number: 32, slug: 'dang-gui-rou-cong-rong-dui-yao', title: 'Dāng Guī + Ròu Cōng Róng', characters: '当归 + 肉苁蓉',
+    category: { en: 'Warm and Moisten the Intestines', es: 'Calentar y Humedecer Intestinos' },
+    search: 'dang gui rou cong rong angelica cistanche nourish blood kidney yang moisten intestines elderly constipation cold back clear urine ji chuan jian',
+    en: {
+      mnemonic: 'Oil the pipes from below.',
+      job: 'Nourish Blood, warm Kidney Yang and moisten the intestines for deficiency constipation.',
+      roles: [['Dāng Guī', 'Nourishes Blood and moistens intestinal dryness.'], ['Ròu Cōng Róng', 'Gently warms Kidney Yang while moistening rather than drying.']],
+      clues: 'Constipation in an older or depleted person with cold low back, weakness and frequent clear urine.',
+      formulas: 'Jì Chuān Jiān.',
+      trap: 'Loose stools or Damp accumulation means the moistening direction is wrong.',
+      prep: 'Wine-processing may strengthen Ròu Cōng Róng’s warming and moving direction when the formula specifies it.',
+      safety: 'Avoid self-treatment for severe abdominal pain, vomiting, rigid distention or no stool and no gas; these may indicate obstruction.'
+    },
+    es: {
+      mnemonic: 'Aceitar las tuberías desde abajo.',
+      job: 'Nutrir Sangre, calentar Yang de Riñón y humedecer intestinos en estreñimiento por deficiencia.',
+      roles: [['Dāng Guī', 'Nutre Sangre y humedece sequedad intestinal.'], ['Ròu Cōng Róng', 'Calienta suavemente Yang renal mientras humedece sin resecar.']],
+      clues: 'Estreñimiento en persona mayor o agotada con espalda fría/débil y orina clara frecuente.',
+      formulas: 'Jì Chuān Jiān.',
+      trap: 'Heces sueltas o acumulación de Humedad significa que la dirección humectante es incorrecta.',
+      prep: 'Procesamiento con vino puede reforzar dirección cálida/móvil de Ròu Cōng Róng cuando se especifica.',
+      safety: 'No autocuidar dolor abdominal grave, vómito, distensión rígida o ausencia de heces y gases; puede ser obstrucción.'
+    }
+  },
+  {
+    number: 33, slug: 'di-yu-huai-mi-dui-yao', title: 'Dì Yú + Huái Mǐ', characters: '地榆 + 槐米',
+    category: { en: 'Cool Blood · Stop Lower Bleeding', es: 'Enfriar Sangre · Detener Sangrado Inferior' },
+    search: 'di yu huai mi sanguisorba sophora lower bleeding hemorrhoids blood stool hot dysentery huai hua san charred',
+    en: {
+      mnemonic: 'Two cold plugs for the back door.',
+      job: 'Cool the Blood and stop bleeding concentrated in the lower body.',
+      roles: [['Dì Yú', 'Cools Blood and astringes bleeding, especially from the lower burner.'], ['Huái Mǐ', 'Cools Liver/Large-Intestine Blood and stops hemorrhoidal or intestinal bleeding.']],
+      clues: 'Bleeding hemorrhoids, bright blood in stool or hot dysentery with blood.',
+      formulas: 'Huái Huā Sǎn.',
+      trap: 'The pair addresses hot lower bleeding; it does not explain or rule out the biomedical source.',
+      prep: 'Charred forms may emphasize hemostasis when specifically prescribed.',
+      safety: 'New rectal bleeding—especially after age 50, with weight loss, black stool, dizziness or pain—requires prompt medical evaluation.'
+    },
+    es: {
+      mnemonic: 'Dos tapones fríos para la puerta trasera.',
+      job: 'Enfriar Sangre y detener sangrado concentrado en parte inferior del cuerpo.',
+      roles: [['Dì Yú', 'Enfría Sangre y astringe sangrado, especialmente del Jiao inferior.'], ['Huái Mǐ', 'Enfría Sangre de Hígado/Intestino Grueso y detiene sangrado hemorroidal o intestinal.']],
+      clues: 'Hemorroides sangrantes, sangre roja en heces o disentería caliente con sangre.',
+      formulas: 'Huái Huā Sǎn.',
+      trap: 'Aborda sangrado inferior caliente; no explica ni descarta su causa biomédica.',
+      prep: 'Formas carbonizadas pueden enfatizar hemostasia cuando se prescriben específicamente.',
+      safety: 'Sangrado rectal nuevo—especialmente después de 50, con pérdida de peso, heces negras, mareo o dolor—requiere evaluación pronta.'
+    }
+  },
+  {
+    number: 34, slug: 'tao-ren-hong-hua-dui-yao', title: 'Táo Rén + Hóng Huā', characters: '桃仁 + 红花',
+    category: { en: 'Invigorate Blood · Dispel Stasis', es: 'Movilizar Sangre · Disipar Estasis' },
+    search: 'tao ren hong hua peach kernel safflower blood stasis clots amenorrhea fixed stabbing pain trauma tao hong si wu tang xue fu zhu yu tang',
+    en: {
+      mnemonic: 'A peach pit and red flower break up stasis.',
+      job: 'Invigorate Blood and dispel stasis for fixed pain, clots and obstructed menstruation.',
+      roles: [['Táo Rén', 'Breaks Blood stasis while moistening the intestines.'], ['Hóng Huā', 'Moves Blood through the channels and intensifies stasis dispersion.']],
+      clues: 'Painful periods with dark clots, amenorrhea, fixed stabbing pain or trauma.',
+      formulas: 'Táo Hóng Sì Wù Tāng; Xuè Fǔ Zhú Yū Tāng.',
+      trap: 'Stabbing fixed pain and purple/clotted signs point to stasis; pale diffuse pain alone points elsewhere.',
+      prep: 'Táo Rén is commonly crushed before decoction to improve extraction.',
+      safety: 'Contraindicated in pregnancy and requires anticoagulant/antiplatelet screening. Active bleeding or suspected internal injury needs urgent care.'
+    },
+    es: {
+      mnemonic: 'Un hueso de durazno y una flor roja rompen estasis.',
+      job: 'Movilizar Sangre y disipar estasis en dolor fijo, coágulos y menstruación obstruida.',
+      roles: [['Táo Rén', 'Rompe estasis de Sangre mientras humedece intestinos.'], ['Hóng Huā', 'Mueve Sangre por canales e intensifica dispersión de estasis.']],
+      clues: 'Reglas dolorosas con coágulos oscuros, amenorrea, dolor fijo punzante o trauma.',
+      formulas: 'Táo Hóng Sì Wù Tāng; Xuè Fǔ Zhú Yū Tāng.',
+      trap: 'Dolor fijo punzante y signos morados/coagulados indican estasis; dolor pálido difuso aislado apunta a otra cosa.',
+      prep: 'Táo Rén suele triturarse antes de decocción para mejorar extracción.',
+      safety: 'Contraindicada en embarazo y exige revisar anticoagulantes/antiagregantes. Sangrado activo o lesión interna sospechada requiere urgencia.'
+    }
+  },
+  {
+    number: 35, slug: 'ru-xiang-mo-yao-dui-yao', title: 'Rǔ Xiāng + Mò Yào', characters: '乳香 + 没药',
+    category: { en: 'Move Qi and Blood · Stop Pain', es: 'Mover Qi y Sangre · Detener Dolor' },
+    search: 'ru xiang mo yao frankincense myrrh blood qi trauma sores swelling pain generate flesh bi xiao huo luo dan',
+    en: {
+      mnemonic: 'Frankincense and myrrh: the wise men’s pain kit.',
+      job: 'Invigorate Blood, move Qi, reduce swelling, stop pain and support tissue repair.',
+      roles: [['Rǔ Xiāng', 'Moves Qi and Blood through the channels and relaxes sinew tension.'], ['Mò Yào', 'Breaks Blood stasis more directly and reduces fixed swelling and pain.']],
+      clues: 'Trauma, painful sores, chest or abdominal pain and painful obstruction with swelling.',
+      formulas: 'Xiǎo Huó Luò Dān.',
+      trap: 'Rǔ Xiāng leans slightly more to moving Qi; Mò Yào slightly more to breaking Blood stasis.',
+      prep: 'Use processed resins when prescribed to reduce stickiness, smoke and gastrointestinal irritation.',
+      safety: 'Contraindicated in pregnancy; screen anticoagulants and bleeding disorders. Both can cause nausea and should not replace evaluation of chest or severe abdominal pain.'
+    },
+    es: {
+      mnemonic: 'Incienso y mirra: el botiquín analgésico de los sabios.',
+      job: 'Movilizar Sangre, mover Qi, reducir hinchazón, detener dolor y apoyar reparación tisular.',
+      roles: [['Rǔ Xiāng', 'Mueve Qi/Sangre por canales y relaja tensión tendinosa.'], ['Mò Yào', 'Rompe estasis de Sangre más directamente y reduce hinchazón/dolor fijo.']],
+      clues: 'Trauma, llagas dolorosas, dolor torácico/abdominal y obstrucción dolorosa con hinchazón.',
+      formulas: 'Xiǎo Huó Luò Dān.',
+      trap: 'Rǔ Xiāng se inclina algo más a mover Qi; Mò Yào a romper estasis de Sangre.',
+      prep: 'Usar resinas procesadas cuando se indique para reducir pegajosidad, humo e irritación gastrointestinal.',
+      safety: 'Contraindicada en embarazo; revisar anticoagulantes y trastornos hemorrágicos. Ambas pueden causar náusea y no sustituyen evaluación de dolor torácico/abdominal grave.'
+    }
+  },
+  {
+    number: 36, slug: 'san-leng-e-zhu-dui-yao', title: 'Sān Léng + É Zhú', characters: '三棱 + 莪术',
+    category: { en: 'Break Qi and Blood · Disperse Masses', es: 'Romper Qi y Sangre · Dispersar Masas' },
+    search: 'san leng e zhu sparganium zedoary demolition crew break blood qi abdominal masses amenorrhea food stagnation xiang leng wan pregnancy mang xiao',
+    en: {
+      mnemonic: 'The demolition crew for hard accumulations.',
+      job: 'Forcefully break Blood and Qi, disperse masses and relieve severe fixed distention and pain.',
+      roles: [['Sān Léng', 'Breaks Blood stasis more strongly and attacks fixed masses.'], ['É Zhú', 'Breaks constrained Qi more strongly and reduces food accumulation.']],
+      clues: 'Abdominal masses, amenorrhea from stasis or severe food stagnation with fixed pain.',
+      formulas: 'Xiāng Léng Wán.',
+      trap: 'This is a forceful excess-stasis strategy, not a gentle Blood-moving pair for a deficient patient.',
+      prep: 'Vinegar-processing may direct the herbs toward the Liver and strengthen pain-relieving action when specified.',
+      safety: 'Contraindicated in pregnancy. Classical 19 Wèi warning: Máng Xiāo fears Sān Léng. Any new abdominal mass requires biomedical diagnosis.'
+    },
+    es: {
+      mnemonic: 'El equipo de demolición para acumulaciones duras.',
+      job: 'Romper con fuerza Sangre/Qi, dispersar masas y aliviar distensión/dolor fijo severo.',
+      roles: [['Sān Léng', 'Rompe estasis de Sangre con más fuerza y ataca masas fijas.'], ['É Zhú', 'Rompe Qi constreñido con más fuerza y reduce acumulación alimentaria.']],
+      clues: 'Masas abdominales, amenorrea por estasis o estancamiento alimentario grave con dolor fijo.',
+      formulas: 'Xiāng Léng Wán.',
+      trap: 'Es estrategia potente para estasis-exceso, no pareja suave para mover Sangre en paciente deficiente.',
+      prep: 'Procesamiento con vinagre puede dirigir al Hígado y reforzar alivio del dolor cuando se especifica.',
+      safety: 'Contraindicada en embarazo. Advertencia clásica 19 Wèi: Máng Xiāo teme a Sān Léng. Masa abdominal nueva requiere diagnóstico biomédico.'
+    }
+  },
+  {
+    number: 37, slug: 'ban-xia-chen-pi-dui-yao', title: 'Bàn Xià + Chén Pí', characters: '半夏 + 陈皮',
+    category: { en: 'Dry Dampness · Transform Phlegm', es: 'Secar Humedad · Transformar Flema' },
+    search: 'ban xia chen pi pinellia citrus two aged dry damp transform phlegm regulate qi nausea chest fullness er chen tang prepared aconite',
+    en: {
+      mnemonic: 'The two aged ones stop Phlegm from forming.',
+      job: 'Dry Dampness, transform Phlegm, regulate Qi and harmonize the Middle.',
+      roles: [['Bàn Xià', 'Dries Dampness, transforms Phlegm and redirects rebellious Stomach Qi downward.'], ['Chén Pí', 'Moves Qi so Dampness and Phlegm stop accumulating.']],
+      clues: 'Copious white sputum, nausea, poor appetite and a stuffy chest with a greasy coat.',
+      formulas: 'Èr Chén Tāng.',
+      trap: 'Bàn Xià handles the Phlegm already present; Chén Pí corrects Qi movement that keeps producing it.',
+      prep: 'Prepared Bàn Xià only; raw Bàn Xià is not an acceptable substitute.',
+      safety: 'Classical 18 Fǎn: Bàn Xià is incompatible with aconite medicinals. Severe vomiting, aspiration risk or breathing difficulty requires urgent care.'
+    },
+    es: {
+      mnemonic: 'Las dos añejas impiden que siga formándose Flema.',
+      job: 'Secar Humedad, transformar Flema, regular Qi y armonizar Centro.',
+      roles: [['Bàn Xià', 'Seca Humedad, transforma Flema y desciende Qi rebelde de Estómago.'], ['Chén Pí', 'Mueve Qi para que Humedad/Flema dejen de acumularse.']],
+      clues: 'Esputo blanco copioso, náusea, poco apetito y pecho tapado con capa grasosa.',
+      formulas: 'Èr Chén Tāng.',
+      trap: 'Bàn Xià trata Flema presente; Chén Pí corrige movimiento Qi que continúa produciéndola.',
+      prep: 'Solo Bàn Xià preparada; la forma cruda no es sustituto aceptable.',
+      safety: '18 Fǎn clásico: Bàn Xià es incompatible con aconitos. Vómito grave, riesgo de aspiración o disnea requiere urgencia.'
+    }
+  },
+  {
+    number: 38, slug: 'ban-xia-sheng-jiang-dui-yao', title: 'Bàn Xià + Shēng Jiāng', characters: '半夏 + 生姜',
+    category: { en: 'Stop Vomiting · Transform Phlegm', es: 'Detener Vómito · Transformar Flema' },
+    search: 'ban xia sheng jiang pinellia fresh ginger vomiting descend stomach qi phlegm detox safety xiao ban xia tang xiao chai hu er chen',
+    en: {
+      mnemonic: 'The anti-vomiting pair with built-in moderation.',
+      job: 'Descend rebellious Stomach Qi, stop vomiting and transform Phlegm.',
+      roles: [['Bàn Xià', 'Strongly redirects Stomach Qi downward and dries Phlegm-Damp.'], ['Shēng Jiāng', 'Warms and harmonizes the Stomach while reducing Bàn Xià’s irritant toxicity.']],
+      clues: 'Nausea or vomiting with Phlegm, a stuffy epigastrium and upward-rebellious Stomach Qi.',
+      formulas: 'Xiǎo Bàn Xià Tāng; also used within Xiǎo Chái Hú Tāng and Èr Chén Tāng.',
+      trap: 'Ginger moderates Bàn Xià but does not make raw Bàn Xià safe for dispensing.',
+      prep: 'Use prepared Bàn Xià only; ginger-processing also creates Jiāng Bàn Xià for vomiting-focused use.',
+      safety: 'Classical 18 Fǎn prohibits Bàn Xià with aconite. Persistent vomiting, blood, severe pain, confusion or dehydration requires urgent evaluation.'
+    },
+    es: {
+      mnemonic: 'La pareja antiemética con moderación incorporada.',
+      job: 'Descender Qi rebelde de Estómago, detener vómito y transformar Flema.',
+      roles: [['Bàn Xià', 'Desciende fuertemente Qi de Estómago y seca Flema-Humedad.'], ['Shēng Jiāng', 'Calienta/armoniza Estómago mientras reduce toxicidad irritante de Bàn Xià.']],
+      clues: 'Náusea o vómito con Flema, epigastrio tapado y Qi de Estómago rebelde hacia arriba.',
+      formulas: 'Xiǎo Bàn Xià Tāng; también dentro de Xiǎo Chái Hú Tāng y Èr Chén Tāng.',
+      trap: 'Jengibre modera Bàn Xià, pero no hace segura la Bàn Xià cruda para dispensar.',
+      prep: 'Solo Bàn Xià preparada; procesarla con jengibre crea Jiāng Bàn Xià enfocada en vómito.',
+      safety: '18 Fǎn clásico prohíbe Bàn Xià con aconito. Vómito persistente, sangre, dolor grave, confusión o deshidratación requiere urgencia.'
+    }
+  },
+  {
+    number: 39, slug: 'gua-lou-xie-bai-dui-yao', title: 'Guā Lóu + Xiè Bái', characters: '瓜蒌 + 薤白',
+    category: { en: 'Unblock Chest Yang · Dissipate Binding', es: 'Desbloquear Yang Torácico · Disipar Opresión' },
+    search: 'gua lou xie bai trichosanthes allium chest bi phlegm chest yang pain back breathlessness gua lou xie bai ban xia tang heart attack',
+    en: {
+      mnemonic: 'Sweep out Phlegm and light the chest’s pilot flame.',
+      job: 'Unblock chest Yang, dissipate Phlegm binding and move Qi through the chest.',
+      roles: [['Guā Lóu', 'Clears and sweeps Phlegm from the chest while expanding constraint.'], ['Xiè Bái', 'Warms and opens obstructed chest Yang and moves Qi.']],
+      clues: 'Chest painful obstruction radiating to the back, breathlessness and a constricted chest.',
+      formulas: 'Guā Lóu Xiè Bái Bàn Xià Tāng.',
+      trap: 'The cool Phlegm-clearing fruit and warm Yang-opening bulb deliberately balance one another.',
+      prep: 'Follow formula-specific instructions for Guā Lóu fruit, peel or seed; they are not interchangeable parts.',
+      safety: 'Classical 18 Fǎn: Guā Lóu is incompatible with aconite. Chest pain must be evaluated first for heart attack or another emergency.'
+    },
+    es: {
+      mnemonic: 'Barrer Flema y encender la llama piloto del pecho.',
+      job: 'Desbloquear Yang torácico, disipar opresión por Flema y mover Qi en pecho.',
+      roles: [['Guā Lóu', 'Aclara/barre Flema torácica mientras expande constreñimiento.'], ['Xiè Bái', 'Calienta y abre Yang de pecho obstruido y mueve Qi.']],
+      clues: 'Obstrucción dolorosa torácica que irradia a espalda, disnea y pecho constreñido.',
+      formulas: 'Guā Lóu Xiè Bái Bàn Xià Tāng.',
+      trap: 'Fruto fresco que aclara Flema y bulbo cálido que abre Yang se equilibran intencionalmente.',
+      prep: 'Seguir instrucciones para fruto, cáscara o semilla de Guā Lóu; no son partes intercambiables.',
+      safety: '18 Fǎn clásico: Guā Lóu es incompatible con aconito. Dolor torácico debe evaluarse primero por infarto u otra emergencia.'
+    }
+  },
+  {
+    number: 40, slug: 'zi-wan-kuan-dong-hua-dui-yao', title: 'Zǐ Wǎn + Kuǎn Dōng Huā', characters: '紫菀 + 款冬花',
+    category: { en: 'Descend Lung Qi · Stop Cough', es: 'Descender Qi de Pulmón · Detener Tos' },
+    search: 'zi wan kuan dong hua aster coltsfoot honey fried cough twins transform phlegm stop cough hot cold acute chronic she gan ma huang tang',
+    en: {
+      mnemonic: 'The honey-fried cough twins.',
+      job: 'Moisten the Lung, descend Qi, transform Phlegm and stop cough across hot or cold, acute or chronic patterns.',
+      roles: [['Zǐ Wǎn', 'Leans toward opening and transforming Phlegm while descending Lung Qi.'], ['Kuǎn Dōng Huā', 'Leans toward directly calming severe cough and moistening the Lung.']],
+      clues: 'Persistent cough where both difficult expectoration and cough intensity need treatment.',
+      formulas: 'Shè Gān Má Huáng Tāng.',
+      trap: 'The pair is thermally flexible; surrounding herbs determine whether the full formula treats Heat or Cold.',
+      prep: 'Honey-fried forms are commonly selected to strengthen moistening and cough-relieving action in chronic cases.',
+      safety: 'Use professionally and avoid prolonged unsupervised use. Coughing blood, low oxygen, chest pain, high fever or breathing difficulty requires prompt medical care.'
+    },
+    es: {
+      mnemonic: 'Las gemelas de la tos tostadas con miel.',
+      job: 'Humedecer Pulmón, descender Qi, transformar Flema y detener tos en patterns calientes/fríos, agudos/crónicos.',
+      roles: [['Zǐ Wǎn', 'Se inclina a abrir/transformar Flema mientras desciende Qi pulmonar.'], ['Kuǎn Dōng Huā', 'Se inclina a calmar directamente tos intensa y humedecer Pulmón.']],
+      clues: 'Tos persistente donde se necesita tratar expectoración difícil e intensidad de tos.',
+      formulas: 'Shè Gān Má Huáng Tāng.',
+      trap: 'La pareja es térmicamente flexible; hierbas circundantes determinan si fórmula trata Calor o Frío.',
+      prep: 'Formas tostadas con miel suelen elegirse para reforzar humectación y alivio de tos en casos crónicos.',
+      safety: 'Uso profesional y no prolongado sin supervisión. Sangre al toser, oxígeno bajo, dolor torácico, fiebre alta o disnea requiere atención pronta.'
+    }
   }
 ];
 
@@ -787,7 +1037,7 @@ function indexPage(language) {
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Aprende las 51 parejas oficiales de Appendix B mediante una imagen, un trabajo conjunto, una fórmula firma y su seguridad. Biblioteca en lotes de 10.' : 'Learn all 51 official Appendix B pairs through one picture, one combined job, one signature formula and safety. Built in batches of 10.'}</p></section>
 <nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a></nav>
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 3 de 6' : 'Appendix B · Batch 3 of 6'}</div></footer></body></html>`;
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 4 de 6' : 'Appendix B · Batch 4 of 6'}</div></footer></body></html>`;
 }
 
 for (const pair of pairs) {
