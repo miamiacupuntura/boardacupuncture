@@ -1255,6 +1255,31 @@ const pairs = [
       prep: 'Triturar y decoctar ambas primero; formas calcinadas cambian énfasis hacia astringir pérdidas.',
       safety: 'Minerales/conchas requieren prueba de identidad y contaminantes. Palpitaciones nuevas, síncope, cefalea grave o déficit neurológico exige urgencia.'
     }
+  },
+  {
+    number: 51, slug: 'tian-ma-gou-teng-dui-yao', title: 'Tiān Má + Gōu Téng', characters: '天麻 + 钩藤',
+    category: { en: 'Calm the Liver · Extinguish Wind', es: 'Calmar Hígado · Extinguir Viento' },
+    search: 'tian ma gou teng gastrodia uncaria wind dizziness liver yang rising hypertension headache tremor spasm tian ma gou teng yin add late stroke',
+    en: {
+      mnemonic: 'The Wind-and-dizziness pair.',
+      job: 'Calm the Liver, extinguish internal Wind, stop dizziness and headache and ease spasms.',
+      roles: [['Tiān Má', 'Neutral and versatile; extinguishes Wind and treats dizziness across deficiency or excess patterns.'], ['Gōu Téng', 'Cool; clears Liver Heat, subdues rising Yang and relieves tremor or spasm.']],
+      clues: 'Liver-Yang-rising headache, dizziness, hypertension pattern, tremor or muscular spasm.',
+      formulas: 'Tiān Má Gōu Téng Yǐn.',
+      trap: 'Tiān Má can address many dizziness patterns; Gōu Téng makes the pair especially appropriate when Heat or rising Yang is present.',
+      prep: 'Add Gōu Téng late and boil it only briefly to preserve its Wind-extinguishing activity.',
+      safety: 'Monitor blood pressure and prescription-drug effects. Sudden severe headache, one-sided weakness, facial droop or slurred speech requires immediate stroke protocol.'
+    },
+    es: {
+      mnemonic: 'La pareja del Viento y el mareo.',
+      job: 'Calmar Hígado, extinguir Viento interno, detener mareo/cefalea y aliviar espasmos.',
+      roles: [['Tiān Má', 'Neutra y versátil; extingue Viento y trata mareo en patterns de deficiencia o exceso.'], ['Gōu Téng', 'Fresca; aclara Calor de Hígado, somete Yang ascendente y alivia temblor/espasmo.']],
+      clues: 'Cefalea y mareo por Yang de Hígado ascendente, pattern hipertensivo, temblor o espasmo muscular.',
+      formulas: 'Tiān Má Gōu Téng Yǐn.',
+      trap: 'Tiān Má aborda muchos mareos; Gōu Téng hace la pareja especialmente apropiada cuando hay Calor o Yang ascendente.',
+      prep: 'Añadir Gōu Téng al final y hervirla brevemente para preservar actividad que extingue Viento.',
+      safety: 'Vigilar presión y efectos de fármacos prescritos. Cefalea súbita grave, debilidad unilateral, caída facial o habla arrastrada exige protocolo de ictus inmediato.'
+    }
   }
 ];
 
@@ -1285,9 +1310,9 @@ function indexPage(language) {
   }).join('');
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Parejas Duì Yào de Appendix B con trabajo, fórmula y seguridad.' : 'Appendix B Duì Yào herb pairs with job, formula and safety.'}"><title>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"><script defer src="comparisons.js?v=20261026-3"></script></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
-<main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Aprende las 51 parejas oficiales de Appendix B mediante una imagen, un trabajo conjunto, una fórmula firma y su seguridad. Biblioteca en lotes de 10.' : 'Learn all 51 official Appendix B pairs through one picture, one combined job, one signature formula and safety. Built in batches of 10.'}</p></section>
+<main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Biblioteca completa de las 51 parejas oficiales de Appendix B: una imagen, un trabajo conjunto, una fórmula firma y la seguridad decisiva.' : 'Complete library of all 51 official Appendix B pairs: one picture, one combined job, one signature formula and decisive safety.'}</p></section>
 <nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a></nav>
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 5 de 6' : 'Appendix B · Batch 5 of 6'}</div></footer></body></html>`;
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Biblioteca completa · Lote 6 de 6' : 'Appendix B · Complete library · Batch 6 of 6'}</div></footer></body></html>`;
 }
 
 for (const pair of pairs) {
