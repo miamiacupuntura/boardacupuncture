@@ -1743,6 +1743,198 @@ const pathologies = [
       safety: 'Atrofia óptica y pérdida visual inexplicada requiere oftalmología/neurooftalmología. Pérdida súbita, dolor ocular, signos neurológicos o defecto de campo nuevo es emergencia; no retrasar tratamiento específico.',
       source: 'Internal Medicine ophthalmology section: Blue-Eye Blindness (Qing Mang).'
     }
+  },
+  {
+    slug: 'sudden-blindness-patterns', title: { en: 'Sudden Blindness Pattern Comparison', es: 'Comparación de Pérdida Visual Súbita' },
+    summary: { en: 'Compare the historical Qi-Blood stasis and Liver-Fire presentations while treating sudden vision loss as an emergency.', es: 'Compara las presentaciones históricas de estasis Qi-Sangre y Fuego de Hígado mientras se trata la pérdida visual súbita como emergencia.' },
+    focus: { en: 'Purple stasis/trauma clues versus painful red Liver-Fire signs', es: 'Pistas púrpuras de estasis/trauma frente a signos dolorosos y rojos de Fuego de Hígado' },
+    search: 'sudden blindness vision loss bao mang qi blood stasis liver fire tong qiao huo xue long dan xie gan retinal emergency',
+    en: {
+      intro: 'The source separates two TCM presentations, but any sudden severe decrease or loss of sight needs immediate retinal, vascular and neurologic evaluation.',
+      rows: [
+        ['Qi stagnation and Blood stasis', 'Sudden vision loss with headache, distended eyes, irritability, dark-purple tongue and stasis spots', 'Tong Qiao Huo Xue Tang', 'Historical strategy: regulate Qi, move Blood and open orifices.'],
+        ['Exuberant Liver Fire', 'Sudden loss with eye tenderness/pain on movement, headache, tinnitus, irritability, insomnia, bitter mouth and red-yellow tongue', 'Long Dan Xie Gan Tang', 'Historical strategy: clear Liver Fire.'],
+      ],
+      rule: 'Purple/rough signs suggest stasis; red-yellow bitter-irritable signs suggest Liver Fire—but neither distinction should delay emergency eye care.',
+      memory: '<strong>Sudden vision loss = emergency first; pattern differentiation only after urgent assessment.</strong>',
+      safety: 'Sudden vision loss, curtain/shadow, field defect, severe eye pain, flashes/floaters or neurologic symptoms is an emergency. Do not delay ophthalmology/stroke evaluation to try herbs or acupuncture.',
+      source: 'Internal Medicine ophthalmology section: Sudden Blindness (Bao Mang).'
+    },
+    es: {
+      intro: 'La fuente separa dos presentaciones MTC, pero toda disminución grave o pérdida súbita de visión necesita evaluación retiniana, vascular y neurológica inmediata.',
+      rows: [
+        ['Estancamiento Qi y estasis de Sangre', 'Pérdida súbita con cefalea, ojos distendidos, irritabilidad, lengua púrpura oscura y manchas de estasis', 'Tong Qiao Huo Xue Tang', 'Estrategia histórica: regular Qi, mover Sangre y abrir orificios.'],
+        ['Fuego exuberante de Hígado', 'Pérdida súbita con dolor ocular al tacto/movimiento, cefalea, tinnitus, irritabilidad, insomnio, boca amarga y lengua roja/amarilla', 'Long Dan Xie Gan Tang', 'Estrategia histórica: aclarar Fuego de Hígado.'],
+      ],
+      rule: 'Signos púrpura/ásperos sugieren estasis; rojo-amarillo-amargo-irritable sugiere Fuego, pero ninguna distinción debe retrasar urgencias.',
+      memory: '<strong>Pérdida visual súbita = emergencia primero; diferenciar el patrón solo después de evaluar.</strong>',
+      safety: 'Pérdida visual súbita, cortina/sombra, defecto de campo, dolor ocular grave, destellos/moscas o signos neurológicos es emergencia. No retrasar oftalmología/ACV para probar hierbas o acupuntura.',
+      source: 'Internal Medicine ophthalmology section: Sudden Blindness (Bao Mang).'
+    }
+  },
+  {
+    slug: 'corneal-nebula-patterns', title: { en: 'Round Corneal Nebula Pattern Comparison', es: 'Comparación de Nebulosa Corneal Redonda' },
+    summary: { en: 'Compare Liver-Kidney deficiency, Spleen-Qi deficiency, upper-burner Liver Heat and Yin depletion with Damp-Heat.', es: 'Compara deficiencia Hígado-Riñón, deficiencia Qi de Bazo, Calor de Hígado del Jiao Superior y agotamiento Yin con Humedad-Calor.' },
+    focus: { en: 'Blurred vision with deficiency, Heat or Dampness clues', es: 'Visión borrosa con pistas de deficiencia, Calor o Humedad' },
+    search: 'round corneal nebula yuan yi nei zhang blurred vision liver kidney spleen qi liver heat yin damp heat qi ju di huang bu zhong yi qi shi jue ming gan lu yin',
+    en: {
+      intro: 'The historical label describes unclear vision; modern examination must identify whether the problem is corneal opacity, cataract, retina, optic nerve or refraction.',
+      rows: [
+        ['Liver-Kidney deficiency', 'Blurred vision with dizziness, tinnitus, weak back/knees and red scant-coated tongue', 'Qi Ju Di Huang Wan', 'Support Liver-Kidney and nourish Blood-Essence.'],
+        ['Spleen-Qi deficiency', 'Blurred vision with fatigue, sallow complexion, poor appetite, loose stool and pale tongue', 'Bu Zhong Yi Qi Tang', 'Support Spleen Qi.'],
+        ['Upper-burner Liver Heat', 'Blurred vision with headache, eye discomfort, excess mucus/tears, bitter mouth and dry throat', 'Shi Jue Ming San', 'Clear Liver Heat.'],
+        ['Yin depletion with Damp-Heat', 'Dry blurred eyes with irritability, halitosis, difficult stool and red tongue with greasy yellow coat', 'Gan Lu Yin', 'Nourish Yin, clear Heat and transform Dampness.'],
+      ],
+      rule: 'Back/tinnitus indicates Liver-Kidney; digestion/fatigue Spleen; headache/bitter mouth Liver Heat; dryness plus greasy Heat Yin depletion with Damp-Heat.',
+      memory: '<strong>Back/ears—Liver-Kidney; digestion—Spleen; bitter/headache—Liver Heat; dry + greasy—Yin/Damp-Heat.</strong>',
+      safety: 'Blurred vision or visible corneal opacity requires eye examination. Pain, redness, photophobia, trauma, contact-lens use, rapid worsening or any sudden loss requires urgent ophthalmic care.',
+      source: 'Internal Medicine ophthalmology section: Round Corneal Nebula (Yuan Yi Nei Zhang).'
+    },
+    es: {
+      intro: 'La etiqueta histórica describe visión poco clara; examen moderno debe identificar córnea, catarata, retina, nervio óptico o refracción.',
+      rows: [
+        ['Deficiencia de Hígado-Riñón', 'Visión borrosa con mareo, tinnitus, lumbar/rodillas débiles y lengua roja con poca capa', 'Qi Ju Di Huang Wan', 'Apoyar Hígado-Riñón y nutrir Sangre-Esencia.'],
+        ['Deficiencia Qi de Bazo', 'Visión borrosa con fatiga, tez cetrina, poco apetito, heces sueltas y lengua pálida', 'Bu Zhong Yi Qi Tang', 'Apoyar Qi de Bazo.'],
+        ['Calor de Hígado del Jiao Superior', 'Visión borrosa con cefalea, molestia ocular, exceso de moco/lágrimas, boca amarga y garganta seca', 'Shi Jue Ming San', 'Aclarar Calor de Hígado.'],
+        ['Agotamiento Yin con Humedad-Calor', 'Ojos secos/borrosos con irritabilidad, halitosis, evacuación difícil y lengua roja con capa amarilla grasosa', 'Gan Lu Yin', 'Nutrir Yin, aclarar Calor y transformar Humedad.'],
+      ],
+      rule: 'Lumbar/tinnitus indica Hígado-Riñón; digestión/fatiga Bazo; cefalea/boca amarga Calor de Hígado; sequedad más capa grasosa Yin con Humedad-Calor.',
+      memory: '<strong>Lumbar/oídos—Hígado-Riñón; digestión—Bazo; amargo/cefalea—Calor de Hígado; seco + grasoso—Yin/Humedad-Calor.</strong>',
+      safety: 'Visión borrosa u opacidad corneal visible requiere examen ocular. Dolor, rojo, fotofobia, trauma, lentes de contacto, empeoramiento rápido o pérdida súbita requiere oftalmología urgente.',
+      source: 'Internal Medicine ophthalmology section: Round Corneal Nebula (Yuan Yi Nei Zhang).'
+    }
+  },
+  {
+    slug: 'hiv-aids-patterns', title: { en: 'HIV/AIDS Supportive Pattern Comparison', es: 'Comparación Complementaria de VIH/SIDA' },
+    summary: { en: 'Organize Spleen-Qi, Kidney-Yang, Kidney-Yin, Toxic-Heat, Blood-stasis and Phlegm presentations without replacing antiretroviral therapy.', es: 'Organiza presentaciones de Qi de Bazo, Yang renal, Yin renal, Calor-Toxina, estasis y Flema sin sustituir terapia antirretroviral.' },
+    focus: { en: 'Supportive TCM differentiation alongside viral suppression and interaction monitoring', es: 'Diferenciación MTC complementaria junto a supresión viral y vigilancia de interacciones' },
+    search: 'HIV AIDS antiretroviral ART spleen qi kidney yang yin toxic heat blood stasis phlegm bu zhong shen ling you gui shen qi zuo gui zhi bai long dan wu wei xiao du xue fu er chen di tan wen dan',
+    en: {
+      intro: 'These are supportive historical TCM presentations, not HIV treatments. Effective ART, viral-load monitoring and infection prevention remain central.',
+      rows: [
+        ['Spleen-Qi deficiency', 'Fatigue, poor appetite, weight loss, pale flabby tongue and weak pulse', 'Bu Zhong Yi Qi Tang or Shen Ling Bai Zhu San', 'Support Spleen Qi.'],
+        ['Kidney-Yang deficiency', 'Cold intolerance, fatigue, weak back/knees, loose stool, frequent urine and low libido', 'You Gui Wan or Shen Qi Wan', 'Support Kidney Yang.'],
+        ['Kidney-Yin deficiency', 'Five-center Heat, afternoon/evening Heat, insomnia, night sweat, dizziness and red scant-coated tongue', 'Zuo Gui Wan or Zhi Bai Di Huang Wan', 'Nourish Kidney Yin.'],
+        ['Toxic Heat', 'Heat intolerance, inflammation/redness, anxiety, thirst for cold fluids and red/crimson tongue', 'Long Dan Xie Gan Tang or Wu Wei Xiao Du Yin', 'Historical strategy: clear Heat-toxin.'],
+        ['Blood stasis', 'Sharp fixed pain, numbness, masses, purple tongue or distended sublingual veins', 'Xue Fu Zhu Yu Tang', 'Move Blood after interaction/bleeding review.'],
+        ['Phlegm', 'Soft masses, heaviness/sluggishness, copious phlegm and greasy coat', 'Er Chen Tang, Di Tan Tang or Wen Dan Tang', 'Transform Phlegm.'],
+      ],
+      rule: 'Digestive fatigue is Spleen; cold/urination Yang; night Heat/dryness Yin; red inflammatory excess Toxic Heat; fixed-purple pain stasis; heaviness/greasy coat Phlegm.',
+      memory: '<strong>Digest—Spleen; cold—Yang; night Heat—Yin; red-toxic—Heat; fixed-purple—stasis; heavy-greasy—Phlegm.</strong>',
+      safety: 'Never replace or interrupt ART. Screen every herb for antiretroviral interactions and liver/kidney effects with the HIV clinician/pharmacist. Fever, dyspnea, neurologic symptoms or severe diarrhea in an immunocompromised patient is urgent.',
+      source: 'Internal Medicine section: TCM and AIDS; reframed as supportive care only.'
+    },
+    es: {
+      intro: 'Son presentaciones MTC históricas complementarias, no tratamientos del VIH. ART efectiva, carga viral y prevención de infecciones siguen centrales.',
+      rows: [
+        ['Deficiencia Qi de Bazo', 'Fatiga, poco apetito, pérdida de peso, lengua pálida/flácida y pulso débil', 'Bu Zhong Yi Qi Tang o Shen Ling Bai Zhu San', 'Apoyar Qi de Bazo.'],
+        ['Deficiencia Yang renal', 'Intolerancia al frío, fatiga, lumbar/rodillas débiles, heces sueltas, orina frecuente y libido baja', 'You Gui Wan o Shen Qi Wan', 'Apoyar Yang renal.'],
+        ['Deficiencia Yin renal', 'Calor de cinco centros, Calor vespertino/nocturno, insomnio, sudor nocturno, mareo y lengua roja con poca capa', 'Zuo Gui Wan o Zhi Bai Di Huang Wan', 'Nutrir Yin renal.'],
+        ['Calor-Toxina', 'Intolerancia al calor, inflamación/enrojecimiento, ansiedad, sed de frío y lengua roja/carmesí', 'Long Dan Xie Gan Tang o Wu Wei Xiao Du Yin', 'Estrategia histórica: aclarar Calor-Toxina.'],
+        ['Estasis de Sangre', 'Dolor fijo punzante, entumecimiento, masas, lengua púrpura o venas sublinguales distendidas', 'Xue Fu Zhu Yu Tang', 'Mover Sangre tras revisar interacción/sangrado.'],
+        ['Flema', 'Masas blandas, pesadez/lentitud, flema copiosa y capa grasosa', 'Er Chen Tang, Di Tan Tang o Wen Dan Tang', 'Transformar Flema.'],
+      ],
+      rule: 'Fatiga digestiva Bazo; frío/micción Yang; Calor nocturno/sequedad Yin; exceso rojo inflamatorio Calor-Toxina; dolor fijo/púrpura estasis; pesadez/capa grasosa Flema.',
+      memory: '<strong>Digestión—Bazo; frío—Yang; Calor nocturno—Yin; rojo-tóxico—Calor; fijo-púrpura—estasis; pesado-grasoso—Flema.</strong>',
+      safety: 'Nunca sustituir ni interrumpir ART. Revisar toda hierba por interacciones antirretrovirales y efectos hepático/renal con clínico/farmacéutico. Fiebre, disnea, síntomas neurológicos o diarrea grave en inmunocomprometido es urgente.',
+      source: 'Internal Medicine section: TCM and AIDS; reformulado solo como apoyo complementario.'
+    }
+  },
+  {
+    slug: 'whooping-cough-patterns', title: { en: 'Whooping Cough Stage Comparison', es: 'Comparación por Etapas de la Tos Ferina' },
+    summary: { en: 'Compare initial Wind-Cold/Wind-Heat, spasmodic Heat-Phlegm and recovery Lung-Yin or Spleen-Qi deficiency.', es: 'Compara Viento-Frío/Viento-Calor inicial, Flema-Calor espasmódica y recuperación por deficiencia Yin pulmonar o Qi de Bazo.' },
+    focus: { en: 'Catarrhal onset, paroxysmal whoop and recovery deficiency', es: 'Inicio catarral, gallo paroxístico y deficiencia de recuperación' },
+    search: 'whooping cough pertussis dun ke wind cold heat spasmodic lung yin spleen qi xing su sang ju sang bai pi sha shen mai dong ren shen wu wei',
+    en: {
+      intro: 'The stage pattern follows the clinical course, but suspected pertussis needs testing, antibiotics, isolation guidance and public-health reporting.',
+      rows: [
+        ['Initial Wind-Cold', 'Cough with thin white foamy phlegm, fever, sneezing and clear runny nose', 'Xing Su San', 'Dispel Wind-Cold and diffuse Lung.'],
+        ['Initial Wind-Heat', 'Cough with difficult thick yellow phlegm, chills/fever and red sore throat', 'Sang Ju Yin', 'Dispel Wind-Heat and diffuse Lung.'],
+        ['Spasmodic coughing stage', 'Repeated prolonged coughing fits with inspiratory whoop, post-tussive vomiting, worse at night, Heat and possible bleeding', 'Sang Bai Pi Tang', 'Clear Lung Heat and transform Phlegm.'],
+        ['Recovery · Lung-Yin deficiency', 'Less frequent but dry cough, scant phlegm, dry thirsty throat and red peeled tongue', 'Sha Shen Mai Dong Tang', 'Nourish Yin and moisten Lung.'],
+        ['Recovery · Spleen-Stomach Qi deficiency', 'Weak cough with thin phlegm, dyspnea, fatigue, poor appetite and spontaneous sweat', 'Ren Shen Wu Wei Zi Tang', 'Strengthen Spleen-Stomach Qi.'],
+      ],
+      rule: 'Clear/foamy is early Cold; yellow/sticky early Heat; whoop/vomit is spasmodic stage; dry recovery is Yin; weak-digestive recovery is Qi.',
+      memory: '<strong>Clear—Cold; yellow—Heat; whoop—spasm; dry recovery—Yin; weak recovery—Qi.</strong>',
+      safety: 'Pertussis is contagious and reportable in many jurisdictions. Infants, pregnancy and household contacts need prompt medical management. Apnea, blue color, breathing difficulty, dehydration or exhaustion is an emergency.',
+      source: 'Internal Medicine pediatrics section: Whooping Cough (Dun Ke).'
+    },
+    es: {
+      intro: 'Las etapas siguen el curso clínico, pero sospecha de tos ferina requiere pruebas, antibióticos, aislamiento y notificación de salud pública.',
+      rows: [
+        ['Viento-Frío inicial', 'Tos con flema blanca delgada/espumosa, fiebre, estornudos y rinorrea clara', 'Xing Su San', 'Expulsar Viento-Frío y difundir Pulmón.'],
+        ['Viento-Calor inicial', 'Tos con flema amarilla espesa/difícil, escalofríos/fiebre y garganta roja/dolorosa', 'Sang Ju Yin', 'Expulsar Viento-Calor y difundir Pulmón.'],
+        ['Etapa de tos espasmódica', 'Ataques prolongados repetidos con gallo inspiratorio, vómito postusivo, peor nocturno, Calor y posible sangrado', 'Sang Bai Pi Tang', 'Aclarar Calor pulmonar y transformar Flema.'],
+        ['Recuperación · Deficiencia Yin pulmonar', 'Tos menos frecuente pero seca, poca flema, garganta seca/sedienta y lengua roja pelada', 'Sha Shen Mai Dong Tang', 'Nutrir Yin y humedecer Pulmón.'],
+        ['Recuperación · Deficiencia Qi Bazo-Estómago', 'Tos débil con flema delgada, disnea, fatiga, poco apetito y sudor espontáneo', 'Ren Shen Wu Wei Zi Tang', 'Fortalecer Qi de Bazo-Estómago.'],
+      ],
+      rule: 'Claro/espumoso es Frío inicial; amarillo/pegajoso Calor; gallo/vómito etapa espasmódica; recuperación seca Yin; recuperación débil/digestiva Qi.',
+      memory: '<strong>Claro—Frío; amarillo—Calor; gallo—espasmo; recuperación seca—Yin; débil—Qi.</strong>',
+      safety: 'Tos ferina es contagiosa y notificable en muchos lugares. Bebés, embarazo y contactos necesitan manejo pronto. Apnea, color azul, disnea, deshidratación o agotamiento es emergencia.',
+      source: 'Internal Medicine pediatrics section: Whooping Cough (Dun Ke).'
+    }
+  },
+  {
+    slug: 'infantile-diarrhea-patterns', title: { en: 'Infantile Diarrhea Pattern Differentiation', es: 'Diferenciación de la Diarrea Infantil' },
+    summary: { en: 'Compare Food stagnation, Damp-Heat, Wind-Cold, Spleen-Qi deficiency and Spleen-Kidney Yang deficiency.', es: 'Compara estancamiento de comida, Humedad-Calor, Viento-Frío, deficiencia Qi de Bazo y deficiencia Yang de Bazo-Riñón.' },
+    focus: { en: 'Stool odor/color, fever, food relation and chronic Cold-deficiency signs', es: 'Olor/color de heces, fiebre, relación con comida y signos crónicos de deficiencia fría' },
+    search: 'infantile diarrhea child food stagnation damp heat wind cold spleen qi kidney yang bao he ge gen qin lian huo xiang zheng qi shen ling bai zhu fu zi li zhong si shen',
+    en: {
+      intro: 'Stool quality and systemic signs organize the TCM comparison; hydration status and infectious causes take priority in infants and children.',
+      rows: [
+        ['Food stagnation', 'Foul runny stool after distention/pain, relieved by bowel movement, belching and vomiting undigested food', 'Bao He Wan', 'Reduce food stagnation.'],
+        ['Damp-Heat', 'Yellow foul stool with mucus, abdominal pain, fever, thirst, burning anus and dark scant urine', 'Ge Gen Qin Lian Tang', 'Clear Damp-Heat.'],
+        ['Wind-Cold', 'Thin clear foamy non-foul stool with pain, borborygmus, fever/chills and white greasy coat', 'Huo Xiang Zheng Qi San', 'Dispel Wind-Cold.'],
+        ['Spleen-Qi deficiency', 'Pale liquid stool after meals, variable chronic course, poor appetite, weight loss and fatigue', 'Shen Ling Bai Zhu San', 'Strengthen Spleen Qi.'],
+        ['Spleen-Kidney Yang deficiency', 'Prolonged clear stool with undigested food, cold limbs, pallor, listlessness and possible anal prolapse', 'Fu Zi Li Zhong Tang + Si Shen Wan', 'Historical strategy: warm Spleen-Kidney Yang.'],
+      ],
+      rule: 'Foul/undigested with relief is food; yellow-burning Heat; clear-foamy with chills Cold; post-meal chronic fatigue Spleen; prolonged watery/cold/undigested Yang deficiency.',
+      memory: '<strong>Foul-food; yellow-burn—Damp-Heat; clear-foam—Cold; after meals—Spleen; prolonged cold—Yang.</strong>',
+      safety: 'Infants dehydrate quickly. Few wet diapers, dry mouth/no tears, lethargy, sunken eyes, blood, bilious vomiting, severe pain, fever in a young infant or inability to drink requires urgent pediatric care. Aconite formulas are not for home use.',
+      source: 'Internal Medicine pediatrics section: Infantile Diarrhea (Xiao Er Fu Xie).'
+    },
+    es: {
+      intro: 'Calidad de heces y signos sistémicos organizan MTC; hidratación y causas infecciosas tienen prioridad en bebés/niños.',
+      rows: [
+        ['Estancamiento de comida', 'Heces líquidas fétidas tras distensión/dolor, alivio al evacuar, eructos y vómito de comida no digerida', 'Bao He Wan', 'Reducir estancamiento de comida.'],
+        ['Humedad-Calor', 'Heces amarillas fétidas con moco, dolor, fiebre, sed, ardor anal y orina oscura/escasa', 'Ge Gen Qin Lian Tang', 'Aclarar Humedad-Calor.'],
+        ['Viento-Frío', 'Heces delgadas, claras, espumosas no fétidas con dolor, borborigmos, fiebre/escalofríos y capa blanca grasosa', 'Huo Xiang Zheng Qi San', 'Expulsar Viento-Frío.'],
+        ['Deficiencia Qi de Bazo', 'Heces líquidas pálidas tras comidas, curso crónico variable, poco apetito, pérdida de peso y fatiga', 'Shen Ling Bai Zhu San', 'Fortalecer Qi de Bazo.'],
+        ['Deficiencia Yang de Bazo-Riñón', 'Heces claras prolongadas con comida no digerida, miembros fríos, palidez, apatía y posible prolapso anal', 'Fu Zi Li Zhong Tang + Si Shen Wan', 'Estrategia histórica: calentar Yang de Bazo-Riñón.'],
+      ],
+      rule: 'Fétido/no digerido con alivio es comida; amarillo/ardiente Calor; claro/espuma con frío Viento-Frío; crónico tras comida/fatiga Bazo; acuoso/frío prolongado Yang.',
+      memory: '<strong>Fétido—comida; amarillo/arde—Humedad-Calor; claro/espuma—Frío; tras comidas—Bazo; frío prolongado—Yang.</strong>',
+      safety: 'Bebés se deshidratan rápido. Pocos pañales mojados, boca seca/sin lágrimas, letargo, ojos hundidos, sangre, vómito biliar, dolor grave, fiebre en bebé pequeño o no beber requiere urgencias pediátricas. Aconito no es para uso doméstico.',
+      source: 'Internal Medicine pediatrics section: Infantile Diarrhea (Xiao Er Fu Xie).'
+    }
+  },
+  {
+    slug: 'infantile-malnutrition-patterns', title: { en: 'Infantile Malnutrition Pattern Differentiation', es: 'Diferenciación de la Desnutrición Infantil' },
+    summary: { en: 'Separate Spleen-Stomach deficiency with food accumulation from parasitic infestation.', es: 'Separa deficiencia de Bazo-Estómago con acumulación de comida de infestación parasitaria.' },
+    focus: { en: 'Growth failure, abdominal distention and parasite-specific clues', es: 'Fallo de crecimiento, distensión abdominal y pistas específicas de parásitos' },
+    search: 'infantile malnutrition failure to thrive gan ji spleen stomach deficiency food accumulation parasites zi sheng jian pi gan ji san fei er wan weight loss child',
+    en: {
+      intro: 'Weight loss or growth faltering in a child requires nutritional, gastrointestinal, endocrine, infectious and safeguarding assessment before pattern-based support.',
+      rows: [
+        ['Spleen-Stomach deficiency with accumulation', 'Gradual weight loss, sallow complexion, thin hair, poor appetite, loose stool; later marked distention, emaciation, dry skin/hair and low fever', 'Zi Sheng Jian Pi Wan or Gan Ji San', 'Historical strategy: support digestion and reduce accumulation.'],
+        ['Parasitic infestation', 'Malnutrition signs plus overeating/pica, distended abdomen with visible veins, recurrent pain and tooth grinding', 'Fei Er Wan', 'Historical strategy: reduce accumulation and expel worms after diagnosis.'],
+      ],
+      rule: 'Poor intake/loose stool with progressive wasting suggests digestive deficiency; pica, recurrent pain and parasite exposure raise concern for infestation—but both need biomedical workup.',
+      memory: '<strong>Failure to grow = measure, test and feed safely before assigning a pattern.</strong>',
+      safety: 'Weight loss, edema, lethargy, dehydration, persistent diarrhea/vomiting, developmental regression or suspected neglect/food insecurity requires prompt pediatric assessment. Parasites require testing and standard treatment.',
+      source: 'Internal Medicine pediatrics section: Infantile Malnutrition (Xiao Er Gan Ji).'
+    },
+    es: {
+      intro: 'Pérdida de peso o fallo de crecimiento requiere evaluación nutricional, gastrointestinal, endocrina, infecciosa y de seguridad antes de apoyo según patrón.',
+      rows: [
+        ['Deficiencia Bazo-Estómago con acumulación', 'Pérdida gradual, tez cetrina, cabello fino, poco apetito, heces sueltas; luego distensión marcada, emaciación, piel/cabello seco y febrícula', 'Zi Sheng Jian Pi Wan o Gan Ji San', 'Estrategia histórica: apoyar digestión y reducir acumulación.'],
+        ['Infestación parasitaria', 'Desnutrición más sobreingesta/pica, abdomen distendido con venas visibles, dolor recurrente y rechinar de dientes', 'Fei Er Wan', 'Estrategia histórica: reducir acumulación y expulsar parásitos tras diagnóstico.'],
+      ],
+      rule: 'Poca ingesta/heces sueltas con desgaste sugiere deficiencia digestiva; pica, dolor y exposición eleva sospecha parasitaria, pero ambas necesitan estudio biomédico.',
+      memory: '<strong>Fallo de crecimiento = medir, estudiar y alimentar con seguridad antes de asignar un patrón.</strong>',
+      safety: 'Pérdida de peso, edema, letargo, deshidratación, diarrea/vómito persistente, regresión o sospecha de negligencia/inseguridad alimentaria requiere pediatría pronta. Parásitos requieren pruebas y tratamiento estándar.',
+      source: 'Internal Medicine pediatrics section: Infantile Malnutrition (Xiao Er Gan Ji).'
+    }
   }
 ];
 
