@@ -653,6 +653,198 @@ const pathologies = [
       safety: 'Incapacidad aguda para orinar es emergencia porque la obstrucción puede dañar riñones. Dolor grave, fiebre, vómito o sangre aumenta urgencia.',
       source: 'Internal Medicine 1, Handout 7: Dribbling Urinary Block.'
     }
+  },
+  {
+    slug: 'depression-patterns', title: { en: 'Depression Pattern Differentiation', es: 'Diferenciación de la Depresión' },
+    summary: { en: 'Compare Liver-Qi stagnation, constrained Qi transforming into Fire, Qi-Phlegm obstruction and Yin-Blood deficiency.', es: 'Compara estancamiento de Qi de Hígado, Qi constreñido que se transforma en Fuego, obstrucción Qi-Flema y deficiencia de Yin-Sangre.' },
+    focus: { en: 'Emotional constraint, Heat, plum-pit sensation and deficiency signs', es: 'Constreñimiento emocional, Calor, sensación de hueso de ciruela y signos de deficiencia' },
+    search: 'depression liver qi stagnation fire phlegm plum pit yin blood chai hu shu gan dan zhi xiao yao zuo jin ban xia hou po gan mai da zao',
+    en: {
+      intro: 'Mood symptoms are differentiated by the dominant mechanism: constraint, Heat, Phlegm obstruction or deficient nourishment of the Heart-Spirit.',
+      rows: [
+        ['Liver-Qi stagnation', 'Despondence, frequent sighing, chest/hypochondriac distention, belching and wiry pulse', 'Chai Hu Shu Gan San', 'Soothe Liver, regulate Qi and relieve constraint.'],
+        ['Constrained Qi transforms into Fire', 'Agitation, irritability, bitter dry mouth, acid regurgitation, constipation and red tongue', 'Dan Zhi Xiao Yao San + Zuo Jin Wan', 'Clear Liver Fire, harmonize Stomach and relieve constraint.'],
+        ['Qi and Phlegm obstruction', 'Plum-pit throat sensation, chest blockage and slippery-wiry pulse', 'Ban Xia Hou Po Tang', 'Regulate Qi, transform Phlegm and dissipate binds.'],
+        ['Yin and Blood deficiency', 'Trance-like state, fright, grief/crying, restlessness and pale tongue', 'Gan Mai Da Zao Tang', 'Nourish Heart and quiet the Spirit.'],
+      ],
+      rule: 'Sighing/distention marks Qi stagnation; red-bitter-irritable marks Fire; throat obstruction with sticky coat marks Phlegm; pale, fragile emotionality marks deficiency.',
+      memory: '<strong>Sigh—Qi; burn—Fire; lump—Phlegm; pale and fragile—deficiency.</strong>',
+      safety: 'Depression requires biomedical assessment. Suicidal thoughts, self-harm plans, inability to care for oneself, psychosis or immediate danger requires emergency help.',
+      source: 'Internal Medicine 1, Handout 8: Depression Patterns.'
+    },
+    es: {
+      intro: 'Los síntomas del ánimo se diferencian por el mecanismo dominante: constreñimiento, Calor, obstrucción por Flema o nutrición deficiente del Corazón-Shen.',
+      rows: [
+        ['Estancamiento de Qi de Hígado', 'Desánimo, suspiros, distensión torácica/hipocondríaca, eructos y pulso de cuerda', 'Chai Hu Shu Gan San', 'Suavizar Hígado, regular Qi y aliviar constreñimiento.'],
+        ['Qi constreñido se transforma en Fuego', 'Agitación, irritabilidad, boca amarga/seca, regurgitación ácida, estreñimiento y lengua roja', 'Dan Zhi Xiao Yao San + Zuo Jin Wan', 'Aclarar Fuego de Hígado, armonizar Estómago y aliviar constreñimiento.'],
+        ['Obstrucción de Qi y Flema', 'Sensación de hueso de ciruela en garganta, bloqueo torácico y pulso resbaladizo/de cuerda', 'Ban Xia Hou Po Tang', 'Regular Qi, transformar Flema y disipar nudos.'],
+        ['Deficiencia de Yin y Sangre', 'Estado ausente, susto, pena/llanto, inquietud y lengua pálida', 'Gan Mai Da Zao Tang', 'Nutrir Corazón y aquietar Shen.'],
+      ],
+      rule: 'Suspiros/distensión marcan Qi; rojo-amargo-irritable marca Fuego; obstrucción de garganta con capa pegajosa marca Flema; palidez y fragilidad emocional marcan deficiencia.',
+      memory: '<strong>Suspira—Qi; arde—Fuego; bulto—Flema; pálido y frágil—deficiencia.</strong>',
+      safety: 'La depresión requiere evaluación biomédica. Ideas o plan suicida, autolesión, incapacidad de autocuidado, psicosis o peligro inmediato requiere ayuda de emergencia.',
+      source: 'Internal Medicine 1, Handout 8: Depression Patterns.'
+    }
+  },
+  {
+    slug: 'mania-withdrawal-patterns', title: { en: 'Mania and Withdrawal Pattern Differentiation', es: 'Diferenciación de Manía y Retraimiento' },
+    summary: { en: 'Separate depressive psychotic presentations from manic Phlegm-Fire and the deficient aftermath of prolonged illness.', es: 'Separa presentaciones psicóticas depresivas de manía por Flema-Fuego y las secuelas deficientes de enfermedad prolongada.' },
+    focus: { en: 'Gradual withdrawal versus abrupt agitation, then Heat versus deficiency', es: 'Retraimiento gradual frente a agitación abrupta, luego Calor frente a deficiencia' },
+    search: 'mania withdrawal psychosis qi phlegm heart spleen deficiency phlegm fire yin injury shun qi dao tan yang xin gan mai sheng tie luo er yin jian',
+    en: {
+      intro: 'Tempo and behavior lead: gradual dull withdrawal suggests a depressive branch, while abrupt destructive agitation suggests manic Phlegm-Fire.',
+      rows: [
+        ['Qi stagnation with Phlegm', 'Gradual withdrawal, dull senses, incoherent self-talk, sadness and white sticky coat', 'Shun Qi Dao Tan Tang', 'Rectify Qi, transform Phlegm and open orifices.'],
+        ['Heart-Spleen Qi deficiency', 'Long duration, trance-like withdrawal, palpitations, fright, fatigue, poor appetite and pale tongue', 'Yang Xin Tang + Gan Mai Da Zao Tang', 'Strengthen Spleen, nourish Heart and quiet Spirit.'],
+        ['Phlegm-Fire harasses the interior', 'Abrupt severe agitation, aggression, insomnia, red face/eyes and yellow sticky coat', 'Sheng Tie Luo Yin', 'Settle Heart, transform Phlegm and drain Fire.'],
+        ['Exuberant Fire injures Yin', 'Prolonged illness with irritability, fright, insomnia, emaciation and red scant-coated tongue', 'Er Yin Jian', 'Nourish Yin, downbear Fire and stabilize emotions.'],
+      ],
+      rule: 'Gradual-sticky withdrawal is Qi-Phlegm; pale-tired withdrawal is deficiency; abrupt red-yellow aggression is Phlegm-Fire; chronic thin-red agitation is injured Yin.',
+      memory: '<strong>Withdraw + sticky—Phlegm; withdraw + pale—deficiency; erupt + red—Fire; chronic + thin—Yin.</strong>',
+      safety: 'New psychosis, mania, aggression, inability to sleep/eat, severe disorganization or danger to self/others needs urgent psychiatric and medical assessment.',
+      source: 'Internal Medicine 1, Handout 8: Mania and Withdrawal.'
+    },
+    es: {
+      intro: 'El ritmo y la conducta orientan: retraimiento apagado gradual sugiere rama depresiva; agitación destructiva abrupta sugiere Flema-Fuego maníaca.',
+      rows: [
+        ['Estancamiento de Qi con Flema', 'Retraimiento gradual, sentidos apagados, habla incoherente consigo mismo, tristeza y capa blanca pegajosa', 'Shun Qi Dao Tan Tang', 'Rectificar Qi, transformar Flema y abrir orificios.'],
+        ['Deficiencia Qi de Corazón-Bazo', 'Duración larga, retraimiento ausente, palpitaciones, susto, fatiga, poco apetito y lengua pálida', 'Yang Xin Tang + Gan Mai Da Zao Tang', 'Fortalecer Bazo, nutrir Corazón y aquietar Shen.'],
+        ['Flema-Fuego acosa el interior', 'Agitación grave abrupta, agresión, insomnio, cara/ojos rojos y capa amarilla pegajosa', 'Sheng Tie Luo Yin', 'Asentar Corazón, transformar Flema y drenar Fuego.'],
+        ['Fuego exuberante lesiona Yin', 'Enfermedad prolongada con irritabilidad, susto, insomnio, adelgazamiento y lengua roja con poca capa', 'Er Yin Jian', 'Nutrir Yin, descender Fuego y estabilizar emociones.'],
+      ],
+      rule: 'Retraimiento gradual/pegajoso es Qi-Flema; pálido/cansado es deficiencia; agresión abrupta rojo-amarilla es Flema-Fuego; agitación crónica delgada/roja es Yin lesionado.',
+      memory: '<strong>Retraído + pegajoso—Flema; retraído + pálido—deficiencia; explota + rojo—Fuego; crónico + delgado—Yin.</strong>',
+      safety: 'Psicosis nueva, manía, agresión, no dormir/comer, desorganización grave o peligro para sí/otros requiere evaluación psiquiátrica y médica urgente.',
+      source: 'Internal Medicine 1, Handout 8: Mania and Withdrawal.'
+    }
+  },
+  {
+    slug: 'epilepsy-patterns', title: { en: 'Epilepsy Pattern Differentiation', es: 'Diferenciación de la Epilepsia' },
+    summary: { en: 'Compare Wind-Phlegm, internal Phlegm-Fire, Liver-Kidney Yin deficiency and Spleen-Stomach Qi deficiency.', es: 'Compara Viento-Flema, Flema-Fuego interno, deficiencia Yin de Hígado-Riñón y deficiencia Qi de Bazo-Estómago.' },
+    focus: { en: 'Seizure presentation plus Phlegm, Heat or chronic deficiency signs', es: 'Presentación convulsiva más signos de Flema, Calor o deficiencia crónica' },
+    search: 'epilepsy seizure wind phlegm fire liver kidney yin spleen stomach qi ding xian long dan xie gan di tan zuo gui liu jun zi',
+    en: {
+      intro: 'Seizures require neurologic diagnosis; the TCM comparison organizes accompanying signs into excess Phlegm/Fire or chronic deficiency branches.',
+      rows: [
+        ['Wind-Phlegm obstruction', 'Dizziness/chest oppression before sudden collapse, convulsions, foaming and white sticky coat', 'Ding Xian Wan', 'Expel Phlegm, extinguish Wind and open orifices.'],
+        ['Internal Phlegm-Fire', 'Seizure with irritability, insomnia, yellow difficult phlegm, bitter mouth, constipation and red greasy tongue', 'Long Dan Xie Gan Tang + Di Tan Tang', 'Drain Fire, transform Phlegm and open orifices.'],
+        ['Liver-Kidney Yin deficiency', 'Chronic epilepsy with vertigo, insomnia, forgetfulness, weak back/knees and red scant-coated tongue', 'Zuo Gui Wan', 'Nourish Liver-Kidney Yin and subdue Yang.'],
+        ['Spleen-Stomach Qi deficiency', 'Chronic epilepsy with fatigue, poor appetite, loose stools, nausea and pale tongue', 'Liu Jun Zi Tang', 'Strengthen Spleen, boost Qi and transform turbidity.'],
+      ],
+      rule: 'White-sticky collapse marks Wind-Phlegm; red-yellow-irritable marks Phlegm-Fire; weak back with empty Heat marks Yin; fatigue/digestion with pallor marks Spleen Qi.',
+      memory: '<strong>White-sticky—Wind-Phlegm; red-greasy—Fire; red-thin + back—Yin; pale-tired + digestion—Qi.</strong>',
+      safety: 'Do not replace antiseizure medication. A seizure lasting 5 minutes, repeated seizures without recovery, first seizure, injury, pregnancy or breathing difficulty is an emergency.',
+      source: 'Internal Medicine 1, Handout 8: Epilepsy Patterns.'
+    },
+    es: {
+      intro: 'Las convulsiones requieren diagnóstico neurológico; la comparación MTC organiza signos acompañantes en Flema/Fuego de exceso o deficiencia crónica.',
+      rows: [
+        ['Obstrucción por Viento-Flema', 'Mareo/opresión antes de caer, convulsiones, espuma y capa blanca pegajosa', 'Ding Xian Wan', 'Expulsar Flema, extinguir Viento y abrir orificios.'],
+        ['Flema-Fuego interno', 'Convulsión con irritabilidad, insomnio, flema amarilla difícil, boca amarga, estreñimiento y lengua roja grasosa', 'Long Dan Xie Gan Tang + Di Tan Tang', 'Drenar Fuego, transformar Flema y abrir orificios.'],
+        ['Deficiencia Yin de Hígado-Riñón', 'Epilepsia crónica con vértigo, insomnio, olvido, lumbar/rodillas débiles y lengua roja con poca capa', 'Zuo Gui Wan', 'Nutrir Yin de Hígado-Riñón y subyugar Yang.'],
+        ['Deficiencia Qi de Bazo-Estómago', 'Epilepsia crónica con fatiga, poco apetito, heces sueltas, náusea y lengua pálida', 'Liu Jun Zi Tang', 'Fortalecer Bazo, aumentar Qi y transformar turbidez.'],
+      ],
+      rule: 'Colapso blanco-pegajoso marca Viento-Flema; rojo-amarillo-irritable, Flema-Fuego; lumbar débil con Calor vacío, Yin; fatiga/digestión con palidez, Qi de Bazo.',
+      memory: '<strong>Blanco-pegajoso—Viento-Flema; rojo-grasoso—Fuego; rojo-delgado + lumbar—Yin; pálido-cansado + digestión—Qi.</strong>',
+      safety: 'No sustituir anticonvulsivos. Convulsión de 5 minutos, repetida sin recuperación, primera convulsión, lesión, embarazo o dificultad respiratoria es emergencia.',
+      source: 'Internal Medicine 1, Handout 8: Epilepsy Patterns.'
+    }
+  },
+  {
+    slug: 'bi-syndrome-patterns', title: { en: 'Bi Syndrome Pattern Differentiation', es: 'Diferenciación del Síndrome Bi' },
+    summary: { en: 'Distinguish Wind, Cold, Damp and Heat Bi from chronic stasis-Phlegm and deficiency branches.', es: 'Distingue Bi por Viento, Frío, Humedad y Calor de ramas crónicas por estasis-Flema y deficiencia.' },
+    focus: { en: 'Moving versus fixed pain, temperature, swelling and chronic deformity', es: 'Dolor móvil frente a fijo, temperatura, hinchazón y deformidad crónica' },
+    search: 'bi syndrome painful obstruction wind cold damp heat blood stasis phlegm deficiency fang feng wu tou yi yi ren bai hu gui zhi tao hong du huo ji sheng',
+    en: {
+      intro: 'Pain behavior identifies the dominant pathogen; chronic deformity or constitutional weakness signals deeper obstruction or deficiency.',
+      rows: [
+        ['Wind-dominant Bi', 'Pain moves between joints, flexion/extension difficulty and aversion to Wind', 'Fang Feng Tang', 'Dispel Wind and open channels.'],
+        ['Cold-dominant Bi', 'Severe fixed cold pain, worse with Cold and better with Heat; no redness', 'Wu Tou Tang', 'Warm channels and dissipate Cold.'],
+        ['Damp-dominant Bi', 'Heavy aching, swelling and numbness, worse in rainy weather', 'Yi Yi Ren Tang', 'Drain Dampness and open channels.'],
+        ['Heat-dominant Bi', 'Hot red swollen painful joints with fever, thirst and dark scant urine', 'Bai Hu Jia Gui Zhi Tang', 'Clear Heat and open channels.'],
+        ['Blood stasis and Phlegm turbidity', 'Chronic swelling, stiffness, deformity, immobility and purple/dark tongue', 'Tao Hong Yin', 'Dispel stasis, transform Phlegm and relieve pain.'],
+        ['Qi-Blood and Liver-Kidney deficiency', 'Prolonged pain with weak back/knees, numbness, dyspnea and pale weak signs', 'Du Huo Ji Sheng Tang or San Bi Tang', 'Supplement deficiency while dispelling Wind-Cold-Damp.'],
+      ],
+      rule: 'Moving is Wind; severe cold fixed pain is Cold; heavy swollen pain is Damp; red-hot pain is Heat; deformity/purple is stasis-Phlegm; weakness is deficiency.',
+      memory: '<strong>Moves—Wind; freezes—Cold; weighs—Damp; burns—Heat; deforms—stasis; weakens—deficiency.</strong>',
+      safety: 'A single hot red swollen joint with fever, sudden inability to bear weight, major trauma or rapidly progressive weakness requires urgent evaluation.',
+      source: 'Internal Medicine 1, Handout 9: Bi Patterns.'
+    },
+    es: {
+      intro: 'El comportamiento del dolor identifica el patógeno dominante; deformidad crónica o debilidad constitucional indica obstrucción profunda o deficiencia.',
+      rows: [
+        ['Bi dominante de Viento', 'Dolor migra entre articulaciones, dificultad de flexión/extensión y aversión al Viento', 'Fang Feng Tang', 'Expulsar Viento y abrir canales.'],
+        ['Bi dominante de Frío', 'Dolor frío grave y fijo, peor con Frío y mejor con Calor; sin enrojecimiento', 'Wu Tou Tang', 'Calentar canales y disipar Frío.'],
+        ['Bi dominante de Humedad', 'Dolor pesado, hinchazón y entumecimiento, peor con lluvia', 'Yi Yi Ren Tang', 'Drenar Humedad y abrir canales.'],
+        ['Bi dominante de Calor', 'Articulación caliente, roja, hinchada y dolorosa con fiebre, sed y orina oscura/escasa', 'Bai Hu Jia Gui Zhi Tang', 'Aclarar Calor y abrir canales.'],
+        ['Estasis de Sangre y turbidez de Flema', 'Hinchazón crónica, rigidez, deformidad, inmovilidad y lengua oscura/púrpura', 'Tao Hong Yin', 'Eliminar estasis, transformar Flema y aliviar dolor.'],
+        ['Deficiencia Qi-Sangre e Hígado-Riñón', 'Dolor prolongado con lumbar/rodillas débiles, entumecimiento, disnea y signos pálidos/débiles', 'Du Huo Ji Sheng Tang o San Bi Tang', 'Suplementar deficiencia y expulsar Viento-Frío-Humedad.'],
+      ],
+      rule: 'Móvil es Viento; frío fijo grave es Frío; pesado/hinchado es Humedad; rojo/caliente es Calor; deformidad/púrpura es estasis-Flema; debilidad es deficiencia.',
+      memory: '<strong>Migra—Viento; congela—Frío; pesa—Humedad; quema—Calor; deforma—estasis; debilita—deficiencia.</strong>',
+      safety: 'Una articulación caliente, roja e hinchada con fiebre, incapacidad súbita de apoyar peso, trauma grave o debilidad progresiva requiere evaluación urgente.',
+      source: 'Internal Medicine 1, Handout 9: Bi Patterns.'
+    }
+  },
+  {
+    slug: 'atony-syndrome-patterns', title: { en: 'Atony Syndrome Pattern Differentiation', es: 'Diferenciación del Síndrome de Atonía' },
+    summary: { en: 'Compare Lung Heat fluid injury, Damp-Heat invasion, Spleen-Stomach Qi deficiency and Liver-Kidney Yin depletion.', es: 'Compara lesión de líquidos por Calor de Pulmón, invasión de Humedad-Calor, deficiencia Qi de Bazo-Estómago y agotamiento Yin de Hígado-Riñón.' },
+    focus: { en: 'Acute Heat or Dampness versus progressive digestive or Kidney deficiency', es: 'Calor o Humedad agudos frente a deficiencia digestiva o renal progresiva' },
+    search: 'atony wei syndrome flaccidity weakness lung heat fluids damp heat spleen stomach qi liver kidney yin qing zao jiu fei er miao shen ling bai zhu hu qian',
+    en: {
+      intro: 'Flaccidity and limb weakness are sorted by acute dryness/Heat, Damp-Heat heaviness or progressive deficiency signs.',
+      rows: [
+        ['Lung Heat injures fluids', 'Weak/flaccid limbs with fever, dry cough/throat, thirst, scant urine and dry yellow tongue', 'Qing Zao Jiu Fei Tang', 'Clear Heat, moisten Lung and generate fluids.'],
+        ['Damp-Heat invasion', 'Heavy weak limbs with numbness/slight swelling, fever, chest fullness, dark urine and yellow sticky coat', 'Jia Wei Er Miao San', 'Clear Heat and drain Dampness.'],
+        ['Spleen-Stomach Qi deficiency', 'Progressive weakness/atrophy with poor appetite, loose stool, fatigue, dyspnea and pale tongue', 'Shen Ling Bai Zhu San', 'Tonify Spleen-Stomach and boost Qi.'],
+        ['Liver-Kidney Yin depletion', 'Weak limbs with weak back/knees, vertigo, tinnitus, dry throat and red scant-coated tongue', 'Hu Qian Wan', 'Nourish Liver-Kidney Yin and clear deficient Heat.'],
+      ],
+      rule: 'Dry febrile signs point to Lung fluids; heavy swollen sticky signs to Damp-Heat; digestion/pallor to Spleen Qi; lumbar weakness/tinnitus/empty Heat to Liver-Kidney Yin.',
+      memory: '<strong>Dry-fever—Lung; heavy-sticky—Damp-Heat; thin-tired digestion—Spleen; back-ears-empty Heat—Kidney Yin.</strong>',
+      safety: 'Sudden or rapidly progressive weakness, one-sided weakness, breathing/swallowing difficulty, loss of bladder/bowel control or inability to walk is an emergency.',
+      source: 'Internal Medicine 1, Handout 9: Atony Patterns.'
+    },
+    es: {
+      intro: 'Flacidez y debilidad de miembros se clasifican por sequedad/Calor agudo, pesadez de Humedad-Calor o signos progresivos de deficiencia.',
+      rows: [
+        ['Calor de Pulmón lesiona líquidos', 'Miembros débiles/flácidos con fiebre, tos/garganta seca, sed, orina escasa y lengua seca amarilla', 'Qing Zao Jiu Fei Tang', 'Aclarar Calor, humedecer Pulmón y generar líquidos.'],
+        ['Invasión de Humedad-Calor', 'Miembros pesados/débiles con entumecimiento o edema leve, fiebre, plenitud torácica, orina oscura y capa amarilla pegajosa', 'Jia Wei Er Miao San', 'Aclarar Calor y drenar Humedad.'],
+        ['Deficiencia Qi de Bazo-Estómago', 'Debilidad/atrofia progresiva con poco apetito, heces sueltas, fatiga, disnea y lengua pálida', 'Shen Ling Bai Zhu San', 'Tonificar Bazo-Estómago y aumentar Qi.'],
+        ['Agotamiento Yin de Hígado-Riñón', 'Miembros débiles con lumbar/rodillas débiles, vértigo, tinnitus, garganta seca y lengua roja con poca capa', 'Hu Qian Wan', 'Nutrir Yin de Hígado-Riñón y aclarar Calor vacío.'],
+      ],
+      rule: 'Signos febriles/secos apuntan a líquidos de Pulmón; pesados/hinchados/pegajosos a Humedad-Calor; digestión/palidez a Qi de Bazo; lumbar/tinnitus/Calor vacío a Yin renal.',
+      memory: '<strong>Seco-fiebre—Pulmón; pesado-pegajoso—Humedad-Calor; digestión débil—Bazo; lumbar-oídos-Calor vacío—Yin renal.</strong>',
+      safety: 'Debilidad súbita o progresiva, unilateral, dificultad al respirar/tragar, pérdida de vejiga/intestino o incapacidad de caminar es emergencia.',
+      source: 'Internal Medicine 1, Handout 9: Atony Patterns.'
+    }
+  },
+  {
+    slug: 'facial-pain-patterns', title: { en: 'Facial Pain Pattern Differentiation', es: 'Diferenciación del Dolor Facial' },
+    summary: { en: 'Separate external Wind-Cold facial pain from Liver-Stomach Fire.', es: 'Separa dolor facial por Viento-Frío externo de Fuego de Hígado-Estómago.' },
+    focus: { en: 'Cold relief versus burning pain with red Heat signs', es: 'Alivio con calor frente a dolor ardiente con signos rojos de Calor' },
+    search: 'facial pain trigeminal wind cold liver stomach fire chuan xiong cha tiao san xiong zhi shi gao cold heat spasm burning',
+    en: {
+      intro: 'Temperature and associated eye/nasal signs separate the two presentations in the source.',
+      rows: [
+        ['External Wind-Cold', 'Sudden facial pain/spasm, worse with Cold, better with Heat, clear runny nose and floating-tight pulse', 'Chuan Xiong Cha Tiao San', 'Dispel Wind-Cold and relieve pain.'],
+        ['Liver and Stomach Fire', 'Sudden burning facial pain, irritability, red tearing eyes, thirst, constipation and red-yellow tongue', 'Xiong Zhi Shi Gao Tang', 'Clear Liver-Stomach Fire and relieve pain.'],
+      ],
+      rule: 'Cold aggravation, Heat relief and clear discharge indicate Wind-Cold; burning pain, red eyes, thirst and constipation indicate Fire.',
+      memory: '<strong>Cold hurts and warmth helps—Wind-Cold; face burns and eyes redden—Fire.</strong>',
+      safety: 'New facial weakness, speech/vision change, severe sudden headache, rash near the eye, fever/swelling, dental infection or persistent new facial pain requires prompt medical evaluation.',
+      source: 'Internal Medicine 1, Handout 9: Facial Pain.'
+    },
+    es: {
+      intro: 'La temperatura y los signos oculares/nasales acompañantes separan las dos presentaciones de la fuente.',
+      rows: [
+        ['Viento-Frío externo', 'Dolor/espasmo facial súbito, peor con Frío, mejor con Calor, rinorrea clara y pulso flotante-tenso', 'Chuan Xiong Cha Tiao San', 'Expulsar Viento-Frío y aliviar dolor.'],
+        ['Fuego de Hígado y Estómago', 'Dolor facial ardiente súbito, irritabilidad, ojos rojos con lagrimeo, sed, estreñimiento y lengua roja/amarilla', 'Xiong Zhi Shi Gao Tang', 'Aclarar Fuego de Hígado-Estómago y aliviar dolor.'],
+      ],
+      rule: 'Frío agrava, calor alivia y secreción clara indica Viento-Frío; dolor ardiente, ojos rojos, sed y estreñimiento indica Fuego.',
+      memory: '<strong>Frío duele y calor ayuda—Viento-Frío; cara arde y ojos enrojecen—Fuego.</strong>',
+      safety: 'Debilidad facial nueva, cambio de habla/visión, cefalea súbita grave, erupción cerca del ojo, fiebre/hinchazón, infección dental o dolor facial nuevo persistente requiere evaluación pronta.',
+      source: 'Internal Medicine 1, Handout 9: Facial Pain.'
+    }
   }
 ];
 
