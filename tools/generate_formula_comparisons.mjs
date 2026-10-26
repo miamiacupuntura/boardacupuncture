@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -1677,29 +1677,11 @@ function indexHtml(language) {
 <footer class="comparison-footer"><div class="comparison-shell">${spanish ? 'Material independiente de estudio. Los Exam Keys y el feedback de los Mock permanecen en Exam Key.' : 'Independent study material. Exam keys and Mock feedback remain in Exam Key.'}</div></footer></body></html>`;
 }
 
-function updateMasterIndex() {
-  const masterPath = resolve(root, 'index.html');
-  let html = readFileSync(masterPath, 'utf8');
-  const herbCount = (html.match(/data-type="herbs"/g) || []).length;
-  const formulaCards = cards.map(card => `        <article class="comparison-card" data-type="formulas" data-search="${esc(card.search)}">
-          <span class="comparison-card__type">Formulas</span><h3>${esc(card.title)}</h3><p>${esc(card.summary)}</p><div class="comparison-card__category"><strong>Category:</strong><br>${esc(card.category)}</div><a class="comparison-card__open" href="${card.slug}.html">Open Study Note →</a>
-        </article>`).join('\n\n');
-  const block = `        <!-- FORMULA-CARDS-START -->\n${formulaCards}\n        <!-- FORMULA-CARDS-END -->`;
-  const markerPattern = /        <!-- FORMULA-CARDS-START -->[\s\S]*?        <!-- FORMULA-CARDS-END -->/;
-  if (!markerPattern.test(html)) {
-    throw new Error('Formula-card markers are missing from comparisons/index.html');
-  }
-  html = html.replace(markerPattern, block);
-  html = html.replace(/<span data-visible-count>\d+<\/span>/, `<span data-visible-count>${herbCount + cards.length}</span>`);
-  writeFileSync(masterPath, html);
-}
-
 for (const card of cards) {
   writeFileSync(resolve(root, `${card.slug}.html`), cardHtml(card, 'en'));
   writeFileSync(resolve(root, `${card.slug}-es.html`), cardHtml(card, 'es'));
 }
 writeFileSync(resolve(root, 'formulas.html'), indexHtml('en'));
 writeFileSync(resolve(root, 'formulas-es.html'), indexHtml('es'));
-updateMasterIndex();
 
-console.log(`Generated ${cards.length * 2} formula cards, 2 indexes and the master listing in ${root}`);
+console.log(`Generated ${cards.length * 2} formula cards and 2 formula indexes in ${root}`);
