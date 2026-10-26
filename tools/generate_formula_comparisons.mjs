@@ -2757,6 +2757,234 @@ cards.push(
       prompts: ['¿Cuál es más fuerte para agotamiento Yang-Esencia?', '¿Cuál enfatiza transformación de agua?', '¿Qué signos favorecen Jin Gui?'],
       source: 'Banco fuente: serie FWB 8.2, Comparison Formulas to Tonify; corroborado con perfiles y materiales tónicos Yang.'
     }
+  },
+  {
+    slug: 'gui-zhi-tang-vs-ge-gen-tang-vs-xiao-qing-long-tang', title: 'Gui Zhi Tang vs. Ge Gen Tang vs. Xiao Qing Long Tang',
+    category: 'Formulas that Release the Exterior',
+    summary: 'Distinguish deficient Wind-Cold with sweating, Wind-Cold with a rigid upper back, and Wind-Cold complicated by internal thin fluids.',
+    search: 'gui zhi tang ge gen tang xiao qing long tang exterior wind cold sweating stiff neck upper back thin fluids cough wheezing',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Gui Zhi Tang', 'Ge Gen Tang', 'Xiao Qing Long Tang'],
+      shared: 'All release Exterior Wind-Cold and may present with chills, fever, headache, body aches and a floating pulse.',
+      fast: ['Exterior deficiency with spontaneous sweating and aversion to wind.', 'Wind-Cold with pronounced stiffness of the neck and upper back, usually without sweating.', 'Wind-Cold constraining the Exterior with internal thin fluids causing cough, wheezing and copious clear sputum.'],
+      rows: [
+        ['Decisive clue', 'Spontaneous sweating from Ying-Wei disharmony.', 'Rigid neck and upper back.', 'Cough or wheezing with thin, clear fluids.'],
+        ['Pattern depth', 'Exterior deficiency.', 'Exterior Wind-Cold with channel constraint.', 'Exterior Wind-Cold plus internal fluid retention.'],
+        ['Fluid clue', 'No defining retained-fluid pattern.', 'May include diarrhea when the Exterior impairs Yangming.', 'Copious clear sputum, chest fullness or retching.'],
+        ['Exam shortcut', 'Sweats.', 'Stiff neck.', 'Cold cough with water.']
+      ],
+      why: 'The shared Exterior presentation is only the starting point. Sweat identifies Gui Zhi Tang, marked upper-back rigidity identifies Ge Gen Tang, and internal thin fluids identify Xiao Qing Long Tang.',
+      memory: '<strong>Gui Zhi leaks;</strong> <strong>Ge Gen loosens;</strong> <strong>Xiao Qing Long drains the cold dragon.</strong>',
+      safety: 'Ge Gen Tang and Xiao Qing Long Tang contain Ma Huang; Xiao Qing Long Tang also contains processed Ban Xia and Xi Xin. Cardiovascular disease, pregnancy, frailty and medication use require professional screening.',
+      prompts: ['Which formula matches spontaneous sweating?', 'Which one is selected for marked neck rigidity?', 'Which one treats Exterior Wind-Cold with internal thin fluids?'],
+      source: 'Most-important-formulas list; corroborated with FWB Exterior comparisons, Classic Formulas profiles and <em>Chinese Herbal Medicine: Formulas &amp; Strategies</em>, 2nd ed.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Gui Zhi Tang', 'Ge Gen Tang', 'Xiao Qing Long Tang'],
+      shared: 'Todas liberan Viento-Frío Exterior y pueden presentar escalofríos, fiebre, cefalea, dolor corporal y pulso flotante.',
+      fast: ['Deficiencia Exterior con sudoración espontánea y aversión al viento.', 'Viento-Frío con rigidez marcada de cuello y espalda superior, normalmente sin sudor.', 'Viento-Frío que constriñe Exterior con líquidos finos internos, tos, sibilancias y esputo claro abundante.'],
+      rows: [
+        ['Pista decisiva', 'Sudor espontáneo por desarmonía Ying-Wei.', 'Cuello y espalda superior rígidos.', 'Tos o sibilancias con líquidos finos y claros.'],
+        ['Profundidad', 'Deficiencia Exterior.', 'Viento-Frío Exterior con constricción de canales.', 'Viento-Frío Exterior más retención interna de líquidos.'],
+        ['Pista de líquidos', 'Sin patrón definitorio de líquidos retenidos.', 'Puede haber diarrea cuando Exterior afecta Yangming.', 'Esputo claro abundante, plenitud torácica o arcadas.'],
+        ['Atajo', 'Suda.', 'Cuello rígido.', 'Tos fría con agua.']
+      ],
+      why: 'El Exterior compartido es solo el comienzo. Sudor señala Gui Zhi Tang, rigidez dorsal Ge Gen Tang y líquidos finos internos Xiao Qing Long Tang.',
+      memory: '<strong>Gui Zhi pierde;</strong> <strong>Ge Gen afloja;</strong> <strong>Xiao Qing Long drena el dragón frío.</strong>',
+      safety: 'Ge Gen Tang y Xiao Qing Long Tang contienen Ma Huang; Xiao Qing Long también contiene Ban Xia procesada y Xi Xin. Enfermedad cardiovascular, embarazo, debilidad y medicamentos requieren evaluación profesional.',
+      prompts: ['¿Cuál corresponde a sudoración espontánea?', '¿Cuál a rigidez marcada del cuello?', '¿Cuál trata Viento-Frío Exterior con líquidos finos internos?'],
+      source: 'Lista Most Important Formulas; corroborado con comparaciones FWB de Exterior, perfiles Classic Formulas y <em>Chinese Herbal Medicine: Formulas &amp; Strategies</em>, 2.ª ed.'
+    }
+  },
+  {
+    slug: 'si-jun-zi-tang-vs-si-wu-tang-vs-ba-zhen-tang-vs-shi-quan-da-bu-tang', title: 'Si Jun Zi Tang vs. Si Wu Tang vs. Ba Zhen Tang vs. Shi Quan Da Bu Tang',
+    category: 'Formulas that Tonify',
+    summary: 'Build the tonic family from Qi, to Blood, to Qi and Blood, and finally Qi-Blood deficiency with Cold.',
+    search: 'si jun zi tang si wu tang ba zhen tang shi quan da bu tang qi blood deficiency cold tonify spleen pale fatigue',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Si Jun Zi Tang', 'Si Wu Tang', 'Ba Zhen Tang', 'Shi Quan Da Bu Tang'],
+      shared: 'All address deficiency. The exam task is to identify whether the missing substance is Qi, Blood, both, or both with Yang-Cold signs.',
+      fast: ['Spleen Qi deficiency.', 'Blood deficiency, often with impaired circulation.', 'Combined Qi and Blood deficiency.', 'Qi and Blood deficiency with Cold or weak Yang.'],
+      rows: [
+        ['Primary target', 'Spleen-Stomach Qi.', 'Liver-Heart Blood.', 'Qi and Blood.', 'Qi, Blood and warming support.'],
+        ['Decisive signs', 'Fatigue, poor appetite, loose stools and weak limbs.', 'Pale complexion, dizziness, palpitations and scanty menses.', 'Both digestive fatigue and Blood-deficiency signs.', 'The combined picture plus cold limbs, aversion to cold or a deep weak pulse.'],
+        ['Formula relationship', 'Qi-tonic foundation.', 'Blood-tonic foundation.', 'Si Jun Zi Tang + Si Wu Tang.', 'Ba Zhen Tang plus Huang Qi and Rou Gui.'],
+        ['Exam shortcut', 'Qi only.', 'Blood only.', 'Qi + Blood.', 'Qi + Blood + Cold.']
+      ],
+      why: 'This is a nested formula family. Recognizing the architecture prevents memorizing four unrelated lists.',
+      memory: '<strong>Four Gentlemen make Qi;</strong> <strong>Four Substances make Blood;</strong> <strong>Eight Treasures unite them;</strong> <strong>Ten Complete adds warmth.</strong>',
+      safety: 'Rich tonic formulas can worsen Food Stagnation, Dampness or acute excess conditions. Shi Quan Da Bu Tang contains Rou Gui and requires differentiation when Heat or pregnancy is present.',
+      prompts: ['Which formula is the sum of Si Jun Zi Tang and Si Wu Tang?', 'Which adds Huang Qi and Rou Gui?', 'Which formula is the Blood-tonic foundation?'],
+      source: 'Most-important-formulas list; corroborated with FWB Tonify comparisons and individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Si Jun Zi Tang', 'Si Wu Tang', 'Ba Zhen Tang', 'Shi Quan Da Bu Tang'],
+      shared: 'Todas tratan deficiencia. La tarea es identificar si falta Qi, Sangre, ambos o ambos acompañados de Frío/Yang débil.',
+      fast: ['Deficiencia de Qi de Bazo.', 'Deficiencia de Sangre, a menudo con circulación alterada.', 'Deficiencia combinada de Qi y Sangre.', 'Deficiencia de Qi y Sangre con Frío o Yang débil.'],
+      rows: [
+        ['Objetivo', 'Qi de Bazo-Estómago.', 'Sangre de Hígado-Corazón.', 'Qi y Sangre.', 'Qi, Sangre y apoyo calentador.'],
+        ['Signos decisivos', 'Fatiga, poco apetito, heces sueltas y extremidades débiles.', 'Palidez, mareo, palpitaciones y menstruación escasa.', 'Signos digestivos de Qi más signos de Sangre.', 'El cuadro combinado más extremidades frías, aversión al frío o pulso profundo-débil.'],
+        ['Relación', 'Base tónica de Qi.', 'Base tónica de Sangre.', 'Si Jun Zi Tang + Si Wu Tang.', 'Ba Zhen Tang más Huang Qi y Rou Gui.'],
+        ['Atajo', 'Solo Qi.', 'Solo Sangre.', 'Qi + Sangre.', 'Qi + Sangre + Frío.']
+      ],
+      why: 'Es una familia anidada. Reconocer su arquitectura evita memorizar cuatro listas aisladas.',
+      memory: '<strong>Cuatro Caballeros hacen Qi;</strong> <strong>Cuatro Sustancias hacen Sangre;</strong> <strong>Ocho Tesoros los unen;</strong> <strong>Diez Completa añade calor.</strong>',
+      safety: 'Los tónicos ricos pueden agravar estancamiento alimentario, Humedad o cuadros agudos de exceso. Shi Quan Da Bu contiene Rou Gui y requiere diferenciación ante Calor o embarazo.',
+      prompts: ['¿Cuál suma Si Jun Zi Tang y Si Wu Tang?', '¿Cuál añade Huang Qi y Rou Gui?', '¿Cuál es la base tónica de Sangre?'],
+      source: 'Lista Most Important Formulas; corroborado con comparaciones FWB de Tonificación y perfiles individuales.'
+    }
+  },
+  {
+    slug: 'liu-wei-di-huang-wan-vs-zhi-bai-di-huang-wan-vs-qi-ju-di-huang-wan', title: 'Liu Wei Di Huang Wan vs. Zhi Bai Di Huang Wan vs. Qi Ju Di Huang Wan',
+    category: 'Formulas that Tonify Yin',
+    summary: 'Start with Liver-Kidney Yin deficiency, then identify deficient Fire or eye-dominant Liver-Kidney deficiency.',
+    search: 'liu wei di huang wan zhi bai di huang wan qi ju di huang wan kidney liver yin deficiency empty heat fire eyes vision',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Liu Wei Di Huang Wan', 'Zhi Bai Di Huang Wan', 'Qi Ju Di Huang Wan'],
+      shared: 'All use the Liu Wei Di Huang Wan base to nourish Liver-Kidney Yin. The added herbs reveal the branch pattern.',
+      fast: ['Foundational Liver-Kidney Yin deficiency.', 'The same deficiency with pronounced deficient Fire.', 'The same deficiency with dry, blurred or weak eyes.'],
+      rows: [
+        ['Added herbs', 'Base six-herb formula.', 'Adds Zhi Mu and Huang Bai.', 'Adds Gou Qi Zi and Ju Hua.'],
+        ['Branch pattern', 'No dominant added branch.', 'Empty Heat/deficient Fire.', 'Eye and vision disorder.'],
+        ['Decisive clue', 'Weak low back, tinnitus, night sweating and Yin-deficiency signs.', 'Stronger tidal fever, five-center heat, night sweating or irritability.', 'Dry eyes, blurred vision or diminished visual acuity.'],
+        ['Exam shortcut', 'Base Yin.', 'Yin + Fire.', 'Yin + Eyes.']
+      ],
+      why: 'The two derivatives do not replace the base diagnosis; they add a decisive branch—Fire or eyes.',
+      memory: '<strong>Liu Wei is the root;</strong> <strong>Zhi Bai cools Fire;</strong> <strong>Qi Ju opens the eyes.</strong>',
+      safety: 'These rich formulas may aggravate weak digestion, loose stools or Dampness. Eye symptoms with sudden vision loss, pain or neurologic signs require urgent evaluation.',
+      prompts: ['Which derivative adds Zhi Mu and Huang Bai?', 'Which adds Gou Qi Zi and Ju Hua?', 'Which is the unmodified base formula?'],
+      source: 'Most-important-formulas list; corroborated with FWB Tonify comparisons and individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Liu Wei Di Huang Wan', 'Zhi Bai Di Huang Wan', 'Qi Ju Di Huang Wan'],
+      shared: 'Todas usan la base Liu Wei Di Huang Wan para nutrir Yin de Hígado-Riñón. Las hierbas añadidas revelan la rama.',
+      fast: ['Deficiencia fundamental de Yin Hígado-Riñón.', 'La misma deficiencia con Fuego vacío pronunciado.', 'La misma deficiencia con ojos secos, borrosos o débiles.'],
+      rows: [
+        ['Hierbas añadidas', 'Fórmula base de seis hierbas.', 'Añade Zhi Mu y Huang Bai.', 'Añade Gou Qi Zi y Ju Hua.'],
+        ['Rama', 'Sin rama añadida dominante.', 'Calor vacío/Fuego deficiente.', 'Trastorno ocular y visual.'],
+        ['Pista decisiva', 'Lumbar débil, tinnitus, sudor nocturno y signos de Yin.', 'Fiebre vespertina, calor de cinco centros, sudor nocturno o irritabilidad más fuertes.', 'Ojos secos, visión borrosa o agudeza visual reducida.'],
+        ['Atajo', 'Yin base.', 'Yin + Fuego.', 'Yin + Ojos.']
+      ],
+      why: 'Las derivadas no sustituyen el diagnóstico base; añaden una rama decisiva: Fuego u ojos.',
+      memory: '<strong>Liu Wei es la raíz;</strong> <strong>Zhi Bai enfría Fuego;</strong> <strong>Qi Ju abre los ojos.</strong>',
+      safety: 'Estas fórmulas ricas pueden agravar digestión débil, heces sueltas o Humedad. Pérdida súbita de visión, dolor ocular o signos neurológicos requieren urgencia.',
+      prompts: ['¿Cuál añade Zhi Mu y Huang Bai?', '¿Cuál añade Gou Qi Zi y Ju Hua?', '¿Cuál es la base sin modificar?'],
+      source: 'Lista Most Important Formulas; corroborado con comparaciones FWB de Tonificación y perfiles individuales.'
+    }
+  },
+  {
+    slug: 'zuo-gui-wan-vs-zuo-gui-yin-vs-you-gui-wan-vs-you-gui-yin', title: 'Zuo Gui Wan vs. Zuo Gui Yin vs. You Gui Wan vs. You Gui Yin',
+    category: 'Formulas that Tonify Yin and Yang',
+    summary: 'Use Left versus Right for Yin versus Yang, then Pill versus Decoction for richer severe deficiency versus a simpler moderate presentation.',
+    search: 'zuo gui wan zuo gui yin you gui wan you gui yin restore left right kidney yin yang essence severe moderate pill decoction',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Zuo Gui Wan', 'Zuo Gui Yin', 'You Gui Wan', 'You Gui Yin'],
+      shared: 'All rebuild Kidney deficiency. Left identifies Yin, Right identifies Yang; Wan is the richer pill strategy and Yin the simpler decoction strategy.',
+      fast: ['Severe Kidney Yin-Essence depletion.', 'Moderate Kidney Yin deficiency.', 'Severe Kidney Yang-Essence depletion.', 'Moderate Kidney Yang deficiency.'],
+      rows: [
+        ['Axis', 'Left: Yin.', 'Left: Yin.', 'Right: Yang.', 'Right: Yang.'],
+        ['Relative depth', 'Richer and more Essence-focused.', 'Simpler and less cloying.', 'Richer and more Essence-focused.', 'Simpler warming support.'],
+        ['Decisive signs', 'Marked Yin/Essence depletion with weak back, tinnitus and reproductive weakness.', 'Typical Yin deficiency without the same depth of Essence depletion.', 'Marked Cold, reproductive weakness and severe Yang/Essence depletion.', 'Typical Yang deficiency with Cold and weakness but less severe Essence loss.'],
+        ['Exam shortcut', 'Left severe.', 'Left moderate.', 'Right severe.', 'Right moderate.']
+      ],
+      why: 'Two decisions solve the family: Yin or Yang, then severe/rich or moderate/simpler.',
+      memory: '<strong>Zuo = Yin;</strong> <strong>You = Yang;</strong> <strong>Wan = deeper;</strong> <strong>Yin = lighter.</strong>',
+      safety: 'Rich Yin formulas can worsen Dampness and weak digestion; warming Yang formulas can aggravate Yin deficiency or Heat. Products containing Fu Zi require properly processed material and professional supervision.',
+      prompts: ['Which two formulas restore Kidney Yin?', 'Which is the richer Yang formula?', 'What does Wan versus Yin signal in this study set?'],
+      source: 'Most-important-formulas list and individual formula profiles; severity wording follows the source study set and is used as an exam-oriented distinction.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Zuo Gui Wan', 'Zuo Gui Yin', 'You Gui Wan', 'You Gui Yin'],
+      shared: 'Todas reconstruyen deficiencia renal. Izquierda identifica Yin, Derecha Yang; Wan es la estrategia rica en píldora e Yin la decocción más simple.',
+      fast: ['Agotamiento grave de Yin-Esencia renal.', 'Deficiencia moderada de Yin renal.', 'Agotamiento grave de Yang-Esencia renal.', 'Deficiencia moderada de Yang renal.'],
+      rows: [
+        ['Eje', 'Izquierda: Yin.', 'Izquierda: Yin.', 'Derecha: Yang.', 'Derecha: Yang.'],
+        ['Profundidad', 'Más rica y centrada en Esencia.', 'Más simple y menos empalagosa.', 'Más rica y centrada en Esencia.', 'Apoyo calentador más simple.'],
+        ['Signos decisivos', 'Agotamiento marcado de Yin/Esencia con lumbar débil, tinnitus y debilidad reproductiva.', 'Deficiencia Yin típica sin la misma profundidad de Esencia.', 'Frío marcado, debilidad reproductiva y agotamiento grave Yang/Esencia.', 'Deficiencia Yang típica con Frío y debilidad, pero menor pérdida de Esencia.'],
+        ['Atajo', 'Izquierda grave.', 'Izquierda moderada.', 'Derecha grave.', 'Derecha moderada.']
+      ],
+      why: 'Dos decisiones resuelven la familia: Yin o Yang, y luego grave/rica o moderada/simple.',
+      memory: '<strong>Zuo = Yin;</strong> <strong>You = Yang;</strong> <strong>Wan = profundo;</strong> <strong>Yin = ligero.</strong>',
+      safety: 'Fórmulas Yin ricas pueden agravar Humedad/digestión débil; fórmulas Yang pueden agravar deficiencia Yin o Calor. Productos con Fu Zi exigen material procesado y supervisión profesional.',
+      prompts: ['¿Qué dos restauran Yin renal?', '¿Cuál es la fórmula Yang más rica?', '¿Qué señala Wan frente a Yin en este material?'],
+      source: 'Lista Most Important Formulas y perfiles individuales; la gradación sigue el material fuente como distinción orientada al examen.'
+    }
+  },
+  {
+    slug: 'ma-zi-ren-wan-vs-run-chang-wan-vs-ji-chuan-jian', title: 'Ma Zi Ren Wan vs. Run Chang Wan vs. Ji Chuan Jian',
+    category: 'Formulas that Moisten the Intestines',
+    summary: 'Separate Heat-Dryness with Spleen bind, Blood-deficiency Dryness, and Kidney-Yang deficiency constipation.',
+    search: 'ma zi ren wan run chang wan ji chuan jian constipation intestinal dryness heat spleen bind blood deficiency kidney yang elderly',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Ma Zi Ren Wan', 'Run Chang Wan', 'Ji Chuan Jian'],
+      shared: 'All address constipation in which Dryness or deficiency impairs passage; the accompanying pattern selects the formula.',
+      fast: ['Heat and Dryness with Spleen bind and relatively excess abdominal signs.', 'Dry Intestines from Blood deficiency.', 'Constipation from Kidney-Yang deficiency, often in an older or frail patient.'],
+      rows: [
+        ['Root pattern', 'Yangming Heat-Dryness/Spleen bind.', 'Blood deficiency failing to moisten.', 'Kidney Yang and Essence deficiency failing to move and moisten.'],
+        ['Decisive clue', 'Hard stool, thirst or Heat with abdominal fullness.', 'Pale, dry and deficient presentation, often postpartum or after blood loss.', 'Cold, weak low back, frequent clear urination and a deep weak pulse.'],
+        ['Treatment direction', 'Moistens while mildly draining and moving Qi.', 'Nourishes Blood and moistens Intestines.', 'Warms Kidney, enriches fluids and directs Qi downward.'],
+        ['Exam shortcut', 'Hot and bound.', 'Blood-dry.', 'Cold and weak.']
+      ],
+      why: '“Dry constipation” is incomplete. Heat/excess, Blood deficiency and Kidney-Yang deficiency require different therapeutic directions.',
+      memory: '<strong>Ma Zi = Heat;</strong> <strong>Run Chang = Blood;</strong> <strong>Ji Chuan = Kidney Yang.</strong>',
+      safety: 'No stool or gas with severe distention, persistent vomiting, rectal bleeding or acute severe pain may indicate obstruction or another emergency. Strong laxative use is not appropriate for self-treatment.',
+      prompts: ['Which formula matches Spleen bind?', 'Which matches Blood deficiency after blood loss?', 'Which matches constipation with Cold and urinary weakness?'],
+      source: 'Most-important-formulas list; corroborated with Downward-Draining materials and individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Ma Zi Ren Wan', 'Run Chang Wan', 'Ji Chuan Jian'],
+      shared: 'Todas tratan estreñimiento donde Sequedad o deficiencia impiden el tránsito; el patrón acompañante decide.',
+      fast: ['Calor-Sequedad con Spleen bind y signos abdominales relativamente excesivos.', 'Intestinos secos por deficiencia de Sangre.', 'Estreñimiento por deficiencia de Yang renal, frecuente en paciente mayor o débil.'],
+      rows: [
+        ['Patrón raíz', 'Calor-Sequedad Yangming/Spleen bind.', 'Deficiencia de Sangre que no humedece.', 'Deficiencia de Yang y Esencia renal que no mueve ni humedece.'],
+        ['Pista decisiva', 'Heces duras, sed o Calor con plenitud abdominal.', 'Cuadro pálido, seco y deficiente, a menudo posparto o tras pérdida de sangre.', 'Frío, lumbar débil, orina clara frecuente y pulso profundo-débil.'],
+        ['Dirección', 'Humedece mientras drena suavemente y mueve Qi.', 'Nutre Sangre y humedece Intestinos.', 'Calienta Riñón, enriquece líquidos y dirige Qi abajo.'],
+        ['Atajo', 'Caliente y ligado.', 'Seco por Sangre.', 'Frío y débil.']
+      ],
+      why: '“Estreñimiento seco” está incompleto. Calor/exceso, deficiencia de Sangre y deficiencia Yang renal exigen direcciones distintas.',
+      memory: '<strong>Ma Zi = Calor;</strong> <strong>Run Chang = Sangre;</strong> <strong>Ji Chuan = Yang renal.</strong>',
+      safety: 'Ausencia de heces y gases con distensión grave, vómitos persistentes, sangrado rectal o dolor agudo puede indicar obstrucción u otra urgencia. No corresponde automedicación con laxantes fuertes.',
+      prompts: ['¿Cuál corresponde a Spleen bind?', '¿Cuál a deficiencia de Sangre tras pérdida?', '¿Cuál a estreñimiento con Frío y debilidad urinaria?'],
+      source: 'Lista Most Important Formulas; corroborado con materiales Downward-Draining y perfiles individuales.'
+    }
+  },
+  {
+    slug: 'xue-fu-zhu-yu-tang-vs-shao-fu-zhu-yu-tang-vs-shen-tong-zhu-yu-tang', title: 'Xue Fu Zhu Yu Tang vs. Shao Fu Zhu Yu Tang vs. Shen Tong Zhu Yu Tang',
+    category: 'Formulas that Invigorate the Blood',
+    summary: 'Use location and temperature to distinguish chest stasis, Cold lower-abdominal stasis and painful channel stasis.',
+    search: 'xue fu zhu yu tang shao fu zhu yu tang shen tong zhu yu tang blood stasis chest lower abdomen cold channels collaterals pain',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Xue Fu Zhu Yu Tang', 'Shao Fu Zhu Yu Tang', 'Shen Tong Zhu Yu Tang'],
+      shared: 'All move Blood and Qi to relieve fixed pain from Blood stasis. Location and Cold are the decisive clues.',
+      fast: ['Blood stasis in the chest and upper burner.', 'Blood stasis with Cold in the lower abdomen and uterus.', 'Blood stasis obstructing channels and collaterals with persistent body or joint pain.'],
+      rows: [
+        ['Primary location', 'Chest/upper burner.', 'Lower abdomen and uterus.', 'Channels, collaterals and body.'],
+        ['Temperature', 'Not defined primarily by Cold.', 'Cold is essential.', 'May follow trauma or chronic obstruction; location matters more than temperature.'],
+        ['Decisive clue', 'Chest pain, dark complexion, chronic fixed headache or insomnia with stasis.', 'Cold fixed lower-abdominal pain, irregular menses or dysmenorrhea relieved by warmth.', 'Fixed severe body, shoulder, back or joint pain with impaired movement.'],
+        ['Exam shortcut', 'Blood mansion/chest.', 'Lesser abdomen/cold.', 'Body pain/channels.']
+      ],
+      why: 'The shared phrase “Qi and Blood stasis” does not choose the answer. The formula names map where the stasis is lodged.',
+      memory: '<strong>Xue Fu = chest;</strong> <strong>Shao Fu = cold lower abdomen;</strong> <strong>Shen Tong = painful body.</strong>',
+      safety: 'Blood-moving formulas require caution or avoidance in pregnancy, active bleeding and anticoagulant use. New chest pain, neurologic deficits or severe pelvic pain requires urgent assessment.',
+      prompts: ['Which formula targets chest stasis?', 'Which requires Cold in the lower abdomen?', 'Which targets painful channels and collaterals?'],
+      source: 'Most-important-formulas list; corroborated with FWB Blood-invigorating comparisons and individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Xue Fu Zhu Yu Tang', 'Shao Fu Zhu Yu Tang', 'Shen Tong Zhu Yu Tang'],
+      shared: 'Todas mueven Sangre y Qi para aliviar dolor fijo por estasis. La localización y el Frío son las pistas decisivas.',
+      fast: ['Estasis de Sangre en tórax y Jiao Superior.', 'Estasis con Frío en hipogastrio y útero.', 'Estasis obstruyendo canales y colaterales con dolor corporal o articular persistente.'],
+      rows: [
+        ['Localización', 'Tórax/Jiao Superior.', 'Hipogastrio y útero.', 'Canales, colaterales y cuerpo.'],
+        ['Temperatura', 'No definida principalmente por Frío.', 'El Frío es esencial.', 'Puede seguir trauma u obstrucción crónica; importa más la localización.'],
+        ['Pista decisiva', 'Dolor torácico, tez oscura, cefalea fija crónica o insomnio con estasis.', 'Dolor hipogástrico frío y fijo, menstruación irregular o dismenorrea aliviada por calor.', 'Dolor fijo intenso corporal, hombro, espalda o articulaciones con movimiento limitado.'],
+        ['Atajo', 'Mansión de Sangre/tórax.', 'Abdomen menor/Frío.', 'Dolor corporal/canales.']
+      ],
+      why: 'La frase compartida “estasis de Qi y Sangre” no decide. Los nombres indican dónde se aloja la estasis.',
+      memory: '<strong>Xue Fu = tórax;</strong> <strong>Shao Fu = hipogastrio frío;</strong> <strong>Shen Tong = cuerpo doloroso.</strong>',
+      safety: 'Fórmulas que mueven Sangre requieren cautela o evitación en embarazo, sangrado activo y anticoagulantes. Dolor torácico nuevo, déficit neurológico o dolor pélvico grave exige urgencia.',
+      prompts: ['¿Cuál trata estasis torácica?', '¿Cuál requiere Frío hipogástrico?', '¿Cuál trata canales y colaterales dolorosos?'],
+      source: 'Lista Most Important Formulas; corroborado con comparaciones FWB de Sangre y perfiles individuales.'
+    }
   }
 );
 
