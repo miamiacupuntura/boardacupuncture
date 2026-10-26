@@ -555,6 +555,154 @@ const families = [
       memory: '<strong>Bao He despeja la comida;</strong> <strong>Dao Zhi empuja bloqueo caliente;</strong> <strong>Jian Pi repara digestión.</strong>',
       safety: 'Dolor abdominal grave/localizado, abdomen rígido, vómito persistente, sangre en heces, pérdida de peso o no expulsar heces/gases requiere evaluación médica pronta.'
     }
+  },
+  {
+    slug: 'ban-xia-xie-xin-tang-family', title: 'Ban Xia Xie Xin Tang Family',
+    category: { en: 'Harmonize Stomach and Intestines', es: 'Armonizar Estómago e Intestinos' },
+    summary: { en: 'Adjust the mixed Cold-Heat epigastric formula toward stronger fluid retention or deeper Middle-Qi deficiency.', es: 'Ajusta la fórmula epigástrica de Frío-Calor mixtos hacia mayor retención de líquidos o deficiencia más profunda del Qi Medio.' },
+    search: 'ban xia xie xin tang family sheng jiang xie xin tang gan cao xie xin tang mixed cold heat epigastric focal distention vomiting diarrhea borborygmus',
+    en: {
+      root: 'Ban Xia Xie Xin Tang harmonizes Cold and Heat clashing in the Middle Jiao and opens painless focal epigastric distention.',
+      architecture: 'Ban Xia and Gan Jiang warm and descend; Huang Qin and Huang Lian clear Heat; Ren Shen, Da Zao and Zhi Gan Cao support deficient Middle Qi. Changing ginger or licorice emphasis reveals the branch.',
+      members: [
+        ['Ban Xia Xie Xin Tang', 'Balanced warm-cold harmonizing base', 'Mixed Cold-Heat in Stomach and Intestines', 'Painless focal epigastric fullness with nausea/vomiting, borborygmus and diarrhea.'],
+        ['Sheng Jiang Xie Xin Tang', 'Reduces dry ginger emphasis and adds a larger Sheng Jiang fluid-dispersing unit', 'Mixed Cold-Heat with water and food retention', 'More pronounced vomiting, sour or foul belching, borborygmus and watery diarrhea.'],
+        ['Gan Cao Xie Xin Tang', 'Increases Zhi Gan Cao support', 'Mixed Cold-Heat with deeper Middle-Qi deficiency', 'More severe recurrent diarrhea with undigested food, fatigue and marked epigastric obstruction.'],
+      ],
+      rule: 'The painless epigastric knot is shared. More water, vomiting and belching selects Sheng Jiang; greater deficiency and relentless diarrhea selects Gan Cao.',
+      memory: '<strong>Ban Xia balances;</strong> <strong>Sheng Jiang disperses water;</strong> <strong>Gan Cao rebuilds the center.</strong>',
+      safety: 'Ban Xia must be properly processed. Persistent vomiting or diarrhea, dehydration, GI bleeding, severe pain, fever or weight loss requires medical evaluation.'
+    },
+    es: {
+      root: 'Ban Xia Xie Xin Tang armoniza Frío y Calor que chocan en el Jiao Medio y abre distensión epigástrica focal sin dolor.',
+      architecture: 'Ban Xia y Gan Jiang calientan y descienden; Huang Qin y Huang Lian aclaran Calor; Ren Shen, Da Zao y Zhi Gan Cao apoyan Qi Medio deficiente. Cambiar el énfasis de jengibre o regaliz revela la rama.',
+      members: [
+        ['Ban Xia Xie Xin Tang', 'Base armonizadora equilibrada caliente-fría', 'Frío-Calor mixtos en Estómago e Intestinos', 'Plenitud epigástrica focal sin dolor con náusea/vómito, borborigmos y diarrea.'],
+        ['Sheng Jiang Xie Xin Tang', 'Reduce énfasis de jengibre seco y añade mayor unidad de Sheng Jiang que dispersa líquidos', 'Frío-Calor mixtos con retención de agua y alimentos', 'Vómito, eructo agrio/fétido, borborigmos y diarrea acuosa más marcados.'],
+        ['Gan Cao Xie Xin Tang', 'Aumenta el apoyo de Zhi Gan Cao', 'Frío-Calor mixtos con deficiencia más profunda de Qi Medio', 'Diarrea recurrente más grave con alimento no digerido, fatiga y obstrucción epigástrica marcada.'],
+      ],
+      rule: 'El nudo epigástrico indoloro es común. Más agua, vómito y eructo elige Sheng Jiang; mayor deficiencia y diarrea persistente elige Gan Cao.',
+      memory: '<strong>Ban Xia equilibra;</strong> <strong>Sheng Jiang dispersa agua;</strong> <strong>Gan Cao reconstruye Centro.</strong>',
+      safety: 'Ban Xia debe estar procesada. Vómito/diarrea persistente, deshidratación, sangrado GI, dolor grave, fiebre o pérdida de peso requiere evaluación médica.'
+    }
+  },
+  {
+    slug: 'jian-zhong-tang-family', title: 'Jian Zhong Tang Family',
+    category: { en: 'Warm and Build the Middle', es: 'Calentar y construir el Centro' },
+    summary: { en: 'Transform the Gui Zhi Tang framework into a deficiency-Cold abdominal-pain family, then add Qi or Blood support.', es: 'Transforma la estructura Gui Zhi Tang en una familia para dolor abdominal por Frío-deficiencia y añade apoyo de Qi o Sangre.' },
+    search: 'jian zhong tang family xiao jian zhong tang huang qi jian zhong tang dang gui jian zhong tang yi tang abdominal pain deficiency cold qi blood',
+    en: {
+      root: 'Xiao Jian Zhong Tang takes the Gui Zhi Tang harmony, doubles Bai Shao and adds Yi Tang to warm, nourish and relax deficiency-type abdominal spasm.',
+      architecture: 'The Gui Zhi-Bai Shao axis regulates tension; Yi Tang builds the Middle. Huang Qi adds Qi and Exterior support, while Dang Gui adds Blood nourishment.',
+      members: [
+        ['Xiao Jian Zhong Tang', 'Gui Zhi Tang with more Bai Shao + Yi Tang', 'Middle-Jiao deficiency Cold with spasm', 'Intermittent dull cramping relieved by warmth, pressure or sweet food in a weak patient.'],
+        ['Huang Qi Jian Zhong Tang', 'Xiao Jian Zhong Tang + Huang Qi', 'Middle deficiency Cold with stronger Qi deficiency', 'The same pain plus marked fatigue, spontaneous sweating, poor recovery or chronic weakness.'],
+        ['Dang Gui Jian Zhong Tang', 'Jian Zhong strategy + Dang Gui Blood nourishment', 'Deficiency Cold with Blood deficiency', 'Abdominal pain with pallor, dizziness, dry signs or postpartum/menstrual Blood depletion.'],
+      ],
+      rule: 'Spasmodic deficiency-Cold starts with Xiao Jian Zhong; spontaneous sweating and exhaustion add Huang Qi; pallor, dryness or postpartum Blood depletion add Dang Gui.',
+      memory: '<strong>Xiao builds;</strong> <strong>Huang Qi strengthens Qi;</strong> <strong>Dang Gui restores Blood.</strong>',
+      safety: 'Yi Tang adds substantial sugar and requires diabetes/dietary review. Acute severe pain, rigid abdomen, fever, bleeding, pregnancy-related pain or persistent vomiting needs urgent assessment.'
+    },
+    es: {
+      root: 'Xiao Jian Zhong Tang toma la armonía de Gui Zhi Tang, duplica Bai Shao y añade Yi Tang para calentar, nutrir y relajar espasmo abdominal por deficiencia.',
+      architecture: 'El eje Gui Zhi-Bai Shao regula tensión; Yi Tang construye Centro. Huang Qi añade apoyo de Qi/Exterior y Dang Gui nutrición de Sangre.',
+      members: [
+        ['Xiao Jian Zhong Tang', 'Gui Zhi Tang con más Bai Shao + Yi Tang', 'Frío por deficiencia del Jiao Medio con espasmo', 'Cólico sordo intermitente aliviado por calor, presión o dulce en paciente débil.'],
+        ['Huang Qi Jian Zhong Tang', 'Xiao Jian Zhong Tang + Huang Qi', 'Frío del Centro con deficiencia de Qi más fuerte', 'Mismo dolor más fatiga marcada, sudor espontáneo, recuperación pobre o debilidad crónica.'],
+        ['Dang Gui Jian Zhong Tang', 'Estrategia Jian Zhong + nutrición de Sangre con Dang Gui', 'Frío-deficiencia con deficiencia de Sangre', 'Dolor abdominal con palidez, mareo, sequedad o agotamiento de Sangre posparto/menstrual.'],
+      ],
+      rule: 'Espasmo por Frío-deficiencia empieza con Xiao Jian Zhong; sudor y agotamiento añaden Huang Qi; palidez, sequedad o deficiencia posparto añaden Dang Gui.',
+      memory: '<strong>Xiao construye;</strong> <strong>Huang Qi fortalece Qi;</strong> <strong>Dang Gui restaura Sangre.</strong>',
+      safety: 'Yi Tang aporta mucho azúcar y requiere revisar diabetes/dieta. Dolor agudo grave, abdomen rígido, fiebre, sangrado, dolor en embarazo o vómito persistente necesita urgencias.'
+    }
+  },
+  {
+    slug: 'si-miao-san-family', title: 'Si Miao San Family',
+    category: { en: 'Clear Damp-Heat from the Lower Burner', es: 'Aclarar Humedad-Calor del Jiao Inferior' },
+    summary: { en: 'Build the Two-, Three- and Four-Marvel sequence by adding lower-limb guidance and Damp drainage.', es: 'Construye la secuencia de Dos, Tres y Cuatro Maravillas añadiendo guía a miembros inferiores y drenaje de Humedad.' },
+    search: 'er miao san san miao wan si miao san wan two three four marvel damp heat lower burner legs knees wei syndrome cang zhu huang bai niu xi yi yi ren',
+    en: {
+      root: 'Er Miao San establishes the pair: Cang Zhu dries Dampness while Huang Bai clears lower-burner Damp-Heat.',
+      architecture: 'Niu Xi turns the pair toward the knees and legs and invigorates circulation; Yi Yi Ren increases Damp drainage and supports the Spleen.',
+      members: [
+        ['Er Miao San', 'Cang Zhu + Huang Bai', 'Lower-burner Damp-Heat', 'Heavy, hot or swollen lower limbs with a yellow greasy coat.'],
+        ['San Miao Wan', 'Er Miao San + Niu Xi', 'Damp-Heat concentrated in knees and lower limbs', 'Leg or knee pain, weakness and swelling; Niu Xi guides downward.'],
+        ['Si Miao Wan / Si Miao San', 'San Miao + Yi Yi Ren', 'Stronger Damp-Heat with painful obstruction or atrophy', 'Heavier swelling, weakness, hot painful joints or walking difficulty.'],
+      ],
+      rule: 'Two clears and dries; Niu Xi makes Three and directs to the legs; Yi Yi Ren makes Four and increases Damp drainage.',
+      memory: '<strong>Two dry;</strong> <strong>Three descend;</strong> <strong>Four drain.</strong>',
+      safety: 'Avoid assuming every red or swollen joint is Damp-Heat. Acute monoarthritis with fever, inability to bear weight, calf swelling or neurologic weakness needs urgent evaluation. Niu Xi requires pregnancy caution.'
+    },
+    es: {
+      root: 'Er Miao San establece la pareja: Cang Zhu seca Humedad mientras Huang Bai aclara Humedad-Calor del Jiao Inferior.',
+      architecture: 'Niu Xi dirige la pareja hacia rodillas/piernas y vigoriza circulación; Yi Yi Ren aumenta drenaje de Humedad y apoya Bazo.',
+      members: [
+        ['Er Miao San', 'Cang Zhu + Huang Bai', 'Humedad-Calor del Jiao Inferior', 'Miembros inferiores pesados, calientes o hinchados con capa amarilla grasosa.'],
+        ['San Miao Wan', 'Er Miao San + Niu Xi', 'Humedad-Calor concentrada en rodillas y piernas', 'Dolor, debilidad e hinchazón de piernas/rodillas; Niu Xi guía hacia abajo.'],
+        ['Si Miao Wan / Si Miao San', 'San Miao + Yi Yi Ren', 'Humedad-Calor más fuerte con obstrucción dolorosa o atrofia', 'Mayor hinchazón, debilidad, articulaciones calientes dolorosas o dificultad al caminar.'],
+      ],
+      rule: 'Dos aclara y seca; Niu Xi forma Tres y dirige a piernas; Yi Yi Ren forma Cuatro y aumenta drenaje de Humedad.',
+      memory: '<strong>Dos secan;</strong> <strong>Tres descienden;</strong> <strong>Cuatro drenan.</strong>',
+      safety: 'No toda articulación roja/hinchada es Humedad-Calor. Monoartritis aguda con fiebre, no poder apoyar, pantorrilla hinchada o debilidad neurológica necesita urgencia. Niu Xi requiere cautela en embarazo.'
+    }
+  },
+  {
+    slug: 'si-shen-wan-family', title: 'Si Shen Wan Family',
+    category: { en: 'Warm Yang · Astringe Chronic Diarrhea', es: 'Calentar Yang · Astringir Diarrea Crónica' },
+    summary: { en: 'Combine the Two-Miracle warming pair with the Schisandra astringing pair to recognize daybreak diarrhea.', es: 'Combina la pareja caliente de Dos Milagros con la pareja astringente de Schisandra para reconocer diarrea del amanecer.' },
+    search: 'si shen wan family er shen wan wu wei zi san four miracle pill daybreak fifth watch diarrhea spleen kidney yang bu gu zhi rou dou kou wu zhu yu wu wei zi',
+    en: {
+      root: 'Si Shen Wan combines two small units to warm Spleen-Kidney Yang, bind the intestines and stop chronic pre-dawn diarrhea.',
+      architecture: 'Er Shen Wan supplies Bu Gu Zhi and Rou Dou Kou for warming and binding; Wu Wei Zi San supplies Wu Wei Zi and Wu Zhu Yu for astringing and dispersing Cold.',
+      members: [
+        ['Er Shen Wan', 'Bu Gu Zhi + Rou Dou Kou', 'Spleen-Kidney deficiency Cold with chronic diarrhea', 'Watery chronic stool with cold low back, poor appetite and undigested food.'],
+        ['Wu Wei Zi San', 'Wu Wei Zi + Wu Zhu Yu unit', 'Yang deficiency with intestinal leakage', 'Chronic diarrhea requiring stronger astringing, often worse toward dawn.'],
+        ['Si Shen Wan', 'Er Shen Wan + Wu Wei Zi San, supported by Sheng Jiang and Da Zao', 'Spleen-Kidney Yang deficiency with daybreak diarrhea', 'Watery undigested stool before sunrise, cold limbs/back, fatigue and a deep slow weak pulse.'],
+      ],
+      rule: 'Chronic Cold diarrhea is the base; the highly testable clock clue—before dawn or fifth watch—selects the complete Si Shen Wan combination.',
+      memory: '<strong>Two warm and bind + two stop leakage = Four Miracles at dawn.</strong>',
+      safety: 'Do not astringe infectious, Damp-Heat or Food-Stagnation diarrhea. Blood, fever, severe pain, dehydration, weight loss or persistent diarrhea requires medical evaluation.'
+    },
+    es: {
+      root: 'Si Shen Wan combina dos unidades pequeñas para calentar Yang de Bazo-Riñón, astringir intestinos y detener diarrea crónica antes del amanecer.',
+      architecture: 'Er Shen Wan aporta Bu Gu Zhi y Rou Dou Kou para calentar/astringir; Wu Wei Zi San aporta Wu Wei Zi y Wu Zhu Yu para contener y dispersar Frío.',
+      members: [
+        ['Er Shen Wan', 'Bu Gu Zhi + Rou Dou Kou', 'Frío por deficiencia de Bazo-Riñón con diarrea crónica', 'Heces acuosas crónicas con lumbar fría, poco apetito y alimento no digerido.'],
+        ['Wu Wei Zi San', 'Unidad Wu Wei Zi + Wu Zhu Yu', 'Deficiencia Yang con fuga intestinal', 'Diarrea crónica que exige mayor astringencia, a menudo peor hacia el amanecer.'],
+        ['Si Shen Wan', 'Er Shen Wan + Wu Wei Zi San, apoyados por Sheng Jiang y Da Zao', 'Deficiencia Yang de Bazo-Riñón con diarrea del amanecer', 'Heces acuosas no digeridas antes del amanecer, miembros/lumbar fríos, fatiga y pulso profundo-lento-débil.'],
+      ],
+      rule: 'Diarrea crónica fría es la base; la pista horaria muy examinable—antes del amanecer o quinta vigilia—elige la combinación completa Si Shen Wan.',
+      memory: '<strong>Dos calientan y atan + dos detienen fuga = Cuatro Milagros al amanecer.</strong>',
+      safety: 'No astringir diarrea infecciosa, Humedad-Calor o estancamiento alimentario. Sangre, fiebre, dolor grave, deshidratación, pérdida de peso o diarrea persistente requiere evaluación.'
+    }
+  },
+  {
+    slug: 'dang-gui-si-ni-tang-family', title: 'Dang Gui Si Ni Tang Family',
+    category: { en: 'Warm Channels · Nourish Blood', es: 'Calentar Canales · Nutrir Sangre' },
+    summary: { en: 'Distinguish Blood-deficient channel Cold from the same pattern complicated by deep internal Cold.', es: 'Distingue Frío de canales con Sangre deficiente del mismo pattern complicado por Frío interno profundo.' },
+    search: 'dang gui si ni tang family dang gui si ni jia wu zhu yu sheng jiang tang blood deficiency cold channels cold hands feet abdominal pain vomiting',
+    en: {
+      root: 'Dang Gui Si Ni Tang warms the channels, disperses Cold and nourishes Blood when cold extremities arise from Blood deficiency and channel obstruction rather than Yang collapse.',
+      architecture: 'Dang Gui and Bai Shao nourish Blood; Gui Zhi and Xi Xin warm channels; Tong Cao opens circulation; Da Zao and Zhi Gan Cao support the deficient interior. Wu Zhu Yu and Sheng Jiang deepen the warming-descending action.',
+      members: [
+        ['Dang Gui Si Ni Tang', 'Blood-nourishing channel-warming base', 'Blood deficiency with Cold lodged in the channels', 'Persistently cold hands and feet, possible pain, pale tongue and a thin or nearly imperceptible pulse without systemic collapse.'],
+        ['Dang Gui Si Ni Jia Wu Zhu Yu Sheng Jiang Tang', 'Base + Wu Zhu Yu + Sheng Jiang', 'The base pattern with long-standing internal Cold', 'Cold extremities plus abdominal pain, nausea/vomiting, headache or deeper digestive Cold.'],
+      ],
+      rule: 'Cold hands and feet plus Blood-deficiency signs choose the base; add Wu Zhu Yu and Sheng Jiang when internal Cold produces digestive rebellion or abdominal pain.',
+      memory: '<strong>Dang Gui Si Ni warms the channels;</strong> <strong>Wu Zhu Yu-Sheng Jiang warms the interior too.</strong>',
+      safety: 'Do not confuse channel Cold with shock or acute vascular occlusion. Sudden one-sided cold/pale limb, severe pain, fainting or unstable vital signs is an emergency. Xi Xin and Wu Zhu Yu require professional dosing.'
+    },
+    es: {
+      root: 'Dang Gui Si Ni Tang calienta canales, dispersa Frío y nutre Sangre cuando extremidades frías provienen de Sangre deficiente y obstrucción, no de colapso Yang.',
+      architecture: 'Dang Gui y Bai Shao nutren Sangre; Gui Zhi y Xi Xin calientan canales; Tong Cao abre circulación; Da Zao y Zhi Gan Cao apoyan interior deficiente. Wu Zhu Yu y Sheng Jiang profundizan acción caliente-descendente.',
+      members: [
+        ['Dang Gui Si Ni Tang', 'Base que nutre Sangre y calienta canales', 'Deficiencia de Sangre con Frío alojado en canales', 'Manos y pies persistentemente fríos, posible dolor, lengua pálida y pulso fino/casi imperceptible sin colapso sistémico.'],
+        ['Dang Gui Si Ni Jia Wu Zhu Yu Sheng Jiang Tang', 'Base + Wu Zhu Yu + Sheng Jiang', 'Pattern base con Frío interno prolongado', 'Extremidades frías más dolor abdominal, náusea/vómito, cefalea o Frío digestivo profundo.'],
+      ],
+      rule: 'Manos/pies fríos con signos de Sangre eligen la base; añade Wu Zhu Yu y Sheng Jiang cuando Frío interno causa rebeldía digestiva o dolor abdominal.',
+      memory: '<strong>Dang Gui Si Ni calienta canales;</strong> <strong>Wu Zhu Yu-Sheng Jiang calienta también el interior.</strong>',
+      safety: 'No confundir Frío de canales con shock u oclusión vascular aguda. Miembro unilateral súbitamente frío/pálido, dolor grave, desmayo o signos vitales inestables es emergencia. Xi Xin y Wu Zhu Yu requieren dosificación profesional.'
+    }
   }
 ];
 
