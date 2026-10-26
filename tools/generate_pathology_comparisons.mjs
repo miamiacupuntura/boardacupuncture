@@ -1935,6 +1935,166 @@ const pathologies = [
       safety: 'Pérdida de peso, edema, letargo, deshidratación, diarrea/vómito persistente, regresión o sospecha de negligencia/inseguridad alimentaria requiere pediatría pronta. Parásitos requieren pruebas y tratamiento estándar.',
       source: 'Internal Medicine pediatrics section: Infantile Malnutrition (Xiao Er Gan Ji).'
     }
+  },
+  {
+    slug: 'infantile-convulsions-patterns', title: { en: 'Infantile Convulsions Pattern Differentiation', es: 'Diferenciación de Convulsiones Infantiles' },
+    summary: { en: 'Differentiate acute external Wind, internal Phlegm-Heat and fright from chronic deficiency presentations.', es: 'Diferencia Viento externo agudo, Flema-Calor interna y susto de las presentaciones crónicas por deficiencia.' },
+    focus: { en: 'Fever, consciousness, digestive signs and acute versus chronic onset', es: 'Fiebre, conciencia, signos digestivos y comienzo agudo frente a crónico' },
+    search: 'infantile convulsions pediatric seizure fright wind external phlegm heat spleen deficiency liver kidney yin qing wen bai du yin xiao er hui chun dan huan gan li pi tang da ding feng zhu san jia fu mai tang',
+    en: {
+      intro: 'A pediatric seizure is first a medical emergency question; pattern differentiation is secondary to airway, timing and urgent evaluation.',
+      rows: [
+        ['Acute fright Wind—external Wind', 'Abrupt high fever, thirst, headache, inflamed throat, agitation, jaw and limb spasms, rigid neck, upturned eyes or opisthotonos', 'Qing Wen Bai Du Yin', 'Clear Heat, open the orifices and extinguish Wind.'],
+        ['Acute fright Wind—internal Phlegm-Heat', 'Poor appetite, vomiting, fever, abdominal pain or constipation, then impaired consciousness, convulsions, wheezing and abdominal distention', 'Xiao Er Hui Chun Dan', 'Clear Phlegm-Heat and extinguish Wind.'],
+        ['Acute fright Wind—sudden fright', 'No fever; cold limbs, restless sleep or crying, marked jumpiness, greenish complexion and intermittent convulsions', 'Hu Po Bao Long Wan; Zhu Sha An Shen Wan is historical/obsolete', 'Settle fright and calm the spirit; never use cinnabar-containing products.'],
+        ['Chronic fright Wind—Spleen deficiency with Liver exuberance', 'Emaciation, sallow complexion, fatigue, sleep with eyes partly open, intermittent spasms, cold limbs, loose green stool or edema', 'Huan Gan Li Pi Tang', 'Support the Spleen and moderate Liver Wind.'],
+        ['Chronic fright Wind—Liver-Kidney Yin deficiency', 'Emaciation, red cheeks, hot palms and soles, restlessness, dry stool and intermittent convulsions', 'Da Ding Feng Zhu or San Jia Fu Mai Tang', 'Enrich Yin and extinguish deficiency Wind.'],
+      ],
+      rule: 'High fever and abrupt rigidity point to acute Heat-Wind; digestive obstruction and noisy breathing point to Phlegm-Heat; cold fright without fever differs from chronic wasting and deficiency signs.',
+      memory: '<strong>Acute: fever, Phlegm or fright. Chronic: wasting with Spleen or Yin deficiency.</strong>',
+      safety: 'Call emergency services for a first seizure, a seizure lasting 5 minutes or more, repeated seizures, breathing difficulty, injury, stiff neck or persistent altered consciousness. Place the child on the side and put nothing in the mouth. Zhu Sha/cinnabar contains mercury and is obsolete.',
+      source: 'Internal Medicine pediatrics section: Infantile Convulsions (Xiao Er Jing Feng).'
+    },
+    es: {
+      intro: 'Una convulsión pediátrica es primero una urgencia médica; diferenciar patterns queda después de proteger vía aérea, cronometrar y evaluar.',
+      rows: [
+        ['Viento de susto agudo—Viento externo', 'Fiebre alta súbita, sed, cefalea, garganta inflamada, agitación, espasmos mandibulares y de miembros, nuca rígida, ojos vueltos u opistótonos', 'Qing Wen Bai Du Yin', 'Aclarar Calor, abrir orificios y extinguir Viento.'],
+        ['Viento de susto agudo—Flema-Calor interna', 'Poco apetito, vómito, fiebre, dolor abdominal o estreñimiento; luego conciencia alterada, convulsiones, sibilancia y distensión', 'Xiao Er Hui Chun Dan', 'Aclarar Flema-Calor y extinguir Viento.'],
+        ['Viento de susto agudo—susto repentino', 'Sin fiebre; miembros fríos, sueño inquieto o llanto, sobresalto marcado, tez verdosa y convulsiones intermitentes', 'Hu Po Bao Long Wan; Zhu Sha An Shen Wan es histórica/obsoleta', 'Asentar el susto y calmar Shen; nunca usar productos con cinabrio.'],
+        ['Viento de susto crónico—deficiencia de Bazo con exuberancia de Hígado', 'Emaciación, tez cetrina, fatiga, dormir con ojos entreabiertos, espasmos intermitentes, miembros fríos, heces verdes sueltas o edema', 'Huan Gan Li Pi Tang', 'Apoyar Bazo y moderar Viento de Hígado.'],
+        ['Viento de susto crónico—deficiencia Yin de Hígado-Riñón', 'Emaciación, mejillas rojas, palmas y plantas calientes, inquietud, heces secas y convulsiones intermitentes', 'Da Ding Feng Zhu o San Jia Fu Mai Tang', 'Enriquecer Yin y extinguir Viento por deficiencia.'],
+      ],
+      rule: 'Fiebre alta y rigidez súbita indican Calor-Viento agudo; obstrucción digestiva y respiración ruidosa indican Flema-Calor; susto frío sin fiebre difiere del desgaste crónico por deficiencia.',
+      memory: '<strong>Agudo: fiebre, Flema o susto. Crónico: desgaste con deficiencia de Bazo o Yin.</strong>',
+      safety: 'Llame a emergencias ante primera convulsión, duración de 5 minutos o más, repetición, dificultad respiratoria, lesión, nuca rígida o conciencia alterada persistente. Coloque al niño de lado y nada en la boca. Zhu Sha/cinabrio contiene mercurio y es obsoleto.',
+      source: 'Sección pediátrica de Internal Medicine: Infantile Convulsions (Xiao Er Jing Feng).'
+    }
+  },
+  {
+    slug: 'infantile-palsy-patterns', title: { en: 'Infantile Palsy / Poliomyelitis Pattern Differentiation', es: 'Diferenciación de Parálisis Infantil / Poliomielitis' },
+    summary: { en: 'Follow the classical progression from febrile invasion to channel involvement and chronic weakness.', es: 'Sigue la progresión clásica desde invasión febril hasta afectación de canales y debilidad crónica.' },
+    focus: { en: 'Acute febrile stage, flaccid paralysis and chronic atrophy', es: 'Etapa febril aguda, parálisis flácida y atrofia crónica' },
+    search: 'infantile palsy poliomyelitis polio acute flaccid paralysis lung stomach channels qi deficiency blood stasis liver kidney ge gen qin lian tang qiang huo sheng shi tang bu yang huan wu tang hu qian wan',
+    en: {
+      intro: 'This historical progression is for examination study only; suspected acute flaccid paralysis requires immediate public-health and hospital assessment.',
+      rows: [
+        ['Pathogen enters Lung and Stomach', 'Fever, sweating, cough, runny nose, sore throat, malaise, headache, vomiting, abdominal pain or diarrhea', 'Ge Gen Qin Lian Tang', 'Release the exterior and clear Damp-Heat.'],
+        ['Pathogen enters the channels', 'Fever and sweating with limb pain, difficulty turning the torso, crying or restlessness, followed by weakness or paralysis', 'Qiang Huo Sheng Shi Tang', 'Dispel Wind-Damp and unblock the channels.'],
+        ['Qi deficiency with Blood stasis', 'After fever resolves: numb, flaccid, weak limbs persisting for months, sallow complexion and spontaneous sweating', 'Bu Yang Huan Wu Tang', 'Tonify Qi and invigorate Blood.'],
+        ['Liver-Kidney depletion', 'Long-standing muscle atrophy, a shorter or thinner affected limb, deformity, scoliosis or clubfoot', 'Hu Qian Wan—historical formula', 'Historical strategy: enrich Liver-Kidney and strengthen sinews.'],
+      ],
+      rule: 'Systemic respiratory-digestive symptoms precede channel pain and paralysis; persistent flaccidity suggests Qi/Blood impairment, while structural atrophy marks the chronic stage.',
+      memory: '<strong>Fever → channel pain → flaccidity → atrophy.</strong>',
+      safety: 'Polio is vaccine-preventable. Any sudden limb weakness or acute flaccid paralysis is an emergency and reportable public-health concern; respiratory or swallowing weakness is immediately life-threatening. Classical Hu Qian Wan contains obsolete tiger bone and must not be used as written.',
+      source: 'Internal Medicine pediatrics section: Infantile Palsy (Poliomyelitis).'
+    },
+    es: {
+      intro: 'Esta progresión histórica sirve solo para estudiar; sospecha de parálisis flácida aguda requiere hospital y salud pública de inmediato.',
+      rows: [
+        ['Patógeno entra en Pulmón y Estómago', 'Fiebre, sudor, tos, rinorrea, dolor de garganta, malestar, cefalea, vómito, dolor abdominal o diarrea', 'Ge Gen Qin Lian Tang', 'Liberar exterior y aclarar Humedad-Calor.'],
+        ['Patógeno entra en los canales', 'Fiebre y sudor con dolor de miembros, dificultad para girar el torso, llanto o inquietud, seguido de debilidad o parálisis', 'Qiang Huo Sheng Shi Tang', 'Expulsar Viento-Humedad y desobstruir canales.'],
+        ['Deficiencia de Qi con estasis de Sangre', 'Tras ceder la fiebre: miembros entumecidos, flácidos y débiles durante meses, tez cetrina y sudor espontáneo', 'Bu Yang Huan Wu Tang', 'Tonificar Qi y vigorizar Sangre.'],
+        ['Agotamiento de Hígado-Riñón', 'Atrofia muscular prolongada, miembro afectado más corto o delgado, deformidad, escoliosis o pie zambo', 'Hu Qian Wan—fórmula histórica', 'Estrategia histórica: enriquecer Hígado-Riñón y fortalecer tendones.'],
+      ],
+      rule: 'Signos respiratorios-digestivos preceden dolor de canales y parálisis; flacidez persistente indica deterioro Qi/Sangre y la atrofia estructural marca cronicidad.',
+      memory: '<strong>Fiebre → dolor de canales → flacidez → atrofia.</strong>',
+      safety: 'La polio se previene con vacuna. Debilidad súbita o parálisis flácida aguda es una emergencia y asunto notificable de salud pública; debilidad respiratoria o al tragar amenaza la vida. Hu Qian Wan clásica contiene hueso de tigre obsoleto y no debe usarse como está escrita.',
+      source: 'Sección pediátrica de Internal Medicine: Infantile Palsy (Poliomyelitis).'
+    }
+  },
+  {
+    slug: 'enuresis-patterns', title: { en: 'Enuresis Pattern Differentiation', es: 'Diferenciación de Enuresis' },
+    summary: { en: 'Separate Kidney Yang, Lung-Spleen Qi and Liver Damp-Heat bedwetting presentations.', es: 'Separa presentaciones de enuresis por Yang de Riñón, Qi de Pulmón-Bazo y Humedad-Calor de Hígado.' },
+    focus: { en: 'Urine quality, constitutional signs and Heat versus Cold', es: 'Calidad de orina, signos constitucionales y Calor frente a Frío' },
+    search: 'enuresis bedwetting child kidney yang deficiency lung spleen qi deficiency liver damp heat suo quan wan tu si zi wan bu zhong yi qi tang long dan xie gan tang',
+    en: {
+      intro: 'Age, continence history, constipation, sleep and urinary symptoms must be assessed before assigning a Chinese medicine pattern.',
+      rows: [
+        ['Kidney Yang deficiency', 'Bedwetting several times nightly, pale complexion, fatigue, copious clear urine, cold limbs and weak low back or legs', 'Suo Quan Wan or Tu Si Zi Wan', 'Warm Kidney Yang and secure urine.'],
+        ['Lung-Spleen Qi deficiency', 'Frequent short urination in a weak or recovering child with dyspnea, fatigue, sallow complexion, poor appetite, loose stool and spontaneous sweating', 'Bu Zhong Yi Qi Tang + Suo Quan Wan', 'Tonify Lung-Spleen Qi and consolidate.'],
+        ['Liver-channel Damp-Heat', 'Small-volume, fishy or dark-yellow urine with agitation, sleep talking, teeth grinding, red lips and a yellow greasy coat', 'Long Dan Xie Gan Tang', 'Clear Liver Damp-Heat.'],
+      ],
+      rule: 'Copious clear urine plus cold is Kidney Yang; weakness with digestive and respiratory Qi signs is Lung-Spleen; scant dark malodorous urine plus agitation is Damp-Heat.',
+      memory: '<strong>Clear and cold—Kidney; weak and loose—Lung-Spleen; dark and agitated—Damp-Heat.</strong>',
+      safety: 'Bedwetting can be developmentally normal under about age 5. New secondary enuresis, painful urination, fever, marked thirst, weight loss, constipation, snoring/apnea or neurologic signs needs medical assessment. Avoid shame or punishment. Tu Si Zi Wan versions containing Fu Zi require expert prescribing.',
+      source: 'Internal Medicine pediatrics section: Enuresis (Yi Niao).'
+    },
+    es: {
+      intro: 'Edad, historia de continencia, estreñimiento, sueño y síntomas urinarios deben evaluarse antes de asignar un pattern de medicina china.',
+      rows: [
+        ['Deficiencia Yang de Riñón', 'Mojar la cama varias veces por noche, palidez, fatiga, orina clara copiosa, miembros fríos y debilidad lumbar o de piernas', 'Suo Quan Wan o Tu Si Zi Wan', 'Calentar Yang de Riñón y asegurar orina.'],
+        ['Deficiencia Qi de Pulmón-Bazo', 'Micciones cortas frecuentes en niño débil o convaleciente con disnea, fatiga, tez cetrina, poco apetito, heces sueltas y sudor espontáneo', 'Bu Zhong Yi Qi Tang + Suo Quan Wan', 'Tonificar Qi de Pulmón-Bazo y consolidar.'],
+        ['Humedad-Calor del canal de Hígado', 'Orina escasa, olor a pescado o amarillo oscuro con agitación, hablar dormido, rechinar dientes, labios rojos y capa amarilla grasosa', 'Long Dan Xie Gan Tang', 'Aclarar Humedad-Calor de Hígado.'],
+      ],
+      rule: 'Orina clara copiosa con frío es Yang de Riñón; debilidad con signos digestivos-respiratorios es Pulmón-Bazo; orina escasa oscura y maloliente con agitación es Humedad-Calor.',
+      memory: '<strong>Clara y fría—Riñón; débil y suelto—Pulmón-Bazo; oscura y agitada—Humedad-Calor.</strong>',
+      safety: 'Mojar la cama puede ser normal antes de unos 5 años. Enuresis secundaria nueva, dolor al orinar, fiebre, mucha sed, pérdida de peso, estreñimiento, ronquido/apnea o signos neurológicos necesitan evaluación. No avergonzar ni castigar. Versiones de Tu Si Zi Wan con Fu Zi requieren experto.',
+      source: 'Sección pediátrica de Internal Medicine: Enuresis (Yi Niao).'
+    }
+  },
+  {
+    slug: 'mumps-patterns', title: { en: 'Mumps Pattern Differentiation', es: 'Diferenciación de Paperas' },
+    summary: { en: 'Separate early external epidemic Warm-Toxin from intense internal Heat-Toxin.', es: 'Separa Toxina-Calor epidémica externa temprana de Toxina-Calor interna intensa.' },
+    focus: { en: 'Parotid swelling quality, fever intensity and complications', es: 'Calidad de inflamación parótida, intensidad de fiebre y complicaciones' },
+    search: 'mumps parotitis epidemic warm toxin external internal heat toxin yin qiao san pu ji xiao du yin testicular swelling',
+    en: {
+      intro: 'Parotid swelling with fever requires infectious diagnosis and public-health management; pattern clues describe relative severity.',
+      rows: [
+        ['External epidemic Warm-Toxin', 'Mild fever and chills with unilateral or bilateral springy, tender parotid swelling, indistinct border, little redness, difficult chewing and sore throat', 'Yin Qiao San', 'Disperse Wind-Heat and resolve toxin.'],
+        ['Internal epidemic Heat-Toxin', 'Hot, red, very painful swelling with high fever, headache, irritability, thirst, sore throat, dark urine, dry stool or vomiting; severe cases may affect testes or consciousness', 'Pu Ji Xiao Du Yin', 'Clear intense Heat-Toxin and reduce swelling.'],
+      ],
+      rule: 'Mild systemic illness with springy non-red swelling is the external stage; high fever with red painful swelling and systemic toxicity is internal Heat-Toxin.',
+      memory: '<strong>Springy and pale = external; hot, red and toxic = internal.</strong>',
+      safety: 'Mumps is vaccine-preventable and commonly reportable. Arrange testing and isolation according to public-health guidance. Testicular pain/swelling, severe headache or stiff neck, confusion, dehydration, hearing loss or breathing difficulty needs urgent care.',
+      source: 'Internal Medicine pediatrics section: Mumps (Zha Sai).'
+    },
+    es: {
+      intro: 'Inflamación parótida con fiebre exige diagnóstico infeccioso y manejo de salud pública; las pistas de pattern describen gravedad relativa.',
+      rows: [
+        ['Toxina-Calor epidémica externa', 'Fiebre y escalofríos leves con inflamación parótida unilateral o bilateral elástica y sensible, borde difuso, poco enrojecimiento, masticación difícil y dolor de garganta', 'Yin Qiao San', 'Dispersar Viento-Calor y resolver toxina.'],
+        ['Toxina-Calor epidémica interna', 'Inflamación caliente, roja y muy dolorosa con fiebre alta, cefalea, irritabilidad, sed, garganta dolorosa, orina oscura, heces secas o vómito; casos graves afectan testículos o conciencia', 'Pu Ji Xiao Du Yin', 'Aclarar Toxina-Calor intensa y reducir inflamación.'],
+      ],
+      rule: 'Enfermedad sistémica leve con inflamación elástica no roja es etapa externa; fiebre alta con hinchazón roja dolorosa y toxicidad es Toxina-Calor interna.',
+      memory: '<strong>Elástica y pálida = externa; caliente, roja y tóxica = interna.</strong>',
+      safety: 'Las paperas se previenen con vacuna y suelen ser notificables. Coordine pruebas y aislamiento según salud pública. Dolor/inflamación testicular, cefalea grave o nuca rígida, confusión, deshidratación, pérdida auditiva o dificultad respiratoria requiere urgencias.',
+      source: 'Sección pediátrica de Internal Medicine: Mumps (Zha Sai).'
+    }
+  },
+  {
+    slug: 'measles-stages', title: { en: 'Measles Stages and Complications', es: 'Etapas y Complicaciones del Sarampión' },
+    summary: { en: 'Track prodrome, eruption and recovery, then recognize Lung, throat and neurologic complications.', es: 'Sigue pródromo, erupción y recuperación, y reconoce complicaciones pulmonares, faríngeas y neurológicas.' },
+    focus: { en: 'Rash sequence, stage changes and emergency complication clues', es: 'Secuencia del exantema, cambios de etapa y pistas de complicación urgente' },
+    search: 'measles rubeola stages prodrome koplik eruption recovery complications lung throat heart liver xuan du fa biao tang qing jie tou biao tang sha shen mai dong tang ma xing shi gan tang qing yan xia tan tang ling jiao gou teng tang',
+    en: {
+      intro: 'Measles staging may aid exam recall, but suspected measles requires immediate infection-control and public-health coordination.',
+      rows: [
+        ['Febrile prodrome', 'Fever, chills, coryza, cough, frontal headache, red tearing eyes and fatigue; Koplik spots may appear after 2–3 days', 'Xuan Du Fa Biao Tang', 'Release the exterior and vent the eruption.'],
+        ['Eruption stage', 'Persistent fever; rash begins at hairline or behind ears and spreads over face, trunk and limbs with thirst, red eyes and cough', 'Qing Jie Tou Biao Tang', 'Clear Heat and promote complete eruption.'],
+        ['Recovery stage', 'Fever recedes, rash fades in the same order with darkening or fine desquamation, while hoarseness, dry cough and thirst may remain', 'Sha Shen Mai Dong Tang', 'Nourish Lung-Stomach Yin and fluids.'],
+        ['Complication—Heat-Toxin oppresses Lung', 'Incomplete or suddenly receding purple rash, unremitting fever, cough, wheeze, nasal flaring, thirst and restlessness', 'Ma Xing Shi Gan Tang', 'Clear Lung Heat and restore descending.'],
+        ['Complication—throat Heat-Toxin', 'Swollen painful throat, hoarse voice and barking cough', 'Qing Yan Xia Tan Tang', 'Clear throat Heat-Toxin and transform Phlegm.'],
+        ['Complication—Heat-Toxin enters Heart-Liver', 'High fever, delirium, confluent purple-red rash, nasal flaring, impaired consciousness or convulsions', 'Ling Jiao Gou Teng Tang—historical formula', 'Historical strategy: cool Heat and extinguish Wind.'],
+      ],
+      rule: 'Coryza-cough-conjunctivitis precede a head-to-toe rash; fading follows the same order. Rash suppression, breathing distress or neurologic change signals complication.',
+      memory: '<strong>Three Cs + Koplik → descending rash → fading; lung or brain signs = emergency.</strong>',
+      safety: 'Measles is highly contagious, vaccine-preventable and immediately reportable in many jurisdictions. Call ahead for same-day medical evaluation and use airborne isolation. Breathing difficulty, dehydration, confusion or seizure is an emergency. Classical Ling Jiao is an endangered/obsolete animal substance; vitamin A is only under medical guidance.',
+      source: 'Internal Medicine pediatrics section: Measles (Ma Zhen).'
+    },
+    es: {
+      intro: 'Las etapas ayudan al examen, pero sospecha de sarampión exige control de infección y coordinación inmediata con salud pública.',
+      rows: [
+        ['Pródromo febril', 'Fiebre, escalofríos, coriza, tos, cefalea frontal, ojos rojos llorosos y fatiga; manchas de Koplik pueden aparecer tras 2–3 días', 'Xuan Du Fa Biao Tang', 'Liberar exterior y exteriorizar erupción.'],
+        ['Etapa eruptiva', 'Fiebre persistente; exantema inicia en línea del cabello o detrás de orejas y baja por cara, tronco y miembros con sed, ojos rojos y tos', 'Qing Jie Tou Biao Tang', 'Aclarar Calor y promover erupción completa.'],
+        ['Recuperación', 'Cede fiebre, el exantema desaparece en el mismo orden con oscurecimiento o descamación fina; pueden quedar ronquera, tos seca y sed', 'Sha Shen Mai Dong Tang', 'Nutrir Yin y líquidos de Pulmón-Estómago.'],
+        ['Complicación—Toxina-Calor oprime Pulmón', 'Erupción incompleta o que retrocede súbito, morada, fiebre persistente, tos, sibilancia, aleteo nasal, sed e inquietud', 'Ma Xing Shi Gan Tang', 'Aclarar Calor de Pulmón y restaurar descenso.'],
+        ['Complicación—Toxina-Calor de garganta', 'Garganta hinchada y dolorosa, voz ronca y tos perruna', 'Qing Yan Xia Tan Tang', 'Aclarar Toxina-Calor de garganta y transformar Flema.'],
+        ['Complicación—Toxina-Calor entra en Corazón-Hígado', 'Fiebre alta, delirio, exantema rojo-morado confluente, aleteo nasal, conciencia alterada o convulsiones', 'Ling Jiao Gou Teng Tang—fórmula histórica', 'Estrategia histórica: enfriar Calor y extinguir Viento.'],
+      ],
+      rule: 'Coriza-tos-conjuntivitis preceden exantema descendente; desaparece en el mismo orden. Supresión del rash, dificultad respiratoria o cambio neurológico indican complicación.',
+      memory: '<strong>Tres C + Koplik → rash descendente → desaparición; pulmón o cerebro = emergencia.</strong>',
+      safety: 'El sarampión es muy contagioso, prevenible por vacuna y de notificación inmediata en muchos lugares. Llame antes para evaluación el mismo día y use aislamiento aéreo. Dificultad respiratoria, deshidratación, confusión o convulsión es emergencia. Ling Jiao clásico es sustancia animal amenazada/obsoleta; vitamina A solo bajo indicación médica.',
+      source: 'Sección pediátrica de Internal Medicine: Measles (Ma Zhen).'
+    }
   }
 ];
 
