@@ -1500,6 +1500,222 @@ cards.push(
       safety: 'Disnea, dolor torácico, sangre al toser, oxígeno bajo, fiebre alta o tos mayor de tres semanas requiere evaluación.',
       prompts: ['¿Cuál inicia agudo en clima seco?', '¿Cuál tiene sudor nocturno?', '¿Cómo difieren pulso/capa?']
     }
+  },
+  {
+    slug: 'heart-qi-deficiency-vs-heart-blood-deficiency', title: 'Heart Qi Deficiency vs. Heart Blood Deficiency', titleEs: 'Deficiencia de Qi de Corazón vs. Deficiencia de Sangre de Corazón',
+    summary: 'Separate weak cardiac function and exertional symptoms from deficient nourishment of the Spirit.',
+    summaryEs: 'Distingue función cardíaca débil con síntomas de esfuerzo de nutrición deficiente de Shen.',
+    search: 'heart qi blood deficiency palpitations exertion short breath spontaneous sweat fatigue insomnia anxiety memory dizziness pale tongue weak thin pulse',
+    en: {
+      names: ['Heart Qi Deficiency', 'Heart Blood Deficiency'],
+      shared: 'Both may cause palpitations, fatigue, anxiety, pale complexion and a weak pulse.',
+      fast: ['Function is weak: palpitations worse with exertion, shortness of breath, spontaneous sweating and general fatigue.', 'Nourishment is weak: insomnia, dream-disturbed sleep, poor memory, dizziness and emotional unease with a pale thin tongue.'],
+      rows: [
+        ['Primary failure', 'Heart Qi cannot propel and govern effectively.', 'Heart Blood cannot nourish and house the Spirit.'],
+        ['Decisive clue', 'Exertional breathlessness and sweating.', 'Insomnia, forgetfulness and dizziness.'],
+        ['Tongue / pulse', 'Pale; weak, possibly irregular.', 'Pale and thin/dry; thin or choppy.'],
+        ['Formula examples', 'Zhi Gan Cao Tang or Sheng Mai San by presentation.', 'Gui Pi Tang or Suan Zao Ren Tang by root pattern.']
+      ],
+      why: 'Palpitations overlap. Exertional functional weakness points to Qi; sleep, memory and undernourished Spirit signs point to Blood.',
+      memory: '<strong>Heart Qi cannot pump;</strong> <strong>Heart Blood cannot house Shen.</strong>',
+      safety: 'Chest pain, fainting, sustained irregular rhythm, severe breathlessness or new palpitations requires prompt medical assessment.',
+      prompts: ['Which worsens with exertion?', 'Which produces insomnia and poor memory?', 'How do pulse qualities differ?']
+    },
+    es: {
+      names: ['Deficiencia de Qi de Corazón', 'Deficiencia de Sangre de Corazón'],
+      shared: 'Ambas causan palpitaciones, fatiga, ansiedad, palidez y pulso débil.',
+      fast: ['Función débil: palpitaciones peores con esfuerzo, falta de aire, sudor espontáneo y fatiga general.', 'Nutrición débil: insomnio, sueños perturbadores, mala memoria, mareo e inquietud con lengua pálida-fina.'],
+      rows: [
+        ['Falla principal', 'Qi de Corazón no impulsa/gobierna eficazmente.', 'Sangre de Corazón no nutre ni aloja Shen.'],
+        ['Pista decisiva', 'Disnea de esfuerzo y sudor.', 'Insomnio, olvido y mareo.'],
+        ['Lengua / pulso', 'Pálida; débil, posible irregular.', 'Pálida y fina/seca; fino o áspero.'],
+        ['Ejemplos de fórmulas', 'Zhi Gan Cao Tang o Sheng Mai San según presentación.', 'Gui Pi Tang o Suan Zao Ren Tang según raíz.']
+      ],
+      why: 'Palpitaciones se superponen. Debilidad funcional con esfuerzo apunta a Qi; sueño, memoria y Shen desnutrido apuntan a Sangre.',
+      memory: '<strong>Qi de Corazón no impulsa;</strong> <strong>Sangre de Corazón no aloja Shen.</strong>',
+      safety: 'Dolor torácico, desmayo, ritmo irregular sostenido, disnea grave o palpitaciones nuevas requiere evaluación pronta.',
+      prompts: ['¿Cuál empeora con esfuerzo?', '¿Cuál causa insomnio/mala memoria?', '¿Cómo difieren pulsos?']
+    }
+  },
+  {
+    slug: 'lung-qi-deficiency-vs-kidney-failing-to-grasp-qi', title: 'Lung Qi Deficiency vs. Kidney Failing to Grasp Qi', titleEs: 'Deficiencia de Qi de Pulmón vs. Riñón que no Capta Qi',
+    summary: 'Separate weak Lung diffusion and defense from chronic inspiratory weakness rooted in the Kidneys.',
+    summaryEs: 'Distingue difusión/defensa pulmonar débil de debilidad inspiratoria crónica arraigada en Riñón.',
+    search: 'lung qi deficiency kidney failing grasp qi cough weak voice spontaneous sweat recurrent colds dyspnea asthma inhalation exertion low back knees deep pulse',
+    en: {
+      names: ['Lung Qi Deficiency', 'Kidney Failing to Grasp Qi'],
+      shared: 'Both can cause chronic shortness of breath, weak cough, fatigue and a weak pulse.',
+      fast: ['Upper/source weakness: weak voice and cough, spontaneous sweating, recurrent colds and breathlessness with speech or mild exertion.', 'Lower/root weakness: difficulty inhaling deeply, chronic wheezing worse with exertion, weak low back/knees and possible urinary or reproductive signs.'],
+      rows: [
+        ['Failed function', 'Diffuse/descend Lung Qi and secure Defensive Qi.', 'Receive and anchor inhaled Lung Qi.'],
+        ['Breathing clue', 'Weak respiration and voice overall.', 'Inhalation is especially difficult or shallow.'],
+        ['Pulse', 'Weak, especially right cun.', 'Deep-weak at chi positions.'],
+        ['Formula examples', 'Bu Fei Tang or Yu Ping Feng San by presentation.', 'Ren Shen Ge Jie San or Su Zi Jiang Qi Tang by Cold-Phlegm context.']
+      ],
+      why: 'Breathlessness overlaps. Weak voice/sweating/recurrent infections localize to Lung; inspiratory difficulty plus low-back signs localizes to Kidney.',
+      memory: '<strong>Lung Qi cannot send;</strong> <strong>Kidney Qi cannot receive.</strong>',
+      safety: 'Severe or rapidly worsening breathlessness, blue lips, chest pain, confusion, low oxygen or inability to speak full sentences is an emergency.',
+      prompts: ['Which has recurrent colds?', 'Which struggles mainly to inhale?', 'What lower-burner signs identify Kidney involvement?']
+    },
+    es: {
+      names: ['Deficiencia de Qi de Pulmón', 'Riñón no Capta Qi'],
+      shared: 'Ambas causan disnea crónica, tos débil, fatiga y pulso débil.',
+      fast: ['Debilidad de fuente superior: voz/tos débil, sudor espontáneo, resfriados frecuentes y falta de aire al hablar o con esfuerzo leve.', 'Debilidad de raíz inferior: dificultad para inspirar profundo, sibilancia crónica peor con esfuerzo, lumbar/rodillas débiles y posibles signos urinarios/reproductivos.'],
+      rows: [
+        ['Función fallida', 'Difundir/descender Qi de Pulmón y asegurar Qi Defensivo.', 'Recibir y anclar Qi pulmonar inhalado.'],
+        ['Respiración', 'Respiración y voz débiles en general.', 'Inspiración especialmente difícil o superficial.'],
+        ['Pulso', 'Débil, especialmente cun derecho.', 'Profundo-débil en posiciones chi.'],
+        ['Ejemplos de fórmulas', 'Bu Fei Tang o Yu Ping Feng San según presentación.', 'Ren Shen Ge Jie San o Su Zi Jiang Qi Tang con Flema-Frío.']
+      ],
+      why: 'Disnea se superpone. Voz débil/sudor/infecciones localizan Pulmón; inspiración difícil más lumbar localiza Riñón.',
+      memory: '<strong>Qi de Pulmón no envía;</strong> <strong>Qi de Riñón no recibe.</strong>',
+      safety: 'Disnea grave/progresiva, labios azules, dolor torácico, confusión, oxígeno bajo o no hablar frases completas es emergencia.',
+      prompts: ['¿Cuál tiene resfriados frecuentes?', '¿Cuál lucha al inspirar?', '¿Qué signos inferiores indican Riñón?']
+    }
+  },
+  {
+    slug: 'stomach-qi-deficiency-vs-spleen-qi-deficiency', title: 'Stomach Qi Deficiency vs. Spleen Qi Deficiency', titleEs: 'Deficiencia de Qi de Estómago vs. Deficiencia de Qi de Bazo',
+    summary: 'Separate weak receiving and descending from weak transformation, transport and tissue support.',
+    summaryEs: 'Distingue recepción/descenso débil de transformación, transporte y sostén tisular débil.',
+    search: 'stomach spleen qi deficiency appetite epigastric discomfort nausea belching vomiting loose stool bloating fatigue heaviness edema muscles pale tongue weak pulse',
+    en: {
+      names: ['Stomach Qi Deficiency', 'Spleen Qi Deficiency'],
+      shared: 'Both cause poor appetite, fatigue, pale tongue and a weak right-guan pulse; they commonly coexist.',
+      fast: ['Receiving/descending fails: epigastric emptiness, poor appetite, mild nausea, belching or tendency to vomiting.', 'Transformation/transport fails: post-meal bloating, loose stools, heaviness, weak limbs and possible Dampness or edema.'],
+      rows: [
+        ['Direction/function', 'Receives food and descends Qi.', 'Transforms food/fluids and raises clear Qi.'],
+        ['Decisive clue', 'Nausea, belching and epigastric emptiness.', 'Loose stool, bloating, heaviness and muscle weakness.'],
+        ['Tongue / pulse', 'Pale, possibly center depression; weak.', 'Pale, possibly swollen/toothmarks; weak.'],
+        ['Formula examples', 'Si Jun Zi Tang; Xiang Sha Liu Jun Zi Tang if nausea/stagnation.', 'Si Jun Zi Tang or Shen Ling Bai Zhu San when Dampness/diarrhea dominates.']
+      ],
+      why: 'Poor appetite is shared. Upward rebellion identifies Stomach; stool, Dampness and weak limbs identify Spleen transport failure.',
+      memory: '<strong>Stomach cannot receive and descend;</strong> <strong>Spleen cannot transform and lift.</strong>',
+      safety: 'Persistent vomiting, progressive swallowing difficulty, GI bleeding, severe pain or unexplained weight loss requires medical evaluation.',
+      prompts: ['Which produces belching and nausea?', 'Which produces loose stool and heaviness?', 'Why do they often coexist?']
+    },
+    es: {
+      names: ['Deficiencia de Qi de Estómago', 'Deficiencia de Qi de Bazo'],
+      shared: 'Ambas causan poco apetito, fatiga, lengua pálida y pulso guan derecho débil; suelen coexistir.',
+      fast: ['Falla recepción/descenso: vacío epigástrico, poco apetito, náusea leve, eructos o tendencia a vomitar.', 'Falla transformación/transporte: distensión posprandial, heces sueltas, pesadez, extremidades débiles y posible Humedad/edema.'],
+      rows: [
+        ['Dirección/función', 'Recibe alimento y desciende Qi.', 'Transforma alimento/líquidos y eleva Qi claro.'],
+        ['Pista decisiva', 'Náusea, eructo y vacío epigástrico.', 'Heces sueltas, distensión, pesadez y músculos débiles.'],
+        ['Lengua / pulso', 'Pálida, posible depresión central; débil.', 'Pálida, posible hinchada/marcas dentales; débil.'],
+        ['Ejemplos de fórmulas', 'Si Jun Zi Tang; Xiang Sha Liu Jun Zi Tang si náusea/estancamiento.', 'Si Jun Zi Tang o Shen Ling Bai Zhu San si dominan Humedad/diarrea.']
+      ],
+      why: 'Poco apetito es común. Rebeldía ascendente identifica Estómago; heces, Humedad y miembros débiles identifican Bazo.',
+      memory: '<strong>Estómago no recibe/desciende;</strong> <strong>Bazo no transforma/eleva.</strong>',
+      safety: 'Vómito persistente, disfagia progresiva, sangrado GI, dolor grave o pérdida de peso inexplicada requiere evaluación.',
+      prompts: ['¿Cuál produce eructos/náusea?', '¿Cuál heces sueltas/pesadez?', '¿Por qué coexisten?']
+    }
+  },
+  {
+    slug: 'yin-collapse-vs-yang-collapse', title: 'Yin Collapse vs. Yang Collapse', titleEs: 'Colapso de Yin vs. Colapso de Yang',
+    summary: 'Recognize two medical emergencies by warm sticky sweat and Heat versus cold profuse sweat and profound Cold.',
+    summaryEs: 'Reconoce dos emergencias mediante sudor tibio pegajoso con Calor frente a sudor frío profuso con Frío profundo.',
+    search: 'yin collapse yang collapse emergency profuse sweat warm sticky oily cold sweat hot skin cold limbs thirst red dry pale wet rapid minute faint slow',
+    en: {
+      names: ['Yin Collapse', 'Yang Collapse'],
+      shared: 'Both are critical depletion states with profuse sweating, extreme weakness, altered responsiveness and a minute pulse.',
+      fast: ['Fluids/Yin exhausted: warm sticky or oily sweat, hot skin, intense thirst, restlessness, red dry tongue and rapid minute pulse.', 'Yang devastated: profuse cold sweat, icy limbs, pale or bluish face, little thirst or desire for warm drinks, pale wet tongue and faint slow pulse.'],
+      rows: [
+        ['Temperature', 'Heat and dryness predominate.', 'Profound Cold and loss of warming predominate.'],
+        ['Sweat', 'Warm, sticky or oily.', 'Cold, copious and clear.'],
+        ['Tongue / pulse', 'Red-dry; minute-rapid.', 'Pale-wet; minute-faint-slow.'],
+        ['Classical formula association', 'Sheng Mai San in Qi-Yin depletion contexts.', 'Si Ni Tang in devastated-Yang theory; Fu Zi requires expert emergency-level use.']
+      ],
+      why: 'Both can sweat and collapse. Temperature of skin/sweat, thirst, tongue moisture and pulse speed determine Yin versus Yang failure.',
+      memory: '<strong>Yin collapse is hot and sticky;</strong> <strong>Yang collapse is cold and pouring.</strong>',
+      safety: 'Both descriptions represent medical emergencies such as shock, severe dehydration, sepsis or cardiac illness. Call emergency services; do not attempt herbal self-treatment.',
+      prompts: ['Which has warm sticky sweat?', 'Which has icy limbs?', 'Why are both emergency presentations?']
+    },
+    es: {
+      names: ['Colapso de Yin', 'Colapso de Yang'],
+      shared: 'Ambos son estados críticos con sudor profuso, debilidad extrema, respuesta alterada y pulso diminuto.',
+      fast: ['Líquidos/Yin agotados: sudor tibio pegajoso o aceitoso, piel caliente, sed intensa, inquietud, lengua roja-seca y pulso diminuto-rápido.', 'Yang devastado: sudor frío profuso, miembros helados, cara pálida/azulada, poca sed o deseo de caliente, lengua pálida-mojada y pulso débil-lento.'],
+      rows: [
+        ['Temperatura', 'Predominan Calor y sequedad.', 'Predomina Frío profundo y pérdida de calentamiento.'],
+        ['Sudor', 'Tibio, pegajoso o aceitoso.', 'Frío, copioso y claro.'],
+        ['Lengua / pulso', 'Roja-seca; diminuto-rápido.', 'Pálida-mojada; diminuto-débil-lento.'],
+        ['Asociación clásica', 'Sheng Mai San en agotamiento Qi-Yin.', 'Si Ni Tang en teoría de Yang devastado; Fu Zi exige experto y nivel de emergencia.']
+      ],
+      why: 'Ambos sudan y colapsan. Temperatura de piel/sudor, sed, humedad lingual y velocidad del pulso determinan Yin o Yang.',
+      memory: '<strong>Colapso Yin es caliente/pegajoso;</strong> <strong>colapso Yang es frío/copioso.</strong>',
+      safety: 'Ambos representan emergencias como shock, deshidratación grave, sepsis o enfermedad cardíaca. Llame a emergencias; no intente autotratamiento herbal.',
+      prompts: ['¿Cuál tiene sudor tibio pegajoso?', '¿Cuál miembros helados?', '¿Por qué ambos son emergencia?']
+    }
+  },
+  {
+    slug: 'summerheat-vs-exterior-wind-heat', title: 'Summerheat vs. Exterior Wind-Heat', titleEs: 'Summerheat vs. Viento-Calor Exterior',
+    summary: 'Separate intense seasonal Heat and fluid injury from a superficial Wind-Heat respiratory presentation.',
+    summaryEs: 'Distingue Calor estacional intenso con lesión de líquidos de presentación respiratoria superficial por Viento-Calor.',
+    search: 'summerheat wind heat exterior summer high fever profuse sweat intense thirst irritability scant dark urine sore throat cough chills floating rapid dampness',
+    en: {
+      names: ['Summerheat', 'Exterior Wind-Heat'],
+      shared: 'Both occur with fever, thirst, sweating, irritability and a rapid pulse during warm weather.',
+      fast: ['Seasonal Heat is intense: high fever, profuse sweat, strong thirst, scant dark urine and fatigue; Dampness may add nausea or diarrhea.', 'Exterior Wind-Heat is superficial: fever with mild chills, sore throat, cough, headache and a floating-rapid pulse.'],
+      rows: [
+        ['Depth', 'Strong Heat directly injures Qi and fluids; may combine with Dampness.', 'Exterior Wind-Heat at Lung/Wei level.'],
+        ['Decisive clue', 'Summer exposure plus marked sweat/thirst and urinary fluid loss.', 'Sore throat/cough with remaining chills and floating pulse.'],
+        ['Tongue / pulse', 'Red with dry or greasy yellow coat; rapid, possibly soggy.', 'Red tip/edges with thin coat; floating-rapid.'],
+        ['Formula examples', 'Qing Luo Yin or Bai Hu Jia Ren Shen Tang by severity.', 'Yin Qiao San or Sang Ju Yin.']
+      ],
+      why: 'Warm season alone is not enough. Intense fluid injury and possible Dampness indicate Summerheat; respiratory Exterior signs indicate Wind-Heat.',
+      memory: '<strong>Summerheat scorches and drains;</strong> <strong>Wind-Heat stays near the surface and throat.</strong>',
+      safety: 'Heat stroke is an emergency: confusion, collapse, seizure, very high temperature or hot altered skin requires immediate cooling and emergency services.',
+      prompts: ['Which strongly injures fluids?', 'Which retains mild chills?', 'What signs show Summerheat with Dampness?']
+    },
+    es: {
+      names: ['Summerheat', 'Viento-Calor Exterior'],
+      shared: 'Ambos ocurren con fiebre, sed, sudor, irritabilidad y pulso rápido en clima cálido.',
+      fast: ['Calor estacional intenso: fiebre alta, sudor profuso, sed fuerte, orina oscura escasa y fatiga; Humedad puede añadir náusea/diarrea.', 'Viento-Calor superficial: fiebre con escalofríos leves, dolor de garganta, tos, cefalea y pulso flotante-rápido.'],
+      rows: [
+        ['Profundidad', 'Calor fuerte lesiona Qi/líquidos; puede combinarse con Humedad.', 'Viento-Calor Exterior en nivel Pulmón/Wei.'],
+        ['Pista decisiva', 'Exposición veraniega más sudor/sed marcados y pérdida urinaria.', 'Garganta/tos con escalofríos restantes y pulso flotante.'],
+        ['Lengua / pulso', 'Roja con capa amarilla seca o grasosa; rápido, posible blando.', 'Punta/bordes rojos con capa fina; flotante-rápido.'],
+        ['Ejemplos de fórmulas', 'Qing Luo Yin o Bai Hu Jia Ren Shen Tang según gravedad.', 'Yin Qiao San o Sang Ju Yin.']
+      ],
+      why: 'Clima cálido solo no basta. Lesión intensa de líquidos y posible Humedad indica Summerheat; signos respiratorios Exterior indican Viento-Calor.',
+      memory: '<strong>Summerheat abrasa y drena;</strong> <strong>Viento-Calor queda en superficie y garganta.</strong>',
+      safety: 'Golpe de calor es emergencia: confusión, colapso, convulsión, temperatura muy alta o piel caliente alterada requiere enfriamiento y emergencias.',
+      prompts: ['¿Cuál lesiona fuertemente líquidos?', '¿Cuál conserva escalofríos?', '¿Qué indica Summerheat con Humedad?']
+    }
+  },
+  {
+    slug: 'cold-in-liver-channel-vs-liver-qi-stagnation', title: 'Cold in the Liver Channel vs. Liver Qi Stagnation', titleEs: 'Frío en Canal de Hígado vs. Estancamiento de Qi de Hígado',
+    summary: 'Separate contracted cold lower-abdominal or genital pain from distending emotion-sensitive Qi constraint.',
+    summaryEs: 'Distingue dolor contraído frío hipogástrico/genital de constricción distensiva de Qi sensible a emociones.',
+    search: 'cold liver channel liver qi stagnation lower abdomen genital scrotal hernia pain severe contracted cold warmth distending rib side emotional wiry tight',
+    en: {
+      names: ['Cold in the Liver Channel', 'Liver Qi Stagnation'],
+      shared: 'Both may cause lower-abdominal, genital or rib-side pain and a wiry pulse because the Liver channel is involved.',
+      fast: ['Cold contraction: severe fixed lower-abdominal, groin or scrotal pain, worse with cold and improved by warmth; pale tongue and deep-wiry-tight pulse.', 'Qi constraint: distending variable pain, sighing, mood changes and menstrual symptoms that worsen with stress; tongue may be normal.'],
+      rows: [
+        ['Pathogen/mechanism', 'Cold contracts the Liver channel and blocks Qi/Blood.', 'Liver Qi fails to course freely.'],
+        ['Pain quality', 'Contracting, severe and cold-sensitive.', 'Distending, mobile and emotion-sensitive.'],
+        ['Tongue / pulse', 'Pale with white moist coat; deep-wiry-tight.', 'Normal/dusky; wiry.'],
+        ['Formula examples', 'Tian Tai Wu Yao San or Nuan Gan Jian.', 'Chai Hu Shu Gan San or Xiao Yao San when deficiency coexists.']
+      ],
+      why: 'Channel location overlaps. Cold response and contraction identify Cold; emotional variability and distention identify Qi stagnation.',
+      memory: '<strong>Cold contracts the groin;</strong> <strong>Qi stagnation distends with stress.</strong>',
+      safety: 'Sudden severe testicular, pelvic or abdominal pain, swelling, fever, vomiting or pregnancy-related pain requires urgent evaluation.',
+      prompts: ['Which improves with warmth?', 'Which fluctuates with emotion?', 'How do tongue and pulse distinguish them?']
+    },
+    es: {
+      names: ['Frío en Canal de Hígado', 'Estancamiento de Qi de Hígado'],
+      shared: 'Ambos causan dolor hipogástrico, genital o costal y pulso de cuerda porque participa el canal de Hígado.',
+      fast: ['Contracción fría: dolor grave fijo hipogástrico, inguinal o escrotal, peor con frío y mejor con calor; lengua pálida y pulso profundo-cuerda-tenso.', 'Constricción de Qi: dolor distensivo variable, suspiros, cambios de ánimo y síntomas menstruales peores con estrés; lengua puede ser normal.'],
+      rows: [
+        ['Patógeno/mecanismo', 'Frío contrae canal de Hígado y bloquea Qi/Sangre.', 'Qi de Hígado no circula libremente.'],
+        ['Dolor', 'Contractivo, grave y sensible al frío.', 'Distensivo, móvil y sensible a emociones.'],
+        ['Lengua / pulso', 'Pálida con capa blanca húmeda; profundo-cuerda-tenso.', 'Normal/oscura; de cuerda.'],
+        ['Ejemplos de fórmulas', 'Tian Tai Wu Yao San o Nuan Gan Jian.', 'Chai Hu Shu Gan San o Xiao Yao San si hay deficiencia.']
+      ],
+      why: 'Localización de canal se superpone. Respuesta al frío y contracción indican Frío; variabilidad emocional y distensión indican Qi.',
+      memory: '<strong>Frío contrae la ingle;</strong> <strong>Qi estancado distiende con estrés.</strong>',
+      safety: 'Dolor testicular, pélvico o abdominal súbito grave, hinchazón, fiebre, vómito o dolor en embarazo requiere urgencia.',
+      prompts: ['¿Cuál mejora con calor?', '¿Cuál cambia con emociones?', '¿Cómo distinguen lengua/pulso?']
+    }
   }
 );
 
