@@ -845,6 +845,186 @@ const pathologies = [
       safety: 'Debilidad facial nueva, cambio de habla/visión, cefalea súbita grave, erupción cerca del ojo, fiebre/hinchazón, infección dental o dolor facial nuevo persistente requiere evaluación pronta.',
       source: 'Internal Medicine 1, Handout 9: Facial Pain.'
     }
+  },
+  {
+    slug: 'sprain-patterns', title: { en: 'Sprain Clinical Comparison', es: 'Comparación Clínica del Esguince' },
+    summary: { en: 'Recognize the Qi-and-Blood stagnation presentation while screening for fracture or severe soft-tissue injury.', es: 'Reconoce la presentación por estancamiento de Qi y Sangre mientras se descarta fractura o lesión grave de tejidos blandos.' },
+    focus: { en: 'Local swelling, discoloration, pain and restricted movement', es: 'Hinchazón local, decoloración, dolor y movimiento restringido' },
+    search: 'sprain strain trauma qi blood stagnation swelling purple restricted movement shu jin huo xue tang',
+    en: {
+      intro: 'The source gives one principal presentation; the exam task is to recognize local traumatic Qi-and-Blood stagnation and distinguish it from injuries requiring imaging.',
+      rows: [
+        ['Qi and Blood stagnation', 'Local distention, swelling, pain, red or dark-purple discoloration and restricted movement', 'Shu Jin Huo Xue Tang', 'Move Qi and Blood, soothe sinews and open channels.'],
+      ],
+      rule: 'After trauma, swelling plus red-purple discoloration and limited motion identifies local Qi-and-Blood stagnation.',
+      memory: '<strong>Trauma + swollen + purple + restricted = Qi and Blood stagnation.</strong>',
+      safety: 'Inability to bear weight, deformity, bony tenderness, loss of sensation/circulation, severe swelling or high-energy trauma requires prompt medical assessment and possible imaging.',
+      source: 'Internal Medicine 1, Handout 9: Sprain.'
+    },
+    es: {
+      intro: 'La fuente presenta un mecanismo principal; la tarea de examen es reconocer estancamiento traumático local de Qi-Sangre y diferenciar lesiones que requieren imagen.',
+      rows: [
+        ['Estancamiento de Qi y Sangre', 'Distensión, hinchazón, dolor, color rojo o púrpura oscuro y movimiento restringido', 'Shu Jin Huo Xue Tang', 'Mover Qi y Sangre, relajar tendones y abrir canales.'],
+      ],
+      rule: 'Tras trauma, hinchazón más color rojo-púrpura y movimiento limitado identifica estancamiento local de Qi-Sangre.',
+      memory: '<strong>Trauma + hinchado + púrpura + restringido = estancamiento de Qi y Sangre.</strong>',
+      safety: 'No poder apoyar peso, deformidad, dolor óseo, pérdida de sensibilidad/circulación, hinchazón grave o trauma de alta energía requiere evaluación e imagen.',
+      source: 'Internal Medicine 1, Handout 9: Sprain.'
+    }
+  },
+  {
+    slug: 'crick-neck-patterns', title: { en: 'Crick in the Neck Pattern Differentiation', es: 'Diferenciación de Tortícolis y Rigidez Cervical' },
+    summary: { en: 'Separate local Qi-Blood stagnation from an external Wind-Cold presentation.', es: 'Separa estancamiento local de Qi-Sangre de una presentación externa de Viento-Frío.' },
+    focus: { en: 'Local palpable tightness versus systemic exterior signs', es: 'Tensión local palpable frente a signos exteriores sistémicos' },
+    search: 'crick neck stiff neck torticollis qi blood stagnation wind cold shu jin huo xue ge gen tang fever chills headache',
+    en: {
+      intro: 'Both branches restrict neck movement; exterior symptoms are the decisive difference.',
+      rows: [
+        ['Qi and Blood stagnation', 'Neck stiffness/pain, restricted motion, tight muscles and sometimes palpable local knots', 'Shu Jin Huo Xue Tang', 'Move Qi and Blood, soothe sinews and harmonize channels.'],
+        ['External Wind-Cold', 'Stiff painful neck plus aversion to Cold, slight fever, headache and floating-tight pulse', 'Ge Gen Tang', 'Dispel Wind-Cold and relax the muscle layer.'],
+      ],
+      rule: 'Purely local tight painful restriction suggests stagnation; chills, slight fever and headache add an exterior Wind-Cold pattern.',
+      memory: '<strong>Local knot—stagnation; stiff neck + chills/headache—Wind-Cold.</strong>',
+      safety: 'Neck stiffness with high fever, severe headache, confusion, rash, neurologic deficit or recent major trauma is an emergency.',
+      source: 'Internal Medicine 1, Handout 9: Crick in the Neck.'
+    },
+    es: {
+      intro: 'Ambas ramas restringen el cuello; los síntomas exteriores son la diferencia decisiva.',
+      rows: [
+        ['Estancamiento de Qi y Sangre', 'Rigidez/dolor cervical, movimiento restringido, músculos tensos y a veces nudos locales palpables', 'Shu Jin Huo Xue Tang', 'Mover Qi y Sangre, relajar tendones y armonizar canales.'],
+        ['Viento-Frío externo', 'Cuello rígido/doloroso más aversión al Frío, fiebre leve, cefalea y pulso flotante-tenso', 'Ge Gen Tang', 'Expulsar Viento-Frío y relajar capa muscular.'],
+      ],
+      rule: 'Restricción dolorosa puramente local sugiere estancamiento; escalofríos, fiebre leve y cefalea añaden Viento-Frío externo.',
+      memory: '<strong>Nudo local—estancamiento; cuello rígido + escalofríos/cefalea—Viento-Frío.</strong>',
+      safety: 'Rigidez cervical con fiebre alta, cefalea grave, confusión, erupción, déficit neurológico o trauma mayor reciente es emergencia.',
+      source: 'Internal Medicine 1, Handout 9: Crick in the Neck.'
+    }
+  },
+  {
+    slug: 'internal-damage-fever-patterns', title: { en: 'Internal Damage Fever Pattern Differentiation', es: 'Diferenciación de Fiebre por Daño Interno' },
+    summary: { en: 'Compare fever from Qi stagnation, Blood stasis, Qi deficiency, Blood deficiency and Yin deficiency.', es: 'Compara fiebre por estancamiento de Qi, estasis de Sangre, deficiencia de Qi, deficiencia de Sangre y deficiencia de Yin.' },
+    focus: { en: 'Timing, emotional triggers, exertion, fixed pain and empty-Heat signs', es: 'Horario, detonantes emocionales, esfuerzo, dolor fijo y signos de Calor vacío' },
+    search: 'internal damage fever qi stagnation blood stasis qi deficiency blood deficiency yin deficiency dan zhi xiao yao xue fu zhu yu bu zhong yi qi gui pi qing gu san',
+    en: {
+      intro: 'The comparison concerns chronic or recurrent feverish sensations after external infection and other biomedical causes have been evaluated.',
+      rows: [
+        ['Qi stagnation fever', 'Feverishness changes with mood; depression/irritability, sighing, hypochondriac distention and wiry-rapid pulse', 'Dan Zhi Xiao Yao San', 'Soothe Liver, resolve constraint and clear Heat.'],
+        ['Blood stasis fever', 'Afternoon/night tidal fever with fixed pain or masses, sallow scaly skin and dark-purple tongue', 'Xue Fu Zhu Yu Tang', 'Invigorate Blood, dispel stasis and clear Heat.'],
+        ['Qi deficiency fever', 'Fever worse after exertion with fatigue, dyspnea, spontaneous sweat, poor appetite and weak pulse', 'Bu Zhong Yi Qi Tang', 'Tonify Qi and strengthen Spleen.'],
+        ['Blood deficiency fever', 'Mild fever with vertigo, fatigue, palpitations, pale lips/nails and pale tongue', 'Gui Pi Tang', 'Benefit Qi and nourish Blood.'],
+        ['Yin deficiency fever', 'Afternoon/night tidal fever, five-center Heat, night sweat, dry mouth and red scant-coated tongue', 'Qing Gu San', 'Nourish Yin and clear deficient Heat.'],
+      ],
+      rule: 'Mood links to Qi; fixed purple pain to stasis; exertion/sweat to Qi deficiency; pallor/palpitations to Blood; night Heat/dryness to Yin.',
+      memory: '<strong>Mood—Qi; fixed-purple—stasis; exertion—Qi deficiency; pale-palpitations—Blood; night-dry—Yin.</strong>',
+      safety: 'Persistent or recurrent fever requires medical evaluation for infection, inflammation, malignancy, medication reaction and endocrine disease. Confusion, stiff neck, dyspnea or severe dehydration is urgent.',
+      source: 'Internal Medicine 1, Handout 10: Internal Damage Fever.'
+    },
+    es: {
+      intro: 'La comparación trata sensación febril crónica o recurrente después de evaluar infección externa y otras causas biomédicas.',
+      rows: [
+        ['Fiebre por estancamiento de Qi', 'Cambia con el ánimo; depresión/irritabilidad, suspiros, distensión hipocondríaca y pulso de cuerda-rápido', 'Dan Zhi Xiao Yao San', 'Suavizar Hígado, resolver constreñimiento y aclarar Calor.'],
+        ['Fiebre por estasis de Sangre', 'Fiebre vespertina/nocturna con dolor fijo o masas, piel cetrina/escamosa y lengua púrpura oscura', 'Xue Fu Zhu Yu Tang', 'Vigorizar Sangre, eliminar estasis y aclarar Calor.'],
+        ['Fiebre por deficiencia de Qi', 'Peor tras esfuerzo con fatiga, disnea, sudor espontáneo, poco apetito y pulso débil', 'Bu Zhong Yi Qi Tang', 'Tonificar Qi y fortalecer Bazo.'],
+        ['Fiebre por deficiencia de Sangre', 'Fiebre leve con vértigo, fatiga, palpitaciones, labios/uñas pálidos y lengua pálida', 'Gui Pi Tang', 'Beneficiar Qi y nutrir Sangre.'],
+        ['Fiebre por deficiencia de Yin', 'Fiebre vespertina/nocturna, Calor de cinco centros, sudor nocturno, boca seca y lengua roja con poca capa', 'Qing Gu San', 'Nutrir Yin y aclarar Calor vacío.'],
+      ],
+      rule: 'Ánimo enlaza con Qi; dolor fijo/púrpura con estasis; esfuerzo/sudor con Qi deficiente; palidez/palpitaciones con Sangre; Calor nocturno/sequedad con Yin.',
+      memory: '<strong>Ánimo—Qi; fijo-púrpura—estasis; esfuerzo—Qi deficiente; pálido-palpitaciones—Sangre; noche-seco—Yin.</strong>',
+      safety: 'Fiebre persistente o recurrente requiere evaluación por infección, inflamación, cáncer, reacción farmacológica o enfermedad endocrina. Confusión, rigidez cervical, disnea o deshidratación grave es urgente.',
+      source: 'Internal Medicine 1, Handout 10: Internal Damage Fever.'
+    }
+  },
+  {
+    slug: 'parasitic-worm-patterns', title: { en: 'Parasitic Worm Clinical Comparison', es: 'Comparación Clínica de Parásitos Intestinales' },
+    summary: { en: 'Compare roundworm, pinworm, tapeworm and biliary roundworm presentations.', es: 'Compara presentaciones por lombriz intestinal, oxiuros, tenia y ascariasis biliar.' },
+    focus: { en: 'Pain location, nocturnal itching, stool findings and acute biliary pain', es: 'Localización del dolor, prurito nocturno, hallazgos en heces y dolor biliar agudo' },
+    search: 'parasites worms roundworm pinworm tapeworm biliary ascaris wu mei wan shi jun zi da huang qu di tang nan gua zi bing lang stool itching',
+    en: {
+      intro: 'Symptoms suggest a parasite type, but stool testing, tape testing or imaging establishes the biomedical diagnosis and guides antiparasitic treatment.',
+      rows: [
+        ['Roundworm presentation', 'Intermittent umbilical pain, unusual cravings, emaciation, nose itching, sleep grinding and worms in stool', 'Wu Mei Wan or Shi Jun Zi San', 'Quiet/expel roundworms and support Spleen-Stomach.'],
+        ['Pinworm presentation', 'Intense nocturnal anal itching, restless sleep and small white worms around the anus, usually in children', 'Shi Jun Zi Da Huang Fen', 'Expel worms and relieve itching.'],
+        ['Tapeworm presentation', 'Mild abdominal discomfort, anal itching, diarrhea and visible tapeworm segments in stool', 'Qu Di Tang', 'Expel worms and rectify digestion.'],
+        ['Biliary roundworm presentation', 'Sudden severe epigastric/right hypochondriac pain radiating to back/shoulder with nausea and vomiting', 'Wu Mei Wan or Dan Dao Qu Hui Tang', 'Expel worms and relieve pain after urgent evaluation.'],
+      ],
+      rule: 'Umbilical symptoms suggest roundworm; night anal itch pinworm; segments tapeworm; acute right-upper abdominal pain biliary migration.',
+      memory: '<strong>Navel—roundworm; night itch—pinworm; segments—tapeworm; right-upper attack—biliary.</strong>',
+      safety: 'Suspected parasites require diagnostic testing and standard antiparasitic treatment. Severe abdominal/right-upper-quadrant pain, jaundice, fever, persistent vomiting or obstruction is urgent.',
+      source: 'Internal Medicine 1, Handout 10: Parasitic Worm Patterns.'
+    },
+    es: {
+      intro: 'Los síntomas sugieren el tipo, pero pruebas de heces, cinta adhesiva o imagen establecen el diagnóstico biomédico y guían el antiparasitario.',
+      rows: [
+        ['Presentación por lombriz intestinal', 'Dolor umbilical intermitente, antojos inusuales, adelgazamiento, prurito nasal, rechinar nocturno y lombrices en heces', 'Wu Mei Wan o Shi Jun Zi San', 'Calmar/expulsar lombrices y apoyar Bazo-Estómago.'],
+        ['Presentación por oxiuros', 'Prurito anal nocturno intenso, sueño inquieto y pequeños gusanos blancos perianales, usualmente en niños', 'Shi Jun Zi Da Huang Fen', 'Expulsar gusanos y aliviar prurito.'],
+        ['Presentación por tenia', 'Molestia abdominal leve, prurito anal, diarrea y segmentos visibles en heces', 'Qu Di Tang', 'Expulsar parásitos y rectificar digestión.'],
+        ['Presentación por ascariasis biliar', 'Dolor epigástrico/hipocondrio derecho súbito y grave irradiado a espalda/hombro con náusea y vómito', 'Wu Mei Wan o Dan Dao Qu Hui Tang', 'Expulsar gusanos y aliviar dolor tras evaluación urgente.'],
+      ],
+      rule: 'Síntomas umbilicales sugieren lombriz; prurito anal nocturno oxiuros; segmentos tenia; ataque abdominal superior derecho migración biliar.',
+      memory: '<strong>Ombligo—lombriz; prurito nocturno—oxiuros; segmentos—tenia; ataque superior derecho—biliar.</strong>',
+      safety: 'Sospecha de parásitos requiere pruebas y antiparasitario estándar. Dolor abdominal/hipocondrio derecho grave, ictericia, fiebre, vómito persistente u obstrucción es urgente.',
+      source: 'Internal Medicine 1, Handout 10: Parasitic Worm Patterns.'
+    }
+  },
+  {
+    slug: 'pulmonary-consumption-patterns', title: { en: 'Pulmonary Consumption (Tuberculosis) Comparison', es: 'Comparación de Consunción Pulmonar (Tuberculosis)' },
+    summary: { en: 'Compare Lung Yin, Yin with empty Heat, Qi-Yin and combined Yin-Yang deficiency presentations.', es: 'Compara presentaciones por deficiencia Yin de Pulmón, Yin con Calor vacío, Qi-Yin y deficiencia combinada Yin-Yang.' },
+    focus: { en: 'Dry cough, bleeding, empty Heat and progressive systemic deficiency', es: 'Tos seca, sangrado, Calor vacío y deficiencia sistémica progresiva' },
+    search: 'pulmonary consumption tuberculosis lung yin empty heat qi yin yin yang bai he gu jin qin jiao bie jia bao zhen bu tian cough blood night sweat',
+    en: {
+      intro: 'This is a historical TCM framework for pulmonary consumption; suspected tuberculosis requires immediate biomedical testing and public-health treatment.',
+      rows: [
+        ['Lung Yin deficiency', 'Dry cough, scant/blood-streaked phlegm, afternoon fever, flushed cheeks, night sweat and dry throat', 'Bai He Gu Jin Tang', 'Nourish Yin, moisten Lung and relieve cough.'],
+        ['Yin deficiency with empty Heat', 'Choking cough, yellow scant phlegm, bright-red blood, steaming-bone fever, heavy night sweat and red scant-coated tongue', 'Qin Jiao Bie Jia San', 'Nourish Yin and diminish deficient Fire.'],
+        ['Qi and Yin deficiency', 'Weak cough/voice, dyspnea, pale-red blood, afternoon fever, spontaneous/night sweat, fatigue and poor appetite', 'Bao Zhen Tang', 'Benefit Qi and nourish Yin.'],
+        ['Yin and Yang deficiency', 'Advanced cough/bleeding with dyspnea, edema, loose stool, spontaneous sweating and reproductive deficiency signs', 'Bu Tian Da Zao Wan', 'Nourish Yin, warm Yang and support severe deficiency.'],
+      ],
+      rule: 'Dry cough begins with Lung Yin; intense empty Heat/bright bleeding marks deeper Yin depletion; weak voice/fatigue adds Qi; edema/cold digestive-reproductive failure adds Yang.',
+      memory: '<strong>Dry—Lung Yin; burning/bleeding—empty Heat; weak voice—Qi-Yin; edema/cold failure—Yin-Yang.</strong>',
+      safety: 'Cough over 3 weeks, coughing blood, night sweats, fever, weight loss or TB exposure requires prompt testing. Active TB needs prescribed multidrug therapy and public-health precautions.',
+      source: 'Internal Medicine 1, Handout 10: Pulmonary Consumption.'
+    },
+    es: {
+      intro: 'Este es un marco histórico MTC para consunción pulmonar; sospecha de tuberculosis requiere pruebas biomédicas inmediatas y tratamiento de salud pública.',
+      rows: [
+        ['Deficiencia Yin de Pulmón', 'Tos seca, flema escasa/con sangre, fiebre vespertina, mejillas rojas, sudor nocturno y garganta seca', 'Bai He Gu Jin Tang', 'Nutrir Yin, humedecer Pulmón y aliviar tos.'],
+        ['Deficiencia Yin con Calor vacío', 'Tos sofocante, flema amarilla escasa, sangre roja brillante, fiebre de huesos, sudor nocturno intenso y lengua roja con poca capa', 'Qin Jiao Bie Jia San', 'Nutrir Yin y disminuir Fuego vacío.'],
+        ['Deficiencia de Qi y Yin', 'Tos/voz débil, disnea, sangre rojo pálido, fiebre vespertina, sudor espontáneo/nocturno, fatiga y poco apetito', 'Bao Zhen Tang', 'Beneficiar Qi y nutrir Yin.'],
+        ['Deficiencia de Yin y Yang', 'Tos/sangrado avanzado con disnea, edema, heces sueltas, sudor espontáneo y signos de deficiencia reproductiva', 'Bu Tian Da Zao Wan', 'Nutrir Yin, calentar Yang y apoyar deficiencia grave.'],
+      ],
+      rule: 'Tos seca inicia con Yin pulmonar; Calor vacío intenso/sangrado brillante marca Yin profundo; voz débil/fatiga añade Qi; edema/frío y fallo digestivo-reproductivo añade Yang.',
+      memory: '<strong>Seco—Yin pulmonar; arde/sangra—Calor vacío; voz débil—Qi-Yin; edema/fallo frío—Yin-Yang.</strong>',
+      safety: 'Tos mayor de 3 semanas, sangre, sudores nocturnos, fiebre, pérdida de peso o exposición a TB requiere pruebas prontas. TB activa necesita terapia multidroga prescrita y precauciones de salud pública.',
+      source: 'Internal Medicine 1, Handout 10: Pulmonary Consumption.'
+    }
+  },
+  {
+    slug: 'malaria-patterns', title: { en: 'Malaria Clinical Comparison', es: 'Comparación Clínica de la Malaria' },
+    summary: { en: 'Separate a typical cyclic Shaoyang presentation from prolonged taxation malaria with Qi-Blood deficiency.', es: 'Separa una presentación cíclica Shaoyang típica de malaria prolongada por agotamiento con deficiencia Qi-Sangre.' },
+    focus: { en: 'Cyclic chills-fever versus recurrent attacks with constitutional weakness', es: 'Ciclos de escalofrío-fiebre frente a ataques recurrentes con debilidad constitucional' },
+    search: 'malaria cyclic chills fever shaoyang taxation deficiency xiao chai hu tang he ren yin mosquito travel',
+    en: {
+      intro: 'The classic comparison distinguishes an active cyclic excess from a prolonged deficient recurrence; neither presentation can confirm malaria without laboratory testing.',
+      rows: [
+        ['Typical malaria presentation', 'Cyclic yawning/fatigue, chills followed by fever, headache, red eyes, thirst and sweating', 'Xiao Chai Hu Tang', 'Harmonize Shaoyang and dispel the pathogen.'],
+        ['Taxation malaria presentation', 'Prolonged recurrent chills-fever triggered by strain with fatigue, dyspnea, poor appetite, emaciation and pale weak signs', 'He Ren Yin', 'Boost Qi, nourish Blood and dispel residual pathogen.'],
+      ],
+      rule: 'A strong orderly chill-fever-sweat cycle suggests the typical branch; recurrence with exertion and pale constitutional weakness suggests taxation.',
+      memory: '<strong>Clear cycle—typical; weak recurrence after strain—taxation.</strong>',
+      safety: 'Fever after travel to a malaria area is a medical emergency until excluded. Same-day blood testing and prompt antimalarial treatment are essential; confusion, breathing difficulty or severe weakness needs emergency care.',
+      source: 'Internal Medicine 1, Handout 10: Malarial Patterns.'
+    },
+    es: {
+      intro: 'La comparación clásica distingue exceso cíclico activo de recurrencia deficiente prolongada; ninguna presentación confirma malaria sin laboratorio.',
+      rows: [
+        ['Presentación de malaria típica', 'Ciclos de bostezos/fatiga, escalofríos seguidos de fiebre, cefalea, ojos rojos, sed y sudor', 'Xiao Chai Hu Tang', 'Armonizar Shaoyang y expulsar patógeno.'],
+        ['Presentación de malaria por agotamiento', 'Escalofrío-fiebre recurrente y prolongado tras esfuerzo con fatiga, disnea, poco apetito, adelgazamiento y signos pálidos/débiles', 'He Ren Yin', 'Aumentar Qi, nutrir Sangre y expulsar patógeno residual.'],
+      ],
+      rule: 'Ciclo fuerte y ordenado escalofrío-fiebre-sudor sugiere rama típica; recurrencia por esfuerzo con debilidad pálida sugiere agotamiento.',
+      memory: '<strong>Ciclo claro—típica; recurrencia débil tras esfuerzo—agotamiento.</strong>',
+      safety: 'Fiebre tras viaje a zona de malaria es emergencia hasta descartarla. Prueba sanguínea el mismo día y antipalúdico pronto son esenciales; confusión, disnea o debilidad grave requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 10: Malarial Patterns.'
+    }
   }
 ];
 
