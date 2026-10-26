@@ -1005,6 +1005,256 @@ const pairs = [
       prep: 'Formas tostadas con miel suelen elegirse para reforzar humectación y alivio de tos en casos crónicos.',
       safety: 'Uso profesional y no prolongado sin supervisión. Sangre al toser, oxígeno bajo, dolor torácico, fiebre alta o disnea requiere atención pronta.'
     }
+  },
+  {
+    number: 41, slug: 'ting-li-zi-da-zao-dui-yao', title: 'Tíng Lì Zǐ + Dà Zǎo', characters: '葶苈子 + 大枣',
+    category: { en: 'Drain Lung Fluid · Calm Wheezing', es: 'Drenar Líquido Pulmonar · Calmar Sibilancia' },
+    search: 'ting li zi da zao lepidium descurainia jujube harsh drain bodyguard lung water phlegm wheezing orthopnea edema ting li da zao xie fei tang',
+    en: {
+      mnemonic: 'A harsh drain with a bodyguard.',
+      job: 'Drain water and Phlegm from the Lung, calm wheezing and promote urination while protecting the Middle.',
+      roles: [['Tíng Lì Zǐ', 'Forcefully drains Lung fluid and directs Lung Qi downward.'], ['Dà Zǎo', 'Protects Spleen/Stomach Qi from the harsh draining action.']],
+      clues: 'Wheezing, inability to lie flat and facial or chest fluid accumulation.',
+      formulas: 'Tíng Lì Dà Zǎo Xiè Fèi Tāng.',
+      trap: 'Dà Zǎo is protective here; it does not cancel the forceful draining nature of Tíng Lì Zǐ.',
+      prep: 'Tíng Lì Zǐ is commonly crushed before decoction; dose and duration require professional control.',
+      safety: 'Breathlessness when lying flat, swollen legs, chest pain or blue lips may indicate heart failure or another emergency and requires urgent evaluation.'
+    },
+    es: {
+      mnemonic: 'Un drenaje fuerte con guardaespaldas.',
+      job: 'Drenar agua/Flema de Pulmón, calmar sibilancia y promover orina mientras protege Centro.',
+      roles: [['Tíng Lì Zǐ', 'Drena con fuerza líquido pulmonar y dirige Qi de Pulmón hacia abajo.'], ['Dà Zǎo', 'Protege Qi de Bazo/Estómago de la acción drenante agresiva.']],
+      clues: 'Sibilancia, incapacidad para acostarse y líquido acumulado en cara o pecho.',
+      formulas: 'Tíng Lì Dà Zǎo Xiè Fèi Tāng.',
+      trap: 'Dà Zǎo protege; no cancela la naturaleza fuertemente drenante de Tíng Lì Zǐ.',
+      prep: 'Tíng Lì Zǐ suele triturarse antes de decocción; dosis y duración requieren control profesional.',
+      safety: 'Disnea al acostarse, piernas hinchadas, dolor torácico o labios azules puede indicar falla cardíaca u otra emergencia.'
+    }
+  },
+  {
+    number: 42, slug: 'fu-zi-gan-jiang-dui-yao', title: 'Fù Zǐ + Gān Jiāng', characters: '附子 + 干姜',
+    category: { en: 'Restore Devastated Yang', es: 'Restaurar Yang Devastado' },
+    search: 'fu zi gan jiang aconite dried ginger restore devastated yang collapse cold limbs watery diarrhea si ni tang toxic prepared predecoct',
+    en: {
+      mnemonic: '“Fù Zǐ without Gān Jiāng is not hot.”',
+      job: 'Restore devastated Yang, warm the Middle and rescue collapse from severe interior Cold.',
+      roles: [['Fù Zǐ', 'Rapidly revives Yang and reaches all twelve channels.'], ['Gān Jiāng', 'Warms and anchors the restored heat in the Middle burner.']],
+      clues: 'Cold limbs, profound weakness or collapse, watery diarrhea and a minute/deep pulse.',
+      formulas: 'Sì Nì Tāng.',
+      trap: 'This is an emergency Cold-collapse strategy, not routine treatment for feeling chilly.',
+      prep: 'Prepared Fù Zǐ only; it requires professional dosing and prolonged pre-decoction before other ingredients.',
+      safety: 'Contraindicated in pregnancy. Numb mouth, vomiting, weakness, palpitations or irregular pulse after aconite exposure requires emergency care or Poison Control.'
+    },
+    es: {
+      mnemonic: '“Fù Zǐ sin Gān Jiāng no está caliente.”',
+      job: 'Restaurar Yang devastado, calentar Centro y rescatar colapso por Frío interior grave.',
+      roles: [['Fù Zǐ', 'Revive Yang rápidamente y alcanza los doce canales.'], ['Gān Jiāng', 'Calienta y mantiene el calor restaurado en Jiao Medio.']],
+      clues: 'Extremidades frías, debilidad profunda o colapso, diarrea acuosa y pulso diminuto/profundo.',
+      formulas: 'Sì Nì Tāng.',
+      trap: 'Es estrategia de emergencia para colapso por Frío, no tratamiento rutinario por sentir frío.',
+      prep: 'Solo Fù Zǐ preparada; requiere dosis profesional y predecocción prolongada antes de otras medicinas.',
+      safety: 'Contraindicada en embarazo. Boca dormida, vómito, debilidad, palpitaciones o pulso irregular tras aconito requiere urgencia o Poison Control.'
+    }
+  },
+  {
+    number: 43, slug: 'fu-zi-rou-gui-dui-yao', title: 'Fù Zǐ + Ròu Guì', characters: '附子 + 肉桂',
+    category: { en: 'Warm and Supplement Kidney Yang', es: 'Calentar y Suplementar Yang de Riñón' },
+    search: 'fu zi rou gui aconite cinnamon bark ming men kidney yang fire source cold back knees clear urine impotence you gui wan shen qi wan',
+    en: {
+      mnemonic: 'Stoke the basement furnace at Mìng Mén.',
+      job: 'Warm and supplement Kidney Yang and lead Fire back to its source.',
+      roles: [['Fù Zǐ', 'Powerfully warms Kidney Yang and revives functional Fire.'], ['Ròu Guì', 'Warms Mìng Mén, enters the Blood level and guides floating Fire home.']],
+      clues: 'Cold low back and knees, frequent clear urine, impotence and chronic lower-burner Cold.',
+      formulas: 'Yòu Guī Wán; later versions of Shèn Qì Wán.',
+      trap: 'Compared with Fù Zǐ + Gān Jiāng, this pair treats chronic Kidney-Yang deficiency rather than acute collapse.',
+      prep: 'Use prepared Fù Zǐ with required pre-decoction; add Ròu Guì late or use it as powder when directed.',
+      safety: 'Fù Zǐ is toxic and the pair is contraindicated in pregnancy. Classical 19 Wèi: Ròu Guì is incompatible with Chì Shí Zhī.'
+    },
+    es: {
+      mnemonic: 'Avivar el horno del sótano en Mìng Mén.',
+      job: 'Calentar/suplementar Yang de Riñón y conducir Fuego de vuelta a su fuente.',
+      roles: [['Fù Zǐ', 'Calienta con fuerza Yang renal y revive Fuego funcional.'], ['Ròu Guì', 'Calienta Mìng Mén, entra al nivel Sangre y guía Fuego flotante a casa.']],
+      clues: 'Espalda/rodillas frías, orina clara frecuente, impotencia y Frío crónico del Jiao inferior.',
+      formulas: 'Yòu Guī Wán; versiones tardías de Shèn Qì Wán.',
+      trap: 'Frente a Fù Zǐ + Gān Jiāng, trata deficiencia Yang renal crónica, no colapso agudo.',
+      prep: 'Usar Fù Zǐ preparada con predecocción requerida; añadir Ròu Guì tarde o como polvo cuando se indique.',
+      safety: 'Fù Zǐ es tóxica y la pareja está contraindicada en embarazo. 19 Wèi clásico: Ròu Guì es incompatible con Chì Shí Zhī.'
+    }
+  },
+  {
+    number: 44, slug: 'gan-jiang-bai-zhu-dui-yao', title: 'Gān Jiāng + Bái Zhú', characters: '干姜 + 白术',
+    category: { en: 'Warm the Middle · Dry Dampness', es: 'Calentar Centro · Secar Humedad' },
+    search: 'gan jiang bai zhu dried ginger atractylodes warm middle spleen dry damp cold abdominal pain loose stool vomiting li zhong wan',
+    en: {
+      mnemonic: 'Dry heat for a cold, soggy Middle.',
+      job: 'Warm the Middle, strengthen the Spleen and dry Cold-Dampness.',
+      roles: [['Gān Jiāng', 'Warms Spleen/Stomach Yang and disperses interior Cold.'], ['Bái Zhú', 'Strengthens Spleen Qi and dries Dampness that produces loose stool.']],
+      clues: 'Cold abdominal pain, loose stools, vomiting, poor appetite and cold limbs from Middle deficiency-Cold.',
+      formulas: 'Lǐ Zhōng Wán.',
+      trap: 'The pair is warm and dry; it is wrong for Yin deficiency, dry stool or Damp-Heat.',
+      prep: 'Distinguish dried Gān Jiāng from fresh Shēng Jiāng; they are not interchangeable in this warming role.',
+      safety: 'Persistent vomiting, blood in stool, severe abdominal pain or dehydration requires medical assessment.'
+    },
+    es: {
+      mnemonic: 'Calor seco para un Centro frío y empapado.',
+      job: 'Calentar Centro, fortalecer Bazo y secar Frío-Humedad.',
+      roles: [['Gān Jiāng', 'Calienta Yang de Bazo/Estómago y dispersa Frío interior.'], ['Bái Zhú', 'Fortalece Qi de Bazo y seca Humedad que produce heces sueltas.']],
+      clues: 'Dolor abdominal frío, heces sueltas, vómito, poco apetito y extremidades frías por deficiencia-Frío del Centro.',
+      formulas: 'Lǐ Zhōng Wán.',
+      trap: 'Es cálida y seca; incorrecta para deficiencia Yin, heces secas o Humedad-Calor.',
+      prep: 'Distinguir Gān Jiāng seca de Shēng Jiāng fresca; no son intercambiables en este papel.',
+      safety: 'Vómito persistente, sangre en heces, dolor abdominal grave o deshidratación requiere evaluación.'
+    }
+  },
+  {
+    number: 45, slug: 'chai-hu-huang-qin-dui-yao', title: 'Chái Hú + Huáng Qín', characters: '柴胡 + 黄芩',
+    category: { en: 'Harmonize Shaoyang', es: 'Armonizar Shaoyang' },
+    search: 'chai hu huang qin bupleurum scutellaria shaoyang alternating chills fever bitter mouth rib side fullness xiao chai hu tang da chai hu',
+    en: {
+      mnemonic: 'Chái opens the door; Qín cleans the room.',
+      job: 'Harmonize Shaoyang by venting the pathogen outward while clearing Heat inside.',
+      roles: [['Chái Hú', 'Courses the Shaoyang pivot and vents the trapped pathogen outward.'], ['Huáng Qín', 'Clears Heat from the Gallbladder/Shaoyang interior.']],
+      clues: 'Alternating chills and fever, bitter mouth, dry throat and rib-side fullness.',
+      formulas: 'Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng.',
+      trap: 'The alternation and pivot signs distinguish Shaoyang from a pure Exterior or pure interior-Heat pattern.',
+      prep: 'Formula context determines whether the pair gently harmonizes or joins a stronger purging strategy.',
+      safety: 'Xiǎo Chái Hú Tāng should not be combined with interferon because serious pulmonary reactions have been reported. Persistent fever requires diagnosis.'
+    },
+    es: {
+      mnemonic: 'Chái abre la puerta; Qín limpia la habitación.',
+      job: 'Armonizar Shaoyang ventilando patógeno hacia afuera mientras aclara Calor interior.',
+      roles: [['Chái Hú', 'Regula pivote Shaoyang y ventila patógeno atrapado hacia afuera.'], ['Huáng Qín', 'Aclara Calor del interior Vesícula Biliar/Shaoyang.']],
+      clues: 'Alternancia de escalofríos/fiebre, boca amarga, garganta seca y plenitud costal.',
+      formulas: 'Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng.',
+      trap: 'Alternancia y signos de pivote distinguen Shaoyang de Exterior puro o Calor interior puro.',
+      prep: 'El contexto determina si armoniza suavemente o se une a estrategia purgante más fuerte.',
+      safety: 'Xiǎo Chái Hú Tāng no debe combinarse con interferón por reacciones pulmonares graves reportadas. Fiebre persistente requiere diagnóstico.'
+    }
+  },
+  {
+    number: 46, slug: 'chai-hu-bai-shao-dui-yao', title: 'Chái Hú + Bái Sháo', characters: '柴胡 + 白芍',
+    category: { en: 'Course the Liver · Nourish Blood', es: 'Mover Hígado · Nutrir Sangre' },
+    search: 'chai hu bai shao bupleurum peony liver qi constraint nourish blood rib pain irritability irregular menses si ni san xiao yao san chai hu shu gan san',
+    en: {
+      mnemonic: 'Move the Liver and feed the Liver.',
+      job: 'Course Liver Qi, nourish Blood, soften tension and relieve constraint pain.',
+      roles: [['Chái Hú', 'Spreads constrained Liver Qi and restores free coursing.'], ['Bái Sháo', 'Nourishes Liver Blood and Yin and prevents excessive dispersal.']],
+      clues: 'Rib-side pain, irritability, abdominal tension or irregular periods from Liver-Qi constraint with Blood deficiency.',
+      formulas: 'Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn.',
+      trap: 'Chái Hú moves while Bái Sháo contains and nourishes; the therapeutic balance is the pair’s point.',
+      prep: 'Relative dose shifts the emphasis between stronger coursing and stronger nourishing/softening.',
+      safety: 'New severe abdominal or chest pain, jaundice, pregnancy bleeding or significant menstrual hemorrhage requires medical evaluation.'
+    },
+    es: {
+      mnemonic: 'Mover Hígado y alimentar Hígado.',
+      job: 'Mover Qi hepático, nutrir Sangre, suavizar tensión y aliviar dolor por estancamiento.',
+      roles: [['Chái Hú', 'Dispersa Qi de Hígado constreñido y restaura libre circulación.'], ['Bái Sháo', 'Nutre Sangre/Yin de Hígado y evita dispersión excesiva.']],
+      clues: 'Dolor costal, irritabilidad, tensión abdominal o reglas irregulares por estancamiento Qi con deficiencia de Sangre.',
+      formulas: 'Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn.',
+      trap: 'Chái Hú mueve mientras Bái Sháo contiene/nutre; el equilibrio es el punto de la pareja.',
+      prep: 'La dosis relativa desplaza énfasis entre movilizar más o nutrir/suavizar más.',
+      safety: 'Dolor abdominal/torácico grave nuevo, ictericia, sangrado en embarazo o hemorragia menstrual importante requiere evaluación.'
+    }
+  },
+  {
+    number: 47, slug: 'huo-xiang-pei-lan-dui-yao', title: 'Huò Xiāng + Pèi Lán', characters: '藿香 + 佩兰',
+    category: { en: 'Aromatically Transform Dampness', es: 'Transformar Humedad Aromáticamente' },
+    search: 'huo xiang pei lan patchouli eupatorium aromatic twins damp middle summerheat nausea chest fullness sweet sticky mouth short boil huo xiang zheng qi san',
+    en: {
+      mnemonic: 'Two fragrant leaves air out a damp, musty Middle.',
+      job: 'Aromatically transform Dampness, awaken the Spleen and relieve Summerheat-Dampness.',
+      roles: [['Huò Xiāng', 'Warmer; better for vomiting and an accompanying Exterior disorder.'], ['Pèi Lán', 'More neutral; better for a sweet, greasy or foul sensation in the mouth.']],
+      clues: 'Nausea, stuffy chest, poor appetite and a sweet-sticky mouth in Summerheat or Dampness.',
+      formulas: 'Huò Xiāng Zhèng Qì Sǎn modified with Pèi Lán.',
+      trap: 'Huò Xiāng emphasizes vomiting/Exterior; Pèi Lán emphasizes oral foulness and mild Damp-Heat.',
+      prep: 'Add both aromatic medicinals late and use a short boil to preserve volatile oils.',
+      safety: 'Aromatics can consume Qi and Yin with excessive use. Persistent vomiting, high fever or dehydration requires evaluation.'
+    },
+    es: {
+      mnemonic: 'Dos hojas fragantes ventilan un Centro húmedo y mohoso.',
+      job: 'Transformar Humedad aromáticamente, despertar Bazo y aliviar Humedad-Calor de verano.',
+      roles: [['Huò Xiāng', 'Más cálida; mejor para vómito y trastorno Exterior acompañante.'], ['Pèi Lán', 'Más neutra; mejor para sensación dulce, grasosa o fétida en boca.']],
+      clues: 'Náusea, pecho tapado, poco apetito y boca dulce-pegajosa en verano o Humedad.',
+      formulas: 'Huò Xiāng Zhèng Qì Sǎn modificada con Pèi Lán.',
+      trap: 'Huò Xiāng enfatiza vómito/Exterior; Pèi Lán mal olor oral y Humedad-Calor leve.',
+      prep: 'Añadir ambas aromáticas tarde y hervir poco para preservar aceites volátiles.',
+      safety: 'Aromáticas pueden consumir Qi/Yin con uso excesivo. Vómito persistente, fiebre alta o deshidratación requiere evaluación.'
+    }
+  },
+  {
+    number: 48, slug: 'jin-qian-cao-hai-jin-sha-dui-yao', title: 'Jīn Qián Cǎo + Hǎi Jīn Shā', characters: '金钱草 + 海金沙',
+    category: { en: 'Unblock Lin · Expel Stones', es: 'Desbloquear Lin · Expulsar Cálculos' },
+    search: 'jin qian cao hai jin sha lysimachia lygodium stones sand urination lin gallstones urinary stones burning san jin tang wrap',
+    en: {
+      mnemonic: 'Gold-coin grass dislodges the stone; sea-gold sand flushes the grit.',
+      job: 'Promote urination, unblock painful Lin and help expel urinary or biliary stones.',
+      roles: [['Jīn Qián Cǎo', 'Dislodges and expels stones while clearing Damp-Heat.'], ['Hǎi Jīn Shā', 'Flushes fine gravel through the urine and relieves burning pain.']],
+      clues: 'Stone-type urinary pain, burning urination or gallstone presentation with Damp-Heat.',
+      formulas: 'Sān Jīn Tāng.',
+      trap: 'The pair may support stone passage but does not establish stone size, obstruction or infection severity.',
+      prep: 'Wrap Hǎi Jīn Shā in a cloth bag during decoction because its fine spores cloud the liquid.',
+      safety: 'Fever with flank pain, vomiting, jaundice, severe colic or inability to urinate may signal obstruction/infection and requires emergency care.'
+    },
+    es: {
+      mnemonic: 'Hierba moneda de oro desprende piedra; arena de oro marino lava grava.',
+      job: 'Promover orina, desbloquear Lin doloroso y ayudar a expulsar cálculos urinarios o biliares.',
+      roles: [['Jīn Qián Cǎo', 'Desprende/expulsa cálculos mientras aclara Humedad-Calor.'], ['Hǎi Jīn Shā', 'Lava grava fina por orina y alivia ardor.']],
+      clues: 'Dolor urinario tipo cálculo, micción ardiente o cálculos biliares con Humedad-Calor.',
+      formulas: 'Sān Jīn Tāng.',
+      trap: 'Puede apoyar paso de cálculo, pero no determina tamaño, obstrucción ni gravedad de infección.',
+      prep: 'Envolver Hǎi Jīn Shā en bolsa de tela al decoctar porque sus esporas finas enturbian líquido.',
+      safety: 'Fiebre con dolor de flanco, vómito, ictericia, cólico grave o incapacidad de orinar puede indicar obstrucción/infección y exige urgencia.'
+    }
+  },
+  {
+    number: 49, slug: 'da-huang-mang-xiao-dui-yao', title: 'Dà Huáng + Máng Xiāo', characters: '大黄 + 芒硝',
+    category: { en: 'Purge Heat · Soften Hardness', es: 'Purgar Calor · Ablandar Dureza' },
+    search: 'da huang mang xiao rhubarb glauber salt yangming bowel excess dry hard stool distention tidal fever delirium da cheng qi tiao wei cheng qi dissolve',
+    en: {
+      mnemonic: 'The General pushes; the salt softens.',
+      job: 'Purge Heat accumulation and soften dry hardness in Yangming bowel excess.',
+      roles: [['Dà Huáng', 'Drives accumulated Heat and stool forcefully downward.'], ['Máng Xiāo', 'Draws water into the bowel and softens hard, dry stool.']],
+      clues: 'Dry hard stool, focal distention/fullness, tidal fever, delirium and a forceful excess pulse.',
+      formulas: 'Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng.',
+      trap: 'This is interior excess with hardness, not deficiency constipation needing moistening and tonification.',
+      prep: 'Add Dà Huáng late when purgation is intended; dissolve Máng Xiāo in the strained decoction and never cook it directly.',
+      safety: 'Contraindicated in pregnancy. Classical 19 Wèi warnings involve Máng Xiāo with Sān Léng and Liú Huáng. A rigid tender abdomen or no stool and gas is a surgical emergency.'
+    },
+    es: {
+      mnemonic: 'El General empuja; la sal ablanda.',
+      job: 'Purgar acumulación de Calor y ablandar dureza seca en exceso intestinal Yangming.',
+      roles: [['Dà Huáng', 'Empuja con fuerza Calor/heces acumuladas hacia abajo.'], ['Máng Xiāo', 'Atrae agua al intestino y ablanda heces duras/secas.']],
+      clues: 'Heces duras/secas, distensión/plenitud focal, fiebre mareal, delirio y pulso fuerte por exceso.',
+      formulas: 'Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng.',
+      trap: 'Es exceso interior con dureza, no estreñimiento por deficiencia que necesita humectar/tonificar.',
+      prep: 'Añadir Dà Huáng tarde para purgar; disolver Máng Xiāo en decocción colada y nunca cocinarla directamente.',
+      safety: 'Contraindicada en embarazo. 19 Wèi clásico relaciona Máng Xiāo con Sān Léng y Liú Huáng. Abdomen rígido/doloroso o sin heces/gases es emergencia quirúrgica.'
+    }
+  },
+  {
+    number: 50, slug: 'long-gu-mu-li-dui-yao', title: 'Lóng Gǔ + Mǔ Lì', characters: '龙骨 + 牡蛎',
+    category: { en: 'Anchor Yang · Calm Spirit · Secure Leakage', es: 'Anclar Yang · Calmar Shen · Asegurar Pérdidas' },
+    search: 'long gu mu li dragon bone oyster shell heavy anchors calm spirit yang astringe sweat semen discharge palpitations insomnia fright gui zhi chai hu zhen gan xi feng',
+    en: {
+      mnemonic: 'Two heavy anchors: fossil bone and oyster shell.',
+      job: 'Settle and calm the Spirit, anchor floating Yang and secure deficiency leakage.',
+      roles: [['Lóng Gǔ', 'Calms fright and the Spirit more strongly and astringes leakage.'], ['Mǔ Lì', 'Anchors rising Yang more strongly and softens hard lumps and nodules.']],
+      clues: 'Palpitations, insomnia, fright, dizziness, night sweats, seminal leakage or chronic discharge.',
+      formulas: 'Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng; Chái Hú Jiā Lóng Gǔ Mǔ Lì Tāng; Zhèn Gān Xī Fēng Tāng.',
+      trap: 'Lóng Gǔ emphasizes calming/astringing; Mǔ Lì emphasizes anchoring/softening hardness.',
+      prep: 'Crush and decoct both first; calcined forms shift the emphasis toward astringing leakage.',
+      safety: 'Mineral/shell products require identity and contaminant testing. New palpitations, fainting, severe headache or neurologic deficits requires urgent evaluation.'
+    },
+    es: {
+      mnemonic: 'Dos anclas pesadas: hueso fósil y concha de ostra.',
+      job: 'Asentar/calmar Shen, anclar Yang flotante y asegurar pérdidas por deficiencia.',
+      roles: [['Lóng Gǔ', 'Calma susto/Shen con más fuerza y astringe pérdidas.'], ['Mǔ Lì', 'Ancla Yang ascendente con más fuerza y suaviza masas/nódulos duros.']],
+      clues: 'Palpitaciones, insomnio, susto, mareo, sudor nocturno, pérdida seminal o descarga crónica.',
+      formulas: 'Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng; Chái Hú Jiā Lóng Gǔ Mǔ Lì Tāng; Zhèn Gān Xī Fēng Tāng.',
+      trap: 'Lóng Gǔ enfatiza calmar/astringir; Mǔ Lì anclar/suavizar dureza.',
+      prep: 'Triturar y decoctar ambas primero; formas calcinadas cambian énfasis hacia astringir pérdidas.',
+      safety: 'Minerales/conchas requieren prueba de identidad y contaminantes. Palpitaciones nuevas, síncope, cefalea grave o déficit neurológico exige urgencia.'
+    }
   }
 ];
 
@@ -1037,7 +1287,7 @@ function indexPage(language) {
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Aprende las 51 parejas oficiales de Appendix B mediante una imagen, un trabajo conjunto, una fórmula firma y su seguridad. Biblioteca en lotes de 10.' : 'Learn all 51 official Appendix B pairs through one picture, one combined job, one signature formula and safety. Built in batches of 10.'}</p></section>
 <nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a></nav>
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 4 de 6' : 'Appendix B · Batch 4 of 6'}</div></footer></body></html>`;
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 5 de 6' : 'Appendix B · Batch 5 of 6'}</div></footer></body></html>`;
 }
 
 for (const pair of pairs) {
