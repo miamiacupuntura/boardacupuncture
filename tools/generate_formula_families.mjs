@@ -397,6 +397,164 @@ const families = [
       memory: '<strong>Tong Qiao = cabeza;</strong> <strong>Xue Fu = pecho;</strong> <strong>Ge Xia = diafragma;</strong> <strong>Shao Fu = pelvis fría;</strong> <strong>Shen Tong = dolor corporal.</strong>',
       safety: 'Movilizadores fuertes exigen revisar embarazo, sangrado, anticoagulantes y cirugía. Dolor torácico nuevo, déficit neurológico o dolor abdominal grave requiere evaluación biomédica urgente.'
     }
+  },
+  {
+    slug: 'xiao-yao-san-family', title: 'Xiao Yao San Family',
+    category: { en: 'Course Liver Qi · Nourish Blood · Strengthen Spleen', es: 'Regular Qi de Hígado · Nutrir Sangre · Fortalecer Bazo' },
+    summary: { en: 'Start with Liver-Qi constraint and deficiency, then add Heat clearing or deeper Blood nourishment.', es: 'Parte de estancamiento de Qi de Hígado con deficiencia y añade aclaramiento de Calor o nutrición más profunda de Sangre.' },
+    search: 'xiao yao san family jia wei xiao yao san dan zhi xiao yao san hei xiao yao san liver qi constraint spleen blood deficiency heat menstruation',
+    en: {
+      root: 'Xiao Yao San courses constrained Liver Qi while nourishing Blood and protecting a deficient Spleen.',
+      architecture: 'Chai Hu moves Liver Qi; Dang Gui and Bai Shao nourish Blood; Bai Zhu, Fu Ling and Zhi Gan Cao support Spleen. Modifications reveal Heat or deeper Blood deficiency.',
+      members: [
+        ['Xiao Yao San', 'Foundational Liver-Spleen-Blood balance', 'Liver-Qi constraint with Spleen-Qi and Blood deficiency', 'Mood change, rib-side or breast distention, fatigue, poor appetite and menstrual irregularity.'],
+        ['Jia Wei Xiao Yao San / Dan Zhi Xiao Yao San', 'Xiao Yao San + Mu Dan Pi + Zhi Zi', 'The base pattern with constrained Heat', 'Irritability, Heat sensations, red eyes, dry mouth or heavier/early menses.'],
+        ['Hei Xiao Yao San', 'Xiao Yao San with added Di Huang Blood-Yin nourishment', 'The base pattern with more pronounced Blood deficiency', 'Greater pallor, dizziness, scant menses or dryness with less dominant Heat.'],
+      ],
+      rule: 'Use the base for constraint plus deficiency; add Dan-Zhi when constraint generates Heat; choose Hei Xiao Yao when Blood depletion is the stronger branch.',
+      memory: '<strong>Xiao Yao frees;</strong> <strong>Jia Wei cools;</strong> <strong>Hei Xiao Yao enriches.</strong>',
+      safety: 'Menstrual complaints require pregnancy and abnormal-bleeding review. Persistent pelvic pain, heavy bleeding, fever or a new mass requires medical assessment.'
+    },
+    es: {
+      root: 'Xiao Yao San regula Qi de Hígado constreñido mientras nutre Sangre y protege un Bazo deficiente.',
+      architecture: 'Chai Hu mueve Qi de Hígado; Dang Gui y Bai Shao nutren Sangre; Bai Zhu, Fu Ling y Zhi Gan Cao apoyan Bazo. Las modificaciones revelan Calor o deficiencia más profunda de Sangre.',
+      members: [
+        ['Xiao Yao San', 'Equilibrio fundamental Hígado-Bazo-Sangre', 'Estancamiento de Qi de Hígado con deficiencia de Qi de Bazo y Sangre', 'Cambios de ánimo, distensión costal o mamaria, fatiga, poco apetito e irregularidad menstrual.'],
+        ['Jia Wei Xiao Yao San / Dan Zhi Xiao Yao San', 'Xiao Yao San + Mu Dan Pi + Zhi Zi', 'Pattern base con Calor por estancamiento', 'Irritabilidad, sensación de calor, ojos rojos, boca seca o menstruación abundante/temprana.'],
+        ['Hei Xiao Yao San', 'Xiao Yao San con Di Huang para nutrir Sangre-Yin', 'Pattern base con deficiencia de Sangre más pronunciada', 'Mayor palidez, mareo, menstruación escasa o sequedad sin Calor dominante.'],
+      ],
+      rule: 'Usa la base para estancamiento con deficiencia; añade Dan-Zhi cuando genera Calor; elige Hei Xiao Yao cuando predomina agotamiento de Sangre.',
+      memory: '<strong>Xiao Yao libera;</strong> <strong>Jia Wei enfría;</strong> <strong>Hei Xiao Yao enriquece.</strong>',
+      safety: 'Quejas menstruales exigen revisar embarazo y sangrado anormal. Dolor pélvico persistente, sangrado abundante, fiebre o masa nueva requiere evaluación médica.'
+    }
+  },
+  {
+    slug: 'ping-wei-san-family', title: 'Ping Wei San Family',
+    category: { en: 'Dry Dampness · Move Middle-Jiao Qi', es: 'Secar Humedad · Mover Qi del Jiao Medio' },
+    summary: { en: 'Extend the Damp-obstruction base toward vomiting, Exterior invasion, Shaoyang disorder or water accumulation.', es: 'Extiende la base de obstrucción por Humedad hacia vómito, invasión Exterior, trastorno Shaoyang o acumulación de agua.' },
+    search: 'ping wei san family bu huan jin zheng qi san huo xiang zheng qi san chai ping tang wei ling tang dampness middle jiao exterior shaoyang edema',
+    en: {
+      root: 'Ping Wei San dries Dampness, moves Qi and harmonizes a distended, heavy Middle Jiao.',
+      architecture: 'Cang Zhu dries and strengthens transport; Hou Po and Chen Pi move Qi; Gan Cao harmonizes. Added aromatic, Exterior, Shaoyang or water-draining units define each branch.',
+      members: [
+        ['Ping Wei San', 'Cang Zhu–Hou Po–Chen Pi base', 'Dampness obstructing Spleen and Stomach', 'Abdominal fullness, heaviness, poor appetite, nausea and a thick greasy coat.'],
+        ['Bu Huan Jin Zheng Qi San', 'Extends Ping Wei with Huo Xiang and processed Ban Xia', 'Damp turbidity with stronger vomiting and Phlegm', 'More nausea, vomiting and epigastric obstruction.'],
+        ['Huo Xiang Zheng Qi San', 'Broad aromatic Damp strategy plus Exterior-releasing and Qi-regulating herbs', 'External Wind-Cold with internal Dampness', 'Fever/chills or headache plus nausea, vomiting, diarrhea and greasy coat.'],
+        ['Chai Ping Tang', 'Xiao Chai Hu Tang + Ping Wei San', 'Shaoyang disorder with Damp obstruction', 'Alternating chills/fever and bitter taste plus fullness, heaviness or greasy coat.'],
+        ['Wei Ling Tang', 'Ping Wei San + Wu Ling San', 'Middle-Jiao Dampness with water accumulation', 'Fullness and heaviness plus edema, diarrhea or urinary difficulty.'],
+      ],
+      rule: 'Stay with Ping Wei for pure Middle Damp; vomiting adds Ban Xia/Huo Xiang, Exterior signs choose Huo Xiang Zheng Qi, Shaoyang signs choose Chai Ping, and edema/urine signs choose Wei Ling.',
+      memory: '<strong>Ping Wei dries;</strong> <strong>Bu Huan stops vomiting;</strong> <strong>Huo Xiang releases;</strong> <strong>Chai Ping harmonizes;</strong> <strong>Wei Ling drains.</strong>',
+      safety: 'These drying aromatic formulas can injure Yin or fluids. Persistent vomiting/diarrhea, dehydration, severe abdominal pain, jaundice or rapidly worsening edema requires medical evaluation; Ban Xia must be processed.'
+    },
+    es: {
+      root: 'Ping Wei San seca Humedad, mueve Qi y armoniza un Jiao Medio distendido y pesado.',
+      architecture: 'Cang Zhu seca y fortalece transporte; Hou Po y Chen Pi mueven Qi; Gan Cao armoniza. Unidades aromáticas, Exterior, Shaoyang o drenantes definen cada rama.',
+      members: [
+        ['Ping Wei San', 'Base Cang Zhu–Hou Po–Chen Pi', 'Humedad obstruyendo Bazo y Estómago', 'Plenitud abdominal, pesadez, poco apetito, náusea y capa gruesa grasosa.'],
+        ['Bu Huan Jin Zheng Qi San', 'Amplía Ping Wei con Huo Xiang y Ban Xia procesada', 'Turbidez-Humedad con vómito y Flema más fuertes', 'Más náusea, vómito y obstrucción epigástrica.'],
+        ['Huo Xiang Zheng Qi San', 'Estrategia aromática amplia más hierbas que liberan Exterior y regulan Qi', 'Viento-Frío externo con Humedad interna', 'Fiebre/escalofríos o cefalea más náusea, vómito, diarrea y capa grasosa.'],
+        ['Chai Ping Tang', 'Xiao Chai Hu Tang + Ping Wei San', 'Trastorno Shaoyang con obstrucción por Humedad', 'Escalofríos/fiebre alternantes y sabor amargo más plenitud, pesadez o capa grasosa.'],
+        ['Wei Ling Tang', 'Ping Wei San + Wu Ling San', 'Humedad del Centro con acumulación de agua', 'Plenitud y pesadez más edema, diarrea o dificultad urinaria.'],
+      ],
+      rule: 'Ping Wei para Humedad pura del Centro; vómito añade Ban Xia/Huo Xiang, Exterior elige Huo Xiang Zheng Qi, Shaoyang elige Chai Ping y edema/orina elige Wei Ling.',
+      memory: '<strong>Ping Wei seca;</strong> <strong>Bu Huan detiene vómito;</strong> <strong>Huo Xiang libera;</strong> <strong>Chai Ping armoniza;</strong> <strong>Wei Ling drena.</strong>',
+      safety: 'Estas fórmulas aromáticas secantes pueden lesionar Yin o líquidos. Vómito/diarrea persistente, deshidratación, dolor grave, ictericia o edema progresivo requiere evaluación; Ban Xia debe estar procesada.'
+    }
+  },
+  {
+    slug: 'li-zhong-wan-family', title: 'Li Zhong Wan Family',
+    category: { en: 'Warm and Tonify the Middle', es: 'Calentar y tonificar el Centro' },
+    summary: { en: 'Build from Middle-Jiao deficiency Cold toward devastated Yang, Taiyang overlap or Cold-Phlegm.', es: 'Avanza desde Frío por deficiencia del Jiao Medio hacia Yang devastado, solapamiento Taiyang o Flema-Frío.' },
+    search: 'li zhong wan family fu zi li zhong wan gui zhi ren shen tang li zhong hua tan wan middle jiao deficiency cold yang collapse exterior phlegm',
+    en: {
+      root: 'Li Zhong Wan warms and tonifies Spleen-Stomach Qi when deficiency Cold impairs transformation and transport.',
+      architecture: 'Ren Shen and Bai Zhu rebuild Qi; Gan Jiang warms the Middle; Zhi Gan Cao harmonizes. Fu Zi, Gui Zhi or Phlegm-transformers identify the deeper or mixed branch.',
+      members: [
+        ['Li Zhong Wan', 'Four-herb warming Qi-tonic core', 'Middle-Jiao deficiency Cold', 'Chronic abdominal pain, vomiting or diarrhea improved by warmth, with no thirst and a deep weak pulse.'],
+        ['Fu Zi Li Zhong Wan', 'Li Zhong Wan + processed Fu Zi', 'Deeper Spleen-Kidney Yang deficiency Cold', 'More severe cold limbs, profuse watery stool, exhaustion or near-collapse.'],
+        ['Gui Zhi Ren Shen Tang', 'Li Zhong core + Gui Zhi', 'Interior deficiency Cold with unresolved Taiyang Exterior signs', 'Chronic diarrhea/epigastric hardness plus fever or headache from Exterior involvement.'],
+        ['Li Zhong Hua Tan Wan', 'Extends the warm-Middle core with Phlegm-transforming support', 'Spleen deficiency Cold generating Cold-Phlegm', 'Cold digestive weakness accompanied by copious thin white sputum, cough or nausea.'],
+      ],
+      rule: 'Use Li Zhong for the cold deficient Middle; add Fu Zi for deeper Yang failure, Gui Zhi for concurrent Exterior involvement, and Phlegm transformation when Cold fluids rise to the Lung.',
+      memory: '<strong>Li Zhong warms center;</strong> <strong>Fu Zi rescues deeper;</strong> <strong>Gui Zhi reaches exterior;</strong> <strong>Hua Tan clears cold Phlegm.</strong>',
+      safety: 'Fu Zi must be properly processed and professionally prescribed. Collapse, severe dehydration, GI bleeding, rigid abdominal pain or persistent vomiting requires emergency assessment.'
+    },
+    es: {
+      root: 'Li Zhong Wan calienta y tonifica Qi de Bazo-Estómago cuando Frío por deficiencia impide transformación y transporte.',
+      architecture: 'Ren Shen y Bai Zhu reconstruyen Qi; Gan Jiang calienta Centro; Zhi Gan Cao armoniza. Fu Zi, Gui Zhi o transformadores de Flema identifican la rama profunda o mixta.',
+      members: [
+        ['Li Zhong Wan', 'Núcleo tónico-caliente de cuatro hierbas', 'Frío por deficiencia del Jiao Medio', 'Dolor abdominal crónico, vómito o diarrea mejorados con calor, sin sed y pulso profundo-débil.'],
+        ['Fu Zi Li Zhong Wan', 'Li Zhong Wan + Fu Zi procesado', 'Frío más profundo por deficiencia Yang de Bazo-Riñón', 'Miembros más fríos, heces acuosas profusas, agotamiento o casi colapso.'],
+        ['Gui Zhi Ren Shen Tang', 'Núcleo Li Zhong + Gui Zhi', 'Frío interior por deficiencia con signos Exterior Taiyang no resueltos', 'Diarrea crónica/dureza epigástrica más fiebre o cefalea por Exterior.'],
+        ['Li Zhong Hua Tan Wan', 'Amplía el núcleo caliente con apoyo transformador de Flema', 'Frío por deficiencia de Bazo que genera Flema-Frío', 'Debilidad digestiva fría con esputo blanco fino abundante, tos o náusea.'],
+      ],
+      rule: 'Li Zhong para Centro frío deficiente; Fu Zi para falla Yang profunda, Gui Zhi para Exterior concurrente y transformación de Flema cuando líquidos fríos suben al Pulmón.',
+      memory: '<strong>Li Zhong calienta Centro;</strong> <strong>Fu Zi rescata profundo;</strong> <strong>Gui Zhi alcanza Exterior;</strong> <strong>Hua Tan limpia Flema fría.</strong>',
+      safety: 'Fu Zi debe estar procesado y ser prescrito profesionalmente. Colapso, deshidratación grave, sangrado GI, abdomen rígido o vómito persistente requiere urgencias.'
+    }
+  },
+  {
+    slug: 'zuo-you-gui-family', title: 'Zuo Gui / You Gui Family',
+    category: { en: 'Restore Kidney Yin or Yang', es: 'Restaurar Yin o Yang de Riñón' },
+    summary: { en: 'Use Left versus Right for Yin versus Yang, then Pill versus Decoction for richer versus simpler support.', es: 'Usa Izquierda frente a Derecha para Yin frente a Yang, y Píldora frente a Decocción para apoyo rico frente a simple.' },
+    search: 'zuo gui wan zuo gui yin you gui wan you gui yin restore left right kidney yin yang essence pill decoction',
+    en: {
+      root: 'The Zuo/You Gui lineage rebuilds Kidney deficiency: Left directs attention to Yin and Essence; Right to Yang and Mingmen fire.',
+      architecture: 'Within each side, Wan is the richer, more Essence-focused pill, while Yin is the simpler decoction for a comparatively moderate presentation.',
+      members: [
+        ['Zuo Gui Yin', 'Simpler Left-side Yin strategy', 'Moderate Kidney Yin deficiency', 'Weak low back, dizziness, tinnitus, dryness or night Heat without profound Essence depletion.'],
+        ['Zuo Gui Wan', 'Richer Left-side Yin-Essence strategy', 'Severe Kidney Yin and Essence deficiency', 'More marked reproductive, marrow, hearing or developmental weakness.'],
+        ['You Gui Yin', 'Simpler Right-side warming strategy', 'Moderate Kidney Yang deficiency', 'Cold limbs, weak low back, fatigue and urinary weakness.'],
+        ['You Gui Wan', 'Richer Right-side Yang-Essence strategy', 'Severe Kidney Yang and Essence deficiency', 'Pronounced Cold, reproductive weakness and deep exhaustion.'],
+      ],
+      rule: 'First choose Left/Yin or Right/Yang; then choose Yin/decoction for the simpler presentation or Wan/pill for deeper Essence depletion.',
+      memory: '<strong>Zuo = Yin;</strong> <strong>You = Yang;</strong> <strong>Yin = lighter;</strong> <strong>Wan = deeper.</strong>',
+      safety: 'Rich Yin tonics can worsen Dampness and weak digestion; warming Yang formulas can aggravate Heat. You Gui Wan commonly contains processed Fu Zi and requires professional supervision.'
+    },
+    es: {
+      root: 'El linaje Zuo/You Gui reconstruye deficiencia de Riñón: Izquierda dirige a Yin y Esencia; Derecha a Yang y fuego Mingmen.',
+      architecture: 'En cada lado, Wan es la píldora más rica y centrada en Esencia, mientras Yin es la decocción más simple para una presentación comparativamente moderada.',
+      members: [
+        ['Zuo Gui Yin', 'Estrategia Yin más simple del lado Izquierdo', 'Deficiencia moderada de Yin renal', 'Lumbar débil, mareo, tinnitus, sequedad o Calor nocturno sin agotamiento profundo de Esencia.'],
+        ['Zuo Gui Wan', 'Estrategia rica de Yin-Esencia del lado Izquierdo', 'Deficiencia grave de Yin y Esencia renal', 'Debilidad reproductiva, medular, auditiva o del desarrollo más marcada.'],
+        ['You Gui Yin', 'Estrategia caliente más simple del lado Derecho', 'Deficiencia moderada de Yang renal', 'Miembros fríos, lumbar débil, fatiga y debilidad urinaria.'],
+        ['You Gui Wan', 'Estrategia rica de Yang-Esencia del lado Derecho', 'Deficiencia grave de Yang y Esencia renal', 'Frío marcado, debilidad reproductiva y agotamiento profundo.'],
+      ],
+      rule: 'Primero elige Izquierda/Yin o Derecha/Yang; luego Yin/decocción para presentación simple o Wan/píldora para agotamiento profundo de Esencia.',
+      memory: '<strong>Zuo = Yin;</strong> <strong>You = Yang;</strong> <strong>Yin = ligero;</strong> <strong>Wan = profundo.</strong>',
+      safety: 'Tónicos Yin ricos pueden agravar Humedad y digestón débil; fórmulas Yang pueden agravar Calor. You Gui Wan suele contener Fu Zi procesado y requiere supervisión profesional.'
+    }
+  },
+  {
+    slug: 'bao-he-wan-family', title: 'Bao He Wan Family',
+    category: { en: 'Reduce Food Stagnation', es: 'Reducir Estancamiento de Alimentos' },
+    summary: { en: 'Grade food accumulation from acute excess to Heat-Damp obstruction or chronic Spleen deficiency.', es: 'Gradúa acumulación alimentaria desde exceso agudo hasta obstrucción por Calor-Humedad o deficiencia crónica de Bazo.' },
+    search: 'bao he wan family zhi shi dao zhi wan jian pi wan food stagnation accumulation heat damp spleen deficiency acute chronic digestion',
+    en: {
+      root: 'Bao He Wan is the balanced starting point for acute Food Stagnation: digest accumulation, regulate Qi and harmonize the Stomach.',
+      architecture: 'The family is organized by what complicates the retained food: nothing beyond excess, Heat-Damp and constipation, or chronic Spleen-Qi deficiency.',
+      members: [
+        ['Bao He Wan', 'Balanced food-reducing base', 'Acute excess Food Stagnation', 'Recent overeating, sour belching, foul breath, distention, nausea and a thick greasy coat.'],
+        ['Zhi Shi Dao Zhi Wan', 'Stronger downward Qi movement with Heat-Damp clearing', 'Food Stagnation with Damp-Heat in the intestines', 'Greater fullness and constipation or diarrhea with dark urine, thirst and a yellow greasy coat.'],
+        ['Jian Pi Wan', 'Combines food reduction with Spleen-Qi tonification', 'Chronic Food Stagnation rooted in Spleen deficiency', 'Recurring fullness with fatigue, poor appetite, loose stool, weight loss and a pale tongue.'],
+      ],
+      rule: 'Recent dietary excess is Bao He; strong Heat-Damp and bowel obstruction is Zhi Shi Dao Zhi; recurrent stagnation in a weak patient is Jian Pi.',
+      memory: '<strong>Bao He clears the meal;</strong> <strong>Dao Zhi pushes hot blockage;</strong> <strong>Jian Pi repairs digestion.</strong>',
+      safety: 'Severe or localized abdominal pain, rigid abdomen, persistent vomiting, blood in stool, weight loss or inability to pass stool and gas requires prompt medical evaluation.'
+    },
+    es: {
+      root: 'Bao He Wan es el punto equilibrado para Estancamiento agudo de Alimentos: digiere acumulación, regula Qi y armoniza Estómago.',
+      architecture: 'La familia se organiza por lo que complica la comida retenida: solo exceso, Calor-Humedad con estreñimiento o deficiencia crónica de Qi de Bazo.',
+      members: [
+        ['Bao He Wan', 'Base equilibrada que reduce alimentos', 'Estancamiento agudo de Alimentos por exceso', 'Sobreingesta reciente, eructo agrio, mal aliento, distensión, náusea y capa gruesa grasosa.'],
+        ['Zhi Shi Dao Zhi Wan', 'Movimiento descendente más fuerte con aclaramiento de Calor-Humedad', 'Estancamiento alimentario con Humedad-Calor intestinal', 'Mayor plenitud y estreñimiento o diarrea con orina oscura, sed y capa amarilla grasosa.'],
+        ['Jian Pi Wan', 'Combina reducción de alimento con tonificación de Qi de Bazo', 'Estancamiento crónico arraigado en deficiencia de Bazo', 'Plenitud recurrente con fatiga, poco apetito, heces sueltas, pérdida de peso y lengua pálida.'],
+      ],
+      rule: 'Exceso dietético reciente es Bao He; Calor-Humedad fuerte y obstrucción intestinal es Zhi Shi Dao Zhi; estancamiento recurrente en paciente débil es Jian Pi.',
+      memory: '<strong>Bao He despeja la comida;</strong> <strong>Dao Zhi empuja bloqueo caliente;</strong> <strong>Jian Pi repara digestión.</strong>',
+      safety: 'Dolor abdominal grave/localizado, abdomen rígido, vómito persistente, sangre en heces, pérdida de peso o no expulsar heces/gases requiere evaluación médica pronta.'
+    }
   }
 ];
 
