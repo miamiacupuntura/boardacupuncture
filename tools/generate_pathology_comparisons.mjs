@@ -245,6 +245,218 @@ const pathologies = [
       safety: 'Insomnio con ideas suicidas, manía, psicosis, somnolencia peligrosa, pausas respiratorias o cambio neurológico abrupto requiere atención urgente.',
       source: 'Internal Medicine 1, Handout 5: Insomnia.'
     }
+  },
+  {
+    slug: 'stomach-pain-patterns', title: { en: 'Stomach Pain Pattern Differentiation', es: 'Diferenciación de Patterns de Dolor de Estómago' },
+    summary: { en: 'Separate Cold, Food Stagnation, Liver-Qi invasion, Heat, Blood stasis and deficiency presentations.', es: 'Separa Frío, estancamiento alimentario, invasión de Qi de Hígado, Calor, estasis de Sangre y presentaciones deficientes.' },
+    focus: { en: 'Temperature, pressure, food, emotion and fixed pain', es: 'Temperatura, presión, alimento, emoción y dolor fijo' },
+    search: 'stomach pain epigastric dolor estomago cold food liver qi heat blood stasis yin yang liang fu bao he chai hu zuo jin shi xiao yi guan huang qi jian zhong',
+    en: {
+      intro: 'Temperature, relationship to food or stress, and whether the pain is fixed provide the fastest distinctions.',
+      rows: [
+        ['Stomach Cold', 'Abrupt pain worse with Cold and relieved by warmth; no thirst', 'Liang Fu Wan', 'Scatter Cold and relieve pain.'],
+        ['Food Stagnation', 'Pain worse with pressure, foul belching, reflux and relief after vomiting or gas', 'Bao He Wan', 'Reduce food and move stagnation.'],
+        ['Liver Qi disrupting Stomach', 'Distending pain spreading to ribs, stress-related belching and reflux', 'Chai Hu Shu Gan San', 'Soothe Liver and harmonize Stomach.'],
+        ['Liver-Stomach Heat', 'Burning acute pain, irritability, bitter dry taste and acid reflux', 'Zuo Jin Wan', 'Clear Heat and harmonize Stomach.'],
+        ['Blood stasis', 'Fixed stabbing pain, purple tongue, hematemesis or black stool', 'Shi Xiao San + Dan Shen Yin', 'Invigorate Blood and dispel stasis.'],
+        ['Stomach Yin deficiency', 'Dull pain, dry mouth, dry stool and red dry tongue', 'Yi Guan Jian or Shao Yao Gan Cao Tang', 'Nourish Yin and relieve pain.'],
+        ['Spleen-Stomach deficiency Cold', 'Dull pain relieved by warmth/pressure with fatigue, cold limbs and loose stool', 'Huang Qi Jian Zhong Tang', 'Warm and supplement the Middle.'],
+      ],
+      rule: 'Warmth points to Cold; pressure worsens excess but relieves deficiency; stress points to Liver Qi; fixed stabbing pain points to Blood stasis; dryness points to Yin deficiency.',
+      memory: '<strong>Cold—warm it; Food—foul; Liver—stress; Heat—burning; Blood—fixed; Yin—dry; Yang—weak and cold.</strong>',
+      safety: 'Black stool, vomiting blood, severe persistent pain, weight loss, fainting, chest pressure or rigid abdomen requires urgent biomedical evaluation.',
+      source: 'Internal Medicine 1, Handout 2: Stomach Pain.'
+    },
+    es: {
+      intro: 'Temperatura, relación con comida o estrés y si el dolor es fijo ofrecen las distinciones más rápidas.',
+      rows: [
+        ['Frío de Estómago', 'Dolor súbito peor con frío y aliviado por calor; sin sed', 'Liang Fu Wan', 'Dispersar Frío y aliviar dolor.'],
+        ['Estancamiento alimentario', 'Dolor peor con presión, eructo fétido, reflujo y alivio tras vómito o gases', 'Bao He Wan', 'Reducir alimento y mover estancamiento.'],
+        ['Qi de Hígado perturba Estómago', 'Dolor distensivo hacia costillas, eructo/reflujo relacionados con estrés', 'Chai Hu Shu Gan San', 'Suavizar Hígado y armonizar Estómago.'],
+        ['Calor Hígado-Estómago', 'Dolor ardiente agudo, irritabilidad, sabor amargo seco y reflujo ácido', 'Zuo Jin Wan', 'Aclarar Calor y armonizar Estómago.'],
+        ['Estasis de Sangre', 'Dolor fijo punzante, lengua púrpura, hematemesis o heces negras', 'Shi Xiao San + Dan Shen Yin', 'Vigorizar Sangre y eliminar estasis.'],
+        ['Deficiencia Yin de Estómago', 'Dolor sordo, boca/heces secas y lengua roja seca', 'Yi Guan Jian o Shao Yao Gan Cao Tang', 'Nutrir Yin y aliviar dolor.'],
+        ['Frío por deficiencia Bazo-Estómago', 'Dolor sordo mejor con calor/presión, fatiga, extremidades frías y heces sueltas', 'Huang Qi Jian Zhong Tang', 'Calentar y suplementar Centro.'],
+      ],
+      rule: 'Calor alivia Frío; presión empeora exceso y alivia deficiencia; estrés señala Qi de Hígado; dolor fijo punzante, estasis; sequedad, deficiencia Yin.',
+      memory: '<strong>Frío—calor; Comida—fétido; Hígado—estrés; Calor—ardor; Sangre—fijo; Yin—seco; Yang—débil y frío.</strong>',
+      safety: 'Heces negras, vómito de sangre, dolor grave persistente, pérdida de peso, desmayo, presión torácica o abdomen rígido requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 2: Stomach Pain.'
+    }
+  },
+  {
+    slug: 'vomiting-patterns', title: { en: 'Vomiting Pattern Differentiation', es: 'Diferenciación de Patterns de Vómito' },
+    summary: { en: 'Compare exterior invasion, Food Stagnation, Liver-Qi rebellion, Phlegm-Damp, Stomach Yin deficiency and deficiency Cold.', es: 'Compara invasión Exterior, alimento estancado, Qi rebelde de Hígado, Flema-Humedad, deficiencia Yin de Estómago y Frío deficiente.' },
+    focus: { en: 'Contents, triggers, coating and constitutional signs', es: 'Contenido, desencadenantes, capa lingual y constitución' },
+    search: 'vomiting vomito exterior food liver qi phlegm damp stomach yin spleen cold huo xiang bao he ban xia hou po xiao ban xia mai men dong li zhong',
+    en: {
+      intro: 'Onset, vomit contents, epigastric signs and the tongue coating distinguish acute excess from chronic deficiency.',
+      rows: [
+        ['Exterior pathogen invading Stomach', 'Sudden vomiting with chills, fever, body aches and chest oppression', 'Huo Xiang Zheng Qi San', 'Release Exterior and transform turbidity.'],
+        ['Food Stagnation', 'Vomiting undigested food, foul belching, reflux and thick greasy coat', 'Bao He Wan', 'Reduce food and guide stagnation out.'],
+        ['Liver Qi disrupting Stomach', 'Stress-related vomiting, belching, reflux and hypochondriac pain', 'Ban Xia Hou Po Tang or Zuo Jin Wan when Heat dominates', 'Soothe Liver and descend Stomach Qi.'],
+        ['Phlegm-Damp obstruction', 'Clear fluid/mucus, dizziness, palpitations and white greasy coat', 'Xiao Ban Xia Tang + Ling Gui Zhu Gan Tang', 'Warm and transform Phlegm-fluid.'],
+        ['Stomach Yin deficiency', 'Repeated retching, thirst, dry mouth, hunger without desire to eat', 'Mai Men Dong Tang', 'Nourish Stomach Yin and descend Qi.'],
+        ['Spleen-Stomach deficiency Cold', 'Vomiting after eating with fatigue, cold limbs, loose stool and pale tongue', 'Li Zhong Tang', 'Warm Middle and strengthen Spleen.'],
+      ],
+      rule: 'Sudden fever/chills indicates Exterior; undigested food and foul odor indicates Food; emotion indicates Liver; clear mucus with greasy coat indicates Phlegm; dry retching indicates Yin deficiency.',
+      memory: '<strong>Exterior—sudden; Food—foul; Liver—stress; Phlegm—clear mucus; Yin—dry retching; Cold—weak and pale.</strong>',
+      safety: 'Blood or coffee-ground material, severe dehydration, persistent bilious vomiting, severe headache, rigid abdomen or inability to keep fluids down requires urgent assessment.',
+      source: 'Internal Medicine 1, Handout 2: Vomiting.'
+    },
+    es: {
+      intro: 'Inicio, contenido del vómito, signos epigástricos y capa lingual distinguen exceso agudo de deficiencia crónica.',
+      rows: [
+        ['Patógeno Exterior invade Estómago', 'Vómito súbito con escalofríos, fiebre, dolores y opresión torácica', 'Huo Xiang Zheng Qi San', 'Liberar Exterior y transformar turbidez.'],
+        ['Estancamiento alimentario', 'Vómito de alimento no digerido, eructo fétido, reflujo y capa gruesa grasosa', 'Bao He Wan', 'Reducir alimento y conducir estancamiento.'],
+        ['Qi de Hígado perturba Estómago', 'Vómito por estrés, eructo, reflujo y dolor hipocondríaco', 'Ban Xia Hou Po Tang o Zuo Jin Wan si domina Calor', 'Suavizar Hígado y descender Qi de Estómago.'],
+        ['Obstrucción Flema-Humedad', 'Líquido claro/moco, mareo, palpitaciones y capa blanca grasosa', 'Xiao Ban Xia Tang + Ling Gui Zhu Gan Tang', 'Calentar y transformar Flema-líquidos.'],
+        ['Deficiencia Yin de Estómago', 'Arcadas repetidas, sed, boca seca y hambre sin deseo de comer', 'Mai Men Dong Tang', 'Nutrir Yin de Estómago y descender Qi.'],
+        ['Frío por deficiencia Bazo-Estómago', 'Vómito tras comer, fatiga, extremidades frías, heces sueltas y lengua pálida', 'Li Zhong Tang', 'Calentar Centro y fortalecer Bazo.'],
+      ],
+      rule: 'Fiebre/escalofríos súbitos indica Exterior; alimento no digerido y olor fétido, Comida; emoción, Hígado; moco claro/capa grasosa, Flema; arcada seca, Yin.',
+      memory: '<strong>Exterior—súbito; Comida—fétido; Hígado—estrés; Flema—moco claro; Yin—arcada seca; Frío—débil y pálido.</strong>',
+      safety: 'Sangre o material tipo café, deshidratación grave, vómito biliar persistente, cefalea grave, abdomen rígido o no retener líquidos requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 2: Vomiting.'
+    }
+  },
+  {
+    slug: 'constipation-patterns', title: { en: 'Constipation Pattern Differentiation', es: 'Diferenciación de Patterns de Estreñimiento' },
+    summary: { en: 'Separate Heat, Qi stagnation, Qi deficiency, Blood deficiency and Cold constipation.', es: 'Separa estreñimiento por Calor, estancamiento de Qi, deficiencia Qi, deficiencia de Sangre y Frío.' },
+    focus: { en: 'Dryness, effort, distention and Cold/deficiency signs', es: 'Sequedad, esfuerzo, distensión y signos de Frío/deficiencia' },
+    search: 'constipation estreñimiento heat qi stagnation deficiency blood cold ma zi ren liu mo huang qi run chang ji chuan',
+    en: {
+      intro: 'Determine whether stool is dry, whether expulsion lacks force, and whether Heat, stagnation, Blood deficiency or Cold accompanies it.',
+      rows: [
+        ['Heat constipation', 'Dry stool, thirst, halitosis, abdominal fullness and yellow dry coat', 'Ma Zi Ren Wan', 'Clear Heat and moisten Intestines.'],
+        ['Qi stagnation', 'Constipation with frequent belching and chest/abdominal distention', 'Liu Mo Yin', 'Move Qi and stagnation.'],
+        ['Qi deficiency', 'Difficult expulsion without marked dryness; fatigue, short breath and sweating', 'Huang Qi Tang', 'Boost Qi and free stool.'],
+        ['Blood deficiency', 'Dry hard stool with pallor, dizziness and palpitations', 'Run Chang Wan', 'Nourish Blood and moisten Intestines.'],
+        ['Cold / Kidney-Yang deficiency', 'Difficult stool with clear urine, cold limbs and weak painful low back', 'Ji Chuan Jian', 'Warm Kidney Yang and moisten bowels.'],
+      ],
+      rule: 'Dry yellow Heat differs from weak pushing Qi deficiency; pallor/dizziness identifies Blood deficiency; distention/belching identifies Qi stagnation; Cold limbs and lumbar weakness identify Kidney Yang.',
+      memory: '<strong>Heat—dry/yellow; Qi stagnation—distended; Qi deficiency—cannot push; Blood—pale/dry; Cold—cold back.</strong>',
+      safety: 'No stool or gas with severe distention, vomiting, blood, fever, weight loss or new constipation after age 50 requires prompt medical evaluation.',
+      source: 'Internal Medicine 1, Handout 3: Constipation.'
+    },
+    es: {
+      intro: 'Determina si las heces están secas, si falta fuerza para expulsar y si acompañan Calor, estancamiento, deficiencia de Sangre o Frío.',
+      rows: [
+        ['Estreñimiento por Calor', 'Heces secas, sed, halitosis, plenitud y capa amarilla seca', 'Ma Zi Ren Wan', 'Aclarar Calor y humedecer Intestinos.'],
+        ['Estancamiento de Qi', 'Estreñimiento con eructos frecuentes y distensión toracoabdominal', 'Liu Mo Yin', 'Mover Qi y estancamiento.'],
+        ['Deficiencia de Qi', 'Expulsión difícil sin sequedad marcada; fatiga, disnea y sudor', 'Huang Qi Tang', 'Aumentar Qi y liberar heces.'],
+        ['Deficiencia de Sangre', 'Heces secas duras con palidez, mareo y palpitaciones', 'Run Chang Wan', 'Nutrir Sangre y humedecer Intestinos.'],
+        ['Frío / deficiencia Yang renal', 'Heces difíciles con orina clara, extremidades frías y lumbar débil/dolorosa', 'Ji Chuan Jian', 'Calentar Yang renal y humedecer intestino.'],
+      ],
+      rule: 'Calor seco/amarillo difiere de falta de empuje Qi; palidez/mareo identifica Sangre; distensión/eructo, estancamiento Qi; frío y lumbar débil, Yang renal.',
+      memory: '<strong>Calor—seco/amarillo; Qi estancado—distendido; Qi deficiente—no empuja; Sangre—pálido/seco; Frío—lumbar fría.</strong>',
+      safety: 'Ausencia de heces y gases con distensión grave, vómito, sangre, fiebre, pérdida de peso o estreñimiento nuevo después de 50 requiere evaluación pronta.',
+      source: 'Internal Medicine 1, Handout 3: Constipation.'
+    }
+  },
+  {
+    slug: 'palpitations-patterns', title: { en: 'Palpitations Pattern Differentiation', es: 'Diferenciación de Patterns de Palpitaciones' },
+    summary: { en: 'Compare fright/Qi deficiency, Blood or Yin deficiency, Yang deficiency, Phlegm-fluid and Blood stasis.', es: 'Compara sobresalto/deficiencia Qi, deficiencia de Sangre o Yin, deficiencia Yang, Flema-líquidos y estasis de Sangre.' },
+    focus: { en: 'Spirit, temperature, fluids and chest obstruction', es: 'Shen, temperatura, líquidos y obstrucción torácica' },
+    search: 'palpitations palpitaciones heart gallbladder qi blood yin yang phlegm water stasis an shen gui pi tian wang gui zhi gan cao ling gui tao ren hong hua',
+    en: {
+      intro: 'Emotional fright, pallor, empty Heat, Cold, fluid signs and fixed chest pain separate the principal branches.',
+      rows: [
+        ['Heart-Gallbladder Qi deficiency', 'Easily frightened, timid, insomnia and profuse dreams', 'An Shen Ding Zhi Wan', 'Supplement Qi, settle fright and calm Spirit.'],
+        ['Heart Blood deficiency', 'Palpitations with dizziness, pallor, fatigue and weak-thready pulse', 'Gui Pi Tang', 'Supplement Qi-Blood and nourish Heart.'],
+        ['Yin deficiency with Heat', 'Palpitations, insomnia, five-center Heat, tinnitus and red peeled tongue', 'Tian Wang Bu Xin Dan', 'Nourish Yin and descend Fire.'],
+        ['Heart Yang deficiency', 'Palpitations, chest oppression, short breath, cold limbs and pale tongue', 'Gui Zhi Gan Cao Long Gu Mu Li Tang', 'Warm Heart Yang and calm Spirit.'],
+        ['Phlegm-fluid oppressing Heart', 'Palpitations with dizziness, mucus, edema, scant urine and greasy coat', 'Ling Gui Zhu Gan Tang', 'Warm Yang and transform Phlegm-fluid.'],
+        ['Blood stasis obstructing Heart', 'Chest pain/oppression, purple lips or nails and intermittent pulse', 'Tao Ren Hong Hua Jian', 'Invigorate Blood and open connections.'],
+      ],
+      rule: 'Fright points to Heart-Gallbladder; pallor to Blood; empty Heat to Yin; Cold to Yang; edema/mucus to fluid; fixed chest pain and purple signs to stasis.',
+      memory: '<strong>Fright—Qi; pale—Blood; hot—Yin; cold—Yang; wet—Phlegm; purple pain—stasis.</strong>',
+      safety: 'Palpitations with chest pain, fainting, severe shortness of breath, sustained rapid/irregular pulse or neurologic symptoms requires urgent cardiac evaluation.',
+      source: 'Internal Medicine 1, Handout 5: Palpitations.'
+    },
+    es: {
+      intro: 'Sobresalto, palidez, Calor vacío, Frío, signos de líquidos y dolor torácico fijo separan las ramas principales.',
+      rows: [
+        ['Deficiencia Qi Corazón-Vesícula', 'Sobresalto fácil, timidez, insomnio y muchos sueños', 'An Shen Ding Zhi Wan', 'Suplementar Qi, contener sobresalto y calmar Shen.'],
+        ['Deficiencia de Sangre de Corazón', 'Palpitaciones con mareo, palidez, fatiga y pulso débil-fino', 'Gui Pi Tang', 'Suplementar Qi-Sangre y nutrir Corazón.'],
+        ['Deficiencia Yin con Calor', 'Palpitaciones, insomnio, Calor de cinco centros, tinnitus y lengua roja pelada', 'Tian Wang Bu Xin Dan', 'Nutrir Yin y descender Fuego.'],
+        ['Deficiencia Yang de Corazón', 'Palpitaciones, opresión, disnea, extremidades frías y lengua pálida', 'Gui Zhi Gan Cao Long Gu Mu Li Tang', 'Calentar Yang de Corazón y calmar Shen.'],
+        ['Flema-líquidos oprime Corazón', 'Palpitaciones con mareo, moco, edema, orina escasa y capa grasosa', 'Ling Gui Zhu Gan Tang', 'Calentar Yang y transformar Flema-líquidos.'],
+        ['Estasis de Sangre obstruye Corazón', 'Dolor/opresión torácica, labios/uñas púrpuras y pulso intermitente', 'Tao Ren Hong Hua Jian', 'Vigorizar Sangre y abrir conexiones.'],
+      ],
+      rule: 'Sobresalto señala Corazón-Vesícula; palidez, Sangre; Calor vacío, Yin; Frío, Yang; edema/moco, líquidos; dolor fijo y púrpura, estasis.',
+      memory: '<strong>Sobresalto—Qi; pálido—Sangre; caliente—Yin; frío—Yang; húmedo—Flema; dolor púrpura—estasis.</strong>',
+      safety: 'Palpitaciones con dolor torácico, desmayo, disnea grave, pulso rápido/irregular sostenido o síntomas neurológicos requiere evaluación cardíaca urgente.',
+      source: 'Internal Medicine 1, Handout 5: Palpitations.'
+    }
+  },
+  {
+    slug: 'dizziness-vertigo-patterns', title: { en: 'Dizziness and Vertigo Pattern Differentiation', es: 'Diferenciación de Patterns de Mareo y Vértigo' },
+    summary: { en: 'Compare Liver Yang, Qi-Blood deficiency, Kidney deficiency and Damp-Phlegm or Phlegm-Heat.', es: 'Compara Yang de Hígado, deficiencia Qi-Sangre, deficiencia renal y Humedad-Flema o Flema-Calor.' },
+    focus: { en: 'Upward Yang, deficient nourishment and Phlegm obstruction', es: 'Yang ascendente, nutrición deficiente y obstrucción por Flema' },
+    search: 'dizziness vertigo mareo liver yang qi blood kidney yin yang damp phlegm heat tian ma gou teng gui pi zuo gui you gui ban xia bai zhu wen dan',
+    en: {
+      intro: 'Head pressure and anger point upward, pallor points to Qi-Blood deficiency, lumbar signs point to Kidney, and heaviness/nausea point to Phlegm.',
+      rows: [
+        ['Liver Yang rising', 'Vertigo with distending headache, tinnitus, anger, irritability and wiry pulse', 'Tian Ma Gou Teng Yin', 'Subdue Yang and nourish Liver-Kidney.'],
+        ['Qi and Blood deficiency', 'Pallor, fatigue, weak voice, palpitations, insomnia and poor appetite', 'Gui Pi Tang', 'Strengthen Spleen and supplement Qi-Blood.'],
+        ['Kidney Yin/Essence deficiency', 'Tinnitus, weak back, emissions, forgetfulness and five-center Heat', 'Zuo Gui Wan', 'Nourish Kidney Yin and Essence.'],
+        ['Kidney Yang/Essence deficiency', 'Tinnitus and weak back with cold limbs and pale tongue', 'You Gui Wan', 'Warm Kidney Yang and Essence.'],
+        ['Damp-Phlegm in Middle', 'Heavy wrapped head, nausea, chest oppression, sleepiness and white greasy coat', 'Ban Xia Bai Zhu Tian Ma Tang', 'Dry Dampness and transform Phlegm.'],
+        ['Phlegm-Heat', 'Heavy head plus irritability, bitter taste, thirst and yellow greasy coat', 'Wen Dan Tang', 'Transform Phlegm and clear Heat.'],
+      ],
+      rule: 'Anger/head distention identifies Liver Yang; pallor/fatigue identifies Qi-Blood; lumbar-tinnitus signs identify Kidney; heaviness and greasy coat identify Phlegm, with yellow/bitter signs marking Heat.',
+      memory: '<strong>Upward—Liver; pale—Qi/Blood; back—Kidney; heavy—Phlegm; yellow—Phlegm-Heat.</strong>',
+      safety: 'Sudden vertigo with one-sided weakness, speech difficulty, severe headache, fainting, chest pain or inability to walk requires emergency stroke/cardiac assessment.',
+      source: 'Internal Medicine 1, Handout 6: Dizziness and Vertigo.'
+    },
+    es: {
+      intro: 'Presión cefálica e ira apuntan arriba, palidez a Qi-Sangre, signos lumbares a Riñón y pesadez/náusea a Flema.',
+      rows: [
+        ['Yang de Hígado ascendente', 'Vértigo con cefalea distensiva, tinnitus, ira, irritabilidad y pulso de cuerda', 'Tian Ma Gou Teng Yin', 'Subyugar Yang y nutrir Hígado-Riñón.'],
+        ['Deficiencia Qi y Sangre', 'Palidez, fatiga, voz débil, palpitaciones, insomnio y poco apetito', 'Gui Pi Tang', 'Fortalecer Bazo y suplementar Qi-Sangre.'],
+        ['Deficiencia Yin/Esencia renal', 'Tinnitus, lumbar débil, emisiones, mala memoria y Calor de cinco centros', 'Zuo Gui Wan', 'Nutrir Yin y Esencia renal.'],
+        ['Deficiencia Yang/Esencia renal', 'Tinnitus y lumbar débil con extremidades frías y lengua pálida', 'You Gui Wan', 'Calentar Yang y Esencia renal.'],
+        ['Humedad-Flema en Centro', 'Cabeza pesada/envuelta, náusea, opresión, somnolencia y capa blanca grasosa', 'Ban Xia Bai Zhu Tian Ma Tang', 'Secar Humedad y transformar Flema.'],
+        ['Flema-Calor', 'Cabeza pesada más irritabilidad, sabor amargo, sed y capa amarilla grasosa', 'Wen Dan Tang', 'Transformar Flema y aclarar Calor.'],
+      ],
+      rule: 'Ira/distensión cefálica identifica Yang de Hígado; palidez/fatiga, Qi-Sangre; lumbar/tinnitus, Riñón; pesadez/capa grasosa, Flema; amarillo/amargo marca Calor.',
+      memory: '<strong>Arriba—Hígado; pálido—Qi/Sangre; lumbar—Riñón; pesado—Flema; amarillo—Flema-Calor.</strong>',
+      safety: 'Vértigo súbito con debilidad unilateral, habla alterada, cefalea grave, desmayo, dolor torácico o no poder caminar requiere evaluación urgente de ictus/corazón.',
+      source: 'Internal Medicine 1, Handout 6: Dizziness and Vertigo.'
+    }
+  },
+  {
+    slug: 'hypertension-patterns', title: { en: 'Hypertension Pattern Differentiation', es: 'Diferenciación de Patterns de Hipertensión' },
+    summary: { en: 'Compare Yin deficiency with rising Yang, Liver Fire, Phlegm-Damp and combined Yin-Yang deficiency.', es: 'Compara deficiencia Yin con Yang ascendente, Fuego de Hígado, Flema-Humedad y deficiencia combinada Yin-Yang.' },
+    focus: { en: 'TCM presentation alongside biomedical blood-pressure management', es: 'Presentación MTC junto al manejo biomédico de presión arterial' },
+    search: 'hypertension hipertension yin yang liver fire phlegm damp qi ju long dan ban xia bai zhu tian ma er xian blood pressure',
+    en: {
+      intro: 'Blood-pressure measurement establishes the biomedical condition; TCM signs differentiate the accompanying presentation, not the numeric diagnosis itself.',
+      rows: [
+        ['Yin deficiency with Yang rising', 'Headache/vertigo, tinnitus, weak back, five-center Heat and red scant-coated tongue', 'Qi Ju Di Huang Wan', 'Nourish Liver-Kidney Yin and subdue Yang.'],
+        ['Exuberant Liver Fire', 'Red face/eyes, irritability, bitter dry mouth, dark urine and constipation', 'Long Dan Xie Gan Tang', 'Drain Liver Fire.'],
+        ['Phlegm-Damp obstruction', 'Heavy painful head, nausea, chest oppression, obesity and white greasy coat', 'Ban Xia Bai Zhu Tian Ma Tang', 'Transform Phlegm and Dampness.'],
+        ['Yin and Yang deficiency', 'Movement-aggravated dizziness, blurred vision, tinnitus, palpitations, dyspnea and lumbar weakness', 'Er Xian Tang', 'Support Kidney Yin and Yang.'],
+      ],
+      rule: 'Empty Heat/lumbar weakness marks Yin deficiency; red angry excess marks Liver Fire; heaviness/greasy coat marks Phlegm-Damp; mixed weakness with both Yin and Yang signs marks combined deficiency.',
+      memory: '<strong>Hot-empty—Yin; red-angry—Fire; heavy-greasy—Phlegm; mixed weak—Yin and Yang.</strong>',
+      safety: 'Herbs do not replace prescribed antihypertensives. Blood pressure at or above 180/120 with chest pain, neurologic symptoms, severe headache or shortness of breath is an emergency.',
+      source: 'Internal Medicine 1, Handout 6: Hypertension.'
+    },
+    es: {
+      intro: 'La medición establece la condición biomédica; los signos MTC diferencian la presentación acompañante, no el diagnóstico numérico.',
+      rows: [
+        ['Deficiencia Yin con Yang ascendente', 'Cefalea/vértigo, tinnitus, lumbar débil, Calor de cinco centros y lengua roja con poca capa', 'Qi Ju Di Huang Wan', 'Nutrir Yin Hígado-Riñón y subyugar Yang.'],
+        ['Fuego exuberante de Hígado', 'Cara/ojos rojos, irritabilidad, boca amarga seca, orina oscura y estreñimiento', 'Long Dan Xie Gan Tang', 'Drenar Fuego de Hígado.'],
+        ['Obstrucción Flema-Humedad', 'Cabeza pesada/dolorosa, náusea, opresión torácica, obesidad y capa blanca grasosa', 'Ban Xia Bai Zhu Tian Ma Tang', 'Transformar Flema y Humedad.'],
+        ['Deficiencia Yin y Yang', 'Mareo peor al moverse, visión borrosa, tinnitus, palpitaciones, disnea y lumbar débil', 'Er Xian Tang', 'Apoyar Yin y Yang renal.'],
+      ],
+      rule: 'Calor vacío/lumbar débil marca Yin; exceso rojo e irritable, Fuego; pesadez/capa grasosa, Flema-Humedad; debilidad mixta con signos Yin-Yang, deficiencia combinada.',
+      memory: '<strong>Caliente-vacío—Yin; rojo-irritable—Fuego; pesado-grasoso—Flema; débil-mixto—Yin y Yang.</strong>',
+      safety: 'Las hierbas no sustituyen antihipertensivos prescritos. Presión ≥180/120 con dolor torácico, síntomas neurológicos, cefalea grave o disnea es emergencia.',
+      source: 'Internal Medicine 1, Handout 6: Hypertension.'
+    }
   }
 ];
 
