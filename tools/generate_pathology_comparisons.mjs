@@ -1575,6 +1575,174 @@ const pathologies = [
       safety: 'Estridor, dificultad al respirar/tragar o hinchazón cervical es urgente. Ronquera mayor de 3 semanas, sangre al toser, masa cervical, pérdida de peso, tabaquismo o recurrencia necesita ORL/laringoscopia.',
       source: 'Internal Medicine ENT section: Loss of Voice (Shi Yin).'
     }
+  },
+  {
+    slug: 'red-swollen-eyes-patterns', title: { en: 'Sore, Red and Swollen Eyes Comparison', es: 'Comparación de Ojos Rojos, Hinchados y Dolorosos' },
+    summary: { en: 'Separate external Wind-Heat from exuberant Liver-Gallbladder Fire.', es: 'Separa Viento-Calor externo de Fuego exuberante de Hígado-Vesícula Biliar.' },
+    focus: { en: 'Exterior respiratory signs versus bitter-irritable Liver-Fire signs', es: 'Signos respiratorios exteriores frente a signos amargos e irritables de Fuego de Hígado' },
+    search: 'red swollen painful eyes conjunctivitis wind heat liver gallbladder fire xie fei yin long dan xie gan photophobia tearing discharge',
+    en: {
+      intro: 'Both presentations can produce redness, pain, photophobia and tearing; the accompanying systemic signs distinguish them.',
+      rows: [
+        ['External Wind-Heat', 'Red painful swollen eyes with photophobia, tearing/itching or gummy discharge plus fever, headache, stuffy nose and thirst', 'Xie Fei Yin', 'Dispel Wind and clear Heat.'],
+        ['Liver-Gallbladder Fire', 'Same eye inflammation with bitter dry mouth, irritability, tinnitus, headache, constipation, dark urine and wiry-rapid pulse', 'Long Dan Xie Gan Tang', 'Drain Liver-GB Fire.'],
+      ],
+      rule: 'Fever, nasal symptoms and exterior onset indicate Wind-Heat; bitter mouth, anger, tinnitus and bowel/urine Heat indicate Liver-GB Fire.',
+      memory: '<strong>Red eye + cold signs—Wind-Heat; red eye + bitter/angry—Liver Fire.</strong>',
+      safety: 'Eye pain with reduced vision, severe photophobia, contact-lens use, trauma/chemical exposure, fixed pupil, severe headache/nausea or corneal clouding requires urgent eye evaluation.',
+      source: 'Internal Medicine ophthalmology section: Sore, Red and Swollen Eyes (Mu Chi Zhong Tong).'
+    },
+    es: {
+      intro: 'Ambas presentaciones pueden causar enrojecimiento, dolor, fotofobia y lagrimeo; los signos sistémicos acompañantes las distinguen.',
+      rows: [
+        ['Viento-Calor externo', 'Ojos rojos/dolorosos/hinchados con fotofobia, lagrimeo/prurito o secreción pegajosa más fiebre, cefalea, nariz tapada y sed', 'Xie Fei Yin', 'Expulsar Viento y aclarar Calor.'],
+        ['Fuego de Hígado-Vesícula Biliar', 'Misma inflamación ocular con boca amarga/seca, irritabilidad, tinnitus, cefalea, estreñimiento, orina oscura y pulso de cuerda-rápido', 'Long Dan Xie Gan Tang', 'Drenar Fuego de Hígado-VB.'],
+      ],
+      rule: 'Fiebre, signos nasales e inicio exterior indica Viento-Calor; boca amarga, ira, tinnitus y Calor intestinal/urinario indica Fuego de Hígado-VB.',
+      memory: '<strong>Ojo rojo + resfriado—Viento-Calor; ojo rojo + amargo/ira—Fuego de Hígado.</strong>',
+      safety: 'Dolor ocular con visión reducida, fotofobia grave, lentes de contacto, trauma/químico, pupila fija, cefalea grave/náusea o córnea opaca requiere evaluación ocular urgente.',
+      source: 'Internal Medicine ophthalmology section: Sore, Red and Swollen Eyes (Mu Chi Zhong Tong).'
+    }
+  },
+  {
+    slug: 'stye-patterns', title: { en: 'Stye Clinical Comparison', es: 'Comparación Clínica del Orzuelo' },
+    summary: { en: 'Recognize the Stomach-Spleen Heat presentation and distinguish a local stye from spreading eyelid infection.', es: 'Reconoce la presentación de Calor de Estómago-Bazo y distingue un orzuelo local de infección palpebral extendida.' },
+    focus: { en: 'Localized hot painful eyelid lesion with digestive Heat signs', es: 'Lesión palpebral localizada, caliente y dolorosa con signos digestivos de Calor' },
+    search: 'stye hordeolum eyelid stomach spleen heat xie huang san qing wei san red swelling painful thirst halitosis',
+    en: {
+      intro: 'The source gives one principal TCM pattern; clinically, location and spread distinguish a simple stye from cellulitis or another eyelid lesion.',
+      rows: [
+        ['Heat brewing in Stomach-Spleen', 'Localized red swollen hot painful eyelid lesion, tender to touch, with thirst, irritability, halitosis, constipation and dark urine', 'Xie Huang San or Qing Wei San', 'Clear Heat and reduce swelling.'],
+      ],
+      rule: 'A focal tender bump at the eyelid margin is consistent with a stye; diffuse swelling, fever or eye-movement pain is not a simple localized lesion.',
+      memory: '<strong>Focal hot eyelid bump—stye; diffuse swelling or sick patient—look deeper.</strong>',
+      safety: 'Use warm compresses and do not squeeze. Fever, spreading redness, vision change, pain with eye movement, protruding eye, immune suppression or failure to improve needs medical evaluation.',
+      source: 'Internal Medicine ophthalmology section: Stye (Zhen Yan).'
+    },
+    es: {
+      intro: 'La fuente ofrece un patrón MTC principal; clínicamente, localización y expansión distinguen orzuelo simple de celulitis u otra lesión palpebral.',
+      rows: [
+        ['Calor gestándose en Estómago-Bazo', 'Lesión palpebral localizada roja, hinchada, caliente y dolorosa al tacto, con sed, irritabilidad, halitosis, estreñimiento y orina oscura', 'Xie Huang San o Qing Wei San', 'Aclarar Calor y reducir hinchazón.'],
+      ],
+      rule: 'Bulto focal doloroso en margen palpebral concuerda con orzuelo; hinchazón difusa, fiebre o dolor al mover ojo no es una lesión simple.',
+      memory: '<strong>Bulto palpebral focal/caliente—orzuelo; hinchazón difusa o paciente enfermo—buscar más profundo.</strong>',
+      safety: 'Usar compresas tibias y no exprimir. Fiebre, enrojecimiento extendido, cambio visual, dolor al mover ojo, ojo saliente, inmunosupresión o no mejorar requiere evaluación.',
+      source: 'Internal Medicine ophthalmology section: Stye (Zhen Yan).'
+    }
+  },
+  {
+    slug: 'upper-eyelid-droop-patterns', title: { en: 'Upper Eyelid Droop Pattern Differentiation', es: 'Diferenciación de Ptosis del Párpado Superior' },
+    summary: { en: 'Compare congenital Kidney-Yang deficiency, fatigable Spleen-Qi deficiency and abrupt Liver-Blood/Wind presentation.', es: 'Compara deficiencia Yang renal congénita, deficiencia Qi de Bazo fatigable y presentación súbita de Sangre de Hígado/Viento.' },
+    focus: { en: 'Congenital versus fatigable versus sudden ptosis with diplopia', es: 'Ptosis congénita frente a fatigable y súbita con diplopía' },
+    search: 'upper eyelid droop ptosis kidney yang spleen qi liver blood wind you gui yin bu zhong yi qi yang xue dang gui di huang diplopia',
+    en: {
+      intro: 'Timing is decisive: congenital, slowly fatigable or abrupt neurologic onset point to very different presentations and medical causes.',
+      rows: [
+        ['Kidney-Yang deficiency', 'Congenital ptosis with inability to elevate the lid, pale tongue and deep-weak pulse', 'You Gui Yin', 'Warm Kidney Yang and assist Spleen Yang.'],
+        ['Spleen-Qi deficiency', 'Slow ptosis better in morning/after rest and worse later or after exertion, with fatigue, poor appetite and possibly dysphagia', 'Bu Zhong Yi Qi Tang', 'Boost Spleen Qi.'],
+        ['Liver-Blood deficiency with Wind affecting channels', 'Abrupt one-sided ptosis, often outward eye deviation and double vision, following pale/dizzy deficiency signs', 'Yang Xue Dang Gui Di Huang Tang', 'Historical strategy: nourish Liver Blood and dispel Wind.'],
+      ],
+      rule: 'Present from birth is congenital; fluctuating and fatigable suggests Qi weakness; sudden unilateral ptosis with diplopia is neurologic until proven otherwise.',
+      memory: '<strong>Born with it—congenital; tires through day—fatigable; sudden + double vision—emergency.</strong>',
+      safety: 'Sudden ptosis, unequal pupils, severe headache, double vision, weakness, speech change or eye-movement abnormality can indicate aneurysm or stroke and requires emergency evaluation. Fatigable ptosis with swallowing/breathing weakness is also urgent.',
+      source: 'Internal Medicine ophthalmology section: Upper Eyelid Droop (Shang Bao Xia Chui).'
+    },
+    es: {
+      intro: 'El tiempo es decisivo: inicio congénito, lento/fatigable o neurológico abrupto apunta a presentaciones y causas médicas muy distintas.',
+      rows: [
+        ['Deficiencia Yang renal', 'Ptosis congénita con incapacidad de elevar párpado, lengua pálida y pulso profundo-débil', 'You Gui Yin', 'Calentar Yang renal y asistir Yang de Bazo.'],
+        ['Deficiencia Qi de Bazo', 'Ptosis lenta mejor por la mañana/tras descanso y peor tarde o tras esfuerzo, con fatiga, poco apetito y posible disfagia', 'Bu Zhong Yi Qi Tang', 'Aumentar Qi de Bazo.'],
+        ['Deficiencia de Sangre de Hígado con Viento en canales', 'Ptosis unilateral súbita, a menudo desviación externa y visión doble, tras signos pálidos/de mareo', 'Yang Xue Dang Gui Di Huang Tang', 'Estrategia histórica: nutrir Sangre de Hígado y expulsar Viento.'],
+      ],
+      rule: 'Desde nacimiento es congénito; fluctuante/fatigable sugiere Qi débil; unilateral súbita con diplopía es neurológica hasta demostrar lo contrario.',
+      memory: '<strong>Desde nacimiento—congénita; se cansa durante día—fatigable; súbita + diplopía—emergencia.</strong>',
+      safety: 'Ptosis súbita, pupilas desiguales, cefalea grave, diplopía, debilidad, cambio del habla o movimiento ocular anormal puede indicar aneurisma/ACV y requiere urgencias. Ptosis fatigable con debilidad al tragar/respirar también es urgente.',
+      source: 'Internal Medicine ophthalmology section: Upper Eyelid Droop (Shang Bao Xia Chui).'
+    }
+  },
+  {
+    slug: 'tearing-patterns', title: { en: 'Excessive Tearing Clinical Comparison', es: 'Comparación Clínica del Lagrimeo Excesivo' },
+    summary: { en: 'Recognize the Liver-Kidney deficiency presentation while screening for ocular-surface or tear-duct disease.', es: 'Reconoce la presentación por deficiencia Hígado-Riñón mientras se descarta enfermedad de superficie ocular o conducto lagrimal.' },
+    focus: { en: 'Clear cool tears without inflammation versus painful or infected tearing', es: 'Lágrimas claras/frías sin inflamación frente a lagrimeo doloroso o infectado' },
+    search: 'tearing epiphora liver kidney deficiency zuo gui yin clear cool tears wind dry eye tear duct',
+    en: {
+      intro: 'The source gives one deficiency pattern; the clinical comparison is between noninflamed clear tearing and tearing caused by irritation, infection or obstruction.',
+      rows: [
+        ['Liver-Kidney deficiency', 'Frequent clear cool thin tears worse in Wind, without redness/pain/swelling, plus dizziness, tinnitus, blurred vision and weak back/knees', 'Zuo Gui Yin', 'Nourish Liver and support Kidney.'],
+      ],
+      rule: 'Clear tears without inflammation plus chronic deficiency signs fit the source pattern; redness, pain, pus or a focal inner-corner swelling suggests another diagnosis.',
+      memory: '<strong>Clear + cool + no red pain + weak back = Liver-Kidney deficiency presentation.</strong>',
+      safety: 'Pain, photophobia, vision change, trauma, chemical exposure, pus or tender swelling near the nose requires eye assessment. Persistent one-sided tearing may need tear-duct evaluation.',
+      source: 'Internal Medicine ophthalmology section: Tearing Patterns (Liu Lei Zheng).'
+    },
+    es: {
+      intro: 'La fuente ofrece un patrón deficiente; la comparación clínica es entre lagrimeo claro sin inflamación y lagrimeo por irritación, infección u obstrucción.',
+      rows: [
+        ['Deficiencia de Hígado-Riñón', 'Lágrimas frecuentes claras, frías y delgadas peores con Viento, sin rojo/dolor/hinchazón, más mareo, tinnitus, visión borrosa y lumbar/rodillas débiles', 'Zuo Gui Yin', 'Nutrir Hígado y apoyar Riñón.'],
+      ],
+      rule: 'Lágrimas claras sin inflamación más deficiencia crónica encaja con la fuente; rojo, dolor, pus o hinchazón en canto interno sugiere otro diagnóstico.',
+      memory: '<strong>Claro + frío + sin dolor rojo + lumbar débil = presentación Hígado-Riñón.</strong>',
+      safety: 'Dolor, fotofobia, cambio visual, trauma, químico, pus o hinchazón dolorosa cerca de nariz requiere evaluación ocular. Lagrimeo unilateral persistente puede necesitar estudio del conducto.',
+      source: 'Internal Medicine ophthalmology section: Tearing Patterns (Liu Lei Zheng).'
+    }
+  },
+  {
+    slug: 'nearsightedness-patterns', title: { en: 'Nearsightedness Clinical Comparison', es: 'Comparación Clínica de la Miopía' },
+    summary: { en: 'Relate the historical Liver-Blood/Kidney-Essence presentation to modern refractive assessment.', es: 'Relaciona la presentación histórica de Sangre de Hígado/Esencia renal con la evaluación refractiva moderna.' },
+    focus: { en: 'Blurred distance vision versus warning signs of retinal disease', es: 'Visión distante borrosa frente a señales de enfermedad retiniana' },
+    search: 'nearsightedness myopia liver blood kidney essence qi ju di huang blurred distance vision eye strain',
+    en: {
+      intro: 'Myopia is a refractive condition measured by eye examination; the source associates accompanying constitutional symptoms with Liver-Blood/Kidney-Essence depletion.',
+      rows: [
+        ['Liver-Blood and Kidney-Essence depletion', 'Near objects clear but distant objects blurred, with eye fatigue, headache, dizziness, tinnitus, weak back/knees and poor memory', 'Qi Ju Di Huang Wan', 'Historical strategy: support Liver-Blood/Kidney-Essence and brighten eyes.'],
+      ],
+      rule: 'Stable blurred distance vision that improves with corrective lenses is refractive; sudden distortion, field loss, flashes or floaters is not routine myopia.',
+      memory: '<strong>Near clear, far blurred = myopia; sudden curtain/flashes = retina until proven otherwise.</strong>',
+      safety: 'Myopia requires optometric/ophthalmic refraction and appropriate correction. Sudden flashes, many floaters, a curtain/shadow, distortion or rapid vision loss requires emergency retinal evaluation.',
+      source: 'Internal Medicine ophthalmology section: Nearsightedness (Jin Shi).'
+    },
+    es: {
+      intro: 'Miopía es una condición refractiva medida por examen ocular; la fuente asocia síntomas constitucionales con agotamiento de Sangre de Hígado/Esencia renal.',
+      rows: [
+        ['Agotamiento de Sangre de Hígado y Esencia renal', 'Objetos cercanos claros y distantes borrosos, con fatiga ocular, cefalea, mareo, tinnitus, lumbar/rodillas débiles y mala memoria', 'Qi Ju Di Huang Wan', 'Estrategia histórica: apoyar Sangre de Hígado/Esencia renal y aclarar visión.'],
+      ],
+      rule: 'Visión distante borrosa estable que mejora con lentes es refractiva; distorsión súbita, pérdida de campo, destellos o moscas volantes no es miopía rutinaria.',
+      memory: '<strong>Cerca claro, lejos borroso = miopía; cortina/destellos súbitos = retina hasta demostrar lo contrario.</strong>',
+      safety: 'Miopía requiere refracción optométrica/oftálmica y corrección. Destellos súbitos, muchas moscas, cortina/sombra, distorsión o pérdida rápida requiere urgencia retiniana.',
+      source: 'Internal Medicine ophthalmology section: Nearsightedness (Jin Shi).'
+    }
+  },
+  {
+    slug: 'optic-atrophy-patterns', title: { en: 'Blue-Eye Blindness (Optic Atrophy) Comparison', es: 'Comparación de Blue-Eye Blindness (Atrofia Óptica)' },
+    summary: { en: 'Compare Liver-Kidney deficiency, Qi-Blood deficiency, Liver-Qi stagnation and Qi-Blood stasis in the historical optic-atrophy framework.', es: 'Compara deficiencia Hígado-Riñón, deficiencia Qi-Sangre, estancamiento Qi de Hígado y estasis Qi-Sangre en el marco histórico de atrofia óptica.' },
+    focus: { en: 'Fundus-confirmed optic damage with constitutional or causal clues', es: 'Daño óptico confirmado en fondo de ojo con pistas constitucionales o causales' },
+    search: 'blue eye blindness qing mang optic atrophy liver kidney deficiency qi blood deficiency liver qi stagnation blood stasis ming mu di huang ren shen yang rong xiao yao xue fu zhu yu',
+    en: {
+      intro: 'The source describes dryness and vision loss with optic-atrophy fundus changes. These historical formulas do not reverse established optic-nerve damage.',
+      rows: [
+        ['Liver-Kidney deficiency', 'Vision loss with dizziness, tinnitus, weak back/knees, seminal emission and red scant-coated tongue', 'Ming Mu Di Huang Wan', 'Historical strategy: support Liver-Kidney.'],
+        ['Qi and Blood deficiency', 'Vision loss with fatigue, dyspnea, palpitations, insomnia, poor appetite, loose stool and pale tongue', 'Ren Shen Yang Rong Tang', 'Historical strategy: support Qi and Blood.'],
+        ['Liver-Qi stagnation', 'Vision loss/distending eye pain linked to emotional stress, bitter taste and costal pain', 'Xiao Yao San', 'Historical strategy: soothe Liver Qi.'],
+        ['Qi and Blood stasis', 'Vision loss after head/eye trauma with headache, poor memory, dark tongue and rough pulse', 'Xue Fu Zhu Yu Tang', 'Historical strategy: move Qi-Blood.'],
+      ],
+      rule: 'Weak back/tinnitus marks Liver-Kidney; global fatigue/pallor Qi-Blood; emotional distention Liver-Qi; trauma/dark-purple signs stasis—but the optic diagnosis must be biomedical.',
+      memory: '<strong>Back/ears—Liver-Kidney; pale/tired—Qi-Blood; emotion/distention—Liver-Qi; trauma/purple—stasis.</strong>',
+      safety: 'Optic atrophy and unexplained vision loss require ophthalmology/neuro-ophthalmology evaluation. Sudden vision loss, eye pain, neurologic symptoms or new field defect is an emergency; do not delay disease-specific treatment.',
+      source: 'Internal Medicine ophthalmology section: Blue-Eye Blindness (Qing Mang).'
+    },
+    es: {
+      intro: 'La fuente describe sequedad y pérdida visual con cambios de atrofia óptica en fondo de ojo. Estas fórmulas históricas no revierten daño establecido del nervio óptico.',
+      rows: [
+        ['Deficiencia de Hígado-Riñón', 'Pérdida visual con mareo, tinnitus, lumbar/rodillas débiles, emisión seminal y lengua roja con poca capa', 'Ming Mu Di Huang Wan', 'Estrategia histórica: apoyar Hígado-Riñón.'],
+        ['Deficiencia de Qi y Sangre', 'Pérdida visual con fatiga, disnea, palpitaciones, insomnio, poco apetito, heces sueltas y lengua pálida', 'Ren Shen Yang Rong Tang', 'Estrategia histórica: apoyar Qi y Sangre.'],
+        ['Estancamiento Qi de Hígado', 'Pérdida visual/dolor ocular distensivo ligado a estrés emocional, sabor amargo y dolor costal', 'Xiao Yao San', 'Estrategia histórica: suavizar Qi de Hígado.'],
+        ['Estasis de Qi y Sangre', 'Pérdida visual tras trauma de cabeza/ojo con cefalea, mala memoria, lengua oscura y pulso áspero', 'Xue Fu Zhu Yu Tang', 'Estrategia histórica: mover Qi-Sangre.'],
+      ],
+      rule: 'Lumbar/tinnitus marca Hígado-Riñón; fatiga/palidez Qi-Sangre; distensión emocional Qi de Hígado; trauma/púrpura estasis, pero el diagnóstico óptico debe ser biomédico.',
+      memory: '<strong>Lumbar/oídos—Hígado-Riñón; pálido/cansado—Qi-Sangre; emoción/distensión—Qi de Hígado; trauma/púrpura—estasis.</strong>',
+      safety: 'Atrofia óptica y pérdida visual inexplicada requiere oftalmología/neurooftalmología. Pérdida súbita, dolor ocular, signos neurológicos o defecto de campo nuevo es emergencia; no retrasar tratamiento específico.',
+      source: 'Internal Medicine ophthalmology section: Blue-Eye Blindness (Qing Mang).'
+    }
   }
 ];
 
