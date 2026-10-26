@@ -1025,6 +1025,182 @@ const pathologies = [
       safety: 'Fiebre tras viaje a zona de malaria es emergencia hasta descartarla. Prueba sanguínea el mismo día y antipalúdico pronto son esenciales; confusión, disnea o debilidad grave requiere urgencias.',
       source: 'Internal Medicine 1, Handout 10: Malarial Patterns.'
     }
+  },
+  {
+    slug: 'goiter-patterns', title: { en: 'Goiter Pattern Differentiation', es: 'Diferenciación del Bocio' },
+    summary: { en: 'Separate Qi-Blood-Phlegm accumulation from Yin deficiency with empty Fire.', es: 'Separa acumulación de Qi-Sangre-Flema de deficiencia Yin con Fuego vacío.' },
+    focus: { en: 'Neck mass with constraint and sticky coat versus hypermetabolic empty-Heat signs', es: 'Masa cervical con constreñimiento y capa pegajosa frente a signos hipermetabólicos de Calor vacío' },
+    search: 'goiter thyroid neck mass qi stagnation blood stasis phlegm yin deficiency empty fire hai zao yu hu zhi bai di huang hyperthyroid',
+    en: {
+      intro: 'The palpable thyroid enlargement is the pathology; emotional/Phlegm signs versus empty-Heat signs distinguish the historical TCM presentations.',
+      rows: [
+        ['Qi stagnation, Blood stasis and congealed Phlegm', 'Neck enlargement with depression/irritability, chest-hypochondriac oppression, insomnia, dark tongue and sticky white coat', 'Hai Zao Yu Hu Tang', 'Regulate Qi, move Blood, transform Phlegm and soften the mass.'],
+        ['Yin deficiency with empty Fire', 'Goiter with weight loss, hunger, dry mouth, palpitations, sweating, tremor, insomnia and red scant-coated tongue', 'Zhi Bai Di Huang Wan', 'Nourish Yin, downbear deficient Fire and address the mass.'],
+      ],
+      rule: 'Constraint plus dark-sticky signs indicates Qi-Blood-Phlegm; weight loss, tremor, palpitations and empty Heat indicates Yin deficiency with Fire.',
+      memory: '<strong>Dark and sticky—Qi/Blood/Phlegm; thin, sweaty and trembling—Yin-Fire.</strong>',
+      safety: 'Every new thyroid/neck mass needs examination and thyroid testing; rapid growth, hoarseness, trouble swallowing/breathing or hard fixed nodes needs urgent assessment. Classical Hai Zao Yu Hu Tang contains the Hai Zao–Gan Cao incompatibility.',
+      source: 'Internal Medicine 1, Handout 11: Goiter.'
+    },
+    es: {
+      intro: 'El aumento tiroideo palpable es la patología; signos emocionales/Flema frente a Calor vacío distinguen las presentaciones MTC históricas.',
+      rows: [
+        ['Estancamiento Qi, estasis de Sangre y Flema coagulada', 'Aumento cervical con depresión/irritabilidad, opresión torácica-hipocondríaca, insomnio, lengua oscura y capa blanca pegajosa', 'Hai Zao Yu Hu Tang', 'Regular Qi, mover Sangre, transformar Flema y ablandar masa.'],
+        ['Deficiencia Yin con Fuego vacío', 'Bocio con pérdida de peso, hambre, boca seca, palpitaciones, sudor, temblor, insomnio y lengua roja con poca capa', 'Zhi Bai Di Huang Wan', 'Nutrir Yin, descender Fuego vacío y abordar masa.'],
+      ],
+      rule: 'Constreñimiento más signos oscuros/pegajosos indica Qi-Sangre-Flema; adelgazamiento, temblor, palpitaciones y Calor vacío indica Yin con Fuego.',
+      memory: '<strong>Oscuro y pegajoso—Qi/Sangre/Flema; delgado, sudoroso y tembloroso—Yin-Fuego.</strong>',
+      safety: 'Toda masa tiroidea/cervical nueva necesita examen y pruebas tiroideas; crecimiento rápido, ronquera, dificultad al tragar/respirar o ganglios duros/fijos requiere evaluación urgente. Hai Zao Yu Hu Tang clásica contiene la incompatibilidad Hai Zao–Gan Cao.',
+      source: 'Internal Medicine 1, Handout 11: Goiter.'
+    }
+  },
+  {
+    slug: 'intestinal-abscess-patterns', title: { en: 'Intestinal Abscess Stage Comparison', es: 'Comparación por Etapas del Absceso Intestinal' },
+    summary: { en: 'Compare initial Damp-Heat or Cold-Damp presentations with pyogenic and rupture stages.', es: 'Compara presentaciones iniciales de Humedad-Calor o Frío-Humedad con etapas piógena y de ruptura.' },
+    focus: { en: 'Right-lower abdominal pain, fever, rebound tenderness and systemic toxicity', es: 'Dolor abdominal inferior derecho, fiebre, rebote y toxicidad sistémica' },
+    search: 'intestinal abscess appendicitis right lower abdomen damp heat cold damp pyogenic rupture da huang mu dan hong teng huo xiang zheng qi yi yi fu zi bai jiang',
+    en: {
+      intro: 'This historical category overlaps appendicitis and intra-abdominal abscess. Stage recognition is educational; suspected cases require urgent surgical assessment.',
+      rows: [
+        ['Initial Qi-Blood stasis with Damp-Heat', 'Right-lower pain worse extending the leg, fever, nausea, constipation, dark urine and yellow sticky coat', 'Da Huang Mu Dan Pi Tang or Hong Teng Jian Ji', 'Move Qi-Blood, clear Damp-Heat and free stool.'],
+        ['Blood stasis with Cold-Damp', 'Milder abdominal pain without fever, loose stool, clear urine and white sticky coat', 'Huo Xiang Zheng Qi San + Hong Teng Jian Ji', 'Dispel Cold-Damp and move Blood.'],
+        ['Pyogenic stage', 'Severe localized pain, marked/rebound tenderness, guarding, palpable mass, high fever and vomiting', 'Hong Teng Jian Ji', 'Historical strategy: clear toxin and discharge pus.'],
+        ['Rupture with Heat toxin', 'Diffuse severe pain, rigid/tender distended abdomen, persistent high fever, vomiting, thirst and dehydration', 'Da Huang Mu Dan Pi Tang + Zeng Ye Tang', 'Historical strategy: clear Heat and support fluids.'],
+        ['Rupture with Cold-Damp collapse signs', 'Abdominal pain, listlessness, cold limbs, spontaneous sweat and deep-thready pulse', 'Yi Yi Fu Zi Bai Jiang San', 'Historical strategy: warm Yang and drain Dampness.'],
+      ],
+      rule: 'Localized right-lower pain begins the sequence; rebound/guarding and high fever indicate abscess; diffuse rigid pain or cold collapse indicates rupture and emergency.',
+      memory: '<strong>Localized—suspect; rebound/fever—pus; diffuse rigid or cold collapse—rupture.</strong>',
+      safety: 'Right-lower abdominal pain with fever, rebound, guarding, vomiting, rigid abdomen or worsening pain requires emergency evaluation. Do not give purgatives or delay imaging/surgery.',
+      source: 'Internal Medicine 1, Handout 11: Intestinal Abscess.'
+    },
+    es: {
+      intro: 'Esta categoría histórica se superpone con apendicitis y absceso intraabdominal. Reconocer etapas es educativo; la sospecha requiere evaluación quirúrgica urgente.',
+      rows: [
+        ['Estasis Qi-Sangre con Humedad-Calor inicial', 'Dolor inferior derecho peor al extender pierna, fiebre, náusea, estreñimiento, orina oscura y capa amarilla pegajosa', 'Da Huang Mu Dan Pi Tang o Hong Teng Jian Ji', 'Mover Qi-Sangre, aclarar Humedad-Calor y liberar heces.'],
+        ['Estasis de Sangre con Frío-Humedad', 'Dolor abdominal más leve sin fiebre, heces sueltas, orina clara y capa blanca pegajosa', 'Huo Xiang Zheng Qi San + Hong Teng Jian Ji', 'Disipar Frío-Humedad y mover Sangre.'],
+        ['Etapa piógena', 'Dolor localizado grave, sensibilidad/rebote, defensa, masa palpable, fiebre alta y vómito', 'Hong Teng Jian Ji', 'Estrategia histórica: aclarar toxina y descargar pus.'],
+        ['Ruptura con toxina de Calor', 'Dolor difuso grave, abdomen rígido/doloroso/distendido, fiebre alta persistente, vómito, sed y deshidratación', 'Da Huang Mu Dan Pi Tang + Zeng Ye Tang', 'Estrategia histórica: aclarar Calor y apoyar líquidos.'],
+        ['Ruptura con signos de colapso Frío-Humedad', 'Dolor abdominal, apatía, miembros fríos, sudor espontáneo y pulso profundo-filiforme', 'Yi Yi Fu Zi Bai Jiang San', 'Estrategia histórica: calentar Yang y drenar Humedad.'],
+      ],
+      rule: 'Dolor inferior derecho inicia secuencia; rebote/defensa y fiebre alta indica absceso; dolor difuso rígido o colapso frío indica ruptura y emergencia.',
+      memory: '<strong>Localizado—sospecha; rebote/fiebre—pus; difuso rígido o colapso frío—ruptura.</strong>',
+      safety: 'Dolor inferior derecho con fiebre, rebote, defensa, vómito, abdomen rígido o empeoramiento requiere urgencias. No administrar purgantes ni retrasar imagen/cirugía.',
+      source: 'Internal Medicine 1, Handout 11: Intestinal Abscess.'
+    }
+  },
+  {
+    slug: 'hemorrhoids-patterns', title: { en: 'Hemorrhoids Pattern Differentiation', es: 'Diferenciación de las Hemorroides' },
+    summary: { en: 'Separate Damp-Heat with Blood stagnation from prolapse due to Qi deficiency.', es: 'Separa Humedad-Calor con estancamiento de Sangre de prolapso por deficiencia de Qi.' },
+    focus: { en: 'Bright painful hot bleeding versus pale prolapse with fatigue', es: 'Sangrado brillante, doloroso y caliente frente a prolapso pálido con fatiga' },
+    search: 'hemorrhoids rectal bleeding damp heat blood stagnation qi deficiency prolapse zhi tong ru shen bu zhong yi qi bright pale',
+    en: {
+      intro: 'Color, pain/Heat and constitutional strength distinguish the two source presentations; rectal bleeding still requires biomedical evaluation.',
+      rows: [
+        ['Blood stagnation with Damp-Heat', 'Bright-red bleeding, anal swelling/pain/itch, thirst, dark urine, constipation and yellow sticky coat', 'Zhi Tong Ru Shen Tang', 'Clear Damp-Heat and invigorate Blood.'],
+        ['Qi deficiency with prolapse', 'Pale bleeding, protruding hemorrhoids, bearing-down heaviness, fatigue, dyspnea, poor appetite and pale tongue', 'Bu Zhong Yi Qi Tang', 'Boost Spleen Qi and raise the fallen.'],
+      ],
+      rule: 'Bright-red, painful, itchy and hot indicates Damp-Heat; pale blood, prolapse, bearing-down and fatigue indicates Qi deficiency.',
+      memory: '<strong>Bright-hot-painful—Damp-Heat; pale-prolapsed-tired—Qi deficiency.</strong>',
+      safety: 'New or persistent rectal bleeding, black stool, anemia, weight loss, bowel-habit change, severe pain or bleeding after age 45 requires medical evaluation; heavy bleeding is urgent.',
+      source: 'Internal Medicine 1, Handout 11: Hemorrhoids.'
+    },
+    es: {
+      intro: 'Color, dolor/Calor y fuerza constitucional distinguen las dos presentaciones; el sangrado rectal todavía requiere evaluación biomédica.',
+      rows: [
+        ['Estancamiento de Sangre con Humedad-Calor', 'Sangre roja brillante, hinchazón/dolor/prurito anal, sed, orina oscura, estreñimiento y capa amarilla pegajosa', 'Zhi Tong Ru Shen Tang', 'Aclarar Humedad-Calor y vigorizar Sangre.'],
+        ['Deficiencia Qi con prolapso', 'Sangre pálida, hemorroides salientes, pesadez descendente, fatiga, disnea, poco apetito y lengua pálida', 'Bu Zhong Yi Qi Tang', 'Aumentar Qi de Bazo y elevar lo caído.'],
+      ],
+      rule: 'Rojo brillante, dolor, prurito y Calor indica Humedad-Calor; sangre pálida, prolapso, caída y fatiga indica Qi deficiente.',
+      memory: '<strong>Brillante-caliente-doloroso—Humedad-Calor; pálido-prolapsado-cansado—Qi deficiente.</strong>',
+      safety: 'Sangrado rectal nuevo/persistente, heces negras, anemia, pérdida de peso, cambio intestinal, dolor grave o sangrado después de 45 años requiere evaluación; sangrado abundante es urgente.',
+      source: 'Internal Medicine 1, Handout 11: Hemorrhoids.'
+    }
+  },
+  {
+    slug: 'gangrene-patterns', title: { en: 'Gangrene Stage Comparison', es: 'Comparación por Etapas de la Gangrena' },
+    summary: { en: 'Compare early cold ischemic Qi-Blood stagnation with late nonhealing Qi-Blood deficiency.', es: 'Compara isquemia fría temprana con estancamiento Qi-Sangre y etapa tardía no cicatrizante por deficiencia Qi-Sangre.' },
+    focus: { en: 'Ischemic pain and weak pulses versus tissue loss and nonhealing wounds', es: 'Dolor isquémico y pulsos débiles frente a pérdida de tejido y heridas sin cicatrizar' },
+    search: 'gangrene ischemia peripheral arterial disease qi blood stagnation deficiency yang he tao hong si wu ren shen yang rong shi quan da bu cold limb tissue loss',
+    en: {
+      intro: 'This is a historical stage comparison. Gangrene means tissue death from ischemia or infection and requires immediate hospital treatment.',
+      rows: [
+        ['Early Qi and Blood stagnation', 'Cold pale limb, heaviness/numbness, calf cramps with walking, weak local pulse, atrophy and dark-purple tongue', 'Yang He Tang + Tao Hong Si Wu Tang', 'Historical strategy: warm Yang and move Blood.'],
+        ['Late Qi and Blood deficiency', 'Digit/tissue loss, nonhealing lesions, withered complexion, fatigue, dyspnea, cold, sweating, atrophy and pale tongue', 'Ren Shen Yang Rong Tang or Shi Quan Da Bu Tang', 'Historical strategy: support Qi and Blood.'],
+      ],
+      rule: 'Cold exertional pain and weak pulse signals ischemia early; tissue loss and a nonhealing wound identifies advanced disease.',
+      memory: '<strong>Cold pain + weak pulse—ischemia; black/lost tissue + nonhealing—advanced gangrene.</strong>',
+      safety: 'Gangrene, black/blue tissue, a cold pulseless limb, rapidly spreading redness, foul drainage, fever or severe rest pain is an emergency. Vascular/surgical and antibiotic treatment cannot be delayed.',
+      source: 'Internal Medicine 1, Handout 11: Gangrene.'
+    },
+    es: {
+      intro: 'Esta es una comparación histórica por etapas. Gangrena significa muerte tisular por isquemia o infección y requiere hospital inmediato.',
+      rows: [
+        ['Estancamiento temprano de Qi y Sangre', 'Miembro frío/pálido, pesadez/entumecimiento, calambres al caminar, pulso local débil, atrofia y lengua púrpura oscura', 'Yang He Tang + Tao Hong Si Wu Tang', 'Estrategia histórica: calentar Yang y mover Sangre.'],
+        ['Deficiencia tardía de Qi y Sangre', 'Pérdida de dedos/tejido, lesiones sin cicatrizar, tez marchita, fatiga, disnea, frío, sudor, atrofia y lengua pálida', 'Ren Shen Yang Rong Tang o Shi Quan Da Bu Tang', 'Estrategia histórica: apoyar Qi y Sangre.'],
+      ],
+      rule: 'Dolor frío por esfuerzo y pulso débil señala isquemia temprana; pérdida tisular y herida sin cicatrizar identifica enfermedad avanzada.',
+      memory: '<strong>Dolor frío + pulso débil—isquemia; tejido negro/perdido + no cicatriza—gangrena avanzada.</strong>',
+      safety: 'Gangrena, tejido negro/azul, miembro frío sin pulso, enrojecimiento rápido, drenaje fétido, fiebre o dolor grave en reposo es emergencia. No retrasar tratamiento vascular/quirúrgico y antibiótico.',
+      source: 'Internal Medicine 1, Handout 11: Gangrene.'
+    }
+  },
+  {
+    slug: 'patch-balding-patterns', title: { en: 'Patch Balding Pattern Differentiation', es: 'Diferenciación de la Alopecia en Parches' },
+    summary: { en: 'Separate sudden Blood dryness with Wind from prolonged Qi stagnation and Blood stasis.', es: 'Separa sequedad de Sangre con Viento de inicio súbito de estancamiento Qi y estasis de Sangre prolongados.' },
+    focus: { en: 'Sudden itchy patches versus gradual loss with constraint and stasis signs', es: 'Parches súbitos con prurito frente a pérdida gradual con constreñimiento y estasis' },
+    search: 'patch balding alopecia areata hair loss blood dryness wind qi stagnation blood stasis shen ying yang zhen xiao yao tong qiao huo xue',
+    en: {
+      intro: 'Onset and systemic signs distinguish the two historical presentations of patchy hair loss.',
+      rows: [
+        ['Wind with dryness of Blood', 'Sudden round/irregular patches with scalp itch, dizziness, insomnia, pale tongue and weak-thready pulse', 'Shen Ying Yang Zhen Tang', 'Nourish Blood and dispel Wind.'],
+        ['Qi stagnation and Blood stasis', 'Gradual prolonged loss with dull complexion, chest/hypochondriac distention, dark tongue and stasis spots', 'Xiao Yao San + Tong Qiao Huo Xue Tang', 'Regulate Qi and invigorate Blood.'],
+      ],
+      rule: 'Sudden itchy patches with pale deficiency signs indicate Blood dryness/Wind; chronic loss with constraint and purple stasis signs indicates Qi-Blood obstruction.',
+      memory: '<strong>Sudden, itchy and pale—Blood-Wind; gradual, constrained and purple—Qi-Blood stasis.</strong>',
+      safety: 'Patchy hair loss needs evaluation for alopecia areata, fungal infection, thyroid disease, nutritional deficiency and medication effects. Scaling, inflammation, scarring or rapid widespread loss needs prompt dermatology review.',
+      source: 'Internal Medicine 1, Handout 11: Patch Balding.'
+    },
+    es: {
+      intro: 'Inicio y signos sistémicos distinguen las dos presentaciones históricas de pérdida capilar en parches.',
+      rows: [
+        ['Viento con sequedad de Sangre', 'Parches redondos/irregulares súbitos con prurito, mareo, insomnio, lengua pálida y pulso débil-filiforme', 'Shen Ying Yang Zhen Tang', 'Nutrir Sangre y expulsar Viento.'],
+        ['Estancamiento Qi y estasis de Sangre', 'Pérdida gradual/prolongada con tez apagada, distensión torácica/hipocondríaca, lengua oscura y manchas de estasis', 'Xiao Yao San + Tong Qiao Huo Xue Tang', 'Regular Qi y vigorizar Sangre.'],
+      ],
+      rule: 'Parches súbitos con prurito y palidez indica sequedad de Sangre/Viento; pérdida crónica con constreñimiento y púrpura indica obstrucción Qi-Sangre.',
+      memory: '<strong>Súbito, pica y pálido—Sangre-Viento; gradual, constreñido y púrpura—estasis Qi-Sangre.</strong>',
+      safety: 'Alopecia en parches requiere evaluar alopecia areata, hongo, tiroides, nutrición y fármacos. Descamación, inflamación, cicatriz o pérdida rápida extensa requiere dermatología pronta.',
+      source: 'Internal Medicine 1, Handout 11: Patch Balding.'
+    }
+  },
+  {
+    slug: 'erysipelas-patterns', title: { en: 'Erysipelas Pattern Differentiation', es: 'Diferenciación de la Erisipela' },
+    summary: { en: 'Compare head/face Wind-Heat, lower-limb Damp-Heat and chest-hypochondriac Liver Fire presentations.', es: 'Compara Viento-Calor de cabeza/cara, Humedad-Calor de miembros inferiores y Fuego de Hígado en tórax/hipocondrio.' },
+    focus: { en: 'Distribution of a rapidly spreading hot, sharply demarcated rash', es: 'Distribución de una erupción caliente, bien delimitada y de expansión rápida' },
+    search: 'erysipelas cellulitis cinnabar toxin dan du wind heat damp heat liver fire pu ji xiao du bi xie sheng shi wu shen long dan xie gan rash infection',
+    en: {
+      intro: 'The source calls this Cinnabar Toxin (Dan Du); biomedically, erysipelas is a bacterial skin infection requiring antibiotics.',
+      rows: [
+        ['Wind-Heat invasion', 'Rapid sharply demarcated hot burning red patch on head/face with chills, fever and headache', 'Pu Ji Xiao Du Yin', 'Historical strategy: dispel Wind, clear Heat and resolve toxin.'],
+        ['Damp-Heat accumulation', 'Lower-limb rash with fever, thirst, chest stuffiness, poor appetite, constipation, dark urine and yellow sticky coat', 'Bi Xie Sheng Shi Tang + Wu Shen Tang', 'Historical strategy: clear Heat and drain Dampness.'],
+        ['Liver Fire', 'Rash over chest/hypochondria with headache, red eyes, bitter taste, irritability and dark urine', 'Long Dan Xie Gan Tang', 'Historical strategy: drain Liver Fire and cool Blood.'],
+      ],
+      rule: 'Head/face plus exterior signs maps to Wind-Heat; lower limb plus sticky Damp signs to Damp-Heat; chest/flank plus red eyes and irritability to Liver Fire.',
+      memory: '<strong>Face—Wind-Heat; legs—Damp-Heat; flanks + anger—Liver Fire.</strong>',
+      safety: 'Suspected erysipelas/cellulitis needs same-day medical assessment and antibiotics. Rapid spread, face/eye involvement, severe pain, fever, confusion, blisters or immunosuppression requires urgent care.',
+      source: 'Internal Medicine 1, Handout 12: Cinnabar Toxin (Dan Du, Erysipelas).'
+    },
+    es: {
+      intro: 'La fuente lo llama Toxina Cinabrio (Dan Du); biomédicamente, la erisipela es una infección bacteriana cutánea que requiere antibióticos.',
+      rows: [
+        ['Invasión de Viento-Calor', 'Placa roja caliente/ardiente, bien delimitada y rápida en cabeza/cara con escalofríos, fiebre y cefalea', 'Pu Ji Xiao Du Yin', 'Estrategia histórica: expulsar Viento, aclarar Calor y resolver toxina.'],
+        ['Acumulación de Humedad-Calor', 'Erupción en piernas con fiebre, sed, opresión torácica, poco apetito, estreñimiento, orina oscura y capa amarilla pegajosa', 'Bi Xie Sheng Shi Tang + Wu Shen Tang', 'Estrategia histórica: aclarar Calor y drenar Humedad.'],
+        ['Fuego de Hígado', 'Erupción en tórax/hipocondrio con cefalea, ojos rojos, sabor amargo, irritabilidad y orina oscura', 'Long Dan Xie Gan Tang', 'Estrategia histórica: drenar Fuego de Hígado y enfriar Sangre.'],
+      ],
+      rule: 'Cabeza/cara con exterior corresponde a Viento-Calor; piernas con signos pegajosos a Humedad-Calor; tórax/flancos con ojos rojos e irritabilidad a Fuego de Hígado.',
+      memory: '<strong>Cara—Viento-Calor; piernas—Humedad-Calor; flancos + ira—Fuego de Hígado.</strong>',
+      safety: 'Sospecha de erisipela/celulitis necesita evaluación el mismo día y antibióticos. Expansión rápida, cara/ojo, dolor grave, fiebre, confusión, ampollas o inmunosupresión requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 12: Cinnabar Toxin (Dan Du, Erysipelas).'
+    }
   }
 ];
 
