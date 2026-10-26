@@ -1201,6 +1201,180 @@ const pathologies = [
       safety: 'Sospecha de erisipela/celulitis necesita evaluación el mismo día y antibióticos. Expansión rápida, cara/ojo, dolor grave, fiebre, confusión, ampollas o inmunosupresión requiere urgencias.',
       source: 'Internal Medicine 1, Handout 12: Cinnabar Toxin (Dan Du, Erysipelas).'
     }
+  },
+  {
+    slug: 'urticaria-patterns', title: { en: 'Urticaria Pattern Differentiation', es: 'Diferenciación de la Urticaria' },
+    summary: { en: 'Compare Wind-Cold, Wind-Heat, gastrointestinal Damp-Heat, Qi-Blood deficiency and menstrual Chong-Ren dysfunction.', es: 'Compara Viento-Frío, Viento-Calor, Humedad-Calor gastrointestinal, deficiencia Qi-Sangre y disfunción menstrual de Chong-Ren.' },
+    focus: { en: 'Wheal color, trigger, digestive signs, chronicity and menstrual timing', es: 'Color de ronchas, detonante, signos digestivos, cronicidad y relación menstrual' },
+    search: 'urticaria hives wind rash feng zhen wind cold heat damp stomach intestine qi blood deficiency chong ren gui zhi jing fang bai du xiao feng fang feng tong sheng ba zhen si wu er xian',
+    en: {
+      intro: 'Wheal color and trigger separate acute Wind branches; digestive symptoms, chronic fatigue or menstrual timing identify the remaining presentations.',
+      rows: [
+        ['Wind-Cold invasion', 'White wheals worse with Cold/Wind, better with warmth, especially in winter', 'Gui Zhi Tang or Jing Fang Bai Du San', 'Dispel Wind-Cold and harmonize Nutritive-Defensive Qi.'],
+        ['Wind-Heat invasion', 'Abrupt red intensely itchy wheals that appear/disappear quickly, with yellow coat and rapid pulse', 'Xiao Feng San', 'Dispel Wind and clear Heat.'],
+        ['Stomach-Intestine Damp-Heat', 'Red itchy wheals with epigastric/abdominal pain, constipation or diarrhea and yellow coat', 'Fang Feng Tong Sheng San + Yin Chen Hao Tang', 'Clear Damp-Heat and regulate stool.'],
+        ['Qi and Blood deficiency', 'Recurrent hives for months/years, worse with exertion or fatigue, pale tongue and weak pulse', 'Ba Zhen Tang', 'Supplement Qi and Blood.'],
+        ['Chong-Ren dysfunction', 'Hives recur before each menstrual period and resolve as menstruation ends, with dysmenorrhea/irregular cycles', 'Si Wu Tang + Er Xian Tang', 'Regulate Chong-Ren.'],
+      ],
+      rule: 'White/cold is Wind-Cold; red/rapid is Wind-Heat; abdominal/bowel signs indicate Damp-Heat; chronic fatigue indicates deficiency; cycle timing indicates Chong-Ren.',
+      memory: '<strong>White-cold; red-hot; gut-damp; tired-deficient; monthly-Chong/Ren.</strong>',
+      safety: 'Hives with lip/tongue swelling, throat tightness, wheezing, faintness or vomiting can be anaphylaxis: use epinephrine if prescribed and call emergency services. Persistent hives need allergy/medical assessment.',
+      source: 'Internal Medicine 1, Handout 12: Wind Rash (Feng Zhen, Urticaria).'
+    },
+    es: {
+      intro: 'Color y detonante separan ramas agudas de Viento; síntomas digestivos, fatiga crónica o horario menstrual identifican las restantes.',
+      rows: [
+        ['Invasión de Viento-Frío', 'Ronchas blancas peores con Frío/Viento, mejores con calor, especialmente en invierno', 'Gui Zhi Tang o Jing Fang Bai Du San', 'Expulsar Viento-Frío y armonizar Qi Nutritivo-Defensivo.'],
+        ['Invasión de Viento-Calor', 'Ronchas rojas muy pruriginosas de inicio abrupto que aparecen/desaparecen rápido, capa amarilla y pulso rápido', 'Xiao Feng San', 'Expulsar Viento y aclarar Calor.'],
+        ['Humedad-Calor de Estómago-Intestino', 'Ronchas rojas con dolor epigástrico/abdominal, estreñimiento o diarrea y capa amarilla', 'Fang Feng Tong Sheng San + Yin Chen Hao Tang', 'Aclarar Humedad-Calor y regular heces.'],
+        ['Deficiencia de Qi y Sangre', 'Urticaria recurrente por meses/años, peor con esfuerzo/fatiga, lengua pálida y pulso débil', 'Ba Zhen Tang', 'Suplementar Qi y Sangre.'],
+        ['Disfunción Chong-Ren', 'Ronchas antes de cada menstruación que desaparecen al terminar, con dismenorrea/ciclos irregulares', 'Si Wu Tang + Er Xian Tang', 'Regular Chong-Ren.'],
+      ],
+      rule: 'Blanco/frío es Viento-Frío; rojo/rápido Viento-Calor; signos intestinales Humedad-Calor; fatiga crónica deficiencia; horario cíclico Chong-Ren.',
+      memory: '<strong>Blanco-frío; rojo-caliente; intestino-húmedo; cansado-deficiente; mensual-Chong/Ren.</strong>',
+      safety: 'Ronchas con hinchazón de labios/lengua, garganta cerrada, sibilancias, desmayo o vómito puede ser anafilaxia: usar epinefrina prescrita y llamar emergencias. Urticaria persistente requiere evaluación.',
+      source: 'Internal Medicine 1, Handout 12: Wind Rash (Feng Zhen, Urticaria).'
+    }
+  },
+  {
+    slug: 'herpes-zoster-patterns', title: { en: 'Herpes Zoster Clinical Comparison', es: 'Comparación Clínica del Herpes Zóster' },
+    summary: { en: 'Recognize the Liver-Fire and Damp-Heat presentation and distinguish active shingles from postherpetic pain.', es: 'Reconoce la presentación de Fuego de Hígado y Humedad-Calor y distingue zóster activo del dolor posherpético.' },
+    focus: { en: 'Unilateral band-like vesicles, burning pain and timing of antiviral treatment', es: 'Vesículas unilaterales en banda, dolor ardiente y tiempo para antivirales' },
+    search: 'herpes zoster shingles snake cinnabar she dan liver fire damp heat long dan xie gan vesicles band pain postherpetic neuralgia antiviral',
+    en: {
+      intro: 'The source gives one main active presentation. The key modern comparison is active vesicular shingles versus persistent pain after the rash resolves.',
+      rows: [
+        ['Active Liver Fire and Damp-Heat', 'Unilateral band of erythema/papules becoming clear then turbid vesicles, with burning/stabbing pain, bitter mouth, dark urine and constipation', 'Long Dan Xie Gan Tang', 'Historical strategy: drain Liver Fire and Damp-Heat.'],
+        ['Postherpetic pain', 'Burning, stabbing or electric pain persists after vesicles crust and the skin heals', 'Source modification: Xiao Yao San with Blood-moving/pain-relieving herbs', 'Biomedical priority: neuropathic-pain assessment and treatment.'],
+      ],
+      rule: 'New grouped vesicles in a one-sided dermatome indicate active shingles; pain continuing after skin healing indicates postherpetic neuralgia.',
+      memory: '<strong>One-sided band + blisters—active zoster; healed skin + nerve pain—postherpetic neuralgia.</strong>',
+      safety: 'Seek same-day care because antivirals work best within 72 hours. Eye/forehead/nose-tip or ear involvement, weakness, widespread rash, pregnancy or immunosuppression requires urgent evaluation.',
+      source: 'Internal Medicine 1, Handout 12: Snake Cinnabar (She Dan, Herpes Zoster).'
+    },
+    es: {
+      intro: 'La fuente ofrece una presentación activa principal. La comparación moderna clave es zóster vesicular activo frente a dolor persistente tras resolver la erupción.',
+      rows: [
+        ['Fuego de Hígado y Humedad-Calor activos', 'Banda unilateral de eritema/pápulas que se vuelve vesículas claras y luego turbias, con dolor ardiente/punzante, boca amarga, orina oscura y estreñimiento', 'Long Dan Xie Gan Tang', 'Estrategia histórica: drenar Fuego de Hígado y Humedad-Calor.'],
+        ['Dolor posherpético', 'Dolor ardiente, punzante o eléctrico persiste después de formar costras y sanar la piel', 'Modificación de la fuente: Xiao Yao San con hierbas que mueven Sangre/alivian dolor', 'Prioridad biomédica: evaluar y tratar dolor neuropático.'],
+      ],
+      rule: 'Vesículas agrupadas nuevas en dermatoma unilateral indica zóster activo; dolor tras sanar piel indica neuralgia posherpética.',
+      memory: '<strong>Banda unilateral + ampollas—zóster activo; piel sana + dolor nervioso—neuralgia posherpética.</strong>',
+      safety: 'Atención el mismo día: antivirales funcionan mejor en 72 horas. Ojo/frente/punta nasal u oído, debilidad, erupción extensa, embarazo o inmunosupresión requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 12: Snake Cinnabar (She Dan, Herpes Zoster).'
+    }
+  },
+  {
+    slug: 'eczema-patterns', title: { en: 'Eczema Pattern Differentiation', es: 'Diferenciación del Eczema' },
+    summary: { en: 'Compare Heat-predominant Damp-Heat, Dampness-predominant Damp-Heat and chronic Blood deficiency with Wind-Dryness.', es: 'Compara Humedad-Calor con predominio de Calor, predominio de Humedad y deficiencia crónica de Sangre con Viento-Sequedad.' },
+    focus: { en: 'Bright inflammation versus heavy oozing versus chronic dry lichenification', es: 'Inflamación brillante frente a exudación húmeda y liquenificación seca crónica' },
+    search: 'eczema dermatitis damp heat blood deficiency wind dryness long dan xie gan er miao chu shi wei ling si wu xiao feng red vesicle oozing lichenification',
+    en: {
+      intro: 'Acute eczema divides by whether Heat/redness or Dampness/oozing dominates; long-standing dry thick skin forms the deficiency branch.',
+      rows: [
+        ['Heat-predominant Damp-Heat', 'Acute bright-red macules/papules/vesicles, severe itch, excoriation, ulceration and Heat signs', 'Long Dan Xie Gan Tang + Er Miao San', 'Clear Heat and drain Dampness.'],
+        ['Dampness-predominant Damp-Heat', 'Acute poorly demarcated red lesions with blisters, heavy oozing, ulceration, chest fullness and greasy coat', 'Chu Shi Wei Ling Tang', 'Strengthen Spleen, drain Dampness and clear Heat.'],
+        ['Blood deficiency with Wind-Dryness', 'Chronic recurrent lichenification, rough scaling skin, intense itch, dizziness, fatigue and pale dry tongue', 'Si Wu Xiao Feng Yin', 'Nourish Blood, moisten Dryness and dispel Wind.'],
+      ],
+      rule: 'Bright red and hot means Heat leads; copious ooze and greasy coat means Damp leads; thick dry scaling after a long course means Blood-Dryness.',
+      memory: '<strong>Bright-red—Heat; wet-oozing—Damp; thick-dry-chronic—Blood deficiency.</strong>',
+      safety: 'Rapidly spreading redness, fever, pain, pus, honey crust, eye involvement or widespread blistering may indicate infection or a serious skin reaction and needs prompt care.',
+      source: 'Internal Medicine 1, Handout 12: Eczema (Shi Zhen).'
+    },
+    es: {
+      intro: 'Eczema agudo se divide según predomine Calor/enrojecimiento o Humedad/exudado; piel seca y gruesa de larga duración forma la rama deficiente.',
+      rows: [
+        ['Humedad-Calor con predominio de Calor', 'Máculas/pápulas/vesículas rojo brillante agudas, prurito grave, excoriación, ulceración y signos de Calor', 'Long Dan Xie Gan Tang + Er Miao San', 'Aclarar Calor y drenar Humedad.'],
+        ['Humedad-Calor con predominio de Humedad', 'Lesiones rojas mal delimitadas con ampollas, exudado abundante, ulceración, plenitud torácica y capa grasosa', 'Chu Shi Wei Ling Tang', 'Fortalecer Bazo, drenar Humedad y aclarar Calor.'],
+        ['Deficiencia de Sangre con Viento-Sequedad', 'Liquenificación crónica recurrente, piel áspera/descamada, prurito intenso, mareo, fatiga y lengua pálida/seca', 'Si Wu Xiao Feng Yin', 'Nutrir Sangre, humedecer Sequedad y expulsar Viento.'],
+      ],
+      rule: 'Rojo brillante/caliente significa Calor; exudado abundante y capa grasosa, Humedad; descamación seca/gruesa crónica, sequedad de Sangre.',
+      memory: '<strong>Rojo brillante—Calor; mojado/exuda—Humedad; grueso-seco-crónico—Sangre deficiente.</strong>',
+      safety: 'Enrojecimiento rápido, fiebre, dolor, pus, costra color miel, ojo afectado o ampollas extensas puede indicar infección o reacción grave y requiere atención pronta.',
+      source: 'Internal Medicine 1, Handout 12: Eczema (Shi Zhen).'
+    }
+  },
+  {
+    slug: 'psoriasis-patterns', title: { en: 'Psoriasis Pattern Differentiation', es: 'Diferenciación de la Psoriasis' },
+    summary: { en: 'Separate short-duration external Wind-Heat-Dampness from chronic Blood deficiency with Wind-Dryness.', es: 'Separa Viento-Calor-Humedad externo de corta duración de deficiencia crónica de Sangre con Viento-Sequedad.' },
+    focus: { en: 'Moist red acute lesions versus thick dry chronic plaques', es: 'Lesiones rojas húmedas agudas frente a placas gruesas secas crónicas' },
+    search: 'psoriasis ox hide tinea niu pi xian wind heat damp blood deficiency dryness xiao feng si wu xiao feng dang gui yin zi plaques scales',
+    en: {
+      intro: 'Duration and moisture distinguish the two source presentations; a biomedical diagnosis is important because fungal disease and eczema can resemble psoriasis.',
+      rows: [
+        ['External Wind-Heat-Dampness', 'Short duration with papules, redness, moistness/ulceration, scabs and yellow or greasy coat', 'Xiao Feng San', 'Dispel Wind, clear Heat and drain Dampness.'],
+        ['Blood deficiency with Wind-Dryness', 'Long duration with thickened dry peeling plaques, insomnia, dizziness, pale tongue and weak-thready pulse', 'Si Wu Xiao Feng Yin or Dang Gui Yin Zi', 'Nourish Blood, dispel Wind and moisten Dryness.'],
+      ],
+      rule: 'Short, red and moist maps to Wind-Heat-Dampness; chronic, thick and dry with pale deficiency signs maps to Blood-Dryness.',
+      memory: '<strong>New-red-wet—Wind/Heat/Damp; old-thick-dry—Blood deficiency.</strong>',
+      safety: 'Widespread redness, fever, pustules, severe pain, dehydration or rapid worsening can be erythrodermic/pustular psoriasis and requires urgent care. Joint pain may indicate psoriatic arthritis.',
+      source: 'Internal Medicine 1, Handout 12: Ox-Hide Tinea (Niu Pi Xian, Psoriasis).'
+    },
+    es: {
+      intro: 'Duración y humedad distinguen las dos presentaciones; diagnóstico biomédico es importante porque hongo y eczema pueden parecer psoriasis.',
+      rows: [
+        ['Viento-Calor-Humedad externo', 'Corta duración con pápulas, enrojecimiento, humedad/ulceración, costras y capa amarilla o grasosa', 'Xiao Feng San', 'Expulsar Viento, aclarar Calor y drenar Humedad.'],
+        ['Deficiencia de Sangre con Viento-Sequedad', 'Larga duración con placas gruesas, secas y descamativas, insomnio, mareo, lengua pálida y pulso débil-filiforme', 'Si Wu Xiao Feng Yin o Dang Gui Yin Zi', 'Nutrir Sangre, expulsar Viento y humedecer Sequedad.'],
+      ],
+      rule: 'Corto, rojo y húmedo corresponde a Viento-Calor-Humedad; crónico, grueso y seco con palidez corresponde a sequedad de Sangre.',
+      memory: '<strong>Nuevo-rojo-húmedo—Viento/Calor/Humedad; viejo-grueso-seco—Sangre deficiente.</strong>',
+      safety: 'Enrojecimiento extenso, fiebre, pústulas, dolor grave, deshidratación o empeoramiento rápido puede ser psoriasis eritrodérmica/pustulosa y requiere urgencias. Dolor articular puede ser artritis psoriásica.',
+      source: 'Internal Medicine 1, Handout 12: Ox-Hide Tinea (Niu Pi Xian, Psoriasis).'
+    }
+  },
+  {
+    slug: 'clove-sores-patterns', title: { en: 'Clove Sores (Furuncles) Comparison', es: 'Comparación de Clove Sores (Forúnculos)' },
+    summary: { en: 'Recognize the exuberant Fire-toxin presentation while screening for a drainable abscess or spreading infection.', es: 'Reconoce la presentación de toxina de Fuego exuberante mientras se descarta absceso que necesita drenaje o infección extendida.' },
+    focus: { en: 'Hard-rooted pustular lesion with local Heat and systemic infection signs', es: 'Lesión pustulosa de raíz dura con Calor local y signos sistémicos de infección' },
+    search: 'clove sores ding chuang furuncle boil abscess fire toxin huang lian jie du red hot swollen pustule fever',
+    en: {
+      intro: 'The source gives one principal pattern; clinically, the crucial distinction is a small localized boil versus abscess/cellulitis requiring drainage or antibiotics.',
+      rows: [
+        ['Exuberant Fire toxin', 'Small hard-rooted yellow/purple lesion becoming blister/pustule, red-hot swelling, pain/itch/numbness, fever, thirst and dark urine', 'Huang Lian Jie Du Tang', 'Historical strategy: clear Heat and resolve toxin.'],
+      ],
+      rule: 'A hard-centered lesion becoming red, hot, swollen and pustular corresponds to Fire toxin; spreading redness or fluctuance raises concern for abscess/cellulitis.',
+      memory: '<strong>Hard seed → hot red pustule = Fire-toxin sore.</strong>',
+      safety: 'Do not squeeze facial lesions. Rapid spread, severe pain, fever, red streaks, immune suppression or a soft/fluctuant center needs same-day care; many abscesses require incision and drainage.',
+      source: 'Internal Medicine 1, Handout 12: Clove Sores (Ding Chuang).'
+    },
+    es: {
+      intro: 'La fuente ofrece un patrón principal; clínicamente importa distinguir un forúnculo pequeño de absceso/celulitis que necesita drenaje o antibióticos.',
+      rows: [
+        ['Toxina de Fuego exuberante', 'Lesión amarilla/púrpura pequeña de raíz dura que se vuelve ampolla/pústula, hinchazón roja/caliente, dolor/prurito/entumecimiento, fiebre, sed y orina oscura', 'Huang Lian Jie Du Tang', 'Estrategia histórica: aclarar Calor y resolver toxina.'],
+      ],
+      rule: 'Lesión de centro duro que se vuelve roja, caliente, hinchada y pustulosa corresponde a toxina de Fuego; enrojecimiento extendido o fluctuación sugiere absceso/celulitis.',
+      memory: '<strong>Semilla dura → pústula roja/caliente = llaga por toxina de Fuego.</strong>',
+      safety: 'No exprimir lesiones faciales. Expansión rápida, dolor grave, fiebre, líneas rojas, inmunosupresión o centro blando/fluctuante necesita atención el mismo día; muchos abscesos requieren drenaje.',
+      source: 'Internal Medicine 1, Handout 12: Clove Sores (Ding Chuang).'
+    }
+  },
+  {
+    slug: 'flat-warts-patterns', title: { en: 'Flat Warts Pattern Differentiation', es: 'Diferenciación de las Verrugas Planas' },
+    summary: { en: 'Separate short-duration Wind-Heat from long-duration Liver Heat with Blood dryness.', es: 'Separa Viento-Calor de corta duración de Calor de Hígado con sequedad de Sangre de larga duración.' },
+    focus: { en: 'Duration plus exterior signs versus Liver constraint and Heat', es: 'Duración más signos exteriores frente a constreñimiento y Calor de Hígado' },
+    search: 'flat warts verruca plana bian ping you hpv wind heat liver heat blood dryness xiao feng tian ma gou teng',
+    en: {
+      intro: 'Duration and accompanying systemic signs distinguish the two source presentations; persistent lesions require confirmation that they are truly warts.',
+      rows: [
+        ['Wind-Heat', 'Flat warts of short duration with aversion to Wind, fever, thin yellow coat and floating-rapid pulse', 'Xiao Feng San', 'Dispel Wind, clear Heat and resolve toxin.'],
+        ['Liver Heat with Blood dryness', 'Long-standing warts with hypochondriac distention, bitter taste, irritability and wiry pulse', 'Tian Ma Gou Teng Yin', 'Soothe Liver, nourish Blood and moisten Dryness.'],
+      ],
+      rule: 'New lesions with exterior signs indicate Wind-Heat; chronic lesions with bitter-irritable Liver signs indicate Liver Heat/Blood dryness.',
+      memory: '<strong>New + exterior—Wind-Heat; old + bitter/irritable—Liver Heat.</strong>',
+      safety: 'A rapidly changing, bleeding, ulcerated, painful, pigmented or uncertain lesion needs dermatology assessment rather than wart treatment. Facial/genital lesions and immune suppression also warrant evaluation.',
+      source: 'Internal Medicine 1, Handout 12: Flat Warts (Bian Ping You).'
+    },
+    es: {
+      intro: 'Duración y signos sistémicos acompañantes distinguen las dos presentaciones; lesiones persistentes requieren confirmar que realmente sean verrugas.',
+      rows: [
+        ['Viento-Calor', 'Verrugas planas de corta duración con aversión al Viento, fiebre, capa amarilla fina y pulso flotante-rápido', 'Xiao Feng San', 'Expulsar Viento, aclarar Calor y resolver toxina.'],
+        ['Calor de Hígado con sequedad de Sangre', 'Verrugas de larga duración con distensión hipocondríaca, sabor amargo, irritabilidad y pulso de cuerda', 'Tian Ma Gou Teng Yin', 'Suavizar Hígado, nutrir Sangre y humedecer Sequedad.'],
+      ],
+      rule: 'Lesiones nuevas con exterior indica Viento-Calor; lesiones crónicas con signos amargos/irritables de Hígado indica Calor de Hígado/sequedad de Sangre.',
+      memory: '<strong>Nueva + exterior—Viento-Calor; vieja + amargo/irritable—Calor de Hígado.</strong>',
+      safety: 'Lesión que cambia rápido, sangra, ulcera, duele, es pigmentada o dudosa necesita dermatología, no tratamiento de verruga. Lesiones faciales/genitales e inmunosupresión también requieren evaluación.',
+      source: 'Internal Medicine 1, Handout 12: Flat Warts (Bian Ping You).'
+    }
   }
 ];
 
