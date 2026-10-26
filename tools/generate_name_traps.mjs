@@ -146,7 +146,7 @@ function esc(value) {
 
 function nav(es, current = false) {
   const suffix = es ? '-es' : '';
-  return `<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${suffix}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${suffix}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${suffix}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${suffix}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${suffix}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a href="dui-yao${suffix}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a><a${current ? ' aria-current="page"' : ''} href="name-traps${suffix}.html">${es ? 'Trampas de Nombres' : 'Name Traps'}</a></nav>`;
+  return `<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${suffix}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${suffix}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${suffix}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${suffix}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${suffix}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a href="dui-yao${suffix}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a><a${current ? ' aria-current="page"' : ''} href="name-traps${suffix}.html">${es ? 'Trampas de Nombres' : 'Name Traps'}</a><a href="herb-families${es ? '-es' : ''}.html">${es ? 'Familias y Partes' : 'Herb Families &amp; Parts'}</a></nav>`;
 }
 
 function detailPage(trap, language) {
