@@ -98,6 +98,33 @@
         (description || heading).insertAdjacentElement('afterend', panel);
     }
 
+    function addModuleSchoolPortal() {
+        const heading = [...document.querySelectorAll('h1, h2, h3')]
+            .find(element => normalise(element.textContent) === 'Your NCBAHM Board Preparation');
+        if (!heading || document.querySelector('.module-school-dashboard-link')) {
+            return;
+        }
+
+        const panel = document.createElement('aside');
+        panel.className = 'module-school-dashboard-panel';
+        panel.setAttribute('aria-label', 'Module School');
+        const text = document.createElement('div');
+        text.innerHTML = '<strong>Module School</strong><span>Integrated clinical modules combining patterns, herbs, formulas and acupuncture points.</span>';
+        const link = document.createElement('a');
+        link.className = 'module-school-dashboard-link';
+        link.href = '/blocks/myprogress/module-school.php';
+        link.textContent = 'Open Module School';
+        panel.append(text, link);
+
+        const continuingEducation = document.querySelector('.continuing-education-dashboard-panel');
+        if (continuingEducation) {
+            continuingEducation.insertAdjacentElement('afterend', panel);
+            return;
+        }
+        const description = heading.nextElementSibling;
+        (description || heading).insertAdjacentElement('afterend', panel);
+    }
+
     const style = document.createElement('style');
     style.textContent = `
         .study-guide-dashboard-link {
@@ -181,21 +208,67 @@
         .continuing-education-dashboard-link:hover,
         .continuing-education-dashboard-link:focus { background: #654391; }
         .continuing-education-dashboard-link:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
+        .module-school-dashboard-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            max-width: 1040px;
+            box-sizing: border-box;
+            margin: 18px auto 22px;
+            padding: 16px 18px;
+            border: 1px solid #b9d4e8;
+            border-left: 5px solid #176b9a;
+            border-radius: 11px;
+            background: #f4f9fc;
+            text-align: left;
+        }
+        .module-school-dashboard-panel strong,
+        .module-school-dashboard-panel span { display: block; }
+        .module-school-dashboard-panel span { margin-top: 3px; color: #52677a; font-size: .9rem; }
+        .module-school-dashboard-link {
+            display: inline-flex;
+            box-sizing: border-box;
+            min-height: 44px;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: #176b9a;
+            color: #fff !important;
+            font-weight: 800;
+            text-decoration: none !important;
+        }
+        .module-school-dashboard-link:hover,
+        .module-school-dashboard-link:focus { background: #115579; }
+        .module-school-dashboard-link:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
         @media (max-width: 650px) {
-            .continuing-education-dashboard-panel { align-items: stretch; flex-direction: column; margin: 16px 0 20px; }
-            .continuing-education-dashboard-link { width: 100%; }
+            .continuing-education-dashboard-panel,
+            .module-school-dashboard-panel { align-items: stretch; flex-direction: column; margin: 16px 0 20px; }
+            .continuing-education-dashboard-link,
+            .module-school-dashboard-link { width: 100%; }
         }
     `;
     document.head.append(style);
 
     addStudyGuideLinks();
     addContinuingEducationPortal();
-    document.addEventListener('DOMContentLoaded', () => { addStudyGuideLinks(); addContinuingEducationPortal(); }, {once: true});
+    addModuleSchoolPortal();
+    document.addEventListener('DOMContentLoaded', () => {
+        addStudyGuideLinks();
+        addContinuingEducationPortal();
+        addModuleSchoolPortal();
+    }, {once: true});
 
     let refreshTimer;
     const observer = new MutationObserver(() => {
         window.clearTimeout(refreshTimer);
-        refreshTimer = window.setTimeout(() => { addStudyGuideLinks(); addContinuingEducationPortal(); }, 80);
+        refreshTimer = window.setTimeout(() => {
+            addStudyGuideLinks();
+            addContinuingEducationPortal();
+            addModuleSchoolPortal();
+        }, 80);
     });
     observer.observe(document.documentElement, {childList: true, subtree: true});
 })();
