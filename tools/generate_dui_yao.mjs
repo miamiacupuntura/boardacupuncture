@@ -505,6 +505,256 @@ const pairs = [
       prep: 'Gān Cǎo tostada con miel puede enfatizar tonificación, pero el procesamiento debe coincidir con la fuente formulaica.',
       safety: 'Dosis grandes/prolongadas de Gān Cǎo pueden subir presión y bajar potasio; revisar diuréticos, corticosteroides, digoxina y enfermedad cardiovascular.'
     }
+  },
+  {
+    number: 21, slug: 'jie-geng-gan-cao-dui-yao', title: 'Jié Gěng + Gān Cǎo', characters: '桔梗 + 甘草',
+    category: { en: 'Benefit the Throat · Expel Pus', es: 'Beneficiar Garganta · Expulsar Pus' },
+    search: 'jie geng gan cao platycodon licorice sore throat hoarseness lung abscess diffuse lung expel pus jie geng tang',
+    en: {
+      mnemonic: 'The sore-throat duo.',
+      job: 'Benefit the throat, diffuse Lung Qi and expel phlegm or pus from the upper burner.',
+      roles: [['Jié Gěng', 'Carries the action upward, diffuses Lung Qi and expels phlegm and pus.'], ['Gān Cǎo', 'Soothes the throat, clears toxicity and moderates Jié Gěng.']],
+      clues: 'Sore throat, hoarseness or cough with thick sputum; classically also Lung abscess.',
+      formulas: 'Jié Gěng Tāng.',
+      trap: 'Jié Gěng opens and lifts toward the Lung and throat; it is not primarily a descending cough herb.',
+      prep: 'Use the processed form of Gān Cǎo specified by the formula source; do not assume honey-fried in every case.',
+      safety: 'Large or prolonged Gān Cǎo doses can raise blood pressure and lower potassium. Fever, chest pain, foul sputum, blood or breathing difficulty requires medical evaluation.'
+    },
+    es: {
+      mnemonic: 'El dúo para dolor de garganta.',
+      job: 'Beneficiar garganta, difundir Qi de Pulmón y expulsar flema o pus del Jiao superior.',
+      roles: [['Jié Gěng', 'Lleva acción hacia arriba, difunde Qi pulmonar y expulsa flema y pus.'], ['Gān Cǎo', 'Suaviza garganta, aclara toxicidad y modera Jié Gěng.']],
+      clues: 'Dolor de garganta, ronquera o tos con esputo espeso; clásicamente también absceso pulmonar.',
+      formulas: 'Jié Gěng Tāng.',
+      trap: 'Jié Gěng abre y eleva hacia Pulmón/garganta; no es principalmente hierba descendente para tos.',
+      prep: 'Usar la forma de Gān Cǎo indicada por la fuente; no asumir tostada con miel en todos los casos.',
+      safety: 'Dosis grandes/prolongadas de Gān Cǎo pueden subir presión y bajar potasio. Fiebre, dolor torácico, esputo fétido, sangre o disnea requiere evaluación.'
+    }
+  },
+  {
+    number: 22, slug: 'sheng-jiang-da-zao-dui-yao', title: 'Shēng Jiāng + Dà Zǎo', characters: '生姜 + 大枣',
+    category: { en: 'Harmonize Ying–Wei and the Middle', es: 'Armonizar Ying–Wei y el Centro' },
+    search: 'sheng jiang da zao fresh ginger jujube harmonize ying wei spleen stomach protect middle buffer harsh herbs gui zhi tang xiao chai hu xiao yao',
+    en: {
+      mnemonic: 'The house band that plays in half the formulas.',
+      job: 'Harmonize Ying and Wei, support the Spleen and Stomach and buffer harsher medicinals.',
+      roles: [['Shēng Jiāng', 'Warms and moves the Middle, disperses lightly and harmonizes Stomach Qi.'], ['Dà Zǎo', 'Tonifies and protects the Middle while nourishing the nutritive level.']],
+      clues: 'A supporting pair inside mixed formulas where the Exterior and Middle need harmonizing.',
+      formulas: 'Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn.',
+      trap: 'They are usually assistants, not the main treatment; identify what the rest of the formula is doing.',
+      prep: 'Slice Shēng Jiāng and split Dà Zǎo when directed so their constituents extract evenly.',
+      safety: 'Concentrated ginger requires caution with anticoagulants and bleeding disorders. Persistent vomiting, dehydration or severe abdominal pain requires assessment.'
+    },
+    es: {
+      mnemonic: 'La banda de casa que toca en media farmacopea.',
+      job: 'Armonizar Ying y Wei, apoyar Bazo/Estómago y amortiguar medicinas más fuertes.',
+      roles: [['Shēng Jiāng', 'Calienta y mueve Centro, dispersa suavemente y armoniza Qi de Estómago.'], ['Dà Zǎo', 'Tonifica y protege Centro mientras nutre nivel nutritivo.']],
+      clues: 'Pareja asistente en fórmulas mixtas donde Exterior y Centro necesitan armonización.',
+      formulas: 'Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn.',
+      trap: 'Suelen ser asistentes, no tratamiento principal; identificar el trabajo del resto de la fórmula.',
+      prep: 'Cortar Shēng Jiāng y abrir Dà Zǎo cuando se indique para extracción uniforme.',
+      safety: 'Jengibre concentrado exige cautela con anticoagulantes y trastornos hemorrágicos. Vómito persistente, deshidratación o dolor abdominal grave requiere evaluación.'
+    }
+  },
+  {
+    number: 23, slug: 'dang-gui-huang-qi-dui-yao', title: 'Dāng Guī + Huáng Qí', characters: '当归 + 黄芪',
+    category: { en: 'Supplement Qi to Generate Blood', es: 'Suplementar Qi para Generar Sangre' },
+    search: 'dang gui huang qi angelica astragalus qi generate blood 5 to 1 blood loss deficiency fever slow healing sores dang gui bu xue tang',
+    en: {
+      mnemonic: 'Five parts Qi make one part Blood.',
+      job: 'Use strongly supplemented Qi to generate Blood and support tissue recovery after loss or depletion.',
+      roles: [['Huáng Qí', 'At the large dose, powerfully drives Qi and production of new Blood.'], ['Dāng Guī', 'Supplies and nourishes the Blood material while gently moving it.']],
+      clues: 'Blood deficiency after blood loss, low-grade deficiency fever, fatigue or slow-healing sores.',
+      formulas: 'Dāng Guī Bǔ Xuè Tāng — Huáng Qí 5 : Dāng Guī 1.',
+      trap: 'The unusual 5:1 ratio is the exam key; equal doses miss the formula’s Qi-generates-Blood logic.',
+      prep: 'Preserve the classical dose relationship unless a qualified practitioner has a specific reason to modify it.',
+      safety: 'Screen anticoagulants/antiplatelets, diabetes medicines and immunosuppressants. Active or unexplained bleeding requires medical evaluation first.'
+    },
+    es: {
+      mnemonic: 'Cinco partes de Qi producen una de Sangre.',
+      job: 'Usar Qi fuertemente suplementado para generar Sangre y apoyar reparación tras pérdida o agotamiento.',
+      roles: [['Huáng Qí', 'En dosis grande impulsa con fuerza Qi y producción de Sangre nueva.'], ['Dāng Guī', 'Aporta y nutre material de Sangre mientras la mueve suavemente.']],
+      clues: 'Deficiencia de Sangre tras hemorragia, fiebre baja por deficiencia, fatiga o llagas que cicatrizan lento.',
+      formulas: 'Dāng Guī Bǔ Xuè Tāng — Huáng Qí 5 : Dāng Guī 1.',
+      trap: 'La proporción 5:1 es clave de examen; dosis iguales pierden lógica Qi-genera-Sangre.',
+      prep: 'Conservar relación clásica salvo razón específica de un profesional calificado para modificarla.',
+      safety: 'Revisar anticoagulantes/antiagregantes, antidiabéticos e inmunosupresores. Sangrado activo o inexplicado requiere evaluación primero.'
+    }
+  },
+  {
+    number: 24, slug: 'dang-gui-chuan-xiong-dui-yao', title: 'Dāng Guī + Chuān Xiōng', characters: '当归 + 川芎',
+    category: { en: 'Nourish and Invigorate Blood', es: 'Nutrir y Movilizar Sangre' },
+    search: 'dang gui chuan xiong angelica ligusticum moving half four substances nourish invigorate blood menses headache postpartum stasis fo shou san si wu tang',
+    en: {
+      mnemonic: 'The moving half of the Four Substances.',
+      job: 'Nourish and invigorate Blood, regulate menstruation and stop pain from deficiency with stasis.',
+      roles: [['Dāng Guī', 'Nourishes Blood while moving it gently and regulating menstruation.'], ['Chuān Xiōng', 'Moves Blood and Qi more strongly and reaches upward to the head.']],
+      clues: 'Irregular or painful periods, headache or postpartum pain with Blood deficiency and stasis.',
+      formulas: 'Fó Shǒu Sǎn; Sì Wù Tāng.',
+      trap: 'Dāng Guī supplies while Chuān Xiōng moves; too much movement is wrong when pure deficiency dominates.',
+      prep: 'Use within a balanced formula when deficiency and stasis coexist rather than treating all bleeding as stasis.',
+      safety: 'Screen warfarin, antiplatelets and bleeding disorders. Chuān Xiōng requires pregnancy caution; severe postpartum bleeding is an emergency.'
+    },
+    es: {
+      mnemonic: 'La mitad móvil de las Cuatro Sustancias.',
+      job: 'Nutrir y movilizar Sangre, regular menstruación y detener dolor por deficiencia con estasis.',
+      roles: [['Dāng Guī', 'Nutre Sangre mientras la mueve suavemente y regula menstruación.'], ['Chuān Xiōng', 'Mueve Sangre/Qi con más fuerza y alcanza cabeza.']],
+      clues: 'Reglas irregulares o dolorosas, cefalea o dolor posparto con deficiencia y estasis de Sangre.',
+      formulas: 'Fó Shǒu Sǎn; Sì Wù Tāng.',
+      trap: 'Dāng Guī aporta y Chuān Xiōng mueve; demasiado movimiento es incorrecto si domina deficiencia pura.',
+      prep: 'Usar en fórmula equilibrada cuando coexisten deficiencia y estasis, no tratar todo sangrado como estasis.',
+      safety: 'Revisar warfarina, antiagregantes y trastornos hemorrágicos. Chuān Xiōng exige cautela en embarazo; hemorragia posparto grave es emergencia.'
+    }
+  },
+  {
+    number: 25, slug: 'dang-gui-xiang-fu-dui-yao', title: 'Dāng Guī + Xiāng Fù', characters: '当归 + 香附',
+    category: { en: 'Regulate Qi, Blood and Menses', es: 'Regular Qi, Sangre y Menstruación' },
+    search: 'dang gui xiang fu angelica cyperus gynecology liver qi constraint blood menstrual pms breast distention painful irregular periods xiang fu si wu tang',
+    en: {
+      mnemonic: 'The gynecology pair: feed the Blood and free the stuck Qi.',
+      job: 'Regulate Qi and Blood, regulate menstruation and relieve pain from Liver-Qi constraint with Blood deficiency.',
+      roles: [['Dāng Guī', 'Nourishes and gently moves Blood to support the menstrual cycle.'], ['Xiāng Fù', 'Spreads constrained Liver Qi and strongly regulates menstruation.']],
+      clues: 'PMS, breast distention and painful or irregular periods linked to emotional constraint.',
+      formulas: 'Xiāng Fù Sì Wù Tāng — an off-list exemplar built on Sì Wù Tāng.',
+      trap: 'Compared with Dāng Guī + Chuān Xiōng, this pair emphasizes Qi constraint and emotional/menstrual distention.',
+      prep: 'Vinegar-processed Xiāng Fù may strengthen its Liver-channel and pain-regulating emphasis when specified.',
+      safety: 'Screen anticoagulants and bleeding disorders. New severe pelvic pain, fainting, pregnancy or heavy bleeding requires urgent evaluation.'
+    },
+    es: {
+      mnemonic: 'La pareja ginecológica: nutrir Sangre y liberar Qi atascado.',
+      job: 'Regular Qi y Sangre, regular menstruación y aliviar dolor por estancamiento de Qi hepático con deficiencia de Sangre.',
+      roles: [['Dāng Guī', 'Nutre y mueve suavemente Sangre para apoyar ciclo menstrual.'], ['Xiāng Fù', 'Dispersa Qi de Hígado constreñido y regula menstruación con fuerza.']],
+      clues: 'PMS, distensión mamaria y reglas dolorosas/irregulares relacionadas con tensión emocional.',
+      formulas: 'Xiāng Fù Sì Wù Tāng — ejemplo fuera de lista basado en Sì Wù Tāng.',
+      trap: 'Frente a Dāng Guī + Chuān Xiōng, enfatiza estancamiento de Qi y distensión emocional/menstrual.',
+      prep: 'Xiāng Fù procesada con vinagre puede reforzar énfasis en canal de Hígado y dolor cuando se especifica.',
+      safety: 'Revisar anticoagulantes y trastornos hemorrágicos. Dolor pélvico grave nuevo, síncope, embarazo o sangrado abundante requiere urgencia.'
+    }
+  },
+  {
+    number: 26, slug: 'ai-ye-e-jiao-dui-yao', title: 'Ài Yè + Ē Jiāo', characters: '艾叶 + 阿胶',
+    category: { en: 'Warm the Womb · Stop Bleeding', es: 'Calentar Útero · Detener Sangrado' },
+    search: 'ai ye e jiao mugwort donkey hide gelatin warm womb nourish blood stop bleeding calm fetus uterine bleeding spotting threatened miscarriage jiao ai tang',
+    en: {
+      mnemonic: 'Warm the womb and glue the leak.',
+      job: 'Warm the channels, nourish Blood, stop uterine bleeding and calm the fetus.',
+      roles: [['Ài Yè', 'Warms the womb and channels and stops bleeding from Cold.'], ['Ē Jiāo', 'Nourishes Blood and Yin and stops bleeding by enriching the deficient root.']],
+      clues: 'Uterine bleeding or spotting with Cold/deficiency signs; classically threatened miscarriage.',
+      formulas: 'Jiāo Ài Tāng.',
+      trap: 'The pair is for deficiency-Cold bleeding, not bright-red excess-Heat bleeding.',
+      prep: 'Melt Ē Jiāo into the strained hot decoction; do not boil it directly with the other herbs.',
+      safety: 'Bleeding during pregnancy requires obstetric co-management. Ē Jiāo is an animal product requiring authenticated, legal and ethically reviewed sourcing.'
+    },
+    es: {
+      mnemonic: 'Calentar el útero y pegar la fuga.',
+      job: 'Calentar canales, nutrir Sangre, detener sangrado uterino y calmar feto.',
+      roles: [['Ài Yè', 'Calienta útero/canales y detiene sangrado por Frío.'], ['Ē Jiāo', 'Nutre Sangre/Yin y detiene sangrado enriqueciendo raíz deficiente.']],
+      clues: 'Sangrado uterino o manchado con signos Frío/deficiencia; clásicamente amenaza de aborto.',
+      formulas: 'Jiāo Ài Tāng.',
+      trap: 'Es para sangrado por deficiencia-Frío, no sangrado rojo brillante por exceso-Calor.',
+      prep: 'Derretir Ē Jiāo en decocción caliente ya colada; no hervir directamente con otras hierbas.',
+      safety: 'Sangrado en embarazo exige manejo obstétrico conjunto. Ē Jiāo es producto animal que requiere procedencia autenticada, legal y ética.'
+    }
+  },
+  {
+    number: 27, slug: 'mai-men-dong-sha-shen-dui-yao', title: 'Mài Mén Dōng + Shā Shēn', characters: '麦门冬 + 沙参',
+    category: { en: 'Nourish Lung–Stomach Yin', es: 'Nutrir Yin de Pulmón–Estómago' },
+    search: 'mai men dong sha shen ophiopogon glehnia adenophora lung stomach yin dry cough mouth fluids moisten dryness sha shen mai men dong tang yi guan jian',
+    en: {
+      mnemonic: 'Two moist roots for a dry cough and dry mouth.',
+      job: 'Nourish Lung and Stomach Yin, generate fluids and moisten dryness.',
+      roles: [['Mài Mén Dōng', 'Enriches Lung, Stomach and Heart Yin while generating fluids.'], ['Shā Shēn', 'Nourishes Lung and Stomach Yin and clears deficiency Heat from dryness.']],
+      clues: 'Dry cough, dry throat or mouth, thirst and scanty sputum from injured fluids.',
+      formulas: 'Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān.',
+      trap: 'This is dry Yin/fluid injury, not Damp-Phlegm with a greasy coat and copious sputum.',
+      prep: 'Use verified Shā Shēn species and formula-specific preparation; regional products are not automatically interchangeable.',
+      safety: 'Shā Shēn is traditionally incompatible with Lí Lú. Use cautiously with marked Spleen deficiency, loose stools or Dampness.'
+    },
+    es: {
+      mnemonic: 'Dos raíces húmedas para tos y boca secas.',
+      job: 'Nutrir Yin de Pulmón/Estómago, generar líquidos y humedecer sequedad.',
+      roles: [['Mài Mén Dōng', 'Enriquece Yin de Pulmón, Estómago y Corazón mientras genera líquidos.'], ['Shā Shēn', 'Nutre Yin de Pulmón/Estómago y aclara Calor por deficiencia asociado a sequedad.']],
+      clues: 'Tos seca, garganta/boca seca, sed y esputo escaso por líquidos lesionados.',
+      formulas: 'Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān.',
+      trap: 'Es lesión seca de Yin/líquidos, no Flema-Humedad con capa grasosa y esputo copioso.',
+      prep: 'Usar especie verificada de Shā Shēn y preparación formulaica; productos regionales no son automáticamente intercambiables.',
+      safety: 'Shā Shēn es tradicionalmente incompatible con Lí Lú. Cautela con deficiencia marcada de Bazo, diarrea o Humedad.'
+    }
+  },
+  {
+    number: 28, slug: 'gou-qi-zi-ju-hua-dui-yao', title: 'Gǒu Qǐ Zǐ + Jú Huā', characters: '枸杞子 + 菊花',
+    category: { en: 'Nourish Liver–Kidney · Brighten Eyes', es: 'Nutrir Hígado–Riñón · Aclarar Ojos' },
+    search: 'gou qi zi ju hua goji chrysanthemum liver kidney yin dry blurry tired eyes dizziness qi ju di huang wan',
+    en: {
+      mnemonic: 'Goji feeds the eyes from below; chrysanthemum clears them from above.',
+      job: 'Nourish Liver and Kidney Yin and brighten deficient, dry or blurred eyes.',
+      roles: [['Gǒu Qǐ Zǐ', 'Nourishes Liver–Kidney Yin and Blood to support vision.'], ['Jú Huā', 'Clears mild Liver Heat and directly brightens the eyes.']],
+      clues: 'Dry, blurry or tired eyes with dizziness and other Liver–Kidney deficiency signs.',
+      formulas: 'Qǐ Jú Dì Huáng Wán.',
+      trap: 'Jú Huā with Gǒu Qǐ Zǐ treats deficient eyes; with Sāng Yè it treats excess Wind-Heat red eyes.',
+      prep: 'Add delicate Jú Huā late rather than subjecting it to an unnecessarily long boil.',
+      safety: 'Gǒu Qǐ Zǐ can interact with warfarin. Sudden vision loss, severe eye pain, halos or neurologic symptoms requires urgent evaluation.'
+    },
+    es: {
+      mnemonic: 'Goji nutre ojos desde abajo; crisantemo los aclara desde arriba.',
+      job: 'Nutrir Yin de Hígado/Riñón y aclarar ojos deficientes, secos o borrosos.',
+      roles: [['Gǒu Qǐ Zǐ', 'Nutre Yin y Sangre de Hígado–Riñón para apoyar visión.'], ['Jú Huā', 'Aclara Calor hepático leve y mejora ojos directamente.']],
+      clues: 'Ojos secos, borrosos o cansados con mareo y otros signos de deficiencia Hígado–Riñón.',
+      formulas: 'Qǐ Jú Dì Huáng Wán.',
+      trap: 'Jú Huā con Gǒu Qǐ Zǐ trata ojos deficientes; con Sāng Yè trata ojos rojos por exceso Viento-Calor.',
+      prep: 'Añadir Jú Huā delicada al final en vez de hervirla innecesariamente por largo tiempo.',
+      safety: 'Gǒu Qǐ Zǐ puede interactuar con warfarina. Pérdida visual súbita, dolor ocular grave, halos o signos neurológicos requiere urgencia.'
+    }
+  },
+  {
+    number: 29, slug: 'han-lian-cao-nu-zhen-zi-dui-yao', title: 'Hàn Lián Cǎo + Nǚ Zhēn Zǐ', characters: '旱莲草 + 女贞子',
+    category: { en: 'Gently Enrich Liver–Kidney Yin', es: 'Enriquecer Suavemente Yin Hígado–Riñón' },
+    search: 'han lian cao nu zhen zi eclipta privet two solstices liver kidney yin cool blood stop bleeding early graying dizziness er zhi wan',
+    en: {
+      mnemonic: 'The two solstices: eclipta in summer, privet in winter.',
+      job: 'Gently enrich Liver–Kidney Yin, cool the Blood and stop deficiency bleeding.',
+      roles: [['Hàn Lián Cǎo', 'Nourishes Liver–Kidney Yin, cools Blood and stops bleeding.'], ['Nǚ Zhēn Zǐ', 'Gently enriches Liver–Kidney Yin and improves deficient vision and dizziness.']],
+      clues: 'Early graying, dizziness, blurred vision or Yin-deficiency bleeding without severe cloying.',
+      formulas: 'Èr Zhì Wán — the formula is the pair.',
+      trap: 'This is a gentle two-herb Yin tonic, not the heavy anchoring shell strategy of Guī Bǎn + Biē Jiǎ.',
+      prep: 'Correct botanical identity matters because both fruits/herbs can be confused with regional substitutes.',
+      safety: 'Use cautiously with chronic loose stools or Spleen deficiency. Unexplained bleeding still requires medical diagnosis.'
+    },
+    es: {
+      mnemonic: 'Los dos solsticios: eclipta en verano y ligustro en invierno.',
+      job: 'Enriquecer suavemente Yin de Hígado–Riñón, enfriar Sangre y detener sangrado por deficiencia.',
+      roles: [['Hàn Lián Cǎo', 'Nutre Yin Hígado–Riñón, enfría Sangre y detiene sangrado.'], ['Nǚ Zhēn Zǐ', 'Enriquece suavemente Yin Hígado–Riñón y mejora visión/mareo por deficiencia.']],
+      clues: 'Canas tempranas, mareo, visión borrosa o sangrado por deficiencia Yin sin empalago intenso.',
+      formulas: 'Èr Zhì Wán — la fórmula es la pareja.',
+      trap: 'Es tónico Yin suave de dos hierbas, no estrategia pesada de conchas Guī Bǎn + Biē Jiǎ.',
+      prep: 'Identidad botánica correcta importa porque ambas pueden confundirse con sustitutos regionales.',
+      safety: 'Cautela con diarrea crónica o deficiencia Bazo. Sangrado inexplicado aún requiere diagnóstico médico.'
+    }
+  },
+  {
+    number: 30, slug: 'gui-ban-bie-jia-dui-yao', title: 'Guī Bǎn + Biē Jiǎ', characters: '龟板 + 鳖甲',
+    category: { en: 'Enrich Yin · Subdue Yang · Extinguish Wind', es: 'Enriquecer Yin · Someter Yang · Extinguir Viento' },
+    search: 'gui ban bie jia tortoise plastron turtle carapace two shells yin subdue yang deficiency wind steaming bones tremors late warm disease da ding feng zhu',
+    en: {
+      mnemonic: 'The two shells: build below and soften what is bound.',
+      job: 'Deeply enrich Yin, subdue Yang and extinguish deficiency Wind in late-stage depletion.',
+      roles: [['Guī Bǎn', 'Builds Kidney Yin, Essence and bones and anchors rising Yang.'], ['Biē Jiǎ', 'Clears deficiency Heat, enters the Liver and softens hard masses or clumping.']],
+      clues: 'Steaming-bone Heat, tremor or internal Wind late in warm disease with severe Yin depletion.',
+      formulas: 'Dà Dìng Fēng Zhū.',
+      trap: 'Biē Jiǎ with Guī Bǎn anchors deficiency Wind; with Qīng Hāo it vents lurking night fever.',
+      prep: 'Crush both shells and decoct them first before adding softer medicinals.',
+      safety: 'Both require pregnancy caution and authenticated legal/ethical sourcing. New tremor, weakness, confusion or seizure requires urgent medical evaluation.'
+    },
+    es: {
+      mnemonic: 'Las dos conchas: construir abajo y suavizar lo endurecido.',
+      job: 'Enriquecer Yin profundamente, someter Yang y extinguir Viento por deficiencia en agotamiento tardío.',
+      roles: [['Guī Bǎn', 'Construye Yin/Esencia de Riñón y huesos, y ancla Yang ascendente.'], ['Biē Jiǎ', 'Aclara Calor por deficiencia, entra en Hígado y suaviza masas/endurecimiento.']],
+      clues: 'Calor en huesos, temblor o Viento interno tardío en enfermedad caliente con agotamiento Yin grave.',
+      formulas: 'Dà Dìng Fēng Zhū.',
+      trap: 'Biē Jiǎ con Guī Bǎn ancla Viento por deficiencia; con Qīng Hāo ventila fiebre nocturna oculta.',
+      prep: 'Triturar ambas conchas y decoctarlas primero antes de añadir medicinas más blandas.',
+      safety: 'Ambas exigen cautela en embarazo y procedencia autenticada, legal y ética. Temblor nuevo, debilidad, confusión o convulsión requiere urgencia.'
+    }
   }
 ];
 
@@ -537,7 +787,7 @@ function indexPage(language) {
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Aprende las 51 parejas oficiales de Appendix B mediante una imagen, un trabajo conjunto, una fórmula firma y su seguridad. Biblioteca en lotes de 10.' : 'Learn all 51 official Appendix B pairs through one picture, one combined job, one signature formula and safety. Built in batches of 10.'}</p></section>
 <nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a></nav>
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 2 de 6' : 'Appendix B · Batch 2 of 6'}</div></footer></body></html>`;
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 3 de 6' : 'Appendix B · Batch 3 of 6'}</div></footer></body></html>`;
 }
 
 for (const pair of pairs) {
