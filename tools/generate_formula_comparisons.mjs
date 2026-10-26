@@ -1226,6 +1226,389 @@ cards.push(
   }
 );
 
+cards.push(
+  {
+    slug: 'er-chen-tang-vs-ban-xia-bai-zhu-tian-ma-tang', title: 'Er Chen Tang vs. Ban Xia Bai Zhu Tian Ma Tang',
+    category: 'Formulas that Transform Phlegm',
+    summary: 'Separate foundational Damp-Phlegm in the Lung and middle burner from Wind-Phlegm rising to the head.',
+    search: 'er chen tang ban xia bai zhu tian ma tang two cured pinellia atractylodes gastrodia damp phlegm wind phlegm dizziness vertigo cough sputum',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Er Chen Tang', 'Ban Xia Bai Zhu Tian Ma Tang'],
+      shared: 'Both dry Dampness, transform Phlegm and harmonize the Stomach; both may show nausea, chest fullness and a slippery pulse.',
+      fast: ['Damp-Phlegm remains in Lung/middle burner: cough with copious white sputum.', 'Damp-Phlegm generates internal Wind that rises: dizziness, vertigo and headache dominate.'],
+      rows: [
+        ['Primary target', 'General Damp-Phlegm from Spleen dysfunction.', 'Wind-Phlegm from Spleen deficiency rising to the head.'],
+        ['Distinct action', 'Regulates Qi and dries Dampness.', 'Strengthens Spleen and extinguishes Wind with Tian Ma.'],
+        ['Decisive clue', 'Cough and sputum.', 'Vertigo and headache.'],
+        ['Exam shortcut', 'Phlegm stays low.', 'Phlegm-Wind rises.']
+      ],
+      why: 'The second formula grows from an Er Chen-style core but adds Spleen support and Wind-extinguishing treatment for head symptoms.',
+      memory: '<strong>Er Chen dries Phlegm;</strong> <strong>Ban Xia Bai Zhu Tian Ma stops the spin.</strong>',
+      safety: 'Sudden severe vertigo with neurologic deficits, chest pain or inability to walk requires urgent assessment.',
+      prompts: ['Which formula is foundational for Damp-Phlegm?', 'Which treats Wind-Phlegm vertigo?', 'What role does Tian Ma signal?'],
+      source: 'Source bank: FWB 6.2 series, Comparison Formulas to Transform Phlegm; corroborated with individual profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Er Chen Tang', 'Ban Xia Bai Zhu Tian Ma Tang'],
+      shared: 'Ambas secan Humedad, transforman Flema y armonizan Estómago; pueden mostrar náusea, plenitud torácica y pulso resbaladizo.',
+      fast: ['Humedad-Flema en Pulmón/Jiao Medio: tos con esputo blanco abundante.', 'Humedad-Flema genera Viento interno ascendente: predominan mareo, vértigo y cefalea.'],
+      rows: [
+        ['Objetivo', 'Humedad-Flema general por disfunción de Bazo.', 'Viento-Flema por deficiencia de Bazo que asciende a cabeza.'],
+        ['Acción distintiva', 'Regula Qi y seca Humedad.', 'Fortalece Bazo y extingue Viento con Tian Ma.'],
+        ['Pista decisiva', 'Tos y esputo.', 'Vértigo y cefalea.'],
+        ['Atajo', 'Flema queda abajo.', 'Flema-Viento asciende.']
+      ],
+      why: 'La segunda crece sobre un núcleo tipo Er Chen y añade apoyo de Bazo y extinción de Viento para síntomas cefálicos.',
+      memory: '<strong>Er Chen seca Flema;</strong> <strong>Ban Xia Bai Zhu Tian Ma detiene el giro.</strong>',
+      safety: 'Vértigo súbito grave con déficit neurológico, dolor torácico o incapacidad para caminar exige urgencia.',
+      prompts: ['¿Cuál es base para Humedad-Flema?', '¿Cuál trata vértigo por Viento-Flema?', '¿Qué señala Tian Ma?'],
+      source: 'Banco fuente: serie FWB 6.2, Comparison Formulas to Transform Phlegm; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'si-ni-san-vs-xiao-yao-san', title: 'Si Ni San vs. Xiao Yao San',
+    category: 'Formulas that Harmonize',
+    summary: 'Separate constrained Yang with cold extremities from Liver-Qi constraint complicated by Spleen and Blood deficiency.',
+    search: 'si ni san xiao yao san frigid extremities powder rambling liver qi constraint spleen blood deficiency cold hands feet emotional pms',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Si Ni San', 'Xiao Yao San'],
+      shared: 'Both spread Liver Qi, harmonize Liver and Spleen, and share Chai Hu, Bai Shao and Gan Cao.',
+      fast: ['Constraint blocks Yang from reaching extremities: cold fingers/toes, abdominal pain and a wiry pulse.', 'Constraint occurs with deficiency: emotional/PMS signs, fatigue, poor appetite and a wiry-weak pulse.'],
+      rows: [
+        ['Pattern character', 'More constrained/excess.', 'More deficient and chronic.'],
+        ['Distinct action', 'Unbinds constrained Yang and regulates the pivot.', 'Nourishes Blood and strengthens Spleen while moving Liver Qi.'],
+        ['Decisive clue', 'Cold extremities with a warm trunk.', 'Mood and menstrual symptoms with digestive weakness.'],
+        ['Exam shortcut', 'Qi cannot reach the limbs.', 'Liver constraint drains Spleen and Blood.']
+      ],
+      why: 'Shared herbs and Liver-Spleen language make them easy to confuse. Cold extremities signal Si Ni San; deficiency and menstrual/emotional context signal Xiao Yao San.',
+      memory: '<strong>Si Ni frees trapped Yang;</strong> <strong>Xiao Yao frees Liver while rebuilding.</strong>',
+      safety: 'New severe abdominal pain, fainting or cold extremities with systemic collapse requires urgent medical assessment.',
+      prompts: ['Which formula has cold fingers and toes?', 'Which adds Spleen and Blood support?', 'Which pulse reflects combined constraint and deficiency?'],
+      source: 'Source bank: FWB 4.2 series, Comparison Formulas to Harmonize; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Si Ni San', 'Xiao Yao San'],
+      shared: 'Ambas difunden Qi de Hígado, armonizan Hígado-Bazo y comparten Chai Hu, Bai Shao y Gan Cao.',
+      fast: ['Estancamiento bloquea Yang hacia extremidades: dedos fríos, dolor abdominal y pulso de cuerda.', 'Estancamiento con deficiencia: signos emocionales/SPM, fatiga, poco apetito y pulso cuerda-débil.'],
+      rows: [
+        ['Carácter', 'Más constreñido/exceso.', 'Más deficiente y crónico.'],
+        ['Acción distintiva', 'Desata Yang constreñido y regula bisagra.', 'Nutre Sangre y fortalece Bazo mientras mueve Qi de Hígado.'],
+        ['Pista decisiva', 'Extremidades frías con tronco caliente.', 'Ánimo y menstruación con debilidad digestiva.'],
+        ['Atajo', 'Qi no llega a miembros.', 'Estancamiento agota Bazo y Sangre.']
+      ],
+      why: 'Hierbas y lenguaje Hígado-Bazo coinciden. Extremidades frías señalan Si Ni; deficiencia y contexto menstrual/emocional señalan Xiao Yao.',
+      memory: '<strong>Si Ni libera Yang atrapado;</strong> <strong>Xiao Yao libera Hígado mientras reconstruye.</strong>',
+      safety: 'Dolor abdominal grave nuevo, desmayo o extremidades frías con colapso sistémico exige urgencia.',
+      prompts: ['¿Cuál presenta dedos fríos?', '¿Cuál añade apoyo de Bazo y Sangre?', '¿Qué pulso muestra estancamiento con deficiencia?'],
+      source: 'Banco fuente: serie FWB 4.2, Comparison Formulas to Harmonize; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'gan-mai-da-zao-tang-vs-xiao-yao-san', title: 'Gan Mai Da Zao Tang vs. Xiao Yao San',
+    category: 'Formulas that Harmonize / Calm the Spirit',
+    summary: 'Separate Zang Zao emotional instability from Liver-Qi constraint with Spleen-Blood deficiency.',
+    search: 'gan mai da zao tang xiao yao san licorice wheat jujube rambling zang zao restless organ crying yawning liver qi constraint spleen blood',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Gan Mai Da Zao Tang', 'Xiao Yao San'],
+      shared: 'Both may treat emotional lability, irritability, anxiety and symptoms influenced by stress.',
+      fast: ['Zang Zao: unexplained crying, frequent yawning, restlessness and inability to control emotions.', 'Liver-Qi constraint: mood changes with rib-side distention, PMS and digestive weakness.'],
+      rows: [
+        ['Primary action', 'Nourishes the Heart, calms the Spirit and harmonizes the middle.', 'Spreads Liver Qi, strengthens Spleen and nourishes Blood.'],
+        ['Decisive clue', 'Crying/yawning emotional episodes.', 'Menstrual, rib-side and appetite clues.'],
+        ['Pattern focus', 'Heart/Spirit nourishment.', 'Liver-Spleen-Blood disharmony.'],
+        ['Exam shortcut', 'Emotion spills over.', 'Emotion is constrained.']
+      ],
+      why: 'Both can appear as stress-related mood disturbance. The classic crying/yawning picture is Gan Mai Da Zao; Liver-Spleen signs are Xiao Yao.',
+      memory: '<strong>Gan Mai Da Zao comforts the Heart;</strong> <strong>Xiao Yao releases the Liver.</strong>',
+      safety: 'Severe depression, mania, psychosis, suicidality or abrupt behavioral change requires mental-health evaluation.',
+      prompts: ['Which formula treats Zang Zao?', 'Which links mood to PMS and digestion?', 'What classic behavior points to Gan Mai Da Zao Tang?'],
+      source: 'Source bank: FWB 13.1 and harmonizing comparisons; corroborated with formula references.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Gan Mai Da Zao Tang', 'Xiao Yao San'],
+      shared: 'Ambas pueden tratar labilidad emocional, irritabilidad, ansiedad y síntomas influidos por estrés.',
+      fast: ['Zang Zao: llanto inexplicado, bostezos frecuentes, inquietud y emociones incontrolables.', 'Estancamiento de Qi de Hígado: ánimo con distensión costal, SPM y debilidad digestiva.'],
+      rows: [
+        ['Acción principal', 'Nutre Corazón, calma Shen y armoniza centro.', 'Difunde Qi de Hígado, fortalece Bazo y nutre Sangre.'],
+        ['Pista decisiva', 'Episodios de llanto/bostezo.', 'Pistas menstruales, costales y de apetito.'],
+        ['Enfoque', 'Nutrición de Corazón/Shen.', 'Desarmonía Hígado-Bazo-Sangre.'],
+        ['Atajo', 'La emoción se derrama.', 'La emoción está constreñida.']
+      ],
+      why: 'Ambas parecen alteración emocional por estrés. Llanto/bostezo clásico es Gan Mai Da Zao; signos Hígado-Bazo son Xiao Yao.',
+      memory: '<strong>Gan Mai Da Zao consuela Corazón;</strong> <strong>Xiao Yao libera Hígado.</strong>',
+      safety: 'Depresión grave, manía, psicosis, ideas suicidas o cambio conductual abrupto requieren evaluación de salud mental.',
+      prompts: ['¿Cuál trata Zang Zao?', '¿Cuál une ánimo con SPM y digestión?', '¿Qué conducta clásica señala Gan Mai Da Zao?'],
+      source: 'Banco fuente: FWB 13.1 y comparaciones de armonización; corroborado con referencias.'
+    }
+  },
+  {
+    slug: 'wu-ling-san-vs-zhen-wu-tang', title: 'Wu Ling San vs. Zhen Wu Tang',
+    category: 'Formulas that Drain Dampness',
+    summary: 'Separate impaired Bladder Qi transformation from deeper Spleen-Kidney Yang deficiency with water accumulation.',
+    search: 'wu ling san zhen wu tang five ingredient poria true warrior water accumulation bladder qi transformation spleen kidney yang deficiency edema urinary',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Wu Ling San', 'Zhen Wu Tang'],
+      shared: 'Both warm and transform water metabolism and may treat edema, urinary difficulty, dizziness or palpitations.',
+      fast: ['Bladder Qi transformation fails, often in a Taiyang pattern; thirst and urinary difficulty dominate.', 'Spleen-Kidney Yang deficiency is deeper; Cold, edema, heaviness and loose stools dominate.'],
+      rows: [
+        ['Depth', 'Functional water regulation at Bladder/Taiyang level.', 'Constitutional Yang deficiency with retained water.'],
+        ['Primary action', 'Promotes urination and transforms Qi.', 'Warms Yang and promotes urination.'],
+        ['Decisive clue', 'Thirst but fluids are not transformed properly.', 'Cold limbs, abdominal pain, heaviness and weakness.'],
+        ['Exam shortcut', 'Water gate will not open.', 'Fire is too weak to move water.']
+      ],
+      why: 'Both drain water, but Zhen Wu Tang is chosen when the warming/tonifying need is deeper and more systemic.',
+      memory: '<strong>Wu Ling opens transformation;</strong> <strong>Zhen Wu rekindles Yang to move water.</strong>',
+      safety: 'Zhen Wu Tang contains Fu Zi and requires processed material and professional supervision. Acute urinary retention or breathlessness with edema needs urgent care.',
+      prompts: ['Which formula emphasizes Bladder Qi transformation?', 'Which treats Spleen-Kidney Yang deficiency?', 'What Cold signs point to Zhen Wu Tang?'],
+      source: 'Source bank: FWB 5.2 series, Comparison Formulas to Expel Damp; corroborated with individual profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Wu Ling San', 'Zhen Wu Tang'],
+      shared: 'Ambas calientan y transforman metabolismo de agua con edema, dificultad urinaria, mareo o palpitaciones.',
+      fast: ['Falla transformación de Qi de Vejiga, a menudo Taiyang; predominan sed y dificultad urinaria.', 'Deficiencia profunda de Yang Bazo-Riñón; predominan Frío, edema, pesadez y heces blandas.'],
+      rows: [
+        ['Profundidad', 'Regulación funcional de agua en Vejiga/Taiyang.', 'Deficiencia constitucional de Yang con agua retenida.'],
+        ['Acción', 'Promueve micción y transforma Qi.', 'Calienta Yang y promueve micción.'],
+        ['Pista decisiva', 'Sed pero líquidos no se transforman.', 'Extremidades frías, dolor abdominal, pesadez y debilidad.'],
+        ['Atajo', 'La compuerta de agua no abre.', 'El fuego es muy débil para mover agua.']
+      ],
+      why: 'Ambas drenan agua; Zhen Wu se elige cuando calentar/tonificar es más profundo y sistémico.',
+      memory: '<strong>Wu Ling abre transformación;</strong> <strong>Zhen Wu reaviva Yang para mover agua.</strong>',
+      safety: 'Zhen Wu contiene Fu Zi y requiere material procesado y supervisión. Retención urinaria aguda o disnea con edema requiere urgencia.',
+      prompts: ['¿Cuál enfatiza transformación de Vejiga?', '¿Cuál trata Yang deficiente de Bazo-Riñón?', '¿Qué signos de Frío señalan Zhen Wu?'],
+      source: 'Banco fuente: serie FWB 5.2, Comparison Formulas to Expel Damp; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'xiao-jian-zhong-tang-vs-li-zhong-wan', title: 'Xiao Jian Zhong Tang vs. Li Zhong Wan',
+    category: 'Formulas that Warm the Interior',
+    summary: 'Separate deficiency abdominal spasm needing Yin-Yang harmonization from straightforward middle-burner deficiency-Cold.',
+    search: 'xiao jian zhong tang li zhong wan minor construct middle regulate middle abdominal pain spasm deficiency cold spleen stomach diarrhea vomiting yi tang',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Xiao Jian Zhong Tang', 'Li Zhong Wan'],
+      shared: 'Both warm and strengthen the middle burner and can treat deficiency abdominal pain relieved by warmth and pressure.',
+      fast: ['Spasmodic pain from deficiency and disharmony of Yin-Yang/Qi-Blood; palpitations or spontaneous sweating may occur.', 'Spleen-Stomach deficiency-Cold with vomiting, watery diarrhea and loss of appetite.'],
+      rows: [
+        ['Primary emphasis', 'Warm, nourish and relax spasm with Yi Tang and Bai Shao.', 'Warm and tonify while drying middle-burner Cold-Damp.'],
+        ['Decisive clue', 'Intermittent cramping pain.', 'Persistent digestive Cold with vomiting/diarrhea.'],
+        ['Formula character', 'Sweeter and more nourishing.', 'Warmer and drier.'],
+        ['Exam shortcut', 'Deficient spasm.', 'Deficient Cold digestion.']
+      ],
+      why: 'Both improve pain with warmth/pressure. Spasm and nourishment point to Xiao Jian Zhong; dominant vomiting-diarrhea points to Li Zhong.',
+      memory: '<strong>Xiao Jian Zhong softens the cramp;</strong> <strong>Li Zhong warms the digestive center.</strong>',
+      safety: 'Severe, rigid or worsening abdominal pain, fever, bleeding or inability to pass stool/gas requires urgent assessment.',
+      prompts: ['Which formula uses Yi Tang for deficient spasm?', 'Which better fits vomiting and watery diarrhea?', 'How does formula character differ?'],
+      source: 'Source bank: FWB 7.1 comparisons and Classic Formulas profiles; corroborated with individual files.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Xiao Jian Zhong Tang', 'Li Zhong Wan'],
+      shared: 'Ambas calientan y fortalecen Jiao Medio y tratan dolor deficiente mejorado por calor y presión.',
+      fast: ['Dolor espasmódico por deficiencia/desarmonía Yin-Yang/Qi-Sangre; puede haber palpitaciones o sudor.', 'Frío por deficiencia Bazo-Estómago con vómito, diarrea acuosa y poco apetito.'],
+      rows: [
+        ['Énfasis', 'Calentar, nutrir y relajar espasmo con Yi Tang y Bai Shao.', 'Calentar/tonificar mientras seca Frío-Humedad del centro.'],
+        ['Pista decisiva', 'Dolor cólico intermitente.', 'Frío digestivo persistente con vómito/diarrea.'],
+        ['Carácter', 'Más dulce y nutritiva.', 'Más caliente y seca.'],
+        ['Atajo', 'Espasmo deficiente.', 'Digestión fría-deficiente.']
+      ],
+      why: 'Ambas mejoran con calor/presión. Espasmo y nutrición señalan Xiao Jian Zhong; vómito-diarrea dominante señala Li Zhong.',
+      memory: '<strong>Xiao Jian Zhong suaviza cólico;</strong> <strong>Li Zhong calienta centro digestivo.</strong>',
+      safety: 'Dolor rígido, grave o progresivo, fiebre, sangrado o no expulsar heces/gases requiere urgencia.',
+      prompts: ['¿Cuál usa Yi Tang para espasmo deficiente?', '¿Cuál encaja con vómito y diarrea acuosa?', '¿Cómo difiere el carácter?'],
+      source: 'Banco fuente: comparaciones FWB 7.1 y perfiles Classic Formulas; corroborado con archivos individuales.'
+    }
+  },
+  {
+    slug: 'xie-xin-tang-vs-ban-xia-xie-xin-tang', title: 'Xie Xin Tang vs. Ban Xia Xie Xin Tang',
+    category: 'Clear Heat / Harmonize',
+    summary: 'Separate pure excess Heat causing epigastric fullness from mixed Cold-Heat binding the epigastrium.',
+    search: 'xie xin tang ban xia xie xin tang drain epigastrium three yellows mixed cold heat focal distention bleeding vomiting diarrhea',
+    en: {
+      eyebrow: 'Formula name trap', names: ['Xie Xin Tang', 'Ban Xia Xie Xin Tang'],
+      shared: 'Both may present with epigastric focal distention and use bitter medicinals to drain pathological Heat downward.',
+      fast: ['Pure excess Heat/Fire: irritability, red face, possible bleeding and a rapid-forceful pulse.', 'Mixed Cold-Heat with middle deficiency: nausea, vomiting, borborygmus and diarrhea.'],
+      rows: [
+        ['Mechanism', 'Excess Fire obstructs and agitates the upper/middle burner.', 'Cold and Heat bind with Stomach rebellion and Spleen deficiency.'],
+        ['Primary action', 'Drains Fire and clears Heat.', 'Harmonizes Cold-Heat and opens the epigastric bind.'],
+        ['Decisive clue', 'Heat signs and possible bleeding.', 'Above-below digestive disharmony.'],
+        ['Exam shortcut', 'Three Huang clear Fire.', 'Ban Xia joins Huang herbs for a mixed knot.']
+      ],
+      why: 'The shared “Xie Xin” name and fullness clue conceal opposite complexity: one is pure Heat, the other mixed Cold-Heat with deficiency.',
+      memory: '<strong>Xie Xin drains Fire;</strong> <strong>Ban Xia Xie Xin unties mixed Cold-Heat.</strong>',
+      safety: 'Vomiting blood, black stools, severe pain or persistent vomiting requires urgent medical evaluation.',
+      prompts: ['Which formula is the Three-Yellows Heat formula?', 'Which treats mixed Cold-Heat?', 'What digestive signs point to Ban Xia Xie Xin Tang?'],
+      source: 'Source bank: FWB 2.2 and FWB 4.2 comparisons; corroborated with individual formula files.'
+    },
+    es: {
+      eyebrow: 'Trampa de nombres de fórmulas', names: ['Xie Xin Tang', 'Ban Xia Xie Xin Tang'],
+      shared: 'Ambas pueden mostrar distensión epigástrica focal y usan sustancias amargas para drenar Calor hacia abajo.',
+      fast: ['Calor/Fuego de exceso puro: irritabilidad, cara roja, posible sangrado y pulso rápido-fuerte.', 'Frío-Calor mixtos con deficiencia central: náusea, vómito, borborigmos y diarrea.'],
+      rows: [
+        ['Mecanismo', 'Fuego de exceso obstruye/agita Jiao Superior-Medio.', 'Frío y Calor se ligan con rebeldía de Estómago y Bazo deficiente.'],
+        ['Acción', 'Drena Fuego y elimina Calor.', 'Armoniza Frío-Calor y abre ligadura epigástrica.'],
+        ['Pista decisiva', 'Signos de Calor y posible sangrado.', 'Desarmonía digestiva arriba-abajo.'],
+        ['Atajo', 'Tres Huang eliminan Fuego.', 'Ban Xia se une a Huang para nudo mixto.']
+      ],
+      why: 'Nombre Xie Xin y plenitud coinciden, pero una es Calor puro y la otra Frío-Calor mixtos con deficiencia.',
+      memory: '<strong>Xie Xin drena Fuego;</strong> <strong>Ban Xia Xie Xin desata Frío-Calor mixtos.</strong>',
+      safety: 'Vómito con sangre, heces negras, dolor grave o vómito persistente exige urgencia.',
+      prompts: ['¿Cuál es fórmula de Tres Amarillos?', '¿Cuál trata Frío-Calor mixtos?', '¿Qué signos digestivos señalan Ban Xia Xie Xin?'],
+      source: 'Banco fuente: comparaciones FWB 2.2 y FWB 4.2; corroborado con archivos individuales.'
+    }
+  },
+  {
+    slug: 'tao-he-cheng-qi-tang-vs-gui-zhi-fu-ling-wan', title: 'Tao He Cheng Qi Tang vs. Gui Zhi Fu Ling Wan',
+    category: 'Formulas that Invigorate Blood',
+    summary: 'Separate acute lower-burner Blood stasis with Heat from a more chronic uterine Blood-stasis mass.',
+    search: 'tao he cheng qi tang gui zhi fu ling wan peach pit order qi cinnamon poria lower burner blood stasis heat uterine mass amenorrhea bleeding',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Tao He Cheng Qi Tang', 'Gui Zhi Fu Ling Wan'],
+      shared: 'Both invigorate Blood and treat lower-abdominal Blood stasis with pain, menstrual obstruction or irregular bleeding.',
+      fast: ['Stasis plus Heat is acute/forceful: lower-abdominal urgency, night fever, irritability or delirium, with normal urination.', 'Stasis forms a chronic mass: fixed pelvic fullness, pain or persistent uterine bleeding.'],
+      rows: [
+        ['Primary mechanism', 'Blood stasis and Heat bind in lower burner.', 'Blood stasis obstructs the womb and forms a mass.'],
+        ['Distinct action', 'Breaks stasis and purges Heat downward.', 'Gradually dispels stasis and reduces masses.'],
+        ['Formula clue', 'Contains Da Huang and Mang Xiao.', 'Uses balanced warming/moving and cooling Blood herbs.'],
+        ['Exam shortcut', 'Hot, acute stasis.', 'Chronic stasis mass.']
+      ],
+      why: 'Both act in the lower abdomen. Heat and purgation point to Tao He Cheng Qi; a stable mass/persistent bleeding points to Gui Zhi Fu Ling.',
+      memory: '<strong>Tao He Cheng Qi purges hot stasis;</strong> <strong>Gui Zhi Fu Ling resolves the mass.</strong>',
+      safety: 'Both require pregnancy screening; Tao He Cheng Qi is strongly purgative. Acute pelvic pain, pregnancy bleeding or heavy hemorrhage requires urgent care.',
+      prompts: ['Which formula combines Blood movement with purgation?', 'Which focuses on a chronic mass?', 'What Heat signs indicate Tao He Cheng Qi Tang?'],
+      source: 'Source bank: FWB 10.1 comparisons; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Tao He Cheng Qi Tang', 'Gui Zhi Fu Ling Wan'],
+      shared: 'Ambas vigorizan Sangre y tratan estasis inferior con dolor, obstrucción menstrual o sangrado irregular.',
+      fast: ['Estasis más Calor aguda/fuerte: urgencia abdominal inferior, fiebre nocturna, irritabilidad o delirio, micción normal.', 'Estasis forma masa crónica: plenitud pélvica fija, dolor o sangrado uterino persistente.'],
+      rows: [
+        ['Mecanismo', 'Estasis y Calor se ligan en Jiao Inferior.', 'Estasis obstruye útero y forma masa.'],
+        ['Acción distintiva', 'Rompe estasis y purga Calor hacia abajo.', 'Dispersa gradualmente estasis y reduce masas.'],
+        ['Pista de fórmula', 'Contiene Da Huang y Mang Xiao.', 'Equilibra hierbas calientes/móviles y enfriadoras de Sangre.'],
+        ['Atajo', 'Estasis caliente aguda.', 'Masa crónica por estasis.']
+      ],
+      why: 'Ambas actúan abajo. Calor y purgación señalan Tao He; masa estable/sangrado persistente señalan Gui Zhi Fu Ling.',
+      memory: '<strong>Tao He Cheng Qi purga estasis caliente;</strong> <strong>Gui Zhi Fu Ling resuelve masa.</strong>',
+      safety: 'Ambas requieren evaluar embarazo; Tao He Cheng Qi purga fuertemente. Dolor pélvico agudo, sangrado en embarazo o hemorragia exige urgencia.',
+      prompts: ['¿Cuál combina mover Sangre con purgar?', '¿Cuál se centra en masa crónica?', '¿Qué Calor indica Tao He Cheng Qi?'],
+      source: 'Banco fuente: comparaciones FWB 10.1; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'sheng-hua-tang-vs-wen-jing-tang', title: 'Sheng Hua Tang vs. Wen Jing Tang',
+    category: 'Formulas that Invigorate Blood / Warm the Menses',
+    summary: 'Separate postpartum Cold and retained lochia from chronic Uterine Cold with Blood deficiency and stasis.',
+    search: 'sheng hua tang wen jing tang generation transformation warm menses postpartum retained lochia uterine cold blood deficiency stasis abdominal pain irregular menstruation',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Sheng Hua Tang', 'Wen Jing Tang'],
+      shared: 'Both warm, nourish and invigorate Blood for lower-abdominal pain from Cold and stasis.',
+      fast: ['Immediate postpartum context: retained lochia, bleeding with clots and abdominal pain.', 'Chronic menstrual/reproductive context: irregular cycles, infertility, Cold and Blood deficiency.'],
+      rows: [
+        ['Timing', 'After childbirth.', 'Chronic gynecologic pattern.'],
+        ['Primary action', 'Transforms and generates new Blood while expelling retained stasis.', 'Warms channels, disperses Cold, nourishes Blood and regulates menses.'],
+        ['Decisive clue', 'Postpartum lochia and pain.', 'Long-standing cycle irregularity with Cold-deficiency signs.'],
+        ['Exam shortcut', 'Postpartum old Blood out, new Blood in.', 'Warm the channel for chronic regulation.']
+      ],
+      why: 'The actions overlap, but timing is decisive. Sheng Hua Tang is postpartum; Wen Jing Tang is a broader chronic uterine Cold-deficiency pattern.',
+      memory: '<strong>Sheng Hua transforms after birth;</strong> <strong>Wen Jing warms the menstrual channel.</strong>',
+      safety: 'Postpartum hemorrhage, fever, foul lochia, dizziness or severe pain requires urgent obstetric evaluation.',
+      prompts: ['Which formula is postpartum-specific?', 'Which treats chronic Uterine Cold?', 'What does retained lochia indicate?'],
+      source: 'Source bank: FWB 10.1 and FWB 11.1 comparisons; corroborated with individual formula files.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Sheng Hua Tang', 'Wen Jing Tang'],
+      shared: 'Ambas calientan, nutren y vigorizan Sangre para dolor inferior por Frío y estasis.',
+      fast: ['Contexto posparto inmediato: loquios retenidos, sangrado con coágulos y dolor.', 'Contexto menstrual/reproductivo crónico: ciclos irregulares, infertilidad, Frío y Sangre deficiente.'],
+      rows: [
+        ['Momento', 'Después del parto.', 'Patrón ginecológico crónico.'],
+        ['Acción', 'Transforma/genera Sangre nueva mientras expulsa estasis retenida.', 'Calienta canales, dispersa Frío, nutre Sangre y regula menstruación.'],
+        ['Pista decisiva', 'Loquios y dolor posparto.', 'Irregularidad crónica con Frío-deficiencia.'],
+        ['Atajo', 'Posparto: sale Sangre vieja, entra nueva.', 'Calentar canal para regulación crónica.']
+      ],
+      why: 'Acciones coinciden, pero el momento decide. Sheng Hua es posparto; Wen Jing es patrón crónico de Frío-deficiencia uterina.',
+      memory: '<strong>Sheng Hua transforma tras parto;</strong> <strong>Wen Jing calienta canal menstrual.</strong>',
+      safety: 'Hemorragia posparto, fiebre, loquios fétidos, mareo o dolor grave exige evaluación obstétrica urgente.',
+      prompts: ['¿Cuál es específica posparto?', '¿Cuál trata Frío uterino crónico?', '¿Qué indican loquios retenidos?'],
+      source: 'Banco fuente: comparaciones FWB 10.1 y FWB 11.1; corroborado con archivos individuales.'
+    }
+  },
+  {
+    slug: 'xiang-ru-san-vs-huo-xiang-zheng-qi-san', title: 'Xiang Ru San vs. Huo Xiang Zheng Qi San',
+    category: 'Release the Exterior / Transform Dampness',
+    summary: 'Separate summer Wind-Cold with Dampness at the Exterior from stronger middle-burner Dampness with digestive rebellion.',
+    search: 'xiang ru san huo xiang zheng qi san elsholtzia agastache summer cold damp exterior nausea vomiting diarrhea middle burner',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Xiang Ru San', 'Huo Xiang Zheng Qi San'],
+      shared: 'Both address Exterior Wind-Cold complicated by Dampness in summer and may include headache, chills, heaviness and digestive upset.',
+      fast: ['Exterior signs dominate: chills, fever, no sweating and heaviness after cold exposure in summer.', 'Middle-burner Dampness dominates: nausea, vomiting, diarrhea and epigastric fullness.'],
+      rows: [
+        ['Primary emphasis', 'Releases Exterior, transforms Dampness and clears summer Dampness through urination.', 'Releases Exterior, aromatically transforms Dampness and regulates middle-burner Qi.'],
+        ['Decisive clue', 'Strong no-sweat Exterior picture.', 'Strong vomiting-diarrhea picture.'],
+        ['Pattern center', 'Exterior and fluids.', 'Spleen-Stomach and Exterior.'],
+        ['Exam shortcut', 'Summer “Ma Huang” pattern.', 'Damp digestive rebellion.']
+      ],
+      why: 'Both combine Exterior and Dampness. Decide whether the surface or the digestive middle burner is clinically louder.',
+      memory: '<strong>Xiang Ru vents summer Cold-Damp;</strong> <strong>Huo Xiang rectifies the damp middle.</strong>',
+      safety: 'Severe dehydration, high fever, bloody diarrhea or inability to keep fluids down requires medical care.',
+      prompts: ['Which formula has stronger Exterior no-sweat signs?', 'Which centers on vomiting and diarrhea?', 'Why is Xiang Ru called summer Ma Huang?'],
+      source: 'Source bank: FWB 1.2 and FWB 5.2 comparisons; corroborated with individual formula files and summerheat materials.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Xiang Ru San', 'Huo Xiang Zheng Qi San'],
+      shared: 'Ambas tratan Viento-Frío Exterior con Humedad en verano, con cefalea, escalofríos, pesadez y alteración digestiva.',
+      fast: ['Predomina Exterior: escalofríos, fiebre, sin sudor y pesadez tras exposición fría en verano.', 'Predomina Humedad de Jiao Medio: náusea, vómito, diarrea y plenitud epigástrica.'],
+      rows: [
+        ['Énfasis', 'Libera Exterior, transforma Humedad y facilita orina.', 'Libera Exterior, transforma aromáticamente Humedad y regula Qi del centro.'],
+        ['Pista decisiva', 'Cuadro Exterior fuerte sin sudor.', 'Cuadro fuerte de vómito-diarrea.'],
+        ['Centro', 'Exterior y líquidos.', 'Bazo-Estómago y Exterior.'],
+        ['Atajo', 'Patrón “Ma Huang de verano”.', 'Rebeldía digestiva por Humedad.']
+      ],
+      why: 'Ambas combinan Exterior y Humedad. Decide si clínicamente grita más superficie o Jiao Medio digestivo.',
+      memory: '<strong>Xiang Ru ventila Frío-Humedad estival;</strong> <strong>Huo Xiang rectifica centro húmedo.</strong>',
+      safety: 'Deshidratación grave, fiebre alta, diarrea con sangre o no retener líquidos requiere atención médica.',
+      prompts: ['¿Cuál tiene Exterior sin sudor más fuerte?', '¿Cuál se centra en vómito-diarrea?', '¿Por qué Xiang Ru es Ma Huang de verano?'],
+      source: 'Banco fuente: comparaciones FWB 1.2 y FWB 5.2; corroborado con archivos individuales y materiales de verano.'
+    }
+  },
+  {
+    slug: 'gu-jing-wan-vs-wen-jing-tang', title: 'Gu Jing Wan vs. Wen Jing Tang',
+    category: 'Formulas that Stop Bleeding / Warm the Menses',
+    summary: 'Separate uterine bleeding from Kidney-Yin deficiency Heat from bleeding and irregular menses caused by Cold, deficiency and stasis.',
+    search: 'gu jing wan wen jing tang stabilize menses warm menses uterine bleeding kidney yin deficiency heat cold blood stasis irregular menstruation',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Gu Jing Wan', 'Wen Jing Tang'],
+      shared: 'Both regulate uterine bleeding in deficiency patterns and may include prolonged or irregular menstruation.',
+      fast: ['Deficiency Heat: dark-red bleeding, heat sensations, dry mouth and a red tongue.', 'Deficiency Cold with stasis: pale/dark bleeding, cold lower abdomen, pain and a pale or dusky tongue.'],
+      rows: [
+        ['Thermal pattern', 'Kidney Yin deficiency with Heat.', 'Uterine Cold with Blood deficiency and stasis.'],
+        ['Primary action', 'Nourishes Yin, clears Heat and stabilizes bleeding.', 'Warms channels, nourishes/moves Blood and regulates menses.'],
+        ['Decisive clue', 'Heat signs with bleeding.', 'Cold pain and irregular flow with deficiency.'],
+        ['Exam shortcut', 'Secure hot bleeding.', 'Warm cold, stagnant bleeding.']
+      ],
+      why: 'Both involve chronic uterine bleeding, so temperature is decisive: Heat and Yin deficiency versus Cold with Blood deficiency/stasis.',
+      memory: '<strong>Gu Jing cools and secures;</strong> <strong>Wen Jing warms and moves.</strong>',
+      safety: 'Heavy bleeding, pregnancy bleeding, dizziness, fainting or postmenopausal bleeding requires urgent gynecologic evaluation.',
+      prompts: ['Which formula treats deficiency-Heat bleeding?', 'Which treats Cold with Blood stasis?', 'What tongue and temperature clues separate them?'],
+      source: 'Source bank: FWB 11.1 and FWB 12.1 comparisons; corroborated with formula references.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Gu Jing Wan', 'Wen Jing Tang'],
+      shared: 'Ambas regulan sangrado uterino en patrones deficientes con menstruación prolongada o irregular.',
+      fast: ['Calor por deficiencia: sangrado rojo oscuro, calor, boca seca y lengua roja.', 'Frío deficiente con estasis: sangrado pálido/oscuro, abdomen inferior frío, dolor y lengua pálida u oscura.'],
+      rows: [
+        ['Patrón térmico', 'Deficiencia de Yin de Riñón con Calor.', 'Frío uterino con deficiencia y estasis de Sangre.'],
+        ['Acción', 'Nutre Yin, elimina Calor y estabiliza sangrado.', 'Calienta canales, nutre/mueve Sangre y regula menstruación.'],
+        ['Pista decisiva', 'Signos de Calor con sangrado.', 'Dolor frío y flujo irregular con deficiencia.'],
+        ['Atajo', 'Asegurar sangrado caliente.', 'Calentar sangrado frío-estancado.']
+      ],
+      why: 'Ambas implican sangrado crónico; decide temperatura: Calor/Yin deficiente frente a Frío con deficiencia-estasis.',
+      memory: '<strong>Gu Jing enfría y asegura;</strong> <strong>Wen Jing calienta y mueve.</strong>',
+      safety: 'Sangrado abundante, en embarazo, mareo, desmayo o posmenopáusico requiere evaluación ginecológica urgente.',
+      prompts: ['¿Cuál trata sangrado por Calor vacío?', '¿Cuál trata Frío con estasis?', '¿Qué lengua y temperatura distinguen?'],
+      source: 'Banco fuente: comparaciones FWB 11.1 y FWB 12.1; corroborado con referencias.'
+    }
+  }
+);
+
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
