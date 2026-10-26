@@ -1609,6 +1609,391 @@ cards.push(
   }
 );
 
+cards.push(
+  {
+    slug: 'liu-wei-di-huang-wan-vs-qing-hao-bie-jia-tang', title: 'Liu Wei Di Huang Wan vs. Qing Hao Bie Jia Tang',
+    category: 'Tonify Yin / Clear Deficiency Heat',
+    summary: 'Separate chronic Liver-Kidney Yin deficiency from lingering Heat hidden in the Yin level after a warm disease.',
+    search: 'liu wei di huang wan qing hao bie jia tang kidney liver yin deficiency heat night fever no sweat shu di sheng di',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Liu Wei Di Huang Wan', 'Qing Hao Bie Jia Tang'],
+      shared: 'Both address Yin deficiency with deficiency-Heat signs and use a Rehmannia root, but their clinical setting and therapeutic direction differ.',
+      fast: ['Chronic Liver-Kidney Yin deficiency: soreness of the back and knees, dizziness, tinnitus and developmental or reproductive signs.', 'Late-stage warm disease: night fever that subsides in the morning without sweating and a cool sensation deep in the bones.'],
+      rows: [
+        ['Root pattern', 'Liver and Kidney Yin deficiency.', 'Heat lodged in the Yin level after warm disease with Yin and fluids injured.'],
+        ['Rehmannia clue', 'Shu Di Huang nourishes Yin and Essence.', 'Sheng Di Huang clears Heat and cools the Blood while protecting Yin.'],
+        ['Therapeutic emphasis', 'Long-term nourishment and balancing of Kidney-Liver Yin.', 'Leads hidden Heat outward while nourishing Yin.'],
+        ['Decisive symptom', 'Chronic lumbar weakness, tinnitus or night sweating.', 'Night fever that improves by morning without sweat.'],
+        ['Exam shortcut', 'Constitutional Yin deficiency.', 'Residual hidden Heat after febrile illness.']
+      ],
+      why: 'Both can show deficiency Heat, but Liu Wei Di Huang Wan rebuilds a chronic deficient root; Qing Hao Bie Jia Tang clears a lingering pathogen from the Yin level.',
+      memory: '<strong>Liu Wei fills the Yin;</strong> <strong>Qing Hao leads hidden Heat out.</strong>',
+      safety: 'Persistent fever, unexplained weight loss or recurrent night sweats requires medical evaluation rather than self-treatment.',
+      prompts: ['Which formula uses Shu Di Huang?', 'Which matches night fever without sweating?', 'Which treats chronic Liver-Kidney Yin deficiency?'],
+      source: 'Source bank: FWB 2.2, Comparison Formulas to Clear Heat; corroborated with formula profiles and Heat-clearing materials.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Liu Wei Di Huang Wan', 'Qing Hao Bie Jia Tang'],
+      shared: 'Ambas tratan deficiencia de Yin con signos de Calor vacío y usan Rehmannia, pero difieren en contexto y dirección terapéutica.',
+      fast: ['Deficiencia crónica de Yin de Hígado-Riñón: debilidad lumbar y de rodillas, mareo, tinnitus y signos reproductivos.', 'Etapa tardía de enfermedad tibia: fiebre nocturna que cede por la mañana sin sudor y calor profundo en huesos.'],
+      rows: [
+        ['Patrón raíz', 'Deficiencia de Yin de Hígado y Riñón.', 'Calor alojado en nivel Yin tras enfermedad tibia con Yin y líquidos lesionados.'],
+        ['Pista de Rehmannia', 'Shu Di Huang nutre Yin y Esencia.', 'Sheng Di Huang elimina Calor, enfría Sangre y protege Yin.'],
+        ['Énfasis', 'Nutrición prolongada del Yin de Riñón-Hígado.', 'Conduce Calor oculto hacia afuera mientras nutre Yin.'],
+        ['Síntoma decisivo', 'Debilidad lumbar crónica, tinnitus o sudor nocturno.', 'Fiebre nocturna que mejora por la mañana sin sudar.'],
+        ['Atajo', 'Deficiencia constitucional de Yin.', 'Calor residual oculto tras fiebre.']
+      ],
+      why: 'Liu Wei reconstruye una raíz crónicamente deficiente; Qing Hao elimina un patógeno persistente del nivel Yin.',
+      memory: '<strong>Liu Wei llena el Yin;</strong> <strong>Qing Hao saca el Calor oculto.</strong>',
+      safety: 'Fiebre persistente, pérdida de peso inexplicada o sudores nocturnos recurrentes requieren evaluación médica.',
+      prompts: ['¿Cuál usa Shu Di Huang?', '¿Cuál corresponde a fiebre nocturna sin sudor?', '¿Cuál trata deficiencia crónica Hígado-Riñón?'],
+      source: 'Banco fuente: FWB 2.2, Comparison Formulas to Clear Heat; corroborado con perfiles y materiales de Calor.'
+    }
+  },
+  {
+    slug: 'zhi-sou-san-vs-sang-ju-yin', title: 'Zhi Sou San vs. Sang Ju Yin',
+    category: 'Formulas that Relieve Coughing / Release the Exterior',
+    summary: 'Separate a persistent cough after Wind-Cold from an early, mild Wind-Heat cough.',
+    search: 'zhi sou san sang ju yin stop coughing mulberry chrysanthemum wind cold wind heat cough exterior throat fever',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Zhi Sou San', 'Sang Ju Yin'],
+      shared: 'Both release a mild Exterior pathogen and direct Lung Qi downward to stop cough; cough is the dominant symptom.',
+      fast: ['Residual Wind-Cold cough after most Exterior signs have faded; little fever and thin white sputum.', 'Early Wind-Heat attacking the Lung; mild fever, thirst, sore throat and a floating-rapid pulse.'],
+      rows: [
+        ['Pathogen', 'Residual Wind-Cold with constrained Lung Qi.', 'Wind-Heat at the Lung defensive level.'],
+        ['Thermal clue', 'Little or no Heat; sputum is thin and white.', 'Mild Heat, thirst or sore throat; sputum may be yellow.'],
+        ['Primary action', 'Stops cough while gently dispersing the remaining pathogen.', 'Disperses Wind-Heat and clears Lung Heat to stop cough.'],
+        ['Exam shortcut', 'The cold is nearly gone, but the cough remains.', 'A mild warm-disease cough has just begun.']
+      ],
+      why: 'Both are cough-centered and relatively gentle. Temperature and timing separate a lingering Wind-Cold cough from the early stage of Wind-Heat.',
+      memory: '<strong>Zhi Sou = cough after Cold;</strong> <strong>Sang Ju = cough at the start of Heat.</strong>',
+      safety: 'Shortness of breath, chest pain, coughing blood, high fever or cough lasting more than three weeks requires medical assessment.',
+      prompts: ['Which treats residual Wind-Cold cough?', 'Which treats early mild Wind-Heat?', 'What sputum and fever clues distinguish them?'],
+      source: 'Source bank: FWB 6.2, Comparison Formulas to Transform Phlegm; corroborated with exterior-releasing materials and individual profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Zhi Sou San', 'Sang Ju Yin'],
+      shared: 'Ambas liberan suavemente un patógeno Exterior y hacen descender Qi de Pulmón; la tos es el síntoma dominante.',
+      fast: ['Tos residual de Viento-Frío cuando casi desaparecieron los signos externos; poca fiebre y esputo blanco fino.', 'Inicio de Viento-Calor en Pulmón; fiebre leve, sed, garganta dolorida y pulso flotante-rápido.'],
+      rows: [
+        ['Patógeno', 'Viento-Frío residual con Qi de Pulmón constreñido.', 'Viento-Calor en nivel defensivo de Pulmón.'],
+        ['Pista térmica', 'Poco o nada de Calor; esputo blanco y fino.', 'Calor leve, sed o garganta dolorida; esputo posiblemente amarillo.'],
+        ['Acción', 'Detiene tos mientras dispersa suavemente el patógeno restante.', 'Dispersa Viento-Calor y limpia Calor pulmonar.'],
+        ['Atajo', 'El resfriado casi terminó, pero queda la tos.', 'La tos de enfermedad tibia acaba de comenzar.']
+      ],
+      why: 'Ambas son suaves y centradas en tos; temperatura y momento separan Viento-Frío residual de Viento-Calor temprano.',
+      memory: '<strong>Zhi Sou = tos después del Frío;</strong> <strong>Sang Ju = tos al comenzar el Calor.</strong>',
+      safety: 'Disnea, dolor torácico, hemoptisis, fiebre alta o tos de más de tres semanas requiere evaluación médica.',
+      prompts: ['¿Cuál trata tos residual de Viento-Frío?', '¿Cuál trata Viento-Calor leve temprano?', '¿Qué pistas de esputo y fiebre distinguen?'],
+      source: 'Banco fuente: FWB 6.2, Comparison Formulas to Transform Phlegm; corroborado con materiales del Exterior y perfiles individuales.'
+    }
+  },
+  {
+    slug: 'chai-hu-shu-gan-san-vs-xiao-yao-san', title: 'Chai Hu Shu Gan San vs. Xiao Yao San',
+    category: 'Formulas that Regulate Qi / Harmonize',
+    summary: 'Separate stronger Liver-Qi stagnation with pain from Liver-Qi constraint complicated by Blood and Spleen deficiency.',
+    search: 'chai hu shu gan san xiao yao san liver qi stagnation constraint pain blood deficiency spleen fatigue menstruation',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Chai Hu Shu Gan San', 'Xiao Yao San'],
+      shared: 'Both course the Liver, regulate Qi and treat rib-side or abdominal discomfort, emotional constraint and menstrual irregularity.',
+      fast: ['Excess Qi stagnation: distending pain and a wiry pulse dominate.', 'Qi constraint with deficiency: fatigue, poor appetite, pale signs and menstrual Blood deficiency accompany the mood symptoms.'],
+      rows: [
+        ['Root pattern', 'Liver-Qi stagnation, primarily excess.', 'Liver-Qi constraint with Spleen-Qi and Blood deficiency.'],
+        ['Pain clue', 'More pronounced distending rib-side, epigastric or abdominal pain.', 'Milder pain with fatigue, poor appetite or dizziness.'],
+        ['Therapeutic emphasis', 'Moves Qi and relieves pain more strongly.', 'Courses Liver while nourishing Blood and strengthening Spleen.'],
+        ['Exam shortcut', 'Stagnation needs movement.', 'Constraint needs movement plus support.']
+      ],
+      why: 'The formulas share a Liver-Qi focus, but Xiao Yao San protects and rebuilds deficient Blood and Spleen Qi instead of simply moving harder.',
+      memory: '<strong>Shu Gan moves pain;</strong> <strong>Xiao Yao moves and nourishes.</strong>',
+      safety: 'Persistent or severe abdominal pain, jaundice, fever or pregnancy-related pain requires medical evaluation.',
+      prompts: ['Which is stronger for distending pain?', 'Which includes Blood and Spleen deficiency?', 'What signs reveal the deficient pattern?'],
+      source: 'Source bank: FWB 4.2.1, Comparison Formulas to Harmonize; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Chai Hu Shu Gan San', 'Xiao Yao San'],
+      shared: 'Ambas regulan Hígado y Qi y tratan molestias costales/abdominales, restricción emocional e irregularidad menstrual.',
+      fast: ['Estancamiento de Qi en exceso: predominan dolor distensivo y pulso de cuerda.', 'Restricción con deficiencia: fatiga, poco apetito, palidez y deficiencia de Sangre acompañan síntomas emocionales.'],
+      rows: [
+        ['Patrón raíz', 'Estancamiento de Qi de Hígado principalmente excesivo.', 'Restricción de Qi de Hígado con deficiencia de Qi de Bazo y Sangre.'],
+        ['Dolor', 'Dolor distensivo costal, epigástrico o abdominal más pronunciado.', 'Dolor más leve con fatiga, poco apetito o mareo.'],
+        ['Énfasis', 'Mueve Qi y alivia dolor con mayor fuerza.', 'Regula Hígado mientras nutre Sangre y fortalece Bazo.'],
+        ['Atajo', 'El estancamiento necesita movimiento.', 'La restricción necesita movimiento y apoyo.']
+      ],
+      why: 'Comparten enfoque hepático, pero Xiao Yao protege y reconstruye Sangre y Qi de Bazo en vez de mover con más fuerza.',
+      memory: '<strong>Shu Gan mueve el dolor;</strong> <strong>Xiao Yao mueve y nutre.</strong>',
+      safety: 'Dolor abdominal persistente o grave, ictericia, fiebre o dolor durante embarazo requiere evaluación médica.',
+      prompts: ['¿Cuál es más fuerte para dolor distensivo?', '¿Cuál incluye deficiencia de Sangre y Bazo?', '¿Qué signos muestran deficiencia?'],
+      source: 'Banco fuente: FWB 4.2.1, Comparison Formulas to Harmonize; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'xiao-huo-luo-dan-vs-du-huo-ji-sheng-tang', title: 'Xiao Huo Luo Dan vs. Du Huo Ji Sheng Tang',
+    category: 'Formulas that Dispel Wind-Dampness',
+    summary: 'Separate severe fixed Cold-Damp obstruction with Phlegm and stasis from chronic painful obstruction with Liver-Kidney and Qi-Blood deficiency.',
+    search: 'xiao huo luo dan du huo ji sheng tang wind damp cold painful obstruction bi phlegm blood stasis deficiency liver kidney qi blood',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Xiao Huo Luo Dan', 'Du Huo Ji Sheng Tang'],
+      shared: 'Both dispel Wind-Dampness, unblock the channels and treat chronic painful obstruction with numbness or limited movement.',
+      fast: ['Severe, fixed and stabbing pain from Wind-Cold-Damp, Phlegm and Blood stasis.', 'Long-standing pain with weakness, soreness and deficiency of Liver-Kidney, Qi and Blood.'],
+      rows: [
+        ['Pattern', 'Excess obstruction: Cold-Damp plus Phlegm and stasis.', 'Mixed excess-deficiency: Wind-Damp in a chronically deficient patient.'],
+        ['Pain clue', 'Intense, fixed, sharp or boring pain.', 'Chronic aching pain with weakness of back and knees.'],
+        ['Therapeutic emphasis', 'Strongly warms, transforms Phlegm and invigorates Blood.', 'Dispels Wind-Damp while tonifying Liver-Kidney and nourishing Qi-Blood.'],
+        ['Exam shortcut', 'Hard obstruction needs force.', 'Old obstruction needs support.']
+      ],
+      why: 'Both address chronic Bi syndrome, but one attacks a severe obstructive excess while the other combines pathogen removal with tonification.',
+      memory: '<strong>Xiao Huo Luo breaks blockage;</strong> <strong>Du Huo Ji Sheng supports the weak.</strong>',
+      safety: 'Classical Xiao Huo Luo Dan contains processed aconite and must not be self-prepared. New weakness, bowel/bladder changes or fever with joint swelling requires urgent assessment.',
+      prompts: ['Which matches fixed stabbing pain?', 'Which matches chronic pain with weak back and knees?', 'Which formula contains processed aconite?'],
+      source: 'Source bank: FWB 14.1, Comparison Formulas to Expel Wind; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Xiao Huo Luo Dan', 'Du Huo Ji Sheng Tang'],
+      shared: 'Ambas expulsan Viento-Humedad, desobstruyen canales y tratan Bi crónico con entumecimiento o movimiento limitado.',
+      fast: ['Dolor grave, fijo y punzante por Viento-Frío-Humedad, Flema y estasis de Sangre.', 'Dolor prolongado con debilidad y deficiencia de Hígado-Riñón, Qi y Sangre.'],
+      rows: [
+        ['Patrón', 'Obstrucción excesiva: Frío-Humedad más Flema y estasis.', 'Exceso-deficiencia: Viento-Humedad en paciente crónicamente deficiente.'],
+        ['Dolor', 'Intenso, fijo, agudo o perforante.', 'Dolor sordo crónico con debilidad lumbar y de rodillas.'],
+        ['Énfasis', 'Calienta fuertemente, transforma Flema y vigoriza Sangre.', 'Expulsa Viento-Humedad mientras tonifica Hígado-Riñón y nutre Qi-Sangre.'],
+        ['Atajo', 'Obstrucción dura necesita fuerza.', 'Obstrucción antigua necesita apoyo.']
+      ],
+      why: 'Una ataca exceso obstructivo grave; la otra combina eliminación del patógeno con tonificación.',
+      memory: '<strong>Xiao Huo Luo rompe bloqueo;</strong> <strong>Du Huo Ji Sheng apoya al débil.</strong>',
+      safety: 'Xiao Huo Luo Dan clásica contiene acónito procesado y no debe prepararse sin supervisión. Debilidad nueva o fiebre articular exige evaluación.',
+      prompts: ['¿Cuál corresponde a dolor fijo punzante?', '¿Cuál a dolor crónico con debilidad lumbar?', '¿Cuál contiene acónito procesado?'],
+      source: 'Banco fuente: FWB 14.1, Comparison Formulas to Expel Wind; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'huo-xiang-zheng-qi-san-vs-ping-wei-san', title: 'Huo Xiang Zheng Qi San vs. Ping Wei San',
+    category: 'Formulas that Transform Dampness',
+    summary: 'Separate External Wind-Cold with internal Dampness from internal Dampness obstructing the middle burner without a defining Exterior pattern.',
+    search: 'huo xiang zheng qi san ping wei san dampness middle burner exterior wind cold nausea vomiting diarrhea epigastric fullness',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Huo Xiang Zheng Qi San', 'Ping Wei San'],
+      shared: 'Both aromatically transform Dampness, regulate Qi and treat nausea, vomiting, diarrhea, poor appetite and epigastric fullness.',
+      fast: ['Exterior Wind-Cold plus middle-burner Dampness: chills, fever and headache accompany digestive symptoms.', 'Interior Dampness stagnates in Spleen-Stomach: fullness, heavy limbs and greasy coat without a defining Exterior invasion.'],
+      rows: [
+        ['Location', 'Exterior and middle burner.', 'Middle burner primarily.'],
+        ['Chief emphasis', 'Huo Xiang releases the Exterior and harmonizes the center.', 'Cang Zhu strongly dries Dampness and strengthens Spleen transport.'],
+        ['Decisive clue', 'Acute digestive upset with chills, fever or headache.', 'Chronic or uncomplicated Damp fullness and heaviness.'],
+        ['Exam shortcut', 'Damp stomach flu pattern.', 'Dampness sitting in the middle.']
+      ],
+      why: 'The shared digestive picture is separated by an Exterior layer. Huo Xiang Zheng Qi reaches outward; Ping Wei stays centered on internal Dampness.',
+      memory: '<strong>Huo Xiang = Exterior + center;</strong> <strong>Ping Wei = level the damp center.</strong>',
+      safety: 'Bloody diarrhea, high fever, severe dehydration, persistent vomiting or severe abdominal pain requires medical care.',
+      prompts: ['Which includes Exterior Wind-Cold?', 'Which is more strongly drying?', 'What symptoms reveal the Exterior layer?'],
+      source: 'Source bank: FWB 5.2, Comparison Formulas to Expel Damp; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Huo Xiang Zheng Qi San', 'Ping Wei San'],
+      shared: 'Ambas transforman aromáticamente Humedad, regulan Qi y tratan náusea, vómito, diarrea, poco apetito y plenitud epigástrica.',
+      fast: ['Viento-Frío Exterior más Humedad central: escalofríos, fiebre y cefalea acompañan síntomas digestivos.', 'Humedad interna estanca Bazo-Estómago: plenitud, pesadez y capa grasosa sin invasión Exterior definitoria.'],
+      rows: [
+        ['Ubicación', 'Exterior y Jiao Medio.', 'Principalmente Jiao Medio.'],
+        ['Énfasis', 'Huo Xiang libera Exterior y armoniza centro.', 'Cang Zhu seca Humedad con fuerza y fortalece transporte de Bazo.'],
+        ['Pista decisiva', 'Malestar digestivo agudo con escalofríos, fiebre o cefalea.', 'Plenitud y pesadez por Humedad interna sin signos externos.'],
+        ['Atajo', 'Patrón húmedo tipo gastroenteritis con Exterior.', 'Humedad asentada en el centro.']
+      ],
+      why: 'El cuadro digestivo compartido se separa por la capa Exterior: Huo Xiang llega afuera; Ping Wei se centra dentro.',
+      memory: '<strong>Huo Xiang = Exterior + centro;</strong> <strong>Ping Wei = nivelar centro húmedo.</strong>',
+      safety: 'Diarrea con sangre, fiebre alta, deshidratación, vómito persistente o dolor grave requiere atención médica.',
+      prompts: ['¿Cuál incluye Viento-Frío Exterior?', '¿Cuál seca con más fuerza?', '¿Qué síntomas muestran capa Exterior?'],
+      source: 'Banco fuente: FWB 5.2, Comparison Formulas to Expel Damp; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'huo-xiang-zheng-qi-san-vs-ren-shen-bai-du-san', title: 'Huo Xiang Zheng Qi San vs. Ren Shen Bai Du San',
+    category: 'Release the Exterior with Internal Deficiency',
+    summary: 'Separate Wind-Cold with digestive Dampness from Wind-Cold-Damp in a Qi-deficient patient with stronger generalized pain.',
+    search: 'huo xiang zheng qi san ren shen bai du san ginseng defeat toxin wind cold damp qi deficiency digestive vomiting diarrhea body aches',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Huo Xiang Zheng Qi San', 'Ren Shen Bai Du San'],
+      shared: 'Both treat External Wind-Cold-Damp while supporting an impaired middle burner and may show fever, chills, headache, nausea or diarrhea.',
+      fast: ['Dampness centers on Stomach and Intestines: vomiting, diarrhea and abdominal fullness dominate.', 'Qi deficiency permits Wind-Cold-Damp invasion: severe headache/body aches, fatigue and a weak pulse dominate.'],
+      rows: [
+        ['Primary center', 'Digestive Dampness with an Exterior component.', 'Exterior pathogen in a Qi-deficient constitution.'],
+        ['Distinct action', 'Aromatically transforms Dampness and rectifies rebellious Qi.', 'Augments Qi while dispersing Wind-Cold-Damp.'],
+        ['Decisive clue', 'Prominent vomiting and diarrhea.', 'Prominent generalized aches with weakness.'],
+        ['Exam shortcut', 'Wet middle burner.', 'Weak patient with painful Exterior invasion.']
+      ],
+      why: 'Both span Exterior and Interior, but Huo Xiang Zheng Qi is digestive-Damp centered while Ren Shen Bai Du is deficiency-and-body-ache centered.',
+      memory: '<strong>Huo Xiang rectifies the gut;</strong> <strong>Ren Shen Bai Du supports the weak Exterior.</strong>',
+      safety: 'Severe dehydration, blood in stool, stiff neck, altered consciousness or breathing difficulty requires urgent evaluation.',
+      prompts: ['Which is selected when vomiting and diarrhea dominate?', 'Which when body aches and Qi deficiency dominate?', 'What common pathogen do they address?'],
+      source: 'Source bank: FWB 5.2, Comparison Formulas to Expel Damp; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Huo Xiang Zheng Qi San', 'Ren Shen Bai Du San'],
+      shared: 'Ambas tratan Viento-Frío-Humedad externo apoyando un centro alterado; pueden mostrar fiebre, escalofríos, cefalea, náusea o diarrea.',
+      fast: ['Humedad centrada en Estómago-Intestinos: predominan vómito, diarrea y plenitud abdominal.', 'Deficiencia de Qi permite invasión: predominan cefalea/dolor corporal fuerte, fatiga y pulso débil.'],
+      rows: [
+        ['Centro', 'Humedad digestiva con componente Exterior.', 'Patógeno Exterior en constitución deficiente de Qi.'],
+        ['Acción distintiva', 'Transforma Humedad aromáticamente y rectifica Qi rebelde.', 'Aumenta Qi mientras dispersa Viento-Frío-Humedad.'],
+        ['Pista decisiva', 'Vómito y diarrea prominentes.', 'Dolores generalizados con debilidad.'],
+        ['Atajo', 'Jiao Medio mojado.', 'Paciente débil con invasión Exterior dolorosa.']
+      ],
+      why: 'Huo Xiang se centra en Humedad digestiva; Ren Shen Bai Du en deficiencia y dolor corporal.',
+      memory: '<strong>Huo Xiang rectifica intestino;</strong> <strong>Ren Shen Bai Du apoya Exterior débil.</strong>',
+      safety: 'Deshidratación grave, sangre en heces, rigidez cervical, confusión o disnea requiere evaluación urgente.',
+      prompts: ['¿Cuál si dominan vómito y diarrea?', '¿Cuál si dominan dolor corporal y deficiencia?', '¿Qué patógeno comparten?'],
+      source: 'Banco fuente: FWB 5.2, Comparison Formulas to Expel Damp; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'ping-wei-san-vs-li-zhong-wan', title: 'Ping Wei San vs. Li Zhong Wan',
+    category: 'Transform Dampness / Warm the Interior',
+    summary: 'Separate excess Dampness obstructing the middle burner from Spleen-Stomach deficiency-Cold.',
+    search: 'ping wei san li zhong wan calm stomach regulate middle damp excess spleen stomach deficiency cold fullness diarrhea appetite',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Ping Wei San', 'Li Zhong Wan'],
+      shared: 'Both regulate the middle burner and treat poor appetite, epigastric or abdominal fullness, nausea, vomiting and diarrhea.',
+      fast: ['Excess Dampness: heaviness, pronounced fullness and a thick greasy coating.', 'Deficiency-Cold: chronic loose stool, abdominal pain improved by warmth/pressure, fatigue and a pale tongue.'],
+      rows: [
+        ['Root pattern', 'Dampness obstructing Spleen and Stomach.', 'Spleen-Stomach Qi/Yang deficiency with internal Cold.'],
+        ['Primary action', 'Dries Dampness and moves Qi.', 'Warms and tonifies the middle burner.'],
+        ['Tongue clue', 'Thick, greasy white coating.', 'Pale tongue with white coating.'],
+        ['Exam shortcut', 'Excess wet blockage.', 'Deficient cold center.']
+      ],
+      why: 'Similar digestive symptoms can result from a pathogen blocking the center or from the center lacking warmth and strength.',
+      memory: '<strong>Ping Wei dries what is too much;</strong> <strong>Li Zhong warms what is too weak.</strong>',
+      safety: 'Severe abdominal pain, persistent vomiting, gastrointestinal bleeding or dehydration requires medical evaluation.',
+      prompts: ['Which treats excess Dampness?', 'Which treats deficiency-Cold?', 'How do tongue and response to warmth distinguish them?'],
+      source: 'Source bank: FWB 5.2, Comparison Formulas to Expel Damp; corroborated with FWB 7.1 and individual profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Ping Wei San', 'Li Zhong Wan'],
+      shared: 'Ambas regulan Jiao Medio y tratan poco apetito, plenitud, náusea, vómito y diarrea.',
+      fast: ['Humedad en exceso: pesadez, plenitud marcada y capa gruesa grasosa.', 'Frío por deficiencia: heces blandas crónicas, dolor mejor con calor/presión, fatiga y lengua pálida.'],
+      rows: [
+        ['Patrón raíz', 'Humedad obstruye Bazo y Estómago.', 'Deficiencia de Qi/Yang de Bazo-Estómago con Frío interno.'],
+        ['Acción', 'Seca Humedad y mueve Qi.', 'Calienta y tonifica Jiao Medio.'],
+        ['Lengua', 'Capa blanca gruesa y grasosa.', 'Lengua pálida con capa blanca.'],
+        ['Atajo', 'Bloqueo húmedo excesivo.', 'Centro frío y deficiente.']
+      ],
+      why: 'Síntomas digestivos semejantes surgen de patógeno que bloquea centro o de centro sin calor ni fuerza.',
+      memory: '<strong>Ping Wei seca lo excesivo;</strong> <strong>Li Zhong calienta lo débil.</strong>',
+      safety: 'Dolor abdominal grave, vómito persistente, sangrado digestivo o deshidratación requiere evaluación médica.',
+      prompts: ['¿Cuál trata Humedad excesiva?', '¿Cuál Frío por deficiencia?', '¿Cómo distinguen lengua y respuesta al calor?'],
+      source: 'Banco fuente: FWB 5.2, Comparison Formulas to Expel Damp; corroborado con FWB 7.1 y perfiles individuales.'
+    }
+  },
+  {
+    slug: 'ba-zheng-san-vs-long-dan-xie-gan-tang', title: 'Ba Zheng San vs. Long Dan Xie Gan Tang',
+    category: 'Formulas that Clear Damp-Heat',
+    summary: 'Separate Damp-Heat concentrated in the Bladder from Liver-Gallbladder Fire or Damp-Heat pouring into the lower burner.',
+    search: 'ba zheng san long dan xie gan tang damp heat bladder liver gallbladder painful urination genital discharge rib side bitter taste',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Ba Zheng San', 'Long Dan Xie Gan Tang'],
+      shared: 'Both clear Damp-Heat from the lower burner, promote urination and may treat painful urination with dark, scanty urine.',
+      fast: ['Bladder Damp-Heat: severe urinary burning, urgency, frequency or stones dominate.', 'Liver-Gallbladder Damp-Heat/Fire: rib-side pain, bitter taste, headache, red eyes or genital itching/discharge accompanies urinary signs.'],
+      rows: [
+        ['Primary channel-organ focus', 'Bladder and urinary tract.', 'Liver and Gallbladder, with downward drainage through the urine.'],
+        ['Decisive clue', 'Urinary pain is the central presentation.', 'Liver-Gallbladder signs occur above or in the genital region.'],
+        ['Therapeutic emphasis', 'Drains Fire and strongly unblocks painful urinary dribbling.', 'Drains Liver Fire and clears Damp-Heat from all three burners.'],
+        ['Exam shortcut', 'Hot urinary tract.', 'Liver Fire/Damp-Heat draining downward.']
+      ],
+      why: 'Both can produce urinary burning, but Ba Zheng San is urinary-tract centered; Long Dan Xie Gan Tang is selected when the Liver-Gallbladder pattern explains the lower-burner symptoms.',
+      memory: '<strong>Ba Zheng burns in the bladder;</strong> <strong>Long Dan starts in Liver-GB.</strong>',
+      safety: 'Use only verified Akebia Mu Tong or an appropriate modern substitute—never aristolochic-acid Guan Mu Tong. Fever with flank pain, inability to urinate or blood in urine requires urgent care.',
+      prompts: ['Which is centered on painful urination?', 'Which includes bitter taste and rib-side signs?', 'What Mu Tong safety distinction is essential?'],
+      source: 'Source bank: FWB 5.2.1, Comparison Formulas to Expel Damp; corroborated with individual profiles and modern safety references.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Ba Zheng San', 'Long Dan Xie Gan Tang'],
+      shared: 'Ambas eliminan Humedad-Calor del Jiao Inferior, promueven micción y pueden tratar orina oscura, escasa y dolorosa.',
+      fast: ['Humedad-Calor de Vejiga: dominan ardor urinario grave, urgencia, frecuencia o cálculos.', 'Humedad-Calor/Fuego de Hígado-Vesícula: dolor costal, sabor amargo, cefalea, ojos rojos o prurito/flujo genital acompaña signos urinarios.'],
+      rows: [
+        ['Foco', 'Vejiga y vías urinarias.', 'Hígado y Vesícula Biliar con drenaje descendente por orina.'],
+        ['Pista decisiva', 'Dolor urinario es presentación central.', 'Signos Hígado-Vesícula arriba o en región genital.'],
+        ['Énfasis', 'Drena Fuego y desobstruye fuertemente lin doloroso.', 'Drena Fuego de Hígado y limpia Humedad-Calor de tres Jiaos.'],
+        ['Atajo', 'Vías urinarias calientes.', 'Fuego/Humedad-Calor de Hígado baja.']
+      ],
+      why: 'Ba Zheng se centra en vías urinarias; Long Dan cuando el patrón Hígado-Vesícula explica los síntomas inferiores.',
+      memory: '<strong>Ba Zheng arde en Vejiga;</strong> <strong>Long Dan comienza en Hígado-VB.</strong>',
+      safety: 'Usar solo Mu Tong de Akebia verificado o sustituto moderno; nunca Guan Mu Tong con ácido aristolóquico. Fiebre lumbar, anuria o hematuria exige urgencia.',
+      prompts: ['¿Cuál se centra en micción dolorosa?', '¿Cuál incluye sabor amargo y signos costales?', '¿Qué distinción de Mu Tong es esencial?'],
+      source: 'Banco fuente: FWB 5.2.1, Comparison Formulas to Expel Damp; corroborado con perfiles y referencias modernas de seguridad.'
+    }
+  },
+  {
+    slug: 'wu-ling-san-vs-zhu-ling-tang-vs-wu-pi-san', title: 'Wu Ling San vs. Zhu Ling Tang vs. Wu Pi San',
+    category: 'Formulas that Drain Dampness',
+    summary: 'Distinguish water retention from failed Qi transformation, water-Heat with Yin injury and superficial edema with Qi stagnation.',
+    search: 'wu ling san zhu ling tang wu pi san five peel water retention edema bladder qi transformation heat yin injury skin qi stagnation',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Wu Ling San', 'Zhu Ling Tang', 'Wu Pi San'],
+      shared: 'All promote urination and treat fluid retention, but they direct treatment toward different mechanisms and tissue levels.',
+      fast: ['Bladder Qi-transformation failure with thirst and urinary difficulty.', 'Water-Heat in the lower burner with Yin injury and irritability or urinary Heat.', 'Superficial generalized edema with heavy limbs, fullness and Qi stagnation.'],
+      rows: [
+        ['Mechanism', 'Taiyang water accumulation; Yang cannot transform fluids.', 'Water combines with Heat and damages Yin.', 'Qi stagnation prevents movement of water in the skin and subcutaneous tissues.'],
+        ['Distinct action', 'Warms Yang and transforms Qi.', 'Clears Heat, promotes urination and nourishes Yin.', 'Moves Qi and reduces edema with peel medicinals.'],
+        ['Decisive clue', 'Thirst but difficulty processing fluids.', 'Heat signs, thirst and possible painful or bloody urination.', 'Pitting edema with abdominal/epigastric fullness.'],
+        ['Exam shortcut', 'Transform water.', 'Drain hot water while protecting Yin.', 'Move superficial water by moving Qi.']
+      ],
+      why: '“Edema” alone is not enough. Decide whether the failed step is Qi transformation, Heat injuring Yin, or Qi stagnation trapping water superficially.',
+      memory: '<strong>Wu Ling transforms;</strong> <strong>Zhu Ling cools;</strong> <strong>Wu Pi moves the skin.</strong>',
+      safety: 'Sudden edema, breathlessness, chest pain, no urine, fever with flank pain or edema during pregnancy requires prompt medical evaluation.',
+      prompts: ['Which warms Yang?', 'Which protects Yin while clearing Heat?', 'Which uses peel medicinals for superficial edema?'],
+      source: 'Source bank: FWB 5.2.1, Comparison Formulas to Expel Damp; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Wu Ling San', 'Zhu Ling Tang', 'Wu Pi San'],
+      shared: 'Todas promueven micción y tratan retención de líquidos, dirigiéndose a mecanismos y niveles tisulares distintos.',
+      fast: ['Falla de transformación de Qi de Vejiga con sed y dificultad urinaria.', 'Agua-Calor inferior con lesión de Yin e irritabilidad o Calor urinario.', 'Edema superficial generalizado con pesadez, plenitud y estancamiento de Qi.'],
+      rows: [
+        ['Mecanismo', 'Acumulación Taiyang; Yang no transforma líquidos.', 'Agua se combina con Calor y daña Yin.', 'Estancamiento de Qi impide mover agua en piel y tejido subcutáneo.'],
+        ['Acción distintiva', 'Calienta Yang y transforma Qi.', 'Elimina Calor, promueve orina y nutre Yin.', 'Mueve Qi y reduce edema con cáscaras.'],
+        ['Pista decisiva', 'Sed pero dificultad para procesar líquidos.', 'Calor, sed y posible orina dolorosa o sanguinolenta.', 'Edema con fóvea y plenitud abdominal/epigástrica.'],
+        ['Atajo', 'Transformar agua.', 'Drenar agua caliente protegiendo Yin.', 'Mover agua superficial moviendo Qi.']
+      ],
+      why: '“Edema” no basta: decide si falla transformación, Calor lesiona Yin o Qi estancado atrapa agua superficial.',
+      memory: '<strong>Wu Ling transforma;</strong> <strong>Zhu Ling enfría;</strong> <strong>Wu Pi mueve piel.</strong>',
+      safety: 'Edema súbito, disnea, dolor torácico, anuria, fiebre lumbar o edema en embarazo exige evaluación pronta.',
+      prompts: ['¿Cuál calienta Yang?', '¿Cuál protege Yin eliminando Calor?', '¿Cuál usa cáscaras para edema superficial?'],
+      source: 'Banco fuente: FWB 5.2.1, Comparison Formulas to Expel Damp; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'ju-pi-zhu-ru-tang-vs-li-zhong-wan', title: 'Ju Pi Zhu Ru Tang vs. Li Zhong Wan',
+    category: 'Formulas that Regulate Qi / Warm the Interior',
+    summary: 'Separate Stomach Qi deficiency with residual Heat and hiccup from middle-burner deficiency-Cold with vomiting or diarrhea.',
+    search: 'ju pi zhu ru tang li zhong wan tangerine peel bamboo shavings regulate middle stomach qi deficiency heat cold hiccup vomiting diarrhea',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Ju Pi Zhu Ru Tang', 'Li Zhong Wan'],
+      shared: 'Both support deficient middle-burner Qi and redirect rebellious Stomach Qi in nausea or vomiting.',
+      fast: ['Stomach Qi deficiency with residual Heat: hiccup, retching, thirst and a tender red tongue.', 'Spleen-Stomach deficiency-Cold: chronic vomiting/diarrhea, abdominal pain, no thirst and a pale tongue.'],
+      rows: [
+        ['Thermal pattern', 'Deficiency with residual Heat.', 'Deficiency with internal Cold.'],
+        ['Primary action', 'Clears Heat and descends rebellious Qi while augmenting Stomach Qi.', 'Warms and tonifies the middle burner.'],
+        ['Decisive clue', 'Persistent hiccup or retching with Heat signs.', 'Cold abdominal pain and loose stools improved by warmth.'],
+        ['Exam shortcut', 'Weak, hot, rebellious Stomach.', 'Weak, cold middle burner.']
+      ],
+      why: 'Both may vomit from deficiency, so temperature is decisive: Ju Pi Zhu Ru clears residual Heat; Li Zhong restores deficient warmth.',
+      memory: '<strong>Zhu Ru cools the hiccup;</strong> <strong>Li Zhong warms the center.</strong>',
+      safety: 'Persistent vomiting or hiccup, inability to keep fluids down, blood, severe pain or neurologic symptoms requires medical evaluation.',
+      prompts: ['Which treats deficiency with residual Heat?', 'Which treats deficiency-Cold?', 'Which symptom particularly points to Ju Pi Zhu Ru Tang?'],
+      source: 'Source bank: FWB 9.1.2, Comparison Formulas to Regulate the Qi; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Ju Pi Zhu Ru Tang', 'Li Zhong Wan'],
+      shared: 'Ambas apoyan Qi deficiente del centro y hacen descender Qi rebelde de Estómago en náusea o vómito.',
+      fast: ['Deficiencia de Qi de Estómago con Calor residual: hipo, arcadas, sed y lengua roja sensible.', 'Frío por deficiencia de Bazo-Estómago: vómito/diarrea crónica, dolor abdominal, ausencia de sed y lengua pálida.'],
+      rows: [
+        ['Patrón térmico', 'Deficiencia con Calor residual.', 'Deficiencia con Frío interno.'],
+        ['Acción', 'Elimina Calor y desciende Qi rebelde mientras aumenta Qi de Estómago.', 'Calienta y tonifica Jiao Medio.'],
+        ['Pista decisiva', 'Hipo o arcadas persistentes con signos de Calor.', 'Dolor frío y heces blandas mejorados por calor.'],
+        ['Atajo', 'Estómago débil, caliente y rebelde.', 'Jiao Medio débil y frío.']
+      ],
+      why: 'Ambas pueden vomitar por deficiencia; la temperatura decide: Ju Pi elimina Calor residual y Li Zhong restaura calor deficiente.',
+      memory: '<strong>Zhu Ru enfría el hipo;</strong> <strong>Li Zhong calienta centro.</strong>',
+      safety: 'Vómito o hipo persistente, incapacidad para retener líquidos, sangre, dolor grave o signos neurológicos requiere evaluación.',
+      prompts: ['¿Cuál trata deficiencia con Calor residual?', '¿Cuál Frío por deficiencia?', '¿Qué síntoma apunta a Ju Pi Zhu Ru Tang?'],
+      source: 'Banco fuente: FWB 9.1.2, Comparison Formulas to Regulate the Qi; corroborado con perfiles individuales.'
+    }
+  }
+);
+
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
