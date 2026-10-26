@@ -1,4 +1,4 @@
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -516,6 +516,333 @@ const cards = [
   }
 ];
 
+cards.push(
+  {
+    slug: 'bai-hu-tang-vs-zhu-ye-shi-gao-tang',
+    title: 'Bai Hu Tang vs. Zhu Ye Shi Gao Tang',
+    category: 'Formulas that Clear Heat',
+    summary: 'Separate blazing Qi-level excess Heat from lingering Heat after illness with injured Qi and fluids.',
+    search: 'bai hu tang zhu ye shi gao tang white tiger lophatherus gypsum qi level heat four bigs residual heat qi fluid injury',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Bai Hu Tang', 'Zhu Ye Shi Gao Tang'],
+      shared: 'Both clear Qi-level Heat and generate fluids, and both use Shi Gao, Gan Cao and Jing Mi.',
+      fast: ['Blazing excess Heat: the “four bigs”—high fever, great thirst, profuse sweating and a big forceful pulse.', 'Residual Heat after febrile disease with injured Qi and fluids: lingering fever, thirst, fatigue and rebellious Stomach Qi.'],
+      rows: [
+        ['Root pattern', 'Strong Yangming Qi-level excess Heat.', 'Residual Heat with Qi and fluid deficiency after illness.'],
+        ['Therapeutic emphasis', 'Powerfully clears Heat and generates fluids.', 'Clears lingering Heat, augments Qi, nourishes fluids and harmonizes the Stomach.'],
+        ['Decisive clue', 'All four “bigs” are prominent.', 'Weakness plus thirst, irritability, nausea or retching after the major Heat has declined.'],
+        ['Pulse', 'Flooding, forceful and rapid.', 'Deficient and rapid.'],
+        ['Exam shortcut', 'Heat is still full and blazing.', 'Heat remains, but the patient is depleted.']
+      ],
+      why: 'Do not choose only by the presence of fever and thirst. The patient’s strength distinguishes a full Heat pattern from residual Heat with deficiency.',
+      memory: '<strong>Bai Hu fights the blaze;</strong> <strong>Zhu Ye Shi Gao clears the embers and rebuilds fluids.</strong>',
+      safety: 'Persistent high fever, confusion, inability to drink or signs of severe dehydration require urgent medical evaluation.',
+      prompts: ['Which formula matches the four bigs?', 'Which formula is used after Heat has injured Qi and fluids?', 'Which pulse distinguishes full Heat from residual Heat with deficiency?'],
+      source: 'Source bank: FWB 2.2 series, Comparison Formulas to Clear Heat; corroborated with Classic Formulas profiles and individual formula files.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Bai Hu Tang', 'Zhu Ye Shi Gao Tang'],
+      shared: 'Ambas eliminan Calor del nivel Qi y generan líquidos; comparten Shi Gao, Gan Cao y Jing Mi.',
+      fast: ['Calor de exceso abrasador: los “cuatro grandes”—fiebre alta, gran sed, sudor profuso y pulso grande-fuerte.', 'Calor residual después de enfermedad febril con Qi y líquidos lesionados: fiebre persistente, sed, fatiga y Qi rebelde de Estómago.'],
+      rows: [
+        ['Patrón raíz', 'Calor fuerte de exceso en nivel Qi Yangming.', 'Calor residual con deficiencia de Qi y líquidos después de enfermedad.'],
+        ['Énfasis terapéutico', 'Elimina poderosamente Calor y genera líquidos.', 'Elimina Calor persistente, aumenta Qi, nutre líquidos y armoniza Estómago.'],
+        ['Pista decisiva', 'Los cuatro “grandes” son prominentes.', 'Debilidad con sed, irritabilidad, náusea o arcadas después de disminuir el Calor principal.'],
+        ['Pulso', 'Desbordante, fuerte y rápido.', 'Deficiente y rápido.'],
+        ['Atajo de examen', 'El Calor sigue lleno y abrasador.', 'Queda Calor, pero el paciente está agotado.']
+      ],
+      why: 'No elijas solo por fiebre y sed. La fuerza del paciente distingue Calor lleno de Calor residual con deficiencia.',
+      memory: '<strong>Bai Hu combate el incendio;</strong> <strong>Zhu Ye Shi Gao elimina brasas y reconstruye líquidos.</strong>',
+      safety: 'Fiebre alta persistente, confusión, incapacidad para beber o deshidratación grave requieren evaluación urgente.',
+      prompts: ['¿Cuál corresponde a los cuatro grandes?', '¿Cuál se usa después de que el Calor lesiona Qi y líquidos?', '¿Qué pulso distingue exceso de deficiencia?'],
+      source: 'Banco fuente: serie FWB 2.2, Comparison Formulas to Clear Heat; corroborado con perfiles Classic Formulas y archivos individuales.'
+    }
+  },
+  {
+    slug: 'xiao-chai-hu-tang-vs-da-chai-hu-tang',
+    title: 'Xiao Chai Hu Tang vs. Da Chai Hu Tang',
+    category: 'Formulas that Harmonize',
+    summary: 'Separate a pure Shaoyang pivot disorder from Shaoyang disease complicated by Yangming bowel excess.',
+    search: 'xiao chai hu tang da chai hu tang minor major bupleurum shaoyang yangming constipation abdominal fullness da huang zhi shi',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Xiao Chai Hu Tang', 'Da Chai Hu Tang'],
+      shared: 'Both harmonize Shaoyang and may show alternating chills and fever, hypochondriac fullness, bitter taste, nausea and a wiry pulse.',
+      fast: ['Primarily Shaoyang: alternating chills and fever without a strong bowel-excess pattern.', 'Shaoyang plus Yangming excess: abdominal or epigastric fullness and pain, persistent vomiting or constipation.'],
+      rows: [
+        ['Pattern depth', 'Half-exterior/half-interior Shaoyang disorder.', 'Shaoyang disorder combined with interior excess.'],
+        ['Distinct action', 'Harmonizes the Shaoyang pivot and supports upright Qi.', 'Harmonizes Shaoyang while draining interior Heat and accumulation.'],
+        ['Decisive clue', 'Alternating chills and fever dominate.', 'Constipation and abdominal fullness/pain join the Shaoyang signs.'],
+        ['Formula construction', 'Contains Qi-supporting Ren Shen and Gan Cao.', 'Adds Da Huang and Zhi Shi to drain and move the interior.'],
+        ['Exam shortcut', 'Shaoyang only.', 'Shaoyang + Yangming bowel excess.']
+      ],
+      why: 'The larger formula is not merely a stronger Xiao Chai Hu Tang; it adds a second disease location that requires downward drainage.',
+      memory: '<strong>Xiao turns the pivot;</strong> <strong>Da turns the pivot and opens the bowel.</strong>',
+      safety: 'Da Chai Hu Tang has a purgative component and is not for self-treatment. Severe abdominal pain or suspected obstruction requires urgent assessment.',
+      prompts: ['Which formula treats a primarily Shaoyang pattern?', 'Which adds Da Huang and Zhi Shi?', 'What Yangming signs justify choosing Da Chai Hu Tang?'],
+      source: 'Source bank: FWB 4.2 series and formula chapter comparisons; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Xiao Chai Hu Tang', 'Da Chai Hu Tang'],
+      shared: 'Ambas armonizan Shaoyang y pueden mostrar escalofríos-fiebre alternantes, plenitud hipocondríaca, sabor amargo, náusea y pulso de cuerda.',
+      fast: ['Principalmente Shaoyang: alternancia sin patrón fuerte de exceso intestinal.', 'Shaoyang más exceso Yangming: plenitud y dolor abdominal/epigástrico, vómito persistente o estreñimiento.'],
+      rows: [
+        ['Profundidad', 'Trastorno Shaoyang mitad Exterior-mitad Interior.', 'Shaoyang combinado con exceso Interior.'],
+        ['Acción distintiva', 'Armoniza la bisagra Shaoyang y apoya Qi correcto.', 'Armoniza Shaoyang mientras drena Calor y acumulación Interior.'],
+        ['Pista decisiva', 'Predominan escalofríos y fiebre alternantes.', 'Estreñimiento y plenitud/dolor abdominal acompañan los signos Shaoyang.'],
+        ['Construcción', 'Contiene Ren Shen y Gan Cao para apoyar Qi.', 'Añade Da Huang y Zhi Shi para drenar y mover Interior.'],
+        ['Atajo de examen', 'Solo Shaoyang.', 'Shaoyang + exceso intestinal Yangming.']
+      ],
+      why: 'La fórmula mayor no es solo una versión más fuerte: añade una segunda localización que requiere drenaje descendente.',
+      memory: '<strong>Xiao gira la bisagra;</strong> <strong>Da gira la bisagra y abre el intestino.</strong>',
+      safety: 'Da Chai Hu Tang tiene componente purgante y no es para automedicación. Dolor abdominal grave o sospecha de obstrucción exige evaluación urgente.',
+      prompts: ['¿Cuál trata principalmente Shaoyang?', '¿Cuál añade Da Huang y Zhi Shi?', '¿Qué signos Yangming justifican Da Chai Hu Tang?'],
+      source: 'Banco fuente: serie FWB 4.2 y comparaciones de capítulos; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'si-wu-tang-vs-xiao-yao-san',
+    title: 'Si Wu Tang vs. Xiao Yao San',
+    category: 'Tonify Blood / Harmonize Liver and Spleen',
+    summary: 'Separate a foundational Blood-deficiency formula from Liver-Qi constraint with Spleen deficiency and secondary Blood deficiency.',
+    search: 'si wu tang xiao yao san four substance rambling powder blood deficiency liver qi constraint spleen deficiency menstruation emotional rib side',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Si Wu Tang', 'Xiao Yao San'],
+      shared: 'Both nourish Liver Blood and contain Dang Gui and Bai Shao; both are commonly tested in menstrual presentations.',
+      fast: ['Blood deficiency is primary: pale complexion, dizziness, scant or irregular menses and a thin pulse.', 'Liver-Qi constraint is primary: emotional symptoms, rib-side distention, PMS and digestive weakness.'],
+      rows: [
+        ['Primary strategy', 'Nourish and regulate Blood.', 'Spread Liver Qi, strengthen Spleen and nourish Blood.'],
+        ['Root pattern', 'Blood deficiency, sometimes with mild Blood stasis.', 'Liver constraint overacting on a deficient Spleen with insufficient Blood.'],
+        ['Decisive clue', 'Pale, dry and undernourished Blood signs dominate.', 'Mood changes, sighing, rib-side or breast distention and appetite changes dominate.'],
+        ['Pulse', 'Thin or choppy.', 'Wiry and weak.'],
+        ['Exam shortcut', 'Build Blood directly.', 'Move Liver Qi while protecting Qi and Blood.']
+      ],
+      why: 'Menstrual irregularity is shared. Emotional and digestive constraint points to Xiao Yao San; uncomplicated Blood deficiency points to Si Wu Tang.',
+      memory: '<strong>Si Wu fills the Blood;</strong> <strong>Xiao Yao frees the Liver and feeds the Blood.</strong>',
+      safety: 'Heavy, unexplained or pregnancy-related bleeding requires medical evaluation rather than formula selection alone.',
+      prompts: ['Which formula is the foundational Blood tonic?', 'Which combines Liver-Qi constraint with Spleen deficiency?', 'Which clues make menstrual irregularity a Xiao Yao San pattern?'],
+      source: 'Source bank: FWB 8.2 series, Comparison Formulas to Tonify; corroborated with Classic Formulas profiles and individual formula files.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Si Wu Tang', 'Xiao Yao San'],
+      shared: 'Ambas nutren Sangre de Hígado y contienen Dang Gui y Bai Shao; ambas se evalúan frecuentemente en cuadros menstruales.',
+      fast: ['Predomina deficiencia de Sangre: tez pálida, mareo, menstruación escasa/irregular y pulso fino.', 'Predomina estancamiento de Qi de Hígado: síntomas emocionales, distensión costal, SPM y debilidad digestiva.'],
+      rows: [
+        ['Estrategia principal', 'Nutrir y regular Sangre.', 'Difundir Qi de Hígado, fortalecer Bazo y nutrir Sangre.'],
+        ['Patrón raíz', 'Deficiencia de Sangre, a veces con estasis leve.', 'Estancamiento de Hígado que afecta Bazo deficiente con Sangre insuficiente.'],
+        ['Pista decisiva', 'Predominan signos pálidos, secos y desnutridos de Sangre.', 'Predominan cambios de ánimo, suspiros, distensión costal/mamaria y cambios de apetito.'],
+        ['Pulso', 'Fino o áspero.', 'De cuerda y débil.'],
+        ['Atajo de examen', 'Construir Sangre directamente.', 'Mover Qi de Hígado protegiendo Qi y Sangre.']
+      ],
+      why: 'La irregularidad menstrual es compartida. Estancamiento emocional-digestivo señala Xiao Yao; deficiencia sencilla de Sangre señala Si Wu.',
+      memory: '<strong>Si Wu llena Sangre;</strong> <strong>Xiao Yao libera Hígado y alimenta Sangre.</strong>',
+      safety: 'Sangrado abundante, inexplicado o relacionado con embarazo requiere evaluación médica.',
+      prompts: ['¿Cuál es el tónico base de Sangre?', '¿Cuál combina estancamiento de Hígado con deficiencia de Bazo?', '¿Qué pistas convierten irregularidad menstrual en patrón Xiao Yao?'],
+      source: 'Banco fuente: serie FWB 8.2, Comparison Formulas to Tonify; corroborado con perfiles Classic Formulas y archivos individuales.'
+    }
+  },
+  {
+    slug: 'bu-zhong-yi-qi-tang-vs-gui-pi-tang',
+    title: 'Bu Zhong Yi Qi Tang vs. Gui Pi Tang',
+    category: 'Formulas that Tonify Qi',
+    summary: 'Separate sinking Middle Qi with prolapse from Spleen-Qi and Heart-Blood deficiency with Spirit or bleeding signs.',
+    search: 'bu zhong yi qi tang gui pi tang tonify middle qi restore spleen qi heart blood sinking prolapse bleeding insomnia palpitations',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Bu Zhong Yi Qi Tang', 'Gui Pi Tang'],
+      shared: 'Both tonify Spleen Qi and may treat fatigue, poor appetite, loose stools and pale weakness.',
+      fast: ['Middle Qi sinks: prolapse, chronic diarrhea, bearing-down sensation or Qi-deficiency fever.', 'Spleen Qi fails to make/hold Blood and Heart Blood is deficient: insomnia, palpitations, poor memory or bleeding.'],
+      rows: [
+        ['Primary direction', 'Raises clear Yang and lifts sunken Qi.', 'Tonifies Spleen Qi, nourishes Heart Blood and calms the Spirit.'],
+        ['Decisive clue', 'Prolapse or bearing-down symptoms.', 'Spirit disturbance or abnormal bleeding.'],
+        ['Typical signs', 'Fatigue worse with exertion, weak voice, spontaneous sweating, chronic diarrhea.', 'Fatigue, poor appetite, insomnia, palpitations, forgetfulness, easy bruising.'],
+        ['Exam shortcut', 'Qi is sinking.', 'Qi is not producing or containing Blood.']
+      ],
+      why: 'Both start from Spleen-Qi deficiency. The downstream failure—sinking versus Heart-Blood deficiency/bleeding—chooses the formula.',
+      memory: '<strong>Bu Zhong lifts;</strong> <strong>Gui Pi builds and holds Blood.</strong>',
+      safety: 'New prolapse, unexplained bleeding, black stools or severe anemia signs require medical evaluation.',
+      prompts: ['Which formula treats sinking Middle Qi?', 'Which combines insomnia with Spleen deficiency?', 'Which is selected when bleeding reflects failure of Qi to hold Blood?'],
+      source: 'Source bank: FWB 8.2 series, Comparison Formulas to Tonify; corroborated with the Classic Formulas profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Bu Zhong Yi Qi Tang', 'Gui Pi Tang'],
+      shared: 'Ambas tonifican Qi de Bazo y pueden tratar fatiga, poco apetito, heces blandas y debilidad pálida.',
+      fast: ['Qi Medio se hunde: prolapso, diarrea crónica, sensación de descenso o fiebre por deficiencia de Qi.', 'Qi de Bazo no produce/contiene Sangre y Sangre de Corazón es deficiente: insomnio, palpitaciones, mala memoria o sangrado.'],
+      rows: [
+        ['Dirección principal', 'Eleva Yang claro y levanta Qi hundido.', 'Tonifica Qi de Bazo, nutre Sangre de Corazón y calma Shen.'],
+        ['Pista decisiva', 'Prolapso o sensación de descenso.', 'Alteración de Shen o sangrado anormal.'],
+        ['Signos típicos', 'Fatiga peor con esfuerzo, voz débil, sudor espontáneo, diarrea crónica.', 'Fatiga, poco apetito, insomnio, palpitaciones, olvido, moretones fáciles.'],
+        ['Atajo de examen', 'Qi se hunde.', 'Qi no produce o no contiene Sangre.']
+      ],
+      why: 'Ambas parten de deficiencia de Qi de Bazo. La falla resultante—hundimiento frente a deficiencia de Sangre/sangrado—elige la fórmula.',
+      memory: '<strong>Bu Zhong eleva;</strong> <strong>Gui Pi construye y contiene Sangre.</strong>',
+      safety: 'Prolapso nuevo, sangrado inexplicado, heces negras o signos de anemia grave requieren evaluación médica.',
+      prompts: ['¿Cuál trata Qi Medio hundido?', '¿Cuál combina insomnio con deficiencia de Bazo?', '¿Cuál se elige cuando Qi no contiene Sangre?'],
+      source: 'Banco fuente: serie FWB 8.2, Comparison Formulas to Tonify; corroborado con perfiles Classic Formulas.'
+    }
+  },
+  {
+    slug: 'zuo-gui-wan-vs-you-gui-wan',
+    title: 'Zuo Gui Wan vs. You Gui Wan',
+    category: 'Formulas that Tonify',
+    summary: 'Use the Left/Right name pair to separate Kidney Yin-Essence deficiency from Kidney Yang and gate-of-vitality Fire deficiency.',
+    search: 'zuo gui wan you gui wan restore left right kidney yin essence yang ming men fire cold heat fu zi rou gui',
+    en: {
+      eyebrow: 'Formula name pair', names: ['Zuo Gui Wan', 'You Gui Wan'],
+      shared: 'Both are rich Kidney-tonifying formulas for deficiency of Essence, low-back weakness, dizziness, tinnitus and reproductive weakness.',
+      fast: ['“Restore the Left”: Kidney Yin and Essence deficiency with dryness or deficiency Heat.', '“Restore the Right”: Kidney Yang and gate-of-vitality Fire deficiency with Cold signs.'],
+      rows: [
+        ['Primary direction', 'Enriches Kidney Yin, Essence and marrow.', 'Warms and tonifies Kidney Yang while replenishing Essence and Blood.'],
+        ['Decisive signs', 'Night sweats, dry mouth, heat sensations, seminal emission, red scant-coated tongue.', 'Cold limbs, aversion to cold, impotence, infertility, edema or clear copious urine.'],
+        ['Formula clue', 'Uses rich Yin/Essence tonics without Fu Zi or Rou Gui.', 'Includes Fu Zi and Rou Gui to restore Ming Men Fire.'],
+        ['Exam shortcut', 'Left = Yin and Essence.', 'Right = Yang and Fire.']
+      ],
+      why: 'The pair shares deep Kidney supplementation, so temperature is decisive: dryness/empty Heat points left; Cold and failed transformation point right.',
+      memory: '<strong>Zuo/Left stores Yin;</strong> <strong>You/Right restores Yang.</strong>',
+      safety: 'You Gui Wan contains Fu Zi and requires processed material, reliable sourcing and qualified professional supervision. Neither formula suits Dampness or digestive weakness without modification.',
+      prompts: ['Which formula enriches Kidney Yin and marrow?', 'Which restores Ming Men Fire?', 'Which ingredient pair makes You Gui Wan distinctly warming?'],
+      source: 'Source bank: FWB 8.2 series and individual formula files; corroborated with <em>Chinese Herbal Medicine: Formulas &amp; Strategies</em>, 2nd ed.'
+    },
+    es: {
+      eyebrow: 'Pareja de nombres de fórmulas', names: ['Zuo Gui Wan', 'You Gui Wan'],
+      shared: 'Ambas tonifican profundamente Riñón en deficiencia de Esencia, debilidad lumbar, mareo, tinnitus y debilidad reproductiva.',
+      fast: ['“Restaurar la Izquierda”: deficiencia de Yin y Esencia de Riñón con Sequedad o Calor vacío.', '“Restaurar la Derecha”: deficiencia de Yang y Fuego de Ming Men con signos de Frío.'],
+      rows: [
+        ['Dirección principal', 'Enriquece Yin de Riñón, Esencia y médula.', 'Calienta y tonifica Yang de Riñón mientras repone Esencia y Sangre.'],
+        ['Signos decisivos', 'Sudor nocturno, boca seca, sensación de Calor, emisión seminal, lengua roja con poca capa.', 'Extremidades frías, aversión al frío, impotencia, infertilidad, edema u orina clara abundante.'],
+        ['Pista de fórmula', 'Usa tónicos ricos de Yin/Esencia sin Fu Zi ni Rou Gui.', 'Incluye Fu Zi y Rou Gui para restaurar Fuego de Ming Men.'],
+        ['Atajo de examen', 'Izquierda = Yin y Esencia.', 'Derecha = Yang y Fuego.']
+      ],
+      why: 'Comparten suplementación profunda de Riñón; decide la temperatura: Sequedad/Calor vacío señala izquierda, Frío y transformación fallida señala derecha.',
+      memory: '<strong>Zuo/Izquierda almacena Yin;</strong> <strong>You/Derecha restaura Yang.</strong>',
+      safety: 'You Gui Wan contiene Fu Zi y requiere material procesado, fuente confiable y supervisión profesional. Ninguna corresponde a Humedad o debilidad digestiva sin modificación.',
+      prompts: ['¿Cuál enriquece Yin de Riñón y médula?', '¿Cuál restaura Fuego de Ming Men?', '¿Qué pareja de ingredientes hace a You Gui Wan claramente caliente?'],
+      source: 'Banco fuente: serie FWB 8.2 y archivos individuales; corroborado con <em>Chinese Herbal Medicine: Formulas &amp; Strategies</em>, 2.ª ed.'
+    }
+  },
+  {
+    slug: 'xue-fu-zhu-yu-tang-vs-bu-yang-huan-wu-tang',
+    title: 'Xue Fu Zhu Yu Tang vs. Bu Yang Huan Wu Tang',
+    category: 'Formulas that Invigorate Blood',
+    summary: 'Separate Qi stagnation and Blood stasis in the chest from Blood stasis caused by severe Qi deficiency after Wind-stroke.',
+    search: 'xue fu zhu yu tang bu yang huan wu tang drive out stasis mansion blood tonify yang restore five chest blood stasis qi deficiency hemiplegia stroke',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Xue Fu Zhu Yu Tang', 'Bu Yang Huan Wu Tang'],
+      shared: 'Both invigorate Blood and dispel stasis, but the Qi pattern, location and clinical setting differ.',
+      fast: ['Qi stagnation and Blood stasis above the diaphragm: fixed chest pain, headache, irritability or dark complexion.', 'Severe Qi deficiency cannot move Blood: chronic post-stroke hemiplegia, weakness, numbness or facial paralysis.'],
+      rows: [
+        ['Root mechanism', 'Qi stagnation drives Blood stasis.', 'Qi deficiency fails to propel Blood.'],
+        ['Location', 'Chest and upper burner.', 'Channels and collaterals, often one side of the body.'],
+        ['Decisive clue', 'Fixed stabbing chest pain with emotional or upper-body stasis signs.', 'Weak, flaccid post-stroke deficits with a deficient pulse.'],
+        ['Therapeutic emphasis', 'Move Qi and Blood and relieve pain.', 'Strongly tonify Qi so Blood can move through the channels.'],
+        ['Exam shortcut', 'Stagnant and painful.', 'Deficient and weak.']
+      ],
+      why: 'Both move Blood, but one disperses an excess-like obstruction while the other supplies Qi to move stasis in a profoundly deficient patient.',
+      memory: '<strong>Xue Fu opens the chest mansion;</strong> <strong>Bu Yang supplies the power to move a weak side.</strong>',
+      safety: 'New chest pain or any new stroke sign is an emergency. These formulas are not substitutes for acute cardiac or stroke care; anticoagulant use requires professional review.',
+      prompts: ['Which formula targets Blood stasis in the chest?', 'Which targets chronic post-stroke weakness from Qi deficiency?', 'How does the pulse help distinguish the mechanisms?'],
+      source: 'Source bank: FWB 10.1 series, Comparison Formulas to Invigorate the Blood; corroborated with individual formula profiles.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Xue Fu Zhu Yu Tang', 'Bu Yang Huan Wu Tang'],
+      shared: 'Ambas vigorizan Sangre y dispersan estasis, pero difieren el patrón de Qi, localización y contexto clínico.',
+      fast: ['Estancamiento de Qi y estasis de Sangre sobre diafragma: dolor fijo de pecho, cefalea, irritabilidad o tez oscura.', 'Deficiencia grave de Qi no mueve Sangre: hemiplejia crónica postictus, debilidad, entumecimiento o parálisis facial.'],
+      rows: [
+        ['Mecanismo raíz', 'Estancamiento de Qi impulsa estasis de Sangre.', 'Deficiencia de Qi no impulsa Sangre.'],
+        ['Localización', 'Pecho y Jiao Superior.', 'Canales y colaterales, a menudo un lado del cuerpo.'],
+        ['Pista decisiva', 'Dolor fijo punzante de pecho con signos emocionales o superiores de estasis.', 'Déficits flácidos y débiles postictus con pulso deficiente.'],
+        ['Énfasis terapéutico', 'Mover Qi y Sangre y aliviar dolor.', 'Tonificar fuertemente Qi para que Sangre recorra canales.'],
+        ['Atajo de examen', 'Estancado y doloroso.', 'Deficiente y débil.']
+      ],
+      why: 'Ambas mueven Sangre; una dispersa obstrucción tipo exceso y la otra aporta Qi para mover estasis en un paciente profundamente deficiente.',
+      memory: '<strong>Xue Fu abre la mansión del pecho;</strong> <strong>Bu Yang aporta fuerza para mover el lado débil.</strong>',
+      safety: 'Dolor de pecho nuevo o cualquier signo nuevo de ictus es emergencia. No sustituyen atención aguda; anticoagulantes requieren revisión profesional.',
+      prompts: ['¿Cuál se dirige a estasis en pecho?', '¿Cuál trata debilidad crónica postictus por deficiencia de Qi?', '¿Cómo ayuda el pulso?'],
+      source: 'Banco fuente: serie FWB 10.1, Comparison Formulas to Invigorate the Blood; corroborado con perfiles individuales.'
+    }
+  },
+  {
+    slug: 'bao-he-wan-vs-jian-pi-wan',
+    title: 'Bao He Wan vs. Jian Pi Wan',
+    category: 'Formulas that Reduce Food Stagnation',
+    summary: 'Separate acute excess Food Stagnation from chronic Food Stagnation rooted in Spleen-Qi deficiency.',
+    search: 'bao he wan jian pi wan preserve harmony strengthen spleen food stagnation excess deficiency acute chronic sour belching loose stool fatigue',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Bao He Wan', 'Jian Pi Wan'],
+      shared: 'Both reduce Food Stagnation and may treat epigastric fullness, poor appetite, belching, nausea and an irregular stool pattern.',
+      fast: ['Acute excess Food Stagnation: distention, sour belching, foul breath, nausea and a thick greasy coat.', 'Chronic stagnation from Spleen deficiency: poor appetite, fatigue, loose stools and a pale tongue.'],
+      rows: [
+        ['Primary strategy', 'Reduce food, guide out stagnation and harmonize the Stomach.', 'Strengthen Spleen Qi while gradually reducing accumulated food.'],
+        ['Constitution', 'Relatively robust, excess presentation.', 'Deficient, chronic presentation.'],
+        ['Decisive clue', 'Recent dietary excess with strong stagnation signs.', 'Long-standing weak digestion with recurring stagnation.'],
+        ['Tongue and pulse', 'Thick greasy coat; slippery and full.', 'Pale tongue; weak pulse, possibly slippery.'],
+        ['Exam shortcut', 'Too much food.', 'Too little digestive power.']
+      ],
+      why: 'Both can show fullness after eating. Acute intensity points to Bao He Wan; fatigue and chronic Spleen weakness point to Jian Pi Wan.',
+      memory: '<strong>Bao He clears the traffic jam;</strong> <strong>Jian Pi repairs the digestive engine.</strong>',
+      safety: 'Persistent vomiting, severe abdominal pain, weight loss, blood in stool or inability to pass stool/gas requires medical evaluation.',
+      prompts: ['Which formula treats acute food excess?', 'Which treats chronic stagnation with Spleen-Qi deficiency?', 'Which tongue and pulse indicate Jian Pi Wan?'],
+      source: 'Source bank: FWB 15.1, Comparison Formulas to Reduce Food Stagnation; corroborated with formula chapters and practice materials.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Bao He Wan', 'Jian Pi Wan'],
+      shared: 'Ambas reducen estancamiento de alimentos y pueden tratar plenitud epigástrica, poco apetito, eructos, náusea y alteración de heces.',
+      fast: ['Estancamiento agudo de exceso: distensión, eructo agrio, mal aliento, náusea y capa gruesa grasosa.', 'Estancamiento crónico por deficiencia de Bazo: poco apetito, fatiga, heces blandas y lengua pálida.'],
+      rows: [
+        ['Estrategia principal', 'Reducir alimento, guiar estancamiento y armonizar Estómago.', 'Fortalecer Qi de Bazo mientras reduce gradualmente alimento acumulado.'],
+        ['Constitución', 'Presentación de exceso relativamente robusta.', 'Presentación deficiente y crónica.'],
+        ['Pista decisiva', 'Exceso dietético reciente con signos fuertes de estancamiento.', 'Digestión débil prolongada con estancamiento recurrente.'],
+        ['Lengua y pulso', 'Capa gruesa grasosa; resbaladizo y lleno.', 'Lengua pálida; pulso débil, posiblemente resbaladizo.'],
+        ['Atajo de examen', 'Demasiada comida.', 'Muy poca fuerza digestiva.']
+      ],
+      why: 'Ambas pueden dar plenitud posprandial. Intensidad aguda señala Bao He; fatiga y debilidad crónica de Bazo señalan Jian Pi.',
+      memory: '<strong>Bao He despeja el atasco;</strong> <strong>Jian Pi repara el motor digestivo.</strong>',
+      safety: 'Vómito persistente, dolor abdominal grave, pérdida de peso, sangre en heces o no expulsar heces/gases requiere evaluación médica.',
+      prompts: ['¿Cuál trata exceso alimentario agudo?', '¿Cuál trata estancamiento crónico con deficiencia de Bazo?', '¿Qué lengua y pulso señalan Jian Pi?'],
+      source: 'Banco fuente: FWB 15.1, Comparison Formulas to Reduce Food Stagnation; corroborado con capítulos y materiales de práctica.'
+    }
+  },
+  {
+    slug: 'su-zi-jiang-qi-tang-vs-ding-chuan-tang',
+    title: 'Su Zi Jiang Qi Tang vs. Ding Chuan Tang',
+    category: 'Formulas that Relieve Coughing and Wheezing',
+    summary: 'Separate Cold-Phlegm with deficiency below from Wind-Cold constraining Phlegm-Heat in the Lungs.',
+    search: 'su zi jiang qi tang ding chuan tang perilla fruit direct qi downward arrest wheezing cold phlegm kidney deficiency phlegm heat exterior wind cold',
+    en: {
+      eyebrow: 'Formula comparison', names: ['Su Zi Jiang Qi Tang', 'Ding Chuan Tang'],
+      shared: 'Both descend rebellious Lung Qi, transform Phlegm and relieve cough or wheezing; both may contain Su Zi, Ban Xia and Gan Cao.',
+      fast: ['Excess above, deficiency below: Cold-Phlegm with weak Kidney grasping and copious thin white sputum.', 'Exterior Wind-Cold with internal Phlegm-Heat: wheezing with thick yellow sputum and mixed Cold/Heat signs.'],
+      rows: [
+        ['Thermal pattern', 'Cold-Phlegm with lower-burner deficiency.', 'Phlegm-Heat constrained by external Wind-Cold.'],
+        ['Sputum clue', 'Copious, thin and white.', 'Copious, thick and yellow.'],
+        ['Distinct action', 'Warms the lower burner and helps Kidneys grasp Qi while directing Lung Qi down.', 'Clears Phlegm-Heat, releases external constraint and arrests wheezing.'],
+        ['Decisive signs', 'Shortness of breath worse with exertion, cold limbs or low-back weakness.', 'Fever/chills, chest constraint and loud wheezing with Heat signs.'],
+        ['Exam shortcut', 'Cold above + deficiency below.', 'Cold outside + Heat-Phlegm inside.']
+      ],
+      why: 'Both treat wheezing with Phlegm. Sputum color and the lower-burner deficiency signs separate them quickly.',
+      memory: '<strong>Su Zi descends cold Qi and supports below;</strong> <strong>Ding Chuan clears hot Phlegm and stops wheeze.</strong>',
+      safety: 'Ding Chuan Tang contains Ma Huang and requires cardiovascular and medication screening. Severe or rapidly worsening breathing difficulty is an emergency.',
+      prompts: ['Which formula treats Cold-Phlegm with Kidney deficiency?', 'Which treats thick yellow sputum in a mixed Exterior pattern?', 'How does sputum color guide the choice?'],
+      source: 'Source bank: FWB 6.2 series, Comparison Formulas to Transform Phlegm; corroborated with individual formula profiles and practice tests.'
+    },
+    es: {
+      eyebrow: 'Comparación de fórmulas', names: ['Su Zi Jiang Qi Tang', 'Ding Chuan Tang'],
+      shared: 'Ambas hacen descender Qi rebelde de Pulmón, transforman Flema y alivian tos/sibilancias; pueden compartir Su Zi, Ban Xia y Gan Cao.',
+      fast: ['Exceso arriba, deficiencia abajo: Flema-Frío con Riñón débil para captar Qi y esputo blanco fino abundante.', 'Viento-Frío Exterior con Flema-Calor interna: sibilancias, esputo amarillo espeso y signos mixtos.'],
+      rows: [
+        ['Patrón térmico', 'Flema-Frío con deficiencia de Jiao Inferior.', 'Flema-Calor constreñida por Viento-Frío externo.'],
+        ['Pista del esputo', 'Abundante, fino y blanco.', 'Abundante, espeso y amarillo.'],
+        ['Acción distintiva', 'Calienta Jiao Inferior y ayuda a Riñón a captar Qi mientras desciende Qi de Pulmón.', 'Elimina Flema-Calor, libera constricción externa y detiene sibilancias.'],
+        ['Signos decisivos', 'Disnea peor con esfuerzo, extremidades frías o debilidad lumbar.', 'Fiebre/escalofríos, constricción torácica y sibilancia fuerte con Calor.'],
+        ['Atajo de examen', 'Frío arriba + deficiencia abajo.', 'Frío afuera + Flema-Calor adentro.']
+      ],
+      why: 'Ambas tratan sibilancias con Flema. El color del esputo y signos de deficiencia inferior las separan rápidamente.',
+      memory: '<strong>Su Zi desciende Qi frío y apoya abajo;</strong> <strong>Ding Chuan elimina Flema caliente y detiene sibilancia.</strong>',
+      safety: 'Ding Chuan Tang contiene Ma Huang y requiere evaluación cardiovascular y farmacológica. Dificultad respiratoria grave o progresiva es emergencia.',
+      prompts: ['¿Cuál trata Flema-Frío con deficiencia de Riñón?', '¿Cuál trata esputo amarillo espeso en patrón Exterior mixto?', '¿Cómo guía el color del esputo?'],
+      source: 'Banco fuente: serie FWB 6.2, Comparison Formulas to Transform Phlegm; corroborado con perfiles individuales y exámenes de práctica.'
+    }
+  }
+);
+
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
@@ -584,11 +911,29 @@ function indexHtml(language) {
 <footer class="comparison-footer"><div class="comparison-shell">${spanish ? 'Material independiente de estudio. Los Exam Keys y el feedback de los Mock permanecen en Exam Key.' : 'Independent study material. Exam keys and Mock feedback remain in Exam Key.'}</div></footer></body></html>`;
 }
 
+function updateMasterIndex() {
+  const masterPath = resolve(root, 'index.html');
+  let html = readFileSync(masterPath, 'utf8');
+  const herbCount = (html.match(/data-type="herbs"/g) || []).length;
+  const formulaCards = cards.map(card => `        <article class="comparison-card" data-type="formulas" data-search="${esc(card.search)}">
+          <span class="comparison-card__type">Formulas</span><h3>${esc(card.title)}</h3><p>${esc(card.summary)}</p><div class="comparison-card__category"><strong>Category:</strong><br>${esc(card.category)}</div><a class="comparison-card__open" href="${card.slug}.html">Open Study Note →</a>
+        </article>`).join('\n\n');
+  const block = `        <!-- FORMULA-CARDS-START -->\n${formulaCards}\n        <!-- FORMULA-CARDS-END -->`;
+  const markerPattern = /        <!-- FORMULA-CARDS-START -->[\s\S]*?        <!-- FORMULA-CARDS-END -->/;
+  if (!markerPattern.test(html)) {
+    throw new Error('Formula-card markers are missing from comparisons/index.html');
+  }
+  html = html.replace(markerPattern, block);
+  html = html.replace(/<span data-visible-count>\d+<\/span>/, `<span data-visible-count>${herbCount + cards.length}</span>`);
+  writeFileSync(masterPath, html);
+}
+
 for (const card of cards) {
   writeFileSync(resolve(root, `${card.slug}.html`), cardHtml(card, 'en'));
   writeFileSync(resolve(root, `${card.slug}-es.html`), cardHtml(card, 'es'));
 }
 writeFileSync(resolve(root, 'formulas.html'), indexHtml('en'));
 writeFileSync(resolve(root, 'formulas-es.html'), indexHtml('es'));
+updateMasterIndex();
 
-console.log(`Generated ${cards.length * 2} formula cards and 2 indexes in ${root}`);
+console.log(`Generated ${cards.length * 2} formula cards, 2 indexes and the master listing in ${root}`);
