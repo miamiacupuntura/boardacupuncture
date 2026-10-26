@@ -1068,6 +1068,222 @@ cards.push(
       safety: 'Primera convulsión, duración de 5 minutos, debilidad/habla súbita, cefalea nueva grave, fiebre alta con nuca rígida o conciencia alterada es emergencia.',
       prompts: ['¿Qué Viento tiene fiebre alta?', '¿Cuál cefalea y tinnitus?', '¿Cuál temblor fino con palidez?']
     }
+  },
+  {
+    slug: 'spleen-yang-deficiency-vs-kidney-yang-deficiency', title: 'Spleen Yang Deficiency vs. Kidney Yang Deficiency', titleEs: 'Deficiencia de Yang de Bazo vs. Deficiencia de Yang de Riñón',
+    summary: 'Separate failure to warm digestion from deeper Mingmen, urinary, reproductive and water-transformation weakness.',
+    summaryEs: 'Distingue falla para calentar digestión de debilidad más profunda de Mingmen, orina, reproducción y transformación de agua.',
+    search: 'spleen kidney yang deficiency cold digestion loose stool undigested edema urine low back knees reproductive dawn diarrhea pale swollen deep slow weak',
+    en: {
+      names: ['Spleen Yang Deficiency', 'Kidney Yang Deficiency'],
+      shared: 'Both cause internal Cold, fatigue, cold limbs, edema, pale swollen wet tongue and a deep slow weak pulse.',
+      fast: ['Digestive center fails: poor appetite, cold abdominal pain, loose stool with undigested food and edema from weak transport.', 'Mingmen and lower burner fail: weak low back/knees, dawn diarrhea, frequent clear urine, edema, reproductive weakness and pronounced cold.'],
+      rows: [
+        ['Primary sphere', 'Digestion and Spleen fluid transport.', 'Urinary, reproductive, Essence and whole-body warming.'],
+        ['Decisive clue', 'Cold digestive symptoms dominate.', 'Low back/knee, urinary or reproductive signs dominate.'],
+        ['Relationship', 'Can progress into Kidney Yang deficiency.', 'Often includes Spleen Yang weakness when advanced.'],
+        ['Formula examples', 'Li Zhong Wan.', 'Jin Gui Shen Qi Wan, You Gui Wan or Zhen Wu Tang by presentation.']
+      ],
+      why: 'Cold and edema overlap. Location and depth decide: Middle-Jiao digestion points to Spleen; lower burner, Essence and Mingmen point to Kidney.',
+      memory: '<strong>Spleen Yang warms the pot;</strong> <strong>Kidney Yang powers the furnace and water gate.</strong>',
+      safety: 'Rapidly worsening edema, shortness of breath, very low urine output, severe weakness or hypothermia requires urgent medical evaluation.',
+      prompts: ['Which pattern has undigested food?', 'Which has dawn diarrhea?', 'Which organ signs show the deeper deficiency?']
+    },
+    es: {
+      names: ['Deficiencia de Yang de Bazo', 'Deficiencia de Yang de Riñón'],
+      shared: 'Ambas causan Frío interno, fatiga, miembros fríos, edema, lengua pálida-hinchada-mojada y pulso profundo-lento-débil.',
+      fast: ['Falla el centro digestivo: poco apetito, dolor abdominal frío, heces sueltas con alimento no digerido y edema por transporte débil.', 'Fallan Mingmen y Jiao Inferior: lumbar/rodillas débiles, diarrea al amanecer, orina clara frecuente, edema, debilidad reproductiva y Frío marcado.'],
+      rows: [
+        ['Esfera principal', 'Digestión y transporte de líquidos de Bazo.', 'Orina, reproducción, Esencia y calentamiento corporal.'],
+        ['Pista decisiva', 'Dominan signos digestivos fríos.', 'Dominan lumbar/rodillas, orina o reproducción.'],
+        ['Relación', 'Puede progresar a deficiencia Yang renal.', 'Avanzada suele incluir Yang de Bazo débil.'],
+        ['Ejemplos de fórmulas', 'Li Zhong Wan.', 'Jin Gui Shen Qi Wan, You Gui Wan o Zhen Wu Tang según presentación.']
+      ],
+      why: 'Frío y edema se superponen. Lugar/profundidad deciden: digestión del Centro es Bazo; Jiao Inferior, Esencia y Mingmen es Riñón.',
+      memory: '<strong>Yang de Bazo calienta la olla;</strong> <strong>Yang de Riñón alimenta horno y compuerta de agua.</strong>',
+      safety: 'Edema rápidamente progresivo, disnea, orina muy escasa, debilidad grave o hipotermia requiere evaluación urgente.',
+      prompts: ['¿Cuál tiene alimento no digerido?', '¿Cuál diarrea al amanecer?', '¿Qué signos muestran deficiencia profunda?']
+    }
+  },
+  {
+    slug: 'liver-yin-deficiency-vs-kidney-yin-deficiency', title: 'Liver Yin Deficiency vs. Kidney Yin Deficiency', titleEs: 'Deficiencia de Yin de Hígado vs. Deficiencia de Yin de Riñón',
+    summary: 'Separate eye-sinew-menstrual undernourishment from low-back, ear, Essence and bone depletion.',
+    summaryEs: 'Distingue desnutrición de ojos-tendones-menstruación de agotamiento lumbar, auditivo, de Esencia y huesos.',
+    search: 'liver kidney yin deficiency eyes dry blurred vision tendons cramps menses low back knees tinnitus hearing essence bones night sweat five center heat',
+    en: {
+      names: ['Liver Yin Deficiency', 'Kidney Yin Deficiency'],
+      shared: 'Both cause dryness, dizziness, tinnitus, night sweating, five-center Heat, red peeled tongue and a thin rapid pulse; they often coexist.',
+      fast: ['Liver emphasis: dry blurred eyes, night blindness, cramps, tremor, brittle nails and scanty menstruation.', 'Kidney emphasis: weak low back/knees, stronger tinnitus or hearing loss, reproductive/Essence weakness and developmental or bone signs.'],
+      rows: [
+        ['Nourished tissues', 'Eyes, sinews, nails and menstrual Blood.', 'Bones, marrow, brain, ears and reproductive Essence.'],
+        ['Decisive location', 'Visual and sinew symptoms.', 'Low back/knees, ears and Essence symptoms.'],
+        ['Common progression', 'May allow Liver Yang to rise.', 'Can fail to nourish Liver Yin and underlie the combined pattern.'],
+        ['Formula examples', 'Yi Guan Jian by presentation.', 'Liu Wei Di Huang Wan or Zuo Gui Wan by depth.']
+      ],
+      why: 'Empty Heat is shared and cannot localize the diagnosis. The affected sensory organ and tissue system identify Liver versus Kidney emphasis.',
+      memory: '<strong>Liver Yin moistens eyes and sinews;</strong> <strong>Kidney Yin fills ears, bones and Essence.</strong>',
+      safety: 'Sudden vision/hearing loss, severe headache, neurologic deficit, unexplained bleeding or significant weight loss requires medical assessment.',
+      prompts: ['Which pattern emphasizes dry eyes?', 'Which emphasizes weak low back and hearing?', 'Why do the two often coexist?']
+    },
+    es: {
+      names: ['Deficiencia de Yin de Hígado', 'Deficiencia de Yin de Riñón'],
+      shared: 'Ambas causan sequedad, mareo, tinnitus, sudor nocturno, Calor de cinco centros, lengua roja pelada y pulso fino-rápido; suelen coexistir.',
+      fast: ['Énfasis Hígado: ojos secos/borrosos, ceguera nocturna, calambres, temblor, uñas frágiles y menstruación escasa.', 'Énfasis Riñón: lumbar/rodillas débiles, tinnitus o pérdida auditiva más fuerte, debilidad de Esencia/reproducción y signos óseos.'],
+      rows: [
+        ['Tejidos nutridos', 'Ojos, tendones, uñas y Sangre menstrual.', 'Huesos, médula, cerebro, oídos y Esencia reproductiva.'],
+        ['Localización decisiva', 'Síntomas visuales y tendinosos.', 'Lumbar/rodillas, oídos y Esencia.'],
+        ['Progresión', 'Puede permitir ascenso de Yang de Hígado.', 'Puede dejar de nutrir Yin de Hígado y sostener pattern combinado.'],
+        ['Ejemplos de fórmulas', 'Yi Guan Jian según presentación.', 'Liu Wei Di Huang Wan o Zuo Gui Wan según profundidad.']
+      ],
+      why: 'Calor Vacío es común y no localiza. Órgano sensorial y tejido afectado identifican énfasis de Hígado o Riñón.',
+      memory: '<strong>Yin de Hígado humedece ojos y tendones;</strong> <strong>Yin de Riñón llena oídos, huesos y Esencia.</strong>',
+      safety: 'Pérdida súbita visual/auditiva, cefalea grave, déficit neurológico, sangrado inexplicado o pérdida de peso requiere evaluación.',
+      prompts: ['¿Cuál enfatiza ojos secos?', '¿Cuál lumbar y audición?', '¿Por qué suelen coexistir?']
+    }
+  },
+  {
+    slug: 'four-bi-syndrome-patterns', title: 'Four Bi-Syndrome Patterns', titleEs: 'Cuatro Patterns de Síndrome Bi',
+    summary: 'Distinguish Wind, Cold, Damp and Heat painful obstruction by movement, severity, heaviness and inflammation.',
+    summaryEs: 'Distingue obstrucción dolorosa por Viento, Frío, Humedad y Calor mediante movilidad, intensidad, pesadez e inflamación.',
+    search: 'bi syndrome wind moving xing cold painful tong damp fixed zhuo heat hot painful joints wandering severe swelling numbness red',
+    en: {
+      names: ['Wind Bi (Xing Bi)', 'Cold Bi (Tong Bi)', 'Damp Bi (Zhuo Bi)', 'Heat Bi (Re Bi)'],
+      shared: 'All obstruct channels and joints, causing pain, stiffness or limited movement.',
+      fast: ['Pain wanders from joint to joint.', 'Severe fixed pain worsened by cold and improved by warmth.', 'Fixed heavy pain with swelling and numbness.', 'Red, hot, swollen and acutely painful joints.'],
+      rows: [
+        ['Dominant quality', 'Movement and variability.', 'Contraction and severe pain.', 'Heaviness and lingering swelling.', 'Inflammation and burning Heat.'],
+        ['Weather clue', 'Often changes rapidly with exposure.', 'Clearly worse in cold weather.', 'Worse in damp weather.', 'Worse with Heat; warmth may aggravate.'],
+        ['Tongue / pulse', 'Thin coat; floating/wiry.', 'White coat; tight/slow.', 'Greasy coat; soggy/slippery.', 'Red with yellow coat; rapid/slippery.'],
+        ['Formula examples', 'Fang Feng Tang.', 'Wu Tou Tang—expert use due to aconite.', 'Yi Yi Ren Tang.', 'Bai Hu Jia Gui Zhi Tang or Xuan Bi Tang.']
+      ],
+      why: 'Pain location alone is weak evidence. Wandering, severity/cold response, heaviness/numbness or red Heat identifies the dominant pathogen.',
+      memory: '<strong>Wind moves;</strong> <strong>Cold hurts;</strong> <strong>Damp weighs;</strong> <strong>Heat reddens.</strong>',
+      safety: 'A single acutely red-hot joint with fever, inability to bear weight, major trauma, calf swelling or neurologic weakness requires urgent evaluation. Aconite formulas are not for self-treatment.',
+      prompts: ['Which Bi wanders?', 'Which produces severe cold-sensitive pain?', 'Which is heavy and numb?', 'Which is red and hot?']
+    },
+    es: {
+      names: ['Bi de Viento (Xing Bi)', 'Bi de Frío (Tong Bi)', 'Bi de Humedad (Zhuo Bi)', 'Bi de Calor (Re Bi)'],
+      shared: 'Todos obstruyen canales y articulaciones, causando dolor, rigidez o movimiento limitado.',
+      fast: ['Dolor migra de articulación en articulación.', 'Dolor fijo grave peor con frío y mejor con calor.', 'Dolor fijo pesado con hinchazón y entumecimiento.', 'Articulaciones rojas, calientes, hinchadas y dolorosas agudamente.'],
+      rows: [
+        ['Cualidad dominante', 'Movimiento y variabilidad.', 'Contracción y dolor grave.', 'Pesadez e hinchazón persistente.', 'Inflamación y Calor ardiente.'],
+        ['Clima', 'Cambia rápido con exposición.', 'Claramente peor en clima frío.', 'Peor en clima húmedo.', 'Peor con Calor; calor externo puede agravar.'],
+        ['Lengua / pulso', 'Capa fina; flotante/de cuerda.', 'Capa blanca; tenso/lento.', 'Capa grasosa; blando/resbaladizo.', 'Roja con capa amarilla; rápido/resbaladizo.'],
+        ['Ejemplos de fórmulas', 'Fang Feng Tang.', 'Wu Tou Tang—uso experto por aconito.', 'Yi Yi Ren Tang.', 'Bai Hu Jia Gui Zhi Tang o Xuan Bi Tang.']
+      ],
+      why: 'Localización sola aporta poco. Migración, gravedad/respuesta al frío, pesadez o rojez identifican patógeno dominante.',
+      memory: '<strong>Viento se mueve;</strong> <strong>Frío duele;</strong> <strong>Humedad pesa;</strong> <strong>Calor enrojece.</strong>',
+      safety: 'Una articulación rojo-caliente con fiebre, incapacidad de apoyar, trauma, pantorrilla hinchada o debilidad neurológica requiere urgencia. Aconito no es autocuidado.',
+      prompts: ['¿Qué Bi migra?', '¿Cuál duele más con frío?', '¿Cuál pesa y entumece?', '¿Cuál es rojo/caliente?']
+    }
+  },
+  {
+    slug: 'wei-qi-ying-xue-levels', title: 'Wei, Qi, Ying and Xue Levels', titleEs: 'Niveles Wei, Qi, Ying y Xue',
+    summary: 'Track warm disease from superficial defensive signs to blazing Qi Heat, nutritive disturbance and Blood-level bleeding or Wind.',
+    summaryEs: 'Sigue enfermedad tibia desde defensa superficial hasta Calor Qi, alteración nutritiva y sangrado o Viento del nivel Sangre.',
+    search: 'wei qi ying xue levels warm disease fever chills thirst sweat night fever delirium rash bleeding convulsions tongue pulse yin qiao bai hu qing ying xi jiao di huang',
+    en: {
+      names: ['Wei Level', 'Qi Level', 'Ying Level', 'Xue Level'],
+      shared: 'All describe depth and severity in warm-febrile disease; progression inward generally means stronger Heat and greater fluid, Spirit or Blood injury.',
+      fast: ['Exterior fever with mild chills, sore throat and floating-rapid pulse.', 'High fever, sweating, strong thirst and forceful-rapid pulse without chills.', 'Fever worse at night, restlessness/delirium and faint rash with crimson tongue.', 'Bleeding, dense purple rash, severe delirium or convulsions with crimson tongue.'],
+      rows: [
+        ['Main site', 'Defensive Exterior and Lung.', 'Interior Qi and organs.', 'Nutritive level and Pericardium/Spirit.', 'Blood level.'],
+        ['Decisive clue', 'Chills still accompany fever.', 'Four greats: fever, sweat, thirst, pulse.', 'Night fever and early Spirit disturbance.', 'Bleeding, macules and stirring Wind.'],
+        ['Tongue / pulse', 'Red tip/edges; floating-rapid.', 'Red with yellow coat; flooding/rapid.', 'Crimson, little coat; thin-rapid.', 'Deep crimson/purple; rapid, possibly wiry.'],
+        ['Formula examples', 'Yin Qiao San.', 'Bai Hu Tang.', 'Qing Ying Tang.', 'Xi Jiao Di Huang Tang with modern Shui Niu Jiao substitution.']
+      ],
+      why: 'Fever is shared. Chills, thirst/sweat, night Spirit change, then bleeding/convulsion mark progressively deeper levels.',
+      memory: '<strong>Wei defends;</strong> <strong>Qi blazes;</strong> <strong>Ying disturbs Shen;</strong> <strong>Xue bleeds and stirs Wind.</strong>',
+      safety: 'This framework never replaces urgent infectious evaluation. High fever with confusion, stiff neck, breathing difficulty, non-blanching rash, bleeding or seizure is an emergency. Rhinoceros horn is prohibited/obsolete.',
+      prompts: ['Which level retains chills?', 'Which has the four greats?', 'Which first disturbs Shen?', 'Which causes bleeding and convulsions?']
+    },
+    es: {
+      names: ['Nivel Wei', 'Nivel Qi', 'Nivel Ying', 'Nivel Xue'],
+      shared: 'Todos describen profundidad/gravedad de enfermedad tibia; progresión interna implica más Calor y lesión de líquidos, Shen o Sangre.',
+      fast: ['Fiebre Exterior con escalofríos leves, garganta dolorosa y pulso flotante-rápido.', 'Fiebre alta, sudor, sed fuerte y pulso fuerte-rápido sin escalofríos.', 'Fiebre peor de noche, inquietud/delirio y rash tenue con lengua carmesí.', 'Sangrado, rash púrpura denso, delirio grave o convulsiones con lengua carmesí.'],
+      rows: [
+        ['Sitio', 'Exterior defensivo y Pulmón.', 'Qi Interior y órganos.', 'Nivel nutritivo y Pericardio/Shen.', 'Nivel Sangre.'],
+        ['Pista decisiva', 'Escalofríos aún acompañan fiebre.', 'Cuatro grandes: fiebre, sudor, sed, pulso.', 'Fiebre nocturna y alteración temprana de Shen.', 'Sangrado, máculas y Viento.'],
+        ['Lengua / pulso', 'Punta/bordes rojos; flotante-rápido.', 'Roja con capa amarilla; desbordante-rápido.', 'Carmesí, poca capa; fino-rápido.', 'Carmesí profunda/púrpura; rápido, posible cuerda.'],
+        ['Ejemplos de fórmulas', 'Yin Qiao San.', 'Bai Hu Tang.', 'Qing Ying Tang.', 'Xi Jiao Di Huang Tang con sustitución moderna Shui Niu Jiao.']
+      ],
+      why: 'Fiebre es común. Escalofríos, sed/sudor, cambio nocturno de Shen y luego sangrado/convulsión marcan profundidad.',
+      memory: '<strong>Wei defiende;</strong> <strong>Qi arde;</strong> <strong>Ying perturba Shen;</strong> <strong>Xue sangra y mueve Viento.</strong>',
+      safety: 'Este marco no sustituye evaluación infecciosa urgente. Fiebre alta con confusión, nuca rígida, disnea, rash no blanqueable, sangrado o convulsión es emergencia. Cuerno de rinoceronte está prohibido/obsoleto.',
+      prompts: ['¿Qué nivel conserva escalofríos?', '¿Cuál tiene cuatro grandes?', '¿Cuál primero altera Shen?', '¿Cuál sangra/convulsiona?']
+    }
+  },
+  {
+    slug: 'three-yang-stages', title: 'Taiyang vs. Yangming vs. Shaoyang', titleEs: 'Taiyang vs. Yangming vs. Shaoyang',
+    summary: 'Separate an Exterior Taiyang battle, an Interior Yangming Heat excess and a pivot-stage Shaoyang disorder.',
+    summaryEs: 'Distingue batalla Exterior Taiyang, exceso de Calor Interior Yangming y trastorno de bisagra Shaoyang.',
+    search: 'three yang stages taiyang yangming shaoyang fever chills neck occipital sweating thirst constipation alternating bitter taste rib side fullness floating flooding wiry',
+    en: {
+      names: ['Taiyang', 'Yangming', 'Shaoyang'],
+      shared: 'All are Yang-stage presentations with fever, but location, fever-chill relationship and pulse identify the stage.',
+      fast: ['Exterior: fever/chills, occipital headache, stiff neck and floating pulse; sweat status separates excess from deficiency.', 'Interior: high fever without chills, profuse sweat, great thirst or bowel excess with a strong/deep pulse.', 'Pivot: alternating chills and fever, bitter taste, dry throat, dizziness, rib-side fullness and wiry pulse.'],
+      rows: [
+        ['Location', 'Exterior and channels.', 'Interior Qi or bowel.', 'Half-exterior, half-interior pivot.'],
+        ['Temperature clue', 'Fever with aversion to cold.', 'Strong Heat without exterior chills.', 'Alternating chills and fever.'],
+        ['Pulse', 'Floating.', 'Flooding/forceful or deep-excess.', 'Wiry.'],
+        ['Formula examples', 'Ma Huang Tang or Gui Zhi Tang by sweating.', 'Bai Hu Tang or a Cheng Qi Tang by Qi/bowel pattern.', 'Xiao Chai Hu Tang.']
+      ],
+      why: 'Fever alone does not locate the stage. Exterior aversion, pure interior Heat or alternating pivot signs solve the comparison.',
+      memory: '<strong>Taiyang is outside;</strong> <strong>Yangming is inside and blazing;</strong> <strong>Shaoyang swings at the hinge.</strong>',
+      safety: 'High fever, confusion, severe dehydration, stiff neck, breathing difficulty, rigid abdomen or inability to pass stool/gas requires urgent medical evaluation.',
+      prompts: ['Which stage has a floating pulse?', 'Which has great fever, sweat and thirst?', 'Which alternates chills and fever?']
+    },
+    es: {
+      names: ['Taiyang', 'Yangming', 'Shaoyang'],
+      shared: 'Todas son presentaciones Yang con fiebre, pero lugar, relación fiebre-escalofrío y pulso identifican etapa.',
+      fast: ['Exterior: fiebre/escalofríos, cefalea occipital, nuca rígida y pulso flotante; sudor separa exceso/deficiencia.', 'Interior: fiebre alta sin escalofríos, sudor profuso, gran sed o exceso intestinal con pulso fuerte/profundo.', 'Bisagra: fiebre/escalofríos alternantes, sabor amargo, garganta seca, mareo, plenitud costal y pulso de cuerda.'],
+      rows: [
+        ['Localización', 'Exterior y canales.', 'Qi Interior o intestino.', 'Mitad Exterior-mitad Interior.'],
+        ['Temperatura', 'Fiebre con aversión al frío.', 'Calor fuerte sin escalofríos exteriores.', 'Fiebre y escalofríos alternantes.'],
+        ['Pulso', 'Flotante.', 'Desbordante/fuerte o profundo-exceso.', 'De cuerda.'],
+        ['Ejemplos de fórmulas', 'Ma Huang Tang o Gui Zhi Tang según sudor.', 'Bai Hu Tang o Cheng Qi Tang según Qi/intestino.', 'Xiao Chai Hu Tang.']
+      ],
+      why: 'Fiebre sola no localiza. Aversión Exterior, Calor Interior puro o alternancia de bisagra resuelven comparación.',
+      memory: '<strong>Taiyang está afuera;</strong> <strong>Yangming adentro y ardiente;</strong> <strong>Shaoyang oscila en la bisagra.</strong>',
+      safety: 'Fiebre alta, confusión, deshidratación grave, nuca rígida, disnea, abdomen rígido o no expulsar heces/gases requiere urgencia.',
+      prompts: ['¿Qué etapa tiene pulso flotante?', '¿Cuál gran fiebre, sudor y sed?', '¿Cuál alterna fiebre/escalofríos?']
+    }
+  },
+  {
+    slug: 'damp-heat-liver-gallbladder-vs-bladder-vs-large-intestine', title: 'Damp-Heat by Location: Liver–Gallbladder vs. Bladder vs. Large Intestine', titleEs: 'Humedad-Calor por Lugar: Hígado–Vesícula vs. Vejiga vs. Intestino Grueso',
+    summary: 'Use the affected excretory route—bile/genitals, urine or stool—to localize Damp-Heat.',
+    summaryEs: 'Usa la vía de excreción afectada—bilis/genitales, orina o heces—para localizar Humedad-Calor.',
+    search: 'damp heat liver gallbladder bladder large intestine jaundice bitter taste genital discharge dysuria burning urine diarrhea dysentery mucus blood tenesmus yellow greasy slippery rapid',
+    en: {
+      names: ['Liver–Gallbladder Damp-Heat', 'Bladder Damp-Heat', 'Large-Intestine Damp-Heat'],
+      shared: 'All show Heat plus Damp obstruction: heaviness/fullness, yellow greasy coat and a slippery rapid or wiry-rapid pulse.',
+      fast: ['Bile/genital route: jaundice, bitter taste, rib-side pain, genital itching/swelling or yellow discharge.', 'Urinary route: urgency, frequency, burning painful scant dark urine or blood/sand in urine.', 'Stool route: foul urgent diarrhea or dysentery with mucus/blood, abdominal pain, burning anus and tenesmus.'],
+      rows: [
+        ['Primary route', 'Bile and genital/reproductive region.', 'Urinary tract.', 'Colon and stool.'],
+        ['Decisive clue', 'Jaundice or genital Damp-Heat.', 'Burning painful urination.', 'Mucus-blood stool and tenesmus.'],
+        ['Pulse tendency', 'Wiry-slippery-rapid.', 'Slippery-rapid.', 'Slippery-rapid.'],
+        ['Formula examples', 'Long Dan Xie Gan Tang or Yin Chen Hao Tang by presentation.', 'Ba Zheng San.', 'Ge Gen Qin Lian Tang or Bai Tou Weng Tang by presentation.']
+      ],
+      why: 'The thermal and tongue signs overlap. Follow what the body is failing to excrete normally: bile/genital fluids, urine or stool.',
+      memory: '<strong>Yellow body/genitals—Liver-GB;</strong> <strong>burning urine—Bladder;</strong> <strong>burning stool—Large Intestine.</strong>',
+      safety: 'Jaundice, fever with flank pain, inability to urinate, pregnancy urinary symptoms, bloody diarrhea, severe dehydration or rigid abdominal pain requires urgent medical evaluation.',
+      prompts: ['Which location causes jaundice?', 'Which causes burning urination?', 'Which causes tenesmus with mucus-blood stool?']
+    },
+    es: {
+      names: ['Humedad-Calor de Hígado–Vesícula', 'Humedad-Calor de Vejiga', 'Humedad-Calor de Intestino Grueso'],
+      shared: 'Todas muestran Calor con obstrucción Húmeda: pesadez/plenitud, capa amarilla grasosa y pulso resbaladizo-rápido o cuerda-rápido.',
+      fast: ['Vía biliar/genital: ictericia, sabor amargo, dolor costal, picor/hinchazón genital o descarga amarilla.', 'Vía urinaria: urgencia, frecuencia, orina ardiente dolorosa escasa/oscura o sangre/arena.', 'Vía fecal: diarrea/disentería fétida urgente con moco/sangre, dolor, ano ardiente y tenesmo.'],
+      rows: [
+        ['Vía principal', 'Bilis y región genital/reproductiva.', 'Tracto urinario.', 'Colon y heces.'],
+        ['Pista decisiva', 'Ictericia o Humedad-Calor genital.', 'Micción ardiente dolorosa.', 'Heces con moco-sangre y tenesmo.'],
+        ['Pulso', 'Cuerda-resbaladizo-rápido.', 'Resbaladizo-rápido.', 'Resbaladizo-rápido.'],
+        ['Ejemplos de fórmulas', 'Long Dan Xie Gan Tang o Yin Chen Hao Tang según presentación.', 'Ba Zheng San.', 'Ge Gen Qin Lian Tang o Bai Tou Weng Tang según presentación.']
+      ],
+      why: 'Temperatura y lengua se superponen. Sigue lo que el cuerpo no excreta normalmente: bilis/líquidos genitales, orina o heces.',
+      memory: '<strong>Cuerpo/genitales amarillos—Hígado-VB;</strong> <strong>orina ardiente—Vejiga;</strong> <strong>heces ardientes—Intestino Grueso.</strong>',
+      safety: 'Ictericia, fiebre con dolor lumbar, no poder orinar, síntomas urinarios en embarazo, diarrea sangrienta, deshidratación grave o abdomen rígido requiere urgencia.',
+      prompts: ['¿Qué lugar causa ictericia?', '¿Cuál micción ardiente?', '¿Cuál tenesmo con moco-sangre?']
+    }
   }
 );
 
