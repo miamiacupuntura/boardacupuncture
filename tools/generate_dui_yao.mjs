@@ -1,0 +1,299 @@
+import { writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
+const cssVersion = '20261026-2';
+
+const pairs = [
+  {
+    number: 1, slug: 'ma-huang-gui-zhi-dui-yao', title: 'Má Huáng + Guì Zhī', characters: '麻黄 + 桂枝',
+    category: { en: 'Exterior-Resolving · Pungent-Warm', es: 'Liberar Exterior · Acre-Tibio' },
+    search: 'ma huang gui zhi ephedra cinnamon twig sweating wind cold exterior excess no sweat ma huang tang',
+    en: {
+      mnemonic: 'The door-opener and the furnace.',
+      job: 'Strongly induce sweating and release an excess Wind-Cold Exterior pattern.',
+      roles: [['Má Huáng', 'Throws open the pores and strongly induces sweating.'], ['Guì Zhī', 'Warms the nutritive/muscle layer and pushes the release outward.']],
+      clues: 'Strong chills, mild fever, no sweating, body aches, wheezing and a floating-tight pulse.',
+      formulas: 'Má Huáng Tāng.',
+      trap: 'Spontaneous sweating means Exterior deficiency; this strong opening pair is usually the wrong direction.',
+      prep: 'Use only with professional dose and duration control.',
+      safety: 'Má Huáng requires cardiovascular, blood-pressure, stimulant and MAOI screening. Palpitations, chest pain or severe headache requires urgent assessment.'
+    },
+    es: {
+      mnemonic: 'El abrepuertas y el horno.',
+      job: 'Inducir sudoración con fuerza y liberar Viento-Frío Exterior por exceso.',
+      roles: [['Má Huáng', 'Abre los poros e induce sudoración con fuerza.'], ['Guì Zhī', 'Calienta capa nutritiva/muscular y empuja la liberación hacia afuera.']],
+      clues: 'Escalofríos fuertes, fiebre leve, sin sudor, dolor corporal, sibilancias y pulso flotante-tenso.',
+      formulas: 'Má Huáng Tāng.',
+      trap: 'Sudor espontáneo significa deficiencia Exterior; esta pareja fuertemente abridora suele ser dirección incorrecta.',
+      prep: 'Solo con control profesional de dosis y duración.',
+      safety: 'Má Huáng exige revisar sistema cardiovascular, presión, estimulantes e IMAO. Palpitaciones, dolor torácico o cefalea grave requiere urgencia.'
+    }
+  },
+  {
+    number: 2, slug: 'ma-huang-xing-ren-dui-yao', title: 'Má Huáng + Xìng Rén', characters: '麻黄 + 杏仁',
+    category: { en: 'Exterior-Resolving · Regulate Lung Qi', es: 'Liberar Exterior · Regular Qi de Pulmón' },
+    search: 'ma huang xing ren apricot kernel diffuse descend lung qi cough wheezing ma huang tang ma xing shi gan tang',
+    en: {
+      mnemonic: 'One opens the window; one pushes the air down.',
+      job: 'Restore Lung diffusion and descent to stop cough and wheezing in appropriately balanced hot or cold formulas.',
+      roles: [['Má Huáng', 'Diffuses and disseminates constrained Lung Qi.'], ['Xìng Rén', 'Descends rebellious Lung Qi and stops cough.']],
+      clues: 'Cough and wheezing from failure of Lung Qi to move in both directions.',
+      formulas: 'Má Huáng Tāng; Má Xìng Shí Gān Tāng.',
+      trap: 'The pair itself is not exclusively hot or cold; the surrounding formula determines thermal direction.',
+      prep: 'Xìng Rén is commonly crushed before decoction.',
+      safety: 'Xìng Rén is slightly toxic and must remain within professional dosing; Má Huáng requires cardiovascular and interaction screening.'
+    },
+    es: {
+      mnemonic: 'Uno abre la ventana; otro empuja el aire hacia abajo.',
+      job: 'Restaurar difusión y descenso de Qi pulmonar para detener tos/sibilancias en fórmulas calientes o frías bien equilibradas.',
+      roles: [['Má Huáng', 'Difunde y disemina Qi de Pulmón constreñido.'], ['Xìng Rén', 'Desciende Qi de Pulmón rebelde y detiene tos.']],
+      clues: 'Tos y sibilancias por falla del Qi pulmonar para moverse en ambas direcciones.',
+      formulas: 'Má Huáng Tāng; Má Xìng Shí Gān Tāng.',
+      trap: 'La pareja no es exclusivamente caliente ni fría; la fórmula que la rodea determina dirección térmica.',
+      prep: 'Xìng Rén suele triturarse antes de decocción.',
+      safety: 'Xìng Rén es ligeramente tóxica y debe mantenerse en dosis profesional; Má Huáng exige revisión cardiovascular e interacciones.'
+    }
+  },
+  {
+    number: 3, slug: 'ma-huang-shi-gao-dui-yao', title: 'Má Huáng + Shí Gāo', characters: '麻黄 + 石膏',
+    category: { en: 'Clear Lung Heat · Relieve Wheezing', es: 'Aclarar Calor de Pulmón · Aliviar Sibilancias' },
+    search: 'ma huang shi gao gypsum lung heat hot wheezing sweating ma xing shi gan da qing long',
+    en: {
+      mnemonic: 'A fire hose aimed at the Lung.',
+      job: 'Diffuse Lung Qi while strongly clearing Lung Heat for hot wheezing.',
+      roles: [['Má Huáng', 'Opens and diffuses constrained Lung Qi.'], ['Shí Gāo', 'Clears blazing Lung Heat and restrains the sweating tendency when used in the larger dose.']],
+      clues: 'Fever, thirst, cough and wheezing with Heat signs, with or without sweating.',
+      formulas: 'Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng.',
+      trap: 'Do not label the pair simply warming because it contains Má Huáng; the larger Shí Gāo dose redirects it toward Lung Heat.',
+      prep: 'Crush Shí Gāo and decoct it first.',
+      safety: 'Má Huáng requires cardiovascular and drug-interaction screening. Severe wheezing or breathing difficulty is an emergency.'
+    },
+    es: {
+      mnemonic: 'Una manguera contra el fuego dirigida al Pulmón.',
+      job: 'Difundir Qi de Pulmón mientras aclara con fuerza Calor pulmonar para sibilancia caliente.',
+      roles: [['Má Huáng', 'Abre y difunde Qi de Pulmón constreñido.'], ['Shí Gāo', 'Aclara Calor ardiente de Pulmón y limita sudoración cuando domina en dosis.']],
+      clues: 'Fiebre, sed, tos y sibilancias con signos de Calor, con o sin sudor.',
+      formulas: 'Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng.',
+      trap: 'No clasificarla solo como caliente por Má Huáng; la dosis mayor de Shí Gāo la redirige a Calor de Pulmón.',
+      prep: 'Triturar Shí Gāo y decoctarlo primero.',
+      safety: 'Má Huáng exige revisión cardiovascular y farmacológica. Sibilancia grave o dificultad respiratoria es emergencia.'
+    }
+  },
+  {
+    number: 4, slug: 'gui-zhi-bai-shao-dui-yao', title: 'Guì Zhī + Bái Sháo', characters: '桂枝 + 白芍',
+    category: { en: 'Harmonize Ying and Wei', es: 'Armonizar Ying y Wei' },
+    search: 'gui zhi bai shao harmonize ying wei nutritive defensive wind cold sweating aversion wind gui zhi tang xiao jian zhong',
+    en: {
+      mnemonic: 'One pushes out; one holds in.',
+      job: 'Harmonize nutritive and protective Qi in Exterior deficiency and regulate tension between movement and containment.',
+      roles: [['Guì Zhī', 'Warms the channels and releases the muscle layer outward.'], ['Bái Sháo', 'Preserves Yin and nutritive Qi so the Exterior does not leak excessively.']],
+      clues: 'Wind-Cold with spontaneous sweating, aversion to wind and a floating-moderate pulse.',
+      formulas: 'Guì Zhī Tāng; Bái Sháo is doubled in Xiǎo Jiàn Zhōng Tāng.',
+      trap: 'This is not the closed, no-sweat excess pattern of Má Huáng + Guì Zhī.',
+      prep: 'The relative dose changes the pair from Exterior harmonizing toward spasm/pain relief.',
+      safety: 'Persistent fever, breathing difficulty or dehydration requires medical evaluation; do not induce further sweating in a depleted patient.'
+    },
+    es: {
+      mnemonic: 'Uno empuja afuera; otro contiene adentro.',
+      job: 'Armonizar Qi nutritivo y protector en deficiencia Exterior y regular tensión entre movimiento y contención.',
+      roles: [['Guì Zhī', 'Calienta canales y libera capa muscular hacia afuera.'], ['Bái Sháo', 'Preserva Yin y Qi nutritivo para que Exterior no pierda en exceso.']],
+      clues: 'Viento-Frío con sudor espontáneo, aversión al viento y pulso flotante-moderado.',
+      formulas: 'Guì Zhī Tāng; Bái Sháo se duplica en Xiǎo Jiàn Zhōng Tāng.',
+      trap: 'No es el pattern cerrado sin sudor de Má Huáng + Guì Zhī.',
+      prep: 'La dosis relativa cambia la pareja de armonizar Exterior hacia aliviar espasmo/dolor.',
+      safety: 'Fiebre persistente, disnea o deshidratación requiere evaluación; no inducir más sudor en paciente agotado.'
+    }
+  },
+  {
+    number: 5, slug: 'jing-jie-fang-feng-dui-yao', title: 'Jīng Jiè + Fáng Fēng', characters: '荆芥 + 防风',
+    category: { en: 'Dispel Wind from the Exterior', es: 'Expulsar Viento del Exterior' },
+    search: 'jing jie fang feng wind exterior itching rash sores wind cold heat jing fang bai du xiao feng san charred bleeding',
+    en: {
+      mnemonic: 'The mild wind-chasing duo.',
+      job: 'Dispel Wind from the surface and stop itching across Wind-Cold, Wind-Heat, rash and early sore presentations.',
+      roles: [['Jīng Jiè', 'Lightly vents the Exterior and rashes; the charred form changes toward stopping bleeding.'], ['Fáng Fēng', 'Expels Wind while relieving pain, spasm and itching.']],
+      clues: 'Itching or migrating superficial symptoms without the harsh sweating action of stronger Exterior herbs.',
+      formulas: 'Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn.',
+      trap: 'The pair is broader than a simple Wind-Cold duo; both can appear in rash and Wind-Heat contexts when balanced.',
+      prep: 'Use charred Jīng Jiè only when the intended job changes to hemostasis.',
+      safety: 'A rapidly spreading rash, breathing difficulty, facial swelling, blistering or fever requires urgent assessment.'
+    },
+    es: {
+      mnemonic: 'El dúo suave que persigue el Viento.',
+      job: 'Expulsar Viento de la superficie y detener picor en Viento-Frío, Viento-Calor, erupciones y llagas tempranas.',
+      roles: [['Jīng Jiè', 'Ventila suavemente Exterior y erupciones; carbonizada cambia a detener sangrado.'], ['Fáng Fēng', 'Expulsa Viento y alivia dolor, espasmo y picor.']],
+      clues: 'Picor o signos superficiales migratorios sin sudoración agresiva de hierbas Exterior más fuertes.',
+      formulas: 'Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn.',
+      trap: 'Es más amplia que una pareja simple Viento-Frío; aparece en erupción y Viento-Calor cuando se equilibra.',
+      prep: 'Usar Jīng Jiè carbonizada solo cuando el trabajo buscado cambia a hemostasia.',
+      safety: 'Rash que se extiende rápido, disnea, hinchazón facial, ampollas o fiebre requiere urgencia.'
+    }
+  },
+  {
+    number: 6, slug: 'cang-er-zi-xin-yi-hua-dui-yao', title: 'Cāng Ěr Zǐ + Xīn Yí Huā', characters: '苍耳子 + 辛夷花',
+    category: { en: 'Open the Nasal Passages', es: 'Abrir Pasajes Nasales' },
+    search: 'cang er zi xin yi hua nose nasal congestion sinus headache loss smell cang er zi san toxic wrap',
+    en: {
+      mnemonic: 'The burr and fuzzy bud nose crew.',
+      job: 'Dispel Wind and open the nasal passages for congestion, sinus pressure and reduced smell.',
+      roles: [['Cāng Ěr Zǐ', 'Strongly opens the nose and dispels Wind-Damp from the head.'], ['Xīn Yí Huā', 'Directs aromatic opening action to the nose and sinus region.']],
+      clues: 'Stuffy nose, frontal/sinus headache and loss or reduction of smell.',
+      formulas: 'Cāng Ěr Zǐ Sǎn.',
+      trap: 'This pair treats obstruction; discharge color and whole pattern still determine whether Cold, Heat or Dampness must also be addressed.',
+      prep: 'Wrap Xīn Yí Huā during decoction because its hairs irritate the throat.',
+      safety: 'Cāng Ěr Zǐ is toxic and requires professional dosing. Facial swelling, visual changes, severe headache, high fever or neurologic signs needs urgent care.'
+    },
+    es: {
+      mnemonic: 'La fresa espinosa y el capullo velloso del equipo nasal.',
+      job: 'Expulsar Viento y abrir pasajes nasales para congestión, presión sinusal y olfato reducido.',
+      roles: [['Cāng Ěr Zǐ', 'Abre nariz con fuerza y expulsa Viento-Humedad de cabeza.'], ['Xīn Yí Huā', 'Dirige apertura aromática a nariz y senos.']],
+      clues: 'Nariz tapada, cefalea frontal/sinusal y pérdida o reducción del olfato.',
+      formulas: 'Cāng Ěr Zǐ Sǎn.',
+      trap: 'Trata obstrucción; color de secreción y pattern completo determinan si también hay Frío, Calor o Humedad.',
+      prep: 'Envolver Xīn Yí Huā al decoctar porque sus pelos irritan garganta.',
+      safety: 'Cāng Ěr Zǐ es tóxica y requiere dosis profesional. Hinchazón facial, cambios visuales, cefalea grave, fiebre alta o signos neurológicos requiere urgencia.'
+    }
+  },
+  {
+    number: 7, slug: 'sang-ye-ju-hua-dui-yao', title: 'Sāng Yè + Jú Huā', characters: '桑叶 + 菊花',
+    category: { en: 'Disperse Wind-Heat · Brighten the Eyes', es: 'Dispersar Viento-Calor · Aclarar Ojos' },
+    search: 'sang ye ju hua mulberry leaf chrysanthemum wind heat lung liver cough red sore eyes headache sang ju yin',
+    en: {
+      mnemonic: 'A leaf and a flower for a hot head.',
+      job: 'Disperse Wind-Heat, clear Lung and Liver Heat and brighten the eyes.',
+      roles: [['Sāng Yè', 'Focuses more on Lung Heat, cough and dryness while also clearing the eyes.'], ['Jú Huā', 'Focuses more on Liver Heat, headache and red painful eyes.']],
+      clues: 'Early Wind-Heat with cough, headache and red, sore or tearing eyes.',
+      formulas: 'Sāng Jú Yǐn.',
+      trap: 'Jú Huā with Sāng Yè treats excess Wind-Heat eyes; with Gǒu Qǐ Zǐ it treats deficient dry/blurred eyes.',
+      prep: 'Light aromatic materials generally do not need prolonged boiling.',
+      safety: 'Sudden visual loss, severe eye pain, halos, trauma or neurologic symptoms requires urgent ophthalmic/medical evaluation.'
+    },
+    es: {
+      mnemonic: 'Una hoja y una flor para una cabeza caliente.',
+      job: 'Dispersar Viento-Calor, aclarar Calor de Pulmón/Hígado y mejorar ojos.',
+      roles: [['Sāng Yè', 'Enfatiza Calor de Pulmón, tos y sequedad, además de ojos.'], ['Jú Huā', 'Enfatiza Calor de Hígado, cefalea y ojos rojos dolorosos.']],
+      clues: 'Viento-Calor temprano con tos, cefalea y ojos rojos, dolorosos o llorosos.',
+      formulas: 'Sāng Jú Yǐn.',
+      trap: 'Jú Huā con Sāng Yè trata ojos por exceso Viento-Calor; con Gǒu Qǐ Zǐ trata ojos secos/borrosos por deficiencia.',
+      prep: 'Materiales aromáticos ligeros generalmente no necesitan cocción prolongada.',
+      safety: 'Pérdida visual súbita, dolor ocular grave, halos, trauma o signos neurológicos requiere urgencia oftálmica/médica.'
+    }
+  },
+  {
+    number: 8, slug: 'ge-gen-sheng-ma-dui-yao', title: 'Gé Gēn + Shēng Má', characters: '葛根 + 升麻',
+    category: { en: 'Vent Rashes · Release the Muscle Layer', es: 'Ventilar Erupciones · Liberar Capa Muscular' },
+    search: 'ge gen sheng ma pueraria cimicifuga measles rash vent muscle layer sheng ma ge gen tang',
+    en: {
+      mnemonic: 'Push the measles rash outward.',
+      job: 'Release the muscle layer and vent an early rash that is failing to erupt fully.',
+      roles: [['Gé Gēn', 'Releases the muscle layer, raises clear Yang and generates fluids.'], ['Shēng Má', 'Raises and vents toxin/rash toward the surface.']],
+      clues: 'Early measles or another appropriately diagnosed rash that is incomplete or slow to emerge.',
+      formulas: 'Shēng Má Gé Gēn Tāng.',
+      trap: 'Stop the venting strategy once the rash is fully out; do not use it to force a late, dark or complicated rash.',
+      prep: 'Use as part of a professionally differentiated formula, not as isolated rash self-care.',
+      safety: 'Suspected measles requires immediate public-health coordination and airborne isolation. Breathing difficulty, dehydration, confusion or seizure is an emergency.'
+    },
+    es: {
+      mnemonic: 'Empujar el rash de sarampión hacia afuera.',
+      job: 'Liberar capa muscular y ventilar erupción temprana que no emerge completamente.',
+      roles: [['Gé Gēn', 'Libera capa muscular, eleva Yang claro y genera líquidos.'], ['Shēng Má', 'Eleva y ventila toxina/erupción hacia superficie.']],
+      clues: 'Sarampión temprano u otra erupción bien diagnosticada que está incompleta o tarda en salir.',
+      formulas: 'Shēng Má Gé Gēn Tāng.',
+      trap: 'Detener estrategia ventiladora cuando rash ya salió; no forzar rash tardío, oscuro o complicado.',
+      prep: 'Usar dentro de fórmula diferenciada profesionalmente, no como autocuidado aislado.',
+      safety: 'Sarampión sospechado exige coordinación inmediata con salud pública y aislamiento aéreo. Disnea, deshidratación, confusión o convulsión es emergencia.'
+    }
+  },
+  {
+    number: 9, slug: 'chai-hu-sheng-ma-dui-yao', title: 'Chái Hú + Shēng Má', characters: '柴胡 + 升麻',
+    category: { en: 'Raise Clear Yang', es: 'Elevar Yang Claro' },
+    search: 'chai hu sheng ma raise clear yang sinking middle qi prolapse chronic diarrhea bu zhong yi qi tang small doses',
+    en: {
+      mnemonic: 'The two-herb forklift.',
+      job: 'Raise clear Yang and guide a tonic formula upward for sinking Middle Qi.',
+      roles: [['Chái Hú', 'Raises clear Yang through the Liver/Shaoyang axis and relieves constraint.'], ['Shēng Má', 'Lifts sunken Spleen Qi and directs action upward.']],
+      clues: 'Prolapse, bearing-down heaviness, chronic diarrhea and fatigue from sinking Qi.',
+      formulas: 'Bǔ Zhōng Yì Qì Tāng.',
+      trap: 'They are steering herbs in small doses; the tonic herbs provide the fuel. Large dispersing doses would change the strategy.',
+      prep: 'Dose relationship matters more than simply recognizing both herbs.',
+      safety: 'New or painful prolapse, bleeding, bowel obstruction symptoms or severe weakness requires medical evaluation.'
+    },
+    es: {
+      mnemonic: 'El montacargas de dos hierbas.',
+      job: 'Elevar Yang claro y guiar fórmula tónica hacia arriba para Qi Medio hundido.',
+      roles: [['Chái Hú', 'Eleva Yang claro por eje Hígado/Shaoyang y alivia estancamiento.'], ['Shēng Má', 'Levanta Qi de Bazo hundido y dirige acción arriba.']],
+      clues: 'Prolapso, pesadez hacia abajo, diarrea crónica y fatiga por Qi hundido.',
+      formulas: 'Bǔ Zhōng Yì Qì Tāng.',
+      trap: 'Son hierbas guía en dosis pequeñas; los tónicos aportan combustible. Dosis dispersantes grandes cambian estrategia.',
+      prep: 'La relación de dosis importa más que solo reconocer ambas hierbas.',
+      safety: 'Prolapso nuevo/doloroso, sangrado, signos de obstrucción intestinal o debilidad grave requiere evaluación.'
+    }
+  },
+  {
+    number: 10, slug: 'zhi-zi-dan-dou-chi-dui-yao', title: 'Zhī Zǐ + Dàn Dòu Chǐ', characters: '栀子 + 淡豆豉',
+    category: { en: 'Vent Constrained Heat from the Chest', es: 'Ventilar Calor Constreñido del Pecho' },
+    search: 'zhi zi dan dou chi gardenia fermented soybean constrained heat chest restlessness insomnia post fever zhi zi chi tang',
+    en: {
+      mnemonic: 'A cold bitter fruit and fermented bean let leftover Heat escape.',
+      job: 'Clear and vent constrained residual Heat from the chest after an unresolved febrile process.',
+      roles: [['Zhī Zǐ', 'Clears Fire from the three burners and relieves irritability.'], ['Dàn Dòu Chǐ', 'Lightly vents lingering Heat outward from the chest and Exterior.']],
+      clues: 'Restlessness, insomnia and stuffy chest after a fever, without the four-greats picture of blazing Qi-level Heat.',
+      formulas: 'Zhī Zǐ Chǐ Tāng.',
+      trap: 'Do not confuse residual constrained Heat with full Yangming Heat requiring Shí Gāo + Zhī Mǔ.',
+      prep: 'Dàn Dòu Chǐ is a prepared/fermented soybean medicinal, not ordinary food soy.',
+      safety: 'Persistent fever, chest pain, breathing difficulty, confusion or severe insomnia with behavioral change requires medical evaluation.'
+    },
+    es: {
+      mnemonic: 'Una fruta amarga-fría y un frijol fermentado dejan escapar Calor residual.',
+      job: 'Aclarar y ventilar Calor residual constreñido del pecho tras proceso febril no resuelto.',
+      roles: [['Zhī Zǐ', 'Aclara Fuego de los tres Jiaos y alivia irritabilidad.'], ['Dàn Dòu Chǐ', 'Ventila suavemente Calor persistente hacia afuera desde pecho/Exterior.']],
+      clues: 'Inquietud, insomnio y pecho tapado tras fiebre, sin los cuatro grandes del Calor ardiente de nivel Qi.',
+      formulas: 'Zhī Zǐ Chǐ Tāng.',
+      trap: 'No confundir Calor residual constreñido con Calor Yangming pleno que requiere Shí Gāo + Zhī Mǔ.',
+      prep: 'Dàn Dòu Chǐ es soja medicinal preparada/fermentada, no soja alimentaria ordinaria.',
+      safety: 'Fiebre persistente, dolor torácico, disnea, confusión o insomnio grave con cambio conductual requiere evaluación.'
+    }
+  }
+];
+
+function esc(value) {
+  return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+}
+
+function detailPage(pair, language) {
+  const es = language === 'es';
+  const data = pair[language];
+  const index = `dui-yao${es ? '-es' : ''}.html`;
+  const alternate = `${pair.slug}${es ? '' : '-es'}.html`;
+  const roles = data.roles.map(role => `<tr><th scope="row">${esc(role[0])}</th><td>${esc(role[1])}</td></tr>`).join('');
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(data.job)}"><title>${esc(pair.title)} | Duì Yào | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
+<header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="${index}"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="${index}">${es ? '← Volver a Duì Yào' : '← Back to Duì Yào'}</a></span></div></header>
+<main class="comparison-shell"><article class="study-note"><p class="comparison-eyebrow">${es ? `Pareja Appendix B · ${pair.number} de 51` : `Appendix B pair · ${pair.number} of 51`}</p><h1 class="study-note__title">${esc(pair.title)}</h1><p style="font-size:1.35rem;margin-top:-8px">${esc(pair.characters)}</p>
+<section class="study-note__block"><h2 class="study-note__heading">${es ? 'Una imagen, un trabajo' : 'One picture, one job'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Imagen' : 'Picture'}</th><td>${esc(data.mnemonic)}</td></tr><tr><th>${es ? 'Trabajo conjunto' : 'Combined job'}</th><td>${esc(data.job)}</td></tr><tr><th>${es ? 'Categoría' : 'Category'}</th><td>${esc(pair.category[language])}</td></tr></tbody></table></section>
+<section class="study-note__block"><h2 class="study-note__heading study-note__heading--orange">${es ? 'Cómo funciona la pareja' : 'How the pair works'}</h2><table><thead><tr><th>${es ? 'Hierba' : 'Herb'}</th><th>${es ? 'Papel dentro de la pareja' : 'Role within the pair'}</th></tr></thead><tbody>${roles}</tbody></table></section>
+<section class="study-note__block"><h2 class="study-note__heading study-note__heading--purple">${es ? 'Enfoque de examen y seguridad' : 'Exam focus and safety'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Pistas' : 'Clues'}</th><td>${esc(data.clues)}</td></tr><tr><th>${es ? 'Fórmula firma' : 'Signature formula'}</th><td>${esc(data.formulas)}</td></tr><tr><th>${es ? 'Trampa' : 'Trap'}</th><td>${esc(data.trap)}</td></tr><tr><th>${es ? 'Preparación' : 'Preparation'}</th><td>${esc(data.prep)}</td></tr><tr><th>${es ? 'Seguridad' : 'Safety'}</th><td>${esc(data.safety)}</td></tr></tbody></table></section>
+</article></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Grupo independiente · Parejas Duì Yào de Appendix B' : 'Independent group · Appendix B Duì Yào pairs'}</div></footer></body></html>`;
+}
+
+function indexPage(language) {
+  const es = language === 'es';
+  const cards = pairs.map(pair => {
+    const data = pair[language];
+    return `<article class="comparison-card" data-type="dui-yao" data-search="${esc(pair.search)}"><span class="comparison-card__type">${es ? `Pareja ${pair.number}` : `Pair ${pair.number}`}</span><h3>${esc(pair.title)}</h3><p>${esc(data.job)}</p><div class="comparison-card__category"><strong>${es ? 'Fórmula firma:' : 'Signature formula:'}</strong><br>${esc(data.formulas)}</div><a class="comparison-card__open" href="${pair.slug}${es ? '-es' : ''}.html">${es ? 'Abrir Pareja →' : 'Open Pair →'}</a></article>`;
+  }).join('');
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Parejas Duì Yào de Appendix B con trabajo, fórmula y seguridad.' : 'Appendix B Duì Yào herb pairs with job, formula and safety.'}"><title>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"><script defer src="comparisons.js?v=20261025-1"></script></head><body>
+<header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
+<main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Aprende las 51 parejas oficiales de Appendix B mediante una imagen, un trabajo conjunto, una fórmula firma y su seguridad. Biblioteca en lotes de 10.' : 'Learn all 51 official Appendix B pairs through one picture, one combined job, one signature formula and safety. Built in batches of 10.'}</p></section>
+<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a></nav>
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 1 de 6' : 'Appendix B · Batch 1 of 6'}</div></footer></body></html>`;
+}
+
+for (const pair of pairs) {
+  writeFileSync(resolve(root, `${pair.slug}.html`), detailPage(pair, 'en'));
+  writeFileSync(resolve(root, `${pair.slug}-es.html`), detailPage(pair, 'es'));
+}
+writeFileSync(resolve(root, 'dui-yao.html'), indexPage('en'));
+writeFileSync(resolve(root, 'dui-yao-es.html'), indexPage('es'));
+console.log(`Generated ${pairs.length * 2} Duì Yào pages and 2 indexes`);
