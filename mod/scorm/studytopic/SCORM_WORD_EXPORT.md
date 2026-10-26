@@ -262,6 +262,30 @@ Single Herbs A-Z comparative-function topic is likewise promoted into its own
 Book and opens directly to its alphabetical answer-key list. The source Word
 documents are not moved or deleted.
 
+## Link the legacy Single Herbs review from Herbology Exam Key
+
+The existing `Single Herbs Review Exam` Book (course module 8633) belongs in
+the `Herbology Exam Key` index rather than on the `Single Herbs Exams` course
+page. This one-time command keeps the Book and all of its chapters intact,
+makes the original activity stealth, and creates the visible native Moodle URL
+`9) Single Herbs Review Exam` in course 92, section 2020.
+
+Review the exact source and target first:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/rehome_single_herbs_review.php
+```
+
+Then apply the validated change:
+
+```bash
+sudo -u www-data php mod/scorm/studytopic/rehome_single_herbs_review.php --execute
+```
+
+The command is idempotent. It refuses to proceed if the source Book differs
+from the expected activity or if a conflicting or duplicate target link is
+present.
+
 ## Custom course selection
 
 ```bash
