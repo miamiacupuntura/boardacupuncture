@@ -255,6 +255,256 @@ const pairs = [
       prep: 'Dàn Dòu Chǐ es soja medicinal preparada/fermentada, no soja alimentaria ordinaria.',
       safety: 'Fiebre persistente, dolor torácico, disnea, confusión o insomnio grave con cambio conductual requiere evaluación.'
     }
+  },
+  {
+    number: 11, slug: 'shi-gao-zhi-mu-dui-yao', title: 'Shí Gāo + Zhī Mǔ', characters: '石膏 + 知母',
+    category: { en: 'Clear Qi-Level Heat', es: 'Aclarar Calor de Nivel Qi' },
+    search: 'shi gao zhi mu gypsum anemarrhena white tiger qi level heat four bigs fever sweat thirst flooding pulse bai hu tang',
+    en: {
+      mnemonic: 'The White Tiger’s claws.',
+      job: 'Clear blazing Qi-level Heat, drain Lung and Stomach Fire and protect fluids.',
+      roles: [['Shí Gāo', 'Powerfully clears excess Heat from the Lung and Stomach Qi level.'], ['Zhī Mǔ', 'Clears Heat while enriching Yin and restoring fluids damaged by the blaze.']],
+      clues: 'The four bigs: high fever, profuse sweating, great thirst and a flooding-forceful pulse.',
+      formulas: 'Bái Hǔ Tāng.',
+      trap: 'This is full excess Qi-level Heat, not lingering constrained Heat treated by Zhī Zǐ + Dàn Dòu Chǐ.',
+      prep: 'Crush Shí Gāo and decoct it first; use the pair only within a correctly differentiated formula.',
+      safety: 'Avoid a strong cold-clearing strategy in Spleen/Stomach deficiency without true excess Heat. Altered mental status, severe dehydration or persistent high fever requires urgent care.'
+    },
+    es: {
+      mnemonic: 'Las garras del Tigre Blanco.',
+      job: 'Aclarar Calor ardiente de nivel Qi, drenar Fuego de Pulmón/Estómago y proteger líquidos.',
+      roles: [['Shí Gāo', 'Aclara con fuerza Calor por exceso del nivel Qi de Pulmón y Estómago.'], ['Zhī Mǔ', 'Aclara Calor mientras nutre Yin y recupera líquidos dañados por el ardor.']],
+      clues: 'Los cuatro grandes: fiebre alta, sudor profuso, mucha sed y pulso inundado-fuerte.',
+      formulas: 'Bái Hǔ Tāng.',
+      trap: 'Es Calor pleno por exceso de nivel Qi, no Calor residual constreñido tratado por Zhī Zǐ + Dàn Dòu Chǐ.',
+      prep: 'Triturar Shí Gāo y decoctarlo primero; usar dentro de fórmula correctamente diferenciada.',
+      safety: 'Evitar estrategia fría potente en deficiencia Bazo/Estómago sin Calor pleno. Alteración mental, deshidratación grave o fiebre alta persistente requiere urgencia.'
+    }
+  },
+  {
+    number: 12, slug: 'zhi-mu-huang-bai-dui-yao', title: 'Zhī Mǔ + Huáng Bǎi', characters: '知母 + 黄柏',
+    category: { en: 'Drain Deficiency Fire', es: 'Drenar Fuego por Deficiencia' },
+    search: 'zhi mu huang bai anemarrhena phellodendron yin deficiency empty fire night sweats steaming bones seminal emission zhi bai di huang wan da bu yin wan',
+    en: {
+      mnemonic: 'Two bitter-cold herbs put out the fire beneath an empty kettle.',
+      job: 'Enrich Yin while draining deficiency Fire from the Kidney and lower burner.',
+      roles: [['Zhī Mǔ', 'Clears deficiency Heat and nourishes Yin and fluids.'], ['Huáng Bǎi', 'Drains ministerial Fire and Damp-Heat from the lower burner.']],
+      clues: 'Night sweats, steaming-bone fever, afternoon Heat, seminal emission and other Empty-Heat signs.',
+      formulas: 'Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán.',
+      trap: 'Do not confuse deficiency Fire with the four-greats excess pattern of Shí Gāo + Zhī Mǔ.',
+      prep: 'The cold, bitter pair is normally embedded in a Yin-enriching formula rather than used as a stand-alone tonic.',
+      safety: 'Use cautiously with chronic loose stools, poor appetite or Spleen deficiency because the pair is bitter and cold.'
+    },
+    es: {
+      mnemonic: 'Dos amargas-frías apagan el fuego bajo una olla vacía.',
+      job: 'Enriquecer Yin mientras drena Fuego por deficiencia de Riñón y Jiao inferior.',
+      roles: [['Zhī Mǔ', 'Aclara Calor por deficiencia y nutre Yin y líquidos.'], ['Huáng Bǎi', 'Drena Fuego ministerial y Humedad-Calor del Jiao inferior.']],
+      clues: 'Sudor nocturno, calor en huesos, Calor vespertino, emisión seminal y otros signos de Calor vacío.',
+      formulas: 'Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán.',
+      trap: 'No confundir Fuego por deficiencia con los cuatro grandes por exceso de Shí Gāo + Zhī Mǔ.',
+      prep: 'La pareja amarga-fría suele incorporarse en fórmula que enriquece Yin, no como tónico aislado.',
+      safety: 'Usar con cautela en diarrea crónica, poco apetito o deficiencia de Bazo porque es amarga y fría.'
+    }
+  },
+  {
+    number: 13, slug: 'sang-bai-pi-di-gu-pi-dui-yao', title: 'Sāng Bái Pí + Dì Gǔ Pí', characters: '桑白皮 + 地骨皮',
+    category: { en: 'Drain Smoldering Lung Heat', es: 'Drenar Calor Latente de Pulmón' },
+    search: 'sang bai pi di gu pi mulberry root bark lycium root bark lung heat cough wheezing afternoon skin heat xie bai san',
+    en: {
+      mnemonic: 'Two root barks drain a smoldering Lung.',
+      job: 'Drain Lung Heat, calm cough and wheezing and clear lingering afternoon Heat.',
+      roles: [['Sāng Bái Pí', 'Drains Lung Heat, descends Lung Qi and promotes urination.'], ['Dì Gǔ Pí', 'Clears deficiency Heat and cools the Blood while targeting smoldering Lung Heat.']],
+      clues: 'Cough or wheezing with hot skin that worsens in the afternoon and no blazing exterior picture.',
+      formulas: 'Xiè Bái Sǎn.',
+      trap: '“Drain the White” refers to the Lung; this is gentler smoldering Heat, not the four-greats Yangming pattern.',
+      prep: 'Differentiate excess Lung Heat from Yin-deficiency Heat before choosing the surrounding formula.',
+      safety: 'Acute breathing difficulty, blue lips, chest pain or inability to speak full sentences requires emergency care.'
+    },
+    es: {
+      mnemonic: 'Dos cortezas de raíz drenan un Pulmón que arde lentamente.',
+      job: 'Drenar Calor pulmonar, calmar tos/sibilancia y aclarar Calor vespertino persistente.',
+      roles: [['Sāng Bái Pí', 'Drena Calor de Pulmón, desciende Qi pulmonar y promueve orina.'], ['Dì Gǔ Pí', 'Aclara Calor por deficiencia y enfría Sangre, enfocándose en Calor pulmonar latente.']],
+      clues: 'Tos o sibilancia con piel caliente por la tarde sin cuadro Exterior ardiente.',
+      formulas: 'Xiè Bái Sǎn.',
+      trap: '“Drenar lo Blanco” alude al Pulmón; es Calor latente más suave, no los cuatro grandes Yangming.',
+      prep: 'Diferenciar Calor pulmonar por exceso de Calor por deficiencia de Yin antes de formular.',
+      safety: 'Disnea aguda, labios azules, dolor torácico o incapacidad para hablar frases completas requiere emergencia.'
+    }
+  },
+  {
+    number: 14, slug: 'huang-lian-rou-gui-dui-yao', title: 'Huáng Lián + Ròu Guì', characters: '黄连 + 肉桂',
+    category: { en: 'Restore Heart–Kidney Communication', es: 'Restaurar Comunicación Corazón–Riñón' },
+    search: 'huang lian rou gui coptis cinnamon bark heart kidney communication insomnia palpitations restlessness jiao tai wan cold above heat below',
+    en: {
+      mnemonic: 'Ice on top and a heater below.',
+      job: 'Restore Heart–Kidney communication by descending Heart Fire and warming Kidney Yang so Water can rise.',
+      roles: [['Huáng Lián', 'Bitter-cold; descends blazing Heart Fire and quiets restlessness.'], ['Ròu Guì', 'Warm; kindles Kidney Yang and guides separated Fire back to its source.']],
+      clues: 'Insomnia, palpitations and restlessness from Heart Fire above with deficient Kidney warmth below.',
+      formulas: 'Jiāo Tài Wán.',
+      trap: 'The opposite temperatures are deliberate; this is not a simple all-Heat or all-Cold prescription.',
+      prep: 'Add Ròu Guì late or administer it as powder to preserve its aromatic warmth.',
+      safety: 'Ròu Guì requires pregnancy and anticoagulant caution. New palpitations, fainting or chest pain requires prompt medical assessment.'
+    },
+    es: {
+      mnemonic: 'Hielo arriba y calefacción abajo.',
+      job: 'Restaurar comunicación Corazón–Riñón descendiendo Fuego cardíaco y calentando Yang renal para que Agua ascienda.',
+      roles: [['Huáng Lián', 'Amarga-fría; desciende Fuego ardiente de Corazón y calma inquietud.'], ['Ròu Guì', 'Caliente; enciende Yang renal y guía Fuego separado a su fuente.']],
+      clues: 'Insomnio, palpitaciones e inquietud por Fuego de Corazón arriba con calor renal deficiente abajo.',
+      formulas: 'Jiāo Tài Wán.',
+      trap: 'Las temperaturas opuestas son intencionales; no es prescripción simple de solo Calor o solo Frío.',
+      prep: 'Añadir Ròu Guì al final o administrarla en polvo para preservar su calor aromático.',
+      safety: 'Ròu Guì exige cautela en embarazo y con anticoagulantes. Palpitaciones nuevas, síncope o dolor torácico requiere evaluación pronta.'
+    }
+  },
+  {
+    number: 15, slug: 'jin-yin-hua-lian-qiao-dui-yao', title: 'Jīn Yín Huā + Lián Qiào', characters: '金银花 + 连翘',
+    category: { en: 'Clear Heat and Resolve Toxicity', es: 'Aclarar Calor y Resolver Toxicidad' },
+    search: 'jin yin hua lian qiao honeysuckle forsythia wind heat toxin sore throat fever boils sores yin qiao san',
+    en: {
+      mnemonic: 'The toxin-and-Wind-Heat duo.',
+      job: 'Disperse Wind-Heat, clear Heat and resolve toxicity at the surface and in hot swellings.',
+      roles: [['Jīn Yín Huā', 'Vents Wind-Heat from the surface and clears hot toxicity.'], ['Lián Qiào', 'Clears Heat, disperses clumps and reduces hot swellings.']],
+      clues: 'Early fever with sore throat or hot, red, painful sores and boils.',
+      formulas: 'Yín Qiáo Sǎn.',
+      trap: 'Their shared toxin-clearing action does not replace drainage or medical treatment for a mature abscess.',
+      prep: 'These light aromatic medicinals generally should not be subjected to unnecessarily prolonged boiling.',
+      safety: 'Rapidly spreading redness, severe pain, high fever, streaking, facial infection or immune suppression requires medical evaluation.'
+    },
+    es: {
+      mnemonic: 'El dúo de toxina y Viento-Calor.',
+      job: 'Dispersar Viento-Calor, aclarar Calor y resolver toxicidad en superficie e hinchazones calientes.',
+      roles: [['Jīn Yín Huā', 'Ventila Viento-Calor de superficie y aclara toxicidad caliente.'], ['Lián Qiào', 'Aclara Calor, dispersa nódulos y reduce hinchazón caliente.']],
+      clues: 'Fiebre temprana con dolor de garganta o llagas/forúnculos rojos, calientes y dolorosos.',
+      formulas: 'Yín Qiáo Sǎn.',
+      trap: 'Su acción antitóxica compartida no sustituye drenaje ni tratamiento médico de absceso maduro.',
+      prep: 'Estas medicinas aromáticas ligeras generalmente no deben hervirse innecesariamente por largo tiempo.',
+      safety: 'Enrojecimiento que se extiende, dolor grave, fiebre alta, estrías, infección facial o inmunosupresión requiere evaluación.'
+    }
+  },
+  {
+    number: 16, slug: 'niu-bang-zi-lian-qiao-dui-yao', title: 'Niú Bàng Zǐ + Lián Qiào', characters: '牛蒡子 + 连翘',
+    category: { en: 'Benefit the Throat · Reduce Swelling', es: 'Beneficiar Garganta · Reducir Hinchazón' },
+    search: 'niu bang zi lian qiao burdock forsythia swollen sore throat mumps wind heat toxin yin qiao san pu ji xiao du yin',
+    en: {
+      mnemonic: 'The swollen-throat pair.',
+      job: 'Disperse Wind-Heat, resolve toxicity, benefit the throat and reduce swelling.',
+      roles: [['Niú Bàng Zǐ', 'Vents Wind-Heat, opens the throat and promotes rash expression.'], ['Lián Qiào', 'Clears toxicity and breaks up hot swelling and clumps.']],
+      clues: 'Marked swollen sore throat, painful neck swelling or mumps-type presentation.',
+      formulas: 'Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn.',
+      trap: 'Compared with Jīn Yín Huā + Lián Qiào, this pair emphasizes throat and swelling more strongly.',
+      prep: 'Niú Bàng Zǐ is commonly crushed before decoction.',
+      safety: 'Niú Bàng Zǐ can loosen stool. Drooling, inability to swallow, muffled voice, airway symptoms or severe dehydration requires urgent care.'
+    },
+    es: {
+      mnemonic: 'La pareja para garganta hinchada.',
+      job: 'Dispersar Viento-Calor, resolver toxicidad, beneficiar garganta y reducir hinchazón.',
+      roles: [['Niú Bàng Zǐ', 'Ventila Viento-Calor, abre garganta y promueve salida de erupción.'], ['Lián Qiào', 'Aclara toxicidad y rompe hinchazón/nódulos calientes.']],
+      clues: 'Dolor de garganta muy hinchada, hinchazón dolorosa del cuello o cuadro tipo paperas.',
+      formulas: 'Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn.',
+      trap: 'Frente a Jīn Yín Huā + Lián Qiào, enfatiza con más fuerza garganta e hinchazón.',
+      prep: 'Niú Bàng Zǐ suele triturarse antes de decocción.',
+      safety: 'Niú Bàng Zǐ puede soltar heces. Babeo, imposibilidad de tragar, voz apagada, signos respiratorios o deshidratación grave requiere urgencia.'
+    }
+  },
+  {
+    number: 17, slug: 'qing-hao-bie-jia-dui-yao', title: 'Qīng Hāo + Biē Jiǎ', characters: '青蒿 + 鳖甲',
+    category: { en: 'Vent Heat Lurking in Yin', es: 'Ventilar Calor Oculto en Yin' },
+    search: 'qing hao bie jia sweet wormwood turtle carapace yin lurking heat night fever cool morning no sweat qing hao bie jia tang',
+    en: {
+      mnemonic: 'The turtle digs in; the wormwood leads Heat out.',
+      job: 'Enrich Yin and vent Heat lurking deep in the Yin level after warm disease.',
+      roles: [['Qīng Hāo', 'Lightly vents hidden Heat outward without damaging Yin.'], ['Biē Jiǎ', 'Enters deeply, enriches Yin and searches out lurking Heat.']],
+      clues: 'Fever at night, cool by morning and no sweating as the fever recedes.',
+      formulas: 'Qīng Hāo Biē Jiǎ Tāng.',
+      trap: 'This is lurking Heat after warm disease, not ordinary Yin-deficiency night sweats or full Qi-level Heat.',
+      prep: 'Crush and decoct Biē Jiǎ first; add Qīng Hāo late and do not boil it for long.',
+      safety: 'Biē Jiǎ requires pregnancy caution and verified legal/ethical sourcing. Persistent or recurrent fever requires medical diagnosis.'
+    },
+    es: {
+      mnemonic: 'La tortuga excava; el ajenjo conduce el Calor hacia afuera.',
+      job: 'Enriquecer Yin y ventilar Calor oculto profundamente en nivel Yin tras enfermedad caliente.',
+      roles: [['Qīng Hāo', 'Ventila suavemente Calor oculto sin dañar Yin.'], ['Biē Jiǎ', 'Entra profundo, enriquece Yin y busca Calor escondido.']],
+      clues: 'Fiebre nocturna, fresco por la mañana y sin sudor cuando cede la fiebre.',
+      formulas: 'Qīng Hāo Biē Jiǎ Tāng.',
+      trap: 'Es Calor oculto tras enfermedad caliente, no sudor nocturno común por deficiencia de Yin ni Calor pleno de nivel Qi.',
+      prep: 'Triturar y decoctar Biē Jiǎ primero; añadir Qīng Hāo tarde y no hervirla mucho.',
+      safety: 'Biē Jiǎ exige cautela en embarazo y procedencia legal/ética verificada. Fiebre persistente o recurrente requiere diagnóstico médico.'
+    }
+  },
+  {
+    number: 18, slug: 'ren-shen-huang-qi-dui-yao', title: 'Rén Shēn + Huáng Qí', characters: '人参 + 黄芪',
+    category: { en: 'Strongly Supplement Qi', es: 'Suplementar Qi con Fuerza' },
+    search: 'ren shen huang qi ginseng astragalus original qi spleen lung raise yang secure exterior exhaustion prolapse spontaneous sweating bu zhong yi qi gui pi tang',
+    en: {
+      mnemonic: 'The Qi power couple: fill the tank and lift it.',
+      job: 'Strongly supplement original and Spleen–Lung Qi, raise Yang and secure the Exterior.',
+      roles: [['Rén Shēn', 'Powerfully replenishes original Qi from within and generates fluids.'], ['Huáng Qí', 'Raises clear Yang, strengthens protective Qi and secures the surface.']],
+      clues: 'Profound fatigue, prolapse, spontaneous sweating, weak voice and signs of Spleen–Lung Qi deficiency.',
+      formulas: 'Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng.',
+      trap: 'Rén Shēn fills from within while Huáng Qí lifts and protects; their roles are complementary, not interchangeable.',
+      prep: 'Use authenticated Rén Shēn and distinguish it from lower-intensity substitutes such as Dǎng Shēn.',
+      safety: 'Rén Shēn is incompatible with Lí Lú and traditionally opposed to Wǔ Líng Zhī. Screen diabetes drugs, warfarin, stimulants and immunosuppressants.'
+    },
+    es: {
+      mnemonic: 'La pareja poderosa del Qi: llenar el tanque y elevarlo.',
+      job: 'Suplementar fuertemente Qi original y de Bazo–Pulmón, elevar Yang y asegurar Exterior.',
+      roles: [['Rén Shēn', 'Repone con fuerza Qi original desde dentro y genera líquidos.'], ['Huáng Qí', 'Eleva Yang claro, fortalece Qi defensivo y asegura superficie.']],
+      clues: 'Fatiga profunda, prolapso, sudor espontáneo, voz débil y signos de deficiencia Qi Bazo–Pulmón.',
+      formulas: 'Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng.',
+      trap: 'Rén Shēn llena desde dentro; Huáng Qí eleva y protege. Sus papeles se complementan, no son intercambiables.',
+      prep: 'Usar Rén Shēn autenticado y distinguirlo de sustitutos menos intensos como Dǎng Shēn.',
+      safety: 'Rén Shēn es incompatible con Lí Lú y tradicionalmente opuesto a Wǔ Líng Zhī. Revisar antidiabéticos, warfarina, estimulantes e inmunosupresores.'
+    }
+  },
+  {
+    number: 19, slug: 'bai-zhu-fu-ling-dui-yao', title: 'Bái Zhú + Fú Líng', characters: '白术 + 茯苓',
+    category: { en: 'Strengthen the Spleen · Drain Dampness', es: 'Fortalecer Bazo · Drenar Humedad' },
+    search: 'bai zhu fu ling atractylodes poria spleen qi dampness loose stools edema poor appetite phlegm fluids si jun zi wu ling ling gui zhu gan',
+    en: {
+      mnemonic: 'The Spleen’s mop and bucket.',
+      job: 'Strengthen the Spleen while drying and draining Dampness so fluids move normally.',
+      roles: [['Bái Zhú', 'Tonifies Spleen Qi and dries Dampness at its source.'], ['Fú Líng', 'Leaches Dampness through urination while supporting the Spleen.']],
+      clues: 'Poor appetite, loose stools, fatigue, edema or phlegm-fluids from weak Spleen transformation.',
+      formulas: 'Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng.',
+      trap: 'Bái Zhú dries and strengthens; Fú Líng drains gently. The pair treats both the weak root and Damp branch.',
+      prep: 'Formula context determines whether the pair primarily tonifies Qi or manages water and phlegm-fluids.',
+      safety: 'New one-sided swelling, sudden breathlessness, chest pain or rapidly worsening edema requires urgent medical assessment.'
+    },
+    es: {
+      mnemonic: 'El trapeador y el cubo del Bazo.',
+      job: 'Fortalecer Bazo mientras seca y drena Humedad para normalizar movimiento de líquidos.',
+      roles: [['Bái Zhú', 'Tonifica Qi de Bazo y seca Humedad en su origen.'], ['Fú Líng', 'Filtra Humedad por orina mientras apoya Bazo.']],
+      clues: 'Poco apetito, heces sueltas, fatiga, edema o flema-líquidos por transformación débil de Bazo.',
+      formulas: 'Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng.',
+      trap: 'Bái Zhú seca y fortalece; Fú Líng drena suavemente. Trata raíz débil y rama húmeda.',
+      prep: 'El contexto formulaico determina si la pareja tonifica Qi o maneja agua y flema-líquidos.',
+      safety: 'Hinchazón unilateral nueva, disnea súbita, dolor torácico o edema que empeora rápido requiere urgencia.'
+    }
+  },
+  {
+    number: 20, slug: 'bai-shao-gan-cao-dui-yao', title: 'Bái Sháo + Gān Cǎo', characters: '白芍 + 甘草',
+    category: { en: 'Relax Spasm · Stop Pain', es: 'Relajar Espasmo · Detener Dolor' },
+    search: 'bai shao gan cao peony licorice sour sweet nourish yin blood relax spasm cramps calf abdominal menstrual shao yao gan cao tang',
+    en: {
+      mnemonic: 'Sour plus sweet melts the cramp.',
+      job: 'Nourish Yin and Blood, soften tension, relax spasm and stop cramping pain.',
+      roles: [['Bái Sháo', 'Nourishes Blood, preserves Yin and softens contracted sinews.'], ['Gān Cǎo', 'Tonifies and harmonizes while urgently relaxing spasm and pain.']],
+      clues: 'Calf cramps, cramping abdominal pain or menstrual spasm with tight, contracted muscles.',
+      formulas: 'Sháo Yào Gān Cǎo Tāng.',
+      trap: 'This pair directly relaxes cramp; Guì Zhī + Bái Sháo instead emphasizes harmonizing Ying and Wei.',
+      prep: 'Honey-fried Gān Cǎo may emphasize supplementation, but processing must match the formula source.',
+      safety: 'Large or prolonged Gān Cǎo doses can raise blood pressure and lower potassium; screen diuretics, corticosteroids, digoxin and cardiovascular disease.'
+    },
+    es: {
+      mnemonic: 'Ácido más dulce derrite el calambre.',
+      job: 'Nutrir Yin y Sangre, suavizar tensión, relajar espasmo y detener dolor tipo calambre.',
+      roles: [['Bái Sháo', 'Nutre Sangre, preserva Yin y suaviza tendones contraídos.'], ['Gān Cǎo', 'Tonifica y armoniza mientras relaja con rapidez espasmo y dolor.']],
+      clues: 'Calambres de pantorrilla, dolor abdominal espasmódico o dolor menstrual con músculos tensos.',
+      formulas: 'Sháo Yào Gān Cǎo Tāng.',
+      trap: 'Relaja directamente calambre; Guì Zhī + Bái Sháo enfatiza armonizar Ying y Wei.',
+      prep: 'Gān Cǎo tostada con miel puede enfatizar tonificación, pero el procesamiento debe coincidir con la fuente formulaica.',
+      safety: 'Dosis grandes/prolongadas de Gān Cǎo pueden subir presión y bajar potasio; revisar diuréticos, corticosteroides, digoxina y enfermedad cardiovascular.'
+    }
   }
 ];
 
@@ -287,7 +537,7 @@ function indexPage(language) {
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 6 · Parejas de hierbas' : 'Group 6 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Aprende las 51 parejas oficiales de Appendix B mediante una imagen, un trabajo conjunto, una fórmula firma y su seguridad. Biblioteca en lotes de 10.' : 'Learn all 51 official Appendix B pairs through one picture, one combined job, one signature formula and safety. Built in batches of 10.'}</p></section>
 <nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a></nav>
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 1 de 6' : 'Appendix B · Batch 1 of 6'}</div></footer></body></html>`;
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Lote 2 de 6' : 'Appendix B · Batch 2 of 6'}</div></footer></body></html>`;
 }
 
 for (const pair of pairs) {
