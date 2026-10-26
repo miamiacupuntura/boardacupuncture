@@ -457,6 +457,202 @@ const pathologies = [
       safety: 'Las hierbas no sustituyen antihipertensivos prescritos. Presión ≥180/120 con dolor torácico, síntomas neurológicos, cefalea grave o disnea es emergencia.',
       source: 'Internal Medicine 1, Handout 6: Hypertension.'
     }
+  },
+  {
+    slug: 'low-back-pain-patterns', title: { en: 'Low Back Pain Pattern Differentiation', es: 'Diferenciación de Patterns de Dolor Lumbar' },
+    summary: { en: 'Compare Cold-Damp, Damp-Heat, Blood stasis and Kidney Yin or Yang deficiency.', es: 'Compara Frío-Humedad, Humedad-Calor, estasis de Sangre y deficiencia Yin o Yang renal.' },
+    focus: { en: 'Temperature, weather, pain quality and deficiency signs', es: 'Temperatura, clima, calidad del dolor y signos de deficiencia' },
+    search: 'low back pain lumbar cold damp heat blood stasis kidney yin yang gan cao gan jiang ling zhu si miao shen tong zhu yu you gui zuo gui',
+    en: {
+      intro: 'Weather and temperature identify Damp branches, fixed stabbing pain identifies stasis, and recurrent aching with weakness identifies Kidney deficiency.',
+      rows: [
+        ['Cold-Damp', 'Cold heavy pain worse in cold/rain and relieved by warmth', 'Gan Cao Gan Jiang Ling Zhu Tang', 'Warm channels and drain Dampness.'],
+        ['Damp-Heat', 'Hot lumbar pain worse in hot/rainy weather with dark urine and yellow greasy coat', 'Si Miao San', 'Clear Heat and drain Dampness.'],
+        ['Blood stasis', 'Fixed stabbing night pain, worse with pressure; purple tongue', 'Shen Tong Zhu Yu Tang', 'Invigorate Blood and open channels.'],
+        ['Kidney Yang deficiency', 'Recurrent aching better with rest/pressure plus cold and fatigue', 'You Gui Wan', 'Warm Kidney Yang.'],
+        ['Kidney Yin deficiency', 'Recurrent aching plus insomnia, dry throat and five-center Heat', 'Zuo Gui Wan', 'Nourish Kidney Yin.'],
+      ],
+      rule: 'Cold-heavy-weather pain is Damp; hot-yellow signs are Damp-Heat; fixed stabbing is stasis; chronic weakness with Cold is Yang and with empty Heat is Yin.',
+      memory: '<strong>Cold-heavy—Cold-Damp; hot-sticky—Damp-Heat; fixed-purple—stasis; cold-weak—Yang; hot-dry—Yin.</strong>',
+      safety: 'New weakness, saddle numbness, bladder/bowel loss, fever, major trauma, cancer history or severe night pain requires urgent evaluation.',
+      source: 'Internal Medicine 1, Handout 6: Low Back Pain.'
+    },
+    es: {
+      intro: 'Clima y temperatura identifican Humedad, dolor fijo punzante identifica estasis y dolor recurrente con debilidad identifica Riñón.',
+      rows: [
+        ['Frío-Humedad', 'Dolor frío/pesado peor con frío o lluvia y aliviado por calor', 'Gan Cao Gan Jiang Ling Zhu Tang', 'Calentar canales y drenar Humedad.'],
+        ['Humedad-Calor', 'Dolor lumbar caliente peor con clima cálido/lluvioso, orina oscura y capa amarilla grasosa', 'Si Miao San', 'Aclarar Calor y drenar Humedad.'],
+        ['Estasis de Sangre', 'Dolor nocturno fijo punzante, peor con presión; lengua púrpura', 'Shen Tong Zhu Yu Tang', 'Vigorizar Sangre y abrir canales.'],
+        ['Deficiencia Yang renal', 'Dolor recurrente mejor con reposo/presión más frío y fatiga', 'You Gui Wan', 'Calentar Yang renal.'],
+        ['Deficiencia Yin renal', 'Dolor recurrente más insomnio, garganta seca y Calor de cinco centros', 'Zuo Gui Wan', 'Nutrir Yin renal.'],
+      ],
+      rule: 'Dolor frío-pesado por clima es Humedad; signos calientes/amarillos son Humedad-Calor; fijo punzante es estasis; debilidad fría es Yang y con Calor vacío es Yin.',
+      memory: '<strong>Frío-pesado—Frío-Humedad; caliente-pegajoso—Humedad-Calor; fijo-púrpura—estasis; frío-débil—Yang; caliente-seco—Yin.</strong>',
+      safety: 'Debilidad nueva, anestesia en silla, pérdida de vejiga/intestino, fiebre, trauma, cáncer o dolor nocturno grave requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 6: Low Back Pain.'
+    }
+  },
+  {
+    slug: 'seminal-emission-patterns', title: { en: 'Seminal Emission Pattern Differentiation', es: 'Diferenciación de Patterns de Emisión Seminal' },
+    summary: { en: 'Separate deficient Fire, Kidney Yang failure, Qi failure to secure and Lower-Burner Damp-Heat.', es: 'Separa Fuego vacío, fallo de Yang renal, Qi que no asegura y Humedad-Calor del Jiao Inferior.' },
+    focus: { en: 'Heat versus Cold, fatigue and urinary signs', es: 'Calor frente a Frío, fatiga y signos urinarios' },
+    search: 'seminal emission spermatorrhea kidney yin heart fire yang qi deficiency damp heat zhi bai you gui bu zhong bi xie',
+    en: {
+      intro: 'Heat/Cold, relation to overwork and urinary burning distinguish failure to secure Essence.',
+      rows: [
+        ['Kidney Yin deficiency with Heart Fire', 'Dream emission, insomnia, dry throat, night sweat and five-center Heat', 'Zhi Bai Di Huang Wan', 'Nourish Yin, clear Fire and secure Essence.'],
+        ['Kidney Yang failing to secure', 'Persistent spontaneous discharge with cold limbs, impotence and pale tongue', 'You Gui Wan', 'Warm Kidney Yang and secure Essence.'],
+        ['Qi deficiency failing to astringe', 'Emission after overwork with fatigue, poor appetite and loose stool', 'Bu Zhong Yi Qi Tang', 'Support Spleen Qi and secure Essence.'],
+        ['Lower-Burner Damp-Heat', 'Emission with burning cloudy urine, bitter taste and yellow greasy coat', 'Cheng Shi Bi Xie Fen Qing Yin', 'Clear Damp-Heat and separate clear from turbid.'],
+      ],
+      rule: 'Empty Heat points to Yin; cold spontaneous leakage to Yang; overwork/digestion to Qi; burning cloudy urine to Damp-Heat.',
+      memory: '<strong>Hot-dry—Yin; cold-leaking—Yang; tired-after-work—Qi; burning-cloudy—Damp-Heat.</strong>',
+      safety: 'Pain, blood, fever, genital discharge, urinary retention or new persistent symptoms requires medical evaluation for infection or urologic disease.',
+      source: 'Internal Medicine 1, Handout 7: Seminal Emission.'
+    },
+    es: {
+      intro: 'Calor/Frío, relación con exceso de trabajo y ardor urinario distinguen el fallo al asegurar Esencia.',
+      rows: [
+        ['Deficiencia Yin renal con Fuego de Corazón', 'Emisión en sueños, insomnio, garganta seca, sudor nocturno y Calor de cinco centros', 'Zhi Bai Di Huang Wan', 'Nutrir Yin, aclarar Fuego y asegurar Esencia.'],
+        ['Yang renal no asegura', 'Descarga espontánea persistente con frío, impotencia y lengua pálida', 'You Gui Wan', 'Calentar Yang renal y asegurar Esencia.'],
+        ['Deficiencia Qi no contiene', 'Emisión tras sobreesfuerzo con fatiga, poco apetito y heces sueltas', 'Bu Zhong Yi Qi Tang', 'Apoyar Qi de Bazo y asegurar Esencia.'],
+        ['Humedad-Calor inferior', 'Emisión con orina turbia ardiente, sabor amargo y capa amarilla grasosa', 'Cheng Shi Bi Xie Fen Qing Yin', 'Aclarar Humedad-Calor y separar claro/turbio.'],
+      ],
+      rule: 'Calor vacío apunta a Yin; pérdida fría espontánea a Yang; sobreesfuerzo/digestión a Qi; orina turbia ardiente a Humedad-Calor.',
+      memory: '<strong>Caliente-seco—Yin; frío-pérdida—Yang; cansado-tras trabajo—Qi; ardiente-turbio—Humedad-Calor.</strong>',
+      safety: 'Dolor, sangre, fiebre, secreción genital, retención urinaria o síntomas nuevos persistentes requiere evaluación médica.',
+      source: 'Internal Medicine 1, Handout 7: Seminal Emission.'
+    }
+  },
+  {
+    slug: 'erectile-dysfunction-patterns', title: { en: 'Erectile Dysfunction Pattern Differentiation', es: 'Diferenciación de Patterns de Disfunción Eréctil' },
+    summary: { en: 'Separate Life-Gate Fire debilitation from Lower-Burner Damp-Heat.', es: 'Separa debilitamiento del Fuego de Ming Men de Humedad-Calor del Jiao Inferior.' },
+    focus: { en: 'Cold deficiency versus hot, heavy urinary signs', es: 'Deficiencia fría frente a signos calientes, pesados y urinarios' },
+    search: 'erectile dysfunction impotence life gate kidney yang damp heat wu zi yan zong zan yu dan long dan xie gan',
+    en: {
+      intro: 'The source contrasts a cold Kidney-deficiency presentation with a hot, heavy Lower-Burner excess.',
+      rows: [
+        ['Life-Gate Fire debilitation', 'Weak erection with cold limbs, fatigue, tinnitus, weak back and frequent urination', 'Wu Zi Yan Zong Wan or Zan Yu Dan', 'Supplement Kidney and invigorate Yang.'],
+        ['Lower-Burner Damp-Heat', 'Erectile difficulty with scrotal dampness, heavy legs, bitter taste and burning dark urine', 'Long Dan Xie Gan Tang', 'Clear Heat and drain Dampness.'],
+      ],
+      rule: 'Cold, fatigue and lumbar weakness indicate Kidney Yang; damp genital signs, heaviness and burning urine indicate Damp-Heat.',
+      memory: '<strong>Cold and weak—Ming Men; hot, heavy and damp—Damp-Heat.</strong>',
+      safety: 'New erectile dysfunction can signal cardiovascular, endocrine, neurologic or medication-related disease. Chest symptoms or exertional pain requires prompt evaluation.',
+      source: 'Internal Medicine 1, Handout 7: Impotence.'
+    },
+    es: {
+      intro: 'La fuente contrasta una presentación fría por deficiencia renal con un exceso caliente/pesado del Jiao Inferior.',
+      rows: [
+        ['Debilitamiento del Fuego de Ming Men', 'Erección débil con frío, fatiga, tinnitus, lumbar débil y micción frecuente', 'Wu Zi Yan Zong Wan o Zan Yu Dan', 'Suplementar Riñón e vigorizar Yang.'],
+        ['Humedad-Calor del Jiao Inferior', 'Dificultad eréctil con humedad escrotal, piernas pesadas, sabor amargo y orina oscura ardiente', 'Long Dan Xie Gan Tang', 'Aclarar Calor y drenar Humedad.'],
+      ],
+      rule: 'Frío, fatiga y lumbar débil indican Yang renal; humedad genital, pesadez y orina ardiente indican Humedad-Calor.',
+      memory: '<strong>Frío y débil—Ming Men; caliente, pesado y húmedo—Humedad-Calor.</strong>',
+      safety: 'Disfunción eréctil nueva puede señalar enfermedad cardiovascular, endocrina, neurológica o efecto farmacológico. Síntomas torácicos requieren evaluación pronta.',
+      source: 'Internal Medicine 1, Handout 7: Impotence.'
+    }
+  },
+  {
+    slug: 'wasting-thirst-patterns', title: { en: 'Wasting-Thirst Pattern Differentiation', es: 'Diferenciación de Patterns de Wasting-Thirst' },
+    summary: { en: 'Compare Lung Heat, Stomach Fire and Kidney Yin depletion across the three burners.', es: 'Compara Calor de Pulmón, Fuego de Estómago y agotamiento de Yin renal en los tres Jiaos.' },
+    focus: { en: 'Thirst, hunger and urination by burner', es: 'Sed, hambre y micción según Jiao' },
+    search: 'wasting thirst xiao ke diabetes lung heat stomach fire kidney yin thirst hunger urination xiao ke fang yu nu jian liu wei di huang',
+    en: {
+      intro: 'The classic three-burner map distinguishes predominant thirst, hunger or urination; biomedical glucose testing remains essential.',
+      rows: [
+        ['Upper Burner · Lung Heat injures fluids', 'Excessive thirst and drinking with dry mouth; urination and hunger may accompany', 'Xiao Ke Fang', 'Clear Lung Heat and generate fluids.'],
+        ['Middle Burner · Stomach Fire', 'Excessive hunger/eating, emaciation, thirst and dry stool', 'Yu Nu Jian', 'Clear Stomach Fire and nourish Yin.'],
+        ['Lower Burner · Kidney Yin depletion', 'Frequent copious turbid urine, thirst, weak back, dizziness and red cheeks', 'Liu Wei Di Huang Wan', 'Nourish Kidney Yin and secure Kidney.'],
+      ],
+      rule: 'Thirst leads Upper Burner, hunger leads Middle Burner, and urination leads Lower Burner—but overlap is common.',
+      memory: '<strong>Upper drinks; Middle eats; Lower urinates.</strong>',
+      safety: 'This framework does not diagnose or replace diabetes care. Confusion, vomiting, deep breathing, severe dehydration or very high/low glucose requires urgent care.',
+      source: 'Internal Medicine 1, Handout 7: Wasting-Thirst.'
+    },
+    es: {
+      intro: 'El mapa clásico de tres Jiaos distingue sed, hambre o micción predominante; las pruebas biomédicas de glucosa son esenciales.',
+      rows: [
+        ['Jiao Superior · Calor de Pulmón lesiona líquidos', 'Sed y bebida excesiva con boca seca; puede acompañar micción y hambre', 'Xiao Ke Fang', 'Aclarar Calor pulmonar y generar líquidos.'],
+        ['Jiao Medio · Fuego de Estómago', 'Hambre/comida excesiva, adelgazamiento, sed y heces secas', 'Yu Nu Jian', 'Aclarar Fuego de Estómago y nutrir Yin.'],
+        ['Jiao Inferior · Agotamiento Yin renal', 'Orina frecuente abundante/turbia, sed, lumbar débil, mareo y mejillas rojas', 'Liu Wei Di Huang Wan', 'Nutrir Yin renal y asegurar Riñón.'],
+      ],
+      rule: 'Sed lidera Jiao Superior, hambre Jiao Medio y micción Jiao Inferior, aunque suelen superponerse.',
+      memory: '<strong>Superior bebe; Medio come; Inferior orina.</strong>',
+      safety: 'Este marco no diagnostica ni sustituye atención de diabetes. Confusión, vómito, respiración profunda, deshidratación o glucosa extrema requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 7: Wasting-Thirst.'
+    }
+  },
+  {
+    slug: 'urinary-strangury-patterns', title: { en: 'Urinary Strangury Pattern Differentiation', es: 'Diferenciación de Patterns de Urinary Strangury' },
+    summary: { en: 'Distinguish Heat, Stone, Qi, Blood, turbid and taxation strangury presentations.', es: 'Distingue presentaciones de strangury por Calor, piedra, Qi, Sangre, turbidez y agotamiento.' },
+    focus: { en: 'Burning, stones, blood, turbidity and deficiency', es: 'Ardor, piedras, sangre, turbidez y deficiencia' },
+    search: 'urinary strangury lin syndrome heat stone qi blood unctuous taxation ba zheng shi wei chen xiang xiao ji bi xie gao lin wu bi shan yao',
+    en: {
+      intro: 'Urinary quality and pain identify the lin presentation; excess and deficiency must then be separated.',
+      rows: [
+        ['Heat lin', 'Frequent scant burning foul urine with thirst and yellow greasy coat', 'Ba Zheng San', 'Clear Damp-Heat and free urine.'],
+        ['Stone lin', 'Sand/stone, interrupted stream, severe sacral pain or hematuria', 'Shi Wei San', 'Clear Heat and expel stones.'],
+        ['Qi lin', 'Painful difficult urine with abdominal/hypochondriac distention; weak fatigue if deficient', 'Chen Xiang San; Bu Zhong Yi Qi Tang if deficient', 'Regulate or supplement Qi.'],
+        ['Blood lin', 'Burning urination with blood/clots; slight pain plus empty Heat when deficient', 'Xiao Ji Yin Zi; Zhi Bai Di Huang Tang if deficient', 'Cool Blood or nourish Yin.'],
+        ['Turbid/unctuous lin', 'Milky rice-water urine; fatigue and lumbar weakness mark deficiency', 'Cheng Shi Bi Xie Fen Qing Yin; Gao Lin Tang if deficient', 'Separate clear/turbid and secure Essence.'],
+        ['Taxation lin', 'Dribbling after exertion with fatigue and weak low back/knees', 'Wu Bi Shan Yao Wan', 'Strengthen Spleen and Kidney.'],
+      ],
+      rule: 'Burning marks Heat, sudden stop marks Stone, distention marks Qi, red marks Blood, milky urine marks turbid lin, and exertional recurrence marks taxation.',
+      memory: '<strong>Burn—Heat; stop—Stone; distend—Qi; red—Blood; milk—Turbid; strain—Taxation.</strong>',
+      safety: 'Fever with flank pain, inability to urinate, vomiting, pregnancy, visible blood or suspected obstruction/stone requires urgent medical evaluation.',
+      source: 'Internal Medicine 1, Handout 7: Urinary Strangury.'
+    },
+    es: {
+      intro: 'Calidad urinaria y dolor identifican la presentación lin; luego debe separarse exceso de deficiencia.',
+      rows: [
+        ['Heat lin', 'Orina frecuente, escasa, ardiente y olorosa con sed/capa amarilla grasosa', 'Ba Zheng San', 'Aclarar Humedad-Calor y liberar orina.'],
+        ['Stone lin', 'Arena/piedra, chorro interrumpido, dolor sacro grave o hematuria', 'Shi Wei San', 'Aclarar Calor y expulsar piedras.'],
+        ['Qi lin', 'Orina dolorosa/difícil con distensión; fatiga débil si es deficiente', 'Chen Xiang San; Bu Zhong Yi Qi Tang si deficiente', 'Regular o suplementar Qi.'],
+        ['Blood lin', 'Micción ardiente con sangre/coágulos; dolor leve y Calor vacío si deficiente', 'Xiao Ji Yin Zi; Zhi Bai Di Huang Tang si deficiente', 'Enfriar Sangre o nutrir Yin.'],
+        ['Turbid/unctuous lin', 'Orina lechosa tipo agua de arroz; fatiga/lumbar débil marca deficiencia', 'Cheng Shi Bi Xie Fen Qing Yin; Gao Lin Tang si deficiente', 'Separar claro/turbio y asegurar Esencia.'],
+        ['Taxation lin', 'Goteo tras esfuerzo con fatiga y lumbar/rodillas débiles', 'Wu Bi Shan Yao Wan', 'Fortalecer Bazo y Riñón.'],
+      ],
+      rule: 'Ardor marca Calor, parada súbita Piedra, distensión Qi, rojo Sangre, orina lechosa turbio y recurrencia tras esfuerzo agotamiento.',
+      memory: '<strong>Arde—Calor; para—Piedra; distiende—Qi; rojo—Sangre; leche—Turbio; esfuerzo—Agotamiento.</strong>',
+      safety: 'Fiebre con dolor de flanco, no poder orinar, vómito, embarazo, sangre visible o sospecha de obstrucción/piedra requiere urgencias.',
+      source: 'Internal Medicine 1, Handout 7: Urinary Strangury.'
+    }
+  },
+  {
+    slug: 'urinary-retention-patterns', title: { en: 'Urinary Retention Pattern Differentiation', es: 'Diferenciación de Patterns de Retención Urinaria' },
+    summary: { en: 'Compare Bladder Damp-Heat, Lung Heat, Liver-Qi stagnation, Blood stasis and Spleen/Kidney deficiency.', es: 'Compara Humedad-Calor de Vejiga, Calor de Pulmón, estancamiento Qi de Hígado, estasis y deficiencia Bazo/Riñón.' },
+    focus: { en: 'Acute obstruction, location and deficient urinary force', es: 'Obstrucción aguda, localización y fuerza urinaria deficiente' },
+    search: 'urinary retention dribbling block bladder damp heat lung heat liver qi blood stasis spleen kidney ba zheng qing fei chen xiang dai di dang bu zhong wu ling ji sheng shen qi',
+    en: {
+      intro: 'Heat, respiratory signs, emotion, fixed lower-abdominal pain and weak urinary force distinguish the branches.',
+      rows: [
+        ['Bladder Damp-Heat', 'Hot scant urine/retention, lower-abdominal fullness, thirst and yellow greasy coat', 'Ba Zheng San', 'Clear Damp-Heat and free urine.'],
+        ['Lung Heat congestion', 'Retention with dry throat, chest Heat, thirst, rapid breathing or cough', 'Qing Fei Yin', 'Clear Lung Heat and open water passages.'],
+        ['Liver-Qi stagnation', 'Difficult urine with emotional constraint and lower-abdominal/hypochondriac distention', 'Chen Xiang San', 'Soothe Liver and regulate Qi.'],
+        ['Blood stasis obstruction', 'Dribbling/retention with fixed lower-abdominal pain and purple tongue', 'Dai Di Dang Wan', 'Invigorate Blood and dispel stasis.'],
+        ['Spleen-Qi deficiency', 'Bearing-down fullness, periodic urge, fatigue, poor appetite and weak voice', 'Bu Zhong Yi Qi Tang + Wu Ling San', 'Raise Qi and promote urination.'],
+        ['Kidney-Yang exhaustion', 'Weak urinary force with cold, fatigue and cold aching low back/knees', 'Ji Sheng Shen Qi Wan', 'Warm Kidney Yang and transform water.'],
+      ],
+      rule: 'Hot urine indicates Bladder; respiratory Heat indicates Lung; emotion/distention indicates Liver; fixed purple pain indicates Blood; bearing-down fatigue indicates Spleen; weak cold stream indicates Kidney.',
+      memory: '<strong>Hot—Bladder; chest—Lung; emotion—Liver; fixed—Blood; sinking—Spleen; cold weak stream—Kidney.</strong>',
+      safety: 'Acute inability to urinate is a medical emergency because obstruction can injure the kidneys. Severe pain, fever, vomiting or blood increases urgency.',
+      source: 'Internal Medicine 1, Handout 7: Dribbling Urinary Block.'
+    },
+    es: {
+      intro: 'Calor, signos respiratorios, emoción, dolor fijo hipogástrico y fuerza urinaria débil distinguen las ramas.',
+      rows: [
+        ['Humedad-Calor de Vejiga', 'Orina caliente escasa/retención, plenitud inferior, sed y capa amarilla grasosa', 'Ba Zheng San', 'Aclarar Humedad-Calor y liberar orina.'],
+        ['Congestión por Calor de Pulmón', 'Retención con garganta seca, Calor torácico, sed, respiración rápida o tos', 'Qing Fei Yin', 'Aclarar Pulmón y abrir vías de agua.'],
+        ['Estancamiento Qi de Hígado', 'Micción difícil con emoción y distensión hipogástrica/hipocondríaca', 'Chen Xiang San', 'Suavizar Hígado y regular Qi.'],
+        ['Obstrucción por estasis', 'Goteo/retención con dolor inferior fijo y lengua púrpura', 'Dai Di Dang Wan', 'Vigorizar Sangre y eliminar estasis.'],
+        ['Deficiencia Qi de Bazo', 'Sensación de caída/plenitud, urgencia periódica, fatiga, poco apetito y voz débil', 'Bu Zhong Yi Qi Tang + Wu Ling San', 'Elevar Qi y promover micción.'],
+        ['Agotamiento Yang renal', 'Fuerza urinaria débil con frío, fatiga y lumbar/rodillas frías y dolorosas', 'Ji Sheng Shen Qi Wan', 'Calentar Yang renal y transformar agua.'],
+      ],
+      rule: 'Orina caliente indica Vejiga; Calor respiratorio Pulmón; emoción/distensión Hígado; dolor fijo púrpura Sangre; caída/fatiga Bazo; chorro débil frío Riñón.',
+      memory: '<strong>Caliente—Vejiga; pecho—Pulmón; emoción—Hígado; fijo—Sangre; hundimiento—Bazo; chorro frío/débil—Riñón.</strong>',
+      safety: 'Incapacidad aguda para orinar es emergencia porque la obstrucción puede dañar riñones. Dolor grave, fiebre, vómito o sangre aumenta urgencia.',
+      source: 'Internal Medicine 1, Handout 7: Dribbling Urinary Block.'
+    }
   }
 ];
 
