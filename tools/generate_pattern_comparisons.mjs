@@ -636,6 +636,222 @@ cards.push(
       safety: 'No abusar de hierbas sudoríficas: dispersión excesiva puede consumir Qi y Yin. Precaución adicional en sangrado o embarazo. Disnea, fiebre alta persistente, confusión, rigidez cervical o deshidratación requiere evaluación.',
       prompts: ['¿Cuál tiene más escalofríos?', '¿Cuál sed y garganta dolorida?', '¿Cómo difieren secreciones y pulso?']
     }
+  },
+  {
+    slug: 'full-heat-vs-empty-heat', title: 'Full Heat vs. Empty Heat', titleEs: 'Calor Pleno vs. Calor Vacío',
+    summary: 'Separate forceful excess Heat from deficient cooling and fluids that produce afternoon or night Heat.',
+    summaryEs: 'Distingue Calor de exceso fuerte de enfriamiento y líquidos deficientes que producen Calor vespertino o nocturno.',
+    search: 'full heat empty heat excess deficiency yin high fever afternoon night sweat five center thirst red tongue yellow coat peeled forceful thin rapid',
+    en: {
+      names: ['Full Heat', 'Empty Heat'],
+      shared: 'Both may cause thirst, irritability, a red tongue, Heat sensations and a rapid pulse.',
+      fast: ['Strong excess: high or continuous fever, intense thirst for cold drinks, red tongue with yellow coat and a forceful rapid pulse.', 'Yin deficiency: afternoon fever, night sweating, five-center Heat, malar flush, peeled red tongue and a thin rapid pulse.'],
+      rows: [
+        ['Mechanism', 'Excess pathogenic Heat blazes internally.', 'Yin and fluids fail to restrain Yang.'],
+        ['Timing / strength', 'Strong and persistent, often worse in daytime.', 'Low-grade or tidal, classically worse afternoon/night.'],
+        ['Tongue / pulse', 'Red with dry yellow coat; full/forceful-rapid.', 'Red with little or no coat; thin-rapid.'],
+        ['Formula examples', 'Bai Hu Tang by Qi-level presentation.', 'Zhi Bai Di Huang Wan or Qing Hao Bie Jia Tang by context.']
+      ],
+      why: 'Redness and rapidity are shared. Coat and pulse strength reveal whether Heat is an excess pathogen or appears because Yin cannot cool.',
+      memory: '<strong>Full Heat has force and coat;</strong> <strong>Empty Heat has timing and no coat.</strong>',
+      safety: 'High persistent fever, confusion, stiff neck, breathing difficulty, severe dehydration or immunocompromise requires urgent medical evaluation.',
+      prompts: ['Which Heat pattern has a forceful pulse?', 'Which peaks at night?', 'How does the tongue coating differ?']
+    },
+    es: {
+      names: ['Calor Pleno', 'Calor Vacío'],
+      shared: 'Ambos pueden causar sed, irritabilidad, lengua roja, sensación de Calor y pulso rápido.',
+      fast: ['Exceso fuerte: fiebre alta o continua, sed intensa por frío, lengua roja con capa amarilla y pulso fuerte-rápido.', 'Deficiencia Yin: fiebre vespertina, sudor nocturno, Calor de cinco centros, rubor malar, lengua roja pelada y pulso fino-rápido.'],
+      rows: [
+        ['Mecanismo', 'Calor patógeno excesivo arde internamente.', 'Yin y líquidos no contienen Yang.'],
+        ['Horario / fuerza', 'Fuerte y persistente, a menudo peor de día.', 'Bajo o vespertino, clásicamente peor tarde/noche.'],
+        ['Lengua / pulso', 'Roja con capa amarilla seca; lleno/fuerte-rápido.', 'Roja con poca o ninguna capa; fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Bai Hu Tang según presentación de nivel Qi.', 'Zhi Bai Di Huang Wan o Qing Hao Bie Jia Tang según contexto.']
+      ],
+      why: 'Rojez y rapidez son comunes. Capa y fuerza del pulso revelan exceso patógeno o falta de Yin para enfriar.',
+      memory: '<strong>Calor Pleno tiene fuerza y capa;</strong> <strong>Calor Vacío tiene horario y no tiene capa.</strong>',
+      safety: 'Fiebre alta persistente, confusión, nuca rígida, disnea, deshidratación grave o inmunosupresión requiere evaluación urgente.',
+      prompts: ['¿Cuál tiene pulso fuerte?', '¿Cuál aumenta de noche?', '¿Cómo difiere la capa lingual?']
+    }
+  },
+  {
+    slug: 'interior-excess-cold-vs-yang-deficiency-cold', title: 'Interior Excess Cold vs. Yang-Deficiency Cold', titleEs: 'Frío Interior por Exceso vs. Frío por Deficiencia de Yang',
+    summary: 'Separate an obstructing Cold pathogen from chronic failure of Yang to warm and transform.',
+    summaryEs: 'Distingue un patógeno Frío obstructivo de la falla crónica de Yang para calentar y transformar.',
+    search: 'interior excess cold yang deficiency cold acute chronic severe fixed pain pressure warmth fatigue loose stool pale tongue thick white weak tight slow',
+    en: {
+      names: ['Interior Excess Cold', 'Yang-Deficiency Cold'],
+      shared: 'Both cause aversion to cold, cold limbs, abdominal discomfort, pale tongue signs and a slow pulse.',
+      fast: ['Acute obstruction: severe fixed pain, worse with pressure, robust constitution, thick white coat and a deep tight forceful pulse.', 'Chronic weakness: dull pain improved by pressure, fatigue, loose stool, edema or clear urine, pale swollen tongue and deep weak slow pulse.'],
+      rows: [
+        ['Mechanism', 'Cold pathogen contracts and blocks Qi.', 'Yang Qi fails to warm, move and transform.'],
+        ['Pain / pressure', 'Severe, fixed and resistant to pressure; warmth helps.', 'Dull, lingering and relieved by warmth and pressure.'],
+        ['Tongue / pulse', 'Pale with thick moist white coat; deep-tight-slow.', 'Pale, swollen and wet; deep-weak-slow.'],
+        ['Formula examples', 'Liang Fu Wan or Tian Tai Wu Yao San by location.', 'Li Zhong Wan, Zhen Wu Tang or Si Ni Tang by depth.']
+      ],
+      why: 'Temperature alone does not distinguish them. Force, onset, pressure response and pulse strength separate excess obstruction from deficient warming.',
+      memory: '<strong>Excess Cold grips;</strong> <strong>Yang deficiency fades.</strong>',
+      safety: 'Severe abdominal pain, rigid abdomen, persistent vomiting, fainting, GI bleeding or hypothermia requires urgent care. Fu Zi formulas require processed material and expert supervision.',
+      prompts: ['Which pattern resists pressure?', 'Which has edema and fatigue?', 'How does pulse strength differ?']
+    },
+    es: {
+      names: ['Frío Interior por Exceso', 'Frío por Deficiencia de Yang'],
+      shared: 'Ambos causan aversión al frío, miembros fríos, molestia abdominal, signos de lengua pálida y pulso lento.',
+      fast: ['Obstrucción aguda: dolor fijo grave peor con presión, constitución fuerte, capa blanca gruesa y pulso profundo-tenso-fuerte.', 'Debilidad crónica: dolor sordo mejor con presión, fatiga, heces sueltas, edema u orina clara, lengua pálida hinchada y pulso profundo-débil-lento.'],
+      rows: [
+        ['Mecanismo', 'Patógeno Frío contrae y bloquea Qi.', 'Qi Yang no calienta, mueve ni transforma.'],
+        ['Dolor / presión', 'Grave, fijo y rechaza presión; mejora con calor.', 'Sordo, prolongado y mejora con calor y presión.'],
+        ['Lengua / pulso', 'Pálida con capa blanca húmeda gruesa; profundo-tenso-lento.', 'Pálida, hinchada y mojada; profundo-débil-lento.'],
+        ['Ejemplos de fórmulas', 'Liang Fu Wan o Tian Tai Wu Yao San según localización.', 'Li Zhong Wan, Zhen Wu Tang o Si Ni Tang según profundidad.']
+      ],
+      why: 'La temperatura sola no distingue. Fuerza, inicio, respuesta a presión y fuerza del pulso separan obstrucción de deficiencia.',
+      memory: '<strong>Frío por exceso aprieta;</strong> <strong>Yang deficiente se apaga.</strong>',
+      safety: 'Dolor abdominal grave, abdomen rígido, vómito persistente, desmayo, sangrado GI o hipotermia requiere urgencias. Fórmulas con Fu Zi exigen material procesado y experto.',
+      prompts: ['¿Cuál rechaza presión?', '¿Cuál tiene edema y fatiga?', '¿Cómo difiere la fuerza del pulso?']
+    }
+  },
+  {
+    slug: 'qi-stagnation-vs-blood-stasis', title: 'Qi Stagnation vs. Blood Stasis', titleEs: 'Estancamiento de Qi vs. Estasis de Sangre',
+    summary: 'Separate mobile distention influenced by emotion from fixed stabbing pain and purple structural signs.',
+    summaryEs: 'Distingue distensión móvil influida por emociones de dolor fijo punzante y signos estructurales púrpura.',
+    search: 'qi stagnation blood stasis distending moving emotional fixed stabbing night pain purple tongue clots masses wiry choppy',
+    en: {
+      names: ['Qi Stagnation', 'Blood Stasis'],
+      shared: 'Both obstruct free flow and can cause pain, menstrual irregularity, masses, irritability and a wiry pulse.',
+      fast: ['Qi obstruction: distending, moving or fluctuating discomfort strongly linked to emotion; tongue may be normal.', 'Blood obstruction: fixed, stabbing pain worse at night, dark clots, palpable masses and a purple or spotted tongue.'],
+      rows: [
+        ['Nature of obstruction', 'Functional movement of Qi is impaired.', 'Blood circulation is physically fixed or congealed.'],
+        ['Pain', 'Distending, wandering and variable.', 'Sharp, stabbing, fixed and often worse at night.'],
+        ['Tongue / pulse', 'Normal or slightly dusky; wiry.', 'Purple/dusky with spots; choppy or wiry.'],
+        ['Formula examples', 'Chai Hu Shu Gan San or Yue Ju Wan.', 'Xue Fu Zhu Yu Tang or other Zhu Yu formula by location.']
+      ],
+      why: 'Qi stagnation often precedes Blood stasis, so they can coexist. Fixity, clots and purple signs show that obstruction has reached Blood.',
+      memory: '<strong>Qi moves and distends;</strong> <strong>Blood fixes and stabs.</strong>',
+      safety: 'New chest pain, unilateral swelling, neurologic deficit, pregnancy pain, heavy bleeding or a new mass requires urgent biomedical evaluation.',
+      prompts: ['Which pain moves with emotion?', 'Which worsens at night?', 'Which produces a purple spotted tongue?']
+    },
+    es: {
+      names: ['Estancamiento de Qi', 'Estasis de Sangre'],
+      shared: 'Ambos obstruyen flujo y causan dolor, irregularidad menstrual, masas, irritabilidad y pulso de cuerda.',
+      fast: ['Obstrucción de Qi: molestia distensiva, móvil o variable muy ligada a emociones; lengua puede ser normal.', 'Obstrucción de Sangre: dolor fijo punzante peor de noche, coágulos oscuros, masas palpables y lengua púrpura o con puntos.'],
+      rows: [
+        ['Naturaleza', 'Movimiento funcional de Qi está alterado.', 'Circulación de Sangre está fija o coagulada.'],
+        ['Dolor', 'Distensivo, errante y variable.', 'Agudo, punzante, fijo y a menudo peor de noche.'],
+        ['Lengua / pulso', 'Normal o algo oscura; de cuerda.', 'Púrpura/oscura con puntos; áspero o de cuerda.'],
+        ['Ejemplos de fórmulas', 'Chai Hu Shu Gan San o Yue Ju Wan.', 'Xue Fu Zhu Yu Tang u otra Zhu Yu según localización.']
+      ],
+      why: 'Qi estancado puede preceder estasis de Sangre y coexistir. Fijeza, coágulos y púrpura muestran que la obstrucción alcanzó Sangre.',
+      memory: '<strong>Qi se mueve y distiende;</strong> <strong>Sangre se fija y punza.</strong>',
+      safety: 'Dolor torácico nuevo, hinchazón unilateral, déficit neurológico, dolor en embarazo, sangrado abundante o masa nueva requiere urgencia biomédica.',
+      prompts: ['¿Qué dolor cambia con emociones?', '¿Cuál empeora de noche?', '¿Cuál da lengua púrpura con puntos?']
+    }
+  },
+  {
+    slug: 'liver-blood-deficiency-vs-liver-yin-deficiency', title: 'Liver Blood Deficiency vs. Liver Yin Deficiency', titleEs: 'Deficiencia de Sangre de Hígado vs. Deficiencia de Yin de Hígado',
+    summary: 'Separate pale failure to nourish from deeper fluid-Essence depletion with Empty Heat.',
+    summaryEs: 'Distingue falla pálida de nutrición de agotamiento más profundo de líquidos-Esencia con Calor Vacío.',
+    search: 'liver blood deficiency yin deficiency pale red dry eyes blurred vision cramps numbness scant menses night sweat five center heat tinnitus',
+    en: {
+      names: ['Liver Blood Deficiency', 'Liver Yin Deficiency'],
+      shared: 'Both fail to nourish the eyes, sinews and menstrual system, causing blurred vision, cramps, dizziness, dryness and scanty menses.',
+      fast: ['Blood deficiency is pale: pale face/tongue, numbness, brittle nails, scant menses and a thin or choppy pulse.', 'Yin deficiency is red and hot: dry eyes/throat, tinnitus, night sweating, five-center Heat, red peeled tongue and thin rapid pulse.'],
+      rows: [
+        ['Depth', 'Deficient Blood nutrition.', 'Deeper depletion of Blood, fluids and Yin anchoring.'],
+        ['Thermal sign', 'Usually no pronounced Empty Heat.', 'Afternoon/night Heat and dryness are characteristic.'],
+        ['Tongue / pulse', 'Pale, often thin; thin/choppy.', 'Red with little coat; thin-rapid.'],
+        ['Formula examples', 'Si Wu Tang.', 'Yi Guan Jian or a Liver-Kidney Yin tonic by presentation.']
+      ],
+      why: 'Eye and menstrual symptoms overlap. Pale versus red, and absence versus presence of Empty Heat, reveal the depth of deficiency.',
+      memory: '<strong>Blood deficiency is pale and underfed;</strong> <strong>Yin deficiency is dry, red and warm.</strong>',
+      safety: 'Sudden visual loss, severe headache, neurologic symptoms, heavy bleeding or pregnancy-related bleeding requires urgent evaluation.',
+      prompts: ['Which pattern has a pale tongue?', 'Which has night sweating?', 'What signs show progression from Blood to Yin deficiency?']
+    },
+    es: {
+      names: ['Deficiencia de Sangre de Hígado', 'Deficiencia de Yin de Hígado'],
+      shared: 'Ambas dejan de nutrir ojos, tendones y sistema menstrual, causando visión borrosa, calambres, mareo, sequedad y menstruación escasa.',
+      fast: ['Deficiencia de Sangre es pálida: cara/lengua pálida, entumecimiento, uñas frágiles, menstruación escasa y pulso fino/áspero.', 'Deficiencia Yin es roja y caliente: ojos/garganta secos, tinnitus, sudor nocturno, Calor de cinco centros, lengua roja pelada y pulso fino-rápido.'],
+      rows: [
+        ['Profundidad', 'Nutrición deficiente de Sangre.', 'Agotamiento más profundo de Sangre, líquidos y anclaje Yin.'],
+        ['Signo térmico', 'Generalmente sin Calor Vacío pronunciado.', 'Calor tarde/noche y sequedad son característicos.'],
+        ['Lengua / pulso', 'Pálida, a menudo fina; fino/áspero.', 'Roja con poca capa; fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Si Wu Tang.', 'Yi Guan Jian o tónico Yin de Hígado-Riñón según presentación.']
+      ],
+      why: 'Ojos y menstruación se superponen. Pálido frente a rojo y ausencia frente a presencia de Calor Vacío revelan profundidad.',
+      memory: '<strong>Sangre deficiente es pálida y mal nutrida;</strong> <strong>Yin deficiente es seco, rojo y caliente.</strong>',
+      safety: 'Pérdida visual súbita, cefalea grave, signos neurológicos, sangrado abundante o sangrado en embarazo requiere urgencia.',
+      prompts: ['¿Cuál tiene lengua pálida?', '¿Cuál sudor nocturno?', '¿Qué muestra progresión de Sangre a Yin?']
+    }
+  },
+  {
+    slug: 'stomach-fire-vs-stomach-yin-deficiency', title: 'Stomach Fire vs. Stomach Yin Deficiency', titleEs: 'Fuego de Estómago vs. Deficiencia de Yin de Estómago',
+    summary: 'Separate blazing excess with voracious hunger from dry deficient Stomach function with little desire to eat.',
+    summaryEs: 'Distingue exceso ardiente con hambre voraz de función seca deficiente del Estómago con poco deseo de comer.',
+    search: 'stomach fire yin deficiency burning epigastric ravenous hunger no appetite dry mouth gums bleeding foul breath constipation red tongue yellow coat peeled center',
+    en: {
+      names: ['Stomach Fire', 'Stomach Yin Deficiency'],
+      shared: 'Both may cause thirst, dry mouth, constipation, a red tongue and epigastric discomfort.',
+      fast: ['Excess Fire: burning pain, voracious hunger, foul breath, swollen bleeding gums, strong thirst and a forceful rapid pulse.', 'Deficient Yin: dull or empty discomfort, hunger without desire to eat, dry mouth with small sips, dry retching and a peeled central tongue.'],
+      rows: [
+        ['Appetite', 'Excessive hunger and rapid return of appetite.', 'Poor appetite or hunger without desire to eat.'],
+        ['Mouth / gums', 'Foul breath, mouth ulcers, swollen or bleeding gums.', 'Dry mouth/throat without strong foul Heat signs.'],
+        ['Tongue / pulse', 'Red with thick/dry yellow coat; slippery-forceful-rapid.', 'Red, dry, peeled in center; thin-rapid.'],
+        ['Formula examples', 'Qing Wei San; Yu Nu Jian when Kidney Yin deficiency coexists.', 'Yi Wei Tang or Sha Shen Mai Dong Tang by context.']
+      ],
+      why: 'Both are dry and red. Appetite intensity, gum Heat, tongue coating and pulse strength separate excess Fire from depleted Yin.',
+      memory: '<strong>Stomach Fire devours;</strong> <strong>Stomach Yin wants but cannot receive.</strong>',
+      safety: 'Vomiting blood, black stool, severe persistent pain, progressive swallowing difficulty, dehydration or unexplained weight loss needs prompt medical evaluation.',
+      prompts: ['Which pattern has voracious hunger?', 'Which has a peeled center tongue?', 'Which produces swollen bleeding gums?']
+    },
+    es: {
+      names: ['Fuego de Estómago', 'Deficiencia de Yin de Estómago'],
+      shared: 'Ambos pueden causar sed, boca seca, estreñimiento, lengua roja y molestia epigástrica.',
+      fast: ['Fuego de exceso: dolor ardiente, hambre voraz, mal aliento, encías hinchadas/sangrantes, sed fuerte y pulso fuerte-rápido.', 'Yin deficiente: molestia sorda/vacía, hambre sin deseo de comer, boca seca con sorbos pequeños, arcadas secas y centro lingual pelado.'],
+      rows: [
+        ['Apetito', 'Hambre excesiva y retorno rápido del apetito.', 'Poco apetito o hambre sin deseo de comer.'],
+        ['Boca / encías', 'Mal aliento, úlceras, encías hinchadas o sangrantes.', 'Boca/garganta seca sin signos fuertes de Fuego fétido.'],
+        ['Lengua / pulso', 'Roja con capa amarilla gruesa/seca; resbaladizo-fuerte-rápido.', 'Roja, seca, pelada al centro; fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Qing Wei San; Yu Nu Jian si coexiste deficiencia Yin renal.', 'Yi Wei Tang o Sha Shen Mai Dong Tang según contexto.']
+      ],
+      why: 'Ambos son secos y rojos. Intensidad del apetito, Calor de encías, capa y fuerza del pulso separan Fuego de Yin agotado.',
+      memory: '<strong>Fuego de Estómago devora;</strong> <strong>Yin de Estómago quiere pero no recibe.</strong>',
+      safety: 'Vómito de sangre, heces negras, dolor grave persistente, disfagia progresiva, deshidratación o pérdida de peso inexplicada requiere evaluación pronta.',
+      prompts: ['¿Cuál tiene hambre voraz?', '¿Cuál centro lingual pelado?', '¿Cuál causa encías hinchadas/sangrantes?']
+    }
+  },
+  {
+    slug: 'phlegm-misting-heart-vs-phlegm-fire', title: 'Phlegm Misting the Heart vs. Phlegm-Fire Harassing the Heart', titleEs: 'Flema que Nubla el Corazón vs. Flema-Fuego que Acosa el Corazón',
+    summary: 'Separate cold turbid withdrawal and clouding from hot agitated mania and insomnia.',
+    summaryEs: 'Distingue retraimiento y nubosidad fría-turbia de agitación caliente con manía e insomnio.',
+    search: 'phlegm misting heart mind phlegm fire harassing cold turbid confusion lethargy depression mania agitation insomnia incoherent speech greasy white yellow tongue slippery slow rapid',
+    en: {
+      names: ['Phlegm Misting the Heart', 'Phlegm-Fire Harassing the Heart'],
+      shared: 'Both obstruct the Heart orifices and can cause confusion, abnormal speech or behavior, chest oppression and a slippery pulse.',
+      fast: ['Cold/turbid and withdrawn: mental dullness, lethargy, depression, muttering, stupor, greasy white coat and slippery-slow pulse.', 'Hot and agitated: insomnia, shouting, mania, violent behavior, bitter taste, red tongue with yellow greasy coat and slippery-rapid pulse.'],
+      rows: [
+        ['Direction', 'Clouds and suppresses consciousness.', 'Agitates and drives behavior upward/outward.'],
+        ['Temperature', 'Usually Cold or neutral Phlegm-Damp.', 'Phlegm combined with Fire.'],
+        ['Tongue / pulse', 'Swollen with white greasy coat; slippery-slow.', 'Red with yellow greasy coat; slippery-rapid.'],
+        ['Formula examples', 'Di Tan Tang by presentation.', 'Wen Dan Tang or Huang Lian Wen Dan Tang by Heat severity.']
+      ],
+      why: 'Both involve Phlegm and altered behavior. Withdrawal versus agitation, and white-slow versus yellow-rapid, separate misting from Fire harassment.',
+      memory: '<strong>Cold Phlegm dims;</strong> <strong>Phlegm-Fire erupts.</strong>',
+      safety: 'New confusion, reduced consciousness, psychosis, suicidal or violent behavior, seizure, fever or suspected intoxication is an emergency requiring immediate biomedical assessment.',
+      prompts: ['Which pattern is withdrawn and dull?', 'Which is agitated and sleepless?', 'How do tongue coat and pulse separate them?']
+    },
+    es: {
+      names: ['Flema que Nubla el Corazón', 'Flema-Fuego que Acosa el Corazón'],
+      shared: 'Ambos obstruyen orificios de Corazón y causan confusión, habla/conducta anormal, opresión torácica y pulso resbaladizo.',
+      fast: ['Fría/turbia y retraída: lentitud mental, letargo, depresión, murmullo, estupor, capa blanca grasosa y pulso resbaladizo-lento.', 'Caliente y agitada: insomnio, gritos, manía, violencia, sabor amargo, lengua roja con capa amarilla grasosa y pulso resbaladizo-rápido.'],
+      rows: [
+        ['Dirección', 'Nubla y suprime conciencia.', 'Agita e impulsa conducta hacia arriba/afuera.'],
+        ['Temperatura', 'Generalmente Flema-Humedad fría o neutra.', 'Flema combinada con Fuego.'],
+        ['Lengua / pulso', 'Hinchada con capa blanca grasosa; resbaladizo-lento.', 'Roja con capa amarilla grasosa; resbaladizo-rápido.'],
+        ['Ejemplos de fórmulas', 'Di Tan Tang según presentación.', 'Wen Dan Tang o Huang Lian Wen Dan Tang según intensidad de Calor.']
+      ],
+      why: 'Ambos implican Flema y conducta alterada. Retraimiento frente a agitación y blanco-lento frente a amarillo-rápido los separan.',
+      memory: '<strong>Flema fría apaga;</strong> <strong>Flema-Fuego estalla.</strong>',
+      safety: 'Confusión nueva, conciencia reducida, psicosis, conducta suicida/violenta, convulsión, fiebre o intoxicación sospechada es emergencia biomédica inmediata.',
+      prompts: ['¿Cuál es retraído y lento?', '¿Cuál agitado e insomne?', '¿Cómo separan capa y pulso?']
+    }
   }
 );
 
