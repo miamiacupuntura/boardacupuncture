@@ -20,12 +20,24 @@
       .replace(/^[^a-z0-9]+/, '');
   }
 
-  if (grid) {
-    cards.sort((first, second) => alphabeticalTitle(first).localeCompare(
+  function compareCards(first, second) {
+    const firstSequence = Number(first.dataset.sequence);
+    const secondSequence = Number(second.dataset.sequence);
+    const hasSequence = first.hasAttribute('data-sequence') && second.hasAttribute('data-sequence');
+
+    if (hasSequence && Number.isFinite(firstSequence) && Number.isFinite(secondSequence)) {
+      return firstSequence - secondSequence;
+    }
+
+    return alphabeticalTitle(first).localeCompare(
       alphabeticalTitle(second),
       'en',
       {numeric: true, sensitivity: 'base'}
-    )).forEach(card => grid.appendChild(card));
+    );
+  }
+
+  if (grid) {
+    cards.sort(compareCards).forEach(card => grid.appendChild(card));
   }
 
   function refresh() {
