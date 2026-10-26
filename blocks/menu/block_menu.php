@@ -326,6 +326,16 @@ class block_menu extends block_base {
                     . '</article>';
             }
 
+            $internalmedicineurl = (new moodle_url('/blocks/myprogress/module-school.php', [
+                'module' => 'internalmedicine',
+            ]))->out(false);
+            $orthopedicsurl = (new moodle_url('/blocks/myprogress/module-school.php', [
+                'module' => 'orthopedics',
+            ]))->out(false);
+            $advancedacupunctureurl = (new moodle_url('/blocks/myprogress/module-school.php', [
+                'module' => 'advancedacupuncture',
+            ]))->out(false);
+
             $this->content->text = <<<HTML
 <section class="board-hub" aria-labelledby="board-hub-title">
   <header class="board-hub__heading">
@@ -334,6 +344,18 @@ class block_menu extends block_base {
     <span>Track your progress and open Questions, Simulation, Exam Keys, Games, Study Guides or Comparisons directly from one screen.</span>
   </header>
   <div class="board-hub__grid">{$boardcards}</div>
+  <aside class="module-school-dashboard-panel" aria-labelledby="module-school-dashboard-title">
+    <div class="module-school-dashboard-panel__copy">
+      <p>INTEGRATED CLINICAL MODULES</p>
+      <h3 id="module-school-dashboard-title">Module School</h3>
+      <span>Study patterns, symptoms, herbs, formulas and acupuncture points together in independent clinical modules.</span>
+    </div>
+    <nav class="module-school-dashboard-panel__actions" aria-label="Module School subjects">
+      <a class="module-school-dashboard-link" href="{$internalmedicineurl}">Internal Medicine</a>
+      <a href="{$orthopedicsurl}">Orthopedics</a>
+      <a href="{$advancedacupunctureurl}">Advanced Acupuncture</a>
+    </nav>
+  </aside>
 </section>
 HTML;
             return $this->content;
