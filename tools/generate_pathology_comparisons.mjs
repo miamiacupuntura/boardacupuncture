@@ -1375,6 +1375,206 @@ const pathologies = [
       safety: 'Lesión que cambia rápido, sangra, ulcera, duele, es pigmentada o dudosa necesita dermatología, no tratamiento de verruga. Lesiones faciales/genitales e inmunosupresión también requieren evaluación.',
       source: 'Internal Medicine 1, Handout 12: Flat Warts (Bian Ping You).'
     }
+  },
+  {
+    slug: 'tinnitus-deafness-patterns', title: { en: 'Tinnitus and Deafness Pattern Differentiation', es: 'Diferenciación de Tinnitus y Sordera' },
+    summary: { en: 'Compare Liver-GB Fire, external Wind-Heat, Phlegm-Fire, Kidney-Essence depletion and Spleen-Stomach Qi deficiency.', es: 'Compara Fuego de Hígado-VB, Viento-Calor externo, Flema-Fuego, agotamiento de Esencia renal y deficiencia Qi de Bazo-Estómago.' },
+    focus: { en: 'Sudden versus gradual onset, sound quality, excess Heat and deficiency clues', es: 'Inicio súbito frente a gradual, calidad del sonido, Calor de exceso y pistas de deficiencia' },
+    search: 'tinnitus deafness hearing loss liver gallbladder fire wind heat phlegm kidney essence spleen qi long dan xie gan yin qiao jia wei er chen er long zuo ci bu zhong yi qi',
+    en: {
+      intro: 'Onset and associated signs distinguish excess from deficiency; sudden sensorineural hearing loss is a time-critical medical diagnosis.',
+      rows: [
+        ['Liver-GB Fire', 'Sudden roaring/thunder tinnitus or deafness worse with anger, headache, red face, bitter mouth and forceful wiry pulse', 'Long Dan Xie Gan Tang', 'Drain Liver-GB Fire.'],
+        ['External Wind-Heat', 'Cold-like onset followed by ear distention/blockage, tinnitus and impaired hearing with fever and floating-rapid pulse', 'Yin Qiao San', 'Dispel Wind and clear Heat.'],
+        ['Phlegm-Fire binding', 'Tinnitus/deafness with heavy dizzy head, chest oppression, profuse phlegm, bitter taste and greasy yellow coat', 'Jia Wei Er Chen Tang', 'Clear Fire and transform Phlegm.'],
+        ['Kidney-Essence depletion', 'Gradual/intermittent cicada-like tinnitus worse at night with chronic hearing loss, weak back/knees and red scant-coated tongue', 'Er Long Zuo Ci Wan', 'Supplement Kidney and secure Essence.'],
+        ['Spleen-Stomach Qi deficiency', 'Tinnitus/hearing loss worse with overwork, empty/cool ear sensation, fatigue, poor appetite, loose stool and pale tongue', 'Bu Zhong Yi Qi Tang', 'Strengthen Spleen-Stomach and boost Qi.'],
+      ],
+      rule: 'Sudden loud/angry is Fire; cold-to-ear blockage is Wind-Heat; heavy/phlegmy is Phlegm-Fire; gradual night cicadas with weak back is Kidney; overwork/digestion is Spleen Qi.',
+      memory: '<strong>Roar—Fire; cold then blocked—Wind; heavy-phlegmy—Phlegm; cicadas at night—Kidney; tired after work—Spleen.</strong>',
+      safety: 'Sudden hearing loss, especially in one ear, needs same-day emergency ENT assessment. Pulsatile tinnitus, neurologic symptoms, severe vertigo, ear trauma or new unilateral tinnitus also requires medical evaluation.',
+      source: 'Internal Medicine ENT section: Tinnitus and Deafness (Er Ming, Er Long).'
+    },
+    es: {
+      intro: 'Inicio y signos asociados separan exceso de deficiencia; pérdida auditiva neurosensorial súbita es un diagnóstico médico contrarreloj.',
+      rows: [
+        ['Fuego de Hígado-VB', 'Tinnitus como rugido/trueno o sordera súbita peor con ira, cefalea, cara roja, boca amarga y pulso de cuerda/fuerte', 'Long Dan Xie Gan Tang', 'Drenar Fuego de Hígado-VB.'],
+        ['Viento-Calor externo', 'Inicio tipo resfriado seguido de distensión/bloqueo de oído, tinnitus y audición reducida con fiebre y pulso flotante-rápido', 'Yin Qiao San', 'Expulsar Viento y aclarar Calor.'],
+        ['Flema-Fuego enlazados', 'Tinnitus/sordera con cabeza pesada y mareada, opresión torácica, flema profusa, sabor amargo y capa amarilla grasosa', 'Jia Wei Er Chen Tang', 'Aclarar Fuego y transformar Flema.'],
+        ['Agotamiento de Esencia renal', 'Tinnitus gradual/intermitente como cigarras peor de noche, pérdida auditiva crónica, lumbar/rodillas débiles y lengua roja con poca capa', 'Er Long Zuo Ci Wan', 'Suplementar Riñón y asegurar Esencia.'],
+        ['Deficiencia Qi de Bazo-Estómago', 'Tinnitus/audición peor con sobreesfuerzo, oído vacío/frío, fatiga, poco apetito, heces sueltas y lengua pálida', 'Bu Zhong Yi Qi Tang', 'Fortalecer Bazo-Estómago y aumentar Qi.'],
+      ],
+      rule: 'Súbito fuerte/ira es Fuego; resfriado y bloqueo Viento-Calor; pesado/flemoso Flema-Fuego; cigarras nocturnas con lumbar débil Riñón; sobreesfuerzo/digestión Qi de Bazo.',
+      memory: '<strong>Ruge—Fuego; resfriado y bloqueo—Viento; pesado/flema—Flema; cigarras nocturnas—Riñón; cansado tras trabajo—Bazo.</strong>',
+      safety: 'Pérdida auditiva súbita, especialmente unilateral, necesita evaluación ORL urgente el mismo día. Tinnitus pulsátil, signos neurológicos, vértigo grave, trauma o tinnitus unilateral nuevo también requiere evaluación.',
+      source: 'Internal Medicine ENT section: Tinnitus and Deafness (Er Ming, Er Long).'
+    }
+  },
+  {
+    slug: 'purulent-ear-patterns', title: { en: 'Purulent Ear Pattern Differentiation', es: 'Diferenciación de Oído con Supuración' },
+    summary: { en: 'Compare acute Wind-Heat or Liver-GB Fire with chronic Spleen-Damp or Kidney-Yin deficiency discharge.', es: 'Compara Viento-Calor o Fuego de Hígado-VB agudo con secreción crónica por Humedad de Bazo o deficiencia Yin renal.' },
+    focus: { en: 'Acute pain and pus quality versus chronic clear or scant discharge', es: 'Dolor agudo y calidad del pus frente a secreción crónica clara o escasa' },
+    search: 'purulent ear otitis discharge perforation wind heat liver gallbladder fire spleen damp kidney yin man jing zi long dan xie gan tuo li xiao du zhi bai di huang',
+    en: {
+      intro: 'Discharge color, pain and chronicity distinguish the source patterns; perforation and infection require otoscopic medical assessment.',
+      rows: [
+        ['External Wind-Heat', 'Acute ear blockage and escalating pain after cold symptoms; perforation may release pus and reduce pain', 'Man Jing Zi San', 'Dispel Wind-Heat and resolve toxin.'],
+        ['Liver-GB Fire', 'Severe ear symptoms with thick yellow or blood-tinged pus, bitter mouth, dry throat, constipation and dark urine', 'Long Dan Xie Gan Tang', 'Drain Liver-GB Fire and resolve toxin.'],
+        ['Dampness encumbers deficient Spleen', 'Large fluctuating quantity of clear thin pus, chronic poor response, heavy head, fatigue, poor appetite and pale moist tongue', 'Tuo Li Xiao Du San', 'Strengthen Spleen and drain Dampness.'],
+        ['Kidney-Yin deficiency with residual toxin', 'Small amount of thin chronic pus with marked hearing loss, tinnitus, weak back/knees and fatigue', 'Zhi Bai Di Huang Wan', 'Nourish Kidney Yin and address residual toxin.'],
+      ],
+      rule: 'Acute pain after a cold is Wind-Heat; thick yellow/bloody pus with Fire signs is Liver-GB; copious clear chronic pus is Spleen-Damp; scant chronic pus plus lumbar weakness is Kidney.',
+      memory: '<strong>Acute-cold—Wind; thick-yellow—Fire; copious-clear—Spleen; scant-chronic—Kidney.</strong>',
+      safety: 'Ear pus, severe pain or suspected eardrum perforation needs medical examination; do not place unapproved drops or herbs in the ear. Swelling behind the ear, facial weakness, vertigo, fever or severe headache is urgent.',
+      source: 'Internal Medicine ENT section: Purulent Ear (Ting Er).'
+    },
+    es: {
+      intro: 'Color de secreción, dolor y cronicidad distinguen los patrones; perforación e infección requieren examen médico con otoscopio.',
+      rows: [
+        ['Viento-Calor externo', 'Bloqueo agudo y dolor creciente tras resfriado; perforación puede liberar pus y reducir dolor', 'Man Jing Zi San', 'Expulsar Viento-Calor y resolver toxina.'],
+        ['Fuego de Hígado-VB', 'Síntomas graves con pus amarillo espeso o sanguinolento, boca amarga, garganta seca, estreñimiento y orina oscura', 'Long Dan Xie Gan Tang', 'Drenar Fuego de Hígado-VB y resolver toxina.'],
+        ['Humedad encumbra Bazo deficiente', 'Gran cantidad fluctuante de pus claro/delgado, mala respuesta crónica, cabeza pesada, fatiga, poco apetito y lengua pálida/húmeda', 'Tuo Li Xiao Du San', 'Fortalecer Bazo y drenar Humedad.'],
+        ['Deficiencia Yin renal con toxina residual', 'Poco pus delgado crónico con pérdida auditiva marcada, tinnitus, lumbar/rodillas débiles y fatiga', 'Zhi Bai Di Huang Wan', 'Nutrir Yin renal y abordar toxina residual.'],
+      ],
+      rule: 'Dolor agudo tras resfriado es Viento-Calor; pus amarillo/sanguinolento con Fuego es Hígado-VB; pus claro abundante crónico Bazo-Humedad; pus escaso crónico más lumbar débil Riñón.',
+      memory: '<strong>Agudo-resfriado—Viento; espeso-amarillo—Fuego; abundante-claro—Bazo; escaso-crónico—Riñón.</strong>',
+      safety: 'Pus, dolor grave o posible perforación necesita examen; no poner gotas/hierbas no aprobadas en el oído. Hinchazón detrás de oreja, debilidad facial, vértigo, fiebre o cefalea grave es urgente.',
+      source: 'Internal Medicine ENT section: Purulent Ear (Ting Er).'
+    }
+  },
+  {
+    slug: 'nosebleed-patterns', title: { en: 'Nosebleed Pattern Differentiation', es: 'Diferenciación de la Epistaxis' },
+    summary: { en: 'Compare Lung Heat, Stomach Heat, Liver Fire, Liver-Kidney Yin deficiency and Spleen-Qi failure.', es: 'Compara Calor de Pulmón, Calor de Estómago, Fuego de Hígado, deficiencia Yin de Hígado-Riñón y fallo de Qi de Bazo.' },
+    focus: { en: 'Blood color and amount plus respiratory, digestive, Liver or deficiency signs', es: 'Color y cantidad de sangre más signos respiratorios, digestivos, de Hígado o deficiencia' },
+    search: 'nosebleed epistaxis lung heat stomach heat liver fire yin deficiency spleen qi sang ju xi jiao di huang long dan zhi bai gui pi bright dark pale blood',
+    en: {
+      intro: 'Blood color/volume and accompanying system signs organize the TCM comparison; first aid and cause assessment come first clinically.',
+      rows: [
+        ['Lung Heat', 'Moderate bright-red bleeding with dry/hot nasal cavity, fever, cough and dry mouth', 'Sang Ju Yin', 'Clear Lung Heat and cool Blood.'],
+        ['Stomach Heat', 'Large bright/dark-red bleed with dry nose, halitosis, intense thirst, dry stool and surging pulse', 'Xi Jiao Di Huang Tang (use Shui Niu Jiao substitute)', 'Clear Stomach Fire and cool Blood.'],
+        ['Liver Fire', 'Large dark-red bleed with headache, vertigo, bitter mouth, red eyes, irritability and wiry-rapid pulse', 'Long Dan Xie Gan Tang', 'Drain Liver Fire and cool Blood.'],
+        ['Liver-Kidney Yin deficiency', 'Small intermittent recurrent bleed with dryness, tidal fever, night sweat, tinnitus and five-center Heat', 'Zhi Bai Di Huang Wan', 'Nourish Yin and clear deficient Fire.'],
+        ['Spleen fails to contain Blood', 'Variable light-red bleeding with pallor, poor appetite, fatigue, weak voice and weak pulse', 'Gui Pi Tang', 'Strengthen Spleen Qi and contain Blood.'],
+      ],
+      rule: 'Respiratory dryness is Lung; large bleed with thirst/halitosis Stomach; dark blood with anger/red eyes Liver; recurrent small hot-dry bleed Yin; pale tired bleed Spleen.',
+      memory: '<strong>Cough-dry—Lung; thirst-breath—Stomach; angry-red eyes—Liver; small-night Heat—Yin; pale-tired—Spleen.</strong>',
+      safety: 'Sit forward and pinch the soft nose continuously for 15 minutes. Bleeding that continues after two attempts, is heavy, follows major trauma, causes faintness, or occurs with anticoagulants requires urgent care.',
+      source: 'Internal Medicine ENT section: Nosebleed (Bi Nu).'
+    },
+    es: {
+      intro: 'Color/volumen y sistema acompañante organizan la comparación MTC; clínicamente primero van primeros auxilios y evaluar la causa.',
+      rows: [
+        ['Calor de Pulmón', 'Sangrado moderado rojo brillante con cavidad nasal seca/caliente, fiebre, tos y boca seca', 'Sang Ju Yin', 'Aclarar Calor pulmonar y enfriar Sangre.'],
+        ['Calor de Estómago', 'Sangrado abundante rojo brillante/oscuro con nariz seca, halitosis, sed intensa, heces secas y pulso desbordante', 'Xi Jiao Di Huang Tang (sustituir por Shui Niu Jiao)', 'Aclarar Fuego de Estómago y enfriar Sangre.'],
+        ['Fuego de Hígado', 'Sangrado abundante rojo oscuro con cefalea, vértigo, boca amarga, ojos rojos, irritabilidad y pulso de cuerda-rápido', 'Long Dan Xie Gan Tang', 'Drenar Fuego de Hígado y enfriar Sangre.'],
+        ['Deficiencia Yin de Hígado-Riñón', 'Sangrado pequeño intermitente/recurrente con sequedad, fiebre tidal, sudor nocturno, tinnitus y Calor de cinco centros', 'Zhi Bai Di Huang Wan', 'Nutrir Yin y aclarar Fuego vacío.'],
+        ['Bazo no contiene Sangre', 'Cantidad variable de sangre rojo pálido con palidez, poco apetito, fatiga, voz débil y pulso débil', 'Gui Pi Tang', 'Fortalecer Qi de Bazo y contener Sangre.'],
+      ],
+      rule: 'Sequedad respiratoria es Pulmón; sangrado abundante con sed/halitosis Estómago; oscuro con ira/ojos rojos Hígado; pequeño recurrente caliente/seco Yin; pálido/cansado Bazo.',
+      memory: '<strong>Tos-seco—Pulmón; sed-aliento—Estómago; ira-ojos rojos—Hígado; pequeño-Calor nocturno—Yin; pálido-cansado—Bazo.</strong>',
+      safety: 'Sentarse inclinado adelante y comprimir la parte blanda 15 minutos continuos. Si persiste tras dos intentos, es abundante, sigue trauma mayor, causa desmayo o usa anticoagulantes requiere urgencias.',
+      source: 'Internal Medicine ENT section: Nosebleed (Bi Nu).'
+    }
+  },
+  {
+    slug: 'chronic-nasal-congestion-patterns', title: { en: 'Chronic Nasal Congestion Pattern Differentiation', es: 'Diferenciación de Congestión Nasal Crónica' },
+    summary: { en: 'Compare Lung Wind-Heat, Gallbladder Heat, Spleen-Stomach Damp-Heat, Lung deficiency-Cold and Spleen-Qi deficiency.', es: 'Compara Viento-Calor de Pulmón, Calor de VB, Humedad-Calor de Bazo-Estómago, Frío por deficiencia pulmonar y deficiencia Qi de Bazo.' },
+    focus: { en: 'Discharge color/odor, facial pain, Heat and deficiency signs', es: 'Color/olor de secreción, dolor facial, Calor y signos de deficiencia' },
+    search: 'nasal congestion sinusitis bi yuan wind heat gallbladder heat spleen stomach damp lung deficiency cold spleen qi cang er zi long dan huang qin hua shi wen fei shen ling bai zhu',
+    en: {
+      intro: 'Discharge quality and systemic signs distinguish the branches; persistent unilateral or complicated sinus disease requires biomedical assessment.',
+      rows: [
+        ['Lung Wind-Heat', 'Fever/chills, headache, blocked nose and turbid yellow fishy discharge, sometimes cough', 'Cang Er Zi San', 'Dispel Wind-Heat and open nasal orifices.'],
+        ['Gallbladder Heat', 'Copious thick foul yellow discharge with severe brow/cheek pressure, bitter mouth, insomnia and irritability', 'Long Dan Xie Gan Tang', 'Drain GB Heat and clear turbidity.'],
+        ['Spleen-Stomach Damp-Heat', 'Heavy yellow discharge, severe continuous blockage, smell loss, swollen nasal cavity, heavy head and greasy yellow coat', 'Huang Qin Hua Shi Tang + Cang Er Zi San', 'Clear Damp-Heat and open orifices.'],
+        ['Lung deficiency-Cold', 'Intermittent blockage with clear sticky discharge worse in Wind/Cold, dyspnea, weak voice and spontaneous sweat', 'Wen Fei Tang', 'Warm/support Lung Qi and dispel Cold.'],
+        ['Spleen-Qi deficiency', 'Thick milky non-foul discharge, severe blockage/smell loss, heavy limbs/head, fatigue, poor appetite and loose stool', 'Shen Ling Bai Zhu San', 'Support Spleen Qi and drain Dampness.'],
+      ],
+      rule: 'Yellow after exterior signs is Lung Wind-Heat; foul with brow/cheek pain GB Heat; heavy/swollen/greasy Damp-Heat; clear/cold/weak Lung; milky with digestive weakness Spleen.',
+      memory: '<strong>Cold then yellow—Lung; foul facial pain—GB; heavy greasy—Damp; clear cold—Lung deficiency; milky tired—Spleen.</strong>',
+      safety: 'Eye swelling, vision change, severe frontal headache, neurologic signs, high fever or facial swelling is urgent. Symptoms over 10 days, recurrent unilateral discharge, bleeding or persistent smell loss needs medical/ENT evaluation.',
+      source: 'Internal Medicine ENT section: Deep-Source Nasal Congestion (Bi Yuan).'
+    },
+    es: {
+      intro: 'Calidad de secreción y signos sistémicos separan ramas; enfermedad sinusal unilateral persistente o complicada requiere evaluación biomédica.',
+      rows: [
+        ['Viento-Calor de Pulmón', 'Fiebre/escalofríos, cefalea, nariz bloqueada y secreción amarilla/turbia con olor a pescado, a veces tos', 'Cang Er Zi San', 'Expulsar Viento-Calor y abrir orificios nasales.'],
+        ['Calor de Vesícula Biliar', 'Secreción amarilla espesa/fétida abundante con presión grave en ceja/mejilla, boca amarga, insomnio e irritabilidad', 'Long Dan Xie Gan Tang', 'Drenar Calor de VB y limpiar turbidez.'],
+        ['Humedad-Calor de Bazo-Estómago', 'Secreción amarilla pesada, bloqueo continuo grave, pérdida de olfato, cavidad hinchada, cabeza pesada y capa amarilla grasosa', 'Huang Qin Hua Shi Tang + Cang Er Zi San', 'Aclarar Humedad-Calor y abrir orificios.'],
+        ['Frío por deficiencia de Pulmón', 'Bloqueo intermitente con secreción clara pegajosa peor con Viento/Frío, disnea, voz débil y sudor espontáneo', 'Wen Fei Tang', 'Calentar/apoyar Qi pulmonar y disipar Frío.'],
+        ['Deficiencia Qi de Bazo', 'Secreción lechosa espesa no fétida, bloqueo/pérdida de olfato grave, miembros/cabeza pesados, fatiga, poco apetito y heces sueltas', 'Shen Ling Bai Zhu San', 'Apoyar Qi de Bazo y drenar Humedad.'],
+      ],
+      rule: 'Amarillo tras exterior es Viento-Calor pulmonar; fétido con dolor facial Calor VB; pesado/hinchado/grasoso Humedad-Calor; claro/frío/débil Pulmón; lechoso con digestión débil Bazo.',
+      memory: '<strong>Resfriado y amarillo—Pulmón; fétido/dolor facial—VB; pesado/grasoso—Humedad; claro/frío—Pulmón deficiente; lechoso/cansado—Bazo.</strong>',
+      safety: 'Hinchazón ocular, cambio visual, cefalea frontal grave, signos neurológicos, fiebre alta o hinchazón facial es urgente. Más de 10 días, secreción unilateral recurrente, sangre o pérdida persistente de olfato requiere evaluación ORL.',
+      source: 'Internal Medicine ENT section: Deep-Source Nasal Congestion (Bi Yuan).'
+    }
+  },
+  {
+    slug: 'sore-throat-patterns', title: { en: 'Sore and Swollen Throat Pattern Differentiation', es: 'Diferenciación de Garganta Dolorosa e Hinchada' },
+    summary: { en: 'Compare Lung Wind-Heat, exuberant Lung-Stomach Heat and chronic Lung-Kidney Yin depletion.', es: 'Compara Viento-Calor de Pulmón, Calor exuberante de Pulmón-Estómago y agotamiento crónico Yin de Pulmón-Riñón.' },
+    focus: { en: 'Acute exterior onset, severe excess Heat or chronic evening dryness', es: 'Inicio exterior agudo, Calor de exceso grave o sequedad crónica vespertina' },
+    search: 'sore throat pharyngitis swollen wind heat lung stomach heat yin deficiency shu feng qing re qing yan li ge yang yin qing fei zhi bai',
+    en: {
+      intro: 'Onset, severity and time-of-day distinguish the three presentations; airway and deep-neck infection signs take priority.',
+      rows: [
+        ['Lung Wind-Heat', 'Acute red swollen painful dry/burning throat worse swallowing, with fever/chills, cough and yellow phlegm', 'Shu Feng Qing Re Tang', 'Dispel Wind-Heat and benefit throat.'],
+        ['Exuberant Lung-Stomach Heat', 'Severe throat pain radiating to ear/jaw, difficult swallowing/obstruction, high fever, thirst, halitosis, constipation and thick yellow phlegm', 'Qing Yan Li Ge Tang', 'Clear Heat-toxin and reduce swelling.'],
+        ['Lung-Kidney Yin depletion', 'Slow/chronic mild red dry itchy throat worse afternoon/night, dry cough, weak back/knees, insomnia and five-center Heat', 'Yang Yin Qing Fei Tang + Zhi Bai Di Huang Wan', 'Nourish Yin and clear deficient Fire.'],
+      ],
+      rule: 'Acute exterior signs indicate Wind-Heat; severe high fever/obstruction/halitosis indicates excess Lung-Stomach Heat; chronic evening dryness with empty Heat indicates Yin deficiency.',
+      memory: '<strong>Acute-cold signs—Wind; severe-hot-blocked—excess Heat; chronic-dry-evening—Yin.</strong>',
+      safety: 'Drooling, inability to swallow liquids, muffled voice, stridor, breathing difficulty, neck swelling, dehydration or severe one-sided pain requires urgent evaluation. Test suspected strep when appropriate.',
+      source: 'Internal Medicine ENT section: Sore Swollen Throat (Yan Hou Zhong Tong).'
+    },
+    es: {
+      intro: 'Inicio, gravedad y horario distinguen las tres presentaciones; signos de vía aérea o infección cervical profunda tienen prioridad.',
+      rows: [
+        ['Viento-Calor de Pulmón', 'Garganta roja/hinchada/dolorosa seca o ardiente de inicio agudo, peor al tragar, con fiebre/escalofríos, tos y flema amarilla', 'Shu Feng Qing Re Tang', 'Expulsar Viento-Calor y beneficiar garganta.'],
+        ['Calor exuberante de Pulmón-Estómago', 'Dolor grave irradiado a oído/mandíbula, dificultad/obstrucción al tragar, fiebre alta, sed, halitosis, estreñimiento y flema amarilla espesa', 'Qing Yan Li Ge Tang', 'Aclarar Calor-toxina y reducir hinchazón.'],
+        ['Agotamiento Yin de Pulmón-Riñón', 'Garganta seca/pruriginosa levemente roja crónica, peor tarde/noche, tos seca, lumbar/rodillas débiles, insomnio y Calor de cinco centros', 'Yang Yin Qing Fei Tang + Zhi Bai Di Huang Wan', 'Nutrir Yin y aclarar Fuego vacío.'],
+      ],
+      rule: 'Exterior agudo indica Viento-Calor; fiebre alta/obstrucción/halitosis grave indica Calor de exceso; sequedad vespertina crónica con Calor vacío indica Yin deficiente.',
+      memory: '<strong>Agudo con exterior—Viento; grave-caliente-bloqueado—exceso; crónico-seco-noche—Yin.</strong>',
+      safety: 'Babeo, no poder tragar líquidos, voz apagada, estridor, disnea, hinchazón cervical, deshidratación o dolor unilateral grave requiere urgencias. Evaluar estreptococo cuando corresponda.',
+      source: 'Internal Medicine ENT section: Sore Swollen Throat (Yan Hou Zhong Tong).'
+    }
+  },
+  {
+    slug: 'loss-of-voice-patterns', title: { en: 'Loss of Voice Pattern Differentiation', es: 'Diferenciación de Pérdida de Voz' },
+    summary: { en: 'Compare acute Wind-Heat, Wind-Cold or Liver-Qi stagnation with chronic Yin, Qi or Qi-Blood-Phlegm presentations.', es: 'Compara Viento-Calor, Viento-Frío o estancamiento Qi de Hígado agudos con presentaciones crónicas de Yin, Qi o Qi-Sangre-Flema.' },
+    focus: { en: 'Acute exterior temperature versus chronic dryness, fatigue or structural nodules', es: 'Temperatura exterior aguda frente a sequedad, fatiga o nódulos estructurales crónicos' },
+    search: 'loss voice aphonia hoarseness wind heat cold liver qi lung kidney yin spleen lung qi blood stasis phlegm shu feng qing re liu wei ban xia hou po bai he gu jin bu zhong yi qi hui yan zhu yu',
+    en: {
+      intro: 'Acute hoarseness is separated by Heat, Cold or emotional constraint; chronic hoarseness by dryness, weak voice/fatigue or structural obstruction.',
+      rows: [
+        ['Acute Wind-Heat', 'Sudden hoarseness with sore throat, dry nose, fever, thirst, cough and yellow phlegm', 'Shu Feng Qing Re Tang', 'Dispel Wind-Heat and open voice.'],
+        ['Acute Wind-Cold', 'Sudden hoarseness with chills, clear runny nose, itchy throat, thin phlegm and no thirst', 'Liu Wei Tang', 'Dispel Wind-Cold and diffuse Lung.'],
+        ['Acute Liver-Qi stagnation', 'Sudden hoarseness/aphonia with irritability, sighing and chest-hypochondriac distention', 'Ban Xia Hou Po Tang', 'Soothe Liver, regulate Qi and open voice.'],
+        ['Chronic Lung-Kidney Yin deficiency', 'Progressive hoarseness worse after prolonged speaking, dry throat/cough, weak back, tidal fever and night sweat', 'Bai He Gu Jin Tang', 'Nourish Lung-Kidney Yin.'],
+        ['Chronic Spleen-Lung Qi deficiency', 'Prolonged faint voice worse with work/mornings, effortful speech, dyspnea, fatigue, poor appetite and loose stool', 'Bu Zhong Yi Qi Tang', 'Support Spleen-Lung Qi.'],
+        ['Qi-Blood stagnation with congealed Phlegm', 'Prolonged effortful hoarseness, foreign-body sensation, chest oppression/phlegm; vocal-cord nodules or polyps', 'Hui Yan Zhu Yu Tang', 'Move Qi-Blood and transform Phlegm.'],
+      ],
+      rule: 'Yellow/thirst is Heat; clear/no thirst Cold; emotional sudden loss Qi; chronic dry/empty Heat Yin; weak tired voice Qi; foreign-body/nodule obstruction stasis-Phlegm.',
+      memory: '<strong>Yellow—Heat; clear—Cold; emotion—Qi; dry—Yin; faint-tired—Qi deficiency; nodule—stasis/Phlegm.</strong>',
+      safety: 'Stridor, breathing/swallowing difficulty or neck swelling is urgent. Hoarseness lasting over 3 weeks, coughing blood, neck mass, weight loss, smoking history or recurrent voice loss needs ENT/laryngoscopic evaluation.',
+      source: 'Internal Medicine ENT section: Loss of Voice (Shi Yin).'
+    },
+    es: {
+      intro: 'Ronquera aguda se separa por Calor, Frío o constreñimiento emocional; la crónica por sequedad, voz débil/fatiga u obstrucción estructural.',
+      rows: [
+        ['Viento-Calor agudo', 'Ronquera súbita con dolor de garganta, nariz seca, fiebre, sed, tos y flema amarilla', 'Shu Feng Qing Re Tang', 'Expulsar Viento-Calor y abrir voz.'],
+        ['Viento-Frío agudo', 'Ronquera súbita con escalofríos, rinorrea clara, garganta con prurito, flema delgada y sin sed', 'Liu Wei Tang', 'Expulsar Viento-Frío y difundir Pulmón.'],
+        ['Estancamiento Qi de Hígado agudo', 'Ronquera/afonía súbita con irritabilidad, suspiros y distensión torácica-hipocondríaca', 'Ban Xia Hou Po Tang', 'Suavizar Hígado, regular Qi y abrir voz.'],
+        ['Deficiencia Yin de Pulmón-Riñón crónica', 'Ronquera progresiva peor tras hablar, garganta/tos seca, lumbar débil, fiebre tidal y sudor nocturno', 'Bai He Gu Jin Tang', 'Nutrir Yin de Pulmón-Riñón.'],
+        ['Deficiencia Qi de Bazo-Pulmón crónica', 'Voz tenue prolongada peor con trabajo/mañanas, habla esforzada, disnea, fatiga, poco apetito y heces sueltas', 'Bu Zhong Yi Qi Tang', 'Apoyar Qi de Bazo-Pulmón.'],
+        ['Estancamiento Qi-Sangre con Flema coagulada', 'Ronquera prolongada/esforzada, objeto en garganta, opresión/flema; nódulos o pólipos de cuerdas', 'Hui Yan Zhu Yu Tang', 'Mover Qi-Sangre y transformar Flema.'],
+      ],
+      rule: 'Amarillo/sed es Calor; claro/sin sed Frío; pérdida emocional súbita Qi; crónica seca/Calor vacío Yin; voz débil/cansada Qi; nódulo/objeto estasis-Flema.',
+      memory: '<strong>Amarillo—Calor; claro—Frío; emoción—Qi; seco—Yin; tenue/cansado—Qi deficiente; nódulo—estasis/Flema.</strong>',
+      safety: 'Estridor, dificultad al respirar/tragar o hinchazón cervical es urgente. Ronquera mayor de 3 semanas, sangre al toser, masa cervical, pérdida de peso, tabaquismo o recurrencia necesita ORL/laringoscopia.',
+      source: 'Internal Medicine ENT section: Loss of Voice (Shi Yin).'
+    }
   }
 ];
 
