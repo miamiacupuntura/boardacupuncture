@@ -1284,6 +1284,222 @@ cards.push(
       safety: 'Ictericia, fiebre con dolor lumbar, no poder orinar, síntomas urinarios en embarazo, diarrea sangrienta, deshidratación grave o abdomen rígido requiere urgencia.',
       prompts: ['¿Qué lugar causa ictericia?', '¿Cuál micción ardiente?', '¿Cuál tenesmo con moco-sangre?']
     }
+  },
+  {
+    slug: 'yin-stages-taiyin-shaoyin-jueyin', title: 'Yin Stages: Taiyin vs. Shaoyin vs. Jueyin', titleEs: 'Etapas Yin: Taiyin vs. Shaoyin vs. Jueyin',
+    summary: 'Track inward Cold from Taiyin digestive weakness to Shaoyin Cold or Heat transformation and terminal Jueyin Cold-Heat complexity.',
+    summaryEs: 'Sigue Frío interno desde debilidad digestiva Taiyin hasta transformación Frío/Calor Shaoyin y complejidad Frío-Calor Jueyin.',
+    search: 'yin stages taiyin shaoyin cold heat transformation jueyin diarrhea abdominal fullness cold limbs somnolence insomnia thirst upper heat lower cold li zhong si ni huang lian e jiao wu mei wan',
+    en: {
+      names: ['Taiyin', 'Shaoyin Cold', 'Shaoyin Heat', 'Jueyin'],
+      shared: 'All are deeper Yin-stage patterns; the task is to identify digestive deficiency, devastated Yang, depleted Yin or mixed upper Heat/lower Cold.',
+      fast: ['Spleen Cold: abdominal fullness, poor appetite, vomiting and diarrhea without thirst.', 'Yang collapse: aversion to cold, cold limbs, somnolence, clear diarrhea and faint pulse.', 'Yin depletion: irritability, insomnia, dry mouth/throat and dark scant urine.', 'Mixed reversal: thirst and chest Heat above with hunger without desire to eat, vomiting or diarrhea and cold below.'],
+      rows: [
+        ['Core mechanism', 'Middle-Jiao deficiency Cold.', 'Heart-Kidney Yang failure.', 'Heart-Kidney Yin deficiency with Heat.', 'Cold and Heat reversal with disordered ascent/descent.'],
+        ['Tongue / pulse', 'Pale, white coat; weak-slow.', 'Pale/wet; deep-faint.', 'Red, little coat; thin-rapid.', 'Variable red tip/pale body; wiry or faint.'],
+        ['Decisive clue', 'Digestive Cold without collapse.', 'Profound cold and desire to sleep.', 'Restless insomnia with dryness.', 'Upper Heat and lower Cold together.'],
+        ['Formula examples', 'Li Zhong Wan.', 'Si Ni Tang.', 'Huang Lian E Jiao Tang.', 'Wu Mei Wan.']
+      ],
+      why: 'Diarrhea can occur in several stages. Thermal direction, consciousness, thirst and pulse strength locate the deeper mechanism.',
+      memory: '<strong>Taiyin digests poorly;</strong> <strong>Shaoyin freezes or dries;</strong> <strong>Jueyin reverses Heat above and Cold below.</strong>',
+      safety: 'Altered consciousness, shock signs, severe dehydration, GI bleeding, rigid abdominal pain or persistent vomiting requires emergency care. Fu Zi formulas require expert use.',
+      prompts: ['Which stage is Middle Cold?', 'Which Shaoyin branch has insomnia?', 'Which pattern combines Heat above with Cold below?']
+    },
+    es: {
+      names: ['Taiyin', 'Shaoyin Frío', 'Shaoyin Calor', 'Jueyin'],
+      shared: 'Todas son etapas Yin profundas; hay que identificar deficiencia digestiva, Yang devastado, Yin agotado o mezcla Calor arriba/Frío abajo.',
+      fast: ['Frío de Bazo: plenitud abdominal, poco apetito, vómito y diarrea sin sed.', 'Colapso Yang: aversión al frío, miembros fríos, somnolencia, diarrea clara y pulso casi ausente.', 'Yin agotado: irritabilidad, insomnio, boca/garganta seca y orina oscura escasa.', 'Reversión mixta: sed y Calor torácico arriba con hambre sin querer comer, vómito/diarrea y Frío abajo.'],
+      rows: [
+        ['Mecanismo', 'Frío por deficiencia del Jiao Medio.', 'Falla Yang de Corazón-Riñón.', 'Deficiencia Yin de Corazón-Riñón con Calor.', 'Reversión Frío-Calor y ascenso/descenso alterado.'],
+        ['Lengua / pulso', 'Pálida, capa blanca; débil-lento.', 'Pálida/mojada; profundo-casi ausente.', 'Roja, poca capa; fino-rápido.', 'Variable: punta roja/cuerpo pálido; cuerda o débil.'],
+        ['Pista decisiva', 'Frío digestivo sin colapso.', 'Frío profundo y deseo de dormir.', 'Insomnio inquieto con sequedad.', 'Calor arriba y Frío abajo juntos.'],
+        ['Ejemplos de fórmulas', 'Li Zhong Wan.', 'Si Ni Tang.', 'Huang Lian E Jiao Tang.', 'Wu Mei Wan.']
+      ],
+      why: 'Diarrea aparece en varias etapas. Dirección térmica, conciencia, sed y fuerza del pulso localizan mecanismo.',
+      memory: '<strong>Taiyin digiere mal;</strong> <strong>Shaoyin se congela o seca;</strong> <strong>Jueyin invierte Calor arriba y Frío abajo.</strong>',
+      safety: 'Conciencia alterada, shock, deshidratación grave, sangrado GI, abdomen rígido o vómito persistente requiere urgencias. Fu Zi exige experto.',
+      prompts: ['¿Qué etapa es Frío del Centro?', '¿Qué rama Shaoyin tiene insomnio?', '¿Cuál mezcla Calor arriba y Frío abajo?']
+    }
+  },
+  {
+    slug: 'upper-middle-lower-jiao-warm-disease', title: 'Upper vs. Middle vs. Lower Jiao in Warm Disease', titleEs: 'Jiao Superior vs. Medio vs. Inferior en Enfermedad Tibia',
+    summary: 'Localize warm disease progression from Lung defense to Spleen-Stomach Heat or Dampness and finally Liver-Kidney Yin injury.',
+    summaryEs: 'Localiza progresión tibia desde defensa pulmonar hasta Calor/Humedad de Bazo-Estómago y lesión Yin de Hígado-Riñón.',
+    search: 'triple burner warm disease upper middle lower jiao lung fever chills cough sore throat stomach spleen high fever thirst dampness liver kidney yin night fever tremor',
+    en: {
+      names: ['Upper Jiao', 'Middle Jiao', 'Lower Jiao'],
+      shared: 'All describe the location and evolution of warm disease; progression downward generally reflects increasing depth and fluid/Yin injury.',
+      fast: ['Lung/defense: fever, mild chills, cough, thirst and sore throat.', 'Spleen-Stomach: blazing Qi Heat with fever/sweat/thirst or Damp-Warm heaviness, fullness and greasy coat.', 'Liver-Kidney: lingering night fever, dry mouth, weak low back, tremor or spasm from depleted Yin.'],
+      rows: [
+        ['Primary organs', 'Lung and Pericardium.', 'Spleen and Stomach.', 'Liver and Kidney.'],
+        ['Decisive clue', 'Exterior respiratory onset.', 'Strong digestive Qi Heat or Damp obstruction.', 'Late-stage Yin depletion and internal Wind.'],
+        ['Tongue / pulse', 'Red tip; floating-rapid.', 'Red/yellow or greasy coat; rapid/slippery.', 'Deep red, little coat; thin-rapid or weak.'],
+        ['Formula examples', 'Yin Qiao San or Sang Ju Yin.', 'Bai Hu Tang or San Ren Tang by dry/Damp branch.', 'Qing Hao Bie Jia Tang or Da Ding Feng Zhu by presentation.']
+      ],
+      why: 'Fever is shared. Respiratory exterior signs, digestive Heat/Dampness and late Yin-Wind signs identify the Jiao.',
+      memory: '<strong>Upper coughs;</strong> <strong>Middle burns or bogs;</strong> <strong>Lower dries and stirs Wind.</strong>',
+      safety: 'Suspected serious infection, confusion, stiff neck, breathing difficulty, dehydration, non-blanching rash or seizure requires urgent medical evaluation.',
+      prompts: ['Which Jiao begins in the Lung?', 'Which includes Damp-Warm digestion?', 'Which reflects late Liver-Kidney Yin injury?']
+    },
+    es: {
+      names: ['Jiao Superior', 'Jiao Medio', 'Jiao Inferior'],
+      shared: 'Todos describen localización/evolución de enfermedad tibia; descenso suele significar más profundidad y lesión de líquidos/Yin.',
+      fast: ['Pulmón/defensa: fiebre, escalofríos leves, tos, sed y garganta dolorosa.', 'Bazo-Estómago: Calor Qi ardiente con fiebre/sudor/sed o Humedad-Tibia con pesadez, plenitud y capa grasosa.', 'Hígado-Riñón: fiebre nocturna persistente, boca seca, lumbar débil, temblor o espasmo por Yin agotado.'],
+      rows: [
+        ['Órganos', 'Pulmón y Pericardio.', 'Bazo y Estómago.', 'Hígado y Riñón.'],
+        ['Pista decisiva', 'Inicio respiratorio Exterior.', 'Calor Qi digestivo fuerte u obstrucción Húmeda.', 'Agotamiento Yin tardío y Viento interno.'],
+        ['Lengua / pulso', 'Punta roja; flotante-rápido.', 'Roja/amarilla o capa grasosa; rápido/resbaladizo.', 'Roja profunda, poca capa; fino-rápido o débil.'],
+        ['Ejemplos de fórmulas', 'Yin Qiao San o Sang Ju Yin.', 'Bai Hu Tang o San Ren Tang según rama seca/Húmeda.', 'Qing Hao Bie Jia Tang o Da Ding Feng Zhu según presentación.']
+      ],
+      why: 'Fiebre es común. Signos respiratorios, Calor/Humedad digestiva y signos tardíos Yin-Viento identifican Jiao.',
+      memory: '<strong>Superior tose;</strong> <strong>Medio arde o se empantana;</strong> <strong>Inferior se seca y mueve Viento.</strong>',
+      safety: 'Infección grave sospechada, confusión, nuca rígida, disnea, deshidratación, rash no blanqueable o convulsión requiere urgencia.',
+      prompts: ['¿Qué Jiao inicia en Pulmón?', '¿Cuál incluye Humedad-Tibia digestiva?', '¿Cuál lesión Yin tardía?']
+    }
+  },
+  {
+    slug: 'heart-kidney-not-communicating-vs-heart-spleen-deficiency', title: 'Heart–Kidney Not Communicating vs. Heart–Spleen Deficiency', titleEs: 'Corazón–Riñón no Comunican vs. Deficiencia de Corazón–Bazo',
+    summary: 'Separate insomnia from upper Fire/lower Yin failure from insomnia rooted in deficient Qi and Blood production.',
+    summaryEs: 'Distingue insomnio por Fuego arriba/Yin abajo de insomnio arraigado en producción deficiente de Qi y Sangre.',
+    search: 'heart kidney not communicating heart spleen deficiency insomnia palpitations memory tinnitus low back night sweat five center heat fatigue appetite loose stool pale bleeding',
+    en: {
+      names: ['Heart–Kidney Not Communicating', 'Heart–Spleen Deficiency'],
+      shared: 'Both cause insomnia, palpitations, anxiety, poor memory and fatigue.',
+      fast: ['Upper Fire/lower Yin: restlessness, night sweating, five-center Heat, tinnitus, weak low back and red peeled tongue.', 'Qi-Blood deficiency: poor appetite, loose stool, pale complexion, dizziness, easy bruising and pale tongue.'],
+      rows: [
+        ['Root mechanism', 'Kidney Yin fails to restrain Heart Fire.', 'Spleen Qi fails to produce/hold Heart Blood.'],
+        ['Thermal/color clue', 'Red, dry and warm at night.', 'Pale, weak and digestive.'],
+        ['Pulse', 'Thin-rapid, sometimes floating-empty.', 'Weak and thin.'],
+        ['Formula examples', 'Jiao Tai Wan or Tian Wang Bu Xin Dan by depth.', 'Gui Pi Tang.']
+      ],
+      why: 'Insomnia and palpitations overlap. Tinnitus/low back plus Empty Heat identify Heart-Kidney; digestive weakness and pallor identify Heart-Spleen.',
+      memory: '<strong>Heart-Kidney is red and restless;</strong> <strong>Heart-Spleen is pale and depleted.</strong>',
+      safety: 'Chest pain, fainting, sustained arrhythmia, suicidal thoughts, mania or severe prolonged insomnia requires prompt medical assessment.',
+      prompts: ['Which has tinnitus and night sweats?', 'Which has poor appetite and bruising?', 'How do tongues differ?']
+    },
+    es: {
+      names: ['Corazón–Riñón no Comunican', 'Deficiencia de Corazón–Bazo'],
+      shared: 'Ambos causan insomnio, palpitaciones, ansiedad, mala memoria y fatiga.',
+      fast: ['Fuego arriba/Yin abajo: inquietud, sudor nocturno, Calor de cinco centros, tinnitus, lumbar débil y lengua roja pelada.', 'Deficiencia Qi-Sangre: poco apetito, heces sueltas, palidez, mareo, moretones y lengua pálida.'],
+      rows: [
+        ['Mecanismo', 'Yin de Riñón no contiene Fuego de Corazón.', 'Qi de Bazo no produce/contiene Sangre de Corazón.'],
+        ['Temperatura/color', 'Rojo, seco y caliente de noche.', 'Pálido, débil y digestivo.'],
+        ['Pulso', 'Fino-rápido, a veces flotante-vacío.', 'Débil y fino.'],
+        ['Ejemplos de fórmulas', 'Jiao Tai Wan o Tian Wang Bu Xin Dan según profundidad.', 'Gui Pi Tang.']
+      ],
+      why: 'Insomnio/palpitaciones se superponen. Tinnitus/lumbar más Calor Vacío es Corazón-Riñón; debilidad digestiva/palidez es Corazón-Bazo.',
+      memory: '<strong>Corazón-Riñón es rojo e inquieto;</strong> <strong>Corazón-Bazo es pálido y agotado.</strong>',
+      safety: 'Dolor torácico, desmayo, arritmia sostenida, ideas suicidas, manía o insomnio grave prolongado requiere evaluación pronta.',
+      prompts: ['¿Cuál tiene tinnitus/sudor nocturno?', '¿Cuál poco apetito/moretones?', '¿Cómo difieren lenguas?']
+    }
+  },
+  {
+    slug: 'liver-overacting-spleen-vs-stomach', title: 'Liver Overacting on Spleen vs. Liver Overacting on Stomach', titleEs: 'Hígado Atacando Bazo vs. Hígado Atacando Estómago',
+    summary: 'Follow constrained Liver Qi into lower digestive transport or upward Stomach rebellion.',
+    summaryEs: 'Sigue Qi de Hígado constreñido hacia transporte digestivo inferior o rebeldía ascendente de Estómago.',
+    search: 'liver overacting spleen stomach liver spleen disharmony liver stomach disharmony emotional abdominal pain diarrhea constipation epigastric belching nausea vomiting acid reflux',
+    en: {
+      names: ['Liver Overacting on Spleen', 'Liver Overacting on Stomach'],
+      shared: 'Both arise when constrained Liver Qi disrupts digestion; symptoms fluctuate with stress and the pulse is often wiry.',
+      fast: ['Transport fails below: abdominal pain/distention with loose stool or alternating diarrhea and constipation, often relieved after defecation.', 'Stomach Qi rebels upward: epigastric/rib-side distention with belching, nausea, vomiting or acid regurgitation.'],
+      rows: [
+        ['Affected function', 'Spleen transformation and stool formation.', 'Stomach receiving and descending.'],
+        ['Direction', 'Irregular movement through intestines.', 'Rebellious upward movement.'],
+        ['Decisive clue', 'Emotion-linked bowel change.', 'Emotion-linked belching, nausea or reflux.'],
+        ['Formula examples', 'Tong Xie Yao Fang.', 'Chai Hu Shu Gan San, Ban Xia Hou Po Tang or Zuo Jin Wan by thermal branch.']
+      ],
+      why: 'Stress is shared. Stool disturbance localizes to Spleen; belching, nausea, vomiting and reflux localize to Stomach.',
+      memory: '<strong>Liver-Spleen disrupts stool;</strong> <strong>Liver-Stomach pushes upward.</strong>',
+      safety: 'Persistent vomiting, blood, black stool, progressive swallowing difficulty, severe localized pain or unexplained weight loss needs medical evaluation.',
+      prompts: ['Which causes stress diarrhea?', 'Which causes belching and reflux?', 'What directional clue separates them?']
+    },
+    es: {
+      names: ['Hígado Ataca Bazo', 'Hígado Ataca Estómago'],
+      shared: 'Ambos surgen cuando Qi de Hígado constreñido altera digestión; síntomas fluctúan con estrés y pulso suele ser de cuerda.',
+      fast: ['Falla transporte abajo: dolor/distensión abdominal con heces sueltas o diarrea/estreñimiento alternante, aliviado tras evacuar.', 'Qi de Estómago asciende rebelde: distensión epigástrica/costal con eructos, náusea, vómito o reflujo ácido.'],
+      rows: [
+        ['Función afectada', 'Transformación de Bazo y formación de heces.', 'Recepción y descenso de Estómago.'],
+        ['Dirección', 'Movimiento intestinal irregular.', 'Movimiento rebelde hacia arriba.'],
+        ['Pista decisiva', 'Cambio intestinal ligado a emociones.', 'Eructo, náusea o reflujo ligado a emociones.'],
+        ['Ejemplos de fórmulas', 'Tong Xie Yao Fang.', 'Chai Hu Shu Gan San, Ban Xia Hou Po Tang o Zuo Jin Wan según rama térmica.']
+      ],
+      why: 'Estrés es común. Alteración de heces localiza Bazo; eructo, náusea, vómito y reflujo localizan Estómago.',
+      memory: '<strong>Hígado-Bazo altera heces;</strong> <strong>Hígado-Estómago empuja arriba.</strong>',
+      safety: 'Vómito persistente, sangre, heces negras, disfagia progresiva, dolor grave localizado o pérdida de peso necesita evaluación.',
+      prompts: ['¿Cuál causa diarrea por estrés?', '¿Cuál eructos/reflujo?', '¿Qué dirección los separa?']
+    }
+  },
+  {
+    slug: 'kidney-essence-deficiency-vs-kidney-yin-deficiency', title: 'Kidney Essence Deficiency vs. Kidney Yin Deficiency', titleEs: 'Deficiencia de Esencia de Riñón vs. Deficiencia de Yin de Riñón',
+    summary: 'Separate developmental, reproductive and marrow insufficiency from fluid-Yin depletion with Empty Heat.',
+    summaryEs: 'Distingue insuficiencia del desarrollo, reproducción y médula de agotamiento de líquidos-Yin con Calor Vacío.',
+    search: 'kidney essence jing deficiency yin deficiency development growth delayed fontanel bones teeth infertility memory hearing low back night sweat five center heat red peeled',
+    en: {
+      names: ['Kidney Essence Deficiency', 'Kidney Yin Deficiency'],
+      shared: 'Both can cause weak low back/knees, tinnitus, poor memory, reproductive weakness and a deep weak pulse.',
+      fast: ['Jing fails to build: delayed growth/development, weak bones/teeth, infertility, premature aging or declining hearing/memory; Heat may be absent.', 'Yin fails to cool: night sweating, five-center Heat, dry mouth, malar flush and a red peeled tongue.'],
+      rows: [
+        ['Primary substance', 'Jing governing growth, reproduction and marrow.', 'Yin fluids and cooling nourishment.'],
+        ['Age/course clue', 'Developmental, constitutional or premature-aging signs.', 'Chronic depletion with dryness and Empty Heat.'],
+        ['Tongue / pulse', 'Pale or red depending Yang/Yin branch; weak chi.', 'Red, little coat; deep-thin-rapid.'],
+        ['Formula examples', 'Zuo Gui Wan or You Gui Wan according to Yin/Yang branch.', 'Liu Wei Di Huang Wan or Zhi Bai Di Huang Wan if Fire is stronger.']
+      ],
+      why: 'Kidney weakness overlaps. Development, fertility, marrow and aging point to Essence; dryness and Empty Heat specifically point to Yin.',
+      memory: '<strong>Essence builds the blueprint;</strong> <strong>Yin supplies the cooling fluid.</strong>',
+      safety: 'Developmental delay, infertility, sudden hearing loss, major cognitive change or unexplained weight loss requires biomedical evaluation.',
+      prompts: ['Which affects growth and marrow?', 'Which has five-center Heat?', 'Can Essence deficiency be either Yin- or Yang-leaning?']
+    },
+    es: {
+      names: ['Deficiencia de Esencia de Riñón', 'Deficiencia de Yin de Riñón'],
+      shared: 'Ambas causan lumbar/rodillas débiles, tinnitus, mala memoria, debilidad reproductiva y pulso profundo-débil.',
+      fast: ['Jing no construye: desarrollo tardío, huesos/dientes débiles, infertilidad, envejecimiento prematuro o audición/memoria declinante; puede no haber Calor.', 'Yin no enfría: sudor nocturno, Calor de cinco centros, boca seca, rubor malar y lengua roja pelada.'],
+      rows: [
+        ['Sustancia', 'Jing que gobierna crecimiento, reproducción y médula.', 'Líquidos Yin y nutrición enfriadora.'],
+        ['Edad/curso', 'Signos del desarrollo, constitucionales o envejecimiento precoz.', 'Agotamiento crónico con sequedad y Calor Vacío.'],
+        ['Lengua / pulso', 'Pálida o roja según rama Yang/Yin; chi débil.', 'Roja, poca capa; profundo-fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Zuo Gui Wan o You Gui Wan según rama Yin/Yang.', 'Liu Wei Di Huang Wan o Zhi Bai Di Huang Wan si Fuego es fuerte.']
+      ],
+      why: 'Debilidad renal se superpone. Desarrollo, fertilidad, médula y edad apuntan a Esencia; sequedad y Calor Vacío a Yin.',
+      memory: '<strong>Esencia construye el plano;</strong> <strong>Yin aporta líquido refrigerante.</strong>',
+      safety: 'Retraso del desarrollo, infertilidad, pérdida auditiva súbita, cambio cognitivo mayor o pérdida de peso requiere evaluación biomédica.',
+      prompts: ['¿Cuál afecta crecimiento/médula?', '¿Cuál Calor de cinco centros?', '¿Esencia puede inclinarse a Yin o Yang?']
+    }
+  },
+  {
+    slug: 'dryness-attacking-lung-vs-lung-yin-deficiency', title: 'Dryness Attacking the Lung vs. Lung Yin Deficiency', titleEs: 'Sequedad Atacando Pulmón vs. Deficiencia de Yin de Pulmón',
+    summary: 'Separate acute seasonal external Dryness from chronic internal failure to moisten the Lung.',
+    summaryEs: 'Distingue Sequedad externa estacional aguda de falla interna crónica para humedecer Pulmón.',
+    search: 'dryness attacking lung yin deficiency acute autumn dry cough nose throat slight fever chills chronic night sweat afternoon fever hoarse voice peeled tongue floating thin rapid',
+    en: {
+      names: ['Dryness Attacking the Lung', 'Lung Yin Deficiency'],
+      shared: 'Both cause dry cough, dry nose/throat, scant sputum, thirst and possible hoarseness.',
+      fast: ['Acute exterior onset, often autumn: slight fever/chills, headache and dry cough with a floating pulse and thin dry coat.', 'Chronic internal deficiency: weak persistent cough, afternoon Heat, night sweats, five-center Heat and red peeled tongue with thin rapid pulse.'],
+      rows: [
+        ['Onset', 'Acute and seasonal/exposure related.', 'Chronic or post-febrile/consumptive.'],
+        ['Exterior signs', 'Mild fever, chills or headache present.', 'Absent; Empty Heat replaces them.'],
+        ['Tongue / pulse', 'Dry tongue with thin coat; floating-rapid.', 'Red, dry, little coat; thin-rapid.'],
+        ['Formula examples', 'Sang Xing Tang or Qing Zao Jiu Fei Tang by severity.', 'Bai He Gu Jin Tang or Sha Shen Mai Dong Tang.']
+      ],
+      why: 'Dry cough is shared. Acute exterior timing and a remaining coat indicate invading Dryness; chronic Empty Heat and peeled tongue indicate Yin deficiency.',
+      memory: '<strong>External Dryness arrives;</strong> <strong>Lung Yin deficiency lingers.</strong>',
+      safety: 'Breathing difficulty, chest pain, coughing blood, low oxygen, high fever or cough lasting over three weeks requires medical assessment.',
+      prompts: ['Which begins acutely in dry weather?', 'Which has night sweats?', 'How do pulse and tongue coat differ?']
+    },
+    es: {
+      names: ['Sequedad Ataca Pulmón', 'Deficiencia de Yin de Pulmón'],
+      shared: 'Ambas causan tos seca, nariz/garganta seca, esputo escaso, sed y posible ronquera.',
+      fast: ['Inicio Exterior agudo, a menudo otoñal: fiebre/escalofríos leves, cefalea y tos seca con pulso flotante y capa fina seca.', 'Deficiencia interna crónica: tos débil persistente, Calor vespertino, sudor nocturno, Calor de cinco centros y lengua roja pelada con pulso fino-rápido.'],
+      rows: [
+        ['Inicio', 'Agudo y estacional/por exposición.', 'Crónico o posfebril/consuntivo.'],
+        ['Signos Exterior', 'Fiebre leve, escalofríos o cefalea.', 'Ausentes; aparecen signos de Calor Vacío.'],
+        ['Lengua / pulso', 'Lengua seca con capa fina; flotante-rápido.', 'Roja, seca, poca capa; fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Sang Xing Tang o Qing Zao Jiu Fei Tang según gravedad.', 'Bai He Gu Jin Tang o Sha Shen Mai Dong Tang.']
+      ],
+      why: 'Tos seca es común. Inicio Exterior agudo y capa presente indican Sequedad invasora; Calor Vacío crónico y lengua pelada indican Yin.',
+      memory: '<strong>Sequedad externa llega;</strong> <strong>deficiencia Yin de Pulmón permanece.</strong>',
+      safety: 'Disnea, dolor torácico, sangre al toser, oxígeno bajo, fiebre alta o tos mayor de tres semanas requiere evaluación.',
+      prompts: ['¿Cuál inicia agudo en clima seco?', '¿Cuál tiene sudor nocturno?', '¿Cómo difieren pulso/capa?']
+    }
   }
 );
 
