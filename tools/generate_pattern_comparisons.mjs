@@ -852,6 +852,222 @@ cards.push(
       safety: 'Confusión nueva, conciencia reducida, psicosis, conducta suicida/violenta, convulsión, fiebre o intoxicación sospechada es emergencia biomédica inmediata.',
       prompts: ['¿Cuál es retraído y lento?', '¿Cuál agitado e insomne?', '¿Cómo separan capa y pulso?']
     }
+  },
+  {
+    slug: 'spleen-qi-deficiency-vs-sinking-vs-not-holding-blood', title: 'Spleen Qi Deficiency vs. Sinking Qi vs. Qi Not Holding Blood', titleEs: 'Deficiencia de Qi de Bazo vs. Qi Hundido vs. Qi que no Contiene Sangre',
+    summary: 'Start with the same Spleen-Qi root, then identify prolapse or bleeding as the decisive functional failure.',
+    summaryEs: 'Parte de la misma raíz de Qi de Bazo y reconoce prolapso o sangrado como falla funcional decisiva.',
+    search: 'spleen qi deficiency sinking qi not holding blood fatigue appetite loose stool prolapse bearing down bleeding bruising bu zhong yi qi gui pi',
+    en: {
+      names: ['Spleen Qi Deficiency', 'Sinking Spleen Qi', 'Spleen Qi Not Holding Blood'],
+      shared: 'All share fatigue, poor appetite, loose stools, pale tongue and a weak pulse because Spleen Qi is deficient.',
+      fast: ['Basic transformation failure: digestive weakness and fatigue without a defining downstream failure.', 'Upbearing failure: prolapse, bearing-down sensation, chronic diarrhea or worse symptoms on standing/exertion.', 'Containment failure: easy bruising, prolonged menses or other pale, slow bleeding.'],
+      rows: [
+        ['Primary failure', 'Transform and transport.', 'Raise and hold organs/tissues.', 'Keep Blood within the vessels.'],
+        ['Decisive clue', 'Poor appetite and loose stool dominate.', 'Prolapse or downward dragging.', 'Chronic bleeding without strong Heat signs.'],
+        ['Pulse tendency', 'Weak, especially right guan.', 'Weak and possibly deficient/faint.', 'Weak or thin with Blood loss.'],
+        ['Formula examples', 'Si Jun Zi Tang.', 'Bu Zhong Yi Qi Tang.', 'Gui Pi Tang.']
+      ],
+      why: 'The root signs overlap. The exam asks what Spleen Qi fails to do: digest, lift or contain Blood.',
+      memory: '<strong>Deficient Qi cannot transform;</strong> <strong>sinking Qi cannot lift;</strong> <strong>uncontained Qi cannot hold Blood.</strong>',
+      safety: 'New prolapse, heavy or unexplained bleeding, black stool, fainting or signs of anemia requires medical evaluation.',
+      prompts: ['Which pattern causes prolapse?', 'Which causes easy bruising?', 'What signs remain in uncomplicated Spleen-Qi deficiency?']
+    },
+    es: {
+      names: ['Deficiencia de Qi de Bazo', 'Qi de Bazo Hundido', 'Qi de Bazo no Contiene Sangre'],
+      shared: 'Todos comparten fatiga, poco apetito, heces sueltas, lengua pálida y pulso débil porque falta Qi de Bazo.',
+      fast: ['Falla básica de transformación: debilidad digestiva y fatiga sin una falla secundaria definitoria.', 'Falla de elevación: prolapso, sensación de descenso, diarrea crónica o empeora al estar de pie/esforzarse.', 'Falla de contención: moretones fáciles, menstruación prolongada u otro sangrado pálido y lento.'],
+      rows: [
+        ['Falla principal', 'Transformar y transportar.', 'Elevar y sostener órganos/tejidos.', 'Mantener Sangre dentro de vasos.'],
+        ['Pista decisiva', 'Dominan poco apetito y heces sueltas.', 'Prolapso o arrastre hacia abajo.', 'Sangrado crónico sin Calor fuerte.'],
+        ['Pulso', 'Débil, especialmente guan derecho.', 'Débil y posiblemente deficiente/casi imperceptible.', 'Débil o fino con pérdida de Sangre.'],
+        ['Ejemplos de fórmulas', 'Si Jun Zi Tang.', 'Bu Zhong Yi Qi Tang.', 'Gui Pi Tang.']
+      ],
+      why: 'La raíz se superpone. El examen pregunta qué no hace Qi de Bazo: digerir, elevar o contener Sangre.',
+      memory: '<strong>Qi deficiente no transforma;</strong> <strong>Qi hundido no eleva;</strong> <strong>Qi sin contención no sostiene Sangre.</strong>',
+      safety: 'Prolapso nuevo, sangrado abundante/inexplicado, heces negras, desmayo o anemia requiere evaluación médica.',
+      prompts: ['¿Cuál causa prolapso?', '¿Cuál moretones?', '¿Qué queda en deficiencia simple de Qi de Bazo?']
+    }
+  },
+  {
+    slug: 'kidney-qi-not-firm-vs-not-grasping-qi', title: 'Kidney Qi Not Firm vs. Kidney Failing to Grasp Qi', titleEs: 'Qi de Riñón no Firme vs. Riñón que no Capta Qi',
+    summary: 'Separate lower-orifice leakage from failure of the Kidneys to anchor inhaled Lung Qi.',
+    summaryEs: 'Distingue fuga por orificios inferiores de falla renal para anclar el Qi inhalado por Pulmón.',
+    search: 'kidney qi not firm failing grasp qi urinary frequency incontinence spermatorrhea vaginal discharge asthma dyspnea inhalation low back',
+    en: {
+      names: ['Kidney Qi Not Firm', 'Kidney Failing to Grasp Qi'],
+      shared: 'Both arise from Kidney-Qi deficiency and may show weak low back/knees, fatigue, urinary weakness and a deep weak pulse.',
+      fast: ['Lower gates leak: frequent clear urine, incontinence, enuresis, spermatorrhea or chronic vaginal discharge.', 'Respiration cannot descend: chronic wheezing or dyspnea worse on inhalation and exertion, with short breath and weak low back.'],
+      rows: [
+        ['Failed function', 'Consolidate Bladder, Essence and lower orifices.', 'Receive and anchor Lung Qi during inhalation.'],
+        ['System emphasis', 'Urinary and reproductive leakage.', 'Respiratory weakness rooted below.'],
+        ['Decisive clue', 'Loss or leakage.', 'Difficulty drawing breath in.'],
+        ['Formula examples', 'Suo Quan Wan or Jin Suo Gu Jing Wan by leakage.', 'Ren Shen Ge Jie San or Su Zi Jiang Qi Tang by presentation.']
+      ],
+      why: 'Both are Kidney-Qi failures, but one loses through the lower gates while the other fails to pull Lung Qi downward.',
+      memory: '<strong>Not firm leaks below;</strong> <strong>not grasping loses the inhale.</strong>',
+      safety: 'New incontinence, urinary retention, saddle numbness, severe breathing difficulty, blue lips or rapidly worsening asthma requires urgent assessment.',
+      prompts: ['Which pattern causes enuresis?', 'Which makes inhalation difficult?', 'What Kidney signs can both share?']
+    },
+    es: {
+      names: ['Qi de Riñón no Firme', 'Riñón no Capta Qi'],
+      shared: 'Ambos nacen de deficiencia de Qi renal y muestran lumbar/rodillas débiles, fatiga, debilidad urinaria y pulso profundo-débil.',
+      fast: ['Compuertas inferiores pierden: orina clara frecuente, incontinencia, enuresis, espermatorrea o flujo vaginal crónico.', 'Respiración no desciende: sibilancia/disnea crónica peor al inhalar y con esfuerzo, respiración corta y lumbar débil.'],
+      rows: [
+        ['Función fallida', 'Consolidar Vejiga, Esencia y orificios inferiores.', 'Recibir y anclar Qi de Pulmón al inhalar.'],
+        ['Sistema', 'Fuga urinaria y reproductiva.', 'Debilidad respiratoria arraigada abajo.'],
+        ['Pista decisiva', 'Pérdida o fuga.', 'Dificultad para inspirar.'],
+        ['Ejemplos de fórmulas', 'Suo Quan Wan o Jin Suo Gu Jing Wan según fuga.', 'Ren Shen Ge Jie San o Su Zi Jiang Qi Tang según presentación.']
+      ],
+      why: 'Ambos son fallas de Qi renal, pero uno pierde por compuertas inferiores y otro no atrae Qi pulmonar hacia abajo.',
+      memory: '<strong>No firme pierde abajo;</strong> <strong>no captar pierde la inhalación.</strong>',
+      safety: 'Incontinencia nueva, retención urinaria, anestesia en silla de montar, disnea grave, labios azules o asma progresiva requiere urgencias.',
+      prompts: ['¿Cuál causa enuresis?', '¿Cuál dificulta inspirar?', '¿Qué signos renales comparten?']
+    }
+  },
+  {
+    slug: 'lung-heat-vs-lung-yin-deficiency', title: 'Lung Heat vs. Lung Yin Deficiency', titleEs: 'Calor de Pulmón vs. Deficiencia de Yin de Pulmón',
+    summary: 'Separate an excess hot productive cough from a chronic dry deficient cough with Empty Heat.',
+    summaryEs: 'Distingue tos productiva caliente por exceso de tos seca crónica por deficiencia con Calor Vacío.',
+    search: 'lung heat yin deficiency cough yellow sputum dry cough scant sputum fever thirst night sweat hoarse voice red tongue yellow coat peeled thin rapid',
+    en: {
+      names: ['Lung Heat', 'Lung Yin Deficiency'],
+      shared: 'Both can cause cough, thirst, dry throat, red tongue signs and a rapid pulse.',
+      fast: ['Excess Heat: loud cough, thick yellow sputum, fever, thirst, chest pain and a red tongue with yellow coat.', 'Deficient Yin: chronic dry weak cough, scant sticky sputum, hoarseness, afternoon Heat, night sweats and a red peeled tongue.'],
+      rows: [
+        ['Sputum', 'Thick, yellow and difficult or profuse.', 'Scant, sticky or absent; possibly blood-streaked from dryness.'],
+        ['Systemic sign', 'Acute fever and strong thirst.', 'Chronic dryness and Empty Heat.'],
+        ['Tongue / pulse', 'Red with yellow coat; rapid and forceful/slippery.', 'Red, dry, little coat; thin-rapid.'],
+        ['Formula examples', 'Ma Xing Shi Gan Tang or Qing Qi Hua Tan Wan.', 'Bai He Gu Jin Tang or Sha Shen Mai Dong Tang.']
+      ],
+      why: 'Both are hot Lung patterns. Sputum abundance, disease timing, tongue coat and pulse strength distinguish excess Heat from depleted Lung Yin.',
+      memory: '<strong>Lung Heat cooks yellow Phlegm;</strong> <strong>Lung Yin deficiency dries the cough.</strong>',
+      safety: 'Breathing difficulty, chest pain, coughing blood, low oxygen, high fever or cough lasting more than three weeks needs medical assessment.',
+      prompts: ['Which produces thick yellow sputum?', 'Which causes hoarseness and night sweats?', 'How does the tongue coat differ?']
+    },
+    es: {
+      names: ['Calor de Pulmón', 'Deficiencia de Yin de Pulmón'],
+      shared: 'Ambos causan tos, sed, garganta seca, lengua roja y pulso rápido.',
+      fast: ['Calor por exceso: tos fuerte, esputo amarillo espeso, fiebre, sed, dolor torácico y lengua roja con capa amarilla.', 'Yin deficiente: tos seca débil crónica, esputo escaso pegajoso, ronquera, Calor vespertino, sudor nocturno y lengua roja pelada.'],
+      rows: [
+        ['Esputo', 'Espeso, amarillo y difícil o abundante.', 'Escaso, pegajoso o ausente; posiblemente con sangre por sequedad.'],
+        ['Signo sistémico', 'Fiebre aguda y sed fuerte.', 'Sequedad crónica y Calor Vacío.'],
+        ['Lengua / pulso', 'Roja con capa amarilla; rápido y fuerte/resbaladizo.', 'Roja, seca, poca capa; fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Ma Xing Shi Gan Tang o Qing Qi Hua Tan Wan.', 'Bai He Gu Jin Tang o Sha Shen Mai Dong Tang.']
+      ],
+      why: 'Ambos son patterns calientes de Pulmón. Esputo, tiempo, capa y fuerza del pulso separan exceso de Yin agotado.',
+      memory: '<strong>Calor de Pulmón cocina Flema amarilla;</strong> <strong>Yin deficiente seca la tos.</strong>',
+      safety: 'Disnea, dolor torácico, sangre al toser, oxígeno bajo, fiebre alta o tos mayor de tres semanas necesita evaluación.',
+      prompts: ['¿Cuál produce esputo amarillo espeso?', '¿Cuál ronquera y sudor nocturno?', '¿Cómo difiere la capa?']
+    }
+  },
+  {
+    slug: 'heart-fire-vs-heart-yin-deficiency', title: 'Heart Fire vs. Heart Yin Deficiency', titleEs: 'Fuego de Corazón vs. Deficiencia de Yin de Corazón',
+    summary: 'Separate forceful full Fire from deficient cooling that leaves the Spirit restless at night.',
+    summaryEs: 'Distingue Fuego pleno y fuerte de enfriamiento deficiente que deja Shen inquieto por la noche.',
+    search: 'heart fire yin deficiency insomnia palpitations agitation mouth tongue ulcers bitter taste night sweat five center red tip yellow coat peeled forceful thin rapid',
+    en: {
+      names: ['Heart Fire', 'Heart Yin Deficiency'],
+      shared: 'Both disturb the Spirit and may cause insomnia, palpitations, anxiety, restlessness, a red tongue tip and rapid pulse.',
+      fast: ['Full Fire: intense agitation, mouth/tongue ulcers, bitter taste, dark urine and a red tongue with yellow coat; pulse forceful-rapid.', 'Yin deficiency: chronic insomnia, night sweating, five-center Heat, dry mouth and a red peeled tongue; pulse thin-rapid.'],
+      rows: [
+        ['Mechanism', 'Excess Fire agitates Heart and Spirit.', 'Heart Yin cannot cool and anchor the Spirit.'],
+        ['Mouth / urine', 'Painful ulcers and dark scant urine.', 'Dryness without strong ulcerative or urinary Fire.'],
+        ['Tongue / pulse', 'Red tip/body with yellow coat; overflowing/forceful-rapid.', 'Red tip, little coat/cracks; thin-rapid.'],
+        ['Formula examples', 'Dao Chi San or Huang Lian Jie Du Tang by severity.', 'Tian Wang Bu Xin Dan.']
+      ],
+      why: 'Insomnia and red tip overlap. Ulcers, dark urine, coating and pulse force indicate Fire; night Heat, dryness and no coat indicate Yin deficiency.',
+      memory: '<strong>Heart Fire flares and sores;</strong> <strong>Heart Yin deficiency dries and wakes.</strong>',
+      safety: 'Chest pain, fainting, sustained rapid/irregular heartbeat, mania, suicidality or severe sleep deprivation requires urgent medical assessment.',
+      prompts: ['Which pattern produces tongue ulcers?', 'Which has night sweats?', 'How does pulse strength distinguish them?']
+    },
+    es: {
+      names: ['Fuego de Corazón', 'Deficiencia de Yin de Corazón'],
+      shared: 'Ambos perturban Shen y causan insomnio, palpitaciones, ansiedad, inquietud, punta roja y pulso rápido.',
+      fast: ['Fuego pleno: agitación intensa, úlceras de boca/lengua, sabor amargo, orina oscura y lengua roja con capa amarilla; pulso fuerte-rápido.', 'Yin deficiente: insomnio crónico, sudor nocturno, Calor de cinco centros, boca seca y lengua roja pelada; pulso fino-rápido.'],
+      rows: [
+        ['Mecanismo', 'Fuego excesivo agita Corazón y Shen.', 'Yin de Corazón no enfría ni ancla Shen.'],
+        ['Boca / orina', 'Úlceras dolorosas y orina oscura escasa.', 'Sequedad sin fuerte Fuego ulcerativo o urinario.'],
+        ['Lengua / pulso', 'Punta/cuerpo rojo con capa amarilla; desbordante/fuerte-rápido.', 'Punta roja, poca capa/grietas; fino-rápido.'],
+        ['Ejemplos de fórmulas', 'Dao Chi San o Huang Lian Jie Du Tang según gravedad.', 'Tian Wang Bu Xin Dan.']
+      ],
+      why: 'Insomnio y punta roja se superponen. Úlceras, orina oscura, capa y fuerza indican Fuego; Calor nocturno, sequedad y sin capa indican Yin.',
+      memory: '<strong>Fuego de Corazón arde y ulcera;</strong> <strong>Yin deficiente seca y despierta.</strong>',
+      safety: 'Dolor torácico, desmayo, ritmo rápido/irregular persistente, manía, suicidio o privación grave de sueño requiere evaluación urgente.',
+      prompts: ['¿Cuál produce úlceras linguales?', '¿Cuál sudor nocturno?', '¿Cómo distingue la fuerza del pulso?']
+    }
+  },
+  {
+    slug: 'dampness-vs-phlegm', title: 'Dampness vs. Phlegm', titleEs: 'Humedad vs. Flema',
+    summary: 'Separate diffuse heavy fluid dysfunction from condensed, visible orifice-obstructing Phlegm.',
+    summaryEs: 'Distingue disfunción difusa y pesada de líquidos de Flema condensada, visible u obstructora de orificios.',
+    search: 'dampness phlegm heaviness fullness edema loose stool nausea sputum nodules dizziness orifices greasy tongue soggy slippery ping wei er chen',
+    en: {
+      names: ['Dampness', 'Phlegm'],
+      shared: 'Both result from impaired fluid transformation and may cause heaviness, chest/epigastric fullness, nausea, a greasy coat and slippery qualities.',
+      fast: ['Diffuse and heavy: body heaviness, edema, loose stool, cloudy discharge, poor appetite and a soggy/slippery pulse.', 'Condensed and obstructive: sputum, nodules, globus, dizziness, altered consciousness or a distinctly slippery pulse.'],
+      rows: [
+        ['Physical idea', 'Wateriness and diffuse accumulation.', 'Condensed pathological fluid.'],
+        ['Typical location', 'Middle Jiao, flesh, joints and lower burner.', 'Lung, throat, channels or sensory orifices.'],
+        ['Decisive clue', 'Heaviness, swelling and loose stool.', 'Sputum, mass, vertigo or orifice obstruction.'],
+        ['Formula examples', 'Ping Wei San or Shen Ling Bai Zhu San by excess/deficiency.', 'Er Chen Tang or Di Tan Tang by location.']
+      ],
+      why: 'Phlegm is often described as a more condensed development of Dampness. Visible sputum is not required when nodules, vertigo or orifice signs show hidden Phlegm.',
+      memory: '<strong>Dampness spreads and weighs;</strong> <strong>Phlegm condenses and blocks.</strong>',
+      safety: 'Sudden confusion, focal neurologic deficit, severe vertigo, breathing difficulty, coughing blood or a new neck mass requires biomedical evaluation.',
+      prompts: ['Which produces diffuse heaviness?', 'Which produces nodules or altered consciousness?', 'How can Phlegm exist without sputum?']
+    },
+    es: {
+      names: ['Humedad', 'Flema'],
+      shared: 'Ambas resultan de transformación alterada de líquidos y causan pesadez, plenitud, náusea, capa grasosa y cualidad resbaladiza.',
+      fast: ['Difusa y pesada: pesadez corporal, edema, heces sueltas, secreción turbia, poco apetito y pulso blando/resbaladizo.', 'Condensada y obstructiva: esputo, nódulos, globo faríngeo, vértigo, conciencia alterada o pulso claramente resbaladizo.'],
+      rows: [
+        ['Idea física', 'Acumulación acuosa y difusa.', 'Líquido patológico condensado.'],
+        ['Localización', 'Jiao Medio, carne, articulaciones y Jiao Inferior.', 'Pulmón, garganta, canales u orificios sensoriales.'],
+        ['Pista decisiva', 'Pesadez, hinchazón y heces sueltas.', 'Esputo, masa, vértigo u obstrucción de orificios.'],
+        ['Ejemplos de fórmulas', 'Ping Wei San o Shen Ling Bai Zhu San según exceso/deficiencia.', 'Er Chen Tang o Di Tan Tang según localización.']
+      ],
+      why: 'Flema suele ser desarrollo más condensado de Humedad. No exige esputo visible si nódulos, vértigo u orificios muestran Flema oculta.',
+      memory: '<strong>Humedad se extiende y pesa;</strong> <strong>Flema se condensa y bloquea.</strong>',
+      safety: 'Confusión súbita, déficit neurológico, vértigo grave, disnea, sangre al toser o masa nueva en cuello requiere evaluación biomédica.',
+      prompts: ['¿Cuál produce pesadez difusa?', '¿Cuál nódulos o conciencia alterada?', '¿Cómo existe Flema sin esputo?']
+    }
+  },
+  {
+    slug: 'internal-wind-extreme-heat-vs-yang-vs-blood-deficiency', title: 'Internal Wind: Extreme Heat vs. Liver Yang vs. Blood Deficiency', titleEs: 'Viento Interno: Calor Extremo vs. Yang de Hígado vs. Deficiencia de Sangre',
+    summary: 'Distinguish acute febrile convulsions, chronic rising-Yang Wind and fine deficiency tremor.',
+    summaryEs: 'Distingue convulsiones febriles agudas, Viento crónico por Yang ascendente y temblor fino por deficiencia.',
+    search: 'internal wind extreme heat liver yang blood deficiency convulsions high fever tremor dizziness headache numbness cramps red pale tongue wiry rapid thin',
+    en: {
+      names: ['Wind from Extreme Heat', 'Wind from Liver Yang Rising', 'Wind from Blood Deficiency'],
+      shared: 'All can produce tremor, spasm, dizziness or abnormal movement because the sinews lose stable nourishment and control.',
+      fast: ['Acute emergency: very high fever, delirium, rigid neck and convulsions with a crimson tongue and rapid forceful pulse.', 'Upward chronic excess-root/deficiency-root: severe dizziness, headache, tinnitus, irritability and coarse tremor with wiry pulse.', 'Deficient nourishment: fine tremor, numbness, cramps, pale complexion/tongue and thin pulse.'],
+      rows: [
+        ['Onset', 'Sudden during severe febrile disease.', 'Usually chronic or episodic with Liver-Yang signs.', 'Gradual with chronic Blood deficiency.'],
+        ['Movement', 'Convulsion and marked rigidity.', 'Coarser tremor, dizziness or potential sudden upward event.', 'Fine tremor, twitching and cramps.'],
+        ['Tongue / pulse', 'Crimson; rapid-forceful.', 'Red edges; wiry, often rapid.', 'Pale; thin/choppy.'],
+        ['Formula examples', 'Ling Jiao Gou Teng Tang historically; endangered animal ingredients require substitution.', 'Tian Ma Gou Teng Yin.', 'Si Wu Tang with Wind-extinguishing support by presentation.']
+      ],
+      why: 'Movement alone is nonspecific. Fever severity, upward Yang signs or pale deficiency signs identify the source of Wind.',
+      memory: '<strong>Heat convulses;</strong> <strong>Yang rises;</strong> <strong>Blood-starved sinews flutter.</strong>',
+      safety: 'Any first seizure, seizure lasting 5 minutes, sudden weakness/speech change, severe new headache, high fever with stiff neck or altered consciousness is an emergency.',
+      prompts: ['Which Wind has high fever?', 'Which has headache and tinnitus?', 'Which produces fine tremor with pallor?']
+    },
+    es: {
+      names: ['Viento por Calor Extremo', 'Viento por Ascenso de Yang de Hígado', 'Viento por Deficiencia de Sangre'],
+      shared: 'Todos causan temblor, espasmo, mareo o movimiento anormal porque tendones pierden nutrición/control estable.',
+      fast: ['Emergencia aguda: fiebre muy alta, delirio, nuca rígida y convulsiones con lengua carmesí y pulso rápido-fuerte.', 'Ascenso crónico: mareo grave, cefalea, tinnitus, irritabilidad y temblor grueso con pulso de cuerda.', 'Nutrición deficiente: temblor fino, entumecimiento, calambres, tez/lengua pálida y pulso fino.'],
+      rows: [
+        ['Inicio', 'Súbito durante enfermedad febril grave.', 'Crónico o episódico con signos de Yang de Hígado.', 'Gradual con deficiencia crónica de Sangre.'],
+        ['Movimiento', 'Convulsión y rigidez marcada.', 'Temblor grueso, mareo o posible evento ascendente súbito.', 'Temblor fino, fasciculación y calambres.'],
+        ['Lengua / pulso', 'Carmesí; rápido-fuerte.', 'Bordes rojos; de cuerda, a menudo rápido.', 'Pálida; fino/áspero.'],
+        ['Ejemplos de fórmulas', 'Ling Jiao Gou Teng Tang histórica; ingredientes animales amenazados exigen sustitución.', 'Tian Ma Gou Teng Yin.', 'Si Wu Tang con apoyo que extingue Viento según presentación.']
+      ],
+      why: 'Movimiento solo no basta. Gravedad febril, signos de Yang ascendente o palidez deficiente identifican origen del Viento.',
+      memory: '<strong>Calor convulsiona;</strong> <strong>Yang asciende;</strong> <strong>tendones sin Sangre aletean.</strong>',
+      safety: 'Primera convulsión, duración de 5 minutos, debilidad/habla súbita, cefalea nueva grave, fiebre alta con nuca rígida o conciencia alterada es emergencia.',
+      prompts: ['¿Qué Viento tiene fiebre alta?', '¿Cuál cefalea y tinnitus?', '¿Cuál temblor fino con palidez?']
+    }
   }
 );
 
