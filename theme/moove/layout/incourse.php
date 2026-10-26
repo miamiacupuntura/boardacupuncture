@@ -32,12 +32,15 @@ $PAGE->requires->js(new moodle_url('/theme/moove/javascript/main-page-dashboard.
 ]), true);
 
 $isexamkeycourse = !empty($COURSE->id) && (int) $COURSE->id === 92;
+$issingleherbsreview =
+    $PAGE->context->contextlevel === CONTEXT_MODULE && (int) $PAGE->cm->id === 8633;
+$hidecourseindex = $isexamkeycourse || $issingleherbsreview;
 
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
 if (isloggedin()) {
-    $courseindexopen = !$isexamkeycourse && (get_user_preferences('drawer-open-index', true) == true);
+    $courseindexopen = !$hidecourseindex && (get_user_preferences('drawer-open-index', true) == true);
     $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
 } else {
     $courseindexopen = false;
@@ -61,7 +64,7 @@ if (!$hasblocks) {
 
 $themesettings = new \theme_moove\util\settings();
 
-if (!$themesettings->enablecourseindex || $isexamkeycourse) {
+if (!$themesettings->enablecourseindex || $hidecourseindex) {
     $courseindex = '';
 } else {
     $courseindex = core_course_drawer();

@@ -269,6 +269,9 @@ the `Herbology Exam Key` index rather than on the `Single Herbs Exams` course
 page. This one-time command keeps the Book and all of its chapters intact,
 makes the original activity stealth, and creates the visible native Moodle URL
 `9) Single Herbs Review Exam` in course 92, section 2020.
+The Moove course layout also suppresses the source course index on this Book,
+so following the link does not expose the Single Herbs exam list beside the
+review content.
 
 Review the exact source and target first:
 
