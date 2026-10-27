@@ -34,13 +34,13 @@ Shi Jue Ming|Extinguish Liver Wind
 ## 2|Benefit Hair|Beneficiar el Cabello
 Huai Niu Xi|Activate Blood
 Da Zao|Qi Tonic
-He Shou Wu|Blood Tonic|Historical source marker; verify current NCCAHM exam outline
+He Shou Wu|Blood Tonic|Historical source marker; verify current NCBAHM exam outline
 Gou Qi Zi|Blood Tonic
 Dang Gui|Blood Tonic
 Tu Si Zi|Yang Tonic
 Nu Zhen Zi|Yin Tonic
 Hei Zhi Ma|Yin Tonic
-Han Lian Cao|Yin Tonic|Historical source marker; verify current NCCAHM exam outline
+Han Lian Cao|Yin Tonic|Historical source marker; verify current NCBAHM exam outline
 
 ## 3|Benefit Throat|Beneficiar la Garganta
 Bo He|Disperse Wind-Heat
@@ -231,17 +231,17 @@ Mai Ya|Digestive
 ## 17|Lower Cholesterol|Reducir el Colesterol
 Ge Gen|Disperse Wind-Heat
 Jue Ming Zi|Clear & Purge Heat
-Ye Ju Hua|Clear Toxic-Heat|Historical source marker; verify current NCCAHM exam outline
+Ye Ju Hua|Clear Toxic-Heat|Historical source marker; verify current NCBAHM exam outline
 Da Huang|Purgative
 Ze Xie|Drain Damp
 Shan Zha|Digestive
 San Qi|Stop Bleeding
-Jiang Huang|Activate Blood|Historical source marker; verify current NCCAHM exam outline
-Hu Zhang|Activate Blood|Historical source marker; verify current NCCAHM exam outline
-Huang Jing|Qi Tonic|Historical source marker; verify current NCCAHM exam outline
-He Shou Wu|Blood Tonic|Historical source marker; verify current NCCAHM exam outline
+Jiang Huang|Activate Blood|Historical source marker; verify current NCBAHM exam outline
+Hu Zhang|Activate Blood|Historical source marker; verify current NCBAHM exam outline
+Huang Jing|Qi Tonic|Historical source marker; verify current NCBAHM exam outline
+He Shou Wu|Blood Tonic|Historical source marker; verify current NCBAHM exam outline
 Nu Zhen Zi|Yin Tonic
-Yu Zhu|Yin Tonic|Historical source marker; verify current NCCAHM exam outline
+Yu Zhu|Yin Tonic|Historical source marker; verify current NCBAHM exam outline
 Tian Ma|Extinguish Liver Wind
 
 ## 18|Moisten Intestines|Humedecer los Intestinos
@@ -277,7 +277,7 @@ Yu Jin|Activate Blood
 ## 20|Move & Nourish Blood|Mover y Nutrir la Sangre
 Dan Shen|Activate Blood
 Hong Hua|Activate Blood|Source dose note: 0.9–1.5 g
-Ji Xue Teng|Activate Blood|Historical source marker; verify current NCCAHM exam outline
+Ji Xue Teng|Activate Blood|Historical source marker; verify current NCBAHM exam outline
 Dang Gui|Blood Tonic
 
 ## 21|Move Blood|Mover la Sangre
@@ -495,7 +495,7 @@ Bing Lang|Expel Parasites
 
 ## 39|Stop Dysentery|Detener la Disentería
 Jin Yin Hua|Clear Toxic-Heat
-Bai Tou Weng|Clear Toxic-Heat|Historical source marker; verify current NCCAHM exam outline
+Bai Tou Weng|Clear Toxic-Heat|Historical source marker; verify current NCBAHM exam outline
 Da Huang|Purgative
 Huang Qin|Drain Damp
 Huang Lian|Drain Damp
@@ -522,7 +522,7 @@ Chuan Xiong|Channel guide|Various types
 Jing Jie|Disperse Wind-Cold
 Zi Cao|Clear Blood-Heat
 Ku Shen|Clear Damp-Heat
-Bai Xian Pi|Clear Toxic-Heat|Historical source marker; verify current NCCAHM exam outline
+Bai Xian Pi|Clear Toxic-Heat|Historical source marker; verify current NCBAHM exam outline
 Di Fu Zi|Drain Damp
 Hai Tong Pi|Dispel Wind-Damp
 Xian He Cao|Stop Bleeding
@@ -580,7 +580,7 @@ Shan Zhu Yu|Astringent
 Wu Wei Zi|Astringent
 Fu Xiao Mai|Astringent
 Wu Mei|Astringent
-Ma Huang Gen|Astringent|Historical source marker; verify current NCCAHM exam outline
+Ma Huang Gen|Astringent|Historical source marker; verify current NCBAHM exam outline
 Long Gu (Duan)|Anchor Shen
 Mu Li (Duan)|Anchor Shen
 Suan Zao Ren|Calm Shen
@@ -610,9 +610,9 @@ Gou Ji|Yang Tonic
 ## 47|Transform Stones|Transformar Cálculos
 Yu Jin|Activate Blood|Gallbladder
 Ji Nei Jin|Digestive|Gallbladder and Kidney
-Jin Qian Cao|Drain Damp|Gallbladder and Kidney; Historical source marker; verify current NCCAHM exam outline
-Hai Jin Sha|Drain Damp|Kidney; Historical source marker; verify current NCCAHM exam outline
-Shi Wei|Drain Damp|Kidney; Historical source marker; verify current NCCAHM exam outline
+Jin Qian Cao|Drain Damp|Gallbladder and Kidney; Historical source marker; verify current NCBAHM exam outline
+Hai Jin Sha|Drain Damp|Kidney; Historical source marker; verify current NCBAHM exam outline
+Shi Wei|Drain Damp|Kidney; Historical source marker; verify current NCBAHM exam outline
 
 ## 48|Treat Burns|Tratar Quemaduras
 Bai Zhi|Disperse Wind-Cold
@@ -666,8 +666,8 @@ Mu Gua|Dispel Wind-Damp
 Qin Jiao|Dispel Wind-Damp
 Huo Xiang|Aromatics for Damp
 Shan Zha|Digestive
-Da Ji|Stop Bleeding|Historical source marker; verify current NCCAHM exam outline
-Xiao Ji|Stop Bleeding|Historical source marker; verify current NCCAHM exam outline
+Da Ji|Stop Bleeding|Historical source marker; verify current NCBAHM exam outline
+Xiao Ji|Stop Bleeding|Historical source marker; verify current NCBAHM exam outline
 Dan Shen|Activate Blood
 Chi Shao|Activate Blood
 Shan Yao|Qi Tonic
@@ -727,7 +727,7 @@ Hai Piao Xiao|Astringent
 Jin Ying Zi|Astringent
 Lian Zi|Astringent
 Qian Shi|Astringent
-Sang Piao Xiao|Astringent|Historical source marker; verify current NCCAHM exam outline
+Sang Piao Xiao|Astringent|Historical source marker; verify current NCBAHM exam outline
 Long Gu|Anchor Shen
 Mu Li|Anchor Shen
 She Chuang Zi|External Use
@@ -747,7 +747,7 @@ Zhi Mu|Clear & Purge Heat
 Qing Hao|Clear Deficient Heat
 Cao Guo|Aromatics for Damp
 Bing Lang|Expel Parasites
-Chang Shan|Expel Parasites|Historical source marker; verify current NCCAHM exam outline
+Chang Shan|Expel Parasites|Historical source marker; verify current NCBAHM exam outline
 
 ## 57|Treat Spermatorrhea|Tratar Espermatorrea
 Shan Yao|Qi Tonic
@@ -763,7 +763,7 @@ Rou Cong Rong|Yang Tonic
 Tu Si Zi|Yang Tonic
 Shan Zhu Yu|Astringent
 Hai Piao Xiao|Astringent
-Sang Piao Xiao|Astringent|Historical source marker; verify current NCCAHM exam outline
+Sang Piao Xiao|Astringent|Historical source marker; verify current NCBAHM exam outline
 Qian Shi|Astringent
 Lian Zi|Astringent
 Bai Guo|Astringent
@@ -915,7 +915,7 @@ def slug(text):
 
 def translated_detail(detail):
     replacements = {
-        "Historical source marker; verify current NCCAHM exam outline": "Marcador de fuente histórica; verificar temario vigente de NCCAHM",
+        "Historical source marker; verify current NCBAHM exam outline": "Marcador de fuente histórica; verificar temario vigente de NCBAHM",
         "Historical antidote chart": "Tabla histórica de antídotos",
         "Protected animal substance; do not use": "Sustancia animal protegida; no usar",
         "Restricted or regulated in some jurisdictions": "Restringida o regulada en algunas jurisdicciones",

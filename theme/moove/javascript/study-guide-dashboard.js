@@ -94,6 +94,33 @@
         link.textContent = 'Continuing Education Courses';
         panel.append(text, link);
 
+        const boardGuidelines = document.querySelector('.board-guidelines-dashboard-panel');
+        if (boardGuidelines) {
+            boardGuidelines.insertAdjacentElement('afterend', panel);
+            return;
+        }
+        const description = heading.nextElementSibling;
+        (description || heading).insertAdjacentElement('afterend', panel);
+    }
+
+    function addBoardGuidelinesPortal() {
+        const heading = [...document.querySelectorAll('h1, h2, h3')]
+            .find(element => normalise(element.textContent) === 'Your NCBAHM Board Preparation');
+        if (!heading || document.querySelector('.board-guidelines-dashboard-link')) {
+            return;
+        }
+
+        const panel = document.createElement('aside');
+        panel.className = 'board-guidelines-dashboard-panel';
+        panel.setAttribute('aria-label', 'NCBAHM Board Guidelines');
+        const text = document.createElement('div');
+        text.innerHTML = '<strong>NCBAHM Board Guidelines</strong><span>Current study scope, official-list boundaries and a separate guideline for each Board.</span>';
+        const link = document.createElement('a');
+        link.className = 'board-guidelines-dashboard-link';
+        link.href = '/study-guide/board-guidelines.html';
+        link.textContent = 'Open Board Guidelines';
+        panel.append(text, link);
+
         const description = heading.nextElementSibling;
         (description || heading).insertAdjacentElement('afterend', panel);
     }
@@ -188,6 +215,41 @@
             background: #faf7fd;
             text-align: left;
         }
+        .board-guidelines-dashboard-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            max-width: 1040px;
+            box-sizing: border-box;
+            margin: 18px auto 22px;
+            padding: 16px 18px;
+            border: 1px solid #a9d4cb;
+            border-left: 5px solid #08756a;
+            border-radius: 11px;
+            background: #f1faf8;
+            text-align: left;
+        }
+        .board-guidelines-dashboard-panel strong,
+        .board-guidelines-dashboard-panel span { display: block; }
+        .board-guidelines-dashboard-panel span { margin-top: 3px; color: #526c69; font-size: .9rem; }
+        .board-guidelines-dashboard-link {
+            display: inline-flex;
+            box-sizing: border-box;
+            min-height: 44px;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: #08756a;
+            color: #fff !important;
+            font-weight: 800;
+            text-decoration: none !important;
+        }
+        .board-guidelines-dashboard-link:hover,
+        .board-guidelines-dashboard-link:focus { background: #055e56; }
+        .board-guidelines-dashboard-link:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
         .continuing-education-dashboard-panel strong,
         .continuing-education-dashboard-panel span { display: block; }
         .continuing-education-dashboard-panel span { margin-top: 3px; color: #5e6874; font-size: .9rem; }
@@ -245,18 +307,22 @@
         .module-school-dashboard-link:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
         @media (max-width: 650px) {
             .continuing-education-dashboard-panel,
+            .board-guidelines-dashboard-panel,
             .module-school-dashboard-panel { align-items: stretch; flex-direction: column; margin: 16px 0 20px; }
             .continuing-education-dashboard-link,
+            .board-guidelines-dashboard-link,
             .module-school-dashboard-link { width: 100%; }
         }
     `;
     document.head.append(style);
 
     addStudyGuideLinks();
+    addBoardGuidelinesPortal();
     addContinuingEducationPortal();
     addModuleSchoolPortal();
     document.addEventListener('DOMContentLoaded', () => {
         addStudyGuideLinks();
+        addBoardGuidelinesPortal();
         addContinuingEducationPortal();
         addModuleSchoolPortal();
     }, {once: true});
@@ -266,6 +332,7 @@
         window.clearTimeout(refreshTimer);
         refreshTimer = window.setTimeout(() => {
             addStudyGuideLinks();
+            addBoardGuidelinesPortal();
             addContinuingEducationPortal();
             addModuleSchoolPortal();
         }, 80);
