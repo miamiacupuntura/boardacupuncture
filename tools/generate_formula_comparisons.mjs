@@ -8,6 +8,7 @@ import { harmonizeFormulaComparisons } from './formula_comparisons_harmonize_bat
 import { dampFormulaComparisons } from './formula_comparisons_damp_batch.mjs';
 import { phlegmFormulaComparisons } from './formula_comparisons_phlegm_batch.mjs';
 import { warmInteriorFormulaComparisons } from './formula_comparisons_warm_interior_batch.mjs';
+import { tonifyFormulaComparisons } from './formula_comparisons_tonify_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -3036,6 +3037,7 @@ cards.push(...harmonizeFormulaComparisons);
 cards.push(...dampFormulaComparisons);
 cards.push(...phlegmFormulaComparisons);
 cards.push(...warmInteriorFormulaComparisons);
+cards.push(...tonifyFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
