@@ -56,7 +56,7 @@ const page = `<!doctype html>
   <meta name="description" content="Notas comparativas en español sobre hierbas individuales de medicina china.">
   <title>Comparaciones de Hierbas Individuales | AcupunctureTests</title>
   <link rel="alternate" hreflang="en" href="index.html">
-  <link rel="stylesheet" href="comparisons.css?v=20261026-2">
+  <link rel="stylesheet" href="comparisons.css?v=20261027-4">
   <script defer src="comparisons.js?v=20261025-1"></script>
 </head>
 <body>
@@ -67,7 +67,7 @@ const page = `<!doctype html>
     </div>
   </header>
   <main class="comparison-shell">
-    <section class="comparison-hero" aria-labelledby="comparisons-title"><p class="comparison-eyebrow">Grupo 1 · Hierbas Individuales</p><h1 id="comparisons-title">Comparaciones de Hierbas Individuales</h1><p>Compara hierbas medicinales chinas por categoría, propiedades, acciones, indicaciones y las pistas decisivas que las distinguen en los exámenes.</p></section>
+    <section class="comparison-hero" aria-labelledby="comparisons-title"><p class="comparison-eyebrow">Grupo 1 · Hierbas Individuales</p><h1 id="comparisons-title">Comparaciones de Hierbas Individuales</h1><p>Compara hierbas medicinales chinas por categoría, propiedades, acciones, indicaciones y las pistas decisivas que las distinguen en los exámenes.</p><div class="comparison-hero__actions"><a class="comparison-guideline-back" href="../guidelines/chinese-herbal-medicine-es.html">← Volver a la guía de Medicina Herbal</a></div></section>
     <nav class="comparison-collection-links" aria-label="Grupos de estudio"><a aria-current="page" href="index-es.html">Comparaciones de Hierbas</a><a href="formulas-es.html">Comparaciones de Fórmulas</a><a href="pathologies-es.html">Comparaciones de Patologías</a><a href="patterns-es.html">Comparaciones de Patterns</a><a href="families-es.html">Familias de Fórmulas</a><a href="dui-yao-es.html">Parejas Duì Yào</a><a href="name-traps-es.html">Trampas de Nombres</a><a href="herb-families-es.html">Familias y Partes</a><a href="safety-es.html">Biblioteca de Seguridad</a><a href="formula-name-traps-es.html">Trampas de Fórmulas</a><a href="misleading-formula-names-es.html">Nombres Engañosos</a><a href="advanced-name-traps-es.html">Trampas Avanzadas</a><a href="supplemental-herb-families-es.html">Familias Adicionales</a><a href="patterns-tips-maciocia-es.html">Patterns Tips Maciocia</a><a href="most-important-formulas-es.html">Fórmulas Esenciales</a></nav>
     <section class="comparison-tools comparison-tools--search-only" aria-label="Buscar comparaciones de hierbas"><label><span class="sr-only">Buscar</span><input class="comparison-search" type="search" placeholder="Buscar hierbas o categorías" data-comparison-search></label></section>
     <section><header class="comparison-summary"><h2>Notas disponibles</h2><p><span data-visible-count>${cards.length}</span> notas comparativas en español</p></header><div class="comparison-grid" data-comparison-grid>${cards.join('\n')}</div><p class="comparison-empty" data-comparison-empty hidden>No hay comparaciones que coincidan con la búsqueda.</p></section>

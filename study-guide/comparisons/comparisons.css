@@ -253,6 +253,32 @@ a { color: inherit; }
   margin: -12px 0 24px;
 }
 
+.comparison-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.comparison-guideline-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 9px;
+  background: var(--teal);
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.comparison-guideline-back:hover,
+.comparison-guideline-back:focus {
+  background: #0b5949;
+  color: #fff;
+}
+
 .comparison-collection-links a {
   padding: 9px 15px;
   border: 1px solid #b8c8d1;
@@ -335,6 +361,7 @@ button:focus-visible,
 input:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
 
 @media (max-width: 720px) {
+  .comparison-guideline-back { width: 100%; }
   .comparison-tools { grid-template-columns: 1fr; }
   .comparison-filters { flex-wrap: wrap; }
   .comparison-summary { align-items: flex-start; flex-direction: column; gap: 4px; }
