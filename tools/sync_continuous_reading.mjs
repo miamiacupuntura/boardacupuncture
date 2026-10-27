@@ -19,6 +19,7 @@ const groups = [
   'supplemental-herb-families',
   'patterns-tips-maciocia',
   'most-important-formulas',
+  'formula-navigator',
   'formula-theory'
 ];
 
@@ -44,7 +45,7 @@ function normalise(value) {
 }
 
 function displayOrder(html, file) {
-  const articlePattern = /<article class="comparison-card"([^>]*)>([\s\S]*?)<\/article>/g;
+  const articlePattern = /<article class="[^"]*\bcomparison-card\b[^"]*"([^>]*)>([\s\S]*?)<\/article>/g;
   const cards = [...html.matchAll(articlePattern)].map((match, sourceIndex) => {
     const attributes = match[1];
     const body = match[2];

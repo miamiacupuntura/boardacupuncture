@@ -9,6 +9,10 @@
   const empty = document.querySelector('[data-comparison-empty]');
   let activeFilter = 'all';
 
+  if (search) {
+    search.value = new URLSearchParams(window.location.search).get('q') || '';
+  }
+
   function normalise(value) {
     return String(value || '').toLocaleLowerCase().normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
@@ -69,7 +73,12 @@
     });
   });
   if (search) {
-    search.addEventListener('input', refresh);
+    search.addEventListener('input', () => {
+      const url = new URL(window.location.href);
+      search.value.trim() ? url.searchParams.set('q', search.value.trim()) : url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+      refresh();
+    });
   }
   refresh();
 })();

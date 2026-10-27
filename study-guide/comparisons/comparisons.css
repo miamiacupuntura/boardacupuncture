@@ -369,6 +369,182 @@ a { color: inherit; }
   font-size: 14px;
 }
 
+.formula-navigator-hero {
+  background: linear-gradient(135deg, #f5fbf9 0%, #fff7ef 100%);
+}
+
+.formula-navigator-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.formula-navigator-stats span {
+  padding: 9px 13px;
+  border: 1px solid #c6d9d3;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.formula-navigator-panel,
+.formula-compare-panel,
+.formula-source-note {
+  margin: 0 0 24px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(23, 50, 77, .05);
+}
+
+.formula-navigator-panel > h2,
+.formula-source-note h2,
+.formula-compare-heading h2 {
+  margin: 0 0 14px;
+  color: var(--navy);
+}
+
+.formula-search-label {
+  display: grid;
+  gap: 7px;
+  font-weight: 800;
+}
+
+.formula-filter-group { margin-top: 18px; }
+.formula-filter-group h3 { margin: 0 0 9px; font-size: 15px; }
+
+.formula-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.formula-filter-row button,
+.formula-compare-heading button {
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid #bdccd5;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.formula-filter-row button[aria-pressed="true"] {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+}
+
+.formula-card-topline,
+.formula-detail-heading,
+.formula-compare-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.formula-risk {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #e8f5f1;
+  color: #116553;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.formula-risk--high { background: #fff0d8; color: #8b4c00; }
+.formula-risk--critical { background: #fde5e2; color: #982b1f; }
+
+.formula-navigator-card { min-height: 430px; }
+.formula-navigator-card .comparison-card__type { margin-bottom: 0; }
+
+.formula-card-clue {
+  padding: 11px 12px;
+  border-left: 4px solid var(--orange);
+  background: #fff8f1;
+  color: var(--ink) !important;
+  font-size: 14px;
+}
+
+.formula-compare-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 7px;
+  margin-top: 15px;
+  color: var(--navy);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.formula-compare-toggle input { width: 18px; height: 18px; }
+.formula-compare-panel[hidden] { display: none; }
+.formula-compare-heading { align-items: center; }
+.formula-compare-heading .comparison-eyebrow { margin-bottom: 4px; }
+
+.formula-compare-table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.formula-compare-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.formula-compare-table th,
+.formula-compare-table td {
+  min-width: 180px;
+  padding: 10px;
+  border: 1px solid #cbd9e0;
+  vertical-align: top;
+  text-align: left;
+}
+
+.formula-compare-table th { background: #eef4f7; color: var(--ink); }
+.formula-compare-table tbody th { min-width: 130px; }
+
+.formula-source-note {
+  border-left: 5px solid var(--teal);
+}
+
+.formula-source-note p { margin-bottom: 0; color: var(--muted); }
+
+.formula-related-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #cbd9e0;
+}
+
+.formula-related-link,
+.formula-related-note {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #edf7f4;
+  color: var(--navy);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.formula-related-link:hover { background: #dcefe9; }
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
@@ -387,4 +563,10 @@ input:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
   .study-note th { border-bottom: 0; }
   .study-note td + td { border-top: 0; }
   .study-note__focus th { width: 100%; }
+  .formula-card-topline,
+  .formula-detail-heading,
+  .formula-compare-heading { align-items: flex-start; flex-direction: column; }
+  .formula-navigator-card { min-height: 0; }
+  .formula-navigator-nav { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; }
+  .formula-navigator-nav a { flex: 0 0 auto; }
 }
