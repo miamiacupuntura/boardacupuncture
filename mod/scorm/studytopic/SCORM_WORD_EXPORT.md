@@ -1,5 +1,10 @@
 # SCORM question-bank Word export
 
+For the separate, controlled path that stages new questions from the supplied
+`Complete Final.docx`, see [`COMPLETE_FINAL_IMPORT.md`](COMPLETE_FINAL_IMPORT.md).
+That process exports explicitly keyed questions as Moodle XML; it does not
+replace this SCORM-to-Word recovery workflow.
+
 This CLI export reconstructs instructor Word downloads from the source SCORM
 packages already stored by Moodle. It does not change courses, attempts, grades,
 activities, or Moodle's file pool.
