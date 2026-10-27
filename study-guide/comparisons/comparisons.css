@@ -627,8 +627,9 @@ a { color: inherit; }
 
 .formula-practice-controls {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px;
+  max-width: 790px;
 }
 
 .formula-practice-controls label {
@@ -636,6 +637,8 @@ a { color: inherit; }
   gap: 7px;
   font-weight: 800;
 }
+
+.formula-practice-controls label[hidden] { display: none; }
 
 .formula-practice-controls select {
   width: 100%;
@@ -648,15 +651,25 @@ a { color: inherit; }
   font: inherit;
 }
 
+.formula-practice-focus,
 .formula-practice-size {
   margin: 20px 0 0;
   padding: 0;
   border: 0;
 }
 
+.formula-practice-focus legend,
 .formula-practice-size legend { margin-bottom: 8px; font-weight: 800; }
-.formula-practice-size div { display: flex; flex-wrap: wrap; gap: 8px; }
+.formula-practice-focus > div,
+.formula-practice-size > div { display: flex; flex-wrap: wrap; gap: 8px; }
 
+.formula-practice-focus p {
+  margin: 10px 0 14px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.formula-practice-focus button,
 .formula-practice-size button,
 .formula-practice-reset {
   min-width: 58px;
@@ -671,6 +684,7 @@ a { color: inherit; }
   cursor: pointer;
 }
 
+.formula-practice-focus button[aria-pressed="true"],
 .formula-practice-size button[aria-pressed="true"] {
   border-color: var(--teal);
   background: var(--teal);

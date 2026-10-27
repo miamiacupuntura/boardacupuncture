@@ -3,11 +3,10 @@
 
   const spanish = document.documentElement.lang === 'es';
   const text = {
-    allFormulas: spanish ? 'Todas las fórmulas y preguntas generales' : 'All formulas and general questions',
-    allCategories: spanish ? 'Todas las categorías' : 'All categories',
     loadingError: spanish ? 'No se pudo cargar el banco de preguntas.' : 'The question bank could not be loaded.',
     available: spanish ? 'Banco listo.' : 'Question bank ready.',
     noQuestions: spanish ? 'No hay preguntas con esta combinación de filtros.' : 'No questions match these filters.',
+    startPractice: count => spanish ? `Comenzar práctica (${count}) →` : `Start practice (${count}) →`,
     source: number => spanish ? `Pregunta de fuente ${number}` : `Source question ${number}`,
     related: spanish ? 'Relacionada con:' : 'Related to:',
     general: spanish ? 'Pregunta general de fórmulas' : 'General formula question',
@@ -22,12 +21,21 @@
     accuracy: spanish ? 'precisión' : 'accuracy',
     needsReview: spanish ? 'Fórmulas para reforzar' : 'Formulas to reinforce',
     resetConfirm: spanish ? '¿Borrar el historial guardado en este dispositivo?' : 'Clear the history saved on this device?',
-    questionWord: spanish ? 'preguntas' : 'questions'
+    questionWord: spanish ? 'preguntas' : 'questions',
+    modeHelp: {
+      all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
+      formula: spanish ? 'Practica todas las preguntas relacionadas con una fórmula específica.' : 'Practice every question related to one specific formula.',
+      category: spanish ? 'Practica preguntas de las fórmulas que pertenecen a una categoría.' : 'Practice questions from formulas in one category.'
+    }
   };
   const storageKey = 'formula-practice-progress-v1';
   const elements = {
     status: document.querySelector('[data-practice-status]'),
     setup: document.querySelector('[data-practice-setup]'),
+    modeButtons: [...document.querySelectorAll('[data-practice-mode]')],
+    modeHelp: document.querySelector('[data-practice-mode-help]'),
+    formulaField: document.querySelector('[data-practice-formula-field]'),
+    categoryField: document.querySelector('[data-practice-category-field]'),
     formula: document.querySelector('[data-practice-formula]'),
     category: document.querySelector('[data-practice-category]'),
     sizeButtons: [...document.querySelectorAll('[data-practice-size]')],
@@ -62,6 +70,7 @@
   const state = {
     data: null,
     formulaByNumber: new Map(),
+    mode: 'all',
     size: 25,
     questions: [],
     index: 0,
@@ -103,30 +112,45 @@
   }
 
   function filteredQuestions() {
-    const formula = elements.formula.value;
-    const category = elements.category.value;
-    return state.data.questions.filter(question => {
-      const formulaMatches = formula === 'all' || question.formulaNumbers.includes(Number(formula));
-      const categoryMatches = category === 'all' || question.categoryKeys.includes(category);
-      return formulaMatches && categoryMatches;
-    });
+    if (state.mode === 'formula') {
+      const formula = Number(elements.formula.value);
+      return state.data.questions.filter(question => question.formulaNumbers.includes(formula));
+    }
+    if (state.mode === 'category') {
+      const category = elements.category.value;
+      return state.data.questions.filter(question => question.categoryKeys.includes(category));
+    }
+    return [...state.data.questions];
   }
 
   function updateUrl() {
     const url = new URL(window.location.href);
-    const formula = elements.formula.value;
-    const category = elements.category.value;
-    formula === 'all' ? url.searchParams.delete('formula') : url.searchParams.set('formula', formula);
-    category === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', category);
+    url.searchParams.delete('formula');
+    url.searchParams.delete('category');
+    if (state.mode === 'formula') url.searchParams.set('formula', elements.formula.value);
+    if (state.mode === 'category') url.searchParams.set('category', elements.category.value);
     url.searchParams.set('size', String(state.size));
     history.replaceState(null, '', url);
     if (elements.language) elements.language.href = `${elements.language.getAttribute('href').split('?')[0]}${url.search}`;
   }
 
+  function setMode(mode, refresh = true) {
+    state.mode = ['all', 'formula', 'category'].includes(mode) ? mode : 'all';
+    elements.modeButtons.forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.practiceMode === state.mode));
+    });
+    elements.formulaField.hidden = state.mode !== 'formula';
+    elements.categoryField.hidden = state.mode !== 'category';
+    elements.modeHelp.textContent = text.modeHelp[state.mode];
+    if (refresh) updateAvailability();
+  }
+
   function updateAvailability() {
     const count = filteredQuestions().length;
+    const sessionCount = Math.min(count, state.size);
     elements.available.textContent = String(count);
     elements.start.disabled = count === 0;
+    elements.start.textContent = text.startPractice(sessionCount);
     elements.status.textContent = count ? text.available : text.noQuestions;
     updateUrl();
   }
@@ -192,6 +216,9 @@
     if ([...elements.category.options].some(item => item.value === requestedCategory)) elements.category.value = requestedCategory;
     if ([10, 25, 50, 100].includes(requestedSize)) state.size = requestedSize;
     elements.sizeButtons.forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.practiceSize) === state.size)));
+    if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
+    else if (requestedCategory && [...elements.category.options].some(item => item.value === requestedCategory)) setMode('category', false);
+    else setMode('all', false);
     elements.setup.hidden = false;
     elements.status.hidden = false;
     updateAvailability();
@@ -358,6 +385,9 @@
 
   elements.formula.addEventListener('change', updateAvailability);
   elements.category.addEventListener('change', updateAvailability);
+  elements.modeButtons.forEach(button => button.addEventListener('click', () => {
+    setMode(button.dataset.practiceMode);
+  }));
   elements.sizeButtons.forEach(button => button.addEventListener('click', () => {
     state.size = Number(button.dataset.practiceSize);
     elements.sizeButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
