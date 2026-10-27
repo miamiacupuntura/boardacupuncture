@@ -9,6 +9,7 @@ import { dampFormulaComparisons } from './formula_comparisons_damp_batch.mjs';
 import { phlegmFormulaComparisons } from './formula_comparisons_phlegm_batch.mjs';
 import { warmInteriorFormulaComparisons } from './formula_comparisons_warm_interior_batch.mjs';
 import { tonifyFormulaComparisons } from './formula_comparisons_tonify_batch.mjs';
+import { regulateQiFormulaComparisons } from './formula_comparisons_regulate_qi_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -213,6 +214,7 @@ const cards = [
       fast: ['Wind-Cold constrains the Exterior while Phlegm-Heat obstructs the Lungs; copious thick sputum is prominent.', 'Lung Heat is more intense; fever, thirst and heat signs dominate, with cough and wheezing.'],
       rows: [
         ['Core pattern', 'External Wind-Cold with internal Phlegm-Heat.', 'Lung Heat with an unresolved Exterior component.'],
+        ['Chief emphasis', 'Bai Guo and Ma Huang focus on arresting wheeze and descending Lung Qi amid Phlegm-Heat.', 'Shi Gao strongly clears Lung Heat while Ma Huang restores diffusion.'],
         ['Phlegm clue', 'Copious, thick and often yellow sputum.', 'Phlegm may occur, but strong Lung Heat is the central clue.'],
         ['Heat clue', 'Heat is present but embedded in a mixed Cold/Heat pattern.', 'High fever, thirst, sweating and a strong rapid pulse may dominate.'],
         ['Therapeutic emphasis', 'Arrests wheezing and clears Phlegm-Heat while releasing constraint.', 'Strongly clears Lung Heat while facilitating Lung-Qi diffusion.'],
@@ -231,6 +233,7 @@ const cards = [
       fast: ['Viento-Frío constriñe el Exterior mientras Flema-Calor obstruye Pulmón; destaca el esputo espeso y abundante.', 'El Calor de Pulmón es más intenso; predominan fiebre, sed y signos de Calor junto con tos y sibilancias.'],
       rows: [
         ['Patrón central', 'Viento-Frío externo con Flema-Calor interna.', 'Calor de Pulmón con componente Exterior no resuelto.'],
+        ['Énfasis principal', 'Bai Guo y Ma Huang se centran en detener sibilancia y descender Qi pulmonar con Flema-Calor.', 'Shi Gao elimina fuertemente Calor de Pulmón mientras Ma Huang restaura difusión.'],
         ['Pista de Flema', 'Esputo abundante, espeso y a menudo amarillo.', 'Puede haber Flema, pero el fuerte Calor de Pulmón es la pista central.'],
         ['Pista de Calor', 'Hay Calor, pero dentro de un patrón mixto Frío/Calor.', 'Pueden predominar fiebre alta, sed, sudor y pulso fuerte-rápido.'],
         ['Énfasis terapéutico', 'Detiene sibilancias y elimina Flema-Calor mientras libera constricción.', 'Elimina fuertemente Calor de Pulmón y facilita la difusión del Qi pulmonar.'],
@@ -2006,7 +2009,8 @@ cards.push(
       rows: [
         ['Thermal pattern', 'Deficiency with residual Heat.', 'Deficiency with internal Cold.'],
         ['Primary action', 'Clears Heat and descends rebellious Qi while augmenting Stomach Qi.', 'Warms and tonifies the middle burner.'],
-        ['Decisive clue', 'Persistent hiccup or retching with Heat signs.', 'Cold abdominal pain and loose stools improved by warmth.'],
+        ['Decisive clue', 'Loud hiccup or belching worsened by warmth.', 'Quiet, weak hiccup or belching relieved by warmth; diarrhea may dominate.'],
+        ['Tongue and pulse', 'Red tongue; weak and rapid pulse.', 'Pale tongue; deep, weak and slow pulse.'],
         ['Exam shortcut', 'Weak, hot, rebellious Stomach.', 'Weak, cold middle burner.']
       ],
       why: 'Both may vomit from deficiency, so temperature is decisive: Ju Pi Zhu Ru clears residual Heat; Li Zhong restores deficient warmth.',
@@ -2022,7 +2026,8 @@ cards.push(
       rows: [
         ['Patrón térmico', 'Deficiencia con Calor residual.', 'Deficiencia con Frío interno.'],
         ['Acción', 'Elimina Calor y desciende Qi rebelde mientras aumenta Qi de Estómago.', 'Calienta y tonifica Jiao Medio.'],
-        ['Pista decisiva', 'Hipo o arcadas persistentes con signos de Calor.', 'Dolor frío y heces blandas mejorados por calor.'],
+        ['Pista decisiva', 'Hipo o eructo fuerte empeorado por calor.', 'Hipo o eructo silencioso y débil aliviado por calor; puede dominar diarrea.'],
+        ['Lengua y pulso', 'Lengua roja; pulso débil y rápido.', 'Lengua pálida; pulso profundo, débil y lento.'],
         ['Atajo', 'Estómago débil, caliente y rebelde.', 'Jiao Medio débil y frío.']
       ],
       why: 'Ambas pueden vomitar por deficiencia; la temperatura decide: Ju Pi elimina Calor residual y Li Zhong restaura calor deficiente.',
@@ -3038,6 +3043,7 @@ cards.push(...dampFormulaComparisons);
 cards.push(...phlegmFormulaComparisons);
 cards.push(...warmInteriorFormulaComparisons);
 cards.push(...tonifyFormulaComparisons);
+cards.push(...regulateQiFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
