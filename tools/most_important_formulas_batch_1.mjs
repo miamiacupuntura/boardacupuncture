@@ -1,0 +1,112 @@
+export const mostImportantFormulaBatch1 = [
+  {
+    slug: 'an-mian-wan-important-formula', name: 'An Mian Wan', nameEs: 'An Mian Wan',
+    category: 'Calm the Spirit', categoryEs: 'Calmar el Shen',
+    pattern: 'Insomnia with agitation in the supplied high-yield list.', patternEs: 'Insomnio con agitación según la lista de alto rendimiento.',
+    action: 'Calms the Spirit and supports sleep; the exact presentation must guide selection.', actionEs: 'Calma el Shen y apoya el sueño; la presentación completa debe guiar la selección.',
+    clue: 'The exam anchor is insomnia in which agitation—not simple fatigue—is prominent.', clueEs: 'La pista de examen es insomnio donde destaca agitación, no simple cansancio.',
+    contrast: 'Do not confuse a symptom association with a complete pattern diagnosis; compare Heat, Phlegm, Blood and Yin signs.', contrastEs: 'No confundas asociación sintomática con diagnóstico completo; compara Calor, Flema, Sangre y Yin.',
+    memory: 'An Mian: “peaceful sleep,” but always identify why sleep is disturbed.', memoryEs: 'An Mian: “sueño tranquilo”, pero identifica por qué se altera.',
+    safety: 'Persistent insomnia, mania, severe agitation, suicidality or medication-related sleep change requires professional evaluation.', safetyEs: 'Insomnio persistente, manía, agitación grave, ideas suicidas o cambio por medicamentos requiere evaluación profesional.',
+    search: 'an mian wan insomnia agitation calm spirit shen sleep'
+  },
+  {
+    slug: 'an-shen-ding-zhi-wan-important-formula', name: 'An Shen Ding Zhi Wan', nameEs: 'An Shen Ding Zhi Wan',
+    category: 'Calm the Spirit · Transform Phlegm', categoryEs: 'Calmar Shen · Transformar Flema',
+    pattern: 'Insubstantial Phlegm misting the Heart with underlying deficiency in the supplied list.', patternEs: 'Flema insustancial nublando Corazón con deficiencia subyacente según la lista.',
+    action: 'Settles fright, calms the Spirit and addresses Phlegm-related clouding while supporting deficiency.', actionEs: 'Asienta susto, calma Shen y aborda nubosidad por Flema apoyando deficiencia.',
+    clue: 'Palpitations, fright, restlessness or poor concentration with a deficient, Phlegm-tinged presentation.', clueEs: 'Palpitaciones, susto, inquietud o concentración pobre con presentación deficiente y Flema.',
+    contrast: 'Wen Dan Tang is more clearly Phlegm-Heat/GB–ST disharmony; this formula is deficiency-weighted and fright-centered.', contrastEs: 'Wen Dan Tang es más Flema-Calor/desarmonía VB–E; esta es más deficiente y centrada en susto.',
+    memory: 'An Shen calms; Ding Zhi stabilizes resolve.', memoryEs: 'An Shen calma; Ding Zhi estabiliza la voluntad.',
+    safety: 'New confusion, hallucinations, chest symptoms or severe psychiatric change requires urgent biomedical assessment.', safetyEs: 'Confusión nueva, alucinaciones, síntomas torácicos o cambio psiquiátrico grave requiere evaluación urgente.',
+    search: 'an shen ding zhi wan fright palpitations phlegm misting heart deficiency calm spirit'
+  },
+  {
+    slug: 'ba-wei-di-huang-wan-important-formula', name: 'Ba Wei Di Huang Wan', nameEs: 'Ba Wei Di Huang Wan',
+    category: 'Warm and Tonify Kidney Yang', categoryEs: 'Calentar y Tonificar Yang de Riñón',
+    pattern: 'Kidney Yang deficiency with weakness of Essence and water transformation.', patternEs: 'Deficiencia de Yang de Riñón con debilidad de Esencia y transformación de agua.',
+    action: 'Warms Kidney Yang on a Liu Wei Di Huang Wan foundation and supports transformation of fluids.', actionEs: 'Calienta Yang renal sobre base Liu Wei Di Huang Wan y apoya transformación de líquidos.',
+    clue: 'Cold low back/limbs, clear abundant urine or edema with a pale wet tongue and deep weak pulse.', clueEs: 'Lumbar/miembros fríos, orina clara abundante o edema con lengua pálida mojada y pulso profundo-débil.',
+    contrast: 'Liu Wei Di Huang Wan nourishes Kidney Yin; Ba Wei adds warming Yang support and is often equated with Jin Gui Shen Qi Wan.', contrastEs: 'Liu Wei nutre Yin renal; Ba Wei añade soporte de Yang y suele equipararse con Jin Gui Shen Qi Wan.',
+    memory: 'Six ingredients nourish the base; eight ingredients warm the gate.', memoryEs: 'Seis nutren la base; ocho calientan la puerta.',
+    safety: 'Not for unconfirmed Heat presentations. Sudden edema, reduced urine or breathlessness requires medical evaluation.', safetyEs: 'No para Calor no confirmado. Edema súbito, menos orina o disnea requiere evaluación médica.',
+    search: 'ba wei di huang wan rehmannia eight kidney yang essence cold clear urine edema jin gui shen qi'
+  },
+  {
+    slug: 'ba-zhen-tang-important-formula', name: 'Ba Zhen Tang', nameEs: 'Ba Zhen Tang',
+    category: 'Tonify Qi and Blood', categoryEs: 'Tonificar Qi y Sangre',
+    pattern: 'Combined Qi and Blood deficiency.', patternEs: 'Deficiencia combinada de Qi y Sangre.',
+    action: 'Combines the functions of Si Jun Zi Tang and Si Wu Tang to supplement Qi and nourish Blood.', actionEs: 'Combina funciones de Si Jun Zi Tang y Si Wu Tang para suplementar Qi y nutrir Sangre.',
+    clue: 'Fatigue and poor appetite occur together with pallor, dizziness, palpitations or scanty menses.', clueEs: 'Fatiga/poco apetito aparecen con palidez, mareo, palpitaciones o menstruación escasa.',
+    contrast: 'Si Jun Zi Tang is Qi-only; Si Wu Tang is Blood-focused; Shi Quan Da Bu Tang adds warming support.', contrastEs: 'Si Jun Zi Tang es Qi; Si Wu Tang se centra en Sangre; Shi Quan Da Bu añade calentamiento.',
+    memory: 'Four Gentlemen plus Four Substances equals Eight Treasures.', memoryEs: 'Cuatro Caballeros más Cuatro Sustancias igual Ocho Tesoros.',
+    safety: 'Fatigue or pallor may indicate anemia, bleeding, endocrine or cardiac disease and warrants appropriate testing.', safetyEs: 'Fatiga o palidez puede indicar anemia, sangrado, trastorno endocrino o cardíaco y requiere pruebas.',
+    search: 'ba zhen tang eight treasures qi blood deficiency si jun zi si wu shi quan da bu'
+  },
+  {
+    slug: 'ba-zhen-yi-mu-wan-important-formula', name: 'Ba Zhen Yi Mu Wan', nameEs: 'Ba Zhen Yi Mu Wan',
+    category: 'Tonify Qi and Blood · Gynecology', categoryEs: 'Tonificar Qi y Sangre · Ginecología',
+    pattern: 'Liver/Heart Blood deficiency with Spleen Qi deficiency in the supplied list.', patternEs: 'Deficiencia de Sangre de Hígado/Corazón con Qi de Bazo deficiente según la lista.',
+    action: 'Builds Qi and Blood while addressing menstrual regulation in a deficient presentation.', actionEs: 'Construye Qi y Sangre mientras regula menstruación en presentación deficiente.',
+    clue: 'Scanty or irregular menstruation with fatigue, pallor, dizziness and poor appetite.', clueEs: 'Menstruación escasa/irregular con fatiga, palidez, mareo y poco apetito.',
+    contrast: 'Ba Zhen Tang is the general Qi–Blood base; Ba Zhen Yi Mu Wan adds a women’s menstrual emphasis.', contrastEs: 'Ba Zhen Tang es base general Qi–Sangre; Ba Zhen Yi Mu añade énfasis menstrual.',
+    memory: 'Eight Treasures plus Yi Mu: deficient menstruation is the exam direction.', memoryEs: 'Ocho Tesoros más Yi Mu: menstruación deficiente es la dirección de examen.',
+    safety: 'Pregnancy, heavy bleeding, severe pelvic pain or unexplained menstrual change requires medical evaluation.', safetyEs: 'Embarazo, sangrado abundante, dolor pélvico grave o cambio menstrual inexplicado requiere evaluación.',
+    search: 'ba zhen yi mu wan women precious liver heart blood spleen qi deficiency menstruation'
+  },
+  {
+    slug: 'ba-zheng-san-important-formula', name: 'Ba Zheng San', nameEs: 'Ba Zheng San',
+    category: 'Clear Damp-Heat from the Lower Burner', categoryEs: 'Eliminar Humedad-Calor del Calentador Inferior',
+    pattern: 'Damp-Heat clumping in the Lower Burner with painful urinary dysfunction.', patternEs: 'Humedad-Calor acumulada en Calentador Inferior con disfunción urinaria dolorosa.',
+    action: 'Clears Heat, drains Dampness and promotes urination.', actionEs: 'Aclara Calor, drena Humedad y promueve micción.',
+    clue: 'Burning, dark, scant or difficult urination with urgency and a sticky yellow coat.', clueEs: 'Orina ardiente, oscura, escasa o difícil con urgencia y capa amarilla pegajosa.',
+    contrast: 'Suo Quan Wan treats frequent pale abundant urine from deficiency-Cold, the opposite thermal and excess/deficiency picture.', contrastEs: 'Suo Quan Wan trata orina frecuente pálida abundante por Frío deficiente, cuadro opuesto.',
+    memory: 'Ba Zheng rectifies eight directions of hot urinary blockage.', memoryEs: 'Ba Zheng rectifica el bloqueo urinario caliente.',
+    safety: 'Fever, flank pain, vomiting, pregnancy, blood in urine or urinary retention requires urgent medical care.', safetyEs: 'Fiebre, dolor de flanco, vómito, embarazo, sangre o retención urinaria requiere urgencia.',
+    search: 'ba zheng san bladder lower burner damp heat burning dark difficult urine lin'
+  },
+  {
+    slug: 'bai-he-gu-jin-tang-important-formula', name: 'Bai He Gu Jin Tang', nameEs: 'Bai He Gu Jin Tang',
+    category: 'Nourish Lung and Kidney Yin', categoryEs: 'Nutrir Yin de Pulmón y Riñón',
+    pattern: 'Lung dryness/Yin deficiency with chronic dry cough.', patternEs: 'Sequedad/deficiencia de Yin de Pulmón con tos seca crónica.',
+    action: 'Nourishes Yin, moistens the Lung, transforms scant Phlegm and stops cough.', actionEs: 'Nutre Yin, humecta Pulmón, transforma Flema escasa y detiene tos.',
+    clue: 'Dry cough, dry throat and scant difficult sputum, possibly blood-streaked, in a chronic deficient picture.', clueEs: 'Tos seca, garganta seca y poco esputo difícil, quizá con sangre, en cuadro crónico deficiente.',
+    contrast: 'Bei Mu Gua Lou San addresses Dry-Phlegm more directly; Bai He Gu Jin Tang emphasizes underlying Yin deficiency.', contrastEs: 'Bei Mu Gua Lou San aborda Flema-Seca directamente; Bai He Gu Jin enfatiza Yin deficiente.',
+    memory: 'Bai He moistens; Gu Jin “preserves Metal.”', memoryEs: 'Bai He humecta; Gu Jin “preserva el Metal”.',
+    safety: 'Coughing blood, breathlessness, fever, low oxygen or unexplained weight loss requires prompt evaluation.', safetyEs: 'Sangre al toser, disnea, fiebre, oxígeno bajo o pérdida de peso requiere evaluación pronta.',
+    search: 'bai he gu jin tang lung dryness yin deficiency dry cough throat scant sputum preserve metal'
+  },
+  {
+    slug: 'bai-tou-weng-tang-important-formula', name: 'Bai Tou Weng Tang', nameEs: 'Bai Tou Weng Tang',
+    category: 'Clear Toxic Heat · Dysentery', categoryEs: 'Eliminar Calor Tóxico · Disentería',
+    pattern: 'Toxic Heat in the intestines causing hot dysenteric disorder.', patternEs: 'Calor Tóxico intestinal causando trastorno disentérico caliente.',
+    action: 'Clears Heat, resolves toxicity, cools Blood and stops dysentery.', actionEs: 'Aclara Calor, resuelve toxicidad, enfría Sangre y detiene disentería.',
+    clue: 'Urgent diarrhea with blood and mucus, abdominal pain, tenesmus and Heat signs.', clueEs: 'Diarrea urgente con sangre/moco, dolor abdominal, tenesmo y signos de Calor.',
+    contrast: 'Ge Gen Qin Lian Tang emphasizes Damp-Heat diarrhea; Bai Tou Weng Tang is the classic bloody Toxic-Heat anchor.', contrastEs: 'Ge Gen Qin Lian enfatiza diarrea Humedad-Calor; Bai Tou Weng es ancla de Calor Tóxico sanguinolento.',
+    memory: 'Bai Tou Weng: bloody dysentery from Toxic Heat.', memoryEs: 'Bai Tou Weng: disentería sanguinolenta por Calor Tóxico.',
+    safety: 'Bloody diarrhea, fever, severe pain, fainting or dehydration requires urgent medical care and testing.', safetyEs: 'Diarrea sanguinolenta, fiebre, dolor grave, síncope o deshidratación requiere atención urgente/pruebas.',
+    search: 'bai tou weng tang toxic heat dysentery bloody mucus diarrhea tenesmus intestine'
+  },
+  {
+    slug: 'ban-xia-bai-zhu-tian-ma-tang-important-formula', name: 'Ban Xia Bai Zhu Tian Ma Tang', nameEs: 'Ban Xia Bai Zhu Tian Ma Tang',
+    category: 'Transform Phlegm · Extinguish Wind', categoryEs: 'Transformar Flema · Extinguir Viento',
+    pattern: 'Wind-Phlegm rising from Spleen deficiency and Dampness.', patternEs: 'Viento-Flema ascendiendo desde deficiencia de Bazo y Humedad.',
+    action: 'Dries Dampness, transforms Phlegm, strengthens Spleen and calms internal Wind.', actionEs: 'Seca Humedad, transforma Flema, fortalece Bazo y calma Viento interno.',
+    clue: 'Dizziness/vertigo with nausea, heavy head, copious Phlegm and a slippery or wiry-slippery pulse.', clueEs: 'Mareo/vértigo con náusea, cabeza pesada, Flema abundante y pulso resbaladizo o cuerda-resbaladizo.',
+    contrast: 'Tian Ma Gou Teng Yin treats Liver Yang/Wind with Heat; this formula is Damp-Phlegm and Spleen-deficiency weighted.', contrastEs: 'Tian Ma Gou Teng Yin trata Yang/Viento de Hígado con Calor; esta pondera Flema-Humedad/Bazo deficiente.',
+    memory: 'Ban Xia dries Phlegm; Tian Ma quiets Wind; Bai Zhu supports the source.', memoryEs: 'Ban Xia seca Flema; Tian Ma calma Viento; Bai Zhu apoya la fuente.',
+    safety: 'Sudden severe vertigo, weakness, speech change, severe headache or inability to walk may indicate stroke and is an emergency.', safetyEs: 'Vértigo súbito grave, debilidad, habla alterada, cefalea intensa o no poder caminar puede ser ACV: emergencia.',
+    search: 'ban xia bai zhu tian ma tang wind phlegm dizziness vertigo nausea spleen damp'
+  },
+  {
+    slug: 'ban-xia-hou-po-tang-important-formula', name: 'Ban Xia Hou Po Tang', nameEs: 'Ban Xia Hou Po Tang',
+    category: 'Move Qi · Transform Phlegm', categoryEs: 'Mover Qi · Transformar Flema',
+    pattern: 'Liver Qi and Phlegm stagnation lodging in the throat—Plum-Pit Qi.', patternEs: 'Estancamiento de Qi de Hígado y Flema alojado en garganta—Qi de Hueso de Ciruela.',
+    action: 'Moves Qi, disperses constraint, transforms Phlegm and redirects rebellious Qi.', actionEs: 'Mueve Qi, dispersa constricción, transforma Flema y redirige Qi rebelde.',
+    clue: 'A persistent lump-in-throat sensation that cannot be swallowed or coughed out, often varying with emotion.', clueEs: 'Sensación persistente de bulto en garganta que no se traga ni expectora, variable con emoción.',
+    contrast: 'Cang Er Zi San treats nasal obstruction; this formula treats throat constraint from Qi–Phlegm interaction.', contrastEs: 'Cang Er Zi San trata obstrucción nasal; esta trata constricción de garganta por Qi–Flema.',
+    memory: 'Ban Xia transforms the material; Hou Po opens the constrained space.', memoryEs: 'Ban Xia transforma lo material; Hou Po abre el espacio constreñido.',
+    safety: 'True difficulty swallowing, choking, weight loss, neck mass or progressive hoarseness requires medical examination.', safetyEs: 'Disfagia verdadera, atragantamiento, pérdida de peso, masa cervical o ronquera progresiva requiere examen.',
+    search: 'ban xia hou po tang plum pit qi globus throat liver qi phlegm stagnation'
+  }
+];
