@@ -1,6 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { safetyLibraryExpansion } from './safety_library_expansion.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-2';
@@ -214,6 +215,8 @@ const topics = [
   }
 ];
 
+topics.push(...safetyLibraryExpansion);
+
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
@@ -234,11 +237,11 @@ function detailPage(topic, language) {
   }).join('');
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(topic.summary[language])}"><title>${esc(topic.title[language])} | ${es ? 'Biblioteca de Seguridad' : 'Safety Library'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="${index}"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>${es ? 'Biblioteca de Seguridad' : 'Safety Library'}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="${index}">${es ? '← Volver a Seguridad' : '← Back to Safety'}</a></span></div></header>
-<main class="comparison-shell"><article class="study-note"><p class="comparison-eyebrow">${es ? `Seguridad ${topic.number} de 4` : `Safety ${topic.number} of 4`}</p><h1 class="study-note__title">${esc(topic.title[language])}</h1><p>${esc(topic.summary[language])}</p>
+<main class="comparison-shell"><article class="study-note"><p class="comparison-eyebrow">${es ? `Seguridad ${topic.number} de ${topics.length}` : `Safety ${topic.number} of ${topics.length}`}</p><h1 class="study-note__title">${esc(topic.title[language])}</h1><p>${esc(topic.summary[language])}</p>
 <section class="study-note__block"><h2 class="study-note__heading">${es ? 'Regla principal' : 'Core rule'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Regla' : 'Rule'}</th><td>${esc(data.rule)}</td></tr></tbody></table></section>${sections}
 <section class="study-note__block"><h2 class="study-note__heading study-note__heading--purple">${es ? 'Cuándo actuar de inmediato' : 'When to act immediately'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Emergencia' : 'Emergency'}</th><td>${esc(data.emergency)}</td></tr></tbody></table></section>
 <p><strong>${es ? 'Uso educativo:' : 'Educational use:'}</strong> ${es ? 'esta biblioteca no sustituye evaluación médica, toxicología, normativa local ni consulta farmacológica.' : 'this library does not replace medical evaluation, poison control, local regulation or pharmacist consultation.'}</p>
-</article></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Grupo 9 · Seguridad enlazada' : 'Group 9 · Linked safety'}</div></footer></body></html>`;
+</article></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Grupo 9 · Seguridad clínica enlazada' : 'Group 9 · Linked clinical safety'}</div></footer></body></html>`;
 }
 
 function indexPage(language) {
@@ -248,7 +251,7 @@ function indexPage(language) {
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="safety${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 9 · Seguridad clínica' : 'Group 9 · Clinical safety'}</p><h1>${es ? 'Biblioteca de Seguridad' : 'Safety Library'}</h1><p>${es ? 'Consulta preparación, toxicidad, interacciones y regulación desde una sola biblioteca enlazada con los grupos de estudio.' : 'Check preparation, toxicity, interactions and regulation in one library linked to every study group.'}</p></section>
 ${nav(es)}
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar seguridad' : 'Search safety'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar sustancia, riesgo o procedimiento' : 'Search substance, risk or procedure'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Secciones disponibles' : 'Available sections'}</h2><p><span data-visible-count>${topics.length}</span> ${es ? 'secciones de seguridad' : 'safety sections'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna sección coincide.' : 'No safety sections match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Preparación · Toxicidad · Interacciones · Regulación' : 'Preparation · Toxicity · Interactions · Regulation'}</div></footer></body></html>`;
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar seguridad' : 'Search safety'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar sustancia, riesgo o procedimiento' : 'Search substance, risk or procedure'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Secciones disponibles' : 'Available sections'}</h2><p><span data-visible-count>${topics.length}</span> ${es ? 'secciones de seguridad' : 'safety sections'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna sección coincide.' : 'No safety sections match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Preparación · Toxicidad · Embarazo · Interacciones · Regulación' : 'Preparation · Toxicity · Pregnancy · Interactions · Regulation'}</div></footer></body></html>`;
 }
 
 for (const topic of topics) {
