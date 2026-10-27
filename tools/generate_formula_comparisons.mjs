@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { exteriorFormulaComparisons } from './formula_comparisons_exterior_batch.mjs';
 import { clearHeatFormulaComparisons } from './formula_comparisons_clear_heat_batch.mjs';
 import { purgeFormulaComparisons } from './formula_comparisons_purge_batch.mjs';
+import { harmonizeFormulaComparisons } from './formula_comparisons_harmonize_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -331,6 +332,7 @@ const cards = [
         ['Category', 'Formula that warms the Interior and rescues devastated Yang.', 'Harmonizing formula that spreads constrained Yang/Qi.'],
         ['Mechanism', 'Yang is too weak to warm the body.', 'Yang exists but is blocked from reaching the extremities.'],
         ['Decisive signs', 'Profuse clear diarrhea, absence of thirst, fatigue, curled posture and a minute or faint pulse.', 'Cold hands/feet with irritability, abdominal pain or diarrhea and a wiry pulse.'],
+        ['Cold distribution', 'Cold may extend above wrists and ankles toward elbows and knees and is difficult to warm by touch.', 'Cold is concentrated in fingers and toes and may warm somewhat with touch.'],
         ['Therapeutic direction', 'Warm the Interior and restore Yang.', 'Spread Liver Qi, harmonize Liver and Spleen, and release constraint.'],
         ['Name trap', 'Tang: collapse and true Cold.', 'San: constraint, not true Yang collapse.']
       ],
@@ -349,6 +351,7 @@ const cards = [
         ['Categoría', 'Fórmula que calienta Interior y rescata Yang devastado.', 'Fórmula armonizante que difunde Yang/Qi constreñido.'],
         ['Mecanismo', 'Yang es demasiado débil para calentar el cuerpo.', 'Yang existe, pero está bloqueado y no llega a las extremidades.'],
         ['Signos decisivos', 'Diarrea clara profusa, ausencia de sed, fatiga, postura encogida y pulso diminuto o tenue.', 'Manos/pies fríos con irritabilidad, dolor abdominal o diarrea y pulso de cuerda.'],
+        ['Distribución del frío', 'El frío puede subir desde muñecas y tobillos hacia codos y rodillas y cuesta calentarlo con contacto.', 'El frío se concentra en dedos y puede calentarse parcialmente con contacto.'],
         ['Dirección terapéutica', 'Calentar Interior y restaurar Yang.', 'Difundir Qi de Hígado, armonizar Hígado-Bazo y liberar estancamiento.'],
         ['Trampa del nombre', 'Tang: colapso y Frío verdadero.', 'San: estancamiento, no colapso verdadero de Yang.']
       ],
@@ -454,6 +457,7 @@ const cards = [
       rows: [
         ['Location', 'Half-exterior, half-interior Shaoyang level.', 'Epigastrium and middle burner.'],
         ['Mechanism', 'Pathogen lodged in Shaoyang with pivot dysfunction.', 'Cold and Heat bind with Stomach-Qi rebellion and Spleen deficiency.'],
+        ['Ingredients', 'Chai Hu and Sheng Jiang distinguish it; both formulas share Ban Xia, Huang Qin, Ren Shen, Da Zao and Zhi Gan Cao.', 'Huang Lian and Gan Jiang distinguish it; both formulas share Ban Xia, Huang Qin, Ren Shen, Da Zao and Zhi Gan Cao.'],
         ['Decisive clue', 'Alternating chills and fever.', 'Painless or mildly tender focal epigastric distention.'],
         ['Associated signs', 'Bitter taste, dry throat, dizziness, wiry pulse.', 'Vomiting with diarrhea, intestinal sounds and epigastric fullness.'],
         ['Exam shortcut', 'Harmonize Shaoyang.', 'Open the epigastric bind.']
@@ -471,6 +475,7 @@ const cards = [
       rows: [
         ['Localización', 'Nivel Shaoyang mitad Exterior-mitad Interior.', 'Epigastrio y Jiao Medio.'],
         ['Mecanismo', 'Patógeno alojado en Shaoyang con disfunción de la bisagra.', 'Frío y Calor se ligan con Qi rebelde de Estómago y deficiencia de Bazo.'],
+        ['Ingredientes', 'Chai Hu y Sheng Jiang la distinguen; ambas comparten Ban Xia, Huang Qin, Ren Shen, Da Zao y Zhi Gan Cao.', 'Huang Lian y Gan Jiang la distinguen; ambas comparten Ban Xia, Huang Qin, Ren Shen, Da Zao y Zhi Gan Cao.'],
         ['Pista decisiva', 'Alternancia de escalofríos y fiebre.', 'Distensión epigástrica focal indolora o poco sensible.'],
         ['Signos asociados', 'Sabor amargo, garganta seca, mareo, pulso de cuerda.', 'Vómito con diarrea, ruidos intestinales y plenitud epigástrica.'],
         ['Atajo de examen', 'Armonizar Shaoyang.', 'Abrir la ligadura epigástrica.']
@@ -977,7 +982,9 @@ cards.push(
       rows: [
         ['Mechanism', 'Cold and Heat bind while Stomach Qi rebels and Spleen Qi sinks.', 'Middle-burner Yang/Qi deficiency generates Cold.'],
         ['Therapeutic direction', 'Open the bind, clear Heat and warm Cold simultaneously.', 'Warm and tonify Spleen-Stomach.'],
+        ['Ingredients', 'Ban Xia, Huang Qin, Huang Lian and Da Zao distinguish it; both share Gan Jiang, Ren Shen and Zhi Gan Cao.', 'Bai Zhu distinguishes it; both share Gan Jiang, Ren Shen and Zhi Gan Cao.'],
         ['Decisive clue', 'Painless focal distention below the Heart.', 'Cold pain and weak digestion without Heat signs.'],
+        ['Tongue and pulse', 'Thin greasy yellow coat; wiry and rapid pulse.', 'Pale body with white coat; deep, weak or slow pulse.'],
         ['Exam shortcut', 'Mixed and knotted.', 'Cold and deficient.']
       ],
       why: 'Vomiting plus diarrhea is shared. Look for the epigastric bind and mixed signs versus a uniformly Cold, weak middle burner.',
@@ -993,7 +1000,9 @@ cards.push(
       rows: [
         ['Mecanismo', 'Frío y Calor se ligan mientras Qi de Estómago rebela y Qi de Bazo desciende.', 'Deficiencia de Yang/Qi de Jiao Medio genera Frío.'],
         ['Dirección', 'Abrir ligadura, eliminar Calor y calentar Frío simultáneamente.', 'Calentar y tonificar Bazo-Estómago.'],
+        ['Ingredientes', 'Ban Xia, Huang Qin, Huang Lian y Da Zao la distinguen; ambas comparten Gan Jiang, Ren Shen y Zhi Gan Cao.', 'Bai Zhu la distingue; ambas comparten Gan Jiang, Ren Shen y Zhi Gan Cao.'],
         ['Pista decisiva', 'Distensión focal indolora bajo Corazón.', 'Dolor frío y digestión débil sin signos de Calor.'],
+        ['Lengua y pulso', 'Capa amarilla, fina y grasosa; pulso de cuerda y rápido.', 'Cuerpo pálido con capa blanca; pulso profundo, débil o lento.'],
         ['Atajo de examen', 'Mixto y anudado.', 'Frío y deficiente.']
       ],
       why: 'Vómito más diarrea es compartido. Busca ligadura epigástrica y signos mixtos frente a Jiao Medio uniformemente frío-débil.',
@@ -1283,8 +1292,10 @@ cards.push(
       fast: ['Constraint blocks Yang from reaching extremities: cold fingers/toes, abdominal pain and a wiry pulse.', 'Constraint occurs with deficiency: emotional/PMS signs, fatigue, poor appetite and a wiry-weak pulse.'],
       rows: [
         ['Pattern character', 'More constrained/excess.', 'More deficient and chronic.'],
+        ['Ingredients', 'Zhi Shi distinguishes it; both formulas share Chai Hu, Bai Shao and Zhi Gan Cao.', 'Dang Gui, Bai Zhu and Fu Ling distinguish it; both formulas share Chai Hu, Bai Shao and Zhi Gan Cao.'],
         ['Distinct action', 'Unbinds constrained Yang and regulates the pivot.', 'Nourishes Blood and strengthens Spleen while moving Liver Qi.'],
         ['Decisive clue', 'Cold extremities with a warm trunk.', 'Mood and menstrual symptoms with digestive weakness.'],
+        ['Tongue and pulse', 'Dusky or red with a yellow coat; wiry and possibly rapid.', 'Dusky with a thin white coat; wiry and weak.'],
         ['Exam shortcut', 'Qi cannot reach the limbs.', 'Liver constraint drains Spleen and Blood.']
       ],
       why: 'Shared herbs and Liver-Spleen language make them easy to confuse. Cold extremities signal Si Ni San; deficiency and menstrual/emotional context signal Xiao Yao San.',
@@ -1299,8 +1310,10 @@ cards.push(
       fast: ['Estancamiento bloquea Yang hacia extremidades: dedos fríos, dolor abdominal y pulso de cuerda.', 'Estancamiento con deficiencia: signos emocionales/SPM, fatiga, poco apetito y pulso cuerda-débil.'],
       rows: [
         ['Carácter', 'Más constreñido/exceso.', 'Más deficiente y crónico.'],
+        ['Ingredientes', 'Zhi Shi la distingue; ambas comparten Chai Hu, Bai Shao y Zhi Gan Cao.', 'Dang Gui, Bai Zhu y Fu Ling la distinguen; ambas comparten Chai Hu, Bai Shao y Zhi Gan Cao.'],
         ['Acción distintiva', 'Desata Yang constreñido y regula bisagra.', 'Nutre Sangre y fortalece Bazo mientras mueve Qi de Hígado.'],
         ['Pista decisiva', 'Extremidades frías con tronco caliente.', 'Ánimo y menstruación con debilidad digestiva.'],
+        ['Lengua y pulso', 'Oscura o roja con capa amarilla; pulso de cuerda y posiblemente rápido.', 'Oscura con capa blanca fina; pulso de cuerda y débil.'],
         ['Atajo', 'Qi no llega a miembros.', 'Estancamiento agota Bazo y Sangre.']
       ],
       why: 'Hierbas y lenguaje Hígado-Bazo coinciden. Extremidades frías señalan Si Ni; deficiencia y contexto menstrual/emocional señalan Xiao Yao.',
@@ -1706,6 +1719,7 @@ cards.push(
       fast: ['Excess Qi stagnation: distending pain and a wiry pulse dominate.', 'Qi constraint with deficiency: fatigue, poor appetite, pale signs and menstrual Blood deficiency accompany the mood symptoms.'],
       rows: [
         ['Root pattern', 'Liver-Qi stagnation, primarily excess.', 'Liver-Qi constraint with Spleen-Qi and Blood deficiency.'],
+        ['Ingredients', 'Chen Pi, Zhi Ke, Chuan Xiong and Xiang Fu distinguish it; both share Chai Hu, Bai Shao and Zhi Gan Cao.', 'Dang Gui, Bai Zhu, Fu Ling, Wei Jiang and Bo He distinguish it; both share Chai Hu, Bai Shao and Zhi Gan Cao.'],
         ['Pain clue', 'More pronounced distending rib-side, epigastric or abdominal pain.', 'Milder pain with fatigue, poor appetite or dizziness.'],
         ['Therapeutic emphasis', 'Moves Qi and relieves pain more strongly.', 'Courses Liver while nourishing Blood and strengthening Spleen.'],
         ['Exam shortcut', 'Stagnation needs movement.', 'Constraint needs movement plus support.']
@@ -1722,6 +1736,7 @@ cards.push(
       fast: ['Estancamiento de Qi en exceso: predominan dolor distensivo y pulso de cuerda.', 'Restricción con deficiencia: fatiga, poco apetito, palidez y deficiencia de Sangre acompañan síntomas emocionales.'],
       rows: [
         ['Patrón raíz', 'Estancamiento de Qi de Hígado principalmente excesivo.', 'Restricción de Qi de Hígado con deficiencia de Qi de Bazo y Sangre.'],
+        ['Ingredientes', 'Chen Pi, Zhi Ke, Chuan Xiong y Xiang Fu la distinguen; ambas comparten Chai Hu, Bai Shao y Zhi Gan Cao.', 'Dang Gui, Bai Zhu, Fu Ling, Wei Jiang y Bo He la distinguen; ambas comparten Chai Hu, Bai Shao y Zhi Gan Cao.'],
         ['Dolor', 'Dolor distensivo costal, epigástrico o abdominal más pronunciado.', 'Dolor más leve con fatiga, poco apetito o mareo.'],
         ['Énfasis', 'Mueve Qi y alivia dolor con mayor fuerza.', 'Regula Hígado mientras nutre Sangre y fortalece Bazo.'],
         ['Atajo', 'El estancamiento necesita movimiento.', 'La restricción necesita movimiento y apoyo.']
@@ -2998,6 +3013,7 @@ cards.push(
 cards.push(...exteriorFormulaComparisons);
 cards.push(...clearHeatFormulaComparisons);
 cards.push(...purgeFormulaComparisons);
+cards.push(...harmonizeFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
