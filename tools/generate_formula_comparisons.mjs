@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exteriorFormulaComparisons } from './formula_comparisons_exterior_batch.mjs';
 import { clearHeatFormulaComparisons } from './formula_comparisons_clear_heat_batch.mjs';
+import { purgeFormulaComparisons } from './formula_comparisons_purge_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -70,6 +71,8 @@ const cards = [
         ['Relative strength', 'Strongest of the three.', 'Moderate.', 'Gentler Qi movement; emphasizes Heat and Dryness.'],
         ['Key ingredients', 'Da Huang, Mang Xiao, Zhi Shi and Hou Po.', 'Da Huang, Zhi Shi and Hou Po; no Mang Xiao.', 'Da Huang, Mang Xiao and Zhi Gan Cao; no Zhi Shi or Hou Po.'],
         ['Abdominal clue', 'Marked distention, fullness, hardness and pain.', 'Distention and fullness with constipation, but less severe hardness.', 'Constipation and irritability with less marked distention/fullness.'],
+        ['Tongue coat', 'Dark yellow to black and very dry.', 'Deep yellow to brown and dry.', 'Yellow and dry, generally less severe.'],
+        ['Pulse', 'Rapid, deep and forceful.', 'Rapid and slippery.', 'Usually rapid; less forceful obstruction.'],
         ['Exam wording', 'Severe Yangming Fu-organ excess.', 'Moderate Yangming Fu-organ excess.', 'Yangming Heat and Dryness needing regulation of the Stomach.']
       ],
       why: 'The names identify a graded family. Da Cheng Qi combines forceful Qi movement with softening; Xiao omits the salt that softens hardness; Tiao Wei omits the strong Qi movers and adds licorice.',
@@ -87,6 +90,8 @@ const cards = [
         ['Fuerza relativa', 'La más fuerte de las tres.', 'Moderada.', 'Movimiento de Qi más suave; enfatiza Calor y Sequedad.'],
         ['Ingredientes clave', 'Da Huang, Mang Xiao, Zhi Shi y Hou Po.', 'Da Huang, Zhi Shi y Hou Po; sin Mang Xiao.', 'Da Huang, Mang Xiao y Zhi Gan Cao; sin Zhi Shi ni Hou Po.'],
         ['Pista abdominal', 'Distensión, plenitud, dureza y dolor marcados.', 'Distensión y plenitud con estreñimiento, pero con menos dureza.', 'Estreñimiento e irritabilidad con menos distensión o plenitud.'],
+        ['Capa lingual', 'Amarillo oscuro a negro y muy seca.', 'Amarillo profundo a marrón y seca.', 'Amarilla y seca, generalmente menos grave.'],
+        ['Pulso', 'Rápido, profundo y fuerte.', 'Rápido y resbaladizo.', 'Usualmente rápido; obstrucción menos fuerte.'],
         ['Lenguaje de examen', 'Exceso grave del órgano Fu de Yangming.', 'Exceso moderado del órgano Fu de Yangming.', 'Calor y Sequedad de Yangming que requieren regular Estómago.']
       ],
       why: 'Los nombres identifican una familia graduada. Da Cheng Qi combina fuerte movimiento de Qi con ablandamiento; Xiao omite la sal que ablanda dureza; Tiao Wei omite los fuertes movilizadores de Qi y añade regaliz.',
@@ -2992,6 +2997,7 @@ cards.push(
 
 cards.push(...exteriorFormulaComparisons);
 cards.push(...clearHeatFormulaComparisons);
+cards.push(...purgeFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
