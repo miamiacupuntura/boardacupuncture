@@ -3,13 +3,15 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mostImportantFormulaBatch1 } from './most_important_formulas_batch_1.mjs';
 import { mostImportantFormulaBatch2 } from './most_important_formulas_batch_2.mjs';
+import { mostImportantFormulaBatch3 } from './most_important_formulas_batch_3.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-2';
 const totalOfficial = 85;
 const batches = [
   { number: 1, cards: mostImportantFormulaBatch1 },
-  { number: 2, cards: mostImportantFormulaBatch2 }
+  { number: 2, cards: mostImportantFormulaBatch2 },
+  { number: 3, cards: mostImportantFormulaBatch3 }
 ];
 const cards = batches.flatMap(batch => batch.cards.map((card, index) => ({ ...card, batch: batch.number, batchIndex: index + 1 })));
 const currentBatch = Math.max(...batches.map(batch => batch.number));
