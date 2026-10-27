@@ -94,10 +94,11 @@ RESOURCES = {
     ],
     "chinese-herbal-medicine": [
         ("Open Board course", "Abrir curso de Board", "/blocks/myprogress/study-guide.php?area=herbology", "/blocks/myprogress/study-guide.php?area=herbology"),
-        ("Three roster cards", "Tres tarjetas de listados", "chinese-herbal-medicine-cards.html", "chinese-herbal-medicine-cards-es.html"),
-        ("51 Duì Yào pairs", "51 parejas Duì Yào", "../comparisons/dui-yao.html", "../comparisons/dui-yao-es.html"),
-        ("Formula composition", "Composición de fórmulas", "../comparisons/formula-theory.html", "../comparisons/formula-theory-es.html"),
-        ("Safety Library", "Biblioteca de seguridad", "../comparisons/safety.html", "../comparisons/safety-es.html"),
+        ("Orientation · Route, changes and priorities", "Orientación · Ruta, cambios y prioridades", "chinese-herbal-medicine-cards.html", "chinese-herbal-medicine-cards-es.html"),
+        ("Step 1 · Individual herbs", "Paso 1 · Hierbas individuales", "../comparisons/index.html", "../comparisons/index-es.html"),
+        ("Step 2 · 51 Duì Yào pairs", "Paso 2 · 51 parejas Duì Yào", "../comparisons/dui-yao.html", "../comparisons/dui-yao-es.html"),
+        ("Step 3 · Formula composition", "Paso 3 · Composición de fórmulas", "../comparisons/formula-theory.html", "../comparisons/formula-theory-es.html"),
+        ("Safety throughout the route", "Seguridad durante toda la ruta", "../comparisons/safety.html", "../comparisons/safety-es.html"),
     ],
     "biomedicine": [
         ("Open Board course", "Abrir curso de Board", "/blocks/myprogress/study-guide.php?area=biomedicine", "/blocks/myprogress/study-guide.php?area=biomedicine"),
@@ -125,10 +126,10 @@ def board_page(board, lang):
     html = top(lang, title, alternate)
     hero_actions = ''
     if herbal:
-        hero_actions = f'''<div class="guide-actions guide-hero__actions"><a class="guide-button" href="chinese-herbal-medicine-cards{suffix}.html">{'Empieza aquí: abre las 3 tarjetas' if es else 'Start here: open the 3 cards'} →</a><a class="guide-button guide-button--outline" href="../comparisons/dui-yao{suffix}.html">{'Practicar 51 Duì Yào' if es else 'Practice 51 Duì Yào'} →</a></div>'''
+        hero_actions = f'''<div class="guide-actions guide-hero__actions"><a class="guide-button" href="../comparisons/index{suffix}.html">{'Comenzar Paso 1: hierbas individuales' if es else 'Start Step 1: individual herbs'} →</a><a class="guide-button guide-button--outline" href="chinese-herbal-medicine-cards{suffix}.html">{'Ver ruta, cambios y prioridades' if es else 'View route, changes and priorities'} →</a></div>'''
     html += f'''<section class="guide-hero"><p class="guide-eyebrow">{'Guía de Board' if es else 'Board guideline'}</p><h1>{escape(title)}</h1><p>{escape(summary)}</p>{hero_actions}</section>'''
     if herbal:
-        html += f'''<div class="guide-alert"><strong>{'¿Para qué sirve este módulo?' if es else 'What is this module for?'}</strong> {'Te indica qué debes estudiar, en qué orden abrir los recursos y qué debes ser capaz de hacer antes del examen. Empieza con las tres tarjetas para entender los listados vigentes; después avanza por los bloques A–D.' if es else 'It tells you what to study, which resources to open in what order, and what you must be able to do before the exam. Start with the three cards to understand the current rosters, then move through blocks A–D.'}</div>'''
+        html += f'''<div class="guide-alert"><strong>{'¿Para qué sirve este módulo?' if es else 'What is this module for?'}</strong> {'Te indica qué debes estudiar, en qué orden abrir los recursos y qué debes ser capaz de hacer antes del examen. Las tres tarjetas orientan el recorrido; el estudio comienza en A · Hierbas, continúa en B · Duì Yào y C · Fórmulas, con D · Seguridad integrado en todas las etapas.' if es else 'It tells you what to study, which resources to open in what order, and what you must be able to do before the exam. The three cards orient the route; study begins with A · Herbs, continues through B · Duì Yào and C · Formulas, with D · Safety integrated throughout.'}</div>'''
         cards = [
             ("1", "Qué vas a estudiar" if es else "What you will study", [
                 "A · Hierbas: diferéncialas por propiedades, acciones, indicaciones, dosis y seguridad." if es else "A · Herbs: distinguish them by properties, actions, indications, dosage and safety.",
