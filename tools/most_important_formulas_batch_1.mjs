@@ -1,18 +1,5 @@
 export const mostImportantFormulaBatch1 = [
   {
-    slug: 'an-mian-wan-important-formula', name: 'An Mian Wan', nameEs: 'An Mian Wan',
-    category: 'Calm the Spirit', categoryEs: 'Calmar el Shen',
-    pattern: 'Insomnia with agitation in the supplied high-yield list.', patternEs: 'Insomnio con agitación según la lista de alto rendimiento.',
-    action: 'Calms the Spirit and supports sleep; the exact presentation must guide selection.', actionEs: 'Calma el Shen y apoya el sueño; la presentación completa debe guiar la selección.',
-    clue: 'The exam anchor is insomnia in which agitation—not simple fatigue—is prominent.', clueEs: 'La pista de examen es insomnio donde destaca agitación, no simple cansancio.',
-    contrast: 'Do not confuse a symptom association with a complete pattern diagnosis; compare Heat, Phlegm, Blood and Yin signs.', contrastEs: 'No confundas asociación sintomática con diagnóstico completo; compara Calor, Flema, Sangre y Yin.',
-    ingredients: 'Variable proprietary formula: there is no single universal ingredient list for every product sold as An Mian Wan. Verify the exact source or manufacturer label before study or use.',
-    ingredientsEs: 'Fórmula patentada variable: no existe una lista universal única para todo producto vendido como An Mian Wan. Verifica la fuente o etiqueta del fabricante antes de estudiar o usar.',
-    memory: 'An Mian: “peaceful sleep,” but always identify why sleep is disturbed.', memoryEs: 'An Mian: “sueño tranquilo”, pero identifica por qué se altera.',
-    safety: 'Persistent insomnia, mania, severe agitation, suicidality or medication-related sleep change requires professional evaluation.', safetyEs: 'Insomnio persistente, manía, agitación grave, ideas suicidas o cambio por medicamentos requiere evaluación profesional.',
-    search: 'an mian wan insomnia agitation calm spirit shen sleep'
-  },
-  {
     slug: 'an-shen-ding-zhi-wan-important-formula', name: 'An Shen Ding Zhi Wan', nameEs: 'An Shen Ding Zhi Wan',
     category: 'Calm the Spirit · Transform Phlegm', categoryEs: 'Calmar Shen · Transformar Flema',
     pattern: 'Insubstantial Phlegm misting the Heart with underlying deficiency in the supplied list.', patternEs: 'Flema insustancial nublando Corazón con deficiencia subyacente según la lista.',
@@ -128,5 +115,18 @@ export const mostImportantFormulaBatch1 = [
     memory: 'Ban Xia transforms the material; Hou Po opens the constrained space.', memoryEs: 'Ban Xia transforma lo material; Hou Po abre el espacio constreñido.',
     safety: 'True difficulty swallowing, choking, weight loss, neck mass or progressive hoarseness requires medical examination.', safetyEs: 'Disfagia verdadera, atragantamiento, pérdida de peso, masa cervical o ronquera progresiva requiere examen.',
     search: 'ban xia hou po tang plum pit qi globus throat liver qi phlegm stagnation'
+  },
+  {
+    slug: 'bao-he-wan-important-formula', name: 'Bao He Wan', nameEs: 'Bao He Wan',
+    category: 'Reduce Food Stagnation', categoryEs: 'Reducir Estancamiento de Alimentos',
+    pattern: 'Food retention in the Middle Burner with impaired Stomach descent.', patternEs: 'Retención de alimentos en Calentador Medio con descenso de Estómago alterado.',
+    action: 'Reduces food stagnation, harmonizes the Stomach and transforms Phlegm.', actionEs: 'Reduce estancamiento alimentario, armoniza Estómago y transforma Flema.',
+    clue: 'Epigastric fullness after overeating with sour regurgitation, foul breath and a thick greasy coating.', clueEs: 'Plenitud epigástrica tras comer en exceso con regurgitación agria, mal aliento y capa grasosa espesa.',
+    contrast: 'Ping Wei San treats Dampness obstructing the middle; Bao He Wan requires retained food and sour-foul signs.', contrastEs: 'Ping Wei San trata Humedad en el centro; Bao He Wan requiere alimento retenido y signos agrio-fétidos.',
+    ingredients: 'Shan Zha, Shen Qu, Lai Fu Zi, Ban Xia, Chen Pi, Fu Ling and Lian Qiao.',
+    ingredientsEs: 'Shan Zha, Shen Qu, Lai Fu Zi, Ban Xia, Chen Pi, Fu Ling y Lian Qiao.',
+    memory: 'Bao He “preserves harmony” by clearing the meal that blocked it.', memoryEs: 'Bao He “preserva armonía” eliminando la comida que la bloqueó.',
+    safety: 'Severe pain, persistent vomiting, fever, inability to pass stool/gas or blood in vomit/stool requires urgent medical evaluation.', safetyEs: 'Dolor grave, vómito persistente, fiebre, no expulsar heces/gases o sangre requiere evaluación urgente.',
+    search: 'bao he wan food retention stagnation middle burner overeating sour regurgitation foul breath'
   }
 ];

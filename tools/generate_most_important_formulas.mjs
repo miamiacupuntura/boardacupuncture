@@ -5,7 +5,7 @@ import { mostImportantFormulaBatch1 } from './most_important_formulas_batch_1.mj
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-2';
-const totalOfficial = 86;
+const totalOfficial = 85;
 const batches = [{ number: 1, cards: mostImportantFormulaBatch1 }];
 const cards = batches.flatMap(batch => batch.cards.map((card, index) => ({ ...card, batch: batch.number, batchIndex: index + 1 })));
 
