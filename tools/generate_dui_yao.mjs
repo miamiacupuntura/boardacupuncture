@@ -1427,6 +1427,7 @@ function indexPage(language) {
   const searchScript = `<script>
 (function () {
   const input = document.querySelector('[data-comparison-search]');
+  const historyBack = document.querySelector('[data-history-back]');
   const cards = Array.from(document.querySelectorAll('.comparison-card'));
   const categories = Array.from(document.querySelectorAll('[data-dui-category]'));
   const total = document.querySelector('[data-visible-count]');
@@ -1452,12 +1453,26 @@ function indexPage(language) {
     if (empty) empty.hidden = visible !== 0;
   }
   if (input) input.addEventListener('input', refresh);
+  if (historyBack) {
+    historyBack.addEventListener('click', function (event) {
+      let sameSiteReferrer = false;
+      try {
+        sameSiteReferrer = Boolean(document.referrer) && new URL(document.referrer).origin === window.location.origin;
+      } catch (error) {
+        sameSiteReferrer = false;
+      }
+      if (sameSiteReferrer && window.history.length > 1) {
+        event.preventDefault();
+        window.history.back();
+      }
+    });
+  }
   refresh();
 }());
 <\/script>`;
 
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Las 51 parejas Duì Yào oficiales organizadas en 15 bloques clínicos.' : 'The 51 official Duì Yào pairs organized into 15 clinical blocks.'}"><title>${es ? 'Parejas Duì Yào por categorías' : 'Duì Yào Pairs by Category'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
-<header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
+<header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" data-history-back href="../guidelines/chinese-herbal-medicine${suffix}.html">${es ? '← Regresar' : '← Go back'}</a><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Paso 2 · Parejas de hierbas' : 'Step 2 · Herb pairs'}</p><h1>${es ? 'Duì Yào por bloques clínicos' : 'Duì Yào by Clinical Block'}</h1><p>${es ? 'Estudia las 51 parejas oficiales dentro de 15 categorías. Cada bloque reinicia su numeración para que puedas terminar un tema sin perder tu posición.' : 'Study all 51 official pairs within 15 categories. Numbering restarts in each block so you can finish one subject without losing your place.'}</p><div class="comparison-hero__actions"><a class="comparison-guideline-back" href="../guidelines/chinese-herbal-medicine${suffix}.html">${es ? '← Volver a la ruta de Medicina Herbal' : '← Back to Herbal Medicine route'}</a><a class="comparison-guideline-back comparison-guideline-back--outline" href="index${suffix}.html">${es ? '← Paso 1 · Hierbas' : '← Step 1 · Herbs'}</a><a class="comparison-guideline-back comparison-guideline-back--outline" href="formula-theory${suffix}.html">${es ? 'Paso 3 · Fórmulas →' : 'Step 3 · Formulas →'}</a></div></section>
 <nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${suffix}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${suffix}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${suffix}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${suffix}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${suffix}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${suffix}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a><a href="name-traps${suffix}.html">${es ? 'Trampas de Nombres' : 'Name Traps'}</a><a href="herb-families${suffix}.html">${es ? 'Familias y Partes' : 'Herb Families &amp; Parts'}</a><a href="safety${suffix}.html">${es ? 'Biblioteca de Seguridad' : 'Safety Library'}</a></nav>
 <section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, categoría, trabajo o fórmula' : 'Search pair, category, job or formula'}" data-comparison-search></label></section>
