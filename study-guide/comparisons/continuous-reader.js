@@ -114,8 +114,9 @@
       const groupTitle = doc.querySelector('.comparison-hero h1')?.textContent?.trim();
       if (groupTitle) ui.brand.textContent = groupTitle;
       chapters = [...doc.querySelectorAll('.comparison-card__open')]
-        .map(link => ({url: link.dataset.chapterUrl || link.getAttribute('href'), title: link.closest('.comparison-card')?.querySelector('h3')?.textContent?.trim()}))
-        .filter(chapter => chapter.url && chapter.title);
+        .map(link => ({url: link.dataset.chapterUrl || link.getAttribute('href'), title: link.closest('.comparison-card')?.querySelector('h3')?.textContent?.trim(), order: Number(link.dataset.chapterNumber)}))
+        .filter(chapter => chapter.url && chapter.title && Number.isFinite(chapter.order))
+        .sort((first, second) => first.order - second.order);
       if (!chapters.length) throw new Error(es ? 'no se encontraron tarjetas' : 'no chapter cards were found');
       current = Math.min(current, chapters.length - 1);
       await loadChapter(current, false);
