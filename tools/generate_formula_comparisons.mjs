@@ -5,6 +5,7 @@ import { exteriorFormulaComparisons } from './formula_comparisons_exterior_batch
 import { clearHeatFormulaComparisons } from './formula_comparisons_clear_heat_batch.mjs';
 import { purgeFormulaComparisons } from './formula_comparisons_purge_batch.mjs';
 import { harmonizeFormulaComparisons } from './formula_comparisons_harmonize_batch.mjs';
+import { dampFormulaComparisons } from './formula_comparisons_damp_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -116,8 +117,11 @@ const cards = [
       rows: [
         ['Pattern', 'Taiyang water accumulation from impaired Bladder Qi transformation.', 'Water and Heat in the lower burner with Yin injury.'],
         ['Distinct action', 'Warms Yang and transforms Qi.', 'Clears Heat and nourishes Yin.'],
+        ['Ingredients', 'Fu Ling, Zhu Ling and Ze Xie are shared; Gui Zhi and Bai Zhu distinguish Wu Ling San.', 'Fu Ling, Zhu Ling and Ze Xie are shared; E Jiao and Hua Shi distinguish Zhu Ling Tang.'],
         ['Key signs', 'Urinary difficulty, edema or fluid retention; thirst with difficulty processing ingested fluids.', 'Urinary difficulty with thirst, fever or irritability; may include painful urination or blood in the urine.'],
+        ['Water clue', 'May vomit soon after drinking because fluids cannot be transformed.', 'Desires and can take fluids, but thirst persists from Heat/Yin injury.'],
         ['Tongue emphasis', 'Often pale or normal with a white coating.', 'Often red with a yellow coating when Heat is pronounced.'],
+        ['Pulse', 'Floating and rapid in the Taiyang presentation.', 'Thin and rapid.'],
         ['Exam shortcut', 'Think “transformation failure.”', 'Think “water + Heat + Yin injury.”']
       ],
       why: 'The shared diuretic core can obscure the direction of treatment. Wu Ling San warms and transforms; Zhu Ling Tang drains while cooling and preserving fluids.',
@@ -134,8 +138,11 @@ const cards = [
       rows: [
         ['Patrón', 'Acumulación de agua Taiyang por alteración de la transformación del Qi de Vejiga.', 'Agua y Calor en Jiao Inferior con lesión de Yin.'],
         ['Acción distintiva', 'Calienta Yang y transforma Qi.', 'Elimina Calor y nutre Yin.'],
+        ['Ingredientes', 'Fu Ling, Zhu Ling y Ze Xie son compartidos; Gui Zhi y Bai Zhu distinguen Wu Ling San.', 'Fu Ling, Zhu Ling y Ze Xie son compartidos; E Jiao y Hua Shi distinguen Zhu Ling Tang.'],
         ['Signos clave', 'Dificultad urinaria, edema o retención; sed con dificultad para procesar líquidos ingeridos.', 'Dificultad urinaria con sed, fiebre o irritabilidad; puede incluir micción dolorosa o sangre en orina.'],
+        ['Pista del agua', 'Puede vomitar poco después de beber porque no transforma los líquidos.', 'Desea y tolera líquidos, pero la sed persiste por Calor/lesión de Yin.'],
         ['Énfasis de lengua', 'Con frecuencia pálida o normal con capa blanca.', 'A menudo roja con capa amarilla cuando el Calor es marcado.'],
+        ['Pulso', 'Flotante y rápido en la presentación Taiyang.', 'Fino y rápido.'],
         ['Atajo de examen', 'Piensa “falla de transformación”.', 'Piensa “agua + Calor + lesión de Yin”.']
       ],
       why: 'El núcleo diurético compartido puede ocultar la dirección terapéutica. Wu Ling San calienta y transforma; Zhu Ling Tang drena mientras enfría y preserva líquidos.',
@@ -417,6 +424,7 @@ const cards = [
         ['Primary problem', 'Spleen-Kidney Yang deficiency with retained water.', 'Severe internal Cold with devastated or collapsing Yang.'],
         ['Therapeutic emphasis', 'Warm Yang and promote urination to transform water.', 'Restore Yang and rescue collapse.'],
         ['Fluid clue', 'Edema, urinary difficulty, heaviness and fluid retention are central.', 'Fluid retention is not the defining feature.'],
+        ['Formula construction', 'Fu Zi with Bai Zhu, Fu Ling, Bai Shao and Sheng Jiang targets Yang deficiency with water.', 'Fu Zi with Gan Jiang and Zhi Gan Cao concentrates on restoring devastated Yang.'],
         ['Ginger distinction', 'Uses Sheng Jiang in the standard formula.', 'Uses Gan Jiang in the standard formula.'],
         ['Exam shortcut', 'Cold + water.', 'Cold + collapse.']
       ],
@@ -434,6 +442,7 @@ const cards = [
         ['Problema principal', 'Deficiencia de Yang de Bazo-Riñón con agua retenida.', 'Frío Interno grave con Yang devastado o en colapso.'],
         ['Énfasis terapéutico', 'Calentar Yang y promover micción para transformar agua.', 'Restaurar Yang y rescatar colapso.'],
         ['Pista de líquidos', 'Edema, dificultad urinaria, pesadez y retención son centrales.', 'La retención de líquidos no es el rasgo definitorio.'],
+        ['Construcción', 'Fu Zi con Bai Zhu, Fu Ling, Bai Shao y Sheng Jiang trata deficiencia de Yang con agua.', 'Fu Zi con Gan Jiang y Zhi Gan Cao se concentra en restaurar Yang devastado.'],
         ['Distinción del jengibre', 'Usa Sheng Jiang en la fórmula estándar.', 'Usa Gan Jiang en la fórmula estándar.'],
         ['Atajo de examen', 'Frío + agua.', 'Frío + colapso.']
       ],
@@ -1835,6 +1844,7 @@ cards.push(
       fast: ['Dampness centers on Stomach and Intestines: vomiting, diarrhea and abdominal fullness dominate.', 'Qi deficiency permits Wind-Cold-Damp invasion: severe headache/body aches, fatigue and a weak pulse dominate.'],
       rows: [
         ['Primary center', 'Digestive Dampness with an Exterior component.', 'Exterior pathogen in a Qi-deficient constitution.'],
+        ['Chief herbs', 'Huo Xiang releases Wind-Cold while aromatically transforming middle-burner Dampness.', 'Qiang Huo and Du Huo disperse Wind-Cold-Damp; Ren Shen supports deficient Qi.'],
         ['Distinct action', 'Aromatically transforms Dampness and rectifies rebellious Qi.', 'Augments Qi while dispersing Wind-Cold-Damp.'],
         ['Decisive clue', 'Prominent vomiting and diarrhea.', 'Prominent generalized aches with weakness.'],
         ['Exam shortcut', 'Wet middle burner.', 'Weak patient with painful Exterior invasion.']
@@ -1851,6 +1861,7 @@ cards.push(
       fast: ['Humedad centrada en Estómago-Intestinos: predominan vómito, diarrea y plenitud abdominal.', 'Deficiencia de Qi permite invasión: predominan cefalea/dolor corporal fuerte, fatiga y pulso débil.'],
       rows: [
         ['Centro', 'Humedad digestiva con componente Exterior.', 'Patógeno Exterior en constitución deficiente de Qi.'],
+        ['Hierbas principales', 'Huo Xiang libera Viento-Frío mientras transforma aromáticamente Humedad central.', 'Qiang Huo y Du Huo dispersan Viento-Frío-Humedad; Ren Shen apoya Qi deficiente.'],
         ['Acción distintiva', 'Transforma Humedad aromáticamente y rectifica Qi rebelde.', 'Aumenta Qi mientras dispersa Viento-Frío-Humedad.'],
         ['Pista decisiva', 'Vómito y diarrea prominentes.', 'Dolores generalizados con debilidad.'],
         ['Atajo', 'Jiao Medio mojado.', 'Paciente débil con invasión Exterior dolorosa.']
@@ -1874,7 +1885,8 @@ cards.push(
       rows: [
         ['Root pattern', 'Dampness obstructing Spleen and Stomach.', 'Spleen-Stomach Qi/Yang deficiency with internal Cold.'],
         ['Primary action', 'Dries Dampness and moves Qi.', 'Warms and tonifies the middle burner.'],
-        ['Tongue clue', 'Thick, greasy white coating.', 'Pale tongue with white coating.'],
+        ['Tongue clue', 'Swollen or scalloped with a thick, greasy coating.', 'Pale and wet with a thin white coating.'],
+        ['Pulse', 'Moderate and slippery.', 'Deep, weak and slow.'],
         ['Exam shortcut', 'Excess wet blockage.', 'Deficient cold center.']
       ],
       why: 'Similar digestive symptoms can result from a pathogen blocking the center or from the center lacking warmth and strength.',
@@ -1890,7 +1902,8 @@ cards.push(
       rows: [
         ['Patrón raíz', 'Humedad obstruye Bazo y Estómago.', 'Deficiencia de Qi/Yang de Bazo-Estómago con Frío interno.'],
         ['Acción', 'Seca Humedad y mueve Qi.', 'Calienta y tonifica Jiao Medio.'],
-        ['Lengua', 'Capa blanca gruesa y grasosa.', 'Lengua pálida con capa blanca.'],
+        ['Lengua', 'Hinchada o dentada con capa gruesa y grasosa.', 'Pálida y húmeda con capa blanca fina.'],
+        ['Pulso', 'Moderado y resbaladizo.', 'Profundo, débil y lento.'],
         ['Atajo', 'Bloqueo húmedo excesivo.', 'Centro frío y deficiente.']
       ],
       why: 'Síntomas digestivos semejantes surgen de patógeno que bloquea centro o de centro sin calor ni fuerza.',
@@ -3014,6 +3027,7 @@ cards.push(...exteriorFormulaComparisons);
 cards.push(...clearHeatFormulaComparisons);
 cards.push(...purgeFormulaComparisons);
 cards.push(...harmonizeFormulaComparisons);
+cards.push(...dampFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
