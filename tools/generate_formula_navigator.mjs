@@ -19,7 +19,7 @@ import {
 } from './classic_formula_navigator_data.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
-const cssVersion = '20261027-2';
+const cssVersion = '20261027-3';
 const practiceData = JSON.parse(readFileSync(resolve(root, 'formula-practice-data.json'), 'utf8'));
 if (practiceData.totals?.questions !== 897 || practiceData.formulas?.length !== 63) {
   throw new Error('Formula practice data is missing or has unexpected totals');
