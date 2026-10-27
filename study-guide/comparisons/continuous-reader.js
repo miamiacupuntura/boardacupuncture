@@ -18,7 +18,7 @@
   const el = id => document.getElementById(id);
   const ui = {
     groupLink: el('reader-group-link'), brand: el('reader-brand'), language: el('reader-language'), dashboard: el('reader-dashboard'),
-    eyebrow: el('reader-eyebrow'), title: el('reader-title'), description: el('reader-description'), progress: el('reader-progress'),
+    progress: el('reader-progress'),
     previous: el('reader-previous'), next: el('reader-next'), index: el('reader-index'), loading: el('reader-loading'), error: el('reader-error'),
     chapter: el('reader-chapter'), meter: el('reader-meter'), meterFill: el('reader-meter-fill'), bottom: el('reader-bottom-controls'), bottomProgress: el('reader-bottom-progress'),
     bottomPrevious: el('reader-bottom-previous'), bottomNext: el('reader-bottom-next'), bottomIndex: el('reader-bottom-index'), footer: el('reader-footer')
@@ -30,8 +30,6 @@
     ui.language.textContent = es ? 'English' : 'Español';
     ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}`;
     ui.dashboard.textContent = es ? '← Dashboard' : '← Back to Dashboard';
-    ui.eyebrow.textContent = es ? 'Modo de estudio continuo' : 'Continuous study mode';
-    ui.description.textContent = es ? 'Permanece en esta página y avanza por todas las tarjetas del grupo.' : 'Stay on this page and move through every card in the selected group.';
     ui.previous.textContent = ui.bottomPrevious.textContent = es ? '← Anterior' : '← Previous';
     ui.next.textContent = ui.bottomNext.textContent = es ? 'Siguiente →' : 'Next →';
     ui.index.textContent = ui.bottomIndex.textContent = es ? 'Todos los capítulos' : 'All chapters';
@@ -88,7 +86,6 @@
       if (!article) throw new Error('chapter content not found');
       article.querySelectorAll('nav[aria-label="Chapter navigation"],nav[aria-label="Navegación entre capítulos"]').forEach(node => node.remove());
       ui.chapter.append(document.importNode(article, true));
-      ui.title.textContent = chapters[current].title;
       document.title = `${chapters[current].title} | ${es ? 'Lectura Continua' : 'Continuous Reading'} | AcupunctureTests`;
       ui.loading.classList.add('reader-hidden');
       ui.bottom.classList.remove('reader-hidden');
