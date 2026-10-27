@@ -20,6 +20,7 @@ test "$DETAIL_COUNT" -eq 24
 test -d "$TARGET_DIR"
 
 install -m 0644 "$SOURCE_DIR"/formula-theory*.html "$TARGET_DIR"/
+install -m 0644 "$SOURCE_DIR/continuous-reader.html" "$SOURCE_DIR/continuous-reader.js" "$TARGET_DIR"/
 for base in "${INDEXES[@]}"; do
   install -m 0644 "$SOURCE_DIR/${base}.html" "$SOURCE_DIR/${base}-es.html" "$TARGET_DIR"/
 done

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Continuous chapter reader for AcupunctureTests study groups.">
+  <title>Continuous Reading | AcupunctureTests</title>
+  <link rel="stylesheet" href="comparisons.css?v=20261026-2">
+  <style>
+    .reader-status{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0;padding:14px 16px;border:1px solid #d5e0ea;border-radius:14px;background:#fff}
+    .reader-status p{margin:0}.reader-progress{font-weight:800;color:#17324d}.reader-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .reader-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 15px;border:1px solid #b9cad9;border-radius:10px;background:#fff;color:#17324d;font:inherit;font-weight:800;cursor:pointer;text-decoration:none}
+    .reader-button--next{border-color:#bf4a00;background:#bf4a00;color:#fff}.reader-button:disabled{opacity:.42;cursor:not-allowed}
+    .reader-loading,.reader-error{padding:36px 20px;border:1px solid #d5e0ea;border-radius:14px;background:#fff;text-align:center}.reader-error{color:#8d2500}
+    .reader-chapter .study-note{margin-top:0}.reader-bottom{margin:26px 0 38px}.reader-hidden{display:none!important}
+  </style>
+  <script defer src="continuous-reader.js?v=20261027-1"></script>
+</head>
+<body>
+  <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" id="reader-group-link" href="index.html"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span id="reader-brand">Continuous Reading</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" id="reader-language" href="#">Español</a><a class="comparison-back" id="reader-dashboard" href="/my/">← Back to Dashboard</a></span></div></header>
+  <main class="comparison-shell">
+    <section class="comparison-hero"><p class="comparison-eyebrow" id="reader-eyebrow">Continuous study mode</p><h1 id="reader-title">Loading chapters…</h1><p id="reader-description">Stay on this page and move through every card in the selected group.</p></section>
+    <div class="reader-status" id="reader-top-controls">
+      <p class="reader-progress" id="reader-progress">Preparing chapters…</p>
+      <div class="reader-actions"><button class="reader-button" id="reader-previous" type="button">← Previous</button><a class="reader-button" id="reader-index" href="index.html">All chapters</a><button class="reader-button reader-button--next" id="reader-next" type="button">Next →</button></div>
+    </div>
+    <div class="reader-loading" id="reader-loading">Loading chapter…</div>
+    <div class="reader-error reader-hidden" id="reader-error" role="alert"></div>
+    <div class="reader-chapter" id="reader-chapter"></div>
+    <div class="reader-status reader-bottom reader-hidden" id="reader-bottom-controls" aria-label="Chapter navigation">
+      <p class="reader-progress" id="reader-bottom-progress"></p>
+      <div class="reader-actions"><button class="reader-button" id="reader-bottom-previous" type="button">← Previous</button><a class="reader-button" id="reader-bottom-index" href="index.html">All chapters</a><button class="reader-button reader-button--next" id="reader-bottom-next" type="button">Next →</button></div>
+    </div>
+  </main>
+  <footer class="comparison-footer"><div class="comparison-shell" id="reader-footer">Continuous reading · Previous · Next · All chapters</div></footer>
+</body>
+</html>
+
