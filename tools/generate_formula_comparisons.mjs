@@ -6,6 +6,7 @@ import { clearHeatFormulaComparisons } from './formula_comparisons_clear_heat_ba
 import { purgeFormulaComparisons } from './formula_comparisons_purge_batch.mjs';
 import { harmonizeFormulaComparisons } from './formula_comparisons_harmonize_batch.mjs';
 import { dampFormulaComparisons } from './formula_comparisons_damp_batch.mjs';
+import { phlegmFormulaComparisons } from './formula_comparisons_phlegm_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -165,6 +166,7 @@ const cards = [
       fast: ['Damp-Phlegm: cough with copious thin white sputum and a greasy white coat.', 'Phlegm-Heat: insomnia, irritability or fright, bitter taste and a greasy yellow coat.'],
       rows: [
         ['Primary emphasis', 'Dries Dampness and regulates Qi to transform Phlegm.', 'Clears Phlegm-Heat, regulates Qi and harmonizes the Gallbladder and Stomach.'],
+        ['Ingredients', 'Ban Xia, Chen Pi, Fu Ling, Sheng Jiang and Gan Cao are shared; Wu Mei distinguishes Er Chen Tang.', 'Ban Xia, Chen Pi, Fu Ling, Sheng Jiang and Gan Cao are shared; Zhi Shi, Zhu Ru and Da Zao distinguish Wen Dan Tang.'],
         ['Target pattern', 'Damp-Phlegm centered in Spleen and Lung.', 'Phlegm-Heat disturbing Gallbladder, Stomach and Spirit.'],
         ['Decisive symptoms', 'Cough with profuse white sputum.', 'Insomnia, easy fright, restlessness or bitter taste.'],
         ['Tongue', 'Pale or normal with greasy white coating.', 'Red with greasy yellow coating.'],
@@ -183,6 +185,7 @@ const cards = [
       fast: ['Humedad-Flema: tos con esputo blanco fino y abundante y capa blanca grasosa.', 'Flema-Calor: insomnio, irritabilidad o sobresalto, sabor amargo y capa amarilla grasosa.'],
       rows: [
         ['Énfasis principal', 'Seca Humedad y regula Qi para transformar Flema.', 'Elimina Flema-Calor, regula Qi y armoniza Vesícula Biliar y Estómago.'],
+        ['Ingredientes', 'Ban Xia, Chen Pi, Fu Ling, Sheng Jiang y Gan Cao son compartidos; Wu Mei distingue Er Chen Tang.', 'Ban Xia, Chen Pi, Fu Ling, Sheng Jiang y Gan Cao son compartidos; Zhi Shi, Zhu Ru y Da Zao distinguen Wen Dan Tang.'],
         ['Patrón objetivo', 'Humedad-Flema centrada en Bazo y Pulmón.', 'Flema-Calor que altera Vesícula Biliar, Estómago y Shen.'],
         ['Síntomas decisivos', 'Tos con abundante esputo blanco.', 'Insomnio, sobresalto fácil, inquietud o sabor amargo.'],
         ['Lengua', 'Pálida o normal con capa blanca grasosa.', 'Roja con capa amarilla grasosa.'],
@@ -3028,6 +3031,7 @@ cards.push(...clearHeatFormulaComparisons);
 cards.push(...purgeFormulaComparisons);
 cards.push(...harmonizeFormulaComparisons);
 cards.push(...dampFormulaComparisons);
+cards.push(...phlegmFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
