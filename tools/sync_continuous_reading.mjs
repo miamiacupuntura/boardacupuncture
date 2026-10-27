@@ -89,9 +89,7 @@ for (const language of ['en', 'es']) {
       if (!chapter) throw new Error(`Display order missing for ${detailUrl} in ${file}`);
       processed += 1;
       const readerUrl = `continuous-reader.html?group=${group}&amp;lang=${language}&amp;chapter=${chapter}`;
-      const label = language === 'es'
-        ? `Leer capítulo ${chapter} de ${cards.length} →`
-        : `Read chapter ${chapter} of ${cards.length} →`;
+      const label = language === 'es' ? 'Leer y continuar →' : 'Read and continue →';
       return `<a class="comparison-card__open" data-chapter-url="${detailUrl}" data-chapter-number="${chapter}" href="${readerUrl}">${label}</a>`;
     });
     writeFileSync(file, html);
