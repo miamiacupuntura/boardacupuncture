@@ -71,6 +71,21 @@ class CompleteFinalImportTest(unittest.TestCase):
         self.assertEqual("Bai Shao & Da Zao", question.options[0].text)
         self.assertEqual("Gui Zhi & Sheng Jiang", question.options[1].text)
 
+    def test_parser_naturalizes_identification_heading(self) -> None:
+        question = IMPORTER.parse_questions(
+            [
+                "1. IDENTIFICATION OF HERBAL FORMULA ACCORDING ZANG FU PATTERNS\n\nClinical manifestations: Palpitations.",
+                "A) Formula A +++++",
+                "B) Formula B",
+            ]
+        )[0]
+
+        self.assertEqual(
+            "Identify the herbal formula according to the Zang Fu pattern described below.\n\n"
+            "Clinical manifestations: Palpitations.",
+            question.prompt,
+        )
+
     def test_moodle_xml_contains_only_uniquely_keyed_questions(self) -> None:
         questions = IMPORTER.parse_questions(
             [

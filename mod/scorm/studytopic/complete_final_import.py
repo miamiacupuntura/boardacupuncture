@@ -28,6 +28,23 @@ QUESTION_RE = re.compile(r"^(\d+)\.\s+([\s\S]+)$")
 OPTION_RE = re.compile(r"^\s*(?:\(([A-Z])\)|([A-Z])[.)])\s*([\s\S]*)$")
 FEEDBACK_RE = re.compile(r"^\s*Feedback:\s*([\s\S]*)$", re.IGNORECASE)
 ANSWER_MARKER = "+++++"
+NATURAL_IDENTIFICATION_HEADINGS = {
+    "IDENTIFICATION OF HERBAL FORMULA ACCORDING ZANG FU PATTERNS": (
+        "Identify the herbal formula according to the Zang Fu pattern described below."
+    ),
+    "IDENTIFICATION OF THE FORMULA ACCORDING TO THE GENERAL DESCRIPTION": (
+        "Identify the formula from the general description below."
+    ),
+    "IDENTIFICATION OF HERBAL FORMULA ACCORDING TO THE FOUR LEVELS": (
+        "Identify the herbal formula according to the Four Levels pattern described below."
+    ),
+    "IDENTIFICATION OF THE FORMULA ACCORDING TO THE MODIFICATION": (
+        "Identify the formula from the modification described below."
+    ),
+    "IDENTIFICATION OF THE FORMULA MODIFICATION ACCORDING TO THE SYMPTOMS": (
+        "Identify the formula modification according to the symptoms described below."
+    ),
+}
 
 
 @dataclass
@@ -93,6 +110,16 @@ def _deduplicate_nonempty(values: Iterable[str]) -> list[str]:
             result.append(cleaned)
             seen.add(cleaned)
     return result
+
+
+def _naturalize_identification_prompt(value: str) -> str:
+    heading, separator, remainder = value.partition("\n")
+    replacement = NATURAL_IDENTIFICATION_HEADINGS.get(heading.strip().upper())
+    if not replacement:
+        return value
+    if not separator or not remainder.strip():
+        return replacement
+    return f"{replacement}\n\n{remainder.strip()}"
 
 
 def parse_questions(paragraphs: Sequence[str]) -> list[Question]:
@@ -174,7 +201,7 @@ def parse_questions(paragraphs: Sequence[str]) -> list[Question]:
             Question(
                 source_number=number,
                 classification=classification,
-                prompt=_clean_text(prompt),
+                prompt=_naturalize_identification_prompt(_clean_text(prompt)),
                 body=_deduplicate_nonempty(body),
                 options=options,
                 feedback=_deduplicate_nonempty(feedback),

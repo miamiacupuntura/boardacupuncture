@@ -52,6 +52,24 @@ function decodeSourceEntities(value) {
   return decoded;
 }
 
+const naturalIdentificationHeadings = new Map([
+  ['IDENTIFICATION OF HERBAL FORMULA ACCORDING ZANG FU PATTERNS', 'Identify the herbal formula according to the Zang Fu pattern described below.'],
+  ['IDENTIFICATION OF THE FORMULA ACCORDING TO THE GENERAL DESCRIPTION', 'Identify the formula from the general description below.'],
+  ['IDENTIFICATION OF HERBAL FORMULA ACCORDING TO THE FOUR LEVELS', 'Identify the herbal formula according to the Four Levels pattern described below.'],
+  ['IDENTIFICATION OF THE FORMULA ACCORDING TO THE MODIFICATION', 'Identify the formula from the modification described below.'],
+  ['IDENTIFICATION OF THE FORMULA MODIFICATION ACCORDING TO THE SYMPTOMS', 'Identify the formula modification according to the symptoms described below.']
+]);
+
+function naturalizeIdentificationPrompt(value) {
+  const prompt = decodeSourceEntities(value);
+  const newline = prompt.indexOf('\n');
+  const heading = (newline === -1 ? prompt : prompt.slice(0, newline)).trim().toUpperCase();
+  const replacement = naturalIdentificationHeadings.get(heading);
+  if (!replacement) return prompt;
+  const remainder = newline === -1 ? '' : prompt.slice(newline + 1).trim();
+  return remainder ? `${replacement}\n\n${remainder}` : replacement;
+}
+
 function readJsonLines(path) {
   if (!existsSync(path)) throw new Error(`Source question file does not exist: ${path}`);
   return readFileSync(path, 'utf8').split(/\r?\n/).filter(Boolean).map((line, index) => {
@@ -109,7 +127,7 @@ const questions = sourceQuestions.map(question => {
     throw new Error(`Question ${question.source_number} has a missing keyed option`);
   }
 
-  const prompt = decodeSourceEntities(question.prompt);
+  const prompt = naturalizeIdentificationPrompt(question.prompt);
   const body = (question.body || []).map(decodeSourceEntities);
   const options = question.options.map(option => ({
     label: option.label,

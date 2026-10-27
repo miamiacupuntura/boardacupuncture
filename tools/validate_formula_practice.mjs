@@ -33,6 +33,10 @@ for (const question of data.questions) {
     question.formulaNumbers.every(number => Number.isInteger(number) && number >= 1 && number <= 63),
     `Question ${question.sourceNumber} has an invalid formula association`
   );
+  requireValue(
+    !question.prompt.startsWith('IDENTIFICATION'),
+    `Question ${question.sourceNumber} still has an unnatural identification heading`
+  );
 }
 requireValue(data.formulas.every(formula => formula.questionCount > 0), 'Every formula must have related questions');
 
