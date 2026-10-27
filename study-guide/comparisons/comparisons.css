@@ -279,6 +279,19 @@ a { color: inherit; }
   color: #fff;
 }
 
+.comparison-guideline-back--outline {
+  border: 1px solid #aebfca;
+  background: #fff;
+  color: var(--navy);
+}
+
+.comparison-guideline-back--outline:hover,
+.comparison-guideline-back--outline:focus {
+  border-color: var(--teal);
+  background: #edf9f6;
+  color: var(--navy);
+}
+
 .comparison-collection-links a {
   padding: 9px 15px;
   border: 1px solid #b8c8d1;
