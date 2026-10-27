@@ -1283,6 +1283,111 @@ const pairs = [
   }
 ];
 
+const categoryBlocks = [
+  {
+    id: 'release-exterior',
+    title: { en: 'Release the Exterior', es: 'Liberar el Exterior' },
+    description: { en: 'Open the Exterior, expel Wind and distinguish Wind-Cold from Wind-Heat presentations.', es: 'Abrir el Exterior, expulsar Viento y distinguir cuadros de Viento-Frío y Viento-Calor.' },
+    pairs: [1, 5, 6, 7, 8]
+  },
+  {
+    id: 'clear-heat',
+    title: { en: 'Clear Heat', es: 'Aclarar Calor' },
+    description: { en: 'Separate Qi-level, Lung, deficiency and toxic Heat strategies.', es: 'Separar estrategias para Calor de nivel Qi, Pulmón, deficiencia y toxicidad.' },
+    pairs: [3, 10, 11, 12, 13, 15, 16, 17, 21]
+  },
+  {
+    id: 'purgatives-laxatives',
+    title: { en: 'Purgatives & Laxatives', es: 'Purgantes y Laxantes' },
+    description: { en: 'Purge Heat accumulation and soften dry hardness when the pattern truly requires downward draining.', es: 'Purgar acumulación de Calor y ablandar dureza seca cuando el patrón realmente exige drenar hacia abajo.' },
+    pairs: [49]
+  },
+  {
+    id: 'drain-damp',
+    title: { en: 'Drain or Transform Dampness', es: 'Drenar o Transformar Humedad' },
+    description: { en: 'Strengthen transport, aromatically transform Dampness or expel stones through the urine.', es: 'Fortalecer transporte, transformar Humedad aromáticamente o expulsar cálculos por la orina.' },
+    pairs: [19, 47, 48]
+  },
+  {
+    id: 'wind-damp-muscular-pain',
+    title: { en: 'Dispel Wind-Damp & Stop Muscular Pain', es: 'Expulsar Viento-Humedad y Detener Dolor Muscular' },
+    description: { en: 'Relieve spasm and pain while identifying the deficiency or obstruction underneath it.', es: 'Aliviar espasmo y dolor identificando la deficiencia u obstrucción que los produce.' },
+    pairs: [20]
+  },
+  {
+    id: 'cough-phlegm',
+    title: { en: 'Stop Cough & Transform Phlegm', es: 'Detener Tos y Transformar Flema' },
+    description: { en: 'Restore Lung-Qi movement and distinguish Damp, Heat, fluid and chest-binding mechanisms.', es: 'Restaurar el movimiento del Qi de Pulmón y distinguir Humedad, Calor, líquidos y opresión torácica.' },
+    pairs: [2, 37, 39, 40, 41]
+  },
+  {
+    id: 'descend-stomach-qi',
+    title: { en: 'Descend Rebellious Stomach Qi', es: 'Descender Qi Rebelde de Estómago' },
+    description: { en: 'Stop nausea and vomiting by treating Phlegm and the direction of Stomach Qi.', es: 'Detener náusea y vómito tratando Flema y la dirección del Qi de Estómago.' },
+    pairs: [38]
+  },
+  {
+    id: 'harmonizing',
+    title: { en: 'Harmonizing', es: 'Armonizar' },
+    description: { en: 'Harmonize Ying–Wei, the Middle, Shaoyang or Liver–Spleen relationships.', es: 'Armonizar Ying–Wei, el Centro, Shaoyang o la relación Hígado–Bazo.' },
+    pairs: [4, 22, 45, 46]
+  },
+  {
+    id: 'move-qi-stop-pain',
+    title: { en: 'Move Qi & Stop Pain', es: 'Mover Qi y Detener Dolor' },
+    description: { en: 'Move Qi and Blood together when painful obstruction, trauma or swelling dominates.', es: 'Mover Qi y Sangre juntos cuando predominan obstrucción dolorosa, trauma o hinchazón.' },
+    pairs: [35]
+  },
+  {
+    id: 'regulate-blood',
+    title: { en: 'Regulate Blood', es: 'Regular Sangre' },
+    description: { en: 'Generate, nourish, cool, move or break Blood according to the mechanism.', es: 'Generar, nutrir, enfriar, mover o romper Sangre según el mecanismo.' },
+    pairs: [23, 24, 33, 34, 36]
+  },
+  {
+    id: 'tonics',
+    title: { en: 'Tonics & Interior Warming', es: 'Tónicos y Calentamiento Interior' },
+    description: { en: 'Supplement Qi, Blood, Yin or Yang and protect digestion while treating the root.', es: 'Tonificar Qi, Sangre, Yin o Yang y proteger la digestión mientras se trata la raíz.' },
+    pairs: [9, 18, 27, 28, 29, 32, 42, 43, 44]
+  },
+  {
+    id: 'astringent',
+    title: { en: 'Stabilize & Astringe', es: 'Estabilizar y Astringir' },
+    description: { en: 'Secure leakage without trapping an unresolved pathogen.', es: 'Asegurar pérdidas sin encerrar un patógeno todavía no resuelto.' },
+    pairs: [50]
+  },
+  {
+    id: 'calm-shen',
+    title: { en: 'Calm the Shen', es: 'Calmar el Shen' },
+    description: { en: 'Reconnect Heart and Kidney and settle agitation through the correct mechanism.', es: 'Reconectar Corazón y Riñón y calmar agitación mediante el mecanismo correcto.' },
+    pairs: [14]
+  },
+  {
+    id: 'extinguish-liver-wind',
+    title: { en: 'Extinguish Liver Wind', es: 'Extinguir Viento de Hígado' },
+    description: { en: 'Enrich Yin, anchor Yang and stop internal Wind according to deficiency or excess.', es: 'Enriquecer Yin, anclar Yang y detener Viento interno según deficiencia o exceso.' },
+    pairs: [30, 51]
+  },
+  {
+    id: 'gynecology',
+    title: { en: 'Gynecology', es: 'Ginecología' },
+    description: { en: 'Regulate Qi and Blood, warm the womb and strengthen the back with pregnancy safety in view.', es: 'Regular Qi y Sangre, calentar el útero y fortalecer la espalda considerando seguridad en embarazo.' },
+    pairs: [25, 26, 31]
+  }
+];
+
+const categoryByPair = new Map();
+categoryBlocks.forEach((block, blockIndex) => {
+  block.pairs.forEach((pairNumber, chapterIndex) => {
+    categoryByPair.set(pairNumber, {
+      block,
+      blockNumber: blockIndex + 1,
+      chapterNumber: chapterIndex + 1,
+      chapterCount: block.pairs.length
+    });
+  });
+});
+
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
@@ -1302,18 +1407,64 @@ function detailPage(pair, language) {
 </article></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Grupo independiente · Parejas Duì Yào de Appendix B' : 'Independent group · Appendix B Duì Yào pairs'}</div></footer></body></html>`;
 }
 
+
 function indexPage(language) {
   const es = language === 'es';
-  const cards = pairs.map(pair => {
-    const data = pair[language];
-    return `<article class="comparison-card" data-type="dui-yao" data-sequence="${pair.number}" data-search="${esc(pair.search)}"><span class="comparison-card__type">${es ? `Pareja ${pair.number}` : `Pair ${pair.number}`}</span><h3>${esc(pair.title)}</h3><p>${esc(data.job)}</p><div class="comparison-card__category"><strong>${es ? 'Fórmula firma:' : 'Signature formula:'}</strong><br>${esc(data.formulas)}</div><a class="comparison-card__open" href="${pair.slug}${es ? '-es' : ''}.html">${es ? 'Abrir Pareja →' : 'Open Pair →'}</a></article>`;
+  const suffix = es ? '-es' : '';
+  const categoryLinks = categoryBlocks.map((block, index) =>
+    `<a href="#${block.id}">${index + 1}. ${esc(block.title[language])}</a>`
+  ).join('');
+
+  const sections = categoryBlocks.map((block, blockIndex) => {
+    const blockPairs = block.pairs.map(number => pairs.find(pair => pair.number === number)).filter(Boolean);
+    const cards = blockPairs.map((pair, chapterIndex) => {
+      const data = pair[language];
+      return `<article class="comparison-card" data-type="dui-yao" data-sequence="${chapterIndex + 1}" data-search="${esc(`${block.title[language]} ${pair.search}`)}"><span class="comparison-card__type">${es ? `Bloque ${blockIndex + 1} · Capítulo ${chapterIndex + 1} de ${blockPairs.length}` : `Block ${blockIndex + 1} · Chapter ${chapterIndex + 1} of ${blockPairs.length}`}</span><h3>${esc(pair.title)}</h3><p>${esc(data.job)}</p><div class="comparison-card__category"><strong>${es ? 'Pareja oficial:' : 'Official pair:'}</strong> ${pair.number} / 51<br><strong>${es ? 'Fórmula firma:' : 'Signature formula:'}</strong><br>${esc(data.formulas)}</div><a class="comparison-card__open" href="${pair.slug}${suffix}.html">${es ? 'Leer capítulo →' : 'Read chapter →'}</a></article>`;
+    }).join('');
+    return `<section class="study-note__block" id="${block.id}" data-dui-category><header class="comparison-summary"><div><p class="comparison-eyebrow">${es ? `Bloque ${blockIndex + 1} de ${categoryBlocks.length}` : `Block ${blockIndex + 1} of ${categoryBlocks.length}`}</p><h2>${esc(block.title[language])}</h2><p>${esc(block.description[language])}</p></div><p><span data-category-count>${blockPairs.length}</span> ${es ? 'parejas' : 'pairs'}</p></header><div class="comparison-grid">${cards}</div></section>`;
   }).join('');
-  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Parejas Duì Yào de Appendix B con trabajo, fórmula y seguridad.' : 'Appendix B Duì Yào herb pairs with job, formula and safety.'}"><title>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"><script defer src="comparisons.js?v=20261026-3"></script></head><body>
+
+  const searchScript = `<script>
+(function () {
+  const input = document.querySelector('[data-comparison-search]');
+  const cards = Array.from(document.querySelectorAll('.comparison-card'));
+  const categories = Array.from(document.querySelectorAll('[data-dui-category]'));
+  const total = document.querySelector('[data-visible-count]');
+  const empty = document.querySelector('[data-comparison-empty]');
+  function normalise(value) {
+    return String(value || '').toLocaleLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/\\s+/g, ' ').trim();
+  }
+  function refresh() {
+    const query = normalise(input ? input.value : '');
+    let visible = 0;
+    cards.forEach(function (card) {
+      const matches = !query || normalise((card.dataset.search || '') + ' ' + card.textContent).includes(query);
+      card.hidden = !matches;
+      if (matches) visible += 1;
+    });
+    categories.forEach(function (category) {
+      const shown = Array.from(category.querySelectorAll('.comparison-card')).filter(function (card) { return !card.hidden; });
+      category.hidden = shown.length === 0;
+      const count = category.querySelector('[data-category-count]');
+      if (count) count.textContent = String(shown.length);
+    });
+    if (total) total.textContent = String(visible);
+    if (empty) empty.hidden = visible !== 0;
+  }
+  if (input) input.addEventListener('input', refresh);
+  refresh();
+}());
+<\/script>`;
+
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Las 51 parejas Duì Yào oficiales organizadas en 15 bloques clínicos.' : 'The 51 official Duì Yào pairs organized into 15 clinical blocks.'}"><title>${es ? 'Parejas Duì Yào por categorías' : 'Duì Yào Pairs by Category'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
-<main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Paso 2 · Parejas de hierbas' : 'Step 2 · Herb pairs'}</p><h1>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</h1><p>${es ? 'Biblioteca completa de las 51 parejas oficiales de Appendix B: una imagen, un trabajo conjunto, una fórmula firma y la seguridad decisiva.' : 'Complete library of all 51 official Appendix B pairs: one picture, one combined job, one signature formula and decisive safety.'}</p><div class="comparison-hero__actions"><a class="comparison-guideline-back" href="../guidelines/chinese-herbal-medicine${es ? '-es' : ''}.html">${es ? '← Volver a la ruta de Medicina Herbal' : '← Back to Herbal Medicine route'}</a><a class="comparison-guideline-back comparison-guideline-back--outline" href="index${es ? '-es' : ''}.html">${es ? '← Paso 1 · Hierbas' : '← Step 1 · Herbs'}</a><a class="comparison-guideline-back comparison-guideline-back--outline" href="formula-theory${es ? '-es' : ''}.html">${es ? 'Paso 3 · Fórmulas →' : 'Step 3 · Formulas →'}</a></div></section>
-<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${es ? '-es' : ''}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${es ? '-es' : ''}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${es ? '-es' : ''}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${es ? '-es' : ''}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${es ? '-es' : ''}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${es ? '-es' : ''}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a><a href="name-traps${es ? '-es' : ''}.html">${es ? 'Trampas de Nombres' : 'Name Traps'}</a><a href="herb-families${es ? '-es' : ''}.html">${es ? 'Familias y Partes' : 'Herb Families &amp; Parts'}</a><a href="safety${es ? '-es' : ''}.html">${es ? 'Biblioteca de Seguridad' : 'Safety Library'}</a><a href="formula-name-traps${es ? '-es' : ''}.html">${es ? 'Trampas de Fórmulas' : 'Formula Name Traps'}</a><a href="misleading-formula-names${es ? '-es' : ''}.html">${es ? 'Nombres Engañosos' : 'Misleading Formula Names'}</a><a href="advanced-name-traps${es ? '-es' : ''}.html">${es ? 'Trampas Avanzadas' : 'Advanced Name Traps'}</a><a href="supplemental-herb-families${es ? '-es' : ''}.html">${es ? 'Familias Adicionales' : 'Supplemental Herb Families'}</a><a href="patterns-tips-maciocia${es ? '-es' : ''}.html">Patterns Tips Maciocia</a><a href="most-important-formulas${es ? '-es' : ''}.html">${es ? 'Fórmulas Esenciales' : 'Most Important Formulas'}</a></nav>
-<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, trabajo o fórmula' : 'Search pair, job or formula'}" data-comparison-search></label></section><section><header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div class="comparison-grid" data-comparison-grid>${cards}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · Biblioteca completa · Lote 6 de 6' : 'Appendix B · Complete library · Batch 6 of 6'}</div></footer></body></html>`;
+<main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Paso 2 · Parejas de hierbas' : 'Step 2 · Herb pairs'}</p><h1>${es ? 'Duì Yào por bloques clínicos' : 'Duì Yào by Clinical Block'}</h1><p>${es ? 'Estudia las 51 parejas oficiales dentro de 15 categorías. Cada bloque reinicia su numeración para que puedas terminar un tema sin perder tu posición.' : 'Study all 51 official pairs within 15 categories. Numbering restarts in each block so you can finish one subject without losing your place.'}</p><div class="comparison-hero__actions"><a class="comparison-guideline-back" href="../guidelines/chinese-herbal-medicine${suffix}.html">${es ? '← Volver a la ruta de Medicina Herbal' : '← Back to Herbal Medicine route'}</a><a class="comparison-guideline-back comparison-guideline-back--outline" href="index${suffix}.html">${es ? '← Paso 1 · Hierbas' : '← Step 1 · Herbs'}</a><a class="comparison-guideline-back comparison-guideline-back--outline" href="formula-theory${suffix}.html">${es ? 'Paso 3 · Fórmulas →' : 'Step 3 · Formulas →'}</a></div></section>
+<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${suffix}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${suffix}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${suffix}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${suffix}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${suffix}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${suffix}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a><a href="name-traps${suffix}.html">${es ? 'Trampas de Nombres' : 'Name Traps'}</a><a href="herb-families${suffix}.html">${es ? 'Familias y Partes' : 'Herb Families &amp; Parts'}</a><a href="safety${suffix}.html">${es ? 'Biblioteca de Seguridad' : 'Safety Library'}</a></nav>
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, categoría, trabajo o fórmula' : 'Search pair, category, job or formula'}" data-comparison-search></label></section>
+<section class="study-note__block"><p class="comparison-eyebrow">${es ? 'Navegación dentro de esta página' : 'Navigation within this page'}</p><h2>${es ? '15 bloques de categorías' : '15 category blocks'}</h2><p>${es ? 'Elige un bloque o continúa hacia abajo para mantener la secuencia completa.' : 'Choose a block or continue downward to preserve the full sequence.'}</p><nav class="comparison-collection-links" aria-label="${es ? 'Categorías Duì Yào' : 'Duì Yào categories'}">${categoryLinks}</nav></section>
+<header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div>${sections}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · 51 parejas · 15 bloques clínicos' : 'Appendix B · 51 pairs · 15 clinical blocks'}</div></footer>${searchScript}</body></html>`;
 }
+
 
 for (const pair of pairs) {
   writeFileSync(resolve(root, `${pair.slug}.html`), detailPage(pair, 'en'));
