@@ -228,44 +228,108 @@ export const safetyLibraryExpansion = [
     slug: 'safety-obsolete-prohibited-substances',
     title: {en: 'Obsolete, Prohibited & Protected Substances', es: 'Sustancias Obsoletas, Prohibidas y Protegidas'},
     summary: {en: 'Recognize substances that should not be copied literally from historical formulas and select lawful strategies.', es: 'Reconoce sustancias que no deben copiarse literalmente de fórmulas históricas y elige estrategias legales.'},
-    search: 'obsolete prohibited protected aristolochia guan mu tong guang fang ji qing mu xiang xi jiao rhinoceros hu gu tiger bone she xiang musk xiong dan bear bile chuan shan jia pangolin zhu sha xiong huang cites',
+    search: 'obsolete prohibited protected toxic California exam FDA USDA CITES ESA 2010 cao wu chuan wu fu zi gan sui ge jie hong da ji hu gu hu lu ba hu po huo ma ren jiang can liu huang lu jiao lu jiao jiao ma huang qian niu zi quan xie she xiang shi chang pu shi jun zi su he xiang tan xiang wu gong wu ling zhi xi jiao xiong dan zao jiao zhu sha zi he che ban mao bing lang chan su ma qian zi ying su ke can sha ye ming sha aristolochia wildlife',
     en: {
       rule: 'A classical source is historical evidence, not automatic legal or safety authorization for the original substance.',
-      sections: [{heading: 'Exam scope is not the same as safety or legality', rows: [
-        ['Asterisk/exclusion list', 'The supplied document excludes many substances for curriculum reasons; exclusion alone does not mean toxic, illegal or obsolete.', 'Keep exam-scope labels separate from clinical safety and legal status.'],
-        ['Internal contradiction found', 'Cao Wu, Fu Zi, Ma Huang, Huo Ma Ren, Shi Chang Pu, Tan Xiang and Lu Jiao Jiao appear in both the included and excluded portions.', 'Do not publish the supplied list as a current official NCCAOM list without the current official content outline.'],
-        ['Verification rule', 'Exam blueprints and legal restrictions change independently over time and jurisdiction.', 'Date-stamp the source and verify against the current NCCAOM outline and local law before changing exam coverage.']
+      sections: [{heading: 'Supplied California exam list: verification status', rows: [
+        ['Working source—not an official current ruling', 'The supplied material says these 29 substances are excluded from the California licensing exam, but no date or current official handbook citation was provided.', 'Keep the list as historical/working study material until it is checked against the current California examination reference.'],
+        ['Exam scope ≠ safety ≠ legality', 'An herb can be omitted from an exam without being illegal, while a protected or unsafe substance may still appear in historical questions.', 'Maintain three separate labels: exam scope, clinical risk and legal/protected status.'],
+        ['Internal contradiction found', 'Cao Wu, Fu Zi, Ma Huang, Huo Ma Ren, Shi Chang Pu, Tan Xiang and Lu Jiao Jiao appear in both the included and excluded portions of the supplied NCCAOM material.', 'Do not present either supplied exclusion list as a current official national or California list without a dated primary source.']
       ]}, {heading: 'Unsafe or obsolete identities', rows: [
         ['Guān Mù Tōng', 'Aristolochia manshuriensis is linked to aristolochic-acid nephropathy and cancer.', 'Do not use; distinguish from authenticated Akebia/Chuan Mu Tong where permitted.'],
         ['Guǎng Fáng Jǐ', 'Aristolochia fangchi was confused with Hàn Fáng Jǐ/Stephania tetrandra.', 'Never substitute by the shared name Fáng Jǐ.'],
         ['Qīng Mù Xiāng', 'Aristolochia root is unsafe despite historical listing.', 'Reformulate the intended action with accepted species.'],
         ['Zhū Shā / Xióng Huáng', 'Cinnabar contains mercury and realgar contains arsenic.', 'Internal use is restricted/prohibited in many places; choose safer alternatives.']
-      ]}, {heading: 'Protected wildlife and legal variation', rows: [
-        ['Xī Jiǎo / Hǔ Gǔ', 'Rhinoceros horn and tiger bone are prohibited wildlife materials.', 'Use lawful strategy-based substitutes; Shuǐ Niú Jiǎo may replace Xī Jiǎo where permitted.'],
-        ['Chuān Shān Jiǎ', 'Pangolin scale is protected/prohibited and appears in historical formulas.', 'Use an accepted lawful substitute or redesign the formula action.'],
-        ['Shè Xiāng / Xióng Dǎn', 'Natural musk and bear bile have major wildlife/legal restrictions.', 'Use approved synthetic or botanical alternatives where allowed.'],
-        ['Má Huáng and jurisdiction-sensitive products', 'Rules differ by product type, concentration, location and practitioner scope.', 'Verify current local law; textbook listing or marketplace availability is not authorization.'],
-        ['Identity and traceability', 'Pinyin-only labels may conceal protected species, adulterants or heavy-metal risk.', 'Require species/chemical identity, part, source, processing, lot and certificate of analysis.']
+      ]}, {heading: 'High-risk or toxic substances in the supplied 29-item list', rows: [
+        ['Cao Wu / Chuan Wu / Fu Zi', 'Prepared wild aconite, Sichuan aconite and lateral aconite root contain cardiotoxic aconitine-type alkaloids.', 'High-risk and processing-dependent; do not reduce their status to one blanket “illegal” label.'],
+        ['Gan Sui / Hong Da Ji / Qian Niu Zi', 'Kansui, Euphorbia/Knoxia root and morning-glory seed are drastic water-expelling purgatives with substantial toxicity risk.', 'Avoid self-use; legality and professional scope must be checked for the exact product.'],
+        ['Zhu Sha', 'Cinnabar is a mercury-containing mineral.', 'Internal use is restricted or prohibited in many settings; use a safer strategy.'],
+        ['Quan Xie / Wu Gong / Zao Jiao', 'Scorpion, centipede and honeylocust fruit can produce serious toxic or irritant effects.', 'Require exact identity, professional risk review and jurisdiction-specific authorization.'],
+        ['Shi Jun Zi / Liu Huang', 'Rangoon creeper fruit and sulfur have dose-, preparation- and product-dependent safety concerns.', 'They are not accurately described by a universal US illegality claim.']
+      ]}, {heading: 'Protected, animal-derived or human-derived materials', rows: [
+        ['Hu Gu / Xi Jiao', 'Tiger bone and rhinoceros horn are protected wildlife materials whose trade is prohibited.', 'Do not use; select a lawful strategy-based substitute.'],
+        ['She Xiang / Xiong Dan', 'Natural deer musk and bear bile raise major wildlife, trade, legal and ethical restrictions.', 'Use an accepted synthetic or botanical alternative where lawful.'],
+        ['Ge Jie / Lu Jiao / Lu Jiao Jiao', 'Gecko, deer horn and deer-horn gelatin depend on species, source, wildlife rules and import requirements.', 'Verify the exact species and lawful traceable source; do not label every form identically.'],
+        ['Zi He Che', 'Human placenta is a human-tissue product with substantial regulatory, infectious-disease and ethical concerns.', 'Do not use unless the exact product and practice are explicitly lawful and appropriately controlled.'],
+        ['Jiang Can / Wu Ling Zhi', 'Sick silkworm and flying-squirrel feces are animal-derived materials with identity, contamination and import concerns.', 'Require authenticated, tested product and applicable legal review.']
+      ]}, {heading: 'Not categorically illegal: product and jurisdiction matter', rows: [
+        ['Ma Huang', 'US dietary supplements containing ephedrine alkaloids are federally restricted, but that does not make every botanical or professional-use circumstance identical.', 'Check the exact product, intended use, federal/state rules and practitioner scope.'],
+        ['Huo Ma Ren', 'Hemp/cannabis seed status depends on variety, processing, THC and product law.', 'Use only a compliant, tested food or medicinal product.'],
+        ['Shi Chang Pu', 'Species identity and beta-asarone content affect safety and regulatory status.', 'Verify Acorus species, preparation and the rule governing the exact product.'],
+        ['Hu Lu Ba / Tan Xiang', 'Fenugreek is widely used as food/herb; sandalwood status depends on species and lawful sourcing.', 'Neither is accurately described as universally illegal in the United States.'],
+        ['Hu Po / Su He Xiang', 'Amber and storax products raise authenticity, composition, sourcing and import questions.', 'Verify the exact material and product rules rather than assigning blanket illegality.'],
+        ['Identity and traceability', 'Pinyin-only labels may conceal protected species, adulterants, contaminants or a different regulated product.', 'Require scientific/chemical identity, part, source, processing, lot and certificate of analysis.']
+      ]}, {heading: 'How to use the supplied FDA/USDA/CITES handout', rows: [
+        ['Historical regulatory snapshot', 'The handout explicitly dates its CITES information to October 10, 2010 and cites a 2009 proposed bill.', 'Treat it as a historical study source, not a current consolidated federal list.'],
+        ['Different agencies, different rules', 'FDA product safety, USDA plant-pest import controls, CITES wildlife trade and the ESA are separate systems.', 'A detention, permit requirement, dietary-supplement restriction and trade prohibition are not interchangeable.'],
+        ['Private supplier policy', '“Mayway USA does not carry as raw herbs” describes a supplier decision, not by itself a federal ban.', 'Label commercial policy separately from government regulation.'],
+        ['Current verification', 'Species listings, exemptions, permits, product definitions and state practice rules change.', 'Verify the scientific species and product against current FDA, USDA APHIS, CITES, USFWS and California primary sources before dispensing.']
+      ]}, {heading: 'High-yield entries retained from the 2010 handout', rows: [
+        ['Ban Mao / Chan Su / Ma Qian Zi / Ying Su Ke', 'Cantharidin, bufotoxins, strychnine and opium alkaloids create major toxicity or controlled-substance concerns.', 'Do not treat these as routine interchangeable herbs.'],
+        ['Bing Lang / Da Fu Pi', 'Areca nut and pericarp raise carcinogenicity and dependence concerns.', 'Clinical risk does not automatically establish a universal import ban; verify the product rule.'],
+        ['Can Sha / Wu Ling Zhi / Ye Ming Sha / Zi He Che', 'Fecal and human-derived products raise sanitation, infectious-disease and import-admissibility concerns.', 'Do not dispense without explicit lawful status and validated processing/testing.'],
+        ['Guang Fang Ji / Guan Mu Tong / Ma Dou Ling / Qing Mu Xiang / Xi Xin', 'The handout groups these under aristolochic-acid concern; risk depends on authenticated species and, for Asarum, plant part and contamination.', 'Exclude Aristolochia identities and require exact authentication rather than relying on a common name.'],
+        ['Ma Huang / Ma Huang Gen', 'The handout correctly distinguishes an ephedrine-alkaloid regulatory problem, but US restrictions are product- and use-specific.', 'Do not rewrite this as “all Ephedra plants are federally illegal.”'],
+        ['Qian Dan / Mi Tuo Seng / Qing Fen / Xiong Huang / Zhu Sha', 'Lead, litharge, calomel, realgar and cinnabar present serious heavy-metal or metalloid hazards.', 'Use safer alternatives; historical materia-medica status does not establish acceptable exposure.'],
+        ['Tu Si Zi / Bai Mao Gen', 'The handout describes plant-pest import controls because viable material can sprout.', 'Powdering, treatment, origin and permit requirements must be checked with current USDA APHIS rules.'],
+        ['Hu Gu / Xi Jiao / Xiong Dan / protected animal parts', 'Tiger, rhinoceros, bear and other protected-species products may trigger CITES, ESA and state prohibitions.', 'Do not possess or trade without current species-specific authority; prefer lawful non-wildlife strategies.']
+      ]}, {heading: 'Corrections required before publication as current law', rows: [
+        ['Chuan Shan Jia', 'The handout lists pangolin scale in CITES Appendix II; commercial international trade protections were strengthened after 2010.', 'Use the current CITES Appendix and domestic law, not the 2010 category.'],
+        ['E Jiao species claim', 'Domestic donkey (Equus asinus) is not identical to the endangered African wild ass (Equus africanus).', 'Verify species and source; do not extend one species listing to every donkey-hide product.'],
+        ['Ji Nei Jin', 'The handout itself qualifies its avian-disease restriction as applying to bulk herb while exempting certain finished products.', 'Preserve the product-form distinction and verify present import conditions.'],
+        ['CITES entries', 'Mu Xiang, Shi Hu, She Xiang, Gui Ban, Hai Ma, Tian Ma and others depend on exact species, source and propagation status.', 'Never assign Appendix status from pinyin alone.']
       ]}],
       emergency: 'If an obsolete or prohibited ingredient is found, stop dispensing, quarantine the batch, preserve records and follow regulator/poison-control guidance.'
     },
     es: {
       rule: 'Una fuente clásica es evidencia histórica, no autorización automática legal o de seguridad para la sustancia original.',
-      sections: [{heading: 'Alcance del examen no equivale a seguridad o legalidad', rows: [
-        ['Lista con asterisco/exclusión', 'El documento suministrado excluye muchas sustancias por currículo; excluir no significa por sí solo tóxica, ilegal u obsoleta.', 'Mantener separado alcance de examen, seguridad clínica y estado legal.'],
-        ['Contradicción interna encontrada', 'Cao Wu, Fu Zi, Ma Huang, Huo Ma Ren, Shi Chang Pu, Tan Xiang y Lu Jiao Jiao aparecen tanto incluidos como excluidos.', 'No publicar la lista como NCCAOM oficial vigente sin el esquema oficial actual.'],
-        ['Regla de verificación', 'Temarios y restricciones legales cambian de forma independiente según fecha y jurisdicción.', 'Fechar la fuente y verificar con esquema NCCAOM vigente y ley local antes de cambiar cobertura.']
+      sections: [{heading: 'Lista suministrada del examen de California: estado de verificación', rows: [
+        ['Fuente de trabajo, no dictamen oficial vigente', 'El material suministrado dice que estas 29 sustancias se excluyen del examen de California, pero no incluye fecha ni cita del manual oficial actual.', 'Conservar como material histórico/de trabajo hasta contrastarlo con la referencia vigente del examen de California.'],
+        ['Alcance del examen ≠ seguridad ≠ legalidad', 'Una hierba puede omitirse del examen sin ser ilegal, mientras una sustancia protegida o insegura puede aparecer en preguntas históricas.', 'Mantener tres etiquetas separadas: alcance de examen, riesgo clínico y estado legal/protegido.'],
+        ['Contradicción interna encontrada', 'Cao Wu, Fu Zi, Ma Huang, Huo Ma Ren, Shi Chang Pu, Tan Xiang y Lu Jiao Jiao aparecen tanto incluidos como excluidos en el material NCCAOM suministrado.', 'No presentar ninguna lista de exclusión suministrada como nacional o californiana oficial vigente sin fuente primaria fechada.']
       ]}, {heading: 'Identidades inseguras u obsoletas', rows: [
         ['Guān Mù Tōng', 'Aristolochia manshuriensis se vincula con nefropatía por ácido aristolóquico y cáncer.', 'No usar; distinguir de Akebia/Chuan Mu Tong autenticada donde sea permitida.'],
         ['Guǎng Fáng Jǐ', 'Aristolochia fangchi se confundió con Hàn Fáng Jǐ/Stephania tetrandra.', 'Nunca sustituir por el nombre compartido Fáng Jǐ.'],
         ['Qīng Mù Xiāng', 'Raíz de Aristolochia es insegura pese a listados históricos.', 'Reformular acción con especies aceptadas.'],
         ['Zhū Shā / Xióng Huáng', 'Cinabrio contiene mercurio y rejalgar arsénico.', 'Uso interno restringido/prohibido en muchos lugares; elegir alternativas seguras.']
-      ]}, {heading: 'Fauna protegida y variación legal', rows: [
-        ['Xī Jiǎo / Hǔ Gǔ', 'Cuerno de rinoceronte y hueso de tigre son materiales prohibidos.', 'Usar sustitutos legales por estrategia; Shuǐ Niú Jiǎo puede sustituir Xī Jiǎo donde se permita.'],
-        ['Chuān Shān Jiǎ', 'Escama de pangolín está protegida/prohibida y aparece en fórmulas históricas.', 'Usar sustituto legal aceptado o rediseñar acción.'],
-        ['Shè Xiāng / Xióng Dǎn', 'Almizcle natural y bilis de oso tienen grandes restricciones.', 'Usar alternativas sintéticas o botánicas aprobadas.'],
-        ['Má Huáng y productos según jurisdicción', 'Reglas cambian por tipo, concentración, lugar y alcance profesional.', 'Verificar ley local vigente; libro o mercado no autorizan.'],
-        ['Identidad y trazabilidad', 'Etiqueta solo pinyin puede ocultar especie protegida, adulterante o metal pesado.', 'Exigir identidad, parte, origen, procesamiento, lote y certificado.']
+      ]}, {heading: 'Sustancias tóxicas o de alto riesgo en la lista de 29', rows: [
+        ['Cao Wu / Chuan Wu / Fu Zi', 'Acónito silvestre preparado, acónito de Sichuan y raíz lateral contienen alcaloides tipo aconitina cardiotóxicos.', 'Son de alto riesgo y dependen del procesamiento; no reducir su estado a una sola etiqueta de “ilegal”.'],
+        ['Gan Sui / Hong Da Ji / Qian Niu Zi', 'Kansui, raíz de Euphorbia/Knoxia y semilla de campanilla son purgantes drásticos con riesgo tóxico importante.', 'Evitar automedicación; verificar legalidad y alcance profesional del producto exacto.'],
+        ['Zhu Sha', 'El cinabrio es un mineral que contiene mercurio.', 'Su uso interno está restringido o prohibido en muchos contextos; usar estrategia más segura.'],
+        ['Quan Xie / Wu Gong / Zao Jiao', 'Escorpión, ciempiés y fruto de gleditsia pueden producir efectos tóxicos o irritantes graves.', 'Exigen identidad exacta, revisión profesional y autorización según jurisdicción.'],
+        ['Shi Jun Zi / Liu Huang', 'Fruto de quisqualis y azufre presentan riesgos según dosis, preparación y producto.', 'No se describen correctamente mediante una afirmación universal de ilegalidad en EE. UU.']
+      ]}, {heading: 'Materiales protegidos, animales o humanos', rows: [
+        ['Hu Gu / Xi Jiao', 'Hueso de tigre y cuerno de rinoceronte son materiales de fauna protegida cuyo comercio está prohibido.', 'No usar; elegir sustituto legal basado en la estrategia.'],
+        ['She Xiang / Xiong Dan', 'Almizcle natural de ciervo y bilis de oso plantean restricciones graves de fauna, comercio, ley y ética.', 'Usar alternativa sintética o botánica aceptada donde sea legal.'],
+        ['Ge Jie / Lu Jiao / Lu Jiao Jiao', 'Gecko, asta de ciervo y gelatina de asta dependen de especie, origen, reglas de fauna e importación.', 'Verificar especie exacta y fuente legal trazable; no etiquetar todas las formas por igual.'],
+        ['Zi He Che', 'La placenta humana es tejido humano con importantes problemas regulatorios, infecciosos y éticos.', 'No usar salvo que el producto y la práctica exactos sean expresamente legales y controlados.'],
+        ['Jiang Can / Wu Ling Zhi', 'Gusano de seda enfermo y heces de ardilla voladora son materiales animales con riesgos de identidad, contaminación e importación.', 'Exigir producto autenticado, analizado y revisión legal aplicable.']
+      ]}, {heading: 'No son categóricamente ilegales: importan producto y jurisdicción', rows: [
+        ['Ma Huang', 'Los suplementos dietéticos con alcaloides de efedrina están restringidos federalmente en EE. UU.; esto no vuelve idéntica toda circunstancia botánica o profesional.', 'Verificar producto, uso, reglas federales/estatales y alcance profesional.'],
+        ['Huo Ma Ren', 'El estado de la semilla de cáñamo/cannabis depende de variedad, procesamiento, THC y ley del producto.', 'Usar solo producto alimentario o medicinal conforme y analizado.'],
+        ['Shi Chang Pu', 'La especie y el contenido de beta-asarona afectan seguridad y regulación.', 'Verificar especie de Acorus, preparación y norma del producto exacto.'],
+        ['Hu Lu Ba / Tan Xiang', 'El fenogreco se usa ampliamente como alimento/hierba; el sándalo depende de especie y origen legal.', 'Ninguno se describe correctamente como universalmente ilegal en Estados Unidos.'],
+        ['Hu Po / Su He Xiang', 'Ámbar y estoraque plantean preguntas de autenticidad, composición, origen e importación.', 'Verificar material y reglas del producto en vez de asignar ilegalidad general.'],
+        ['Identidad y trazabilidad', 'Una etiqueta solo en pinyin puede ocultar especie protegida, adulterante, contaminante u otro producto regulado.', 'Exigir identidad científica/química, parte, origen, procesamiento, lote y certificado.']
+      ]}, {heading: 'Cómo usar el documento FDA/USDA/CITES suministrado', rows: [
+        ['Panorama regulatorio histórico', 'El documento fecha expresamente su información CITES al 10 de octubre de 2010 y cita un proyecto de ley de 2009.', 'Tratarlo como fuente histórica de estudio, no como lista federal consolidada vigente.'],
+        ['Agencias distintas, reglas distintas', 'Seguridad de productos FDA, control fitosanitario USDA, comercio CITES y ESA son sistemas separados.', 'Detención, permiso, restricción de suplemento y prohibición comercial no son equivalentes.'],
+        ['Política de proveedor privado', '“Mayway USA no vende como hierba cruda” describe una decisión comercial, no por sí sola una prohibición federal.', 'Separar política comercial de regulación gubernamental.'],
+        ['Verificación vigente', 'Cambian listados de especies, exenciones, permisos, definiciones de producto y reglas estatales.', 'Verificar especie y producto en fuentes primarias actuales de FDA, USDA APHIS, CITES, USFWS y California antes de dispensar.']
+      ]}, {heading: 'Entradas clave conservadas del documento de 2010', rows: [
+        ['Ban Mao / Chan Su / Ma Qian Zi / Ying Su Ke', 'Cantaridina, bufotoxinas, estricnina y alcaloides del opio crean toxicidad grave o problemas de sustancias controladas.', 'No tratarlas como hierbas rutinarias intercambiables.'],
+        ['Bing Lang / Da Fu Pi', 'Nuez y pericarpio de areca plantean carcinogenicidad y dependencia.', 'El riesgo clínico no establece automáticamente una prohibición universal de importación; verificar regla del producto.'],
+        ['Can Sha / Wu Ling Zhi / Ye Ming Sha / Zi He Che', 'Productos fecales y humanos plantean problemas sanitarios, infecciosos y de admisibilidad de importación.', 'No dispensar sin legalidad expresa y procesamiento/análisis validados.'],
+        ['Guang Fang Ji / Guan Mu Tong / Ma Dou Ling / Qing Mu Xiang / Xi Xin', 'El documento los agrupa por ácido aristolóquico; el riesgo depende de especie autenticada y, para Asarum, parte vegetal y contaminación.', 'Excluir identidades Aristolochia y exigir autenticación exacta, no confiar en nombre común.'],
+        ['Ma Huang / Ma Huang Gen', 'El documento identifica un problema regulatorio de alcaloides de efedrina, pero las restricciones estadounidenses dependen de producto y uso.', 'No convertirlo en “todas las plantas Ephedra son federalmente ilegales”.'],
+        ['Qian Dan / Mi Tuo Seng / Qing Fen / Xiong Huang / Zhu Sha', 'Plomo, litargirio, calomel, rejalgar y cinabrio presentan peligros graves por metales o metaloides.', 'Usar alternativas seguras; el estado histórico no establece exposición aceptable.'],
+        ['Tu Si Zi / Bai Mao Gen', 'El documento describe controles fitosanitarios porque el material viable puede germinar.', 'Verificar molienda, tratamiento, origen y permisos con reglas actuales USDA APHIS.'],
+        ['Hu Gu / Xi Jiao / Xiong Dan / partes animales protegidas', 'Productos de tigre, rinoceronte, oso y otras especies pueden activar prohibiciones CITES, ESA y estatales.', 'No poseer ni comerciar sin autoridad vigente por especie; preferir estrategias legales sin fauna.']
+      ]}, {heading: 'Correcciones necesarias antes de publicarlo como ley vigente', rows: [
+        ['Chuan Shan Jia', 'El documento coloca la escama de pangolín en Apéndice II; la protección del comercio internacional se reforzó después de 2010.', 'Usar el Apéndice CITES y ley nacional vigentes, no la categoría de 2010.'],
+        ['Afirmación de especie para E Jiao', 'El burro doméstico (Equus asinus) no es idéntico al asno salvaje africano amenazado (Equus africanus).', 'Verificar especie y origen; no extender un listado a todo producto de piel de burro.'],
+        ['Ji Nei Jin', 'El propio documento limita su restricción por enfermedad aviar a hierba a granel y exime ciertos productos terminados.', 'Conservar distinción por forma de producto y verificar condiciones actuales de importación.'],
+        ['Entradas CITES', 'Mu Xiang, Shi Hu, She Xiang, Gui Ban, Hai Ma, Tian Ma y otros dependen de especie, origen y propagación.', 'Nunca asignar Apéndice solo por pinyin.']
       ]}],
       emergency: 'Si aparece ingrediente obsoleto o prohibido, suspender dispensación, aislar lote, conservar registros y seguir al regulador/toxicología.'
     }
