@@ -93,12 +93,13 @@ RESOURCES = {
         ("Official 2026 outline", "Temario oficial 2026", ACPL, ACPL),
     ],
     "chinese-herbal-medicine": [
-        ("Open Board course", "Abrir curso de Board", "/blocks/myprogress/study-guide.php?area=herbology", "/blocks/myprogress/study-guide.php?area=herbology"),
         ("Orientation · Route, changes and priorities", "Orientación · Ruta, cambios y prioridades", "chinese-herbal-medicine-cards.html", "chinese-herbal-medicine-cards-es.html"),
         ("Step 1 · Individual herbs", "Paso 1 · Hierbas individuales", "../comparisons/index.html", "../comparisons/index-es.html"),
         ("Step 2 · 51 Duì Yào pairs", "Paso 2 · 51 parejas Duì Yào", "../comparisons/dui-yao.html", "../comparisons/dui-yao-es.html"),
         ("Step 3 · Formula composition", "Paso 3 · Composición de fórmulas", "../comparisons/formula-theory.html", "../comparisons/formula-theory-es.html"),
         ("Safety throughout the route", "Seguridad durante toda la ruta", "../comparisons/safety.html", "../comparisons/safety-es.html"),
+        ("Open Board course", "Abrir curso de Board", "/blocks/myprogress/study-guide.php?area=herbology", "/blocks/myprogress/study-guide.php?area=herbology"),
+        ("Official NCBAHM publication", "Publicación oficial NCBAHM", OFFICIAL, OFFICIAL),
     ],
     "biomedicine": [
         ("Open Board course", "Abrir curso de Board", "/blocks/myprogress/study-guide.php?area=biomedicine", "/blocks/myprogress/study-guide.php?area=biomedicine"),
@@ -108,7 +109,7 @@ RESOURCES = {
 def top(lang, title, alternate, back="../board-guidelines"):
     es = lang == "es"
     suffix = "-es.html" if es else ".html"
-    return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{escape(title)}"><title>{escape(title)} | AcupunctureTests</title><link rel="alternate" hreflang="{'en' if es else 'es'}" href="{alternate}"><link rel="stylesheet" href="guidelines.css?v=20261027-4"></head><body><header class="guide-topbar"><div class="guide-shell guide-topbar__inner"><a class="guide-brand" href="{back}{suffix}">☯ AcupunctureTests · {'Guías de Board' if es else 'Board Guidelines'}</a><div class="guide-actions"><a class="guide-button guide-button--outline" href="{alternate}">{'English' if es else 'Español'}</a><a class="guide-button guide-button--outline" href="/my/">← Dashboard</a></div></div></header><main class="guide-shell">'''
+    return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{escape(title)}"><title>{escape(title)} | AcupunctureTests</title><link rel="alternate" hreflang="{'en' if es else 'es'}" href="{alternate}"><link rel="stylesheet" href="guidelines.css?v=20261027-5"></head><body><header class="guide-topbar"><div class="guide-shell guide-topbar__inner"><a class="guide-brand" href="{back}{suffix}">☯ AcupunctureTests · {'Guías de Board' if es else 'Board Guidelines'}</a><div class="guide-actions"><a class="guide-button guide-button--outline" href="{alternate}">{'English' if es else 'Español'}</a><a class="guide-button guide-button--outline" href="/my/">← Dashboard</a></div></div></header><main class="guide-shell">'''
 
 def foot(es=False):
     return f'''</main><footer class="guide-footer"><div class="guide-shell">{'Revisado el 27 de octubre de 2026 · El temario oficial vigente siempre prevalece.' if es else 'Reviewed October 27, 2026 · The current official outline always controls.'}</div></footer></body></html>'''
@@ -124,23 +125,20 @@ def board_page(board, lang):
     source = board.get("source", OFFICIAL)
     herbal = board["slug"] == "chinese-herbal-medicine"
     html = top(lang, title, alternate)
-    hero_actions = ''
-    if herbal:
-        hero_actions = f'''<div class="guide-actions guide-hero__actions"><a class="guide-button" href="../comparisons/index{suffix}.html">{'Comenzar Paso 1: hierbas individuales' if es else 'Start Step 1: individual herbs'} →</a><a class="guide-button guide-button--outline" href="chinese-herbal-medicine-cards{suffix}.html">{'Ver ruta, cambios y prioridades' if es else 'View route, changes and priorities'} →</a></div>'''
-    html += f'''<section class="guide-hero"><p class="guide-eyebrow">{'Guía de Board' if es else 'Board guideline'}</p><h1>{escape(title)}</h1><p>{escape(summary)}</p>{hero_actions}</section>'''
+    html += f'''<section class="guide-hero"><p class="guide-eyebrow">{'Guía de Board' if es else 'Board guideline'}</p><h1>{escape(title)}</h1><p>{escape(summary)}</p></section>'''
     if herbal:
         route_items = [
-            ("0", "Orientación" if es else "Orientation", "Ruta y prioridades" if es else "Route and priorities", f"chinese-herbal-medicine-cards{suffix}.html", "guide-route__item--orientation"),
-            ("1", "Hierbas" if es else "Herbs", "Empieza aquí" if es else "Start here", f"../comparisons/index{suffix}.html", "guide-route__item--start"),
-            ("2", "Duì Yào", "51 parejas" if es else "51 pairs", f"../comparisons/dui-yao{suffix}.html", ""),
-            ("3", "Fórmulas" if es else "Formulas", "Composición y comparación" if es else "Composition and comparison", f"../comparisons/formula-theory{suffix}.html", ""),
-            ("D", "Seguridad" if es else "Safety", "Durante toda la ruta" if es else "Throughout the route", f"../comparisons/safety{suffix}.html", "guide-route__item--safety"),
+            ("0", "Orientación" if es else "Orientation", "Ruta y prioridades" if es else "Route and priorities", "guide-route__item--orientation"),
+            ("1", "Hierbas" if es else "Herbs", "Empieza aquí" if es else "Start here", "guide-route__item--start"),
+            ("2", "Duì Yào", "51 parejas" if es else "51 pairs", ""),
+            ("3", "Fórmulas" if es else "Formulas", "Composición y comparación" if es else "Composition and comparison", ""),
+            ("D", "Seguridad" if es else "Safety", "Durante toda la ruta" if es else "Throughout the route", "guide-route__item--safety"),
         ]
-        html += f'''<section class="guide-route" aria-labelledby="herbal-route-title"><div class="guide-route__heading"><div><p class="guide-eyebrow">{'Navegación del módulo' if es else 'Module navigation'}</p><h2 id="herbal-route-title">{'Ruta de estudio' if es else 'Study route'}</h2></div><p>{'Sigue los pasos 1–3 en orden. Consulta seguridad en cada paso.' if es else 'Follow steps 1–3 in order. Check safety at every step.'}</p></div><nav class="guide-route__items" aria-label="{'Ruta de estudio de Medicina Herbal' if es else 'Chinese Herbal Medicine study route'}">'''
-        for number, label, hint, href, modifier in route_items:
-            html += f'''<a class="guide-route__item {modifier}" href="{href}"><span class="guide-route__number">{number}</span><span><strong>{label}</strong><small>{hint}</small></span></a>'''
-        html += '</nav></section>'
-        html += f'''<div class="guide-alert"><strong>{'¿Para qué sirve este módulo?' if es else 'What is this module for?'}</strong> {'Te indica qué debes estudiar, en qué orden abrir los recursos y qué debes ser capaz de hacer antes del examen. Las tres tarjetas orientan el recorrido; el estudio comienza en A · Hierbas, continúa en B · Duì Yào y C · Fórmulas, con D · Seguridad integrado en todas las etapas.' if es else 'It tells you what to study, which resources to open in what order, and what you must be able to do before the exam. The three cards orient the route; study begins with A · Herbs, continues through B · Duì Yào and C · Formulas, with D · Safety integrated throughout.'}</div>'''
+        html += f'''<section class="guide-route" aria-labelledby="herbal-route-title"><div class="guide-route__heading"><div><p class="guide-eyebrow">{'Secuencia del módulo' if es else 'Module sequence'}</p><h2 id="herbal-route-title">{'Ruta de estudio' if es else 'Study route'}</h2></div><p>{'Sigue los pasos 1–3 en orden. Consulta seguridad en cada paso.' if es else 'Follow steps 1–3 in order. Check safety at every step.'}</p></div><div class="guide-route__items">'''
+        for number, label, hint, modifier in route_items:
+            html += f'''<div class="guide-route__item {modifier}"><span class="guide-route__number">{number}</span><span><strong>{label}</strong><small>{hint}</small></span></div>'''
+        html += '</div></section>'
+        html += f'''<div class="guide-alert"><strong>{'Lee primero esta página de arriba hacia abajo.' if es else 'Read this page from top to bottom first.'}</strong> {'Aquí entenderás qué estudiar, el orden correcto y la meta de cada bloque. No necesitas abrir otra página todavía: todos los enlaces están juntos al final.' if es else 'Here you will understand what to study, the correct order and the goal of each block. You do not need to open another page yet: all links are grouped together at the end.'}</div>'''
         cards = [
             ("1", "Qué vas a estudiar" if es else "What you will study", [
                 "A · Hierbas: diferéncialas por propiedades, acciones, indicaciones, dosis y seguridad." if es else "A · Herbs: distinguish them by properties, actions, indications, dosage and safety.",
@@ -168,27 +166,36 @@ def board_page(board, lang):
             ("2", "Método de estudio" if es else "Study method", [study]),
             ("3", "Auditoría antes del examen" if es else "Pre-exam audit", ["Confirmar versión y fecha del temario oficial." if es else "Confirm the official outline version and effective date.", "Relacionar cada recurso del curso con una competencia del temario." if es else "Map every course resource to an outline competency.", "Separar contenido oficial, material educativo y reglas clínicas o legales." if es else "Separate official scope, educational material, and clinical or legal rules."]),
         ]
-    html += f'<div class="guide-grid{" guide-grid--three" if herbal else ""}">'
-    for number, heading, rows in cards:
-        html += f'<article class="guide-card"><p class="guide-eyebrow">{number} · {"Paso" if es else "Step"}</p><h2>{heading}</h2><ul>' + ''.join(f'<li>{escape(x)}</li>' for x in rows) + '</ul></article>'
     if herbal:
-        html += f'''<article class="guide-card guide-card--wide guide-card--purple"><p class="guide-eyebrow">{'Punto de entrada' if es else 'Entry point'}</p><h2>{'Comienza con el mapa de los listados' if es else 'Begin with the roster map'}</h2><p>{'Las tres tarjetas explican el listado de hierbas, el listado de fórmulas y cómo interpretar el cambio de NCCAOM a NCBAHM. Después vuelve aquí para seguir la ruta A–D.' if es else 'The three cards explain the herb roster, formula roster and how to interpret the transition from NCCAOM to NCBAHM. Then return here to follow the A–D route.'}</p><div class="guide-actions"><a class="guide-button" href="chinese-herbal-medicine-cards{suffix}.html">{'Abrir las 3 tarjetas' if es else 'Open the 3 cards'} →</a><a class="guide-button guide-button--outline" href="nccaom-ncbahm-crosswalk{suffix}.html">{'Entender el cambio NCCAOM → NCBAHM' if es else 'Understand the NCCAOM → NCBAHM transition'} →</a></div></article>'''
-    html += '</div>'
+        html += f'''<section class="guide-reading-flow" aria-label="{'Lectura guiada del módulo' if es else 'Guided module reading'}">'''
+        for number, heading, rows in cards:
+            html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">{number}</div><div><p class="guide-eyebrow">{number} · {'Lectura' if es else 'Read'}</p><h2>{heading}</h2><ul>''' + ''.join(f'<li>{escape(x)}</li>' for x in rows) + '</ul></div></article>'
+        html += f'''<article class="guide-reading-step guide-reading-step--last"><div class="guide-reading-step__number">4</div><div><p class="guide-eyebrow">{'Antes de abrir los recursos' if es else 'Before opening resources'}</p><h2>{'Cómo continuar sin perder el hilo' if es else 'How to continue without losing the thread'}</h2><p>{'Termina esta lectura y revisa el control de progreso que aparece debajo. Cuando llegues a los enlaces finales, abre un solo recurso a la vez y utiliza siempre el botón “Regresar a la ruta de Medicina Herbal” para volver a este punto.' if es else 'Finish this reading and review the progress check below. When you reach the final links, open one resource at a time and always use the “Back to the Herbal Medicine route” button to return here.'}</p></div></article></section>'''
+    else:
+        html += '<div class="guide-grid">'
+        for number, heading, rows in cards:
+            html += f'<article class="guide-card"><p class="guide-eyebrow">{number} · {"Paso" if es else "Step"}</p><h2>{heading}</h2><ul>' + ''.join(f'<li>{escape(x)}</li>' for x in rows) + '</ul></article>'
+        html += '</div>'
     audit = AUDITS[board["slug"]]
     audit_heading = ("Comprueba lo que ya puedes hacer" if es else "Check what you can already do") if herbal else ("Auditoría práctica del Board" if es else "Practical Board audit")
     audit_intro = ("No marques un bloque como terminado por haber leído las tarjetas. Márcalo cuando puedas aplicar el conocimiento a una pregunta clínica y explicar por qué las otras opciones son incorrectas." if es else "Do not mark a block complete because you read the cards. Mark it when you can apply the knowledge to a clinical question and explain why the other options are wrong.") if herbal else ("Marca un bloque como cubierto solo cuando puedas resolverlo dentro de un caso, no solamente reconocer el término." if es else "Mark a block covered only when you can solve it inside a case, not merely recognize the term.")
-    html += f'''<section class="guide-section"><p class="guide-eyebrow">{'Control de progreso' if herbal and es else 'Progress check' if herbal else 'Control de cobertura' if es else 'Coverage control'}</p><h2>{audit_heading}</h2><p>{audit_intro}</p><div class="guide-flow">'''
+    html += f'''<section class="guide-section"><p class="guide-eyebrow">{'Control de progreso' if herbal and es else 'Progress check' if herbal else 'Control de cobertura' if es else 'Coverage control'}</p><h2>{audit_heading}</h2><p>{audit_intro}</p><div class="guide-flow{' guide-flow--linear' if herbal else ''}">'''
     for en_label, es_label, en_body, es_body in audit:
         status_label = ("Debes poder" if es else "You can") if herbal else ("Verificar" if es else "Verify")
         html += f'''<article class="guide-flow__item"><span class="guide-status">{status_label}</span><h3>{escape(es_label if es else en_label)}</h3><p>{escape(es_body if es else en_body)}</p></article>'''
     html += '</div></section>'
-    html += f'''<section class="guide-section"><h2>{'Recursos recomendados' if es else 'Recommended resources'}</h2><div class="guide-resource-list">'''
+    if herbal:
+        html += f'''<section class="guide-section"><h2>{'Fuente y control de versión' if es else 'Source and version control'}</h2><p>{'El alcance vigente de NCBAHM controla la preparación. Encontrarás el enlace a la publicación oficial junto con los demás recursos al final, para que no interrumpas la lectura.' if es else 'The current NCBAHM scope controls preparation. You will find the official publication link with the other resources at the end so your reading is not interrupted.'}</p></section>'''
+        html += f'''<section class="guide-section guide-final-navigation"><p class="guide-eyebrow">{'Fin de la guía · Ahora puedes continuar' if es else 'End of guide · Now continue'}</p><h2>{'Abre los recursos en este orden' if es else 'Open resources in this order'}</h2><p>{'Empieza por Orientación si necesitas revisar los cambios de listados. Luego sigue los pasos 1–3 y consulta Seguridad durante todo el recorrido.' if es else 'Begin with Orientation if you need to review roster changes. Then follow steps 1–3 and consult Safety throughout the route.'}</p><div class="guide-resource-list guide-resource-list--linear">'''
+    else:
+        html += f'''<section class="guide-section"><h2>{'Recursos recomendados' if es else 'Recommended resources'}</h2><div class="guide-resource-list">'''
     for en_label, es_label, en_href, es_href in RESOURCES[board["slug"]]:
         href = es_href if es else en_href
         external = href.startswith("http")
         html += f'''<a class="guide-resource" href="{href}"{' target="_blank" rel="noopener"' if external else ''}><span>{escape(es_label if es else en_label)}</span><strong>→</strong></a>'''
     html += '</div></section>'
-    html += f'''<section class="guide-section"><h2>{'Fuente y control de versión' if es else 'Source and version control'}</h2><p>{'Consulta la publicación oficial antes de cambiar el plan de estudio. La fecha de revisión de esta página no convierte el material educativo en una publicación del Board.' if es else 'Check the official publication before changing the study plan. This page’s review date does not make the educational material a Board publication.'}</p><a class="guide-button guide-button--outline" href="{source}" target="_blank" rel="noopener">{'Abrir fuente oficial' if es else 'Open official source'} ↗</a></section>'''
+    if not herbal:
+        html += f'''<section class="guide-section"><h2>{'Fuente y control de versión' if es else 'Source and version control'}</h2><p>{'Consulta la publicación oficial antes de cambiar el plan de estudio. La fecha de revisión de esta página no convierte el material educativo en una publicación del Board.' if es else 'Check the official publication before changing the study plan. This page’s review date does not make the educational material a Board publication.'}</p><a class="guide-button guide-button--outline" href="{source}" target="_blank" rel="noopener">{'Abrir fuente oficial' if es else 'Open official source'} ↗</a></section>'''
     return html + foot(es)
 
 def herbal_cards(lang):
