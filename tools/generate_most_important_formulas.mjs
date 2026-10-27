@@ -6,6 +6,7 @@ import { mostImportantFormulaBatch2 } from './most_important_formulas_batch_2.mj
 import { mostImportantFormulaBatch3 } from './most_important_formulas_batch_3.mjs';
 import { mostImportantFormulaBatch4 } from './most_important_formulas_batch_4.mjs';
 import { mostImportantFormulaBatch5 } from './most_important_formulas_batch_5.mjs';
+import { mostImportantFormulaBatch6 } from './most_important_formulas_batch_6.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-2';
@@ -15,7 +16,8 @@ const batches = [
   { number: 2, cards: mostImportantFormulaBatch2 },
   { number: 3, cards: mostImportantFormulaBatch3 },
   { number: 4, cards: mostImportantFormulaBatch4 },
-  { number: 5, cards: mostImportantFormulaBatch5 }
+  { number: 5, cards: mostImportantFormulaBatch5 },
+  { number: 6, cards: mostImportantFormulaBatch6 }
 ];
 const cards = batches.flatMap(batch => batch.cards.map((card, index) => ({ ...card, batch: batch.number, batchIndex: index + 1 })));
 const currentBatch = Math.max(...batches.map(batch => batch.number));
