@@ -32,6 +32,24 @@ if ! grep -q 'Acupuncture &amp; Point Location' "${SOURCE_DIR}/index.html"; then
     exit 1
 fi
 
+PRACTICE_DIR="${SOURCE_DIR}/comparisons"
+for required in \
+    formula-practice.html \
+    formula-practice-es.html \
+    formula-practice.js \
+    formula-practice-data.json; do
+    if [[ ! -f "${PRACTICE_DIR}/${required}" ]]; then
+        echo "Formula practice artifact is missing: ${required}" >&2
+        exit 1
+    fi
+done
+node "${REPO_ROOT}/tools/validate_formula_practice.mjs" \
+    "${PRACTICE_DIR}/formula-practice-data.json"
+if ! grep -q 'formula-practice.html' "${PRACTICE_DIR}/formula-navigator.html"; then
+    echo "Formula Navigator does not link to Formula Practice." >&2
+    exit 1
+fi
+
 mkdir -p "${OUTPUT_DIR}"
 ARTIFACT="${OUTPUT_DIR}/study-guide-${RELEASE_ID}.tar.gz"
 

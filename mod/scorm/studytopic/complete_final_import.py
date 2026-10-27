@@ -76,6 +76,11 @@ def extract_docx_paragraphs(path: Path) -> list[str]:
 
 def _clean_text(value: str) -> str:
     value = value.replace(ANSWER_MARKER, "")
+    for _ in range(3):
+        decoded = html.unescape(value)
+        if decoded == value:
+            break
+        value = decoded
     return re.sub(r"[ \t]+", " ", value).strip()
 
 

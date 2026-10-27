@@ -59,6 +59,18 @@ class CompleteFinalImportTest(unittest.TestCase):
         self.assertEqual("unkeyed_multiple_choice", question.classification)
         self.assertEqual([], question.correct_labels)
 
+    def test_parser_normalizes_repeated_source_entities(self) -> None:
+        question = IMPORTER.parse_questions(
+            [
+                "1. Which pair?",
+                "A) Bai Shao &amp;amp; Da Zao +++++",
+                "B) Gui Zhi &amp; Sheng Jiang",
+            ]
+        )[0]
+
+        self.assertEqual("Bai Shao & Da Zao", question.options[0].text)
+        self.assertEqual("Gui Zhi & Sheng Jiang", question.options[1].text)
+
     def test_moodle_xml_contains_only_uniquely_keyed_questions(self) -> None:
         questions = IMPORTER.parse_questions(
             [

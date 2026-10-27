@@ -53,3 +53,22 @@ Do not import `review-required.jsonl` as scored content. After a subject-matter
 expert supplies explicit answer keys, update the controlled source and rerun
 the staging process into a new output directory so the audit trail remains
 reproducible.
+
+## Build the connected 63-formula practice bank
+
+The Study Guide practice generator consumes only `keyed-questions.jsonl` and
+matches explicit formula-name mentions to the existing 63-formula catalog:
+
+```bash
+node tools/generate_formula_practice.mjs \
+  --source /var/tmp/complete-final-import/keyed-questions.jsonl
+node tools/generate_formula_navigator.mjs
+node tools/validate_formula_practice.mjs
+```
+
+This creates the bilingual Formula Practice pages and their validated static
+data. A question may be linked to more than one formula when it is comparative
+or names another formula as a distractor. The interface describes these as
+related questions rather than implying that every linked formula is correct.
+General keyed questions remain available in comprehensive mock exams. The
+review queue is never read by the practice generator.
