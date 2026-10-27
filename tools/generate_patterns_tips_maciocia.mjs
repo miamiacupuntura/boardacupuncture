@@ -7,6 +7,7 @@ import { lungCards } from './pattern_lung_batch.mjs';
 import { spleenCards } from './pattern_spleen_batch.mjs';
 import { kidneyCards } from './pattern_kidney_batch.mjs';
 import { stomachCards } from './pattern_stomach_batch.mjs';
+import { smallIntestineCards } from './pattern_small_intestine_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-2';
@@ -16,7 +17,8 @@ const batches = [
   { key: 'lung', number: 3, title: 'Lung', titleEs: 'Pulmón', cards: lungCards },
   { key: 'spleen', number: 4, title: 'Spleen', titleEs: 'Bazo', cards: spleenCards },
   { key: 'kidney', number: 5, title: 'Kidney', titleEs: 'Riñón', cards: kidneyCards },
-  { key: 'stomach', number: 6, title: 'Stomach', titleEs: 'Estómago', cards: stomachCards }
+  { key: 'stomach', number: 6, title: 'Stomach', titleEs: 'Estómago', cards: stomachCards },
+  { key: 'small-intestine', number: 7, title: 'Small Intestine', titleEs: 'Intestino Delgado', cards: smallIntestineCards }
 ];
 const cards = batches.flatMap(batch => batch.cards.map((card, index) => ({
   ...card,
@@ -66,7 +68,7 @@ function indexPage(language) {
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Grupo 14 · Tabla clínica por órganos' : 'Group 14 · Organ-pattern clinical table'}</p><h1>Patterns Tips Maciocia</h1><p>${es ? 'Colección independiente basada en la tabla grande entregada: compara signos, lengua, pulso y fórmulas por sistema sin mezclarla con Pattern Comparisons.' : 'Independent collection based on the supplied master table: compare signs, tongue, pulse and formulas by system without mixing it into Pattern Comparisons.'}</p></section>
 ${nav(es)}
 <section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar tips' : 'Search tips'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar patrón, signo, lengua, pulso o fórmula' : 'Search pattern, sign, tongue, pulse or formula'}" data-comparison-search></label></section>
-<section><header class="comparison-summary"><h2>${es ? 'Tips disponibles · Lotes 1–6' : 'Available tips · Batches 1–6'}</h2><p><span data-visible-count>${cards.length}</span> ${es ? 'tips clínicos' : 'clinical tips'}</p></header><div class="comparison-grid" data-comparison-grid>${cardHtml}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ningún tip coincide.' : 'No tips match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Patterns Tips Maciocia · Corazón, Pericardio, Hígado, Pulmón, Bazo, Riñón y Estómago.' : 'Patterns Tips Maciocia · Heart, Pericardium, Liver, Lung, Spleen, Kidney and Stomach.'}</div></footer></body></html>`;
+<section><header class="comparison-summary"><h2>${es ? 'Tips disponibles · Lotes 1–7' : 'Available tips · Batches 1–7'}</h2><p><span data-visible-count>${cards.length}</span> ${es ? 'tips clínicos' : 'clinical tips'}</p></header><div class="comparison-grid" data-comparison-grid>${cardHtml}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ningún tip coincide.' : 'No tips match this search.'}</p></section></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Patterns Tips Maciocia · Corazón, Pericardio, Hígado, Pulmón, Bazo, Riñón, Estómago e Intestino Delgado.' : 'Patterns Tips Maciocia · Heart, Pericardium, Liver, Lung, Spleen, Kidney, Stomach and Small Intestine.'}</div></footer></body></html>`;
 }
 
 cards.forEach(card => {
