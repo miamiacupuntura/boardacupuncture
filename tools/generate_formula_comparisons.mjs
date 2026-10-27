@@ -11,6 +11,7 @@ import { warmInteriorFormulaComparisons } from './formula_comparisons_warm_inter
 import { tonifyFormulaComparisons } from './formula_comparisons_tonify_batch.mjs';
 import { regulateQiFormulaComparisons } from './formula_comparisons_regulate_qi_batch.mjs';
 import { invigorateBloodFormulaComparisons } from './formula_comparisons_invigorate_blood_batch.mjs';
+import { finalCategoryFormulaComparisons } from './formula_comparisons_final_categories_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -3046,6 +3047,7 @@ cards.push(...warmInteriorFormulaComparisons);
 cards.push(...tonifyFormulaComparisons);
 cards.push(...regulateQiFormulaComparisons);
 cards.push(...invigorateBloodFormulaComparisons);
+cards.push(...finalCategoryFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
