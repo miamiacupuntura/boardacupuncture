@@ -20,7 +20,7 @@
     groupLink: el('reader-group-link'), brand: el('reader-brand'), language: el('reader-language'), dashboard: el('reader-dashboard'),
     eyebrow: el('reader-eyebrow'), title: el('reader-title'), description: el('reader-description'), progress: el('reader-progress'),
     previous: el('reader-previous'), next: el('reader-next'), index: el('reader-index'), loading: el('reader-loading'), error: el('reader-error'),
-    chapter: el('reader-chapter'), bottom: el('reader-bottom-controls'), bottomProgress: el('reader-bottom-progress'),
+    chapter: el('reader-chapter'), meter: el('reader-meter'), meterFill: el('reader-meter-fill'), bottom: el('reader-bottom-controls'), bottomProgress: el('reader-bottom-progress'),
     bottomPrevious: el('reader-bottom-previous'), bottomNext: el('reader-bottom-next'), bottomIndex: el('reader-bottom-index'), footer: el('reader-footer')
   };
 
@@ -50,6 +50,10 @@
   function updateControls() {
     const text = es ? `Capítulo ${current + 1} de ${chapters.length}` : `Chapter ${current + 1} of ${chapters.length}`;
     ui.progress.textContent = ui.bottomProgress.textContent = text;
+    ui.meter.setAttribute('aria-label', es ? 'Progreso de lectura' : 'Reading progress');
+    ui.meter.setAttribute('aria-valuemax', String(chapters.length));
+    ui.meter.setAttribute('aria-valuenow', String(current + 1));
+    ui.meterFill.style.width = `${((current + 1) / chapters.length) * 100}%`;
     ui.previous.disabled = ui.bottomPrevious.disabled = current === 0;
     const last = current === chapters.length - 1;
     ui.next.textContent = ui.bottomNext.textContent = last ? (es ? 'Finalizar →' : 'Finish →') : (es ? 'Siguiente →' : 'Next →');
@@ -113,8 +117,8 @@
       const groupTitle = doc.querySelector('.comparison-hero h1')?.textContent?.trim();
       if (groupTitle) ui.brand.textContent = groupTitle;
       chapters = [...doc.querySelectorAll('.comparison-card__open')]
-        .map(link => ({url: link.getAttribute('href'), title: link.closest('.comparison-card')?.querySelector('h3')?.textContent?.trim()}))
-        .filter(chapter => chapter.url && chapter.title && !chapter.url.startsWith('continuous-reader'));
+        .map(link => ({url: link.dataset.chapterUrl || link.getAttribute('href'), title: link.closest('.comparison-card')?.querySelector('h3')?.textContent?.trim()}))
+        .filter(chapter => chapter.url && chapter.title);
       if (!chapters.length) throw new Error(es ? 'no se encontraron tarjetas' : 'no chapter cards were found');
       current = Math.min(current, chapters.length - 1);
       await loadChapter(current, false);

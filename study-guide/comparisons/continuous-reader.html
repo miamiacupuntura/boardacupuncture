@@ -9,6 +9,7 @@
   <style>
     .reader-status{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0;padding:14px 16px;border:1px solid #d5e0ea;border-radius:14px;background:#fff}
     .reader-status p{margin:0}.reader-progress{font-weight:800;color:#17324d}.reader-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .reader-meter{width:100%;height:8px;overflow:hidden;border-radius:999px;background:#dfe8f0}.reader-meter span{display:block;width:0;height:100%;border-radius:inherit;background:#ff7626;transition:width .2s ease}
     .reader-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 15px;border:1px solid #b9cad9;border-radius:10px;background:#fff;color:#17324d;font:inherit;font-weight:800;cursor:pointer;text-decoration:none}
     .reader-button--next{border-color:#bf4a00;background:#bf4a00;color:#fff}.reader-button:disabled{opacity:.42;cursor:not-allowed}
     .reader-loading,.reader-error{padding:36px 20px;border:1px solid #d5e0ea;border-radius:14px;background:#fff;text-align:center}.reader-error{color:#8d2500}
@@ -23,6 +24,7 @@
     <div class="reader-status" id="reader-top-controls">
       <p class="reader-progress" id="reader-progress">Preparing chapters…</p>
       <div class="reader-actions"><button class="reader-button" id="reader-previous" type="button">← Previous</button><a class="reader-button" id="reader-index" href="index.html">All chapters</a><button class="reader-button reader-button--next" id="reader-next" type="button">Next →</button></div>
+      <div class="reader-meter" id="reader-meter" role="progressbar" aria-label="Reading progress" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1"><span id="reader-meter-fill"></span></div>
     </div>
     <div class="reader-loading" id="reader-loading">Loading chapter…</div>
     <div class="reader-error reader-hidden" id="reader-error" role="alert"></div>
