@@ -4,7 +4,7 @@
     'name-traps', 'herb-families', 'safety', 'formula-name-traps',
     'misleading-formula-names', 'advanced-name-traps',
     'supplemental-herb-families', 'patterns-tips-maciocia',
-    'most-important-formulas', 'formula-theory'
+    'most-important-formulas', 'formula-theory', 'herbal-incompatibilities'
   ]);
   const params = new URLSearchParams(window.location.search);
   const group = groups.has(params.get('group')) ? params.get('group') : 'index';
