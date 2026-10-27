@@ -70,15 +70,24 @@ const formulas = classicFormulaOutline.map(([number, name, categoryKey, kings, r
 function nav(es) {
   const suffix = es ? '-es' : '';
   const items = [
-    ['index', es ? 'Comparaciones de Hierbas' : 'Single Herbs'],
+    ['index', es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'],
     ['formulas', es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'],
-    ['pathologies', es ? 'Patologías' : 'Pathologies'],
-    ['patterns', es ? 'Patrones' : 'Patterns'],
+    ['pathologies', es ? 'Patologías' : 'Pathology Comparisons'],
+    ['patterns', es ? 'Patrones' : 'Pattern Comparisons'],
     ['families', es ? 'Familias de Fórmulas' : 'Formula Families'],
     ['dui-yao', es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'],
+    ['name-traps', es ? 'Trampas de Nombres' : 'Name Traps'],
+    ['herb-families', es ? 'Familias y Partes' : 'Herb Families & Parts'],
     ['safety', es ? 'Biblioteca de Seguridad' : 'Safety Library'],
-    ['most-important-formulas', es ? 'Fórmulas Esenciales' : 'Essential Formulas'],
+    ['formula-name-traps', es ? 'Trampas de Fórmulas' : 'Formula Name Traps'],
+    ['misleading-formula-names', es ? 'Nombres Engañosos' : 'Misleading Formula Names'],
+    ['advanced-name-traps', es ? 'Trampas Avanzadas' : 'Advanced Name Traps'],
+    ['supplemental-herb-families', es ? 'Familias Adicionales' : 'Supplemental Herb Families'],
+    ['patterns-tips-maciocia', 'Patterns Tips Maciocia'],
+    ['most-important-formulas', es ? 'Fórmulas Esenciales' : 'Most Important Formulas'],
     ['formula-theory', es ? 'Composición de Fórmulas' : 'Formula Composition'],
+    ['herbal-incompatibilities', es ? 'Incompatibilidades' : 'Herbal Incompatibilities'],
+    ['secondary-actions', es ? 'Acciones Secundarias' : 'Secondary Actions'],
     ['formula-navigator', es ? 'Navegador de 63 Fórmulas' : '63-Formula Navigator']
   ];
   return `<nav class="comparison-collection-links formula-navigator-nav" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}">${items.map(([key, label]) => `<a${key === 'formula-navigator' ? ' aria-current="page"' : ''} href="${key}${suffix}.html">${label}</a>`).join('')}</nav>`;
