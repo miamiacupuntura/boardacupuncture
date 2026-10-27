@@ -7,6 +7,7 @@ import { purgeFormulaComparisons } from './formula_comparisons_purge_batch.mjs';
 import { harmonizeFormulaComparisons } from './formula_comparisons_harmonize_batch.mjs';
 import { dampFormulaComparisons } from './formula_comparisons_damp_batch.mjs';
 import { phlegmFormulaComparisons } from './formula_comparisons_phlegm_batch.mjs';
+import { warmInteriorFormulaComparisons } from './formula_comparisons_warm_interior_batch.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-1';
@@ -2234,6 +2235,7 @@ cards.push(
       fast: ['Cold in Liver/Stomach drives Qi upward: severe vomiting, acid regurgitation and vertex headache.', 'Spleen-Stomach deficiency-Cold fails to transform food and fluids: chronic diarrhea, poor appetite and abdominal pain.'],
       rows: [
         ['Primary organs', 'Liver and Stomach; may involve Kidney.', 'Spleen and Stomach.'],
+        ['Ingredients', 'Ren Shen is shared; Wu Zhu Yu and Sheng Jiang distinguish this formula.', 'Ren Shen is shared; Gan Jiang and Bai Zhu distinguish this formula.'],
         ['Qi direction', 'Strongly descends rebellious Qi.', 'Warms and restores middle-burner transformation.'],
         ['Decisive clue', 'Vertex headache with vomiting or acid regurgitation.', 'Chronic loose stool with cold abdominal pain.'],
         ['Exam shortcut', 'Cold rebellion rises.', 'Cold deficiency weakens the center.']
@@ -2250,6 +2252,7 @@ cards.push(
       fast: ['Frío en Hígado-Estómago impulsa Qi arriba: vómito grave, regurgitación ácida y cefalea de vértex.', 'Frío por deficiencia de Bazo-Estómago no transforma alimentos/líquidos: diarrea crónica, poco apetito y dolor abdominal.'],
       rows: [
         ['Órganos', 'Hígado y Estómago; puede incluir Riñón.', 'Bazo y Estómago.'],
+        ['Ingredientes', 'Ren Shen es compartido; Wu Zhu Yu y Sheng Jiang distinguen esta fórmula.', 'Ren Shen es compartido; Gan Jiang y Bai Zhu distinguen esta fórmula.'],
         ['Dirección de Qi', 'Desciende fuertemente Qi rebelde.', 'Calienta y restaura transformación central.'],
         ['Pista decisiva', 'Cefalea de vértex con vómito o reflujo ácido.', 'Heces blandas crónicas con dolor frío.'],
         ['Atajo', 'Rebeldía fría asciende.', 'Deficiencia fría debilita centro.']
@@ -2272,7 +2275,7 @@ cards.push(
       fast: ['Severe internal Cold: intense abdominal pain, vomiting, inability to eat and visible or palpable abdominal movement.', 'Moderate chronic deficiency-Cold: dull pain, loose stool, poor appetite and fatigue.'],
       rows: [
         ['Relative strength', 'Stronger and more urgent warming.', 'Gentler foundational warming-tonification.'],
-        ['Distinct ingredients', 'Shu Jiao and Yi Tang strongly disperse Cold and relieve pain.', 'Bai Zhu strengthens Spleen and dries Dampness.'],
+        ['Ingredients', 'Ren Shen and Gan Jiang are shared; Shu Jiao and Yi Tang strongly disperse Cold and relieve pain.', 'Ren Shen and Gan Jiang are shared; Bai Zhu and Zhi Gan Cao emphasize Spleen support.'],
         ['Decisive clue', 'Severe pain and rebellious Qi with marked Cold.', 'Chronic diarrhea and weakness.'],
         ['Exam shortcut', 'Major Cold pain.', 'Routine middle deficiency-Cold.']
       ],
@@ -2288,7 +2291,7 @@ cards.push(
       fast: ['Frío interno grave: dolor intenso, vómito, incapacidad para comer y movimiento abdominal visible/palpable.', 'Frío deficiente crónico moderado: dolor sordo, heces blandas, poco apetito y fatiga.'],
       rows: [
         ['Fuerza', 'Calentamiento más fuerte y urgente.', 'Calentamiento-tonificación fundamental más suave.'],
-        ['Ingredientes distintivos', 'Shu Jiao y Yi Tang dispersan Frío y alivian dolor con fuerza.', 'Bai Zhu fortalece Bazo y seca Humedad.'],
+        ['Ingredientes', 'Ren Shen y Gan Jiang son compartidos; Shu Jiao y Yi Tang dispersan Frío y alivian dolor con fuerza.', 'Ren Shen y Gan Jiang son compartidos; Bai Zhu y Zhi Gan Cao enfatizan apoyo de Bazo.'],
         ['Pista decisiva', 'Dolor grave y Qi rebelde con Frío marcado.', 'Diarrea crónica y debilidad.'],
         ['Atajo', 'Dolor mayor por Frío.', 'Frío deficiente central habitual.']
       ],
@@ -3032,6 +3035,7 @@ cards.push(...purgeFormulaComparisons);
 cards.push(...harmonizeFormulaComparisons);
 cards.push(...dampFormulaComparisons);
 cards.push(...phlegmFormulaComparisons);
+cards.push(...warmInteriorFormulaComparisons);
 
 function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
