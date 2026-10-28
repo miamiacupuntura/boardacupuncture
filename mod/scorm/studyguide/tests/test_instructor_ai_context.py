@@ -33,6 +33,22 @@ class InstructorAiContextTest(unittest.TestCase):
         self.assertIn(expected, self.index)
         self.assertIn(expected, self.index_v2)
 
+    def test_both_page_versions_offer_directed_questions(self) -> None:
+        for page in (self.index, self.index_v2):
+            self.assertIn("Preguntas dirigidas", page)
+            self.assertEqual(4, page.count('class="instructor_ai_guided_prompt"'))
+            self.assertIn("Hierbas del grupo", page)
+            self.assertIn("Acción compartida", page)
+            self.assertIn("Diferencias clave", page)
+            self.assertIn("Pistas de examen", page)
+            self.assertIn("CURRENT STUDY GUIDE TITLE", page)
+            self.assertIn("document.getElementById('instructor_ai_button').click()", page)
+
+    def test_narrow_requests_cannot_expand_to_unrelated_categories(self) -> None:
+        self.assertIn("RESPONSE-PRECISION RULES:", self.endpoint)
+        self.assertIn("list only the members", self.endpoint)
+        self.assertIn("general survey of unrelated herbal categories", self.endpoint)
+
 
 if __name__ == "__main__":
     unittest.main()

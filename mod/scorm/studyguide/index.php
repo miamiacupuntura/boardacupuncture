@@ -516,6 +516,16 @@ echo $OUTPUT->header();
         Use AI to create, improve, compare, and organize study material for this Study Guide.
     </p>
 
+    <div style="margin:0 0 14px;padding:12px;background:#fff;border:1px solid #d8e2f2;border-radius:10px;">
+        <strong style="display:block;margin-bottom:8px;color:#344054;">Preguntas dirigidas</strong>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <button type="button" class="instructor_ai_guided_prompt" data-prompt="Responde en español y usa exclusivamente el CURRENT STUDY GUIDE TITLE. Identifica la categoría exacta de la guía actual y enumera, sin añadir ni omitir elementos, todas las hierbas que aparecen entre paréntesis en el título. Conserva sus nombres Pinyin. No describas otros grupos. Si el título no contiene una lista, indícalo claramente." style="padding:8px 12px;border:1px solid #9db5e8;border-radius:999px;background:#fff;color:#284b9b;font-weight:bold;cursor:pointer;">Hierbas del grupo</button>
+            <button type="button" class="instructor_ai_guided_prompt" data-prompt="Responde en español usando únicamente el CURRENT STUDY GUIDE TITLE y los materiales de esta guía. Indica la acción compartida exacta del grupo actual. No menciones otras categorías ni agregues acciones que no estén respaldadas por el título o los materiales." style="padding:8px 12px;border:1px solid #9db5e8;border-radius:999px;background:#fff;color:#284b9b;font-weight:bold;cursor:pointer;">Acción compartida</button>
+            <button type="button" class="instructor_ai_guided_prompt" data-prompt="Responde en español. Compara solamente las hierbas enumeradas en el CURRENT STUDY GUIDE TITLE. Para cada una, presenta la diferencia o pista decisiva que esté respaldada por los materiales de esta guía. Si los materiales no ofrecen diferencias suficientes, identifica exactamente qué información falta y no la sustituyas con una explicación general de otras categorías." style="padding:8px 12px;border:1px solid #9db5e8;border-radius:999px;background:#fff;color:#284b9b;font-weight:bold;cursor:pointer;">Diferencias clave</button>
+            <button type="button" class="instructor_ai_guided_prompt" data-prompt="Responde en español y crea pistas breves de examen únicamente para las hierbas del CURRENT STUDY GUIDE TITLE. Organiza la respuesta como Hierba — pista decisiva. Usa solo hechos presentes en esta guía. No inventes diferencias ni incluyas hierbas de otros grupos." style="padding:8px 12px;border:1px solid #9db5e8;border-radius:999px;background:#fff;color:#284b9b;font-weight:bold;cursor:pointer;">Pistas de examen</button>
+        </div>
+    </div>
+
     <textarea
         id="instructor_ai_prompt"
         style="width:100%;min-height:120px;padding:12px;border:1px solid #ccd5e0;border-radius:10px;box-sizing:border-box;"
@@ -657,6 +667,14 @@ document.getElementById('instructor_ai_button').addEventListener('click', async 
     } finally {
         this.disabled = false;
     }
+});
+
+document.querySelectorAll('.instructor_ai_guided_prompt').forEach(function(button) {
+    button.addEventListener('click', function() {
+        const promptBox = document.getElementById('instructor_ai_prompt');
+        promptBox.value = this.getAttribute('data-prompt');
+        document.getElementById('instructor_ai_button').click();
+    });
 });
 </script>
 
