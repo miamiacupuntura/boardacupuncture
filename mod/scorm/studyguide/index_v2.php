@@ -637,6 +637,7 @@ document.getElementById('instructor_ai_button').addEventListener('click', async 
     try {
         const params = new URLSearchParams({
             id: <?php echo (int)$scormid; ?>,
+            cmid: <?php echo (int)$cmid; ?>,
             prompt: prompt,
             sesskey: M.cfg.sesskey
         });

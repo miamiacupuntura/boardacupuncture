@@ -46,11 +46,36 @@ if (!$scorm) {
     throw new moodle_exception('Invalid SCORM activity.');
 }
 
+$plainprompttext = static function(string $value): string {
+    $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return trim(preg_replace('/[ \t]+/', ' ', $value));
+};
+
 /*
- * Use the same Instructor Study Guide source that the Study Guide page
- * displays for SCORM 610.
+ * Always identify the current activity explicitly. Many instructor requests use
+ * contextual phrases such as "this group"; the SCORM title often contains the
+ * exact category and herb list even when the optional description is minimal.
  */
-$studyguide = $scorm->intro;
+$activitytitle = $plainprompttext($scorm->name);
+$activityintro = $plainprompttext($scorm->intro);
+$studyguidesections = [
+    "CURRENT STUDY GUIDE TITLE:\n" . $activitytitle,
+];
+
+if ($activityintro !== '') {
+    $studyguidesections[] = "CURRENT STUDY GUIDE DESCRIPTION:\n" . $activityintro;
+}
+
+$instructorrecord = $DB->get_record(
+    'scorm_studyguide_instructor',
+    ['scormid' => $scormid],
+    'content'
+);
+if ($instructorrecord && trim($instructorrecord->content) !== '') {
+    $studyguidesections[] = "INSTRUCTOR STUDY MATERIALS:\n" . $plainprompttext($instructorrecord->content);
+}
+
+$studyguide = implode("\n\n============================================================\n\n", $studyguidesections);
 
 if (in_array($scormid, [5959, 6090, 6261, 6260, 6255, 6256, 6257, 6258], true)) {
     $masterstudycardfile = __DIR__ . '/master_study_card_yin_yang.txt';
@@ -59,10 +84,10 @@ if (in_array($scormid, [5959, 6090, 6261, 6260, 6255, 6256, 6257, 6258], true)) 
         $masterstudycard = file_get_contents($masterstudycardfile);
 
         if ($masterstudycard !== false && trim($masterstudycard) !== '') {
-            $studyguide =
-                $masterstudycard .
+            $studyguide .=
                 "\n\n============================================================\n\n" .
-                $studyguide;
+                "MASTER STUDY CARD:\n" .
+                $masterstudycard;
         }
     }
 }
@@ -332,6 +357,13 @@ You are assisting the instructor, not the student.
 Use the AcupunctureTests study materials provided below as the primary source whenever they contain information relevant to the instructor's request.
 
 The current Study Guide and Master Study Card are authoritative course materials for their topics. Prefer them whenever they apply.
+
+CURRENT-CONTEXT RULES:
+- Interpret phrases such as 'this group', 'this category', 'this guide', 'este grupo', 'esta categoría' and 'esta guía' as references to the CURRENT STUDY GUIDE TITLE.
+- Read the current title before answering. If the title contains a parenthetical list of herbs, formulas, points, channels or other members, that list is the authoritative answer to a request asking which members belong to 'this group'.
+- Do not substitute a different group from memory merely because it has a similar name.
+- Answer directly from the current title and description when they contain the requested information.
+- If the current title and materials do not identify what the contextual phrase refers to, ask the instructor to clarify instead of guessing.
 
 However, Instructor AI is also a general educational assistant for AcupunctureTests. If the requested topic is not covered by the provided AcupunctureTests materials, you may use your general knowledge to answer the instructor's request.
 
