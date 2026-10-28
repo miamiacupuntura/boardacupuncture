@@ -4,8 +4,8 @@
   const spanish = document.documentElement.lang === 'es';
   const search = document.querySelector('[data-formula-search]');
   const cards = [...document.querySelectorAll('.formula-navigator-card')];
-  const categoryButtons = [...document.querySelectorAll('[data-formula-category]')];
-  const routeButtons = [...document.querySelectorAll('[data-formula-route]')];
+  const categorySelect = document.querySelector('[data-formula-category-filter]');
+  const routeSelect = document.querySelector('[data-formula-route-filter]');
   const count = document.querySelector('[data-visible-count]');
   const empty = document.querySelector('[data-formula-empty]');
   const comparePanel = document.querySelector('[data-formula-compare-panel]');
@@ -24,9 +24,9 @@
       .replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
   }
 
-  function setPressed(buttons, key, attribute) {
-    if (!buttons.some(button => button.dataset[attribute] === key)) key = 'all';
-    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset[attribute] === key)));
+  function setSelectValue(select, key) {
+    if (![...select.options].some(option => option.value === key)) key = 'all';
+    select.value = key;
     return key;
   }
 
@@ -77,16 +77,14 @@
     compareOutput.innerHTML = `<table class="formula-compare-table"><thead><tr><th>${spanish ? 'Criterio' : 'Criterion'}</th>${formulas.map(formula => `<th scope="col">${escapeHtml(formula.name)}</th>`).join('')}</tr></thead><tbody>${row(spanish ? 'Categoría' : 'Category', formulas, 'category')}${row(spanish ? 'Patrón' : 'Pattern', formulas, 'pattern')}${row(spanish ? 'Acción' : 'Action', formulas, 'action')}${row(spanish ? 'Pista decisiva' : 'Decisive clue', formulas, 'clue')}${row(spanish ? 'Emperador' : 'King herbs', formulas, 'kings')}</tbody></table>`;
   }
 
-  categoryButtons.forEach(button => button.addEventListener('click', () => {
-    activeCategory = button.dataset.formulaCategory;
-    setPressed(categoryButtons, activeCategory, 'formulaCategory');
+  categorySelect.addEventListener('change', () => {
+    activeCategory = categorySelect.value;
     refresh();
-  }));
-  routeButtons.forEach(button => button.addEventListener('click', () => {
-    activeRoute = button.dataset.formulaRoute;
-    setPressed(routeButtons, activeRoute, 'formulaRoute');
+  });
+  routeSelect.addEventListener('change', () => {
+    activeRoute = routeSelect.value;
     refresh();
-  }));
+  });
   search.addEventListener('input', refresh);
 
   document.querySelectorAll('[data-compare-formula]').forEach(input => input.addEventListener('change', () => {
@@ -106,7 +104,7 @@
   });
 
   search.value = params.get('q') || '';
-  activeCategory = setPressed(categoryButtons, activeCategory, 'formulaCategory');
-  activeRoute = setPressed(routeButtons, activeRoute, 'formulaRoute');
+  activeCategory = setSelectValue(categorySelect, activeCategory);
+  activeRoute = setSelectValue(routeSelect, activeRoute);
   refresh();
 })();
