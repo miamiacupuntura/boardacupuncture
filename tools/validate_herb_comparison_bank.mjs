@@ -64,6 +64,10 @@ if (process.argv[3]) {
   for (const chart of data.charts) {
     if (!translatedFigures.has(chart.figure)) fail(`Spanish translation is missing figure ${chart.figure}`);
   }
+  const tastes = translation.questions.find(question => question.id === '1-2');
+  const requiredTasteHeadings = ['Sabor picante', 'Dulzura', 'Acidez', 'Amargor', 'Sabor salado', 'Insipidez', 'Hierbas aromáticas', 'Astringencia'];
+  if (!tastes || requiredTasteHeadings.some(heading => !tastes.answer.includes(heading))) fail('Spanish five-tastes explanation is missing reviewed headings');
+  if (/Cariño|Ba Ji Tianx|Paeoniaeflora|Zinsis|Chuan Nie XiC|Stomach-Qi|Espléndido/.test(tastes.answer)) fail('Spanish five-tastes explanation contains a known translation corruption');
 }
 
 console.log(`Validated herbal comparison bank: ${data.chapters.length} chapters, ${data.questions.length} questions, ${data.charts.length} charts.`);

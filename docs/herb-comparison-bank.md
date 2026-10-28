@@ -16,6 +16,7 @@ This module turns the question-and-answer and comparison-chart material in *Chin
 | --- | --- |
 | `study-guide/comparisons/herb-comparison-bank-data.json` | 17 chapters, 249 questions, 117 charts |
 | `study-guide/comparisons/herb-comparison-bank-translations-es.json` | Spanish question, answer, memory-cue, and chart-title layer |
+| `tools/herb_comparison_translation_overrides_es.json` | Human-reviewed Spanish corrections keyed by question ID |
 | `study-guide/comparisons/herb-comparison-bank.html` | English entry point |
 | `study-guide/comparisons/herb-comparison-bank-es.html` | Spanish entry point |
 | `study-guide/comparisons/herb-comparison-bank.js` | filtering, modes, flashcard progress, chart rendering |
@@ -46,7 +47,7 @@ The release build fails unless the bank contains exactly:
 
 ## Editorial review order
 
-Review Spanish content chapter by chapter rather than editing the generated English JSON. Corrections should ultimately live in a small override layer keyed by question ID (`chapter-question`) so that regenerating the extraction remains safe. Priority review order:
+Review Spanish content chapter by chapter rather than editing either generated JSON file. Corrections live in `tools/herb_comparison_translation_overrides_es.json`, keyed by question ID (`chapter-question`), so regenerating the extraction and translation remains safe. Priority review order:
 
 1. question wording and punctuation;
 2. herb names and biomedical/TCM terminology;

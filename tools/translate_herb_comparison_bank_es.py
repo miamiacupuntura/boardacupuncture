@@ -30,6 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source", type=Path, default=root / "study-guide/comparisons/herb-comparison-bank-data.json")
     parser.add_argument("--output", type=Path, default=root / "study-guide/comparisons/herb-comparison-bank-translations-es.json")
     parser.add_argument("--cache", type=Path, default=root / "output/herb-comparison-translation-cache-es.json")
+    parser.add_argument("--overrides", type=Path, default=root / "tools/herb_comparison_translation_overrides_es.json")
     parser.add_argument("--batch-chars", type=int, default=5000)
     parser.add_argument("--workers", type=int, default=3)
     return parser.parse_args()
@@ -40,6 +41,18 @@ def answer_parts(value: str) -> list[str]:
 
 
 def comparison_polish(value: str, source: str) -> str:
+    heading_translations = {
+        "Pungency": "Sabor picante",
+        "Sweetness": "Dulzura",
+        "Sourness": "Acidez",
+        "Bitterness": "Amargor",
+        "Saltiness": "Sabor salado",
+        "Blandness": "Insipidez",
+        "Aromatic herbs": "Hierbas aromáticas",
+        "Astringency": "Astringencia",
+    }
+    if source in heading_translations:
+        return heading_translations[source]
     value = polish_spanish(value, source)
     replacements = (
         (r"\bWind-Heat\b", "Viento-Calor"),
@@ -88,6 +101,7 @@ def main() -> int:
     ensure_model()
     source_bytes = args.source.read_bytes()
     data = json.loads(source_bytes)
+    overrides = json.loads(args.overrides.read_text(encoding="utf-8")) if args.overrides.is_file() else {}
     cache = load_cache(args.cache)
     values: list[str] = []
     for question in data["questions"]:
@@ -106,12 +120,20 @@ def main() -> int:
     questions = []
     for question in data["questions"]:
         parts = answer_parts(question["answer"])
-        questions.append({
+        translated_question = {
             "id": question["id"],
             "question": comparison_polish(cache[question["question"]], question["question"]),
             "memoryCue": comparison_polish(cache[question["memoryCue"]], question["memoryCue"]),
             "answer": "\n\n".join(comparison_polish(cache[part], part) for part in parts),
-        })
+        }
+        override = overrides.get(question["id"], {})
+        if override.get("question"):
+            translated_question["question"] = override["question"]
+        if override.get("memoryCue"):
+            translated_question["memoryCue"] = override["memoryCue"]
+        if override.get("answerParts"):
+            translated_question["answer"] = "\n\n".join(override["answerParts"])
+        questions.append(translated_question)
     charts = [
         {"figure": chart["figure"], "title": comparison_polish(cache[chart["title"]], chart["title"])}
         for chart in data["charts"]

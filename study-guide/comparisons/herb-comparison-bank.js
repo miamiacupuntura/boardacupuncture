@@ -48,7 +48,7 @@
     return blocks.reduce((merged, block) => {
       const previous = merged.at(-1);
       const previousIsLong = previous && previous.length > 100;
-      const sentenceFinished = previous && /[.!?:;][”’"')\]*\s]*$/.test(previous);
+      const sentenceFinished = previous && /[.!?:][”’"')\]*\s]*$/.test(previous);
       const startsAsContinuation = /^[a-záéíóúüñ]/.test(block);
       if (previousIsLong && (!sentenceFinished || startsAsContinuation)) merged[merged.length - 1] = `${previous} ${block}`;
       else merged.push(block);
@@ -375,7 +375,7 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       state.data = await response.json();
       if (es || params.has('q')) {
-        const translated = await fetch('herb-comparison-bank-translations-es.json');
+        const translated = await fetch('herb-comparison-bank-translations-es.json?v=20261028-2');
         if (!translated.ok) throw new Error(`Spanish translation HTTP ${translated.status}`);
         applySpanishTranslations(await translated.json(), es);
       }
