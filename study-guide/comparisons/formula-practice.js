@@ -14,6 +14,8 @@
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
     noFeedback: spanish ? 'La fuente no proporcionó retroalimentación adicional.' : 'The source supplied no additional feedback.',
+    showEnglish: 'Ver inglés original',
+    showSpanish: 'Ver traducción al español',
     next: spanish ? 'Siguiente pregunta →' : 'Next question →',
     finish: spanish ? 'Ver resultado →' : 'View result →',
     historyEmpty: spanish ? 'Completa una sesión para comenzar tu historial.' : 'Complete a session to start your history.',
@@ -47,6 +49,7 @@
     reset: document.querySelector('[data-practice-reset]'),
     workspace: document.querySelector('[data-practice-workspace]'),
     returnToSetup: document.querySelector('[data-practice-return]'),
+    questionLanguage: document.querySelector('[data-question-language]'),
     position: document.querySelector('[data-practice-position]'),
     total: document.querySelector('[data-practice-total]'),
     score: document.querySelector('[data-practice-score]'),
@@ -70,6 +73,8 @@
   };
   const state = {
     data: null,
+    translations: new Map(),
+    showOriginal: false,
     formulaByNumber: new Map(),
     mode: 'all',
     size: 25,
@@ -233,6 +238,37 @@
     return link;
   }
 
+  function displayedQuestion(question) {
+    if (!spanish || state.showOriginal) return question;
+    return state.translations.get(question.sourceNumber) || question;
+  }
+
+  function renderQuestionCopy(question) {
+    const displayed = displayedQuestion(question);
+    elements.prompt.textContent = displayed.prompt;
+    elements.body.replaceChildren();
+    displayed.body.forEach(value => {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = value;
+      elements.body.append(paragraph);
+    });
+    const displayedOptions = new Map(displayed.options.map(option => [option.label, option.text]));
+    elements.options.querySelectorAll('button').forEach(button => {
+      const answerText = button.querySelector('span');
+      if (answerText) answerText.textContent = displayedOptions.get(button.dataset.answerLabel) || '';
+    });
+    if (!state.answered) return;
+    const correctOption = displayed.options.find(option => option.label === question.correctLabel);
+    elements.correctAnswer.textContent = `${text.correctAnswer} ${question.correctLabel}) ${correctOption?.text || ''}`;
+    elements.feedbackText.replaceChildren();
+    const feedback = displayed.feedback.length ? displayed.feedback : [text.noFeedback];
+    feedback.forEach(value => {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = value;
+      elements.feedbackText.append(paragraph);
+    });
+  }
+
   function renderQuestion() {
     const question = state.questions[state.index];
     state.answered = false;
@@ -241,13 +277,6 @@
     elements.score.textContent = String(state.score);
     elements.progressBar.style.width = `${((state.index + 1) / state.questions.length) * 100}%`;
     elements.source.textContent = text.source(question.sourceNumber);
-    elements.prompt.textContent = question.prompt;
-    elements.body.replaceChildren();
-    question.body.forEach(value => {
-      const paragraph = document.createElement('p');
-      paragraph.textContent = value;
-      elements.body.append(paragraph);
-    });
 
     elements.associations.replaceChildren();
     const label = document.createElement('strong');
@@ -271,7 +300,6 @@
       const badge = document.createElement('strong');
       badge.textContent = answer.label;
       const answerText = document.createElement('span');
-      answerText.textContent = answer.text;
       button.append(badge, answerText);
       button.addEventListener('click', () => answerQuestion(answer.label));
       elements.options.append(button);
@@ -280,6 +308,7 @@
     elements.feedback.classList.remove('is-correct', 'is-incorrect');
     elements.next.hidden = true;
     elements.next.textContent = state.index === state.questions.length - 1 ? text.finish : text.next;
+    renderQuestionCopy(question);
   }
 
   function recordAnswer(question, correct) {
@@ -310,18 +339,10 @@
       if (button.dataset.answerLabel === question.correctLabel) button.classList.add('is-correct');
       else if (button.dataset.answerLabel === selectedLabel) button.classList.add('is-incorrect');
     });
-    const correctOption = question.options.find(option => option.label === question.correctLabel);
     elements.feedback.hidden = false;
     elements.feedback.classList.add(correct ? 'is-correct' : 'is-incorrect');
     elements.verdict.textContent = correct ? text.correct : text.incorrect;
-    elements.correctAnswer.textContent = `${text.correctAnswer} ${question.correctLabel}) ${correctOption?.text || ''}`;
-    elements.feedbackText.replaceChildren();
-    const feedback = question.feedback.length ? question.feedback : [text.noFeedback];
-    feedback.forEach(value => {
-      const paragraph = document.createElement('p');
-      paragraph.textContent = value;
-      elements.feedbackText.append(paragraph);
-    });
+    renderQuestionCopy(question);
     elements.next.hidden = false;
     elements.next.focus();
   }
@@ -402,21 +423,46 @@
   elements.repeat.addEventListener('click', startSession);
   elements.configure.addEventListener('click', returnToSetup);
   elements.returnToSetup.addEventListener('click', returnToSetup);
+  elements.questionLanguage?.addEventListener('click', () => {
+    state.showOriginal = !state.showOriginal;
+    elements.questionLanguage.textContent = state.showOriginal ? text.showSpanish : text.showEnglish;
+    elements.questionLanguage.setAttribute('aria-pressed', String(state.showOriginal));
+    if (state.questions.length) renderQuestionCopy(state.questions[state.index]);
+  });
   elements.reset.addEventListener('click', () => {
     if (!window.confirm(text.resetConfirm)) return;
     try { localStorage.removeItem(storageKey); } catch (_) { /* Optional persistence. */ }
     renderHistory();
   });
 
-  fetch('formula-practice-data.json', { credentials: 'same-origin' })
+  const bankRequest = fetch('formula-practice-data.json', { credentials: 'same-origin' })
     .then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
-    })
-    .then(data => {
+    });
+  const translationsRequest = spanish
+    ? fetch('formula-practice-translations-es.json', { credentials: 'same-origin' })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .catch(error => {
+        console.error('Spanish translation layer unavailable', error);
+        return null;
+      })
+    : Promise.resolve(null);
+
+  Promise.all([bankRequest, translationsRequest])
+    .then(([data, translations]) => {
       if (data.totals?.questions !== 897 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
+      if (translations?.questions?.length === 897) {
+        state.translations = new Map(translations.questions.map(question => [question.sourceNumber, question]));
+      } else if (spanish) {
+        state.showOriginal = true;
+        if (elements.questionLanguage) elements.questionLanguage.hidden = true;
+      }
       populateControls();
     })
     .catch(error => {

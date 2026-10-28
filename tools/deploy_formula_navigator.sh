@@ -20,6 +20,7 @@ install -m 0644 \
   "$SOURCE_DIR/formula-navigator.js" \
   "$SOURCE_DIR/formula-practice.js" \
   "$SOURCE_DIR/formula-practice-data.json" \
+  "$SOURCE_DIR/formula-practice-translations-es.json" \
   "$SOURCE_DIR/comparisons.js" \
   "$SOURCE_DIR/comparisons.css" \
   "$TARGET_DIR"/

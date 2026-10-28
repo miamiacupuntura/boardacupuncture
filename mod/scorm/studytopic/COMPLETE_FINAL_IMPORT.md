@@ -62,6 +62,8 @@ matches explicit formula-name mentions to the existing 63-formula catalog:
 ```bash
 node tools/generate_formula_practice.mjs \
   --source /var/tmp/complete-final-import/keyed-questions.jsonl
+ARGOS_CHUNK_TYPE=MINISBD ARGOS_INTRA_THREADS=1 \
+  python3 tools/translate_formula_practice_es.py
 node tools/generate_formula_navigator.mjs
 node tools/validate_formula_practice.mjs
 ```
@@ -72,3 +74,10 @@ or names another formula as a distractor. The interface describes these as
 related questions rather than implying that every linked formula is correct.
 General keyed questions remain available in comprehensive mock exams. The
 review queue is never read by the practice generator.
+
+The Spanish question, option, and feedback text is an automatic translation
+layer stored separately from the authoritative English bank. The Spanish page
+shows a language-quality warning and lets the student reveal the original
+English for each question. Formula associations, answer labels, and the
+correct-answer key always come from the English source data, so translation
+cannot change which option is scored as correct.

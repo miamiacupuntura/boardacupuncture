@@ -595,6 +595,16 @@ a { color: inherit; }
   color: #175b4d;
 }
 
+.formula-translation-notice {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid #e6c88e;
+  border-left: 5px solid #c37a12;
+  border-radius: 10px;
+  background: #fff8e9;
+  color: #71420c;
+}
+
 .formula-practice-status.is-error {
   border-color: #e3aaa3;
   background: #fff0ee;
@@ -745,6 +755,8 @@ a { color: inherit; }
 
 .formula-practice-session-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 18px;
 }
 
@@ -761,6 +773,11 @@ a { color: inherit; }
 }
 
 .formula-practice-session-actions button:hover { background: #edf3f6; }
+
+.formula-practice-session-actions .formula-practice-language-toggle {
+  border-color: var(--teal);
+  color: var(--teal);
+}
 
 .formula-practice-progress-track {
   height: 8px;

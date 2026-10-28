@@ -37,7 +37,8 @@ for required in \
     formula-practice.html \
     formula-practice-es.html \
     formula-practice.js \
-    formula-practice-data.json; do
+    formula-practice-data.json \
+    formula-practice-translations-es.json; do
     if [[ ! -f "${PRACTICE_DIR}/${required}" ]]; then
         echo "Formula practice artifact is missing: ${required}" >&2
         exit 1
