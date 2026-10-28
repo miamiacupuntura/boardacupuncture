@@ -29,7 +29,8 @@
     previous: q('[data-flash-previous]'), next: q('[data-flash-next]'), shuffle: q('[data-flash-shuffle]'),
     memorySummary: q('[data-memory-summary]')
   };
-  const state = { data: null, mode: 'questions', chapter: 1, search: '', deck: [], index: 0, revealed: false };
+  const languageLink = q('.herb-bank-top-actions a[href^="herb-comparison-bank"]');
+  const state = { data: null, mode: 'questions', chapter: 1, search: '', deck: [], index: 0, revealed: false, reading: {} };
   const progressKey = 'herb-comparison-bank-progress-v1';
   let progress = readProgress();
 
@@ -60,21 +61,33 @@
   function questionMatches(item) {
     if (state.chapter && item.chapter !== state.chapter) return false;
     const needle = normalize(state.search);
-    return !needle || normalize(`${item.question} ${item.answer}`).includes(needle);
+    return !needle || normalize(`${item.question} ${item.answer} ${item._sourceQuestion || ''} ${item._sourceAnswer || ''} ${item._alternateQuestion || ''} ${item._alternateAnswer || ''}`).includes(needle);
   }
   function chartMatches(item) {
     if (state.chapter && item.chapter !== state.chapter) return false;
     const needle = normalize(state.search);
-    return !needle || normalize(`${item.title} ${item.bars.map(bar => `${bar.herb} ${bar.temperature}`).join(' ')}`).includes(needle);
+    return !needle || normalize(`${item.title} ${item._sourceTitle || ''} ${item._alternateTitle || ''} ${item.bars.map(bar => `${bar.herb} ${bar.temperature}`).join(' ')}`).includes(needle);
   }
   function filteredQuestions() { return state.data.questions.filter(questionMatches); }
   function filteredCharts() { return state.data.charts.filter(chartMatches); }
 
-  function applySpanishTranslations(translations) {
+  function applySpanishTranslations(translations, translateContent = true) {
     const questions = new Map((translations.questions || []).map(item => [item.id, item]));
     const charts = new Map((translations.charts || []).map(item => [item.figure, item]));
-    state.data.questions = state.data.questions.map(item => ({ ...item, ...(questions.get(item.id) || {}) }));
-    state.data.charts = state.data.charts.map(item => ({ ...item, ...(charts.get(item.figure) || {}) }));
+    state.data.questions = state.data.questions.map(item => {
+      const translated = questions.get(item.id);
+      if (!translated) return item;
+      return translateContent
+        ? { ...item, _sourceQuestion: item.question, _sourceAnswer: item.answer, ...translated }
+        : { ...item, _alternateQuestion: translated.question, _alternateAnswer: translated.answer };
+    });
+    state.data.charts = state.data.charts.map(item => {
+      const translated = charts.get(item.figure);
+      if (!translated) return item;
+      return translateContent
+        ? { ...item, _sourceTitle: item.title, ...translated }
+        : { ...item, _alternateTitle: translated.title };
+    });
   }
 
   function populateChapters() {
@@ -100,6 +113,7 @@
     items.forEach(item => {
       const article = create('article', 'herb-question');
       article.id = `question-${item.id}`;
+      article.dataset.bankItem = item.id;
       article.append(create('p', 'comparison-eyebrow', questionLabel(item)), create('h3', '', item.question));
       const details = create('details');
       const summary = create('summary', '', copy.reveal);
@@ -138,6 +152,7 @@
       els.flashLabel.textContent = '';
       els.flashQuestion.textContent = copy.empty;
       renderMemorySummary();
+      updateLanguageLink();
       return;
     }
     els.flashLabel.textContent = questionLabel(item);
@@ -148,6 +163,7 @@
     els.flashAnswer.append(cue, heading);
     paragraphs(item.answer).forEach(value => els.flashAnswer.append(create('p', '', value)));
     renderMemorySummary();
+    updateLanguageLink();
   }
   function revealFlashcard() {
     if (!state.deck.length) return;
@@ -155,6 +171,7 @@
     els.flashAnswer.hidden = !state.revealed;
     els.flashRating.hidden = !state.revealed;
     els.flashReveal.textContent = state.revealed ? copy.hide : copy.reveal;
+    updateLanguageLink();
   }
   function moveCard(delta) {
     if (!state.deck.length) return;
@@ -201,6 +218,7 @@
     const fragment = document.createDocumentFragment();
     items.forEach(chart => {
       const card = create('article', 'herb-chart-card');
+      card.dataset.bankItem = chart.figure;
       card.append(create('p', 'comparison-eyebrow', `${copy.chapter} ${chart.chapter} · Fig. ${chart.figure}`));
       card.append(create('h3', '', chart.title));
       card.append(create('p', 'herb-chart-card__insight', chartInsight(chart)));
@@ -228,13 +246,78 @@
 
   function updateUrl() {
     const url = new URL(location.href);
+    ['at', 'progress', 'expanded', 'card', 'reveal'].forEach(key => url.searchParams.delete(key));
     url.searchParams.set('mode', state.mode);
     url.searchParams.set('chapter', String(state.chapter));
     if (state.search) url.searchParams.set('q', state.search); else url.searchParams.delete('q');
     history.replaceState(null, '', url);
+    updateLanguageLink();
+  }
+
+  function readingContext() {
+    if (state.mode === 'flashcards') {
+      const item = state.deck[state.index];
+      return item ? { card: item.id, reveal: state.revealed ? '1' : '' } : {};
+    }
+    const selector = state.mode === 'charts' ? '.herb-chart-card' : '.herb-question';
+    const anchorY = Math.min(180, Math.round(innerHeight * .28));
+    let element = document.elementFromPoint(Math.round(innerWidth / 2), anchorY)?.closest(selector);
+    if (!element) {
+      element = [...document.querySelectorAll(selector)].find(node => {
+        const rect = node.getBoundingClientRect();
+        return rect.bottom > anchorY && rect.top < innerHeight;
+      });
+    }
+    if (!element) return state.reading;
+    const rect = element.getBoundingClientRect();
+    const progress = Math.max(0, Math.min(1, (anchorY - rect.top) / Math.max(1, rect.height)));
+    const details = state.mode === 'questions' ? q('details', element) : null;
+    state.reading = {
+      at: element.dataset.bankItem,
+      progress: progress.toFixed(4),
+      expanded: details?.open ? '1' : ''
+    };
+    return state.reading;
+  }
+
+  function updateLanguageLink() {
+    if (!languageLink || !state.data) return;
+    const target = es ? 'herb-comparison-bank.html' : 'herb-comparison-bank-es.html';
+    const url = new URL(target, location.href);
+    url.searchParams.set('mode', state.mode);
+    url.searchParams.set('chapter', String(state.chapter));
+    if (state.search) url.searchParams.set('q', state.search);
+    Object.entries(readingContext()).forEach(([key, value]) => { if (value) url.searchParams.set(key, value); });
+    languageLink.href = `${url.pathname.split('/').pop()}${url.search}${url.hash}`;
+  }
+
+  function restoreReadingPosition(params) {
+    if (state.mode === 'flashcards') {
+      const card = params.get('card');
+      const position = card ? state.deck.findIndex(item => item.id === card) : -1;
+      if (position >= 0) {
+        state.index = position;
+        renderFlashcard(true);
+      }
+      if (params.get('reveal') === '1' && !state.revealed) revealFlashcard();
+      return;
+    }
+    const itemId = params.get('at');
+    if (!itemId) return;
+    const selector = state.mode === 'charts' ? '.herb-chart-card' : '.herb-question';
+    const element = [...document.querySelectorAll(selector)].find(node => node.dataset.bankItem === itemId);
+    if (!element) return;
+    if (state.mode === 'questions' && params.get('expanded') === '1') q('details', element).open = true;
+    const progress = Math.max(0, Math.min(1, Number(params.get('progress')) || 0));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const anchorY = Math.min(180, Math.round(innerHeight * .28));
+      window.scrollTo(0, Math.max(0, element.offsetTop + element.offsetHeight * progress - anchorY));
+      updateLanguageLink();
+    }));
   }
   function setMode(mode, update = true) {
     state.mode = ['questions', 'flashcards', 'charts'].includes(mode) ? mode : 'questions';
+    state.reading = {};
     els.modes.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.bankMode === state.mode)));
     els.views.forEach(view => { view.hidden = view.dataset.bankView !== state.mode; });
     if (state.mode === 'flashcards') renderFlashcard();
@@ -243,6 +326,7 @@
   }
   function refresh() {
     state.index = 0;
+    state.reading = {};
     renderQuestions();
     renderFlashcard();
     renderCharts();
@@ -265,6 +349,15 @@
       renderFlashcard(true);
     });
     qa('[data-flash-rate]').forEach(button => button.addEventListener('click', () => rateCard(button.dataset.flashRate)));
+    if (languageLink) {
+      languageLink.addEventListener('pointerdown', updateLanguageLink);
+      languageLink.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') updateLanguageLink(); });
+    }
+    let scrollFrame = 0;
+    addEventListener('scroll', () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; updateLanguageLink(); });
+    }, { passive: true });
   }
   async function init() {
     try {
@@ -272,10 +365,10 @@
       const response = await fetch('herb-comparison-bank-data.json');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       state.data = await response.json();
-      if (es) {
+      if (es || params.has('q')) {
         const translated = await fetch('herb-comparison-bank-translations-es.json');
         if (!translated.ok) throw new Error(`Spanish translation HTTP ${translated.status}`);
-        applySpanishTranslations(await translated.json());
+        applySpanishTranslations(await translated.json(), es);
       }
       const requestedChapter = Number(params.get('chapter'));
       if (params.has('chapter') && Number.isInteger(requestedChapter) && requestedChapter >= 0 && requestedChapter <= 17) state.chapter = requestedChapter;
@@ -285,6 +378,8 @@
       bind();
       renderQuestions(); renderCharts(); renderFlashcard();
       setMode(params.get('mode') || 'questions', false);
+      restoreReadingPosition(params);
+      updateLanguageLink();
       els.status.hidden = true;
     } catch (error) {
       console.error(error);

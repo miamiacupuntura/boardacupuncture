@@ -8,6 +8,7 @@ This module turns the question-and-answer and comparison-chart material in *Chin
 - **Recall flashcards:** asks the same questions without showing the answer first and stores `Again`, `Hard`, or `Got it` only in the current browser.
 - **Bar-chart comparisons:** recreates the 117 source figures as accessible HTML. Bar height represents relative action strength; color represents herb temperature.
 - **English and Spanish:** English extraction is authoritative. Spanish content is a separate automatically generated layer so terminology can be reviewed without changing the source bank.
+- **Continuous bilingual reading:** switching English/Spanish preserves the chapter, study mode, search, current question or chart, relative reading position, and flashcard reveal state.
 
 ## Generated artifacts
 
