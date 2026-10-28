@@ -51,6 +51,26 @@ if ! grep -q 'formula-practice.html' "${PRACTICE_DIR}/formula-navigator.html"; t
     exit 1
 fi
 
+for required in \
+    herb-comparison-bank.html \
+    herb-comparison-bank-es.html \
+    herb-comparison-bank.css \
+    herb-comparison-bank.js \
+    herb-comparison-bank-data.json \
+    herb-comparison-bank-translations-es.json; do
+    if [[ ! -f "${PRACTICE_DIR}/${required}" ]]; then
+        echo "Herbal comparison bank artifact is missing: ${required}" >&2
+        exit 1
+    fi
+done
+node "${REPO_ROOT}/tools/validate_herb_comparison_bank.mjs" \
+    "${PRACTICE_DIR}/herb-comparison-bank-data.json" \
+    "${PRACTICE_DIR}/herb-comparison-bank-translations-es.json"
+if ! grep -q 'herb-comparison-bank.html' "${PRACTICE_DIR}/index.html"; then
+    echo "Single Herbs Comparisons does not link to the herbal comparison bank." >&2
+    exit 1
+fi
+
 mkdir -p "${OUTPUT_DIR}"
 ARTIFACT="${OUTPUT_DIR}/study-guide-${RELEASE_ID}.tar.gz"
 
