@@ -64,6 +64,19 @@ function normalizeEnglishCopy(value, prompt = false) {
     .join('\n')
     .replace(/ +([,.;:!?])/g, '$1')
     .replace(/\.\s+and\b/gi, ', and')
+    .replace(/\bwhaite\b/gi, 'white')
+    .replace(/\bsuitable far the case\b/gi, 'suitable for the case')
+    .replace(/\bFu Ung Tang\b/g, 'Fu Ling Tang')
+    .replace(/\bWhat is difference\?/gi, 'What is the difference?')
+    .replace(/\bWhat are ingredients\b/gi, 'What are the ingredients')
+    .replace(/\bWhat are manifestations\b/gi, 'What are the manifestations')
+    .replace(/\bClinical Manifestations:/g, 'Clinical manifestations:')
+    .replace(/\bTreatment Principle:/g, 'Treatment principle:')
+    .replace(/\bFloating-Rapid\b/gi, 'floating and rapid')
+    .replace(/\bFloating-Tight\b/gi, 'floating and tight')
+    .replace(/\bDeep-Weak-Slow\b/gi, 'deep, weak, and slow')
+    .replace(/\bFrequent-pale-abundant urination\b/gi, 'frequent, pale, abundant urination')
+    .replace(/\bThin-white coating\b/gi, 'thin, white coating')
     .trim();
   if (!prompt) return normalized;
   normalized = normalized
@@ -77,11 +90,11 @@ function normalizeEnglishCopy(value, prompt = false) {
 }
 
 const naturalIdentificationHeadings = new Map([
-  ['IDENTIFICATION OF HERBAL FORMULA ACCORDING ZANG FU PATTERNS', 'Identify the herbal formula according to the Zang Fu pattern described below.'],
-  ['IDENTIFICATION OF THE FORMULA ACCORDING TO THE GENERAL DESCRIPTION', 'Identify the formula from the general description below.'],
-  ['IDENTIFICATION OF HERBAL FORMULA ACCORDING TO THE FOUR LEVELS', 'Identify the herbal formula according to the Four Levels pattern described below.'],
-  ['IDENTIFICATION OF THE FORMULA ACCORDING TO THE MODIFICATION', 'Identify the formula from the modification described below.'],
-  ['IDENTIFICATION OF THE FORMULA MODIFICATION ACCORDING TO THE SYMPTOMS', 'Identify the formula modification according to the symptoms described below.']
+  ['IDENTIFICATION OF HERBAL FORMULA ACCORDING ZANG FU PATTERNS', 'Which herbal formula corresponds to the Zang Fu pattern described below?'],
+  ['IDENTIFICATION OF THE FORMULA ACCORDING TO THE GENERAL DESCRIPTION', 'Which formula corresponds to the general description below?'],
+  ['IDENTIFICATION OF HERBAL FORMULA ACCORDING TO THE FOUR LEVELS', 'Which herbal formula corresponds to the Four Levels pattern described below?'],
+  ['IDENTIFICATION OF THE FORMULA ACCORDING TO THE MODIFICATION', 'Which formula corresponds to the modification described below?'],
+  ['IDENTIFICATION OF THE FORMULA MODIFICATION ACCORDING TO THE SYMPTOMS', 'Which formula modification corresponds to the symptoms described below?']
 ]);
 
 function naturalizeIdentificationPrompt(value) {

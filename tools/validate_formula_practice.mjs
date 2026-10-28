@@ -69,6 +69,7 @@ requireValue(
 const translatedByNumber = new Map(
   translationData.questions.map(question => [question.sourceNumber, question])
 );
+const englishResidue = /\b(?:which|what|both|the|and|with|due|treats?|atrophy|marked|patterns?|include|except|chief|deputy|assistant|envoy|tongue|pulse|heat|cold|blood|dampness|phlegm|wiry|slippery|floating|tight|thin|white|yellow|red)\b/i;
 let changedPrompts = 0;
 let changedOptions = 0;
 for (const question of data.questions) {
@@ -87,6 +88,18 @@ for (const question of data.questions) {
   requireValue(
     translated.options.every((option, index) => option.label === question.options[index].label && option.text?.trim()),
     `Spanish options do not preserve labels for question ${question.sourceNumber}`
+  );
+  requireValue(
+    !englishResidue.test(translated.prompt),
+    `Spanish prompt contains untranslated English in question ${question.sourceNumber}`
+  );
+  requireValue(
+    translated.options.every(option => !englishResidue.test(option.text)),
+    `Spanish option contains untranslated English in question ${question.sourceNumber}`
+  );
+  requireValue(
+    ![translated.prompt, ...translated.options.map(option => option.text)].some(value => /&(?:quot|amp);/.test(value)),
+    `Spanish student-facing copy contains an encoded entity in question ${question.sourceNumber}`
   );
   requireValue(
     translated.feedback?.length === question.feedback.length && translated.feedback.every(value => value?.trim()),

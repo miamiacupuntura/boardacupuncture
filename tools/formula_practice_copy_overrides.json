@@ -62,7 +62,7 @@
     }
   },
   "816": {
-    "promptEs": "Identifique la fórmula herbal correspondiente al siguiente patrón Zang Fu.\n\nManifestaciones clínicas: palpitaciones, disnea de esfuerzo, sudoración, palidez, cansancio y apatía.\n\nLengua: pálida o de color normal.\n\nPulso: vacío.",
+    "promptEs": "¿Qué fórmula herbal corresponde al patrón Zang Fu descrito a continuación?\n\nManifestaciones clínicas: palpitaciones, disnea de esfuerzo, sudoración, palidez, cansancio y apatía.\n\nLengua: pálida o de color normal.\n\nPulso: vacío.",
     "optionsEs": {
       "A": "Bao Yuan Tang (Decocción para preservar el origen)",
       "B": "Rou Fu Bao Yuan Tang (Decocción de Cinnamomum y Aconitum para preservar el origen)",
@@ -71,12 +71,116 @@
     }
   },
   "883": {
-    "promptEs": "Identifique la fórmula herbal correspondiente al siguiente patrón Zang Fu.\n\nManifestaciones clínicas: dolor y debilidad lumbar, debilidad de las rodillas, micción clara y frecuente, chorro urinario débil, micción abundante, goteo posmiccional, incontinencia urinaria, enuresis, nocturia, emisiones nocturnas sin sueños, eyaculación precoz y espermatorrea. En mujeres: prolapso uterino, leucorrea crónica y abortos recurrentes.\n\nLengua: pálida.\n\nPulso: profundo y débil, especialmente en las posiciones posteriores.",
+    "promptEs": "¿Qué fórmula herbal corresponde al patrón Zang Fu descrito a continuación?\n\nManifestaciones clínicas: dolor y debilidad lumbar, debilidad de las rodillas, micción clara y frecuente, chorro urinario débil, micción abundante, goteo posmiccional, incontinencia urinaria, enuresis, nocturia, emisiones nocturnas sin sueños, eyaculación precoz y espermatorrea. En mujeres: prolapso uterino, leucorrea crónica y abortos recurrentes.\n\nLengua: pálida.\n\nPulso: profundo y débil, especialmente en las posiciones posteriores.",
     "optionsEs": {
       "A": "Liu Wei Di Huang Wan (Píldora de seis ingredientes con Rehmannia)",
       "B": "Zuo Gui Wan (Píldora para restaurar el Riñón izquierdo)",
       "C": "You Gui Wan (Píldora para restaurar el Riñón derecho) con Huang Qi y Qian Shi",
       "D": "Shen Ge San o Su Zi Jiang Qi Tang"
     }
+  },
+  "143": {
+    "promptEn": "Which of the following formulas is appropriate for Stomach Heat or Fire manifested by burning epigastric pain, intense thirst with a desire for cold drinks, restlessness, a red tongue with a dry, thick yellow or dark-yellow coating, and a rapid, slippery, or full pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas es apropiada para el Calor o Fuego de Estómago que se manifiesta con dolor epigástrico ardiente, sed intensa con deseo de bebidas frías, inquietud, lengua roja con saburra amarilla o amarilla oscura, seca y gruesa, y pulso rápido, resbaladizo o lleno?"
+  },
+  "314": {
+    "promptEn": "Why are Li Zhi He and Ju He added to Nuan Gan Jian (Warm the Liver Decoction)?",
+    "promptEs": "¿Por qué se añaden Li Zhi He y Ju He a Nuan Gan Jian?"
+  },
+  "922": {
+    "promptEn": "Which formula corresponds to the general description below?\n\nActions: Releases the exterior, transforms congested fluids, warms the Lungs, and directs rebellious Qi downward.\n\nIndications: Fever and chills, with chills predominating, without sweating; cough; wheezing; copious, white, stringy sputum that is difficult to expectorate; a stifling sensation in the chest; generalized heaviness and body aches; no particular thirst; a moist tongue coating; and a floating, tight pulse. In severe cases, there may be floating edema or considerable difficulty breathing when lying down.\n\nThis formula should not be used long-term or for Heat patterns, coughing of blood, or cough due to Yin deficiency. Use it cautiously in patients with hypertension.",
+    "promptEs": "¿Qué fórmula corresponde a la descripción general que aparece a continuación?\n\nAcciones: libera el Exterior, transforma los líquidos acumulados, calienta el Pulmón y hace descender el Qi rebelde.\n\nIndicaciones: fiebre y escalofríos, con predominio de los escalofríos, sin sudoración; tos; sibilancias; esputo abundante, blanco y filamentoso, difícil de expectorar; sensación de opresión en el pecho; pesadez generalizada y dolor corporal; ausencia de sed marcada; saburra lingual húmeda; y pulso flotante y tenso. En casos graves puede haber edema generalizado o dificultad considerable para respirar al acostarse.\n\nEsta fórmula no debe utilizarse durante períodos prolongados ni en patrones de Calor, tos con sangre o tos por deficiencia de Yin. Debe emplearse con precaución en pacientes con hipertensión."
+  },
+  "1193": {
+    "promptEn": "Which formula corresponds to the modification described below?\n\nThe patient has alternating fever and chills, a dry throat, a bitter or sour taste, dizziness, irritability, fullness in the chest and hypochondria that may make deep breathing difficult, heartburn, nausea and vomiting, reduced appetite, a thin white tongue coating, and a wiry pulse.\n\nFormula: Xiao Chai Hu Tang (Minor Bupleurum Decoction)\n\nChief: Chai Hu (Rx Bupleuri)\n\nDeputy: Huang Qin (Rx Scutellariae Baicalensis)\n\nAssistants: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata), and Da Zao (Fr Jujubae)\n\nWhat modification is used for abdominal pain?",
+    "promptEs": "¿Qué fórmula corresponde a la modificación descrita a continuación?\n\nEl paciente presenta alternancia de fiebre y escalofríos, garganta seca, sabor amargo o ácido, mareos, irritabilidad, plenitud en el pecho y los hipocondrios que puede dificultar la inspiración profunda, acidez, náuseas y vómitos, falta de apetito, saburra lingual fina y blanca y pulso en cuerda.\n\nFórmula: Xiao Chai Hu Tang\n\nPrincipal: Chai Hu (Rx Bupleuri)\n\nAdjunta: Huang Qin (Rx Scutellariae Baicalensis)\n\nAsistentes: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata) y Da Zao (Fr Jujubae)\n\n¿Qué modificación se utiliza para el dolor abdominal?"
+  },
+  "1194": {
+    "promptEn": "Which formula corresponds to the modification described below?\n\nThe patient has alternating fever and chills, a dry throat, a bitter or sour taste, dizziness, irritability, fullness in the chest and hypochondria that may make deep breathing difficult, heartburn, nausea and vomiting, reduced appetite, a thin white tongue coating, and a wiry pulse.\n\nFormula: Xiao Chai Hu Tang (Minor Bupleurum Decoction)\n\nChief: Chai Hu (Rx Bupleuri)\n\nDeputy: Huang Qin (Rx Scutellariae Baicalensis)\n\nAssistants: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata), and Da Zao (Fr Jujubae)\n\nWhat modification is used for irritability in the chest without nausea?",
+    "promptEs": "¿Qué fórmula corresponde a la modificación descrita a continuación?\n\nEl paciente presenta alternancia de fiebre y escalofríos, garganta seca, sabor amargo o ácido, mareos, irritabilidad, plenitud en el pecho y los hipocondrios que puede dificultar la inspiración profunda, acidez, náuseas y vómitos, falta de apetito, saburra lingual fina y blanca y pulso en cuerda.\n\nFórmula: Xiao Chai Hu Tang\n\nPrincipal: Chai Hu (Rx Bupleuri)\n\nAdjunta: Huang Qin (Rx Scutellariae Baicalensis)\n\nAsistentes: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata) y Da Zao (Fr Jujubae)\n\n¿Qué modificación se utiliza para la irritabilidad en el pecho sin náuseas?"
+  },
+  "1195": {
+    "promptEn": "Which formula corresponds to the modification described below?\n\nThe patient has alternating fever and chills, a dry throat, a bitter or sour taste, dizziness, irritability, fullness in the chest and hypochondria that may make deep breathing difficult, heartburn, nausea and vomiting, reduced appetite, a thin white tongue coating, and a wiry pulse.\n\nFormula: Xiao Chai Hu Tang (Minor Bupleurum Decoction)\n\nChief: Chai Hu (Rx Bupleuri)\n\nDeputy: Huang Qin (Rx Scutellariae Baicalensis)\n\nAssistants: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata), and Da Zao (Fr Jujubae)\n\nWhat modification is used for hard focal distention and firmness below the ribs?",
+    "promptEs": "¿Qué fórmula corresponde a la modificación descrita a continuación?\n\nEl paciente presenta alternancia de fiebre y escalofríos, garganta seca, sabor amargo o ácido, mareos, irritabilidad, plenitud en el pecho y los hipocondrios que puede dificultar la inspiración profunda, acidez, náuseas y vómitos, falta de apetito, saburra lingual fina y blanca y pulso en cuerda.\n\nFórmula: Xiao Chai Hu Tang\n\nPrincipal: Chai Hu (Rx Bupleuri)\n\nAdjunta: Huang Qin (Rx Scutellariae Baicalensis)\n\nAsistentes: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata) y Da Zao (Fr Jujubae)\n\n¿Qué modificación se utiliza para la distensión focal dura y la firmeza debajo de las costillas?"
+  },
+  "1196": {
+    "promptEn": "Which formula corresponds to the modification described below?\n\nThe patient has alternating fever and chills, a dry throat, a bitter or sour taste, dizziness, irritability, fullness in the chest and hypochondria that may make deep breathing difficult, heartburn, nausea and vomiting, reduced appetite, a thin white tongue coating, and a wiry pulse.\n\nFormula: Xiao Chai Hu Tang (Minor Bupleurum Decoction)\n\nChief: Chai Hu (Rx Bupleuri)\n\nDeputy: Huang Qin (Rx Scutellariae Baicalensis)\n\nAssistants: Zhi Ban Xia (Rz Pinelliae Preparatum), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata), and Da Zao (Fr Jujubae)\n\nWhat modification is used for palpitations in the epigastric area with inhibited urination?",
+    "promptEs": "¿Qué fórmula corresponde a la modificación descrita a continuación?\n\nEl paciente presenta alternancia de fiebre y escalofríos, garganta seca, sabor amargo o ácido, mareos, irritabilidad, plenitud en el pecho y los hipocondrios que puede dificultar la inspiración profunda, acidez, náuseas y vómitos, falta de apetito, saburra lingual fina y blanca y pulso en cuerda.\n\nFórmula: Xiao Chai Hu Tang\n\nPrincipal: Chai Hu (Rx Bupleuri)\n\nAdjunta: Huang Qin (Rx Scutellariae Baicalensis)\n\nAsistentes: Zhi Ban Xia (Rz Pinelliae Preparatum), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata) y Da Zao (Fr Jujubae)\n\n¿Qué modificación se utiliza para las palpitaciones en el epigastrio acompañadas de dificultad para orinar?"
+  },
+  "1197": {
+    "promptEn": "Which formula corresponds to the modification described below?\n\nThe patient has alternating fever and chills, a dry throat, a bitter or sour taste, dizziness, irritability, fullness in the chest and hypochondria that may make deep breathing difficult, heartburn, nausea and vomiting, reduced appetite, a thin white tongue coating, and a wiry pulse.\n\nFormula: Xiao Chai Hu Tang (Minor Bupleurum Decoction)\n\nChief: Chai Hu (Rx Bupleuri)\n\nDeputy: Huang Qin (Rx Scutellariae Baicalensis)\n\nAssistants: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata), and Da Zao (Fr Jujubae)\n\nWhat modification is used when Heat enters the blood chamber?",
+    "promptEs": "¿Qué fórmula corresponde a la modificación descrita a continuación?\n\nEl paciente presenta alternancia de fiebre y escalofríos, garganta seca, sabor amargo o ácido, mareos, irritabilidad, plenitud en el pecho y los hipocondrios que puede dificultar la inspiración profunda, acidez, náuseas y vómitos, falta de apetito, saburra lingual fina y blanca y pulso en cuerda.\n\nFórmula: Xiao Chai Hu Tang\n\nPrincipal: Chai Hu (Rx Bupleuri)\n\nAdjunta: Huang Qin (Rx Scutellariae Baicalensis)\n\nAsistentes: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata) y Da Zao (Fr Jujubae)\n\n¿Qué modificación se utiliza cuando el Calor penetra en la cámara de la Sangre?"
+  },
+  "1198": {
+    "promptEn": "Which formula corresponds to the modification described below?\n\nThe patient has alternating fever and chills, a dry throat, a bitter or sour taste, dizziness, irritability, fullness in the chest and hypochondria that may make deep breathing difficult, heartburn, nausea and vomiting, reduced appetite, a thin white tongue coating, and a wiry pulse.\n\nFormula: Xiao Chai Hu Tang (Minor Bupleurum Decoction)\n\nChief: Chai Hu (Rx Bupleuri)\n\nDeputy: Huang Qin (Rx Scutellariae Baicalensis)\n\nAssistants: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata), and Da Zao (Fr Jujubae)\n\nWhat modification is used for rough, scanty, dark, and painful urination?",
+    "promptEs": "¿Qué fórmula corresponde a la modificación descrita a continuación?\n\nEl paciente presenta alternancia de fiebre y escalofríos, garganta seca, sabor amargo o ácido, mareos, irritabilidad, plenitud en el pecho y los hipocondrios que puede dificultar la inspiración profunda, acidez, náuseas y vómitos, falta de apetito, saburra lingual fina y blanca y pulso en cuerda.\n\nFórmula: Xiao Chai Hu Tang\n\nPrincipal: Chai Hu (Rx Bupleuri)\n\nAdjunta: Huang Qin (Rx Scutellariae Baicalensis)\n\nAsistentes: Ban Xia (Rz Pinelliae), Sheng Jiang (Rz Zingiberis Recens), Ren Shen (Rx Ginseng), Zhi Gan Cao (Rx Glycyrrhizae Preparata) y Da Zao (Fr Jujubae)\n\n¿Qué modificación se utiliza para una micción áspera, escasa, oscura y dolorosa?"
+  },
+  "1306": {
+    "promptEn": "What conditions does You Gui Wan (Restore the Right Kidney Pill) treat?",
+    "promptEs": "¿Qué trastornos trata You Gui Wan?"
+  },
+  "28": {
+    "promptEs": "¿Cuál es la dosis tradicional de Huang Qi en Bu Yang Huan Wu Tang?"
+  },
+  "183": {
+    "promptEs": "¿En qué se diferencian Da Huang Fu Zi Tang y Ji Chuan Jian?"
+  },
+  "286": {
+    "promptEs": "Tanto Zuo Gui Wan como Liu Wei Di Huang Wan tonifican el Riñón y el Hígado. ¿En qué se diferencian?"
+  },
+  "287": {
+    "promptEs": "¿Cuál de las siguientes afirmaciones sobre Liu Wei Di Huang Wan, Zuo Gui Wan y Zuo Gui Yin es correcta?"
+  },
+  "292": {
+    "promptEs": "You Gui Wan y Jin Gui Shen Qi Wan calientan y fortalecen el Yang de origen y tonifican el Riñón. ¿En qué se diferencian?"
+  },
+  "293": {
+    "promptEs": "¿Cuál de las siguientes afirmaciones sobre Jin Gui Shen Qi Wan, You Gui Yin y You Gui Wan es correcta?"
+  },
+  "277": {
+    "optionsEs": {
+      "A": "Du Qi Wan trata las sibilancias crónicas en pacientes que presentan disnea constante y comienzan a jadear con poco esfuerzo, así como la eyaculación precoz o la espermatorrea por deficiencia de Riñón.",
+      "B": "Qi Ju Di Huang Wan trata la sequedad ocular con disminución de la agudeza visual, fotofobia, lagrimeo al exponerse a corrientes de aire o dolor ocular.",
+      "C": "Zhi Bai Di Huang Wan trata la deficiencia de Yin con Fuego exuberante, Calor por consunción o síndrome de vapor en los huesos, caracterizado por sudoración nocturna, sequedad de boca y lengua y pulso grande únicamente en la posición posterior. También trata la dificultad urinaria y el dolor lumbar por Humedad-Calor en el Jiao Inferior cuando existe una deficiencia subyacente de Yin de Riñón.",
+      "D": "Ba Wei Di Huang Wan trata la sudoración posparto continua por deficiencia.",
+      "E": "Todas son correctas."
+    }
+  },
+  "884": {
+    "optionsEs": {
+      "D": "You Gui Wan con Dong Chong Xia Cao (Cordyceps sinensis) y Wu Wei Zi; o Shen Ge San; o Su Zi Jiang Qi Tang."
+    }
+  },
+  "39": {
+    "promptEn": "Which of the following formulas is suitable when wind-heat lodges in the intestines or damp-heat accumulates in the intestines and Stomach, forming toxin? Manifestations include bright-red rectal bleeding during defecation, usually before but sometimes after the passage of stool; blood in the stool; hemorrhoids with bright-red or dark-red bleeding; a red tongue; and a wiry and rapid or soggy and rapid pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas es apropiada cuando el Viento-Calor se aloja en los intestinos o la Humedad-Calor se acumula en los intestinos y el Estómago y forma toxina? Las manifestaciones incluyen sangrado rectal rojo brillante durante la defecación, por lo general antes, aunque a veces después, de evacuar; sangre en las heces; hemorroides con sangrado rojo brillante o rojo oscuro; lengua roja; y pulso en cuerda y rápido, o blando y rápido?"
+  },
+  "46": {
+    "promptEn": "Which of the following formulas is suitable for injury and deficiency of the Penetrating and Conception vessels with a tendency toward Cold? Manifestations include abdominal pain with uterine bleeding, excessive menstruation, continuous menstrual spotting, postpartum bleeding, or bleeding during pregnancy. The blood is pale and thin without clots, accompanied by weakness and soreness of the lower back, a dull complexion, a pale tongue with a thin white coating, and a thin, frail pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas es apropiada para una lesión y deficiencia de los vasos Chong Mai y Ren Mai con tendencia al Frío? Las manifestaciones incluyen dolor abdominal con sangrado uterino, menstruación excesiva, manchado menstrual continuo, sangrado posparto o sangrado durante el embarazo. La sangre es pálida y fluida, sin coágulos, acompañada de debilidad y dolor lumbar, tez apagada, lengua pálida con saburra fina y blanca y pulso fino y débil?"
+  },
+  "91": {
+    "promptEn": "Which of the following formulas can be used for Wind-type stroke caused by an excessive upward surge of Qi that produces congestion of blood in the brain? Manifestations include dizziness, vertigo, distention of the eyes, tinnitus, a feverish sensation in the head, headache, irritability, a flushed face as if intoxicated, and a wiry, long, forceful pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas puede utilizarse para una apoplejía de tipo Viento causada por el ascenso excesivo del Qi, que produce congestión de Sangre en el cerebro? Las manifestaciones incluyen mareos, vértigo, distensión ocular, tinnitus, sensación de calor en la cabeza, cefalea, irritabilidad, rostro enrojecido como si el paciente estuviera intoxicado y pulso en cuerda, largo y fuerte?"
+  },
+  "97": {
+    "promptEn": "Which of the following formulas can be used for a closed disorder due to phlegm-heat? Manifestations include fever, irritability and restlessness, delirious speech, impaired consciousness progressing to coma, copious sputum with labored and raspy breathing, spasms, convulsions, a red or deep-red tongue with a foul, greasy yellow coating, and a slippery, rapid pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas puede utilizarse para un trastorno cerrado debido a Flema-Calor? Las manifestaciones incluyen fiebre, irritabilidad e inquietud, habla delirante, alteración de la conciencia que puede progresar hasta el coma, esputo abundante con respiración trabajosa y áspera, espasmos, convulsiones, lengua roja o de color rojo oscuro con saburra amarilla, grasa y maloliente, y pulso resbaladizo y rápido?"
+  },
+  "121": {
+    "promptEn": "Which of the following formulas treats Heat in the Stomach at the Yang Ming channel stage with injury to Qi and fluids?",
+    "promptEs": "¿Cuál de las siguientes fórmulas trata el Calor de Estómago en la etapa del canal Yang Ming con lesión del Qi y los líquidos?"
+  },
+  "211": {
+    "promptEn": "Both Fang Ji Huang Qi Tang (Stephania and Astragalus Decoction) and Fang Ji Fu Ling Tang (Stephania and Poria Decoction) eliminate water from the exterior of the body. What is the difference between them?",
+    "promptEs": "Fang Ji Huang Qi Tang y Fang Ji Fu Ling Tang eliminan el agua de la superficie del cuerpo. ¿En qué se diferencian?"
+  },
+  "241": {
+    "promptEn": "Which of the following formulas is appropriate for a Yin-type flat abscess characterized by localized, painful, headless swellings that blend into the surrounding tissue, do not alter the texture or color of the skin, and are not hot to the touch? There is no thirst; the tongue is very pale; and the pulse is deep, thin, and forceless?",
+    "promptEs": "¿Cuál de las siguientes fórmulas es apropiada para un absceso plano de tipo Yin, caracterizado por tumefacciones localizadas, dolorosas y sin cabeza que se confunden con el tejido circundante, no alteran la textura ni el color de la piel y no están calientes al tacto? No hay sed; la lengua es muy pálida; y el pulso es profundo, fino y sin fuerza?"
+  },
+  "301": {
+    "promptEn": "Which of the following herbal formulas is suitable for a Qi-type bulging disorder characterized by lower abdominal pain radiating to the testicles, swollen or distended testicles, a pale tongue with a white coating, and either a deep, slow pulse or a wiry pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas herbales es apropiada para un trastorno de abultamiento de tipo Qi, caracterizado por dolor en la parte inferior del abdomen que se irradia a los testículos, testículos hinchados o distendidos, lengua pálida con saburra blanca y pulso profundo y lento o pulso en cuerda?"
   }
 }
