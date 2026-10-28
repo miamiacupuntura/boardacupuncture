@@ -44,7 +44,16 @@
     return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
   function paragraphs(text) {
-    return String(text || '').split(/\n\s*\n/).map(value => value.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
+    const blocks = String(text || '').split(/\n\s*\n/).map(value => value.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
+    return blocks.reduce((merged, block) => {
+      const previous = merged.at(-1);
+      const previousIsLong = previous && previous.length > 100;
+      const sentenceFinished = previous && /[.!?:;][”’"')\]*\s]*$/.test(previous);
+      const startsAsContinuation = /^[a-záéíóúüñ]/.test(block);
+      if (previousIsLong && (!sentenceFinished || startsAsContinuation)) merged[merged.length - 1] = `${previous} ${block}`;
+      else merged.push(block);
+      return merged;
+    }, []);
   }
   function create(tag, className, text) {
     const node = document.createElement(tag);
