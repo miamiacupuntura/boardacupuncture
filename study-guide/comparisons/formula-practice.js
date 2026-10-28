@@ -13,7 +13,6 @@
     correct: spanish ? 'Correcto' : 'Correct',
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
-    noFeedback: spanish ? 'La fuente no proporcionó retroalimentación adicional.' : 'The source supplied no additional feedback.',
     showEnglish: 'Ver inglés original',
     showSpanish: 'Ver traducción al español',
     next: spanish ? 'Siguiente pregunta →' : 'Next question →',
@@ -261,8 +260,7 @@
     const correctOption = displayed.options.find(option => option.label === question.correctLabel);
     elements.correctAnswer.textContent = `${text.correctAnswer} ${question.correctLabel}) ${correctOption?.text || ''}`;
     elements.feedbackText.replaceChildren();
-    const feedback = displayed.feedback.length ? displayed.feedback : [text.noFeedback];
-    feedback.forEach(value => {
+    displayed.feedback.forEach(value => {
       const paragraph = document.createElement('p');
       paragraph.textContent = value;
       elements.feedbackText.append(paragraph);
