@@ -8,6 +8,9 @@
     noQuestions: spanish ? 'No hay preguntas con esta combinación de filtros.' : 'No questions match these filters.',
     startPractice: count => spanish ? `Comenzar práctica (${count}) →` : `Start practice (${count}) →`,
     source: number => spanish ? `Pregunta de fuente ${number}` : `Source question ${number}`,
+    questionPosition: (position, total, source) => spanish
+      ? `Pregunta ${position} de ${total} · Fuente ${source}`
+      : `Question ${position} of ${total} · Source ${source}`,
     related: spanish ? 'Relacionada con:' : 'Related to:',
     general: spanish ? 'Pregunta general de fórmulas' : 'General formula question',
     correct: spanish ? 'Correcto' : 'Correct',
@@ -15,8 +18,15 @@
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
     showEnglish: 'Ver inglés original',
     showSpanish: 'Ver traducción al español',
-    next: spanish ? 'Siguiente pregunta →' : 'Next question →',
-    finish: spanish ? 'Ver resultado →' : 'View result →',
+    allAvailable: count => spanish ? `Todas (${count})` : `All (${count})`,
+    maximumAvailable: count => spanish
+      ? `Máximo disponible para esta selección: ${count} preguntas.`
+      : `Maximum available for this selection: ${count} questions.`,
+    sessionMaximum: spanish ? 'Máximo por sesión en el banco completo: 100 preguntas.' : 'Maximum per full-bank session: 100 questions.',
+    finishProgress: (answered, total) => spanish
+      ? `Finalizar práctica (${answered}/${total} respondidas)`
+      : `Finish practice (${answered}/${total} answered)`,
+    skipForNow: spanish ? 'Saltar por ahora ↓' : 'Skip for now ↓',
     historyEmpty: spanish ? 'Completa una sesión para comenzar tu historial.' : 'Complete a session to start your history.',
     attempts: spanish ? 'respuestas' : 'answers',
     accuracy: spanish ? 'precisión' : 'accuracy',
@@ -40,6 +50,8 @@
     formula: document.querySelector('[data-practice-formula]'),
     category: document.querySelector('[data-practice-category]'),
     sizeButtons: [...document.querySelectorAll('[data-practice-size]')],
+    maxSizeButton: document.querySelector('[data-practice-size-max]'),
+    maxHelp: document.querySelector('[data-practice-max-help]'),
     available: document.querySelector('[data-practice-available]'),
     start: document.querySelector('[data-practice-start]'),
     history: document.querySelector('[data-practice-history]'),
@@ -53,16 +65,8 @@
     total: document.querySelector('[data-practice-total]'),
     score: document.querySelector('[data-practice-score]'),
     progressBar: document.querySelector('[data-practice-progress-bar]'),
-    source: document.querySelector('[data-practice-source]'),
-    prompt: document.querySelector('[data-practice-prompt]'),
-    body: document.querySelector('[data-practice-body]'),
-    associations: document.querySelector('[data-practice-associations]'),
-    options: document.querySelector('[data-practice-options]'),
-    feedback: document.querySelector('[data-practice-feedback]'),
-    verdict: document.querySelector('[data-practice-verdict]'),
-    correctAnswer: document.querySelector('[data-practice-correct-answer]'),
-    feedbackText: document.querySelector('[data-practice-feedback-text]'),
-    next: document.querySelector('[data-practice-next]'),
+    questionList: document.querySelector('[data-practice-question-list]'),
+    finish: document.querySelector('[data-practice-finish]'),
     results: document.querySelector('[data-practice-results]'),
     finalScore: document.querySelector('[data-practice-final-score]'),
     breakdown: document.querySelector('[data-practice-breakdown]'),
@@ -77,11 +81,11 @@
     formulaByNumber: new Map(),
     mode: 'all',
     size: 25,
+    useMaximum: false,
     questions: [],
-    index: 0,
     score: 0,
-    answered: false,
-    answers: []
+    answers: [],
+    answeredBySource: new Map()
   };
 
   function readHistory() {
@@ -152,7 +156,31 @@
 
   function updateAvailability() {
     const count = filteredQuestions().length;
+    const presets = elements.sizeButtons.map(button => Number(button.dataset.practiceSize));
+    if (state.mode === 'all' && !presets.includes(state.size)) {
+      state.size = 25;
+      state.useMaximum = false;
+    }
+    if (state.useMaximum && state.mode !== 'all') state.size = count;
+    if (state.useMaximum && presets.includes(count)) state.useMaximum = false;
+    if (count > 0 && state.size > count) {
+      state.size = count;
+      state.useMaximum = state.mode !== 'all';
+    }
+    if (count > 0 && state.size < 1) state.size = Math.min(25, count);
     const sessionCount = Math.min(count, state.size);
+    elements.sizeButtons.forEach(button => {
+      const size = Number(button.dataset.practiceSize);
+      button.disabled = size > count;
+      button.setAttribute('aria-pressed', String(!state.useMaximum && size === state.size));
+    });
+    const showMaximum = state.mode !== 'all' && count > 0 && !presets.includes(count);
+    elements.maxSizeButton.hidden = !showMaximum;
+    elements.maxSizeButton.textContent = text.allAvailable(count);
+    elements.maxSizeButton.setAttribute('aria-pressed', String(showMaximum && state.useMaximum));
+    elements.maxHelp.textContent = state.mode === 'all'
+      ? text.sessionMaximum
+      : text.maximumAvailable(count);
     elements.available.textContent = String(count);
     elements.start.disabled = count === 0;
     elements.start.textContent = text.startPractice(sessionCount);
@@ -219,11 +247,11 @@
     const requestedSize = Number(params.get('size'));
     if ([...elements.formula.options].some(item => item.value === requestedFormula)) elements.formula.value = requestedFormula;
     if ([...elements.category.options].some(item => item.value === requestedCategory)) elements.category.value = requestedCategory;
-    if ([10, 25, 50, 100].includes(requestedSize)) state.size = requestedSize;
-    elements.sizeButtons.forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.practiceSize) === state.size)));
+    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= 897) state.size = requestedSize;
     if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
     else if (requestedCategory && [...elements.category.options].some(item => item.value === requestedCategory)) setMode('category', false);
     else setMode('all', false);
+    state.useMaximum = state.mode !== 'all' && requestedSize === filteredQuestions().length;
     elements.setup.hidden = false;
     elements.status.hidden = false;
     updateAvailability();
@@ -242,55 +270,50 @@
     return state.translations.get(question.sourceNumber) || question;
   }
 
-  function renderQuestionCopy(question) {
+  function renderQuestionCopy(question, card) {
     const displayed = displayedQuestion(question);
-    elements.prompt.textContent = displayed.prompt;
-    elements.body.replaceChildren();
+    const prompt = card.querySelector('[data-card-prompt]');
+    const body = card.querySelector('[data-card-body]');
+    const options = card.querySelector('[data-card-options]');
+    const correctAnswer = card.querySelector('[data-card-correct-answer]');
+    const feedbackText = card.querySelector('[data-card-feedback-text]');
+    prompt.textContent = displayed.prompt;
+    body.replaceChildren();
     displayed.body.forEach(value => {
       const paragraph = document.createElement('p');
       paragraph.textContent = value;
-      elements.body.append(paragraph);
+      body.append(paragraph);
     });
     const displayedOptions = new Map(displayed.options.map(option => [option.label, option.text]));
-    elements.options.querySelectorAll('button').forEach(button => {
+    options.querySelectorAll('button').forEach(button => {
       const answerText = button.querySelector('span');
       if (answerText) answerText.textContent = displayedOptions.get(button.dataset.answerLabel) || '';
     });
-    if (!state.answered) return;
+    if (!state.answeredBySource.has(question.sourceNumber)) return;
     const correctOption = displayed.options.find(option => option.label === question.correctLabel);
-    elements.correctAnswer.textContent = `${text.correctAnswer} ${question.correctLabel}) ${correctOption?.text || ''}`;
-    elements.feedbackText.replaceChildren();
+    correctAnswer.textContent = `${text.correctAnswer} ${question.correctLabel}) ${correctOption?.text || ''}`;
+    feedbackText.replaceChildren();
     displayed.feedback.forEach(value => {
       const paragraph = document.createElement('p');
       paragraph.textContent = value;
-      elements.feedbackText.append(paragraph);
+      feedbackText.append(paragraph);
     });
   }
 
-  function renderQuestion() {
-    const question = state.questions[state.index];
-    state.answered = false;
-    elements.position.textContent = String(state.index + 1);
-    elements.total.textContent = String(state.questions.length);
-    elements.score.textContent = String(state.score);
-    elements.progressBar.style.width = `${((state.index + 1) / state.questions.length) * 100}%`;
-    elements.source.textContent = text.source(question.sourceNumber);
-
-    elements.associations.replaceChildren();
-    const label = document.createElement('strong');
-    if (question.formulaNumbers.length) {
-      label.textContent = text.related;
-      elements.associations.append(label);
-      question.formulaNumbers.forEach(number => {
-        const formula = state.formulaByNumber.get(number);
-        if (formula) elements.associations.append(associationLink(formula));
-      });
-    } else {
-      label.textContent = text.general;
-      elements.associations.append(label);
-    }
-
-    elements.options.replaceChildren();
+  function createQuestionCard(question, index) {
+    const card = document.createElement('article');
+    card.className = 'formula-practice-question';
+    card.dataset.questionSource = String(question.sourceNumber);
+    const source = document.createElement('p');
+    source.className = 'comparison-eyebrow';
+    source.textContent = text.questionPosition(index + 1, state.questions.length, question.sourceNumber);
+    const prompt = document.createElement('h2');
+    prompt.dataset.cardPrompt = '';
+    const body = document.createElement('div');
+    body.dataset.cardBody = '';
+    const options = document.createElement('div');
+    options.className = 'formula-practice-options';
+    options.dataset.cardOptions = '';
     question.options.forEach(answer => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -299,14 +322,65 @@
       badge.textContent = answer.label;
       const answerText = document.createElement('span');
       button.append(badge, answerText);
-      button.addEventListener('click', () => answerQuestion(answer.label));
-      elements.options.append(button);
+      button.addEventListener('click', () => answerQuestion(question, answer.label, card));
+      options.append(button);
     });
-    elements.feedback.hidden = true;
-    elements.feedback.classList.remove('is-correct', 'is-incorrect');
-    elements.next.hidden = true;
-    elements.next.textContent = state.index === state.questions.length - 1 ? text.finish : text.next;
-    renderQuestionCopy(question);
+
+    const skip = document.createElement('button');
+    skip.type = 'button';
+    skip.className = 'formula-practice-skip';
+    skip.textContent = text.skipForNow;
+    skip.addEventListener('click', () => {
+      const target = card.nextElementSibling || elements.finish;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    const feedback = document.createElement('section');
+    feedback.className = 'formula-practice-feedback';
+    feedback.dataset.cardFeedback = '';
+    feedback.hidden = true;
+    const verdict = document.createElement('h3');
+    verdict.dataset.cardVerdict = '';
+    const correctAnswer = document.createElement('p');
+    correctAnswer.dataset.cardCorrectAnswer = '';
+    const associations = document.createElement('div');
+    associations.className = 'formula-practice-associations';
+    associations.dataset.cardAssociations = '';
+    const label = document.createElement('strong');
+    if (question.formulaNumbers.length) {
+      label.textContent = text.related;
+      associations.append(label);
+      question.formulaNumbers.forEach(number => {
+        const formula = state.formulaByNumber.get(number);
+        if (formula) associations.append(associationLink(formula));
+      });
+    } else {
+      label.textContent = text.general;
+      associations.append(label);
+    }
+    const feedbackText = document.createElement('div');
+    feedbackText.dataset.cardFeedbackText = '';
+    feedback.append(verdict, correctAnswer, associations, feedbackText);
+    card.append(source, prompt, body, options, skip, feedback);
+    renderQuestionCopy(question, card);
+    return card;
+  }
+
+  function updateSessionProgress() {
+    const answered = state.answers.length;
+    elements.position.textContent = String(answered);
+    elements.total.textContent = String(state.questions.length);
+    elements.score.textContent = String(state.score);
+    elements.progressBar.style.width = `${state.questions.length ? (answered / state.questions.length) * 100 : 0}%`;
+    elements.finish.textContent = text.finishProgress(answered, state.questions.length);
+  }
+
+  function renderQuestions() {
+    elements.questionList.replaceChildren();
+    state.questions.forEach((question, index) => {
+      elements.questionList.append(createQuestionCard(question, index));
+    });
+    updateSessionProgress();
   }
 
   function recordAnswer(question, correct) {
@@ -323,26 +397,25 @@
     writeHistory(history);
   }
 
-  function answerQuestion(selectedLabel) {
-    if (state.answered) return;
-    state.answered = true;
-    const question = state.questions[state.index];
+  function answerQuestion(question, selectedLabel, card) {
+    if (state.answeredBySource.has(question.sourceNumber)) return;
     const correct = selectedLabel === question.correctLabel;
     if (correct) state.score += 1;
     state.answers.push({ question, correct });
+    state.answeredBySource.set(question.sourceNumber, { selectedLabel, correct });
     recordAnswer(question, correct);
-    elements.score.textContent = String(state.score);
-    [...elements.options.querySelectorAll('button')].forEach(button => {
+    [...card.querySelectorAll('[data-card-options] button')].forEach(button => {
       button.disabled = true;
       if (button.dataset.answerLabel === question.correctLabel) button.classList.add('is-correct');
       else if (button.dataset.answerLabel === selectedLabel) button.classList.add('is-incorrect');
     });
-    elements.feedback.hidden = false;
-    elements.feedback.classList.add(correct ? 'is-correct' : 'is-incorrect');
-    elements.verdict.textContent = correct ? text.correct : text.incorrect;
-    renderQuestionCopy(question);
-    elements.next.hidden = false;
-    elements.next.focus();
+    const feedback = card.querySelector('[data-card-feedback]');
+    feedback.hidden = false;
+    feedback.classList.add(correct ? 'is-correct' : 'is-incorrect');
+    card.querySelector('[data-card-verdict]').textContent = correct ? text.correct : text.incorrect;
+    card.querySelector('.formula-practice-skip').hidden = true;
+    renderQuestionCopy(question, card);
+    updateSessionProgress();
   }
 
   function renderBreakdown() {
@@ -370,10 +443,12 @@
   function finishSession() {
     elements.workspace.hidden = true;
     elements.results.hidden = false;
-    const score = percentage(state.score, state.questions.length);
+    const answered = state.answers.length;
+    const skipped = state.questions.length - answered;
+    const score = percentage(state.score, answered);
     elements.finalScore.textContent = spanish
-      ? `${state.score} de ${state.questions.length} correctas — ${score}%`
-      : `${state.score} of ${state.questions.length} correct — ${score}%`;
+      ? `${state.score} correctas de ${answered} respondidas — ${score}%. ${skipped} sin responder.`
+      : `${state.score} correct out of ${answered} answered — ${score}%. ${skipped} unanswered.`;
     renderBreakdown();
     renderHistory();
     elements.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -383,14 +458,14 @@
     const pool = filteredQuestions();
     if (!pool.length) return;
     state.questions = shuffle(pool).slice(0, Math.min(state.size, pool.length));
-    state.index = 0;
     state.score = 0;
     state.answers = [];
+    state.answeredBySource = new Map();
     elements.setup.hidden = true;
     elements.history.hidden = true;
     elements.results.hidden = true;
     elements.workspace.hidden = false;
-    renderQuestion();
+    renderQuestions();
     elements.workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -410,14 +485,16 @@
   }));
   elements.sizeButtons.forEach(button => button.addEventListener('click', () => {
     state.size = Number(button.dataset.practiceSize);
-    elements.sizeButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    updateUrl();
+    state.useMaximum = false;
+    updateAvailability();
   }));
-  elements.start.addEventListener('click', startSession);
-  elements.next.addEventListener('click', () => {
-    if (state.index === state.questions.length - 1) finishSession();
-    else { state.index += 1; renderQuestion(); }
+  elements.maxSizeButton.addEventListener('click', () => {
+    state.useMaximum = true;
+    state.size = filteredQuestions().length;
+    updateAvailability();
   });
+  elements.start.addEventListener('click', startSession);
+  elements.finish.addEventListener('click', finishSession);
   elements.repeat.addEventListener('click', startSession);
   elements.configure.addEventListener('click', returnToSetup);
   elements.returnToSetup.addEventListener('click', returnToSetup);
@@ -425,7 +502,10 @@
     state.showOriginal = !state.showOriginal;
     elements.questionLanguage.textContent = state.showOriginal ? text.showSpanish : text.showEnglish;
     elements.questionLanguage.setAttribute('aria-pressed', String(state.showOriginal));
-    if (state.questions.length) renderQuestionCopy(state.questions[state.index]);
+    state.questions.forEach(question => {
+      const card = elements.questionList.querySelector(`[data-question-source="${question.sourceNumber}"]`);
+      if (card) renderQuestionCopy(question, card);
+    });
   });
   elements.reset.addEventListener('click', () => {
     if (!window.confirm(text.resetConfirm)) return;

@@ -701,6 +701,17 @@ a { color: inherit; }
   color: #fff;
 }
 
+.formula-practice-size button:disabled {
+  opacity: .38;
+  cursor: not-allowed;
+}
+
+.formula-practice-max-help {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .formula-practice-availability {
   display: flex;
   align-items: center;
@@ -713,7 +724,8 @@ a { color: inherit; }
 
 .formula-practice-availability p { margin: 0; color: var(--muted); }
 .formula-practice-start,
-.formula-practice-next {
+.formula-practice-next,
+.formula-practice-finish {
   min-height: 44px;
   padding: 9px 16px;
   border: 0;
@@ -794,6 +806,24 @@ a { color: inherit; }
   border-radius: inherit;
   background: var(--teal);
   transition: width .2s ease;
+}
+
+.formula-practice-skip-note {
+  margin: 0 0 22px;
+  color: var(--muted);
+}
+
+.formula-practice-question-list {
+  display: grid;
+  gap: 26px;
+}
+
+.formula-practice-question {
+  scroll-margin-top: 18px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fbfcfd;
 }
 
 .formula-practice-question h2 {
@@ -881,6 +911,20 @@ a { color: inherit; }
 .formula-practice-feedback h3 { margin: 0 0 7px; }
 .formula-practice-feedback p:last-child { margin-bottom: 0; }
 .formula-practice-next { margin-top: 18px; }
+.formula-practice-skip {
+  margin-top: 14px;
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.formula-practice-finish {
+  display: block;
+  margin: 28px 0 0 auto;
+}
 .formula-practice-final-score { font-size: 24px; font-weight: 800; }
 .formula-practice-breakdown h3 { margin-top: 22px; }
 
@@ -913,4 +957,5 @@ select:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
   .formula-practice-availability { align-items: stretch; flex-direction: column; }
   .formula-practice-start { width: 100%; }
   .formula-practice-question h2 { font-size: 20px; }
+  .formula-practice-finish { width: 100%; }
 }
