@@ -75,7 +75,7 @@ const formulas = classicFormulaOutline.map(([number, name, categoryKey, kings, r
 });
 
 function guideName(es) {
-  return es ? 'Guía de estudio de fórmulas herbales' : 'Herbal Formula Study Guide';
+  return 'Herbs Practice Exams';
 }
 
 function nav(es) {
@@ -151,7 +151,7 @@ function indexPage(es) {
 function practicePage(es) {
   const suffix = es ? '-es' : '';
   const alternate = `formula-practice${es ? '' : '-es'}.html`;
-  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Práctica segura con 897 preguntas verificadas y conectadas con la guía de estudio de fórmulas herbales.' : 'Safe practice with 897 verified questions connected to the Herbal Formula Study Guide.'}"><title>${es ? 'Práctica de Fórmulas' : 'Formula Practice'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${practiceCssVersion}"><script defer src="formula-practice.js?v=20261028-4"></script></head><body>
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Práctica segura con 897 preguntas verificadas y conectadas con Herbs Practice Exams.' : 'Safe practice with 897 verified questions connected to Herbs Practice Exams.'}"><title>${es ? 'Práctica de Fórmulas' : 'Formula Practice'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${practiceCssVersion}"><script defer src="formula-practice.js?v=20261028-4"></script></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="formula-navigator${suffix}.html"><span class="comparison-brand__mark" aria-hidden="true">☿</span><span>${guideName(es)}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" data-practice-language href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="formula-navigator${suffix}.html">${es ? '← Volver a la guía' : '← Back to guide'}</a></span></div></header>
 <main class="comparison-shell formula-practice-page"><section class="comparison-hero formula-practice-hero"><p class="comparison-eyebrow">${es ? 'Práctica conectada · Aprende a tu ritmo' : 'Connected practice · Learn at your pace'}</p><h1>${es ? 'Práctica de Fórmulas' : 'Formula Practice'}</h1><p>${es ? 'Crea simulacros de 10, 25, 50 o 100 preguntas, o abre todas las disponibles para una fórmula.' : 'Build 10, 25, 50, or 100-question mocks, or open every available question for one formula.'}</p><div class="formula-navigator-stats"><span><strong>897</strong> ${es ? 'preguntas para practicar' : 'questions to practice'}</span><span><strong>63</strong> ${es ? 'fórmulas para estudiar' : 'formulas to study'}</span><span><strong>✓</strong> ${es ? 'práctica personalizada con resultados' : 'personalized practice with results'}</span></div></section>
 ${es ? '<aside class="formula-translation-notice" role="note"><strong>Traducción automática al español.</strong> Puede contener errores de idioma o terminología. Ante cualquier diferencia, consulta el texto original en inglés.</aside>' : ''}

@@ -16,7 +16,7 @@ let updated = 0;
 for (const language of ['en', 'es']) {
   const suffix = language === 'es' ? '-es' : '';
   const href = `formula-navigator${suffix}.html`;
-  const label = language === 'es' ? 'Guía de estudio de fórmulas herbales' : 'Herbal Formula Study Guide';
+  const label = 'Herbs Practice Exams';
   const link = `<a href="${href}">${label}</a>`;
   for (const base of indexes) {
     if (base === 'formula-navigator') continue;
