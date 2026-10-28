@@ -12,12 +12,12 @@ function requireValue(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-requireValue(data.totals?.questions === 897, 'Expected 897 safe questions');
-requireValue(data.totals?.matchedQuestions === 725, 'Expected 725 formula-linked questions');
-requireValue(data.totals?.generalQuestions === 172, 'Expected 172 general questions');
+requireValue(data.totals?.questions === 572, 'Expected 572 core-formula questions');
+requireValue(data.totals?.matchedQuestions === 572, 'Every question must be linked to a core formula');
+requireValue(data.totals?.generalQuestions === 0, 'General or supplemental-formula questions must be excluded');
 requireValue(data.formulas?.length === 63, 'Expected 63 formulas');
 requireValue(data.categories?.length === 14, 'Expected 14 categories');
-requireValue(data.questions?.length === 897, 'Question array length does not match totals');
+requireValue(data.questions?.length === 572, 'Question array length does not match totals');
 requireValue(!raw.includes('+++++'), 'A source answer marker leaked into practice data');
 requireValue(!raw.includes('&amp;'), 'An encoded ampersand leaked into practice data');
 
@@ -48,16 +48,10 @@ for (const question of data.questions) {
   );
 }
 requireValue(data.formulas.every(formula => formula.questionCount > 0), 'Every formula must have related questions');
-const question64 = data.questions.find(question => question.sourceNumber === 64);
-requireValue(
-  question64?.prompt.startsWith('Which of the following formulas is appropriate for frequent urination progressing to incontinence and spermatorrhea?'),
-  'Reviewed English copy for question 64 is missing'
-);
-
 const translationPath = resolve(dirname(path), 'formula-practice-translations-es.json');
 const translationData = JSON.parse(readFileSync(translationPath, 'utf8'));
 requireValue(translationData.automatic === true, 'Spanish layer must identify itself as automatic translation');
-requireValue(translationData.questions?.length === 897, 'Expected 897 Spanish translations');
+requireValue(translationData.questions?.length === 572, 'Expected 572 Spanish translations');
 requireValue(
   translationData.sourceDataSha256 === createHash('sha256').update(raw).digest('hex'),
   'Spanish translation layer does not match the current English bank'
@@ -72,6 +66,7 @@ const translatedByNumber = new Map(
 const englishResidue = /\b(?:which|what|both|the|and|with|due|treats?|atrophy|marked|patterns?|include|except|chief|deputy|assistant|envoy|tongue|pulse|heat|cold|blood|dampness|phlegm|wiry|slippery|floating|tight|thin|white|yellow|red)\b/i;
 let changedPrompts = 0;
 let changedOptions = 0;
+let translatedOptionCount = 0;
 for (const question of data.questions) {
   const translated = translatedByNumber.get(question.sourceNumber);
   requireValue(translated, `Missing Spanish translation for question ${question.sourceNumber}`);
@@ -106,6 +101,7 @@ for (const question of data.questions) {
     `Spanish feedback mismatch for question ${question.sourceNumber}`
   );
   if (translated.prompt !== question.prompt) changedPrompts += 1;
+  translatedOptionCount += translated.options.length;
   changedOptions += translated.options.filter((option, index) => option.text !== question.options[index].text).length;
 
   const sourceSegments = [question.prompt, ...question.body, ...question.options.map(option => option.text), ...question.feedback];
@@ -127,15 +123,10 @@ for (const question of data.questions) {
     }
   }
 }
-requireValue(changedPrompts > 850, 'Too few prompts were translated into Spanish');
-requireValue(changedOptions > 2500, 'Too few answer options were translated into Spanish');
+requireValue(changedPrompts >= data.questions.length * 0.95, 'Too few prompts were translated into Spanish');
+requireValue(changedOptions >= translatedOptionCount * 0.9, 'Too few answer options were translated into Spanish');
 requireValue(
   !/ZX(?:FORMULA|TERM|SEG)|P\d{4}P/.test(JSON.stringify(translationData.questions)),
   'Spanish translation contains an unresolved protection token'
 );
-requireValue(
-  translatedByNumber.get(64)?.prompt.startsWith('¿Cuál de las siguientes fórmulas es apropiada para la micción frecuente hasta el punto de incontinencia y la espermatorrea?'),
-  'Reviewed Spanish copy for question 64 is missing'
-);
-
 console.log(`Validated ${data.questions.length} practice questions and ${translationData.questions.length} Spanish translations`);

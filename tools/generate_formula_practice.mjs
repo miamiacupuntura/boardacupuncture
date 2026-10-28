@@ -175,13 +175,15 @@ const questions = sourceQuestions.map(question => {
     text: normalizeEnglishCopy(option.text)
   }));
   const feedback = (question.feedback || []).map(value => normalizeEnglishCopy(value));
-  const searchable = compact([
+  const correctOption = options.find(option => option.label === correctLabel);
+  const focusSearchable = compact([
     prompt,
     ...body,
-    ...options.map(option => option.text),
+    correctOption?.text,
     ...feedback
   ].join(' '));
-  const matches = formulas.filter(formula => searchable.includes(formula.compactName));
+  const matches = formulas.filter(formula => focusSearchable.includes(formula.compactName));
+  if (matches.length === 0) return null;
   matches.forEach(formula => { formula.questionCount += 1; });
 
   return {
@@ -194,7 +196,7 @@ const questions = sourceQuestions.map(question => {
     formulaNumbers: matches.map(formula => formula.number),
     categoryKeys: [...new Set(matches.map(formula => formula.categoryKey))]
   };
-});
+}).filter(Boolean);
 
 if (questions.some(question => JSON.stringify(question).includes('+++++'))) {
   throw new Error('An answer marker leaked into the student practice data');
@@ -213,7 +215,7 @@ const data = {
     keyedJsonlSha256: createHash('sha256').update(sourceBytes).digest('hex'),
     document: sourceAudit(args.source)
   },
-  policy: 'Only questions with one explicit source answer marker are included. Formula links are mention-based and may include comparison distractors.',
+  policy: 'Only explicitly keyed questions focused on one or more of the 63 core formulas are included. A core formula must appear in the prompt, body, correct answer, or feedback; distractor-only mentions do not qualify.',
   totals: {
     questions: questions.length,
     matchedQuestions: matchedQuestionCount,

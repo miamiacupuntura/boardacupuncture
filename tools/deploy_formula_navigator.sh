@@ -32,7 +32,7 @@ done
 
 grep -q 'href="formula-navigator.html"' "$TARGET_DIR/index.html"
 grep -q 'href="formula-navigator-es.html"' "$TARGET_DIR/index-es.html"
-grep -q '897' "$TARGET_DIR/formula-practice.html"
-grep -q '897' "$TARGET_DIR/formula-practice-data.json"
+grep -q '572' "$TARGET_DIR/formula-practice.html"
+grep -q '572' "$TARGET_DIR/formula-practice-data.json"
 
 echo "63-FORMULA NAVIGATOR AND PRACTICE BANK DEPLOYED OK"

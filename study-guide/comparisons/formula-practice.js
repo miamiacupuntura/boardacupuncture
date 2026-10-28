@@ -247,7 +247,7 @@
     const requestedSize = Number(params.get('size'));
     if ([...elements.formula.options].some(item => item.value === requestedFormula)) elements.formula.value = requestedFormula;
     if ([...elements.category.options].some(item => item.value === requestedCategory)) elements.category.value = requestedCategory;
-    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= 897) state.size = requestedSize;
+    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= state.data.totals.questions) state.size = requestedSize;
     if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
     else if (requestedCategory && [...elements.category.options].some(item => item.value === requestedCategory)) setMode('category', false);
     else setMode('all', false);
@@ -532,10 +532,10 @@
 
   Promise.all([bankRequest, translationsRequest])
     .then(([data, translations]) => {
-      if (data.totals?.questions !== 897 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
+      if (data.totals?.questions !== 572 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
-      if (translations?.questions?.length === 897) {
+      if (translations?.questions?.length === data.questions.length) {
         state.translations = new Map(translations.questions.map(question => [question.sourceNumber, question]));
       } else if (spanish) {
         state.showOriginal = true;
