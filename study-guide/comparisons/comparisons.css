@@ -743,6 +743,25 @@ a { color: inherit; }
   margin-bottom: 8px;
 }
 
+.formula-practice-session-actions {
+  display: flex;
+  margin-bottom: 18px;
+}
+
+.formula-practice-session-actions button {
+  min-height: 40px;
+  padding: 8px 13px;
+  border: 1px solid #c9d5dc;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.formula-practice-session-actions button:hover { background: #edf3f6; }
+
 .formula-practice-progress-track {
   height: 8px;
   margin-bottom: 28px;

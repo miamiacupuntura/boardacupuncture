@@ -46,6 +46,7 @@
     weaknesses: document.querySelector('[data-practice-weaknesses]'),
     reset: document.querySelector('[data-practice-reset]'),
     workspace: document.querySelector('[data-practice-workspace]'),
+    returnToSetup: document.querySelector('[data-practice-return]'),
     position: document.querySelector('[data-practice-position]'),
     total: document.querySelector('[data-practice-total]'),
     score: document.querySelector('[data-practice-score]'),
@@ -400,6 +401,7 @@
   });
   elements.repeat.addEventListener('click', startSession);
   elements.configure.addEventListener('click', returnToSetup);
+  elements.returnToSetup.addEventListener('click', returnToSetup);
   elements.reset.addEventListener('click', () => {
     if (!window.confirm(text.resetConfirm)) return;
     try { localStorage.removeItem(storageKey); } catch (_) { /* Optional persistence. */ }
