@@ -81,3 +81,9 @@ shows a language-quality warning and lets the student reveal the original
 English for each question. Formula associations, answer labels, and the
 correct-answer key always come from the English source data, so translation
 cannot change which option is scored as correct.
+
+Reviewed wording corrections live in
+`tools/formula_practice_copy_overrides.json`. The practice generator also
+normalizes recurring source grammar and punctuation before translation. Keep
+clinical copy edits in the override file so regenerating the bank does not
+discard them, and never place answer-key changes in that file.

@@ -38,8 +38,21 @@ for (const question of data.questions) {
     !question.prompt.startsWith('IDENTIFICATION'),
     `Question ${question.sourceNumber} still has an unnatural identification heading`
   );
+  requireValue(
+    !/\bWhich of the following (?:herbal )?formula\b/i.test(question.prompt),
+    `Uncorrected singular formula wording in question ${question.sourceNumber}`
+  );
+  requireValue(
+    !/,\s+what (?:is|are) (?:their|the) differences?\?/i.test(question.prompt),
+    `Comma splice remains in question ${question.sourceNumber}`
+  );
 }
 requireValue(data.formulas.every(formula => formula.questionCount > 0), 'Every formula must have related questions');
+const question64 = data.questions.find(question => question.sourceNumber === 64);
+requireValue(
+  question64?.prompt.startsWith('Which of the following formulas is appropriate for frequent urination progressing to incontinence and spermatorrhea?'),
+  'Reviewed English copy for question 64 is missing'
+);
 
 const translationPath = resolve(dirname(path), 'formula-practice-translations-es.json');
 const translationData = JSON.parse(readFileSync(translationPath, 'utf8'));
@@ -93,9 +106,23 @@ for (const question of data.questions) {
         );
       }
     }
+    if (/spermatorrh(?:ea|oea)/i.test(sourceSegments[index])) {
+      requireValue(
+        /espermatorrea/i.test(translatedSegments[index]),
+        `Spanish text mistranslated spermatorrhea in question ${question.sourceNumber}`
+      );
+    }
   }
 }
 requireValue(changedPrompts > 850, 'Too few prompts were translated into Spanish');
 requireValue(changedOptions > 2500, 'Too few answer options were translated into Spanish');
+requireValue(
+  !/ZX(?:FORMULA|TERM|SEG)|P\d{4}P/.test(JSON.stringify(translationData.questions)),
+  'Spanish translation contains an unresolved protection token'
+);
+requireValue(
+  translatedByNumber.get(64)?.prompt.startsWith('¿Cuál de las siguientes fórmulas es apropiada para la micción frecuente hasta el punto de incontinencia y la espermatorrea?'),
+  'Reviewed Spanish copy for question 64 is missing'
+);
 
 console.log(`Validated ${data.questions.length} practice questions and ${translationData.questions.length} Spanish translations`);

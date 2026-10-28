@@ -12,6 +12,10 @@ import {
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const defaultSource = resolve(repositoryRoot, 'output/complete-final-import/keyed-questions.jsonl');
 const defaultOutput = resolve(repositoryRoot, 'study-guide/comparisons/formula-practice-data.json');
+const copyOverrides = JSON.parse(readFileSync(
+  resolve(repositoryRoot, 'tools/formula_practice_copy_overrides.json'),
+  'utf8'
+));
 
 function parseArguments(argv) {
   const options = { source: defaultSource, output: defaultOutput };
@@ -50,6 +54,26 @@ function decodeSourceEntities(value) {
     decoded = next;
   }
   return decoded;
+}
+
+function normalizeEnglishCopy(value, prompt = false) {
+  let normalized = decodeSourceEntities(value)
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
+    .map(line => line.replace(/[ \t]+/g, ' ').trim())
+    .join('\n')
+    .replace(/ +([,.;:!?])/g, '$1')
+    .replace(/\.\s+and\b/gi, ', and')
+    .trim();
+  if (!prompt) return normalized;
+  normalized = normalized
+    .replace(/\bWhich of the following herbal formula\b/gi, 'Which of the following herbal formulas')
+    .replace(/\bWhich of the following formula\b/gi, 'Which of the following formulas')
+    .replace(/(Which of the following (?:herbal )?formulas) treat\b/gi, '$1 treats')
+    .replace(/(Which of the following (?:herbal )?formulas) uses for\b/gi, '$1 is used for')
+    .replace(/(Which of the following herbal formulas) for\b/gi, '$1 is appropriate for')
+    .replace(/,\s+what ((?:is|are) (?:their|the) differences?\?)/gi, '. What $1');
+  return normalized;
 }
 
 const naturalIdentificationHeadings = new Map([
@@ -127,13 +151,17 @@ const questions = sourceQuestions.map(question => {
     throw new Error(`Question ${question.source_number} has a missing keyed option`);
   }
 
-  const prompt = naturalizeIdentificationPrompt(question.prompt);
-  const body = (question.body || []).map(decodeSourceEntities);
+  const override = copyOverrides[String(question.source_number)] || {};
+  const prompt = normalizeEnglishCopy(
+    override.promptEn || naturalizeIdentificationPrompt(question.prompt),
+    true
+  );
+  const body = (question.body || []).map(value => normalizeEnglishCopy(value));
   const options = question.options.map(option => ({
     label: option.label,
-    text: decodeSourceEntities(option.text)
+    text: normalizeEnglishCopy(option.text)
   }));
-  const feedback = (question.feedback || []).map(decodeSourceEntities);
+  const feedback = (question.feedback || []).map(value => normalizeEnglishCopy(value));
   const searchable = compact([
     prompt,
     ...body,

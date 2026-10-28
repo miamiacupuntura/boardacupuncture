@@ -1,0 +1,82 @@
+{
+  "41": {
+    "promptEn": "Which of the following formulas is used for upper-Jiao manifestations of heat in the blood, such as coughing, spitting, or vomiting blood, or nosebleeds—particularly when the blood is bright red? Accompanying signs and symptoms include a dry mouth and throat, a red or deep-red tongue, and a wiry, rapid, or forceful pulse?"
+  },
+  "58": {
+    "promptEn": "Which of the following formulas is suitable for chronic diarrhea or dysentery with loss of bowel control? Manifestations include unremitting diarrhea to the point of incontinence, persistent abdominal pain that improves with pressure or warmth, lethargy, reduced appetite, a pale tongue with a white coating, and a slow, thin pulse?"
+  },
+  "63": {
+    "promptEn": "Which of the following formulas is suitable for dysfunction of the Kidneys and Liver manifested by chronic spermatorrhea, impotence, fatigue and weakness, sore and weak limbs, lower-back pain, tinnitus, a pale tongue with a white coating, and a thin, frail pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas es apropiada para una disfunción de Riñón e Hígado que se manifiesta con espermatorrea crónica, impotencia, fatiga y debilidad, dolor y debilidad en las extremidades, dolor lumbar, tinnitus, lengua pálida con saburra blanca y pulso fino y débil?"
+  },
+  "64": {
+    "promptEn": "Which of the following formulas is appropriate for frequent urination progressing to incontinence and spermatorrhea? Other signs and symptoms include gray, cloudy urine resembling rice water; disorientation; forgetfulness; a pale tongue with a white coating; and a thin, slow, frail pulse?",
+    "promptEs": "¿Cuál de las siguientes fórmulas es apropiada para la micción frecuente hasta el punto de incontinencia y la espermatorrea? Otros signos y síntomas incluyen orina gris y turbia, similar al agua de arroz; desorientación; falta de memoria; lengua pálida con saburra blanca; y pulso fino, lento y débil?",
+    "optionsEs": {
+      "A": "Liu Wei Di Huang Wan (Píldora de seis ingredientes con Rehmannia)",
+      "B": "Jin Suo Gu Jing Wan (Píldora de cierre metálico para estabilizar la esencia)",
+      "C": "Sang Piao Xiao San (Polvo de ooteca de mantis)",
+      "D": "Suo Quan Wan (Píldora para contener la orina)"
+    }
+  },
+  "65": {
+    "promptEs": "Jin Suo Gu Jing Wan y Sang Piao Xiao San tratan patrones caracterizados por incontinencia urinaria y espermatorrea debido a una falta de comunicación entre Corazón y Riñón. ¿En qué se diferencian?"
+  },
+  "68": {
+    "promptEs": "Suo Quan Wan y Sang Piao Xiao San tratan la micción frecuente, la incontinencia urinaria, la enuresis y la espermatorrea. ¿En qué se diferencian?"
+  },
+  "79": {
+    "promptEn": "Both Tian Wang Bu Xin Dan (Emperor of Heaven's Special Pill to Tonify the Heart) and Zhi Gan Cao Tang (Prepared Licorice Decoction) tonify the Yin and blood to treat patterns manifested by palpitations, anxiety, insomnia, and dry stools. What is the difference between them?"
+  },
+  "83": {
+    "promptEn": "Which of the following formulas is suitable for the heat-transformation pattern (Re Hua) of the Shao Yin stage of a cold-damage disorder, manifested by irritability with a sensation of heat in the chest, insomnia, palpitations with anxiety, a red tongue with a dry, yellow coating, and a thin, rapid pulse?"
+  },
+  "85": {
+    "promptEn": "Which of the following formulas is suitable for fullness in the chest; irritability with occasional attacks of fright and palpitations; urinary difficulty; constipation; delirious speech; inability to rotate the trunk; a sensation of extreme heaviness throughout the body; a red tongue with a slippery coating; and a wiry, rapid pulse?"
+  },
+  "101": {
+    "promptEn": "Which of the following formulas is suitable for internal clumping of phlegm-heat manifested by coughing up yellow, viscous sputum that is difficult to expectorate; focal distention and fullness in the chest and diaphragm; nausea; a red tongue with a greasy, yellow coating; and a slippery, rapid pulse?"
+  },
+  "103": {
+    "promptEn": "Which of the following formulas is suitable for thin mucus in the epigastrium manifested by fullness in the chest and hypochondria; palpitations; shortness of breath; coughing up clear, watery sputum; dizziness or vertigo; a pale, swollen tongue with a white, slippery or greasy coating; and a slippery pulse that may also be wiry or soggy?"
+  },
+  "105": {
+    "promptEn": "Both Ling Gui Zhu Gan Tang (Poria, Cinnamon Twig, Atractylodis Macrocephalae and Licorice Decoction) and Zhen Wu Tang (True Warrior Decoction) warm the Yang, promote water metabolism, and contain Fu Ling and Bai Zhu. Both are used for internal retention of water and Qi in patients with Yang deficiency, which may cause dizziness and other problems. What is the difference between them?"
+  },
+  "130": {
+    "promptEn": "Which of the following herbal formulas is appropriate for a Lung abscess caused by wind-heat toxin entering the Lungs, manifested by cough with foul-smelling sputum that may be streaked with blood, slight fever, mild chest pain, dry scaly skin, a red tongue with a greasy yellow coating, and a slippery rapid pulse?"
+  },
+  "134": {
+    "promptEn": "Which of the following formulas is appropriate for toothache, especially when the pain extends into the head, accompanied by facial swelling, fever, bad breath, a dry mouth, a red tongue with little coating, and a slippery, large, rapid pulse?"
+  },
+  "135": {
+    "promptEn": "Which herbal formula is appropriate for toothache, loose teeth, bleeding gums, frontal headache, irritability, fever, thirst with a desire for cold drinks, a dry red tongue with a yellow coating, and a floating, slippery, deficient, large pulse?"
+  },
+  "272": {
+    "promptEs": "Tanto Zhi Gan Cao Tang como Gui Pi Tang tonifican el Qi y la Sangre y tratan las palpitaciones. ¿En qué se diferencian?",
+    "optionsEs": {
+      "A": "Zhi Gan Cao Tang nutre con mayor intensidad la Sangre y los líquidos Yin. Además, activa el Yang con hierbas acres y tibias. Su acción no se centra en el Jiao Medio, sino en armonizar el Qi nutritivo y defensivo para restablecer el pulso.",
+      "B": "Gui Pi Tang tonifica con mayor intensidad el Qi. Fortalece el Bazo y calma el Shen. Puede utilizarse en patrones de deficiencia de Qi de Bazo y Sangre de Corazón, así como en sangrados debidos a la incapacidad del Bazo para contener la Sangre.",
+      "C": "Ambas afirmaciones.",
+      "D": "Ninguna de las anteriores."
+    }
+  },
+  "816": {
+    "promptEs": "Identifique la fórmula herbal correspondiente al siguiente patrón Zang Fu.\n\nManifestaciones clínicas: palpitaciones, disnea de esfuerzo, sudoración, palidez, cansancio y apatía.\n\nLengua: pálida o de color normal.\n\nPulso: vacío.",
+    "optionsEs": {
+      "A": "Bao Yuan Tang (Decocción para preservar el origen)",
+      "B": "Rou Fu Bao Yuan Tang (Decocción de Cinnamomum y Aconitum para preservar el origen)",
+      "C": "Shen Fu Tang (Decocción de Ginseng y Aconitum)",
+      "D": "Shen Qi Si Wu Tang (Decocción de Ginseng, Astrágalo y las cuatro sustancias)"
+    }
+  },
+  "883": {
+    "promptEs": "Identifique la fórmula herbal correspondiente al siguiente patrón Zang Fu.\n\nManifestaciones clínicas: dolor y debilidad lumbar, debilidad de las rodillas, micción clara y frecuente, chorro urinario débil, micción abundante, goteo posmiccional, incontinencia urinaria, enuresis, nocturia, emisiones nocturnas sin sueños, eyaculación precoz y espermatorrea. En mujeres: prolapso uterino, leucorrea crónica y abortos recurrentes.\n\nLengua: pálida.\n\nPulso: profundo y débil, especialmente en las posiciones posteriores.",
+    "optionsEs": {
+      "A": "Liu Wei Di Huang Wan (Píldora de seis ingredientes con Rehmannia)",
+      "B": "Zuo Gui Wan (Píldora para restaurar el Riñón izquierdo)",
+      "C": "You Gui Wan (Píldora para restaurar el Riñón derecho) con Huang Qi y Qian Shi",
+      "D": "Shen Ge San o Su Zi Jiang Qi Tang"
+    }
+  }
+}
