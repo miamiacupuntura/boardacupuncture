@@ -130,6 +130,12 @@ $istopicten = $selected !== null
         || stripos($selectedname, 'Downward Draining (Moist laxative)') !== false
         || stripos($selectedname, 'Moist Laxatives') !== false
     );
+$istopiceleven = $selected !== null
+    && (
+        (stripos($selectedname, 'Gan Sui') !== false && stripos($selectedname, 'Yuan Hua') !== false && stripos($selectedname, 'Qian Niu Zi') !== false)
+        || stripos($selectedname, 'Harsh Expellants') !== false
+        || stripos($selectedname, 'Cathartics') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -171,6 +177,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir Huo Ma Ren y Yu Li Ren según la presencia de sequedad, deficiencia, estancamiento de Qi, edema y dificultad urinaria.'
         : 'Learn to distinguish Huo Ma Ren and Yu Li Ren by dryness, deficiency, Qi stagnation, edema and difficult urination.';
+} else if ($istopiceleven) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir los expulsores drásticos según localización del líquido, naturaleza térmica, fuerza catártica y toxicidad.'
+        : 'Learn to distinguish harsh expellants by fluid location, thermal nature, cathartic strength and toxicity.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -905,6 +915,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-downward-draining-purgatives.php'); ?>
             <?php elseif ($istopicten): ?>
                 <?php require(__DIR__ . '/single-herbs-category-moist-laxatives.php'); ?>
+            <?php elseif ($istopiceleven): ?>
+                <?php require(__DIR__ . '/single-herbs-category-harsh-expellants.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
