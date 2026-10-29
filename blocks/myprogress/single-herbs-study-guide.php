@@ -182,6 +182,13 @@ $istopiceighteen = $selected !== null
         || stripos($selectedname, 'Regulate the Qi') !== false
         || stripos($selectedname, 'Regulate Qi') !== false
     );
+$istopictwenty = $selected !== null
+    && (
+        (stripos($selectedname, 'San Qi') !== false && stripos($selectedname, 'Pu Huang') !== false && stripos($selectedname, 'Bai Ji') !== false && stripos($selectedname, 'Huai Mi') !== false)
+        || stripos($selectedname, 'Regulate the Blood and stop bleeding') !== false
+        || stripos($selectedname, 'Regulate Blood and Stop Bleeding') !== false
+        || stripos($selectedname, 'Herbs that Stop Bleeding') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -255,6 +262,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las hierbas que regulan Qi según órgano, dirección, fuerza, temperatura, dolor, Flema, Humedad y acumulación.'
         : 'Learn to distinguish Qi-regulating herbs by organ, direction, strength, temperature, pain, Phlegm, Dampness and accumulation clues.';
+} else if ($istopictwenty) {
+    $workspaceintro = $ises
+        ? 'Aprende a detener sangrado sin perder de vista su causa: Calor, Frío, estasis, trauma, deficiencia o localización en Pulmón, intestino, orina y útero.'
+        : 'Learn to stop bleeding without losing sight of its cause: Heat, Cold, stasis, trauma, deficiency or location in Lung, intestine, urine and uterus.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1005,6 +1016,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-relieve-food-stagnation.php'); ?>
             <?php elseif ($istopiceighteen): ?>
                 <?php require(__DIR__ . '/single-herbs-category-regulate-qi.php'); ?>
+            <?php elseif ($istopictwenty): ?>
+                <?php require(__DIR__ . '/single-herbs-category-stop-bleeding.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
