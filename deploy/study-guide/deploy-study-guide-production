@@ -86,8 +86,13 @@ deploy_release() {
     fi
 
     release_dir="${RELEASES_DIR}/${release_id}"
-    if [[ -e "${release_dir}" ]]; then
-        echo "Release already exists: ${release_id}" >&2
+    if [[ -d "${release_dir}" ]]; then
+        activate_release "${release_id}"
+        rm -f -- "${artifact_real}"
+        echo "Production Study Guide release ${release_id} already existed and was reactivated."
+        return
+    elif [[ -e "${release_dir}" ]]; then
+        echo "Release path exists but is not a directory: ${release_id}" >&2
         exit 1
     fi
 

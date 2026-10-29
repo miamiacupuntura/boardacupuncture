@@ -80,6 +80,11 @@ The deployment user owns only the static release and incoming directories:
 - `/var/www/acupuncturetests-study-guide`
 
 The production workflow is manual and is isolated from the staging workflow.
+Its **release_ref** input identifies the exact branch, tag, or commit to publish;
+the resolved 40-character commit is printed in the run summary before the
+artifact is deployed. Re-running an already available commit safely reactivates
+that immutable release instead of failing.
+
 Rollback switches only the production Study Guide symlink:
 
 ```bash

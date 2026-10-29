@@ -2,6 +2,12 @@ name: Deploy Study Guide to production
 
 on:
   workflow_dispatch:
+    inputs:
+      release_ref:
+        description: Branch, tag, or full commit SHA to deploy
+        required: true
+        default: main
+        type: string
 
 permissions:
   contents: read
@@ -13,20 +19,39 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    outputs:
+      release_sha: ${{ steps.source.outputs.sha }}
     steps:
       - name: Check out the selected commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_ref }}
+
+      - name: Resolve and display the selected release
+        id: source
+        shell: bash
+        env:
+          RELEASE_REF: ${{ inputs.release_ref }}
+        run: |
+          RELEASE_SHA="$(git rev-parse HEAD)"
+          echo "sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
+          {
+            echo "## Production release selected"
+            echo "- Requested ref: \`$RELEASE_REF\`"
+            echo "- Exact commit: \`$RELEASE_SHA\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "Deploying $RELEASE_REF at $RELEASE_SHA"
 
       - name: Build and validate the static artifact
-        run: deploy/study-guide/build-release.sh "$RUNNER_TEMP/release" "$GITHUB_SHA"
+        run: deploy/study-guide/build-release.sh "$RUNNER_TEMP/release" "${{ steps.source.outputs.sha }}"
 
       - name: Upload the immutable release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: study-guide-production-${{ github.sha }}
+          name: study-guide-production-${{ steps.source.outputs.sha }}
           path: |
-            ${{ runner.temp }}/release/study-guide-${{ github.sha }}.tar.gz
-            ${{ runner.temp }}/release/study-guide-${{ github.sha }}.tar.gz.sha256
+            ${{ runner.temp }}/release/study-guide-${{ steps.source.outputs.sha }}.tar.gz
+            ${{ runner.temp }}/release/study-guide-${{ steps.source.outputs.sha }}.tar.gz.sha256
           if-no-files-found: error
           retention-days: 30
 
@@ -38,7 +63,7 @@ jobs:
       - name: Download the tested artifact
         uses: actions/download-artifact@v4
         with:
-          name: study-guide-production-${{ github.sha }}
+          name: study-guide-production-${{ needs.build.outputs.release_sha }}
           path: ${{ runner.temp }}/release
 
       - name: Configure trusted SSH access
@@ -57,7 +82,8 @@ jobs:
           DEPLOY_PORT: ${{ secrets.PRODUCTION_DEPLOY_PORT }}
           DEPLOY_USER: ${{ secrets.PRODUCTION_DEPLOY_USER }}
         run: |
-          ARTIFACT="study-guide-${GITHUB_SHA}.tar.gz"
+          RELEASE_SHA="${{ needs.build.outputs.release_sha }}"
+          ARTIFACT="study-guide-${RELEASE_SHA}.tar.gz"
           CHECKSUM="$(awk '{print $1}' "$RUNNER_TEMP/release/${ARTIFACT}.sha256")"
           SSH_OPTIONS=(
             -i "$RUNNER_TEMP/ssh/key"
@@ -80,8 +106,15 @@ jobs:
             "$RUNNER_TEMP/release/$ARTIFACT" \
             "$DEPLOY_USER@$DEPLOY_HOST:/var/lib/acupuncture-deploy/production-incoming/$ARTIFACT"
 
+          # All client-expanded values below are immutable SHA/checksum values.
+          # shellcheck disable=SC2029
           ssh "${SSH_OPTIONS[@]}" "$DEPLOY_USER@$DEPLOY_HOST" \
-            "/usr/local/bin/deploy-study-guide-production deploy '/var/lib/acupuncture-deploy/production-incoming/$ARTIFACT' '$GITHUB_SHA' '$CHECKSUM'"
+            "/usr/local/bin/deploy-study-guide-production deploy '/var/lib/acupuncture-deploy/production-incoming/$ARTIFACT' '$RELEASE_SHA' '$CHECKSUM'"
+
+          {
+            echo "## Production deployment completed"
+            echo "- Exact commit: \`$RELEASE_SHA\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Verify the public production response
         run: |
