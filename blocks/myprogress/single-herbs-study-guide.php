@@ -90,6 +90,12 @@ $istopicseven = $selected !== null
         || stripos($selectedname, 'Clear Heat from Deficiency') !== false
         || stripos($selectedname, 'Clear Deficiency Heat') !== false
     );
+$istopiceight = $selected !== null
+    && (
+        (stripos($selectedname, 'Qing Hao') !== false && stripos($selectedname, 'He Ye') !== false && stripos($selectedname, 'Xi Gua Pi') !== false)
+        || stripos($selectedname, 'Clear Summer Heat') !== false
+        || stripos($selectedname, 'Clear Summerheat') !== false
+    );
 
 $topiconeherbs = [
     [
@@ -769,6 +775,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-clear-resolve-toxicity.php'); ?>
             <?php elseif ($istopicseven): ?>
                 <?php require(__DIR__ . '/single-herbs-category-clear-deficient-heat.php'); ?>
+            <?php elseif ($istopiceight): ?>
+                <?php require(__DIR__ . '/single-herbs-category-clear-summer-heat.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
