@@ -72,10 +72,21 @@ a { color: inherit; }
 .guide-actions--section { margin-top: 18px; }
 .guide-footer { margin-top: 40px; padding: 22px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 .guide-source { color: var(--muted); font-size: .88rem; }
+.guide-section--annex { border-top: 5px solid var(--teal); }
+.guide-herb-roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; margin: 22px 0; padding: 0; list-style: none; counter-reset: appendix-herb; }
+.guide-herb-roster li { counter-increment: appendix-herb; position: relative; min-width: 0; padding: 11px 12px 11px 42px; border: 1px solid #d9e4eb; border-radius: 8px; background: #f8fbfc; }
+.guide-herb-roster li::before { content: counter(appendix-herb); position: absolute; top: 11px; left: 11px; color: var(--teal); font-size: .76rem; font-weight: 900; }
+.guide-herb-roster strong,
+.guide-herb-roster span { display: block; overflow-wrap: anywhere; }
+.guide-herb-roster strong { font-size: .91rem; }
+.guide-herb-roster span { margin-top: 2px; color: var(--muted); font-size: .77rem; font-style: italic; line-height: 1.35; }
+.guide-annex-source { padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+.guide-annex-source a { color: var(--teal); font-weight: 800; }
 
 @media (max-width: 900px) {
   .guide-grid--three { grid-template-columns: 1fr; }
   .guide-grid--three .guide-card--wide { grid-column: auto; }
+  .guide-herb-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 720px) {
@@ -91,4 +102,5 @@ a { color: inherit; }
   .guide-button { width: 100%; }
   .guide-actions { width: 100%; flex-direction: column; }
   .guide-resource-list { grid-template-columns: 1fr; }
+  .guide-herb-roster { grid-template-columns: 1fr; }
 }
