@@ -35,11 +35,14 @@
     ? '← Volver a la guía de Single Herbs'
     : '← Back to Single Herbs Study Guide';
 
-  document.querySelectorAll('a[hreflang]').forEach(function(link) {
-    const languageUrl = new URL(link.href, window.location.href);
-    languageUrl.searchParams.set('from', 'single-herbs');
-    languageUrl.searchParams.set('focus', focus);
-    link.href = languageUrl.toString();
+  backLinks.forEach(function(link) {
+    if (link === returnLink) {
+      return;
+    }
+    const destination = new URL(link.href, window.location.href);
+    destination.searchParams.set('from', 'single-herbs');
+    destination.searchParams.set('focus', focus);
+    link.href = destination.toString();
   });
 
 })();

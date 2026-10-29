@@ -199,6 +199,17 @@ $istopictwenty = $selected !== null
         || stripos($selectedname, 'Regulate Blood and Stop Bleeding') !== false
         || stripos($selectedname, 'Herbs that Stop Bleeding') !== false
     );
+$istopictwentyone = $selected !== null
+    && (
+        ((stripos($selectedname, 'Rou Gui') !== false)
+            && stripos($selectedname, 'Fu Zi') !== false
+            && (stripos($selectedname, 'Gan Jiang') !== false || stripos($selectedname, 'Gao Jiang') !== false)
+            && stripos($selectedname, 'Wu Zhu Yu') !== false
+            && (stripos($selectedname, 'Xiao Hui Xiang') !== false || stripos($selectedname, 'Xiao Hu Xiang') !== false))
+        || stripos($selectedname, 'Herbs That Warm the Interior and Expel Cold') !== false
+        || stripos($selectedname, 'Warm the Interior and Expel Cold') !== false
+        || stripos($selectedname, 'Warm Interior') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -280,6 +291,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a detener sangrado sin perder de vista su causa: Calor, Frío, estasis, trauma, deficiencia o localización en Pulmón, intestino, orina y útero.'
         : 'Learn to stop bleeding without losing sight of its cause: Heat, Cold, stasis, trauma, deficiency or location in Lung, intestine, urine and uterus.';
+} else if ($istopictwentyone) {
+    $workspaceintro = $ises
+        ? 'Aprende a calentar el Interior y expulsar Frío según urgencia, órgano, localización del dolor, colapso de Yang, Qi rebelde y toxicidad.'
+        : 'Learn to warm the Interior and expel Cold by urgency, organ, pain location, Yang collapse, rebellious Qi and toxicity.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1034,6 +1049,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-invigorate-blood.php'); ?>
             <?php elseif ($istopictwenty): ?>
                 <?php require(__DIR__ . '/single-herbs-category-stop-bleeding.php'); ?>
+            <?php elseif ($istopictwentyone): ?>
+                <?php require(__DIR__ . '/single-herbs-category-warm-interior.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
