@@ -64,6 +64,12 @@ $istopicthree = $selected !== null
         || stripos($selectedname, 'Clear Heat and Drain Fire') !== false
         || stripos($selectedname, 'Clear Heat & Drain Fire') !== false
     );
+$istopicfour = $selected !== null
+    && (
+        (stripos($selectedname, 'Sheng Di Huang') !== false && stripos($selectedname, 'Xuan Shen') !== false)
+        || stripos($selectedname, 'Clear Heat and Cool Blood') !== false
+        || stripos($selectedname, 'Clear Heat & Cool Blood') !== false
+    );
 
 $topiconeherbs = [
     [
@@ -735,6 +741,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-cool-acrid.php'); ?>
             <?php elseif ($istopicthree): ?>
                 <?php require(__DIR__ . '/single-herbs-category-clear-heat-drain-fire.php'); ?>
+            <?php elseif ($istopicfour): ?>
+                <?php require(__DIR__ . '/single-herbs-category-clear-heat-cool-blood.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
