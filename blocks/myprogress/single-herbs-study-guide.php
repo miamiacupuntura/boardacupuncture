@@ -7,6 +7,9 @@ require_login();
 
 $sourcecourseid = 45;
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
+$displaylang = optional_param('lang', 'en', PARAM_ALPHA);
+$displaylang = $displaylang === 'es' ? 'es' : 'en';
+$ises = $displaylang === 'es';
 $sections = $DB->get_records_select(
     'course_sections',
     'course = :courseid AND section BETWEEN :firstsection AND :lastsection',
@@ -165,6 +168,7 @@ $topiconecomparisons = [
         'title' => 'Zi Su Ye vs. Ma Huang',
         'summary' => 'Middle-Jiao Qi, nausea or pregnancy favors Zi Su Ye; strong sweating, wheezing or edema favors Ma Huang.',
         'path' => '/study-guide/comparisons/zi-su-ye-vs-ma-huang.html',
+        'path_es' => '/study-guide/comparisons/zi-su-ye-vs-ma-huang-es.html',
     ],
     [
         'title' => 'Fang Feng vs. Jing Jie',
@@ -175,11 +179,13 @@ $topiconecomparisons = [
         'title' => 'Qiang Huo vs. Gao Ben',
         'summary' => 'Both enter the Taiyang–Du region; Qiang Huo emphasizes upper-body Wind-Cold-Damp pain and stiffness.',
         'path' => '/study-guide/comparisons/qiang-huo-vs-gao-ben.html',
+        'path_es' => '/study-guide/comparisons/qiang-huo-vs-gao-ben-es.html',
     ],
     [
         'title' => 'Xin Yi Hua vs. Hou Po',
         'summary' => 'Magnolia flower with nasal clues indicates Xin Yi Hua; Magnolia bark with fullness and Dampness indicates Hou Po.',
         'path' => '/study-guide/comparisons/xin-yi-hua-vs-hou-po.html',
+        'path_es' => '/study-guide/comparisons/xin-yi-hua-vs-hou-po-es.html',
     ],
 ];
 
@@ -187,18 +193,33 @@ $pageparams = [];
 if ($focus !== '') {
     $pageparams['focus'] = $focus;
 }
+if ($ises) {
+    $pageparams['lang'] = 'es';
+}
 $pageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $pageparams);
-$categoryindexurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php');
+$categoryindexparams = $ises ? ['lang' => 'es'] : [];
+$categoryindexurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryindexparams);
+$languageparams = [];
+if ($focus !== '') {
+    $languageparams['focus'] = $focus;
+}
+if (!$ises) {
+    $languageparams['lang'] = 'es';
+}
+$languageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $languageparams);
 $herbologyurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
 $dashboardurl = new moodle_url('/my/');
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title('Single Herbs Study Guide');
-$PAGE->set_heading('Single Herbs Study Guide');
+$pagetitle = $ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide';
+$PAGE->set_title($pagetitle);
+$PAGE->set_heading($pagetitle);
 
 echo $OUTPUT->header();
+$spanishtranslations = $ises ? require(__DIR__ . '/single-herbs-study-guide-es.php') : [];
+ob_start();
 ?>
 <style>
 .single-herbs-guide{max-width:1160px;margin:24px auto 58px;padding:0 16px;color:#17232a}
@@ -259,6 +280,7 @@ echo $OUTPUT->header();
             <p class="single-herbs-guide__lead">Study the materia medica using the same category boundaries and sequence as the Single Herbs Board Level workspace.</p>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
+            <a class="single-herbs-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <a class="single-herbs-guide__back" href="<?php echo $herbologyurl->out(false); ?>">← Chinese Herbology</a>
             <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
         </nav>
@@ -393,10 +415,13 @@ echo $OUTPUT->header();
                     <p class="single-herbs-guide__section-lead">Open the complete comparison when two choices appear plausible.</p>
                     <div class="single-herbs-guide__comparisons">
                         <?php foreach ($topiconecomparisons as $comparison): ?>
-                            <?php $comparisonurl = new moodle_url($comparison['path'], [
+                            <?php
+                            $comparisonpath = $ises && !empty($comparison['path_es']) ? $comparison['path_es'] : $comparison['path'];
+                            $comparisonurl = new moodle_url($comparisonpath, [
                                 'from' => 'single-herbs',
                                 'focus' => (string) $selected['number'],
-                            ]); ?>
+                            ]);
+                            ?>
                             <a class="single-herbs-guide__comparison" href="<?php echo $comparisonurl->out(false); ?>">
                                 <strong><?php echo s($comparison['title']); ?></strong>
                                 <span><?php echo s($comparison['summary']); ?></span>
@@ -452,14 +477,26 @@ echo $OUTPUT->header();
         <?php if ($categories): ?>
             <section class="single-herbs-guide__grid" aria-label="Single Herbs categories">
                 <?php foreach ($categories as $category): ?>
-                    <?php $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', ['focus' => (string) $category['number']]); ?>
+                    <?php
+                    $categoryparams = ['focus' => (string) $category['number']];
+                    if ($ises) {
+                        $categoryparams['lang'] = 'es';
+                    }
+                    $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
+                    ?>
                     <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="single-herbs-guide__category-number"><?php echo $category['number'] === 0 ? 'G' : $category['number']; ?></span>
                         <strong><?php echo $category['name']; ?></strong>
                         <small>Open study framework →</small>
                     </a>
                 <?php endforeach; ?>
-                <?php $mixedurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', ['focus' => 'mixed']); ?>
+                <?php
+                $mixedparams = ['focus' => 'mixed'];
+                if ($ises) {
+                    $mixedparams['lang'] = 'es';
+                }
+                $mixedurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $mixedparams);
+                ?>
                 <a class="single-herbs-guide__category single-herbs-guide__category--mixed" href="<?php echo $mixedurl->out(false); ?>">
                     <span class="single-herbs-guide__category-number">M</span>
                     <strong>Mixed Review</strong>
@@ -472,4 +509,6 @@ echo $OUTPUT->header();
     <?php endif; ?>
 </main>
 <?php
+$guidecontent = ob_get_clean();
+echo $ises ? strtr($guidecontent, $spanishtranslations) : $guidecontent;
 echo $OUTPUT->footer();
