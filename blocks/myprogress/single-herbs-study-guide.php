@@ -182,6 +182,16 @@ $istopiceighteen = $selected !== null
         || stripos($selectedname, 'Regulate the Qi') !== false
         || stripos($selectedname, 'Regulate Qi') !== false
     );
+$istopicnineteen = $selected !== null
+    && (
+        (stripos($selectedname, 'Tao Ren') !== false
+            && (stripos($selectedname, 'Ru Xiang') !== false || stripos($selectedname, 'Ru Xian') !== false)
+            && stripos($selectedname, 'Dan Shen') !== false
+            && stripos($selectedname, 'Ze Lan') !== false)
+        || stripos($selectedname, 'Invigorate the Blood and Move blood stasis') !== false
+        || stripos($selectedname, 'Invigorate the Blood and Move Blood Stasis') !== false
+        || stripos($selectedname, 'Invigorate Blood and Dispel Stasis') !== false
+    );
 $istopictwenty = $selected !== null
     && (
         (stripos($selectedname, 'San Qi') !== false && stripos($selectedname, 'Pu Huang') !== false && stripos($selectedname, 'Bai Ji') !== false && stripos($selectedname, 'Huai Mi') !== false)
@@ -262,6 +272,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las hierbas que regulan Qi según órgano, dirección, fuerza, temperatura, dolor, Flema, Humedad y acumulación.'
         : 'Learn to distinguish Qi-regulating herbs by organ, direction, strength, temperature, pain, Phlegm, Dampness and accumulation clues.';
+} else if ($istopicnineteen) {
+    $workspaceintro = $ises
+        ? 'Aprende a mover Sangre y resolver estasis según fuerza, temperatura, localización, dolor, masas, menstruación, trauma y movimiento de Qi.'
+        : 'Learn to invigorate Blood and resolve stasis by strength, temperature, location, pain, masses, menstruation, trauma and Qi movement.';
 } else if ($istopictwenty) {
     $workspaceintro = $ises
         ? 'Aprende a detener sangrado sin perder de vista su causa: Calor, Frío, estasis, trauma, deficiencia o localización en Pulmón, intestino, orina y útero.'
@@ -1016,6 +1030,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-relieve-food-stagnation.php'); ?>
             <?php elseif ($istopiceighteen): ?>
                 <?php require(__DIR__ . '/single-herbs-category-regulate-qi.php'); ?>
+            <?php elseif ($istopicnineteen): ?>
+                <?php require(__DIR__ . '/single-herbs-category-invigorate-blood.php'); ?>
             <?php elseif ($istopictwenty): ?>
                 <?php require(__DIR__ . '/single-herbs-category-stop-bleeding.php'); ?>
             <?php else: ?>
