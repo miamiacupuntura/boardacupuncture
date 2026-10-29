@@ -37,6 +37,23 @@ foreach ($sections as $section) {
     ];
 }
 
+$extractstudyguidenumber = static function(string $name): ?int {
+    $plaintext = trim(html_entity_decode(strip_tags($name), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    if (preg_match('/^(\d+)\.?\s+/', $plaintext, $matches) !== 1) {
+        return null;
+    }
+    return (int) $matches[1];
+};
+
+$studyguidecategories = [];
+foreach ($categories as $sectionnumber => $category) {
+    $guidenumber = $extractstudyguidenumber((string) $category['name']);
+    if ($guidenumber !== null) {
+        $category['guide_number'] = $guidenumber;
+        $studyguidecategories[$sectionnumber] = $category;
+    }
+}
+
 $selected = null;
 $ismixed = $focus === 'mixed';
 if (!$ismixed && $focus !== '' && ctype_digit($focus)) {
@@ -47,6 +64,7 @@ if (!$ismixed && $focus !== '' && ctype_digit($focus)) {
 }
 
 $selectedname = $selected !== null ? (string) $selected['name'] : '';
+$selectedguidenumber = $selected !== null ? $extractstudyguidenumber($selectedname) : null;
 $istopicone = $selected !== null
     && stripos($selectedname, 'Ma Huang') !== false
     && stripos($selectedname, 'Gui Zhi') !== false
@@ -101,6 +119,12 @@ $istopicnine = $selected !== null
         (stripos($selectedname, 'Da Huang') !== false && stripos($selectedname, 'Mang Xiao') !== false && stripos($selectedname, 'Fan Xie Ye') !== false && stripos($selectedname, 'Lu Hui') !== false)
         || stripos($selectedname, 'Downward Draining (Purgatives)') !== false
         || stripos($selectedname, 'Downward-Draining Purgatives') !== false
+    );
+$istopicten = $selected !== null
+    && (
+        (stripos($selectedname, 'Huo Ma Ren') !== false && stripos($selectedname, 'Yu Li Ren') !== false)
+        || stripos($selectedname, 'Downward Draining (Moist laxative)') !== false
+        || stripos($selectedname, 'Moist Laxatives') !== false
     );
 
 $topiconeherbs = [
@@ -455,16 +479,18 @@ $previouscategoryurl = null;
 $nextcategoryurl = null;
 $previouscategory = null;
 $nextcategory = null;
-$lastcategorynumber = $categories ? max(array_keys($categories)) : 0;
-if ($selected !== null) {
-    $categorynumbers = array_keys($categories);
+$laststudyguidenumber = $studyguidecategories
+    ? max(array_column($studyguidecategories, 'guide_number'))
+    : 0;
+if ($selected !== null && $selectedguidenumber !== null) {
+    $categorynumbers = array_keys($studyguidecategories);
     $currentcategoryindex = array_search($selected['number'], $categorynumbers, true);
     if ($currentcategoryindex !== false && $currentcategoryindex > 0) {
         $previousparams = ['focus' => (string) $categorynumbers[$currentcategoryindex - 1]];
         if ($ises) {
             $previousparams['lang'] = 'es';
         }
-        $previouscategory = $categories[$categorynumbers[$currentcategoryindex - 1]];
+        $previouscategory = $studyguidecategories[$categorynumbers[$currentcategoryindex - 1]];
         $previouscategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $previousparams);
     }
     if ($currentcategoryindex !== false && $currentcategoryindex < count($categorynumbers) - 1) {
@@ -472,7 +498,7 @@ if ($selected !== null) {
         if ($ises) {
             $nextparams['lang'] = 'es';
         }
-        $nextcategory = $categories[$categorynumbers[$currentcategoryindex + 1]];
+        $nextcategory = $studyguidecategories[$categorynumbers[$currentcategoryindex + 1]];
         $nextcategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $nextparams);
     }
 }
@@ -572,7 +598,11 @@ ob_start();
 
     <?php if ($selected !== null || $ismixed): ?>
         <?php
-        $focuslabel = $ismixed ? 'Mixed Review' : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']);
+        $focuslabel = $ismixed
+            ? 'Mixed Review'
+            : ($selectedguidenumber !== null
+                ? ($ises ? 'Guía de estudio ' : 'Study Guide ') . $selectedguidenumber
+                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']));
         $focustitle = $ismixed ? 'Mixed Review' : $selected['name'];
         ?>
         <section class="single-herbs-guide__workspace" aria-labelledby="single-herbs-focus-title">
@@ -585,9 +615,9 @@ ob_start();
             </div>
             <?php if ($selected !== null): ?>
                 <nav aria-label="<?php echo s($ises ? 'Navegación superior entre notas de estudio' : 'Top Study Note navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Anterior · Categoría ' : '← Previous · Category ') . $previouscategory['number']); ?></a><?php endif; ?></span>
-                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Nota de estudio ' : 'Study Note ') . $selected['number'] . ' / ' . $lastcategorynumber); ?></strong>
-                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente · Categoría ' : 'Next · Category ') . $nextcategory['number'] . ' →'); ?></a><?php endif; ?></span>
+                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Guía anterior · ' : '← Previous Study Guide · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
+                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Guía de estudio ' : 'Study Guide ') . $selectedguidenumber . ' / ' . $laststudyguidenumber); ?></strong>
+                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente guía · ' : 'Next Study Guide · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
                 </nav>
             <?php endif; ?>
             <?php if ($istopicone): ?>
@@ -817,6 +847,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-clear-summer-heat.php'); ?>
             <?php elseif ($istopicnine): ?>
                 <?php require(__DIR__ . '/single-herbs-category-downward-draining-purgatives.php'); ?>
+            <?php elseif ($istopicten): ?>
+                <?php require(__DIR__ . '/single-herbs-category-moist-laxatives.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
@@ -830,9 +862,9 @@ ob_start();
             <?php endif; ?>
         </section>
         <nav aria-label="<?php echo s($ises ? 'Navegación entre notas de estudio' : 'Study Note navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
-            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Nota anterior · Categoría ' : '← Previous Study Note · Category ') . $previouscategory['number']); ?></a><?php endif; ?></span>
+            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Guía anterior · ' : '← Previous Study Guide · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
             <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
-            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente nota · Categoría ' : 'Next Study Note · Category ') . $nextcategory['number'] . ' →'); ?></a><?php endif; ?></span>
+            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente guía · ' : 'Next Study Guide · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
         </nav>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
@@ -850,6 +882,7 @@ ob_start();
             <section class="single-herbs-guide__grid" aria-label="Single Herbs categories">
                 <?php foreach ($categories as $category): ?>
                     <?php
+                    $categoryguidenumber = $extractstudyguidenumber((string) $category['name']);
                     $categoryparams = ['focus' => (string) $category['number']];
                     if ($ises) {
                         $categoryparams['lang'] = 'es';
@@ -857,7 +890,7 @@ ob_start();
                     $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
                     ?>
                     <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
-                        <span class="single-herbs-guide__category-number"><?php echo $category['number'] === 0 ? 'G' : $category['number']; ?></span>
+                        <span class="single-herbs-guide__category-number"><?php echo $categoryguidenumber !== null ? $categoryguidenumber : ($category['number'] === 0 ? 'G' : $category['number']); ?></span>
                         <strong><?php echo $category['name']; ?></strong>
                         <small>Open study framework →</small>
                     </a>
