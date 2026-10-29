@@ -618,7 +618,13 @@ ob_start();
                 <div>
                     <p class="single-herbs-guide__eyebrow"><?php echo s($focuslabel); ?></p>
                     <h3 id="single-herbs-focus-title"><?php echo s($focustitle); ?></h3>
-                    <p class="single-herbs-guide__workspace-intro">This category uses the same scope as Board Level practice. Its source-verified learning material will follow one consistent study sequence.</p>
+                    <p class="single-herbs-guide__workspace-intro"><?php echo s($istopicten
+                        ? ($ises
+                            ? 'Aprende a distinguir Huo Ma Ren y Yu Li Ren según la presencia de sequedad, deficiencia, estancamiento de Qi, edema y dificultad urinaria.'
+                            : 'Learn to distinguish Huo Ma Ren and Yu Li Ren by dryness, deficiency, Qi stagnation, edema and difficult urination.')
+                        : ($ises
+                            ? 'Esta categoría sigue el alcance de la preparación Board Level y organiza el contenido en una secuencia de estudio uniforme.'
+                            : 'This category follows the Board Level preparation scope and organizes the material in one consistent study sequence.')); ?></p>
                 </div>
             </div>
             <?php if ($selected !== null): ?>
