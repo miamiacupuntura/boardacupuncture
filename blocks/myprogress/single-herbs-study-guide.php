@@ -636,7 +636,9 @@ ob_start();
         <div>
             <p class="single-herbs-guide__eyebrow">Chinese Herbology · Study Guide</p>
             <h2>Single Herbs</h2>
-            <p class="single-herbs-guide__lead">Study the materia medica using the same category boundaries and sequence as the Single Herbs Board Level workspace.</p>
+            <p class="single-herbs-guide__lead"><?php echo s($ises
+                ? 'Conecta patrones de categoría, pistas clínicas decisivas, comparaciones y memoria activa para reconocer cada hierba en el Board.'
+                : 'Connect category patterns, decisive clinical clues, comparisons and active recall to recognize each herb on the Board.'); ?></p>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
             <a class="single-herbs-guide__back" href="<?php echo $guidelineurl->out(false); ?>">2026 Board Guideline ↔</a>
