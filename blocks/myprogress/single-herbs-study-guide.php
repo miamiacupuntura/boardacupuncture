@@ -175,6 +175,13 @@ $istopicseventeen = $selected !== null
         || stripos($selectedname, 'Relieve Food Stagnation') !== false
         || stripos($selectedname, 'Reduce Food Stagnation') !== false
     );
+$istopiceighteen = $selected !== null
+    && (
+        (stripos($selectedname, 'Chen Pi') !== false && stripos($selectedname, 'Zhi Shi') !== false && stripos($selectedname, 'Xiang Fu') !== false && stripos($selectedname, 'Chuan Lian Zi') !== false)
+        || stripos($selectedname, 'Herbs that Regulate the Qi') !== false
+        || stripos($selectedname, 'Regulate the Qi') !== false
+        || stripos($selectedname, 'Regulate Qi') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -244,6 +251,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las hierbas que reducen estancamiento alimentario según el tipo de alimento, fuerza digestiva, movimiento de Qi, estasis de Sangre, lactancia y deficiencia.'
         : 'Learn to distinguish Food-Stagnation herbs by food type, digestive strength, Qi movement, Blood stasis, lactation and deficiency clues.';
+} else if ($istopiceighteen) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas que regulan Qi según órgano, dirección, fuerza, temperatura, dolor, Flema, Humedad y acumulación.'
+        : 'Learn to distinguish Qi-regulating herbs by organ, direction, strength, temperature, pain, Phlegm, Dampness and accumulation clues.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -992,6 +1003,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-aromatic-transform-dampness.php'); ?>
             <?php elseif ($istopicseventeen): ?>
                 <?php require(__DIR__ . '/single-herbs-category-relieve-food-stagnation.php'); ?>
+            <?php elseif ($istopiceighteen): ?>
+                <?php require(__DIR__ . '/single-herbs-category-regulate-qi.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
