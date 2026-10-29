@@ -216,8 +216,6 @@ echo $OUTPUT->header();
 .single-herbs-guide__section{margin-top:28px}.single-herbs-guide__section h4{margin:0 0 7px;color:#123246;font-size:22px}.single-herbs-guide__section-lead{margin:0 0 16px;color:#60717e;line-height:1.5}
 .single-herbs-guide__pattern{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
 .single-herbs-guide__pattern article{padding:17px;border-radius:10px;background:#f7fafb;border:1px solid #dce4e8}.single-herbs-guide__pattern strong{display:block;margin-bottom:6px;color:#0f5f58}.single-herbs-guide__pattern span{color:#5b6b79;font-size:14px;line-height:1.45}
-.single-herbs-guide__table-shell{overflow-x:auto;border:1px solid #dce4e8;border-radius:10px}
-.single-herbs-guide__table{width:100%;min-width:940px;border-collapse:collapse;background:#fff;font-size:14px}.single-herbs-guide__table th,.single-herbs-guide__table td{padding:13px 14px;border-bottom:1px solid #e4eaed;text-align:left;vertical-align:top;line-height:1.45}.single-herbs-guide__table thead th{background:#eaf5f3;color:#123f43;font-size:12px;letter-spacing:.04em;text-transform:uppercase}.single-herbs-guide__table tbody tr:last-child td{border-bottom:0}.single-herbs-guide__table td:first-child strong{display:block;color:#123246;font-size:15px}.single-herbs-guide__table td:first-child small{display:block;margin-top:3px;color:#6b7b87;font-style:italic}.single-herbs-guide__table-caution{color:#7f3f17}
 .single-herbs-guide__profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .single-herbs-guide__profile{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #f77e25;border-radius:10px;background:#fff}
 .single-herbs-guide__profile summary{position:relative;cursor:pointer;padding:17px 42px 17px 17px;list-style:none}.single-herbs-guide__profile summary::-webkit-details-marker{display:none}.single-herbs-guide__profile summary:after{content:'+';position:absolute;right:16px;top:16px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:19px;font-weight:900}.single-herbs-guide__profile[open] summary:after{content:'−'}
@@ -282,27 +280,6 @@ echo $OUTPUT->header();
                         <div><strong>Frontal sinus pain or pus</strong><span>Bai Zhi</span></div>
                         <div><strong>Vomiting + mild exterior</strong><span>Sheng Jiang</span></div>
                         <div><strong>Nasal obstruction dominates</strong><span>Xin Yi Hua</span></div>
-                    </div>
-                </section>
-
-                <section class="single-herbs-guide__section" aria-labelledby="topic-one-herbs-title">
-                    <h4 id="topic-one-herbs-title">Core herb matrix</h4>
-                    <p class="single-herbs-guide__section-lead">A compact reference for recognition and differentiation. Dosage ranges are study references, not prescribing instructions.</p>
-                    <div class="single-herbs-guide__table-shell" role="region" aria-label="Warm acrid herbs comparison table" tabindex="0">
-                        <table class="single-herbs-guide__table">
-                            <thead><tr><th>Herb</th><th>Properties · channels · dose</th><th>Core identity</th><th>Decisive clue</th><th>Safety / preparation</th></tr></thead>
-                            <tbody>
-                                <?php foreach ($topiconeherbs as $herb): ?>
-                                    <tr>
-                                        <td><strong><?php echo s($herb['name']); ?></strong><small><?php echo s($herb['latin']); ?></small></td>
-                                        <td><?php echo s($herb['properties']); ?><br><?php echo s($herb['channels']); ?><br><strong><?php echo s($herb['dose']); ?></strong></td>
-                                        <td><?php echo s($herb['identity']); ?></td>
-                                        <td><?php echo s($herb['clue']); ?></td>
-                                        <td class="single-herbs-guide__table-caution"><?php echo s($herb['caution']); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
                     </div>
                 </section>
 
