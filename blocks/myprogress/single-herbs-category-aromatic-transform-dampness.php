@@ -299,8 +299,8 @@ $aromaticquestions = [
     <h4 id="topic-sixteen-yang"><?php echo s($aromatictext('Yang comparative fingerprints', 'Huellas comparativas de Yang')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($aromatictext('Yang figure 7.2 gives all four listed Middle-Jiao aromatics the same relative index of 100, so that graph confirms their shared strength but does not distinguish which one to choose. Use the study question below to separate them.', 'La figura 7.2 de Yang asigna a las cuatro aromáticas del Jiao Medio listadas el mismo índice relativo de 100; la gráfica confirma su fuerza compartida, pero no distingue cuál elegir. Usa la pregunta de estudio siguiente para separarlas.')); ?></p>
     <aside class="single-herbs-guide__memory-path">
-        <p class="single-herbs-guide__memory-line"><?php echo s($aromatictext('Study question adapted from Yang', 'Pregunta de estudio adaptada de Yang')); ?></p>
-        <p><strong><?php echo s($aromatictext('How do the functions of Sha Ren, Bai Dou Kou, Cao Dou Kou and Cao Guo differ?', '¿Cómo se diferencian las funciones de Sha Ren, Bai Dou Kou, Cao Dou Kou y Cao Guo?')); ?></strong></p>
+        <p class="single-herbs-guide__memory-line"><?php echo s($aromatictext('Yang question shown in full', 'Pregunta de Yang mostrada completa')); ?></p>
+        <p><strong><?php echo s($aromatictext('What are the differences between the functions of Sha Ren (Amomi xanthioidis Fructus), Bai Dou Kou (Amomi Fructus rotundus), Cao Dou Kou (Alpiniae katsumadai Semen) and Cao Guo (Tsaoko Fructus)?', '¿Cuáles son las diferencias entre las funciones de Sha Ren (Amomi xanthioidis Fructus), Bai Dou Kou (Amomi Fructus rotundus), Cao Dou Kou (Alpiniae katsumadai Semen) y Cao Guo (Tsaoko Fructus)?')); ?></strong></p>
         <p><?php echo s($aromatictext('Answer it on two axes: which herb moves Qi and relieves distension best, and which herb warms and dries Cold-Dampness most strongly?', 'Respóndela con dos ejes: ¿cuál mueve mejor el Qi y alivia la distensión, y cuál calienta y seca Frío-Humedad con mayor fuerza?')); ?></p>
     </aside>
     <div class="single-herbs-guide__yang-charts">
