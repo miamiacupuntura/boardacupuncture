@@ -14,8 +14,6 @@ return [
     'General / Uncategorized' => 'General / Sin categoría',
     'Category' => 'Categoría',
     'This category uses the same scope as Board Level practice. Its source-verified learning material will follow one consistent study sequence.' => 'Esta categoría usa el mismo alcance que la práctica Board Level. El material verificado por fuentes sigue una secuencia de estudio uniforme.',
-    'EXAMPLE READY' => 'EJEMPLO LISTO',
-    'STRUCTURE READY' => 'ESTRUCTURA LISTA',
     '← All Single Herbs categories' => '← Todas las categorías de hierbas individuales',
     'Board-aligned category index' => 'Índice de categorías alineado con Board',
     'The category names and order come from the same Moodle sections used by Board Level, followed by a Mixed Review workspace.' => 'Los nombres y el orden de las categorías provienen de las mismas secciones de Moodle utilizadas en Board Level, seguidas por un espacio de repaso mixto.',

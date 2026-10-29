@@ -451,7 +451,6 @@ ob_start();
 .single-herbs-guide__workspace-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #e2e8ec}
 .single-herbs-guide__workspace h3{margin:0 0 8px;font-size:clamp(18px,1.9vw,22px);line-height:1.25}
 .single-herbs-guide__workspace-intro{max-width:740px;margin:0;color:#5b6b79;line-height:1.6}
-.single-herbs-guide__status{display:inline-flex;padding:6px 10px;border-radius:999px;background:#fff0e5;color:#a64f12;font-size:12px;font-weight:900;white-space:nowrap}
 .single-herbs-guide__plan{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0;padding:0;list-style:none;counter-reset:guide-step}
 .single-herbs-guide__plan li{counter-increment:guide-step;position:relative;min-height:105px;padding:18px 18px 18px 58px;border:1px solid #dde4e8;border-radius:10px;background:#f9fbfc}
 .single-herbs-guide__plan li:before{content:counter(guide-step);position:absolute;left:17px;top:17px;display:flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%;background:#176b70;color:#fff;font-weight:900}
@@ -507,7 +506,6 @@ ob_start();
                     <h3 id="single-herbs-focus-title"><?php echo s($focustitle); ?></h3>
                     <p class="single-herbs-guide__workspace-intro">This category uses the same scope as Board Level practice. Its source-verified learning material will follow one consistent study sequence.</p>
                 </div>
-                <span class="single-herbs-guide__status"><?php echo $istopicone ? 'EXAMPLE READY' : 'STRUCTURE READY'; ?></span>
             </div>
             <?php if ($istopicone): ?>
                 <section aria-labelledby="topic-one-foundations">
