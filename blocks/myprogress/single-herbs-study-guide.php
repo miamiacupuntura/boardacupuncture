@@ -45,6 +45,10 @@ $extractstudyguidenumber = static function(string $name): ?int {
     return (int) $matches[1];
 };
 
+$stripstudyguidenumber = static function(string $name): string {
+    return trim((string) preg_replace('/^\s*\d+\.?\s+/', '', $name));
+};
+
 $studyguidecategories = [];
 foreach ($categories as $sectionnumber => $category) {
     $guidenumber = $extractstudyguidenumber((string) $category['name']);
@@ -603,7 +607,11 @@ ob_start();
             : ($selectedguidenumber !== null
                 ? ($ises ? 'Guía de estudio ' : 'Study Guide ') . $selectedguidenumber
                 : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']));
-        $focustitle = $ismixed ? 'Mixed Review' : $selected['name'];
+        $focustitle = $ismixed
+            ? 'Mixed Review'
+            : ($selectedguidenumber !== null
+                ? $stripstudyguidenumber((string) $selected['name'])
+                : $selected['name']);
         ?>
         <section class="single-herbs-guide__workspace" aria-labelledby="single-herbs-focus-title">
             <div class="single-herbs-guide__workspace-header">
@@ -873,16 +881,17 @@ ob_start();
                 <p>The category names and order come from the same Moodle sections used by Board Level, followed by a Mixed Review workspace.</p>
             </div>
             <div class="single-herbs-guide__count" aria-label="Category count">
-                <strong><?php echo count($categories) + 1; ?></strong>
+                <strong><?php echo count($studyguidecategories) + 1; ?></strong>
                 <span>study areas</span>
             </div>
         </section>
 
-        <?php if ($categories): ?>
+        <?php if ($studyguidecategories): ?>
             <section class="single-herbs-guide__grid" aria-label="Single Herbs categories">
-                <?php foreach ($categories as $category): ?>
+                <?php foreach ($studyguidecategories as $category): ?>
                     <?php
-                    $categoryguidenumber = $extractstudyguidenumber((string) $category['name']);
+                    $categoryguidenumber = (int) $category['guide_number'];
+                    $categorydisplayname = $stripstudyguidenumber((string) $category['name']);
                     $categoryparams = ['focus' => (string) $category['number']];
                     if ($ises) {
                         $categoryparams['lang'] = 'es';
@@ -890,8 +899,8 @@ ob_start();
                     $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
                     ?>
                     <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
-                        <span class="single-herbs-guide__category-number"><?php echo $categoryguidenumber !== null ? $categoryguidenumber : ($category['number'] === 0 ? 'G' : $category['number']); ?></span>
-                        <strong><?php echo $category['name']; ?></strong>
+                        <span class="single-herbs-guide__category-number"><?php echo $categoryguidenumber; ?></span>
+                        <strong><?php echo $categorydisplayname; ?></strong>
                         <small>Open study framework →</small>
                     </a>
                 <?php endforeach; ?>
