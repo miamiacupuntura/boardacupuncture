@@ -96,6 +96,12 @@ $istopiceight = $selected !== null
         || stripos($selectedname, 'Clear Summer Heat') !== false
         || stripos($selectedname, 'Clear Summerheat') !== false
     );
+$istopicnine = $selected !== null
+    && (
+        (stripos($selectedname, 'Da Huang') !== false && stripos($selectedname, 'Mang Xiao') !== false && stripos($selectedname, 'Fan Xie Ye') !== false && stripos($selectedname, 'Lu Hui') !== false)
+        || stripos($selectedname, 'Downward Draining (Purgatives)') !== false
+        || stripos($selectedname, 'Downward-Draining Purgatives') !== false
+    );
 
 $topiconeherbs = [
     [
@@ -777,6 +783,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-clear-deficient-heat.php'); ?>
             <?php elseif ($istopiceight): ?>
                 <?php require(__DIR__ . '/single-herbs-category-clear-summer-heat.php'); ?>
+            <?php elseif ($istopicnine): ?>
+                <?php require(__DIR__ . '/single-herbs-category-downward-draining-purgatives.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
