@@ -451,6 +451,26 @@ if ($ises) {
 $pageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $pageparams);
 $categoryindexparams = $ises ? ['lang' => 'es'] : [];
 $categoryindexurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryindexparams);
+$previouscategoryurl = null;
+$nextcategoryurl = null;
+if ($selected !== null) {
+    $categorynumbers = array_keys($categories);
+    $currentcategoryindex = array_search($selected['number'], $categorynumbers, true);
+    if ($currentcategoryindex !== false && $currentcategoryindex > 0) {
+        $previousparams = ['focus' => (string) $categorynumbers[$currentcategoryindex - 1]];
+        if ($ises) {
+            $previousparams['lang'] = 'es';
+        }
+        $previouscategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $previousparams);
+    }
+    if ($currentcategoryindex !== false && $currentcategoryindex < count($categorynumbers) - 1) {
+        $nextparams = ['focus' => (string) $categorynumbers[$currentcategoryindex + 1]];
+        if ($ises) {
+            $nextparams['lang'] = 'es';
+        }
+        $nextcategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $nextparams);
+    }
+}
 $languageparams = [];
 if ($focus !== '') {
     $languageparams['focus'] = $focus;
@@ -797,7 +817,11 @@ ob_start();
                 <p class="single-herbs-guide__note"><strong>Content stage:</strong> this category framework is ready. Verified educational content will be developed from the supplied Bensky materia medica without changing the Original Bank.</p>
             <?php endif; ?>
         </section>
-        <p style="margin-top:18px"><a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>">← All Single Herbs categories</a></p>
+        <nav aria-label="<?php echo s($ises ? 'Navegación entre notas de estudio' : 'Study Note navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
+            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s($ises ? '← Nota de estudio anterior' : '← Previous Study Note'); ?></a><?php endif; ?></span>
+            <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
+            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s($ises ? 'Siguiente nota de estudio →' : 'Next Study Note →'); ?></a><?php endif; ?></span>
+        </nav>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
             <div>
