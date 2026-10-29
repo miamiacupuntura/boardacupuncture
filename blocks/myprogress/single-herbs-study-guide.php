@@ -62,7 +62,8 @@ $topiconeherbs = [
         'identity' => 'The strongest diaphoretic in this group; disseminates Lung Qi, calms wheezing and promotes urination.',
         'clue' => 'Marked chills, no sweating, body aches and wheezing in an Exterior excess presentation.',
         'memory' => 'MA = Maximum opening: Ma Huang throws open the pores when Cold has locked the exterior.',
-        'formulas' => 'Chief: Ma Huang Tang and Da Qing Long Tang. Co-chief: Xiao Qing Long Tang with Gui Zhi, and Ma Xing Shi Gan Tang with Shi Gao.',
+        'unique' => "Within this Board subset it is the hottest and ranks highest for both sweating and light dispersion in Yang's comparative figures.",
+        'formulas' => 'Chief: Ma Huang Tang. Co-chief: Xiao Qing Long Tang with Gui Zhi, and Ma Xing Shi Gan Tang with Shi Gao.',
         'caution' => 'Use cautiously with spontaneous sweating, Yin deficiency, hypertension, insomnia or cardiovascular disease.',
     ],
     [
@@ -74,6 +75,7 @@ $topiconeherbs = [
         'identity' => 'Releases the muscle layer, warms and unblocks the channels, supports Yang and harmonizes Nutritive and Defensive Qi.',
         'clue' => 'Exterior Wind-Cold with sweating, or Cold obstructing the channels and circulation.',
         'memory' => 'A twig reaches the branches: Gui Zhi carries warmth through the channels and limbs.',
+        'unique' => "Yang ranks it second in warmth in this Board subset. Its Heart-channel and Blood-circulating emphasis distinguishes it from Ma Huang's stronger surface release.",
         'formulas' => 'Chief: Gui Zhi Tang. Co-chief: Xiao Qing Long Tang with Ma Huang.',
         'caution' => 'Use cautiously with febrile disease, Yin deficiency with Heat, hot Blood or pregnancy with Heat signs.',
     ],
@@ -86,7 +88,8 @@ $topiconeherbs = [
         'identity' => 'Gently releases Wind-Cold while moving Qi, harmonizing the Middle and calming the fetus.',
         'clue' => 'A mild exterior pattern with chest or epigastric fullness, nausea, vomiting or pregnancy-related Qi constraint.',
         'memory' => 'The Perilla leaf moves at the surface and settles what is restless in the Middle—including the fetus.',
-        'formulas' => 'Co-chief: Xiang Su San with Xiang Fu, and Xing Su San with Xing Ren.',
+        'unique' => "Among the least warm herbs in Yang's warm-herb figure, yet it uniquely combines gentle Exterior release with Middle-Jiao Qi regulation and calming the fetus.",
+        'formulas' => 'No chief or co-chief formula from the current Board Domain roster is linked here. Keep the herb profile without adding an off-list formula.',
         'caution' => 'Its aromatic oils are best preserved with a relatively short decoction.',
     ],
     [
@@ -98,6 +101,7 @@ $topiconeherbs = [
         'identity' => 'A light, gentle Wind herb that releases the Exterior, vents rashes and benefits itchy skin eruptions.',
         'clue' => 'Superficial Wind with rash or itching; raw herb disperses Wind, while the charred form is used differently for bleeding.',
         'memory' => 'Jing Jie sweeps Wind from the skin; once charred, the same herb turns inward to stop bleeding.',
+        'unique' => "It is among the least warm yet tied for second in light dispersion in Yang's figures; processing can shift it from dispersing Wind to stopping bleeding.",
         'formulas' => 'Co-chief: Xiao Feng San with Fang Feng. Supporting ingredient: Yin Qiao San and Zhi Sou San.',
         'caution' => 'Do not confuse the actions of raw Jing Jie, Jing Jie Sui and charred Jing Jie.',
     ],
@@ -110,6 +114,7 @@ $topiconeherbs = [
         'identity' => 'Expels Wind at greater depth than Jing Jie, overcomes Dampness, alleviates pain and addresses spasms.',
         'clue' => 'Wind-Cold-Damp with muscle heaviness or pain, or Wind affecting several levels of the body.',
         'memory' => 'Fang Feng is the Wind shield: broader and deeper than Jing Jie, especially when Dampness adds heaviness.',
+        'unique' => "Its sweet taste moderates pungency; compared with Jing Jie it is less superficial and reaches Dampness and pain in the muscles more effectively.",
         'formulas' => 'Co-chief: Xiao Feng San with Jing Jie. Supporting ingredient: Yu Ping Feng San, Juan Bi Tang and Du Huo Ji Sheng Tang.',
         'caution' => 'Use cautiously when there is Blood or Yin deficiency without an exterior pathogenic factor.',
     ],
@@ -122,7 +127,8 @@ $topiconeherbs = [
         'identity' => 'Strongly releases Wind-Cold-Damp and relieves pain, especially along the Taiyang region and upper body.',
         'clue' => 'Occipital headache, stiff upper back and generalized aches aggravated by Cold-Damp.',
         'memory' => 'Qiang Huo climbs the back of the head: occiput, neck and upper back reveal its Taiyang route.',
-        'formulas' => 'Chief: Jiu Wei Qiang Huo Tang. Co-chief: Qiang Huo Sheng Shi Tang with Du Huo.',
+        'unique' => "It ties for the highest exogenous-Dampness score among the Board herbs shown by Yang; its decisive location is the occiput, neck and upper Taiyang region.",
+        'formulas' => 'Co-chief: Qiang Huo Sheng Shi Tang with Du Huo.',
         'caution' => 'Drying and dispersing; use cautiously with Yin or Blood deficiency and in patients with depleted fluids.',
     ],
     [
@@ -134,6 +140,7 @@ $topiconeherbs = [
         'identity' => 'Releases Wind-Cold, opens the nasal passages, relieves Yangming frontal pain and reduces swelling and pus.',
         'clue' => 'Frontal headache with nasal obstruction or thick, foul discharge and sinus fullness.',
         'memory' => 'Bai Zhi lights the front of the face: forehead, eyebrows, nose, teeth and purulent swelling.',
+        'unique' => "It ties Qiang Huo for the highest exogenous-Dampness score among these Board herbs, but its rich aroma and Yangming route point to frontal pain, the nose and pus.",
         'formulas' => 'Appears in Cang Er Zi San and Chuan Xiong Cha Tiao San, but another herb leads each formula.',
         'caution' => 'Its warm, drying nature is unsuitable for headache or nasal disease caused primarily by Yin deficiency or Heat.',
     ],
@@ -146,7 +153,8 @@ $topiconeherbs = [
         'identity' => 'Gently releases Wind-Cold, warms the Middle, stops vomiting, warms the Lung and reduces toxicity of certain herbs.',
         'clue' => 'A mild exterior pattern accompanied by nausea, vomiting, cough or Middle-Jiao Cold.',
         'memory' => 'Fresh ginger begins at the front door but returns to the kitchen: Exterior release plus Stomach harmony.',
-        'formulas' => 'Appears in Gui Zhi Tang, Xiao Ban Xia Tang and Ju Pi Zhu Ru Tang as a supporting ingredient rather than the chief.',
+        'unique' => "It sits in the middle of Yang's warmth comparison, but the text calls it a first-line choice for nausea because it uniquely joins mild Exterior release with Stomach harmony.",
+        'formulas' => 'Appears in Gui Zhi Tang and Ju Pi Zhu Ru Tang as a supporting ingredient rather than the chief.',
         'caution' => 'Use cautiously with spontaneous sweating from deficiency or prominent internal Heat.',
     ],
     [
@@ -158,8 +166,147 @@ $topiconeherbs = [
         'identity' => 'Focuses on opening the nasal passages, dispersing Wind-Cold and restoring the sense of smell.',
         'clue' => 'Nasal obstruction, reduced smell and sinus pain where the nose is the dominant problem.',
         'memory' => 'The Magnolia flower opens at the nose: when smell disappears, think Xin Yi Hua.',
+        'unique' => "It is among the least warm herbs yet tied with Jing Jie for second in light dispersion in Yang's figures; its most specific target is nasal opening and smell.",
         'formulas' => 'Appears in Cang Er Zi San as a supporting nasal-opening ingredient; Cang Er Zi is the chief herb.',
         'caution' => 'The flower hairs can irritate the throat; traditionally decocted in a cloth bag.',
+    ],
+];
+
+$windcoldcategoryherbs = [
+    [
+        'name' => 'Bai Zhi',
+        'latin' => 'Angelicae Dahuricae Radix',
+        'common' => 'Angelica Root',
+        'boardfocus' => true,
+        'note' => 'Best known for frontal, eyebrow, dental and gum pain; also addresses swelling, pus and vaginal discharge.',
+    ],
+    [
+        'name' => 'Cong Bai',
+        'latin' => 'Allii Fistulosi Bulbus',
+        'common' => 'Scallion or Green Onion',
+        'boardfocus' => false,
+        'note' => 'Gently releases the Exterior in the very early stage of Wind-Cold and may be used topically for abscesses and sores.',
+    ],
+    [
+        'name' => 'E Bu Shi Cao',
+        'latin' => 'Centipedae Herba',
+        'common' => 'Centipeda Herb',
+        'boardfocus' => false,
+        'note' => 'Expels Wind-Cold, opens the nasal passages and is especially associated with nasal obstruction, discharge and cough.',
+    ],
+    [
+        'name' => 'Fang Feng',
+        'latin' => 'Saposhnikoviae Radix',
+        'common' => 'Ledebouriella Root',
+        'boardfocus' => true,
+        'note' => 'Releases the Exterior and is useful for painful obstruction, particularly when Wind predominates.',
+    ],
+    [
+        'name' => 'Gao Ben',
+        'latin' => 'Ligustici Rhizoma et Radix',
+        'common' => 'Chinese Lovage Root',
+        'boardfocus' => false,
+        'note' => 'Expels Wind-Cold and is strongly associated with headache at the vertex.',
+    ],
+    [
+        'name' => 'Gui Zhi',
+        'latin' => 'Cinnamomi Ramulus',
+        'common' => 'Cinnamon or Cassia Twig',
+        'boardfocus' => true,
+        'note' => 'Releases the muscle layer and benefits Wind-Cold-Damp painful obstruction in the joints, limbs and shoulders.',
+    ],
+    [
+        'name' => 'Jing Jie',
+        'latin' => 'Schizonepetae Herba',
+        'common' => 'Schizonepeta Bud or Stem',
+        'boardfocus' => true,
+        'note' => 'Releases the Exterior, helps vent early carbuncles or boils and, after appropriate processing, can stop bleeding.',
+    ],
+    [
+        'name' => 'Ma Huang',
+        'latin' => 'Ephedrae Herba',
+        'common' => 'Ephedra Stem',
+        'boardfocus' => true,
+        'note' => 'Releases the Exterior, induces sweating, disseminates Lung Qi, calms wheezing and promotes urination.',
+    ],
+    [
+        'name' => 'Qiang Huo',
+        'latin' => 'Notopterygii Rhizoma seu Radix',
+        'common' => 'Notopterygium Root',
+        'boardfocus' => true,
+        'note' => 'Best for Wind-Cold-Damp body or joint pain and occipital headache, with an affinity for the Taiyang and Governing Vessel regions.',
+    ],
+    [
+        'name' => 'Sheng Jiang',
+        'latin' => 'Zingiberis Rhizoma Recens',
+        'common' => 'Fresh Ginger Rhizome',
+        'boardfocus' => true,
+        'note' => 'Disperses Wind-Cold, warms the Middle and Lung, stops vomiting and reduces the toxicity of certain herbs.',
+    ],
+    [
+        'name' => 'Sheng Jiang Pi',
+        'latin' => 'Zingiberis Rhizomatis Recens Cortex',
+        'common' => 'Fresh Ginger Rhizome Skin',
+        'boardfocus' => false,
+        'note' => 'The peel has a cooler, more superficial emphasis and promotes urination to reduce edema.',
+    ],
+    [
+        'name' => 'Xi Xin',
+        'latin' => 'Asari Herba',
+        'common' => 'Chinese Wild Ginger or Asarum',
+        'boardfocus' => false,
+        'note' => 'Treats Wind-Cold pain, especially with Dampness or underlying Kidney-Yang deficiency; warms the Lung and opens the nose.',
+    ],
+    [
+        'name' => 'Xiang Ru',
+        'latin' => 'Moslae Herba',
+        'common' => 'Elsholtzia',
+        'boardfocus' => false,
+        'note' => 'Releases the Exterior in summer, transforms Dampness, promotes urination and reduces swelling.',
+    ],
+    [
+        'name' => 'Xin Yi Hua',
+        'latin' => 'Magnoliae Flos',
+        'common' => 'Magnolia Flower',
+        'boardfocus' => true,
+        'note' => 'Most often used with Wind-Cold and remains a major nasal-opening herb for appropriate rhinitis and sinus patterns.',
+    ],
+    [
+        'name' => 'Zi Su Geng',
+        'latin' => 'Perillae Caulis',
+        'common' => 'Perilla Stalk',
+        'boardfocus' => false,
+        'note' => 'Moves Qi, relieves chest and epigastric constraint, harmonizes the Middle and helps calm the fetus.',
+    ],
+    [
+        'name' => 'Zi Su Ye',
+        'latin' => 'Perillae Folium',
+        'common' => 'Perilla Leaf',
+        'boardfocus' => true,
+        'note' => 'Releases mild Wind-Cold, moves Qi, calms the fetus, relieves morning sickness and may be used for seafood poisoning.',
+    ],
+];
+
+$yangcomparisoncharts = [
+    [
+        'title' => 'Relative warmth',
+        'figure' => 'Yang Fig. 2.1',
+        'items' => ['Ma Huang' => 100, 'Gui Zhi' => 80, 'Sheng Jiang' => 50, 'Qiang Huo' => 50, 'Bai Zhi' => 30, 'Fang Feng' => 30, 'Jing Jie' => 20, 'Xin Yi Hua' => 20, 'Zi Su Ye' => 20],
+    ],
+    [
+        'title' => 'Sweat-inducing strength',
+        'figure' => 'Yang Fig. 2.2',
+        'items' => ['Ma Huang' => 100, 'Gui Zhi' => 50, 'Zi Su Ye' => 30, 'Jing Jie' => 20],
+    ],
+    [
+        'title' => 'Light and dispersing quality',
+        'figure' => 'Yang Fig. 2.3',
+        'items' => ['Ma Huang' => 100, 'Jing Jie' => 80, 'Xin Yi Hua' => 80, 'Fang Feng' => 60, 'Zi Su Ye' => 50, 'Gui Zhi' => 40],
+    ],
+    [
+        'title' => 'Expelling exogenous Dampness',
+        'figure' => 'Yang Fig. 2.5',
+        'items' => ['Qiang Huo' => 70, 'Bai Zhi' => 70, 'Zi Su Ye' => 40, 'Fang Feng' => 40],
     ],
 ];
 
@@ -257,6 +404,8 @@ ob_start();
 .single-herbs-guide__pattern article{padding:17px;border-radius:10px;background:#f7fafb;border:1px solid #dce4e8}.single-herbs-guide__pattern strong{display:block;margin-bottom:6px;color:#0f5f58}.single-herbs-guide__pattern span{color:#5b6b79;font-size:14px;line-height:1.45}
 .single-herbs-guide__memory-path{margin-top:18px;padding:19px 21px;border-left:5px solid #0b817d;border-radius:10px;background:linear-gradient(135deg,#eef8f6,#f8fbff);color:#405565;line-height:1.6}.single-herbs-guide__memory-path strong{color:#0d665e}.single-herbs-guide__memory-path p{margin:0}.single-herbs-guide__memory-path p+p{margin-top:8px}.single-herbs-guide__memory-line{font-size:17px;font-weight:900;color:#123246!important}
 .single-herbs-guide__house{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 18px;margin:13px 0;padding:0;list-style:none}.single-herbs-guide__house li{color:#52677a}.single-herbs-guide__house strong{color:#17364a}
+.single-herbs-guide__catalog-heading{margin:25px 0 6px;color:#123246;font-size:19px}.single-herbs-guide__catalog-intro{margin:0 0 14px;color:#60717e;line-height:1.5}.single-herbs-guide__category-herbs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none;counter-reset:wind-cold-herb}.single-herbs-guide__category-herb{counter-increment:wind-cold-herb;position:relative;padding:14px 15px 14px 48px;border:1px solid #dde4e8;border-radius:9px;background:#fbfcfd}.single-herbs-guide__category-herb:before{content:counter(wind-cold-herb);position:absolute;left:14px;top:14px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:12px;font-weight:900}.single-herbs-guide__category-herb--core{border-left:4px solid #0b817d;background:#f7fcfb}.single-herbs-guide__category-herb:not(.single-herbs-guide__category-herb--core){border-left:4px solid #d97706;background:#fffaf2}.single-herbs-guide__category-herb-head{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}.single-herbs-guide__category-herb-head strong{color:#17364a}.single-herbs-guide__category-herb-head em{color:#6b7b87;font-size:12px}.single-herbs-guide__category-herb-badge{display:inline-flex;padding:2px 7px;border-radius:999px;background:#dff2ee;color:#0d665e;font-size:10px;font-weight:900;text-transform:uppercase}.single-herbs-guide__category-herb-badge--outside{background:#ffedd5;color:#9a3412}.single-herbs-guide__category-herb-common{display:block;margin-top:3px;color:#9a4a12;font-size:12px;font-weight:800}.single-herbs-guide__category-herb p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}
+.single-herbs-guide__yang-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__yang-chart{padding:16px;border:1px solid #dce4e8;border-radius:10px;background:#fff}.single-herbs-guide__yang-chart h5{margin:0;color:#17364a;font-size:16px}.single-herbs-guide__yang-chart small{display:block;margin:2px 0 12px;color:#7a647e}.single-herbs-guide__yang-bar{display:grid;grid-template-columns:82px minmax(0,1fr) 30px;gap:8px;align-items:center;margin-top:7px;font-size:11px;color:#4c6070}.single-herbs-guide__yang-bar-track{height:8px;overflow:hidden;border-radius:99px;background:#e9eef2}.single-herbs-guide__yang-bar-fill{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#ef5b72,#f48276)}.single-herbs-guide__yang-bar b{text-align:right;color:#17364a;font-size:11px}.single-herbs-guide__yang-note{margin-top:13px;padding:12px 15px;border-radius:8px;background:#f4f0ff;color:#5b4283;font-size:13px;line-height:1.5}
 .single-herbs-guide__formula-leads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__formula-lead{padding:17px;border:1px solid #d9e2e7;border-left:4px solid #7c3aed;border-radius:10px;background:#faf8ff}.single-herbs-guide__formula-lead h5{margin:0 0 7px;color:#50259a;font-size:17px}.single-herbs-guide__formula-lead p{margin:0;color:#52677a;line-height:1.55}.single-herbs-guide__formula-lead strong{color:#25364a}
 .single-herbs-guide__questions{margin:0;padding-left:24px;columns:2;column-gap:32px}.single-herbs-guide__questions li{break-inside:avoid;margin:0 0 12px;padding-left:4px;color:#405565;line-height:1.5}.single-herbs-guide__scope-note{margin-top:14px;padding:12px 15px;border-radius:8px;background:#fff8e8;color:#725110;line-height:1.5}
 .single-herbs-guide__profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -269,8 +418,8 @@ ob_start();
 .single-herbs-guide__comparisons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__comparison{display:block;padding:17px;border:1px solid #d9e2e7;border-radius:10px;background:#fff;color:inherit;text-decoration:none}.single-herbs-guide__comparison:hover{border-color:#0b817d;color:inherit;text-decoration:none}.single-herbs-guide__comparison strong{display:block;margin-bottom:6px;color:#0d665e}.single-herbs-guide__comparison span{display:block;color:#60717e;font-size:14px;line-height:1.45}.single-herbs-guide__comparison small{display:block;margin-top:10px;color:#185cca;font-weight:800}
 .single-herbs-guide__safety{padding:19px 21px;border-left:5px solid #b45309;border-radius:10px;background:#fff7ed;color:#713f12;line-height:1.55}.single-herbs-guide__safety strong{display:block;margin-bottom:6px}
 .single-herbs-guide__recall{display:grid;gap:9px}.single-herbs-guide__recall details{border:1px solid #dce4e8;border-radius:9px;background:#fff}.single-herbs-guide__recall summary{cursor:pointer;padding:15px 17px;color:#17364a;font-weight:800}.single-herbs-guide__recall details[open] summary{border-bottom:1px solid #e4eaed;background:#f6fafb}.single-herbs-guide__recall p{margin:0;padding:15px 17px;color:#52677a;line-height:1.5}.single-herbs-guide__source{font-size:13px}
-@media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads{grid-template-columns:1fr}.single-herbs-guide__questions{columns:1}}
+@media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr}.single-herbs-guide__questions{columns:1}}
 </style>
 
 <main class="single-herbs-guide">
@@ -303,13 +452,14 @@ ob_start();
             </div>
             <?php if ($istopicone): ?>
                 <section aria-labelledby="topic-one-foundations">
-                    <h4 id="topic-one-foundations">Category foundations</h4>
-                    <p class="single-herbs-guide__section-lead">Warm, acrid Exterior-releasing herbs disperse Wind-Cold, restore the Lung's dispersing function and open the superficial layer. The exam task is to identify each herb's particular emphasis rather than treating the group as interchangeable.</p>
+                    <h4 id="topic-one-foundations">Wind-Cold Exterior-releasing herbs: general introduction</h4>
+                    <p class="single-herbs-guide__section-lead">Many herbs in this group are acrid and warm. They disperse Wind-Cold, restore the Lung's dispersing function and open the superficial layer.</p>
                     <div class="single-herbs-guide__pattern">
-                        <article><strong>Core pattern</strong><span>Aversion to cold, fever, headache or body aches, nasal obstruction, cough, thin white tongue coating and a floating pulse.</span></article>
-                        <article><strong>Strength spectrum</strong><span>Ma Huang and Gui Zhi are stronger; Jing Jie, Fang Feng, Zi Su Ye and Sheng Jiang are generally gentler and more selective.</span></article>
-                        <article><strong>Board distinction</strong><span>Look for the decisive secondary clue: wheezing, sweating, nausea, rash, Damp pain, headache location or nasal obstruction.</span></article>
+                        <article><strong>Typical presentation</strong><span>Mild fever, severe chills, headache, body or neck pain and no thirst.</span></article>
+                        <article><strong>Primary focus</strong><span>The superficial layer of the body and the Lung. The treatment aim is a controlled, light sweat rather than heavy diaphoresis.</span></article>
+                        <article><strong>Board distinction</strong><span>Identify the decisive secondary clue: wheezing, sweating, nausea, rash, Damp pain, headache location or nasal obstruction.</span></article>
                     </div>
+                    <p class="single-herbs-guide__scope-note"><strong>General precautions:</strong> do not overdose herbs that promote sweating, because excessive dispersion consumes Qi and Yin. Use additional caution with bleeding conditions and pregnancy because these herbs are moving and dispersing.</p>
                     <aside class="single-herbs-guide__memory-path" aria-label="Memory path for warm acrid exterior-releasing herbs">
                         <p class="single-herbs-guide__memory-line">Picture the Exterior as a house.</p>
                         <ul class="single-herbs-guide__house">
@@ -320,9 +470,49 @@ ob_start();
                             <li><strong>Intruder:</strong> Wind-Cold</li>
                             <li><strong>Exit strategy:</strong> a light sweat</li>
                         </ul>
-                        <p><strong>Acrid disperses, Warm mobilizes, the Lung opens and sweat escorts Wind-Cold out.</strong> The goal is not maximal sweating: too much carries away Qi and consumes Yin. Because pungency also moves Blood and Qi, use extra caution with bleeding or pregnancy.</p>
+                        <p><strong>Acrid disperses, Warm mobilizes, the Lung opens and sweat escorts Wind-Cold out.</strong> This is the mechanism represented by the house image.</p>
                         <p>Walk through the house to remember the group: <strong>Ma Huang opens the locked door; Gui Zhi warms the branches; Zi Su Ye settles the kitchen; Jing Jie sweeps the skin; Fang Feng raises a Wind shield; Qiang Huo climbs the neck; Bai Zhi clears the forehead and sinuses; Sheng Jiang stops at the Stomach; Xin Yi Hua opens at the nose.</strong></p>
                     </aside>
+                    <h5 class="single-herbs-guide__catalog-heading">Broader Wind-Cold materia medica list</h5>
+                    <p class="single-herbs-guide__catalog-intro">This 16-herb source list gives the wider materia medica context. The nine herbs in this Board category are marked <strong>In Board category list</strong>; every additional herb or plant part is clearly marked <strong>Outside this Board category list</strong> and is included only for recognition.</p>
+                    <ol class="single-herbs-guide__category-herbs">
+                        <?php foreach ($windcoldcategoryherbs as $categoryherb): ?>
+                            <li class="single-herbs-guide__category-herb<?php echo $categoryherb['boardfocus'] ? ' single-herbs-guide__category-herb--core' : ''; ?>">
+                                <div class="single-herbs-guide__category-herb-head">
+                                    <strong><?php echo s($categoryherb['name']); ?></strong>
+                                    <em><?php echo s($categoryherb['latin']); ?></em>
+                                    <?php if ($categoryherb['boardfocus']): ?>
+                                        <span class="single-herbs-guide__category-herb-badge">In Board category list</span>
+                                    <?php else: ?>
+                                        <span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside">Outside this Board category list</span>
+                                    <?php endif; ?>
+                                </div>
+                                <span class="single-herbs-guide__category-herb-common"><?php echo s($categoryherb['common']); ?></span>
+                                <p><?php echo s($categoryherb['note']); ?></p>
+                            </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </section>
+
+                <section class="single-herbs-guide__section" aria-labelledby="topic-one-yang-title">
+                    <h4 id="topic-one-yang-title">Yang comparative fingerprint</h4>
+                    <p class="single-herbs-guide__section-lead">Use the bars to see what makes each Board herb stand out relative to its neighbors. The view below keeps only the nine herbs in this Board category.</p>
+                    <div class="single-herbs-guide__yang-charts">
+                        <?php foreach ($yangcomparisoncharts as $chart): ?>
+                            <article class="single-herbs-guide__yang-chart">
+                                <h5><?php echo s($chart['title']); ?></h5>
+                                <small><?php echo s($chart['figure']); ?></small>
+                                <?php foreach ($chart['items'] as $herbname => $value): ?>
+                                    <div class="single-herbs-guide__yang-bar">
+                                        <span><?php echo s($herbname); ?></span>
+                                        <span class="single-herbs-guide__yang-bar-track"><span class="single-herbs-guide__yang-bar-fill" style="width:<?php echo (int) $value; ?>%"></span></span>
+                                        <b><?php echo (int) $value; ?></b>
+                                    </div>
+                                <?php endforeach; ?>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="single-herbs-guide__yang-note"><strong>How to read these bars:</strong> they are relative comparison indices transcribed from Yang, Chapter 2, Figures 2.1, 2.2, 2.3 and 2.5. They are not doses, efficacy percentages or prescribing instructions. Herbs outside this Board category that appear in the original figures are intentionally omitted here.</p>
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-decision-title">
@@ -343,7 +533,7 @@ ob_start();
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-profiles-title">
                     <h4 id="topic-one-profiles-title">Individual herb profiles</h4>
-                    <p class="single-herbs-guide__section-lead">Each profile compresses the facts into one exam clue, one memorable image and a bridge to the formulas where that action becomes clinically meaningful.</p>
+                    <p class="single-herbs-guide__section-lead">Each profile compresses the facts into one exam clue, one memorable image and a bridge only to formulas found in the current Board Domain rosters.</p>
                     <div class="single-herbs-guide__profiles">
                         <?php foreach ($topiconeherbs as $herb): ?>
                             <details class="single-herbs-guide__profile"<?php echo $herb['name'] === 'Ma Huang' ? ' open' : ''; ?>>
@@ -358,6 +548,7 @@ ob_start();
                                         <dt>Identity</dt><dd><?php echo s($herb['identity']); ?></dd>
                                         <dt>Exam clue</dt><dd><?php echo s($herb['clue']); ?></dd>
                                         <dt>Memory</dt><dd class="single-herbs-guide__profile-memory"><?php echo s($herb['memory']); ?></dd>
+                                        <dt>Unique fingerprint</dt><dd><?php echo s($herb['unique']); ?></dd>
                                         <dt>Formula bridge</dt><dd class="single-herbs-guide__profile-formulas"><?php echo s($herb['formulas']); ?></dd>
                                         <dt>Safety</dt><dd class="single-herbs-guide__profile-safety"><?php echo s($herb['caution']); ?></dd>
                                     </dl>
@@ -369,19 +560,15 @@ ob_start();
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-formula-leads-title">
                     <h4 id="topic-one-formula-leads-title">When the herb leads the formula</h4>
-                    <p class="single-herbs-guide__section-lead">These connections are limited to formulas in which one of the nine herbs is a chief or co-chief ingredient. A formula mention elsewhere does not automatically mean that the herb leads it.</p>
+                    <p class="single-herbs-guide__section-lead">These connections are limited to formulas in the current Board Domain rosters in which one of the nine herbs is a chief or co-chief ingredient. Off-list textbook connections are deliberately omitted.</p>
                     <div class="single-herbs-guide__formula-leads">
                         <article class="single-herbs-guide__formula-lead">
                             <h5>Ma Huang</h5>
-                            <p><strong>Chief:</strong> Ma Huang Tang and Da Qing Long Tang. <strong>Co-chief:</strong> Xiao Qing Long Tang with Gui Zhi; Ma Xing Shi Gan Tang with Shi Gao.</p>
+                            <p><strong>Chief:</strong> Ma Huang Tang. <strong>Co-chief:</strong> Xiao Qing Long Tang with Gui Zhi; Ma Xing Shi Gan Tang with Shi Gao.</p>
                         </article>
                         <article class="single-herbs-guide__formula-lead">
                             <h5>Gui Zhi</h5>
                             <p><strong>Chief:</strong> Gui Zhi Tang, where it releases the muscle layer and harmonizes Ying and Wei. <strong>Co-chief:</strong> Xiao Qing Long Tang with Ma Huang.</p>
-                        </article>
-                        <article class="single-herbs-guide__formula-lead">
-                            <h5>Zi Su Ye</h5>
-                            <p><strong>Co-chief:</strong> Xiang Su San with Xiang Fu for Exterior Wind-Cold with Qi constraint; Xing Su San with Xing Ren for cool-dryness affecting the Lung.</p>
                         </article>
                         <article class="single-herbs-guide__formula-lead">
                             <h5>Jing Jie + Fang Feng</h5>
@@ -389,10 +576,10 @@ ob_start();
                         </article>
                         <article class="single-herbs-guide__formula-lead">
                             <h5>Qiang Huo</h5>
-                            <p><strong>Chief:</strong> Jiu Wei Qiang Huo Tang. <strong>Co-chief:</strong> Qiang Huo Sheng Shi Tang with Du Huo for Wind-Damp pain concentrated in the upper body.</p>
+                            <p><strong>Co-chief:</strong> Qiang Huo Sheng Shi Tang with Du Huo for Wind-Damp pain concentrated in the upper body.</p>
                         </article>
                     </div>
-                    <p class="single-herbs-guide__scope-note"><strong>Role check:</strong> Fang Feng supports Yu Ping Feng San, Bai Zhi and Xin Yi Hua support Cang Er Zi San, and Sheng Jiang supports Xiao Ban Xia Tang. They are clinically relevant ingredients, but they do not lead those particular formulas.</p>
+                    <p class="single-herbs-guide__scope-note"><strong>Role check:</strong> Fang Feng supports Yu Ping Feng San, Bai Zhi and Xin Yi Hua support Cang Er Zi San, and Sheng Jiang supports Gui Zhi Tang and Ju Pi Zhu Ru Tang. These formulas are on the Board rosters, but the named herb does not lead each formula.</p>
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-comparisons-title">
@@ -417,8 +604,8 @@ ob_start();
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-safety-title">
-                    <h4 id="topic-one-safety-title">Safety checkpoint</h4>
-                    <div class="single-herbs-guide__safety"><strong>Exterior-releasing herbs are dispersing and should not be treated as routine home remedies.</strong>Strong or prolonged diaphoresis can consume Qi and fluids. Extra caution is required with deficiency sweating, pregnancy, bleeding tendencies, Heat presentations and cardiovascular disease. Ma Huang has important cardiovascular and regulatory considerations; professional supervision and current local rules are essential.</div>
+                    <h4 id="topic-one-safety-title">Ma Huang safety checkpoint</h4>
+                    <div class="single-herbs-guide__safety"><strong>Ma Huang requires a separate safety review beyond the general category precautions above.</strong>It has important cardiovascular, medication-interaction and regulatory considerations. Professional supervision, individual screening and current local rules are essential.</div>
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-yang-questions-title">
