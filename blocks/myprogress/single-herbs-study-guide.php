@@ -143,6 +143,12 @@ $istopictwelve = $selected !== null
         || stripos($selectedname, 'Drain Dampness (Diuretics)') !== false
         || stripos($selectedname, 'Expel Wind-Dampness') !== false
     );
+$istopicthirteen = $selected !== null
+    && (
+        (stripos($selectedname, 'Qian Hu') !== false && stripos($selectedname, 'Chuan Bei Mu') !== false && stripos($selectedname, 'Zhu Ru') !== false)
+        || stripos($selectedname, 'Cool and Transform Phlegm Heat') !== false
+        || stripos($selectedname, 'Cool and Transform Phlegm-Heat') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -192,6 +198,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las hierbas que expulsan Viento-Humedad según el tipo de Bi, movimiento del dolor, temperatura, región corporal y deficiencia subyacente.'
         : 'Learn to distinguish Wind-Damp-expelling herbs by Bi type, pain movement, temperature, body region and underlying deficiency.';
+} else if ($istopicthirteen) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas que enfrían y transforman Flema-Calor según esputo, sequedad, nódulos, opresión torácica, intestino, Estómago y Shen.'
+        : 'Learn to distinguish herbs that cool and transform Phlegm-Heat by sputum, dryness, nodules, chest constraint, bowel, Stomach and Shen clues.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -930,6 +940,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-harsh-expellants.php'); ?>
             <?php elseif ($istopictwelve): ?>
                 <?php require(__DIR__ . '/single-herbs-category-drain-dampness.php'); ?>
+            <?php elseif ($istopicthirteen): ?>
+                <?php require(__DIR__ . '/single-herbs-category-cool-transform-phlegm.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
