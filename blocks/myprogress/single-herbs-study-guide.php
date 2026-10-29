@@ -235,6 +235,8 @@ echo $OUTPUT->header();
 .single-herbs-guide__pattern{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
 .single-herbs-guide__pattern article{padding:17px;border-radius:10px;background:#f7fafb;border:1px solid #dce4e8}.single-herbs-guide__pattern strong{display:block;margin-bottom:6px;color:#0f5f58}.single-herbs-guide__pattern span{color:#5b6b79;font-size:14px;line-height:1.45}
 .single-herbs-guide__memory-path{margin-top:18px;padding:19px 21px;border-left:5px solid #0b817d;border-radius:10px;background:linear-gradient(135deg,#eef8f6,#f8fbff);color:#405565;line-height:1.6}.single-herbs-guide__memory-path strong{color:#0d665e}.single-herbs-guide__memory-path p{margin:0}.single-herbs-guide__memory-path p+p{margin-top:8px}.single-herbs-guide__memory-line{font-size:17px;font-weight:900;color:#123246!important}
+.single-herbs-guide__house{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 18px;margin:13px 0;padding:0;list-style:none}.single-herbs-guide__house li{color:#52677a}.single-herbs-guide__house strong{color:#17364a}
+.single-herbs-guide__atlas{border-top:1px solid #dce4e8}.single-herbs-guide__atlas-group{padding:17px 0;border-bottom:1px solid #e6ecef}.single-herbs-guide__atlas-group:last-child{border-bottom:0}.single-herbs-guide__atlas-group h5{margin:0 0 7px;color:#0d665e;font-size:16px}.single-herbs-guide__atlas-group p{margin:0;color:#52677a;line-height:1.55}.single-herbs-guide__atlas-group p+p{margin-top:6px}.single-herbs-guide__atlas-rule{color:#17364a!important;font-weight:900}
 .single-herbs-guide__profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .single-herbs-guide__profile{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #f77e25;border-radius:10px;background:#fff}
 .single-herbs-guide__profile summary{position:relative;cursor:pointer;padding:17px 42px 17px 17px;list-style:none}.single-herbs-guide__profile summary::-webkit-details-marker{display:none}.single-herbs-guide__profile summary:after{content:'+';position:absolute;right:16px;top:16px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:19px;font-weight:900}.single-herbs-guide__profile[open] summary:after{content:'−'}
@@ -245,8 +247,8 @@ echo $OUTPUT->header();
 .single-herbs-guide__comparisons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__comparison{display:block;padding:17px;border:1px solid #d9e2e7;border-radius:10px;background:#fff;color:inherit;text-decoration:none}.single-herbs-guide__comparison:hover{border-color:#0b817d;color:inherit;text-decoration:none}.single-herbs-guide__comparison strong{display:block;margin-bottom:6px;color:#0d665e}.single-herbs-guide__comparison span{display:block;color:#60717e;font-size:14px;line-height:1.45}.single-herbs-guide__comparison small{display:block;margin-top:10px;color:#185cca;font-weight:800}
 .single-herbs-guide__safety{padding:19px 21px;border-left:5px solid #b45309;border-radius:10px;background:#fff7ed;color:#713f12;line-height:1.55}.single-herbs-guide__safety strong{display:block;margin-bottom:6px}
 .single-herbs-guide__recall{display:grid;gap:9px}.single-herbs-guide__recall details{border:1px solid #dce4e8;border-radius:9px;background:#fff}.single-herbs-guide__recall summary{cursor:pointer;padding:15px 17px;color:#17364a;font-weight:800}.single-herbs-guide__recall details[open] summary{border-bottom:1px solid #e4eaed;background:#f6fafb}.single-herbs-guide__recall p{margin:0;padding:15px 17px;color:#52677a;line-height:1.5}.single-herbs-guide__source{font-size:13px}
-@media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles{grid-template-columns:1fr}}
+@media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house{grid-template-columns:1fr}}
 </style>
 
 <main class="single-herbs-guide">
@@ -286,8 +288,16 @@ echo $OUTPUT->header();
                         <article><strong>Board distinction</strong><span>Look for the decisive secondary clue: wheezing, sweating, nausea, rash, Damp pain, headache location or nasal obstruction.</span></article>
                     </div>
                     <aside class="single-herbs-guide__memory-path" aria-label="Memory path for warm acrid exterior-releasing herbs">
-                        <p class="single-herbs-guide__memory-line">Picture the Exterior as a house: the skin is the wall, the pores are its doors, the Lung controls ventilation and Wei Qi guards the entrance.</p>
-                        <p><strong>Acrid disperses, Warm mobilizes, the Lung opens and a light sweat escorts Wind-Cold out.</strong> The goal is not maximal sweating: too much carries away Qi and consumes Yin.</p>
+                        <p class="single-herbs-guide__memory-line">Picture the Exterior as a house.</p>
+                        <ul class="single-herbs-guide__house">
+                            <li><strong>Roof and walls:</strong> body surface</li>
+                            <li><strong>Doors and windows:</strong> pores</li>
+                            <li><strong>Ventilation:</strong> Lung</li>
+                            <li><strong>Exterior guard:</strong> Wei Qi</li>
+                            <li><strong>Intruder:</strong> Wind-Cold</li>
+                            <li><strong>Exit strategy:</strong> a light sweat</li>
+                        </ul>
+                        <p><strong>Acrid disperses, Warm mobilizes, the Lung opens and sweat escorts Wind-Cold out.</strong> The goal is not maximal sweating: too much carries away Qi and consumes Yin. Because pungency also moves Blood and Qi, use extra caution with bleeding or pregnancy.</p>
                         <p>Walk through the house to remember the group: <strong>Ma Huang opens the locked door; Gui Zhi warms the branches; Zi Su Ye settles the kitchen; Jing Jie sweeps the skin; Fang Feng raises a Wind shield; Qiang Huo climbs the neck; Bai Zhi clears the forehead and sinuses; Sheng Jiang stops at the Stomach; Xin Yi Hua opens at the nose.</strong></p>
                     </aside>
                 </section>
@@ -305,6 +315,50 @@ echo $OUTPUT->header();
                         <div><strong>Frontal sinus pain or pus</strong><span>Bai Zhi</span></div>
                         <div><strong>Vomiting + mild exterior</strong><span>Sheng Jiang</span></div>
                         <div><strong>Nasal obstruction dominates</strong><span>Xin Yi Hua</span></div>
+                    </div>
+                </section>
+
+                <section class="single-herbs-guide__section" aria-labelledby="topic-one-atlas-title">
+                    <h4 id="topic-one-atlas-title">Chapter memory atlas</h4>
+                    <p class="single-herbs-guide__section-lead">These short routes connect the warm-herb category to the larger Exterior chapter. Read them as one mental journey, not as isolated lists.</p>
+                    <div class="single-herbs-guide__atlas">
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>The warm route through the house</h5>
+                            <p><strong>Ma Huang</strong> is the main door and maximum opening; <strong>Gui Zhi</strong> sends warmth into the branches; <strong>Jing Jie</strong> sweeps Wind from the skin; <strong>Fang Feng</strong> is the deeper Wind shield; <strong>Xiang Ru</strong> is the aromatic summer umbrella; <strong>Xi Xin</strong> is the tiny detective that searches bones, teeth and nasal passages; <strong>Sheng Jiang</strong> returns to the kitchen to settle the Stomach.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>Map the headache before choosing the herb</h5>
+                            <p class="single-herbs-guide__atlas-rule">Qiang behind, Bai in front, Chuan at the sides, Gao on top.</p>
+                            <p>Qiang Huo points to the occiput, neck and upper back; Bai Zhi to the Yangming forehead, eyebrows and teeth; Chuan Xiong to the temporal sides; Gao Ben to the vertex.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>Three nasal jobs</h5>
+                            <p class="single-herbs-guide__atlas-rule">Bai clears, Xin opens, Cang dries.</p>
+                            <p>Bai Zhi suggests frontal pain with thick or foul discharge; Xin Yi Hua suggests obstruction and loss of smell; Cang Er Zi suggests profuse discharge, itching and Dampness.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>Three ways to lift</h5>
+                            <p class="single-herbs-guide__atlas-rule">Ge generates, Sheng ascends, Chai releases Shaoyang.</p>
+                            <p>Ge Gen links neck stiffness, fluids and diarrhea; Sheng Ma links prolapse with Toxic-Heat; Chai Hu links Shaoyang with free movement of Liver Qi.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>When Wind reaches the skin</h5>
+                            <p>Think <strong>Bo He</strong> for head and throat, <strong>Chan Tui</strong> for rash with spasms, <strong>Niu Bang Zi</strong> for red burning lesions with constipation, <strong>Jiang Can</strong> for Wind with Phlegm and spasm, and <strong>Jing Jie</strong> as the flexible Wind-and-itching herb.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>Wind-Heat across the Upper Jiao</h5>
+                            <p class="single-herbs-guide__atlas-rule">Mint to the throat; chrysanthemum to the eyes; mulberry leaf to the dry Lung; Bupleurum to Shaoyang.</p>
+                            <p>Bo He emphasizes the head and throat; Ju Hua the eyes and Liver; Sang Ye dry cough and Lung Heat; Chai Hu Shaoyang and constrained Liver Qi.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>Ju Hua by color and habitat</h5>
+                            <p><strong>Yellow disperses</strong> Wind-Heat from the Lung; <strong>white clears and nourishes the eyes</strong>; <strong>wild clears toxin</strong> from boils and inflamed lesions.</p>
+                        </div>
+                        <div class="single-herbs-guide__atlas-group">
+                            <h5>Why Exterior herbs matter beyond a common cold</h5>
+                            <p class="single-herbs-guide__atlas-rule">PAE-PI: Pain, Asthma, Edema, Piel/Skin and Infections.</p>
+                            <p>The chapter connects Exterior herbs with painful obstruction, Lung-Qi dysfunction, water metabolism, itching and rash, ENT disorders and the early stages of infectious disease.</p>
+                        </div>
                     </div>
                 </section>
 
