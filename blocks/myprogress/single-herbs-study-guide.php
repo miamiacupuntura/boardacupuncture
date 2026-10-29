@@ -161,6 +161,13 @@ $istopicfifteen = $selected !== null
         || stripos($selectedname, 'Relieve Coughing and Wheezing') !== false
         || stripos($selectedname, 'Relieve Cough and Wheezing') !== false
     );
+$istopicsixteen = $selected !== null
+    && (
+        (stripos($selectedname, 'Huo Xiang') !== false && stripos($selectedname, 'Cang Zhu') !== false && stripos($selectedname, 'Bai Dou Kou') !== false)
+        || stripos($selectedname, 'Aromatic herbs for transforming dampness') !== false
+        || stripos($selectedname, 'Aromatic Herbs that Transform Dampness') !== false
+        || stripos($selectedname, 'Aromatics for Damp') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -222,6 +229,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las hierbas que alivian tos y sibilancia según dirección del Qi de Pulmón, temperatura, cantidad de Flema, garganta, Estómago, edema y cronicidad.'
         : 'Learn to distinguish cough- and wheeze-relieving herbs by Lung-Qi direction, temperature, Phlegm quantity, throat, Stomach, edema and chronicity.';
+} else if ($istopicsixteen) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las aromáticas que transforman Humedad según obstrucción del Jiao Medio, movimiento de Qi, Frío, vómito, embarazo, sibilancia y malaria.'
+        : 'Learn to distinguish aromatic Dampness-transforming herbs by Middle-Jiao obstruction, Qi movement, Cold, vomiting, pregnancy, wheezing and malaria clues.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -966,6 +977,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-warm-transform-phlegm.php'); ?>
             <?php elseif ($istopicfifteen): ?>
                 <?php require(__DIR__ . '/single-herbs-category-relieve-cough-wheezing.php'); ?>
+            <?php elseif ($istopicsixteen): ?>
+                <?php require(__DIR__ . '/single-herbs-category-aromatic-transform-dampness.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
