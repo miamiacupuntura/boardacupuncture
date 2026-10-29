@@ -58,6 +58,12 @@ $istopictwo = $selected !== null
         || stripos($selectedname, 'Wind-Heat') !== false
         || stripos($selectedname, 'Wind Heat') !== false
     );
+$istopicthree = $selected !== null
+    && (
+        (stripos($selectedname, 'Shi Gao') !== false && stripos($selectedname, 'Zhi Mu') !== false)
+        || stripos($selectedname, 'Clear Heat and Drain Fire') !== false
+        || stripos($selectedname, 'Clear Heat & Drain Fire') !== false
+    );
 
 $topiconeherbs = [
     [
@@ -727,6 +733,8 @@ ob_start();
                 <p class="single-herbs-guide__note single-herbs-guide__source"><strong>Sources used for this prototype:</strong> Bensky, Clavey, Stöger and Gamble, <em>Chinese Herbal Medicine: Materia Medica</em>, 3rd ed., category and individual monographs; and Yang, <em>Chinese Herbal Medicines: Comparisons and Characteristics</em>, 2nd ed., Chapter 2. This is educational review material and not prescribing guidance.</p>
             <?php elseif ($istopictwo): ?>
                 <?php require(__DIR__ . '/single-herbs-category-cool-acrid.php'); ?>
+            <?php elseif ($istopicthree): ?>
+                <?php require(__DIR__ . '/single-herbs-category-clear-heat-drain-fire.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
