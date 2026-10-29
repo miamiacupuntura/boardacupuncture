@@ -3,7 +3,11 @@
 
   const params = new URLSearchParams(window.location.search);
   const focus = params.get('focus');
+  const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
   const guideUrl = new URL('/blocks/myprogress/single-herbs-study-guide.php', window.location.origin);
+  if (isSpanish) {
+    guideUrl.searchParams.set('lang', 'es');
+  }
   if (params.get('from') === 'single-herbs' && focus && /^\d+$/.test(focus)) {
     guideUrl.searchParams.set('focus', focus);
   }
@@ -13,7 +17,6 @@
     return;
   }
 
-  const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
   const existingReturnLink = topbar.querySelector('.comparison-back--single-herbs');
   if (existingReturnLink) {
     existingReturnLink.href = guideUrl.toString();
