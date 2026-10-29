@@ -1021,6 +1021,15 @@ ob_start();
 </main>
 <script>
 (function() {
+    <?php if ($selected !== null): ?>
+    document.querySelectorAll('.single-herbs-guide__profile-formulas a[href*="/formula-navigator-"]').forEach(function(link) {
+        const formulaUrl = new URL(link.getAttribute('href'), window.location.origin);
+        formulaUrl.searchParams.set('from', 'single-herbs');
+        formulaUrl.searchParams.set('focus', '<?php echo (int) $selected['number']; ?>');
+        link.href = formulaUrl.pathname + formulaUrl.search;
+    });
+    <?php endif; ?>
+
     const deck = document.querySelector('[data-yang-deck]');
     if (!deck) {
         return;
