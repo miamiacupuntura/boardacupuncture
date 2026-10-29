@@ -168,6 +168,13 @@ $istopicsixteen = $selected !== null
         || stripos($selectedname, 'Aromatic Herbs that Transform Dampness') !== false
         || stripos($selectedname, 'Aromatics for Damp') !== false
     );
+$istopicseventeen = $selected !== null
+    && (
+        (stripos($selectedname, 'Ji Nei Jin') !== false && stripos($selectedname, 'Lai Fu Zi') !== false && stripos($selectedname, 'Shan Zha') !== false)
+        || stripos($selectedname, 'Herbs that Relieve Food Stagnation') !== false
+        || stripos($selectedname, 'Relieve Food Stagnation') !== false
+        || stripos($selectedname, 'Reduce Food Stagnation') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -233,6 +240,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las aromáticas que transforman Humedad según obstrucción del Jiao Medio, movimiento de Qi, Frío, vómito, embarazo, sibilancia y malaria.'
         : 'Learn to distinguish aromatic Dampness-transforming herbs by Middle-Jiao obstruction, Qi movement, Cold, vomiting, pregnancy, wheezing and malaria clues.';
+} else if ($istopicseventeen) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas que reducen estancamiento alimentario según el tipo de alimento, fuerza digestiva, movimiento de Qi, estasis de Sangre, lactancia y deficiencia.'
+        : 'Learn to distinguish Food-Stagnation herbs by food type, digestive strength, Qi movement, Blood stasis, lactation and deficiency clues.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -979,6 +990,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-relieve-cough-wheezing.php'); ?>
             <?php elseif ($istopicsixteen): ?>
                 <?php require(__DIR__ . '/single-herbs-category-aromatic-transform-dampness.php'); ?>
+            <?php elseif ($istopicseventeen): ?>
+                <?php require(__DIR__ . '/single-herbs-category-relieve-food-stagnation.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
