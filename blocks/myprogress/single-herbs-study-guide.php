@@ -335,7 +335,10 @@ echo $OUTPUT->header();
                     <p class="single-herbs-guide__section-lead">Open the complete comparison when two choices appear plausible.</p>
                     <div class="single-herbs-guide__comparisons">
                         <?php foreach ($topiconecomparisons as $comparison): ?>
-                            <?php $comparisonurl = new moodle_url($comparison['path']); ?>
+                            <?php $comparisonurl = new moodle_url($comparison['path'], [
+                                'from' => 'single-herbs',
+                                'focus' => (string) $selected['number'],
+                            ]); ?>
                             <a class="single-herbs-guide__comparison" href="<?php echo $comparisonurl->out(false); ?>">
                                 <strong><?php echo s($comparison['title']); ?></strong>
                                 <span><?php echo s($comparison['summary']); ?></span>
