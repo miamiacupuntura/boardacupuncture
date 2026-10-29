@@ -89,6 +89,12 @@ $chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' =
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 }
+$currentguidelineurl = null;
+if ($areaid === 'herbology') {
+    $currentguidelineurl = new moodle_url('/study-guide/guidelines/chinese-herbal-medicine.html', [
+        'return' => $pageurl->out(false),
+    ]);
+}
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -153,6 +159,9 @@ echo $OUTPUT->header();
             <p class="subject-study-guide__intro"><?php echo s($area['description']); ?></p>
         </div>
         <nav class="subject-study-guide__top-actions" aria-label="Study Guide course catalogs">
+            <?php if ($currentguidelineurl !== null): ?>
+                <a class="subject-study-guide__back" href="<?php echo $currentguidelineurl->out(false); ?>">2026 Board Guideline ↔</a>
+            <?php endif; ?>
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>">← Back to Dashboard</a>
             <a class="subject-study-guide__catalog subject-study-guide__catalog--ce" href="<?php echo (new moodle_url('/study-guide/continuing-education.html'))->out(false); ?>">Continuing Education</a>
         </nav>
