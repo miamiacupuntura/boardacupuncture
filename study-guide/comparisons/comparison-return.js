@@ -17,7 +17,9 @@
   const returnLink = document.createElement('a');
   returnLink.className = 'comparison-back comparison-back--single-herbs';
   returnLink.href = guideUrl.toString();
-  returnLink.textContent = isSpanish ? '← Volver a Single Herbs' : '← Back to Single Herbs';
+  returnLink.textContent = isSpanish
+    ? '← Volver a la guía de Single Herbs'
+    : '← Back to Single Herbs Study Guide';
 
   const existingBacks = topbar.querySelectorAll('.comparison-back');
   const comparisonBack = existingBacks.length ? existingBacks[existingBacks.length - 1] : null;
