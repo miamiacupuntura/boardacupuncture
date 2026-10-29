@@ -56,7 +56,14 @@ $areas = [
     'herbology' => [
         'title' => 'Chinese Herbology',
         'description' => 'Study Guide chapters for Single Herbs and Formulas.',
-        'chapters' => [],
+        'chapters' => [
+            [
+                'title' => 'Single Herbs',
+                'description' => 'Study single herbs through the same General, Topics 1–34 and Mixed Review categories used in the Chinese Herbology Board Level workspace.',
+                'path' => '/blocks/myprogress/single-herbs-study-guide.php',
+                'anchor' => '',
+            ],
+        ],
     ],
     'biomedicine' => [
         'title' => 'Biomedicine',
