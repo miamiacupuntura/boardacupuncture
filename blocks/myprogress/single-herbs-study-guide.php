@@ -136,6 +136,13 @@ $istopiceleven = $selected !== null
         || stripos($selectedname, 'Harsh Expellants') !== false
         || stripos($selectedname, 'Cathartics') !== false
     );
+$istopictwelve = $selected !== null
+    && (
+        (stripos($selectedname, 'Du Huo') !== false && stripos($selectedname, 'Qin Jiao') !== false && stripos($selectedname, 'Wei Ling Xian') !== false)
+        || stripos($selectedname, 'Herbs That Drain Dampness') !== false
+        || stripos($selectedname, 'Drain Dampness (Diuretics)') !== false
+        || stripos($selectedname, 'Expel Wind-Dampness') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -181,6 +188,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir los expulsores drásticos según localización del líquido, naturaleza térmica, fuerza catártica y toxicidad.'
         : 'Learn to distinguish harsh expellants by fluid location, thermal nature, cathartic strength and toxicity.';
+} else if ($istopictwelve) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas que expulsan Viento-Humedad según el tipo de Bi, movimiento del dolor, temperatura, región corporal y deficiencia subyacente.'
+        : 'Learn to distinguish Wind-Damp-expelling herbs by Bi type, pain movement, temperature, body region and underlying deficiency.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -917,6 +928,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-moist-laxatives.php'); ?>
             <?php elseif ($istopiceleven): ?>
                 <?php require(__DIR__ . '/single-herbs-category-harsh-expellants.php'); ?>
+            <?php elseif ($istopictwelve): ?>
+                <?php require(__DIR__ . '/single-herbs-category-drain-dampness.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
