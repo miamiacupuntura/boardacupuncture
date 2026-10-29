@@ -70,6 +70,12 @@ $istopicfour = $selected !== null
         || stripos($selectedname, 'Clear Heat and Cool Blood') !== false
         || stripos($selectedname, 'Clear Heat & Cool Blood') !== false
     );
+$istopicfive = $selected !== null
+    && (
+        (stripos($selectedname, 'Huang Qin') !== false && stripos($selectedname, 'Huang Lian') !== false && stripos($selectedname, 'Huang Bai') !== false)
+        || stripos($selectedname, 'Clear Heat and Dry Damp') !== false
+        || stripos($selectedname, 'Clear Heat & Dry Damp') !== false
+    );
 
 $topiconeherbs = [
     [
@@ -743,6 +749,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-clear-heat-drain-fire.php'); ?>
             <?php elseif ($istopicfour): ?>
                 <?php require(__DIR__ . '/single-herbs-category-clear-heat-cool-blood.php'); ?>
+            <?php elseif ($istopicfive): ?>
+                <?php require(__DIR__ . '/single-herbs-category-clear-heat-dry-damp.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
