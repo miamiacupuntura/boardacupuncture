@@ -19,12 +19,13 @@
     return;
   }
 
+  const existingReturnLink = actions.querySelector('.comparison-back--single-herbs');
   const backLinks = actions.querySelectorAll('.comparison-back');
   if (!backLinks.length) {
     return;
   }
 
-  const returnLink = backLinks[backLinks.length - 1];
+  const returnLink = existingReturnLink || backLinks[backLinks.length - 1];
   returnLink.classList.add('comparison-back--single-herbs');
   returnLink.href = guideUrl.toString();
   returnLink.textContent = isSpanish
