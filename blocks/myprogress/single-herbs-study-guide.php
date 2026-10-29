@@ -131,6 +131,52 @@ $istopicten = $selected !== null
         || stripos($selectedname, 'Moist Laxatives') !== false
     );
 
+if ($istopicone) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas tibias y acres que liberan el Exterior según sudoración, respiración, dolor, náusea y localización de los síntomas.'
+        : 'Learn to distinguish warm, acrid Exterior-releasing herbs by sweating, breathing, pain, nausea and symptom location.';
+} else if ($istopictwo) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas frescas y acres que liberan el Exterior según garganta, ojos, erupciones, tos y toxicidad por Calor.'
+        : 'Learn to distinguish cool, acrid Exterior-releasing herbs by throat, eye, rash, cough and Heat-toxicity clues.';
+} else if ($istopicthree) {
+    $workspaceintro = $ises
+        ? 'Aprende a elegir la hierba que drena Fuego según el órgano afectado, la intensidad de la sed y la combinación de Calor, irritabilidad y sequedad.'
+        : 'Learn to choose a Fire-draining herb by the affected organ, intensity of thirst and the combination of Heat, irritability and dryness.';
+} else if ($istopicfour) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas que enfrían Sangre según sangrado, erupciones, lesión de Yin, estasis y nivel de profundidad del Calor.'
+        : 'Learn to distinguish Blood-cooling herbs by bleeding, rash, Yin injury, stasis and the depth of Heat.';
+} else if ($istopicfive) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir Huang Qin, Huang Lian, Huang Bai y Long Dan Cao según órgano, región corporal y patrón de Calor-Humedad.'
+        : 'Learn to distinguish Huang Qin, Huang Lian, Huang Bai and Long Dan Cao by organ, body region and Damp-Heat pattern.';
+} else if ($istopicsix) {
+    $workspaceintro = $ises
+        ? 'Aprende a seleccionar hierbas que resuelven toxicidad según garganta, piel, abscesos, mamas, intestinos y localización de la inflamación.'
+        : 'Learn to select toxicity-resolving herbs by throat, skin, abscess, breast, intestinal and inflammation-location clues.';
+} else if ($istopicseven) {
+    $workspaceintro = $ises
+        ? 'Aprende a reconocer Calor por deficiencia y a diferenciar estas hierbas según lesión de Yin, fiebre nocturna, huesos humeantes y enfriamiento de Sangre.'
+        : 'Learn to recognize deficiency Heat and distinguish these herbs by Yin injury, night fever, steaming bones and Blood-cooling clues.';
+} else if ($istopiceight) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir las hierbas para Calor de Verano según sed, daño de Qi o líquidos, Humedad, orina y síntomas digestivos.'
+        : 'Learn to distinguish Summer-Heat herbs by thirst, Qi or fluid injury, Dampness, urination and digestive clues.';
+} else if ($istopicnine) {
+    $workspaceintro = $ises
+        ? 'Aprende a diferenciar los purgantes descendentes según acumulación de Calor, sequedad, fuerza de purga y participación de Hígado o parásitos.'
+        : 'Learn to distinguish downward-draining purgatives by Heat accumulation, dryness, purging strength and Liver or parasite involvement.';
+} else if ($istopicten) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir Huo Ma Ren y Yu Li Ren según la presencia de sequedad, deficiencia, estancamiento de Qi, edema y dificultad urinaria.'
+        : 'Learn to distinguish Huo Ma Ren and Yu Li Ren by dryness, deficiency, Qi stagnation, edema and difficult urination.';
+} else {
+    $workspaceintro = $ises
+        ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
+        : 'Learn to identify the core herbs in this category through their properties, functions, decisive clinical clues and Board comparisons.';
+}
+
 $topiconeherbs = [
     [
         'name' => 'Ma Huang',
@@ -618,13 +664,7 @@ ob_start();
                 <div>
                     <p class="single-herbs-guide__eyebrow"><?php echo s($focuslabel); ?></p>
                     <h3 id="single-herbs-focus-title"><?php echo s($focustitle); ?></h3>
-                    <p class="single-herbs-guide__workspace-intro"><?php echo s($istopicten
-                        ? ($ises
-                            ? 'Aprende a distinguir Huo Ma Ren y Yu Li Ren según la presencia de sequedad, deficiencia, estancamiento de Qi, edema y dificultad urinaria.'
-                            : 'Learn to distinguish Huo Ma Ren and Yu Li Ren by dryness, deficiency, Qi stagnation, edema and difficult urination.')
-                        : ($ises
-                            ? 'Esta categoría sigue el alcance de la preparación Board Level y organiza el contenido en una secuencia de estudio uniforme.'
-                            : 'This category follows the Board Level preparation scope and organizes the material in one consistent study sequence.')); ?></p>
+                    <p class="single-herbs-guide__workspace-intro"><?php echo s($workspaceintro); ?></p>
                 </div>
             </div>
             <?php if ($selected !== null): ?>
