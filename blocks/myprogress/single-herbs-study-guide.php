@@ -605,7 +605,7 @@ ob_start();
         $focuslabel = $ismixed
             ? 'Mixed Review'
             : ($selectedguidenumber !== null
-                ? ($ises ? 'Guía de estudio ' : 'Study Guide ') . $selectedguidenumber
+                ? ($ises ? 'Categoría ' : 'Category ') . $selectedguidenumber
                 : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']));
         $focustitle = $ismixed
             ? 'Mixed Review'
@@ -622,10 +622,10 @@ ob_start();
                 </div>
             </div>
             <?php if ($selected !== null): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación superior entre notas de estudio' : 'Top Study Note navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Guía anterior · ' : '← Previous Study Guide · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
-                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Guía de estudio ' : 'Study Guide ') . $selectedguidenumber . ' / ' . $laststudyguidenumber); ?></strong>
-                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente guía · ' : 'Next Study Guide · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
+                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
+                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
+                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Categoría ' : 'Category ') . $selectedguidenumber . ' / ' . $laststudyguidenumber); ?></strong>
+                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
                 </nav>
             <?php endif; ?>
             <?php if ($istopicone): ?>
@@ -869,10 +869,10 @@ ob_start();
                 <p class="single-herbs-guide__note"><strong>Content stage:</strong> this category framework is ready. Verified educational content will be developed from the supplied Bensky materia medica without changing the Original Bank.</p>
             <?php endif; ?>
         </section>
-        <nav aria-label="<?php echo s($ises ? 'Navegación entre notas de estudio' : 'Study Note navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
-            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Guía anterior · ' : '← Previous Study Guide · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
+        <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
+            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
             <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
-            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente guía · ' : 'Next Study Guide · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
+            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
         </nav>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
