@@ -43,6 +43,12 @@ if (!$ismixed && $focus !== '' && ctype_digit($focus)) {
     }
 }
 
+$selectedname = $selected !== null ? (string) $selected['name'] : '';
+$istopicone = $selected !== null
+    && stripos($selectedname, 'Ma Huang') !== false
+    && stripos($selectedname, 'Gui Zhi') !== false
+    && stripos($selectedname, 'Xin Yi') !== false;
+
 $topiconeherbs = [
     [
         'name' => 'Ma Huang',
@@ -245,9 +251,9 @@ echo $OUTPUT->header();
                     <h3 id="single-herbs-focus-title"><?php echo s($focustitle); ?></h3>
                     <p class="single-herbs-guide__workspace-intro">This category uses the same scope as Board Level practice. Its source-verified learning material will follow one consistent study sequence.</p>
                 </div>
-                <span class="single-herbs-guide__status"><?php echo !$ismixed && $selected['number'] === 1 ? 'EXAMPLE READY' : 'STRUCTURE READY'; ?></span>
+                <span class="single-herbs-guide__status"><?php echo $istopicone ? 'EXAMPLE READY' : 'STRUCTURE READY'; ?></span>
             </div>
-            <?php if (!$ismixed && $selected['number'] === 1): ?>
+            <?php if ($istopicone): ?>
                 <section aria-labelledby="topic-one-foundations">
                     <h4 id="topic-one-foundations">Category foundations</h4>
                     <p class="single-herbs-guide__section-lead">Warm, acrid Exterior-releasing herbs disperse Wind-Cold, restore the Lung's dispersing function and open the superficial layer. The exam task is to identify each herb's particular emphasis rather than treating the group as interchangeable.</p>
