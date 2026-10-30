@@ -36,8 +36,7 @@ function nav(es) {
   const html = links.map(([file, label]) => `<a href="${file}${suffix}.html">${label}</a>`).join('');
   const after = [
     ['herbal-incompatibilities', es ? 'Incompatibilidades' : 'Herbal Incompatibilities'],
-    ['secondary-actions', es ? 'Acciones Secundarias' : 'Secondary Actions'],
-    ['formula-navigator', 'Herbs Practice Exams']
+    ['secondary-actions', es ? 'Acciones Secundarias' : 'Secondary Actions']
   ].map(([file, label]) => `<a href="${file}${suffix}.html">${label}</a>`).join('');
   return `<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}">${html}<a aria-current="page" href="formula-theory${suffix}.html">${es ? 'Composición de Fórmulas' : 'Formula Composition'}</a>${after}</nav>`;
 }

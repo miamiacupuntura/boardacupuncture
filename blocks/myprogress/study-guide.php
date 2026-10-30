@@ -72,6 +72,13 @@ $areas = [
                 'priority' => true,
             ],
             [
+                'title' => 'Herbs Practice Exams',
+                'description' => 'Find, review and compare 63 formulas through clinical patterns, decisive clues, safety notes and 572 connected practice questions.',
+                'path' => '/study-guide/comparisons/formula-navigator.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 63 FORMULAS',
+            ],
+            [
                 'title' => 'Commonly Used Herbal Combinations',
                 'description' => 'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.',
                 'path' => '/blocks/myprogress/common-herbal-combinations.php',
