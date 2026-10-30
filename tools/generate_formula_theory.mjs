@@ -23,7 +23,6 @@ function nav(es) {
     ['pathologies', es ? 'Patologías' : 'Pathology Comparisons'],
     ['patterns', es ? 'Patrones' : 'Pattern Comparisons'],
     ['families', es ? 'Familias de Fórmulas' : 'Formula Families'],
-    ['dui-yao', es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'],
     ['name-traps', es ? 'Trampas de Nombres' : 'Name Traps'],
     ['herb-families', es ? 'Familias y Partes' : 'Herb Families & Parts'],
     ['safety', es ? 'Biblioteca de Seguridad' : 'Safety Library'],

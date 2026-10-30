@@ -83,7 +83,6 @@ function nav(es) {
   const items = [
     ['herb-comparison-bank', es ? 'Banco comparativo de hierbas' : 'Herbal comparisons question bank'],
     ['families', es ? 'Familias de fórmulas' : 'Formula families'],
-    ['dui-yao', es ? 'Parejas Duì Yào' : 'Duì Yào pairs'],
     ['formula-theory', es ? 'Composición y teoría' : 'Composition and theory'],
     ['most-important-formulas', es ? 'Fórmulas esenciales' : 'Essential formulas'],
     ['safety', es ? 'Biblioteca de seguridad' : 'Safety library'],

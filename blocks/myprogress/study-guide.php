@@ -55,13 +55,21 @@ $areas = [
     ],
     'herbology' => [
         'title' => 'Chinese Herbology',
-        'description' => 'Study Guide chapters for Single Herbs and Formulas.',
+        'description' => 'Study Guide chapters for Single Herbs, Duì Yào and Formulas.',
         'chapters' => [
             [
                 'title' => 'Single Herbs',
                 'description' => 'Study single herbs through the same General, Topics 1–34 and Mixed Review categories used in the Chinese Herbology Board Level workspace.',
                 'path' => '/blocks/myprogress/single-herbs-study-guide.php',
                 'anchor' => '',
+            ],
+            [
+                'title' => 'Duì Yào Pairs',
+                'description' => 'Master 51 official herb pairs through 15 clinical blocks. This Domain I resource emphasizes combined actions, individual roles, decisive clues, formulas and safety.',
+                'path' => '/study-guide/comparisons/dui-yao.html',
+                'anchor' => '',
+                'status' => 'DOMAIN I · HIGH PRIORITY',
+                'priority' => true,
             ],
         ],
     ],
@@ -125,6 +133,7 @@ echo $OUTPUT->header();
 .subject-study-guide__benefit p{margin:0;color:#52677a;font-size:14px;line-height:1.5}
 .subject-study-guide__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
+.subject-study-guide__card--priority{border-top-color:#0b817d;background:linear-gradient(180deg,#f7fffd 0%,#fff 42%)}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
 .subject-study-guide__card h3{margin:0 0 9px;color:#17232a;font-size:21px;line-height:1.25}
 .subject-study-guide__card p{margin:0 0 18px;color:#64748b;line-height:1.55}
@@ -198,8 +207,8 @@ echo $OUTPUT->header();
                 $chapterurl->set_anchor($chapter['anchor']);
             }
             ?>
-            <article class="subject-study-guide__card">
-                <span class="subject-study-guide__status">AVAILABLE</span>
+            <article class="subject-study-guide__card<?php echo !empty($chapter['priority']) ? ' subject-study-guide__card--priority' : ''; ?>">
+                <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
                 <h3><?php echo s($chapter['title']); ?></h3>
                 <p><?php echo s($chapter['description']); ?></p>
                 <?php if (isset($chapter['objectives'])): ?>
