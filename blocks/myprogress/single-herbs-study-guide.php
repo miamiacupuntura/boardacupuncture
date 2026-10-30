@@ -265,6 +265,17 @@ $istopictwentyseven = $selected !== null
         || stripos($selectedname, 'Herbs that Stabilize and Bind') !== false
         || stripos($selectedname, 'Stabilize and Bind') !== false
     );
+$istopictwentyeight = $selected !== null
+    && (
+        (stripos($selectedname, 'Mu Li') !== false
+            && stripos($selectedname, 'Long Gu') !== false
+            && (stripos($selectedname, 'Ci Shi') !== false || stripos($selectedname, 'Ci Zhi') !== false)
+            && stripos($selectedname, 'Zhen Zhu') !== false
+            && stripos($selectedname, 'Zhen Zhu Mu') !== false)
+        || stripos($selectedname, 'Herbs That Anchor, Settle and Calm The Spirit') !== false
+        || stripos($selectedname, 'Herbs that Anchor, Settle and Calm the Spirit') !== false
+        || stripos($selectedname, 'Anchor, Settle and Calm') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -370,6 +381,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a estabilizar y contener distinguiendo pérdidas de Pulmón, sudor, intestino, Vejiga y Esencia sin encerrar patógenos.'
         : 'Learn to stabilize and bind by distinguishing Lung, sweat, intestinal, Bladder and Essence leakage without trapping pathogens.';
+} else if ($istopictwentyeight) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir sedación directa de Shen, anclaje de Yang de Hígado, miedo, mareo, tinnitus, Calor, pérdidas y masas duras.'
+        : 'Learn to distinguish direct Spirit sedation, Liver-Yang anchoring, fear, dizziness, tinnitus, Heat, leakage and hard masses.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1136,6 +1151,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-tonify-yin.php'); ?>
             <?php elseif ($istopictwentyseven): ?>
                 <?php require(__DIR__ . '/single-herbs-category-stabilize-bind.php'); ?>
+            <?php elseif ($istopictwentyeight): ?>
+                <?php require(__DIR__ . '/single-herbs-category-anchor-settle-spirit.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
