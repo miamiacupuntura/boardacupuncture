@@ -73,10 +73,10 @@ $areas = [
             ],
             [
                 'title' => 'Herbs Practice Exams',
-                'description' => 'Find, review and compare 63 formulas through clinical patterns, decisive clues, safety notes and 572 connected practice questions.',
+                'description' => 'Find, practice and compare 63 core formulas in one connected workspace with clinical clues and 572 practice questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
-                'status' => 'AVAILABLE · 63 FORMULAS',
+                'status' => 'AVAILABLE · CONNECTED STUDY',
             ],
             [
                 'title' => 'Commonly Used Herbal Combinations',
