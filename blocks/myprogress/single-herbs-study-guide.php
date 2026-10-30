@@ -286,6 +286,13 @@ $istopictwentynine = $selected !== null
         || stripos($selectedname, 'Herbs That Nourish the Heart and Calm the Spirit') !== false
         || stripos($selectedname, 'Nourish the Heart and Calm') !== false
     );
+$istopicthirty = $selected !== null
+    && (
+        (stripos($selectedname, 'Shi Chang Pu') !== false && stripos($selectedname, 'Niu Huang') !== false)
+        || stripos($selectedname, 'Aromatic Substances that Open the Orifices') !== false
+        || stripos($selectedname, 'Aromatic Substances That Open the Orifices') !== false
+        || stripos($selectedname, 'Open the Orifices') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -399,6 +406,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a nutrir Corazón y calmar Shen distinguiendo Sangre de Hígado, Flema y memoria, colaterales inquietos, depresión y opresión torácica.'
         : 'Learn to nourish the Heart and calm the Spirit by distinguishing Liver Blood, Phlegm and memory, restless collaterals, depression and chest constraint.';
+} else if ($istopicthirty) {
+    $workspaceintro = $ises
+        ? 'Aprende a abrir los orificios distinguiendo cierre por Calor-tóxico de cierre por Flema-Humedad, y nunca confundiendo síndrome cerrado con colapso.'
+        : 'Learn to open the orifices by distinguishing Heat-toxin closure from Phlegm-Damp closure—and never confusing Locked-up syndrome with collapse.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1169,6 +1180,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-anchor-settle-spirit.php'); ?>
             <?php elseif ($istopictwentynine): ?>
                 <?php require(__DIR__ . '/single-herbs-category-nourish-heart-calm-spirit.php'); ?>
+            <?php elseif ($istopicthirty): ?>
+                <?php require(__DIR__ . '/single-herbs-category-open-orifices.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
