@@ -293,6 +293,17 @@ $istopicthirty = $selected !== null
         || stripos($selectedname, 'Aromatic Substances That Open the Orifices') !== false
         || stripos($selectedname, 'Open the Orifices') !== false
     );
+$istopicthirtyone = $selected !== null
+    && (
+        (stripos($selectedname, 'Tian Ma') !== false
+            && stripos($selectedname, 'Gou Teng') !== false
+            && stripos($selectedname, 'Di Long') !== false
+            && stripos($selectedname, 'Shi Jue Ming') !== false
+            && stripos($selectedname, 'Dai Zhe Shi') !== false)
+        || stripos($selectedname, 'Herbs That Extinguish Wind and Stop Tremors') !== false
+        || stripos($selectedname, 'Herbs that Extinguish Wind and Stop Tremors') !== false
+        || stripos($selectedname, 'Extinguish Wind and Stop Tremors') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -410,6 +421,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a abrir los orificios distinguiendo cierre por Calor-tóxico de cierre por Flema-Humedad, y nunca confundiendo síndrome cerrado con colapso.'
         : 'Learn to open the orifices by distinguishing Heat-toxin closure from Phlegm-Damp closure—and never confusing Locked-up syndrome with collapse.';
+} else if ($istopicthirtyone) {
+    $workspaceintro = $ises
+        ? 'Aprende a anclar Yang y extinguir Viento distinguiendo deficiencia, Calor, Flema, ojos, colaterales, temblor, espasmo y urgencias neurológicas.'
+        : 'Learn to anchor Yang and extinguish Wind by distinguishing deficiency, Heat, Phlegm, eyes, collaterals, tremor, spasm and neurologic emergencies.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1182,6 +1197,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-nourish-heart-calm-spirit.php'); ?>
             <?php elseif ($istopicthirty): ?>
                 <?php require(__DIR__ . '/single-herbs-category-open-orifices.php'); ?>
+            <?php elseif ($istopicthirtyone): ?>
+                <?php require(__DIR__ . '/single-herbs-category-extinguish-wind.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
