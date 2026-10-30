@@ -253,6 +253,18 @@ $istopictwentysix = $selected !== null
         || stripos($selectedname, 'Herbs that Tonify Yin') !== false
         || stripos($selectedname, 'Tonify Yin') !== false
     );
+$istopictwentyseven = $selected !== null
+    && (
+        (stripos($selectedname, 'Wu Mei') !== false
+            && stripos($selectedname, 'Wu Wei Zi') !== false
+            && stripos($selectedname, 'Shan Zhu Yu') !== false
+            && stripos($selectedname, 'Rou Dou Kou') !== false
+            && stripos($selectedname, 'Lian Zi') !== false
+            && stripos($selectedname, 'He Zi') !== false)
+        || stripos($selectedname, 'Herbs That Stabilize and Bind') !== false
+        || stripos($selectedname, 'Herbs that Stabilize and Bind') !== false
+        || stripos($selectedname, 'Stabilize and Bind') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -354,6 +366,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a tonificar Yin distinguiendo Pulmón, Corazón, Estómago, Hígado, Riñón, líquidos, Esencia, visión y humectación intestinal.'
         : 'Learn to tonify Yin by distinguishing Lung, Heart, Stomach, Liver, Kidney, fluids, Essence, vision and intestinal moisture.';
+} else if ($istopictwentyseven) {
+    $workspaceintro = $ises
+        ? 'Aprende a estabilizar y contener distinguiendo pérdidas de Pulmón, sudor, intestino, Vejiga y Esencia sin encerrar patógenos.'
+        : 'Learn to stabilize and bind by distinguishing Lung, sweat, intestinal, Bladder and Essence leakage without trapping pathogens.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1118,6 +1134,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-tonify-yang.php'); ?>
             <?php elseif ($istopictwentysix): ?>
                 <?php require(__DIR__ . '/single-herbs-category-tonify-yin.php'); ?>
+            <?php elseif ($istopictwentyseven): ?>
+                <?php require(__DIR__ . '/single-herbs-category-stabilize-bind.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
