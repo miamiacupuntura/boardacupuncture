@@ -305,7 +305,11 @@ $istopicthirtyone = $selected !== null
         || stripos($selectedname, 'Extinguish Wind and Stop Tremors') !== false
     );
 
-if ($istopicone) {
+if ($ismixed) {
+    $workspaceintro = $ises
+        ? 'Integra todas las categorías con casos mezclados: identifica primero el patrón, luego el mecanismo y por último la pista decisiva que separa hierbas parecidas.'
+        : 'Integrate every category with mixed cases: identify the pattern first, then the mechanism, and finally the decisive clue that separates similar herbs.';
+} else if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a distinguir las hierbas tibias y acres que liberan el Exterior según sudoración, respiración, dolor, náusea y localización de los síntomas.'
         : 'Learn to distinguish warm, acrid Exterior-releasing herbs by sweating, breathing, pain, nausea and symptom location.';
@@ -779,10 +783,17 @@ if ($ises) {
 $pageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $pageparams);
 $categoryindexparams = $ises ? ['lang' => 'es'] : [];
 $categoryindexurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryindexparams);
+$mixedreviewparams = ['focus' => 'mixed'];
+if ($ises) {
+    $mixedreviewparams['lang'] = 'es';
+}
+$mixedreviewurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $mixedreviewparams);
 $previouscategoryurl = null;
 $nextcategoryurl = null;
 $previouscategory = null;
 $nextcategory = null;
+$mixedpreviouscategory = null;
+$mixedpreviouscategoryurl = null;
 $laststudyguidenumber = $studyguidecategories
     ? max(array_column($studyguidecategories, 'guide_number'))
     : 0;
@@ -805,6 +816,15 @@ if ($selected !== null && $selectedguidenumber !== null) {
         $nextcategory = $studyguidecategories[$categorynumbers[$currentcategoryindex + 1]];
         $nextcategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $nextparams);
     }
+}
+if ($ismixed && $studyguidecategories) {
+    $mixedprevioussection = array_key_last($studyguidecategories);
+    $mixedpreviouscategory = $studyguidecategories[$mixedprevioussection];
+    $mixedpreviousparams = ['focus' => (string) $mixedprevioussection];
+    if ($ises) {
+        $mixedpreviousparams['lang'] = 'es';
+    }
+    $mixedpreviouscategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $mixedpreviousparams);
 }
 $languageparams = [];
 if ($focus !== '') {
@@ -905,12 +925,12 @@ ob_start();
     <?php if ($selected !== null || $ismixed): ?>
         <?php
         $focuslabel = $ismixed
-            ? 'Mixed Review'
+            ? ($ises ? 'Repaso mixto' : 'Mixed Review')
             : ($selectedguidenumber !== null
                 ? ($ises ? 'Categoría ' : 'Category ') . $selectedguidenumber
                 : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']));
         $focustitle = $ismixed
-            ? 'Mixed Review'
+            ? ($ises ? 'Repaso mixto' : 'Mixed Review')
             : ($selectedguidenumber !== null
                 ? $stripstudyguidenumber((string) $selected['name'])
                 : $selected['name']);
@@ -927,10 +947,18 @@ ob_start();
                 <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
                     <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
                     <strong style="color:#0d665e"><?php echo s(($ises ? 'Categoría ' : 'Category ') . $selectedguidenumber . ' / ' . $laststudyguidenumber); ?></strong>
-                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
+                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso mixto →' : 'Next · Mixed Review →'); ?></a><?php endif; ?></span>
+                </nav>
+            <?php elseif ($ismixed): ?>
+                <nav aria-label="<?php echo s($ises ? 'Navegación del repaso mixto' : 'Mixed Review navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
+                    <span><?php if ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviouscategory['guide_number']); ?></a><?php endif; ?></span>
+                    <strong style="color:#0d665e"><?php echo s($ises ? 'Repaso mixto' : 'Mixed Review'); ?></strong>
+                    <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
                 </nav>
             <?php endif; ?>
-            <?php if ($istopicone): ?>
+            <?php if ($ismixed): ?>
+                <?php require(__DIR__ . '/single-herbs-mixed-review.php'); ?>
+            <?php elseif ($istopicone): ?>
                 <section aria-labelledby="topic-one-foundations">
                     <h4 id="topic-one-foundations">Wind-Cold Exterior-releasing herbs: general introduction</h4>
                     <p class="single-herbs-guide__section-lead">Many herbs in this group are acrid and warm. They disperse Wind-Cold, restore the Lung's dispersing function and open the superficial layer.</p>
@@ -1212,9 +1240,9 @@ ob_start();
             <?php endif; ?>
         </section>
         <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
-            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
+            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php elseif ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviouscategory['guide_number']); ?></a><?php endif; ?></span>
             <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
-            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php endif; ?></span>
+            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso mixto →' : 'Next · Mixed Review →'); ?></a><?php endif; ?></span>
         </nav>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
