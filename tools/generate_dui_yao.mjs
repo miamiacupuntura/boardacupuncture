@@ -1411,29 +1411,9 @@ function detailPage(pair, language) {
 function indexPage(language) {
   const es = language === 'es';
   const suffix = es ? '-es' : '';
-  const categoryOptions = categoryBlocks.map((block, index) =>
-    `<option value="${block.id}">${index + 1}. ${esc(block.title[language])}</option>`
+  const categoryLinks = categoryBlocks.map((block, index) =>
+    `<a href="#${block.id}">${index + 1}. ${esc(block.title[language])}</a>`
   ).join('');
-  const libraryOptions = [
-    ['index', 'Single Herbs Comparisons', 'Comparaciones de Hierbas'],
-    ['formulas', 'Formula Comparisons', 'Comparaciones de Fórmulas'],
-    ['pathologies', 'Pathology Comparisons', 'Patologías'],
-    ['patterns', 'Pattern Comparisons', 'Patrones'],
-    ['families', 'Formula Families', 'Familias de Fórmulas'],
-    ['name-traps', 'Name Traps', 'Trampas de Nombres'],
-    ['herb-families', 'Herb Families & Parts', 'Familias y Partes'],
-    ['safety', 'Safety Library', 'Biblioteca de Seguridad'],
-    ['formula-name-traps', 'Formula Name Traps', 'Trampas de Fórmulas'],
-    ['misleading-formula-names', 'Misleading Formula Names', 'Nombres Engañosos'],
-    ['advanced-name-traps', 'Advanced Name Traps', 'Trampas Avanzadas'],
-    ['supplemental-herb-families', 'Supplemental Herb Families', 'Familias Adicionales'],
-    ['patterns-tips-maciocia', 'Patterns Tips Maciocia', 'Patterns Tips Maciocia'],
-    ['most-important-formulas', 'Most Important Formulas', 'Fórmulas Esenciales'],
-    ['formula-theory', 'Formula Composition', 'Composición de Fórmulas'],
-    ['herbal-incompatibilities', 'Herbal Incompatibilities', 'Incompatibilidades'],
-    ['secondary-actions', 'Secondary Actions', 'Acciones Secundarias'],
-    ['formula-navigator', 'Herbs Practice Exams', 'Exámenes de Práctica de Hierbas']
-  ].map(item => `<option value="${item[0]}${suffix}.html">${esc(es ? item[2] : item[1])}</option>`).join('');
 
   const sections = categoryBlocks.map((block, blockIndex) => {
     const blockPairs = block.pairs.map(number => pairs.find(pair => pair.number === number)).filter(Boolean);
@@ -1448,8 +1428,6 @@ function indexPage(language) {
 (function () {
   const input = document.querySelector('[data-comparison-search]');
   const historyBack = document.querySelector('[data-history-back]');
-  const libraryJump = document.querySelector('[data-library-jump]');
-  const categoryJump = document.querySelector('[data-category-jump]');
   const cards = Array.from(document.querySelectorAll('.comparison-card'));
   const categories = Array.from(document.querySelectorAll('[data-dui-category]'));
   const total = document.querySelector('[data-visible-count]');
@@ -1475,17 +1453,6 @@ function indexPage(language) {
     if (empty) empty.hidden = visible !== 0;
   }
   if (input) input.addEventListener('input', refresh);
-  if (libraryJump) {
-    libraryJump.addEventListener('change', function () {
-      if (libraryJump.value) window.location.href = libraryJump.value;
-    });
-  }
-  if (categoryJump) {
-    categoryJump.addEventListener('change', function () {
-      const target = document.getElementById(categoryJump.value);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
   if (historyBack) {
     historyBack.addEventListener('click', function (event) {
       let sameSiteReferrer = false;
@@ -1507,8 +1474,9 @@ function indexPage(language) {
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Las 51 parejas Duì Yào oficiales organizadas en 15 bloques clínicos.' : 'The 51 official Duì Yào pairs organized into 15 clinical blocks.'}"><title>${es ? 'Parejas Duì Yào por categorías' : 'Duì Yào Pairs by Category'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" data-history-back href="../guidelines/chinese-herbal-medicine${suffix}.html">${es ? '← Regresar' : '← Go back'}</a><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Paso 2 · Parejas de hierbas' : 'Step 2 · Herb pairs'}</p><h1>${es ? 'Duì Yào por bloques clínicos' : 'Duì Yào by Clinical Block'}</h1><p>${es ? 'Estudia las 51 parejas oficiales dentro de 15 categorías. Cada bloque reinicia su numeración para que puedas terminar un tema sin perder tu posición.' : 'Study all 51 official pairs within 15 categories. Numbering restarts in each block so you can finish one subject without losing your place.'}</p></section>
-<section class="comparison-tools"><label><span style="display:block;font-weight:700;margin-bottom:6px">${es ? 'Otros recursos de estudio' : 'Other study resources'}</span><select class="comparison-search" data-library-jump><option value="">${es ? 'Seleccionar un recurso…' : 'Choose a resource…'}</option>${libraryOptions}</select></label><label><span style="display:block;font-weight:700;margin-bottom:6px">${es ? 'Buscar dentro de Dui Yao' : 'Search within Dui Yao'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Pareja, categoría, función o fórmula' : 'Pair, category, job or formula'}" data-comparison-search></label></section>
-<section class="study-note__block"><p class="comparison-eyebrow">${es ? 'Navegación dentro de esta página' : 'Navigation within this page'}</p><h2>${es ? 'Duì Yào · 15 bloques de categorías' : 'Duì Yào · 15 category blocks'}</h2><p>${es ? 'Elige un bloque o continúa hacia abajo para mantener la secuencia completa.' : 'Choose a block or continue downward to preserve the full sequence.'}</p><label><span class="sr-only">${es ? 'Elegir bloque Dui Yao' : 'Choose a Dui Yao block'}</span><select class="comparison-search" data-category-jump><option value="">${es ? 'Ir a un bloque…' : 'Jump to a block…'}</option>${categoryOptions}</select></label></section>
+<nav class="comparison-collection-links" aria-label="${es ? 'Grupos de estudio' : 'Study groups'}"><a href="index${suffix}.html">${es ? 'Comparaciones de Hierbas' : 'Single Herbs Comparisons'}</a><a href="formulas${suffix}.html">${es ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</a><a href="pathologies${suffix}.html">${es ? 'Patologías' : 'Pathology Comparisons'}</a><a href="patterns${suffix}.html">${es ? 'Patrones' : 'Pattern Comparisons'}</a><a href="families${suffix}.html">${es ? 'Familias de Fórmulas' : 'Formula Families'}</a><a aria-current="page" href="dui-yao${suffix}.html">${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</a><a href="name-traps${suffix}.html">${es ? 'Trampas de Nombres' : 'Name Traps'}</a><a href="herb-families${suffix}.html">${es ? 'Familias y Partes' : 'Herb Families &amp; Parts'}</a><a href="safety${suffix}.html">${es ? 'Biblioteca de Seguridad' : 'Safety Library'}</a><a href="formula-name-traps${suffix}.html">${es ? 'Trampas de Fórmulas' : 'Formula Name Traps'}</a><a href="misleading-formula-names${suffix}.html">${es ? 'Nombres Engañosos' : 'Misleading Formula Names'}</a><a href="advanced-name-traps${suffix}.html">${es ? 'Trampas Avanzadas' : 'Advanced Name Traps'}</a><a href="supplemental-herb-families${suffix}.html">${es ? 'Familias Adicionales' : 'Supplemental Herb Families'}</a><a href="patterns-tips-maciocia${suffix}.html">Patterns Tips Maciocia</a><a href="most-important-formulas${suffix}.html">${es ? 'Fórmulas Esenciales' : 'Most Important Formulas'}</a><a href="formula-theory${suffix}.html">${es ? 'Composición de Fórmulas' : 'Formula Composition'}</a><a href="herbal-incompatibilities${suffix}.html">${es ? 'Incompatibilidades' : 'Herbal Incompatibilities'}</a><a href="secondary-actions${suffix}.html">${es ? 'Acciones Secundarias' : 'Secondary Actions'}</a></nav>
+<section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, categoría, trabajo o fórmula' : 'Search pair, category, job or formula'}" data-comparison-search></label></section>
+<section class="study-note__block"><p class="comparison-eyebrow">${es ? 'Navegación dentro de esta página' : 'Navigation within this page'}</p><h2>${es ? 'Duì Yào · 15 bloques de categorías' : 'Duì Yào · 15 category blocks'}</h2><p>${es ? 'Elige un bloque o continúa hacia abajo para mantener la secuencia completa.' : 'Choose a block or continue downward to preserve the full sequence.'}</p><nav class="comparison-collection-links" aria-label="${es ? 'Categorías Duì Yào' : 'Duì Yào categories'}">${categoryLinks}</nav></section>
 <header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div>${sections}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · 51 parejas · 15 bloques clínicos' : 'Appendix B · 51 pairs · 15 clinical blocks'}</div></footer>${searchScript}</body></html>`;
 }
 
