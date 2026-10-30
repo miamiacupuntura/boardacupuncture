@@ -121,8 +121,6 @@ echo $OUTPUT->header();
 .subject-study-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 15px;border:1px solid #ccd4da;border-radius:8px;background:#fff;color:#334155;font-weight:700;text-decoration:none;white-space:nowrap}
 .subject-study-guide__back:hover{background:#f1f5f9;text-decoration:none}
 .subject-study-guide__top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-.subject-study-guide__catalog{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 15px;border-radius:8px;background:#13705c;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}
-.subject-study-guide__catalog--ce{background:#7652a5}.subject-study-guide__catalog:hover{background:#0d5a4a;color:#fff;text-decoration:none}.subject-study-guide__catalog--ce:hover{background:#654391}
 .subject-study-guide__board-overview{margin:0 0 18px;padding:34px 40px;border-top:5px solid #0b817d;border-radius:13px;background:linear-gradient(135deg,#f8fcfb 0%,#fbf8fd 100%);box-shadow:0 3px 12px rgba(15,23,42,.05)}
 .subject-study-guide__board-overview .subject-study-guide__eyebrow{margin-bottom:8px;color:#08746f}
 .subject-study-guide__board-overview h3{margin:0 0 10px;color:#123246;font-size:clamp(28px,4vw,42px);line-height:1.12}
@@ -172,7 +170,6 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__back" href="<?php echo $currentguidelineurl->out(false); ?>">2026 Board Guideline ↔</a>
             <?php endif; ?>
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>">← Back to Dashboard</a>
-            <a class="subject-study-guide__catalog subject-study-guide__catalog--ce" href="<?php echo (new moodle_url('/study-guide/continuing-education.html'))->out(false); ?>">Continuing Education</a>
         </nav>
     </header>
 
