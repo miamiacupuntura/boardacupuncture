@@ -71,6 +71,14 @@ $areas = [
                 'status' => 'DOMAIN I · HIGH PRIORITY',
                 'priority' => true,
             ],
+            [
+                'title' => 'Commonly Used Herbal Combinations',
+                'description' => 'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.',
+                'path' => '/blocks/myprogress/common-herbal-combinations.php',
+                'anchor' => '',
+                'status' => 'AVAILABLE · APPENDIX 2',
+                'secondary' => true,
+            ],
         ],
     ],
     'biomedicine' => [
@@ -90,6 +98,12 @@ if (!array_key_exists($areaid, $areas)) {
     $areaid = 'pointlocation';
 }
 $area = $areas[$areaid];
+$primarychapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
+    return empty($chapter['secondary']);
+}));
+$otherchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
+    return !empty($chapter['secondary']);
+}));
 $showconstruction = optional_param('view', '', PARAM_ALPHA) === 'construction';
 
 $pageurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid]);
@@ -142,6 +156,13 @@ echo $OUTPUT->header();
 .subject-study-guide__open:hover{background:#1d4ed8;color:#fff;text-decoration:none}
 .subject-study-guide__future{grid-column:1/-1;min-height:180px;border-top-color:#94a3b8;border-style:dashed;text-align:center}
 .subject-study-guide__future .subject-study-guide__status,.subject-study-guide__future .subject-study-guide__open{align-self:center}
+.subject-study-guide__other{grid-column:1/-1;padding:22px;border:1px solid #d8e1e7;border-top:4px solid #94a3b8;border-radius:12px;background:#f8fafc}
+.subject-study-guide__other-header{margin-bottom:18px;text-align:center}
+.subject-study-guide__other-header .subject-study-guide__status{display:inline-block;margin-bottom:9px}
+.subject-study-guide__other-header h3{margin:0 0 7px;color:#17232a;font-size:23px}
+.subject-study-guide__other-header p{margin:0;color:#64748b;line-height:1.5}
+.subject-study-guide__other-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.subject-study-guide__other .subject-study-guide__card{min-height:200px;text-align:left}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
 .subject-study-guide__construction-mark{margin-bottom:15px;font-size:48px}
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
@@ -197,7 +218,7 @@ echo $OUTPUT->header();
     <?php endif; ?>
 
     <section id="study-guide-chapters" class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
-        <?php foreach ($area['chapters'] as $chapter): ?>
+        <?php foreach ($primarychapters as $chapter): ?>
             <?php
             $chapterurl = new moodle_url($chapter['path']);
             if ($chapter['anchor'] !== '') {
@@ -222,12 +243,38 @@ echo $OUTPUT->header();
             </article>
         <?php endforeach; ?>
 
-        <article class="subject-study-guide__card subject-study-guide__future">
-            <span class="subject-study-guide__status">COMING SOON</span>
-            <h3><?php echo empty($area['chapters']) ? 'Study Guide chapters' : 'More chapters'; ?></h3>
-            <p>New chapters will be added here as their Study Guides are completed.</p>
-            <a class="subject-study-guide__open" href="<?php echo (new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid, 'view' => 'construction']))->out(false); ?>">View status</a>
-        </article>
+        <?php if (!empty($otherchapters)): ?>
+            <section class="subject-study-guide__other" aria-labelledby="other-chapters-title">
+                <header class="subject-study-guide__other-header">
+                    <span class="subject-study-guide__status">ADDITIONAL STUDY</span>
+                    <h3 id="other-chapters-title">Other chapters</h3>
+                    <p>Additional source-based chapters that complement the principal study guides.</p>
+                </header>
+                <div class="subject-study-guide__other-grid">
+                    <?php foreach ($otherchapters as $chapter): ?>
+                        <?php
+                        $chapterurl = new moodle_url($chapter['path']);
+                        if ($chapter['anchor'] !== '') {
+                            $chapterurl->set_anchor($chapter['anchor']);
+                        }
+                        ?>
+                        <article class="subject-study-guide__card">
+                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
+                            <h3><?php echo s($chapter['title']); ?></h3>
+                            <p><?php echo s($chapter['description']); ?></p>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php else: ?>
+            <article class="subject-study-guide__card subject-study-guide__future">
+                <span class="subject-study-guide__status">COMING SOON</span>
+                <h3><?php echo empty($primarychapters) ? 'Study Guide chapters' : 'More chapters'; ?></h3>
+                <p>New chapters will be added here as their Study Guides are completed.</p>
+                <a class="subject-study-guide__open" href="<?php echo (new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid, 'view' => 'construction']))->out(false); ?>">View status</a>
+            </article>
+        <?php endif; ?>
     </section>
 <?php endif; ?>
 </main>
