@@ -231,6 +231,17 @@ $istopictwentyfour = $selected !== null
         || stripos($selectedname, 'Herbs that Tonify Blood') !== false
         || stripos($selectedname, 'Tonify Blood') !== false
     );
+$istopictwentyfive = $selected !== null
+    && (
+        (stripos($selectedname, 'Rou Cong Rong') !== false
+            && stripos($selectedname, 'Lu Rong') !== false
+            && stripos($selectedname, 'Du Zhong') !== false
+            && stripos($selectedname, 'Tu Si Zi') !== false
+            && stripos($selectedname, 'Yin Yang Huo') !== false)
+        || stripos($selectedname, 'Herbs That Tonify Yang') !== false
+        || stripos($selectedname, 'Herbs that Tonify Yang') !== false
+        || stripos($selectedname, 'Tonify Yang') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -324,6 +335,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a tonificar Sangre distinguiendo fuerza, temperatura, movimiento, Yin, Esencia, sangrado y suavización de Hígado.'
         : 'Learn to tonify Blood by distinguishing strength, temperature, movement, Yin, Essence, bleeding and Liver softening.';
+} else if ($istopictwentyfive) {
+    $workspaceintro = $ises
+        ? 'Aprende a tonificar Yang distinguiendo Esencia, huesos, sexualidad, Vejiga, diarrea, Pulmón, intestino y toxicidad.'
+        : 'Learn to tonify Yang by distinguishing Essence, bones, sexuality, Bladder, diarrhea, Lung, bowel and toxicity.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1084,6 +1099,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-tonify-qi.php'); ?>
             <?php elseif ($istopictwentyfour): ?>
                 <?php require(__DIR__ . '/single-herbs-category-tonify-blood.php'); ?>
+            <?php elseif ($istopictwentyfive): ?>
+                <?php require(__DIR__ . '/single-herbs-category-tonify-yang.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
