@@ -73,10 +73,18 @@ $areas = [
             ],
             [
                 'title' => 'Herbs Practice Exams',
-                'description' => 'Find, practice and compare 63 core formulas in one connected workspace with clinical clues and 572 practice questions.',
+                'description' => 'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · CONNECTED STUDY',
+            ],
+            [
+                'title' => 'Formula Comparisons',
+                'description' => 'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.',
+                'path' => '/study-guide/comparisons/formulas.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 110 COMPARISONS',
+                'secondary' => true,
             ],
             [
                 'title' => 'Commonly Used Herbal Combinations',

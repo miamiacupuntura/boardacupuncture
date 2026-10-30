@@ -3100,11 +3100,6 @@ function cardHtml(card, language) {
 `;
 }
 
-function modeNav(spanish) {
-  const suffix = spanish ? '-es' : '';
-  return `<nav class="comparison-collection-links" aria-label="${spanish ? 'Modos de Herbs Practice Exams' : 'Herbs Practice Exams modes'}"><a href="formula-navigator${suffix}.html">${spanish ? 'Buscar una fórmula' : 'Find a formula'}</a><a href="formula-practice${suffix}.html">${spanish ? 'Practicar preguntas' : 'Practice questions'}</a><a aria-current="page" href="formulas${suffix}.html">${spanish ? 'Comparar fórmulas' : 'Compare formulas'}</a></nav>`;
-}
-
 function indexHtml(language) {
   const spanish = language === 'es';
   const cardsHtml = cards.map(card => `<article class="comparison-card" data-type="formulas" data-search="${esc(card.search)}">
@@ -3112,9 +3107,8 @@ function indexHtml(language) {
         </article>`).join('\n\n        ');
   return `<!doctype html>
 <html lang="${spanish ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${spanish ? 'Comparaciones fundamentales de fórmulas de medicina china.' : 'Fundamental Chinese medicine formula comparisons.'}"><title>${spanish ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'} | AcupunctureTests</title><link rel="alternate" hreflang="${spanish ? 'en' : 'es'}" href="formulas${spanish ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"><script defer src="comparisons.js?v=20261025-1"></script></head>
-<body><header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="formula-navigator${spanish ? '-es' : ''}.html"><span class="comparison-brand__mark" aria-hidden="true">☿</span><span>Herbs Practice Exams</span></a><span style="display:flex;flex-wrap:wrap;gap:8px"><a class="comparison-back" href="formulas${spanish ? '' : '-es'}.html">${spanish ? 'English' : 'Español'}</a><a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology">${spanish ? '← Herbolaria China' : '← Chinese Herbology'}</a></span></div></header>
+<body><header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="formulas${spanish ? '-es' : ''}.html"><span class="comparison-brand__mark" aria-hidden="true">☿</span><span>${spanish ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</span></a><span style="display:flex;flex-wrap:wrap;gap:8px"><a class="comparison-back" href="formulas${spanish ? '' : '-es'}.html">${spanish ? 'English' : 'Español'}</a><a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology">${spanish ? '← Herbolaria China' : '← Chinese Herbology'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${spanish ? 'Grupo 2 · Fórmulas' : 'Group 2 · Formulas'}</p><h1>${spanish ? 'Comparaciones de Fórmulas' : 'Formula Comparisons'}</h1><p>${spanish ? 'Compara fórmulas de medicina china por estrategia terapéutica, patrón, acciones, ingredientes y las pistas decisivas que las distinguen en el examen.' : 'Compare Chinese medicine formulas by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish them on exams.'}</p></section>
-${modeNav(spanish)}
 <section class="comparison-tools" aria-label="${spanish ? 'Buscar comparaciones de fórmulas' : 'Search Formula Comparisons'}"><label><span class="sr-only">${spanish ? 'Buscar' : 'Search'}</span><input class="comparison-search" type="search" placeholder="${spanish ? 'Buscar fórmulas o categorías' : 'Search formulas or categories'}" data-comparison-search></label></section>
 <section><header class="comparison-summary"><h2>${spanish ? 'Notas disponibles' : 'Available notes'}</h2><p><span data-visible-count>${cards.length}</span> ${spanish ? 'comparaciones de fórmulas' : 'formula comparisons'}</p></header><div class="comparison-grid" data-comparison-grid>
         ${cardsHtml}
