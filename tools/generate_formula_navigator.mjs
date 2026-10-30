@@ -20,7 +20,7 @@ import {
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261028-4';
-const practiceCssVersion = '20261028-3';
+const practiceCssVersion = '20261030-1';
 const practiceData = JSON.parse(readFileSync(resolve(root, 'formula-practice-data.json'), 'utf8'));
 if (practiceData.totals?.questions !== 572 || practiceData.formulas?.length !== 63) {
   throw new Error('Formula practice data is missing or has unexpected totals');
