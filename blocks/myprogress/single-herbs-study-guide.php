@@ -210,6 +210,17 @@ $istopictwentyone = $selected !== null
         || stripos($selectedname, 'Warm the Interior and Expel Cold') !== false
         || stripos($selectedname, 'Warm Interior') !== false
     );
+$istopictwentythree = $selected !== null
+    && (
+        (stripos($selectedname, 'Ren Shen') !== false
+            && stripos($selectedname, 'Dang Shen') !== false
+            && stripos($selectedname, 'Huang Qi') !== false
+            && stripos($selectedname, 'Shan Yao') !== false
+            && (stripos($selectedname, 'Yi Tang') !== false || stripos($selectedname, 'Yi tang') !== false))
+        || stripos($selectedname, 'Herbs That Tonify Qi') !== false
+        || stripos($selectedname, 'Herbs that Tonify Qi') !== false
+        || stripos($selectedname, 'Tonify Qi') !== false
+    );
 
 if ($istopicone) {
     $workspaceintro = $ises
@@ -295,6 +306,10 @@ if ($istopicone) {
     $workspaceintro = $ises
         ? 'Aprende a calentar el Interior y expulsar Frío según urgencia, órgano, localización del dolor, colapso de Yang, Qi rebelde y toxicidad.'
         : 'Learn to warm the Interior and expel Cold by urgency, organ, pain location, Yang collapse, rebellious Qi and toxicity.';
+} else if ($istopictwentythree) {
+    $workspaceintro = $ises
+        ? 'Aprende a tonificar Qi distinguiendo fuerza, órgano, dirección, Humedad, líquidos, Exterior, sangrado, dolor y seguridad.'
+        : 'Learn to tonify Qi by distinguishing strength, organ, direction, Dampness, fluids, Exterior, bleeding, pain and safety.';
 } else {
     $workspaceintro = $ises
         ? 'Aprende a identificar las hierbas centrales de esta categoría mediante sus propiedades, funciones, pistas clínicas decisivas y comparaciones del Board.'
@@ -1051,6 +1066,8 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-category-stop-bleeding.php'); ?>
             <?php elseif ($istopictwentyone): ?>
                 <?php require(__DIR__ . '/single-herbs-category-warm-interior.php'); ?>
+            <?php elseif ($istopictwentythree): ?>
+                <?php require(__DIR__ . '/single-herbs-category-tonify-qi.php'); ?>
             <?php else: ?>
                 <ol class="single-herbs-guide__plan">
                     <li><strong>Category foundations</strong><span>Definition, therapeutic strategy and the distinctions that define this group.</span></li>
