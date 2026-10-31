@@ -1,9 +1,10 @@
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261026-2';
+const coreFormulaNames = new Set(JSON.parse(readFileSync(resolve(root, 'formula-practice-data.json'), 'utf8')).formulas.map(formula => formula.name));
 
 const families = [
   {
@@ -715,8 +716,17 @@ function page(family, language) {
   const data = family[language];
   const index = es ? 'families-es.html' : 'families.html';
   const alternate = `${family.slug}${es ? '' : '-es'}.html`;
-  const rows = data.members.map(member => `<tr><th scope="row">${esc(member[0])}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`).join('\n');
-  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(family.title)}"><title>${esc(family.title)} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
+  const hasCoreVariation = data.members.some((member, index) => index > 0 && coreFormulaNames.has(member[0]));
+  const coreBadgeStyles = hasCoreVariation
+    ? '<style>.formula-family__core-badge{display:inline-block;margin:3px 0 0 6px;padding:3px 7px;border-radius:999px;background:#dff4ee;color:#0b675b;font-size:10px;font-weight:900;line-height:1.2;text-transform:uppercase;white-space:nowrap;vertical-align:middle}</style>'
+    : '';
+  const rows = data.members.map((member, index) => {
+    const coreBadge = index > 0 && coreFormulaNames.has(member[0])
+      ? ` <span class="formula-family__core-badge">${es ? 'Principal 63' : 'Core 63'}</span>`
+      : '';
+    return `<tr><th scope="row">${esc(member[0])}${coreBadge}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`;
+  }).join('\n');
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(family.title)}"><title>${esc(family.title)} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}">${coreBadgeStyles}</head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="${index}"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>${es ? 'Familias de Fórmulas' : 'Formula Families'}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="${index}">${es ? '← Volver a Familias' : '← Back to Families'}</a></span></div></header>
 <main class="comparison-shell"><article class="study-note"><p class="comparison-eyebrow">${es ? 'Familia de fórmulas' : 'Formula family'}</p><h1 class="study-note__title">${esc(family.title)}</h1>
 <section class="study-note__block"><h2 class="study-note__heading">${es ? 'Fórmula raíz y arquitectura' : 'Root formula and architecture'}</h2><table class="study-note__focus"><tbody><tr><th scope="row">${es ? 'Raíz' : 'Root'}</th><td>${data.root}</td></tr><tr><th scope="row">${es ? 'Arquitectura' : 'Architecture'}</th><td>${data.architecture}</td></tr></tbody></table></section>

@@ -86,13 +86,12 @@ $areas = [
                 'status' => 'AVAILABLE · CONNECTED STUDY',
             ],
             [
-                'title' => 'Formula Variations',
-                'description' => 'Study 22 formula families as named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing the variation.',
+                'title' => 'Formula Families / Variations',
+                'description' => 'Study 22 formula families and their named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing each branch.',
                 'path' => '/study-guide/comparisons/families.html',
                 'anchor' => '',
-                'status' => 'AVAILABLE · 22 VARIATION FAMILIES',
+                'status' => 'AVAILABLE · 22 FAMILIES',
                 'secondary' => true,
-                'featured' => true,
             ],
             [
                 'title' => 'Formula Comparisons',
@@ -198,8 +197,6 @@ echo $OUTPUT->header();
 .subject-study-guide__grid--herbology{grid-template-columns:repeat(auto-fit,minmax(235px,1fr))}
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .subject-study-guide__card--priority{border-top-color:#0b817d;background:linear-gradient(180deg,#f7fffd 0%,#fff 42%)}
-.subject-study-guide__card--featured{position:relative;grid-column:1/-1;min-height:190px;border:2px solid #0b817d;border-top-width:7px;background:linear-gradient(135deg,#eefaf7 0%,#fffaf4 100%);box-shadow:0 10px 25px rgba(11,129,125,.16)}
-.subject-study-guide__card.subject-study-guide__card--featured h3{color:#075f59;font-size:25px}.subject-study-guide__card--featured p{max-width:760px}.subject-study-guide__card--featured .subject-study-guide__open{background:#0b817d}.subject-study-guide__card--featured .subject-study-guide__open:hover{background:#07645f}.subject-study-guide__featured-label{align-self:flex-start;margin:0 0 10px;padding:6px 10px;border-radius:999px;background:#0b817d;color:#fff;font-size:11px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
 .subject-study-guide__card h3{margin:0 0 9px;color:#17232a;font-size:21px;line-height:1.25}
 .subject-study-guide__card p{margin:0 0 18px;color:#64748b;line-height:1.55}
@@ -312,8 +309,7 @@ echo $OUTPUT->header();
                             $chapterurl->set_anchor($chapter['anchor']);
                         }
                         ?>
-                        <article class="subject-study-guide__card<?php echo !empty($chapter['featured']) ? ' subject-study-guide__card--featured' : ''; ?>">
-                            <?php if (!empty($chapter['featured'])): ?><span class="subject-study-guide__featured-label">★ Featured study</span><?php endif; ?>
+                        <article class="subject-study-guide__card">
                             <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
                             <h3><?php echo s($chapter['title']); ?></h3>
                             <p><?php echo s($chapter['description']); ?></p>
