@@ -10,7 +10,11 @@ $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
 $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafile), true) : null;
-if (!is_array($data) || count($data['categories'] ?? []) !== 14 || count($data['formulas'] ?? []) !== 63) {
+if (!is_array($data)
+        || count($data['categories'] ?? []) !== 14
+        || count($data['formulas'] ?? []) !== 63
+        || count($data['supplementalCategories'] ?? []) !== 1
+        || count($data['supplementalFormulas'] ?? []) !== 7) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -71,6 +75,10 @@ $categorycopy = [
         'Recognize food retention and the hallmark sour, foul and greasy signs.',
         'Reconoce retención de alimentos y sus signos ácidos, fétidos y grasosos característicos.',
     ],
+    'dispel-summerheat' => [
+        'Choose among five Summerheat strategies: clear mild Heat, release constrained Exterior, drain Dampness, restore Qi and fluids, or preserve severely damaged Yin.',
+        'Elige entre cinco estrategias para Calor de Verano: aclarar Calor leve, liberar el Exterior constreñido, drenar Humedad, restaurar Qi y líquidos o conservar Yin gravemente lesionado.',
+    ],
 ];
 
 $categories = [];
@@ -84,9 +92,22 @@ foreach ($data['formulas'] as $formula) {
     }
 }
 
-$selected = $categories[$focus] ?? null;
+$supplementalcategories = [];
+foreach ($data['supplementalCategories'] as $category) {
+    $category['formulas'] = [];
+    $supplementalcategories[$category['key']] = $category;
+}
+foreach ($data['supplementalFormulas'] as $formula) {
+    if (isset($supplementalcategories[$formula['categoryKey']])) {
+        $supplementalcategories[$formula['categoryKey']]['formulas'][] = $formula;
+    }
+}
+
+$allcategories = $categories + $supplementalcategories;
+$selected = $allcategories[$focus] ?? null;
+$issupplemental = $selected !== null && isset($supplementalcategories[$selected['key']]);
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
-$categorykeys = array_keys($categories);
+$categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
 
 $params = [];
@@ -160,7 +181,9 @@ echo $OUTPUT->header();
 .formula-study-guide__category-number{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;margin-bottom:10px;border-radius:50%;background:#e9f6f3;color:#0b6b63;font-weight:900}
 .formula-study-guide__category strong{font-size:18px;line-height:1.3}.formula-study-guide__category p{margin:7px 0 12px;color:#5b6b79;font-size:14px;line-height:1.45}.formula-study-guide__category small{margin-top:auto;color:#075e54;font-weight:800}
 .formula-study-guide__category-meta{display:block;margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
+.formula-study-guide__supplement{margin-top:26px;padding:22px 24px;border:1px solid #c9ded9;border-top:4px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__supplement-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}.formula-study-guide__supplement-heading h3{margin:2px 0 5px;font-size:22px}.formula-study-guide__supplement-heading p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.formula-study-guide__supplement-badge{padding:6px 10px;border-radius:999px;background:#d9f1eb;color:#08695f;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__category--supplemental{min-height:156px;border-top-color:#0b817d}.formula-study-guide__category--supplemental .formula-study-guide__category-number{width:auto;padding:0 10px;border-radius:999px}.formula-study-guide__category--supplemental small{color:#075fc8}
 .formula-study-guide__category-header{margin-bottom:18px;padding:22px 24px;border-top:5px solid #f77e25;border-radius:12px;background:linear-gradient(135deg,#fffaf5,#f7fbfb)}
+.formula-study-guide__category-header--supplemental{border-top-color:#0b817d;background:linear-gradient(135deg,#effaf7,#fffaf5)}
 .formula-study-guide__category-header h3{margin:4px 0 8px;font-size:clamp(25px,3vw,34px)}.formula-study-guide__category-header p{max-width:800px;margin:0;color:#52677a;line-height:1.55}
 .formula-study-guide__priority{margin:0 0 18px;padding:20px 22px;border:1px solid #b9dfd7;border-left:5px solid #0b817d;border-radius:11px;background:#eef9f6}.formula-study-guide__priority h4{margin:0 0 7px;font-size:20px}.formula-study-guide__priority h5{margin:17px 0 0;font-size:15px}.formula-study-guide__priority>p{margin:0;color:#496474;line-height:1.55}
 .formula-study-guide__route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.formula-study-guide__route-step{padding:13px;border-radius:9px;background:#fff}.formula-study-guide__route-step b{display:flex;align-items:center;gap:8px;color:#123246}.formula-study-guide__route-number{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-size:12px}.formula-study-guide__route-step p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}
@@ -175,12 +198,14 @@ echo $OUTPUT->header();
 .formula-study-guide__exam-focus{margin:14px 0 0;padding:11px 14px;border-left:4px solid #f77e25;border-radius:6px;background:#fff7ed;color:#6e481f;line-height:1.5}.formula-study-guide__exam-focus strong{color:#7c3f0a}
 .formula-study-guide__deep-dive{margin-top:12px;border:1px solid #d5e4e1;border-radius:8px;background:#f8fbfa}.formula-study-guide__deep-dive summary{padding:10px 13px;color:#17675e;font-weight:800;cursor:pointer}.formula-study-guide__deep-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;padding:0 13px 13px}.formula-study-guide__deep-grid p{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__deep-grid strong{display:block;margin-bottom:4px;color:#17232a}
 .formula-study-guide__modification{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:13px;padding:12px 13px;border:1px solid #bddfd7;border-left:4px solid #12816f;border-radius:8px;background:#f3fbf8;color:#365762;line-height:1.45}.formula-study-guide__modification p{margin:0}.formula-study-guide__modification strong{color:#087263}.formula-study-guide__modification b{color:#9b450e}.formula-study-guide__modification a{flex:0 0 auto;color:#075fc8;font-weight:800;text-decoration:none}.formula-study-guide__modification a:hover{text-decoration:underline}
+.formula-study-guide__branches{margin-top:12px;border:1px solid #d7e1e6;border-radius:8px;background:#fff}.formula-study-guide__branches summary{padding:11px 13px;color:#174c69;font-weight:800;cursor:pointer}.formula-study-guide__branch-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 13px 13px}.formula-study-guide__branch-group{padding:12px;border-radius:8px;background:#f6f9fa}.formula-study-guide__branch-group h5{margin:0 0 8px;color:#17232a;font-size:14px}.formula-study-guide__branch-group ul{margin:0;padding-left:18px}.formula-study-guide__branch-group li{margin:0 0 8px;color:#52677a;line-height:1.45}.formula-study-guide__branch-group li:last-child{margin-bottom:0}.formula-study-guide__branch-group strong{color:#17232a}
 .formula-study-guide__formula-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #dde5e9}.formula-study-guide__ingredients{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__ingredients strong{color:#17232a}
+.formula-study-guide__source-pages{flex:0 0 auto;padding:7px 10px;border-radius:7px;background:#eef3f6;color:#415a6b;font-size:12px;font-weight:800;white-space:nowrap}
 .formula-study-guide__safety{margin-top:12px;border:1px solid #ded6ec;border-radius:8px;background:#fbf9ff}.formula-study-guide__safety summary{padding:10px 13px;color:#60409a;font-weight:800;cursor:pointer}.formula-study-guide__safety p{margin:0;padding:0 13px 13px;color:#52677a;line-height:1.5}
 .formula-study-guide__references{margin:20px 0;border:1px solid #d8e1e7;border-radius:11px;background:#fff}.formula-study-guide__references>summary{padding:16px 18px;color:#334155;font-size:17px;font-weight:900;cursor:pointer}.formula-study-guide__references-body{padding:0 18px 18px}.formula-study-guide__references-body>p{margin:0 0 15px;color:#52677a;line-height:1.5}.formula-study-guide__reference-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__reference-group{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__reference-group h5{margin:0 0 10px;font-size:15px}.formula-study-guide__reference-group ul{margin:0;padding-left:18px}.formula-study-guide__reference-group li{margin:0 0 9px;color:#52677a;line-height:1.4}.formula-study-guide__reference-group li:last-child{margin-bottom:0}.formula-study-guide__reference-group strong{color:#17232a}
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid{grid-template-columns:1fr}.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:1fr}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
@@ -233,6 +258,37 @@ echo $OUTPUT->header();
                 </a>
             <?php endforeach; ?>
         </section>
+        <section class="formula-study-guide__supplement" aria-labelledby="supplemental-formula-title">
+            <div class="formula-study-guide__supplement-heading">
+                <div>
+                    <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Capítulos suplementarios' : 'Supplementary chapters'); ?></p>
+                    <h3 id="supplemental-formula-title"><?php echo s($ises ? 'Fórmulas adicionales de la fuente' : 'Additional source formulas'); ?></h3>
+                    <p><?php echo s($ises
+                        ? 'Amplían el estudio del libro sin cambiar las 63 fórmulas ni los totales del banco oficial de práctica.'
+                        : 'These extend study from the source text without changing the 63 formulas or official practice-bank totals.'); ?></p>
+                </div>
+                <span class="formula-study-guide__supplement-badge"><?php echo s($ises ? 'Separadas del listado Board' : 'Separate from Board roster'); ?></span>
+            </div>
+            <div class="formula-study-guide__grid">
+                <?php foreach ($supplementalcategories as $category): ?>
+                    <?php
+                    $categoryparams = ['focus' => $category['key']];
+                    if ($ises) {
+                        $categoryparams['lang'] = 'es';
+                    }
+                    $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
+                    $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
+                    ?>
+                    <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
+                        <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Capítulo ' : 'Chapter '); ?><?php echo (int) $category['sourceChapter']; ?></span>
+                        <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
+                        <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas principales' : 'principal formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $category['sourcePages']); ?></span>
+                        <p><?php echo s($copy); ?></p>
+                        <small><?php echo s($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →'); ?></small>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
     <?php else: ?>
         <?php $selectedcopy = $categorycopy[$selected['key']][$ises ? 1 : 0]; ?>
         <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>">
@@ -240,10 +296,12 @@ echo $OUTPUT->header();
             <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
             <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
         </nav>
-        <section class="formula-study-guide__category-header" aria-labelledby="selected-category-title">
-            <p class="formula-study-guide__eyebrow"><?php echo s(($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14'); ?></p>
+        <section class="formula-study-guide__category-header<?php echo $issupplemental ? ' formula-study-guide__category-header--supplemental' : ''; ?>" aria-labelledby="selected-category-title">
+            <p class="formula-study-guide__eyebrow"><?php echo s($issupplemental
+                ? (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages'])
+                : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
-            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'; ?></strong></p>
+            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'); ?></strong></p>
         </section>
         <?php if ($selectedguide !== null): ?>
             <section class="formula-study-guide__priority" aria-labelledby="guideline-priority-title">
@@ -280,17 +338,25 @@ echo $OUTPUT->header();
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
                     : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : ($ises ? 'Seguridad revisada' : 'Safety reviewed'));
-                $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
-                $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
+                $formulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $formula['number']);
+                $practiceurl = null;
+                if (!$issupplemental) {
+                    $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
+                    $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
+                }
                 ?>
-                <article class="formula-study-guide__formula" id="formula-<?php echo (int) $formula['number']; ?>">
+                <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
                     <header class="formula-study-guide__formula-heading">
                         <div>
-                            <span class="formula-study-guide__formula-label"><?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $formula['number'] . ' ' . ($ises ? 'de' : 'of') . ' 63'); ?></span>
+                            <span class="formula-study-guide__formula-label"><?php echo s($issupplemental
+                                ? (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence'] . ' ' . ($ises ? 'de' : 'of') . ' 7 · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'])
+                                : (($ises ? 'Fórmula ' : 'Formula ') . $formula['number'] . ' ' . ($ises ? 'de' : 'of') . ' 63')); ?></span>
                             <h4><?php echo s($formula['name']); ?></h4>
+                            <?php if ($issupplemental): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Principal del guideline' : 'Guideline core'); ?></span><?php endif; ?>
+                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Fuente suplementaria' : 'Supplementary source'); ?></span><?php endif; ?>
                             <span class="formula-study-guide__risk<?php echo $tier !== 'standard' ? ' formula-study-guide__risk--' . s($tier) : ''; ?>"><?php echo s($risklabel); ?></span>
                         </div>
                     </header>
@@ -312,6 +378,37 @@ echo $OUTPUT->header();
                             </div>
                         </details>
                     <?php endif; ?>
+                    <?php if (!empty($formula['modifications']) || !empty($formula['variations']) || !empty($formula['associated'])): ?>
+                        <details class="formula-study-guide__branches">
+                            <summary><?php echo s($ises ? 'Modificaciones, variaciones y fórmulas asociadas' : 'Modifications, variations, and associated formulas'); ?></summary>
+                            <div class="formula-study-guide__branch-body">
+                                <?php if (!empty($formula['modifications'])): ?>
+                                    <section class="formula-study-guide__branch-group">
+                                        <h5><?php echo s($ises ? 'Modificaciones clínicas' : 'Clinical modifications'); ?></h5>
+                                        <ul><?php foreach ($formula['modifications'] as $item): ?>
+                                            <li><strong><?php echo s($ises ? $item[2] : $item[0]); ?>:</strong> <?php echo s($ises ? $item[3] : $item[1]); ?></li>
+                                        <?php endforeach; ?></ul>
+                                    </section>
+                                <?php endif; ?>
+                                <?php if (!empty($formula['variations'])): ?>
+                                    <section class="formula-study-guide__branch-group">
+                                        <h5><?php echo s($ises ? 'Variaciones con nombre propio' : 'Named variations'); ?></h5>
+                                        <ul><?php foreach ($formula['variations'] as $item): ?>
+                                            <li><strong><?php echo s($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                        <?php endforeach; ?></ul>
+                                    </section>
+                                <?php endif; ?>
+                                <?php if (!empty($formula['associated'])): ?>
+                                    <section class="formula-study-guide__branch-group">
+                                        <h5><?php echo s($ises ? 'Fórmulas asociadas' : 'Associated formulas'); ?></h5>
+                                        <ul><?php foreach ($formula['associated'] as $item): ?>
+                                            <li><strong><?php echo s($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                        <?php endforeach; ?></ul>
+                                    </section>
+                                <?php endif; ?>
+                            </div>
+                        </details>
+                    <?php endif; ?>
                     <?php if (isset($formula['modificationPreview'], $formula['modificationPreviewEs'])):
                         $preview = $ises ? $formula['modificationPreviewEs'] : $formula['modificationPreview'];
                         $modificationspath = $ises
@@ -328,7 +425,11 @@ echo $OUTPUT->header();
                     <?php endif; ?>
                     <div class="formula-study-guide__formula-footer">
                         <p class="formula-study-guide__ingredients"><strong><?php echo $ises ? 'Ingredientes:' : 'Ingredients:'; ?></strong> <?php echo s($ises ? $formula['ingredientsEs'] : $formula['ingredients']); ?></p>
-                        <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
+                        <?php if ($practiceurl !== null): ?>
+                            <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
+                        <?php else: ?>
+                            <span class="formula-study-guide__source-pages"><?php echo s(($ises ? 'Fuente: capítulo 5 · págs. ' : 'Source: Chapter 5 · pp. ') . $formula['sourcePages']); ?></span>
+                        <?php endif; ?>
                     </div>
                     <details class="formula-study-guide__safety">
                         <summary><?php echo s($ises ? 'Revisar seguridad y precauciones' : 'Review safety and cautions'); ?></summary>

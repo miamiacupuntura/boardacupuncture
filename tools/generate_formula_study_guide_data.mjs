@@ -1,4 +1,4 @@
-import { writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mostImportantFormulaBatch1 } from './most_important_formulas_batch_1.mjs';
@@ -20,11 +20,20 @@ import {
   formulaStudyGuideSupplements,
   releaseExteriorCategoryGuide
 } from './formula_study_guide_supplements.mjs';
+import {
+  summerheatCategory,
+  summerheatCategoryGuide,
+  summerheatFormulas
+} from './summerheat_formula_supplement.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const outputPath = resolve(repositoryRoot, 'blocks/myprogress/formulas-study-guide-data.json');
+const existingData = existsSync(outputPath)
+  ? JSON.parse(readFileSync(outputPath, 'utf8'))
+  : { categoryGuides: {}, formulas: [] };
+const existingFormulaByName = new Map((existingData.formulas || []).map(formula => [formula.name, formula]));
 const practiceData = JSON.parse(
-  await import('node:fs').then(({ readFileSync }) =>
-    readFileSync(resolve(repositoryRoot, 'study-guide/comparisons/formula-practice-data.json'), 'utf8'))
+  readFileSync(resolve(repositoryRoot, 'study-guide/comparisons/formula-practice-data.json'), 'utf8')
 );
 const practiceCounts = new Map(practiceData.formulas.map(formula => [formula.number, formula.questionCount]));
 const expandedCards = [
@@ -42,13 +51,14 @@ const categories = classicFormulaCategories.map(([key, name, nameEs], index) => 
   nameEs
 }));
 
-const formulas = classicFormulaOutline.map(([number, name, categoryKey, kings]) => {
+const generatedFormulas = classicFormulaOutline.map(([number, name, categoryKey, kings]) => {
   const content = expandedByName.get(name) || classicFormulaFallbacks[name];
   if (!content) {
     throw new Error(`Missing study-guide content for ${name}`);
   }
   const category = categoryByKey.get(categoryKey);
   const supplement = formulaStudyGuideSupplements[name] || {};
+  const existing = existingFormulaByName.get(name) || {};
   return {
     number,
     name,
@@ -71,8 +81,22 @@ const formulas = classicFormulaOutline.map(([number, name, categoryKey, kings]) 
     ...(supplement.priority ? { priority: supplement.priority } : {}),
     ...(supplement.examFocus ? { examFocus: supplement.examFocus, examFocusEs: supplement.examFocusEs } : {}),
     ...(supplement.ingredientRoles ? { ingredientRoles: supplement.ingredientRoles, ingredientRolesEs: supplement.ingredientRolesEs } : {}),
-    ...(supplement.comparison ? { comparison: supplement.comparison, comparisonEs: supplement.comparisonEs } : {})
+    ...(supplement.comparison ? { comparison: supplement.comparison, comparisonEs: supplement.comparisonEs } : {}),
+    ...(existing.modificationPreview ? {
+      modificationPreview: existing.modificationPreview,
+      modificationPreviewEs: existing.modificationPreviewEs
+    } : {})
   };
+});
+
+// Some category deep-dives are curated directly in the canonical JSON after the
+// base roster is generated. Keep those reviewed fields intact on subsequent
+// runs while still refreshing practice totals and adding new supplements.
+const formulas = generatedFormulas.map(formula => {
+  const existing = existingFormulaByName.get(formula.name);
+  return existing
+    ? {...existing, practiceCount: practiceCounts.get(formula.number) || 0}
+    : formula;
 });
 
 if (categories.length !== 14 || formulas.length !== 63) {
@@ -80,13 +104,17 @@ if (categories.length !== 14 || formulas.length !== 63) {
 }
 
 const output = {
-  version: 2,
+  version: 3,
   categories,
   categoryGuides: {
-    'release-exterior': releaseExteriorCategoryGuide
+    ...(existingData.categoryGuides || {}),
+    'release-exterior': existingData.categoryGuides?.['release-exterior'] || releaseExteriorCategoryGuide,
+    'dispel-summerheat': summerheatCategoryGuide
   },
-  formulas
+  formulas,
+  supplementalCategories: [summerheatCategory],
+  supplementalFormulas: summerheatFormulas
 };
-const outputPath = resolve(repositoryRoot, 'blocks/myprogress/formulas-study-guide-data.json');
 writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 console.log(`Generated ${outputPath} with ${categories.length} categories and ${formulas.length} formulas.`);
+console.log(`Added ${summerheatFormulas.length} supplemental formulas from Chapter ${summerheatCategory.sourceChapter}.`);
