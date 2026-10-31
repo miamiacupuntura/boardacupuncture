@@ -6,6 +6,10 @@ require_once(__DIR__ . '/../../config.php');
 require_login();
 
 $returnurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
+$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
+    'area' => 'herbology',
+    'view' => 'library',
+]);
 $pageurl = new moodle_url('/blocks/myprogress/common-herbal-combinations.php');
 
 $PAGE->set_url($pageurl);
@@ -551,6 +555,7 @@ echo $OUTPUT->header();
 <style>
 .herb-combos{max-width:1120px;margin:24px auto 56px;padding:0 16px;color:#173047}
 .herb-combos__top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px}
+.herb-combos__top-actions{display:flex;gap:8px;flex-wrap:wrap}
 .herb-combos__brand{font-size:18px;font-weight:850;color:#173047}
 .herb-combos__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 15px;border:1px solid #c7d3dc;border-radius:9px;background:#fff;color:#173047;font-weight:800;text-decoration:none}
 .herb-combos__back:hover{background:#f1f5f9;text-decoration:none}
@@ -586,7 +591,10 @@ echo $OUTPUT->header();
 <main class="herb-combos">
     <nav class="herb-combos__top" aria-label="Study Guide navigation">
         <span class="herb-combos__brand">Chinese Herbology · Other chapters</span>
-        <a class="herb-combos__back" href="<?php echo $returnurl->out(false); ?>">← Back to Chinese Herbology</a>
+        <span class="herb-combos__top-actions">
+            <a class="herb-combos__back" href="<?php echo $libraryurl->out(false); ?>">← Library</a>
+            <a class="herb-combos__back" href="<?php echo $returnurl->out(false); ?>">← Study Guide</a>
+        </span>
     </nav>
 
     <header class="herb-combos__hero">

@@ -321,6 +321,10 @@ $librarygroups = [
 
 $pageurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid]);
 $chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid]);
+$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
+    'area' => $areaid,
+    'view' => 'library',
+]);
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
@@ -429,6 +433,8 @@ echo $OUTPUT->header();
         <nav class="subject-study-guide__top-actions" aria-label="Study Guide course catalogs">
             <?php if ($showlibrary): ?>
                 <a class="subject-study-guide__back" href="<?php echo $chapterlisturl->out(false); ?>">← Study Guide</a>
+            <?php elseif ($areaid === 'herbology'): ?>
+                <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>">Library →</a>
             <?php endif; ?>
             <?php if ($currentguidelineurl !== null): ?>
                 <a class="subject-study-guide__back" href="<?php echo $currentguidelineurl->out(false); ?>">2026 Board Guideline ↔</a>

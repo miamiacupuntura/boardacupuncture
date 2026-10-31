@@ -1,6 +1,10 @@
 (() => {
   'use strict';
 
+  const returnNavigation = document.createElement('script');
+  returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
+  document.head.appendChild(returnNavigation);
+
   const spanish = document.documentElement.lang === 'es';
   const search = document.querySelector('[data-formula-search]');
   const cards = [...document.querySelectorAll('.formula-navigator-card')];

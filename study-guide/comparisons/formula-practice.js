@@ -1,6 +1,10 @@
 (() => {
   'use strict';
 
+  const returnNavigation = document.createElement('script');
+  returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
+  document.head.appendChild(returnNavigation);
+
   const spanish = document.documentElement.lang === 'es';
   const text = {
     loadingError: spanish ? 'No se pudo cargar el banco de preguntas.' : 'The question bank could not be loaded.',

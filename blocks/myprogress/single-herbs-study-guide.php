@@ -835,6 +835,10 @@ if (!$ises) {
 }
 $languageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $languageparams);
 $herbologyurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
+$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
+    'area' => 'herbology',
+    'view' => 'library',
+]);
 $dashboardurl = new moodle_url('/my/');
 $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
@@ -917,7 +921,8 @@ ob_start();
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
             <a class="single-herbs-guide__back" href="<?php echo $guidelineurl->out(false); ?>">2026 Board Guideline ↔</a>
             <a class="single-herbs-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-            <a class="single-herbs-guide__back" href="<?php echo $herbologyurl->out(false); ?>">← Chinese Herbology</a>
+            <a class="single-herbs-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Biblioteca' : '← Library'; ?></a>
+            <a class="single-herbs-guide__back" href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
             <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
         </nav>
     </header>

@@ -1,6 +1,10 @@
 (() => {
   'use strict';
 
+  const returnNavigation = document.createElement('script');
+  returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
+  document.head.appendChild(returnNavigation);
+
   const spanish = document.documentElement.lang.toLowerCase().startsWith('es');
   const elements = {
     search: document.querySelector('[data-modification-search]'),

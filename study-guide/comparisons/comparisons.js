@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  const returnNavigation = document.createElement('script');
+  returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
+  document.head.appendChild(returnNavigation);
+
   const search = document.querySelector('[data-comparison-search]');
   const filters = [...document.querySelectorAll('[data-filter]')];
   const cards = [...document.querySelectorAll('.comparison-card')];

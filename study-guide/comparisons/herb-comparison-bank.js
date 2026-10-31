@@ -1,6 +1,10 @@
 (() => {
   'use strict';
 
+  const returnNavigation = document.createElement('script');
+  returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
+  document.head.appendChild(returnNavigation);
+
   const es = document.documentElement.lang === 'es';
   const copy = es ? {
     all: 'Todos los capítulos', chapter: 'Capítulo', question: 'Pregunta', page: 'PDF pág.', questions: 'preguntas', charts: 'gráficos',
