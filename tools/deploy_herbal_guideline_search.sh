@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+REVISION="${1:-}"
+REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
+MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
+TARGET_DIR="$MOODLE_ROOT/study-guide/guidelines"
+BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
+
+if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
+    echo "Uso: sudo bash deploy_herbal_guideline_search.sh COMMIT_DE_40_CARACTERES"
+    exit 1
+fi
+
+if [[ ! -f "$MOODLE_ROOT/config.php" || ! -d "$TARGET_DIR" ]]; then
+    echo "ERROR: no se encontró la guía activa en $TARGET_DIR"
+    exit 1
+fi
+
+TEMP_DIR="$(mktemp -d)"
+BACKUP_DIR="$BACKUP_ROOT/boardacupuncture-guideline-search-$(date +%Y%m%d-%H%M%S)"
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+for asset in guidelines.css guideline-return.js guideline-search.js; do
+    curl -fsSL \
+        "$REPOSITORY/$REVISION/study-guide/guidelines/$asset" \
+        -o "$TEMP_DIR/$asset"
+done
+
+grep -q "guide-smart-search" "$TEMP_DIR/guidelines.css"
+grep -q "guideline-search.js?v=20261031-1" "$TEMP_DIR/guideline-return.js"
+grep -q "Search the complete guide" "$TEMP_DIR/guideline-search.js"
+grep -q "Mu Li San" "$TEMP_DIR/guideline-search.js"
+grep -q "formulas-study-guide-data.json" "$TEMP_DIR/guideline-search.js"
+
+mkdir -p "$BACKUP_DIR"
+cp -a "$TARGET_DIR/guidelines.css" "$BACKUP_DIR/"
+cp -a "$TARGET_DIR/guideline-return.js" "$BACKUP_DIR/"
+if [[ -f "$TARGET_DIR/guideline-search.js" ]]; then
+    cp -a "$TARGET_DIR/guideline-search.js" "$BACKUP_DIR/"
+fi
+
+OWNER="$(stat -c '%U' "$TARGET_DIR/guideline-return.js")"
+GROUP="$(stat -c '%G' "$TARGET_DIR/guideline-return.js")"
+
+for asset in guidelines.css guideline-return.js guideline-search.js; do
+    install -m 0644 -o "$OWNER" -g "$GROUP" "$TEMP_DIR/$asset" "$TARGET_DIR/$asset"
+done
+
+if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
+    if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
+        runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+    else
+        php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+    fi
+fi
+
+grep -q "guide-smart-search" "$TARGET_DIR/guidelines.css"
+grep -q "guideline-search.js?v=20261031-1" "$TARGET_DIR/guideline-return.js"
+grep -q "Mu Li San" "$TARGET_DIR/guideline-search.js"
+
+echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
+echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
+echo "Respaldo: $BACKUP_DIR"

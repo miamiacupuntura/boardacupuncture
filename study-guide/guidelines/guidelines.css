@@ -26,6 +26,37 @@ a { color: inherit; }
 .guide-hero h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.05; }
 .guide-hero p:last-child { max-width: 780px; margin-bottom: 0; color: var(--muted); font-size: 1.08rem; }
 .guide-alert { margin: 18px 0; padding: 15px 18px; border-left: 5px solid var(--teal); border-radius: 8px; background: #eaf7f4; }
+.guide-smart-search { position: relative; z-index: 4; margin: 18px 0; padding: 22px 24px; border: 1px solid #bfd8d2; border-left: 6px solid var(--teal); border-radius: 14px; background: linear-gradient(135deg, #f4fbf9, #fff); box-shadow: 0 10px 24px rgba(25, 54, 76, .08); scroll-margin-top: 16px; }
+.guide-smart-search__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.guide-smart-search__heading h2 { margin: 0 0 4px; font-size: 1.45rem; }
+.guide-smart-search__heading p:last-child { max-width: 790px; margin: 0; color: var(--muted); }
+.guide-smart-search__shortcut { flex: 0 0 auto; padding: 6px 9px; border: 1px solid var(--line); border-radius: 7px; background: #fff; color: var(--muted); font-size: .76rem; font-weight: 800; }
+.guide-smart-search__field { position: relative; display: flex; align-items: center; margin-top: 17px; }
+.guide-smart-search__field svg { position: absolute; left: 15px; width: 21px; height: 21px; fill: none; stroke: var(--teal); stroke-linecap: round; stroke-width: 2; pointer-events: none; }
+.guide-smart-search__field input { width: 100%; min-height: 54px; padding: 12px 48px 12px 47px; border: 2px solid #9cc9c0; border-radius: 11px; background: #fff; color: var(--navy); font: inherit; font-size: 1.04rem; outline: none; }
+.guide-smart-search__field input:focus { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(6, 114, 103, .13); }
+.guide-smart-search__field input::-webkit-search-cancel-button { display: none; }
+.guide-smart-search__clear { position: absolute; right: 10px; width: 35px; height: 35px; border: 0; border-radius: 50%; background: #edf4f7; color: var(--navy); font-size: 1.35rem; cursor: pointer; }
+.guide-smart-search__clear:hover,
+.guide-smart-search__clear:focus { background: #dcebe7; outline: 2px solid var(--teal); }
+.guide-smart-search__examples { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 11px; color: var(--muted); font-size: .82rem; }
+.guide-smart-search__examples button { padding: 4px 8px; border: 1px solid #c8ddd8; border-radius: 999px; background: #fff; color: #05665c; font: inherit; font-weight: 800; cursor: pointer; }
+.guide-smart-search__examples button:hover,
+.guide-smart-search__examples button:focus { border-color: var(--teal); background: #e9f7f3; outline: none; }
+.guide-smart-search__status { margin: 11px 0 0; color: var(--muted); font-size: .82rem; font-weight: 700; }
+.guide-smart-search__results { max-height: 470px; margin-top: 10px; overflow-y: auto; border: 1px solid var(--line); border-radius: 11px; background: #fff; box-shadow: 0 14px 28px rgba(25, 54, 76, .13); }
+.guide-smart-search__result { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 15px; border-bottom: 1px solid #e1eaef; color: var(--navy); text-decoration: none; }
+.guide-smart-search__result:last-child { border-bottom: 0; }
+.guide-smart-search__result:hover,
+.guide-smart-search__result:focus,
+.guide-smart-search__result.is-active { background: #edf9f6; outline: none; }
+.guide-smart-search__result-main { display: grid; min-width: 0; gap: 2px; }
+.guide-smart-search__result-type { color: var(--teal); font-size: .68rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+.guide-smart-search__result strong { font-size: .98rem; }
+.guide-smart-search__result small { overflow: hidden; color: var(--muted); font-size: .78rem; line-height: 1.4; text-overflow: ellipsis; }
+.guide-smart-search__result-action { flex: 0 0 auto; color: #075e54; font-size: .78rem; font-weight: 900; }
+.guide-smart-search__empty { margin: 0; padding: 17px; color: var(--muted); }
+.guide-search-target { scroll-margin-top: 18px; }
 .guide-reading-flow { margin: 22px 0; padding: 0 28px; border: 1px solid var(--line); border-top: 5px solid var(--orange); border-radius: 14px; background: #fff; box-shadow: 0 8px 18px rgba(25, 54, 76, .05); }
 .guide-reading-step { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 18px; padding: 28px 0; border-bottom: 1px solid var(--line); }
 .guide-reading-step > div:last-child { min-width: 0; }
@@ -121,4 +152,9 @@ a { color: inherit; }
   .guide-actions { width: 100%; flex-direction: column; }
   .guide-resource-list { grid-template-columns: 1fr; }
   .guide-herb-roster { grid-template-columns: 1fr; }
+  .guide-smart-search { padding: 19px 16px; }
+  .guide-smart-search__heading { display: block; }
+  .guide-smart-search__shortcut { display: inline-block; margin-top: 10px; }
+  .guide-smart-search__result { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .guide-smart-search__result-action { align-self: flex-end; }
 }
