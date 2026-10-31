@@ -159,6 +159,7 @@ $tonifychapterkeys = [
     'tonify-yin-yang-ch8',
 ];
 $tonifychaptercategories = array_intersect_key($supplementalcategories, array_flip($tonifychapterkeys));
+$warmchaptercategory = $supplementalcategories['warm-interior-cold'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -186,7 +187,7 @@ $tonifychapteroverview = [
 
 $supplementalindexcategories = [];
 foreach ($supplementalcategories as $categorykey => $category) {
-    if (!in_array($categorykey, $tonifychapterkeys, true)) {
+    if (!in_array($categorykey, $tonifychapterkeys, true) && $categorykey !== 'warm-interior-cold') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
@@ -198,6 +199,7 @@ $selected = $allcategories[$focus] ?? null;
 $issupplemental = $selected !== null && isset($supplementalcategories[$selected['key']]);
 $istonifychapterpage = $selected !== null
     && ($selected['key'] === 'tonify-chapter-8' || in_array($selected['key'], $tonifychapterkeys, true));
+$iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-cold';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
@@ -217,6 +219,11 @@ if ($ises) {
     $tonifyparentparams['lang'] = 'es';
 }
 $tonifyparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $tonifyparentparams);
+$warmparentparams = ['focus' => 'warm-interior'];
+if ($ises) {
+    $warmparentparams['lang'] = 'es';
+}
+$warmparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $warmparentparams);
 $languageparams = $selected === null ? [] : ['focus' => $selected['key']];
 if (!$ises) {
     $languageparams['lang'] = 'es';
@@ -279,6 +286,7 @@ echo $OUTPUT->header();
 .formula-study-guide__category-number{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;margin-bottom:10px;border-radius:50%;background:#e9f6f3;color:#0b6b63;font-weight:900}
 .formula-study-guide__category strong{font-size:18px;line-height:1.3}.formula-study-guide__category p{margin:7px 0 12px;color:#5b6b79;font-size:14px;line-height:1.45}.formula-study-guide__category small{margin-top:auto;color:#075e54;font-weight:800}
 .formula-study-guide__category-meta{display:block;margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
+.formula-study-guide__category-extension{display:block;margin:9px 0 0;padding:7px 9px;border-radius:7px;background:#e7f7f3;color:#075e54;font-size:11px;font-weight:900;line-height:1.35}
 .formula-study-guide__supplement{margin-top:26px;padding:22px 24px;border:1px solid #c9ded9;border-top:4px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__supplement-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}.formula-study-guide__supplement-heading h3{margin:2px 0 5px;font-size:22px}.formula-study-guide__supplement-heading p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.formula-study-guide__supplement-badge{padding:6px 10px;border-radius:999px;background:#d9f1eb;color:#08695f;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__category--supplemental{min-height:156px;border-top-color:#0b817d}.formula-study-guide__category--supplemental .formula-study-guide__category-number{width:auto;padding:0 10px;border-radius:999px}.formula-study-guide__category--supplemental small{color:#075fc8}
 .formula-study-guide__category-header{margin-bottom:18px;padding:22px 24px;border-top:5px solid #f77e25;border-radius:12px;background:linear-gradient(135deg,#fffaf5,#f7fbfb)}
 .formula-study-guide__category-header--supplemental{border-top-color:#0b817d;background:linear-gradient(135deg,#effaf7,#fffaf5)}
@@ -286,6 +294,7 @@ echo $OUTPUT->header();
 .formula-study-guide__chapter-shortcut{margin:0 0 18px;padding:18px 20px;border:1px solid #add8cf;border-left:5px solid #0b817d;border-radius:11px;background:#effaf7}.formula-study-guide__chapter-shortcut h4{margin:0 0 5px;font-size:20px}.formula-study-guide__chapter-shortcut>p{margin:0 0 14px;color:#496474;line-height:1.5}.formula-study-guide__chapter-shortcut-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.formula-study-guide__chapter-shortcut-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid #c7e3dd;border-radius:8px;background:#fff;color:#075e54;font-weight:800;text-decoration:none}.formula-study-guide__chapter-shortcut-link:hover{background:#e7f7f3;color:#064e47;text-decoration:none}.formula-study-guide__chapter-shortcut-link span{color:#64748b;font-size:12px;white-space:nowrap}
 .formula-study-guide__chapter-shortcut-action{margin:0 0 14px}
 .formula-study-guide__board-verification{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:16px 18px;border:1px solid #b9ddd5;border-left:5px solid #0b817d;border-radius:10px;background:#effaf7}.formula-study-guide__board-verification h4{margin:0 0 4px;font-size:17px}.formula-study-guide__board-verification p{margin:0;color:#496474;font-size:13px;line-height:1.5}.formula-study-guide__board-verification .formula-study-guide__button{flex:0 0 auto}
+.formula-study-guide__overlap-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:13px 0 15px}.formula-study-guide__overlap-item{padding:9px 11px;border:1px solid #c7e3dd;border-radius:8px;background:#fff;color:#075e54;font-size:13px;font-weight:900}.formula-study-guide__chapter-shortcut-actions{display:flex;gap:9px;flex-wrap:wrap}
 .formula-study-guide__board-roster{margin:16px 0;padding:15px;border:1px solid #b9ddd5;border-radius:9px;background:#fff}.formula-study-guide__board-roster h5{margin:0 0 4px;font-size:16px}.formula-study-guide__board-roster>p{margin:0 0 12px;color:#496474;font-size:13px}.formula-study-guide__board-roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.formula-study-guide__board-roster-group{padding:11px 12px;border:1px solid #d8e8e4;border-radius:8px;background:#f8fbfa}.formula-study-guide__board-roster-group h6{margin:0 0 7px;color:#075e54;font-size:13px}.formula-study-guide__board-roster-group ul{margin:0;padding:0;list-style:none}.formula-study-guide__board-roster-group li+li{margin-top:7px}.formula-study-guide__board-roster-formula{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.formula-study-guide__board-roster-formula a{color:#172033;font-weight:800;text-decoration:none}.formula-study-guide__board-roster-formula a:hover{color:#075e54;text-decoration:underline}.formula-study-guide__board-roster-meta{display:block;margin-top:2px;color:#64748b;font-size:11px;line-height:1.35}.formula-study-guide__board-roster-number{flex:0 0 auto;padding:3px 6px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;white-space:nowrap}
 .formula-study-guide__chapter-directory{margin:0 0 20px;padding:22px;border:1px solid #c9ded9;border-top:5px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__chapter-directory h4{margin:0 0 7px;font-size:22px}.formula-study-guide__chapter-directory>p{margin:0 0 16px;color:#496474;line-height:1.55}.formula-study-guide__chapter-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.formula-study-guide__chapter-directory-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__chapter-directory-group h5{margin:0 0 8px;font-size:16px}.formula-study-guide__chapter-directory-group h5 a{color:#075e54;text-decoration:none}.formula-study-guide__chapter-directory-group h5 a:hover{text-decoration:underline}.formula-study-guide__chapter-directory-group ol{margin:0;padding-left:22px;columns:2;column-gap:22px}.formula-study-guide__chapter-directory-group li{margin:0 0 5px;break-inside:avoid;color:#52677a;font-size:13px;line-height:1.35}.formula-study-guide__chapter-directory-group li a{color:#334155;text-decoration:none}.formula-study-guide__chapter-directory-group li a:hover{color:#075fc8;text-decoration:underline}
 .formula-study-guide__chapter-section{margin:18px 0 0;padding:20px 22px;border-left:6px solid #0b817d;border-radius:11px;background:linear-gradient(135deg,#eaf8f5,#fff7ed)}.formula-study-guide__chapter-section .formula-study-guide__eyebrow{margin-bottom:5px}.formula-study-guide__chapter-section h4{margin:0 0 7px;font-size:25px}.formula-study-guide__chapter-section>p{margin:0;color:#496474;line-height:1.55}.formula-study-guide__chapter-section-meta{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;background:#fff;color:#52677a;font-size:12px;font-weight:800}
@@ -312,7 +321,7 @@ echo $OUTPUT->header();
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
+@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__overlap-list{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
 <main class="formula-study-guide">
     <header class="formula-study-guide__top">
@@ -358,6 +367,9 @@ echo $OUTPUT->header();
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></span>
+                    <?php if ($category['key'] === 'warm-interior'): ?>
+                        <span class="formula-study-guide__category-extension"><?php echo s($ises ? 'Incluye el capítulo 6 completo · ' : 'Includes complete Chapter 6 · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></span>
+                    <?php endif; ?>
                     <p><?php echo s($copy); ?></p>
                     <small><?php echo s($ises ? 'Abrir categoría →' : 'Open category →'); ?></small>
                 </a>
@@ -400,6 +412,7 @@ echo $OUTPUT->header();
             <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior' : '← Previous category'); ?></a><?php endif; ?></span>
             <div class="formula-study-guide__category-nav-center">
                 <?php if ($istonifychapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $tonifyparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Tonificar' : '← Tonify main category'); ?></a><?php endif; ?>
+                <?php if ($iswarmchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calentar el Interior' : '← Warm the Interior main category'); ?></a><?php endif; ?>
                 <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
             </div>
             <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
@@ -411,7 +424,31 @@ echo $OUTPUT->header();
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
             <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'); ?></strong></p>
         </section>
-        <?php if (!$issupplemental && $selected['key'] !== 'tonify'): ?>
+        <?php if ($selected['key'] === 'warm-interior'): ?>
+            <?php
+            $warmchapterparams = ['focus' => 'warm-interior-cold'];
+            if ($ises) {
+                $warmchapterparams['lang'] = 'es';
+            }
+            $warmchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $warmchapterparams);
+            ?>
+            <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-six-shortcut-title">
+                <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Ampliación integrada' : 'Integrated expansion'); ?></p>
+                <h4 id="chapter-six-shortcut-title"><?php echo s($ises ? 'Capítulo 6 completo · ' : 'Complete Chapter 6 · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></h4>
+                <p><?php echo s($ises
+                    ? 'Las 4 fórmulas oficiales de esta categoría están incluidas exactamente en el capítulo 6. El capítulo añade 7 fórmulas relacionadas para estudiar Frío en canales, Jiao Medio y colapso de Yang.'
+                    : 'All 4 official formulas in this category are included exactly in Chapter 6. The chapter adds 7 related formulas for studying Cold in the channels, Middle Burner, and Yang collapse.'); ?></p>
+                <div class="formula-study-guide__overlap-list" aria-label="<?php echo s($ises ? 'Fórmulas compartidas' : 'Shared formulas'); ?>">
+                    <?php foreach ($categories['warm-interior']['formulas'] as $warmboardformula): ?>
+                        <span class="formula-study-guide__overlap-item">✓ <?php echo s($warmboardformula['name']); ?> · <?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $warmboardformula['number']); ?></span>
+                    <?php endforeach; ?>
+                </div>
+                <div class="formula-study-guide__chapter-shortcut-actions">
+                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmchapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 6 completo →' : 'Open complete Chapter 6 →'); ?></a>
+                    <a class="formula-study-guide__button" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar en Board Domain →' : 'Verify in Board Domain →'); ?></a>
+                </div>
+            </section>
+        <?php elseif (!$issupplemental && $selected['key'] !== 'tonify'): ?>
             <section class="formula-study-guide__board-verification" aria-labelledby="board-verification-title">
                 <div>
                     <h4 id="board-verification-title"><?php echo s($ises ? 'Comprueba el listado oficial del Board' : 'Verify the official Board list'); ?></h4>
