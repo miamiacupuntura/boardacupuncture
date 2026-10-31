@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+REVISION="${1:-}"
+REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
+MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
+TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
+
+if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
+    echo "Uso: sudo bash deploy_formula_study_guide.sh COMMIT_DE_40_CARACTERES"
+    exit 1
+fi
+
+if [[ ! -f "$MOODLE_ROOT/config.php" || ! -d "$TARGET_DIR" ]]; then
+    echo "ERROR: no se encontró la instalación activa de Moodle en $MOODLE_ROOT"
+    exit 1
+fi
+
+TEMP_DIR="$(mktemp -d)"
+BACKUP_DIR="/var/backups/boardacupuncture-formulas-$(date +%Y%m%d-%H%M%S)"
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/formulas-study-guide.php" \
+    -o "$TEMP_DIR/formulas-study-guide.php"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/formulas-study-guide-data.json" \
+    -o "$TEMP_DIR/formulas-study-guide-data.json"
+
+php -l "$TEMP_DIR/formulas-study-guide.php" >/dev/null
+php -r '
+    $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+    $chapter8 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => str_ends_with($formula["categoryKey"] ?? "", "-ch8")
+    );
+    if (count($data["categories"] ?? []) !== 14
+            || count($data["formulas"] ?? []) !== 63
+            || count($data["supplementalCategories"] ?? []) !== 9
+            || count($data["supplementalFormulas"] ?? []) !== 69
+            || count($chapter8) !== 45) {
+        fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
+        exit(1);
+    }
+' "$TEMP_DIR/formulas-study-guide-data.json"
+
+grep -q "tonify-chapter-8" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
+
+mkdir -p "$BACKUP_DIR"
+cp -a "$TARGET_DIR/formulas-study-guide.php" "$BACKUP_DIR/"
+cp -a "$TARGET_DIR/formulas-study-guide-data.json" "$BACKUP_DIR/"
+
+PHP_OWNER="$(stat -c '%U' "$TARGET_DIR/formulas-study-guide.php")"
+PHP_GROUP="$(stat -c '%G' "$TARGET_DIR/formulas-study-guide.php")"
+JSON_OWNER="$(stat -c '%U' "$TARGET_DIR/formulas-study-guide-data.json")"
+JSON_GROUP="$(stat -c '%G' "$TARGET_DIR/formulas-study-guide-data.json")"
+
+install -m 0644 -o "$PHP_OWNER" -g "$PHP_GROUP" \
+    "$TEMP_DIR/formulas-study-guide.php" "$TARGET_DIR/formulas-study-guide.php"
+install -m 0644 -o "$JSON_OWNER" -g "$JSON_GROUP" \
+    "$TEMP_DIR/formulas-study-guide-data.json" "$TARGET_DIR/formulas-study-guide-data.json"
+
+if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
+    if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
+        runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+    else
+        php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+    fi
+fi
+
+grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
+
+echo "CAPÍTULO 8 INSTALADO EN MOODLE"
+echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
+echo "Respaldo: $BACKUP_DIR"
