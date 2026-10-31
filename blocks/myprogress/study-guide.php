@@ -79,7 +79,7 @@ $areas = [
                 'status' => 'AVAILABLE · 63 FORMULAS',
             ],
             [
-                'title' => 'Herbs Practice Exams',
+                'title' => 'Formulas Practice Exams',
                 'description' => 'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
