@@ -100,7 +100,7 @@ $areas = [
                 'path' => '/study-guide/comparisons/formulas.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · 110 COMPARISONS',
-                'secondary' => true,
+                'comparison' => true,
             ],
             [
                 'title' => 'Single Herbs Comparisons',
@@ -360,7 +360,7 @@ echo $OUTPUT->header();
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status">COMPARATIVE STUDY</span>
                     <h3 id="comparisons-title">Comparisons</h3>
-                    <p>Compare single herbs, pathologies and Chinese medicine patterns.</p>
+                    <p>Compare single herbs, formulas, pathologies and Chinese medicine patterns.</p>
                 </header>
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($comparisonchapters as $chapter): ?>
