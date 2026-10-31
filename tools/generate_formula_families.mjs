@@ -720,15 +720,15 @@ function page(family, language) {
   const hasHighYieldVariation = data.members.length > 1 && !coreFormulaNames.has(data.members[1][0]);
   const badgeStyles = '<style>.formula-family__badge{display:inline-block;margin:3px 0 0 6px;padding:3px 7px;border-radius:999px;background:#dff4ee;color:#0b675b;font-size:10px;font-weight:900;line-height:1.2;text-transform:uppercase;white-space:nowrap;vertical-align:middle}.formula-family__badge--high{background:#fff0d8;color:#955000}.formula-family__legend{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 10px;color:#52677a;font-size:13px}.formula-family__legend .formula-family__badge{margin:0}</style>';
   const legend = [
-    hasCoreVariation ? `<span class="formula-family__badge">${es ? 'Principal 63' : 'Core 63'}</span> ${es ? 'incluida en el listado principal' : 'included in the core roster'}` : '',
-    hasHighYieldVariation ? `<span class="formula-family__badge formula-family__badge--high">${es ? 'Alto rendimiento' : 'High yield'}</span> ${es ? 'rama prioritaria para memorizar' : 'priority branch to memorize'}` : ''
+    hasCoreVariation ? `<span class="formula-family__badge">${es ? 'Fórmula principal' : 'Main formula'}</span> ${es ? 'incluida entre las 63 principales' : 'included among the 63 main formulas'}` : '',
+    hasHighYieldVariation ? `<span class="formula-family__badge formula-family__badge--high">${es ? 'Variación importante' : 'Important variation'}</span> ${es ? 'conviene memorizarla' : 'worth memorizing'}` : ''
   ].filter(Boolean).join(' · ');
   const rows = data.members.map((member, index) => {
     const isCoreVariation = index > 0 && coreFormulaNames.has(member[0]);
     const isHighYieldVariation = index === 1 && !isCoreVariation;
     const badge = isCoreVariation
-      ? ` <span class="formula-family__badge">${es ? 'Principal 63' : 'Core 63'}</span>`
-      : (isHighYieldVariation ? ` <span class="formula-family__badge formula-family__badge--high">${es ? 'Alto rendimiento' : 'High yield'}</span>` : '');
+      ? ` <span class="formula-family__badge">${es ? 'Fórmula principal' : 'Main formula'}</span>`
+      : (isHighYieldVariation ? ` <span class="formula-family__badge formula-family__badge--high">${es ? 'Variación importante' : 'Important variation'}</span>` : '');
     return `<tr><th scope="row">${esc(member[0])}${badge}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`;
   }).join('\n');
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(family.title)}"><title>${esc(family.title)} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}">${badgeStyles}</head><body>
