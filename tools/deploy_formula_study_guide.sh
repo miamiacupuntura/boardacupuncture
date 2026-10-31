@@ -28,8 +28,12 @@ curl -fsSL \
 curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/formulas-study-guide-data.json" \
     -o "$TEMP_DIR/formulas-study-guide-data.json"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" \
+    -o "$TEMP_DIR/study-guide.php"
 
 php -l "$TEMP_DIR/formulas-study-guide.php" >/dev/null
+php -l "$TEMP_DIR/study-guide.php" >/dev/null
 php -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     $chapter8 = array_filter(
@@ -49,20 +53,27 @@ php -r '
 grep -q "tonify-chapter-8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "\$languageurl" "$TEMP_DIR/study-guide.php"
+grep -q "Español" "$TEMP_DIR/study-guide.php"
 
 mkdir -p "$BACKUP_DIR"
 cp -a "$TARGET_DIR/formulas-study-guide.php" "$BACKUP_DIR/"
 cp -a "$TARGET_DIR/formulas-study-guide-data.json" "$BACKUP_DIR/"
+cp -a "$TARGET_DIR/study-guide.php" "$BACKUP_DIR/"
 
 PHP_OWNER="$(stat -c '%U' "$TARGET_DIR/formulas-study-guide.php")"
 PHP_GROUP="$(stat -c '%G' "$TARGET_DIR/formulas-study-guide.php")"
 JSON_OWNER="$(stat -c '%U' "$TARGET_DIR/formulas-study-guide-data.json")"
 JSON_GROUP="$(stat -c '%G' "$TARGET_DIR/formulas-study-guide-data.json")"
+STUDY_OWNER="$(stat -c '%U' "$TARGET_DIR/study-guide.php")"
+STUDY_GROUP="$(stat -c '%G' "$TARGET_DIR/study-guide.php")"
 
 install -m 0644 -o "$PHP_OWNER" -g "$PHP_GROUP" \
     "$TEMP_DIR/formulas-study-guide.php" "$TARGET_DIR/formulas-study-guide.php"
 install -m 0644 -o "$JSON_OWNER" -g "$JSON_GROUP" \
     "$TEMP_DIR/formulas-study-guide-data.json" "$TARGET_DIR/formulas-study-guide-data.json"
+install -m 0644 -o "$STUDY_OWNER" -g "$STUDY_GROUP" \
+    "$TEMP_DIR/study-guide.php" "$TARGET_DIR/study-guide.php"
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
@@ -73,7 +84,9 @@ if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
 fi
 
 grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Español" "$TARGET_DIR/study-guide.php"
 
 echo "CAPÍTULO 8 INSTALADO EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
+echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "Respaldo: $BACKUP_DIR"

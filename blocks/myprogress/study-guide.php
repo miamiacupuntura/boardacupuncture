@@ -5,6 +5,10 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 
+$displaylang = optional_param('lang', 'en', PARAM_ALPHA);
+$displaylang = $displaylang === 'es' ? 'es' : 'en';
+$ises = $displaylang === 'es';
+
 $areas = [
     'foundations' => [
         'title' => 'Foundations',
@@ -273,11 +277,126 @@ $areas = [
     ],
 ];
 
+$spanishcopy = [
+    'Chinese Herbology' => 'Herbología China',
+    'Study Guide chapters for Single Herbs, Duì Yào and Formulas.' => 'Capítulos de la guía para Hierbas individuales, Duì Yào y Fórmulas.',
+    'Single Herbs' => 'Hierbas individuales',
+    'Study single herbs through the same General, Topics 1–34 and Mixed Review categories used in the Chinese Herbology Board Level workspace.' => 'Estudia las hierbas individuales con las mismas categorías General, Temas 1–34 y Repaso mixto del espacio Board Level de Herbología China.',
+    'Duì Yào Pairs' => 'Parejas Duì Yào',
+    'Master 51 official herb pairs through 15 clinical blocks. This Domain I resource emphasizes combined actions, individual roles, decisive clues, formulas and safety.' => 'Domina las 51 parejas oficiales en 15 bloques clínicos. Este recurso del Dominio I destaca acciones combinadas, funciones individuales, pistas decisivas, fórmulas y seguridad.',
+    'Formulas' => 'Fórmulas',
+    'Study 63 core formulas through 14 treatment categories with patterns, actions, decisive clues, essential ingredients and safety review.' => 'Estudia 63 fórmulas principales en 14 categorías terapéuticas con patrones, acciones, pistas decisivas, ingredientes esenciales y revisión de seguridad.',
+    'Herbal Comparisons Question Bank' => 'Banco de preguntas de comparación de hierbas',
+    'Practice 249 comparative herb questions in book order with recall flashcards and 117 strength-and-temperature charts.' => 'Practica 249 preguntas comparativas en el orden del libro con tarjetas de memoria y 117 tablas de potencia y temperatura.',
+    'Formulas Practice Exams' => 'Exámenes de práctica de fórmulas',
+    'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.' => 'Busca y estudia las 63 fórmulas principales y crea sesiones enfocadas con 572 preguntas conectadas.',
+    'Formula Families / Variations' => 'Familias y variaciones de fórmulas',
+    'Study 22 formula families and their named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing each branch.' => 'Estudia 22 familias de fórmulas y sus variaciones. Cada ficha muestra la fórmula raíz, el cambio estructural, el patrón resultante y la pista decisiva.',
+    'Name Traps' => 'Trampas de nombres',
+    'Separate nearly identical herb names by characters, identity, function and the safety alert that must not be missed.' => 'Distingue nombres de hierbas casi idénticos por caracteres, identidad, función y la alerta de seguridad esencial.',
+    'Herb Families & Parts' => 'Familias y partes de hierbas',
+    'Learn how leaf, twig, bark, root, seed and fruit within an herb family change direction, function and safety.' => 'Aprende cómo hoja, rama, corteza, raíz, semilla y fruto cambian la dirección, función y seguridad dentro de una familia.',
+    'Safety Library' => 'Biblioteca de seguridad',
+    'Review preparation, toxicity, interactions and regulation while studying herbs, pairs and formulas.' => 'Repasa preparación, toxicidad, interacciones y regulación mientras estudias hierbas, parejas y fórmulas.',
+    'Formula Name Traps' => 'Trampas en nombres de fórmulas',
+    'Separate formulas with nearly identical names by architecture, mechanism and the clinical clue that changes the answer.' => 'Distingue fórmulas con nombres casi idénticos por arquitectura, mecanismo y la pista clínica que cambia la respuesta.',
+    'Misleading Formula Names' => 'Nombres engañosos de fórmulas',
+    'Learn formulas whose historical, poetic or shared name does not literally describe the modern clinical strategy.' => 'Aprende fórmulas cuyo nombre histórico, poético o compartido no describe literalmente la estrategia clínica moderna.',
+    'Advanced Name Traps' => 'Trampas avanzadas de nombres',
+    'Separate pinyin groups, geographic prefixes and Western common names that hide different species.' => 'Distingue grupos de pinyin, prefijos geográficos y nombres comunes occidentales que ocultan especies diferentes.',
+    'Supplemental Herb Families' => 'Familias suplementarias de hierbas',
+    'Review six additional plant, medicinal-part and related-herb groups that are commonly confused.' => 'Repasa seis grupos adicionales de plantas, partes medicinales y hierbas relacionadas que suelen confundirse.',
+    'Patterns Tips Maciocia' => 'Consejos de patrones de Maciocia',
+    'Review signs, tongue, pulse and representative formulas through 100 organ-pattern clinical tips.' => 'Repasa signos, lengua, pulso y fórmulas representativas mediante 100 consejos clínicos de patrones de órganos.',
+    'Most Important Formulas' => 'Fórmulas más importantes',
+    'Review 85 formulas by pattern, action, decisive clue, contrast, memory cue and safety.' => 'Repasa 85 fórmulas por patrón, acción, pista decisiva, contraste, recurso de memoria y seguridad.',
+    'Formula Composition' => 'Composición de fórmulas',
+    'Learn herb relationships, Jun–Chen–Zuo–Shi hierarchy, dose architecture, preparation and an exam method.' => 'Aprende relaciones entre hierbas, jerarquía Jun–Chen–Zuo–Shi, arquitectura de dosis, preparación y un método de examen.',
+    'Herbal Incompatibilities' => 'Incompatibilidades herbales',
+    'Master the seven herb relationships, Eighteen Incompatibilities, Nineteen Antagonisms and their decisive exam clues.' => 'Domina las siete relaciones herbales, las Dieciocho Incompatibilidades, los Diecinueve Antagonismos y sus pistas decisivas.',
+    'Secondary Actions' => 'Acciones secundarias',
+    'Study 60 secondary herb functions while keeping the primary category of each medicinal in view.' => 'Estudia 60 funciones secundarias sin perder de vista la categoría principal de cada sustancia medicinal.',
+    'Formula Comparisons' => 'Comparaciones de fórmulas',
+    'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.' => 'Repasa 110 comparaciones por estrategia, patrón, acciones, ingredientes y pistas decisivas que distinguen fórmulas similares.',
+    'Single Herbs Comparisons' => 'Comparaciones de hierbas individuales',
+    'Review 247 comparative study notes that distinguish similar herbs by actions, indications, channels and decisive clinical clues.' => 'Repasa 247 notas comparativas que distinguen hierbas similares por acciones, indicaciones, canales y pistas clínicas decisivas.',
+    'Pathology Comparisons' => 'Comparaciones de patologías',
+    'Review 66 clinical comparisons organized by pathology, symptom location and the clues that guide herb or formula selection.' => 'Repasa 66 comparaciones clínicas por patología, localización de síntomas y pistas que orientan la selección de hierbas o fórmulas.',
+    'Pattern Comparisons' => 'Comparaciones de patrones',
+    'Review 50 pattern comparisons that separate similar Chinese medicine presentations by mechanism, signs, tongue and pulse.' => 'Repasa 50 comparaciones que distinguen cuadros similares por mecanismo, signos, lengua y pulso.',
+    'Formula Modifications' => 'Modificaciones de fórmulas',
+    'Review 305 clinical modifications as reference cards organized by formula, presentation and the corresponding ingredient change.' => 'Repasa 305 modificaciones clínicas organizadas por fórmula, presentación y cambio correspondiente de ingredientes.',
+    'Formula Modification Practice Exams' => 'Exámenes de modificaciones de fórmulas',
+    'Test the 305 formula modifications in focused question sessions after reviewing the reference cards.' => 'Evalúa las 305 modificaciones en sesiones enfocadas después de repasar las fichas de referencia.',
+    'Commonly Used Herbal Combinations' => 'Combinaciones herbales de uso común',
+    'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.' => 'Estudia 70 combinaciones del Apéndice 2 por relación, aplicación clínica y función de cada hierba. Este capítulo permanece separado de las 51 parejas Duì Yào oficiales.',
+    'Open question bank →' => 'Abrir banco de preguntas →',
+    'Study Guide' => 'Guía de estudio',
+    'Study Library' => 'Biblioteca de estudio',
+    'Library →' => 'Biblioteca →',
+    '2026 Board Guideline ↔' => 'Guideline Board 2026 ↔',
+    '← Back to Dashboard' => '← Volver al Dashboard',
+    'Open Study Guide →' => 'Abrir guía de estudio →',
+    'Main Study Guides' => 'Guías principales',
+    'Open the principal learning resources.' => 'Abre los recursos principales de aprendizaje.',
+    'Open question banks and focused practice sessions.' => 'Abre bancos de preguntas y sesiones de práctica enfocadas.',
+    'Open the comparative study collections.' => 'Abre las colecciones de estudio comparativo.',
+    'Open families, safety, theory and supplemental study resources.' => 'Abre familias, seguridad, teoría y recursos suplementarios.',
+    'PRACTICE' => 'PRÁCTICA',
+    'Practice Exams' => 'Exámenes de práctica',
+    'Practice herb comparisons, principal formulas and their clinical modifications.' => 'Practica comparaciones de hierbas, fórmulas principales y sus modificaciones clínicas.',
+    'COMPARATIVE STUDY' => 'ESTUDIO COMPARATIVO',
+    'Comparisons' => 'Comparaciones',
+    'Compare single herbs, formulas, pathologies and Chinese medicine patterns.' => 'Compara hierbas individuales, fórmulas, patologías y patrones de medicina china.',
+    'ADDITIONAL STUDY' => 'ESTUDIO ADICIONAL',
+    'Other chapters' => 'Otros capítulos',
+    'Additional source-based chapters that complement the principal study guides.' => 'Capítulos adicionales basados en fuentes que complementan las guías principales.',
+    'AVAILABLE' => 'DISPONIBLE',
+];
+$tr = static function(string $text) use ($ises, $spanishcopy): string {
+    if (!$ises) {
+        return $text;
+    }
+    if (isset($spanishcopy[$text])) {
+        return $spanishcopy[$text];
+    }
+    return strtr($text, [
+        'AVAILABLE' => 'DISPONIBLE',
+        'HIGH PRIORITY' => 'PRIORIDAD ALTA',
+        'FORMULAS' => 'FÓRMULAS',
+        'QUESTIONS' => 'PREGUNTAS',
+        'COMPARISONS' => 'COMPARACIONES',
+        'MODIFICATIONS' => 'MODIFICACIONES',
+        'FAMILIES' => 'FAMILIAS',
+        'ACTIONS' => 'ACCIONES',
+        'CLINICAL TIPS' => 'CONSEJOS CLÍNICOS',
+        'THEORY TOPICS' => 'TEMAS DE TEORÍA',
+        'SAFETY SECTIONS' => 'SECCIONES DE SEGURIDAD',
+        'SAFETY CHAPTERS' => 'CAPÍTULOS DE SEGURIDAD',
+        'NAME TRAPS' => 'TRAMPAS DE NOMBRES',
+        'FORMULA NAMES' => 'NOMBRES DE FÓRMULAS',
+        'CONNECTED STUDY' => 'ESTUDIO CONECTADO',
+        'APPENDIX' => 'APÉNDICE',
+    ]);
+};
+
 $areaid = optional_param('area', 'pointlocation', PARAM_ALPHA);
 if (!array_key_exists($areaid, $areas)) {
     $areaid = 'pointlocation';
 }
 $area = $areas[$areaid];
+if ($ises) {
+    $area['title'] = $tr($area['title']);
+    $area['description'] = $tr($area['description']);
+    foreach ($area['chapters'] as &$translatedchapter) {
+        foreach (['title', 'description', 'status', 'button_label', 'guide_status', 'board_practice'] as $field) {
+            if (isset($translatedchapter[$field])) {
+                $translatedchapter[$field] = $tr($translatedchapter[$field]);
+            }
+        }
+    }
+    unset($translatedchapter);
+}
 $primarychapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return empty($chapter['secondary']) && empty($chapter['practice_exam']) && empty($chapter['comparison']);
 }));
@@ -319,12 +438,14 @@ $librarygroups = [
     ],
 ];
 
-$pageurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid]);
-$chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => $areaid]);
-$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
-    'area' => $areaid,
-    'view' => 'library',
-]);
+$baseparams = ['area' => $areaid];
+if ($ises) {
+    $baseparams['lang'] = 'es';
+}
+$pageurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
+$chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
+$libraryparams = $baseparams + ['view' => 'library'];
+$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
@@ -332,15 +453,45 @@ if ($showconstruction) {
 }
 $currentguidelineurl = null;
 if ($areaid === 'herbology') {
-    $currentguidelineurl = new moodle_url('/study-guide/guidelines/chinese-herbal-medicine.html', [
+    $currentguidelineurl = new moodle_url($ises
+        ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
+        : '/study-guide/guidelines/chinese-herbal-medicine.html', [
         'return' => $pageurl->out(false),
     ]);
 }
+$languageparams = ['area' => $areaid];
+if ($showlibrary) {
+    $languageparams['view'] = 'library';
+}
+if (!$ises) {
+    $languageparams['lang'] = 'es';
+}
+$languageurl = new moodle_url('/blocks/myprogress/study-guide.php', $languageparams);
+$makechapterurl = static function(array $chapter) use ($ises): moodle_url {
+    $path = $chapter['path'];
+    $params = $chapter['params'] ?? [];
+    if ($ises) {
+        if (str_ends_with($path, '.php')) {
+            $params['lang'] = 'es';
+        } elseif (str_ends_with($path, '.html')) {
+            $spanishpath = substr($path, 0, -5) . '-es.html';
+            $spanishfile = __DIR__ . '/../../' . ltrim($spanishpath, '/');
+            if (is_readable($spanishfile)) {
+                $path = $spanishpath;
+            }
+        }
+    }
+    $url = new moodle_url($path, $params);
+    if ($chapter['anchor'] !== '') {
+        $url->set_anchor($chapter['anchor']);
+    }
+    return $url;
+};
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
-$pagelabel = $showlibrary ? ' Library' : ' Study Guide';
+$pagelabel = $showlibrary ? ($ises ? ' · Biblioteca' : ' Library') : ($ises ? ' · Guía de estudio' : ' Study Guide');
 $PAGE->set_title($area['title'] . $pagelabel);
 $PAGE->set_heading($area['title'] . $pagelabel);
 
@@ -426,47 +577,47 @@ echo $OUTPUT->header();
 <?php else: ?>
     <header class="subject-study-guide__top">
         <div>
-            <p class="subject-study-guide__eyebrow"><?php echo $showlibrary ? 'Study Library' : 'Study Guide'; ?></p>
-            <h2><?php echo s($area['title'] . ($showlibrary ? ' Library' : '')); ?></h2>
-            <p class="subject-study-guide__intro"><?php echo $showlibrary ? 'Open every Study Guide resource from one quick-access library.' : s($area['description']); ?></p>
+            <p class="subject-study-guide__eyebrow"><?php echo s($tr($showlibrary ? 'Study Library' : 'Study Guide')); ?></p>
+            <h2><?php echo s($area['title'] . ($showlibrary ? ($ises ? ' · Biblioteca' : ' Library') : '')); ?></h2>
+            <p class="subject-study-guide__intro"><?php echo $showlibrary ? s($ises ? 'Abre todos los recursos desde una biblioteca de acceso rápido.' : 'Open every Study Guide resource from one quick-access library.') : s($area['description']); ?></p>
         </div>
         <nav class="subject-study-guide__top-actions" aria-label="Study Guide course catalogs">
+            <?php if ($areaid === 'herbology'): ?>
+                <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+            <?php endif; ?>
             <?php if ($showlibrary): ?>
-                <a class="subject-study-guide__back" href="<?php echo $chapterlisturl->out(false); ?>">← Study Guide</a>
+                <a class="subject-study-guide__back" href="<?php echo $chapterlisturl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
             <?php elseif ($areaid === 'herbology'): ?>
-                <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>">Library →</a>
+                <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($tr('Library →')); ?></a>
             <?php endif; ?>
             <?php if ($currentguidelineurl !== null): ?>
-                <a class="subject-study-guide__back" href="<?php echo $currentguidelineurl->out(false); ?>">2026 Board Guideline ↔</a>
+                <a class="subject-study-guide__back" href="<?php echo $currentguidelineurl->out(false); ?>"><?php echo s($tr('2026 Board Guideline ↔')); ?></a>
             <?php endif; ?>
-            <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>">← Back to Dashboard</a>
+            <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
         </nav>
     </header>
 
     <?php if ($showlibrary): ?>
         <section class="subject-study-library" aria-labelledby="study-library-title">
             <header class="subject-study-library__intro">
-                <p class="subject-study-guide__eyebrow">Quick access</p>
-                <h3 id="study-library-title"><?php echo s($area['title']); ?> Library</h3>
-                <p>Everything available in the Study Guide is listed below as a direct button. New classified resources will appear here automatically.</p>
+                <p class="subject-study-guide__eyebrow"><?php echo s($ises ? 'Acceso rápido' : 'Quick access'); ?></p>
+                <h3 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h3>
+                <p><?php echo s($ises ? 'Todo lo disponible en la guía aparece abajo como botón directo. Los nuevos recursos clasificados aparecerán automáticamente.' : 'Everything available in the Study Guide is listed below as a direct button. New classified resources will appear here automatically.'); ?></p>
             </header>
             <?php foreach ($librarygroups as $group): ?>
                 <?php if (!empty($group['chapters'])): ?>
                     <section class="subject-study-library__group subject-study-library__group--<?php echo s($group['modifier']); ?>">
                         <header class="subject-study-library__group-header">
                             <div>
-                                <h3><?php echo s($group['title']); ?></h3>
-                                <p><?php echo s($group['description']); ?></p>
+                                <h3><?php echo s($tr($group['title'])); ?></h3>
+                                <p><?php echo s($tr($group['description'])); ?></p>
                             </div>
-                            <span class="subject-study-library__count"><?php echo count($group['chapters']); ?> resources</span>
+                            <span class="subject-study-library__count"><?php echo count($group['chapters']); ?> <?php echo $ises ? 'recursos' : 'resources'; ?></span>
                         </header>
                         <nav class="subject-study-library__buttons" aria-label="<?php echo s($group['title']); ?>">
                             <?php foreach ($group['chapters'] as $chapter): ?>
                                 <?php
-                                $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
-                                if ($chapter['anchor'] !== '') {
-                                    $chapterurl->set_anchor($chapter['anchor']);
-                                }
+                                $chapterurl = $makechapterurl($chapter);
                                 ?>
                                 <a class="subject-study-library__button" href="<?php echo $chapterurl->out(false); ?>" title="<?php echo s($chapter['description']); ?>"><?php echo s($chapter['title']); ?></a>
                             <?php endforeach; ?>
@@ -502,13 +653,10 @@ echo $OUTPUT->header();
     <section id="study-guide-chapters" class="subject-study-guide__grid<?php echo $areaid === 'herbology' ? ' subject-study-guide__grid--herbology' : ''; ?>" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
         <?php foreach ($primarychapters as $chapter): ?>
             <?php
-            $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
-            if ($chapter['anchor'] !== '') {
-                $chapterurl->set_anchor($chapter['anchor']);
-            }
+            $chapterurl = $makechapterurl($chapter);
             ?>
             <article class="subject-study-guide__card<?php echo !empty($chapter['priority']) ? ' subject-study-guide__card--priority' : ''; ?>">
-                <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
+                <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? $tr('AVAILABLE')); ?></span>
                 <h3><?php echo s($chapter['title']); ?></h3>
                 <p><?php echo s($chapter['description']); ?></p>
                 <?php if (isset($chapter['objectives'])): ?>
@@ -521,30 +669,27 @@ echo $OUTPUT->header();
                         <dd><?php echo s($chapter['board_practice']); ?></dd>
                     </dl>
                 <?php endif; ?>
-                <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
+                <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($tr('Open Study Guide →')); ?></a>
             </article>
         <?php endforeach; ?>
 
         <?php if (!empty($practicechapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__practice" aria-labelledby="practice-exams-title">
                 <header class="subject-study-guide__other-header">
-                    <span class="subject-study-guide__status">PRACTICE</span>
-                    <h3 id="practice-exams-title">Practice Exams</h3>
-                    <p>Practice herb comparisons, principal formulas and their clinical modifications.</p>
+                    <span class="subject-study-guide__status"><?php echo s($tr('PRACTICE')); ?></span>
+                    <h3 id="practice-exams-title"><?php echo s($tr('Practice Exams')); ?></h3>
+                    <p><?php echo s($tr('Practice herb comparisons, principal formulas and their clinical modifications.')); ?></p>
                 </header>
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($practicechapters as $chapter): ?>
                         <?php
-                        $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
-                        if ($chapter['anchor'] !== '') {
-                            $chapterurl->set_anchor($chapter['anchor']);
-                        }
+                        $chapterurl = $makechapterurl($chapter);
                         ?>
                         <article class="subject-study-guide__card">
-                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
+                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? $tr('AVAILABLE')); ?></span>
                             <h3><?php echo s($chapter['title']); ?></h3>
                             <p><?php echo s($chapter['description']); ?></p>
-                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($chapter['button_label'] ?? 'Open Study Guide →'); ?></a>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($chapter['button_label'] ?? $tr('Open Study Guide →')); ?></a>
                         </article>
                     <?php endforeach; ?>
                 </div>
@@ -554,23 +699,20 @@ echo $OUTPUT->header();
         <?php if (!empty($comparisonchapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__comparisons" aria-labelledby="comparisons-title">
                 <header class="subject-study-guide__other-header">
-                    <span class="subject-study-guide__status">COMPARATIVE STUDY</span>
-                    <h3 id="comparisons-title">Comparisons</h3>
-                    <p>Compare single herbs, formulas, pathologies and Chinese medicine patterns.</p>
+                    <span class="subject-study-guide__status"><?php echo s($tr('COMPARATIVE STUDY')); ?></span>
+                    <h3 id="comparisons-title"><?php echo s($tr('Comparisons')); ?></h3>
+                    <p><?php echo s($tr('Compare single herbs, formulas, pathologies and Chinese medicine patterns.')); ?></p>
                 </header>
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($comparisonchapters as $chapter): ?>
                         <?php
-                        $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
-                        if ($chapter['anchor'] !== '') {
-                            $chapterurl->set_anchor($chapter['anchor']);
-                        }
+                        $chapterurl = $makechapterurl($chapter);
                         ?>
                         <article class="subject-study-guide__card">
-                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
+                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? $tr('AVAILABLE')); ?></span>
                             <h3><?php echo s($chapter['title']); ?></h3>
                             <p><?php echo s($chapter['description']); ?></p>
-                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($tr('Open Study Guide →')); ?></a>
                         </article>
                     <?php endforeach; ?>
                 </div>
@@ -580,23 +722,20 @@ echo $OUTPUT->header();
         <?php if (!empty($otherchapters)): ?>
             <section class="subject-study-guide__other" aria-labelledby="other-chapters-title">
                 <header class="subject-study-guide__other-header">
-                    <span class="subject-study-guide__status">ADDITIONAL STUDY</span>
-                    <h3 id="other-chapters-title">Other chapters</h3>
-                    <p>Additional source-based chapters that complement the principal study guides.</p>
+                    <span class="subject-study-guide__status"><?php echo s($tr('ADDITIONAL STUDY')); ?></span>
+                    <h3 id="other-chapters-title"><?php echo s($tr('Other chapters')); ?></h3>
+                    <p><?php echo s($tr('Additional source-based chapters that complement the principal study guides.')); ?></p>
                 </header>
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($otherchapters as $chapter): ?>
                         <?php
-                        $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
-                        if ($chapter['anchor'] !== '') {
-                            $chapterurl->set_anchor($chapter['anchor']);
-                        }
+                        $chapterurl = $makechapterurl($chapter);
                         ?>
                         <article class="subject-study-guide__card">
-                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
+                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? $tr('AVAILABLE')); ?></span>
                             <h3><?php echo s($chapter['title']); ?></h3>
                             <p><?php echo s($chapter['description']); ?></p>
-                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($tr('Open Study Guide →')); ?></a>
                         </article>
                     <?php endforeach; ?>
                 </div>
