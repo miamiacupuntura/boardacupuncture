@@ -92,7 +92,7 @@ $areas = [
                 'path' => '/study-guide/comparisons/families.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · 22 FAMILIES',
-                'comparison' => true,
+                'secondary' => true,
             ],
             [
                 'title' => 'Formula Comparisons',
@@ -100,6 +100,30 @@ $areas = [
                 'path' => '/study-guide/comparisons/formulas.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · 110 COMPARISONS',
+                'secondary' => true,
+            ],
+            [
+                'title' => 'Single Herbs Comparisons',
+                'description' => 'Review 247 comparative study notes that distinguish similar herbs by actions, indications, channels and decisive clinical clues.',
+                'path' => '/study-guide/comparisons/index.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 247 COMPARISONS',
+                'comparison' => true,
+            ],
+            [
+                'title' => 'Pathology Comparisons',
+                'description' => 'Review 66 clinical comparisons organized by pathology, symptom location and the clues that guide herb or formula selection.',
+                'path' => '/study-guide/comparisons/pathologies.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 66 COMPARISONS',
+                'comparison' => true,
+            ],
+            [
+                'title' => 'Pattern Comparisons',
+                'description' => 'Review 50 pattern comparisons that separate similar Chinese medicine presentations by mechanism, signs, tongue and pulse.',
+                'path' => '/study-guide/comparisons/patterns.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 50 COMPARISONS',
                 'comparison' => true,
             ],
             [
@@ -108,7 +132,7 @@ $areas = [
                 'path' => '/study-guide/comparisons/formula-modifications.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · 305 MODIFICATIONS',
-                'comparison' => true,
+                'secondary' => true,
             ],
             [
                 'title' => 'Formula Modification Practice Exams',
@@ -336,7 +360,7 @@ echo $OUTPUT->header();
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status">COMPARATIVE STUDY</span>
                     <h3 id="comparisons-title">Comparisons</h3>
-                    <p>Compare formula families, similar formulas and their clinical modifications.</p>
+                    <p>Compare single herbs, pathologies and Chinese medicine patterns.</p>
                 </header>
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($comparisonchapters as $chapter): ?>
