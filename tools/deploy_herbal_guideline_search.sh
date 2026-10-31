@@ -5,7 +5,7 @@ set -euo pipefail
 REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
-TARGET_DIR="$MOODLE_ROOT/study-guide/guidelines"
+TARGET_DIR="${GUIDELINE_DIR:-}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -13,10 +13,38 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     exit 1
 fi
 
-if [[ ! -f "$MOODLE_ROOT/config.php" || ! -d "$TARGET_DIR" ]]; then
-    echo "ERROR: no se encontró la guía activa en $TARGET_DIR"
+if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
+    echo "ERROR: no se encontró Moodle en $MOODLE_ROOT"
     exit 1
 fi
+
+if [[ -z "$TARGET_DIR" ]]; then
+    CANDIDATE_DIRS=(
+        "$MOODLE_ROOT/study-guide/guidelines"
+        "$(dirname "$MOODLE_ROOT")/study-guide/guidelines"
+        "/var/www/html/study-guide/guidelines"
+    )
+    for candidate in "${CANDIDATE_DIRS[@]}"; do
+        if [[ -f "$candidate/guideline-return.js" && -f "$candidate/guidelines.css" ]]; then
+            TARGET_DIR="$candidate"
+            break
+        fi
+    done
+fi
+
+if [[ -z "$TARGET_DIR" ]]; then
+    ACTIVE_GUIDE="$(find /var/www -type f -path '*/study-guide/guidelines/guideline-return.js' -print -quit 2>/dev/null || true)"
+    if [[ -n "$ACTIVE_GUIDE" ]]; then
+        TARGET_DIR="$(dirname "$ACTIVE_GUIDE")"
+    fi
+fi
+
+if [[ -z "$TARGET_DIR" || ! -f "$TARGET_DIR/guideline-return.js" || ! -f "$TARGET_DIR/guidelines.css" ]]; then
+    echo "ERROR: no se encontró la guía activa. Puedes indicar su ruta con GUIDELINE_DIR=/ruta/study-guide/guidelines"
+    exit 1
+fi
+
+echo "Guía detectada: $TARGET_DIR"
 
 TEMP_DIR="$(mktemp -d)"
 BACKUP_DIR="$BACKUP_ROOT/boardacupuncture-guideline-search-$(date +%Y%m%d-%H%M%S)"
