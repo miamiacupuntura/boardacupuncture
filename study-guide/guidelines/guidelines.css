@@ -82,6 +82,23 @@ a { color: inherit; }
 .guide-herb-roster span { margin-top: 2px; color: var(--muted); font-size: .77rem; font-style: italic; line-height: 1.35; }
 .guide-annex-source { padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 .guide-annex-source a { color: var(--teal); font-weight: 800; }
+.guide-formula-roster { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--line); }
+.guide-formula-roster > h3 { margin: 0 0 6px; font-size: 1.25rem; }
+.guide-formula-roster > p { margin: 0 0 16px; }
+.guide-formula-roster__status { padding: 13px 15px; border-radius: 8px; background: #edf4f7; color: var(--muted); }
+.guide-formula-roster__status--error { background: #fff3e8; color: #8a461b; }
+.guide-formula-roster__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.guide-formula-category { min-width: 0; overflow: hidden; border: 1px solid #d9e4eb; border-radius: 10px; background: #f8fbfc; }
+.guide-formula-category__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 15px; border-bottom: 1px solid #d9e4eb; background: #edf7f5; }
+.guide-formula-category__heading h4 { margin: 0; font-size: .96rem; line-height: 1.35; }
+.guide-formula-category__heading > span { flex: 0 0 auto; color: var(--teal); font-size: .72rem; font-weight: 900; text-transform: uppercase; }
+.guide-formula-category__list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.guide-formula-category__list li { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; padding: 9px 15px; border-bottom: 1px solid #e3ebef; }
+.guide-formula-category__list li:last-child { border-bottom: 0; }
+.guide-formula-category__list a { min-width: 0; color: var(--navy); font-size: .89rem; font-weight: 800; line-height: 1.35; text-decoration: none; }
+.guide-formula-category__list a:hover,
+.guide-formula-category__list a:focus { color: var(--teal); text-decoration: underline; }
+.guide-formula-category__priority { flex: 0 0 auto; padding: 3px 6px; border-radius: 999px; background: #dff2ed; color: #05665c; font-size: .62rem; font-weight: 900; text-transform: uppercase; }
 
 @media (max-width: 900px) {
   .guide-grid--three { grid-template-columns: 1fr; }
@@ -94,6 +111,7 @@ a { color: inherit; }
   .guide-topbar__inner { align-items: flex-start; flex-direction: column; }
   .guide-hero { padding: 28px 22px; }
   .guide-grid { grid-template-columns: 1fr; }
+  .guide-formula-roster__grid { grid-template-columns: 1fr; }
   .guide-card--wide { grid-column: auto; }
   .guide-reading-flow { padding: 0 20px; }
   .guide-reading-step { grid-template-columns: 1fr; gap: 10px; }
