@@ -303,7 +303,7 @@ class block_menu extends block_base {
                 if ($subject['area'] === 'herbology') {
                     $comparisonsurl = new moodle_url('/study-guide/comparisons/index.html');
                     $actions .= '<a class="board-hub__action comparisons-dashboard-link" href="'
-                        . $comparisonsurl->out(false) . '">Comparisons</a>';
+                        . $comparisonsurl->out(false) . '">Library</a>';
                 }
                 $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
                     . $studyguideurl->out(false) . '">Study Guide</a>';
