@@ -128,6 +128,29 @@ foreach ($data['formulas'] as $formula) {
     }
 }
 
+$boardformulasbyname = [];
+foreach ($data['formulas'] as $boardformula) {
+    $boardformulasbyname[$boardformula['name']] = $boardformula;
+}
+$boardformulaaliases = [
+    'Shen Qi Wan' => 'Jin Gui Shen Qi Wan',
+];
+$getboardformula = static function(string $name) use ($boardformulasbyname, $boardformulaaliases): ?array {
+    $boardname = $boardformulaaliases[$name] ?? $name;
+    return $boardformulasbyname[$boardname] ?? null;
+};
+$makeboardformulaurl = static function(array $boardformula) use ($ises): moodle_url {
+    $params = ['focus' => $boardformula['categoryKey']];
+    if ($ises) {
+        $params['lang'] = 'es';
+    }
+    return new moodle_url(
+        '/blocks/myprogress/formulas-study-guide.php',
+        $params,
+        'formula-' . $boardformula['number']
+    );
+};
+
 $supplementalcategories = [];
 foreach ($data['supplementalCategories'] as $category) {
     $category['formulas'] = [];
@@ -270,6 +293,7 @@ echo $OUTPUT->header();
 .formula-study-guide__priority{margin:0 0 18px;padding:20px 22px;border:1px solid #b9dfd7;border-left:5px solid #0b817d;border-radius:11px;background:#eef9f6}.formula-study-guide__priority h4{margin:0 0 7px;font-size:20px}.formula-study-guide__priority h5{margin:17px 0 0;font-size:15px}.formula-study-guide__priority>p{margin:0;color:#496474;line-height:1.55}
 .formula-study-guide__route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.formula-study-guide__route-step{padding:13px;border-radius:9px;background:#fff}.formula-study-guide__route-step b{display:flex;align-items:center;gap:8px;color:#123246}.formula-study-guide__route-number{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-size:12px}.formula-study-guide__route-step p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}
 .formula-study-guide__compare{margin:0 0 20px;border:1px solid #d8e1e7;border-radius:11px;background:#fff;overflow:hidden}.formula-study-guide__compare h4{margin:0;padding:16px 18px;background:#f5f8fa;font-size:18px}.formula-study-guide__table-wrap{overflow-x:auto}.formula-study-guide__table{width:100%;border-collapse:collapse}.formula-study-guide__table th,.formula-study-guide__table td{padding:11px 14px;border-top:1px solid #e2e8ec;text-align:left;vertical-align:top}.formula-study-guide__table th{color:#334155;font-size:12px;text-transform:uppercase}.formula-study-guide__table td{color:#52677a;line-height:1.4}.formula-study-guide__table td:first-child{color:#17232a;font-weight:800;white-space:nowrap}
+.formula-study-guide__domain-badge{display:inline-flex;align-items:center;margin:5px 0 0;padding:4px 7px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;white-space:nowrap}.formula-study-guide__domain-badge:hover{background:#c9ddff;color:#0b3b8c;text-decoration:none}
 .formula-study-guide__category-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px}.formula-study-guide__category-nav>span{flex:1}.formula-study-guide__category-nav>span:last-child{text-align:right}.formula-study-guide__category-nav-center{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap}
 .formula-study-guide__formula-list{display:grid;gap:16px}
 .formula-study-guide__formula{padding:22px;border:1px solid #d8e1e7;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.04)}
@@ -474,7 +498,18 @@ echo $OUTPUT->header();
                         <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                         <tbody>
                             <?php foreach ($selectedguide['quickCompare'] as $row): ?>
-                                <tr><td><?php echo s($row[0]); ?></td><td><?php echo s($ises ? $row[3] : $row[1]); ?></td><td><?php echo s($ises ? $row[4] : $row[2]); ?></td></tr>
+                                <?php $boardmatch = $getboardformula($row[0]); ?>
+                                <tr>
+                                    <td>
+                                        <?php echo s($row[0]); ?>
+                                        <?php if ($boardmatch !== null): ?>
+                                            <?php $boardurl = $makeboardformulaurl($boardmatch); ?><br>
+                                            <a class="formula-study-guide__domain-badge" href="<?php echo $boardurl->out(false); ?>"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></a>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
+                                    <td><?php echo s($ises ? $row[4] : $row[2]); ?></td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -540,7 +575,18 @@ echo $OUTPUT->header();
                                     <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
-                                            <tr><td><?php echo s($row[0]); ?></td><td><?php echo s($ises ? $row[3] : $row[1]); ?></td><td><?php echo s($ises ? $row[4] : $row[2]); ?></td></tr>
+                                            <?php $boardmatch = $getboardformula($row[0]); ?>
+                                            <tr>
+                                                <td>
+                                                    <?php echo s($row[0]); ?>
+                                                    <?php if ($boardmatch !== null): ?>
+                                                        <?php $boardurl = $makeboardformulaurl($boardmatch); ?><br>
+                                                        <a class="formula-study-guide__domain-badge" href="<?php echo $boardurl->out(false); ?>"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></a>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
+                                                <td><?php echo s($ises ? $row[4] : $row[2]); ?></td>
+                                            </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
