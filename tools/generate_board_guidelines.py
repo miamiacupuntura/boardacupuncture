@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 from html import escape
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "study-guide" / "guidelines"
@@ -106,7 +107,7 @@ def top(lang, title, alternate, back="../board-guidelines", css_version="2026102
     return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{escape(title)}"><title>{escape(title)} | AcupunctureTests</title><link rel="alternate" hreflang="{'en' if es else 'es'}" href="{alternate}"><link rel="stylesheet" href="guidelines.css?v={css_version}"></head><body><header class="guide-topbar"><div class="guide-shell guide-topbar__inner"><a class="guide-brand" href="{back}{suffix}">☯ AcupunctureTests · {'Guías de Board' if es else 'Board Guidelines'}</a><div class="guide-actions"><a class="guide-button guide-button--outline" href="{alternate}">{'English' if es else 'Español'}</a><a class="guide-button guide-button--outline" href="/my/">← Dashboard</a></div></div></header><main class="guide-shell">'''
 
 def foot(es=False, returnscript=False):
-    script = '<script src="guideline-return.js?v=20261029-1"></script>' if returnscript else ''
+    script = '<script src="guideline-return.js?v=20261031-5"></script>' if returnscript else ''
     return f'''</main><footer class="guide-footer"><div class="guide-shell">{'Revisado el 27 de octubre de 2026 · El temario oficial vigente siempre prevalece.' if es else 'Reviewed October 27, 2026 · The current official outline always controls.'}</div></footer>{script}</body></html>'''
 
 
@@ -123,7 +124,11 @@ def appendix_a_roster(es=False):
         pinyin, separator, latin = entry.rpartition(" (")
         if not separator or not latin.endswith(")"):
             raise ValueError(f"Invalid Appendix A herb entry: {entry}")
-        items.append(f'<li><strong>{escape(pinyin)}</strong><span>{escape(latin[:-1])}</span></li>')
+        herb_url = f'/blocks/myprogress/single-herbs-study-guide.php?herb={quote(pinyin)}'
+        if es:
+            herb_url += '&amp;lang=es'
+        label = f'Abrir ficha de {pinyin}' if es else f'Open card for {pinyin}'
+        items.append(f'<li><a class="guide-herb-roster__card-link" href="{herb_url}" aria-label="{escape(label, quote=True)}"><strong>{escape(pinyin)}</strong></a><span>{escape(latin[:-1])}</span></li>')
     return f'''<section class="guide-section guide-section--annex" id="appendix-a-current-roster"><p class="guide-eyebrow">{'Anexo · Apéndice A vigente' if es else 'Annex · Current Appendix A'}</p><h2>{'Listado oficial de 304 hierbas individuales' if es else 'Official roster of 304 individual herbs'}</h2><p>{'Transcripción de Appendix A del Chinese Herbology Content Outline de NCBAHM, efectivo el 1 de septiembre de 2026. El Board indica que el examen se concentra en esta lista, pero puede mencionar otras hierbas y usarlas como distractores.' if es else 'Transcribed from Appendix A of the NCBAHM Chinese Herbology Content Outline, effective September 1, 2026. The Board states that the exam focuses on this roster, but other herbs may still be mentioned and used as distractors.'}</p><ol class="guide-herb-roster">{''.join(items)}</ol><div class="guide-annex-source"><strong>{'Fuente oficial:' if es else 'Official source:'}</strong> <a href="{CH}" target="_blank" rel="noopener">NCBAHM · Chinese Herbology Content Outline 2026 ↗</a> · <a href="#appendix-a-study">{'Volver a la sección de estudio ↑' if es else 'Back to the study section ↑'}</a></div></section>'''
 
 def board_page(board, lang):
@@ -136,7 +141,7 @@ def board_page(board, lang):
     alternate = f'{board["slug"]}{"" if es else "-es"}.html'
     source = board.get("source", OFFICIAL)
     herbal = board["slug"] == "chinese-herbal-medicine"
-    html = top(lang, title, alternate, css_version="20261029-1" if herbal else "20261027-7")
+    html = top(lang, title, alternate, css_version="20261031-5" if herbal else "20261027-7")
     html += f'''<section class="guide-hero"><p class="guide-eyebrow">{'Guía de Board' if es else 'Board guideline'}</p><h1>{escape(title)}</h1><p>{escape(summary)}</p></section>'''
     if herbal:
         html += f'''<div class="guide-alert"><strong>{'Documento de lectura continua.' if es else 'Continuous reading document.'}</strong> {'Lee de arriba hacia abajo sin cambiar de página. Esta guía contiene el orden de estudio, los cambios principales, las prioridades y el control final.' if es else 'Read from top to bottom without changing pages. This guide contains the study order, key changes, priorities and final review.'}</div>'''

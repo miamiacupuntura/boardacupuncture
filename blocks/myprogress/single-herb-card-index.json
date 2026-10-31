@@ -1,0 +1,1528 @@
+{
+  "version": 1,
+  "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
+  "total": 304,
+  "routedToDetailedStudy": 199,
+  "herbs": [
+    {
+      "name": "Ai Ye",
+      "latin": "Artemisiae argyi Folium",
+      "guideNumber": 20
+    },
+    {
+      "name": "Ba Dou",
+      "latin": "Crotonis Fructus",
+      "guideNumber": 9
+    },
+    {
+      "name": "Ba Ji Tian",
+      "latin": "Morindae officinalis Radix",
+      "guideNumber": 25
+    },
+    {
+      "name": "Bai Bian Dou",
+      "latin": "Lablab Semen album",
+      "guideNumber": 8
+    },
+    {
+      "name": "Bai Bu",
+      "latin": "Stemonae Radix",
+      "guideNumber": 15
+    },
+    {
+      "name": "Bai Dou Kou",
+      "latin": "Amomi Fructus rotundus",
+      "guideNumber": 16
+    },
+    {
+      "name": "Bai Guo",
+      "latin": "Ginkgo Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Bai He",
+      "latin": "Lilii Bulbus",
+      "guideNumber": null
+    },
+    {
+      "name": "Bai Hua She",
+      "latin": "Agkistrodon/Bungarus",
+      "guideNumber": null
+    },
+    {
+      "name": "Bai Hua She She Cao",
+      "latin": "Hedyotis diffusae Herba",
+      "guideNumber": 6
+    },
+    {
+      "name": "Bai Ji",
+      "latin": "Bletillae Rhizoma",
+      "guideNumber": 20
+    },
+    {
+      "name": "Bai Jiang Can",
+      "latin": "Bombyx Batryticatus",
+      "guideNumber": null
+    },
+    {
+      "name": "Bai Jiang Cao",
+      "latin": "Patriniae Herba",
+      "guideNumber": 6
+    },
+    {
+      "name": "Bai Jie Zi",
+      "latin": "Sinapis Semen",
+      "guideNumber": 14
+    },
+    {
+      "name": "Bai Mao Gen",
+      "latin": "Imperatae Rhizoma",
+      "guideNumber": 20
+    },
+    {
+      "name": "Bai Qian",
+      "latin": "Cynanchi stauntonii Rhizoma",
+      "guideNumber": 14
+    },
+    {
+      "name": "Bai Shao",
+      "latin": "Paeoniae Radix alba",
+      "guideNumber": 24
+    },
+    {
+      "name": "Bai Tou Weng",
+      "latin": "Pulsatillae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Bai Wei",
+      "latin": "Cynanchi atrati Radix",
+      "guideNumber": 7
+    },
+    {
+      "name": "Bai Xian Pi",
+      "latin": "Dictamni Cortex",
+      "guideNumber": 5
+    },
+    {
+      "name": "Bai Zhi",
+      "latin": "Angelicae dahuricae Radix",
+      "guideNumber": 1
+    },
+    {
+      "name": "Bai Zhu",
+      "latin": "Atractylodis macrocephalae Rhizoma",
+      "guideNumber": 23
+    },
+    {
+      "name": "Bai Zi Ren",
+      "latin": "Platycladi Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Ban Lan Gen",
+      "latin": "Isatidis/Baphicacanthis Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Ban Xia",
+      "latin": "Pinelliae Rhizoma",
+      "guideNumber": 14
+    },
+    {
+      "name": "Ban Zhi Lian",
+      "latin": "Scutellariae barbatae Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Bi Ba",
+      "latin": "Piperis longi Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Bi Xie",
+      "latin": "Dioscoreae hypoglaucae Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Bian Xu",
+      "latin": "Polygoni avicularis Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Bie Jia",
+      "latin": "Trionycis Carapax",
+      "guideNumber": 7
+    },
+    {
+      "name": "Bing Lang",
+      "latin": "Arecae Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Bing Pian",
+      "latin": "Borneolum",
+      "guideNumber": null
+    },
+    {
+      "name": "Bo He",
+      "latin": "Menthae haplocalycis Herba",
+      "guideNumber": 2
+    },
+    {
+      "name": "Bu Gu Zhi",
+      "latin": "Psoraleae Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Cang Er Zi",
+      "latin": "Xanthii Fructus",
+      "guideNumber": 12
+    },
+    {
+      "name": "Cang Zhu",
+      "latin": "Atractylodis Rhizoma",
+      "guideNumber": 16
+    },
+    {
+      "name": "Cao Dou Kou",
+      "latin": "Alpiniae katsumadai Semen",
+      "guideNumber": 16
+    },
+    {
+      "name": "Cao Guo",
+      "latin": "Tsaoko Fructus",
+      "guideNumber": 16
+    },
+    {
+      "name": "Cao Wu",
+      "latin": "Aconiti kusnezoffii Radix",
+      "guideNumber": 21
+    },
+    {
+      "name": "Ce Bai Ye",
+      "latin": "Platycladi Cacumen",
+      "guideNumber": 20
+    },
+    {
+      "name": "Chai Hu",
+      "latin": "Bupleuri Radix",
+      "guideNumber": 2
+    },
+    {
+      "name": "Chan Tui",
+      "latin": "Cicadae Periostracum",
+      "guideNumber": 2
+    },
+    {
+      "name": "Che Qian Zi",
+      "latin": "Plantaginis Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Chen Pi",
+      "latin": "Citri reticulatae Pericarpium",
+      "guideNumber": 18
+    },
+    {
+      "name": "Chen Xiang",
+      "latin": "Aquilariae Lignum resinatum",
+      "guideNumber": 18
+    },
+    {
+      "name": "Chi Shao",
+      "latin": "Paeoniae Radix rubra",
+      "guideNumber": 4
+    },
+    {
+      "name": "Chi Shi Zhi",
+      "latin": "Halloysitum rubrum",
+      "guideNumber": null
+    },
+    {
+      "name": "Chi Xiao Dou",
+      "latin": "Phaseoli Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Chuan Bei Mu",
+      "latin": "Fritillariae cirrhosae Bulbus",
+      "guideNumber": 13
+    },
+    {
+      "name": "Chuan Lian Zi",
+      "latin": "Toosendan Fructus",
+      "guideNumber": 18
+    },
+    {
+      "name": "Chuan Mu Tong",
+      "latin": "Clematidis armandii Caulis",
+      "guideNumber": null
+    },
+    {
+      "name": "Chuan Niu Xi",
+      "latin": "Cyathulae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Chuan Wu",
+      "latin": "Aconiti Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Chuan Xin Lian",
+      "latin": "Andrographitis Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Chuan Xiong",
+      "latin": "Chuanxiong Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Chun Pi",
+      "latin": "Ailanthi Cortex",
+      "guideNumber": 27
+    },
+    {
+      "name": "Ci Ji Li",
+      "latin": "Tribuli Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Ci Shi",
+      "latin": "Magnetitum",
+      "guideNumber": 28
+    },
+    {
+      "name": "Ci Wu Jia",
+      "latin": "Acanthopanacis senticosi Radix et Caulis",
+      "guideNumber": null
+    },
+    {
+      "name": "Cong Bai",
+      "latin": "Allii fistulosi Bulbus",
+      "guideNumber": 1
+    },
+    {
+      "name": "Da Fu Pi",
+      "latin": "Arecae Pericarpium",
+      "guideNumber": 18
+    },
+    {
+      "name": "Da Huang",
+      "latin": "Rhei Radix et Rhizoma",
+      "guideNumber": 9
+    },
+    {
+      "name": "Da Ji",
+      "latin": "Cirsii japonici Herba sive Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Da Qing Ye",
+      "latin": "Isatidis Folium",
+      "guideNumber": null
+    },
+    {
+      "name": "Da Zao",
+      "latin": "Jujubae Fructus",
+      "guideNumber": 23
+    },
+    {
+      "name": "Dai Zhe Shi",
+      "latin": "Haematitum",
+      "guideNumber": 31
+    },
+    {
+      "name": "Dan Dou Chi",
+      "latin": "Sojae Semen preparatum",
+      "guideNumber": 2
+    },
+    {
+      "name": "Dan Shen",
+      "latin": "Salviae miltiorrhizae Radix",
+      "guideNumber": 4
+    },
+    {
+      "name": "Dan Zhu Ye",
+      "latin": "Lophateri Herba",
+      "guideNumber": 3
+    },
+    {
+      "name": "Dang Gui",
+      "latin": "Angelicae sinensis Radix",
+      "guideNumber": 10
+    },
+    {
+      "name": "Dang Shen",
+      "latin": "Codonopsis Radix",
+      "guideNumber": 23
+    },
+    {
+      "name": "Deng Xin Cao",
+      "latin": "Junci Medulla",
+      "guideNumber": null
+    },
+    {
+      "name": "Di Fu Zi",
+      "latin": "Kochiae Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Di Gu Pi",
+      "latin": "Lycii Cortex",
+      "guideNumber": 7
+    },
+    {
+      "name": "Di Long",
+      "latin": "Pheretima",
+      "guideNumber": 31
+    },
+    {
+      "name": "Di Yu",
+      "latin": "Sanguisorbae Radix",
+      "guideNumber": 20
+    },
+    {
+      "name": "Ding Xiang",
+      "latin": "Caryophylli Flos",
+      "guideNumber": null
+    },
+    {
+      "name": "Dong Chong Xia Cao",
+      "latin": "Cordyceps",
+      "guideNumber": 25
+    },
+    {
+      "name": "Dong Gua Zi",
+      "latin": "Benincasae Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Dong Kui Zi",
+      "latin": "Malvae Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Du Huo",
+      "latin": "Angelicae pubescentis Radix",
+      "guideNumber": 12
+    },
+    {
+      "name": "Du Zhong",
+      "latin": "Eucommiae Cortex",
+      "guideNumber": 25
+    },
+    {
+      "name": "E Jiao",
+      "latin": "Asini Corii Colla",
+      "guideNumber": 24
+    },
+    {
+      "name": "E Zhu",
+      "latin": "Curcumae Rhizoma",
+      "guideNumber": 19
+    },
+    {
+      "name": "Fan Xie Ye",
+      "latin": "Sennae Folium",
+      "guideNumber": 9
+    },
+    {
+      "name": "Fang Feng",
+      "latin": "Saposhnikoviae Radix",
+      "guideNumber": 1
+    },
+    {
+      "name": "Feng Mi",
+      "latin": "Mel",
+      "guideNumber": 10
+    },
+    {
+      "name": "Fo Shou",
+      "latin": "Citri sarcodactylis Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Fu Ling",
+      "latin": "Poria",
+      "guideNumber": null
+    },
+    {
+      "name": "Fu Pen Zi",
+      "latin": "Rubi Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Fu Shen",
+      "latin": "Poriae Sclerotium pararadicis",
+      "guideNumber": null
+    },
+    {
+      "name": "Fu Xiao Mai",
+      "latin": "Tritici Fructus levis",
+      "guideNumber": 27
+    },
+    {
+      "name": "Fu Zi",
+      "latin": "Aconiti Radix lateralis",
+      "guideNumber": 21
+    },
+    {
+      "name": "Gan Cao",
+      "latin": "Glycyrrhizae Radix",
+      "guideNumber": 23
+    },
+    {
+      "name": "Gan Jiang",
+      "latin": "Zingiberis Rhizoma",
+      "guideNumber": 21
+    },
+    {
+      "name": "Gan Sui",
+      "latin": "Kansui Radix",
+      "guideNumber": 9
+    },
+    {
+      "name": "Gao Ben",
+      "latin": "Ligustici Rhizoma",
+      "guideNumber": 1
+    },
+    {
+      "name": "Gao Liang Jiang",
+      "latin": "Alpiniae officinarum Rhizoma",
+      "guideNumber": 21
+    },
+    {
+      "name": "Ge Gen",
+      "latin": "Puerariae Radix",
+      "guideNumber": 2
+    },
+    {
+      "name": "Ge Jie",
+      "latin": "Gecko",
+      "guideNumber": null
+    },
+    {
+      "name": "Gou Ji",
+      "latin": "Cibotii Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Gou Qi Zi",
+      "latin": "Lycii Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Gou Teng",
+      "latin": "Uncariae Ramulus cum Uncis",
+      "guideNumber": 31
+    },
+    {
+      "name": "Gu Sui Bu",
+      "latin": "Drynariae Rhizoma",
+      "guideNumber": 25
+    },
+    {
+      "name": "Gu Ya (Setariae",
+      "latin": "Oryzae) Fructus germinatus",
+      "guideNumber": null
+    },
+    {
+      "name": "Gua Lou",
+      "latin": "Trichosanthis Fructus",
+      "guideNumber": 13
+    },
+    {
+      "name": "Gua Lou Pi",
+      "latin": "Trichosanthis Pericarpium",
+      "guideNumber": 13
+    },
+    {
+      "name": "Gua Lou Ren",
+      "latin": "Trichosanthis Semen",
+      "guideNumber": 13
+    },
+    {
+      "name": "Gui Ban",
+      "latin": "Testudinis Plastrum",
+      "guideNumber": null
+    },
+    {
+      "name": "Gui Zhi",
+      "latin": "Cinnamomi Ramulus",
+      "guideNumber": 1
+    },
+    {
+      "name": "Hai Jin Sha",
+      "latin": "Lygodii Spora",
+      "guideNumber": null
+    },
+    {
+      "name": "Hai Piao Xiao",
+      "latin": "Sepia Endoconcha",
+      "guideNumber": null
+    },
+    {
+      "name": "Hai Tong Pi",
+      "latin": "Erythrinae Cortex",
+      "guideNumber": 12
+    },
+    {
+      "name": "Hai Zao",
+      "latin": "Sargassum",
+      "guideNumber": null
+    },
+    {
+      "name": "Han Fang Ji",
+      "latin": "Stephaniae tetrandrae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Han Lian Cao",
+      "latin": "Ecliptae Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "He Huan Pi",
+      "latin": "Albiziae Cortex",
+      "guideNumber": 29
+    },
+    {
+      "name": "He Shou Wu",
+      "latin": "Polygoni multiflori Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "He Tao Ren",
+      "latin": "Juglandis Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "He Ye",
+      "latin": "Nelumbinis Folium",
+      "guideNumber": 6
+    },
+    {
+      "name": "He Zi",
+      "latin": "Chebulae Fructus",
+      "guideNumber": 27
+    },
+    {
+      "name": "Hei Zhi Ma",
+      "latin": "Sesami Semen nigrum",
+      "guideNumber": 10
+    },
+    {
+      "name": "Hong Hua",
+      "latin": "Carthami Flos",
+      "guideNumber": null
+    },
+    {
+      "name": "Hou Po",
+      "latin": "Magnoliae officinalis Cortex",
+      "guideNumber": 16
+    },
+    {
+      "name": "Hu Jiao",
+      "latin": "Piperis Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Hua Jiao",
+      "latin": "Zanthoxyli Pericarpium",
+      "guideNumber": null
+    },
+    {
+      "name": "Hua Shi",
+      "latin": "Talcum",
+      "guideNumber": 8
+    },
+    {
+      "name": "Huai Mi",
+      "latin": "Sophorae Flos immaturus",
+      "guideNumber": 20
+    },
+    {
+      "name": "Huai Niu Xi",
+      "latin": "Achyranthis bidentatae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Huang Bai",
+      "latin": "Phellodendri Cortex",
+      "guideNumber": 5
+    },
+    {
+      "name": "Huang Jing",
+      "latin": "Polygonati Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Huang Lian",
+      "latin": "Coptidis Rhizoma",
+      "guideNumber": 5
+    },
+    {
+      "name": "Huang Qi",
+      "latin": "Astragali Radix",
+      "guideNumber": 23
+    },
+    {
+      "name": "Huang Qin",
+      "latin": "Scutellariae Radix",
+      "guideNumber": 5
+    },
+    {
+      "name": "Huo Ma Ren",
+      "latin": "Cannabis Semen",
+      "guideNumber": 9
+    },
+    {
+      "name": "Huo Xiang",
+      "latin": "Pogostemonis/Agastaches Herba",
+      "guideNumber": 16
+    },
+    {
+      "name": "Ji Nei Jin",
+      "latin": "Gigeriae galli Endothelium corneum",
+      "guideNumber": 17
+    },
+    {
+      "name": "Ji Xue Teng",
+      "latin": "Spatholobi Caulis",
+      "guideNumber": null
+    },
+    {
+      "name": "Jiang Huang",
+      "latin": "Curcumae longae Rhizoma",
+      "guideNumber": 19
+    },
+    {
+      "name": "Jie Geng",
+      "latin": "Platycodi Radix",
+      "guideNumber": 15
+    },
+    {
+      "name": "Jin Qian Cao",
+      "latin": "Lysimachiae Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Jin Yin Hua",
+      "latin": "Lonicerae Flos",
+      "guideNumber": 6
+    },
+    {
+      "name": "Jin Ying Zi",
+      "latin": "Rosae laevigatae Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Jing Jie",
+      "latin": "Schizonepetae Herba",
+      "guideNumber": 1
+    },
+    {
+      "name": "Jing Mi",
+      "latin": "Oryzae Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Ju Hong",
+      "latin": "Citri reticulatae Exocarpium rubrum",
+      "guideNumber": 18
+    },
+    {
+      "name": "Ju Hua",
+      "latin": "Chrysanthemi Flos",
+      "guideNumber": 2
+    },
+    {
+      "name": "Jue Ming Zi",
+      "latin": "Cassiae Semen",
+      "guideNumber": 3
+    },
+    {
+      "name": "Ku Shen",
+      "latin": "Sophorae flavescentis Radix",
+      "guideNumber": 5
+    },
+    {
+      "name": "Kuan Dong Hua",
+      "latin": "Farfarae Flos",
+      "guideNumber": 15
+    },
+    {
+      "name": "Kun Bu",
+      "latin": "Eckloniae Thallus",
+      "guideNumber": null
+    },
+    {
+      "name": "Lai Fu Zi",
+      "latin": "Raphani Semen",
+      "guideNumber": 17
+    },
+    {
+      "name": "Lian Qiao",
+      "latin": "Forsythiae Fructus",
+      "guideNumber": 6
+    },
+    {
+      "name": "Lian Xu",
+      "latin": "Nelumbinis Stamen",
+      "guideNumber": 27
+    },
+    {
+      "name": "Lian Zi",
+      "latin": "Nelumbinis Semen",
+      "guideNumber": 27
+    },
+    {
+      "name": "Lian Zi Xin",
+      "latin": "Nelumbinis Plumula",
+      "guideNumber": 3
+    },
+    {
+      "name": "Ling Yang Jiao",
+      "latin": "Saigae tataricae Cornu",
+      "guideNumber": null
+    },
+    {
+      "name": "Ling Zhi",
+      "latin": "Ganoderma",
+      "guideNumber": null
+    },
+    {
+      "name": "Liu Huang",
+      "latin": "Sulfur",
+      "guideNumber": null
+    },
+    {
+      "name": "Long Dan Cao",
+      "latin": "Gentianae Radix",
+      "guideNumber": 5
+    },
+    {
+      "name": "Long Gu",
+      "latin": "Fossilia Ossis Mastodi",
+      "guideNumber": 28
+    },
+    {
+      "name": "Long Yan Rou",
+      "latin": "Longan Arillus",
+      "guideNumber": null
+    },
+    {
+      "name": "Lu Dou",
+      "latin": "Phaseoli radiati Semen",
+      "guideNumber": 8
+    },
+    {
+      "name": "Lu Gen",
+      "latin": "Phragmitis Rhizoma",
+      "guideNumber": 3
+    },
+    {
+      "name": "Lu Hui",
+      "latin": "Aloe",
+      "guideNumber": 9
+    },
+    {
+      "name": "Lu Lu Tong",
+      "latin": "Liquidambaris Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Lu Rong",
+      "latin": "Cervi Cornu pantotrichum",
+      "guideNumber": 25
+    },
+    {
+      "name": "Ma Bo",
+      "latin": "Lasiosphaera/Calvatia",
+      "guideNumber": null
+    },
+    {
+      "name": "Ma Huang",
+      "latin": "Ephedrae Herba",
+      "guideNumber": 1
+    },
+    {
+      "name": "Ma Huang Gen",
+      "latin": "Ephedrae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Mai Men Dong",
+      "latin": "Ophiopogonis Radix",
+      "guideNumber": 26
+    },
+    {
+      "name": "Mai Ya",
+      "latin": "Hordei Fructus germinatus",
+      "guideNumber": 17
+    },
+    {
+      "name": "Man Jing Zi",
+      "latin": "Viticis Fructus",
+      "guideNumber": 2
+    },
+    {
+      "name": "Mang Xiao",
+      "latin": "Natrii Sulfas",
+      "guideNumber": 9
+    },
+    {
+      "name": "Mei Gui Hua",
+      "latin": "Rosae rugosae Flos",
+      "guideNumber": null
+    },
+    {
+      "name": "Mo Yao",
+      "latin": "Myrrha",
+      "guideNumber": 19
+    },
+    {
+      "name": "Mu Dan Pi",
+      "latin": "Moutan Cortex",
+      "guideNumber": 4
+    },
+    {
+      "name": "Mu Gua",
+      "latin": "Chaenomelis Fructus",
+      "guideNumber": 12
+    },
+    {
+      "name": "Mu Li",
+      "latin": "Ostreae Concha",
+      "guideNumber": 28
+    },
+    {
+      "name": "Mu Tong",
+      "latin": "Akebiae Caulis",
+      "guideNumber": null
+    },
+    {
+      "name": "Mu Xiang",
+      "latin": "Aucklandiae Radix",
+      "guideNumber": 18
+    },
+    {
+      "name": "Mu Zei",
+      "latin": "Equiseti hiemalis Herba",
+      "guideNumber": 2
+    },
+    {
+      "name": "Niu Bang Zi",
+      "latin": "Arctii Fructus",
+      "guideNumber": 2
+    },
+    {
+      "name": "Niu Huang",
+      "latin": "Bovis Calculus",
+      "guideNumber": 30
+    },
+    {
+      "name": "Nu Zhen Zi",
+      "latin": "Ligustri lucidi Fructus",
+      "guideNumber": 26
+    },
+    {
+      "name": "Ou Jie",
+      "latin": "Nelumbinis Nodus rhizomatis",
+      "guideNumber": null
+    },
+    {
+      "name": "Pang Da Hai",
+      "latin": "Sterculiae lychnophorae Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Pei Lan",
+      "latin": "Eupatorii Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Pi Pa Ye",
+      "latin": "Eriobotryae Folium",
+      "guideNumber": 15
+    },
+    {
+      "name": "Pu Gong Ying",
+      "latin": "Taraxaci Herba",
+      "guideNumber": 6
+    },
+    {
+      "name": "Pu Huang",
+      "latin": "Typhae Pollen",
+      "guideNumber": 20
+    },
+    {
+      "name": "Qian Cao",
+      "latin": "Rubiae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Qian Hu",
+      "latin": "Peucedani Radix",
+      "guideNumber": 13
+    },
+    {
+      "name": "Qian Shi",
+      "latin": "Euryales Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Qiang Huo",
+      "latin": "Notopterygii Rhizoma Seu Radix",
+      "guideNumber": 1
+    },
+    {
+      "name": "Qin Jiao",
+      "latin": "Gentianae macrophyllae Radix",
+      "guideNumber": 12
+    },
+    {
+      "name": "Qin Pi",
+      "latin": "Fraxini Cortex",
+      "guideNumber": 5
+    },
+    {
+      "name": "Qing Dai",
+      "latin": "Indigo naturalis",
+      "guideNumber": 4
+    },
+    {
+      "name": "Qing Hao",
+      "latin": "Artemisiae annuae Herba",
+      "guideNumber": 7
+    },
+    {
+      "name": "Qing Pi",
+      "latin": "Citri reticulatae viride Pericarpium",
+      "guideNumber": 18
+    },
+    {
+      "name": "Quan Xie",
+      "latin": "Scorpio",
+      "guideNumber": null
+    },
+    {
+      "name": "Qu Mai",
+      "latin": "Dianthi Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Ren Shen",
+      "latin": "Ginseng Radix",
+      "guideNumber": 23
+    },
+    {
+      "name": "Rou Cong Rong",
+      "latin": "Cistanches Herba",
+      "guideNumber": 10
+    },
+    {
+      "name": "Rou Dou Kou",
+      "latin": "Myristicae Semen",
+      "guideNumber": 27
+    },
+    {
+      "name": "Rou Gui",
+      "latin": "Cinnamomi Cortex",
+      "guideNumber": 21
+    },
+    {
+      "name": "Ru Xiang",
+      "latin": "Olibanum",
+      "guideNumber": 19
+    },
+    {
+      "name": "San Leng",
+      "latin": "Sparganii Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "San Qi",
+      "latin": "Notoginseng Radix",
+      "guideNumber": 20
+    },
+    {
+      "name": "Sang Bai Pi",
+      "latin": "Mori Cortex",
+      "guideNumber": 15
+    },
+    {
+      "name": "Sang Ji Sheng",
+      "latin": "Taxilli Herba",
+      "guideNumber": 12
+    },
+    {
+      "name": "Sang Piao Xiao",
+      "latin": "Mantidis Ootheca",
+      "guideNumber": null
+    },
+    {
+      "name": "Sang Shen",
+      "latin": "Mori Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Sang Ye",
+      "latin": "Mori Folium",
+      "guideNumber": 2
+    },
+    {
+      "name": "Sang Zhi",
+      "latin": "Mori Ramulus",
+      "guideNumber": 12
+    },
+    {
+      "name": "Sha Ren",
+      "latin": "Amomi Fructus",
+      "guideNumber": 16
+    },
+    {
+      "name": "Sha Shen",
+      "latin": "Glehniae/Adenophorae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Sha Yuan Ji Li",
+      "latin": "Astragali complanati Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Shan Dou Gen",
+      "latin": "Sophorae tonkinensis Radix",
+      "guideNumber": 6
+    },
+    {
+      "name": "Shan Yao",
+      "latin": "Dioscoreae Rhizoma",
+      "guideNumber": 23
+    },
+    {
+      "name": "Shan Zha",
+      "latin": "Crataegi Fructus",
+      "guideNumber": 17
+    },
+    {
+      "name": "Shan Zhu Yu",
+      "latin": "Corni Fructus",
+      "guideNumber": 27
+    },
+    {
+      "name": "She Chuang Zi",
+      "latin": "Cnidii Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "She Gan",
+      "latin": "Belamcandae Rhizoma",
+      "guideNumber": 6
+    },
+    {
+      "name": "She Xiang",
+      "latin": "Moschus",
+      "guideNumber": null
+    },
+    {
+      "name": "Shen Qu",
+      "latin": "Massa medicata fermentata",
+      "guideNumber": 17
+    },
+    {
+      "name": "Sheng Di Huang",
+      "latin": "Rehmanniae Radix",
+      "guideNumber": 4
+    },
+    {
+      "name": "Sheng Jiang",
+      "latin": "Zingiberis Rhizoma recens",
+      "guideNumber": 1
+    },
+    {
+      "name": "Sheng Ma",
+      "latin": "Cimicifugae Rhizoma",
+      "guideNumber": 2
+    },
+    {
+      "name": "Shi Chang Pu",
+      "latin": "Acori tatarinowii Rhizoma",
+      "guideNumber": 30
+    },
+    {
+      "name": "Shi Gao",
+      "latin": "Gypsum fibrosum",
+      "guideNumber": 3
+    },
+    {
+      "name": "Shi Hu",
+      "latin": "Dendrobii Herba",
+      "guideNumber": 26
+    },
+    {
+      "name": "Shi Jue Ming",
+      "latin": "Haliotidis Concha",
+      "guideNumber": 31
+    },
+    {
+      "name": "Shi Wei",
+      "latin": "Pyrrosiae Folium",
+      "guideNumber": null
+    },
+    {
+      "name": "Shu Di Huang",
+      "latin": "Rehmanniae Radix preparata",
+      "guideNumber": 24
+    },
+    {
+      "name": "Shui Niu Jiao",
+      "latin": "Bubali Cornu",
+      "guideNumber": 4
+    },
+    {
+      "name": "Si Gua Luo",
+      "latin": "Luffae Fructus Retinervus",
+      "guideNumber": null
+    },
+    {
+      "name": "Suan Zao Ren",
+      "latin": "Ziziphi spinosae Semen",
+      "guideNumber": 29
+    },
+    {
+      "name": "Suo Yang",
+      "latin": "Cynomorii Herba",
+      "guideNumber": 25
+    },
+    {
+      "name": "Tai Zi Shen",
+      "latin": "Pseudostellariae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Tan Xiang",
+      "latin": "Santali albi Lignum",
+      "guideNumber": 18
+    },
+    {
+      "name": "Tao Ren",
+      "latin": "Persicae Semen",
+      "guideNumber": 10
+    },
+    {
+      "name": "Tian Hua Fen",
+      "latin": "Trichosanthis Radix",
+      "guideNumber": 3
+    },
+    {
+      "name": "Tian Ma",
+      "latin": "Gastrodiae Rhizoma",
+      "guideNumber": 31
+    },
+    {
+      "name": "Tian Men Dong",
+      "latin": "Asparagi Radix",
+      "guideNumber": 26
+    },
+    {
+      "name": "Tian Nan Xing",
+      "latin": "Arisaematis Rhizoma",
+      "guideNumber": 14
+    },
+    {
+      "name": "Ting Li Zi",
+      "latin": "Lepidii/Descurainiae Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Tong Cao",
+      "latin": "Tetrapanacis Medulla",
+      "guideNumber": null
+    },
+    {
+      "name": "Tu Bie Chong",
+      "latin": "Eupolyphaga/Steleophaga",
+      "guideNumber": null
+    },
+    {
+      "name": "Tu Fu Ling",
+      "latin": "Smilacis glabrae Rhizoma",
+      "guideNumber": 6
+    },
+    {
+      "name": "Tu Si Zi",
+      "latin": "Cuscutae Semen",
+      "guideNumber": 25
+    },
+    {
+      "name": "Wang Bu Liu Xing",
+      "latin": "Vaccariae Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Wei Ling Xian",
+      "latin": "Clematidis Radix",
+      "guideNumber": 12
+    },
+    {
+      "name": "Wu Gong",
+      "latin": "Scolopendra",
+      "guideNumber": null
+    },
+    {
+      "name": "Wu Jia Pi",
+      "latin": "Acanthopanacis Cortex",
+      "guideNumber": 12
+    },
+    {
+      "name": "Wu Ling Zhi",
+      "latin": "Trogopterori Faeces",
+      "guideNumber": null
+    },
+    {
+      "name": "Wu Mei",
+      "latin": "Mume Fructus",
+      "guideNumber": 27
+    },
+    {
+      "name": "Wu Wei Zi",
+      "latin": "Schisandrae Fructus",
+      "guideNumber": 27
+    },
+    {
+      "name": "Wu Yao",
+      "latin": "Linderae Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Wu Zhu Yu",
+      "latin": "Evodiae Fructus",
+      "guideNumber": 21
+    },
+    {
+      "name": "Xi Xian Cao",
+      "latin": "Siegesbeckiae Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Xi Xin",
+      "latin": "Asari Radix et Rhizoma",
+      "guideNumber": 1
+    },
+    {
+      "name": "Xi Yang Shen",
+      "latin": "Panacis quinquefolii Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Xia Ku Cao",
+      "latin": "Prunellae Spica",
+      "guideNumber": 3
+    },
+    {
+      "name": "Xian He Cao",
+      "latin": "Agrimoniae Herba",
+      "guideNumber": 20
+    },
+    {
+      "name": "Xian Mao",
+      "latin": "Curculiginis Rhizoma",
+      "guideNumber": 25
+    },
+    {
+      "name": "Xiang Fu",
+      "latin": "Cyperi Rhizoma",
+      "guideNumber": 18
+    },
+    {
+      "name": "Xiang Ru",
+      "latin": "Moslae Herba",
+      "guideNumber": 1
+    },
+    {
+      "name": "Xiao Hui Xiang",
+      "latin": "Foeniculi Fructus",
+      "guideNumber": 21
+    },
+    {
+      "name": "Xiao Ji",
+      "latin": "Cirsii Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Xie Bai",
+      "latin": "Allii macrostemi Bulbus",
+      "guideNumber": null
+    },
+    {
+      "name": "Xin Yi",
+      "latin": "Magnoliae Flos",
+      "guideNumber": 1
+    },
+    {
+      "name": "Xing Ren",
+      "latin": "Armeniacae Semen",
+      "guideNumber": 10
+    },
+    {
+      "name": "Xu Duan",
+      "latin": "Dipsaci Radix",
+      "guideNumber": null
+    },
+    {
+      "name": "Xuan Fu Hua",
+      "latin": "Inulae Flos",
+      "guideNumber": 14
+    },
+    {
+      "name": "Xuan Shen",
+      "latin": "Scrophulariae Radix",
+      "guideNumber": 4
+    },
+    {
+      "name": "Yan Hu Suo",
+      "latin": "Corydalis Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Ye Jiao Teng",
+      "latin": "Polygoni multiflori Caulis",
+      "guideNumber": 29
+    },
+    {
+      "name": "Ye Ju Hua",
+      "latin": "Chrysanthemi indici Flos",
+      "guideNumber": null
+    },
+    {
+      "name": "Yi Mu Cao",
+      "latin": "Leonuri Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Yi Tang",
+      "latin": "Maltosum",
+      "guideNumber": 23
+    },
+    {
+      "name": "Yi Yi Ren",
+      "latin": "Coicis Semen",
+      "guideNumber": null
+    },
+    {
+      "name": "Yi Zhi Ren",
+      "latin": "Alpiniae oxyphyllae Fructus",
+      "guideNumber": 25
+    },
+    {
+      "name": "Yin Chen",
+      "latin": "Artemisiae scopariae Herba",
+      "guideNumber": null
+    },
+    {
+      "name": "Yin Yang Huo",
+      "latin": "Epimedii Herba",
+      "guideNumber": 25
+    },
+    {
+      "name": "Yu Jin",
+      "latin": "Curcumae Radix",
+      "guideNumber": 19
+    },
+    {
+      "name": "Yu Xing Cao",
+      "latin": "Houttuyniae Herba",
+      "guideNumber": 6
+    },
+    {
+      "name": "Yu Zhu",
+      "latin": "Polygonati odorati Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Yuan Zhi",
+      "latin": "Polygalae Radix",
+      "guideNumber": 29
+    },
+    {
+      "name": "Zao Jiao Ci",
+      "latin": "Gleditsiae Spina",
+      "guideNumber": null
+    },
+    {
+      "name": "Ze Lan",
+      "latin": "Lycopi Herba",
+      "guideNumber": 19
+    },
+    {
+      "name": "Ze Xie",
+      "latin": "Alismatis Rhizoma",
+      "guideNumber": null
+    },
+    {
+      "name": "Zhe Bei Mu",
+      "latin": "Fritillariae thunbergii Bulbus",
+      "guideNumber": 13
+    },
+    {
+      "name": "Zhen Zhu",
+      "latin": "Margarita",
+      "guideNumber": 28
+    },
+    {
+      "name": "Zhi Ke",
+      "latin": "Aurantii Fructus",
+      "guideNumber": 18
+    },
+    {
+      "name": "Zhi Mu",
+      "latin": "Anemarrhenae Radix",
+      "guideNumber": 3
+    },
+    {
+      "name": "Zhi Shi",
+      "latin": "Aurantii Fructus immaturus",
+      "guideNumber": 18
+    },
+    {
+      "name": "Zhi Zi",
+      "latin": "Gardeniae Fructus",
+      "guideNumber": 3
+    },
+    {
+      "name": "Zhu Ling",
+      "latin": "Polyporus",
+      "guideNumber": null
+    },
+    {
+      "name": "Zhu Ru",
+      "latin": "Bambusae Caulis in taeniam",
+      "guideNumber": 13
+    },
+    {
+      "name": "Zi Cao",
+      "latin": "Arnebiae/Lithospermi Radix",
+      "guideNumber": 4
+    },
+    {
+      "name": "Zi Su Ye",
+      "latin": "Perillae Folium",
+      "guideNumber": 1
+    },
+    {
+      "name": "Zi Su Zi",
+      "latin": "Perillae Fructus",
+      "guideNumber": null
+    },
+    {
+      "name": "Zi Wan",
+      "latin": "Asteris Radix",
+      "guideNumber": 15
+    }
+  ]
+}

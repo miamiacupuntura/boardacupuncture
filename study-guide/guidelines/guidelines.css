@@ -110,6 +110,9 @@ a { color: inherit; }
 .guide-herb-roster strong,
 .guide-herb-roster span { display: block; overflow-wrap: anywhere; }
 .guide-herb-roster strong { font-size: .91rem; }
+.guide-herb-roster__card-link { display: block; color: var(--ink); text-decoration: none; }
+.guide-herb-roster__card-link:hover strong { color: #075fc8; text-decoration: underline; }
+.guide-herb-roster__card-link:focus-visible { border-radius: 4px; outline: 3px solid #185cca; outline-offset: 3px; }
 .guide-herb-roster span { margin-top: 2px; color: var(--muted); font-size: .77rem; font-style: italic; line-height: 1.35; }
 .guide-annex-source { padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 .guide-annex-source a { color: var(--teal); font-weight: 800; }

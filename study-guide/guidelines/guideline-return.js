@@ -3,13 +3,13 @@
     if (!document.querySelector('link[data-guide-search-styles]')) {
         const searchStyles = document.createElement('link');
         searchStyles.rel = 'stylesheet';
-        searchStyles.href = new URL('guidelines.css?v=20261031-4', assetBase).href;
+        searchStyles.href = new URL('guidelines.css?v=20261031-5', assetBase).href;
         searchStyles.dataset.guideSearchStyles = 'true';
         document.head.appendChild(searchStyles);
     }
     if (!document.querySelector('script[data-guide-smart-search]')) {
         const searchScript = document.createElement('script');
-        searchScript.src = new URL('guideline-search.js?v=20261031-1', assetBase).href;
+        searchScript.src = new URL('guideline-search.js?v=20261031-2', assetBase).href;
         searchScript.dataset.guideSmartSearch = 'true';
         document.head.appendChild(searchScript);
     }

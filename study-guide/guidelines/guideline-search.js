@@ -162,13 +162,23 @@
         if (!name) {
             return;
         }
+        const herbUrl = '/blocks/myprogress/single-herbs-study-guide.php?herb=' + encodeURIComponent(name.textContent.trim()) + (isSpanish ? '&lang=es' : '');
+        if (!name.closest('a')) {
+            const cardLink = document.createElement('a');
+            cardLink.className = 'guide-herb-roster__card-link';
+            cardLink.href = herbUrl;
+            cardLink.setAttribute('aria-label', (isSpanish ? 'Abrir ficha de ' : 'Open card for ') + name.textContent.trim());
+            name.replaceWith(cardLink);
+            cardLink.appendChild(name);
+        }
         addEntry({
             title: name.textContent,
             summary: latin ? latin.textContent : '',
-            href: ensureId(element, 'guide-herb', index + 1),
+            href: herbUrl,
             type: copy.herb,
             rank: 70
         });
+        ensureId(element, 'guide-herb', index + 1);
     });
 
     document.querySelectorAll('.guide-table tbody tr').forEach(function(element, index) {
