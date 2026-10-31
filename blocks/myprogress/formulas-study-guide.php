@@ -286,7 +286,6 @@ echo $OUTPUT->header();
 .formula-study-guide__category-number{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;margin-bottom:10px;border-radius:50%;background:#e9f6f3;color:#0b6b63;font-weight:900}
 .formula-study-guide__category strong{font-size:18px;line-height:1.3}.formula-study-guide__category p{margin:7px 0 12px;color:#5b6b79;font-size:14px;line-height:1.45}.formula-study-guide__category small{margin-top:auto;color:#075e54;font-weight:800}
 .formula-study-guide__category-meta{display:block;margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
-.formula-study-guide__category-extension{display:block;margin:9px 0 0;padding:7px 9px;border-radius:7px;background:#e7f7f3;color:#075e54;font-size:11px;font-weight:900;line-height:1.35}
 .formula-study-guide__supplement{margin-top:26px;padding:22px 24px;border:1px solid #c9ded9;border-top:4px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__supplement-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}.formula-study-guide__supplement-heading h3{margin:2px 0 5px;font-size:22px}.formula-study-guide__supplement-heading p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.formula-study-guide__supplement-badge{padding:6px 10px;border-radius:999px;background:#d9f1eb;color:#08695f;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__category--supplemental{min-height:156px;border-top-color:#0b817d}.formula-study-guide__category--supplemental .formula-study-guide__category-number{width:auto;padding:0 10px;border-radius:999px}.formula-study-guide__category--supplemental small{color:#075fc8}
 .formula-study-guide__category-header{margin-bottom:18px;padding:22px 24px;border-top:5px solid #f77e25;border-radius:12px;background:linear-gradient(135deg,#fffaf5,#f7fbfb)}
 .formula-study-guide__category-header--supplemental{border-top-color:#0b817d;background:linear-gradient(135deg,#effaf7,#fffaf5)}
@@ -367,9 +366,6 @@ echo $OUTPUT->header();
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></span>
-                    <?php if ($category['key'] === 'warm-interior'): ?>
-                        <span class="formula-study-guide__category-extension"><?php echo s($ises ? 'Incluye el capítulo 6 completo · ' : 'Includes complete Chapter 6 · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></span>
-                    <?php endif; ?>
                     <p><?php echo s($copy); ?></p>
                     <small><?php echo s($ises ? 'Abrir categoría →' : 'Open category →'); ?></small>
                 </a>
@@ -436,8 +432,8 @@ echo $OUTPUT->header();
                 <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Ampliación integrada' : 'Integrated expansion'); ?></p>
                 <h4 id="chapter-six-shortcut-title"><?php echo s($ises ? 'Capítulo 6 completo · ' : 'Complete Chapter 6 · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></h4>
                 <p><?php echo s($ises
-                    ? 'Las 4 fórmulas oficiales de esta categoría están incluidas exactamente en el capítulo 6. El capítulo añade 7 fórmulas relacionadas para estudiar Frío en canales, Jiao Medio y colapso de Yang.'
-                    : 'All 4 official formulas in this category are included exactly in Chapter 6. The chapter adds 7 related formulas for studying Cold in the channels, Middle Burner, and Yang collapse.'); ?></p>
+                    ? 'Los términos “Calentar el Interior” y “Calentar el Interior y dispersar Frío” se utilizan en ocasiones de manera indistinta para esta familia. El capítulo 6 incluye las 4 fórmulas oficiales y añade 7 fórmulas relacionadas para estudiar Frío en canales, Jiao Medio y colapso de Yang.'
+                    : 'The terms “Warm the Interior” and “Warm Interior Cold” are sometimes used interchangeably for this formula family. Chapter 6 includes all 4 official formulas and adds 7 related formulas for studying Cold in the channels, Middle Burner, and Yang collapse.'); ?></p>
                 <div class="formula-study-guide__overlap-list" aria-label="<?php echo s($ises ? 'Fórmulas compartidas' : 'Shared formulas'); ?>">
                     <?php foreach ($categories['warm-interior']['formulas'] as $warmboardformula): ?>
                         <span class="formula-study-guide__overlap-item">✓ <?php echo s($warmboardformula['name']); ?> · <?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $warmboardformula['number']); ?></span>
