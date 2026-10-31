@@ -16,6 +16,10 @@ import {
   classicFormulaOutline,
   classicFormulaSafetyTiers
 } from './classic_formula_navigator_data.mjs';
+import {
+  formulaStudyGuideSupplements,
+  releaseExteriorCategoryGuide
+} from './formula_study_guide_supplements.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const practiceData = JSON.parse(
@@ -44,6 +48,7 @@ const formulas = classicFormulaOutline.map(([number, name, categoryKey, kings]) 
     throw new Error(`Missing study-guide content for ${name}`);
   }
   const category = categoryByKey.get(categoryKey);
+  const supplement = formulaStudyGuideSupplements[name] || {};
   return {
     number,
     name,
@@ -51,18 +56,22 @@ const formulas = classicFormulaOutline.map(([number, name, categoryKey, kings]) 
     category: category.en,
     categoryEs: category.es,
     kings,
-    pattern: content.pattern,
-    patternEs: content.patternEs,
-    action: content.action,
-    actionEs: content.actionEs,
-    clue: content.clue,
-    clueEs: content.clueEs,
-    ingredients: content.ingredients,
-    ingredientsEs: content.ingredientsEs,
-    safety: content.safety,
-    safetyEs: content.safetyEs,
+    pattern: supplement.pattern || content.pattern,
+    patternEs: supplement.patternEs || content.patternEs,
+    action: supplement.action || content.action,
+    actionEs: supplement.actionEs || content.actionEs,
+    clue: supplement.clue || content.clue,
+    clueEs: supplement.clueEs || content.clueEs,
+    ingredients: supplement.ingredients || content.ingredients,
+    ingredientsEs: supplement.ingredientsEs || content.ingredientsEs,
+    safety: supplement.safety || content.safety,
+    safetyEs: supplement.safetyEs || content.safetyEs,
     safetyTier: classicFormulaSafetyTiers[name] || 'standard',
-    practiceCount: practiceCounts.get(number) || 0
+    practiceCount: practiceCounts.get(number) || 0,
+    ...(supplement.priority ? { priority: supplement.priority } : {}),
+    ...(supplement.examFocus ? { examFocus: supplement.examFocus, examFocusEs: supplement.examFocusEs } : {}),
+    ...(supplement.ingredientRoles ? { ingredientRoles: supplement.ingredientRoles, ingredientRolesEs: supplement.ingredientRolesEs } : {}),
+    ...(supplement.comparison ? { comparison: supplement.comparison, comparisonEs: supplement.comparisonEs } : {})
   };
 });
 
@@ -70,7 +79,14 @@ if (categories.length !== 14 || formulas.length !== 63) {
   throw new Error(`Unexpected formula guide totals: ${categories.length} categories, ${formulas.length} formulas`);
 }
 
-const output = { version: 1, categories, formulas };
+const output = {
+  version: 2,
+  categories,
+  categoryGuides: {
+    'release-exterior': releaseExteriorCategoryGuide
+  },
+  formulas
+};
 const outputPath = resolve(repositoryRoot, 'blocks/myprogress/formulas-study-guide-data.json');
 writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 console.log(`Generated ${outputPath} with ${categories.length} categories and ${formulas.length} formulas.`);
