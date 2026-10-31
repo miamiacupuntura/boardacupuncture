@@ -1,0 +1,205 @@
+{
+  "version": 1,
+  "categories": [
+    {"key": "modifications", "en": "Formula Modifications", "es": "Modificaciones de fórmulas"}
+  ],
+  "sources": [
+    {
+      "id": "gui-zhi-tang-profile",
+      "title": "Gui Zhi Tang formula profile",
+      "providedBy": "user",
+      "reviewStatus": "transcribed-from-image"
+    }
+  ],
+  "questions": [
+    {
+      "sourceNumber": "MOD-GZT-1",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "Which herbs are added to Gui Zhi Tang for marked nasal congestion with sneezing?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Fang Feng and Xin Yi Hua"},
+        {"label": "B", "text": "Hou Po and Xing Ren"},
+        {"label": "C", "text": "Ju Hua and Chan Tui"},
+        {"label": "D", "text": "Qiang Huo and Fang Feng"}
+      ],
+      "correctLabel": "A",
+      "feedback": ["For marked nasal congestion with sneezing, add Fang Feng and Xin Yi Hua. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierbas se añaden a Gui Zhi Tang para la congestión nasal intensa con estornudos?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Fang Feng y Xin Yi Hua"},
+          {"label": "B", "text": "Hou Po y Xing Ren"},
+          {"label": "C", "text": "Ju Hua y Chan Tui"},
+          {"label": "D", "text": "Qiang Huo y Fang Feng"}
+        ],
+        "feedback": ["Para congestión nasal intensa con estornudos, se añaden Fang Feng y Xin Yi Hua. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GZT-2",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "Which herbs are added to Gui Zhi Tang for shortness of breath and labored breathing?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Fang Feng and Xin Yi Hua"},
+        {"label": "B", "text": "Hou Po and Xing Ren"},
+        {"label": "C", "text": "Ju Hua and Chan Tui"},
+        {"label": "D", "text": "Chen Pi and Hou Po"}
+      ],
+      "correctLabel": "B",
+      "feedback": ["For shortness of breath and labored breathing, add Hou Po and Xing Ren. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierbas se añaden a Gui Zhi Tang para la disnea y la respiración dificultosa?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Fang Feng y Xin Yi Hua"},
+          {"label": "B", "text": "Hou Po y Xing Ren"},
+          {"label": "C", "text": "Ju Hua y Chan Tui"},
+          {"label": "D", "text": "Chen Pi y Hou Po"}
+        ],
+        "feedback": ["Para disnea y respiración dificultosa, se añaden Hou Po y Xing Ren. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GZT-3",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "Which herbs are added to Gui Zhi Tang for a swollen, heavy sensation in the head?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Ju Hua and Chan Tui"},
+        {"label": "B", "text": "Hou Po and Xing Ren"},
+        {"label": "C", "text": "Huang Qi and Fang Feng"},
+        {"label": "D", "text": "Chi Shao and Gao Ben"}
+      ],
+      "correctLabel": "A",
+      "feedback": ["For a swollen, heavy sensation in the head, add Ju Hua and Chan Tui. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierbas se añaden a Gui Zhi Tang para una sensación de hinchazón y pesadez en la cabeza?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Ju Hua y Chan Tui"},
+          {"label": "B", "text": "Hou Po y Xing Ren"},
+          {"label": "C", "text": "Huang Qi y Fang Feng"},
+          {"label": "D", "text": "Chi Shao y Gao Ben"}
+        ],
+        "feedback": ["Para una sensación de hinchazón y pesadez en la cabeza, se añaden Ju Hua y Chan Tui. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GZT-4",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "How is Gui Zhi Tang modified for profuse sweating?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Increase Bai Shao; reduce Gui Zhi, Sheng Jiang, and Zhi Gan Cao by half; add Huang Qi and Fang Feng"},
+        {"label": "B", "text": "Replace Bai Shao with Chi Shao and add Gao Ben"},
+        {"label": "C", "text": "Increase Bai Shao and Sheng Jiang; add Chen Pi and Hou Po"},
+        {"label": "D", "text": "Add Ju Hua and Chan Tui without changing the base formula"}
+      ],
+      "correctLabel": "A",
+      "feedback": ["For profuse sweating, increase Bai Shao; reduce Gui Zhi, Sheng Jiang, and Zhi Gan Cao to one-half; and add Huang Qi and Fang Feng. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Cómo se modifica Gui Zhi Tang para la sudoración profusa?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Aumentar Bai Shao; reducir a la mitad Gui Zhi, Sheng Jiang y Zhi Gan Cao; añadir Huang Qi y Fang Feng"},
+          {"label": "B", "text": "Sustituir Bai Shao por Chi Shao y añadir Gao Ben"},
+          {"label": "C", "text": "Aumentar Bai Shao y Sheng Jiang; añadir Chen Pi y Hou Po"},
+          {"label": "D", "text": "Añadir Ju Hua y Chan Tui sin cambiar la fórmula base"}
+        ],
+        "feedback": ["Para sudoración profusa, se aumenta Bai Shao; se reducen a la mitad Gui Zhi, Sheng Jiang y Zhi Gan Cao; y se añaden Huang Qi y Fang Feng. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GZT-5",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "How is Gui Zhi Tang modified for severe headache?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Replace Bai Shao with Chi Shao and add Gao Ben"},
+        {"label": "B", "text": "Add Fang Feng and Xin Yi Hua"},
+        {"label": "C", "text": "Increase Bai Shao and Sheng Jiang; add Chen Pi and Hou Po"},
+        {"label": "D", "text": "Add Qiang Huo and Fang Feng"}
+      ],
+      "correctLabel": "A",
+      "feedback": ["For severe headache, replace Bai Shao with Chi Shao and add Gao Ben. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Cómo se modifica Gui Zhi Tang para la cefalea intensa?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Sustituir Bai Shao por Chi Shao y añadir Gao Ben"},
+          {"label": "B", "text": "Añadir Fang Feng y Xin Yi Hua"},
+          {"label": "C", "text": "Aumentar Bai Shao y Sheng Jiang; añadir Chen Pi y Hou Po"},
+          {"label": "D", "text": "Añadir Qiang Huo y Fang Feng"}
+        ],
+        "feedback": ["Para cefalea intensa, se sustituye Bai Shao por Chi Shao y se añade Gao Ben. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GZT-6",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "How is Gui Zhi Tang modified for severe vomiting?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Add Hou Po and Xing Ren"},
+        {"label": "B", "text": "Increase Bai Shao and Sheng Jiang; add Chen Pi and Hou Po"},
+        {"label": "C", "text": "Replace Bai Shao with Chi Shao and add Gao Ben"},
+        {"label": "D", "text": "Add Huang Qi and Fang Feng"}
+      ],
+      "correctLabel": "B",
+      "feedback": ["For severe vomiting, increase Bai Shao and Sheng Jiang and add Chen Pi and Hou Po. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Cómo se modifica Gui Zhi Tang para los vómitos intensos?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Añadir Hou Po y Xing Ren"},
+          {"label": "B", "text": "Aumentar Bai Shao y Sheng Jiang; añadir Chen Pi y Hou Po"},
+          {"label": "C", "text": "Sustituir Bai Shao por Chi Shao y añadir Gao Ben"},
+          {"label": "D", "text": "Añadir Huang Qi y Fang Feng"}
+        ],
+        "feedback": ["Para vómitos intensos, se aumentan Bai Shao y Sheng Jiang y se añaden Chen Pi y Hou Po. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GZT-7",
+      "sourceId": "gui-zhi-tang-profile",
+      "prompt": "Which herbs are added to Gui Zhi Tang for joint pain with fatigue and signs of Dampness?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Qiang Huo and Fang Feng"},
+        {"label": "B", "text": "Ju Hua and Chan Tui"},
+        {"label": "C", "text": "Hou Po and Xing Ren"},
+        {"label": "D", "text": "Huang Qi and Gao Ben"}
+      ],
+      "correctLabel": "A",
+      "feedback": ["For joint pain with fatigue and Dampness signs, add Qiang Huo and Fang Feng. Source: user-provided Gui Zhi Tang formula profile."],
+      "formulaNumbers": [2],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierbas se añaden a Gui Zhi Tang para dolor articular con fatiga y signos de Humedad?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Qiang Huo y Fang Feng"},
+          {"label": "B", "text": "Ju Hua y Chan Tui"},
+          {"label": "C", "text": "Hou Po y Xing Ren"},
+          {"label": "D", "text": "Huang Qi y Gao Ben"}
+        ],
+        "feedback": ["Para dolor articular con fatiga y signos de Humedad, se añaden Qiang Huo y Fang Feng. Fuente: perfil de Gui Zhi Tang proporcionado por el usuario."]
+      }
+    }
+  ]
+}

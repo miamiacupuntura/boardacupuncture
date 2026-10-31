@@ -94,6 +94,18 @@ $areas = [
                 'secondary' => true,
             ],
             [
+                'title' => 'Formula Modifications',
+                'description' => 'Practice 305 focused questions on adding, removing or replacing ingredients according to the patient presentation.',
+                'path' => '/study-guide/comparisons/formula-practice.html',
+                'params' => [
+                    'category' => 'modifications',
+                    'size' => 25,
+                ],
+                'anchor' => '',
+                'status' => 'AVAILABLE · 305 QUESTIONS',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Commonly Used Herbal Combinations',
                 'description' => 'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.',
                 'path' => '/blocks/myprogress/common-herbal-combinations.php',
@@ -243,7 +255,7 @@ echo $OUTPUT->header();
     <section id="study-guide-chapters" class="subject-study-guide__grid<?php echo $areaid === 'herbology' ? ' subject-study-guide__grid--herbology' : ''; ?>" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
         <?php foreach ($primarychapters as $chapter): ?>
             <?php
-            $chapterurl = new moodle_url($chapter['path']);
+            $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
             if ($chapter['anchor'] !== '') {
                 $chapterurl->set_anchor($chapter['anchor']);
             }
@@ -276,7 +288,7 @@ echo $OUTPUT->header();
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($otherchapters as $chapter): ?>
                         <?php
-                        $chapterurl = new moodle_url($chapter['path']);
+                        $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
                         if ($chapter['anchor'] !== '') {
                             $chapterurl->set_anchor($chapter['anchor']);
                         }

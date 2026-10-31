@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "categories": [
+    {"key": "modifications", "en": "Formula Modifications", "es": "Modificaciones de fórmulas"}
+  ],
+  "sources": [
+    {
+      "id": "ge-gen-tang-profile",
+      "title": "Ge Gen Tang formula profile",
+      "providedBy": "user",
+      "reviewStatus": "transcribed-from-image"
+    }
+  ],
+  "questions": [
+    {
+      "sourceNumber": "MOD-GGT-1",
+      "sourceId": "ge-gen-tang-profile",
+      "prompt": "Which herbs are added to Ge Gen Tang for severe nasal blockage?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Chuan Xiong, Huang Qin, Xin Yi Hua, and Jie Geng"},
+        {"label": "B", "text": "Chan Tui and Fang Feng"},
+        {"label": "C", "text": "Du Huo and Tao He Cheng Qi Tang"},
+        {"label": "D", "text": "Su Zi, Chen Pi, and Xing Ren"}
+      ],
+      "correctLabel": "A",
+      "feedback": ["For severe nasal blockage, add Chuan Xiong, Huang Qin, Xin Yi Hua, and Jie Geng. Source: user-provided Ge Gen Tang formula profile."],
+      "formulaNumbers": [3],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierbas se añaden a Ge Gen Tang para la obstrucción nasal intensa?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Chuan Xiong, Huang Qin, Xin Yi Hua y Jie Geng"},
+          {"label": "B", "text": "Chan Tui y Fang Feng"},
+          {"label": "C", "text": "Du Huo y Tao He Cheng Qi Tang"},
+          {"label": "D", "text": "Su Zi, Chen Pi y Xing Ren"}
+        ],
+        "feedback": ["Para obstrucción nasal intensa, se añaden Chuan Xiong, Huang Qin, Xin Yi Hua y Jie Geng. Fuente: perfil de Ge Gen Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GGT-2",
+      "sourceId": "ge-gen-tang-profile",
+      "prompt": "Which herb is added to Ge Gen Tang when urticaria accompanies the presentation?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Huang Qin"},
+        {"label": "B", "text": "Chan Tui"},
+        {"label": "C", "text": "Du Huo"},
+        {"label": "D", "text": "Xin Yi Hua"}
+      ],
+      "correctLabel": "B",
+      "feedback": ["For urticaria, add Chan Tui to Ge Gen Tang. Source: user-provided Ge Gen Tang formula profile."],
+      "formulaNumbers": [3],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierba se añade a Ge Gen Tang cuando la presentación se acompaña de urticaria?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Huang Qin"},
+          {"label": "B", "text": "Chan Tui"},
+          {"label": "C", "text": "Du Huo"},
+          {"label": "D", "text": "Xin Yi Hua"}
+        ],
+        "feedback": ["Para urticaria, se añade Chan Tui a Ge Gen Tang. Fuente: perfil de Ge Gen Tang proporcionado por el usuario."]
+      }
+    },
+    {
+      "sourceNumber": "MOD-GGT-3",
+      "sourceId": "ge-gen-tang-profile",
+      "prompt": "How is Ge Gen Tang modified for severe facial pain?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Add Chan Tui"},
+        {"label": "B", "text": "Add Chuan Xiong and Xin Yi Hua"},
+        {"label": "C", "text": "Add Du Huo and Tao He Cheng Qi Tang"},
+        {"label": "D", "text": "Add Huang Qi and Fang Feng"}
+      ],
+      "correctLabel": "C",
+      "feedback": ["For severe facial pain, the source adds Du Huo and Tao He Cheng Qi Tang. Source: user-provided Ge Gen Tang formula profile."],
+      "formulaNumbers": [3],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Cómo se modifica Ge Gen Tang para el dolor facial intenso?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Añadir Chan Tui"},
+          {"label": "B", "text": "Añadir Chuan Xiong y Xin Yi Hua"},
+          {"label": "C", "text": "Añadir Du Huo y Tao He Cheng Qi Tang"},
+          {"label": "D", "text": "Añadir Huang Qi y Fang Feng"}
+        ],
+        "feedback": ["Para dolor facial intenso, la fuente añade Du Huo y Tao He Cheng Qi Tang. Fuente: perfil de Ge Gen Tang proporcionado por el usuario."]
+      }
+    }
+  ]
+}

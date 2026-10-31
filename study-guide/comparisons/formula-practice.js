@@ -72,7 +72,9 @@
     breakdown: document.querySelector('[data-practice-breakdown]'),
     repeat: document.querySelector('[data-practice-repeat]'),
     configure: document.querySelector('[data-practice-configure]'),
-    language: document.querySelector('[data-practice-language]')
+    language: document.querySelector('[data-practice-language]'),
+    questionTotals: [...document.querySelectorAll('[data-practice-question-total]')],
+    categoryTotals: [...document.querySelectorAll('[data-practice-category-total]')]
   };
   const state = {
     data: null,
@@ -256,6 +258,37 @@
     elements.status.hidden = false;
     updateAvailability();
     renderHistory();
+  }
+
+  function mergeSupplements(data, translations, supplements) {
+    const knownCategories = new Set(data.categories.map(category => category.key));
+    const knownQuestions = new Set(data.questions.map(question => String(question.sourceNumber)));
+    supplements.filter(Boolean).forEach(supplement => {
+      (supplement.categories || []).forEach(category => {
+        if (!category?.key || knownCategories.has(category.key)) return;
+        data.categories.push(category);
+        knownCategories.add(category.key);
+      });
+      (supplement.questions || []).forEach(entry => {
+        if (!entry?.sourceNumber || knownQuestions.has(String(entry.sourceNumber))) return;
+        const { translationEs, ...question } = entry;
+        data.questions.push(question);
+        knownQuestions.add(String(question.sourceNumber));
+        if (translations && translationEs) {
+          translations.questions.push({
+            sourceNumber: question.sourceNumber,
+            ...translationEs
+          });
+        }
+      });
+    });
+    data.totals.questions = data.questions.length;
+    data.totals.categories = data.categories.length;
+    data.formulas.forEach(formula => {
+      formula.questionCount = data.questions.filter(question =>
+        question.formulaNumbers.includes(formula.number)
+      ).length;
+    });
   }
 
   function associationLink(formula) {
@@ -530,11 +563,33 @@
       })
     : Promise.resolve(null);
 
-  Promise.all([bankRequest, translationsRequest])
-    .then(([data, translations]) => {
-      if (data.totals?.questions !== 572 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
+  const requestedCategory = new URLSearchParams(window.location.search).get('category');
+  const supplementsRequest = requestedCategory === 'modifications'
+    ? fetch('formula-modifications-manifest.json', { credentials: 'same-origin' })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(manifest => Promise.all((manifest.files || []).map(filename =>
+        fetch(filename, { credentials: 'same-origin' }).then(response => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+      )))
+      .catch(error => {
+        console.error('Formula modification supplement unavailable', error);
+        return [];
+      })
+    : Promise.resolve([]);
+
+  Promise.all([bankRequest, translationsRequest, supplementsRequest])
+    .then(([data, translations, supplements]) => {
+      if (data.totals?.questions < 572 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
+      mergeSupplements(data, translations, supplements);
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
+      elements.questionTotals.forEach(element => { element.textContent = String(data.totals.questions); });
+      elements.categoryTotals.forEach(element => { element.textContent = String(data.totals.categories); });
       if (translations?.questions?.length === data.questions.length) {
         state.translations = new Map(translations.questions.map(question => [question.sourceNumber, question]));
       } else if (spanish) {

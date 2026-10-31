@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "scope": "Formula modification questions supplied after the verified core-bank import.",
+  "categories": [
+    {
+      "key": "modifications",
+      "en": "Formula Modifications",
+      "es": "Modificaciones de fórmulas"
+    }
+  ],
+  "sources": [
+    {
+      "id": "ma-huang-tang-profile-481",
+      "title": "Ma Huang Tang formula profile",
+      "page": 481,
+      "providedBy": "user",
+      "reviewStatus": "transcribed-from-image"
+    }
+  ],
+  "questions": [
+    {
+      "sourceNumber": "MOD-481-1",
+      "sourceId": "ma-huang-tang-profile-481",
+      "prompt": "Which modification of Ma Huang Tang is appropriate when exterior Wind-Cold is accompanied by interior Heat?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Add Shi Gao"},
+        {"label": "B", "text": "Add Huang Qi"},
+        {"label": "C", "text": "Add Su Zi and Chen Pi"},
+        {"label": "D", "text": "Combine with Si Wu Tang"}
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "For exterior Wind-Cold with concurrent interior Heat, the source modifies Ma Huang Tang by adding Shi Gao. Source: Ma Huang Tang formula profile, p. 481."
+      ],
+      "formulaNumbers": [1],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué modificación de Ma Huang Tang es apropiada cuando el Viento-Frío exterior se acompaña de Calor interno?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Añadir Shi Gao"},
+          {"label": "B", "text": "Añadir Huang Qi"},
+          {"label": "C", "text": "Añadir Su Zi y Chen Pi"},
+          {"label": "D", "text": "Combinar con Si Wu Tang"}
+        ],
+        "feedback": [
+          "Para Viento-Frío exterior acompañado de Calor interno, la fuente modifica Ma Huang Tang añadiendo Shi Gao. Fuente: perfil de Ma Huang Tang, p. 481."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "MOD-481-2",
+      "sourceId": "ma-huang-tang-profile-481",
+      "prompt": "Which herb is added to Ma Huang Tang when the exterior Wind-Cold presentation occurs with concurrent Yang deficiency?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Shi Gao"},
+        {"label": "B", "text": "Huang Qi"},
+        {"label": "C", "text": "Tian Hua Fen"},
+        {"label": "D", "text": "Chen Pi"}
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "The source adds Huang Qi when Ma Huang Tang is used for exterior Wind-Cold with concurrent Yang deficiency. Source: Ma Huang Tang formula profile, p. 481."
+      ],
+      "formulaNumbers": [1],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué hierba se añade a Ma Huang Tang cuando la presentación de Viento-Frío exterior ocurre con deficiencia concurrente de Yang?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Shi Gao"},
+          {"label": "B", "text": "Huang Qi"},
+          {"label": "C", "text": "Tian Hua Fen"},
+          {"label": "D", "text": "Chen Pi"}
+        ],
+        "feedback": [
+          "La fuente añade Huang Qi cuando Ma Huang Tang se utiliza para Viento-Frío exterior con deficiencia concurrente de Yang. Fuente: perfil de Ma Huang Tang, p. 481."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "MOD-481-3",
+      "sourceId": "ma-huang-tang-profile-481",
+      "prompt": "How is Ma Huang Tang modified when sore throat is a prominent symptom?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Increase Gui Zhi and add Huang Qi"},
+        {"label": "B", "text": "Remove Xing Ren and add Shi Gao"},
+        {"label": "C", "text": "Reduce Gui Zhi by half and add Tian Hua Fen and She Gan"},
+        {"label": "D", "text": "Add Su Zi and Chen Pi without changing Gui Zhi"}
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "For sore throat, the source reduces Gui Zhi to one-half and adds Tian Hua Fen and She Gan. Source: Ma Huang Tang formula profile, p. 481."
+      ],
+      "formulaNumbers": [1],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Cómo se modifica Ma Huang Tang cuando el dolor de garganta es un síntoma predominante?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Aumentar Gui Zhi y añadir Huang Qi"},
+          {"label": "B", "text": "Retirar Xing Ren y añadir Shi Gao"},
+          {"label": "C", "text": "Reducir Gui Zhi a la mitad y añadir Tian Hua Fen y She Gan"},
+          {"label": "D", "text": "Añadir Su Zi y Chen Pi sin modificar Gui Zhi"}
+        ],
+        "feedback": [
+          "Para dolor de garganta, la fuente reduce Gui Zhi a la mitad y añade Tian Hua Fen y She Gan. Fuente: perfil de Ma Huang Tang, p. 481."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "MOD-481-4",
+      "sourceId": "ma-huang-tang-profile-481",
+      "prompt": "Which modification of Ma Huang Tang addresses cough and wheezing with white sputum and tightness in the chest?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Add Shi Gao and Huang Qi"},
+        {"label": "B", "text": "Add Tian Hua Fen and She Gan"},
+        {"label": "C", "text": "Add Su Zi and Chen Pi"},
+        {"label": "D", "text": "Combine with Si Wu Tang"}
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "For cough and wheezing with white sputum and chest tightness, the source adds Su Zi and Chen Pi. Source: Ma Huang Tang formula profile, p. 481."
+      ],
+      "formulaNumbers": [1],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "¿Qué modificación de Ma Huang Tang trata la tos y las sibilancias con esputo blanco y opresión torácica?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Añadir Shi Gao y Huang Qi"},
+          {"label": "B", "text": "Añadir Tian Hua Fen y She Gan"},
+          {"label": "C", "text": "Añadir Su Zi y Chen Pi"},
+          {"label": "D", "text": "Combinar con Si Wu Tang"}
+        ],
+        "feedback": [
+          "Para tos y sibilancias con esputo blanco y opresión torácica, la fuente añade Su Zi y Chen Pi. Fuente: perfil de Ma Huang Tang, p. 481."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "MOD-481-5",
+      "sourceId": "ma-huang-tang-profile-481",
+      "prompt": "According to the source, which formula is combined with Ma Huang Tang in the modification for childhood psoriasis?",
+      "body": [],
+      "options": [
+        {"label": "A", "text": "Si Wu Tang"},
+        {"label": "B", "text": "Bai Hu Tang"},
+        {"label": "C", "text": "Er Chen Tang"},
+        {"label": "D", "text": "Bu Zhong Yi Qi Tang"}
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "The source lists Si Wu Tang as the formula combined with Ma Huang Tang for childhood psoriasis. Source: Ma Huang Tang formula profile, p. 481."
+      ],
+      "formulaNumbers": [1],
+      "categoryKeys": ["release-exterior", "modifications"],
+      "translationEs": {
+        "prompt": "Según la fuente, ¿qué fórmula se combina con Ma Huang Tang en la modificación para la psoriasis infantil?",
+        "body": [],
+        "options": [
+          {"label": "A", "text": "Si Wu Tang"},
+          {"label": "B", "text": "Bai Hu Tang"},
+          {"label": "C", "text": "Er Chen Tang"},
+          {"label": "D", "text": "Bu Zhong Yi Qi Tang"}
+        ],
+        "feedback": [
+          "La fuente indica Si Wu Tang como la fórmula que se combina con Ma Huang Tang para la psoriasis infantil. Fuente: perfil de Ma Huang Tang, p. 481."
+        ]
+      }
+    }
+  ]
+}
