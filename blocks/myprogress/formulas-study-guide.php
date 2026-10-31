@@ -13,8 +13,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 3
-        || count($data['supplementalFormulas'] ?? []) !== 24) {
+        || count($data['supplementalCategories'] ?? []) !== 9
+        || count($data['supplementalFormulas'] ?? []) !== 69) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -86,6 +86,30 @@ $categorycopy = [
     'exterior-interior-excess' => [
         'Differentiate simultaneous exterior-interior excess by whether the interior requires purging, clearing Heat, or warming Cold.',
         'Distingue el exceso simultáneo Exterior-Interior según si el Interior requiere purgar, aclarar Calor o calentar Frío.',
+    ],
+    'tonify-qi-ch8' => [
+        'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
+        'Distingue la deficiencia de Qi por órgano, hundimiento, Exterior inestable, pérdida de líquidos, Humedad e incapacidad para captar Qi.',
+    ],
+    'tonify-blood-ch8' => [
+        'Separate simple Blood deficiency from Cold, stasis, spasm, menstrual loss, and postpartum pain.',
+        'Separa deficiencia simple de Sangre de Frío, estasis, espasmo, pérdida menstrual y dolor posparto.',
+    ],
+    'tonify-qi-blood-ch8' => [
+        'Choose combined tonification by temperature, dominant organ, bleeding, irregular pulse, and obstetric context.',
+        'Elige tonificación combinada por temperatura, órgano dominante, sangrado, pulso irregular y contexto obstétrico.',
+    ],
+    'nourish-tonify-yin-ch8' => [
+        'Locate Yin deficiency in the Kidney-Liver, Lung, or Stomach and grade deficiency Fire, dryness, and essence depletion.',
+        'Localiza la deficiencia de Yin en Riñón-Hígado, Pulmón o Estómago y gradúa Fuego por deficiencia, sequedad y agotamiento de esencia.',
+    ],
+    'warm-tonify-yang-ch8' => [
+        'Distinguish impaired water transformation, deep exhaustion, leakage, and fertility presentations of Kidney Yang deficiency.',
+        'Distingue transformación alterada del agua, agotamiento profundo, pérdidas y cuadros de fertilidad por deficiencia de Yang de Riñón.',
+    ],
+    'tonify-yin-yang-ch8' => [
+        'Separate severe pure depletion from Phlegm obstruction, Liver-Blood deficiency, and the pattern of Cold below with Fire above.',
+        'Separa agotamiento puro grave de obstrucción por Flema, deficiencia de Sangre de Hígado y el patrón de Frío abajo con Fuego arriba.',
     ],
 ];
 
