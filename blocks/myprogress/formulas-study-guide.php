@@ -87,6 +87,10 @@ $categorycopy = [
         'Differentiate simultaneous exterior-interior excess by whether the interior requires purging, clearing Heat, or warming Cold.',
         'Distingue el exceso simultáneo Exterior-Interior según si el Interior requiere purgar, aclarar Calor o calentar Frío.',
     ],
+    'tonify-chapter-8' => [
+        'Study the complete tonification chapter in six sections: Qi, Blood, Qi and Blood, Yin, Yang, and combined Yin-Yang.',
+        'Estudia el capítulo completo de tonificación en seis secciones: Qi, Sangre, Qi y Sangre, Yin, Yang y Yin-Yang combinados.',
+    ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
         'Distingue la deficiencia de Qi por órgano, hundimiento, Exterior inestable, pérdida de líquidos, Humedad e incapacidad para captar Qi.',
@@ -144,6 +148,31 @@ $tonifychapterkeys = [
     'tonify-yin-yang-ch8',
 ];
 $tonifychaptercategories = array_intersect_key($supplementalcategories, array_flip($tonifychapterkeys));
+
+$tonifychapterformulas = [];
+foreach ($tonifychaptercategories as $chaptercategory) {
+    foreach ($chaptercategory['formulas'] as $chapterformula) {
+        $tonifychapterformulas[] = $chapterformula;
+    }
+}
+$tonifychapteroverview = [
+    'number' => 'S4',
+    'key' => 'tonify-chapter-8',
+    'name' => 'Formulas That Tonify · Complete Chapter 8',
+    'nameEs' => 'Fórmulas que tonifican · Capítulo 8 completo',
+    'sourceChapter' => 8,
+    'sourcePages' => '307–416',
+    'formulas' => $tonifychapterformulas,
+];
+
+$supplementalindexcategories = [];
+foreach ($supplementalcategories as $categorykey => $category) {
+    if (!in_array($categorykey, $tonifychapterkeys, true)) {
+        $supplementalindexcategories[$categorykey] = $category;
+    }
+}
+$supplementalindexcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
+$supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -228,6 +257,9 @@ echo $OUTPUT->header();
 .formula-study-guide__category-header--supplemental{border-top-color:#0b817d;background:linear-gradient(135deg,#effaf7,#fffaf5)}
 .formula-study-guide__category-header h3{margin:4px 0 8px;font-size:clamp(25px,3vw,34px)}.formula-study-guide__category-header p{max-width:800px;margin:0;color:#52677a;line-height:1.55}
 .formula-study-guide__chapter-shortcut{margin:0 0 18px;padding:18px 20px;border:1px solid #add8cf;border-left:5px solid #0b817d;border-radius:11px;background:#effaf7}.formula-study-guide__chapter-shortcut h4{margin:0 0 5px;font-size:20px}.formula-study-guide__chapter-shortcut>p{margin:0 0 14px;color:#496474;line-height:1.5}.formula-study-guide__chapter-shortcut-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.formula-study-guide__chapter-shortcut-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid #c7e3dd;border-radius:8px;background:#fff;color:#075e54;font-weight:800;text-decoration:none}.formula-study-guide__chapter-shortcut-link:hover{background:#e7f7f3;color:#064e47;text-decoration:none}.formula-study-guide__chapter-shortcut-link span{color:#64748b;font-size:12px;white-space:nowrap}
+.formula-study-guide__chapter-shortcut-action{margin:0 0 14px}
+.formula-study-guide__chapter-directory{margin:0 0 20px;padding:22px;border:1px solid #c9ded9;border-top:5px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__chapter-directory h4{margin:0 0 7px;font-size:22px}.formula-study-guide__chapter-directory>p{margin:0 0 16px;color:#496474;line-height:1.55}.formula-study-guide__chapter-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.formula-study-guide__chapter-directory-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__chapter-directory-group h5{margin:0 0 8px;font-size:16px}.formula-study-guide__chapter-directory-group h5 a{color:#075e54;text-decoration:none}.formula-study-guide__chapter-directory-group h5 a:hover{text-decoration:underline}.formula-study-guide__chapter-directory-group ol{margin:0;padding-left:22px;columns:2;column-gap:22px}.formula-study-guide__chapter-directory-group li{margin:0 0 5px;break-inside:avoid;color:#52677a;font-size:13px;line-height:1.35}.formula-study-guide__chapter-directory-group li a{color:#334155;text-decoration:none}.formula-study-guide__chapter-directory-group li a:hover{color:#075fc8;text-decoration:underline}
+.formula-study-guide__chapter-section{margin:18px 0 0;padding:20px 22px;border-left:6px solid #0b817d;border-radius:11px;background:linear-gradient(135deg,#eaf8f5,#fff7ed)}.formula-study-guide__chapter-section .formula-study-guide__eyebrow{margin-bottom:5px}.formula-study-guide__chapter-section h4{margin:0 0 7px;font-size:25px}.formula-study-guide__chapter-section>p{margin:0;color:#496474;line-height:1.55}.formula-study-guide__chapter-section-meta{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;background:#fff;color:#52677a;font-size:12px;font-weight:800}
 .formula-study-guide__priority{margin:0 0 18px;padding:20px 22px;border:1px solid #b9dfd7;border-left:5px solid #0b817d;border-radius:11px;background:#eef9f6}.formula-study-guide__priority h4{margin:0 0 7px;font-size:20px}.formula-study-guide__priority h5{margin:17px 0 0;font-size:15px}.formula-study-guide__priority>p{margin:0;color:#496474;line-height:1.55}
 .formula-study-guide__route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.formula-study-guide__route-step{padding:13px;border-radius:9px;background:#fff}.formula-study-guide__route-step b{display:flex;align-items:center;gap:8px;color:#123246}.formula-study-guide__route-number{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-size:12px}.formula-study-guide__route-step p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}
 .formula-study-guide__compare{margin:0 0 20px;border:1px solid #d8e1e7;border-radius:11px;background:#fff;overflow:hidden}.formula-study-guide__compare h4{margin:0;padding:16px 18px;background:#f5f8fa;font-size:18px}.formula-study-guide__table-wrap{overflow-x:auto}.formula-study-guide__table{width:100%;border-collapse:collapse}.formula-study-guide__table th,.formula-study-guide__table td{padding:11px 14px;border-top:1px solid #e2e8ec;text-align:left;vertical-align:top}.formula-study-guide__table th{color:#334155;font-size:12px;text-transform:uppercase}.formula-study-guide__table td{color:#52677a;line-height:1.4}.formula-study-guide__table td:first-child{color:#17232a;font-weight:800;white-space:nowrap}
@@ -248,9 +280,9 @@ echo $OUTPUT->header();
 .formula-study-guide__references{margin:20px 0;border:1px solid #d8e1e7;border-radius:11px;background:#fff}.formula-study-guide__references>summary{padding:16px 18px;color:#334155;font-size:17px;font-weight:900;cursor:pointer}.formula-study-guide__references-body{padding:0 18px 18px}.formula-study-guide__references-body>p{margin:0 0 15px;color:#52677a;line-height:1.5}.formula-study-guide__reference-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__reference-group{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__reference-group h5{margin:0 0 10px;font-size:15px}.formula-study-guide__reference-group ul{margin:0;padding-left:18px}.formula-study-guide__reference-group li{margin:0 0 9px;color:#52677a;line-height:1.4}.formula-study-guide__reference-group li:last-child{margin-bottom:0}.formula-study-guide__reference-group strong{color:#17232a}
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__chapter-directory-grid{grid-template-columns:1fr}.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links{grid-template-columns:1fr}.formula-study-guide__badges{justify-content:flex-start}}
+@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
 <main class="formula-study-guide">
     <header class="formula-study-guide__top">
@@ -313,7 +345,7 @@ echo $OUTPUT->header();
                 <span class="formula-study-guide__supplement-badge"><?php echo s($ises ? 'Separadas del listado Board' : 'Separate from Board roster'); ?></span>
             </div>
             <div class="formula-study-guide__grid">
-                <?php foreach ($supplementalcategories as $category): ?>
+                <?php foreach ($supplementalindexcategories as $category): ?>
                     <?php
                     $categoryparams = ['focus' => $category['key']];
                     if ($ises) {
@@ -352,6 +384,14 @@ echo $OUTPUT->header();
                 <p><?php echo s($ises
                     ? 'Las 8 fórmulas de arriba son el listado Board oficial. Abre aquí las seis secciones completas extraídas de las páginas 309–411.'
                     : 'The 8 formulas above are the official Board roster. Open the six complete sections extracted from pages 309–411 here.'); ?></p>
+                <?php
+                $masterchapterparams = ['focus' => 'tonify-chapter-8'];
+                if ($ises) {
+                    $masterchapterparams['lang'] = 'es';
+                }
+                $masterchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $masterchapterparams);
+                ?>
+                <div class="formula-study-guide__chapter-shortcut-action"><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $masterchapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 8 completo →' : 'Open complete Chapter 8 →'); ?></a></div>
                 <div class="formula-study-guide__chapter-shortcut-links">
                     <?php foreach ($tonifychaptercategories as $chaptercategory): ?>
                         <?php
@@ -365,6 +405,40 @@ echo $OUTPUT->header();
                             <?php echo s($ises ? $chaptercategory['nameEs'] : $chaptercategory['name']); ?>
                             <span><?php echo count($chaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> →</span>
                         </a>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
+        <?php if ($selected['key'] === 'tonify-chapter-8'): ?>
+            <section class="formula-study-guide__priority" aria-labelledby="chapter-eight-principles-title">
+                <h4 id="chapter-eight-principles-title"><?php echo s($ises ? 'Cómo se organiza la tonificación' : 'How tonification is organized'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'Las fórmulas tónicas se eligen por la sustancia deficiente y por el órgano o mecanismo dominante. Primero se diferencia Qi, Sangre, Yin, Yang o una deficiencia combinada; después se comprueban Frío, Calor por deficiencia, Humedad, Flema, estasis, hundimiento o pérdidas.'
+                    : 'Tonifying formulas are selected by the deficient substance and the dominant organ or mechanism. First differentiate Qi, Blood, Yin, Yang, or combined deficiency; then check for Cold, deficiency Heat, Dampness, Phlegm, stasis, sinking, or leakage.'); ?></p>
+                <h5><?php echo s($ises ? 'Ruta de estudio del capítulo' : 'Chapter study route'); ?></h5>
+                <div class="formula-study-guide__route">
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">1</span><?php echo s($ises ? 'Identifica qué falta' : 'Identify what is deficient'); ?></b><p><?php echo s($ises ? 'Qi, Sangre, Yin, Yang o varias sustancias a la vez.' : 'Qi, Blood, Yin, Yang, or several substances together.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Localiza el sistema' : 'Locate the system'); ?></b><p><?php echo s($ises ? 'Bazo, Pulmón, Corazón, Hígado, Riñón o Estómago.' : 'Spleen, Lung, Heart, Liver, Kidney, or Stomach.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">3</span><?php echo s($ises ? 'Busca la complicación' : 'Find the complication'); ?></b><p><?php echo s($ises ? 'Hundimiento, pérdidas, Frío, Calor vacío, Humedad, Flema o estasis.' : 'Sinking, leakage, Cold, empty Heat, Dampness, Phlegm, or stasis.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Comprueba seguridad' : 'Check safety'); ?></b><p><?php echo s($ises ? 'Descarta patógeno activo, sangrado, urgencias y sustancias tóxicas o restringidas.' : 'Exclude active pathogens, bleeding, emergencies, and toxic or restricted substances.'); ?></p></div>
+                </div>
+            </section>
+            <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-eight-directory-title">
+                <h4 id="chapter-eight-directory-title"><?php echo s($ises ? 'Listado completo de fórmulas que tonifican' : 'Complete list of formulas that tonify'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'Las 45 fórmulas están separadas por tipo de tonificación. Selecciona una fórmula para ir directamente a su ficha o continúa hacia abajo para estudiar cada sección completa.'
+                    : 'The 45 formulas are separated by tonification type. Select a formula to jump to its card or continue downward to study every complete section.'); ?></p>
+                <div class="formula-study-guide__chapter-directory-grid">
+                    <?php foreach ($tonifychaptercategories as $chaptercategory): ?>
+                        <section class="formula-study-guide__chapter-directory-group">
+                            <h5><a href="#chapter-section-<?php echo s($chaptercategory['key']); ?>"><?php echo s($ises ? $chaptercategory['nameEs'] : $chaptercategory['name']); ?> · <?php echo count($chaptercategory['formulas']); ?></a></h5>
+                            <ol>
+                                <?php foreach ($chaptercategory['formulas'] as $chapterformula): ?>
+                                    <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a></li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </section>
                     <?php endforeach; ?>
                 </div>
             </section>
@@ -398,8 +472,15 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
         <section class="formula-study-guide__formula-list" aria-label="<?php echo s($ises ? 'Fórmulas de la categoría' : 'Category formulas'); ?>">
+            <?php $chapterformulaindex = 0; $lastformulacategory = null; ?>
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
+                $chapterformulaindex++;
+                $newchaptersection = $selected['key'] === 'tonify-chapter-8'
+                    && $lastformulacategory !== $formula['categoryKey'];
+                $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
+                $formulacategoryguide = $newchaptersection ? ($data['categoryGuides'][$formula['categoryKey']] ?? null) : null;
+                $lastformulacategory = $formula['categoryKey'];
                 $tier = $formula['safetyTier'];
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
@@ -410,13 +491,57 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
+                if ($selected['key'] === 'tonify-chapter-8') {
+                    $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
+                        . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
+                        . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
+                } elseif ($issupplemental) {
+                    $formulalabel = ($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence']
+                        . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
+                        . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
+                } else {
+                    $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $formula['number']
+                        . ' ' . ($ises ? 'de' : 'of') . ' 63';
+                }
                 ?>
+                <?php if ($newchaptersection && $formulacategory !== null): ?>
+                    <section class="formula-study-guide__chapter-section" id="chapter-section-<?php echo s($formulacategory['key']); ?>">
+                        <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Sección del capítulo 8' : 'Chapter 8 section'); ?></p>
+                        <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
+                        <p><?php echo s($categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
+                        <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
+                    </section>
+                    <?php if ($formulacategoryguide !== null): ?>
+                        <section class="formula-study-guide__priority" aria-label="<?php echo s($ises ? 'Diferenciación de la sección' : 'Section differentiation'); ?>">
+                            <h4><?php echo s($ises ? $formulacategoryguide['routeTitleEs'] : $formulacategoryguide['routeTitle']); ?></h4>
+                            <div class="formula-study-guide__route">
+                                <?php foreach ($formulacategoryguide['route'] as $step): ?>
+                                    <div class="formula-study-guide__route-step">
+                                        <b><span class="formula-study-guide__route-number"><?php echo s($step[0]); ?></span><?php echo s($ises ? $step[3] : $step[1]); ?></b>
+                                        <p><?php echo s($ises ? $step[4] : $step[2]); ?></p>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </section>
+                        <section class="formula-study-guide__compare" aria-label="<?php echo s($ises ? 'Comparación de fórmulas' : 'Formula comparison'); ?>">
+                            <h4><?php echo s($ises ? $formulacategoryguide['quickCompareTitleEs'] : $formulacategoryguide['quickCompareTitle']); ?></h4>
+                            <div class="formula-study-guide__table-wrap">
+                                <table class="formula-study-guide__table">
+                                    <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
+                                    <tbody>
+                                        <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
+                                            <tr><td><?php echo s($row[0]); ?></td><td><?php echo s($ises ? $row[3] : $row[1]); ?></td><td><?php echo s($ises ? $row[4] : $row[2]); ?></td></tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
                     <header class="formula-study-guide__formula-heading">
                         <div>
-                            <span class="formula-study-guide__formula-label"><?php echo s($issupplemental
-                                ? (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence'] . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']) . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'])
-                                : (($ises ? 'Fórmula ' : 'Formula ') . $formula['number'] . ' ' . ($ises ? 'de' : 'of') . ' 63')); ?></span>
+                            <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
                             <h4><?php echo s($formula['name']); ?></h4>
                             <?php if ($issupplemental): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
