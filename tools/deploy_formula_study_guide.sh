@@ -6,6 +6,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
+BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash deploy_formula_study_guide.sh COMMIT_DE_40_CARACTERES"
@@ -18,7 +19,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" || ! -d "$TARGET_DIR" ]]; then
 fi
 
 TEMP_DIR="$(mktemp -d)"
-BACKUP_DIR="/var/backups/boardacupuncture-formulas-$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$BACKUP_ROOT/boardacupuncture-formulas-$(date +%Y%m%d-%H%M%S)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 curl -fsSL \
