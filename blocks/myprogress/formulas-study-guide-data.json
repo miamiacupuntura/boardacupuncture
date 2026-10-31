@@ -393,6 +393,150 @@
           ]
         }
       ]
+    },
+    "harmonize": {
+      "priorityTitle": "Guideline priority: master these 4 harmonizing formulas first",
+      "priorityTitleEs": "Prioridad del guideline: domina primero estas 4 fórmulas armonizadoras",
+      "priorityText": "The current exam guideline requires the four formulas below. First locate the disharmony: Shaoyang, Liver-Spleen or Stomach-Intestines. Then separate excess from deficiency and identify the decisive symptom. Secondary chapter formulas remain collapsed for comparison and safety review.",
+      "priorityTextEs": "El guideline actual exige las cuatro fórmulas siguientes. Primero localiza la desarmonía: Shaoyang, Hígado-Bazo o Estómago-Intestinos. Después separa exceso de deficiencia e identifica el síntoma decisivo. Las fórmulas secundarias del capítulo permanecen plegadas para comparación y seguridad.",
+      "routeTitle": "Four-step harmonizing decision route",
+      "routeTitleEs": "Ruta de decisión para armonizar en cuatro pasos",
+      "route": [
+        [
+          "1",
+          "Half-exterior, half-interior Shaoyang?",
+          "Alternating chills and fever with a bitter taste, dry throat, wiry pulse, hypochondriac fullness and nausea points to Xiao Chai Hu Tang.",
+          "¿Shaoyang mitad exterior y mitad interior?",
+          "Escalofríos y fiebre alternantes con sabor amargo, garganta seca, pulso de cuerda, plenitud hipocondríaca y náusea apuntan a Xiao Chai Hu Tang."
+        ],
+        [
+          "2",
+          "Cold fingertips but a warm body?",
+          "Cold limited mainly to fingers and toes, with internal constraint and a warm trunk, points to Si Ni San—not the true Yang collapse of Si Ni Tang.",
+          "¿Dedos fríos pero cuerpo tibio?",
+          "Frío limitado sobre todo a dedos de manos y pies, con constricción interna y tronco tibio, apunta a Si Ni San; no al colapso verdadero de Yang de Si Ni Tang."
+        ],
+        [
+          "3",
+          "Liver constraint plus Blood and Spleen deficiency?",
+          "Hypochondriac or breast distention with stress, fatigue, poor appetite, dizziness or irregular menstruation points to Xiao Yao San.",
+          "¿Constricción de Hígado más deficiencia de Sangre y Bazo?",
+          "Distensión hipocondríaca o mamaria relacionada con estrés, fatiga, poco apetito, mareo o menstruación irregular apunta a Xiao Yao San."
+        ],
+        [
+          "4",
+          "Soft focal epigastric distention with vomiting and diarrhea?",
+          "A soft epigastrium with focal fullness, little or no pain, dry heaves, borborygmus and diarrhea points to Ban Xia Xie Xin Tang.",
+          "¿Distensión epigástrica focal blanda con vómito y diarrea?",
+          "Epigastrio blando con plenitud focal, poco o ningún dolor, arcadas, borborigmos y diarrea apunta a Ban Xia Xie Xin Tang."
+        ]
+      ],
+      "quickCompareTitle": "The four harmonizing formulas at a glance",
+      "quickCompareTitleEs": "Las cuatro fórmulas armonizadoras de un vistazo",
+      "quickCompare": [
+        [
+          "Xiao Chai Hu Tang",
+          "Shaoyang disharmony",
+          "Alternating chills/fever · bitter taste · hypochondriac fullness · nausea",
+          "Desarmonía Shaoyang",
+          "Escalofríos/fiebre alternantes · sabor amargo · plenitud hipocondríaca · náusea"
+        ],
+        [
+          "Si Ni San",
+          "Yang constrained in the interior",
+          "Cold fingertips/toes · warm trunk · wiry pulse · excess signs",
+          "Yang constreñido en el interior",
+          "Dedos fríos · tronco tibio · pulso de cuerda · signos de exceso"
+        ],
+        [
+          "Xiao Yao San",
+          "Liver constraint with Blood/Spleen deficiency",
+          "Stress-linked distention · fatigue · poor appetite · irregular menses",
+          "Constricción de Hígado con deficiencia de Sangre/Bazo",
+          "Distensión ligada al estrés · fatiga · poco apetito · menstruación irregular"
+        ],
+        [
+          "Ban Xia Xie Xin Tang",
+          "Cold-Heat clumping in the middle",
+          "Soft, nearly painless focal epigastric distention · vomiting · borborygmus · diarrhea",
+          "Aglomeración Frío-Calor en el centro",
+          "Distensión epigástrica focal blanda y casi indolora · vómito · borborigmos · diarrea"
+        ]
+      ],
+      "referencesTitle": "Secondary formulas — comparison and safety only",
+      "referencesTitleEs": "Fórmulas secundarias — solo comparación y seguridad",
+      "referencesText": "These chapter formulas sharpen differentiation after the four required cards are secure. They are not additional primary cards in the current guideline, and several require strict professional supervision.",
+      "referencesTextEs": "Estas fórmulas del capítulo afinan la diferenciación después de dominar las cuatro tarjetas obligatorias. No son tarjetas primarias adicionales del guideline actual y varias exigen supervisión profesional estricta.",
+      "referenceGroups": [
+        {
+          "title": "Shaoyang variations",
+          "titleEs": "Variaciones de Shaoyang",
+          "items": [
+            [
+              "Hao Qin Qing Dan Tang",
+              "Damp-Heat and turbid phlegm in Shaoyang: fever predominates, chills are mild, the tongue body is red with a thick greasy coat, and the right pulse is slippery-rapid.",
+              "Humedad-Calor y flema turbia en Shaoyang: predomina fiebre, los escalofríos son leves, el cuerpo lingual es rojo con capa gruesa grasosa y el pulso derecho es resbaladizo-rápido."
+            ],
+            [
+              "Chai Hu Jia Long Gu Mu Li Tang",
+              "Complex excess pattern involving all three Yang levels with chest fullness, fright palpitations, constipation, urinary difficulty and disturbed spirit. Historical toxic Qian Dan is replaced in modern practice.",
+              "Patrón complejo de exceso que afecta los tres niveles Yang con plenitud torácica, palpitaciones por susto, estreñimiento, dificultad urinaria y Shen alterado. El Qian Dan histórico y tóxico se sustituye actualmente."
+            ],
+            [
+              "Chai Hu Gui Zhi Gan Jiang Tang",
+              "Shaoyang disharmony with internal fluid clumping and mixed excess-deficiency: thirst, reduced urination, chest/hypochondriac fullness and often soft stool or diarrhea.",
+              "Desarmonía Shaoyang con líquidos aglomerados internos y mezcla exceso-deficiencia: sed, orina reducida, plenitud torácica/hipocondríaca y a menudo heces blandas o diarrea."
+            ]
+          ]
+        },
+        {
+          "title": "Liver-Spleen and middle-burner separators",
+          "titleEs": "Separadores de Hígado-Bazo y Jiao Medio",
+          "items": [
+            [
+              "Tong Xie Yao Fang",
+              "Recurrent painful diarrhea from Spleen deficiency with Liver overcontrol: pain and urge begin before stool and improve after evacuation; the pulse is wiry.",
+              "Diarrea dolorosa recurrente por deficiencia de Bazo con sobrecontrol de Hígado: dolor y urgencia comienzan antes de defecar y mejoran después; el pulso es de cuerda."
+            ],
+            [
+              "Huang Lian Tang",
+              "Heat above and Cold below: chest irritability and nausea above with abdominal pain or diarrhea below. Unlike Ban Xia Xie Xin Tang, focal epigastric distention is not the defining clue.",
+              "Calor arriba y Frío abajo: irritabilidad torácica y náusea arriba con dolor abdominal o diarrea abajo. A diferencia de Ban Xia Xie Xin Tang, la distensión epigástrica focal no es la pista definitoria."
+            ],
+            [
+              "Jia Wei Xiao Yao San",
+              "Xiao Yao San presentation after constraint has generated more obvious Heat: irritability, flushing, red eyes, dry mouth or increased bleeding.",
+              "Cuadro de Xiao Yao San cuando la constricción ha generado Calor más evidente: irritabilidad, rubor, ojos rojos, boca seca o aumento del sangrado."
+            ]
+          ]
+        },
+        {
+          "title": "Malarial disorders and membrane source — high caution",
+          "titleEs": "Trastornos palúdicos y fuente de membrana — precaución alta",
+          "items": [
+            [
+              "Jie Nüe Qi Bao Yin",
+              "Excess phlegm-damp malarial pattern with intense regular alternating attacks. Contains toxic Chang Shan and is not for deficiency or chronic conditions.",
+              "Patrón palúdico de exceso por flema-humedad con ataques alternantes intensos y regulares. Contiene Chang Shan tóxico y no corresponde a deficiencia ni cuadros crónicos."
+            ],
+            [
+              "Qing Pi Tang",
+              "Warm or pure-Heat malaria with phlegm-dampness trapping Heat: fever dominates, with thirst, bitter taste, constipation and a yellow greasy coat.",
+              "Malaria tibia o de Calor puro con flema-humedad atrapando Calor: predomina fiebre, con sed, sabor amargo, estreñimiento y capa amarilla grasosa."
+            ],
+            [
+              "Da Yuan Yin",
+              "Strong pathogenic and upright Qi with foul turbidity lodged in the membrane source: both fever and chills are strong, intervals are irregular, and the tongue has a thick foul pasty coat with dark-red edges.",
+              "Qi patógeno y correcto fuertes con turbidez pestilente alojada en la fuente de membrana: fiebre y escalofríos son intensos, los intervalos irregulares y la lengua presenta capa gruesa, sucia y pastosa con bordes rojo oscuro."
+            ],
+            [
+              "Chai Hu Da Yuan Yin",
+              "Phlegm-dampness obstructs the membrane source with additional Shaoyang signs; focal chest/epigastric fullness and a coarse white powdery coat are prominent.",
+              "Flema-humedad obstruye la fuente de membrana con signos Shaoyang añadidos; destacan plenitud focal torácica/epigástrica y capa blanca gruesa con aspecto de polvo."
+            ]
+          ]
+        }
+      ]
     }
   },
   "formulas": [
@@ -773,18 +917,25 @@
       "category": "Harmonize",
       "categoryEs": "Armonizar",
       "kings": "Chai Hu",
-      "pattern": "Half-exterior, half-interior Shaoyang disorder.",
-      "patternEs": "Trastorno Shaoyang mitad exterior y mitad interior.",
+      "pattern": "Half-exterior, half-interior Shaoyang disorder with constrained Gallbladder and Triple Burner Qi.",
+      "patternEs": "Trastorno Shaoyang mitad exterior y mitad interior con Qi de Vesícula Biliar y Triple Calentador constreñido.",
       "action": "Harmonizes Shaoyang, vents the pathogen, clears Heat and supports upright Qi.",
       "actionEs": "Armoniza Shaoyang, libera patógeno, aclara Calor y apoya Qi correcto.",
-      "clue": "Alternating chills and fever, bitter taste, dry throat, dizziness, hypochondriac fullness and nausea.",
-      "clueEs": "Escalofríos y fiebre alternantes, sabor amargo, garganta seca, mareo, plenitud hipocondríaca y náusea.",
+      "clue": "Alternating chills and fever with a bitter taste, dry throat, dizziness, chest or hypochondriac fullness, nausea and a wiry pulse.",
+      "clueEs": "Escalofríos y fiebre alternantes con sabor amargo, garganta seca, mareo, plenitud torácica o hipocondríaca, náusea y pulso de cuerda.",
       "ingredients": "Chai Hu, Huang Qin, Ban Xia, Sheng Jiang, Ren Shen, Zhi Gan Cao and Da Zao.",
       "ingredientsEs": "Chai Hu, Huang Qin, Ban Xia, Sheng Jiang, Ren Shen, Zhi Gan Cao y Da Zao.",
-      "safety": "Persistent fever, jaundice, severe abdominal pain, dehydration, pregnancy or significant liver disease requires medical evaluation.",
-      "safetyEs": "Fiebre persistente, ictericia, dolor abdominal grave, deshidratación, embarazo o enfermedad hepática requiere evaluación.",
+      "safety": "Professional pattern diagnosis is essential; alternating fever and chills alone do not establish a Shaoyang pattern. Use cautiously with ascending Liver Yang, hypertension, Yin-deficiency bleeding or marked deficiency, and avoid long unsupervised courses. Persistent fever, jaundice, severe abdominal pain, dehydration, pregnancy or significant liver disease requires medical evaluation.",
+      "safetyEs": "El diagnóstico profesional del patrón es esencial; fiebre y escalofríos alternantes por sí solos no establecen Shaoyang. Usar con cautela en ascenso de Yang de Hígado, hipertensión, sangrado por deficiencia de Yin o deficiencia marcada, y evitar cursos prolongados sin supervisión. Fiebre persistente, ictericia, dolor abdominal grave, deshidratación, embarazo o enfermedad hepática requiere evaluación médica.",
       "safetyTier": "standard",
-      "practiceCount": 24
+      "practiceCount": 24,
+      "priority": "core",
+      "examFocus": "The pivot is stuck between exterior and interior. The high-yield cluster is alternating chills and fever plus one or more Shaoyang signs: bitter taste, dry throat, dizziness, hypochondriac fullness, nausea and a wiry pulse.",
+      "examFocusEs": "El pivote está bloqueado entre exterior e interior. El grupo de alto rendimiento es fiebre y escalofríos alternantes más uno o varios signos Shaoyang: sabor amargo, garganta seca, mareo, plenitud hipocondríaca, náusea y pulso de cuerda.",
+      "ingredientRoles": "Chai Hu vents the half-exterior aspect and spreads Liver/Gallbladder Qi; Huang Qin clears Heat from the interior Shaoyang aspect; Ban Xia and Sheng Jiang transform phlegm, harmonize the Stomach and descend rebellious Qi; Ren Shen, Da Zao and Zhi Gan Cao support upright and middle-burner Qi while harmonizing the formula.",
+      "ingredientRolesEs": "Chai Hu ventila el aspecto medio exterior y difunde Qi de Hígado/Vesícula Biliar; Huang Qin aclara Calor del aspecto interior Shaoyang; Ban Xia y Sheng Jiang transforman flema, armonizan Estómago y descienden Qi rebelde; Ren Shen, Da Zao y Zhi Gan Cao apoyan Qi correcto y del Jiao Medio mientras armonizan la fórmula.",
+      "comparison": "Hao Qin Qing Dan Tang treats Damp-Heat and turbid phlegm in Shaoyang: fever is stronger, chills milder, and the tongue is red with a thick greasy coat. Xiao Yao San treats internally generated Liver-Spleen disharmony with deficiency signs rather than a lodged Shaoyang pathogen.",
+      "comparisonEs": "Hao Qin Qing Dan Tang trata Humedad-Calor y flema turbia en Shaoyang: la fiebre es más fuerte, los escalofríos más leves y la lengua roja con capa gruesa grasosa. Xiao Yao San trata desarmonía interna Hígado-Bazo con signos de deficiencia, no un patógeno alojado en Shaoyang."
     },
     {
       "number": 17,
@@ -793,18 +944,25 @@
       "category": "Harmonize",
       "categoryEs": "Armonizar",
       "kings": "Chai Hu",
-      "pattern": "Liver Qi constraint overacting on the Spleen and blocking Yang from reaching the extremities.",
-      "patternEs": "Constricción de Qi de Hígado sobrecontrolando Bazo y bloqueando llegada de Yang a extremidades.",
+      "pattern": "Yang- or Heat-type inversion from internal Qi constraint, often with Liver-Spleen disharmony.",
+      "patternEs": "Inversión tipo Yang o Calor por constricción interna de Qi, a menudo con desarmonía Hígado-Bazo.",
       "action": "Disperses constrained Qi, harmonizes Liver/Spleen and restores circulation to the limbs.",
       "actionEs": "Dispersa Qi constreñido, armoniza Hígado/Bazo y restaura circulación a miembros.",
-      "clue": "Cold fingers and toes with a warm body, irritability and abdominal or hypochondriac discomfort.",
-      "clueEs": "Dedos fríos con cuerpo tibio, irritabilidad y molestia abdominal o hipocondríaca.",
+      "clue": "Cold fingers and toes while the head and trunk remain warm, with irritability, chest or epigastric fullness, abdominal pain or diarrhea and a wiry pulse.",
+      "clueEs": "Dedos de manos y pies fríos mientras cabeza y tronco permanecen tibios, con irritabilidad, plenitud torácica o epigástrica, dolor abdominal o diarrea y pulso de cuerda.",
       "ingredients": "Chai Hu, Bai Shao, Zhi Shi and Zhi Gan Cao.",
       "ingredientsEs": "Chai Hu, Bai Shao, Zhi Shi y Zhi Gan Cao.",
-      "safety": "Cold limbs with chest pain, fainting, confusion, severe weakness or low blood pressure requires emergency assessment.",
-      "safetyEs": "Extremidades frías con dolor torácico, desmayo, confusión, debilidad grave o presión baja requiere urgencia.",
+      "safety": "Do not confuse constrained Yang with true Yang deficiency, where the whole limbs are cold with fatigue, a pale tongue and a weak deep pulse. The formula is unsuitable for Qi constraint associated with Yin deficiency. Cold limbs with chest pain, fainting, confusion, severe weakness or low blood pressure requires emergency assessment.",
+      "safetyEs": "No confundir Yang constreñido con deficiencia verdadera de Yang, donde las extremidades completas están frías con fatiga, lengua pálida y pulso profundo débil. La fórmula no corresponde a constricción de Qi asociada con deficiencia de Yin. Extremidades frías con dolor torácico, desmayo, confusión, debilidad grave o presión baja requiere urgencia.",
       "safetyTier": "standard",
-      "practiceCount": 20
+      "practiceCount": 20,
+      "priority": "core",
+      "examFocus": "The cold is mainly at the fingertips and toes because Yang is trapped, not depleted. A warm trunk, wiry pulse and internal excess signs separate Si Ni San from the cold entire limbs, pale tongue and weak pulse of Si Ni Tang.",
+      "examFocusEs": "El frío está principalmente en puntas de dedos porque el Yang está atrapado, no agotado. Tronco tibio, pulso de cuerda y signos internos de exceso separan Si Ni San de las extremidades completas frías, lengua pálida y pulso débil de Si Ni Tang.",
+      "ingredientRoles": "Chai Hu vents constrained Yang and spreads Liver Qi; Zhi Shi breaks Qi stagnation and directs downward; Bai Shao nourishes Liver Yin and moderates pain while balancing Chai Hu; Zhi Gan Cao strengthens the Spleen, harmonizes the herbs and combines with Bai Shao to relieve spasm.",
+      "ingredientRolesEs": "Chai Hu ventila Yang constreñido y difunde Qi de Hígado; Zhi Shi rompe estancamiento de Qi y dirige hacia abajo; Bai Shao nutre Yin de Hígado, modera dolor y equilibra Chai Hu; Zhi Gan Cao fortalece Bazo, armoniza las hierbas y se combina con Bai Shao para aliviar espasmo.",
+      "comparison": "Xiao Yao San shares Chai Hu, Bai Shao and Zhi Gan Cao but adds Blood- and Spleen-tonifying herbs for fatigue, poor appetite and menstrual signs. Si Ni San is more excess-oriented and is defined by constrained Yang causing cold fingertips.",
+      "comparisonEs": "Xiao Yao San comparte Chai Hu, Bai Shao y Zhi Gan Cao, pero añade hierbas que tonifican Sangre y Bazo para fatiga, poco apetito y signos menstruales. Si Ni San se orienta más al exceso y se define por Yang constreñido que causa dedos fríos."
     },
     {
       "number": 18,
@@ -813,18 +971,25 @@
       "category": "Harmonize",
       "categoryEs": "Armonizar",
       "kings": "Chai Hu",
-      "pattern": "Liver Qi stagnation with Liver Blood and Spleen Qi deficiency.",
-      "patternEs": "Estancamiento de Qi de Hígado con deficiencia de Sangre de Hígado y Qi de Bazo.",
+      "pattern": "Liver Qi constraint with Liver Blood deficiency and a frail Spleen.",
+      "patternEs": "Constricción de Qi de Hígado con deficiencia de Sangre de Hígado y Bazo debilitado.",
       "action": "Spreads Liver Qi, nourishes Blood and strengthens the Spleen.",
       "actionEs": "Dispersa Qi de Hígado, nutre Sangre y fortalece Bazo.",
-      "clue": "Mood-related hypochondriac discomfort, irregular menses, fatigue and poor appetite that fluctuate with stress.",
-      "clueEs": "Molestia hipocondríaca relacionada con ánimo, menstruación irregular, fatiga y poco apetito que fluctúan con estrés.",
+      "clue": "Stress-linked hypochondriac or breast distention with fatigue, reduced appetite, headache or dizziness, irregular menstruation, a pale-red tongue and a wiry-deficient pulse.",
+      "clueEs": "Distensión hipocondríaca o mamaria ligada al estrés con fatiga, poco apetito, cefalea o mareo, menstruación irregular, lengua rojo-pálida y pulso de cuerda deficiente.",
       "ingredients": "Chai Hu, Dang Gui, Bai Shao, Bai Zhu, Fu Ling and Zhi Gan Cao, prepared with Bo He and Sheng Jiang.",
       "ingredientsEs": "Chai Hu, Dang Gui, Bai Shao, Bai Zhu, Fu Ling y Zhi Gan Cao, preparados con Bo He y Sheng Jiang.",
-      "safety": "Severe depression, suicidal thoughts, heavy bleeding, pregnancy pain or a new pelvic mass requires professional assessment.",
-      "safetyEs": "Depresión grave, ideas suicidas, sangrado abundante, dolor en embarazo o nueva masa pélvica requiere evaluación profesional.",
+      "safety": "Not for a purely deficient presentation without Liver constraint, and not a substitute for mental-health, gynecologic or medical evaluation. Severe depression, suicidal thoughts, heavy bleeding, pregnancy pain, persistent fever or a new pelvic or breast mass requires prompt professional assessment.",
+      "safetyEs": "No corresponde a un cuadro puramente deficiente sin constricción de Hígado ni sustituye evaluación de salud mental, ginecológica o médica. Depresión grave, ideas suicidas, sangrado abundante, dolor en embarazo, fiebre persistente o nueva masa pélvica o mamaria requiere evaluación profesional pronta.",
       "safetyTier": "standard",
-      "practiceCount": 14
+      "practiceCount": 14,
+      "priority": "core",
+      "examFocus": "This is a mixed excess-deficiency pattern: Liver constraint creates distention and a wiry quality, while Blood and Spleen deficiency create dizziness, fatigue, poor appetite, menstrual irregularity and a deficient pulse.",
+      "examFocusEs": "Es un patrón mixto de exceso-deficiencia: la constricción de Hígado produce distensión y cualidad de cuerda, mientras la deficiencia de Sangre y Bazo produce mareo, fatiga, poco apetito, irregularidad menstrual y pulso deficiente.",
+      "ingredientRoles": "Chai Hu spreads Liver Qi and relieves constraint; Dang Gui and Bai Shao nourish Liver Blood and preserve Yin; Bai Zhu, Fu Ling and Zhi Gan Cao strengthen the Spleen; Sheng Jiang harmonizes the Stomach; a small dose of Bo He assists Chai Hu in venting constrained Heat.",
+      "ingredientRolesEs": "Chai Hu difunde Qi de Hígado y alivia constricción; Dang Gui y Bai Shao nutren Sangre de Hígado y preservan Yin; Bai Zhu, Fu Ling y Zhi Gan Cao fortalecen Bazo; Sheng Jiang armoniza Estómago; una dosis pequeña de Bo He ayuda a Chai Hu a ventilar Calor constreñido.",
+      "comparison": "Si Ni San treats a more excessive constraint with cold fingertips and lacks the broad Blood/Spleen support. Jia Wei Xiao Yao San adds Mu Dan Pi and Zhi Zi when constraint has transformed into clearer Heat signs such as irritability, flushing, red eyes or dry mouth.",
+      "comparisonEs": "Si Ni San trata constricción más excesiva con dedos fríos y carece del apoyo amplio a Sangre/Bazo. Jia Wei Xiao Yao San añade Mu Dan Pi y Zhi Zi cuando la constricción se ha transformado en signos de Calor más claros como irritabilidad, rubor, ojos rojos o boca seca."
     },
     {
       "number": 19,
@@ -833,18 +998,25 @@
       "category": "Harmonize",
       "categoryEs": "Armonizar",
       "kings": "Ban Xia",
-      "pattern": "Mixed Cold-Heat and deficiency-excess disharmony in the Middle Burner causing focal epigastric distention.",
-      "patternEs": "Desarmonía mixta Frío-Calor y deficiencia-exceso en el Jiao Medio que produce distensión epigástrica focal.",
+      "pattern": "Cold and Heat clumping with simultaneous excess and deficiency in the middle burner, obstructing ascent and descent.",
+      "patternEs": "Frío y Calor aglomerados con exceso y deficiencia simultáneos en el Jiao Medio, obstruyendo ascenso y descenso.",
       "action": "Harmonize the Stomach, descend rebellious Qi, disperse clumping and eliminate focal distention.",
       "actionEs": "Armoniza Estómago, desciende Qi rebelde, dispersa aglomeración y elimina distensión focal.",
-      "clue": "Painless epigastric focal distention with nausea, borborygmus and diarrhea.",
-      "clueEs": "Distensión epigástrica focal sin dolor, con náusea, borborigmos y diarrea.",
+      "clue": "Soft epigastric focal distention, fullness and tightness with little or no pain, plus dry heaves or vomiting, borborygmus and diarrhea.",
+      "clueEs": "Distensión epigástrica focal blanda, plenitud y opresión con poco o ningún dolor, más arcadas o vómito, borborigmos y diarrea.",
       "ingredients": "Ban Xia, Gan Jiang, Huang Qin, Huang Lian, Ren Shen, Da Zao and Zhi Gan Cao.",
       "ingredientsEs": "Ban Xia, Gan Jiang, Huang Qin, Huang Lian, Ren Shen, Da Zao y Zhi Gan Cao.",
-      "safety": "Ban Xia must be processed; persistent vomiting, bleeding or severe pain requires evaluation.",
-      "safetyEs": "Ban Xia debe estar procesada; vómito persistente, sangrado o dolor intenso requiere evaluación.",
+      "safety": "Ban Xia must be properly processed. The formula does not fit focal distention caused primarily by food retention, simple Qi stagnation or a hard painful abdominal mass. Persistent vomiting, blood, dehydration, fever, severe pain or a rigid abdomen requires urgent medical evaluation.",
+      "safetyEs": "Ban Xia debe estar correctamente procesada. La fórmula no corresponde a distensión focal causada principalmente por retención de alimentos, estancamiento simple de Qi o masa abdominal dura y dolorosa. Vómito persistente, sangre, deshidratación, fiebre, dolor intenso o abdomen rígido requiere evaluación médica urgente.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "priority": "core",
+      "examFocus": "The epigastrium feels subjectively blocked but remains soft, with little or no pain. The triad of focal distention, vomiting and diarrhea reveals failure of the middle burner to raise the clear and descend the turbid.",
+      "examFocusEs": "El epigastrio se siente subjetivamente bloqueado, pero permanece blando, con poco o ningún dolor. La tríada de distensión focal, vómito y diarrea revela fallo del Jiao Medio para elevar lo claro y descender lo turbio.",
+      "ingredientRoles": "Huang Lian and Huang Qin bitterly drain constrained Heat downward; Ban Xia and Gan Jiang acridly disperse clumping, warm the middle and descend rebellious Qi; Ren Shen, Da Zao and Zhi Gan Cao support middle-burner Qi so tonification does not trap the excess and draining does not further injure deficiency.",
+      "ingredientRolesEs": "Huang Lian y Huang Qin drenan amargamente Calor constreñido hacia abajo; Ban Xia y Gan Jiang dispersan acremente la aglomeración, calientan el centro y descienden Qi rebelde; Ren Shen, Da Zao y Zhi Gan Cao apoyan Qi del Jiao Medio para que tonificar no atrape exceso ni drenar agrave deficiencia.",
+      "comparison": "Xiao Chai Hu Tang shares five herbs but is identified by alternating chills and fever, bitter taste and hypochondriac fullness. Huang Lian Tang emphasizes Heat above and Cold below with chest irritability and abdominal pain; Ban Xia Xie Xin Tang emphasizes soft, nearly painless focal epigastric distention.",
+      "comparisonEs": "Xiao Chai Hu Tang comparte cinco hierbas, pero se identifica por fiebre y escalofríos alternantes, sabor amargo y plenitud hipocondríaca. Huang Lian Tang enfatiza Calor arriba y Frío abajo con irritabilidad torácica y dolor abdominal; Ban Xia Xie Xin Tang enfatiza distensión epigástrica focal blanda y casi indolora."
     },
     {
       "number": 20,
