@@ -726,10 +726,17 @@ function page(family, language) {
   const rows = data.members.map((member, index) => {
     const isCoreVariation = index > 0 && coreFormulaNames.has(member[0]);
     const isHighYieldVariation = index === 1 && !isCoreVariation;
+    const hasLongClassicalName = member[0] === 'Dang Gui Si Ni Jia Wu Zhu Yu Sheng Jiang Tang';
+    const displayName = hasLongClassicalName
+      ? (es ? 'Dang Gui Si Ni Tang + Wu Zhu Yu y Sheng Jiang' : 'Dang Gui Si Ni Tang + Wu Zhu Yu and Sheng Jiang')
+      : esc(member[0]);
+    const classicalName = hasLongClassicalName
+      ? `<small style="display:block;margin-top:4px;color:#52677a;font-size:11px;font-weight:500;line-height:1.35">${es ? 'Nombre clásico completo' : 'Full classical name'}: ${esc(member[0])}</small>`
+      : '';
     const badge = isCoreVariation
       ? ` <span class="formula-family__badge">${es ? 'Fórmula principal' : 'Main formula'}</span>`
       : (isHighYieldVariation ? ` <span class="formula-family__badge formula-family__badge--high">${es ? 'Variación importante' : 'Important variation'}</span>` : '');
-    return `<tr><th scope="row">${esc(member[0])}${badge}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`;
+    return `<tr><th scope="row">${displayName}${badge}${classicalName}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`;
   }).join('\n');
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(family.title)}"><title>${esc(family.title)} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}">${badgeStyles}</head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="${index}"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>${es ? 'Familias de Fórmulas' : 'Formula Families'}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="${index}">${es ? '← Volver a Familias' : '← Back to Families'}</a></span></div></header>
