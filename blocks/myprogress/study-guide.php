@@ -95,7 +95,15 @@ $areas = [
             ],
             [
                 'title' => 'Formula Modifications',
-                'description' => 'Practice 305 focused questions on adding, removing or replacing ingredients according to the patient presentation.',
+                'description' => 'Review 305 clinical modifications as reference cards organized by formula, presentation and the corresponding ingredient change.',
+                'path' => '/study-guide/comparisons/formula-modifications.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 305 MODIFICATIONS',
+                'secondary' => true,
+            ],
+            [
+                'title' => 'Formula Modification Practice',
+                'description' => 'Test the 305 formula modifications in focused question sessions after reviewing the reference cards.',
                 'path' => '/study-guide/comparisons/formula-practice.html',
                 'params' => [
                     'category' => 'modifications',
