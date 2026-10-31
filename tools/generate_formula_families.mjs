@@ -717,20 +717,25 @@ function page(family, language) {
   const index = es ? 'families-es.html' : 'families.html';
   const alternate = `${family.slug}${es ? '' : '-es'}.html`;
   const hasCoreVariation = data.members.some((member, index) => index > 0 && coreFormulaNames.has(member[0]));
-  const coreBadgeStyles = hasCoreVariation
-    ? '<style>.formula-family__core-badge{display:inline-block;margin:3px 0 0 6px;padding:3px 7px;border-radius:999px;background:#dff4ee;color:#0b675b;font-size:10px;font-weight:900;line-height:1.2;text-transform:uppercase;white-space:nowrap;vertical-align:middle}</style>'
-    : '';
+  const hasHighYieldVariation = data.members.length > 1 && !coreFormulaNames.has(data.members[1][0]);
+  const badgeStyles = '<style>.formula-family__badge{display:inline-block;margin:3px 0 0 6px;padding:3px 7px;border-radius:999px;background:#dff4ee;color:#0b675b;font-size:10px;font-weight:900;line-height:1.2;text-transform:uppercase;white-space:nowrap;vertical-align:middle}.formula-family__badge--high{background:#fff0d8;color:#955000}.formula-family__legend{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 10px;color:#52677a;font-size:13px}.formula-family__legend .formula-family__badge{margin:0}</style>';
+  const legend = [
+    hasCoreVariation ? `<span class="formula-family__badge">${es ? 'Principal 63' : 'Core 63'}</span> ${es ? 'incluida en el listado principal' : 'included in the core roster'}` : '',
+    hasHighYieldVariation ? `<span class="formula-family__badge formula-family__badge--high">${es ? 'Alto rendimiento' : 'High yield'}</span> ${es ? 'rama prioritaria para memorizar' : 'priority branch to memorize'}` : ''
+  ].filter(Boolean).join(' · ');
   const rows = data.members.map((member, index) => {
-    const coreBadge = index > 0 && coreFormulaNames.has(member[0])
-      ? ` <span class="formula-family__core-badge">${es ? 'Principal 63' : 'Core 63'}</span>`
-      : '';
-    return `<tr><th scope="row">${esc(member[0])}${coreBadge}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`;
+    const isCoreVariation = index > 0 && coreFormulaNames.has(member[0]);
+    const isHighYieldVariation = index === 1 && !isCoreVariation;
+    const badge = isCoreVariation
+      ? ` <span class="formula-family__badge">${es ? 'Principal 63' : 'Core 63'}</span>`
+      : (isHighYieldVariation ? ` <span class="formula-family__badge formula-family__badge--high">${es ? 'Alto rendimiento' : 'High yield'}</span>` : '');
+    return `<tr><th scope="row">${esc(member[0])}${badge}</th><td>${esc(member[1])}</td><td>${esc(member[2])}</td><td>${esc(member[3])}</td></tr>`;
   }).join('\n');
-  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(family.title)}"><title>${esc(family.title)} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}">${coreBadgeStyles}</head><body>
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(family.title)}"><title>${esc(family.title)} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}">${badgeStyles}</head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="${index}"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>${es ? 'Familias de Fórmulas' : 'Formula Families'}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="${index}">${es ? '← Volver a Familias' : '← Back to Families'}</a></span></div></header>
 <main class="comparison-shell"><article class="study-note"><p class="comparison-eyebrow">${es ? 'Familia de fórmulas' : 'Formula family'}</p><h1 class="study-note__title">${esc(family.title)}</h1>
 <section class="study-note__block"><h2 class="study-note__heading">${es ? 'Fórmula raíz y arquitectura' : 'Root formula and architecture'}</h2><table class="study-note__focus"><tbody><tr><th scope="row">${es ? 'Raíz' : 'Root'}</th><td>${data.root}</td></tr><tr><th scope="row">${es ? 'Arquitectura' : 'Architecture'}</th><td>${data.architecture}</td></tr></tbody></table></section>
-<section class="study-note__block"><h2 class="study-note__heading study-note__heading--orange">${es ? 'Miembros de la familia' : 'Family members'}</h2><table><thead><tr><th>${es ? 'Fórmula' : 'Formula'}</th><th>${es ? 'Cambio estructural' : 'Structural change'}</th><th>${es ? 'Patrón' : 'Pattern'}</th><th>${es ? 'Pista decisiva' : 'Decisive clue'}</th></tr></thead><tbody>${rows}</tbody></table></section>
+<section class="study-note__block"><h2 class="study-note__heading study-note__heading--orange">${es ? 'Miembros de la familia' : 'Family members'}</h2><p class="formula-family__legend">${legend}</p><table><thead><tr><th>${es ? 'Fórmula' : 'Formula'}</th><th>${es ? 'Cambio estructural' : 'Structural change'}</th><th>${es ? 'Patrón' : 'Pattern'}</th><th>${es ? 'Pista decisiva' : 'Decisive clue'}</th></tr></thead><tbody>${rows}</tbody></table></section>
 <section class="study-note__block"><h2 class="study-note__heading study-note__heading--purple">${es ? 'Regla de estudio' : 'Study rule'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Cómo elegir' : 'How to choose'}</th><td>${data.rule}</td></tr><tr><th>${es ? 'Memoria' : 'Memory cue'}</th><td>${data.memory}</td></tr><tr><th>${es ? 'Seguridad' : 'Safety'}</th><td>${data.safety}</td></tr></tbody></table></section>
 </article></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Grupo independiente · Familias de Fórmulas' : 'Independent group · Formula Families'}</div></footer></body></html>`;
 }
