@@ -8,10 +8,6 @@ require_login();
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
-$returnto = optional_param('returnto', '', PARAM_ALPHANUMEXT);
-if ($returnto !== 'tonify-board-roster') {
-    $returnto = '';
-}
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
 $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafile), true) : null;
 if (!is_array($data)
@@ -143,21 +139,6 @@ $getboardformula = static function(string $name) use ($boardformulasbyname, $boa
     $boardname = $boardformulaaliases[$name] ?? $name;
     return $boardformulasbyname[$boardname] ?? null;
 };
-$makeboardformulaurl = static function(array $boardformula, string $returnto = '') use ($ises): moodle_url {
-    $params = ['focus' => $boardformula['categoryKey']];
-    if ($ises) {
-        $params['lang'] = 'es';
-    }
-    if ($returnto !== '') {
-        $params['returnto'] = $returnto;
-    }
-    return new moodle_url(
-        '/blocks/myprogress/formulas-study-guide.php',
-        $params,
-        'formula-' . $boardformula['number']
-    );
-};
-
 $supplementalcategories = [];
 foreach ($data['supplementalCategories'] as $category) {
     $category['formulas'] = [];
@@ -236,11 +217,6 @@ if ($ises) {
     $tonifyparentparams['lang'] = 'es';
 }
 $tonifyparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $tonifyparentparams);
-$tonifyboardrosterurl = new moodle_url(
-    '/blocks/myprogress/formulas-study-guide.php',
-    $tonifyparentparams,
-    'chapter-eight-board-roster-title'
-);
 $languageparams = $selected === null ? [] : ['focus' => $selected['key']];
 if (!$ises) {
     $languageparams['lang'] = 'es';
@@ -255,6 +231,7 @@ $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
     : '/study-guide/guidelines/chinese-herbal-medicine.html';
 $guidelineurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)], 'appendix-c-study');
+$guidelinerosterurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)], 'guide-formula-roster-title');
 
 $previousurl = null;
 $nexturl = null;
@@ -309,7 +286,6 @@ echo $OUTPUT->header();
 .formula-study-guide__chapter-shortcut{margin:0 0 18px;padding:18px 20px;border:1px solid #add8cf;border-left:5px solid #0b817d;border-radius:11px;background:#effaf7}.formula-study-guide__chapter-shortcut h4{margin:0 0 5px;font-size:20px}.formula-study-guide__chapter-shortcut>p{margin:0 0 14px;color:#496474;line-height:1.5}.formula-study-guide__chapter-shortcut-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.formula-study-guide__chapter-shortcut-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid #c7e3dd;border-radius:8px;background:#fff;color:#075e54;font-weight:800;text-decoration:none}.formula-study-guide__chapter-shortcut-link:hover{background:#e7f7f3;color:#064e47;text-decoration:none}.formula-study-guide__chapter-shortcut-link span{color:#64748b;font-size:12px;white-space:nowrap}
 .formula-study-guide__chapter-shortcut-action{margin:0 0 14px}
 .formula-study-guide__board-roster{margin:16px 0;padding:15px;border:1px solid #b9ddd5;border-radius:9px;background:#fff}.formula-study-guide__board-roster h5{margin:0 0 4px;font-size:16px}.formula-study-guide__board-roster>p{margin:0 0 12px;color:#496474;font-size:13px}.formula-study-guide__board-roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.formula-study-guide__board-roster-group{padding:11px 12px;border:1px solid #d8e8e4;border-radius:8px;background:#f8fbfa}.formula-study-guide__board-roster-group h6{margin:0 0 7px;color:#075e54;font-size:13px}.formula-study-guide__board-roster-group ul{margin:0;padding:0;list-style:none}.formula-study-guide__board-roster-group li+li{margin-top:7px}.formula-study-guide__board-roster-formula{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.formula-study-guide__board-roster-formula a{color:#172033;font-weight:800;text-decoration:none}.formula-study-guide__board-roster-formula a:hover{color:#075e54;text-decoration:underline}.formula-study-guide__board-roster-meta{display:block;margin-top:2px;color:#64748b;font-size:11px;line-height:1.35}.formula-study-guide__board-roster-number{flex:0 0 auto;padding:3px 6px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;white-space:nowrap}
-.formula-study-guide__board-roster-open{display:inline-block!important;margin-top:4px;color:#075fc8!important;font-size:11px;font-weight:900!important}.formula-study-guide__formula-return{margin:-2px 0 14px;padding-bottom:12px;border-bottom:1px solid #dbe7e4}.formula-study-guide__formula-return a{display:inline-flex;align-items:center;padding:7px 10px;border:1px solid #9dcfc5;border-radius:7px;background:#eef9f6;color:#075e54;font-size:12px;font-weight:900;text-decoration:none}.formula-study-guide__formula-return a:hover{background:#dbf3ed;color:#064e47;text-decoration:none}
 .formula-study-guide__chapter-directory{margin:0 0 20px;padding:22px;border:1px solid #c9ded9;border-top:5px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__chapter-directory h4{margin:0 0 7px;font-size:22px}.formula-study-guide__chapter-directory>p{margin:0 0 16px;color:#496474;line-height:1.55}.formula-study-guide__chapter-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.formula-study-guide__chapter-directory-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__chapter-directory-group h5{margin:0 0 8px;font-size:16px}.formula-study-guide__chapter-directory-group h5 a{color:#075e54;text-decoration:none}.formula-study-guide__chapter-directory-group h5 a:hover{text-decoration:underline}.formula-study-guide__chapter-directory-group ol{margin:0;padding-left:22px;columns:2;column-gap:22px}.formula-study-guide__chapter-directory-group li{margin:0 0 5px;break-inside:avoid;color:#52677a;font-size:13px;line-height:1.35}.formula-study-guide__chapter-directory-group li a{color:#334155;text-decoration:none}.formula-study-guide__chapter-directory-group li a:hover{color:#075fc8;text-decoration:underline}
 .formula-study-guide__chapter-section{margin:18px 0 0;padding:20px 22px;border-left:6px solid #0b817d;border-radius:11px;background:linear-gradient(135deg,#eaf8f5,#fff7ed)}.formula-study-guide__chapter-section .formula-study-guide__eyebrow{margin-bottom:5px}.formula-study-guide__chapter-section h4{margin:0 0 7px;font-size:25px}.formula-study-guide__chapter-section>p{margin:0;color:#496474;line-height:1.55}.formula-study-guide__chapter-section-meta{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;background:#fff;color:#52677a;font-size:12px;font-weight:800}
 .formula-study-guide__priority{margin:0 0 18px;padding:20px 22px;border:1px solid #b9dfd7;border-left:5px solid #0b817d;border-radius:11px;background:#eef9f6}.formula-study-guide__priority h4{margin:0 0 7px;font-size:20px}.formula-study-guide__priority h5{margin:17px 0 0;font-size:15px}.formula-study-guide__priority>p{margin:0;color:#496474;line-height:1.55}
@@ -450,8 +426,11 @@ echo $OUTPUT->header();
                 <section class="formula-study-guide__board-roster" aria-labelledby="chapter-eight-board-roster-title">
                     <h5 id="chapter-eight-board-roster-title"><?php echo s($ises ? 'Fórmulas de este capítulo incluidas en los Board Domains · 9' : 'Chapter formulas included in the Board Domains · 9'); ?></h5>
                     <p><?php echo s($ises
-                        ? 'La categoría grande indica el tipo exacto de tonificación del capítulo; debajo de cada fórmula aparece su dominio oficial del Board.'
-                        : 'The group heading gives the exact chapter tonification type; each formula also shows its official Board domain.'); ?></p>
+                        ? 'La categoría grande indica el tipo exacto de tonificación del capítulo; debajo de cada fórmula aparece su dominio oficial del Board. Usa el enlace para comprobar estas fórmulas directamente contra el listado completo de 63 fórmulas del Appendix C.'
+                        : 'The group heading gives the exact chapter tonification type; each formula also shows its official Board domain. Use the link to verify these formulas directly against the complete 63-formula Appendix C list.'); ?></p>
+                    <div class="formula-study-guide__chapter-shortcut-action">
+                        <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir en Board Domain →' : 'Open in Board Domain →'); ?></a>
+                    </div>
                     <div class="formula-study-guide__board-roster-grid">
                         <?php foreach ($tonifyboardgroups as $chaptercategorykey => $boardformulanames): ?>
                             <?php
@@ -471,7 +450,6 @@ echo $OUTPUT->header();
                                         if ($boardformula === null) {
                                             continue;
                                         }
-                                        $boardurl = $makeboardformulaurl($boardformula, 'tonify-board-roster');
                                         $boardcategory = $categories[$boardformula['categoryKey']] ?? null;
                                         $boardcategoryname = $boardcategory === null
                                             ? $boardformula['categoryKey']
@@ -479,9 +457,8 @@ echo $OUTPUT->header();
                                         ?>
                                         <li class="formula-study-guide__board-roster-formula">
                                             <span>
-                                                <a href="<?php echo $boardurl->out(false); ?>"><?php echo s($boardformula['name']); ?></a>
+                                                <strong><?php echo s($boardformula['name']); ?></strong>
                                                 <small class="formula-study-guide__board-roster-meta"><?php echo s(($ises ? 'Dominio Board: ' : 'Board domain: ') . $boardcategoryname); ?></small>
-                                                <a class="formula-study-guide__board-roster-open" href="<?php echo $boardurl->out(false); ?>"><?php echo s($ises ? 'Abrir en Board Domain →' : 'Open in Board Domain →'); ?></a>
                                             </span>
                                             <span class="formula-study-guide__board-roster-number"><?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $boardformula['number']); ?></span>
                                         </li>
@@ -569,8 +546,7 @@ echo $OUTPUT->header();
                                     <td>
                                         <?php echo s($row[0]); ?>
                                         <?php if ($boardmatch !== null): ?>
-                                            <?php $boardurl = $makeboardformulaurl($boardmatch, $istonifychapterpage ? 'tonify-board-roster' : ''); ?><br>
-                                            <a class="formula-study-guide__domain-badge" href="<?php echo $boardurl->out(false); ?>"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></a>
+                                            <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
                                         <?php endif; ?>
                                     </td>
                                     <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -646,8 +622,7 @@ echo $OUTPUT->header();
                                                 <td>
                                                     <?php echo s($row[0]); ?>
                                                     <?php if ($boardmatch !== null): ?>
-                                                        <?php $boardurl = $makeboardformulaurl($boardmatch, 'tonify-board-roster'); ?><br>
-                                                        <a class="formula-study-guide__domain-badge" href="<?php echo $boardurl->out(false); ?>"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></a>
+                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -661,11 +636,6 @@ echo $OUTPUT->header();
                     <?php endif; ?>
                 <?php endif; ?>
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
-                    <?php if ($returnto === 'tonify-board-roster' && !$issupplemental): ?>
-                        <nav class="formula-study-guide__formula-return" aria-label="<?php echo s($ises ? 'Regresar al listado Board del capítulo 8' : 'Return to the Chapter 8 Board list'); ?>">
-                            <a href="<?php echo $tonifyboardrosterurl->out(false); ?>"><?php echo s($ises ? '← Volver al listado de 9 fórmulas Board' : '← Return to the 9 Board formulas'); ?></a>
-                        </nav>
-                    <?php endif; ?>
                     <header class="formula-study-guide__formula-heading">
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
