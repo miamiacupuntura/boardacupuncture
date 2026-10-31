@@ -13,8 +13,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 1
-        || count($data['supplementalFormulas'] ?? []) !== 7) {
+        || count($data['supplementalCategories'] ?? []) !== 2
+        || count($data['supplementalFormulas'] ?? []) !== 18) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -78,6 +78,10 @@ $categorycopy = [
     'dispel-summerheat' => [
         'Choose among five Summerheat strategies: clear mild Heat, release constrained Exterior, drain Dampness, restore Qi and fluids, or preserve severely damaged Yin.',
         'Elige entre cinco estrategias para Calor de Verano: aclarar Calor leve, liberar el Exterior constreñido, drenar Humedad, restaurar Qi y líquidos o conservar Yin gravemente lesionado.',
+    ],
+    'warm-interior-cold' => [
+        'Locate Cold by depth: channels and vessels, the Middle Burner, or life-threatening devastation of Yang.',
+        'Localiza el Frío por profundidad: canales y vasos, Jiao Medio o devastación potencialmente mortal del Yang.',
     ],
 ];
 
@@ -349,7 +353,7 @@ echo $OUTPUT->header();
                     <header class="formula-study-guide__formula-heading">
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($issupplemental
-                                ? (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence'] . ' ' . ($ises ? 'de' : 'of') . ' 7 · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'])
+                                ? (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence'] . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']) . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'])
                                 : (($ises ? 'Fórmula ' : 'Formula ') . $formula['number'] . ' ' . ($ises ? 'de' : 'of') . ' 63')); ?></span>
                             <h4><?php echo s($formula['name']); ?></h4>
                             <?php if ($issupplemental): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>

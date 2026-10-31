@@ -25,6 +25,11 @@ import {
   summerheatCategoryGuide,
   summerheatFormulas
 } from './summerheat_formula_supplement.mjs';
+import {
+  warmInteriorColdCategory,
+  warmInteriorColdCategoryGuide,
+  warmInteriorColdFormulas
+} from './warm_interior_cold_formula_supplement.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputPath = resolve(repositoryRoot, 'blocks/myprogress/formulas-study-guide-data.json');
@@ -109,12 +114,14 @@ const output = {
   categoryGuides: {
     ...(existingData.categoryGuides || {}),
     'release-exterior': existingData.categoryGuides?.['release-exterior'] || releaseExteriorCategoryGuide,
-    'dispel-summerheat': summerheatCategoryGuide
+    'dispel-summerheat': summerheatCategoryGuide,
+    'warm-interior-cold': warmInteriorColdCategoryGuide
   },
   formulas,
-  supplementalCategories: [summerheatCategory],
-  supplementalFormulas: summerheatFormulas
+  supplementalCategories: [summerheatCategory, warmInteriorColdCategory],
+  supplementalFormulas: [...summerheatFormulas, ...warmInteriorColdFormulas]
 };
 writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 console.log(`Generated ${outputPath} with ${categories.length} categories and ${formulas.length} formulas.`);
 console.log(`Added ${summerheatFormulas.length} supplemental formulas from Chapter ${summerheatCategory.sourceChapter}.`);
+console.log(`Added ${warmInteriorColdFormulas.length} supplemental formulas from Chapter ${warmInteriorColdCategory.sourceChapter}.`);
