@@ -252,6 +252,238 @@
         }
       ]
     },
+    "clear-heat": {
+      "priorityTitle": "Guideline priority: master these 5 Heat-clearing formulas first",
+      "priorityTitleEs": "Prioridad del guideline: domina primero estas 5 fórmulas que aclaran Calor",
+      "priorityText": "The current exam guideline requires the five formulas below. First distinguish excess Heat from deficiency Heat, then locate the Heat at the Qi level, Three Burners, Lung, Liver/Gallbladder or deep Yin level. Secondary chapter formulas remain collapsed for comparison and safety review.",
+      "priorityTextEs": "El guideline actual exige las cinco fórmulas siguientes. Primero distingue Calor de exceso de Calor por deficiencia; después localízalo en nivel Qi, Tres Calentadores, Pulmón, Hígado/Vesícula Biliar o nivel Yin profundo. Las fórmulas secundarias permanecen plegadas para comparación y seguridad.",
+      "routeTitle": "Four-step Heat-clearing decision route",
+      "routeTitleEs": "Ruta de decisión para aclarar Calor en cuatro pasos",
+      "route": [
+        [
+          "1",
+          "Excess or deficiency Heat?",
+          "Forceful pulse, thick yellow coat and robust symptoms suggest excess; a thin-rapid pulse, little coat, emaciation and night or afternoon fever suggest deficiency Heat.",
+          "¿Calor de exceso o por deficiencia?",
+          "Pulso fuerte, capa amarilla gruesa y síntomas robustos sugieren exceso; pulso fino-rápido, poca capa, adelgazamiento y fiebre nocturna o vespertina sugieren Calor por deficiencia."
+        ],
+        [
+          "2",
+          "Blazing Qi-level Heat?",
+          "The Four Greats—great fever, thirst, sweating and a surging-forceful pulse—point to Bai Hu Tang.",
+          "¿Calor intenso del nivel Qi?",
+          "Los Cuatro Grandes—fiebre, sed y sudoración intensas con pulso desbordante-fuerte—apuntan a Bai Hu Tang."
+        ],
+        [
+          "3",
+          "Which organ or region dominates?",
+          "Three-Burner Fire-Toxin points to Huang Lian Jie Du Tang; wheezing from Lung Heat to Ma Xing Shi Gan Tang; upward Liver Fire or downward Damp-Heat to Long Dan Xie Gan Tang.",
+          "¿Qué órgano o región predomina?",
+          "Fuego-Toxina de Tres Calentadores apunta a Huang Lian Jie Du Tang; sibilancia por Calor de Pulmón a Ma Xing Shi Gan Tang; Fuego de Hígado ascendente o Humedad-Calor descendente a Long Dan Xie Gan Tang."
+        ],
+        [
+          "4",
+          "Hidden Heat in depleted Yin?",
+          "Night fever that recedes by morning without sweating, with emaciation and little tongue coat after febrile disease, points to Qing Hao Bie Jia Tang.",
+          "¿Calor oculto en Yin agotado?",
+          "Fiebre nocturna que cede por la mañana sin sudor, con adelgazamiento y poca capa lingual tras enfermedad febril, apunta a Qing Hao Bie Jia Tang."
+        ]
+      ],
+      "quickCompareTitle": "The five Heat-clearing formulas at a glance",
+      "quickCompareTitleEs": "Las cinco fórmulas que aclaran Calor de un vistazo",
+      "quickCompare": [
+        [
+          "Bai Hu Tang",
+          "Blazing Yangming/Qi-level Heat",
+          "Four Greats · red tongue · flooding-forceful pulse",
+          "Calor intenso Yangming/nivel Qi",
+          "Cuatro Grandes · lengua roja · pulso desbordante-fuerte"
+        ],
+        [
+          "Huang Lian Jie Du Tang",
+          "Fire-Toxin obstructing the Three Burners",
+          "High fever · severe irritability/delirium · dark urine · rapid-forceful pulse",
+          "Fuego-Toxina obstruyendo Tres Calentadores",
+          "Fiebre alta · irritabilidad/delirio intenso · orina oscura · pulso rápido-fuerte"
+        ],
+        [
+          "Ma Xing Shi Gan Tang",
+          "Lung Heat obstructing Qi",
+          "Cough/wheezing · thirst · nasal flaring · rapid pulse; sweat may be present",
+          "Calor de Pulmón obstruyendo Qi",
+          "Tos/sibilancia · sed · aleteo nasal · pulso rápido; puede haber sudor"
+        ],
+        [
+          "Long Dan Xie Gan Tang",
+          "Liver/Gallbladder Fire or Damp-Heat",
+          "Red painful eyes above or burning genital/urinary signs below · wiry-rapid pulse",
+          "Fuego o Humedad-Calor de Hígado/Vesícula",
+          "Ojos rojos dolorosos arriba o ardor genital/urinario abajo · pulso cuerda-rápido"
+        ],
+        [
+          "Qing Hao Bie Jia Tang",
+          "Hidden Heat in the Yin level",
+          "Night fever → morning coolness · no sweat as fever recedes · little coat",
+          "Calor oculto en el nivel Yin",
+          "Fiebre nocturna → frescura matutina · sin sudor al ceder · poca capa"
+        ]
+      ],
+      "referencesTitle": "Secondary formulas — comparison and safety only",
+      "referencesTitleEs": "Fórmulas secundarias — solo comparación y seguridad",
+      "referencesText": "These chapter formulas sharpen level, organ and excess-deficiency differentiation after the five required cards are secure. They are not additional primary cards in the current guideline.",
+      "referencesTextEs": "Estas fórmulas del capítulo afinan la diferenciación por nivel, órgano y exceso-deficiencia después de dominar las cinco tarjetas obligatorias. No son tarjetas primarias adicionales del guideline actual.",
+      "referenceGroups": [
+        {
+          "title": "Qi, nutritive, Blood and toxin levels",
+          "titleEs": "Niveles Qi, nutritivo, Sangre y toxicidad",
+          "items": [
+            [
+              "Zhu Ye Shi Gao Tang",
+              "Lingering Qi-level Heat after febrile disease with depleted Qi and fluids: low fever, thirst, nausea and a deficient-rapid pulse.",
+              "Calor residual del nivel Qi tras enfermedad febril con Qi y líquidos agotados: febrícula, sed, náusea y pulso deficiente-rápido."
+            ],
+            [
+              "Zhi Zi Chi Tang",
+              "Formless constrained Heat in the chest: irritability, insomnia, soft epigastric discomfort and a slightly rapid pulse.",
+              "Calor sin forma constreñido en pecho: irritabilidad, insomnio, molestia epigástrica blanda y pulso ligeramente rápido."
+            ],
+            [
+              "Qing Ying Tang",
+              "Heat entering the nutritive level: fever worse at night, severe restlessness, dry scarlet tongue and thin-rapid pulse.",
+              "Calor entrando al nivel nutritivo: fiebre peor de noche, inquietud intensa, lengua escarlata seca y pulso fino-rápido."
+            ],
+            [
+              "Qing Gong Tang",
+              "Warm pathogen entering the Pericardium with impaired consciousness, disordered speech and a crimson peeled tongue.",
+              "Patógeno tibio entrando al Pericardio con conciencia alterada, habla desordenada y lengua carmesí pelada."
+            ],
+            [
+              "Xi Jiao Di Huang Tang",
+              "Heat in the Blood level with bleeding, dark rashes or agitation; modern practice substitutes Shui Niu Jiao for rhinoceros horn.",
+              "Calor en nivel Sangre con sangrado, erupciones oscuras o agitación; la práctica moderna sustituye cuerno de rinoceronte por Shui Niu Jiao."
+            ],
+            [
+              "Liang Ge San",
+              "Blazing Heat above with formed accumulation below: mouth sores, thirst, irritability and constipation.",
+              "Calor ardiente arriba con acumulación formada abajo: llagas bucales, sed, irritabilidad y estreñimiento."
+            ],
+            [
+              "Pu Ji Xiao Du Yin",
+              "Epidemic toxic Fire concentrated in the head and neck with marked redness, swelling, throat dysfunction, fever and chills.",
+              "Fuego tóxico epidémico concentrado en cabeza y cuello con enrojecimiento, hinchazón, disfunción de garganta, fiebre y escalofríos."
+            ],
+            [
+              "Qing Wen Bai Du Yin",
+              "Severe epidemic toxin flooding both Qi and Blood levels: intense fever and thirst with dark-red tongue, rash, bleeding or delirium.",
+              "Toxina epidémica grave inundando niveles Qi y Sangre: fiebre y sed intensas con lengua rojo oscuro, erupción, sangrado o delirio."
+            ],
+            [
+              "Hua Ban Tang",
+              "Yangming Qi-level Heat extending into Blood with dark-red maculae while thirst and a yellow coat remain.",
+              "Calor Yangming del nivel Qi extendido a Sangre con máculas rojo oscuro mientras persisten sed y capa amarilla."
+            ]
+          ]
+        },
+        {
+          "title": "Organ Heat separators",
+          "titleEs": "Separadores de Calor de órganos",
+          "items": [
+            [
+              "Xie Xin Tang",
+              "Damp-Heat excess with interior clumping; directs Fire downward primarily through the stool.",
+              "Exceso de Humedad-Calor con aglomeración interior; dirige Fuego hacia abajo principalmente por las heces."
+            ],
+            [
+              "Xie Bai San",
+              "Lurking constrained Lung Fire, often in children: afternoon-worse cough, wheezing, dry mouth and a thin-rapid pulse.",
+              "Fuego de Pulmón latente y constreñido, a menudo infantil: tos y sibilancia peores por la tarde, boca seca y pulso fino-rápido."
+            ],
+            [
+              "Xin Yi Qing Fei Yin",
+              "Stagnant Lung Heat with failure to disseminate: chronic nasal congestion, rhinitis or polyps with a red coated tongue.",
+              "Calor estancado de Pulmón con fallo de difusión: congestión nasal crónica, rinitis o pólipos con lengua roja cubierta."
+            ],
+            [
+              "Qing Wei San",
+              "Blazing Stomach Fire entering the Blood: severe toothache, swollen or bleeding gums, bad breath and a slippery-large-rapid pulse.",
+              "Fuego intenso de Estómago entrando a Sangre: dolor dental fuerte, encías hinchadas o sangrantes, mal aliento y pulso resbaladizo-grande-rápido."
+            ],
+            [
+              "Yu Nu Jian",
+              "Vigorous Stomach Fire with Kidney Yin deficiency: toothache plus loose teeth, thirst, dry red tongue and a deficient-large pulse.",
+              "Fuego vigoroso de Estómago con deficiencia de Yin de Riñón: dolor dental más dientes flojos, sed, lengua roja seca y pulso deficiente-grande."
+            ],
+            [
+              "Dao Chi San",
+              "Heart Fire transferred to the Small Intestine: mouth sores, chest irritability and dark, scanty, painful or bloody urine.",
+              "Fuego de Corazón transferido al Intestino Delgado: llagas bucales, irritabilidad torácica y orina oscura, escasa, dolorosa o con sangre."
+            ],
+            [
+              "Zuo Jin Wan",
+              "Liver Heat invading the Stomach: hypochondriac pain, acid reflux, vomiting, bitter taste and a wiry-rapid pulse.",
+              "Calor de Hígado invadiendo Estómago: dolor hipocondríaco, reflujo ácido, vómito, sabor amargo y pulso cuerda-rápido."
+            ]
+          ]
+        },
+        {
+          "title": "Liver Fire and intestinal Heat refinements",
+          "titleEs": "Matices de Fuego de Hígado y Calor intestinal",
+          "items": [
+            [
+              "Xie Qing Wan",
+              "Constrained Liver Fire with red swollen eyes, irritability, constipation and possible tremors or convulsions.",
+              "Fuego de Hígado constreñido con ojos rojos hinchados, irritabilidad, estreñimiento y posibles temblores o convulsiones."
+            ],
+            [
+              "Dang Gui Long Hui Wan",
+              "Extremely cold, draining formula for clumped Liver/Gallbladder Fire with headache, vertigo, mania, constipation or rough urination.",
+              "Fórmula extremadamente fría y drenante para Fuego aglomerado de Hígado/Vesícula con cefalea, vértigo, manía, estreñimiento u orina áspera."
+            ],
+            [
+              "Shao Yao Tang",
+              "Damp-Heat dysentery with Qi and Blood stagnation: abdominal pain, tenesmus and roughly equal pus and blood.",
+              "Disentería por Humedad-Calor con estancamiento de Qi y Sangre: dolor abdominal, tenesmo y pus y sangre aproximadamente iguales."
+            ],
+            [
+              "Huang Qin Tang",
+              "Heat constraint moving from Shaoyang into the Stomach and Intestines: fever, bitter taste, abdominal pain and hot diarrhea.",
+              "Calor constreñido pasando de Shaoyang a Estómago e Intestinos: fiebre, sabor amargo, dolor abdominal y diarrea caliente."
+            ],
+            [
+              "Bai Tou Weng Tang",
+              "Heat-toxin dysentery with thirst, tenesmus, anal burning and more blood than pus in the stool.",
+              "Disentería por toxina de Calor con sed, tenesmo, ardor anal y más sangre que pus en las heces."
+            ]
+          ]
+        },
+        {
+          "title": "Deficiency-Heat refinements",
+          "titleEs": "Matices de Calor por deficiencia",
+          "items": [
+            [
+              "Qing Gu San",
+              "Steaming-bone disorder from Liver/Kidney Yin deficiency: afternoon fever, night sweats and subjective deep heat while the flesh is not hot.",
+              "Calor en los huesos por deficiencia de Yin de Hígado/Riñón: fiebre vespertina, sudor nocturno y calor profundo subjetivo sin piel caliente."
+            ],
+            [
+              "Qin Jiao Bie Jia San",
+              "Wind consumption: pathogenic Wind penetrates inward against preexisting Yin deficiency, producing afternoon fever, night sweats and cough.",
+              "Consunción por Viento: Viento patógeno penetra al interior sobre deficiencia previa de Yin y produce fiebre vespertina, sudores nocturnos y tos."
+            ],
+            [
+              "Dang Gui Liu Huang Tang",
+              "Blood/Yin deficiency with raging internal Fire and unstable exterior: prominent night sweats, red face, dry mouth and rapid pulse.",
+              "Deficiencia de Sangre/Yin con Fuego interno intenso y exterior inestable: sudores nocturnos marcados, rostro rojo, boca seca y pulso rápido."
+            ],
+            [
+              "Bai He Di Huang Tang",
+              "Lily disorder after febrile illness: mental disorientation, irritability, insomnia and palpitations with little tongue coat.",
+              "Trastorno del lirio tras enfermedad febril: desorientación, irritabilidad, insomnio y palpitaciones con poca capa lingual."
+            ]
+          ]
+        }
+      ]
+    },
     "purge": {
       "priorityTitle": "Guideline priority: master these 3 Cheng Qi formulas first",
       "priorityTitleEs": "Prioridad del guideline: domina primero estas 3 fórmulas Cheng Qi",
@@ -744,10 +976,17 @@
       "clueEs": "Los Cuatro Grandes: fiebre, sed y sudoración intensas con pulso grande y desbordante.",
       "ingredients": "Shi Gao, Zhi Mu, Geng Mi and Zhi Gan Cao.",
       "ingredientsEs": "Shi Gao, Zhi Mu, Geng Mi y Zhi Gan Cao.",
-      "safety": "Not for Cold or deficiency presentations; severe fever and altered mental status require urgent care.",
-      "safetyEs": "No corresponde a cuadros de Frío o deficiencia; fiebre intensa y alteración mental requieren atención urgente.",
+      "safety": "This is a strong, cold formula for robust excess Heat—not for Cold, marked Qi/Yang deficiency, a weak pulse, spontaneous sweating without thirst or unresolved exterior disease. Prolonged unsupervised use may injure the middle burner. Very high fever, confusion, fainting, dehydration or persistent symptoms requires urgent medical evaluation.",
+      "safetyEs": "Es una fórmula fuerte y fría para Calor de exceso robusto; no corresponde a Frío, deficiencia marcada de Qi/Yang, pulso débil, sudor espontáneo sin sed ni enfermedad exterior sin resolver. El uso prolongado sin supervisión puede lesionar el Jiao Medio. Fiebre muy alta, confusión, desmayo, deshidratación o síntomas persistentes requiere evaluación médica urgente.",
       "safetyTier": "standard",
-      "practiceCount": 12
+      "practiceCount": 12,
+      "priority": "core",
+      "examFocus": "Recognize the Four Greats, but require an interior Yangming/Qi-level excess presentation: intense fever, profuse sweat, severe thirst and a flooding-forceful or slippery-rapid pulse. The Heat is formless and moving outward; constipation and abdominal hardness are not defining clues.",
+      "examFocusEs": "Reconoce los Cuatro Grandes, pero exige un cuadro de exceso interior Yangming/nivel Qi: fiebre intensa, sudor profuso, sed severa y pulso desbordante-fuerte o resbaladizo-rápido. El Calor no tiene forma y se mueve hacia afuera; estreñimiento y dureza abdominal no son pistas definitorias.",
+      "ingredientRoles": "Shi Gao is chief and clears blazing Qi-level and Stomach Heat; Zhi Mu assists Heat clearing, enriches Yin and generates fluids; Geng Mi and Zhi Gan Cao protect Stomach Qi, generate fluids and moderate the intense cold without trapping Heat.",
+      "ingredientRolesEs": "Shi Gao es jefe y aclara Calor intenso del nivel Qi y Estómago; Zhi Mu ayuda a aclarar Calor, enriquece Yin y genera líquidos; Geng Mi y Zhi Gan Cao protegen Qi de Estómago, generan líquidos y moderan el frío intenso sin atrapar Calor.",
+      "comparison": "Zhu Ye Shi Gao Tang treats lingering Qi-level Heat after illness with Qi/fluid deficiency, nausea and a deficient-rapid pulse. Ma Xing Shi Gan Tang redirects Shi Gao to Lung Heat with cough and wheezing. Da Cheng Qi Tang treats formed Yangming-organ clumping with constipation, abdominal resistance and a deep-forceful pulse.",
+      "comparisonEs": "Zhu Ye Shi Gao Tang trata Calor residual del nivel Qi tras enfermedad con deficiencia de Qi/líquidos, náusea y pulso deficiente-rápido. Ma Xing Shi Gan Tang dirige Shi Gao a Calor de Pulmón con tos y sibilancia. Da Cheng Qi Tang trata aglomeración formada del órgano Yangming con estreñimiento, resistencia abdominal y pulso profundo-fuerte."
     },
     {
       "number": 9,
@@ -764,10 +1003,17 @@
       "clueEs": "Fiebre alta, irritabilidad marcada, insomnio, delirio o sangrado con lengua roja y pulso rápido-fuerte.",
       "ingredients": "Huang Lian, Huang Qin, Huang Bai and Zhi Zi.",
       "ingredientsEs": "Huang Lian, Huang Qin, Huang Bai y Zhi Zi.",
-      "safety": "A very cold, bitter formula; avoid indiscriminate prolonged use and urgently assess sepsis-like signs.",
-      "safetyEs": "Fórmula muy fría y amarga; evitar uso prolongado indiscriminado y evaluar con urgencia signos semejantes a sepsis.",
+      "safety": "Very bitter and cold; reserve for a robust excess Fire-Toxin pattern and avoid prolonged or preventive use, Spleen/Stomach deficiency-cold, significant Yin/fluid damage or pregnancy without specialist direction. High fever with delirium, neck stiffness, rash, bleeding, hypotension or suspected sepsis is an emergency.",
+      "safetyEs": "Muy amarga y fría; reservar para patrón robusto de exceso por Fuego-Toxina y evitar uso prolongado o preventivo, Frío-deficiencia de Bazo/Estómago, daño importante de Yin/líquidos o embarazo sin dirección especializada. Fiebre alta con delirio, rigidez cervical, erupción, sangrado, hipotensión o sospecha de sepsis es emergencia.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "priority": "core",
+      "examFocus": "Think severe Fire-Toxin obstructing all Three Burners: high fever, marked irritability or delirium, insomnia, dry mouth, dark urine, red tongue with yellow coat and a rapid-forceful pulse. Toxic swellings, bleeding, jaundice or dysentery may appear, but the core strategy remains draining Fire throughout the body.",
+      "examFocusEs": "Piensa en Fuego-Toxina severo obstruyendo los Tres Calentadores: fiebre alta, irritabilidad marcada o delirio, insomnio, boca seca, orina oscura, lengua roja con capa amarilla y pulso rápido-fuerte. Puede haber hinchazones tóxicas, sangrado, ictericia o disentería, pero la estrategia central sigue siendo drenar Fuego de todo el cuerpo.",
+      "ingredientRoles": "Huang Lian is chief and drains Heart and middle-burner Fire; Huang Qin clears the upper burner; Huang Bai clears the lower burner; Zhi Zi drains Heat from all Three Burners and guides it out through the urine while relieving irritability.",
+      "ingredientRolesEs": "Huang Lian es jefe y drena Fuego de Corazón y Jiao Medio; Huang Qin aclara el Jiao Superior; Huang Bai aclara el Jiao Inferior; Zhi Zi drena Calor de los Tres Calentadores y lo guía por la orina mientras alivia irritabilidad.",
+      "comparison": "Xie Xin Tang replaces Zhi Zi and Huang Bai with Da Huang when damp-Heat has clumped and must be guided primarily through the stool. Liang Ge San adds purgatives and light herbs when upper-burner Heat coexists with constipation. Qing Wen Bai Du Yin is much larger and treats epidemic toxin simultaneously flooding the Qi and Blood levels.",
+      "comparisonEs": "Xie Xin Tang sustituye Zhi Zi y Huang Bai por Da Huang cuando Humedad-Calor se ha aglomerado y debe guiarse principalmente por las heces. Liang Ge San añade purgantes y hierbas ligeras cuando Calor del Jiao Superior coexiste con estreñimiento. Qing Wen Bai Du Yin es mucho mayor y trata toxina epidémica que inunda simultáneamente niveles Qi y Sangre."
     },
     {
       "number": 10,
@@ -784,10 +1030,17 @@
       "clueEs": "Fiebre, sudor, sed, tos y sibilancia con aleteo nasal y pulso rápido.",
       "ingredients": "Ma Huang, Xing Ren, Shi Gao and Zhi Gan Cao.",
       "ingredientsEs": "Ma Huang, Xing Ren, Shi Gao y Zhi Gan Cao.",
-      "safety": "Breathing difficulty, blue lips, chest pain, confusion or low oxygen is an emergency. Ma Huang requires cardiovascular caution.",
-      "safetyEs": "Dificultad respiratoria, labios azules, dolor torácico, confusión u oxígeno bajo es emergencia. Ma Huang requiere precaución cardiovascular.",
+      "safety": "Ma Huang requires professional screening for hypertension, arrhythmia, cardiovascular disease, stimulant use, anxiety, insomnia, pregnancy and drug interactions. Do not use for wheezing from Cold, Lung-Qi deficiency or damaged fluids without the matching Heat pattern. Breathing difficulty, blue lips, chest pain, confusion or low oxygen is an emergency.",
+      "safetyEs": "Ma Huang exige evaluación profesional por hipertensión, arritmia, enfermedad cardiovascular, estimulantes, ansiedad, insomnio, embarazo e interacciones. No usar para sibilancia por Frío, deficiencia de Qi de Pulmón o líquidos dañados sin el patrón de Calor correspondiente. Disnea, labios azules, dolor torácico, confusión u oxígeno bajo es emergencia.",
       "safetyTier": "high",
-      "practiceCount": 11
+      "practiceCount": 11,
+      "priority": "core",
+      "examFocus": "The decisive mechanism is Lung Heat blocking diffusion and descent: cough, wheezing, labored breathing or nasal flaring plus thirst and a rapid pulse. Sweating may be present or absent; do not reject the formula because sweat is absent or the tongue coat is still white.",
+      "examFocusEs": "El mecanismo decisivo es Calor de Pulmón bloqueando difusión y descenso: tos, sibilancia, respiración trabajosa o aleteo nasal más sed y pulso rápido. Puede haber o no sudor; no descartes la fórmula porque falte sudor o la capa lingual todavía sea blanca.",
+      "ingredientRoles": "Ma Huang opens and disseminates Lung Qi to stop wheezing; the larger, cold dose of Shi Gao clears Lung and Stomach Heat and restrains Ma Huang's warming, sweating action; Xing Ren descends rebellious Lung Qi; Zhi Gan Cao moistens the Lung and harmonizes the pair of chief herbs.",
+      "ingredientRolesEs": "Ma Huang abre y difunde Qi de Pulmón para detener sibilancia; la dosis mayor y fría de Shi Gao aclara Calor de Pulmón y Estómago y controla la acción tibia y sudorífica de Ma Huang; Xing Ren desciende Qi rebelde de Pulmón; Zhi Gan Cao humedece Pulmón y armoniza la pareja de jefes.",
+      "comparison": "Xie Bai San treats lurking constrained Lung Fire, commonly with afternoon-worse cough, skin hot to light touch, little sputum and a thin-rapid pulse on a Yin-deficient background. Bai Hu Tang treats generalized blazing Qi-level Heat without cough/wheezing as the defining problem. Xiao Qing Long Tang treats Cold thin fluids with chills, no thirst and watery sputum.",
+      "comparisonEs": "Xie Bai San trata Fuego de Pulmón latente y constreñido, comúnmente con tos peor por la tarde, piel caliente al tacto ligero, poco esputo y pulso fino-rápido sobre deficiencia de Yin. Bai Hu Tang trata Calor generalizado intenso del nivel Qi sin que tos/sibilancia sean el problema definitorio. Xiao Qing Long Tang trata líquidos fríos con escalofríos, ausencia de sed y esputo acuoso."
     },
     {
       "number": 11,
@@ -804,10 +1057,17 @@
       "clueEs": "Ojos rojos dolorosos/cefalea e irritabilidad arriba, o ardor, descarga y picor genital/urinario abajo, con pulso cuerda rápido.",
       "ingredients": "Long Dan Cao, Huang Qin, Zhi Zi, Ze Xie, Mu Tong, Che Qian Zi, Dang Gui, Sheng Di Huang, Chai Hu and Sheng Gan Cao.",
       "ingredientsEs": "Long Dan Cao, Huang Qin, Zhi Zi, Ze Xie, Mu Tong, Che Qian Zi, Dang Gui, Sheng Di Huang, Chai Hu y Sheng Gan Cao.",
-      "safety": "Severe eye pain/vision change, jaundice, fever, pelvic pain, pregnancy or blood in urine requires prompt medical evaluation.",
-      "safetyEs": "Dolor ocular grave/cambio visual, ictericia, fiebre, dolor pélvico, embarazo o sangre en orina requiere evaluación pronta.",
+      "safety": "Very bitter, cold and drying; use only for a clear excess pattern and avoid long courses, large doses, Spleen/Stomach deficiency, damaged fluids or pregnancy without specialist oversight. Mu Tong must be correctly identified—Aristolochia species are nephrotoxic and must never be substituted. Severe eye pain/vision change, jaundice, fever, pelvic pain or blood in urine requires prompt evaluation.",
+      "safetyEs": "Muy amarga, fría y secante; usar solo con patrón claro de exceso y evitar cursos prolongados, dosis altas, deficiencia de Bazo/Estómago, líquidos dañados o embarazo sin supervisión especializada. Mu Tong debe identificarse correctamente: especies de Aristolochia son nefrotóxicas y nunca deben sustituirse. Dolor ocular grave/cambio visual, ictericia, fiebre, dolor pélvico o sangre en orina requiere evaluación pronta.",
       "safetyTier": "standard",
-      "practiceCount": 11
+      "practiceCount": 11,
+      "priority": "core",
+      "examFocus": "Use three anchors: wiry-rapid pulse, red tongue or red sides, and dark urine or urinary difficulty. Upward Liver/Gallbladder Fire produces hypochondriac pain, headache, bitter taste, red eyes or ear symptoms; downward Damp-Heat produces burning urination, genital swelling/itching or foul leukorrhea.",
+      "examFocusEs": "Usa tres anclas: pulso cuerda-rápido, lengua roja o bordes rojos y orina oscura o difícil. Fuego ascendente de Hígado/Vesícula produce dolor hipocondríaco, cefalea, sabor amargo, ojos rojos o signos óticos; Humedad-Calor descendente produce micción ardiente, hinchazón/picor genital o leucorrea maloliente.",
+      "ingredientRoles": "Long Dan Cao is chief and drains Liver/Gallbladder Fire and lower-burner Damp-Heat; Huang Qin and Zhi Zi reinforce Fire clearing; Ze Xie, Mu Tong and Che Qian Zi drain Damp-Heat through urination; Chai Hu disperses constrained Liver Qi and guides upward; Sheng Di Huang and Dang Gui protect Yin and Blood; Gan Cao protects the middle and harmonizes.",
+      "ingredientRolesEs": "Long Dan Cao es jefe y drena Fuego de Hígado/Vesícula y Humedad-Calor del Jiao Inferior; Huang Qin y Zhi Zi refuerzan aclarar Fuego; Ze Xie, Mu Tong y Che Qian Zi drenan Humedad-Calor por la orina; Chai Hu dispersa Qi de Hígado constreñido y guía hacia arriba; Sheng Di Huang y Dang Gui protegen Yin y Sangre; Gan Cao protege el centro y armoniza.",
+      "comparison": "Xie Qing Wan treats constrained Liver Fire with red swollen eyes and possible tremors/convulsions but does not emphasize urinary drainage. Dang Gui Long Hui Wan is colder and more purgative for severe clumped Fire with mania or constipation. Zuo Jin Wan is the focused choice when Liver Heat invades the Stomach and acid reflux or vomiting dominates.",
+      "comparisonEs": "Xie Qing Wan trata Fuego de Hígado constreñido con ojos rojos hinchados y posibles temblores/convulsiones, pero no enfatiza drenaje urinario. Dang Gui Long Hui Wan es más fría y purgante para Fuego grave aglomerado con manía o estreñimiento. Zuo Jin Wan es la opción enfocada cuando Calor de Hígado invade Estómago y predominan reflujo ácido o vómito."
     },
     {
       "number": 12,
@@ -824,10 +1084,17 @@
       "clueEs": "Fiebre nocturna que cede por la mañana sin sudor, adelgazamiento y lengua roja con poca capa.",
       "ingredients": "Qing Hao, Bie Jia, Sheng Di Huang, Zhi Mu and Mu Dan Pi.",
       "ingredientsEs": "Qing Hao, Bie Jia, Sheng Di Huang, Zhi Mu y Mu Dan Pi.",
-      "safety": "Bie Jia is animal-derived; persistent night fever or weight loss requires medical evaluation.",
-      "safetyEs": "Bie Jia es de origen animal; fiebre nocturna persistente o pérdida de peso requiere evaluación médica.",
+      "safety": "Not for the early Qi-level stage of warm disease, pure excess Heat, marked digestive weakness or presentations with spasms/convulsions. Bie Jia is animal-derived and requires sourcing and allergy review; Qing Hao is added near the end to preserve volatile constituents. Persistent night fever, weight loss, bleeding or recurrent fever requires medical evaluation.",
+      "safetyEs": "No corresponde a etapa temprana del nivel Qi de enfermedad tibia, Calor de exceso puro, debilidad digestiva marcada ni cuadros con espasmos/convulsiones. Bie Jia es de origen animal y exige revisar procedencia y alergias; Qing Hao se añade cerca del final para preservar componentes volátiles. Fiebre nocturna persistente, pérdida de peso, sangrado o fiebre recurrente requiere evaluación médica.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "priority": "core",
+      "examFocus": "The board clue is the daily rhythm: fever appears at night and recedes by morning, yet there is no sweat as it resolves. Add emaciation without loss of appetite, a red tongue with little coat and a fine-rapid pulse after a febrile illness.",
+      "examFocusEs": "La pista de board es el ritmo diario: la fiebre aparece de noche y cede por la mañana, pero no hay sudor al resolverse. Añade adelgazamiento sin pérdida de apetito, lengua roja con poca capa y pulso fino-rápido tras enfermedad febril.",
+      "ingredientRoles": "Bie Jia enters the deep Yin level, enriches Yin and tracks down hidden Heat; Qing Hao, added near the end, vents that Heat outward. Sheng Di Huang and Zhi Mu nourish Yin, generate fluids and clear deficiency Heat; Mu Dan Pi cools the Blood and assists venting Heat without causing stagnation.",
+      "ingredientRolesEs": "Bie Jia entra al nivel Yin profundo, enriquece Yin y localiza Calor oculto; Qing Hao, añadido cerca del final, lo ventila hacia afuera. Sheng Di Huang y Zhi Mu nutren Yin, generan líquidos y aclaran Calor por deficiencia; Mu Dan Pi enfría Sangre y ayuda a ventilar Calor sin causar estancamiento.",
+      "comparison": "Qing Gu San treats chronic steaming-bone Heat from Liver/Kidney Yin deficiency, often with afternoon fever and night sweating; Qing Hao Bie Jia Tang is classically post-febrile, with night fever, morning coolness and no sweat as fever recedes. Qin Jiao Bie Jia San adds a stronger Wind-dispersing strategy when pathogenic Wind has penetrated inward and cough or night sweats are prominent.",
+      "comparisonEs": "Qing Gu San trata Calor crónico en los huesos por deficiencia de Yin de Hígado/Riñón, a menudo con fiebre vespertina y sudor nocturno; Qing Hao Bie Jia Tang es clásicamente posfebril, con fiebre nocturna, frescura matutina y sin sudor al ceder. Qin Jiao Bie Jia San añade estrategia más fuerte de dispersar Viento cuando Viento patógeno penetró al interior y predominan tos o sudores nocturnos."
     },
     {
       "number": 13,
