@@ -84,6 +84,7 @@ $areas = [
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · CONNECTED STUDY',
+                'practice_exam' => true,
             ],
             [
                 'title' => 'Formula Families / Variations',
@@ -119,7 +120,7 @@ $areas = [
                 ],
                 'anchor' => '',
                 'status' => 'AVAILABLE · 305 QUESTIONS',
-                'secondary' => true,
+                'practice_exam' => true,
             ],
             [
                 'title' => 'Commonly Used Herbal Combinations',
@@ -149,10 +150,13 @@ if (!array_key_exists($areaid, $areas)) {
 }
 $area = $areas[$areaid];
 $primarychapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return empty($chapter['secondary']);
+    return empty($chapter['secondary']) && empty($chapter['practice_exam']);
+}));
+$practicechapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
+    return !empty($chapter['practice_exam']);
 }));
 $otherchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return !empty($chapter['secondary']);
+    return !empty($chapter['secondary']) && empty($chapter['practice_exam']);
 }));
 $showconstruction = optional_param('view', '', PARAM_ALPHA) === 'construction';
 
@@ -214,6 +218,8 @@ echo $OUTPUT->header();
 .subject-study-guide__other-header p{margin:0;color:#64748b;line-height:1.5}
 .subject-study-guide__other-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .subject-study-guide__other .subject-study-guide__card{min-height:200px;text-align:left}
+.subject-study-guide__practice{border-top-color:#0b817d;background:#f5fbfa}
+.subject-study-guide__practice .subject-study-guide__status{background:#dff4ee;color:#0b675b}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
 .subject-study-guide__construction-mark{margin-bottom:15px;font-size:48px}
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
@@ -293,6 +299,32 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
             </article>
         <?php endforeach; ?>
+
+        <?php if (!empty($practicechapters)): ?>
+            <section class="subject-study-guide__other subject-study-guide__practice" aria-labelledby="practice-exams-title">
+                <header class="subject-study-guide__other-header">
+                    <span class="subject-study-guide__status">PRACTICE</span>
+                    <h3 id="practice-exams-title">Practice Exams</h3>
+                    <p>Build focused practice sessions for the principal formulas and their clinical modifications.</p>
+                </header>
+                <div class="subject-study-guide__other-grid">
+                    <?php foreach ($practicechapters as $chapter): ?>
+                        <?php
+                        $chapterurl = new moodle_url($chapter['path'], $chapter['params'] ?? []);
+                        if ($chapter['anchor'] !== '') {
+                            $chapterurl->set_anchor($chapter['anchor']);
+                        }
+                        ?>
+                        <article class="subject-study-guide__card">
+                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
+                            <h3><?php echo s($chapter['title']); ?></h3>
+                            <p><?php echo s($chapter['description']); ?></p>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
 
         <?php if (!empty($otherchapters)): ?>
             <section class="subject-study-guide__other" aria-labelledby="other-chapters-title">
