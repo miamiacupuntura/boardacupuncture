@@ -110,7 +110,7 @@ $areas = [
                 'secondary' => true,
             ],
             [
-                'title' => 'Formula Modification Practice',
+                'title' => 'Formula Modification Practice Exams',
                 'description' => 'Test the 305 formula modifications in focused question sessions after reviewing the reference cards.',
                 'path' => '/study-guide/comparisons/formula-practice.html',
                 'params' => [
