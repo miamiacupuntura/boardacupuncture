@@ -72,6 +72,13 @@ $areas = [
                 'priority' => true,
             ],
             [
+                'title' => 'Formulas',
+                'description' => 'Study 63 core formulas through 14 treatment categories with patterns, actions, decisive clues, essential ingredients and safety review.',
+                'path' => '/blocks/myprogress/formulas-study-guide.php',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 63 FORMULAS',
+            ],
+            [
                 'title' => 'Herbs Practice Exams',
                 'description' => 'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
@@ -159,6 +166,7 @@ echo $OUTPUT->header();
 .subject-study-guide__benefit h3{margin:0 0 8px;color:#17232a;font-size:16px}
 .subject-study-guide__benefit p{margin:0;color:#52677a;font-size:14px;line-height:1.5}
 .subject-study-guide__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.subject-study-guide__grid--herbology{grid-template-columns:repeat(auto-fit,minmax(235px,1fr))}
 .subject-study-guide__card{display:flex;min-height:220px;flex-direction:column;padding:22px;border:1px solid #dce2e6;border-top:5px solid #f77e25;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .subject-study-guide__card--priority{border-top-color:#0b817d;background:linear-gradient(180deg,#f7fffd 0%,#fff 42%)}
 .subject-study-guide__status{align-self:flex-start;margin:0 0 13px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:12px;font-weight:800}
@@ -183,7 +191,7 @@ echo $OUTPUT->header();
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
 .subject-study-guide__construction p{max-width:570px;margin:0 auto 26px;color:#64748b;line-height:1.65}
 .subject-study-guide a:focus-visible{outline:3px solid #185cca;outline-offset:3px}
-@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}}
+@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}}
 </style>
 <main class="subject-study-guide">
 <?php if ($showconstruction): ?>
@@ -232,7 +240,7 @@ echo $OUTPUT->header();
         </section>
     <?php endif; ?>
 
-    <section id="study-guide-chapters" class="subject-study-guide__grid" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
+    <section id="study-guide-chapters" class="subject-study-guide__grid<?php echo $areaid === 'herbology' ? ' subject-study-guide__grid--herbology' : ''; ?>" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
         <?php foreach ($primarychapters as $chapter): ?>
             <?php
             $chapterurl = new moodle_url($chapter['path']);
