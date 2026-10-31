@@ -1,6 +1,33 @@
 (function() {
     const params = new URLSearchParams(window.location.search);
     const returnTarget = params.get('return');
+    const isSpanish = document.documentElement.lang === 'es';
+
+    const formulaStep = Array.from(document.querySelectorAll('.guide-reading-step')).find(function(step) {
+        const eyebrow = step.querySelector('.guide-eyebrow');
+        return eyebrow && eyebrow.textContent.includes('Appendix C');
+    });
+    if (formulaStep) {
+        formulaStep.id = 'appendix-c-study';
+        if (window.location.hash === '#appendix-c-study') {
+            window.requestAnimationFrame(function() {
+                formulaStep.scrollIntoView({block: 'start'});
+            });
+        }
+        const formulaContent = formulaStep.querySelector('.guide-reading-step__number + div');
+        if (formulaContent && !formulaContent.querySelector('.guide-formula-list-link')) {
+            const formulaActions = document.createElement('div');
+            formulaActions.className = 'guide-actions guide-actions--section guide-formula-list-link';
+
+            const formulaLink = document.createElement('a');
+            formulaLink.className = 'guide-button';
+            formulaLink.href = '/blocks/myprogress/formulas-study-guide.php' + (isSpanish ? '?lang=es' : '');
+            formulaLink.textContent = isSpanish ? 'Abrir el listado de fórmulas →' : 'Open the formula list →';
+            formulaActions.appendChild(formulaLink);
+            formulaContent.appendChild(formulaActions);
+        }
+    }
+
     if (!returnTarget) {
         return;
     }
@@ -22,7 +49,6 @@
         return;
     }
 
-    const isSpanish = document.documentElement.lang === 'es';
     const backLink = document.createElement('a');
     backLink.className = 'guide-button guide-button--outline';
     backLink.href = returnUrl.href;

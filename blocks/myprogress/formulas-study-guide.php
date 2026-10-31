@@ -105,6 +105,10 @@ if (!$ises) {
 }
 $languageurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $languageparams);
 $herbologyurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
+$guidelinepath = $ises
+    ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
+    : '/study-guide/guidelines/chinese-herbal-medicine.html';
+$guidelineurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)], 'appendix-c-study');
 
 $previousurl = null;
 $nexturl = null;
@@ -185,6 +189,7 @@ echo $OUTPUT->header();
                 : 'Study the 63 core formulas in 14 categories. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
+            <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guideline de fórmulas' : '← Formula guideline'); ?></a>
             <a class="formula-study-guide__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <a class="formula-study-guide__button" href="<?php echo $herbologyurl->out(false); ?>"><?php echo s($ises ? '← Herbología China' : '← Chinese Herbology'); ?></a>
         </nav>
