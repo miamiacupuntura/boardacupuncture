@@ -183,4 +183,6 @@
 
   elements.search.addEventListener('input', applyFilters);
   elements.category.addEventListener('change', applyFilters);
+  const requestedFormula = new URLSearchParams(window.location.search).get('q');
+  if (requestedFormula) elements.search.value = requestedFormula;
 })();

@@ -797,7 +797,17 @@
       "ingredientRoles": "Ma Huang opens the pores, induces sweating and disseminates Lung Qi; Gui Zhi strengthens exterior release and warms the channels; Xing Ren descends Lung Qi and moderates the dispersing pair; Zhi Gan Cao harmonizes and tempers the formula.",
       "ingredientRolesEs": "Ma Huang abre los poros, induce sudor y difunde el Qi de Pulmón; Gui Zhi refuerza la liberación exterior y calienta los canales; Xing Ren desciende el Qi pulmonar y modera la pareja dispersante; Zhi Gan Cao armoniza y modera la fórmula.",
       "comparison": "Versus Gui Zhi Tang: Ma Huang Tang has closed pores, no sweating and a floating-tight pulse; Gui Zhi Tang has spontaneous sweating and a floating-lax or frail pulse.",
-      "comparisonEs": "Frente a Gui Zhi Tang: Ma Huang Tang presenta poros cerrados, ausencia de sudor y pulso flotante-tenso; Gui Zhi Tang presenta sudor espontáneo y pulso flotante-laxo o frágil."
+      "comparisonEs": "Frente a Gui Zhi Tang: Ma Huang Tang presenta poros cerrados, ausencia de sudor y pulso flotante-tenso; Gui Zhi Tang presenta sudor espontáneo y pulso flotante-laxo o frágil.",
+      "modificationPreview": {
+        "trigger": "Exterior Wind-Cold is accompanied by interior Heat",
+        "change": "Add Shi Gao",
+        "source": "Ma Huang Tang formula profile, p. 481."
+      },
+      "modificationPreviewEs": {
+        "trigger": "El Viento-Frío exterior se acompaña de Calor interno",
+        "change": "Añadir Shi Gao",
+        "source": "perfil de Ma Huang Tang, p. 481."
+      }
     },
     {
       "number": 2,
@@ -824,7 +834,17 @@
       "ingredientRoles": "Gui Zhi releases the muscle layer and assists Wei Qi; Bai Shao nourishes and contains Ying; Sheng Jiang assists exterior release and harmonizes the Stomach; Da Zao nourishes Ying and the middle; Zhi Gan Cao harmonizes the two sides.",
       "ingredientRolesEs": "Gui Zhi libera la capa muscular y ayuda al Wei Qi; Bai Shao nutre y contiene Ying; Sheng Jiang ayuda a liberar el exterior y armoniza el Estómago; Da Zao nutre Ying y el centro; Zhi Gan Cao armoniza ambos lados.",
       "comparison": "Versus Ma Huang Tang: spontaneous sweating and a lax/frail pulse indicate an open, unstable exterior rather than a tightly closed excess exterior.",
-      "comparisonEs": "Frente a Ma Huang Tang: el sudor espontáneo y el pulso laxo/frágil indican un exterior abierto e inestable, no un exterior de exceso fuertemente cerrado."
+      "comparisonEs": "Frente a Ma Huang Tang: el sudor espontáneo y el pulso laxo/frágil indican un exterior abierto e inestable, no un exterior de exceso fuertemente cerrado.",
+      "modificationPreview": {
+        "trigger": "Marked nasal congestion with sneezing",
+        "change": "Fang Feng and Xin Yi Hua",
+        "source": "user-provided Gui Zhi Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "La congestión nasal intensa con estornudos",
+        "change": "Fang Feng y Xin Yi Hua",
+        "source": "perfil de Gui Zhi Tang proporcionado por el usuario."
+      }
     },
     {
       "number": 3,
@@ -851,7 +871,17 @@
       "ingredientRoles": "Ge Gen releases the muscle layer, draws fluids upward and relaxes the neck; Ma Huang and Gui Zhi open the closed exterior; Bai Shao preserves Yin and relaxes spasm; Sheng Jiang, Da Zao and Zhi Gan Cao harmonize Ying, Wei and the middle.",
       "ingredientRolesEs": "Ge Gen libera la capa muscular, eleva líquidos y relaja el cuello; Ma Huang y Gui Zhi abren el exterior cerrado; Bai Shao preserva Yin y relaja el espasmo; Sheng Jiang, Da Zao y Zhi Gan Cao armonizan Ying, Wei y el centro.",
       "comparison": "Ma Huang Tang emphasizes cough or wheezing from constrained Lung Qi; Ge Gen Tang emphasizes rigid neck and upper back. Gui Zhi Jia Ge Gen Tang is the related presentation with sweating.",
-      "comparisonEs": "Ma Huang Tang enfatiza tos o sibilancias por constricción del Qi pulmonar; Ge Gen Tang enfatiza nuca y espalda superior rígidas. Gui Zhi Jia Ge Gen Tang es el cuadro relacionado con sudoración."
+      "comparisonEs": "Ma Huang Tang enfatiza tos o sibilancias por constricción del Qi pulmonar; Ge Gen Tang enfatiza nuca y espalda superior rígidas. Gui Zhi Jia Ge Gen Tang es el cuadro relacionado con sudoración.",
+      "modificationPreview": {
+        "trigger": "Severe nasal blockage",
+        "change": "Chuan Xiong, Huang Qin, Xin Yi Hua, and Jie Geng",
+        "source": "user-provided Ge Gen Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "La obstrucción nasal intensa",
+        "change": "Chuan Xiong, Huang Qin, Xin Yi Hua y Jie Geng",
+        "source": "perfil de Ge Gen Tang proporcionado por el usuario."
+      }
     },
     {
       "number": 4,
@@ -878,7 +908,17 @@
       "ingredientRoles": "Sang Ye and Ju Hua lightly clear Wind-Heat from the Lung; Lian Qiao and Bo He strengthen exterior release; Jie Geng raises and Xing Ren descends Lung Qi; Lu Gen clears Heat and generates fluids; Gan Cao harmonizes.",
       "ingredientRolesEs": "Sang Ye y Ju Hua aclaran suavemente Viento-Calor del Pulmón; Lian Qiao y Bo He refuerzan la liberación exterior; Jie Geng eleva y Xing Ren desciende el Qi pulmonar; Lu Gen aclara Calor y genera líquidos; Gan Cao armoniza.",
       "comparison": "Versus Yin Qiao San: Sang Ju Yin is lighter and cough-centered; Yin Qiao San is stronger for fever, sore throat and Heat-Toxin.",
-      "comparisonEs": "Frente a Yin Qiao San: Sang Ju Yin es más ligera y centrada en la tos; Yin Qiao San es más fuerte para fiebre, dolor de garganta y Calor-Tóxico."
+      "comparisonEs": "Frente a Yin Qiao San: Sang Ju Yin es más ligera y centrada en la tos; Yin Qiao San es más fuerte para fiebre, dolor de garganta y Calor-Tóxico.",
+      "modificationPreview": {
+        "trigger": "Qi-level dryness",
+        "change": "Add Shi Gao and Zhi Mu",
+        "source": "Sang Ju Yin formula profile, p. 484."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Sequedad en el nivel qi",
+        "change": "Añadir Shi Gao y Zhi Mu",
+        "source": "Sang Ju Yin formula profile, p. 484."
+      }
     },
     {
       "number": 5,
@@ -905,7 +945,17 @@
       "ingredientRoles": "Jin Yin Hua and Lian Qiao clear exterior Heat and toxicity; Niu Bang Zi and Jie Geng benefit the throat and spread Lung Qi; Bo He, Dan Dou Chi and Jing Jie Sui vent the exterior; Zhu Ye and Lu Gen clear Heat and generate fluids; Gan Cao harmonizes and assists the throat.",
       "ingredientRolesEs": "Jin Yin Hua y Lian Qiao aclaran Calor exterior y toxicidad; Niu Bang Zi y Jie Geng benefician la garganta y difunden el Qi pulmonar; Bo He, Dan Dou Chi y Jing Jie Sui ventilan el exterior; Zhu Ye y Lu Gen aclaran Calor y generan líquidos; Gan Cao armoniza y ayuda a la garganta.",
       "comparison": "Versus Sang Ju Yin: choose Yin Qiao San when fever and sore throat are more prominent; choose Sang Ju Yin when a mild cough dominates.",
-      "comparisonEs": "Frente a Sang Ju Yin: elegir Yin Qiao San cuando predominan fiebre y dolor de garganta; elegir Sang Ju Yin cuando domina una tos leve."
+      "comparisonEs": "Frente a Sang Ju Yin: elegir Yin Qiao San cuando predominan fiebre y dolor de garganta; elegir Sang Ju Yin cuando domina una tos leve.",
+      "modificationPreview": {
+        "trigger": "Stifling sensation in the chest",
+        "change": "Add Huo Xiang",
+        "source": "Yin Qiao San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Sensación de opresión en el pecho",
+        "change": "Añadir Huo Xiang",
+        "source": "Yin Qiao San formula profile."
+      }
     },
     {
       "number": 6,
@@ -932,7 +982,17 @@
       "ingredientRoles": "Chai Hu and Ge Gen release the muscle layer and vent constrained Heat; Qiang Huo and Bai Zhi release the exterior and relieve head or orbital pain; Huang Qin and Shi Gao clear emerging interior Heat; Jie Geng spreads Lung Qi; Bai Shao protects Yin; Sheng Jiang, Da Zao and Gan Cao harmonize.",
       "ingredientRolesEs": "Chai Hu y Ge Gen liberan la capa muscular y ventilan Calor constreñido; Qiang Huo y Bai Zhi liberan el exterior y alivian dolor de cabeza u órbita; Huang Qin y Shi Gao aclaran el Calor interior emergente; Jie Geng difunde el Qi pulmonar; Bai Shao protege Yin; Sheng Jiang, Da Zao y Gan Cao armonizan.",
       "comparison": "Ge Gen Tang remains a closed Wind-Cold presentation dominated by neck rigidity; Chai Ge Jie Ji Tang adds increasing fever, decreasing chills, irritability, dry nose and orbital pain. Bai Hu Tang treats fully interior Yangming Heat.",
-      "comparisonEs": "Ge Gen Tang permanece como Viento-Frío cerrado dominado por rigidez cervical; Chai Ge Jie Ji Tang añade fiebre creciente, escalofríos decrecientes, irritabilidad, nariz seca y dolor orbitario. Bai Hu Tang trata Calor Yangming plenamente interior."
+      "comparisonEs": "Ge Gen Tang permanece como Viento-Frío cerrado dominado por rigidez cervical; Chai Ge Jie Ji Tang añade fiebre creciente, escalofríos decrecientes, irritabilidad, nariz seca y dolor orbitario. Bai Hu Tang trata Calor Yangming plenamente interior.",
+      "modificationPreview": {
+        "trigger": "Severe chills without sweating",
+        "change": "Remove Huang Qin and add Ma Huang; use more in winter, less in spring, and substitute Zi Su Ye for Ma Huang in summer or fall",
+        "source": "Chai Ge Jie Ji Tang formula profile, p. 486."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Escalofríos intensos sin sudoración",
+        "change": "Retirar Huang Qin y añadir Ma Huang; usar más en invierno, menos en primavera y sustituir Ma Huang por Zi Su Ye en verano u otoño",
+        "source": "Chai Ge Jie Ji Tang formula profile, p. 486."
+      }
     },
     {
       "number": 7,
@@ -959,7 +1019,17 @@
       "ingredientRoles": "Qiang Huo and Du Huo dispel Wind-Cold-Damp and relieve pain; Chuan Xiong, Chai Hu and Bo He assist exterior and muscle-layer release; Jie Geng and Zhi Ke regulate chest Qi; Qian Hu descends Lung Qi and transforms phlegm; Ren Shen, Fu Ling and Gan Cao support Qi and the Spleen without trapping the pathogen; Sheng Jiang assists release.",
       "ingredientRolesEs": "Qiang Huo y Du Huo expulsan Viento-Frío-Humedad y alivian dolor; Chuan Xiong, Chai Hu y Bo He ayudan a liberar exterior y capa muscular; Jie Geng y Zhi Ke regulan el Qi torácico; Qian Hu desciende el Qi pulmonar y transforma flema; Ren Shen, Fu Ling y Gan Cao apoyan Qi y Bazo sin atrapar el patógeno; Sheng Jiang ayuda a liberar.",
       "comparison": "Jing Fang Bai Du San omits Ren Shen and suits a stronger constitution. Jiu Wei Qiang Huo Tang treats Wind-Cold-Damp with internal Heat; Ren Shen Bai Du San is selected when Qi deficiency is central.",
-      "comparisonEs": "Jing Fang Bai Du San omite Ren Shen y conviene a una constitución más fuerte. Jiu Wei Qiang Huo Tang trata Viento-Frío-Humedad con Calor interior; Ren Shen Bai Du San se elige cuando la deficiencia de Qi es central."
+      "comparisonEs": "Jing Fang Bai Du San omite Ren Shen y conviene a una constitución más fuerte. Jiu Wei Qiang Huo Tang trata Viento-Frío-Humedad con Calor interior; Ren Shen Bai Du San se elige cuando la deficiencia de Qi es central.",
+      "modificationPreview": {
+        "trigger": "Malarial disorders",
+        "change": "Increase Chai Hu and add Huang Qin and Bing Lang",
+        "source": "Ren Shen Bai Du San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Trastornos palúdicos",
+        "change": "Aumentar Chai Hu y añadir Huang Qin y Bing Lang",
+        "source": "Ren Shen Bai Du San formula profile."
+      }
     },
     {
       "number": 8,
@@ -986,7 +1056,17 @@
       "ingredientRoles": "Shi Gao is chief and clears blazing Qi-level and Stomach Heat; Zhi Mu assists Heat clearing, enriches Yin and generates fluids; Geng Mi and Zhi Gan Cao protect Stomach Qi, generate fluids and moderate the intense cold without trapping Heat.",
       "ingredientRolesEs": "Shi Gao es jefe y aclara Calor intenso del nivel Qi y Estómago; Zhi Mu ayuda a aclarar Calor, enriquece Yin y genera líquidos; Geng Mi y Zhi Gan Cao protegen Qi de Estómago, generan líquidos y moderan el frío intenso sin atrapar Calor.",
       "comparison": "Zhu Ye Shi Gao Tang treats lingering Qi-level Heat after illness with Qi/fluid deficiency, nausea and a deficient-rapid pulse. Ma Xing Shi Gan Tang redirects Shi Gao to Lung Heat with cough and wheezing. Da Cheng Qi Tang treats formed Yangming-organ clumping with constipation, abdominal resistance and a deep-forceful pulse.",
-      "comparisonEs": "Zhu Ye Shi Gao Tang trata Calor residual del nivel Qi tras enfermedad con deficiencia de Qi/líquidos, náusea y pulso deficiente-rápido. Ma Xing Shi Gan Tang dirige Shi Gao a Calor de Pulmón con tos y sibilancia. Da Cheng Qi Tang trata aglomeración formada del órgano Yangming con estreñimiento, resistencia abdominal y pulso profundo-fuerte."
+      "comparisonEs": "Zhu Ye Shi Gao Tang trata Calor residual del nivel Qi tras enfermedad con deficiencia de Qi/líquidos, náusea y pulso deficiente-rápido. Ma Xing Shi Gan Tang dirige Shi Gao a Calor de Pulmón con tos y sibilancia. Da Cheng Qi Tang trata aglomeración formada del órgano Yangming con estreñimiento, resistencia abdominal y pulso profundo-fuerte.",
+      "modificationPreview": {
+        "trigger": "Concurrent stomach qi deficiency",
+        "change": "Replace non-glutinous rice (Geng Mi) with Shan Yao",
+        "source": "Bai Hu Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Deficiencia concurrente de qi de estómago",
+        "change": "Sustituir el arroz no glutinoso (Geng Mi) por Shan Yao",
+        "source": "Bai Hu Tang formula profile."
+      }
     },
     {
       "number": 9,
@@ -1013,7 +1093,17 @@
       "ingredientRoles": "Huang Lian is chief and drains Heart and middle-burner Fire; Huang Qin clears the upper burner; Huang Bai clears the lower burner; Zhi Zi drains Heat from all Three Burners and guides it out through the urine while relieving irritability.",
       "ingredientRolesEs": "Huang Lian es jefe y drena Fuego de Corazón y Jiao Medio; Huang Qin aclara el Jiao Superior; Huang Bai aclara el Jiao Inferior; Zhi Zi drena Calor de los Tres Calentadores y lo guía por la orina mientras alivia irritabilidad.",
       "comparison": "Xie Xin Tang replaces Zhi Zi and Huang Bai with Da Huang when damp-Heat has clumped and must be guided primarily through the stool. Liang Ge San adds purgatives and light herbs when upper-burner Heat coexists with constipation. Qing Wen Bai Du Yin is much larger and treats epidemic toxin simultaneously flooding the Qi and Blood levels.",
-      "comparisonEs": "Xie Xin Tang sustituye Zhi Zi y Huang Bai por Da Huang cuando Humedad-Calor se ha aglomerado y debe guiarse principalmente por las heces. Liang Ge San añade purgantes y hierbas ligeras cuando Calor del Jiao Superior coexiste con estreñimiento. Qing Wen Bai Du Yin es mucho mayor y trata toxina epidémica que inunda simultáneamente niveles Qi y Sangre."
+      "comparisonEs": "Xie Xin Tang sustituye Zhi Zi y Huang Bai por Da Huang cuando Humedad-Calor se ha aglomerado y debe guiarse principalmente por las heces. Liang Ge San añade purgantes y hierbas ligeras cuando Calor del Jiao Superior coexiste con estreñimiento. Qing Wen Bai Du Yin es mucho mayor y trata toxina epidémica que inunda simultáneamente niveles Qi y Sangre.",
+      "modificationPreview": {
+        "trigger": "Constipation",
+        "change": "Add Da Huang",
+        "source": "Huang Lian Jie Du Tang formula profile, p. 492."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Estreñimiento",
+        "change": "Añadir Da Huang",
+        "source": "Huang Lian Jie Du Tang formula profile, p. 492."
+      }
     },
     {
       "number": 10,
@@ -1040,7 +1130,17 @@
       "ingredientRoles": "Ma Huang opens and disseminates Lung Qi to stop wheezing; the larger, cold dose of Shi Gao clears Lung and Stomach Heat and restrains Ma Huang's warming, sweating action; Xing Ren descends rebellious Lung Qi; Zhi Gan Cao moistens the Lung and harmonizes the pair of chief herbs.",
       "ingredientRolesEs": "Ma Huang abre y difunde Qi de Pulmón para detener sibilancia; la dosis mayor y fría de Shi Gao aclara Calor de Pulmón y Estómago y controla la acción tibia y sudorífica de Ma Huang; Xing Ren desciende Qi rebelde de Pulmón; Zhi Gan Cao humedece Pulmón y armoniza la pareja de jefes.",
       "comparison": "Xie Bai San treats lurking constrained Lung Fire, commonly with afternoon-worse cough, skin hot to light touch, little sputum and a thin-rapid pulse on a Yin-deficient background. Bai Hu Tang treats generalized blazing Qi-level Heat without cough/wheezing as the defining problem. Xiao Qing Long Tang treats Cold thin fluids with chills, no thirst and watery sputum.",
-      "comparisonEs": "Xie Bai San trata Fuego de Pulmón latente y constreñido, comúnmente con tos peor por la tarde, piel caliente al tacto ligero, poco esputo y pulso fino-rápido sobre deficiencia de Yin. Bai Hu Tang trata Calor generalizado intenso del nivel Qi sin que tos/sibilancia sean el problema definitorio. Xiao Qing Long Tang trata líquidos fríos con escalofríos, ausencia de sed y esputo acuoso."
+      "comparisonEs": "Xie Bai San trata Fuego de Pulmón latente y constreñido, comúnmente con tos peor por la tarde, piel caliente al tacto ligero, poco esputo y pulso fino-rápido sobre deficiencia de Yin. Bai Hu Tang trata Calor generalizado intenso del nivel Qi sin que tos/sibilancia sean el problema definitorio. Xiao Qing Long Tang trata líquidos fríos con escalofríos, ausencia de sed y esputo acuoso.",
+      "modificationPreview": {
+        "trigger": "Severe heat",
+        "change": "Add Jin Yin Hua, Lian Qiao, Huang Qin, and Yu Xing Cao",
+        "source": "Ma Xing Shi Gan Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Calor intenso",
+        "change": "Añadir Jin Yin Hua, Lian Qiao, Huang Qin y Yu Xing Cao",
+        "source": "Ma Xing Shi Gan Tang formula profile."
+      }
     },
     {
       "number": 11,
@@ -1067,7 +1167,17 @@
       "ingredientRoles": "Long Dan Cao is chief and drains Liver/Gallbladder Fire and lower-burner Damp-Heat; Huang Qin and Zhi Zi reinforce Fire clearing; Ze Xie, Mu Tong and Che Qian Zi drain Damp-Heat through urination; Chai Hu disperses constrained Liver Qi and guides upward; Sheng Di Huang and Dang Gui protect Yin and Blood; Gan Cao protects the middle and harmonizes.",
       "ingredientRolesEs": "Long Dan Cao es jefe y drena Fuego de Hígado/Vesícula y Humedad-Calor del Jiao Inferior; Huang Qin y Zhi Zi refuerzan aclarar Fuego; Ze Xie, Mu Tong y Che Qian Zi drenan Humedad-Calor por la orina; Chai Hu dispersa Qi de Hígado constreñido y guía hacia arriba; Sheng Di Huang y Dang Gui protegen Yin y Sangre; Gan Cao protege el centro y armoniza.",
       "comparison": "Xie Qing Wan treats constrained Liver Fire with red swollen eyes and possible tremors/convulsions but does not emphasize urinary drainage. Dang Gui Long Hui Wan is colder and more purgative for severe clumped Fire with mania or constipation. Zuo Jin Wan is the focused choice when Liver Heat invades the Stomach and acid reflux or vomiting dominates.",
-      "comparisonEs": "Xie Qing Wan trata Fuego de Hígado constreñido con ojos rojos hinchados y posibles temblores/convulsiones, pero no enfatiza drenaje urinario. Dang Gui Long Hui Wan es más fría y purgante para Fuego grave aglomerado con manía o estreñimiento. Zuo Jin Wan es la opción enfocada cuando Calor de Hígado invade Estómago y predominan reflujo ácido o vómito."
+      "comparisonEs": "Xie Qing Wan trata Fuego de Hígado constreñido con ojos rojos hinchados y posibles temblores/convulsiones, pero no enfatiza drenaje urinario. Dang Gui Long Hui Wan es más fría y purgante para Fuego grave aglomerado con manía o estreñimiento. Zuo Jin Wan es la opción enfocada cuando Calor de Hígado invade Estómago y predominan reflujo ácido o vómito.",
+      "modificationPreview": {
+        "trigger": "Pale-red leukorrhea with a wiry, rapid pulse",
+        "change": "Add Chi Shao and Lian Xu",
+        "source": "Long Dan Xie Gan Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Leucorrea rojo pálido con pulso de cuerda y rápido",
+        "change": "Añadir Chi Shao y Lian Xu",
+        "source": "Long Dan Xie Gan Tang formula profile."
+      }
     },
     {
       "number": 12,
@@ -1094,7 +1204,17 @@
       "ingredientRoles": "Bie Jia enters the deep Yin level, enriches Yin and tracks down hidden Heat; Qing Hao, added near the end, vents that Heat outward. Sheng Di Huang and Zhi Mu nourish Yin, generate fluids and clear deficiency Heat; Mu Dan Pi cools the Blood and assists venting Heat without causing stagnation.",
       "ingredientRolesEs": "Bie Jia entra al nivel Yin profundo, enriquece Yin y localiza Calor oculto; Qing Hao, añadido cerca del final, lo ventila hacia afuera. Sheng Di Huang y Zhi Mu nutren Yin, generan líquidos y aclaran Calor por deficiencia; Mu Dan Pi enfría Sangre y ayuda a ventilar Calor sin causar estancamiento.",
       "comparison": "Qing Gu San treats chronic steaming-bone Heat from Liver/Kidney Yin deficiency, often with afternoon fever and night sweating; Qing Hao Bie Jia Tang is classically post-febrile, with night fever, morning coolness and no sweat as fever recedes. Qin Jiao Bie Jia San adds a stronger Wind-dispersing strategy when pathogenic Wind has penetrated inward and cough or night sweats are prominent.",
-      "comparisonEs": "Qing Gu San trata Calor crónico en los huesos por deficiencia de Yin de Hígado/Riñón, a menudo con fiebre vespertina y sudor nocturno; Qing Hao Bie Jia Tang es clásicamente posfebril, con fiebre nocturna, frescura matutina y sin sudor al ceder. Qin Jiao Bie Jia San añade estrategia más fuerte de dispersar Viento cuando Viento patógeno penetró al interior y predominan tos o sudores nocturnos."
+      "comparisonEs": "Qing Gu San trata Calor crónico en los huesos por deficiencia de Yin de Hígado/Riñón, a menudo con fiebre vespertina y sudor nocturno; Qing Hao Bie Jia Tang es clásicamente posfebril, con fiebre nocturna, frescura matutina y sin sudor al ceder. Qin Jiao Bie Jia San añade estrategia más fuerte de dispersar Viento cuando Viento patógeno penetró al interior y predominan tos o sudores nocturnos.",
+      "modificationPreview": {
+        "trigger": "Lung consumption",
+        "change": "Add Sha Shen and Han Lian Cao",
+        "source": "Qing Hao Bie Jia Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Consunción de pulmón",
+        "change": "Añadir Sha Shen y Han Lian Cao",
+        "source": "Qing Hao Bie Jia Tang formula profile."
+      }
     },
     {
       "number": 13,
@@ -1121,7 +1241,17 @@
       "ingredientRoles": "Da Huang is the chief that purges formed Heat accumulation; Mang Xiao moistens dryness and softens hardness; Zhi Shi breaks clumps and focal distention; Hou Po moves Qi and relieves fullness so stool can be expelled.",
       "ingredientRolesEs": "Da Huang es el jefe que purga la acumulación formada de Calor; Mang Xiao humedece la sequedad y ablanda la dureza; Zhi Shi rompe aglomeraciones y distensión focal; Hou Po mueve el Qi y alivia la plenitud para permitir expulsar las heces.",
       "comparison": "Bai Hu Tang clears outward-moving, formless Yangming Heat with a flooding pulse; Da Cheng Qi Tang purges Heat that has bound to matter, with abdominal resistance and a deep-forceful pulse. Xiao Cheng Qi Tang lacks Mang Xiao because dryness is less severe.",
-      "comparisonEs": "Bai Hu Tang aclara Calor Yangming sin forma que se mueve hacia afuera con pulso desbordante; Da Cheng Qi Tang purga Calor ligado a materia, con resistencia abdominal y pulso profundo-fuerte. Xiao Cheng Qi Tang omite Mang Xiao porque la sequedad es menos grave."
+      "comparisonEs": "Bai Hu Tang aclara Calor Yangming sin forma que se mueve hacia afuera con pulso desbordante; Da Cheng Qi Tang purga Calor ligado a materia, con resistencia abdominal y pulso profundo-fuerte. Xiao Cheng Qi Tang omite Mang Xiao porque la sequedad es menos grave.",
+      "modificationPreview": {
+        "trigger": "High fever, severe thirst, and a rapid, forceful pulse from concurrent yangming channel- and organ-stage disorders",
+        "change": "Add Zhi Mu and Shi Gao",
+        "source": "Da Cheng Qi Tang formula profile, p. 498."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Fiebre alta, sed intensa y pulso rápido y fuerte por trastornos simultáneos del canal y del órgano yangming",
+        "change": "Añadir Zhi Mu y Shi Gao",
+        "source": "Da Cheng Qi Tang formula profile, p. 498."
+      }
     },
     {
       "number": 14,
@@ -1202,7 +1332,17 @@
       "ingredientRoles": "Chai Hu vents the half-exterior aspect and spreads Liver/Gallbladder Qi; Huang Qin clears Heat from the interior Shaoyang aspect; Ban Xia and Sheng Jiang transform phlegm, harmonize the Stomach and descend rebellious Qi; Ren Shen, Da Zao and Zhi Gan Cao support upright and middle-burner Qi while harmonizing the formula.",
       "ingredientRolesEs": "Chai Hu ventila el aspecto medio exterior y difunde Qi de Hígado/Vesícula Biliar; Huang Qin aclara Calor del aspecto interior Shaoyang; Ban Xia y Sheng Jiang transforman flema, armonizan Estómago y descienden Qi rebelde; Ren Shen, Da Zao y Zhi Gan Cao apoyan Qi correcto y del Jiao Medio mientras armonizan la fórmula.",
       "comparison": "Hao Qin Qing Dan Tang treats Damp-Heat and turbid phlegm in Shaoyang: fever is stronger, chills milder, and the tongue is red with a thick greasy coat. Xiao Yao San treats internally generated Liver-Spleen disharmony with deficiency signs rather than a lodged Shaoyang pathogen.",
-      "comparisonEs": "Hao Qin Qing Dan Tang trata Humedad-Calor y flema turbia en Shaoyang: la fiebre es más fuerte, los escalofríos más leves y la lengua roja con capa gruesa grasosa. Xiao Yao San trata desarmonía interna Hígado-Bazo con signos de deficiencia, no un patógeno alojado en Shaoyang."
+      "comparisonEs": "Hao Qin Qing Dan Tang trata Humedad-Calor y flema turbia en Shaoyang: la fiebre es más fuerte, los escalofríos más leves y la lengua roja con capa gruesa grasosa. Xiao Yao San trata desarmonía interna Hígado-Bazo con signos de deficiencia, no un patógeno alojado en Shaoyang.",
+      "modificationPreview": {
+        "trigger": "Pronounced thirst",
+        "change": "Remove Ban Xia and add Tian Hua Fen",
+        "source": "Xiao Chai Hu Tang formula profile, p. 503."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Sed pronunciada",
+        "change": "Retirar Ban Xia y añadir Tian Hua Fen",
+        "source": "Xiao Chai Hu Tang formula profile, p. 503."
+      }
     },
     {
       "number": 17,
@@ -1256,7 +1396,17 @@
       "ingredientRoles": "Chai Hu spreads Liver Qi and relieves constraint; Dang Gui and Bai Shao nourish Liver Blood and preserve Yin; Bai Zhu, Fu Ling and Zhi Gan Cao strengthen the Spleen; Sheng Jiang harmonizes the Stomach; a small dose of Bo He assists Chai Hu in venting constrained Heat.",
       "ingredientRolesEs": "Chai Hu difunde Qi de Hígado y alivia constricción; Dang Gui y Bai Shao nutren Sangre de Hígado y preservan Yin; Bai Zhu, Fu Ling y Zhi Gan Cao fortalecen Bazo; Sheng Jiang armoniza Estómago; una dosis pequeña de Bo He ayuda a Chai Hu a ventilar Calor constreñido.",
       "comparison": "Si Ni San treats a more excessive constraint with cold fingertips and lacks the broad Blood/Spleen support. Jia Wei Xiao Yao San adds Mu Dan Pi and Zhi Zi when constraint has transformed into clearer Heat signs such as irritability, flushing, red eyes or dry mouth.",
-      "comparisonEs": "Si Ni San trata constricción más excesiva con dedos fríos y carece del apoyo amplio a Sangre/Bazo. Jia Wei Xiao Yao San añade Mu Dan Pi y Zhi Zi cuando la constricción se ha transformado en signos de Calor más claros como irritabilidad, rubor, ojos rojos o boca seca."
+      "comparisonEs": "Si Ni San trata constricción más excesiva con dedos fríos y carece del apoyo amplio a Sangre/Bazo. Jia Wei Xiao Yao San añade Mu Dan Pi y Zhi Zi cuando la constricción se ha transformado en signos de Calor más claros como irritabilidad, rubor, ojos rojos o boca seca.",
+      "modificationPreview": {
+        "trigger": "More severe hypochondriac pain with distention",
+        "change": "Add Bai Zhu and Xiang Fu",
+        "source": "Xiao Yao San formula profile, p. 505."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Dolor hipocondríaco más intenso con distensión",
+        "change": "Añadir Bai Zhu y Xiang Fu",
+        "source": "Xiao Yao San formula profile, p. 505."
+      }
     },
     {
       "number": 19,
@@ -1283,7 +1433,17 @@
       "ingredientRoles": "Huang Lian and Huang Qin bitterly drain constrained Heat downward; Ban Xia and Gan Jiang acridly disperse clumping, warm the middle and descend rebellious Qi; Ren Shen, Da Zao and Zhi Gan Cao support middle-burner Qi so tonification does not trap the excess and draining does not further injure deficiency.",
       "ingredientRolesEs": "Huang Lian y Huang Qin drenan amargamente Calor constreñido hacia abajo; Ban Xia y Gan Jiang dispersan acremente la aglomeración, calientan el centro y descienden Qi rebelde; Ren Shen, Da Zao y Zhi Gan Cao apoyan Qi del Jiao Medio para que tonificar no atrape exceso ni drenar agrave deficiencia.",
       "comparison": "Xiao Chai Hu Tang shares five herbs but is identified by alternating chills and fever, bitter taste and hypochondriac fullness. Huang Lian Tang emphasizes Heat above and Cold below with chest irritability and abdominal pain; Ban Xia Xie Xin Tang emphasizes soft, nearly painless focal epigastric distention.",
-      "comparisonEs": "Xiao Chai Hu Tang comparte cinco hierbas, pero se identifica por fiebre y escalofríos alternantes, sabor amargo y plenitud hipocondríaca. Huang Lian Tang enfatiza Calor arriba y Frío abajo con irritabilidad torácica y dolor abdominal; Ban Xia Xie Xin Tang enfatiza distensión epigástrica focal blanda y casi indolora."
+      "comparisonEs": "Xiao Chai Hu Tang comparte cinco hierbas, pero se identifica por fiebre y escalofríos alternantes, sabor amargo y plenitud hipocondríaca. Huang Lian Tang enfatiza Calor arriba y Frío abajo con irritabilidad torácica y dolor abdominal; Ban Xia Xie Xin Tang enfatiza distensión epigástrica focal blanda y casi indolora.",
+      "modificationPreview": {
+        "trigger": "Damp-heat aggregating in the middle jiao with vomiting and focal distention",
+        "change": "Remove Ren Shen, Gan Jiang, Da Zao, and Zhi Gan Cao; add Zhi Shi and Sheng Jiang",
+        "source": "Ban Xia Xie Xin Tang formula profile, p. 506."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Humedad-calor acumulada en el jiao medio con vómitos y distensión focal",
+        "change": "Retirar Ren Shen, Gan Jiang, Da Zao y Zhi Gan Cao; añadir Zhi Shi y Sheng Jiang",
+        "source": "Ban Xia Xie Xin Tang formula profile, p. 506."
+      }
     },
     {
       "number": 20,
@@ -1303,7 +1463,17 @@
       "safety": "Persistent vomiting, severe pain, gastrointestinal bleeding, dehydration or unexplained weight loss requires medical evaluation.",
       "safetyEs": "Vómito persistente, dolor grave, sangrado gastrointestinal, deshidratación o pérdida de peso requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 10
+      "practiceCount": 10,
+      "modificationPreview": {
+        "trigger": "Severe damp-cold with generalized cold and pain",
+        "change": "Add Rou Gui and Gan Jiang",
+        "source": "Ping Wei San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Humedad-frío intensa con frío y dolor generalizados",
+        "change": "Añadir Rou Gui y Gan Jiang",
+        "source": "Ping Wei San formula profile."
+      }
     },
     {
       "number": 21,
@@ -1323,7 +1493,17 @@
       "safety": "Processed Ban Xia is required; dehydration, bloody stool or persistent fever needs medical care.",
       "safetyEs": "Ban Xia debe estar procesada; deshidratación, sangre en heces o fiebre persistente requiere atención médica.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "modificationPreview": {
+        "trigger": "Severe wind-cold",
+        "change": "Increase Zi Su Ye",
+        "source": "Huo Xiang Zheng Qi San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Viento-frío intenso",
+        "change": "Aumentar Zi Su Ye",
+        "source": "Huo Xiang Zheng Qi San formula profile."
+      }
     },
     {
       "number": 22,
@@ -1343,7 +1523,17 @@
       "safety": "Fever, flank pain, vomiting, pregnancy, blood in urine or urinary retention requires urgent medical care.",
       "safetyEs": "Fiebre, dolor de flanco, vómito, embarazo, sangre o retención urinaria requiere urgencia.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "modificationPreview": {
+        "trigger": "Bloody painful urinary dysfunction",
+        "change": "Increase Bian Xu; add Bai Mao Gen and Xiao Ji",
+        "source": "Ba Zheng San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Trastorno urinario doloroso con sangre",
+        "change": "Aumentar Bian Xu; añadir Bai Mao Gen y Xiao Ji",
+        "source": "Ba Zheng San formula profile."
+      }
     },
     {
       "number": 23,
@@ -1363,7 +1553,17 @@
       "safety": "Little or no urine, sudden edema, breathlessness, confusion or persistent vomiting requires urgent medical evaluation.",
       "safetyEs": "Poca o ninguna orina, edema súbito, disnea, confusión o vómito persistente requiere evaluación urgente.",
       "safetyTier": "standard",
-      "practiceCount": 22
+      "practiceCount": 22,
+      "modificationPreview": {
+        "trigger": "Severe edema",
+        "change": "Add Sang Bai Pi, Chen Pi, and Da Fu Pi",
+        "source": "Wu Ling San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Edema intenso",
+        "change": "Añadir Sang Bai Pi, Chen Pi y Da Fu Pi",
+        "source": "Wu Ling San formula profile."
+      }
     },
     {
       "number": 24,
@@ -1383,7 +1583,17 @@
       "safety": "Urinary retention, fever, flank pain or blood in urine needs prompt evaluation.",
       "safetyEs": "Retención urinaria, fiebre, dolor en flanco o sangre en orina requiere evaluación pronta.",
       "safetyTier": "standard",
-      "practiceCount": 8
+      "practiceCount": 8,
+      "modificationPreview": {
+        "trigger": "Severe thirst from yin deficiency",
+        "change": "Add Sha Shen and Tian Hua Fen",
+        "source": "Zhu Ling Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Sed intensa por deficiencia de yin",
+        "change": "Añadir Sha Shen y Tian Hua Fen",
+        "source": "Zhu Ling Tang formula profile."
+      }
     },
     {
       "number": 25,
@@ -1403,7 +1613,17 @@
       "safety": "New generalized edema may signal heart, kidney or liver disease; breathlessness, chest pain or low urine requires urgent care.",
       "safetyEs": "Edema generalizado nuevo puede indicar enfermedad cardíaca, renal o hepática; disnea, dolor torácico o poca orina requiere urgencia.",
       "safetyTier": "standard",
-      "practiceCount": 4
+      "practiceCount": 4,
+      "modificationPreview": {
+        "trigger": "Externally contracted wind with edema above the waist",
+        "change": "Add Fang Feng, Zi Su Ye, Jing Jie, and Bai Zhi",
+        "source": "Wu Pi San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Viento contraído externamente con edema por encima de la cintura",
+        "change": "Añadir Fang Feng, Zi Su Ye, Jing Jie y Bai Zhi",
+        "source": "Wu Pi San formula profile."
+      }
     },
     {
       "number": 26,
@@ -1423,7 +1643,17 @@
       "safety": "Fu Zi requires correct processing. Sudden edema, low urine, breathlessness, chest pain, confusion or fainting requires urgent care.",
       "safetyEs": "Fu Zi requiere procesamiento correcto. Edema súbito, poca orina, disnea, dolor torácico, confusión o desmayo requiere urgencia.",
       "safetyTier": "high",
-      "practiceCount": 12
+      "practiceCount": 12,
+      "modificationPreview": {
+        "trigger": "More pronounced spleen yang deficiency with diarrhea",
+        "change": "Remove Bai Shao and add Gan Jiang",
+        "source": "Zhen Wu Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Deficiencia más pronunciada de yang de bazo con diarrea",
+        "change": "Retirar Bai Shao y añadir Gan Jiang",
+        "source": "Zhen Wu Tang formula profile."
+      }
     },
     {
       "number": 27,
@@ -1443,7 +1673,17 @@
       "safety": "New weakness, saddle numbness, loss of bladder/bowel control, fever or traumatic back pain requires urgent evaluation.",
       "safetyEs": "Debilidad nueva, anestesia en silla de montar, pérdida de control vesical/intestinal, fiebre o trauma lumbar requiere urgencia.",
       "safetyTier": "standard",
-      "practiceCount": 2
+      "practiceCount": 2,
+      "modificationPreview": {
+        "trigger": "Severe pain",
+        "change": "Add Bai Hua She, Di Long, and Hong Hua",
+        "source": "Du Huo Ji Sheng Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Dolor intenso",
+        "change": "Añadir Bai Hua She, Di Long y Hong Hua",
+        "source": "Du Huo Ji Sheng Tang formula profile."
+      }
     },
     {
       "number": 28,
@@ -1463,7 +1703,17 @@
       "safety": "Severe abdominal pain, persistent vomiting, blood, fever, fainting or dehydration requires urgent medical care.",
       "safetyEs": "Dolor abdominal grave, vómito persistente, sangre, fiebre, desmayo o deshidratación requiere atención urgente.",
       "safetyTier": "standard",
-      "practiceCount": 16
+      "practiceCount": 16,
+      "modificationPreview": {
+        "trigger": "Severe vomiting",
+        "change": "Add Sheng Jiang",
+        "source": "Li Zhong Wan formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Vómitos intensos",
+        "change": "Añadir Sheng Jiang",
+        "source": "Li Zhong Wan formula profile."
+      }
     },
     {
       "number": 29,
@@ -1483,7 +1733,17 @@
       "safety": "Wu Zhu Yu is potentially toxic and requires verified identity and professional dosing.",
       "safetyEs": "Wu Zhu Yu es potencialmente tóxica y exige identidad verificada y dosificación profesional.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "modificationPreview": {
+        "trigger": "Severe vomiting or morning sickness",
+        "change": "Add Ban Xia and Sha Ren",
+        "source": "Wu Zhu Yu Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Vómitos intensos o náuseas del embarazo",
+        "change": "Añadir Ban Xia y Sha Ren",
+        "source": "Wu Zhu Yu Tang formula profile."
+      }
     },
     {
       "number": 30,
@@ -1503,7 +1763,17 @@
       "safety": "Severe abdominal pain can be a surgical emergency; Yi Tang also requires dietary/glucose review.",
       "safetyEs": "El dolor abdominal intenso puede ser una urgencia quirúrgica; Yi Tang también requiere revisar dieta y glucosa.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "modificationPreview": {
+        "trigger": "Roundworms",
+        "change": "Add Wu Mei, Bing Lang, and Shi Jun Zi",
+        "source": "Da Jian Zhong Tang formula profile, p. 522."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Lombrices intestinales",
+        "change": "Añadir Wu Mei, Bing Lang y Shi Jun Zi",
+        "source": "Da Jian Zhong Tang formula profile, p. 522."
+      }
     },
     {
       "number": 31,
@@ -1523,7 +1793,17 @@
       "safety": "This presentation is a medical emergency. Fu Zi is cardiotoxic if improperly processed or dosed and requires qualified supervision.",
       "safetyEs": "Este cuadro es emergencia médica. Fu Zi es cardiotóxico si se procesa o dosifica mal y requiere supervisión cualificada.",
       "safetyTier": "high",
-      "practiceCount": 19
+      "practiceCount": 19,
+      "modificationPreview": {
+        "trigger": "Intractable arthritis due to wind-dampness",
+        "change": "Add Rou Gui and Bai Zhu",
+        "source": "Si Ni Tang formula profile, p. 523."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Artritis intratable por viento-humedad",
+        "change": "Añadir Rou Gui y Bai Zhu",
+        "source": "Si Ni Tang formula profile, p. 523."
+      }
     },
     {
       "number": 32,
@@ -1543,7 +1823,17 @@
       "safety": "Persistent fatigue or appetite loss may reflect anemia, infection, endocrine, gastrointestinal or malignant disease and warrants evaluation.",
       "safetyEs": "Fatiga o pérdida de apetito persistente puede reflejar anemia, infección, trastorno endocrino, gastrointestinal o malignidad y requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 23
+      "practiceCount": 23,
+      "modificationPreview": {
+        "trigger": "Indigestion, reduced appetite, abdominal distention, and weight loss",
+        "change": "Add Xiang Fu and Hou Po",
+        "source": "Si Jun Zi Tang formula profile, p. 526."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Indigestión, disminución del apetito, distensión abdominal y pérdida de peso",
+        "change": "Añadir Xiang Fu y Hou Po",
+        "source": "Si Jun Zi Tang formula profile, p. 526."
+      }
     },
     {
       "number": 33,
@@ -1563,7 +1853,17 @@
       "safety": "New prolapse, bleeding, persistent fever, marked weight loss or severe abdominal symptoms require medical assessment.",
       "safetyEs": "Prolapso nuevo, sangrado, fiebre persistente, pérdida marcada de peso o síntomas abdominales graves requieren evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 21
+      "practiceCount": 21,
+      "modificationPreview": {
+        "trigger": "Abdominal pain",
+        "change": "Increase Zhi Gan Cao and add Bai Shao",
+        "source": "Bu Zhong Yi Qi Tang formula profile, p. 527."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Dolor abdominal",
+        "change": "Aumentar Zhi Gan Cao y añadir Bai Shao",
+        "source": "Bu Zhong Yi Qi Tang formula profile, p. 527."
+      }
     },
     {
       "number": 34,
@@ -1583,7 +1883,17 @@
       "safety": "Shortness of breath, chest pain, fainting or heat illness requires urgent biomedical care.",
       "safetyEs": "Disnea, dolor torácico, desmayo o enfermedad por calor requiere atención biomédica urgente.",
       "safetyTier": "standard",
-      "practiceCount": 8
+      "practiceCount": 8,
+      "modificationPreview": {
+        "trigger": "Profuse sweating with dark, scanty, and difficult urination",
+        "change": "Add Huang Qi and Dang Gui; do not use herbs that leach out Dampness",
+        "source": "Sheng Mai San formula profile, p. 528."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Sudoración profusa con orina oscura, escasa y micción dificultosa",
+        "change": "Añadir Huang Qi y Dang Gui; no usar hierbas que drenen la Humedad",
+        "source": "Sheng Mai San formula profile, p. 528."
+      }
     },
     {
       "number": 35,
@@ -1603,7 +1913,17 @@
       "safety": "Heavy bleeding, pregnancy-related bleeding, marked pallor, fainting or rapid heartbeat requires medical evaluation.",
       "safetyEs": "Sangrado abundante o durante embarazo, palidez marcada, desmayo o taquicardia requiere evaluación médica.",
       "safetyTier": "standard",
-      "practiceCount": 21
+      "practiceCount": 21,
+      "modificationPreview": {
+        "trigger": "Restless fetus disorder with continuous vaginal bleeding",
+        "change": "Add Ai Ye and E Jiao",
+        "source": "Si Wu Tang formula profile, p. 529."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Trastorno de inquietud fetal con sangrado vaginal continuo",
+        "change": "Añadir Ai Ye y E Jiao",
+        "source": "Si Wu Tang formula profile, p. 529."
+      }
     },
     {
       "number": 36,
@@ -1623,7 +1943,17 @@
       "safety": "Heavy bleeding, black stool, fainting, chest symptoms or severe anemia signs require urgent medical evaluation.",
       "safetyEs": "Sangrado abundante, heces negras, desmayo, síntomas torácicos o signos de anemia grave requieren evaluación urgente.",
       "safetyTier": "standard",
-      "practiceCount": 23
+      "practiceCount": 23,
+      "modificationPreview": {
+        "trigger": "Numbness in the upper extremities",
+        "change": "Add Qiang Huo and Chuan Xiong",
+        "source": "Gui Pi Tang formula profile, p. 530."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Entumecimiento de las extremidades superiores",
+        "change": "Añadir Qiang Huo y Chuan Xiong",
+        "source": "Gui Pi Tang formula profile, p. 530."
+      }
     },
     {
       "number": 37,
@@ -1663,7 +1993,17 @@
       "safety": "Persistent night sweats, weight loss, urinary changes or severe fatigue requires evaluation for biomedical causes.",
       "safetyEs": "Sudor nocturno persistente, pérdida de peso, cambios urinarios o fatiga grave requiere evaluar causas biomédicas.",
       "safetyTier": "standard",
-      "practiceCount": 23
+      "practiceCount": 23,
+      "modificationPreview": {
+        "trigger": "Severe depletion of fluids with signs of heat",
+        "change": "Replace Shu Di Huang with Sheng Di Huang",
+        "source": "Liu Wei Di Huang Wan formula profile, p. 532."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Agotamiento grave de los líquidos con signos de calor",
+        "change": "Sustituir Shu Di Huang por Sheng Di Huang",
+        "source": "Liu Wei Di Huang Wan formula profile, p. 532."
+      }
     },
     {
       "number": 39,
@@ -1683,7 +2023,17 @@
       "safety": "Fu Zi requires correct processing and professional prescribing. Sudden edema, low urine or breathlessness requires urgent evaluation.",
       "safetyEs": "Fu Zi requiere procesamiento correcto y prescripción profesional. Edema súbito, poca orina o disnea requiere evaluación urgente.",
       "safetyTier": "high",
-      "practiceCount": 20
+      "practiceCount": 20,
+      "modificationPreview": {
+        "trigger": "A stronger warming and tonifying effect on kidney yang",
+        "change": "Replace Gui Zhi with Rou Gui",
+        "source": "Jin Gui Shen Qi Wan formula profile, p. 533."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Un efecto más intenso de calentamiento y tonificación del yang de riñón",
+        "change": "Sustituir Gui Zhi por Rou Gui",
+        "source": "Jin Gui Shen Qi Wan formula profile, p. 533."
+      }
     },
     {
       "number": 40,
@@ -1723,7 +2073,17 @@
       "safety": "True difficulty swallowing, choking, weight loss, neck mass or progressive hoarseness requires medical examination.",
       "safetyEs": "Disfagia verdadera, atragantamiento, pérdida de peso, masa cervical o ronquera progresiva requiere examen.",
       "safetyTier": "standard",
-      "practiceCount": 4
+      "practiceCount": 4,
+      "modificationPreview": {
+        "trigger": "A severe case of stagnant qi with the formula's usual presentation",
+        "change": "Add Chai Hu, Yu Jin, Xiang Fu, and Qing Pi",
+        "source": "Ban Xia Hou Po Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Un caso grave de estancamiento de qi con la presentación habitual de la fórmula",
+        "change": "Añadir Chai Hu, Yu Jin, Xiang Fu y Qing Pi",
+        "source": "Ban Xia Hou Po Tang formula profile."
+      }
     },
     {
       "number": 42,
@@ -1763,7 +2123,17 @@
       "safety": "Severe breathlessness, blue lips, chest pain, confusion or low oxygen is an emergency. Ma Huang and Bai Guo require professional dosing.",
       "safetyEs": "Disnea grave, labios azules, dolor torácico, confusión u oxígeno bajo es emergencia. Ma Huang y Bai Guo requieren dosificación profesional.",
       "safetyTier": "high",
-      "practiceCount": 3
+      "practiceCount": 3,
+      "modificationPreview": {
+        "trigger": "Thick, yellow sputum that is difficult to expectorate",
+        "change": "Add Dan Nan Xing, Gua Lou Pi, and Qian Hu",
+        "source": "Ding Chuan Tang formula profile, p. 540."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Esputo espeso y amarillo difícil de expectorar",
+        "change": "Añadir Dan Nan Xing, Gua Lou Pi y Qian Hu",
+        "source": "Ding Chuan Tang formula profile, p. 540."
+      }
     },
     {
       "number": 44,
@@ -1783,7 +2153,17 @@
       "safety": "Persistent hiccup or vomiting with chest pain, neurologic symptoms, dehydration, blood or weight loss requires medical assessment.",
       "safetyEs": "Hipo o vómito persistente con dolor torácico, síntomas neurológicos, deshidratación, sangre o pérdida de peso requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 2
+      "practiceCount": 2,
+      "modificationPreview": {
+        "trigger": "Yin deficiency with thirst, a red tongue with a scanty, dry coating, and a thready, rapid pulse",
+        "change": "Add Mai Men Dong, Shi Hu, and Lu Gen",
+        "source": "Ju Pi Zhu Ru Tang formula profile, p. 541."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Deficiencia de yin con sed, lengua roja con saburra escasa y seca, y pulso filiforme y rápido",
+        "change": "Añadir Mai Men Dong, Shi Hu y Lu Gen",
+        "source": "Ju Pi Zhu Ru Tang formula profile, p. 541."
+      }
     },
     {
       "number": 45,
@@ -1803,7 +2183,17 @@
       "safety": "Contraindicated in pregnancy; strong Blood-moving and purgative formula for professional use.",
       "safetyEs": "Contraindicada en embarazo; fórmula movilizadora de Sangre y purgante fuerte de uso profesional.",
       "safetyTier": "high",
-      "practiceCount": 8
+      "practiceCount": 8,
+      "modificationPreview": {
+        "trigger": "Irregular menstruation or dysmenorrhea",
+        "change": "Add Dang Gui and Hong Hua",
+        "source": "Tao He Cheng Qi Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Menstruación irregular o dismenorrea",
+        "change": "Añadir Dang Gui y Hong Hua",
+        "source": "Tao He Cheng Qi Tang formula profile."
+      }
     },
     {
       "number": 46,
@@ -1823,7 +2213,17 @@
       "safety": "Chest pain may be cardiac and requires emergency evaluation. Avoid unsupervised use with pregnancy, active bleeding or anticoagulants.",
       "safetyEs": "Dolor torácico puede ser cardíaco y requiere urgencia. Evitar uso sin supervisión en embarazo, sangrado activo o anticoagulantes.",
       "safetyTier": "standard",
-      "practiceCount": 13
+      "practiceCount": 13,
+      "modificationPreview": {
+        "trigger": "Headache",
+        "change": "Add Man Jing Zi and Bai Ji Li",
+        "source": "Xue Fu Zhu Yu Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Cefalea",
+        "change": "Añadir Man Jing Zi y Bai Ji Li",
+        "source": "Xue Fu Zhu Yu Tang formula profile."
+      }
     },
     {
       "number": 47,
@@ -1843,7 +2243,17 @@
       "safety": "Pregnancy, heavy bleeding, severe pelvic pain, fainting or postmenopausal bleeding requires medical evaluation.",
       "safetyEs": "Embarazo, sangrado abundante, dolor pélvico grave, desmayo o sangrado posmenopáusico requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "modificationPreview": {
+        "trigger": "More severe lower abdominal cold and pain",
+        "change": "Remove Mai Men Dong and Mu Dan Pi; add Xiao Hui Xiang and Ai Ye; replace Gui Zhi with Rou Gui",
+        "source": "Wen Jing Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Frío y dolor más intensos en el abdomen inferior",
+        "change": "Retirar Mai Men Dong y Mu Dan Pi; añadir Xiao Hui Xiang y Ai Ye; sustituir Gui Zhi por Rou Gui",
+        "source": "Wen Jing Tang formula profile."
+      }
     },
     {
       "number": 48,
@@ -1863,7 +2273,17 @@
       "safety": "Use during pregnancy only under qualified supervision. Pregnancy pain/bleeding, heavy bleeding or a new pelvic mass requires urgent evaluation.",
       "safetyEs": "Usar durante embarazo solo bajo supervisión cualificada. Dolor/sangrado en embarazo, sangrado abundante o nueva masa pélvica requiere evaluación urgente.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "modificationPreview": {
+        "trigger": "More severe blood stasis",
+        "change": "Add Da Huang",
+        "source": "Gui Zhi Fu Ling Wan formula profile, p. 548."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Estasis de sangre más grave",
+        "change": "Añadir Da Huang",
+        "source": "Gui Zhi Fu Ling Wan formula profile, p. 548."
+      }
     },
     {
       "number": 49,
@@ -1883,7 +2303,17 @@
       "safety": "Do not assume recurrent infections are simple deficiency; persistent fever, weight loss, breathing problems or immunosuppression requires evaluation.",
       "safetyEs": "No asumir que infecciones recurrentes son simple deficiencia; fiebre persistente, pérdida de peso, problemas respiratorios o inmunosupresión requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "modificationPreview": {
+        "trigger": "An externally contracted disorder with aversion to wind, sweating, and a moderate pulse",
+        "change": "Add Gui Zhi",
+        "source": "Yu Ping Feng San formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Trastorno contraído externamente con aversión al viento, sudoración y pulso moderado",
+        "change": "Añadir Gui Zhi",
+        "source": "Yu Ping Feng San formula profile."
+      }
     },
     {
       "number": 50,
@@ -1903,7 +2333,17 @@
       "safety": "Blood, fever, dehydration, severe pain, nocturnal symptoms or weight loss requires medical evaluation rather than astringent self-treatment.",
       "safetyEs": "Sangre, fiebre, deshidratación, dolor grave, síntomas nocturnos o pérdida de peso requiere evaluación, no autotratamiento astringente.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "modificationPreview": {
+        "trigger": "Prolapsed rectum",
+        "change": "Add Huang Qi, Dang Shen, and Sheng Ma",
+        "source": "Si Shen Wan formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Prolapso rectal",
+        "change": "Añadir Huang Qi, Dang Shen y Sheng Ma",
+        "source": "Si Shen Wan formula profile."
+      }
     },
     {
       "number": 51,
@@ -1923,7 +2363,17 @@
       "safety": "Heavy, gestational or postmenopausal bleeding requires urgent medical evaluation; Gui Ban is animal-derived.",
       "safetyEs": "Sangrado abundante, gestacional o posmenopáusico requiere evaluación médica urgente; Gui Ban es de origen animal.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "modificationPreview": {
+        "trigger": "More severe yin deficiency characterized by lingering menstruation with scanty red blood, malar flush, hot palms and soles, dry throat and mouth, a red tongue with little coating, and a thready, rapid pulse",
+        "change": "Remove Huang Qin and Xiang Fu; add Di Gu Pi and Shu Di Huang",
+        "source": "Gu Jing Wan formula profile, p. 553."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Deficiencia de yin más grave caracterizada por menstruación prolongada con sangre roja y escasa, rubor malar, palmas y plantas calientes, garganta y boca secas, lengua roja con poca saburra y pulso filiforme y rápido",
+        "change": "Retirar Huang Qin y Xiang Fu; añadir Di Gu Pi y Shu Di Huang",
+        "source": "Gu Jing Wan formula profile, p. 553."
+      }
     },
     {
       "number": 52,
@@ -1943,7 +2393,17 @@
       "safety": "New severe insomnia with mania, suicidal thoughts, chest symptoms or neurologic change requires urgent professional assessment.",
       "safetyEs": "Insomnio nuevo grave con manía, ideas suicidas, síntomas torácicos o cambio neurológico requiere evaluación urgente.",
       "safetyTier": "standard",
-      "practiceCount": 9
+      "practiceCount": 9,
+      "modificationPreview": {
+        "trigger": "Deficient heart and gallbladder qi manifesting as dream-disturbed sleep, waking at night terrified, palpitations, a pale tongue body, and a wiry, thready pulse",
+        "change": "Add Dang Shen and Long Gu",
+        "source": "Suan Zao Ren Tang formula profile."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Deficiencia de qi de corazón y vesícula biliar manifestada por sueño perturbado por sueños, despertar nocturno con terror, palpitaciones, cuerpo lingual pálido y pulso de cuerda y filiforme",
+        "change": "Añadir Dang Shen y Long Gu",
+        "source": "Suan Zao Ren Tang formula profile."
+      }
     },
     {
       "number": 53,
@@ -1983,7 +2443,17 @@
       "safety": "Contains wheat and substantial licorice; review gluten allergy/celiac disease and licorice interactions.",
       "safetyEs": "Contiene trigo y una cantidad importante de regaliz; revisar alergia/celiaquía e interacciones de Gan Cao.",
       "safetyTier": "standard",
-      "practiceCount": 6
+      "practiceCount": 6,
+      "modificationPreview": {
+        "trigger": "Irritability with heat in the chest and other signs of more severe heart yin deficiency",
+        "change": "Add Bai He and Bai Zi Ren",
+        "source": "Gan Mai Da Zao Tang formula profile, p. 558."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Irritabilidad con calor en el pecho y otros signos de deficiencia más grave de yin de corazón",
+        "change": "Añadir Bai He y Bai Zi Ren",
+        "source": "Gan Mai Da Zao Tang formula profile, p. 558."
+      }
     },
     {
       "number": 55,
@@ -2003,7 +2473,17 @@
       "safety": "Facial swelling, breathing difficulty, blistering, mucosal lesions, fever or rapidly spreading rash requires urgent medical care.",
       "safetyEs": "Hinchazón facial, dificultad respiratoria, ampollas, lesiones mucosas, fiebre o erupción rápida requiere urgencia.",
       "safetyTier": "standard",
-      "practiceCount": 2
+      "practiceCount": 2,
+      "modificationPreview": {
+        "trigger": "Severe wind-heat and toxin",
+        "change": "Add Jin Yin Hua, Lian Qiao, Pu Gong Ying, and Ye Ju Hua",
+        "source": "Xiao Feng San formula profile, p. 561."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Viento-calor y toxina intensos",
+        "change": "Añadir Jin Yin Hua, Lian Qiao, Pu Gong Ying y Ye Ju Hua",
+        "source": "Xiao Feng San formula profile, p. 561."
+      }
     },
     {
       "number": 56,
@@ -2023,7 +2503,17 @@
       "safety": "High-risk formula containing processed aconites and processed toxic Tian Nan Xing; specialist use only.",
       "safetyEs": "Fórmula de alto riesgo con aconitos procesados y Tian Nan Xing tóxico procesado; solo uso especializado.",
       "safetyTier": "critical",
-      "practiceCount": 2
+      "practiceCount": 2,
+      "modificationPreview": {
+        "trigger": "A dampness-predominant disorder",
+        "change": "Add Cang Zhu, Guang Fang Ji, and Yi Yi Ren",
+        "source": "Xiao Huo Luo Dan formula profile, p. 562."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Trastorno con predominio de humedad",
+        "change": "Añadir Cang Zhu, Guang Fang Ji y Yi Yi Ren",
+        "source": "Xiao Huo Luo Dan formula profile, p. 562."
+      }
     },
     {
       "number": 57,
@@ -2063,7 +2553,17 @@
       "safety": "This drying formula is inappropriate for unconfirmed dry cough or Yin deficiency. Persistent cough or breathing difficulty requires evaluation.",
       "safetyEs": "Esta fórmula secante no corresponde a tos seca o Yin deficiente no confirmado. Tos persistente o dificultad respiratoria requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 7
+      "practiceCount": 7,
+      "modificationPreview": {
+        "trigger": "Damp-heat in the upper burner",
+        "change": "Add Huang Qin, Zhi Zi, Xing Ren, and Jie Geng",
+        "source": "Er Chen Tang formula profile, p. 566."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Humedad-calor en el jiao superior",
+        "change": "Añadir Huang Qin, Zhi Zi, Xing Ren y Jie Geng",
+        "source": "Er Chen Tang formula profile, p. 566."
+      }
     },
     {
       "number": 59,
@@ -2083,7 +2583,17 @@
       "safety": "New hallucinations, mania, suicidal thoughts, fainting, chest symptoms or severe neurologic change requires urgent assessment.",
       "safetyEs": "Alucinaciones nuevas, manía, ideas suicidas, desmayo, síntomas torácicos o cambio neurológico grave requiere urgencia.",
       "safetyTier": "standard",
-      "practiceCount": 14
+      "practiceCount": 14,
+      "modificationPreview": {
+        "trigger": "Severe vertigo",
+        "change": "Add Bai Shao, Dai Zhe Shi, and Huang Qin",
+        "source": "Wen Dan Tang formula profile, p. 567."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Vértigo intenso",
+        "change": "Añadir Bai Shao, Dai Zhe Shi y Huang Qin",
+        "source": "Wen Dan Tang formula profile, p. 567."
+      }
     },
     {
       "number": 60,
@@ -2123,7 +2633,17 @@
       "safety": "Persistent or worsening cough, blood, fever, weight loss, chest pain, breathing difficulty or low oxygen requires medical assessment.",
       "safetyEs": "Tos persistente o creciente, sangre, fiebre, pérdida de peso, dolor torácico, disnea u oxígeno bajo requiere evaluación.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "modificationPreview": {
+        "trigger": "The early stages of wind-cold",
+        "change": "Add a decoction of Sheng Jiang",
+        "source": "Zhi Sou San formula profile, p. 569."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Etapas iniciales de viento-frío",
+        "change": "Añadir una decocción de Sheng Jiang",
+        "source": "Zhi Sou San formula profile, p. 569."
+      }
     },
     {
       "number": 62,
@@ -2143,7 +2663,17 @@
       "safety": "Sudden severe vertigo, weakness, speech change, severe headache or inability to walk may indicate stroke and is an emergency.",
       "safetyEs": "Vértigo súbito grave, debilidad, habla alterada, cefalea intensa o no poder caminar puede ser ACV: emergencia.",
       "safetyTier": "standard",
-      "practiceCount": 3
+      "practiceCount": 3,
+      "modificationPreview": {
+        "trigger": "Severe headache",
+        "change": "Add Man Jing Zi",
+        "source": "Ban Xia Bai Zhu Tian Ma Tang formula profile, p. 570."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Cefalea intensa",
+        "change": "Añadir Man Jing Zi",
+        "source": "Ban Xia Bai Zhu Tian Ma Tang formula profile, p. 570."
+      }
     },
     {
       "number": 63,
@@ -2163,7 +2693,17 @@
       "safety": "Severe pain, persistent vomiting, fever, inability to pass stool/gas or blood in vomit/stool requires urgent medical evaluation.",
       "safetyEs": "Dolor grave, vómito persistente, fiebre, no expulsar heces/gases o sangre requiere evaluación urgente.",
       "safetyTier": "standard",
-      "practiceCount": 8
+      "practiceCount": 8,
+      "modificationPreview": {
+        "trigger": "More severe abdominal distention",
+        "change": "Add Zhi Shi and Hou Po",
+        "source": "Bao He Wan formula profile, p. 573."
+      },
+      "modificationPreviewEs": {
+        "trigger": "Distensión abdominal más intensa",
+        "change": "Añadir Zhi Shi y Hou Po",
+        "source": "Bao He Wan formula profile, p. 573."
+      }
     }
   ]
 }
