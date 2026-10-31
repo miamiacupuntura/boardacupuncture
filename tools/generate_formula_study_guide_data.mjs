@@ -28,6 +28,7 @@ import {
 import {
   warmInteriorColdCategory,
   warmInteriorColdCategoryGuide,
+  warmInteriorCoreCategoryGuide,
   warmInteriorColdFormulas
 } from './warm_interior_cold_formula_supplement.mjs';
 import {
@@ -110,7 +111,11 @@ const generatedFormulas = classicFormulaOutline.map(([number, name, categoryKey,
 const formulas = generatedFormulas.map(formula => {
   const existing = existingFormulaByName.get(formula.name);
   return existing
-    ? {...existing, practiceCount: practiceCounts.get(formula.number) || 0}
+    ? {
+        ...existing,
+        ...(formula.priority ? {priority: formula.priority} : {}),
+        practiceCount: practiceCounts.get(formula.number) || 0
+      }
     : formula;
 });
 
@@ -124,6 +129,7 @@ const output = {
   categoryGuides: {
     ...(existingData.categoryGuides || {}),
     'release-exterior': existingData.categoryGuides?.['release-exterior'] || releaseExteriorCategoryGuide,
+    'warm-interior': warmInteriorCoreCategoryGuide,
     'dispel-summerheat': summerheatCategoryGuide,
     'warm-interior-cold': warmInteriorColdCategoryGuide,
     'exterior-interior-excess': exteriorInteriorExcessCategoryGuide,

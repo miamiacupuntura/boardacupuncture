@@ -354,6 +354,57 @@ export const warmInteriorColdFormulas = [
   }
 ];
 
+export const warmInteriorCoreCategoryGuide = {
+  priorityTitle: 'Guideline priority: master these 4 formulas first',
+  priorityTitleEs: 'Prioridad del guideline: domina primero estas 4 fórmulas',
+  priorityText: 'These four cards are the complete Warm the Interior roster in the current exam guideline. Use the Chapter 6 expansion only after their differences are secure.',
+  priorityTextEs: 'Estas cuatro tarjetas forman el listado completo de Calentar el Interior en el guideline actual. Usa la ampliación del capítulo 6 solo después de dominar sus diferencias.',
+  routeTitle: 'Four-step diagnostic route',
+  routeTitleEs: 'Ruta diagnóstica en cuatro pasos',
+  route: [
+    ['1', 'Middle Burner or collapse?', 'Digestive deficiency-Cold points to the Middle Burner; extreme cold limbs with a faint pulse points toward Shaoyin Yang collapse.', '¿Jiao Medio o colapso?', 'El Frío-deficiencia digestivo señala el Jiao Medio; extremidades extremadamente frías con pulso débil orientan a colapso de Yang Shaoyin.'],
+    ['2', 'Diarrhea or vomiting?', 'Watery diarrhea without thirst favors Li Zhong Wan; clear-fluid vomiting with vertex headache favors Wu Zhu Yu Tang.', '¿Diarrea o vómito?', 'Diarrea acuosa sin sed favorece Li Zhong Wan; vómito de líquidos claros con cefalea de vértex favorece Wu Zhu Yu Tang.'],
+    ['3', 'How severe is the pain?', 'Excruciating abdominal pain with powerful ascending Cold and severe vomiting points to Da Jian Zhong Tang.', '¿Qué tan intenso es el dolor?', 'Dolor abdominal insoportable con Frío ascendente potente y vómitos graves señala Da Jian Zhong Tang.'],
+    ['4', 'Is Yang devastated?', 'Extremely cold limbs, somnolence, undigested diarrhea and a minute pulse point to Si Ni Tang.', '¿Está devastado el Yang?', 'Extremidades gélidas, somnolencia, diarrea con alimentos no digeridos y pulso diminuto señalan Si Ni Tang.']
+  ],
+  quickCompareTitle: 'Core formula quick comparison',
+  quickCompareTitleEs: 'Comparación rápida de fórmulas centrales',
+  quickCompare: [
+    ['Li Zhong Wan', 'Middle-Burner deficiency-Cold', 'Watery diarrhea · no thirst · abdominal pain relieved by warmth', 'Frío-deficiencia del Jiao Medio', 'Diarrea acuosa · sin sed · dolor abdominal aliviado por calor'],
+    ['Wu Zhu Yu Tang', 'Stomach/Liver deficiency-Cold', 'Clear-fluid vomiting · vertex headache · cold limbs', 'Frío-deficiencia de Estómago/Hígado', 'Vómito de líquidos claros · cefalea de vértex · extremidades frías'],
+    ['Da Jian Zhong Tang', 'Severe ascending interior Cold', 'Excruciating abdominal pain · intense Cold · severe vomiting', 'Frío interior ascendente grave', 'Dolor abdominal insoportable · Frío intenso · vómitos graves'],
+    ['Si Ni Tang', 'Shaoyin Cold inversion with Yang collapse', 'Extremely cold limbs · somnolence · undigested diarrhea · minute pulse', 'Inversión por Frío Shaoyin con colapso de Yang', 'Extremidades gélidas · somnolencia · diarrea no digerida · pulso diminuto']
+  ],
+  referencesTitle: 'Chapter 6 expansion — comparison only',
+  referencesTitleEs: 'Ampliación del capítulo 6 — solo comparación',
+  referencesText: 'The seven formulas below extend the same warming family after the four Board formulas are secure. They do not change the official 63-formula roster.',
+  referencesTextEs: 'Las siete fórmulas siguientes amplían la misma familia después de dominar las cuatro fórmulas Board. No modifican el listado oficial de 63 fórmulas.',
+  referenceGroups: [
+    {
+      title: 'Channels and nutritive Qi', titleEs: 'Canales y Qi nutritivo',
+      items: [
+        ['Dang Gui Si Ni Tang', 'Channel Cold with Blood deficiency and chronically cold, painful extremities.', 'Frío en canales con deficiencia de Sangre y extremidades crónicamente frías y dolorosas.'],
+        ['Huang Qi Gui Zhi Wu Wu Tang', 'Superficial Blood painful obstruction with numbness from nutritive/protective-Qi deficiency.', 'Obstrucción dolorosa superficial con entumecimiento por deficiencia de Qi nutritivo/protector.']
+      ]
+    },
+    {
+      title: 'Middle, fluids, and Dampness', titleEs: 'Jiao Medio, líquidos y Humedad',
+      items: [
+        ['Xiao Jian Zhong Tang', 'Consumptive Middle-Burner Cold with intermittent spasm relieved by warmth and pressure.', 'Frío consuntivo del Jiao Medio con espasmo intermitente aliviado por calor y presión.'],
+        ['Gan Cao Gan Jiang Tang', 'Deficiency-Cold Lung atrophy with misdistributed clear fluids.', 'Atrofia pulmonar por Frío-deficiencia con líquidos claros mal distribuidos.'],
+        ['Bai Zhu Fu Zi Tang', 'Wind-Cold-Damp obstruction with Dampness predominating over pain.', 'Obstrucción por Viento-Frío-Humedad con predominio de Humedad sobre dolor.']
+      ]
+    },
+    {
+      title: 'Advanced Yang rescue', titleEs: 'Rescate avanzado de Yang',
+      items: [
+        ['Hui Yang Jiu Ji Tang', 'Three-Yin Cold with exhausted true Yang and deficient nutritive Qi.', 'Frío de los tres Yin con Yang verdadero agotado y Qi nutritivo deficiente.'],
+        ['Shen Fu Tang', 'Qi abandonment with Yang collapse, sweating, weak breathing and an almost absent pulse.', 'Abandono de Qi con colapso de Yang, sudor, respiración débil y pulso casi ausente.']
+      ]
+    }
+  ]
+};
+
 export const warmInteriorColdCategoryGuide = {
   priorityTitle: 'Supplementary Chapter 6: locate the depth of Cold',
   priorityTitleEs: 'Capítulo suplementario 6: localiza la profundidad del Frío',

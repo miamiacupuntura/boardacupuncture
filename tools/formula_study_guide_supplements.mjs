@@ -75,7 +75,11 @@ export const formulaStudyGuideSupplements = {
     comparisonEs: 'Jing Fang Bai Du San omite Ren Shen y conviene a una constitución más fuerte. Jiu Wei Qiang Huo Tang trata Viento-Frío-Humedad con Calor interior; Ren Shen Bai Du San se elige cuando la deficiencia de Qi es central.',
     safety: 'Warm and drying; contraindicated for Heat, Wind-Heat or Damp-Heat patterns. Breathing difficulty, persistent high fever, confusion, dehydration or low oxygen requires medical evaluation.',
     safetyEs: 'Tibia y secante; contraindicada en patrones de Calor, Viento-Calor o Humedad-Calor. Disnea, fiebre alta persistente, confusión, deshidratación u oxígeno bajo requiere evaluación médica.'
-  }
+  },
+  'Li Zhong Wan': {priority: 'core'},
+  'Wu Zhu Yu Tang': {priority: 'core'},
+  'Da Jian Zhong Tang': {priority: 'core'},
+  'Si Ni Tang': {priority: 'core'}
 };
 
 export const releaseExteriorCategoryGuide = {
