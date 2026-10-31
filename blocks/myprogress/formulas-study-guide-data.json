@@ -2050,8 +2050,8 @@
     "stabilize-bind": {
       "priorityTitle": "Board priority: master these three formulas first",
       "priorityTitleEs": "Prioridad Board: domina primero estas tres fórmulas",
-      "priorityText": "The official Stabilize and Bind domain contains three formulas. Chapter 9 overlaps with Si Shen Wan and Gu Jing Wan; Yu Ping Feng San remains an official Board formula but is discussed in Chapter 8 of the source.",
-      "priorityTextEs": "El dominio oficial Estabilizar y contener incluye tres fórmulas. El capítulo 9 coincide con Si Shen Wan y Gu Jing Wan; Yu Ping Feng San sigue siendo fórmula oficial del Board, pero la fuente la estudia en el capítulo 8.",
+      "priorityText": "The official Stabilize and Bind domain contains three formulas. Bensky Chapter 9 overlaps with Si Shen Wan (#50) and Gu Jing Wan (#51); Yu Ping Feng San (#49) remains an official Board formula but Bensky discusses it in Chapter 8.",
+      "priorityTextEs": "El dominio oficial Estabilizar y contener incluye tres fórmulas. El capítulo 9 de Bensky coincide con Si Shen Wan (#50) y Gu Jing Wan (#51); Yu Ping Feng San (#49) sigue siendo fórmula oficial del Board, pero Bensky la estudia en el capítulo 8.",
       "routeTitle": "Identify the site and mechanism of leakage",
       "routeTitleEs": "Identifica el sitio y mecanismo de la pérdida",
       "route": [
@@ -2104,8 +2104,8 @@
       ],
       "referencesTitle": "Source relationship and safety boundary",
       "referencesTitleEs": "Relación con la fuente y límite de seguridad",
-      "referencesText": "The complete Chapter 9 expansion contains 17 principal source formulas in five sections. It is an academic comparison layer and does not enlarge the official Board roster.",
-      "referencesTextEs": "La ampliación completa del capítulo 9 contiene 17 fórmulas principales de la fuente en cinco secciones. Es una capa de comparación académica y no amplía el listado oficial del Board.",
+      "referencesText": "Source: Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 9, pages 419–454. The 17 principal formulas form an academic comparison layer and do not enlarge the official Board roster.",
+      "referencesTextEs": "Fuente: Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 9, páginas 419–454. Las 17 fórmulas principales forman una capa de comparación académica y no amplían el listado oficial del Board.",
       "referenceGroups": [
         {
           "title": "Core boundaries",
@@ -4155,8 +4155,8 @@
     {
       "number": "S5",
       "key": "stabilize-bind-ch9",
-      "name": "Formulas That Stabilize and Bind · Chapter 9 source profiles",
-      "nameEs": "Fórmulas que estabilizan y contienen · perfiles fuente del capítulo 9",
+      "name": "Formulas That Stabilize and Bind · Bensky Chapter 9 source profiles",
+      "nameEs": "Fórmulas que estabilizan y contienen · perfiles del capítulo 9 de Bensky",
       "sourceChapter": 9,
       "sourcePages": "419–454"
     }

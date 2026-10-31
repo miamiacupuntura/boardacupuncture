@@ -92,8 +92,8 @@ $categorycopy = [
         'Estudia el capítulo completo de tonificación en seis secciones: Qi, Sangre, Qi y Sangre, Yin, Yang y Yin-Yang combinados.',
     ],
     'stabilize-bind-chapter-9' => [
-        'Study all 17 principal Chapter 9 formulas in five leakage-control sections while preserving the separate official Board roster.',
-        'Estudia las 17 fórmulas principales del capítulo 9 en cinco secciones de control de pérdidas, conservando separado el listado oficial del Board.',
+        'Study all 17 principal formulas in Bensky Chapter 9 across five leakage-control sections while preserving the separate official Board roster.',
+        'Estudia las 17 fórmulas principales del capítulo 9 de Bensky en cinco secciones de control de pérdidas, conservando separado el listado oficial del Board.',
     ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
@@ -262,8 +262,8 @@ foreach ($stabilizechapterplan as [$name, $sequence, $sectionkey, $englishname, 
 $stabilizechapteroverview = [
     'number' => 'S5',
     'key' => 'stabilize-bind-chapter-9',
-    'name' => 'Formulas That Stabilize and Bind · Complete Chapter 9',
-    'nameEs' => 'Fórmulas que estabilizan y contienen · Capítulo 9 completo',
+    'name' => 'Formulas That Stabilize and Bind · Complete Bensky Chapter 9',
+    'nameEs' => 'Fórmulas que estabilizan y contienen · Capítulo 9 completo de Bensky',
     'sourceChapter' => 9,
     'sourcePages' => '419–454',
     'formulas' => $stabilizechapterformulas,
@@ -689,14 +689,17 @@ echo $OUTPUT->header();
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-nine-shortcut-title">
                 <h4 id="chapter-nine-shortcut-title"><?php echo s($ises ? 'Capítulo 9 completo · 17 fórmulas' : 'Complete Chapter 9 · 17 formulas'); ?></h4>
                 <p><?php echo s($ises
-                    ? 'Dos fórmulas del capítulo aparecen en los Board Domains—Si Shen Wan y Gu Jing Wan—y la ampliación añade 15 perfiles principales relacionados. Yu Ping Feng San sigue siendo la tercera fórmula oficial de esta categoría, pero la fuente la estudia en el capítulo 8.'
-                    : 'Two chapter formulas appear in the Board Domains—Si Shen Wan and Gu Jing Wan—and the expansion adds 15 related principal profiles. Yu Ping Feng San remains the third official formula in this category, but the source discusses it in Chapter 8.'); ?></p>
+                    ? 'Dos fórmulas del capítulo 9 de Bensky aparecen en los Board Domains—Si Shen Wan (#50) y Gu Jing Wan (#51)—y la ampliación añade 15 perfiles principales relacionados. Yu Ping Feng San (#49) sigue siendo la tercera fórmula oficial de esta categoría, pero Bensky la estudia en el capítulo 8.'
+                    : 'Two formulas in Bensky Chapter 9 appear in the Board Domains—Si Shen Wan (#50) and Gu Jing Wan (#51)—and the expansion adds 15 related principal profiles. Yu Ping Feng San (#49) remains the third official formula in this category, but Bensky discusses it in Chapter 8.'); ?></p>
                 <div class="formula-study-guide__chapter-shortcut-actions">
                     <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizechapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 9 completo →' : 'Open complete Chapter 9 →'); ?></a>
                 </div>
             </section>
         <?php endif; ?>
         <?php if ($selected['key'] === 'stabilize-bind-chapter-9'): ?>
+            <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 9, páginas 419–454.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 9, pages 419–454.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-nine-principles-title">
                 <h4 id="chapter-nine-principles-title"><?php echo s($ises ? 'Principio central: tonificar la raíz y contener la rama' : 'Core principle: tonify the root and secure the branch'); ?></h4>
                 <p><?php echo s($ises
@@ -713,7 +716,7 @@ echo $OUTPUT->header();
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-nine-board-title">
                 <div>
                     <h4 id="chapter-nine-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 2 de 17' : 'Board Domains overlap · 2 of 17'); ?></h4>
-                    <p><?php echo s($ises ? 'Si Shen Wan es la fórmula 50 y Gu Jing Wan la 51. Las otras 15 fichas amplían la fuente sin modificar el listado oficial de 63.' : 'Si Shen Wan is formula 50 and Gu Jing Wan is 51. The other 15 cards extend the source without changing the official roster of 63.'); ?></p>
+                    <p><?php echo s($ises ? 'Marcadas en el directorio y en sus fichas: Si Shen Wan es la fórmula Board #50 y Gu Jing Wan la #51. Las otras 15 fichas proceden del capítulo 9 de Bensky y no modifican el listado oficial de 63.' : 'Marked in the directory and on their cards: Si Shen Wan is Board formula #50 and Gu Jing Wan is #51. The other 15 cards come from Bensky Chapter 9 and do not change the official roster of 63.'); ?></p>
                 </div>
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
             </section>
@@ -728,7 +731,10 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a></li>
+                                    <li>
+                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a>
+                                        <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Dominio Board #' : 'Board Domain #') . $chapterformula['number']); ?></span><?php endif; ?>
+                                    </li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -848,7 +854,9 @@ echo $OUTPUT->header();
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Principal del guideline' : 'Guideline core'); ?></span><?php endif; ?>
-                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s(is_numeric($formula['number']) ? ($ises ? 'Board + fuente' : 'Board + source') : ($ises ? 'Fuente suplementaria' : 'Supplementary source')); ?></span><?php endif; ?>
+                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s(is_numeric($formula['number'])
+                                ? (($ises ? 'Dominio Board · Fórmula #' : 'Board Domain · Formula #') . $formula['number'])
+                                : (($ises ? 'Bensky · Capítulo ' : 'Bensky · Chapter ') . $selected['sourceChapter'])); ?></span><?php endif; ?>
                             <span class="formula-study-guide__risk<?php echo $tier !== 'standard' ? ' formula-study-guide__risk--' . s($tier) : ''; ?>"><?php echo s($risklabel); ?></span>
                         </div>
                     </header>
@@ -920,8 +928,9 @@ echo $OUTPUT->header();
                         <?php if ($practiceurl !== null): ?>
                             <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
                         <?php else: ?>
-                            <span class="formula-study-guide__source-pages"><?php echo s(($ises ? 'Fuente: capítulo ' : 'Source: Chapter ')
-                                . $selected['sourceChapter'] . ($ises ? ' · págs. ' : ' · pp. ') . $formula['sourcePages']); ?></span>
+                            <span class="formula-study-guide__source-pages"><?php echo s('Bensky · '
+                                . ($ises ? 'capítulo ' : 'Chapter ') . $selected['sourceChapter']
+                                . ($ises ? ' · págs. ' : ' · pp. ') . $formula['sourcePages']); ?></span>
                         <?php endif; ?>
                     </div>
                     <details class="formula-study-guide__safety">

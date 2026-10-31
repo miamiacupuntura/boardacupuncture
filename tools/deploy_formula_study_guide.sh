@@ -61,6 +61,8 @@ grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 9" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Bensky et al., Chinese Herbal Medicine: Formulas & Strategies" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Dominio Board · Fórmula #" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "\$languageurl" "$TEMP_DIR/study-guide.php"
 grep -q "Español" "$TEMP_DIR/study-guide.php"
 
