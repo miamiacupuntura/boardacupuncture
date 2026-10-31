@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "categories": [
     {
       "number": 1,
@@ -247,6 +247,148 @@
               "Jia Jian Wei Rui Tang",
               "Wind-Heat with Yin deficiency, dry throat, thirst and little sweat.",
               "Viento-Calor con deficiencia de Yin, garganta seca, sed y poco sudor."
+            ]
+          ]
+        }
+      ]
+    },
+    "purge": {
+      "priorityTitle": "Guideline priority: master these 3 Cheng Qi formulas first",
+      "priorityTitleEs": "Prioridad del guideline: domina primero estas 3 fórmulas Cheng Qi",
+      "priorityText": "The current exam guideline requires the three Cheng Qi formulas below. Differentiate them by what has formed in the abdomen: focal distention, fullness, dryness and hardness. Secondary chapter formulas remain collapsed for comparison and safety review.",
+      "priorityTextEs": "El guideline actual exige las tres fórmulas Cheng Qi siguientes. Diferéncialas por lo que se ha formado en el abdomen: distensión focal, plenitud, sequedad y dureza. Las fórmulas secundarias del capítulo permanecen plegadas para comparación y revisión de seguridad.",
+      "routeTitle": "Four-step Cheng Qi decision route",
+      "routeTitleEs": "Ruta de decisión Cheng Qi en cuatro pasos",
+      "route": [
+        [
+          "1",
+          "Is this interior excess?",
+          "Look for constipation or circumfluence, abdominal resistance to pressure, a dry yellow-to-black coat and a deep, excessive pulse—not an unresolved exterior pattern or pure deficiency.",
+          "¿Es exceso interior?",
+          "Busca estreñimiento o desbordamiento, abdomen resistente a la presión, capa seca amarilla a negra y pulso profundo-excesivo; no un patrón exterior sin resolver ni deficiencia pura."
+        ],
+        [
+          "2",
+          "All four: focal distention, fullness, dryness and hardness?",
+          "When all four are severe, especially with pain worse on pressure and a deep-forceful pulse, choose Da Cheng Qi Tang.",
+          "¿Están los cuatro: distensión focal, plenitud, sequedad y dureza?",
+          "Cuando los cuatro son intensos, especialmente con dolor peor a la presión y pulso profundo-fuerte, elige Da Cheng Qi Tang."
+        ],
+        [
+          "3",
+          "Clumping without marked dryness?",
+          "Focal distention, fullness and hardness with less dryness and no need for Mang Xiao points to Xiao Cheng Qi Tang.",
+          "¿Aglomeración sin sequedad marcada?",
+          "Distensión focal, plenitud y dureza con menos sequedad y sin necesidad de Mang Xiao apuntan a Xiao Cheng Qi Tang."
+        ],
+        [
+          "4",
+          "Dryness without marked focal distention or fullness?",
+          "Mild constipation with irritability and dryness, but little focal distention or fullness, points to Tiao Wei Cheng Qi Tang.",
+          "¿Sequedad sin distensión focal ni plenitud marcadas?",
+          "Estreñimiento leve con irritabilidad y sequedad, pero poca distensión focal o plenitud, apunta a Tiao Wei Cheng Qi Tang."
+        ]
+      ],
+      "quickCompareTitle": "The three Cheng Qi formulas at a glance",
+      "quickCompareTitleEs": "Las tres fórmulas Cheng Qi de un vistazo",
+      "quickCompare": [
+        [
+          "Da Cheng Qi Tang",
+          "Severe Yangming organ clumping",
+          "Focal distention + fullness + dryness + hardness; pain worse on pressure",
+          "Aglomeración grave del órgano Yangming",
+          "Distensión focal + plenitud + sequedad + dureza; dolor peor a la presión"
+        ],
+        [
+          "Xiao Cheng Qi Tang",
+          "Moderate Heat clumping",
+          "Focal distention + fullness + hardness, but less dryness; no Mang Xiao",
+          "Aglomeración moderada de Calor",
+          "Distensión focal + plenitud + dureza, pero menos sequedad; sin Mang Xiao"
+        ],
+        [
+          "Tiao Wei Cheng Qi Tang",
+          "Mild Dry-Heat accumulation",
+          "Dryness and irritability with little focal distention or fullness; Gan Cao moderates",
+          "Acumulación leve de Calor-Sequedad",
+          "Sequedad e irritabilidad con poca distensión focal o plenitud; Gan Cao modera"
+        ]
+      ],
+      "referencesTitle": "Secondary formulas — comparison and safety only",
+      "referencesTitleEs": "Fórmulas secundarias — solo comparación y seguridad",
+      "referencesText": "These formulas sharpen pattern differentiation after the three required Cheng Qi cards are secure. Several are drastic, toxic or obsolete and must not be treated as routine alternatives.",
+      "referencesTextEs": "Estas fórmulas afinan la diferenciación después de dominar las tres tarjetas Cheng Qi obligatorias. Varias son drásticas, tóxicas u obsoletas y no deben tratarse como alternativas rutinarias.",
+      "referenceGroups": [
+        {
+          "title": "Change the purging strategy",
+          "titleEs": "Cambiar la estrategia de purgación",
+          "items": [
+            [
+              "Da Xian Xiong Tang",
+              "Heat and water clump in the chest or epigastrium; extreme hardness and pain even with light pressure. Contains toxic Gan Sui.",
+              "Calor y agua se aglomeran en pecho o epigastrio; dureza y dolor extremos incluso con presión ligera. Contiene Gan Sui tóxico."
+            ],
+            [
+              "Da Huang Fu Zi Tang",
+              "Cold accumulation: abdominal or hypochondriac pain, cold extremities, white greasy coat and a deep-tight-wiry pulse.",
+              "Acumulación fría: dolor abdominal o hipocondríaco, extremidades frías, capa blanca grasosa y pulso profundo-tenso-de cuerda."
+            ],
+            [
+              "Wen Pi Tang",
+              "Cold accumulation with Spleen-Yang deficiency; warms, tonifies and purges.",
+              "Acumulación fría con deficiencia de Yang del Bazo; calienta, tonifica y purga."
+            ],
+            [
+              "Ma Zi Ren Wan",
+              "Heat-Dryness and Spleen bind: hard stool with normal or frequent urination; moistens and purges mildly.",
+              "Calor-Sequedad y Spleen bind: heces duras con micción normal o frecuente; humedece y purga suavemente."
+            ]
+          ]
+        },
+        {
+          "title": "Purge while protecting deficiency",
+          "titleEs": "Purgar mientras se protege la deficiencia",
+          "items": [
+            [
+              "Huang Long Tang",
+              "Da Cheng Qi Tang-type excess with Qi and Blood deficiency: fatigue, shortness of breath and a deficient pulse.",
+              "Exceso tipo Da Cheng Qi Tang con deficiencia de Qi y Sangre: fatiga, disnea y pulso deficiente."
+            ],
+            [
+              "Zeng Ye Cheng Qi Tang",
+              "Extreme dry stool that purging alone cannot move; nourish fluids first so the stuck boat can float.",
+              "Heces extremadamente secas que la purgación sola no mueve; primero nutre líquidos para que la barca atascada pueda flotar."
+            ]
+          ]
+        },
+        {
+          "title": "Drive out excess water — high risk",
+          "titleEs": "Expulsar exceso de agua — alto riesgo",
+          "items": [
+            [
+              "Shi Zao Tang",
+              "Suspended thin mucus in the chest and hypochondria; toxic, drastic and for very short professional use only.",
+              "Flema-fluido suspendida en pecho e hipocondrios; tóxica, drástica y solo para uso profesional muy breve."
+            ],
+            [
+              "Zhou Che Wan",
+              "Historical emergency purgative for water-Heat in robust patients; contains obsolete toxic calomel and is not recommended.",
+              "Purgante histórico de emergencia para agua-Calor en pacientes robustos; contiene calomel tóxico obsoleto y no se recomienda."
+            ],
+            [
+              "Yu Gong San",
+              "Yang edema with Qi stagnation; milder than Shi Zao Tang but still an excess-only purgative.",
+              "Edema Yang con estancamiento de Qi; menos drástica que Shi Zao Tang, pero sigue siendo purgante solo para exceso."
+            ],
+            [
+              "Ji Jiao Li Huang Wan",
+              "Water in the Stomach and Intestines with Qi stagnation, constipation, reduced urination and a yellow greasy coat.",
+              "Agua en Estómago e Intestinos con estancamiento de Qi, estreñimiento, orina reducida y capa amarilla grasosa."
+            ],
+            [
+              "Shu Zao Yin Zi",
+              "Severe Yang edema flooding interior and exterior; contains toxic Shang Lu and is contraindicated in deficiency edema.",
+              "Edema Yang severo que inunda interior y exterior; contiene Shang Lu tóxico y está contraindicado en edema por deficiencia."
             ]
           ]
         }
@@ -550,18 +692,25 @@
       "category": "Purge",
       "categoryEs": "Purgar",
       "kings": "Da Huang",
-      "pattern": "Severe Yangming-Fu Heat accumulation with hardness, dryness, fullness and focal distention.",
-      "patternEs": "Acumulación grave de Calor en Yangming-Fu con dureza, sequedad, plenitud y distensión focal.",
+      "pattern": "Severe Yangming organ Heat binding with matter: focal distention, fullness, dryness and hardness.",
+      "patternEs": "Calor grave del órgano Yangming ligado a materia: distensión focal, plenitud, sequedad y dureza.",
       "action": "Vigorously purge Heat accumulation.",
       "actionEs": "Purga vigorosamente la acumulación de Calor.",
-      "clue": "Severe constipation and a hard, full, painful abdomen that resists pressure.",
-      "clueEs": "Estreñimiento intenso y abdomen duro, lleno y doloroso que rechaza la presión.",
+      "clue": "Severe constipation—or foul watery circumfluence—plus a hard, full abdomen with pain worse on pressure and a deep, excessive, forceful pulse.",
+      "clueEs": "Estreñimiento intenso —o diarrea acuosa fétida por desbordamiento— más abdomen duro y lleno, dolor peor a la presión y pulso profundo, excesivo y fuerte.",
       "ingredients": "Da Huang, Mang Xiao, Hou Po and Zhi Shi.",
       "ingredientsEs": "Da Huang, Mang Xiao, Hou Po y Zhi Shi.",
-      "safety": "A strong professional purgative; avoid in pregnancy, frailty, dehydration or suspected obstruction.",
-      "safetyEs": "Purgante fuerte de uso profesional; evitar en embarazo, fragilidad, deshidratación o sospecha de obstrucción.",
+      "safety": "Potent, short-course professional purgative; stop once loose stool occurs. Contraindicated in pregnancy and generally inappropriate with an unresolved exterior pattern, Shaoyang vomiting, interior Cold, marked deficiency, depleted fluids, frailty or no material to purge. Severe pain, vomiting, dehydration, delirium or suspected obstruction requires urgent biomedical assessment.",
+      "safetyEs": "Purgante potente, profesional y de uso breve; suspender al aparecer heces sueltas. Contraindicado en embarazo y generalmente inapropiado con patrón exterior sin resolver, vómito Shaoyang, Frío interior, deficiencia marcada, líquidos agotados, fragilidad o ausencia de materia que purgar. Dolor intenso, vómito, deshidratación, delirio o sospecha de obstrucción exige evaluación biomédica urgente.",
       "safetyTier": "high",
-      "practiceCount": 13
+      "practiceCount": 13,
+      "priority": "core",
+      "examFocus": "All four abdominal qualities are pronounced: focal distention (Zhi Shi), fullness (Hou Po), dryness (Mang Xiao) and formed excess/hardness (Da Huang). Preparation matters: add Da Huang late and dissolve Mang Xiao in the strained decoction.",
+      "examFocusEs": "Las cuatro cualidades abdominales son marcadas: distensión focal (Zhi Shi), plenitud (Hou Po), sequedad (Mang Xiao) y exceso formado/dureza (Da Huang). La preparación importa: añadir Da Huang al final y disolver Mang Xiao en la decocción colada.",
+      "ingredientRoles": "Da Huang is the chief that purges formed Heat accumulation; Mang Xiao moistens dryness and softens hardness; Zhi Shi breaks clumps and focal distention; Hou Po moves Qi and relieves fullness so stool can be expelled.",
+      "ingredientRolesEs": "Da Huang es el jefe que purga la acumulación formada de Calor; Mang Xiao humedece la sequedad y ablanda la dureza; Zhi Shi rompe aglomeraciones y distensión focal; Hou Po mueve el Qi y alivia la plenitud para permitir expulsar las heces.",
+      "comparison": "Bai Hu Tang clears outward-moving, formless Yangming Heat with a flooding pulse; Da Cheng Qi Tang purges Heat that has bound to matter, with abdominal resistance and a deep-forceful pulse. Xiao Cheng Qi Tang lacks Mang Xiao because dryness is less severe.",
+      "comparisonEs": "Bai Hu Tang aclara Calor Yangming sin forma que se mueve hacia afuera con pulso desbordante; Da Cheng Qi Tang purga Calor ligado a materia, con resistencia abdominal y pulso profundo-fuerte. Xiao Cheng Qi Tang omite Mang Xiao porque la sequedad es menos grave."
     },
     {
       "number": 14,
@@ -570,18 +719,25 @@
       "category": "Purge",
       "categoryEs": "Purgar",
       "kings": "Da Huang",
-      "pattern": "Milder Yangming-Fu clumping with fullness and focal distention but less dryness.",
-      "patternEs": "Aglomeración más leve de Yangming-Fu con plenitud y distensión focal, pero menos sequedad.",
+      "pattern": "Moderate Yangming organ Heat clumping with focal distention, fullness and hardness, but less dryness.",
+      "patternEs": "Aglomeración moderada de Calor del órgano Yangming con distensión focal, plenitud y dureza, pero menos sequedad.",
       "action": "Moderately purge clumped Heat.",
       "actionEs": "Purga moderadamente el Calor aglomerado.",
-      "clue": "Constipation with abdominal fullness and a slippery-rapid pulse, without the severe dryness of Da Cheng Qi Tang.",
-      "clueEs": "Estreñimiento con plenitud abdominal y pulso resbaladizo-rápido, sin la sequedad intensa de Da Cheng Qi Tang.",
+      "clue": "Constipation with focal distention and fullness, pain not markedly worse on pressure, an old-looking dirty-dry yellow coat and a slippery-rapid pulse.",
+      "clueEs": "Estreñimiento con distensión focal y plenitud, dolor que no empeora marcadamente con presión, capa amarilla vieja, sucia y seca, y pulso resbaladizo-rápido.",
       "ingredients": "Da Huang, Hou Po and Zhi Shi.",
       "ingredientsEs": "Da Huang, Hou Po y Zhi Shi.",
-      "safety": "Not a routine laxative; severe abdominal pain, vomiting or inability to pass gas needs urgent assessment.",
-      "safetyEs": "No es un laxante rutinario; dolor abdominal intenso, vómito o incapacidad para expulsar gases requiere evaluación urgente.",
+      "safety": "Not a routine laxative and not for pure deficiency constipation. Avoid in pregnancy, frailty or dehydration. Severe abdominal pain, vomiting, fever, inability to pass gas or suspected obstruction requires urgent biomedical assessment; do not delay stronger care when the full Da Cheng Qi Tang presentation is present.",
+      "safetyEs": "No es un laxante rutinario ni sirve para estreñimiento por deficiencia pura. Evitar en embarazo, fragilidad o deshidratación. Dolor abdominal intenso, vómito, fiebre, incapacidad para expulsar gases o sospecha de obstrucción exige evaluación biomédica urgente; no retrasar atención más fuerte cuando está presente el cuadro completo de Da Cheng Qi Tang.",
       "safetyTier": "standard",
-      "practiceCount": 5
+      "practiceCount": 5,
+      "priority": "core",
+      "examFocus": "Think three of the four Da Cheng Qi qualities: focal distention, fullness and hardness are present, but marked dryness is absent. Therefore Mang Xiao is omitted and Da Huang is cooked with the other herbs to moderate its action.",
+      "examFocusEs": "Piensa en tres de las cuatro cualidades de Da Cheng Qi: hay distensión focal, plenitud y dureza, pero falta sequedad marcada. Por eso se omite Mang Xiao y Da Huang se cocina con las demás hierbas para moderar su acción.",
+      "ingredientRoles": "Da Huang moderately purges clumped Heat; Hou Po moves Qi and reduces fullness; Zhi Shi breaks focal distention and accumulation. Lower Hou Po and Zhi Shi doses reflect less severe Qi stagnation than in Da Cheng Qi Tang.",
+      "ingredientRolesEs": "Da Huang purga moderadamente el Calor aglomerado; Hou Po mueve el Qi y reduce plenitud; Zhi Shi rompe distensión focal y acumulación. Las dosis menores de Hou Po y Zhi Shi reflejan estancamiento de Qi menos grave que en Da Cheng Qi Tang.",
+      "comparison": "Da Cheng Qi Tang adds Mang Xiao for severe dryness and treats pain that clearly worsens on pressure. Tiao Wei Cheng Qi Tang retains Mang Xiao for dryness but replaces Hou Po and Zhi Shi with Gan Cao because focal distention and fullness are minimal.",
+      "comparisonEs": "Da Cheng Qi Tang añade Mang Xiao para sequedad grave y trata dolor que empeora claramente con presión. Tiao Wei Cheng Qi Tang conserva Mang Xiao para sequedad, pero reemplaza Hou Po y Zhi Shi con Gan Cao porque la distensión focal y la plenitud son mínimas."
     },
     {
       "number": 15,
@@ -590,18 +746,25 @@
       "category": "Purge",
       "categoryEs": "Purgar",
       "kings": "Da Huang",
-      "pattern": "Dry Heat in the Stomach and Intestines with mild Yangming-Fu constipation.",
-      "patternEs": "Calor seco en Estómago e Intestinos con estreñimiento leve de Yangming-Fu.",
+      "pattern": "Mild Yangming Dry-Heat accumulation without pronounced focal distention or abdominal fullness.",
+      "patternEs": "Acumulación leve de Calor-Sequedad Yangming sin distensión focal ni plenitud abdominal pronunciadas.",
       "action": "Mildly purge clumped Heat and soften dryness.",
       "actionEs": "Purga suavemente el Calor aglomerado y ablanda la sequedad.",
-      "clue": "Constipation with thirst and irritability but little marked abdominal focal distention.",
-      "clueEs": "Estreñimiento con sed e irritabilidad, pero poca distensión abdominal focal marcada.",
+      "clue": "Mild constipation with irritability and a slippery-rapid pulse, but no marked focal distention or fullness; dryness is more important than Qi stagnation.",
+      "clueEs": "Estreñimiento leve con irritabilidad y pulso resbaladizo-rápido, pero sin distensión focal ni plenitud marcadas; la sequedad importa más que el estancamiento de Qi.",
       "ingredients": "Da Huang, Mang Xiao and Zhi Gan Cao.",
       "ingredientsEs": "Da Huang, Mang Xiao y Zhi Gan Cao.",
-      "safety": "Avoid in pregnancy, frailty, dehydration and suspected obstruction.",
-      "safetyEs": "Evitar durante embarazo, fragilidad, deshidratación y sospecha de obstrucción.",
+      "safety": "Still a purgative—not a routine laxative. Avoid in pregnancy, frailty, depleted fluids or suspected obstruction. Persistent constipation, bleeding, severe pain, vomiting, fever or inability to pass gas requires biomedical assessment.",
+      "safetyEs": "Sigue siendo un purgante, no un laxante rutinario. Evitar en embarazo, fragilidad, líquidos agotados o sospecha de obstrucción. Estreñimiento persistente, sangrado, dolor intenso, vómito, fiebre o incapacidad para expulsar gases exige evaluación biomédica.",
       "safetyTier": "standard",
-      "practiceCount": 6
+      "practiceCount": 6,
+      "priority": "core",
+      "examFocus": "This is the mildest Cheng Qi formula: Mang Xiao remains to soften dryness, while Gan Cao replaces the forceful Qi-moving pair Hou Po and Zhi Shi because fullness and focal distention are absent.",
+      "examFocusEs": "Es la fórmula Cheng Qi más suave: Mang Xiao permanece para ablandar la sequedad, mientras Gan Cao reemplaza la pareja movilizadora fuerte Hou Po y Zhi Shi porque faltan plenitud y distensión focal.",
+      "ingredientRoles": "Da Huang mildly purges clumped Heat; Mang Xiao softens dry stool and moistens hardness; Zhi Gan Cao harmonizes the Stomach and moderates the harshness of the two purgatives.",
+      "ingredientRolesEs": "Da Huang purga suavemente el Calor aglomerado; Mang Xiao ablanda heces secas y humedece dureza; Zhi Gan Cao armoniza el Estómago y modera la agresividad de los dos purgantes.",
+      "comparison": "Xiao Cheng Qi Tang treats more Qi stagnation—focal distention and fullness—with Hou Po and Zhi Shi but no Mang Xiao. Da Cheng Qi Tang contains all four herbs for the full severe pattern.",
+      "comparisonEs": "Xiao Cheng Qi Tang trata mayor estancamiento de Qi —distensión focal y plenitud— con Hou Po y Zhi Shi, pero sin Mang Xiao. Da Cheng Qi Tang contiene las cuatro hierbas para el patrón grave completo."
     },
     {
       "number": 16,
