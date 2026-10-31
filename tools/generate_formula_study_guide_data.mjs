@@ -41,6 +41,11 @@ import {
   tonifyChapterCategoryGuides,
   tonifyChapterFormulas
 } from './tonify_formula_supplement.mjs';
+import {
+  stabilizeBindChapterCategory,
+  stabilizeBindChapterFormulas,
+  stabilizeBindCoreCategoryGuide
+} from './stabilize_bind_formula_supplement.mjs';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputPath = resolve(repositoryRoot, 'blocks/myprogress/formulas-study-guide-data.json');
@@ -124,7 +129,7 @@ if (categories.length !== 14 || formulas.length !== 63) {
 }
 
 const output = {
-  version: 4,
+  version: 5,
   categories,
   categoryGuides: {
     ...(existingData.categoryGuides || {}),
@@ -133,6 +138,7 @@ const output = {
     'dispel-summerheat': summerheatCategoryGuide,
     'warm-interior-cold': warmInteriorColdCategoryGuide,
     'exterior-interior-excess': exteriorInteriorExcessCategoryGuide,
+    'stabilize-bind': stabilizeBindCoreCategoryGuide,
     ...tonifyChapterCategoryGuides
   },
   formulas,
@@ -140,13 +146,15 @@ const output = {
     summerheatCategory,
     warmInteriorColdCategory,
     exteriorInteriorExcessCategory,
-    ...tonifyChapterCategories
+    ...tonifyChapterCategories,
+    stabilizeBindChapterCategory
   ],
   supplementalFormulas: [
     ...summerheatFormulas,
     ...warmInteriorColdFormulas,
     ...exteriorInteriorExcessFormulas,
-    ...tonifyChapterFormulas
+    ...tonifyChapterFormulas,
+    ...stabilizeBindChapterFormulas
   ]
 };
 writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`);
@@ -155,3 +163,4 @@ console.log(`Added ${summerheatFormulas.length} supplemental formulas from Chapt
 console.log(`Added ${warmInteriorColdFormulas.length} supplemental formulas from Chapter ${warmInteriorColdCategory.sourceChapter}.`);
 console.log(`Added ${exteriorInteriorExcessFormulas.length} supplemental formulas from Chapter ${exteriorInteriorExcessCategory.sourceChapter}.`);
 console.log(`Added ${tonifyChapterFormulas.length} supplemental formulas across ${tonifyChapterCategories.length} sections from Chapter 8.`);
+console.log(`Added ${stabilizeBindChapterFormulas.length} unique supplemental profiles from Chapter 9.`);

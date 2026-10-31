@@ -40,11 +40,16 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => str_ends_with($formula["categoryKey"] ?? "", "-ch8")
     );
+    $chapter9 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "stabilize-bind-ch9"
+    );
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 9
-            || count($data["supplementalFormulas"] ?? []) !== 69
-            || count($chapter8) !== 45) {
+            || count($data["supplementalCategories"] ?? []) !== 10
+            || count($data["supplementalFormulas"] ?? []) !== 84
+            || count($chapter8) !== 45
+            || count($chapter9) !== 15) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
@@ -53,6 +58,9 @@ php -r '
 grep -q "tonify-chapter-8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 9" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo del capítulo 9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "\$languageurl" "$TEMP_DIR/study-guide.php"
 grep -q "Español" "$TEMP_DIR/study-guide.php"
 
@@ -86,7 +94,8 @@ fi
 grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULO 8 INSTALADO EN MOODLE"
+echo "CAPÍTULOS 8 Y 9 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
+echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "Respaldo: $BACKUP_DIR"

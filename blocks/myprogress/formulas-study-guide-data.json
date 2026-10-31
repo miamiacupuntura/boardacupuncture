@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "categories": [
     {
       "number": 1,
@@ -2046,6 +2046,89 @@
           ]
         }
       ]
+    },
+    "stabilize-bind": {
+      "priorityTitle": "Board priority: master these three formulas first",
+      "priorityTitleEs": "Prioridad Board: domina primero estas tres fórmulas",
+      "priorityText": "The official Stabilize and Bind domain contains three formulas. Chapter 9 overlaps with Si Shen Wan and Gu Jing Wan; Yu Ping Feng San remains an official Board formula but is discussed in Chapter 8 of the source.",
+      "priorityTextEs": "El dominio oficial Estabilizar y contener incluye tres fórmulas. El capítulo 9 coincide con Si Shen Wan y Gu Jing Wan; Yu Ping Feng San sigue siendo fórmula oficial del Board, pero la fuente la estudia en el capítulo 8.",
+      "routeTitle": "Identify the site and mechanism of leakage",
+      "routeTitleEs": "Identifica el sitio y mecanismo de la pérdida",
+      "route": [
+        [
+          "1",
+          "Exterior",
+          "Spontaneous sweat, draft aversion and recurrent infections → Yu Ping Feng San.",
+          "Exterior",
+          "Sudor espontáneo, aversión a corrientes e infecciones recurrentes → Yu Ping Feng San."
+        ],
+        [
+          "2",
+          "Intestines",
+          "Predawn watery diarrhea with Cold and weak low back → Si Shen Wan.",
+          "Intestinos",
+          "Diarrea acuosa antes del amanecer con Frío y lumbar débil → Si Shen Wan."
+        ],
+        [
+          "3",
+          "Uterus",
+          "Continuous bright-red bleeding with Heat and Yin deficiency → Gu Jing Wan.",
+          "Útero",
+          "Sangrado rojo brillante continuo con Calor y deficiencia de Yin → Gu Jing Wan."
+        ]
+      ],
+      "quickCompareTitle": "Official Board formulas: decisive separation",
+      "quickCompareTitleEs": "Fórmulas oficiales del Board: separación decisiva",
+      "quickCompare": [
+        [
+          "Yu Ping Feng San",
+          "Unstable Exterior from protective-Qi deficiency",
+          "Recurrent colds · spontaneous sweat · draft aversion",
+          "Exterior inestable por deficiencia de Qi protector",
+          "Resfriados recurrentes · sudor espontáneo · aversión a corrientes"
+        ],
+        [
+          "Si Shen Wan",
+          "Spleen-Kidney Yang deficiency",
+          "Predawn diarrhea · undigested food · Cold limbs",
+          "Deficiencia de Yang de Bazo-Riñón",
+          "Diarrea al amanecer · alimento no digerido · miembros fríos"
+        ],
+        [
+          "Gu Jing Wan",
+          "Heat in Chong/Ren over Yin deficiency",
+          "Very red continuous bleeding · Heat signs · red tongue",
+          "Calor en Chong/Ren sobre deficiencia de Yin",
+          "Sangrado continuo muy rojo · signos de Calor · lengua roja"
+        ]
+      ],
+      "referencesTitle": "Source relationship and safety boundary",
+      "referencesTitleEs": "Relación con la fuente y límite de seguridad",
+      "referencesText": "The complete Chapter 9 expansion contains 17 principal source formulas in five sections. It is an academic comparison layer and does not enlarge the official Board roster.",
+      "referencesTextEs": "La ampliación completa del capítulo 9 contiene 17 fórmulas principales de la fuente en cinco secciones. Es una capa de comparación académica y no amplía el listado oficial del Board.",
+      "referenceGroups": [
+        {
+          "title": "Core boundaries",
+          "titleEs": "Límites centrales",
+          "items": [
+            [
+              "Do not trap excess",
+              "Do not astringe while an unresolved pathogen or excess remains.",
+              "No astringir mientras persista un patógeno o exceso no resuelto."
+            ],
+            [
+              "Urgent loss",
+              "Collapse, heavy bleeding, severe diarrhea or respiratory distress requires urgent medical care.",
+              "Colapso, sangrado abundante, diarrea grave o dificultad respiratoria requieren atención urgente."
+            ],
+            [
+              "Treat the root",
+              "After controlling leakage, continue treatment of the underlying deficiency or mechanism.",
+              "Tras controlar la pérdida, continuar tratando la deficiencia o mecanismo subyacente."
+            ]
+          ]
+        }
+      ]
     }
   },
   "formulas": [
@@ -3594,7 +3677,8 @@
         "trigger": "Trastorno contraído externamente con aversión al viento, sudoración y pulso moderado",
         "change": "Añadir Gui Zhi",
         "source": "Yu Ping Feng San formula profile."
-      }
+      },
+      "priority": "core"
     },
     {
       "number": 50,
@@ -3624,7 +3708,8 @@
         "trigger": "Prolapso rectal",
         "change": "Añadir Huang Qi, Dang Shen y Sheng Ma",
         "source": "Si Shen Wan formula profile."
-      }
+      },
+      "priority": "core"
     },
     {
       "number": 51,
@@ -3654,7 +3739,8 @@
         "trigger": "Deficiencia de yin más grave caracterizada por menstruación prolongada con sangre roja y escasa, rubor malar, palmas y plantas calientes, garganta y boca secas, lengua roja con poca saburra y pulso filiforme y rápido",
         "change": "Retirar Huang Qin y Xiang Fu; añadir Di Gu Pi y Shu Di Huang",
         "source": "Gu Jing Wan formula profile, p. 553."
-      }
+      },
+      "priority": "core"
     },
     {
       "number": 52,
@@ -4065,6 +4151,14 @@
       "sourceChapter": 8,
       "sourcePages": "405–411",
       "safetyKey": "yinyang"
+    },
+    {
+      "number": "S5",
+      "key": "stabilize-bind-ch9",
+      "name": "Formulas That Stabilize and Bind · Chapter 9 source profiles",
+      "nameEs": "Fórmulas que estabilizan y contienen · perfiles fuente del capítulo 9",
+      "sourceChapter": 9,
+      "sourcePages": "419–454"
     }
   ],
   "supplementalFormulas": [
@@ -6608,6 +6702,436 @@
       "ingredientsEs": "Xian Mao 6–15 g, Yin Yang Huo 9–15 g, Ba Ji Tian 9 g, Huang Bai 4.5–9 g, Zhi Mu 4.5–9 g y Dang Gui 9 g.",
       "examFocus": "Simultaneous Cold below and Fire above: warm deficient Kidney Yang while Zhi Mu-Huang Bai drain flaring Fire.",
       "examFocusEs": "Frío abajo y Fuego arriba simultáneos: calentar Yang renal deficiente mientras Zhi Mu-Huang Bai drenan Fuego ascendente."
+    },
+    {
+      "number": "C9-01",
+      "sequence": 1,
+      "name": "Mu Li San",
+      "englishName": "Oyster Shell Powder",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Stabilize the Exterior and Stop Sweating",
+      "groupEs": "Estabilizar el Exterior y detener la sudoración",
+      "sourcePages": "420–422",
+      "kings": "Duan Mu Li",
+      "pattern": "Unstable protective Qi with constrained Heat at the nutritive-Qi level.",
+      "patternEs": "Qi protector inestable con Calor constreñido en el nivel del Qi nutritivo.",
+      "action": "Inhibits sweating and stabilizes the Exterior.",
+      "actionEs": "Inhibe la sudoración y estabiliza el Exterior.",
+      "clue": "Chronic spontaneous sweating, worse at night, with palpitations, easy startling, shortness of breath and a thin, frail pulse.",
+      "clueEs": "Sudor espontáneo crónico, peor de noche, con palpitaciones, sobresalto fácil, disnea y pulso fino y frágil.",
+      "ingredients": "Duan Mu Li, Huang Qi, Ma Huang Gen, Fu Xiao Mai.",
+      "ingredientsEs": "Duan Mu Li, Huang Qi, Ma Huang Gen, Fu Xiao Mai.",
+      "safety": "Inappropriate for profuse oily sweating from exhaustion of Yin or Yang. Persistent night sweats, chest symptoms, fever or weight loss require medical evaluation.",
+      "safetyEs": "Inadecuada para sudor aceitoso profuso por agotamiento de Yin o Yang. Sudor nocturno persistente, síntomas torácicos, fiebre o pérdida de peso requieren evaluación médica.",
+      "safetyTier": "high",
+      "examFocus": "Heart/nutritive-Qi signs plus sweating worse at night separate it from a simple protective-Qi deficiency.",
+      "examFocusEs": "Los signos de Corazón/Qi nutritivo y el sudor peor de noche la separan de una deficiencia simple de Qi protector.",
+      "comparison": "Yu Ping Feng San emphasizes recurrent infections, draft aversion and Lung protective-Qi deficiency; Dang Gui Liu Huang Tang fits stronger deficiency-Fire night sweating.",
+      "comparisonEs": "Yu Ping Feng San enfatiza infecciones recurrentes, aversión a corrientes y deficiencia de Qi protector de Pulmón; Dang Gui Liu Huang Tang corresponde a sudor nocturno por Fuego de deficiencia más intenso.",
+      "associated": [
+        [
+          "Bai Zi Ren Wan",
+          "Associated sweating formula in the source.",
+          "Fórmula asociada para sudoración en la fuente."
+        ],
+        [
+          "Gu Biao Zhi Han Tang",
+          "Associated formula that secures the Exterior and stops sweating.",
+          "Fórmula asociada que asegura el Exterior y detiene el sudor."
+        ]
+      ]
+    },
+    {
+      "number": "C9-02",
+      "sequence": 2,
+      "name": "Jiu Xian San",
+      "englishName": "Nine-Immortal Powder",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure the Lungs and Stop Coughing",
+      "groupEs": "Asegurar los Pulmones y detener la tos",
+      "sourcePages": "423–424",
+      "kings": "Ren Shen",
+      "pattern": "Chronic cough depleting both Lung Qi and Lung Yin.",
+      "patternEs": "Tos crónica que agota simultáneamente Qi y Yin de Pulmón.",
+      "action": "Secures the Lungs, stops cough, augments Qi and nourishes Yin.",
+      "actionEs": "Asegura los Pulmones, detiene la tos, fortalece Qi y nutre Yin.",
+      "clue": "Chronic unremitting cough with wheezing, shiny-white complexion, shortness of breath, spontaneous sweating and a deficient, rapid pulse.",
+      "clueEs": "Tos crónica incesante con sibilancias, tez blanca brillante, disnea, sudor espontáneo y pulso deficiente y rápido.",
+      "ingredients": "Ren Shen, Wu Mei, Wu Wei Zi, E Jiao, Kuan Dong Hua, Chuan Bei Mu, Jie Geng, Sang Bai Pi; the historical Ying Su Ke is obsolete and excluded.",
+      "ingredientsEs": "Ren Shen, Wu Mei, Wu Wei Zi, E Jiao, Kuan Dong Hua, Chuan Bei Mu, Jie Geng, Sang Bai Pi; the historical Ying Su Ke is obsolete and excluded.",
+      "safety": "The historical Ying Su Ke is obsolete/illegal in many jurisdictions and must not be used; the source names He Zi, Wu Bei Zi or Bai Guo as substitutions. Do not restrain cough while pronounced Phlegm or an Exterior pathogen remains. E Jiao is animal-derived. Breathing difficulty or blood-streaked sputum needs medical assessment.",
+      "safetyEs": "La Ying Su Ke histórica es obsoleta/ilegal en muchas jurisdicciones y no debe usarse; la fuente cita He Zi, Wu Bei Zi o Bai Guo como sustitutos. No contener la tos mientras persistan Flema marcada o patógeno Exterior. E Jiao es de origen animal. Disnea o esputo con sangre requieren evaluación médica.",
+      "safetyTier": "critical",
+      "examFocus": "A late-stage cough formula: use only after the pathogen or obstructing root has been eliminated.",
+      "examFocusEs": "Fórmula para etapa tardía de la tos: solo después de eliminar el patógeno o la obstrucción de raíz.",
+      "comparison": "Bu Fei E Jiao Tang emphasizes Yin enrichment and Heat clearing; Jiu Xian San adds three astringent strategies for combined Qi-Yin deficiency.",
+      "comparisonEs": "Bu Fei E Jiao Tang enfatiza enriquecer Yin y aclarar Calor; Jiu Xian San añade tres estrategias astringentes para deficiencia combinada de Qi-Yin."
+    },
+    {
+      "number": "C9-03",
+      "sequence": 3,
+      "name": "Zhen Ren Yang Zang Tang",
+      "englishName": "True Man's Decoction to Nourish the Organs",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Bind the Intestines and Secure Abandoned Conditions",
+      "groupEs": "Contener los Intestinos y asegurar cuadros de abandono",
+      "sourcePages": "425–426",
+      "kings": "Ren Shen, Chao Bai Zhu",
+      "pattern": "Spleen and Kidney Yang deficiency with instability of the Intestines.",
+      "patternEs": "Deficiencia de Yang de Bazo y Riñón con inestabilidad de los Intestinos.",
+      "action": "Warms the Middle, tonifies deficiency, restrains intestinal leakage and stops diarrhea.",
+      "actionEs": "Calienta el Centro, tonifica deficiencia, contiene pérdidas intestinales y detiene diarrea.",
+      "clue": "Unremitting diarrhea or chronic dysentery, possibly with incontinence or prolapse, and abdominal pain relieved by warmth or pressure.",
+      "clueEs": "Diarrea incesante o disentería crónica, posible incontinencia o prolapso, y dolor abdominal aliviado por calor o presión.",
+      "ingredients": "Ren Shen, Chao Bai Zhu, Rou Gui, Wei Rou Dou Kou, He Zi, Bai Shao, Dang Gui, Mu Xiang, Zhi Gan Cao; historical Ying Su Ke is excluded.",
+      "ingredientsEs": "Ren Shen, Chao Bai Zhu, Rou Gui, Wei Rou Dou Kou, He Zi, Bai Shao, Dang Gui, Mu Xiang, Zhi Gan Cao; historical Ying Su Ke is excluded.",
+      "safety": "Never use for excess, stagnation or Damp-Heat. Historical Ying Su Ke must not be presented as usable. Blood or pus in stool, dehydration, fever, severe pain or prolapse requires medical evaluation.",
+      "safetyEs": "Nunca usar para exceso, estancamiento o Humedad-Calor. La Ying Su Ke histórica no debe presentarse como utilizable. Sangre o pus en heces, deshidratación, fiebre, dolor grave o prolapso requieren evaluación médica.",
+      "safetyTier": "critical",
+      "examFocus": "The formula prioritizes uncontrolled bowel leakage while also warming and supporting depleted Middle Qi and Blood.",
+      "examFocusEs": "Prioriza la pérdida intestinal incontrolada mientras calienta y apoya Qi del Centro y Sangre agotados.",
+      "comparison": "Si Shen Wan primarily warms Mingmen for daybreak diarrhea; this formula prioritizes uncontrolled bowel movements regardless of timing.",
+      "comparisonEs": "Si Shen Wan calienta principalmente Mingmen para diarrea al amanecer; esta fórmula prioriza evacuaciones incontroladas sin importar el horario."
+    },
+    {
+      "number": "C9-04",
+      "sequence": 4,
+      "name": "Tao Hua Tang",
+      "englishName": "Peach Blossom Decoction",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Bind the Intestines and Secure Abandoned Conditions",
+      "groupEs": "Contener los Intestinos y asegurar cuadros de abandono",
+      "sourcePages": "427–429",
+      "kings": "Chi Shi Zhi",
+      "pattern": "Deficiency-Cold in the lower burner and Large Intestine.",
+      "patternEs": "Frío por deficiencia en Jiao Inferior e Intestino Grueso.",
+      "action": "Warms the Middle, dispels Cold, binds the bowels and stops chronic dysenteric leakage.",
+      "actionEs": "Calienta el Centro, dispersa Frío, contiene intestinos y detiene pérdidas disentéricas crónicas.",
+      "clue": "Chronic dark blood and pus in the stool with abdominal pain better from pressure or warmth, pale tongue and slow, frail pulse.",
+      "clueEs": "Sangre oscura y pus crónicos en heces con dolor abdominal mejor con presión o calor, lengua pálida y pulso lento y frágil.",
+      "ingredients": "Chi Shi Zhi, Gan Jiang, Jing Mi.",
+      "ingredientsEs": "Chi Shi Zhi, Gan Jiang, Jing Mi.",
+      "safety": "Contraindicated in Damp-Heat dysentery. It treats the branch with little root tonification; switch to root-directed care after leakage stops. Blood or pus in stool requires medical evaluation.",
+      "safetyEs": "Contraindicada en disentería por Humedad-Calor. Trata la rama con escasa tonificación de raíz; al detenerse la pérdida se requiere tratamiento de raíz. Sangre o pus en heces requieren evaluación médica.",
+      "safetyTier": "high",
+      "examFocus": "Dark, nonfresh blood and nonfoul pus with relief from warmth identify deficiency-Cold rather than Damp-Heat.",
+      "examFocusEs": "Sangre oscura no fresca y pus no fétido, con alivio por calor, identifican Frío por deficiencia y no Humedad-Calor.",
+      "comparison": "Zhen Ren Yang Zang Tang tonifies the root more strongly; Zhu Che Wan treats unresolved Damp-Heat with Yin/Blood damage.",
+      "comparisonEs": "Zhen Ren Yang Zang Tang tonifica más la raíz; Zhu Che Wan trata Humedad-Calor no resuelta con lesión de Yin/Sangre.",
+      "associated": [
+        [
+          "Chi Shi Zhi Yu Yu Liang Tang",
+          "Binds leakage without assisting original Yang.",
+          "Contiene pérdidas sin apoyar el Yang original."
+        ]
+      ]
+    },
+    {
+      "number": "C9-06",
+      "sequence": 6,
+      "name": "Zhu Che Wan",
+      "englishName": "Halt the Carts Pill",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Bind the Intestines and Secure Abandoned Conditions",
+      "groupEs": "Contener los Intestinos y asegurar cuadros de abandono",
+      "sourcePages": "432–433",
+      "kings": "Huang Lian",
+      "pattern": "Long-term intestinal Damp-Heat with damage to both Yin and Yang.",
+      "patternEs": "Humedad-Calor intestinal crónica con lesión simultánea de Yin y Yang.",
+      "action": "Drains Heat, dries Dampness, nourishes Yin and stops chronic dysenteric leakage.",
+      "actionEs": "Drena Calor, seca Humedad, nutre Yin y detiene pérdidas disentéricas crónicas.",
+      "clue": "Blood and pus that come and go, tenesmus, continuous abdominal pain, chest irritability, red tongue with little coat and thin rapid pulse.",
+      "clueEs": "Sangre y pus intermitentes, tenesmo, dolor abdominal continuo, irritabilidad torácica, lengua roja con poca saburra y pulso fino rápido.",
+      "ingredients": "Huang Lian, Gan Jiang, Dang Gui, E Jiao; traditionally bound with vinegar.",
+      "ingredientsEs": "Huang Lian, Gan Jiang, Dang Gui, E Jiao; traditionally bound with vinegar.",
+      "safety": "Contraindicated in the initial stage of dysentery, when the pathogen must first be eliminated. E Jiao is animal-derived. Persistent blood, pus, fever or pain requires medical evaluation.",
+      "safetyEs": "Contraindicada en la etapa inicial de disentería, cuando primero debe eliminarse el patógeno. E Jiao es de origen animal. Sangre, pus, fiebre o dolor persistentes requieren evaluación médica.",
+      "safetyTier": "high",
+      "examFocus": "Mixed excess-deficiency: unresolved Damp-Heat remains, but chronic disease has damaged Yin/Blood and Yang Qi.",
+      "examFocusEs": "Exceso-deficiencia mixtos: persiste Humedad-Calor, pero la cronicidad ha lesionado Yin/Sangre y Yang Qi.",
+      "comparison": "Tao Hua Tang is pure deficiency-Cold; Zhu Che Wan retains a Huang Lian Damp-Heat-clearing core.",
+      "comparisonEs": "Tao Hua Tang es Frío por deficiencia puro; Zhu Che Wan conserva un núcleo de Huang Lian que aclara Humedad-Calor."
+    },
+    {
+      "number": "C9-07",
+      "sequence": 7,
+      "name": "Yi Huang San",
+      "englishName": "Benefit the Yellow Powder",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Bind the Intestines and Secure Abandoned Conditions",
+      "groupEs": "Contener los Intestinos y asegurar cuadros de abandono",
+      "sourcePages": "433–434",
+      "kings": "Chen Pi, Ding Xiang",
+      "pattern": "Immature Spleen-Stomach function with Qi stagnation and chronic diarrhea.",
+      "patternEs": "Función inmadura de Bazo-Estómago con estancamiento de Qi y diarrea crónica.",
+      "action": "Strengthens the Spleen, harmonizes the Stomach, regulates Qi and stops diarrhea.",
+      "actionEs": "Fortalece Bazo, armoniza Estómago, regula Qi y detiene diarrea.",
+      "clue": "Pediatric abdominal pain and distention, vomiting, unremitting diarrhea and anorexia; or bloated abdomen with yellow complexion and wasting.",
+      "clueEs": "Dolor y distensión abdominal pediátricos, vómito, diarrea incesante y anorexia; o abdomen hinchado con tez amarilla y emaciación.",
+      "ingredients": "Chen Pi, Ding Xiang, Qing Pi, Pao He Zi, Zhi Gan Cao.",
+      "ingredientsEs": "Chen Pi, Ding Xiang, Qing Pi, Pao He Zi, Zhi Gan Cao.",
+      "safety": "A warming pediatric formula, contraindicated in hot dysenteric patterns. Persistent diarrhea, vomiting, dehydration, weight loss or a sick child requires prompt pediatric evaluation.",
+      "safetyEs": "Fórmula pediátrica tibia, contraindicada en cuadros disentéricos calientes. Diarrea persistente, vómito, deshidratación, pérdida de peso o un niño enfermo requieren evaluación pediátrica pronta.",
+      "safetyTier": "high",
+      "examFocus": "This is functional immaturity with stagnation, not simple depletion; heavy indiscriminate Qi tonification can worsen it.",
+      "examFocusEs": "Es inmadurez funcional con estancamiento, no agotamiento simple; la tonificación pesada e indiscriminada de Qi puede empeorarla.",
+      "comparison": "Do not confuse Yi Huang San, a pediatric digestive formula, with Yi Huang Tang for vaginal discharge.",
+      "comparisonEs": "No confundir Yi Huang San, fórmula digestiva pediátrica, con Yi Huang Tang para flujo vaginal."
+    },
+    {
+      "number": "C9-08",
+      "sequence": 8,
+      "name": "Jin Suo Gu Jing Wan",
+      "englishName": "Metal Lock Pill to Stabilize the Essence",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure the Essence and Stop Enuresis",
+      "groupEs": "Asegurar la Esencia y detener la enuresis",
+      "sourcePages": "435–436",
+      "kings": "Chao Sha Yuan Zi",
+      "pattern": "Kidney deficiency with instability of the gate of Essence.",
+      "patternEs": "Deficiencia de Riñón con inestabilidad de la puerta de la Esencia.",
+      "action": "Stabilizes the Kidneys and binds semen.",
+      "actionEs": "Estabiliza Riñones y contiene el semen.",
+      "clue": "Chronic spontaneous spermatorrhea, impotence, fatigue, weak limbs, low-back pain, tinnitus and a thin, frail pulse.",
+      "clueEs": "Espermatorrea espontánea crónica, impotencia, fatiga, extremidades débiles, dolor lumbar, tinnitus y pulso fino y frágil.",
+      "ingredients": "Chao Sha Yuan Zi, Qian Shi, Lian Xu, Duan Long Gu, Duan Mu Li; Lian Zi powder forms the pills.",
+      "ingredientsEs": "Chao Sha Yuan Zi, Qian Shi, Lian Xu, Duan Long Gu, Duan Mu Li; Lian Zi powder forms the pills.",
+      "safety": "Contraindicated with Damp-Heat in the lower burner. Modify rather than simply bind deficiency-Fire nocturnal emissions; stop if an externally contracted fever develops. Long Gu and Mu Li require professional sourcing.",
+      "safetyEs": "Contraindicada con Humedad-Calor en Jiao Inferior. Modificar en vez de contener sin más las emisiones nocturnas por Fuego de deficiencia; suspender si aparece fiebre externa. Long Gu y Mu Li requieren obtención profesional.",
+      "safetyTier": "high",
+      "examFocus": "Spontaneous emissions without dreams point to an unstable gate of Essence; dream-associated emissions more often suggest Fire or Heart involvement.",
+      "examFocusEs": "Las emisiones espontáneas sin sueños apuntan a puerta de Esencia inestable; las asociadas a sueños sugieren más Fuego o participación de Corazón.",
+      "comparison": "Sang Piao Xiao San adds Heart-Qi deficiency, forgetfulness and failed Heart-Kidney communication.",
+      "comparisonEs": "Sang Piao Xiao San añade deficiencia de Qi de Corazón, olvidos y comunicación Corazón-Riñón fallida.",
+      "associated": [
+        [
+          "Shui Lu Er Xian Dan",
+          "Associated two-ingredient essence-securing formula.",
+          "Fórmula asociada de dos ingredientes para asegurar Esencia."
+        ]
+      ]
+    },
+    {
+      "number": "C9-09",
+      "sequence": 9,
+      "name": "Sang Piao Xiao San",
+      "englishName": "Mantis Egg-Case Powder",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure the Essence and Stop Enuresis",
+      "groupEs": "Asegurar la Esencia y detener la enuresis",
+      "sourcePages": "436–438",
+      "kings": "Sang Piao Xiao",
+      "pattern": "Heart and Kidney Qi deficiency with failed communication and loss of Bladder restraint.",
+      "patternEs": "Deficiencia de Qi de Corazón y Riñón con comunicación fallida y pérdida de control de Vejiga.",
+      "action": "Regulates and tonifies Heart and Kidneys, stabilizes Essence and stops leakage.",
+      "actionEs": "Regula y tonifica Corazón y Riñones, estabiliza Esencia y detiene pérdidas.",
+      "clue": "Frequent urination or incontinence with gray/cloudy urine, forgetfulness or disorientation, pale tongue and thin slow frail pulse.",
+      "clueEs": "Micción frecuente o incontinencia con orina gris/turbia, olvidos o desorientación, lengua pálida y pulso fino, lento y frágil.",
+      "ingredients": "Sang Piao Xiao, Long Gu, Ren Shen, Fu Shen, Yuan Zhi, Shi Chang Pu, Zhi Gui Ban, Dang Gui.",
+      "ingredientsEs": "Sang Piao Xiao, Long Gu, Ren Shen, Fu Shen, Yuan Zhi, Shi Chang Pu, Zhi Gui Ban, Dang Gui.",
+      "safety": "Contraindicated for vigorous lower-burner Fire or Damp-Heat, often with painful urination. Sang Piao Xiao and Gui Ban are animal-derived; professional review is required. New confusion or painful urinary symptoms require medical evaluation.",
+      "safetyEs": "Contraindicada para Fuego vigoroso o Humedad-Calor del Jiao Inferior, a menudo con micción dolorosa. Sang Piao Xiao y Gui Ban son de origen animal; requiere revisión profesional. Confusión nueva o síntomas urinarios dolorosos requieren evaluación médica.",
+      "safetyTier": "high",
+      "examFocus": "Mental signs plus turbid urine identify Heart-Kidney communication failure, not a simple Kidney-Cold leakage.",
+      "examFocusEs": "Signos mentales más orina turbia identifican falla de comunicación Corazón-Riñón, no una pérdida simple por Frío de Riñón.",
+      "comparison": "Jin Suo Gu Jing Wan emphasizes Kidney deficiency and spontaneous emissions; Suo Quan Wan emphasizes clear copious urine from Kidney deficiency-Cold.",
+      "comparisonEs": "Jin Suo Gu Jing Wan enfatiza deficiencia de Riñón y emisiones espontáneas; Suo Quan Wan enfatiza orina clara abundante por Frío de deficiencia de Riñón."
+    },
+    {
+      "number": "C9-10",
+      "sequence": 10,
+      "name": "Suo Quan Wan",
+      "englishName": "Restrict the Fountain Pill",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure the Essence and Stop Enuresis",
+      "groupEs": "Asegurar la Esencia y detener la enuresis",
+      "sourcePages": "438–439",
+      "kings": "Yi Zhi Ren",
+      "pattern": "Kidney Qi deficiency-Cold with loss of Bladder restraint.",
+      "patternEs": "Frío por deficiencia de Qi de Riñón con pérdida de control de Vejiga.",
+      "action": "Warms the Kidneys, dispels Cold, checks urinary frequency and stops leakage.",
+      "actionEs": "Calienta Riñones, dispersa Frío, reduce frecuencia urinaria y detiene pérdidas.",
+      "clue": "Frequent, clear and prolonged urination, incontinence or enuresis with pale tongue, white coat and submerged frail pulse.",
+      "clueEs": "Micción frecuente, clara y prolongada, incontinencia o enuresis con lengua pálida, saburra blanca y pulso sumergido y frágil.",
+      "ingredients": "Yi Zhi Ren, Wu Yao, Chao Shan Yao.",
+      "ingredientsEs": "Yi Zhi Ren, Wu Yao, Chao Shan Yao.",
+      "safety": "Do not infer Kidney-Cold from frequency alone; infection, diabetes, neurologic disease and structural causes require assessment. The source advises avoiding spicy/stimulating foods and notes the formula is often too weak alone.",
+      "safetyEs": "No inferir Frío de Riñón solo por frecuencia; infección, diabetes, enfermedad neurológica y causas estructurales requieren evaluación. La fuente aconseja evitar alimentos picantes/estimulantes y señala que suele ser demasiado débil sola.",
+      "safetyTier": "high",
+      "examFocus": "Clear, copious/prolonged urine plus Cold signs distinguishes it from turbid urine with mental signs in Sang Piao Xiao San.",
+      "examFocusEs": "Orina clara abundante/prolongada más signos de Frío la separan de orina turbia con signos mentales de Sang Piao Xiao San.",
+      "comparison": "Sang Piao Xiao San treats Heart-Kidney Qi deficiency; Suo Quan Wan is the compact Kidney deficiency-Cold formula.",
+      "comparisonEs": "Sang Piao Xiao San trata deficiencia de Qi de Corazón-Riñón; Suo Quan Wan es la fórmula compacta para Frío por deficiencia de Riñón."
+    },
+    {
+      "number": "C9-11",
+      "sequence": 11,
+      "name": "Gui Zhi Jia Long Gu Mu Li Tang",
+      "englishName": "Cinnamon Twig Decoction plus Dragon Bone and Oyster Shell",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure the Essence and Stop Enuresis",
+      "groupEs": "Asegurar la Esencia y detener la enuresis",
+      "sourcePages": "439–441",
+      "kings": "Gui Zhi, Bai Shao",
+      "pattern": "Deficient Yin and Yang separation with Yang floating above and Yin essence leaking below.",
+      "patternEs": "Separación por deficiencia de Yin y Yang con Yang flotando arriba y Esencia Yin perdiéndose abajo.",
+      "action": "Restrains Essence, suppresses rebellion and harmonizes Yin and Yang.",
+      "actionEs": "Contiene Esencia, suprime rebelión y armoniza Yin y Yang.",
+      "clue": "Spermatorrhea or sexual dreams with lower-abdominal contraction, dizziness, palpitations, disturbed sleep and a hollow, slightly tight pulse.",
+      "clueEs": "Espermatorrea o sueños sexuales con contracción abdominal inferior, mareo, palpitaciones, sueño alterado y pulso hueco ligeramente tenso.",
+      "ingredients": "Gui Zhi, Bai Shao, Long Gu, Mu Li, Sheng Jiang, Da Zao, Gan Cao.",
+      "ingredientsEs": "Gui Zhi, Bai Shao, Long Gu, Mu Li, Sheng Jiang, Da Zao, Gan Cao.",
+      "safety": "The pulse boundary matters: intended for a floating or big but weak pulse, not a forceful exterior pulse. Long Gu and Mu Li are mineral-derived and require professional sourcing/review. Persistent palpitations, syncope or neurologic symptoms need medical evaluation.",
+      "safetyEs": "Importa el límite del pulso: corresponde a pulso flotante o grande pero débil, no a pulso Exterior fuerte. Long Gu y Mu Li son minerales y requieren obtención/revisión profesional. Palpitaciones persistentes, síncope o síntomas neurológicos requieren evaluación médica.",
+      "safetyTier": "high",
+      "examFocus": "This is deeper exhaustion with false-Yang/excess-like signs and Essence loss, not ordinary Gui Zhi Tang disharmony.",
+      "examFocusEs": "Es agotamiento más profundo con signos tipo falso Yang/exceso y pérdida de Esencia, no la desarmonía ordinaria de Gui Zhi Tang.",
+      "comparison": "Chai Hu Jia Long Gu Mu Li Tang treats a broader Shaoyang/excess-type disharmony; this formula treats deficient Yin-Yang separation.",
+      "comparisonEs": "Chai Hu Jia Long Gu Mu Li Tang trata una desarmonía más amplia tipo Shaoyang/exceso; esta fórmula trata separación de Yin-Yang por deficiencia.",
+      "associated": [
+        [
+          "Gui Zhi Gan Cao Long Gu Mu Li Tang",
+          "A narrower Heart-focused branch for palpitations, restlessness and spontaneous sweating.",
+          "Rama más centrada en Corazón para palpitaciones, inquietud y sudor espontáneo."
+        ]
+      ]
+    },
+    {
+      "number": "C9-12",
+      "sequence": 12,
+      "name": "Shou Tai Wan",
+      "englishName": "Fetus Longevity Pill",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure the Essence and Stop Enuresis",
+      "groupEs": "Asegurar la Esencia y detener la enuresis",
+      "sourcePages": "441–442",
+      "kings": "Tu Si Zi",
+      "pattern": "Kidney deficiency with unstable Chong and Ren and inadequate fetal nourishment.",
+      "patternEs": "Deficiencia de Riñón con Chong y Ren inestables y nutrición fetal insuficiente.",
+      "action": "Stabilizes the Kidneys and calms/stabilizes the fetus.",
+      "actionEs": "Estabiliza Riñones y calma/estabiliza el feto.",
+      "clue": "Threatened or recurrent miscarriage with pregnancy bleeding, sore low back, sinking lower abdomen, dizziness, tinnitus and weak legs.",
+      "clueEs": "Amenaza o repetición de aborto con sangrado en embarazo, dolor lumbar, hundimiento abdominal inferior, mareo, tinnitus y piernas débiles.",
+      "ingredients": "Tu Si Zi, Sang Ji Sheng, Xu Duan, E Jiao.",
+      "ingredientsEs": "Tu Si Zi, Sang Ji Sheng, Xu Duan, E Jiao.",
+      "safety": "Pregnancy bleeding or possible miscarriage requires urgent licensed obstetric evaluation and must never be framed as self-treatment. Unsuitable when Heat or stagnation is the cause. E Jiao is animal-derived.",
+      "safetyEs": "El sangrado en embarazo o posible aborto requiere evaluación obstétrica urgente y nunca debe plantearse como autotratamiento. Inadecuada cuando la causa es Calor o estancamiento. E Jiao es de origen animal.",
+      "safetyTier": "critical",
+      "examFocus": "This is a historical pattern profile, not a substitute for emergency obstetric diagnosis or treatment.",
+      "examFocusEs": "Es un perfil histórico de patrón, no un sustituto del diagnóstico o tratamiento obstétrico urgente.",
+      "comparison": "Differentiate Kidney-deficiency instability from bleeding caused by Heat, trauma, stasis or other obstetric pathology.",
+      "comparisonEs": "Diferenciar inestabilidad por deficiencia de Riñón de sangrado por Calor, trauma, estasis u otra patología obstétrica."
+    },
+    {
+      "number": "C9-13",
+      "sequence": 13,
+      "name": "Gu Chong Tang",
+      "englishName": "Stabilize Gushing Decoction",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure Irregular Uterine Bleeding and Stop Vaginal Discharge",
+      "groupEs": "Asegurar el sangrado uterino irregular y detener el flujo vaginal",
+      "sourcePages": "443–444",
+      "kings": "Shan Zhu Yu, Chao Bai Zhu",
+      "pattern": "Instability of the Chong and Ren with lower-burner original-Qi deficiency.",
+      "patternEs": "Inestabilidad de Chong y Ren con deficiencia de Qi original del Jiao Inferior.",
+      "action": "Augments Qi, strengthens the Spleen, stabilizes the Chong vessel and stops bleeding.",
+      "actionEs": "Fortalece Qi y Bazo, estabiliza Chong y detiene sangrado.",
+      "clue": "Incessant gushing or trickling of thin pale uterine blood with palpitations, shortness of breath, pale tongue and frail pulse.",
+      "clueEs": "Sangrado uterino incesante, a chorros o goteo, de sangre pálida y fina con palpitaciones, disnea, lengua pálida y pulso frágil.",
+      "ingredients": "Chao Bai Zhu, Huang Qi, Shan Zhu Yu, Bai Shao, Duan Long Gu, Duan Mu Li, Hai Piao Xiao, Zong Lu Tan, Wu Bei Zi, Qian Cao Gen.",
+      "ingredientsEs": "Chao Bai Zhu, Huang Qi, Shan Zhu Yu, Bai Shao, Duan Long Gu, Duan Mu Li, Hai Piao Xiao, Zong Lu Tan, Wu Bei Zi, Qian Cao Gen.",
+      "safety": "Heavy or pregnancy-related bleeding requires urgent medical evaluation. Profuse sweat, cold limbs and an almost imperceptible pulse indicate collapse requiring emergency stabilization, not this formula. Adjust for clear Heat or Cold signs.",
+      "safetyEs": "El sangrado abundante o relacionado con embarazo requiere evaluación médica urgente. Sudor profuso, extremidades frías y pulso casi imperceptible indican colapso que exige estabilización de emergencia, no esta fórmula. Ajustar ante signos claros de Calor o Frío.",
+      "safetyTier": "critical",
+      "examFocus": "Pale thin blood plus Qi-deficiency collapse tendency separates it from the red Heat bleeding of Gu Jing Wan.",
+      "examFocusEs": "Sangre pálida y fina más tendencia al colapso de Qi la separan del sangrado rojo por Calor de Gu Jing Wan.",
+      "comparison": "Gui Pi Tang fits less severe chronic Spleen-Qi/Heart-Blood bleeding; Gu Chong Tang strongly binds severe gushing, then root treatment must continue.",
+      "comparisonEs": "Gui Pi Tang corresponde a sangrado crónico menos grave por Qi de Bazo/Sangre de Corazón; Gu Chong Tang contiene con fuerza el sangrado profuso y luego debe continuarse el tratamiento de raíz."
+    },
+    {
+      "number": "C9-15",
+      "sequence": 15,
+      "name": "Shen Ling Dan",
+      "englishName": "Pregnancy Panacea",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure Irregular Uterine Bleeding and Stop Vaginal Discharge",
+      "groupEs": "Asegurar el sangrado uterino irregular y detener el flujo vaginal",
+      "sourcePages": "446–447",
+      "kings": "Yu Yu Liang, Zi Shi Ying",
+      "pattern": "Deficiency-Cold of Chong and Ren with obvious Blood stasis.",
+      "patternEs": "Frío por deficiencia de Chong y Ren con estasis de Sangre evidente.",
+      "action": "Historically stabilizes uterine bleeding while transforming Blood stasis.",
+      "actionEs": "Históricamente estabiliza sangrado uterino mientras transforma estasis de Sangre.",
+      "clue": "Continuous dark-purple bleeding with clots and lower-abdominal pain relieved when clots pass; dark-purple tongue and submerged wiry pulse.",
+      "clueEs": "Sangrado morado oscuro continuo con coágulos y dolor abdominal inferior aliviado al expulsarlos; lengua morada oscura y pulso sumergido y cuerda.",
+      "ingredients": "Yu Yu Liang, Zi Shi Ying, Chi Shi Zhi, Dai Zhe Shi, Ru Xiang, Mo Yao, Wu Ling Zhi; historical Zhu Sha is obsolete and excluded.",
+      "ingredientsEs": "Yu Yu Liang, Zi Shi Ying, Chi Shi Zhi, Dai Zhe Shi, Ru Xiang, Mo Yao, Wu Ling Zhi; historical Zhu Sha is obsolete and excluded.",
+      "safety": "Zhu Sha/Cinnabaris has unacceptable mercury toxicity and must not be used; the source says no substitution is needed. Mineral-heavy and contains animal-derived Wu Ling Zhi. Contraindicated during pregnancy, in Damp-Heat, or in deficiency-Cold without stasis. Uterine bleeding requires medical evaluation.",
+      "safetyEs": "Zhu Sha/Cinabrio tiene toxicidad inaceptable por mercurio y no debe usarse; la fuente indica que no necesita sustitución. Rica en minerales y contiene Wu Ling Zhi de origen animal. Contraindicada en embarazo, Humedad-Calor o Frío por deficiencia sin estasis. El sangrado uterino requiere evaluación médica.",
+      "safetyTier": "critical",
+      "examFocus": "The historical name does not make it safe in pregnancy: this profile is contraindicated during pregnancy and excludes cinnabar.",
+      "examFocusEs": "El nombre histórico no la hace segura en embarazo: este perfil está contraindicado durante el embarazo y excluye el cinabrio.",
+      "comparison": "Gu Chong Tang treats pale Qi-deficiency gushing; Shen Ling Dan is more chronic with dark clots, pain and explicit stasis.",
+      "comparisonEs": "Gu Chong Tang trata sangrado pálido profuso por deficiencia de Qi; Shen Ling Dan es más crónica, con coágulos oscuros, dolor y estasis explícita."
+    },
+    {
+      "number": "C9-16",
+      "sequence": 16,
+      "name": "Wan Dai Tang",
+      "englishName": "End Discharge Decoction",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure Irregular Uterine Bleeding and Stop Vaginal Discharge",
+      "groupEs": "Asegurar el sangrado uterino irregular y detener el flujo vaginal",
+      "sourcePages": "447–450",
+      "kings": "Tu Chao Bai Zhu, Chao Shan Yao",
+      "pattern": "Spleen Qi deficiency with Dampness and Liver constraint affecting the Girdle vessel.",
+      "patternEs": "Deficiencia de Qi de Bazo con Humedad y estancamiento de Hígado que afectan el vaso Cinturón.",
+      "action": "Tonifies the Middle, strengthens the Spleen, transforms Dampness and stops vaginal discharge.",
+      "actionEs": "Tonifica el Centro, fortalece Bazo, transforma Humedad y detiene flujo vaginal.",
+      "clue": "Profuse thin white or pale-yellow nonfoul discharge with fatigue, shiny-pale complexion, loose stools, pale tongue and soggy frail pulse.",
+      "clueEs": "Flujo profuso, fino, blanco o amarillo pálido y no fétido con fatiga, tez pálida brillante, heces sueltas, lengua pálida y pulso empapado y frágil.",
+      "ingredients": "Tu Chao Bai Zhu, Chao Shan Yao, Ren Shen, Zhi Cang Zhu, Chen Pi, Jiu Chao Che Qian Zi, Jiu Chao Bai Shao, Chai Hu, Jing Jie Sui Tan, Gan Cao.",
+      "ingredientsEs": "Tu Chao Bai Zhu, Chao Shan Yao, Ren Shen, Zhi Cang Zhu, Chen Pi, Jiu Chao Che Qian Zi, Jiu Chao Bai Shao, Chai Hu, Jing Jie Sui Tan, Gan Cao.",
+      "safety": "Do not use for dark-yellow, bloody, thick, sticky or foul discharge with a yellow tongue coat and wiry pulse; it can worsen Heat or Damp-Heat. New, persistent, bloody, painful or foul discharge requires medical evaluation.",
+      "safetyEs": "No usar para flujo amarillo oscuro, sanguinolento, espeso, pegajoso o fétido con saburra amarilla y pulso cuerda; puede empeorar Calor o Humedad-Calor. Flujo nuevo, persistente, sanguinolento, doloroso o fétido requiere evaluación médica.",
+      "safetyTier": "high",
+      "examFocus": "It stops leakage by restoring Spleen-Liver-Dai vessel function, not through a large dose of astringents.",
+      "examFocusEs": "Detiene pérdidas restaurando la función Bazo-Hígado-Dai, no mediante gran cantidad de astringentes.",
+      "comparison": "Yi Huang Tang treats sticky yellow odor-bearing discharge with mild lower-burner Damp-Heat; Wan Dai Tang treats thin white/pale nonfoul discharge from Spleen deficiency.",
+      "comparisonEs": "Yi Huang Tang trata flujo amarillo pegajoso y oloroso con Humedad-Calor leve inferior; Wan Dai Tang trata flujo fino blanco/pálido no fétido por deficiencia de Bazo.",
+      "associated": [
+        [
+          "Qing Dai Tang",
+          "More strongly binds profuse thin clear or reddish discharge while regulating Blood.",
+          "Contiene con más fuerza flujo profuso, fino, claro o rojizo mientras regula Sangre."
+        ]
+      ]
+    },
+    {
+      "number": "C9-17",
+      "sequence": 17,
+      "name": "Yi Huang Tang",
+      "englishName": "Change Yellow Discharge Decoction",
+      "categoryKey": "stabilize-bind-ch9",
+      "group": "Secure Irregular Uterine Bleeding and Stop Vaginal Discharge",
+      "groupEs": "Asegurar el sangrado uterino irregular y detener el flujo vaginal",
+      "sourcePages": "450–452",
+      "kings": "Chao Shan Yao, Chao Qian Shi",
+      "pattern": "Underlying Spleen or Kidney Qi deficiency with constrained Dampness transformed into mild lower-burner Damp-Heat.",
+      "patternEs": "Deficiencia subyacente de Qi de Bazo o Riñón con Humedad constreñida transformada en Humedad-Calor leve inferior.",
+      "action": "Strengthens the Spleen, dries Dampness, clears Heat and stops vaginal discharge.",
+      "actionEs": "Fortalece Bazo, seca Humedad, aclara Calor y detiene flujo vaginal.",
+      "clue": "Long-term yellowish-white, viscous, fishy-smelling discharge with pale-yellow complexion, heavy head, low appetite and a soft slippery pulse.",
+      "clueEs": "Flujo crónico amarillo-blanco, viscoso y con olor a pescado, con tez amarillo pálido, cabeza pesada, poco apetito y pulso blando resbaladizo.",
+      "ingredients": "Chao Shan Yao, Chao Qian Shi, Huang Bai, Che Qian Zi, crushed Bai Guo.",
+      "ingredientsEs": "Chao Shan Yao, Chao Qian Shi, Huang Bai, Che Qian Zi, crushed Bai Guo.",
+      "safety": "Use neither without Damp-Heat nor for severe Damp-Heat excess. Offensive discharge with itching/burning or cottage-cheese material lies outside this pattern and requires evaluation. Inappropriate use may delay or suppress menstruation.",
+      "safetyEs": "No usar sin Humedad-Calor ni para exceso grave de Humedad-Calor. Flujo ofensivo con picor/ardor o material tipo requesón queda fuera del patrón y requiere evaluación. El uso inapropiado puede retrasar o suprimir la menstruación.",
+      "safetyTier": "high",
+      "examFocus": "The key is deficiency plus mild constrained Damp-Heat—not pure deficiency and not full excess.",
+      "examFocusEs": "La clave es deficiencia más Humedad-Calor leve constreñida: ni deficiencia pura ni exceso pleno.",
+      "comparison": "Wan Dai Tang is white/pale, thin and nonfoul; Yi Huang Tang is yellow/dark, sticky and odor-bearing.",
+      "comparisonEs": "Wan Dai Tang presenta flujo blanco/pálido, fino y no fétido; Yi Huang Tang, amarillo/oscuro, pegajoso y oloroso."
     }
   ]
 }

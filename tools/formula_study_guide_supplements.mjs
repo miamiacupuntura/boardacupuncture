@@ -79,7 +79,10 @@ export const formulaStudyGuideSupplements = {
   'Li Zhong Wan': {priority: 'core'},
   'Wu Zhu Yu Tang': {priority: 'core'},
   'Da Jian Zhong Tang': {priority: 'core'},
-  'Si Ni Tang': {priority: 'core'}
+  'Si Ni Tang': {priority: 'core'},
+  'Yu Ping Feng San': {priority: 'core'},
+  'Si Shen Wan': {priority: 'core'},
+  'Gu Jing Wan': {priority: 'core'}
 };
 
 export const releaseExteriorCategoryGuide = {

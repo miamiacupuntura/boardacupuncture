@@ -13,8 +13,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 9
-        || count($data['supplementalFormulas'] ?? []) !== 69) {
+        || count($data['supplementalCategories'] ?? []) !== 10
+        || count($data['supplementalFormulas'] ?? []) !== 84) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -91,6 +91,10 @@ $categorycopy = [
         'Study the complete tonification chapter in six sections: Qi, Blood, Qi and Blood, Yin, Yang, and combined Yin-Yang.',
         'Estudia el capítulo completo de tonificación en seis secciones: Qi, Sangre, Qi y Sangre, Yin, Yang y Yin-Yang combinados.',
     ],
+    'stabilize-bind-chapter-9' => [
+        'Study all 17 principal Chapter 9 formulas in five leakage-control sections while preserving the separate official Board roster.',
+        'Estudia las 17 fórmulas principales del capítulo 9 en cinco secciones de control de pérdidas, conservando separado el listado oficial del Board.',
+    ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
         'Distingue la deficiencia de Qi por órgano, hundimiento, Exterior inestable, pérdida de líquidos, Humedad e incapacidad para captar Qi.',
@@ -160,6 +164,7 @@ $tonifychapterkeys = [
 ];
 $tonifychaptercategories = array_intersect_key($supplementalcategories, array_flip($tonifychapterkeys));
 $warmchaptercategory = $supplementalcategories['warm-interior-cold'];
+$stabilizechaptersourcecategory = $supplementalcategories['stabilize-bind-ch9'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -185,14 +190,98 @@ $tonifychapteroverview = [
     'formulas' => $tonifychapterformulas,
 ];
 
+$stabilizechaptersections = [
+    'exterior' => [
+        'key' => 'exterior', 'name' => 'Stabilize the Exterior and Stop Sweating',
+        'nameEs' => 'Estabilizar el Exterior y detener la sudoración', 'sourcePages' => '420–422',
+        'copy' => 'Secure an unstable exterior only after excluding unresolved excess.',
+        'copyEs' => 'Asegura un Exterior inestable solo después de excluir exceso no resuelto.',
+    ],
+    'lung' => [
+        'key' => 'lung', 'name' => 'Secure the Lungs and Stop Coughing',
+        'nameEs' => 'Asegurar los Pulmones y detener la tos', 'sourcePages' => '423–424',
+        'copy' => 'Late-stage cough requires simultaneous support of depleted Lung Qi and Yin.',
+        'copyEs' => 'La tos tardía exige apoyar simultáneamente Qi y Yin de Pulmón agotados.',
+    ],
+    'intestine' => [
+        'key' => 'intestine', 'name' => 'Bind the Intestines and Secure Abandoned Conditions',
+        'nameEs' => 'Contener los Intestinos y asegurar cuadros de abandono', 'sourcePages' => '425–434',
+        'copy' => 'Differentiate deficiency-Cold leakage from unresolved Damp-Heat before binding the bowels.',
+        'copyEs' => 'Diferencia pérdidas por Frío-deficiencia de Humedad-Calor no resuelta antes de contener los intestinos.',
+    ],
+    'essence' => [
+        'key' => 'essence', 'name' => 'Secure the Essence and Stop Enuresis',
+        'nameEs' => 'Asegurar la Esencia y detener la enuresis', 'sourcePages' => '435–442',
+        'copy' => 'Separate Kidney leakage, Heart-Kidney disconnection, deficiency-Cold and Yin-Yang separation.',
+        'copyEs' => 'Separa pérdida de Riñón, desconexión Corazón-Riñón, Frío-deficiencia y separación Yin-Yang.',
+    ],
+    'gynecology' => [
+        'key' => 'gynecology', 'name' => 'Secure Irregular Uterine Bleeding and Stop Vaginal Discharge',
+        'nameEs' => 'Asegurar el sangrado uterino irregular y detener el flujo vaginal', 'sourcePages' => '443–452',
+        'copy' => 'Color, consistency, odor, temperature and deficiency-versus-excess determine the route.',
+        'copyEs' => 'Color, consistencia, olor, temperatura y deficiencia frente a exceso determinan la ruta.',
+    ],
+];
+$stabilizechapterplan = [
+    ['Mu Li San', 1, 'exterior', 'Oyster Shell Powder', '420–422'],
+    ['Jiu Xian San', 2, 'lung', 'Nine-Immortal Powder', '423–424'],
+    ['Zhen Ren Yang Zang Tang', 3, 'intestine', "True Man's Decoction to Nourish the Organs", '425–426'],
+    ['Tao Hua Tang', 4, 'intestine', 'Peach Blossom Decoction', '427–429'],
+    ['Si Shen Wan', 5, 'intestine', 'Four-Miracle Pill', '429–431'],
+    ['Zhu Che Wan', 6, 'intestine', 'Halt the Carts Pill', '432–433'],
+    ['Yi Huang San', 7, 'intestine', 'Benefit the Yellow Powder', '433–434'],
+    ['Jin Suo Gu Jing Wan', 8, 'essence', 'Metal Lock Pill to Stabilize the Essence', '435–436'],
+    ['Sang Piao Xiao San', 9, 'essence', 'Mantis Egg-Case Powder', '436–438'],
+    ['Suo Quan Wan', 10, 'essence', 'Restrict the Fountain Pill', '438–439'],
+    ['Gui Zhi Jia Long Gu Mu Li Tang', 11, 'essence', 'Cinnamon Twig Decoction plus Dragon Bone and Oyster Shell', '439–441'],
+    ['Shou Tai Wan', 12, 'essence', 'Fetus Longevity Pill', '441–442'],
+    ['Gu Chong Tang', 13, 'gynecology', 'Stabilize Gushing Decoction', '443–444'],
+    ['Gu Jing Wan', 14, 'gynecology', 'Stabilize the Menses Pill', '445–446'],
+    ['Shen Ling Dan', 15, 'gynecology', 'Pregnancy Panacea', '446–447'],
+    ['Wan Dai Tang', 16, 'gynecology', 'End Discharge Decoction', '447–450'],
+    ['Yi Huang Tang', 17, 'gynecology', 'Change Yellow Discharge Decoction', '450–452'],
+];
+$stabilizesupplementbyname = [];
+foreach ($stabilizechaptersourcecategory['formulas'] as $formula) {
+    $stabilizesupplementbyname[$formula['name']] = $formula;
+}
+$stabilizechapterformulas = [];
+foreach ($stabilizechapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $stabilizesupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 9 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $stabilizechaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $stabilizechaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $stabilizechapterformulas[] = $formula;
+}
+$stabilizechapteroverview = [
+    'number' => 'S5',
+    'key' => 'stabilize-bind-chapter-9',
+    'name' => 'Formulas That Stabilize and Bind · Complete Chapter 9',
+    'nameEs' => 'Fórmulas que estabilizan y contienen · Capítulo 9 completo',
+    'sourceChapter' => 9,
+    'sourcePages' => '419–454',
+    'formulas' => $stabilizechapterformulas,
+];
+
 $supplementalindexcategories = [];
 foreach ($supplementalcategories as $categorykey => $category) {
-    if (!in_array($categorykey, $tonifychapterkeys, true) && $categorykey !== 'warm-interior-cold') {
+    if (!in_array($categorykey, $tonifychapterkeys, true)
+            && $categorykey !== 'warm-interior-cold'
+            && $categorykey !== 'stabilize-bind-ch9') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
 $supplementalindexcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
+$supplementalindexcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
 $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
+$supplementalcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
+unset($supplementalcategories['stabilize-bind-ch9']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -200,6 +289,7 @@ $issupplemental = $selected !== null && isset($supplementalcategories[$selected[
 $istonifychapterpage = $selected !== null
     && ($selected['key'] === 'tonify-chapter-8' || in_array($selected['key'], $tonifychapterkeys, true));
 $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-cold';
+$isstabilizechapterpage = $selected !== null && $selected['key'] === 'stabilize-bind-chapter-9';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
@@ -229,6 +319,16 @@ if ($ises) {
     $warmchapterparams['lang'] = 'es';
 }
 $warmchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $warmchapterparams);
+$stabilizeparentparams = ['focus' => 'stabilize-bind'];
+if ($ises) {
+    $stabilizeparentparams['lang'] = 'es';
+}
+$stabilizeparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $stabilizeparentparams);
+$stabilizechapterparams = ['focus' => 'stabilize-bind-chapter-9'];
+if ($ises) {
+    $stabilizechapterparams['lang'] = 'es';
+}
+$stabilizechapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $stabilizechapterparams);
 $languageparams = $selected === null ? [] : ['focus' => $selected['key']];
 if (!$ises) {
     $languageparams['lang'] = 'es';
@@ -414,6 +514,7 @@ echo $OUTPUT->header();
             <div class="formula-study-guide__category-nav-center">
                 <?php if ($istonifychapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $tonifyparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Tonificar' : '← Tonify main category'); ?></a><?php endif; ?>
                 <?php if ($iswarmchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calentar el Interior' : '← Warm the Interior main category'); ?></a><?php endif; ?>
+                <?php if ($isstabilizechapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizeparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Estabilizar y contener' : '← Stabilize and Bind main category'); ?></a><?php endif; ?>
                 <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
             </div>
             <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
@@ -584,6 +685,57 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
+        <?php if ($selected['key'] === 'stabilize-bind'): ?>
+            <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-nine-shortcut-title">
+                <h4 id="chapter-nine-shortcut-title"><?php echo s($ises ? 'Capítulo 9 completo · 17 fórmulas' : 'Complete Chapter 9 · 17 formulas'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'Dos fórmulas del capítulo aparecen en los Board Domains—Si Shen Wan y Gu Jing Wan—y la ampliación añade 15 perfiles principales relacionados. Yu Ping Feng San sigue siendo la tercera fórmula oficial de esta categoría, pero la fuente la estudia en el capítulo 8.'
+                    : 'Two chapter formulas appear in the Board Domains—Si Shen Wan and Gu Jing Wan—and the expansion adds 15 related principal profiles. Yu Ping Feng San remains the third official formula in this category, but the source discusses it in Chapter 8.'); ?></p>
+                <div class="formula-study-guide__chapter-shortcut-actions">
+                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizechapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 9 completo →' : 'Open complete Chapter 9 →'); ?></a>
+                </div>
+            </section>
+        <?php endif; ?>
+        <?php if ($selected['key'] === 'stabilize-bind-chapter-9'): ?>
+            <section class="formula-study-guide__priority" aria-labelledby="chapter-nine-principles-title">
+                <h4 id="chapter-nine-principles-title"><?php echo s($ises ? 'Principio central: tonificar la raíz y contener la rama' : 'Core principle: tonify the root and secure the branch'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'El capítulo trata pérdidas por debilidad del mecanismo de contención. Antes de astringir, descarta un patógeno, Calor, Humedad-Calor, estasis u otro exceso no resuelto; contenerlo puede atraparlo. El colapso, el sangrado abundante, la dificultad respiratoria y la pérdida grave de líquidos son urgencias médicas.'
+                    : 'The chapter treats leakage caused by a weak containment mechanism. Before astringing, exclude an unresolved pathogen, Heat, Damp-Heat, stasis, or another excess; binding can trap it. Collapse, heavy bleeding, respiratory distress, and severe fluid loss are medical emergencies.'); ?></p>
+                <h5><?php echo s($ises ? 'Ruta de estudio del capítulo' : 'Chapter study route'); ?></h5>
+                <div class="formula-study-guide__route">
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">1</span><?php echo s($ises ? 'Localiza la pérdida' : 'Locate the leakage'); ?></b><p><?php echo s($ises ? 'Sudor, tos, intestino, orina/Esencia o útero/flujo.' : 'Sweat, cough, bowel, urine/Essence, or uterus/discharge.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Confirma deficiencia' : 'Confirm deficiency'); ?></b><p><?php echo s($ises ? 'Qi, Yin, Yang, Sangre o comunicación funcional debilitada.' : 'Qi, Yin, Yang, Blood, or weakened functional communication.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">3</span><?php echo s($ises ? 'Descarta exceso' : 'Exclude excess'); ?></b><p><?php echo s($ises ? 'No atrapes patógeno, Humedad-Calor, Flema, estasis o Calor pleno.' : 'Do not trap a pathogen, Damp-Heat, Phlegm, stasis, or full Heat.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Revisa seguridad' : 'Check safety'); ?></b><p><?php echo s($ises ? 'Identifica urgencias y sustancias obsoletas, tóxicas, animales o minerales.' : 'Identify emergencies and obsolete, toxic, animal-derived, or mineral substances.'); ?></p></div>
+                </div>
+            </section>
+            <section class="formula-study-guide__board-verification" aria-labelledby="chapter-nine-board-title">
+                <div>
+                    <h4 id="chapter-nine-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 2 de 17' : 'Board Domains overlap · 2 of 17'); ?></h4>
+                    <p><?php echo s($ises ? 'Si Shen Wan es la fórmula 50 y Gu Jing Wan la 51. Las otras 15 fichas amplían la fuente sin modificar el listado oficial de 63.' : 'Si Shen Wan is formula 50 and Gu Jing Wan is 51. The other 15 cards extend the source without changing the official roster of 63.'); ?></p>
+                </div>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+            </section>
+            <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-nine-directory-title">
+                <h4 id="chapter-nine-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 9' : 'Complete Chapter 9 directory'); ?></h4>
+                <p><?php echo s($ises ? 'Las 17 fórmulas están ordenadas en las cinco secciones de la fuente. Selecciona una para ir a su ficha.' : 'The 17 formulas follow the source order in five sections. Select one to jump to its card.'); ?></p>
+                <div class="formula-study-guide__chapter-directory-grid">
+                    <?php foreach ($stabilizechaptersections as $sectionkey => $section): ?>
+                        <?php $sectionformulas = array_values(array_filter($selected['formulas'], static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey)); ?>
+                        <section class="formula-study-guide__chapter-directory-group">
+                            <h5><a href="#chapter-section-<?php echo s($sectionkey); ?>"><?php echo s($ises ? $section['nameEs'] : $section['name']); ?> · <?php echo count($sectionformulas); ?></a></h5>
+                            <ol>
+                                <?php foreach ($sectionformulas as $chapterformula): ?>
+                                    <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a></li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </section>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
         <?php if ($selected['key'] === 'warm-interior'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-six-shortcut-title">
                 <h4 id="chapter-six-shortcut-title"><?php echo s($ises ? 'Ampliación del capítulo 6 · ' : 'Chapter 6 expansion · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></h4>
@@ -600,11 +752,22 @@ echo $OUTPUT->header();
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
                 $chapterformulaindex++;
-                $newchaptersection = $selected['key'] === 'tonify-chapter-8'
-                    && $lastformulacategory !== $formula['categoryKey'];
-                $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
-                $formulacategoryguide = $newchaptersection ? ($data['categoryGuides'][$formula['categoryKey']] ?? null) : null;
-                $lastformulacategory = $formula['categoryKey'];
+                $currentsectionkey = $selected['key'] === 'stabilize-bind-chapter-9'
+                    ? $formula['chapterSectionKey'] : $formula['categoryKey'];
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9'], true)
+                    && $lastformulacategory !== $currentsectionkey;
+                if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
+                    $formulacategory = $stabilizechaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
+                } else {
+                    $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
+                }
+                $formulacategoryguide = $newchaptersection && $selected['key'] === 'tonify-chapter-8'
+                    ? ($data['categoryGuides'][$formula['categoryKey']] ?? null) : null;
+                $lastformulacategory = $currentsectionkey;
                 $tier = $formula['safetyTier'];
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
@@ -615,7 +778,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if ($selected['key'] === 'tonify-chapter-8') {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -630,9 +793,13 @@ echo $OUTPUT->header();
                 ?>
                 <?php if ($newchaptersection && $formulacategory !== null): ?>
                     <section class="formula-study-guide__chapter-section" id="chapter-section-<?php echo s($formulacategory['key']); ?>">
-                        <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Sección del capítulo 8' : 'Chapter 8 section'); ?></p>
+                        <p class="formula-study-guide__eyebrow"><?php echo s($ises
+                            ? 'Sección del capítulo ' . $selected['sourceChapter']
+                            : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s($categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
+                        <p><?php echo s($selected['key'] === 'stabilize-bind-chapter-9'
+                            ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
+                            : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
                     </section>
                     <?php if ($formulacategoryguide !== null): ?>
@@ -681,7 +848,7 @@ echo $OUTPUT->header();
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Principal del guideline' : 'Guideline core'); ?></span><?php endif; ?>
-                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Fuente suplementaria' : 'Supplementary source'); ?></span><?php endif; ?>
+                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s(is_numeric($formula['number']) ? ($ises ? 'Board + fuente' : 'Board + source') : ($ises ? 'Fuente suplementaria' : 'Supplementary source')); ?></span><?php endif; ?>
                             <span class="formula-study-guide__risk<?php echo $tier !== 'standard' ? ' formula-study-guide__risk--' . s($tier) : ''; ?>"><?php echo s($risklabel); ?></span>
                         </div>
                     </header>
@@ -694,12 +861,12 @@ echo $OUTPUT->header();
                     <?php if (isset($formula['examFocus'])): ?>
                         <p class="formula-study-guide__exam-focus"><strong><?php echo $ises ? 'Enfoque de examen:' : 'Exam focus:'; ?></strong> <?php echo s($ises ? $formula['examFocusEs'] : $formula['examFocus']); ?></p>
                     <?php endif; ?>
-                    <?php if (isset($formula['ingredientRoles'], $formula['comparison'])): ?>
+                    <?php if (isset($formula['ingredientRoles']) || isset($formula['comparison'])): ?>
                         <details class="formula-study-guide__deep-dive">
                             <summary><?php echo s($ises ? 'Arquitectura y comparación de alto rendimiento' : 'High-yield architecture and comparison'); ?></summary>
                             <div class="formula-study-guide__deep-grid">
-                                <p><strong><?php echo $ises ? 'Funciones de ingredientes' : 'Ingredient roles'; ?></strong><?php echo s($ises ? $formula['ingredientRolesEs'] : $formula['ingredientRoles']); ?></p>
-                                <p><strong><?php echo $ises ? 'Comparación decisiva' : 'Decisive comparison'; ?></strong><?php echo s($ises ? $formula['comparisonEs'] : $formula['comparison']); ?></p>
+                                <?php if (isset($formula['ingredientRoles'])): ?><p><strong><?php echo $ises ? 'Funciones de ingredientes' : 'Ingredient roles'; ?></strong><?php echo s($ises ? $formula['ingredientRolesEs'] : $formula['ingredientRoles']); ?></p><?php endif; ?>
+                                <?php if (isset($formula['comparison'])): ?><p><strong><?php echo $ises ? 'Comparación decisiva' : 'Decisive comparison'; ?></strong><?php echo s($ises ? $formula['comparisonEs'] : $formula['comparison']); ?></p><?php endif; ?>
                             </div>
                         </details>
                     <?php endif; ?>
