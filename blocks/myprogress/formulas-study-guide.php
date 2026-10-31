@@ -13,8 +13,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 2
-        || count($data['supplementalFormulas'] ?? []) !== 18) {
+        || count($data['supplementalCategories'] ?? []) !== 3
+        || count($data['supplementalFormulas'] ?? []) !== 24) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -82,6 +82,10 @@ $categorycopy = [
     'warm-interior-cold' => [
         'Locate Cold by depth: channels and vessels, the Middle Burner, or life-threatening devastation of Yang.',
         'Localiza el Frío por profundidad: canales y vasos, Jiao Medio o devastación potencialmente mortal del Yang.',
+    ],
+    'exterior-interior-excess' => [
+        'Differentiate simultaneous exterior-interior excess by whether the interior requires purging, clearing Heat, or warming Cold.',
+        'Distingue el exceso simultáneo Exterior-Interior según si el Interior requiere purgar, aclarar Calor o calentar Frío.',
     ],
 ];
 
@@ -432,7 +436,8 @@ echo $OUTPUT->header();
                         <?php if ($practiceurl !== null): ?>
                             <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
                         <?php else: ?>
-                            <span class="formula-study-guide__source-pages"><?php echo s(($ises ? 'Fuente: capítulo 5 · págs. ' : 'Source: Chapter 5 · pp. ') . $formula['sourcePages']); ?></span>
+                            <span class="formula-study-guide__source-pages"><?php echo s(($ises ? 'Fuente: capítulo ' : 'Source: Chapter ')
+                                . $selected['sourceChapter'] . ($ises ? ' · págs. ' : ' · pp. ') . $formula['sourcePages']); ?></span>
                         <?php endif; ?>
                     </div>
                     <details class="formula-study-guide__safety">
