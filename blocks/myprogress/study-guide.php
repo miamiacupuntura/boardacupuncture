@@ -79,6 +79,15 @@ $areas = [
                 'status' => 'AVAILABLE · 63 FORMULAS',
             ],
             [
+                'title' => 'Herbal Comparisons Question Bank',
+                'description' => 'Practice 249 comparative herb questions in book order with recall flashcards and 117 strength-and-temperature charts.',
+                'path' => '/study-guide/comparisons/herb-comparison-bank.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 249 QUESTIONS',
+                'button_label' => 'Open question bank →',
+                'practice_exam' => true,
+            ],
+            [
                 'title' => 'Formulas Practice Exams',
                 'description' => 'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
@@ -430,7 +439,7 @@ echo $OUTPUT->header();
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status">PRACTICE</span>
                     <h3 id="practice-exams-title">Practice Exams</h3>
-                    <p>Build focused practice sessions for the principal formulas and their clinical modifications.</p>
+                    <p>Practice herb comparisons, principal formulas and their clinical modifications.</p>
                 </header>
                 <div class="subject-study-guide__other-grid">
                     <?php foreach ($practicechapters as $chapter): ?>
@@ -444,7 +453,7 @@ echo $OUTPUT->header();
                             <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? 'AVAILABLE'); ?></span>
                             <h3><?php echo s($chapter['title']); ?></h3>
                             <p><?php echo s($chapter['description']); ?></p>
-                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>">Open Study Guide →</a>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($chapter['button_label'] ?? 'Open Study Guide →'); ?></a>
                         </article>
                     <?php endforeach; ?>
                 </div>
