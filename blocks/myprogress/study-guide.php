@@ -86,6 +86,14 @@ $areas = [
                 'status' => 'AVAILABLE · CONNECTED STUDY',
             ],
             [
+                'title' => 'Formula Variations',
+                'description' => 'Study 22 formula families as named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing the variation.',
+                'path' => '/study-guide/comparisons/families.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 22 VARIATION FAMILIES',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Formula Comparisons',
                 'description' => 'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.',
                 'path' => '/study-guide/comparisons/formulas.html',
