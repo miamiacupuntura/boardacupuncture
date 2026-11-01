@@ -447,6 +447,78 @@
           "Fiebre nocturna que cede por la mañana sin sudor, con adelgazamiento y poca capa lingual tras enfermedad febril, apunta a Qing Hao Bie Jia Tang."
         ]
       ],
+      "relatedDuiYaoAnchor": "clear-heat",
+      "relatedDuiYaoTitle": "Related Duì Yào · Clear Heat by Level, Location and Root",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Aclarar Calor según nivel, localización y raíz",
+      "relatedDuiYaoText": "These seven official Appendix B pairs sharpen the category's decisive distinctions: hot wheezing versus smoldering Lung Heat, blazing Qi-level Heat, residual constrained Heat, deficiency Fire, superficial Heat-Toxin, and Heat lurking in depleted Yin.",
+      "relatedDuiYaoTextEs": "Estas siete parejas oficiales del Appendix B afinan las distinciones decisivas de la categoría: sibilancia caliente frente a Calor latente de Pulmón, Calor intenso del nivel Qi, Calor residual constreñido, Fuego por deficiencia, Calor-Toxicidad superficial y Calor oculto en Yin agotado.",
+      "relatedDuiYaoCaveat": "These pairs are not interchangeable. Jīn Yín Huā + Lián Qiào addresses Wind-Heat or toxicity near the surface and does not replace Huáng Lián Jiě Dú Tāng for robust Three-Burner Fire-Toxin. Likewise, deficiency-Fire and hidden-Heat pairs are too indirect for blazing excess. Match depth, location, force and fluid injury before selecting the treatment.",
+      "relatedDuiYaoCaveatEs": "Estas parejas no son intercambiables. Jīn Yín Huā + Lián Qiào trata Viento-Calor o toxicidad cercana a la superficie y no sustituye Huáng Lián Jiě Dú Tāng ante Fuego-Toxina robusto de los Tres Calentadores. Del mismo modo, las parejas para Fuego por deficiencia y Calor oculto son demasiado indirectas ante exceso intenso. Corresponde profundidad, localización, fuerza y lesión de líquidos antes de elegir el tratamiento.",
+      "relatedDuiYao": [
+        {
+          "number": 3,
+          "slug": "ma-huang-shi-gao-dui-yao",
+          "title": "Má Huáng + Shí Gāo",
+          "characters": "麻黄 + 石膏",
+          "action": "Diffuse Lung Qi while strongly clearing Lung Heat for hot wheezing.",
+          "actionEs": "Difundir Qi de Pulmón mientras aclara con fuerza Calor de Pulmón para sibilancia caliente.",
+          "formulas": "Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng."
+        },
+        {
+          "number": 10,
+          "slug": "zhi-zi-dan-dou-chi-dui-yao",
+          "title": "Zhī Zǐ + Dàn Dòu Chǐ",
+          "characters": "栀子 + 淡豆豉",
+          "action": "Clear and vent constrained residual Heat from the chest after an unresolved febrile process.",
+          "actionEs": "Aclarar y ventilar Calor residual constreñido en el pecho tras un proceso febril no resuelto.",
+          "formulas": "Zhī Zǐ Chǐ Tāng."
+        },
+        {
+          "number": 11,
+          "slug": "shi-gao-zhi-mu-dui-yao",
+          "title": "Shí Gāo + Zhī Mǔ",
+          "characters": "石膏 + 知母",
+          "action": "Clear blazing Qi-level Heat, drain Lung and Stomach Fire and protect fluids.",
+          "actionEs": "Aclarar Calor intenso del nivel Qi, drenar Fuego de Pulmón y Estómago y proteger líquidos.",
+          "formulas": "Bái Hǔ Tāng."
+        },
+        {
+          "number": 12,
+          "slug": "zhi-mu-huang-bai-dui-yao",
+          "title": "Zhī Mǔ + Huáng Bǎi",
+          "characters": "知母 + 黄柏",
+          "action": "Enrich Yin while draining deficiency Fire from the Kidney and lower burner.",
+          "actionEs": "Enriquecer Yin mientras drena Fuego por deficiencia de Riñón y Jiao Inferior.",
+          "formulas": "Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán."
+        },
+        {
+          "number": 13,
+          "slug": "sang-bai-pi-di-gu-pi-dui-yao",
+          "title": "Sāng Bái Pí + Dì Gǔ Pí",
+          "characters": "桑白皮 + 地骨皮",
+          "action": "Drain smoldering Lung Heat, calm cough and wheezing and clear lingering afternoon Heat.",
+          "actionEs": "Drenar Calor latente de Pulmón, calmar tos y sibilancias y aclarar Calor vespertino persistente.",
+          "formulas": "Xiè Bái Sǎn."
+        },
+        {
+          "number": 15,
+          "slug": "jin-yin-hua-lian-qiao-dui-yao",
+          "title": "Jīn Yín Huā + Lián Qiào",
+          "characters": "金银花 + 连翘",
+          "action": "Disperse Wind-Heat, clear Heat and resolve toxicity at the surface and in hot swellings.",
+          "actionEs": "Dispersar Viento-Calor, aclarar Calor y resolver toxicidad en la superficie y en hinchazones calientes.",
+          "formulas": "Yín Qiáo Sǎn."
+        },
+        {
+          "number": 17,
+          "slug": "qing-hao-bie-jia-dui-yao",
+          "title": "Qīng Hāo + Biē Jiǎ",
+          "characters": "青蒿 + 鳖甲",
+          "action": "Enrich Yin and vent Heat lurking deep in the Yin level after warm disease.",
+          "actionEs": "Enriquecer Yin y ventilar Calor oculto en profundidad en el nivel Yin tras enfermedad tibia.",
+          "formulas": "Qīng Hāo Biē Jiǎ Tāng."
+        }
+      ],
       "quickCompareTitle": "The five Heat-clearing formulas at a glance",
       "quickCompareTitleEs": "Las cinco fórmulas que aclaran Calor de un vistazo",
       "quickCompare": [
