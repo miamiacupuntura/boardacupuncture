@@ -514,7 +514,6 @@ $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-c
 $isstabilizechapterpage = $selected !== null && $selected['key'] === 'stabilize-bind-chapter-9';
 $iscalmshenchapterpage = $selected !== null && $selected['key'] === 'calm-shen-chapter-10';
 $isopenorificeschapterpage = $selected !== null && $selected['key'] === 'open-orifices-chapter-11';
-$isregulateqichapterpage = $selected !== null && $selected['key'] === 'regulate-qi-chapter-12';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
@@ -569,11 +568,6 @@ if ($ises) {
     $openorificeschapterparams['lang'] = 'es';
 }
 $openorificeschapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $openorificeschapterparams);
-$regulateqiparentparams = ['focus' => 'regulate-qi'];
-if ($ises) {
-    $regulateqiparentparams['lang'] = 'es';
-}
-$regulateqiparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $regulateqiparentparams);
 $regulateqichapterparams = ['focus' => 'regulate-qi-chapter-12'];
 if ($ises) {
     $regulateqichapterparams['lang'] = 'es';
@@ -800,7 +794,6 @@ echo $OUTPUT->header();
                 <?php if ($iswarmchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calentar el Interior' : '← Warm the Interior main category'); ?></a><?php endif; ?>
                 <?php if ($isstabilizechapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizeparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Estabilizar y contener' : '← Stabilize and Bind main category'); ?></a><?php endif; ?>
                 <?php if ($iscalmshenchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $calmshenparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calmar el Shen' : '← Calm Shen main category'); ?></a><?php endif; ?>
-                <?php if ($isregulateqichapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqiparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Regular el Qi' : '← Regulate Qi main category'); ?></a><?php endif; ?>
                 <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
             </div>
             <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
