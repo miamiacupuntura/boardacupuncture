@@ -68,6 +68,17 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "treat-dryness-ch15"
     );
+    $chapter16 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-damp-ch16"
+    );
+    $dampnessSections = $data["categoryGuides"]["expel-damp-chapter-16"]["formulaSections"] ?? [];
+    $dampnessSectionNames = [];
+    foreach ($dampnessSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $dampnessSectionNames[] = $formulaName;
+        }
+    }
     $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
     $drynessSectionNames = [];
     foreach ($drynessSections as $section) {
@@ -104,10 +115,11 @@ php -r '
             $purgeReferenceNames[] = $item[0] ?? "";
         }
     }
-    if (count($data["categories"] ?? []) !== 14
+    if (($data["version"] ?? null) !== 7
+            || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 16
-            || count($data["supplementalFormulas"] ?? []) !== 153
+            || count($data["supplementalCategories"] ?? []) !== 17
+            || count($data["supplementalFormulas"] ?? []) !== 178
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -116,6 +128,15 @@ php -r '
             || count($chapter13) !== 19
             || count($chapter14) !== 14
             || count($chapter15) !== 8
+            || count($chapter16) !== 25
+            || array_column($dampnessSections, "key") !== [
+                "transform-harmonize-middle", "clear-damp-heat", "promote-urination",
+                "warm-transform-water", "dispel-wind-damp"
+            ]
+            || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $dampnessSections)
+                !== [5, 10, 5, 7, 6]
+            || count($dampnessSectionNames) !== 33
+            || count(array_unique($dampnessSectionNames)) !== 33
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -266,6 +287,14 @@ grep -q '"key": "enrich-yin-internal-dryness"' "$TEMP_DIR/formulas-study-guide-d
 grep -q "Dato interesante: el Board no tiene una categoría propia para tratar Sequedad" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Las seis fórmulas asociadas permanecen dentro de sus fichas principales" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "0 de 8 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "expel-damp-chapter-16" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number":"C16-33"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "transform-harmonize-middle"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "dispel-wind-damp"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Coincidencia con los Board Domains · 8 de 33" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Dato interesante: ocho fórmulas del Board" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -386,11 +415,19 @@ grep -q '"key": "enrich-yin-internal-dryness"' "$TARGET_DIR/formulas-study-guide
 grep -q "Dato interesante: el Board no tiene una categoría propia para tratar Sequedad" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Las seis fórmulas asociadas permanecen dentro de sus fichas principales" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "0 de 8 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "expel-damp-chapter-16" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number":"C16-33"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "transform-harmonize-middle"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "dispel-wind-damp"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Coincidencia con los Board Domains · 8 de 33" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Dato interesante: ocho fórmulas del Board" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14 Y 15 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15 Y 16 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
@@ -412,11 +449,13 @@ echo "VISTA ÚNICA INSTALADA: INVIGORATE BLOOD ABRE DIRECTAMENTE EL CAPÍTULO 13
 echo "CAPÍTULO 14 INSTALADO: 17 fórmulas (14 perfiles nuevos + 3 Board; 2 secciones de la fuente)"
 echo "PRIORIDAD INSTALADA: LAS 3 FÓRMULAS BOARD APARECEN PRIMERO"
 echo "EXPLICACIÓN MÉDICA INSTALADA: COBERTURA DE PATRONES, SEGURIDAD Y LÍMITES CLÍNICOS"
-echo "DATOS INTERESANTES INSTALADOS: HIPÓTESIS CLÍNICAS Y CURRICULARES PARA LOS CAPÍTULOS 5–15"
+echo "DATOS INTERESANTES INSTALADOS: HIPÓTESIS CLÍNICAS Y CURRICULARES PARA LOS CAPÍTULOS 5–16"
 echo "VISTA ÚNICA INSTALADA: EXPEL WIND ABRE DIRECTAMENTE EL CAPÍTULO 14 COMPLETO"
 echo "CAPÍTULO 15 INSTALADO: 8 FÓRMULAS PRINCIPALES EN 2 SECCIONES (0 BOARD)"
 echo "FÓRMULAS ASOCIADAS INSTALADAS: 6 VARIANTES DENTRO DE SUS FICHAS PRINCIPALES"
 echo "SEQUEDAD INSTALADA: EXTERNA FRESCA/CÁLIDA VS. INTERNA POR AGOTAMIENTO DE LÍQUIDOS"
+echo "CAPÍTULO 16 INSTALADO: 33 FÓRMULAS EN 5 SECCIONES (25 PERFILES NUEVOS + 8 BOARD)"
+echo "VISTA ÚNICA INSTALADA: EXPEL DAMPNESS ABRE DIRECTAMENTE EL CAPÍTULO 16 COMPLETO"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
