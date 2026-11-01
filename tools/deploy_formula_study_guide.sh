@@ -48,13 +48,18 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "calm-shen-ch10"
     );
+    $chapter11 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "open-orifices-ch11"
+    );
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 11
-            || count($data["supplementalFormulas"] ?? []) !== 90
+            || count($data["supplementalCategories"] ?? []) !== 12
+            || count($data["supplementalFormulas"] ?? []) !== 97
             || count($chapter8) !== 45
             || count($chapter9) !== 15
-            || count($chapter10) !== 6) {
+            || count($chapter10) !== 6
+            || count($chapter11) !== 7) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
@@ -69,6 +74,9 @@ grep -q "Listado completo del capítulo 9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "calm-shen-chapter-10" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 10" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 10" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "open-orifices-chapter-11" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 11" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo del capítulo 11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "displayformulaname" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Bensky et al., Chinese Herbal Medicine: Formulas & Strategies" "$TEMP_DIR/formulas-study-guide.php"
@@ -108,14 +116,16 @@ if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
 fi
 
 grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "open-orifices-chapter-11" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9 Y 10 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10 Y 11 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "CAPÍTULO 10 INSTALADO: 9 fórmulas en 2 secciones (6 perfiles nuevos + 3 Board)"
+echo "CAPÍTULO 11 INSTALADO: 7 fórmulas en 2 secciones (7 perfiles Bensky, 0 Board)"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
