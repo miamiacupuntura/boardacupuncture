@@ -162,6 +162,78 @@
           "Un paciente débil o convaleciente con signos de Humedad redirige la elección hacia Ren Shen Bai Du San."
         ]
       ],
+      "relatedDuiYaoAnchor": "release-exterior",
+      "relatedDuiYaoTitle": "Related Duì Yào · Release Wind-Cold or Wind-Heat",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Liberar Viento-Frío o Viento-Calor",
+      "relatedDuiYaoText": "These seven official Appendix B pairs clarify the category's main mechanisms: induce sweating in exterior excess, restore Lung diffusion and descent, harmonize nutritive and protective Qi, disperse mild Wind-Heat, clear Wind-Heat and toxicity, benefit a swollen sore throat, and coordinate Ying-Wei with the Middle Burner.",
+      "relatedDuiYaoTextEs": "Estas siete parejas oficiales del Appendix B aclaran los mecanismos principales de la categoría: inducir sudor en exceso Exterior, restaurar difusión y descenso de Pulmón, armonizar Qi nutritivo y protector, dispersar Viento-Calor leve, aclarar Viento-Calor y toxicidad, beneficiar garganta dolorida e hinchada y coordinar Ying-Wei con el Jiao Medio.",
+      "relatedDuiYaoCaveat": "These pairs are not interchangeable. First distinguish Cold from Heat, excess from deficiency, presence or absence of sweating, and whether cough or throat signs dominate. A focused pair does not replace the architecture, dosage, preparation or safety controls of the complete formula.",
+      "relatedDuiYaoCaveatEs": "Estas parejas no son intercambiables. Primero distingue Frío de Calor, exceso de deficiencia, presencia o ausencia de sudor y si predominan tos o signos de garganta. Una pareja focal no sustituye la arquitectura, dosis, preparación ni controles de seguridad de la fórmula completa.",
+      "relatedDuiYao": [
+        {
+          "number": 1,
+          "slug": "ma-huang-gui-zhi-dui-yao",
+          "title": "Má Huáng + Guì Zhī",
+          "characters": "麻黄 + 桂枝",
+          "action": "Strongly induce sweating and release an excess Wind-Cold Exterior pattern.",
+          "actionEs": "Inducir sudoración con fuerza y liberar un patrón Exterior de Viento-Frío por exceso.",
+          "formulas": "Má Huáng Tāng."
+        },
+        {
+          "number": 2,
+          "slug": "ma-huang-xing-ren-dui-yao",
+          "title": "Má Huáng + Xìng Rén",
+          "characters": "麻黄 + 杏仁",
+          "action": "Restore Lung diffusion and descent to stop cough and wheezing in an exterior excess pattern.",
+          "actionEs": "Restaurar difusión y descenso de Qi de Pulmón para detener tos y sibilancias en un patrón Exterior de exceso.",
+          "formulas": "Má Huáng Tāng; Má Xìng Shí Gān Tāng."
+        },
+        {
+          "number": 4,
+          "slug": "gui-zhi-bai-shao-dui-yao",
+          "title": "Guì Zhī + Bái Sháo",
+          "characters": "桂枝 + 白芍",
+          "action": "Harmonize nutritive and protective Qi in exterior deficiency and balance movement with containment.",
+          "actionEs": "Armonizar Qi nutritivo y protector en deficiencia Exterior y equilibrar movimiento con contención.",
+          "formulas": "Guì Zhī Tāng."
+        },
+        {
+          "number": 7,
+          "slug": "sang-ye-ju-hua-dui-yao",
+          "title": "Sāng Yè + Jú Huā",
+          "characters": "桑叶 + 菊花",
+          "action": "Disperse mild Wind-Heat, clear the Lung and emphasize cough with eye or head signs.",
+          "actionEs": "Dispersar Viento-Calor leve, aclarar Pulmón y enfatizar tos con signos de ojos o cabeza.",
+          "formulas": "Sāng Jú Yǐn."
+        },
+        {
+          "number": 15,
+          "slug": "jin-yin-hua-lian-qiao-dui-yao",
+          "title": "Jīn Yín Huā + Lián Qiào",
+          "characters": "金银花 + 连翘",
+          "action": "Disperse Wind-Heat, clear Heat and resolve toxicity at the surface.",
+          "actionEs": "Dispersar Viento-Calor, aclarar Calor y resolver toxicidad en la superficie.",
+          "formulas": "Yín Qiáo Sǎn."
+        },
+        {
+          "number": 16,
+          "slug": "niu-bang-zi-lian-qiao-dui-yao",
+          "title": "Niú Bàng Zǐ + Lián Qiào",
+          "characters": "牛蒡子 + 连翘",
+          "action": "Disperse Wind-Heat, resolve toxicity and benefit a swollen, painful throat.",
+          "actionEs": "Dispersar Viento-Calor, resolver toxicidad y beneficiar una garganta dolorida e hinchada.",
+          "formulas": "Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn."
+        },
+        {
+          "number": 22,
+          "slug": "sheng-jiang-da-zao-dui-yao",
+          "title": "Shēng Jiāng + Dà Zǎo",
+          "characters": "生姜 + 大枣",
+          "action": "Harmonize Ying and Wei, support the Spleen and Stomach and coordinate the exterior with the Middle Burner.",
+          "actionEs": "Armonizar Ying y Wei, apoyar Bazo y Estómago y coordinar el Exterior con el Jiao Medio.",
+          "formulas": "Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn."
+        }
+      ],
       "quickCompareTitle": "Core formula quick comparison",
       "quickCompareTitleEs": "Comparación rápida de fórmulas centrales",
       "quickCompare": [
