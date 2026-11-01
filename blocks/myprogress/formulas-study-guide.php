@@ -674,9 +674,10 @@ echo $OUTPUT->header();
 .formula-study-guide__source-pages{flex:0 0 auto;padding:7px 10px;border-radius:7px;background:#eef3f6;color:#415a6b;font-size:12px;font-weight:800;white-space:nowrap}
 .formula-study-guide__safety{margin-top:12px;border:1px solid #ded6ec;border-radius:8px;background:#fbf9ff}.formula-study-guide__safety summary{padding:10px 13px;color:#60409a;font-weight:800;cursor:pointer}.formula-study-guide__safety p{margin:0;padding:0 13px 13px;color:#52677a;line-height:1.5}
 .formula-study-guide__references{margin:20px 0;border:1px solid #d8e1e7;border-radius:11px;background:#fff}.formula-study-guide__references>summary{padding:16px 18px;color:#334155;font-size:17px;font-weight:900;cursor:pointer}.formula-study-guide__references-body{padding:0 18px 18px}.formula-study-guide__references-body>p{margin:0 0 15px;color:#52677a;line-height:1.5}.formula-study-guide__reference-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__reference-group{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__reference-group h5{margin:0 0 10px;font-size:15px}.formula-study-guide__reference-group ul{margin:0;padding-left:18px}.formula-study-guide__reference-group li{margin:0 0 9px;color:#52677a;line-height:1.4}.formula-study-guide__reference-group li:last-child{margin-bottom:0}.formula-study-guide__reference-group strong{color:#17232a}
+.formula-study-guide__additional{margin:20px 0;border:1px solid #add8cf;border-left:5px solid #0b817d;border-radius:11px;background:#effaf7}.formula-study-guide__additional>summary{padding:17px 18px;color:#075e54;font-size:18px;font-weight:900;cursor:pointer}.formula-study-guide__additional-body{padding:0 18px 18px}.formula-study-guide__additional-body>p{margin:0 0 15px;color:#496474;line-height:1.5}.formula-study-guide__additional-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:15px}.formula-study-guide__additional-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__additional-group h5{margin:0 0 9px;color:#17232a;font-size:15px}.formula-study-guide__additional-group ol{margin:0;padding-left:22px}.formula-study-guide__additional-group li{margin:0 0 7px;color:#52677a;line-height:1.4}.formula-study-guide__additional-group a{color:#174c69;font-weight:750;text-decoration:none}.formula-study-guide__additional-group a:hover{color:#075fc8;text-decoration:underline}
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
@@ -821,22 +822,6 @@ echo $OUTPUT->header();
                         : 'Open the complete Appendix C list—63 formulas in 14 categories—to verify directly which formulas belong to the guideline.'); ?></p>
                 </div>
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir en Board Domain →' : 'Open in Board Domain →'); ?></a>
-            </section>
-        <?php endif; ?>
-        <?php if ($selected['key'] === 'regulate-qi'): ?>
-            <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-twelve-shortcut-title">
-                <h4 id="chapter-twelve-shortcut-title"><?php echo s($ises ? 'Capítulo 12 completo · 20 fórmulas principales' : 'Complete Chapter 12 · 20 principal formulas'); ?></h4>
-                <p><?php echo s($ises
-                    ? 'La categoría oficial del Board contiene cinco fórmulas. El capítulo completo añade otras quince y organiza toda la familia en dos movimientos: promover el movimiento del Qi y dirigir el Qi rebelde hacia abajo.'
-                    : 'The official Board category contains five formulas. The complete chapter adds fifteen more and organizes the entire family around two movements: promoting Qi movement and directing rebellious Qi downward.'); ?></p>
-                <div class="formula-study-guide__board-roster">
-                    <h5><?php echo s($ises ? 'Coincidencia exacta con Appendix C 2026 · 5 de 20' : 'Exact overlap with the 2026 Appendix C · 5 of 20'); ?></h5>
-                    <p><?php echo s('Yue Ju Wan*, Ban Xia Hou Po Tang*, Su Zi Jiang Qi Tang*, Ding Chuan Tang*, Ju Pi Zhu Ru Tang*.'); ?></p>
-                </div>
-                <div class="formula-study-guide__chapter-shortcut-actions">
-                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqichapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 12 completo →' : 'Open complete Chapter 12 →'); ?></a>
-                    <a class="formula-study-guide__button" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
-                </div>
             </section>
         <?php endif; ?>
         <?php if ($selected['key'] === 'tonify'): ?>
@@ -1448,6 +1433,39 @@ echo $OUTPUT->header();
                 </article>
             <?php endforeach; ?>
         </section>
+        <?php if ($selected['key'] === 'regulate-qi'): ?>
+            <details class="formula-study-guide__additional">
+                <summary><?php echo s($ises
+                    ? 'Ver 15 fórmulas adicionales de Bensky · Capítulo 12'
+                    : 'View 15 additional Bensky formulas · Chapter 12'); ?></summary>
+                <div class="formula-study-guide__additional-body">
+                    <p><?php echo s($ises
+                        ? 'Estas fórmulas completan el capítulo 12, pero no pertenecen al listado oficial vigente de 63 fórmulas del Board. Selecciona un nombre para abrir su ficha completa.'
+                        : 'These formulas complete Chapter 12 but are not part of the current official 63-formula Board roster. Select a name to open its complete profile.'); ?></p>
+                    <div class="formula-study-guide__additional-grid">
+                        <?php foreach ($regulateqichaptersections as $sectionkey => $section): ?>
+                            <?php
+                            $additionalformulas = array_values(array_filter(
+                                $regulateqichapterformulas,
+                                static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey
+                                    && $getboardformula($formula['name']) === null
+                            ));
+                            ?>
+                            <section class="formula-study-guide__additional-group">
+                                <h5><?php echo s(($ises ? $section['nameEs'] : $section['name']) . ' · ' . count($additionalformulas)); ?></h5>
+                                <ol>
+                                    <?php foreach ($additionalformulas as $additionalformula): ?>
+                                        <?php $additionalformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $additionalformula['number']); ?>
+                                        <li><a href="<?php echo $regulateqichapterurl->out(false); ?>#formula-<?php echo s($additionalformulaid); ?>"><?php echo s($additionalformula['name']); ?></a></li>
+                                    <?php endforeach; ?>
+                                </ol>
+                            </section>
+                        <?php endforeach; ?>
+                    </div>
+                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqichapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir las 20 fichas del capítulo 12 →' : 'Open all 20 Chapter 12 profiles →'); ?></a>
+                </div>
+            </details>
+        <?php endif; ?>
         <?php if ($selectedguide !== null): ?>
             <details class="formula-study-guide__references">
                 <summary><?php echo s($ises ? $selectedguide['referencesTitleEs'] : $selectedguide['referencesTitle']); ?></summary>
