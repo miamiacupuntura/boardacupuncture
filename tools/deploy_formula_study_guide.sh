@@ -56,15 +56,20 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "regulate-qi-ch12"
     );
+    $chapter13 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "regulate-blood-ch13"
+    );
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 13
-            || count($data["supplementalFormulas"] ?? []) !== 112
+            || count($data["supplementalCategories"] ?? []) !== 14
+            || count($data["supplementalFormulas"] ?? []) !== 131
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
             || count($chapter11) !== 7
-            || count($chapter12) !== 15) {
+            || count($chapter12) !== 15
+            || count($chapter13) !== 19) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
@@ -100,6 +105,14 @@ grep -q "Dato relevante para el examen · 5 de 20 en Appendix C 2026" "$TEMP_DIR
 grep -q "Ver 15 fórmulas adicionales de Bensky · Capítulo 12" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Abrir las 20 fichas del capítulo 12 →" "$TEMP_DIR/formulas-study-guide.php"
 ! grep -q "Regulate Qi main category" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "regulate-blood-chapter-13" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 13" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo del capítulo 13" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "4 fórmulas Board · Capítulo 13 de Bensky: 23" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Coincidencia con los Board Domains · 4 de 23" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Ver 19 fórmulas adicionales de Bensky · Capítulo 13" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Abrir las 23 fichas del capítulo 13 →" "$TEMP_DIR/formulas-study-guide.php"
+! grep -q "Invigorate Blood main category" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -154,11 +167,17 @@ grep -q "Dato relevante para el examen · 5 de 20 en Appendix C 2026" "$TARGET_D
 grep -q "Ver 15 fórmulas adicionales de Bensky · Capítulo 12" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Abrir las 20 fichas del capítulo 12 →" "$TARGET_DIR/formulas-study-guide.php"
 ! grep -q "Regulate Qi main category" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "regulate-blood-chapter-13" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "4 fórmulas Board · Capítulo 13 de Bensky: 23" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Coincidencia con los Board Domains · 4 de 23" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Ver 19 fórmulas adicionales de Bensky · Capítulo 13" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Abrir las 23 fichas del capítulo 13 →" "$TARGET_DIR/formulas-study-guide.php"
+! grep -q "Invigorate Blood main category" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11 Y 12 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12 Y 13 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"
@@ -170,6 +189,8 @@ echo "CAPÍTULO 11 INSTALADO: 7 fórmulas en 2 secciones (7 perfiles Bensky, 0 B
 echo "ANÁLISIS DE ALCANCE INSTALADO: METALES, ESPECIES PROTEGIDAS, INGREDIENTES REGULADOS, VÍA NASAL Y URGENCIAS"
 echo "CAPÍTULO 12 INSTALADO: 20 fórmulas en 2 secciones (15 perfiles nuevos + 5 Board)"
 echo "TARJETA UNIFICADA INSTALADA: REGULATE QI APARECE UNA SOLA VEZ EN EL ÍNDICE"
+echo "CAPÍTULO 13 INSTALADO: 23 fórmulas en 2 secciones (19 perfiles nuevos + 4 Board)"
+echo "TARJETA UNIFICADA INSTALADA: INVIGORATE BLOOD APARECE UNA SOLA VEZ EN EL ÍNDICE"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
