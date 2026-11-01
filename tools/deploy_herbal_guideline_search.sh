@@ -71,8 +71,8 @@ for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
     fi
     cp -a "$TARGET_DIR/$page" "$TEMP_DIR/$page"
     sed -E -i \
-        -e 's/guidelines\.css\?v=20261031-[0-9]+/guidelines.css?v=20261031-5/g' \
-        -e 's/guideline-return\.js\?v=20261031-[0-9]+/guideline-return.js?v=20261031-5/g' \
+        -e 's/guidelines\.css\?v=20261031-[0-9]+/guidelines.css?v=20261031-6/g' \
+        -e 's/guideline-return\.js\?v=20261031-[0-9]+/guideline-return.js?v=20261031-6/g' \
         "$TEMP_DIR/$page"
 done
 
@@ -86,15 +86,18 @@ php -r '
 ' "$TEMP_DIR/single-herb-card-index.json"
 grep -q "guide-smart-search" "$TEMP_DIR/guidelines.css"
 grep -q "guide-herb-roster__card-link" "$TEMP_DIR/guidelines.css"
-grep -q "guideline-search.js?v=20261031-2" "$TEMP_DIR/guideline-return.js"
+grep -q "guideline-search.js?v=20261031-3" "$TEMP_DIR/guideline-return.js"
 grep -q "Search the complete guide" "$TEMP_DIR/guideline-search.js"
 grep -q "Mu Li San" "$TEMP_DIR/guideline-search.js"
 grep -q "formulas-study-guide-data.json" "$TEMP_DIR/guideline-search.js"
 grep -q "single-herbs-study-guide.php?herb=" "$TEMP_DIR/guideline-search.js"
+grep -q "Included in the current Board guideline" "$TEMP_DIR/guideline-search.js"
+grep -q "calm-shen-chapter-10" "$TEMP_DIR/guideline-search.js"
 grep -q "single-herb-card-index.json" "$TEMP_DIR/single-herbs-study-guide.php"
-grep -q "guidelines.css?v=20261031-5" "$TEMP_DIR/chinese-herbal-medicine.html"
-grep -q "guideline-return.js?v=20261031-5" "$TEMP_DIR/chinese-herbal-medicine.html"
-grep -q "guideline-return.js?v=20261031-5" "$TEMP_DIR/chinese-herbal-medicine-es.html"
+grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "guidelines.css?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "guideline-return.js?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "guideline-return.js?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine-es.html"
 
 mkdir -p "$BACKUP_DIR"
 cp -a "$TARGET_DIR/guidelines.css" "$BACKUP_DIR/"
@@ -136,15 +139,18 @@ fi
 
 grep -q "guide-smart-search" "$TARGET_DIR/guidelines.css"
 grep -q "guide-herb-roster__card-link" "$TARGET_DIR/guidelines.css"
-grep -q "guideline-search.js?v=20261031-2" "$TARGET_DIR/guideline-return.js"
+grep -q "guideline-search.js?v=20261031-3" "$TARGET_DIR/guideline-return.js"
 grep -q "Mu Li San" "$TARGET_DIR/guideline-search.js"
 grep -q "single-herbs-study-guide.php?herb=" "$TARGET_DIR/guideline-search.js"
-grep -q "guideline-return.js?v=20261031-5" "$TARGET_DIR/chinese-herbal-medicine.html"
-grep -q "guideline-return.js?v=20261031-5" "$TARGET_DIR/chinese-herbal-medicine-es.html"
+grep -q "Included in the current Board guideline" "$TARGET_DIR/guideline-search.js"
+grep -q "guideline-return.js?v=20261031-6" "$TARGET_DIR/chinese-herbal-medicine.html"
+grep -q "guideline-return.js?v=20261031-6" "$TARGET_DIR/chinese-herbal-medicine-es.html"
 grep -q "single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "guidelineHerbs" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 
 echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
 echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
 echo "304 HIERBAS ENLAZADAS CON SUS TARJETAS DE SINGLE HERBS"
+echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DEL GUIDELINE"
 echo "Respaldo: $BACKUP_DIR"

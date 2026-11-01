@@ -18,6 +18,7 @@
         boardFormula: 'Fórmula · Dominio Board',
         benskyFormula: 'Fórmula · Bensky',
         table: 'Comparación',
+        marker: '* Incluida en el guideline vigente del Board',
         examples: 'Prueba:',
         suggestions: ['Mu Li San', 'Si Shen Wan', 'Huang Qi', 'sangrado uterino']
     } : {
@@ -36,6 +37,7 @@
         boardFormula: 'Formula · Board Domain',
         benskyFormula: 'Formula · Bensky',
         table: 'Comparison',
+        marker: '* Included in the current Board guideline',
         examples: 'Try:',
         suggestions: ['Mu Li San', 'Si Shen Wan', 'Huang Qi', 'uterine bleeding']
     };
@@ -96,6 +98,7 @@
         '<div class="guide-smart-search__examples"><strong>' + copy.examples + '</strong> ' + copy.suggestions.map(function(term) {
             return '<button type="button" data-search-term="' + term + '">' + term + '</button>';
         }).join('') + '</div>',
+        '<p class="guide-smart-search__marker">' + copy.marker + '</p>',
         '<p id="guide-smart-search-status" class="guide-smart-search__status" role="status" aria-live="polite">' + copy.loading + '</p>',
         '<div id="guide-smart-search-results" class="guide-smart-search__results" role="listbox" hidden></div>'
     ].join('');
@@ -144,16 +147,21 @@
         if (!link) {
             return;
         }
+        const formulaName = link.textContent.trim().replace(/\*$/, '');
         const category = element.closest('.guide-formula-category');
         const categoryName = category && category.querySelector('h4') ? category.querySelector('h4').textContent : '';
         addEntry({
-            title: link.textContent,
+            title: formulaName,
             summary: categoryName,
             extra: element.textContent,
             href: link.getAttribute('href'),
             type: copy.boardFormula,
+            guideline: true,
             rank: 80
         });
+        if (!/\*$/.test(link.textContent.trim())) {
+            link.appendChild(document.createTextNode('*'));
+        }
     });
 
     document.querySelectorAll('.guide-herb-roster li').forEach(function(element, index) {
@@ -162,22 +170,27 @@
         if (!name) {
             return;
         }
-        const herbUrl = '/blocks/myprogress/single-herbs-study-guide.php?herb=' + encodeURIComponent(name.textContent.trim()) + (isSpanish ? '&lang=es' : '');
+        const herbName = name.textContent.trim().replace(/\*$/, '');
+        const herbUrl = '/blocks/myprogress/single-herbs-study-guide.php?herb=' + encodeURIComponent(herbName) + (isSpanish ? '&lang=es' : '');
         if (!name.closest('a')) {
             const cardLink = document.createElement('a');
             cardLink.className = 'guide-herb-roster__card-link';
             cardLink.href = herbUrl;
-            cardLink.setAttribute('aria-label', (isSpanish ? 'Abrir ficha de ' : 'Open card for ') + name.textContent.trim());
+            cardLink.setAttribute('aria-label', (isSpanish ? 'Abrir ficha de ' : 'Open card for ') + herbName);
             name.replaceWith(cardLink);
             cardLink.appendChild(name);
         }
         addEntry({
-            title: name.textContent,
+            title: herbName,
             summary: latin ? latin.textContent : '',
             href: herbUrl,
             type: copy.herb,
+            guideline: true,
             rank: 70
         });
+        if (!/\*$/.test(name.textContent.trim())) {
+            name.appendChild(document.createTextNode('*'));
+        }
         ensureId(element, 'guide-herb', index + 1);
     });
 
@@ -199,14 +212,20 @@
         if (formula.categoryKey === 'stabilize-bind-ch9') {
             return 'stabilize-bind-chapter-9';
         }
+        if (formula.categoryKey === 'calm-shen-ch10') {
+            return 'calm-shen-chapter-10';
+        }
         return formula.categoryKey;
     };
 
     const addFormulaData = function(formula, supplemental) {
         const focus = formulaFocus(formula);
         const language = isSpanish ? '&lang=es' : '';
+        const sourceChapter = formula.categoryKey === 'stabilize-bind-ch9'
+            ? '9'
+            : (formula.categoryKey === 'calm-shen-ch10' ? '10' : '');
         const source = supplemental
-            ? ((isSpanish ? 'Bensky · capítulo ' : 'Bensky · Chapter ') + (formula.categoryKey === 'stabilize-bind-ch9' ? '9' : ''))
+            ? ((isSpanish ? 'Bensky · capítulo ' : 'Bensky · Chapter ') + sourceChapter)
             : ((isSpanish ? 'Dominio Board · Fórmula #' : 'Board Domain · Formula #') + formula.number);
         addEntry({
             title: formula.name,
@@ -214,6 +233,7 @@
             extra: [formula.kings, formula.ingredients, formula.ingredientsEs, formula.clue, formula.clueEs, formula.group, formula.groupEs].filter(Boolean).join(' '),
             href: '/blocks/myprogress/formulas-study-guide.php?focus=' + encodeURIComponent(focus) + language + '#formula-' + encodeURIComponent(formula.number),
             type: supplemental ? copy.benskyFormula : copy.boardFormula,
+            guideline: !supplemental,
             source: source,
             rank: supplemental ? 90 : 100
         });
@@ -307,7 +327,8 @@
             link.href = entry.href;
             link.className = 'guide-smart-search__result';
             link.setAttribute('role', 'option');
-            link.innerHTML = '<span class="guide-smart-search__result-main"><span class="guide-smart-search__result-type">' + entry.type + '</span><strong>' + entry.title + '</strong><small>' + entry.summary + '</small></span><span class="guide-smart-search__result-action">' + copy.open + ' →</span>';
+            const displayTitle = entry.title + (entry.guideline ? '*' : '');
+            link.innerHTML = '<span class="guide-smart-search__result-main"><span class="guide-smart-search__result-type">' + entry.type + '</span><strong>' + displayTitle + '</strong><small>' + entry.summary + '</small></span><span class="guide-smart-search__result-action">' + copy.open + ' →</span>';
             link.addEventListener('mouseenter', function() { setActiveResult(index); });
             link.addEventListener('click', function() {
                 if (entry.href.charAt(0) === '#') {

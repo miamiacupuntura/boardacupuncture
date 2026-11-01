@@ -63,20 +63,29 @@ $normalizeherbname = static function(string $value): string {
     $value = strtolower(trim((string) preg_replace('/\s*\*$/', '', $value)));
     return trim((string) preg_replace('/[^a-z0-9]+/', ' ', $value));
 };
-$requestedherbcard = null;
-if ($requestedherb !== '') {
-    $cardindexpath = __DIR__ . '/single-herb-card-index.json';
-    if (is_readable($cardindexpath)) {
-        $cardindex = json_decode(file_get_contents($cardindexpath), true);
-        if (is_array($cardindex)) {
-            $requestedkey = $normalizeherbname($requestedherb);
-            foreach ($cardindex['herbs'] ?? [] as $herbcard) {
-                if ($normalizeherbname((string)($herbcard['name'] ?? '')) === $requestedkey) {
-                    $requestedherbcard = $herbcard;
-                    $requestedherb = (string)$herbcard['name'];
-                    break;
-                }
+$cardindex = null;
+$guidelineherbkeys = [];
+$cardindexpath = __DIR__ . '/single-herb-card-index.json';
+if (is_readable($cardindexpath)) {
+    $decodedcardindex = json_decode(file_get_contents($cardindexpath), true);
+    if (is_array($decodedcardindex)) {
+        $cardindex = $decodedcardindex;
+        foreach ($cardindex['herbs'] ?? [] as $herbcard) {
+            $herbname = (string)($herbcard['name'] ?? '');
+            if ($herbname !== '') {
+                $guidelineherbkeys[$normalizeherbname($herbname)] = true;
             }
+        }
+    }
+}
+$requestedherbcard = null;
+if ($requestedherb !== '' && is_array($cardindex)) {
+    $requestedkey = $normalizeherbname($requestedherb);
+    foreach ($cardindex['herbs'] ?? [] as $herbcard) {
+        if ($normalizeherbname((string)($herbcard['name'] ?? '')) === $requestedkey) {
+            $requestedherbcard = $herbcard;
+            $requestedherb = (string)$herbcard['name'];
+            break;
         }
     }
 }
@@ -900,6 +909,7 @@ ob_start();
 .single-herbs-guide__eyebrow{margin:0 0 6px;color:#08746f;font-size:13px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .single-herbs-guide h2{margin:0 0 9px;font-size:clamp(29px,4vw,42px);line-height:1.12}
 .single-herbs-guide__lead{max-width:760px;margin:0;color:#5b6b79;font-size:16px;line-height:1.6}
+.single-herbs-guide__marker-note{margin:7px 0 0;color:#075e54;font-size:13px;font-weight:800}
 .single-herbs-guide__actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
 .single-herbs-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
 .single-herbs-guide__back:hover{background:#f1f5f9;text-decoration:none}
@@ -955,6 +965,7 @@ ob_start();
             <p class="single-herbs-guide__lead"><?php echo s($ises
                 ? 'Conecta patrones de categoría, pistas clínicas decisivas, comparaciones y memoria activa para reconocer cada hierba en el Board.'
                 : 'Connect category patterns, decisive clinical clues, comparisons and active recall to recognize each herb on the Board.'); ?></p>
+            <p class="single-herbs-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente del Board' : '* Included in the current Board guideline'); ?></p>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
             <a class="single-herbs-guide__back" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
@@ -1353,9 +1364,24 @@ ob_start();
 <script>
 (function() {
     const requestedHerb = <?php echo json_encode($requestedherbcard['name'] ?? '', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+    const guidelineHerbs = new Set(<?php echo json_encode(array_keys($guidelineherbkeys), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>);
     const normalizeHerb = function(value) {
         return String(value || '').toLowerCase().replace(/\s*\*$/, '').replace(/[^a-z0-9]+/g, ' ').trim();
     };
+    document.querySelectorAll([
+        '#requested-herb-card-title',
+        '.single-herbs-guide__category-herb-head strong',
+        '.single-herbs-guide__profile-name',
+        '.single-herbs-guide__yang-bar > span:first-child',
+        '.single-herbs-guide__formula-lead h5',
+        '.single-herbs-guide__decision div > span'
+    ].join(',')).forEach(function(element) {
+        const rawHerbKey = normalizeHerb(element.textContent);
+        const herbKey = rawHerbKey === 'xin yi hua' ? 'xin yi' : rawHerbKey;
+        if (guidelineHerbs.has(herbKey) && !/\*\s*$/.test(element.textContent)) {
+            element.appendChild(document.createTextNode('*'));
+        }
+    });
     if (requestedHerb) {
         const requestedKey = normalizeHerb(requestedHerb);
         const profileNames = Array.from(document.querySelectorAll('.single-herbs-guide__profile-name'));

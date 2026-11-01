@@ -43,6 +43,7 @@ a { color: inherit; }
 .guide-smart-search__examples button { padding: 4px 8px; border: 1px solid #c8ddd8; border-radius: 999px; background: #fff; color: #05665c; font: inherit; font-weight: 800; cursor: pointer; }
 .guide-smart-search__examples button:hover,
 .guide-smart-search__examples button:focus { border-color: var(--teal); background: #e9f7f3; outline: none; }
+.guide-smart-search__marker { margin: 9px 0 0; color: #05665c; font-size: .8rem; font-weight: 900; }
 .guide-smart-search__status { margin: 11px 0 0; color: var(--muted); font-size: .82rem; font-weight: 700; }
 .guide-smart-search__results { max-height: 470px; margin-top: 10px; overflow-y: auto; border: 1px solid var(--line); border-radius: 11px; background: #fff; box-shadow: 0 14px 28px rgba(25, 54, 76, .13); }
 .guide-smart-search__result { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 15px; border-bottom: 1px solid #e1eaef; color: var(--navy); text-decoration: none; }

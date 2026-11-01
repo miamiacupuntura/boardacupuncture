@@ -147,6 +147,9 @@ $getboardformula = static function(string $name) use ($boardformulasbyname, $boa
     $boardname = $boardformulaaliases[$name] ?? $name;
     return $boardformulasbyname[$boardname] ?? null;
 };
+$displayformulaname = static function(string $name) use ($getboardformula): string {
+    return $name . ($getboardformula($name) !== null ? '*' : '');
+};
 $supplementalcategories = [];
 foreach ($data['supplementalCategories'] as $category) {
     $category['formulas'] = [];
@@ -451,6 +454,7 @@ echo $OUTPUT->header();
 .formula-study-guide__eyebrow{margin:0 0 6px;color:#08746f;font-size:13px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .formula-study-guide h2{margin:0 0 9px;font-size:clamp(29px,4vw,42px);line-height:1.12}
 .formula-study-guide__lead{max-width:760px;margin:0;color:#5b6b79;font-size:16px;line-height:1.6}
+.formula-study-guide__marker-note{margin:7px 0 0;color:#075e54;font-size:13px;font-weight:800}
 .formula-study-guide__actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
 .formula-study-guide__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
 .formula-study-guide__button:hover{background:#f1f5f9;color:#17232a;text-decoration:none}
@@ -508,6 +512,7 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__lead"><?php echo s($ises
                 ? 'Estudia las 63 fórmulas principales en 14 categorías. Cada ficha conecta patrón, acción, pista decisiva, arquitectura y seguridad.'
                 : 'Study the 63 core formulas in 14 categories. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
+            <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente del Board' : '* Included in the current Board guideline'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
             <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
@@ -658,7 +663,7 @@ echo $OUTPUT->header();
                                         ?>
                                         <li class="formula-study-guide__board-roster-formula">
                                             <span>
-                                                <strong><?php echo s($boardformula['name']); ?></strong>
+                                                <strong><?php echo s($displayformulaname($boardformula['name'])); ?></strong>
                                                 <small class="formula-study-guide__board-roster-meta"><?php echo s(($ises ? 'Dominio Board: ' : 'Board domain: ') . $boardcategoryname); ?></small>
                                             </span>
                                             <span class="formula-study-guide__board-roster-number"><?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $boardformula['number']); ?></span>
@@ -713,7 +718,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($chaptercategory['formulas'] as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -745,7 +750,7 @@ echo $OUTPUT->header();
                                 <?php $boardmatch = $getboardformula($row[0]); ?>
                                 <tr>
                                     <td>
-                                        <?php echo s($row[0]); ?>
+                                        <?php echo s($displayformulaname($row[0])); ?>
                                         <?php if ($boardmatch !== null): ?>
                                             <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
                                         <?php endif; ?>
@@ -817,7 +822,7 @@ echo $OUTPUT->header();
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
                                     <li>
-                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a>
+                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a>
                                         <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Dominio Board #' : 'Board Domain #') . $chapterformula['number']); ?></span><?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
@@ -863,7 +868,7 @@ echo $OUTPUT->header();
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
                                     <li>
-                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($chapterformula['name']); ?></a>
+                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a>
                                         <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Dominio Board #' : 'Board Domain #') . $chapterformula['number']); ?></span><?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
@@ -967,7 +972,7 @@ echo $OUTPUT->header();
                                             <?php $boardmatch = $getboardformula($row[0]); ?>
                                             <tr>
                                                 <td>
-                                                    <?php echo s($row[0]); ?>
+                                                    <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($boardmatch !== null): ?>
                                                         <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
                                                     <?php endif; ?>
@@ -986,7 +991,7 @@ echo $OUTPUT->header();
                     <header class="formula-study-guide__formula-heading">
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
-                            <h4><?php echo s($formula['name']); ?></h4>
+                            <h4><?php echo s($displayformulaname($formula['name'])); ?></h4>
                             <?php if ($issupplemental): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
@@ -1031,7 +1036,7 @@ echo $OUTPUT->header();
                                     <section class="formula-study-guide__branch-group">
                                         <h5><?php echo s($ises ? 'Variaciones con nombre propio' : 'Named variations'); ?></h5>
                                         <ul><?php foreach ($formula['variations'] as $item): ?>
-                                            <li><strong><?php echo s($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                            <li><strong><?php echo s($displayformulaname($item[0])); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
                                         <?php endforeach; ?></ul>
                                     </section>
                                 <?php endif; ?>
@@ -1039,7 +1044,7 @@ echo $OUTPUT->header();
                                     <section class="formula-study-guide__branch-group">
                                         <h5><?php echo s($ises ? 'Fórmulas asociadas' : 'Associated formulas'); ?></h5>
                                         <ul><?php foreach ($formula['associated'] as $item): ?>
-                                            <li><strong><?php echo s($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                            <li><strong><?php echo s($displayformulaname($item[0])); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
                                         <?php endforeach; ?></ul>
                                     </section>
                                 <?php endif; ?>
@@ -1088,7 +1093,7 @@ echo $OUTPUT->header();
                                 <h5><?php echo s($ises ? $group['titleEs'] : $group['title']); ?></h5>
                                 <ul>
                                     <?php foreach ($group['items'] as $item): ?>
-                                        <li><strong><?php echo s($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                        <li><strong><?php echo s($displayformulaname($item[0])); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
                                     <?php endforeach; ?>
                                 </ul>
                             </section>
