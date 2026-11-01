@@ -1631,8 +1631,9 @@ echo $OUTPUT->header();
                     <?php endforeach; ?>
                 </div>
             </section>
-            <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
-            <?php foreach ($quickcomparesections as $comparesection): ?>
+            <?php if ($selected['key'] !== 'expel-damp-chapter-16'): ?>
+                <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
+                <?php foreach ($quickcomparesections as $comparesection): ?>
                 <?php $compareformulanames = array_flip($comparesection['formulaNames']); ?>
                 <?php $comparerows = array_values(array_filter($selectedguide['quickCompare'], static fn(array $row): bool => isset($compareformulanames[$row[0]]))); ?>
                 <section class="formula-study-guide__compare" aria-labelledby="core-comparison-<?php echo s($comparesection['key']); ?>-title">
@@ -1660,7 +1661,8 @@ echo $OUTPUT->header();
                         </table>
                     </div>
                 </section>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         <?php endif; ?>
         <?php if ($selected['key'] === 'calm-shen'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-ten-shortcut-title">
@@ -2384,7 +2386,45 @@ echo $OUTPUT->header();
                 </article>
             <?php endforeach; ?>
         </section>
-        <?php if ($selectedguide !== null): ?>
+        <?php if ($selected['key'] === 'expel-damp-chapter-16' && $selectedguide !== null): ?>
+            <details class="formula-study-guide__references" id="chapter-sixteen-comparison-annex">
+                <summary><?php echo s($ises ? 'Anexo · Tablas comparativas del capítulo 16' : 'Annex · Chapter 16 comparison tables'); ?></summary>
+                <div class="formula-study-guide__references-body">
+                    <p><?php echo s($ises
+                        ? 'Consulta estas cinco tablas después de estudiar las fichas. Permanecen plegadas para mantener breve la ruta principal del capítulo.'
+                        : 'Use these five tables after studying the formula cards. They remain collapsed to keep the chapter’s main study route concise.'); ?></p>
+                    <?php $appendixcomparesections = $selectedformulasections; ?>
+                    <?php foreach ($appendixcomparesections as $comparesection): ?>
+                        <?php $compareformulanames = array_flip($comparesection['formulaNames']); ?>
+                        <?php $comparerows = array_values(array_filter($selectedguide['quickCompare'], static fn(array $row): bool => isset($compareformulanames[$row[0]]))); ?>
+                        <section class="formula-study-guide__compare" aria-labelledby="annex-comparison-<?php echo s($comparesection['key']); ?>-title">
+                            <h4 id="annex-comparison-<?php echo s($comparesection['key']); ?>-title"><?php echo s(($ises ? 'Comparación · ' : 'Comparison · ') . ($ises ? $comparesection['nameEs'] : $comparesection['name'])); ?></h4>
+                            <div class="formula-study-guide__table-wrap">
+                                <table class="formula-study-guide__table">
+                                    <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
+                                    <tbody>
+                                        <?php foreach ($comparerows as $row): ?>
+                                            <?php $boardmatch = $getboardformula($row[0]); ?>
+                                            <tr>
+                                                <td>
+                                                    <?php echo s($displayformulaname($row[0])); ?>
+                                                    <?php if ($boardmatch !== null): ?>
+                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
+                                                <td><?php echo s($ises ? $row[4] : $row[2]); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    <?php endforeach; ?>
+                </div>
+            </details>
+        <?php endif; ?>
+        <?php if ($selectedguide !== null && !empty($selectedguide['referenceGroups'])): ?>
             <details class="formula-study-guide__references">
                 <summary><?php echo s($ises ? $selectedguide['referencesTitleEs'] : $selectedguide['referencesTitle']); ?></summary>
                 <div class="formula-study-guide__references-body">
