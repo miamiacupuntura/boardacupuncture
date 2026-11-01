@@ -8,9 +8,11 @@ require_login();
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
-if ($focus === 'invigorate-blood') {
-    $focus = 'regulate-blood-chapter-13';
-}
+$chapterfocusaliases = [
+    'regulate-qi' => 'regulate-qi-chapter-12',
+    'invigorate-blood' => 'regulate-blood-chapter-13',
+];
+$focus = $chapterfocusaliases[$focus] ?? $focus;
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
 $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafile), true) : null;
 if (!is_array($data)
@@ -1571,39 +1573,6 @@ echo $OUTPUT->header();
                 </article>
             <?php endforeach; ?>
         </section>
-        <?php if ($selected['key'] === 'regulate-qi'): ?>
-            <details class="formula-study-guide__additional">
-                <summary><?php echo s($ises
-                    ? 'Ver 15 fórmulas adicionales de Bensky · Capítulo 12'
-                    : 'View 15 additional Bensky formulas · Chapter 12'); ?></summary>
-                <div class="formula-study-guide__additional-body">
-                    <p><?php echo s($ises
-                        ? 'Estas fórmulas completan el capítulo 12, pero no pertenecen al listado oficial vigente de 63 fórmulas del Board. Selecciona un nombre para abrir su ficha completa.'
-                        : 'These formulas complete Chapter 12 but are not part of the current official 63-formula Board roster. Select a name to open its complete profile.'); ?></p>
-                    <div class="formula-study-guide__additional-grid">
-                        <?php foreach ($regulateqichaptersections as $sectionkey => $section): ?>
-                            <?php
-                            $additionalformulas = array_values(array_filter(
-                                $regulateqichapterformulas,
-                                static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey
-                                    && $getboardformula($formula['name']) === null
-                            ));
-                            ?>
-                            <section class="formula-study-guide__additional-group">
-                                <h5><?php echo s(($ises ? $section['nameEs'] : $section['name']) . ' · ' . count($additionalformulas)); ?></h5>
-                                <ol>
-                                    <?php foreach ($additionalformulas as $additionalformula): ?>
-                                        <?php $additionalformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $additionalformula['number']); ?>
-                                        <li><a href="<?php echo $regulateqichapterurl->out(false); ?>#formula-<?php echo s($additionalformulaid); ?>"><?php echo s($additionalformula['name']); ?></a></li>
-                                    <?php endforeach; ?>
-                                </ol>
-                            </section>
-                        <?php endforeach; ?>
-                    </div>
-                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqichapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir las 20 fichas del capítulo 12 →' : 'Open all 20 Chapter 12 profiles →'); ?></a>
-                </div>
-            </details>
-        <?php endif; ?>
         <?php if ($selectedguide !== null): ?>
             <details class="formula-study-guide__references">
                 <summary><?php echo s($ises ? $selectedguide['referencesTitleEs'] : $selectedguide['referencesTitle']); ?></summary>
