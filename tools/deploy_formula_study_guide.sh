@@ -78,6 +78,13 @@ php -r '
             $clearHeatSectionNames[] = $formulaName;
         }
     }
+    $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
+    $purgeSectionNames = [];
+    foreach ($purgeSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $purgeSectionNames[] = $formulaName;
+        }
+    }
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
             || count($data["supplementalCategories"] ?? []) !== 15
@@ -100,6 +107,12 @@ php -r '
             || $clearHeatSectionNames !== [
                 "Bai Hu Tang", "Huang Lian Jie Du Tang", "Ma Xing Shi Gan Tang",
                 "Long Dan Xie Gan Tang", "Qing Hao Bie Jia Tang"
+            ]
+            || array_column($purgeSections, "key") !== [
+                "severe-complete-clumping", "moderate-clumping", "dryness-predominant"
+            ]
+            || $purgeSectionNames !== [
+                "Da Cheng Qi Tang", "Xiao Cheng Qi Tang", "Tiao Wei Cheng Qi Tang"
             ]) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
@@ -118,6 +131,10 @@ grep -q '"key": "qi-level-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "fire-toxin"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "organ-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "hidden-deficiency-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Una familia Cheng Qi, tres grados de aglomeración y tres arquitecturas" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "severe-complete-clumping"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "moderate-clumping"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "dryness-predominant"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
@@ -236,6 +253,10 @@ grep -q '"key": "qi-level-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "fire-toxin"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "organ-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "hidden-deficiency-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Una familia Cheng Qi, tres grados de aglomeración y tres arquitecturas" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "severe-complete-clumping"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "moderate-clumping"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "dryness-predominant"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Categoría oficial del Board: 3 fórmulas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "3 fórmulas Board · Capítulo 9 de Bensky: 17" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente" "$TARGET_DIR/formulas-study-guide.php"
@@ -289,6 +310,7 @@ grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guid
 echo "CAPÍTULOS 8, 9, 10, 11, 12, 13 Y 14 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
+echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"

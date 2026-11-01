@@ -571,10 +571,48 @@
       ]
     },
     "purge": {
-      "priorityTitle": "Guideline priority: master these 3 Cheng Qi formulas first",
-      "priorityTitleEs": "Prioridad del guideline: domina primero estas 3 fórmulas Cheng Qi",
-      "priorityText": "The current exam guideline requires the three Cheng Qi formulas below. Differentiate them by what has formed in the abdomen: focal distention, fullness, dryness and hardness. Secondary chapter formulas remain collapsed for comparison and safety review.",
-      "priorityTextEs": "El guideline actual exige las tres fórmulas Cheng Qi siguientes. Diferéncialas por lo que se ha formado en el abdomen: distensión focal, plenitud, sequedad y dureza. Las fórmulas secundarias del capítulo permanecen plegadas para comparación y revisión de seguridad.",
+      "priorityTitle": "Guideline priority: master the 3 Cheng Qi formulas as a graded scale",
+      "priorityTitleEs": "Prioridad del guideline: domina las 3 fórmulas Cheng Qi como una escala gradual",
+      "priorityText": "All three treat Yangming organ Heat binding, but they are not interchangeable laxatives. Grade the formation and severity of focal distention, fullness, dryness, and hardness, then match the ingredient architecture to what is actually present.",
+      "priorityTextEs": "Las tres tratan Calor ligado en el órgano Yangming, pero no son laxantes intercambiables. Gradúa la formación e intensidad de distensión focal, plenitud, sequedad y dureza, y después relaciona la arquitectura de ingredientes con lo que realmente está presente.",
+      "clinicalFrameTitle": "One Cheng Qi family, three degrees of clumping and three ingredient architectures",
+      "clinicalFrameTitleEs": "Una familia Cheng Qi, tres grados de aglomeración y tres arquitecturas de ingredientes",
+      "clinicalFrameText": "The choice is not based on constipation alone. Da Cheng Qi Tang combines purging, salt-softening, and strong Qi movement for complete severe clumping. Xiao Cheng Qi Tang removes Mang Xiao when dryness is less important. Tiao Wei Cheng Qi Tang removes the strong Qi-moving pair and adds Gan Cao when Dry-Heat and irritability dominate with little focal distention or fullness.",
+      "clinicalFrameTextEs": "La elección no se basa solo en estreñimiento. Da Cheng Qi Tang combina purgación, ablandamiento salino y fuerte movimiento de Qi para aglomeración completa y grave. Xiao Cheng Qi Tang retira Mang Xiao cuando la sequedad es menos importante. Tiao Wei Cheng Qi Tang retira el par que moviliza Qi con fuerza y añade Gan Cao cuando predominan Calor-Sequedad e irritabilidad con poca distensión focal o plenitud.",
+      "clinicalFrameCaveat": "These formulas are potent short-course purgatives, not routine constipation remedies. Chinese-medicine clumping does not establish a biomedical diagnosis. Severe or worsening abdominal pain, guarding, repeated vomiting, fever, blood in stool, dehydration, marked distention, or inability to pass stool or gas requires urgent evaluation for obstruction or another acute abdomen.",
+      "clinicalFrameCaveatEs": "Estas fórmulas son purgantes potentes de uso breve, no remedios rutinarios para estreñimiento. La aglomeración de medicina china no establece un diagnóstico biomédico. Dolor abdominal intenso o creciente, defensa, vómitos repetidos, fiebre, sangre en heces, deshidratación, distensión marcada o incapacidad para evacuar heces o gases requiere valoración urgente por obstrucción u otro abdomen agudo.",
+      "formulaSections": [
+        {
+          "key": "severe-complete-clumping",
+          "name": "Severe complete clumping",
+          "nameEs": "Aglomeración completa y grave",
+          "formulaNames": ["Da Cheng Qi Tang"],
+          "copy": "All four abdominal features—focal distention, fullness, dryness, and hardness—are pronounced. The full four-ingredient architecture purges Heat, softens dry stool, and moves obstructed Qi forcefully.",
+          "copyEs": "Los cuatro rasgos abdominales—distensión focal, plenitud, sequedad y dureza—son pronunciados. La arquitectura completa de cuatro ingredientes purga Calor, ablanda heces secas y moviliza con fuerza Qi obstruido.",
+          "diagnostic": "Severe constipation or foul watery circumfluence, hard full abdomen, pain worse on pressure, dry dark coat, and a deep excessive forceful pulse.",
+          "diagnosticEs": "Estreñimiento grave o desbordamiento acuoso fétido, abdomen duro y lleno, dolor peor a la presión, capa seca oscura y pulso profundo-excesivo-fuerte."
+        },
+        {
+          "key": "moderate-clumping",
+          "name": "Moderate clumping with less dryness",
+          "nameEs": "Aglomeración moderada con menor sequedad",
+          "formulaNames": ["Xiao Cheng Qi Tang"],
+          "copy": "Focal distention, fullness, and hardness remain, but dryness is not severe enough to require Mang Xiao. Da Huang purges while Hou Po and Zhi Shi move Qi and break fullness.",
+          "copyEs": "Persisten distensión focal, plenitud y dureza, pero la sequedad no es tan intensa como para requerir Mang Xiao. Da Huang purga mientras Hou Po y Zhi Shi movilizan Qi y rompen plenitud.",
+          "diagnostic": "Constipation with focal distention and fullness, less severe dryness, pain not markedly worse on pressure, and a slippery-rapid rather than deeply forceful presentation.",
+          "diagnosticEs": "Estreñimiento con distensión focal y plenitud, sequedad menos intensa, dolor no claramente peor a la presión y cuadro resbaladizo-rápido en vez de profundamente fuerte."
+        },
+        {
+          "key": "dryness-predominant",
+          "name": "Mild accumulation with Dry-Heat predominance",
+          "nameEs": "Acumulación leve con predominio de Calor-Sequedad",
+          "formulaNames": ["Tiao Wei Cheng Qi Tang"],
+          "copy": "Dryness and irritability matter more than Qi clumping. Mang Xiao softens, Da Huang purges, and Zhi Gan Cao moderates; Hou Po and Zhi Shi are absent because marked focal distention and fullness are absent.",
+          "copyEs": "Sequedad e irritabilidad importan más que aglomeración de Qi. Mang Xiao ablanda, Da Huang purga y Zhi Gan Cao modera; Hou Po y Zhi Shi están ausentes porque no hay distensión focal ni plenitud marcadas.",
+          "diagnostic": "Mild constipation with dryness and irritability, little focal distention or fullness, no pronounced hardness, and a slippery-rapid pulse.",
+          "diagnosticEs": "Estreñimiento leve con sequedad e irritabilidad, poca distensión focal o plenitud, sin dureza pronunciada y pulso resbaladizo-rápido."
+        }
+      ],
       "routeTitle": "Four-step Cheng Qi decision route",
       "routeTitleEs": "Ruta de decisión Cheng Qi en cuatro pasos",
       "route": [
