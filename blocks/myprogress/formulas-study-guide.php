@@ -13,6 +13,7 @@ $chapterfocusaliases = [
     'invigorate-blood' => 'regulate-blood-chapter-13',
     'expel-wind' => 'expel-wind-chapter-14',
     'expel-damp' => 'expel-damp-chapter-16',
+    'transform-phlegm' => 'transform-phlegm-chapter-17',
 ];
 $focus = $chapterfocusaliases[$focus] ?? $focus;
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
@@ -21,8 +22,8 @@ if (!is_array($data)
         || ($data['version'] ?? null) !== 7
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 18
-        || count($data['supplementalFormulas'] ?? []) !== 179) {
+        || count($data['supplementalCategories'] ?? []) !== 19
+        || count($data['supplementalFormulas'] ?? []) !== 192) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -127,6 +128,10 @@ $categorycopy = [
         'Compare all 33 principal formulas in Bensky Chapter 16 across five routes: transform the Middle, clear Damp-Heat, promote urination, warm water metabolism, and dispel Wind-Dampness.',
         'Compara las 33 fórmulas principales del capítulo 16 de Bensky en cinco rutas: transformar el Centro, aclarar Humedad-Calor, promover la orina, calentar el metabolismo del agua y dispersar Viento-Humedad.',
     ],
+    'transform-phlegm-chapter-17' => [
+        'Compare all 18 principal formulas in Bensky Chapter 17 across seven routes: dry Dampness, clear Phlegm-Heat, disperse clumping, moisten dryness, warm Phlegm-Cold, extinguish Wind-Phlegm, and recognize the historical emetic method.',
+        'Compara las 18 fórmulas principales del capítulo 17 de Bensky en siete rutas: secar Humedad, aclarar Flema-Calor, dispersar aglomeraciones, humedecer Sequedad, calentar Flema-Frío, extinguir Viento-Flema y reconocer el método emético histórico.',
+    ],
     'treat-dryness-ch15' => [
         'Compare eight principal formulas in Bensky Chapter 15 by external versus internal dryness, cool versus warm dryness, organ location, fluid damage, rebellious Qi, thirst, and constipation.',
         'Compara las ocho fórmulas principales del capítulo 15 de Bensky por Sequedad externa o interna, fresca o cálida, localización orgánica, lesión de líquidos, Qi rebelde, sed y estreñimiento.',
@@ -169,6 +174,14 @@ $categoryreferences = [
     'expel-damp-chapter-16' => [
         'Complete Bensky source: 33 principal formulas in five sections. Board overlap: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang, and Du Huo Ji Sheng Tang.',
         'Fuente Bensky completa: 33 fórmulas principales en cinco secciones. Coincidencia Board: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang y Du Huo Ji Sheng Tang.',
+    ],
+    'transform-phlegm' => [
+        'Official Board category: 5 formulas. All five also appear among the 18 principal formulas in complete Bensky Chapter 17.',
+        'Categoría oficial del Board: 5 fórmulas. Las cinco también aparecen entre las 18 fórmulas principales del capítulo 17 completo de Bensky.',
+    ],
+    'transform-phlegm-chapter-17' => [
+        'Complete Bensky source: 18 principal formulas in seven sections. Board overlap: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San, and Ban Xia Bai Zhu Tian Ma Tang.',
+        'Fuente Bensky completa: 18 fórmulas principales en siete secciones. Coincidencia Board: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San y Ban Xia Bai Zhu Tian Ma Tang.',
     ],
     'stabilize-bind' => [
         'Official Board category: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
@@ -294,6 +307,7 @@ $regulateqichaptersourcecategory = $supplementalcategories['regulate-qi-ch12'];
 $regulatebloodchaptersourcecategory = $supplementalcategories['regulate-blood-ch13'];
 $expelwindchaptersourcecategory = $supplementalcategories['expel-wind-ch14'];
 $expeldampchaptersourcecategory = $supplementalcategories['expel-damp-ch16'];
+$transformphlegmchaptersourcecategory = $supplementalcategories['transform-phlegm-ch17'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -807,6 +821,99 @@ $expeldampchapteroverview = [
     'formulas' => $expeldampchapterformulas,
 ];
 
+$transformphlegmchaptersections = [
+    'dry-damp-transform' => [
+        'key' => 'dry-damp-transform', 'name' => 'Dry Dampness and Transform Phlegm',
+        'nameEs' => 'Secar Humedad y transformar Flema', 'sourcePages' => '773–790',
+        'copy' => 'Regulate Qi and restore fluid movement when Phlegm-Dampness obstructs the Lung, Middle Burner, channels, or sensory orifices.',
+        'copyEs' => 'Regula Qi y restaura el movimiento de líquidos cuando Flema-Humedad obstruye Pulmón, Jiao Medio, canales u orificios sensoriales.',
+    ],
+    'clear-heat-transform' => [
+        'key' => 'clear-heat-transform', 'name' => 'Clear Heat and Transform Phlegm',
+        'nameEs' => 'Aclarar Calor y transformar Flema', 'sourcePages' => '790–798',
+        'copy' => 'Clear the Heat that condenses fluids while moving Qi and directing Phlegm downward.',
+        'copyEs' => 'Aclara el Calor que condensa líquidos mientras mueve Qi y dirige Flema hacia abajo.',
+    ],
+    'disperse-clumping' => [
+        'key' => 'disperse-clumping', 'name' => 'Transform Phlegm and Disperse Clumping',
+        'nameEs' => 'Transformar Flema y dispersar aglomeraciones', 'sourcePages' => '798–801',
+        'copy' => 'Soften hardness and combine Phlegm treatment with Heat, Qi, or Blood regulation according to the nodule.',
+        'copyEs' => 'Ablanda dureza y combina tratamiento de Flema con regulación de Calor, Qi o Sangre según el nódulo.',
+    ],
+    'moisten-dryness' => [
+        'key' => 'moisten-dryness', 'name' => 'Moisten Dryness and Transform Phlegm',
+        'nameEs' => 'Humedecer Sequedad y transformar Flema', 'sourcePages' => '801–805',
+        'copy' => 'Moisten the Lung without cloying while clearing Heat and transforming deep, sticky dry Phlegm.',
+        'copyEs' => 'Humedece Pulmón sin empalagar mientras aclara Calor y transforma Flema-Seca profunda y pegajosa.',
+    ],
+    'warm-phlegm-cold' => [
+        'key' => 'warm-phlegm-cold', 'name' => 'Warm and Transform Phlegm-Cold',
+        'nameEs' => 'Calentar y transformar Flema-Frío', 'sourcePages' => '806–810',
+        'copy' => 'Warm and move cold thin mucus while distinguishing Yang deficiency from Phlegm with food and Qi stagnation.',
+        'copyEs' => 'Calienta y moviliza líquidos claros fríos distinguiendo deficiencia de Yang de Flema con estancamiento de alimento y Qi.',
+    ],
+    'transform-extinguish-wind' => [
+        'key' => 'transform-extinguish-wind', 'name' => 'Transform Phlegm and Extinguish Wind',
+        'nameEs' => 'Transformar Flema y extinguir Viento', 'sourcePages' => '810–817',
+        'copy' => 'Separate internal Wind-Phlegm vertigo or seizure from the gentle exterior-dispersing treatment of a residual cough.',
+        'copyEs' => 'Separa vértigo o convulsión por Viento-Flema interno del tratamiento exterior suave de una tos residual.',
+    ],
+    'induce-vomiting' => [
+        'key' => 'induce-vomiting', 'name' => 'Induce Vomiting',
+        'nameEs' => 'Inducir vómito', 'sourcePages' => '817–818',
+        'copy' => 'A historical emetic method retained for recognition and safety—not for self-treatment.',
+        'copyEs' => 'Método emético histórico conservado para reconocimiento y seguridad, no para automedicación.',
+    ],
+];
+$transformphlegmchapterplan = [
+    ['Er Chen Tang', 1, 'dry-damp-transform', 'Two-Aged Herb Decoction', '773–779'],
+    ['Dao Tan Tang', 2, 'dry-damp-transform', 'Guide Out Phlegm Decoction', '779–781'],
+    ['Di Tan Tang', 3, 'dry-damp-transform', 'Scour Out Phlegm Decoction', '782–783'],
+    ['Fu Ling Wan', 4, 'dry-damp-transform', 'Poria Pill', '783–786'],
+    ['Wen Dan Tang', 5, 'dry-damp-transform', 'Warm Gallbladder Decoction', '786–789'],
+    ['Xiang Fu Xuan Fu Hua Tang', 6, 'dry-damp-transform', 'Cyperus and Inula Decoction', '789–790'],
+    ['Qing Qi Hua Tan Wan', 7, 'clear-heat-transform', 'Clear the Qi and Transform Phlegm Pill', '790–792'],
+    ['Xiao Xian Xiong Tang', 8, 'clear-heat-transform', 'Minor Decoction for Pathogens Stuck in the Chest', '793–794'],
+    ['Gun Tan Wan', 9, 'clear-heat-transform', 'Flushing Away Roiling Phlegm Pill', '795–798'],
+    ['Xiao Luo Wan', 10, 'disperse-clumping', 'Reduce Scrofula Pill', '798–800'],
+    ['Hai Zao Yu Hu Tang', 11, 'disperse-clumping', 'Sargassum Decoction for the Jade Flask', '800–801'],
+    ['Bei Mu Gua Lou San', 12, 'moisten-dryness', 'Fritillaria and Trichosanthes Fruit Powder', '802–804'],
+    ['Ling Gan Wu Wei Jiang Xin Tang', 13, 'warm-phlegm-cold', 'Poria, Licorice, Schisandra, Ginger, and Asarum Decoction', '806–808'],
+    ['San Zi Yang Qin Tang', 14, 'warm-phlegm-cold', "Three-Seed Decoction to Nourish One's Parents", '808–810'],
+    ['Ban Xia Bai Zhu Tian Ma Tang', 15, 'transform-extinguish-wind', 'Pinellia, White Atractylodes, and Gastrodia Decoction', '811–813'],
+    ['Ding Xian Wan', 16, 'transform-extinguish-wind', 'Arrest Seizures Pill', '813–815'],
+    ['Zhi Sou San', 17, 'transform-extinguish-wind', 'Stop Coughing Powder', '815–817'],
+    ['Gua Di San', 18, 'induce-vomiting', 'Melon Pedicle Powder', '817–818'],
+];
+$transformphlegmsupplementbyname = [];
+foreach ($transformphlegmchaptersourcecategory['formulas'] as $formula) {
+    $transformphlegmsupplementbyname[$formula['name']] = $formula;
+}
+$transformphlegmchapterformulas = [];
+foreach ($transformphlegmchapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $transformphlegmsupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 17 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['chapterSourceSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $transformphlegmchaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $transformphlegmchaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $transformphlegmchapterformulas[] = $formula;
+}
+$transformphlegmchapteroverview = [
+    'number' => 'S13',
+    'key' => 'transform-phlegm-chapter-17',
+    'name' => 'Formulas That Dispel Phlegm · Complete Bensky Chapter 17',
+    'nameEs' => 'Fórmulas que eliminan la Flema · Capítulo 17 completo de Bensky',
+    'sourceChapter' => 17,
+    'sourcePages' => '773–821',
+    'formulas' => $transformphlegmchapterformulas,
+];
+
 $chapterinterestinginsights = [
     'dispel-summerheat' => [
         'title' => 'Interesting point: Summerheat may be distributed across other Board competencies',
@@ -1006,7 +1113,8 @@ foreach ($supplementalcategories as $categorykey => $category) {
             && $categorykey !== 'regulate-qi-ch12'
             && $categorykey !== 'regulate-blood-ch13'
             && $categorykey !== 'expel-wind-ch14'
-            && $categorykey !== 'expel-damp-ch16') {
+            && $categorykey !== 'expel-damp-ch16'
+            && $categorykey !== 'transform-phlegm-ch17') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
@@ -1020,6 +1128,7 @@ $supplementalcategories[$regulateqichapteroverview['key']] = $regulateqichaptero
 $supplementalcategories[$regulatebloodchapteroverview['key']] = $regulatebloodchapteroverview;
 $supplementalcategories[$expelwindchapteroverview['key']] = $expelwindchapteroverview;
 $supplementalcategories[$expeldampchapteroverview['key']] = $expeldampchapteroverview;
+$supplementalcategories[$transformphlegmchapteroverview['key']] = $transformphlegmchapteroverview;
 unset($supplementalcategories['stabilize-bind-ch9']);
 unset($supplementalcategories['calm-shen-ch10']);
 unset($supplementalcategories['open-orifices-ch11']);
@@ -1027,6 +1136,7 @@ unset($supplementalcategories['regulate-qi-ch12']);
 unset($supplementalcategories['regulate-blood-ch13']);
 unset($supplementalcategories['expel-wind-ch14']);
 unset($supplementalcategories['expel-damp-ch16']);
+unset($supplementalcategories['transform-phlegm-ch17']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -1072,6 +1182,7 @@ $unifiedfamilystatusformulas = [
     'invigorate-blood' => $regulatebloodchapteroverview['formulas'],
     'expel-wind' => $expelwindchapteroverview['formulas'],
     'expel-damp' => $expeldampchapteroverview['formulas'],
+    'transform-phlegm' => $transformphlegmchapteroverview['formulas'],
 ];
 $selectedstatusformulas = $selected === null
     ? []
@@ -1653,7 +1764,7 @@ echo $OUTPUT->header();
                     <?php endforeach; ?>
                 </div>
             </section>
-            <?php if ($selected['key'] !== 'expel-damp-chapter-16'): ?>
+            <?php if (!in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)): ?>
                 <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
                 <?php foreach ($quickcomparesections as $comparesection): ?>
                 <?php $compareformulanames = array_flip($comparesection['formulaNames']); ?>
@@ -2172,10 +2283,12 @@ echo $OUTPUT->header();
                 <?php
                 $chapterformulaindex++;
                 $clinicalsection = $selectedformulasectionbyname[$formula['name']] ?? null;
-                $newclinicalsection = $clinicalsection !== null && $lastclinicalsectionkey !== $clinicalsection['key'];
-                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16'], true)
+                $newclinicalsection = $clinicalsection !== null
+                    && $lastclinicalsectionkey !== $clinicalsection['key']
+                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true);
+                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
-                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16'], true)
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)
                     && $lastformulacategory !== $currentsectionkey;
                 if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
                     $formulacategory = $stabilizechaptersections[$currentsectionkey];
@@ -2219,6 +2332,12 @@ echo $OUTPUT->header();
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
                     ));
+                } elseif ($newchaptersection && $selected['key'] === 'transform-phlegm-chapter-17') {
+                    $formulacategory = $transformphlegmchaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
                 } else {
                     $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
                 }
@@ -2238,7 +2357,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16'], true)) {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -2260,7 +2379,7 @@ echo $OUTPUT->header();
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16'], true)
+                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
@@ -2413,13 +2532,14 @@ echo $OUTPUT->header();
                 </article>
             <?php endforeach; ?>
         </section>
-        <?php if ($selected['key'] === 'expel-damp-chapter-16' && $selectedguide !== null): ?>
-            <details class="formula-study-guide__references" id="chapter-sixteen-comparison-annex">
-                <summary><?php echo s($ises ? 'Anexo · Tablas comparativas del capítulo 16' : 'Annex · Chapter 16 comparison tables'); ?></summary>
+        <?php if (in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true) && $selectedguide !== null): ?>
+            <?php $comparisonchapternumber = (int) $selected['sourceChapter']; ?>
+            <details class="formula-study-guide__references" id="chapter-<?php echo s((string) $comparisonchapternumber); ?>-comparison-annex">
+                <summary><?php echo s(($ises ? 'Anexo · Tablas comparativas del capítulo ' : 'Annex · Chapter ') . $comparisonchapternumber . ($ises ? '' : ' comparison tables')); ?></summary>
                 <div class="formula-study-guide__references-body">
                     <p><?php echo s($ises
-                        ? 'Consulta estas cinco tablas después de estudiar las fichas. Permanecen plegadas para mantener breve la ruta principal del capítulo.'
-                        : 'Use these five tables after studying the formula cards. They remain collapsed to keep the chapter’s main study route concise.'); ?></p>
+                        ? 'Consulta estas tablas después de estudiar las fichas. Permanecen plegadas para mantener breve la ruta principal del capítulo.'
+                        : 'Use these tables after studying the formula cards. They remain collapsed to keep the chapter’s main study route concise.'); ?></p>
                     <?php $appendixcomparesections = $selectedformulasections; ?>
                     <?php foreach ($appendixcomparesections as $comparesection): ?>
                         <?php $compareformulanames = array_flip($comparesection['formulaNames']); ?>

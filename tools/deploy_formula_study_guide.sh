@@ -74,6 +74,10 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-damp-ch16"
     );
+    $chapter17 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "transform-phlegm-ch17"
+    );
     $historical = array_filter(
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
@@ -83,6 +87,13 @@ php -r '
     foreach ($dampnessSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
             $dampnessSectionNames[] = $formulaName;
+        }
+    }
+    $phlegmSections = $data["categoryGuides"]["transform-phlegm-chapter-17"]["formulaSections"] ?? [];
+    $phlegmSectionNames = [];
+    foreach ($phlegmSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $phlegmSectionNames[] = $formulaName;
         }
     }
     $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
@@ -124,8 +135,8 @@ php -r '
     if (($data["version"] ?? null) !== 7
             || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 18
-            || count($data["supplementalFormulas"] ?? []) !== 179
+            || count($data["supplementalCategories"] ?? []) !== 19
+            || count($data["supplementalFormulas"] ?? []) !== 192
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -135,6 +146,7 @@ php -r '
             || count($chapter14) !== 14
             || count($chapter15) !== 8
             || count($chapter16) !== 25
+            || count($chapter17) !== 13
             || count($historical) !== 1
             || array_column($historical, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
@@ -145,6 +157,14 @@ php -r '
                 !== [5, 10, 5, 7, 6]
             || count($dampnessSectionNames) !== 33
             || count(array_unique($dampnessSectionNames)) !== 33
+            || array_column($phlegmSections, "key") !== [
+                "dry-damp-transform", "clear-heat-transform", "disperse-clumping",
+                "moisten-dryness", "warm-phlegm-cold", "transform-extinguish-wind", "induce-vomiting"
+            ]
+            || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $phlegmSections)
+                !== [6, 3, 2, 1, 2, 3, 1]
+            || count($phlegmSectionNames) !== 18
+            || count(array_unique($phlegmSectionNames)) !== 18
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -306,9 +326,13 @@ grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TEMP_DIR/formulas-st
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Dato interesante: ocho fórmulas del Board" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM" "$TEMP_DIR/formulas-study-guide-data.json"
-grep -q "chapter-sixteen-comparison-annex" "$TEMP_DIR/formulas-study-guide.php"
-grep -q "Anexo · Tablas comparativas del capítulo 16" "$TEMP_DIR/formulas-study-guide.php"
-grep -Fq "\$selected['key'] !== 'expel-damp-chapter-16'" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "comparisonchapternumber" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "transform-phlegm-chapter-17" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number":"C17-18"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"dry-damp-transform"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"induce-vomiting"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "'transform-phlegm' => 'transform-phlegm-chapter-17'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -440,14 +464,18 @@ grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TARGET_DIR/formulas-
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato interesante: ocho fórmulas del Board" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM" "$TARGET_DIR/formulas-study-guide-data.json"
-grep -q "chapter-sixteen-comparison-annex" "$TARGET_DIR/formulas-study-guide.php"
-grep -q "Anexo · Tablas comparativas del capítulo 16" "$TARGET_DIR/formulas-study-guide.php"
-grep -Fq "\$selected['key'] !== 'expel-damp-chapter-16'" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "comparisonchapternumber" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "transform-phlegm-chapter-17" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number":"C17-18"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"dry-damp-transform"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"induce-vomiting"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "'transform-phlegm' => 'transform-phlegm-chapter-17'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15 Y 16 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15, 16 Y 17 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
@@ -477,6 +505,9 @@ echo "SEQUEDAD INSTALADA: EXTERNA FRESCA/CÁLIDA VS. INTERNA POR AGOTAMIENTO DE 
 echo "CAPÍTULO 16 INSTALADO: 33 FÓRMULAS EN 5 SECCIONES (25 PERFILES NUEVOS + 8 BOARD)"
 echo "VISTA ÚNICA INSTALADA: EXPEL DAMPNESS ABRE DIRECTAMENTE EL CAPÍTULO 16 COMPLETO"
 echo "ANEXO INSTALADO: LAS 5 TABLAS COMPARATIVAS DEL CAPÍTULO 16 QUEDAN PLEGADAS AL FINAL"
+echo "CAPÍTULO 17 INSTALADO: 18 FÓRMULAS EN 7 SECCIONES (13 PERFILES NUEVOS + 5 BOARD)"
+echo "VISTA ÚNICA INSTALADA: TRANSFORM PHLEGM ABRE DIRECTAMENTE EL CAPÍTULO 17 COMPLETO"
+echo "ANEXO INSTALADO: LAS 7 TABLAS COMPARATIVAS DEL CAPÍTULO 17 QUEDAN PLEGADAS AL FINAL"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
