@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+trap 'status=$?; echo "ERROR: despliegue detenido en la línea $LINENO (código $status)." >&2; exit $status' ERR
+
 REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
@@ -289,8 +291,8 @@ grep -q "Las seis fórmulas asociadas permanecen dentro de sus fichas principale
 grep -q "0 de 8 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "expel-damp-chapter-16" "$TEMP_DIR/formulas-study-guide.php"
 grep -q '"number":"C16-33"' "$TEMP_DIR/formulas-study-guide-data.json"
-grep -q '"key": "transform-harmonize-middle"' "$TEMP_DIR/formulas-study-guide-data.json"
-grep -q '"key": "dispel-wind-damp"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"transform-harmonize-middle"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"dispel-wind-damp"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Coincidencia con los Board Domains · 8 de 33" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TEMP_DIR/formulas-study-guide.php"
@@ -417,8 +419,8 @@ grep -q "Las seis fórmulas asociadas permanecen dentro de sus fichas principale
 grep -q "0 de 8 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "expel-damp-chapter-16" "$TARGET_DIR/formulas-study-guide.php"
 grep -q '"number":"C16-33"' "$TARGET_DIR/formulas-study-guide-data.json"
-grep -q '"key": "transform-harmonize-middle"' "$TARGET_DIR/formulas-study-guide-data.json"
-grep -q '"key": "dispel-wind-damp"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"transform-harmonize-middle"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"dispel-wind-damp"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Coincidencia con los Board Domains · 8 de 33" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TARGET_DIR/formulas-study-guide.php"
