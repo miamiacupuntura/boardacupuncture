@@ -659,6 +659,161 @@ $expelwindchapteroverview = [
     'formulas' => $expelwindchapterformulas,
 ];
 
+$chapterinterestinginsights = [
+    'dispel-summerheat' => [
+        'title' => 'Interesting point: Summerheat may be distributed across other Board competencies',
+        'titleEs' => 'Dato interesante: el Calor de Verano puede estar distribuido entre otras competencias del Board',
+        'stat' => '0 of 7 direct overlaps',
+        'statEs' => '0 de 7 coincidencias directas',
+        'intro' => 'The current roster has no dedicated Dispel Summerheat category, yet it tests several component mechanisms through formulas filed under Clear Heat, Expel Dampness, and Tonify.',
+        'introEs' => 'El listado vigente no tiene una categoría propia de Dispersar Calor de Verano, aunque evalúa varios mecanismos componentes mediante fórmulas clasificadas en Aclarar Calor, Expulsar Humedad y Tonificar.',
+        'rows' => [
+            ['coverage' => 'Strong Heat with thirst and fluid injury', 'coverageEs' => 'Calor intenso con sed y lesión de líquidos', 'boardNames' => ['Bai Hu Tang'], 'additional' => 'Seasonal Heat presentations differentiated by exterior signs, Dampness, and residual Heat.', 'additionalEs' => 'Cuadros estacionales de Calor diferenciados por signos de Exterior, Humedad y Calor residual.'],
+            ['coverage' => 'Dampness with exterior and digestive symptoms', 'coverageEs' => 'Humedad con síntomas exteriores y digestivos', 'boardNames' => ['Huo Xiang Zheng Qi San'], 'additional' => 'Xiang Ru San, Liu Yi San, and related formulas grade the balance of Summerheat, Dampness, water, and the exterior.', 'additionalEs' => 'Xiang Ru San, Liu Yi San y fórmulas relacionadas gradúan el equilibrio entre Calor de Verano, Humedad, agua y Exterior.'],
+            ['coverage' => 'Qi-Yin and fluid depletion after Heat', 'coverageEs' => 'Agotamiento de Qi-Yin y líquidos después del Calor', 'boardNames' => ['Sheng Mai San'], 'additional' => 'Qing Shu Yi Qi Tang and Wu Shi Lian Mei Tang add narrower recovery patterns after prolonged seasonal Heat.', 'additionalEs' => 'Qing Shu Yi Qi Tang y Wu Shi Lian Mei Tang añaden patrones de recuperación más específicos tras Calor estacional prolongado.'],
+        ],
+        'hypothesis' => 'A reasonable hypothesis is that the Board tests the underlying Heat, Dampness, exterior, and Qi-Yin mechanisms without preserving Summerheat as a separate climatic chapter.',
+        'hypothesisEs' => 'Una sospecha razonable es que el Board evalúa los mecanismos subyacentes de Calor, Humedad, Exterior y Qi-Yin sin conservar Calor de Verano como capítulo climático independiente.',
+        'value' => 'The seven formulas still matter because season, climate, humidity, thirst, sweating, and digestive signs change the treatment strategy. Suspected heat stroke or severe dehydration requires emergency care.',
+        'valueEs' => 'Las siete fórmulas siguen siendo importantes porque estación, clima, humedad, sed, sudoración y signos digestivos cambian la estrategia. Sospecha de golpe de calor o deshidratación grave requiere urgencias.',
+    ],
+    'warm-interior-cold' => [
+        'title' => 'Interesting point: four formulas sample four clinically distinct depths of Interior Cold',
+        'titleEs' => 'Dato interesante: cuatro fórmulas representan cuatro profundidades clínicas del Frío interno',
+        'stat' => '4 of 11 in the Board roster',
+        'statEs' => '4 de 11 en el listado Board',
+        'intro' => 'The selected formulas form a compact diagnostic ladder from Middle-Burner deficiency-Cold to counterflow, severe abdominal Cold, and collapse of Yang.',
+        'introEs' => 'Las fórmulas seleccionadas forman una escala diagnóstica compacta: Frío-deficiencia del Jiao Medio, contracorriente, Frío abdominal intenso y colapso de Yang.',
+        'rows' => [
+            ['coverage' => 'Middle-Burner deficiency-Cold', 'coverageEs' => 'Frío-deficiencia del Jiao Medio', 'boardNames' => ['Li Zhong Wan'], 'additional' => 'Bensky adds gentler or more targeted warming strategies for pain, fluids, and Spleen weakness.', 'additionalEs' => 'Bensky añade estrategias de calentamiento más suaves o específicas para dolor, líquidos y debilidad de Bazo.'],
+            ['coverage' => 'Cold counterflow and severe abdominal Cold', 'coverageEs' => 'Frío en contracorriente y Frío abdominal intenso', 'boardNames' => ['Wu Zhu Yu Tang', 'Da Jian Zhong Tang'], 'additional' => 'The broader chapter distinguishes channel Cold, Blood deficiency, sensory numbness, and different abdominal mechanisms.', 'additionalEs' => 'El capítulo amplio distingue Frío en canales, deficiencia de Sangre, entumecimiento sensorial y distintos mecanismos abdominales.'],
+            ['coverage' => 'Devastated Yang and collapse', 'coverageEs' => 'Yang devastado y colapso', 'boardNames' => ['Si Ni Tang'], 'additional' => 'Hui Yang Jiu Ji Tang and Shen Fu Tang represent specialized rescue variations with major safety and acuity concerns.', 'additionalEs' => 'Hui Yang Jiu Ji Tang y Shen Fu Tang representan variantes especializadas de rescate con importantes consideraciones de seguridad y gravedad.'],
+        ],
+        'hypothesis' => 'The likely curricular logic is prototype compression: one memorable formula for each major depth or direction of Cold, while narrower channel, Blood, and rescue variations remain in Bensky.',
+        'hypothesisEs' => 'La posible lógica curricular es una compresión por prototipos: una fórmula memorable para cada profundidad o dirección principal del Frío, mientras las variantes de canales, Sangre y rescate permanecen en Bensky.',
+        'value' => 'The omitted formulas refine location and root; they are not interchangeable. Collapse, shock, severe abdominal pain, or formulas containing Fu Zi require urgent evaluation and specialist safety review.',
+        'valueEs' => 'Las fórmulas omitidas refinan localización y raíz; no son intercambiables. Colapso, shock, dolor abdominal intenso o fórmulas con Fu Zi requieren valoración urgente y revisión especializada.',
+    ],
+    'exterior-interior-excess' => [
+        'title' => 'Interesting point: the Board may decompose mixed formulas into foundational strategies',
+        'titleEs' => 'Dato interesante: el Board puede descomponer las fórmulas mixtas en estrategias fundamentales',
+        'stat' => '0 of 6 direct overlaps',
+        'statEs' => '0 de 6 coincidencias directas',
+        'intro' => 'This chapter is built from simultaneous exterior and interior disease. The current roster tests many of the component strategies, but not these six combined prescriptions as their own category.',
+        'introEs' => 'Este capítulo se construye sobre enfermedad simultánea de Exterior e Interior. El listado vigente evalúa muchas estrategias componentes, pero no estas seis prescripciones combinadas como categoría propia.',
+        'rows' => [
+            ['coverage' => 'Harmonize Shaoyang and purge Yangming', 'coverageEs' => 'Armonizar Shaoyang y purgar Yangming', 'boardNames' => ['Xiao Chai Hu Tang', 'Da Cheng Qi Tang'], 'additional' => 'Da Chai Hu Tang integrates both operations in one mixed excess presentation.', 'additionalEs' => 'Da Chai Hu Tang integra ambas operaciones en un solo cuadro mixto de exceso.'],
+            ['coverage' => 'Release the exterior while clearing interior Heat', 'coverageEs' => 'Liberar Exterior mientras se aclara Calor interno', 'boardNames' => ['Ge Gen Tang', 'Huang Lian Jie Du Tang'], 'additional' => 'Ge Gen Huang Qin Huang Lian Tang and Fang Feng Tong Sheng San require more specific combinations of diarrhea, Heat, and exterior constraint.', 'additionalEs' => 'Ge Gen Huang Qin Huang Lian Tang y Fang Feng Tong Sheng San exigen combinaciones más específicas de diarrea, Calor y constricción exterior.'],
+            ['coverage' => 'Treat exterior signs with interior Cold-Dampness or deficiency', 'coverageEs' => 'Tratar signos exteriores con Frío-Humedad o deficiencia interna', 'boardNames' => ['Huo Xiang Zheng Qi San', 'Li Zhong Wan'], 'additional' => 'Wu Ji San and Gui Zhi Ren Shen Tang combine warming, releasing, transforming, and tonifying in narrower mixed patterns.', 'additionalEs' => 'Wu Ji San y Gui Zhi Ren Shen Tang combinan calentar, liberar, transformar y tonificar en patrones mixtos más estrechos.'],
+        ],
+        'hypothesis' => 'A plausible explanation is that the Board favors clearer single-strategy anchors, then expects the learner to reason through combinations rather than memorize a separate hybrid category.',
+        'hypothesisEs' => 'Una explicación plausible es que el Board favorece anclas claras de una estrategia y espera que el estudiante razone las combinaciones en vez de memorizar una categoría híbrida separada.',
+        'value' => 'Bensky’s six formulas remain valuable precisely because real patients can show two layers at once. Their complexity also increases the risk of treating the wrong layer or applying an overly strong method.',
+        'valueEs' => 'Las seis fórmulas de Bensky siguen siendo valiosas precisamente porque un paciente real puede mostrar dos capas a la vez. Su complejidad también aumenta el riesgo de tratar la capa equivocada o aplicar un método demasiado fuerte.',
+    ],
+    'tonify-chapter-8' => [
+        'title' => 'Interesting point: nine prototypes compress a forty-five-formula tonification chapter',
+        'titleEs' => 'Dato interesante: nueve prototipos comprimen un capítulo de cuarenta y cinco fórmulas tónicas',
+        'stat' => '9 of 45 across Board domains',
+        'statEs' => '9 de 45 entre los dominios Board',
+        'intro' => 'Eight formulas appear under Tonify and Yu Ping Feng San appears under Stabilize and Bind. Together they sample the major deficient substances and several clinically important dynamics.',
+        'introEs' => 'Ocho fórmulas aparecen en Tonificar y Yu Ping Feng San aparece en Estabilizar y contener. Juntas representan las principales sustancias deficientes y varias dinámicas clínicas importantes.',
+        'rows' => [
+            ['coverage' => 'Foundational Qi, Blood, and combined deficiency', 'coverageEs' => 'Deficiencia básica de Qi, Sangre y combinación de ambas', 'boardNames' => ['Si Jun Zi Tang', 'Si Wu Tang', 'Gui Pi Tang', 'Shi Quan Da Bu Tang'], 'additional' => 'Bensky adds organ-specific, obstetric, postpartum, Cold, stasis, and pain refinements.', 'additionalEs' => 'Bensky añade refinamientos por órgano, obstetricia, posparto, Frío, estasis y dolor.'],
+            ['coverage' => 'Sinking Qi, Qi-Yin fluid loss, and an unstable exterior', 'coverageEs' => 'Hundimiento de Qi, pérdida de líquidos Qi-Yin y Exterior inestable', 'boardNames' => ['Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'], 'additional' => 'The remaining formulas distinguish Lung failure, failure to grasp Qi, Dampness, prolapse, sweating, and deeper exhaustion.', 'additionalEs' => 'Las fórmulas restantes distinguen falla de Pulmón, incapacidad para captar Qi, Humedad, prolapso, sudoración y agotamiento más profundo.'],
+            ['coverage' => 'Liver-Kidney Yin deficiency and Kidney Yang deficiency', 'coverageEs' => 'Deficiencia de Yin de Hígado-Riñón y deficiencia de Yang de Riñón', 'boardNames' => ['Liu Wei Di Huang Wan', 'Jin Gui Shen Qi Wan'], 'additional' => 'Bensky expands into deficiency Fire, Lung or Stomach Yin, essence, fertility, pure Yang depletion, and combined Yin-Yang patterns.', 'additionalEs' => 'Bensky amplía hacia Fuego por deficiencia, Yin de Pulmón o Estómago, Esencia, fertilidad, agotamiento puro de Yang y patrones combinados Yin-Yang.'],
+        ],
+        'hypothesis' => 'The likely exam strategy is to test archetypal deficiency patterns and transformation rules; the other thirty-six formulas are mostly finer branches built from those foundations.',
+        'hypothesisEs' => 'La probable estrategia de examen es evaluar patrones arquetípicos de deficiencia y reglas de transformación; las otras treinta y seis fórmulas son, en gran parte, ramas más finas construidas sobre esas bases.',
+        'value' => 'Those branches matter clinically because the same word—“deficiency”—can hide different organs, temperatures, fluids, reproductive contexts, and secondary pathogens.',
+        'valueEs' => 'Esas ramas importan clínicamente porque una misma palabra—«deficiencia»—puede ocultar órganos, temperaturas, líquidos, contextos reproductivos y patógenos secundarios distintos.',
+    ],
+    'stabilize-bind-chapter-9' => [
+        'title' => 'Interesting point: the official category samples three kinds of leakage, but one lives in another Bensky chapter',
+        'titleEs' => 'Dato interesante: la categoría oficial representa tres tipos de pérdida, pero una fórmula vive en otro capítulo de Bensky',
+        'stat' => '2 of 17 overlap here; 3 in the Board domain',
+        'statEs' => '2 de 17 coinciden aquí; 3 en el dominio Board',
+        'intro' => 'Si Shen Wan and Gu Jing Wan overlap directly with Chapter 9. Yu Ping Feng San is the third official Stabilize and Bind formula, but Bensky places it in Chapter 8 because it tonifies defensive Qi while securing the exterior.',
+        'introEs' => 'Si Shen Wan y Gu Jing Wan coinciden directamente con el capítulo 9. Yu Ping Feng San es la tercera fórmula oficial de Estabilizar y contener, pero Bensky la coloca en el capítulo 8 porque tonifica Qi defensivo mientras asegura el Exterior.',
+        'rows' => [
+            ['coverage' => 'Unstable exterior with spontaneous sweating and recurrent invasion', 'coverageEs' => 'Exterior inestable con sudor espontáneo e invasiones repetidas', 'boardNames' => ['Yu Ping Feng San'], 'additional' => 'Mu Li San offers another sweating pattern, while Chapter 9 also separates Lung leakage and late-stage cough.', 'additionalEs' => 'Mu Li San ofrece otro patrón de sudoración, mientras el capítulo 9 también separa pérdida de Pulmón y tos tardía.'],
+            ['coverage' => 'Chronic intestinal leakage from Spleen-Kidney Yang deficiency', 'coverageEs' => 'Pérdida intestinal crónica por deficiencia de Yang de Bazo-Riñón', 'boardNames' => ['Si Shen Wan'], 'additional' => 'Bensky distinguishes deficiency-Cold diarrhea, Damp-Heat residue, prolapse, and different levels of astringency.', 'additionalEs' => 'Bensky distingue diarrea por Frío-deficiencia, residuo de Humedad-Calor, prolapso y distintos grados de astringencia.'],
+            ['coverage' => 'Persistent uterine bleeding with deficiency and constrained Heat', 'coverageEs' => 'Sangrado uterino persistente con deficiencia y Calor constreñido', 'boardNames' => ['Gu Jing Wan'], 'additional' => 'The chapter adds essence, urinary, pregnancy, vaginal discharge, and other gynecologic leakage patterns.', 'additionalEs' => 'El capítulo añade patrones de pérdida de Esencia, urinarios, embarazo, flujo vaginal y otras pérdidas ginecológicas.'],
+        ],
+        'hypothesis' => 'The Board may be sampling three high-yield leakage territories—exterior, intestines, and uterus—while leaving the chapter’s many organ- and discharge-specific binders as advanced differentiation.',
+        'hypothesisEs' => 'El Board puede estar representando tres territorios de pérdida de alto rendimiento—Exterior, Intestinos y útero—y dejando los numerosos astringentes específicos por órgano y secreción como diferenciación avanzada.',
+        'value' => 'The omitted formulas teach an essential safety rule: never bind an unresolved pathogen or excess. Color, odor, temperature, timing, and the presence of Heat or Dampness change whether astringency is appropriate.',
+        'valueEs' => 'Las fórmulas omitidas enseñan una regla esencial de seguridad: nunca contener un patógeno o exceso no resuelto. Color, olor, temperatura, momento y presencia de Calor o Humedad cambian si la astringencia es apropiada.',
+    ],
+    'calm-shen-chapter-10' => [
+        'title' => 'Interesting point: the Board favors nourishing Shen formulas over the mineral-heavy historical branch',
+        'titleEs' => 'Dato interesante: el Board favorece fórmulas que nutren el Shen sobre la rama histórica rica en minerales',
+        'stat' => '3 of 9 in the Board roster',
+        'statEs' => '3 de 9 en el listado Board',
+        'intro' => 'All three official formulas belong to the nourishing side of the chapter and present recognizable deficiency patterns rather than relying primarily on heavy settling substances.',
+        'introEs' => 'Las tres fórmulas oficiales pertenecen al lado nutritivo del capítulo y presentan patrones reconocibles de deficiencia, en vez de depender principalmente de sustancias pesadas que asientan.',
+        'rows' => [
+            ['coverage' => 'Liver Blood and Heart Yin deficiency with insomnia', 'coverageEs' => 'Deficiencia de Sangre de Hígado y Yin de Corazón con insomnio', 'boardNames' => ['Suan Zao Ren Tang'], 'additional' => 'Ding Zhi Wan and Huang Lian E Jiao Tang add Qi deficiency, Phlegm, constrained Fire, and Heart-Kidney disharmony.', 'additionalEs' => 'Ding Zhi Wan y Huang Lian E Jiao Tang añaden deficiencia de Qi, Flema, Fuego constreñido y desarmonía Corazón-Riñón.'],
+            ['coverage' => 'Heart-Kidney Yin and Blood deficiency', 'coverageEs' => 'Deficiencia de Yin y Sangre de Corazón-Riñón', 'boardNames' => ['Tian Wang Bu Xin Dan'], 'additional' => 'Bensky grades deeper Fire, sensory symptoms, and heavier anchoring methods.', 'additionalEs' => 'Bensky gradúa Fuego más profundo, síntomas sensoriales y métodos de anclaje más pesados.'],
+            ['coverage' => 'Zang Zao with emotional lability', 'coverageEs' => 'Zang Zao con labilidad emocional', 'boardNames' => ['Gan Mai Da Zao Tang'], 'additional' => 'The sedating branch includes Zhu Sha, magnetite, iron filings, and mother-of-pearl formulas with greater sourcing and safety complexity.', 'additionalEs' => 'La rama sedante incluye fórmulas con Zhu Sha, magnetita, limaduras de hierro y madreperla, con mayor complejidad de procedencia y seguridad.'],
+        ],
+        'hypothesis' => 'A strong clinical suspicion is that broad deficiency archetypes are easier to standardize nationally, while cinnabar-containing and heavy-mineral formulas raise toxicity, quality-control, and modern-use concerns.',
+        'hypothesisEs' => 'Una sospecha clínica fuerte es que los arquetipos amplios de deficiencia son más fáciles de estandarizar nacionalmente, mientras las fórmulas con cinabrio y minerales pesados plantean problemas de toxicidad, control de calidad y uso moderno.',
+        'value' => 'The six additional formulas remain important for recognizing Fire, Phlegm, sensory changes, and historical sedating strategies—but historical Zhu Sha contains mercury and should not be treated as a routine modern ingredient.',
+        'valueEs' => 'Las seis fórmulas adicionales siguen siendo importantes para reconocer Fuego, Flema, cambios sensoriales y estrategias sedantes históricas; pero el Zhu Sha histórico contiene mercurio y no debe considerarse un ingrediente moderno rutinario.',
+    ],
+    'open-orifices-chapter-11' => [
+        'title' => 'Interesting point: an entire classical family can remain outside a modern national roster',
+        'titleEs' => 'Dato interesante: una familia clásica completa puede quedar fuera de un listado nacional moderno',
+        'stat' => '0 of 7 direct overlaps',
+        'statEs' => '0 de 7 coincidencias directas',
+        'intro' => 'The seven formulas address hot or cold sensory-orifice closure with impaired consciousness—presentations that overlap modern neurologic, infectious, toxicologic, or cardiopulmonary emergencies.',
+        'introEs' => 'Las siete fórmulas tratan cierre caliente o frío de los orificios sensoriales con alteración de conciencia, cuadros que se superponen con urgencias neurológicas, infecciosas, toxicológicas o cardiopulmonares modernas.',
+        'rows' => [
+            ['coverage' => 'Routine Board roster', 'coverageEs' => 'Listado terapéutico rutinario del Board', 'boardNames' => [], 'additional' => 'Bensky preserves hot closure, cold closure, pediatric convulsion, Phlegm, internal Wind, and historical revival strategies.', 'additionalEs' => 'Bensky conserva cierre caliente, cierre frío, convulsión pediátrica, Flema, Viento interno y estrategias históricas de reanimación.'],
+            ['coverage' => 'Modern emergency and safety competence', 'coverageEs' => 'Competencia moderna de urgencia y seguridad', 'boardNames' => [], 'additional' => 'The chapter requires recognizing protected species, animal-derived substances, metals, variable substitutions, and a hazardous nasal administration route.', 'additionalEs' => 'El capítulo exige reconocer especies protegidas, sustancias animales, metales, sustituciones variables y una vía nasal peligrosa.'],
+        ],
+        'hypothesis' => 'The strongest suspicion is not that the theory lacks value, but that emergency acuity, obsolete or restricted ingredients, substitution variability, and standardization problems make the family poorly suited to a routine national formula roster.',
+        'hypothesisEs' => 'La sospecha más fuerte no es que la teoría carezca de valor, sino que la urgencia, los ingredientes obsoletos o restringidos, la variabilidad de sustituciones y los problemas de estandarización hacen que la familia sea poco adecuada para un listado nacional rutinario.',
+        'value' => 'Its educational value is safety recognition and differential diagnosis. Altered consciousness, seizure, collapse, severe fever, or respiratory compromise requires emergency services, not self-treatment with a classical formula.',
+        'valueEs' => 'Su valor educativo está en reconocer seguridad y diagnóstico diferencial. Alteración de conciencia, convulsión, colapso, fiebre grave o compromiso respiratorio requieren urgencias, no automedicación con una fórmula clásica.',
+    ],
+    'regulate-qi-chapter-12' => [
+        'title' => 'Interesting point: five formulas map the two master directions of Qi pathology',
+        'titleEs' => 'Dato interesante: cinco fórmulas cartografían las dos direcciones maestras de la patología del Qi',
+        'stat' => '5 of 20 in the Board roster',
+        'statEs' => '5 de 20 en el listado Board',
+        'intro' => 'The Board sample includes Qi that is stuck and Qi that rebels upward, then distributes those dynamics across general constraint, throat, Lung, and Stomach presentations.',
+        'introEs' => 'La muestra del Board incluye Qi estancado y Qi que asciende en contracorriente, y distribuye esas dinámicas entre cuadros generales, garganta, Pulmón y Estómago.',
+        'rows' => [
+            ['coverage' => 'General constraint and Phlegm-Qi in the throat', 'coverageEs' => 'Estancamiento general y Flema-Qi en garganta', 'boardNames' => ['Yue Ju Wan', 'Ban Xia Hou Po Tang'], 'additional' => 'Bensky adds Liver-channel pain, chest obstruction, Middle-Burner Cold, hernia, menstrual, and food-related variants.', 'additionalEs' => 'Bensky añade variantes de dolor del canal de Hígado, obstrucción torácica, Frío del Jiao Medio, hernia, menstruación y alimento.'],
+            ['coverage' => 'Rebellious Lung Qi with Cold-Phlegm or Phlegm-Heat', 'coverageEs' => 'Qi rebelde de Pulmón con Flema-Frío o Flema-Calor', 'boardNames' => ['Su Zi Jiang Qi Tang', 'Ding Chuan Tang'], 'additional' => 'The wider chapter grades deficiency below, exterior constraint, sputum quality, wheezing, and the strength of descent.', 'additionalEs' => 'El capítulo amplio gradúa deficiencia abajo, constricción exterior, calidad del esputo, sibilancia y fuerza del descenso.'],
+            ['coverage' => 'Rebellious Stomach Qi from deficiency-Heat', 'coverageEs' => 'Qi rebelde de Estómago por Calor-deficiencia', 'boardNames' => ['Ju Pi Zhu Ru Tang'], 'additional' => 'Xuan Fu Dai Zhe Tang, Ding Xiang Shi Di Tang, and Da Ban Xia Tang refine retching, hiccup, vomiting, Phlegm, Cold, and deficiency.', 'additionalEs' => 'Xuan Fu Dai Zhe Tang, Ding Xiang Shi Di Tang y Da Ban Xia Tang refinan arcadas, hipo, vómito, Flema, Frío y deficiencia.'],
+        ],
+        'hypothesis' => 'The probable curricular compression is directional: master movement versus descent, then use five high-yield organ examples; the other fifteen formulas are narrower combinations of location, temperature, Phlegm, food, Blood, and deficiency.',
+        'hypothesisEs' => 'La probable compresión curricular es direccional: dominar movimiento frente a descenso y usar cinco ejemplos orgánicos de alto rendimiento; las otras quince fórmulas son combinaciones más estrechas de localización, temperatura, Flema, alimento, Sangre y deficiencia.',
+        'value' => 'The omitted formulas matter because the same symptom—pain, cough, hiccup, or vomiting—can require opposite treatment depending on direction, timing, temperature, and root.',
+        'valueEs' => 'Las fórmulas omitidas importan porque un mismo síntoma—dolor, tos, hipo o vómito—puede requerir tratamiento opuesto según dirección, momento, temperatura y raíz.',
+    ],
+    'regulate-blood-chapter-13' => [
+        'title' => 'Interesting point: the Board samples Blood stasis, but none of the chapter’s stop-bleeding formulas',
+        'titleEs' => 'Dato interesante: el Board representa estasis de Sangre, pero ninguna fórmula hemostática del capítulo',
+        'stat' => '4 of 23 in the Board roster',
+        'statEs' => '4 de 23 en el listado Board',
+        'intro' => 'All four overlaps come from the section that invigorates Blood and dispels stasis. The eight principal stop-bleeding formulas and eleven additional stasis formulas remain outside the official roster.',
+        'introEs' => 'Las cuatro coincidencias provienen de la sección que vigoriza Sangre y dispersa estasis. Las ocho fórmulas principales para detener sangrado y once fórmulas adicionales de estasis quedan fuera del listado oficial.',
+        'rows' => [
+            ['coverage' => 'Heat-stasis in the Lower Burner and Qi-stasis in the chest', 'coverageEs' => 'Calor-estasis en Jiao Inferior y Qi-estasis en pecho', 'boardNames' => ['Tao He Cheng Qi Tang', 'Xue Fu Zhu Yu Tang'], 'additional' => 'Bensky adds trauma, postpartum stasis, severe fixed pain, chronic masses, collaterals, and stronger breaking methods.', 'additionalEs' => 'Bensky añade trauma, estasis posparto, dolor fijo intenso, masas crónicas, colaterales y métodos de ruptura más fuertes.'],
+            ['coverage' => 'Gynecologic Cold-stasis and uterine masses', 'coverageEs' => 'Frío-estasis ginecológico y masas uterinas', 'boardNames' => ['Wen Jing Tang', 'Gui Zhi Fu Ling Wan'], 'additional' => 'The broader chapter distinguishes deficiency, pregnancy, postpartum recovery, menstrual pain, and different degrees of Blood nourishment.', 'additionalEs' => 'El capítulo amplio distingue deficiencia, embarazo, recuperación posparto, dolor menstrual y distintos grados de nutrición de Sangre.'],
+            ['coverage' => 'Stop bleeding by location and mechanism', 'coverageEs' => 'Detener sangrado según localización y mecanismo', 'boardNames' => [], 'additional' => 'Eight formulas separate Heat, deficiency-Cold, stasis, Lung, Intestine, Bladder, uterus, and Middle-Burner bleeding.', 'additionalEs' => 'Ocho fórmulas separan Calor, Frío-deficiencia, estasis y sangrado de Pulmón, Intestino, Vejiga, útero y Jiao Medio.'],
+        ],
+        'hypothesis' => 'One plausible reason is that four stasis archetypes provide reusable pattern logic, whereas hemostatic prescriptions are highly location- and cause-specific and often overlap situations that require urgent biomedical evaluation.',
+        'hypothesisEs' => 'Una razón plausible es que cuatro arquetipos de estasis ofrecen lógica de patrón reutilizable, mientras las prescripciones hemostáticas dependen mucho de localización y causa y suelen superponerse con situaciones que exigen valoración biomédica urgente.',
+        'value' => 'The nineteen additional formulas are clinically important for avoiding a dangerous shortcut: moving Blood can worsen active bleeding, while stopping bleeding without addressing stasis can retain the cause. Acute or heavy bleeding is an emergency.',
+        'valueEs' => 'Las diecinueve fórmulas adicionales son importantes para evitar un atajo peligroso: mover Sangre puede empeorar sangrado activo, mientras detenerlo sin tratar estasis puede retener la causa. Sangrado agudo o abundante es una urgencia.',
+    ],
+];
+
 $supplementalindexcategories = [];
 foreach ($supplementalcategories as $categorykey => $category) {
     if (!in_array($categorykey, $tonifychapterkeys, true)
@@ -838,7 +993,7 @@ echo $OUTPUT->header();
 .formula-study-guide__chapter-shortcut-action{margin:0 0 14px}
 .formula-study-guide__board-verification{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:16px 18px;border:1px solid #b9ddd5;border-left:5px solid #0b817d;border-radius:10px;background:#effaf7}.formula-study-guide__board-verification h4{margin:0 0 4px;font-size:17px}.formula-study-guide__board-verification p{margin:0;color:#496474;font-size:13px;line-height:1.5}.formula-study-guide__board-verification .formula-study-guide__button{flex:0 0 auto}
 .formula-study-guide__scope-analysis{margin:0 0 20px;border:1px solid #edc989;border-left:5px solid #d97706;border-radius:11px;background:#fffaf0;overflow:hidden}.formula-study-guide__scope-analysis-header{padding:18px 20px}.formula-study-guide__scope-analysis-header h4{margin:0 0 7px;font-size:20px}.formula-study-guide__scope-analysis-header p{margin:0;color:#68543a;line-height:1.55}.formula-study-guide__scope-analysis-header p+p{margin-top:8px}.formula-study-guide__scope-analysis-caveat{font-size:13px}.formula-study-guide__scope-analysis .formula-study-guide__table-wrap{background:#fff}.formula-study-guide__scope-analysis .formula-study-guide__table td:first-child{white-space:normal}.formula-study-guide__scope-analysis-count{display:inline-flex;align-items:center;margin-right:6px;padding:3px 7px;border-radius:999px;background:#ffedd5;color:#9a3412;font-size:11px;font-weight:900;white-space:nowrap}
-.formula-study-guide__medical-rationale{margin:0 0 20px;border:1px solid #c4d7f2;border-left:5px solid #315fa5;border-radius:11px;background:#f5f8ff;overflow:hidden}.formula-study-guide__medical-rationale-header{padding:18px 20px}.formula-study-guide__medical-rationale-header h4{margin:0 0 7px;color:#173f78;font-size:20px}.formula-study-guide__medical-rationale-header p{margin:0;color:#435d7a;line-height:1.55}.formula-study-guide__medical-rationale-header p+p{margin-top:8px}.formula-study-guide__medical-rationale .formula-study-guide__table-wrap{background:#fff}.formula-study-guide__medical-rationale .formula-study-guide__table td:first-child{white-space:normal}.formula-study-guide__medical-rationale-secondary{border-top:1px solid #c4d7f2;background:#eef4ff}.formula-study-guide__medical-rationale-caveat{font-size:13px}
+.formula-study-guide__medical-rationale{margin:0 0 20px;border:1px solid #c4d7f2;border-left:5px solid #315fa5;border-radius:11px;background:#f5f8ff;overflow:hidden}.formula-study-guide__medical-rationale-header{padding:18px 20px}.formula-study-guide__medical-rationale-header h4{margin:0 0 7px;color:#173f78;font-size:20px}.formula-study-guide__medical-rationale-header p{margin:0;color:#435d7a;line-height:1.55}.formula-study-guide__medical-rationale-header p+p{margin-top:8px}.formula-study-guide__medical-rationale-stat{display:inline-flex;margin:0 0 9px;padding:4px 9px;border-radius:999px;background:#dce9ff;color:#214f91;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.03em}.formula-study-guide__medical-rationale .formula-study-guide__table-wrap{background:#fff}.formula-study-guide__medical-rationale .formula-study-guide__table td:first-child{white-space:normal}.formula-study-guide__medical-rationale-board{color:#173f78;font-weight:800}.formula-study-guide__medical-rationale-secondary{border-top:1px solid #c4d7f2;background:#eef4ff}.formula-study-guide__medical-rationale-caveat{font-size:13px}
 .formula-study-guide__chapter-shortcut-actions{display:flex;gap:9px;flex-wrap:wrap}
 .formula-study-guide__board-roster{margin:16px 0;padding:15px;border:1px solid #b9ddd5;border-radius:9px;background:#fff}.formula-study-guide__board-roster h5{margin:0 0 4px;font-size:16px}.formula-study-guide__board-roster>p{margin:0 0 12px;color:#496474;font-size:13px}.formula-study-guide__board-roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.formula-study-guide__board-roster-group{padding:11px 12px;border:1px solid #d8e8e4;border-radius:8px;background:#f8fbfa}.formula-study-guide__board-roster-group h6{margin:0 0 7px;color:#075e54;font-size:13px}.formula-study-guide__board-roster-group ul{margin:0;padding:0;list-style:none}.formula-study-guide__board-roster-group li+li{margin-top:7px}.formula-study-guide__board-roster-formula{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.formula-study-guide__board-roster-formula a{color:#172033;font-weight:800;text-decoration:none}.formula-study-guide__board-roster-formula a:hover{color:#075e54;text-decoration:underline}.formula-study-guide__board-roster-meta{display:block;margin-top:2px;color:#64748b;font-size:11px;line-height:1.35}.formula-study-guide__board-roster-number{flex:0 0 auto;padding:3px 6px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;white-space:nowrap}
 .formula-study-guide__chapter-directory{margin:0 0 20px;padding:22px;border:1px solid #c9ded9;border-top:5px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__chapter-directory h4{margin:0 0 7px;font-size:22px}.formula-study-guide__chapter-directory>p{margin:0 0 16px;color:#496474;line-height:1.55}.formula-study-guide__chapter-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.formula-study-guide__chapter-directory-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__chapter-directory-group h5{margin:0 0 8px;font-size:16px}.formula-study-guide__chapter-directory-group h5 a{color:#075e54;text-decoration:none}.formula-study-guide__chapter-directory-group h5 a:hover{text-decoration:underline}.formula-study-guide__chapter-directory-group ol{margin:0;padding-left:22px;columns:2;column-gap:22px}.formula-study-guide__chapter-directory-group li{margin:0 0 5px;break-inside:avoid;color:#52677a;font-size:13px;line-height:1.35}.formula-study-guide__chapter-directory-group li a{color:#334155;text-decoration:none}.formula-study-guide__chapter-directory-group li a:hover{color:#075fc8;text-decoration:underline}
@@ -1561,6 +1716,47 @@ echo $OUTPUT->header();
                     : 'The terms “Warm the Interior” and “Warm Interior Cold” are sometimes used interchangeably for this formula family. After the 4 guideline formulas are secure, Chapter 6 adds 7 related formulas for Cold in the channels, Middle Burner, and Yang collapse.'); ?></p>
                 <div class="formula-study-guide__chapter-shortcut-actions">
                     <a class="formula-study-guide__button" href="<?php echo $warmchapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir la ampliación del capítulo 6 →' : 'Open the Chapter 6 expansion →'); ?></a>
+                </div>
+            </section>
+        <?php endif; ?>
+        <?php if (isset($chapterinterestinginsights[$selected['key']])): ?>
+            <?php $chapterinsight = $chapterinterestinginsights[$selected['key']]; ?>
+            <section class="formula-study-guide__medical-rationale" aria-labelledby="chapter-interesting-insight-title">
+                <div class="formula-study-guide__medical-rationale-header">
+                    <span class="formula-study-guide__medical-rationale-stat"><?php echo s($ises ? $chapterinsight['statEs'] : $chapterinsight['stat']); ?></span>
+                    <h4 id="chapter-interesting-insight-title"><?php echo s($ises ? $chapterinsight['titleEs'] : $chapterinsight['title']); ?></h4>
+                    <p><?php echo s($ises ? $chapterinsight['introEs'] : $chapterinsight['intro']); ?></p>
+                </div>
+                <div class="formula-study-guide__table-wrap">
+                    <table class="formula-study-guide__table">
+                        <thead>
+                            <tr>
+                                <th><?php echo $ises ? 'Cobertura clínica que el Board ya evalúa' : 'Clinical coverage the Board already tests'; ?></th>
+                                <th><?php echo $ises ? 'Fórmulas Board representativas' : 'Representative Board formulas'; ?></th>
+                                <th><?php echo $ises ? 'Qué añade Bensky fuera del Board' : 'What Bensky adds outside the Board'; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($chapterinsight['rows'] as $insightrow): ?>
+                                <?php $boardlabels = array_map($displayformulaname, $insightrow['boardNames']); ?>
+                                <tr>
+                                    <td><?php echo s($ises ? $insightrow['coverageEs'] : $insightrow['coverage']); ?></td>
+                                    <td class="formula-study-guide__medical-rationale-board"><?php echo s($boardlabels === []
+                                        ? ($ises ? 'Ninguna fórmula directa en el listado vigente' : 'No direct formula in the current roster')
+                                        : implode(', ', $boardlabels)); ?></td>
+                                    <td><?php echo s($ises ? $insightrow['additionalEs'] : $insightrow['additional']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="formula-study-guide__medical-rationale-header formula-study-guide__medical-rationale-secondary">
+                    <h4><?php echo s($ises ? 'Una sospecha clínica y curricular razonable' : 'A reasonable clinical and curricular hypothesis'); ?></h4>
+                    <p><?php echo s($ises ? $chapterinsight['hypothesisEs'] : $chapterinsight['hypothesis']); ?></p>
+                    <p><strong><?php echo $ises ? 'Por qué sigue siendo interesante:' : 'Why this remains interesting:'; ?></strong> <?php echo s($ises ? $chapterinsight['valueEs'] : $chapterinsight['value']); ?></p>
+                    <p class="formula-study-guide__medical-rationale-caveat"><?php echo s($ises
+                        ? 'Nota de alcance: el Board no publica una justificación médica fórmula por fórmula. Esta es una hipótesis clínica y educativa basada en cobertura de patrones, aplicabilidad, seguridad y organización del temario; no una declaración oficial del Board.'
+                        : 'Scope note: the Board does not publish a formula-by-formula medical rationale. This is a clinical and educational hypothesis based on pattern coverage, applicability, safety, and syllabus organization—not an official Board statement.'); ?></p>
                 </div>
             </section>
         <?php endif; ?>
