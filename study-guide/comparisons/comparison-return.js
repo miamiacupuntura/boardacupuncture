@@ -71,6 +71,16 @@
   }
 
   const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
+  const relatedPairSlugs = (params.get('related-pairs') || '')
+    .split(',')
+    .filter(function(slug) {
+      return /^[a-z0-9-]+$/.test(slug);
+    });
+  const currentPageName = window.location.pathname.split('/').pop() || '';
+  const currentDuiYaoSlug = currentPageName.replace(/-es\.html$/, '').replace(/\.html$/, '');
+  const isDuiYaoIndex = currentDuiYaoSlug === 'dui-yao';
+  const isRelatedFormulaPair = relatedPairSlugs.includes(currentDuiYaoSlug);
+  const shouldNameFormulaCategory = isDuiYaoIndex || isRelatedFormulaPair;
   const guideUrl = new URL(
     isFormulaGuideReturn
       ? '/blocks/myprogress/formulas-study-guide.php'
@@ -111,7 +121,9 @@
   }
   returnLink.href = guideUrl.toString();
   returnLink.textContent = isFormulaGuideReturn
-    ? formulaGuideLabels[focus][isSpanish ? 'es' : 'en']
+    ? (shouldNameFormulaCategory
+      ? formulaGuideLabels[focus][isSpanish ? 'es' : 'en']
+      : (isSpanish ? '← Volver a la guía de fórmulas' : '← Back to Formula Study Guide'))
     : (isSpanish ? '← Volver a la guía de Single Herbs' : '← Back to Single Herbs Study Guide');
 
   if (isFormulaGuideReturn) {
@@ -129,6 +141,11 @@
 
       destination.searchParams.set('from', 'formula-study-guide');
       destination.searchParams.set('focus', focus);
+      if (relatedPairSlugs.length) {
+        destination.searchParams.set('related-pairs', relatedPairSlugs.join(','));
+      } else {
+        destination.searchParams.delete('related-pairs');
+      }
       link.href = destination.toString();
     });
   } else {

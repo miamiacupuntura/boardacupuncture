@@ -1792,6 +1792,13 @@ echo $OUTPUT->header();
                     'from' => 'formula-study-guide',
                     'focus' => $duiyaoreturnfocus,
                 ];
+                $duiyaorelatedslugs = array_values(array_filter(
+                    array_column($selectedguide['relatedDuiYao'], 'slug'),
+                    static fn($slug): bool => is_string($slug) && preg_match('/^[a-z0-9-]+$/', $slug) === 1
+                ));
+                if ($duiyaorelatedslugs !== []) {
+                    $duiyaoreturnparams['related-pairs'] = implode(',', $duiyaorelatedslugs);
+                }
                 $duiyaoindexurl = new moodle_url($duiyaoindexpath, $duiyaoreturnparams, $duiyaoindexanchor);
                 ?>
                 <section class="formula-study-guide__dui-yao" aria-labelledby="related-dui-yao-title">
