@@ -3,6 +3,8 @@ from pathlib import Path
 from html import escape
 from urllib.parse import quote
 import json
+import re
+import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "study-guide" / "guidelines"
@@ -14,6 +16,9 @@ APPENDIX_A_HERBS_FILE = ROOT / "tools" / "data" / "ncbahm_2026_appendix_a_herbs.
 NCCAOM_2020_HERBS_FILE = ROOT / "tools" / "data" / "nccaom_2020_appendix_a_herbs.txt"
 NCCAOM_2020_FORMULAS_FILE = ROOT / "tools" / "data" / "nccaom_2020_appendix_b_formulas.txt"
 FORMULA_GUIDE_DATA_FILE = ROOT / "blocks" / "myprogress" / "formulas-study-guide-data.json"
+DUI_YAO_DATA_FILE = ROOT / "study-guide" / "comparisons" / "dui-yao-data.json"
+HERB_PAIR_RESEARCH = "https://pubmed.ncbi.nlm.nih.gov/24791518/"
+HERB_PAIR_COMPATIBILITY_REVIEW = "https://pubmed.ncbi.nlm.nih.gov/22871585/"
 
 BOARDS = [
     {
@@ -112,7 +117,7 @@ def top(lang, title, alternate, back="../board-guidelines", css_version="2026102
     return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{escape(title)}"><title>{escape(title)} | AcupunctureTests</title><link rel="alternate" hreflang="{'en' if es else 'es'}" href="{alternate}"><link rel="stylesheet" href="guidelines.css?v={css_version}"></head><body><header class="guide-topbar"><div class="guide-shell guide-topbar__inner"><a class="guide-brand" href="{back}{suffix}">☯ AcupunctureTests · {'Guías de Board' if es else 'Board Guidelines'}</a><div class="guide-actions"><a class="guide-button guide-button--outline" href="{alternate}">{'English' if es else 'Español'}</a><a class="guide-button guide-button--outline" href="/my/">← Dashboard</a></div></div></header><main class="guide-shell">'''
 
 def foot(es=False, returnscript=False):
-    script = '<script src="guideline-return.js?v=20261031-5"></script>' if returnscript else ''
+    script = '<script src="guideline-return.js?v=20261101-1"></script>' if returnscript else ''
     reviewed = (
         ('Revisado el 1 de noviembre de 2026' if es else 'Reviewed November 1, 2026')
         if returnscript else
@@ -219,6 +224,126 @@ def appendix_a_roster(es=False):
         items.append(f'<li><a class="guide-herb-roster__card-link" href="{herb_url}" aria-label="{escape(label, quote=True)}"><strong>{escape(pinyin)}</strong></a><span>{escape(latin[:-1])}</span></li>')
     return f'''<section class="guide-section guide-section--annex" id="appendix-a-current-roster"><p class="guide-eyebrow">{'Anexo · Apéndice A vigente' if es else 'Annex · Current Appendix A'}</p><h2>{'Listado oficial de 304 hierbas individuales' if es else 'Official roster of 304 individual herbs'}</h2><p>{'Transcripción de Appendix A del Chinese Herbology Content Outline de NCBAHM, efectivo el 1 de septiembre de 2026. El Board indica que el examen se concentra en esta lista, pero puede mencionar otras hierbas y usarlas como distractores.' if es else 'Transcribed from Appendix A of the NCBAHM Chinese Herbology Content Outline, effective September 1, 2026. The Board states that the exam focuses on this roster, but other herbs may still be mentioned and used as distractors.'}</p><ol class="guide-herb-roster">{''.join(items)}</ol><div class="guide-annex-source"><strong>{'Fuente oficial:' if es else 'Official source:'}</strong> <a href="{CH}" target="_blank" rel="noopener">NCBAHM · Chinese Herbology Content Outline 2026 ↗</a> · <a href="#appendix-a-study">{'Volver a la sección de estudio ↑' if es else 'Back to the study section ↑'}</a></div></section>'''
 
+
+def normalized_pinyin(value):
+    decomposed = unicodedata.normalize("NFD", value)
+    return "".join(char for char in decomposed if unicodedata.category(char) != "Mn").lower()
+
+
+def formula_has_herb(ingredients, herb):
+    ingredients = normalized_pinyin(ingredients)
+    herb = normalized_pinyin(herb)
+    return re.search(r"(?<![a-z])" + re.escape(herb).replace(r"\ ", r"\s+") + r"(?![a-z])", ingredients) is not None
+
+
+def dui_yao_annex(es=False):
+    pairs = json.loads(DUI_YAO_DATA_FILE.read_text(encoding="utf-8"))
+    formula_data = json.loads(FORMULA_GUIDE_DATA_FILE.read_text(encoding="utf-8"))
+    formulas = formula_data["formulas"]
+    if len(pairs) != 51 or [pair["number"] for pair in pairs] != list(range(1, 52)):
+        raise ValueError("Expected the 51 numbered NCBAHM 2026 Duì Yào pairs")
+    if len(formulas) != 63:
+        raise ValueError("Expected the 63 current NCBAHM formulas")
+
+    current_herbs = {normalized_pinyin(entry.partition(" (")[0]) for entry in appendix_a_herbs()}
+    pair_herbs = []
+    for pair in pairs:
+        components = [normalized_pinyin(item.strip()).title() for item in pair["title"].split(" + ")]
+        if len(components) != 2:
+            raise ValueError(f"Invalid Duì Yào title: {pair['title']}")
+        pair["components"] = components
+        pair_herbs.extend(components)
+    unique_pair_herbs = sorted(set(pair_herbs))
+    literal_pair_gaps = [herb for herb in unique_pair_herbs if normalized_pinyin(herb) not in current_herbs]
+    if literal_pair_gaps != ["Xin Yi Hua"] or normalized_pinyin("Xin Yi") not in current_herbs:
+        raise ValueError(f"Unexpected Duì Yào herb coverage result: {literal_pair_gaps}")
+
+    language_query = "&amp;lang=es" if es else ""
+    pair_suffix = "-es" if es else ""
+
+    def pair_link(pair):
+        return f'../comparisons/{pair["slug"]}{pair_suffix}.html'
+
+    def formula_link(formula):
+        return f'/blocks/myprogress/formulas-study-guide.php?focus={quote(formula["categoryKey"])}{language_query}#formula-{formula["number"]}'
+
+    action_items = []
+    priority_rows = []
+    for pair in pairs:
+        action = pair["action"]["es" if es else "en"]
+        signature = pair["formulas"]["es" if es else "en"]
+        action_items.append(
+            f'<li data-dui-action="{pair["number"]}"><a href="{pair_link(pair)}"><strong>{escape(pair["title"])}</strong></a>: '
+            f'{escape(action)}<small><strong>{"Fórmula(s) de referencia" if es else "Reference formula(s)"}:</strong> {escape(signature)}</small></li>'
+        )
+        first, second = pair["components"]
+        hits = [formula for formula in formulas if formula_has_herb(formula["ingredients"], first) and formula_has_herb(formula["ingredients"], second)]
+        if len(hits) >= 2:
+            formula_links = ", ".join(f'<a href="{formula_link(formula)}">{escape(formula["name"])}</a>' for formula in hits)
+            priority_rows.append((len(hits), pair, formula_links))
+    priority_rows.sort(key=lambda item: (-item[0], item[1]["number"]))
+
+    # Literal labels in the 63-formula data that are not standalone Appendix A names.
+    # The first 16 normalize to a listed medicinal; the final historical label requires a scope note.
+    ingredient_crosswalk = [
+        ("Zhi Gan Cao", "Gan Cao", "processed"),
+        ("Sheng Gan Cao", "Gan Cao", "processed"),
+        ("Jing Jie Sui", "Jing Jie", "part"),
+        ("Zhu Ye", "Dan Zhu Ye", "alias"),
+        ("Sheng Jiang Pi", "Sheng Jiang", "part"),
+        ("Fu Ling Pi", "Fu Ling", "part"),
+        ("Zhi Fu Zi", "Fu Zi", "processed"),
+        ("Niu Xi", "Huai Niu Xi / Chuan Niu Xi", "generic"),
+        ("Chuan Jiao", "Hua Jiao", "alias"),
+        ("Su Zi", "Zi Su Zi", "alias"),
+        ("Su Ye", "Zi Su Ye", "alias"),
+        ("Ju Pi", "Chen Pi", "alias"),
+        ("Chun Gen Pi", "Chun Pi", "alias"),
+        ("Zhi Cao Wu", "Cao Wu", "processed"),
+        ("Zhi Chuan Wu", "Chuan Wu", "processed"),
+        ("Geng Mi", "Jing Mi", "alias"),
+        ("Zhu Sha", "Appendix D", "obsolete"),
+    ]
+    for label, current_name, status in ingredient_crosswalk:
+        if not any(formula_has_herb(formula["ingredients"], label) for formula in formulas):
+            raise ValueError(f"Formula ingredient audit label not found: {label}")
+        if status not in {"outside", "obsolete", "generic"} and normalized_pinyin(current_name) not in current_herbs:
+            raise ValueError(f"Formula ingredient crosswalk target not in Appendix A: {current_name}")
+    for candidate in ("Huai Niu Xi", "Chuan Niu Xi"):
+        if normalized_pinyin(candidate) not in current_herbs:
+            raise ValueError(f"Formula ingredient crosswalk target not in Appendix A: {candidate}")
+
+    relationship_rows = [
+        ("Dān Xíng · 单行", "Uso individual; es el punto de comparación, no una pareja." if es else "Single use; the comparison baseline, not a pair."),
+        ("Xiāng Xū · 相须", "Acciones semejantes se refuerzan mutuamente." if es else "Similar actions mutually reinforce one another."),
+        ("Xiāng Shǐ · 相使", "Una hierba dirige y la otra asiste o amplía su efecto." if es else "One medicinal leads while the other assists or extends its effect."),
+        ("Xiāng Wèi · 相畏", "La toxicidad o aspereza de una es contenida por la otra." if es else "The toxicity or harshness of one is restrained by the other."),
+        ("Xiāng Shā · 相杀", "Una reduce o elimina la toxicidad de la otra; es la perspectiva recíproca de Xiāng Wèi." if es else "One reduces or removes the other's toxicity; the reciprocal perspective of Xiāng Wèi."),
+        ("Xiāng Wù · 相恶", "Una debilita o interfiere con el efecto terapéutico buscado de la otra." if es else "One weakens or interferes with the other's intended therapeutic effect."),
+        ("Xiāng Fǎn · 相反", "La combinación aumenta toxicidad o reacciones adversas y debe evitarse." if es else "The combination increases toxicity or adverse effects and should be avoided."),
+    ]
+    status_labels = {
+        "processed": "forma procesada" if es else "processed form",
+        "part": "parte de la hierba" if es else "herb part",
+        "alias": "alias o nombre equivalente" if es else "alias or equivalent name",
+        "generic": "nombre genérico" if es else "generic name",
+        "obsolete": "histórica y obsoleta" if es else "historical and obsolete",
+    }
+    crosswalk_rows = []
+    for label, current_name, status in ingredient_crosswalk:
+        hits = [formula for formula in formulas if formula_has_herb(formula["ingredients"], label)]
+        names = ", ".join(f'<a href="{formula_link(formula)}">{escape(formula["name"])}</a>' for formula in hits)
+        crosswalk_rows.append(
+            f'<tr><th>{escape(label)}</th><td>{escape(current_name)}</td><td>{escape(status_labels[status])}</td><td>{names}</td></tr>'
+        )
+
+    priority_html = "".join(
+        f'<tr data-dui-priority="{pair["number"]}"><th><a href="{pair_link(pair)}">{escape(pair["title"])}</a></th><td><strong>{count}</strong></td><td>{formula_links}</td></tr>'
+        for count, pair, formula_links in priority_rows
+    )
+    relationship_html = "".join(f'<tr><th>{name}</th><td>{body}</td></tr>' for name, body in relationship_rows)
+    return f'''<section class="guide-section guide-section--annex guide-section--dui-yao" id="dui-yao-annex"><p class="guide-eyebrow">{'Anexo · Appendix B vigente' if es else 'Annex · Current Appendix B'}</p><h2>{'Las 51 parejas Duì Yào: acciones, prioridad y auditoría' if es else 'The 51 Duì Yào pairs: actions, priority and audit'}</h2><p>{'El temario NCCAOM 2020 ya evaluaba las funciones, indicaciones y aplicación de parejas comunes, pero no publicaba una lista nominal de parejas. El Appendix B de NCBAHM 2026 convierte ese objetivo en una lista explícita de 51 parejas de enfoque.' if es else 'The NCCAOM 2020 outline already tested the functions, indications and application of common pairs, but it did not publish a named pair roster. NCBAHM 2026 Appendix B turns that objective into an explicit 51-pair focus list.'}</p><div class="guide-alert guide-alert--compact"><strong>{'Cómo leer este anexo:' if es else 'How to read this annex:'}</strong> {'la acción resume el trabajo conjunto. La tabla de prioridad cuenta en cuántas de las 63 fórmulas vigentes aparecen ambos componentes; es una señal de rendimiento para estudiar, no una afirmación de que siempre ocupen la misma jerarquía o función.' if es else 'the action summarizes the combined job. The priority table counts how many of the 63 current formulas contain both components; it is a study-yield signal, not a claim that the pair always has the same hierarchy or function.'}</div><h3>{'Siete relaciones tradicionales de compatibilidad' if es else 'Seven traditional compatibility relationships'}</h3><p>{'Estas relaciones explican el marco clásico de combinación. No significan que cada una de las 51 parejas deba memorizarse bajo una sola etiqueta rígida.' if es else 'These relationships explain the classical combination framework. They do not mean that every one of the 51 pairs must be memorized under one rigid label.'}</p><div class="guide-table-wrap"><table class="guide-table guide-dui-relationships"><thead><tr><th>{'Relación' if es else 'Relationship'}</th><th>{'Significado práctico' if es else 'Practical meaning'}</th></tr></thead><tbody>{relationship_html}</tbody></table></div><h3>{'Resumen de todas las acciones' if es else 'Summary of every action'}</h3><ol class="guide-dui-action-list">{''.join(action_items)}</ol><h3>{'Prioridad por repetición dentro de las 63 fórmulas' if es else 'Priority by repetition within the 63 formulas'}</h3><p>{'Se muestran las parejas que coaparecen en dos o más fórmulas vigentes. Una pareja con cero o una coaparición sigue siendo examinable porque Appendix B la incluye expresamente.' if es else 'Pairs co-occurring in two or more current formulas are shown. A pair with zero or one co-occurrence remains testable because Appendix B expressly includes it.'}</p><div class="guide-table-wrap"><table class="guide-table guide-dui-priority"><thead><tr><th>Duì Yào</th><th>{'Coapariciones' if es else 'Co-occurrences'}</th><th>{'Fórmulas vigentes' if es else 'Current formulas'}</th></tr></thead><tbody>{priority_html}</tbody></table></div><h3>{'Auditoría contra las 304 hierbas y las 63 fórmulas' if es else 'Audit against the 304 herbs and 63 formulas'}</h3><div class="guide-audit-summary"><article><strong>51</strong><span>{'parejas verificadas' if es else 'verified pairs'}</span></article><article><strong>77</strong><span>{'nombres herbales únicos' if es else 'unique herb names'}</span></article><article><strong>0</strong><span>{'hierbas Duì Yào realmente ausentes' if es else 'Duì Yào herbs substantively absent'}</span></article><article><strong>1</strong><span>{'mención histórica fuera de Appendix A' if es else 'historical mention outside Appendix A'}</span></article></div><p><strong>{'Resultado Duì Yào:' if es else 'Duì Yào result:'}</strong> {'los 77 nombres corresponden a Appendix A. La única diferencia literal es Xīn Yí Huā, publicada como Xīn Yí en la lista vigente; no es una sustancia distinta.' if es else 'all 77 names correspond to Appendix A. The only literal difference is Xīn Yí Huā, published as Xīn Yí in the current roster; it is not a different substance.'}</p><p><strong>{'Resultado de fórmulas:' if es else 'Formula result:'}</strong> {'diecisiete etiquetas de ingredientes no coinciden literalmente con un nombre independiente de Appendix A. Dieciséis son formas procesadas, partes, alias o nombres genéricos de hierbas vigentes; Gēng Mǐ corresponde a Jīng Mǐ. La única mención realmente fuera de Appendix A es Zhū Shā, incluida solo al señalar versiones históricas de Tiān Wáng Bǔ Xīn Dān y clasificada como obsoleta en Appendix D. Por tanto, no hay un ingrediente activo moderno de las 63 fichas sin correspondencia en las 304 hierbas.' if es else 'seventeen ingredient labels do not literally match a standalone Appendix A name. Sixteen are processed forms, parts, aliases or generic names for current herbs; Gēng Mǐ corresponds to Jīng Mǐ. The only mention truly outside Appendix A is Zhū Shā, included only when noting historical versions of Tiān Wáng Bǔ Xīn Dān and classified as obsolete in Appendix D. Therefore, no modern active ingredient in the 63 profiles lacks a match among the 304 herbs.'}</p><div class="guide-table-wrap"><table class="guide-table guide-ingredient-audit"><thead><tr><th>{'Etiqueta en la fórmula' if es else 'Formula label'}</th><th>{'Correspondencia vigente' if es else 'Current match'}</th><th>{'Clasificación' if es else 'Classification'}</th><th>{'Dónde aparece' if es else 'Where it appears'}</th></tr></thead><tbody>{''.join(crosswalk_rows)}</tbody></table></div><div class="guide-annex-source"><strong>{'Fuentes:' if es else 'Sources:'}</strong> <a href="{NCCAOM_2020_CH}" target="_blank" rel="noopener">NCCAOM 2020 ↗</a> · <a href="{CH}" target="_blank" rel="noopener">NCBAHM 2026 ↗</a> · <a href="{HERB_PAIR_RESEARCH}" target="_blank" rel="noopener">PubMed · Duì Yào ↗</a> · <a href="{HERB_PAIR_COMPATIBILITY_REVIEW}" target="_blank" rel="noopener">PubMed · compatibility ↗</a> · <a href="#appendix-b-study">{'Volver a la sección de estudio ↑' if es else 'Back to the study section ↑'}</a></div></section>'''
+
 def board_page(board, lang):
     es = lang == "es"
     title = board["es" if es else "en"]
@@ -229,7 +354,7 @@ def board_page(board, lang):
     alternate = f'{board["slug"]}{"" if es else "-es"}.html'
     source = board.get("source", OFFICIAL)
     herbal = board["slug"] == "chinese-herbal-medicine"
-    html = top(lang, title, alternate, css_version="20261101-1" if herbal else "20261027-7")
+    html = top(lang, title, alternate, css_version="20261101-2" if herbal else "20261027-7")
     html += f'''<section class="guide-hero"><p class="guide-eyebrow">{'Guía de Board' if es else 'Board guideline'}</p><h1>{escape(title)}</h1><p>{escape(summary)}</p></section>'''
     if herbal:
         html += f'''<div class="guide-alert"><strong>{'Documento de lectura continua.' if es else 'Continuous reading document.'}</strong> {'Lee de arriba hacia abajo sin cambiar de página. Esta guía contiene el orden de estudio, los cambios principales, las prioridades y el control final.' if es else 'Read from top to bottom without changing pages. This guide contains the study order, key changes, priorities and final review.'}</div>'''
@@ -274,7 +399,7 @@ def board_page(board, lang):
         html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">2</div><div><p class="guide-eyebrow">{'Mapa vigente' if es else 'Current map'}</p><h2>{'Qué contiene cada apéndice y para qué sirve' if es else 'What each appendix contains and why it matters'}</h2><div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>{'Apéndice' if es else 'Appendix'}</th><th>{'Contenido' if es else 'Content'}</th><th>{'Qué debes aprender' if es else 'What to learn'}</th><th>{'Resultado esperado' if es else 'Expected result'}</th></tr></thead><tbody>{''.join(f'<tr><th>{a}</th><td>{b}</td><td>{c}</td><td>{d}</td></tr>' for a,b,c,d in appendix_rows)}</tbody></table></div></div></article>'''
         html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">3</div><div><p class="guide-eyebrow">NCCAOM → NCBAHM</p><h2>{'Qué cambia en la preparación' if es else 'What changes in preparation'}</h2><p>{'La comparación muestra qué conocimientos conservar, qué contenido añadir y dónde redistribuir el tiempo de estudio para el alcance actual.' if es else 'The comparison shows what knowledge to retain, what content to add and where to redistribute study time for the current scope.'}</p><div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>{'Área' if es else 'Area'}</th><th>{'Preparación anterior' if es else 'Earlier preparation'}</th><th>{'Preparación actual NCBAHM' if es else 'Current NCBAHM preparation'}</th><th>{'Acción del alumno' if es else 'Student action'}</th></tr></thead><tbody>{''.join(f'<tr><th>{a}</th><td>{b}</td><td>{c}</td><td>{d}</td></tr>' for a,b,c,d in transition_rows)}</tbody></table></div></div></article>'''
         html += f'''<article class="guide-reading-step" id="appendix-a-study"><div class="guide-reading-step__number">4</div><div><p class="guide-eyebrow">Appendix A · {'Hierbas individuales' if es else 'Individual herbs'}</p><h2>{'Construye primero una base que permita decidir' if es else 'First build a foundation that supports decisions'}</h2><p>{'Para cada hierba aprende identidad y parte medicinal, categoría, naturaleza, sabor, canales, acciones, indicaciones, dosis, preparación y seguridad. Añade una frase de contraste: “La elijo en vez de una hierba parecida cuando aparece esta pista”.' if es else 'For every herb learn identity and medicinal part, category, nature, flavor, channels, actions, indications, dosage, preparation and safety. Add one contrast sentence: “I choose it instead of a similar herb when this clue appears.”'}</p><p><strong>{'Utilidad:' if es else 'Why this matters:'}</strong> {'sin esa base, Duì Yào se convierte en memorización de parejas y las fórmulas se convierten en listas sin mecanismo.' if es else 'without that foundation, Duì Yào becomes pair memorization and formulas become lists without mechanism.'}</p><p><a href="#appendix-a-current-roster"><strong>{'Consultar las 304 hierbas en el anexo ↓' if es else 'See all 304 herbs in the annex ↓'}</strong></a></p></div></article>'''
-        html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">5</div><div><p class="guide-eyebrow">Appendix B · Duì Yào</p><h2>{'Qué es Duì Yào y por qué aparece después de las hierbas' if es else 'What Duì Yào is and why it comes after herbs'}</h2><p>{'Duì Yào significa literalmente “medicinales emparejados”. Es la unidad intermedia entre una hierba individual y una fórmula completa. La pareja permite ver cómo dos funciones se refuerzan, se complementan, se equilibran o cambian de dirección al combinarse.' if es else 'Duì Yào literally means “paired medicinals.” It is the intermediate unit between an individual herb and a complete formula. The pair shows how two functions reinforce, complement, balance or redirect one another when combined.'}</p><p>{'No se estudia primero porque necesitas conocer el aporte individual antes de comprender la relación. Tampoco debes confundir una pareja con una prescripción completa: normalmente es un núcleo funcional dentro de una fórmula mayor.' if es else 'It is not studied first because you need to know each individual contribution before understanding the relationship. Do not confuse a pair with a complete prescription: it is usually a functional core inside a larger formula.'}</p><h3>{'Ejemplo: Má Huáng + Guì Zhī' if es else 'Example: Má Huáng + Guì Zhī'}</h3><div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>Má Huáng</th><th>Guì Zhī</th><th>{'Trabajo conjunto' if es else 'Combined job'}</th><th>{'Pista de caso' if es else 'Case clue'}</th></tr></thead><tbody><tr><td>{'Abre con fuerza el Exterior, induce sudoración y difunde Qi de Pulmón.' if es else 'Strongly opens the Exterior, induces sweating and diffuses Lung Qi.'}</td><td>{'Calienta la capa nutritiva y muscular y apoya la liberación hacia afuera.' if es else 'Warms the nutritive and muscle layers and supports outward release.'}</td><td>{'Liberación potente de Viento-Frío Exterior por exceso; pareja característica de Má Huáng Tāng.' if es else 'Powerful release of excess Exterior Wind-Cold; a characteristic pair in Má Huáng Tāng.'}</td><td>{'Escalofríos, dolores corporales, ausencia de sudor y posible sibilancia; revisar riesgo cardiovascular de Má Huáng.' if es else 'Chills, body aches, absence of sweating and possible wheezing; screen Má Huáng cardiovascular risk.'}</td></tr></tbody></table></div></div></article>'''
+        html += f'''<article class="guide-reading-step" id="appendix-b-study"><div class="guide-reading-step__number">5</div><div><p class="guide-eyebrow">Appendix B · Duì Yào</p><h2>{'Qué es Duì Yào y por qué aparece después de las hierbas' if es else 'What Duì Yào is and why it comes after herbs'}</h2><p>{'Duì Yào significa literalmente “medicinales emparejados”. Es la unidad intermedia entre una hierba individual y una fórmula completa. La pareja permite ver cómo dos funciones se refuerzan, se complementan, se equilibran o cambian de dirección al combinarse.' if es else 'Duì Yào literally means “paired medicinals.” It is the intermediate unit between an individual herb and a complete formula. The pair shows how two functions reinforce, complement, balance or redirect one another when combined.'}</p><p>{'No se estudia primero porque necesitas conocer el aporte individual antes de comprender la relación. Tampoco debes confundir una pareja con una prescripción completa: normalmente es un núcleo funcional dentro de una fórmula mayor.' if es else 'It is not studied first because you need to know each individual contribution before understanding the relationship. Do not confuse a pair with a complete prescription: it is usually a functional core inside a larger formula.'}</p><h3>{'Ejemplo: Má Huáng + Guì Zhī' if es else 'Example: Má Huáng + Guì Zhī'}</h3><div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>Má Huáng</th><th>Guì Zhī</th><th>{'Trabajo conjunto' if es else 'Combined job'}</th><th>{'Pista de caso' if es else 'Case clue'}</th></tr></thead><tbody><tr><td>{'Abre con fuerza el Exterior, induce sudoración y difunde Qi de Pulmón.' if es else 'Strongly opens the Exterior, induces sweating and diffuses Lung Qi.'}</td><td>{'Calienta la capa nutritiva y muscular y apoya la liberación hacia afuera.' if es else 'Warms the nutritive and muscle layers and supports outward release.'}</td><td>{'Liberación potente de Viento-Frío Exterior por exceso; pareja característica de Má Huáng Tāng.' if es else 'Powerful release of excess Exterior Wind-Cold; a characteristic pair in Má Huáng Tāng.'}</td><td>{'Escalofríos, dolores corporales, ausencia de sudor y posible sibilancia; revisar riesgo cardiovascular de Má Huáng.' if es else 'Chills, body aches, absence of sweating and possible wheezing; screen Má Huáng cardiovascular risk.'}</td></tr></tbody></table></div><p><a href="#dui-yao-annex"><strong>{'Consultar las 51 acciones, prioridades y auditoría en el anexo ↓' if es else 'See all 51 actions, priorities and the audit in the annex ↓'}</strong></a></p></div></article>'''
         html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">6</div><div><p class="guide-eyebrow">{'Método Duì Yào' if es else 'Duì Yào method'}</p><h2>{'Cómo dominar cada una de las 51 parejas' if es else 'How to master each of the 51 pairs'}</h2><ol><li>{'Nombra el trabajo conjunto en una sola frase.' if es else 'State the combined job in one sentence.'}</li><li>{'Explica qué aporta la primera hierba.' if es else 'Explain what the first herb contributes.'}</li><li>{'Explica qué aporta la segunda y en qué se diferencia.' if es else 'Explain what the second contributes and how it differs.'}</li><li>{'Identifica una fórmula representativa donde la pareja sea funcional.' if es else 'Identify a representative formula where the pair is functional.'}</li><li>{'Añade una pista que confirme la pareja y una que la descarte.' if es else 'Add one clue that confirms the pair and one that rules it out.'}</li><li>{'Cierra con dosis, preparación, interacción o contraindicación relevante.' if es else 'Finish with relevant dosage, preparation, interaction or contraindication.'}</li></ol><p><strong>{'Prueba de dominio:' if es else 'Mastery test:'}</strong> {'si solo recuerdas dos nombres, aún no dominas la pareja; debes poder explicar la relación.' if es else 'if you only remember two names, you do not yet master the pair; you must explain the relationship.'}</p></div></article>'''
         html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">7</div><div><p class="guide-eyebrow">Appendix C · {'Fórmulas' if es else 'Formulas'}</p><h2>{'Pasa de la pareja a la arquitectura de la fórmula' if es else 'Move from the pair to formula architecture'}</h2><p>{'Una fórmula no es una suma de ingredientes. Tiene una estrategia y una jerarquía Jun–Chen–Zuo–Shi: jefe, adjunto, asistente y mensajero. Estudia qué patrón trata, cómo cada ingrediente sostiene la estrategia, qué modificación cambia la dirección y qué contraindicación obliga a descartarla.' if es else 'A formula is not a sum of ingredients. It has a strategy and a Jun–Chen–Zuo–Shi hierarchy: chief, deputy, assistant and envoy. Study the pattern it treats, how each ingredient supports the strategy, which modification changes direction and which contraindication rules it out.'}</p><p><strong>{'Pregunta útil:' if es else 'Useful question:'}</strong> {'¿qué ingrediente o pareja explica la diferencia entre esta fórmula y otra de la misma familia?' if es else 'which ingredient or pair explains the difference between this formula and another in the same family?'}</p></div></article>'''
         html += f'''<article class="guide-reading-step"><div class="guide-reading-step__number">8</div><div><p class="guide-eyebrow">Appendix D · {'Seguridad' if es else 'Safety'}</p><h2>{'Qué no estudiar como tratamiento activo' if es else 'What not to study as an active treatment'}</h2><p>{'No memorices como opciones terapéuticas utilizables las nueve sustancias obsoletas: Xi Jiao, Hu Gu, Xiong Dan, Chuan Shan Jia, Guan Mu Tong, Guang Fang Ji, Ma Dou Ling, Zhu Sha y Ying Su Ke.' if es else 'Do not memorize the nine obsolete substances as usable therapeutic options: Xi Jiao, Hu Gu, Xiong Dan, Chuan Shan Jia, Guan Mu Tong, Guang Fang Ji, Ma Dou Ling, Zhu Sha and Ying Su Ke.'}</p><p>{'Sí debes reconocer su nombre, el motivo de seguridad o protección y la sustitución apropiada. Integra procesamiento, dosis, embarazo, toxicidad e interacciones durante el estudio de hierbas, parejas y fórmulas.' if es else 'You should still recognize each name, the safety or protection issue and the appropriate substitution. Integrate processing, dosage, pregnancy, toxicity and interactions while studying herbs, pairs and formulas.'}</p></div></article>'''
@@ -298,6 +423,7 @@ def board_page(board, lang):
     html += '</div></section>'
     if herbal:
         html += appendix_a_roster(es)
+        html += dui_yao_annex(es)
         html += historical_roster_annex(es)
         html += f'''<section class="guide-section"><p class="guide-eyebrow">{'Cierre del documento' if es else 'Document close'}</p><h2>{'Fuente y control de versión' if es else 'Source and version control'}</h2><p>{'El alcance vigente publicado por NCBAHM controla la preparación. Antes del examen confirma la fecha efectiva del temario y de los Apéndices A–D.' if es else 'The current scope published by NCBAHM controls preparation. Before the exam, confirm the effective date of the outline and Appendices A–D.'}</p><p class="guide-source"><a href="{CH}" target="_blank" rel="noopener">{CH}</a></p></section>'''
     else:

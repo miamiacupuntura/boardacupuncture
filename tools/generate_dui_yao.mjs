@@ -1486,4 +1486,16 @@ for (const pair of pairs) {
 }
 writeFileSync(resolve(root, 'dui-yao.html'), indexPage('en'));
 writeFileSync(resolve(root, 'dui-yao-es.html'), indexPage('es'));
-console.log(`Generated ${pairs.length * 2} Duì Yào pages and 2 indexes`);
+writeFileSync(
+  resolve(root, 'dui-yao-data.json'),
+  `${JSON.stringify(pairs.map(pair => ({
+    number: pair.number,
+    slug: pair.slug,
+    title: pair.title,
+    characters: pair.characters,
+    category: pair.category,
+    action: { en: pair.en.job, es: pair.es.job },
+    formulas: { en: pair.en.formulas, es: pair.es.formulas }
+  })), null, 2)}\n`
+);
+console.log(`Generated ${pairs.length * 2} Duì Yào pages, 2 indexes and the structured pair dataset`);

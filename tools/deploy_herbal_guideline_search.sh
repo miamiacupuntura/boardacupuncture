@@ -69,8 +69,8 @@ for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
         "$REPOSITORY/$REVISION/study-guide/guidelines/$page" \
         -o "$TEMP_DIR/$page"
     sed -E -i \
-        -e 's/guidelines\.css\?v=[0-9-]+/guidelines.css?v=20261101-1/g' \
-        -e 's/guideline-return\.js\?v=20261031-[0-9]+/guideline-return.js?v=20261031-6/g' \
+        -e 's/guidelines\.css\?v=[0-9-]+/guidelines.css?v=20261101-2/g' \
+        -e 's/guideline-return\.js\?v=[0-9-]+/guideline-return.js?v=20261101-1/g' \
         "$TEMP_DIR/$page"
 done
 
@@ -84,6 +84,7 @@ php -r '
 ' "$TEMP_DIR/single-herb-card-index.json"
 grep -q "guide-smart-search" "$TEMP_DIR/guidelines.css"
 grep -q "guide-herb-roster__card-link" "$TEMP_DIR/guidelines.css"
+grep -q "guidelines.css?v=20261101-2" "$TEMP_DIR/guideline-return.js"
 grep -q "guideline-search.js?v=20261031-3" "$TEMP_DIR/guideline-return.js"
 grep -q "Search the complete guide" "$TEMP_DIR/guideline-search.js"
 grep -q "Mu Li San" "$TEMP_DIR/guideline-search.js"
@@ -93,13 +94,17 @@ grep -q "Included in the current Board guideline" "$TEMP_DIR/guideline-search.js
 grep -q "calm-shen-chapter-10" "$TEMP_DIR/guideline-search.js"
 grep -q "single-herb-card-index.json" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
-grep -q "guidelines.css?v=20261101-1" "$TEMP_DIR/chinese-herbal-medicine.html"
-grep -q "guideline-return.js?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine.html"
-grep -q "guideline-return.js?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine-es.html"
+grep -q "guidelines.css?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "guideline-return.js?v=20261101-1" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "guideline-return.js?v=20261101-1" "$TEMP_DIR/chinese-herbal-medicine-es.html"
 grep -q "Historical annex · NCCAOM 2020 → NCBAHM 2026" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "Run Chang Wan and Juan Bi Tang were both listed" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "Anexo histórico · NCCAOM 2020 → NCBAHM 2026" "$TEMP_DIR/chinese-herbal-medicine-es.html"
 grep -q "guide-roster-comparison" "$TEMP_DIR/guidelines.css"
+grep -q "The 51 Duì Yào pairs: actions, priority and audit" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "Las 51 parejas Duì Yào: acciones, prioridad y auditoría" "$TEMP_DIR/chinese-herbal-medicine-es.html"
+grep -q "data-dui-action=\"51\"" "$TEMP_DIR/chinese-herbal-medicine-es.html"
+grep -q "guide-dui-action-list" "$TEMP_DIR/guidelines.css"
 
 mkdir -p "$BACKUP_DIR"
 cp -a "$TARGET_DIR/guidelines.css" "$BACKUP_DIR/"
@@ -141,6 +146,7 @@ fi
 
 grep -q "guide-smart-search" "$TARGET_DIR/guidelines.css"
 grep -q "guide-herb-roster__card-link" "$TARGET_DIR/guidelines.css"
+grep -q "guidelines.css?v=20261101-2" "$TARGET_DIR/guideline-return.js"
 grep -q "guideline-search.js?v=20261031-3" "$TARGET_DIR/guideline-return.js"
 grep -q "Mu Li San" "$TARGET_DIR/guideline-search.js"
 grep -q "single-herbs-study-guide.php?herb=" "$TARGET_DIR/guideline-search.js"
@@ -149,8 +155,12 @@ grep -q "Historical annex · NCCAOM 2020 → NCBAHM 2026" "$TARGET_DIR/chinese-h
 grep -q "Run Chang Wan and Juan Bi Tang were both listed" "$TARGET_DIR/chinese-herbal-medicine.html"
 grep -q "Anexo histórico · NCCAOM 2020 → NCBAHM 2026" "$TARGET_DIR/chinese-herbal-medicine-es.html"
 grep -q "guide-roster-comparison" "$TARGET_DIR/guidelines.css"
-grep -q "guideline-return.js?v=20261031-6" "$TARGET_DIR/chinese-herbal-medicine.html"
-grep -q "guideline-return.js?v=20261031-6" "$TARGET_DIR/chinese-herbal-medicine-es.html"
+grep -q "The 51 Duì Yào pairs: actions, priority and audit" "$TARGET_DIR/chinese-herbal-medicine.html"
+grep -q "Las 51 parejas Duì Yào: acciones, prioridad y auditoría" "$TARGET_DIR/chinese-herbal-medicine-es.html"
+grep -q "data-dui-action=\"51\"" "$TARGET_DIR/chinese-herbal-medicine-es.html"
+grep -q "guide-dui-action-list" "$TARGET_DIR/guidelines.css"
+grep -q "guideline-return.js?v=20261101-1" "$TARGET_DIR/chinese-herbal-medicine.html"
+grep -q "guideline-return.js?v=20261101-1" "$TARGET_DIR/chinese-herbal-medicine-es.html"
 grep -q "single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"

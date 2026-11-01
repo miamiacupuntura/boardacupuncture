@@ -128,6 +128,24 @@ a { color: inherit; }
 .guide-roster-change__empty { display: block; margin-top: 8px; color: var(--muted); font-style: italic; }
 .guide-annex-source { padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 .guide-annex-source a { color: var(--teal); font-weight: 800; }
+.guide-section--dui-yao { scroll-margin-top: 24px; }
+.guide-dui-action-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; margin: 18px 0 28px; padding: 0; list-style: none; counter-reset: dui-action; }
+.guide-dui-action-list li { counter-increment: dui-action; position: relative; min-width: 0; padding: 13px 14px 13px 48px; border: 1px solid #d9e4eb; border-radius: 9px; background: #f8fbfc; line-height: 1.45; }
+.guide-dui-action-list li::before { content: counter(dui-action); position: absolute; top: 13px; left: 14px; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 999px; background: #dff2ed; color: #05665c; font-size: .74rem; font-weight: 900; }
+.guide-dui-action-list a { color: var(--navy); text-decoration: none; }
+.guide-dui-action-list a:hover,
+.guide-dui-action-list a:focus { color: var(--teal); text-decoration: underline; }
+.guide-dui-action-list small { display: block; margin-top: 5px; color: var(--muted); line-height: 1.4; }
+.guide-dui-priority th { min-width: 210px; }
+.guide-dui-priority td:nth-child(2) { width: 120px; text-align: center; }
+.guide-audit-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+.guide-audit-summary article { padding: 16px; border: 1px solid #b9ddd5; border-radius: 10px; background: #edf9f6; text-align: center; }
+.guide-audit-summary strong,
+.guide-audit-summary span { display: block; }
+.guide-audit-summary strong { color: var(--teal); font-size: 1.65rem; line-height: 1; }
+.guide-audit-summary span { margin-top: 7px; color: var(--muted); font-size: .8rem; font-weight: 800; }
+.guide-ingredient-audit th { min-width: 130px; }
+.guide-ingredient-audit td:last-child { min-width: 230px; }
 .guide-formula-roster { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--line); }
 .guide-formula-roster > h3 { margin: 0 0 6px; font-size: 1.25rem; }
 .guide-formula-roster > p { margin: 0 0 16px; }
@@ -150,6 +168,7 @@ a { color: inherit; }
   .guide-grid--three { grid-template-columns: 1fr; }
   .guide-grid--three .guide-card--wide { grid-column: auto; }
   .guide-herb-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .guide-audit-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 720px) {
@@ -167,6 +186,8 @@ a { color: inherit; }
   .guide-actions { width: 100%; flex-direction: column; }
   .guide-resource-list { grid-template-columns: 1fr; }
   .guide-herb-roster { grid-template-columns: 1fr; }
+  .guide-dui-action-list,
+  .guide-audit-summary { grid-template-columns: 1fr; }
   .guide-roster-comparison__list,
   .guide-roster-change__list { columns: 1; }
   .guide-smart-search { padding: 19px 16px; }
