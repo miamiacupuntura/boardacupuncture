@@ -14,7 +14,7 @@ fi
 
 REPOSITORY="${REPOSITORY:-miamiacupuntura/boardacupuncture}"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
-TARGET_DIR="$MOODLE_ROOT/study-guide/comparisons"
+TARGET_DIR="${DUI_YAO_DIR:-}"
 RAW_BASE="https://raw.githubusercontent.com/$REPOSITORY/$REVISION/study-guide/comparisons"
 TEMP_DIR="$(mktemp -d)"
 BACKUP_DIR="/tmp/dui-yao-module-backup-$(date +%Y%m%d-%H%M%S)"
@@ -24,10 +24,34 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if [[ ! -d "$TARGET_DIR" ]]; then
-    echo "ERROR: no existe $TARGET_DIR" >&2
+if [[ -z "$TARGET_DIR" ]]; then
+    CANDIDATE_DIRS=(
+        "/var/www/acupuncturetests-study-guide/current/comparisons"
+        "$MOODLE_ROOT/study-guide/comparisons"
+        "$(dirname "$MOODLE_ROOT")/study-guide/comparisons"
+        "/var/www/html/study-guide/comparisons"
+    )
+    for candidate in "${CANDIDATE_DIRS[@]}"; do
+        if [[ -f "$candidate/dui-yao.html" && -f "$candidate/dui-yao-es.html" ]]; then
+            TARGET_DIR="$candidate"
+            break
+        fi
+    done
+fi
+
+if [[ -z "$TARGET_DIR" ]]; then
+    ACTIVE_INDEX="$(find /var/www -type f -path '*/study-guide/comparisons/dui-yao.html' -print -quit 2>/dev/null || true)"
+    if [[ -n "$ACTIVE_INDEX" ]]; then
+        TARGET_DIR="$(dirname "$ACTIVE_INDEX")"
+    fi
+fi
+
+if [[ -z "$TARGET_DIR" || ! -f "$TARGET_DIR/dui-yao.html" || ! -f "$TARGET_DIR/dui-yao-es.html" ]]; then
+    echo "ERROR: no se encontró el módulo Duì Yào activo. Puedes indicar su ruta con DUI_YAO_DIR=/ruta/study-guide/comparisons" >&2
     exit 1
 fi
+
+echo "Módulo Duì Yào detectado: $TARGET_DIR"
 if ! command -v curl >/dev/null 2>&1 || ! command -v php >/dev/null 2>&1; then
     echo "ERROR: este despliegue requiere curl y php." >&2
     exit 1
