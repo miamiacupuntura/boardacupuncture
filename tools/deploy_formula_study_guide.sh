@@ -125,6 +125,7 @@ php -r '
     $warmInteriorDuiYao = $data["categoryGuides"]["warm-interior"]["relatedDuiYao"] ?? [];
     $tonifyDuiYao = $data["categoryGuides"]["tonify"]["relatedDuiYao"] ?? [];
     $regulateQiDuiYao = $data["categoryGuides"]["regulate-qi-chapter-12"]["relatedDuiYao"] ?? [];
+    $invigorateBloodDuiYao = $data["categoryGuides"]["regulate-blood-chapter-13"]["relatedDuiYao"] ?? [];
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
     $purgeDuiYao = $data["categoryGuides"]["purge"]["relatedDuiYao"] ?? [];
     $purgeSectionNames = [];
@@ -149,6 +150,7 @@ php -r '
         "warm-interior" => "tonics",
         "tonify" => "tonics",
         "regulate-qi-chapter-12" => "descend-stomach-qi",
+        "regulate-blood-chapter-13" => "regulate-blood",
         "expel-damp-chapter-16" => "drain-damp",
         "transform-phlegm-chapter-17" => "cough-phlegm",
     ];
@@ -241,6 +243,10 @@ php -r '
             || array_column($regulateQiDuiYao, "formulas") !== [
                 "Dìng Chuǎn Tāng.", "Jú Pí Zhú Rú Tāng.",
                 "Sū Zǐ Jiàng Qì Tāng.", "Bàn Xià Hòu Pò Tāng."
+            ]
+            || array_column($invigorateBloodDuiYao, "number") !== [24, 34, 49]
+            || array_column($invigorateBloodDuiYao, "formulas") !== [
+                "Wēn Jīng Tāng.", "Xuè Fǔ Zhú Yū Tāng.", "Táo Hé Chéng Qì Tāng."
             ]
             || array_column($purgeSections, "key") !== [
                 "severe-complete-clumping", "moderate-clumping", "dryness-predominant"
@@ -415,6 +421,8 @@ grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TEMP_DIR/formulas-st
 grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "tao-ren-hong-hua-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Vínculo con fórmula del guideline" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
@@ -575,6 +583,8 @@ grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TARGET_DIR/formulas-
 grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "tao-ren-hong-hua-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Vínculo con fórmula del guideline" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
@@ -622,6 +632,7 @@ echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS OFICIALES PARA ARMONIZAR"
 echo "PUENTE DUÌ YÀO INSTALADO: 2 PAREJAS OFICIALES PARA CALENTAR EL INTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE TONIFY LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE REGULATE QI LIMITADAS AL GUIDELINE"
+echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE INVIGORATE BLOOD LIMITADAS AL GUIDELINE"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"

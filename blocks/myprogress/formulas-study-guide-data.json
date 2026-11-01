@@ -2628,6 +2628,44 @@
         }
       ]
     },
+    "regulate-blood-chapter-13": {
+      "relatedDuiYaoAnchor": "regulate-blood",
+      "relatedDuiYaoTitle": "Related Duì Yào · Move Blood and Dispel Stasis",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Movilizar Sangre y disipar estasis",
+      "relatedDuiYaoText": "These three official Appendix B pairs connect directly to three formulas in the four-formula Invigorate Blood guideline roster. They reinforce the distinctions between nourishing and moving Blood, directly dispelling stasis, and combining Blood movement with downward purgation.",
+      "relatedDuiYaoTextEs": "Estos tres pares oficiales del Appendix B conectan directamente con tres fórmulas del listado de cuatro fórmulas de Movilizar Sangre del guideline. Refuerzan las diferencias entre nutrir y movilizar Sangre, disipar estasis directamente y combinar movimiento de Sangre con purgación descendente.",
+      "relatedDuiYaoCaveat": "These are ingredient-level guideline links, not claims that each pair alone defines the complete formula. Appendix B contains no direct pair for Guì Zhī Fú Líng Wán; its full architecture must be learned from the complete prescription. Only the four required Invigorate Blood formulas are named here.",
+      "relatedDuiYaoCaveatEs": "Estos son vínculos del guideline a nivel de ingredientes, no afirmaciones de que cada pareja defina por sí sola la fórmula completa. Appendix B no contiene un par directo para Guì Zhī Fú Líng Wán; su arquitectura debe aprenderse desde la prescripción completa. Aquí solo se nombran las cuatro fórmulas obligatorias de Movilizar Sangre.",
+      "relatedDuiYao": [
+        {
+          "number": 24,
+          "slug": "dang-gui-chuan-xiong-dui-yao",
+          "title": "Dāng Guī + Chuān Xiōng",
+          "characters": "当归 + 川芎",
+          "action": "Nourish and invigorate Blood, regulate menstruation and stop pain from deficiency with stasis.",
+          "actionEs": "Nutrir y movilizar Sangre, regular menstruación y detener dolor por deficiencia con estasis.",
+          "formulas": "Wēn Jīng Tāng."
+        },
+        {
+          "number": 34,
+          "slug": "tao-ren-hong-hua-dui-yao",
+          "title": "Táo Rén + Hóng Huā",
+          "characters": "桃仁 + 红花",
+          "action": "Invigorate Blood and dispel stasis for fixed pain, clots and obstructed menstruation.",
+          "actionEs": "Movilizar Sangre y disipar estasis en dolor fijo, coágulos y menstruación obstruida.",
+          "formulas": "Xuè Fǔ Zhú Yū Tāng."
+        },
+        {
+          "number": 49,
+          "slug": "da-huang-mang-xiao-dui-yao",
+          "title": "Dà Huáng + Máng Xiāo",
+          "characters": "大黄 + 芒硝",
+          "action": "Purge Heat accumulation and soften dry hardness in Yangming bowel excess.",
+          "actionEs": "Purgar acumulación de Calor y ablandar dureza seca en exceso intestinal Yangming.",
+          "formulas": "Táo Hé Chéng Qì Tāng."
+        }
+      ]
+    },
     "treat-dryness-ch15": {
       "priorityTitle": "Chapter 15: first decide whether dryness is external or internal",
       "priorityTitleEs": "Capítulo 15: primero decide si la Sequedad es externa o interna",
