@@ -2506,6 +2506,24 @@
           "Sangrado continuo muy rojo · signos de Calor · lengua roja"
         ]
       ],
+      "relatedDuiYaoAnchor": "harmonizing",
+      "relatedDuiYaoTitle": "Related Duì Yào · Harmonize the Middle During Astringent Treatment",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Armonizar el Centro durante el tratamiento astringente",
+      "relatedDuiYaoText": "One official Appendix B pair appears together within the three-formula Stabilize and Bind guideline roster. Shēng Jiāng and Dà Zǎo are traditionally used in the preparation of Sì Shén Wán, supporting the Middle while the full formula warms and contains chronic predawn diarrhea.",
+      "relatedDuiYaoTextEs": "Una pareja oficial del Appendix B aparece junta dentro del listado de tres fórmulas de Estabilizar y contener del guideline. Shēng Jiāng y Dà Zǎo se usan tradicionalmente en la preparación de Sì Shén Wán, apoyando el Centro mientras la fórmula completa calienta y contiene la diarrea crónica antes del amanecer.",
+      "relatedDuiYaoCaveat": "This is an ingredient-level traditional-preparation link, not a claim that the pair defines the complete formula. Appendix B contains no exact two-herb pair within Yù Píng Fēng Sǎn or Gù Jīng Wán. Only the three required Stabilize and Bind formulas are named here.",
+      "relatedDuiYaoCaveatEs": "Este es un vínculo del guideline a nivel de ingredientes y preparación tradicional, no una afirmación de que la pareja defina la fórmula completa. Appendix B no contiene una pareja exacta de dos hierbas dentro de Yù Píng Fēng Sǎn ni Gù Jīng Wán. Aquí solo se nombran las tres fórmulas obligatorias de Estabilizar y contener.",
+      "relatedDuiYao": [
+        {
+          "number": 22,
+          "slug": "sheng-jiang-da-zao-dui-yao",
+          "title": "Shēng Jiāng + Dà Zǎo",
+          "characters": "生姜 + 大枣",
+          "action": "Harmonize Ying and Wei, support the Spleen and Stomach and buffer harsher medicinals.",
+          "actionEs": "Armonizar Ying y Wei, apoyar Bazo/Estómago y amortiguar medicinas más fuertes.",
+          "formulas": "Sì Shén Wán — traditional preparation."
+        }
+      ],
       "referencesTitle": "Source relationship and safety boundary",
       "referencesTitleEs": "Relación con la fuente y límite de seguridad",
       "referencesText": "Source: Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 9, pages 419–454. The 17 principal formulas form an academic comparison layer and do not enlarge the official Board roster.",

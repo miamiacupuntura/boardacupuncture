@@ -124,6 +124,7 @@ php -r '
     $harmonizeDuiYao = $data["categoryGuides"]["harmonize"]["relatedDuiYao"] ?? [];
     $warmInteriorDuiYao = $data["categoryGuides"]["warm-interior"]["relatedDuiYao"] ?? [];
     $tonifyDuiYao = $data["categoryGuides"]["tonify"]["relatedDuiYao"] ?? [];
+    $stabilizeBindDuiYao = $data["categoryGuides"]["stabilize-bind"]["relatedDuiYao"] ?? [];
     $regulateQiDuiYao = $data["categoryGuides"]["regulate-qi-chapter-12"]["relatedDuiYao"] ?? [];
     $invigorateBloodDuiYao = $data["categoryGuides"]["regulate-blood-chapter-13"]["relatedDuiYao"] ?? [];
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
@@ -149,6 +150,7 @@ php -r '
         "harmonize" => "harmonizing",
         "warm-interior" => "tonics",
         "tonify" => "tonics",
+        "stabilize-bind" => "harmonizing",
         "regulate-qi-chapter-12" => "descend-stomach-qi",
         "regulate-blood-chapter-13" => "regulate-blood",
         "expel-damp-chapter-16" => "drain-damp",
@@ -238,6 +240,10 @@ php -r '
             || array_column($tonifyDuiYao, "formulas") !== [
                 "Bǔ Zhōng Yì Qì Tāng.", "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng.",
                 "Sì Jūn Zǐ Tāng.", "Sì Wù Tāng."
+            ]
+            || array_column($stabilizeBindDuiYao, "number") !== [22]
+            || array_column($stabilizeBindDuiYao, "formulas") !== [
+                "Sì Shén Wán — traditional preparation."
             ]
             || array_column($regulateQiDuiYao, "number") !== [2, 22, 37, 38]
             || array_column($regulateQiDuiYao, "formulas") !== [
@@ -419,6 +425,8 @@ grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.
 grep -q "Duì Yào relacionados · Transformar Flema-Humedad" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Armonizar el Centro durante el tratamiento astringente" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "sheng-jiang-da-zao-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TEMP_DIR/formulas-study-guide-data.json"
@@ -581,6 +589,8 @@ grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TARGET_DIR/formulas-study-guide-dat
 grep -q "Duì Yào relacionados · Transformar Flema-Humedad" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Armonizar el Centro durante el tratamiento astringente" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "sheng-jiang-da-zao-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TARGET_DIR/formulas-study-guide-data.json"
@@ -631,6 +641,7 @@ echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA OFICIAL PARA PURGAR CALOR Y ABLANDAR 
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS OFICIALES PARA ARMONIZAR"
 echo "PUENTE DUÌ YÀO INSTALADO: 2 PAREJAS OFICIALES PARA CALENTAR EL INTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE TONIFY LIMITADAS AL GUIDELINE"
+echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA DE STABILIZE AND BIND LIMITADA AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE REGULATE QI LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE INVIGORATE BLOOD LIMITADAS AL GUIDELINE"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"
