@@ -125,6 +125,7 @@ php -r '
     $warmInteriorDuiYao = $data["categoryGuides"]["warm-interior"]["relatedDuiYao"] ?? [];
     $tonifyDuiYao = $data["categoryGuides"]["tonify"]["relatedDuiYao"] ?? [];
     $stabilizeBindDuiYao = $data["categoryGuides"]["stabilize-bind"]["relatedDuiYao"] ?? [];
+    $calmShenDuiYao = $data["categoryGuides"]["calm-shen-chapter-10"]["relatedDuiYao"] ?? [];
     $regulateQiDuiYao = $data["categoryGuides"]["regulate-qi-chapter-12"]["relatedDuiYao"] ?? [];
     $invigorateBloodDuiYao = $data["categoryGuides"]["regulate-blood-chapter-13"]["relatedDuiYao"] ?? [];
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
@@ -151,6 +152,7 @@ php -r '
         "warm-interior" => "tonics",
         "tonify" => "tonics",
         "stabilize-bind" => "harmonizing",
+        "calm-shen-chapter-10" => "regulate-blood",
         "regulate-qi-chapter-12" => "descend-stomach-qi",
         "regulate-blood-chapter-13" => "regulate-blood",
         "expel-damp-chapter-16" => "drain-damp",
@@ -245,6 +247,10 @@ php -r '
             || array_column($stabilizeBindDuiYao, "formulas") !== [
                 "Sì Shén Wán — traditional preparation."
             ]
+            || array_column($calmShenDuiYao, "number") !== [24]
+            || array_column($calmShenDuiYao, "formulas") !== [
+                "Tiān Wáng Bǔ Xīn Dān — Dāng Guī; Suān Zǎo Rén Tāng — Chuān Xiōng."
+            ]
             || array_column($regulateQiDuiYao, "number") !== [2, 22, 37, 38]
             || array_column($regulateQiDuiYao, "formulas") !== [
                 "Dìng Chuǎn Tāng.", "Jú Pí Zhú Rú Tāng.",
@@ -333,6 +339,8 @@ grep -q "Fuente Bensky completa: 9 fórmulas; coincidencia Board: 3" "$TEMP_DIR/
 grep -q "Calmar el Shen / Calmar el Espíritu" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "3 fórmulas Board · Capítulo 10 de Bensky: 9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Abrir familia unificada →" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "'calm-shen' => 'calm-shen-chapter-10'" "$TEMP_DIR/formulas-study-guide.php"
+! grep -q "Calm Shen main category" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "open-orifices-chapter-11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 11" "$TEMP_DIR/formulas-study-guide.php"
@@ -427,6 +435,8 @@ grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TEMP_DIR/formulas-st
 grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Armonizar el Centro durante el tratamiento astringente" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "sheng-jiang-da-zao-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Nutrir Sangre sin perder movimiento" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Tiān Wáng Bǔ Xīn Dān — Dāng Guī" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TEMP_DIR/formulas-study-guide-data.json"
@@ -506,6 +516,8 @@ grep -q "3 fórmulas Board · Capítulo 9 de Bensky: 17" "$TARGET_DIR/formulas-s
 grep -q "Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Fuente Bensky completa: 9 fórmulas; coincidencia Board: 3" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Calmar el Shen / Calmar el Espíritu" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "'calm-shen' => 'calm-shen-chapter-10'" "$TARGET_DIR/formulas-study-guide.php"
+! grep -q "Calm Shen main category" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "open-orifices-chapter-11" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato relevante para el examen · 0 de 7 en Appendix C 2026" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "regulate-qi-chapter-12" "$TARGET_DIR/formulas-study-guide.php"
@@ -591,6 +603,8 @@ grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TARGET_DIR/formulas-
 grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Armonizar el Centro durante el tratamiento astringente" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "sheng-jiang-da-zao-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Nutrir Sangre sin perder movimiento" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Tiān Wáng Bǔ Xīn Dān — Dāng Guī" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TARGET_DIR/formulas-study-guide-data.json"
@@ -642,6 +656,8 @@ echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS OFICIALES PARA ARMONIZAR"
 echo "PUENTE DUÌ YÀO INSTALADO: 2 PAREJAS OFICIALES PARA CALENTAR EL INTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE TONIFY LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA DE STABILIZE AND BIND LIMITADA AL GUIDELINE"
+echo "CALM SHEN UNIFICADO: LA TARJETA ABRE DIRECTAMENTE EL CAPÍTULO 10 COMPLETO"
+echo "PUENTE DUÌ YÀO INSTALADO: 1 COMPARACIÓN DIVIDIDA DE CALM SHEN LIMITADA AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE REGULATE QI LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE INVIGORATE BLOOD LIMITADAS AL GUIDELINE"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"

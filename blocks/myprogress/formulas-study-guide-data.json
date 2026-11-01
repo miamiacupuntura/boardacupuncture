@@ -2552,6 +2552,26 @@
         }
       ]
     },
+    "calm-shen-chapter-10": {
+      "relatedDuiYaoAnchor": "regulate-blood",
+      "relatedDuiYaoTitle": "Related Duì Yào · Nourish Blood Without Losing Movement",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Nutrir Sangre sin perder movimiento",
+      "relatedDuiYaoText": "One official Appendix B pair provides a useful category-level comparison without adding formulas outside the guideline. Dāng Guī appears in Tiān Wáng Bǔ Xīn Dān, while Chuān Xiōng appears in Suān Zǎo Rén Tāng; their classical relationship clarifies nourishment versus movement in deficiency insomnia.",
+      "relatedDuiYaoTextEs": "Una pareja oficial del Appendix B ofrece una comparación útil a nivel de categoría sin añadir fórmulas externas al guideline. Dāng Guī aparece en Tiān Wáng Bǔ Xīn Dān, mientras Chuān Xiōng aparece en Suān Zǎo Rén Tāng; su relación clásica aclara nutrición frente a movimiento en insomnio por deficiencia.",
+      "relatedDuiYaoCaveat": "This is a split ingredient comparison: the complete pair does not occur intact in any of the three required Calm Shen formulas. Appendix B has no direct pair for Gān Mài Dà Zǎo Tāng. Only formulas from this guideline category are named.",
+      "relatedDuiYaoCaveatEs": "Esta es una comparación dividida por ingredientes: la pareja completa no aparece intacta en ninguna de las tres fórmulas obligatorias de Calmar el Shen. Appendix B no tiene una pareja directa para Gān Mài Dà Zǎo Tāng. Solo se nombran fórmulas de esta categoría del guideline.",
+      "relatedDuiYao": [
+        {
+          "number": 24,
+          "slug": "dang-gui-chuan-xiong-dui-yao",
+          "title": "Dāng Guī + Chuān Xiōng",
+          "characters": "当归 + 川芎",
+          "action": "Nourish and invigorate Blood, regulate menstruation and stop pain from deficiency with stasis.",
+          "actionEs": "Nutrir y movilizar Sangre, regular menstruación y detener dolor por deficiencia con estasis.",
+          "formulas": "Tiān Wáng Bǔ Xīn Dān — Dāng Guī; Suān Zǎo Rén Tāng — Chuān Xiōng."
+        }
+      ]
+    },
     "tonify": {
       "relatedDuiYaoAnchor": "tonics",
       "relatedDuiYaoTitle": "Related Duì Yào · Tonify Qi and Blood",

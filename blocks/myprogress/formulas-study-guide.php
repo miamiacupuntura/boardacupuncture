@@ -9,6 +9,7 @@ $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
 $chapterfocusaliases = [
+    'calm-shen' => 'calm-shen-chapter-10',
     'regulate-qi' => 'regulate-qi-chapter-12',
     'invigorate-blood' => 'regulate-blood-chapter-13',
     'expel-wind' => 'expel-wind-chapter-14',
@@ -1146,7 +1147,6 @@ $istonifychapterpage = $selected !== null
     && ($selected['key'] === 'tonify-chapter-8' || in_array($selected['key'], $tonifychapterkeys, true));
 $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-cold';
 $isstabilizechapterpage = $selected !== null && $selected['key'] === 'stabilize-bind-chapter-9';
-$iscalmshenchapterpage = $selected !== null && $selected['key'] === 'calm-shen-chapter-10';
 $isopenorificeschapterpage = $selected !== null && $selected['key'] === 'open-orifices-chapter-11';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
 $selectedformulasections = $selectedguide['formulaSections'] ?? [];
@@ -1226,16 +1226,6 @@ if ($ises) {
     $stabilizechapterparams['lang'] = 'es';
 }
 $stabilizechapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $stabilizechapterparams);
-$calmshenparentparams = ['focus' => 'calm-shen'];
-if ($ises) {
-    $calmshenparentparams['lang'] = 'es';
-}
-$calmshenparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $calmshenparentparams);
-$calmshenchapterparams = ['focus' => 'calm-shen-chapter-10'];
-if ($ises) {
-    $calmshenchapterparams['lang'] = 'es';
-}
-$calmshenchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $calmshenchapterparams);
 $openorificeschapterparams = ['focus' => 'open-orifices-chapter-11'];
 if ($ises) {
     $openorificeschapterparams['lang'] = 'es';
@@ -1521,7 +1511,6 @@ echo $OUTPUT->header();
                 <?php if ($istonifychapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $tonifyparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Tonificar' : '← Tonify main category'); ?></a><?php endif; ?>
                 <?php if ($iswarmchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calentar el Interior' : '← Warm the Interior main category'); ?></a><?php endif; ?>
                 <?php if ($isstabilizechapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizeparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Estabilizar y contener' : '← Stabilize and Bind main category'); ?></a><?php endif; ?>
-                <?php if ($iscalmshenchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $calmshenparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calmar el Shen' : '← Calm Shen main category'); ?></a><?php endif; ?>
                 <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
             </div>
             <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
@@ -1865,17 +1854,6 @@ echo $OUTPUT->header();
                 </section>
                 <?php endforeach; ?>
             <?php endif; ?>
-        <?php endif; ?>
-        <?php if ($selected['key'] === 'calm-shen'): ?>
-            <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-ten-shortcut-title">
-                <h4 id="chapter-ten-shortcut-title"><?php echo s($ises ? 'Capítulo 10 completo · 9 fórmulas' : 'Complete Chapter 10 · 9 formulas'); ?></h4>
-                <p><?php echo s($ises
-                    ? 'Tres fórmulas del capítulo aparecen en los Board Domains: Suan Zao Ren Tang (#52), Tian Wang Bu Xin Dan (#53) y Gan Mai Da Zao Tang (#54). La ampliación añade seis perfiles principales de Bensky con alertas reforzadas para sustancias históricas tóxicas, obsoletas o amenazadas.'
-                    : 'Three chapter formulas appear in the Board Domains: Suan Zao Ren Tang (#52), Tian Wang Bu Xin Dan (#53), and Gan Mai Da Zao Tang (#54). The expansion adds six principal Bensky profiles with reinforced alerts for toxic, obsolete, or endangered historical substances.'); ?></p>
-                <div class="formula-study-guide__chapter-shortcut-actions">
-                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $calmshenchapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 10 completo →' : 'Open complete Chapter 10 →'); ?></a>
-                </div>
-            </section>
         <?php endif; ?>
         <?php if ($selected['key'] === 'stabilize-bind'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-nine-shortcut-title">
