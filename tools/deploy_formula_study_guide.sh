@@ -120,6 +120,7 @@ php -r '
         }
     }
     $harmonizeDuiYao = $data["categoryGuides"]["harmonize"]["relatedDuiYao"] ?? [];
+    $warmInteriorDuiYao = $data["categoryGuides"]["warm-interior"]["relatedDuiYao"] ?? [];
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
     $purgeDuiYao = $data["categoryGuides"]["purge"]["relatedDuiYao"] ?? [];
     $purgeSectionNames = [];
@@ -194,6 +195,8 @@ php -r '
             ]
             || array_column($harmonizeDuiYao, "number") !== [38, 45, 46]
             || count(array_unique(array_column($harmonizeDuiYao, "slug"))) !== 3
+            || array_column($warmInteriorDuiYao, "number") !== [42, 44]
+            || count(array_unique(array_column($warmInteriorDuiYao, "slug"))) !== 2
             || array_column($purgeSections, "key") !== [
                 "severe-complete-clumping", "moderate-clumping", "dryness-predominant"
             ]
@@ -359,6 +362,8 @@ grep -q "Duì Yào relacionados · Purgar Calor y ablandar dureza seca" "$TEMP_D
 grep -q '"slug": "da-huang-mang-xiao-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Armonizar Shaoyang, Hígado y Centro" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "chai-hu-huang-qin-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Calentar el Centro y rescatar Yang" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "fu-zi-gan-jiang-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
@@ -512,6 +517,8 @@ grep -q "Duì Yào relacionados · Purgar Calor y ablandar dureza seca" "$TARGET
 grep -q '"slug": "da-huang-mang-xiao-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Armonizar Shaoyang, Hígado y Centro" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "chai-hu-huang-qin-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Calentar el Centro y rescatar Yang" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "fu-zi-gan-jiang-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
@@ -557,6 +564,7 @@ echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA LIBERAR EL EXTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA ACLARAR CALOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA OFICIAL PARA PURGAR CALOR Y ABLANDAR SEQUEDAD"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS OFICIALES PARA ARMONIZAR"
+echo "PUENTE DUÌ YÀO INSTALADO: 2 PAREJAS OFICIALES PARA CALENTAR EL INTERIOR"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"

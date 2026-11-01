@@ -2336,6 +2336,33 @@
       "priorityTitleEs": "Prioridad del guideline: domina primero estas 4 fórmulas",
       "priorityText": "These four cards are the complete Warm the Interior roster in the current exam guideline. Use the Chapter 6 expansion only after their differences are secure.",
       "priorityTextEs": "Estas cuatro tarjetas forman el listado completo de Calentar el Interior en el guideline actual. Usa la ampliación del capítulo 6 solo después de dominar sus diferencias.",
+      "relatedDuiYaoAnchor": "warm-interior",
+      "relatedDuiYaoTitle": "Related Duì Yào · Warm the Middle and Rescue Yang",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Calentar el Centro y rescatar Yang",
+      "relatedDuiYaoText": "These two official Appendix B pairs anchor the category's clearest contrast. Gān Jiāng + Bái Zhú warms and strengthens a deficient Middle Burner in Lǐ Zhōng Wán; Fù Zǐ + Gān Jiāng acts at a deeper and more urgent level to restore devastated Yang in Sì Nì Tāng.",
+      "relatedDuiYaoTextEs": "Estos dos pares oficiales del Appendix B fijan el contraste más claro de la categoría. Gān Jiāng + Bái Zhú calienta y fortalece un Jiao Medio deficiente en Lǐ Zhōng Wán; Fù Zǐ + Gān Jiāng actúa a un nivel más profundo y urgente para restaurar Yang devastado en Sì Nì Tāng.",
+      "relatedDuiYaoCaveat": "Shared Gān Jiāng does not make the formulas interchangeable. Digestive deficiency-Cold with watery diarrhea and no thirst points toward Lǐ Zhōng Wán; extreme cold limbs, somnolence, undigested diarrhea and a minute pulse point toward Sì Nì Tāng. Appendix B contains no direct pair for Wú Zhū Yú Tāng or Dà Jiàn Zhōng Tāng, so their vertex-headache and excruciating-pain branches must still be learned from the complete formulas.",
+      "relatedDuiYaoCaveatEs": "Compartir Gān Jiāng no vuelve intercambiables las fórmulas. Frío-deficiencia digestivo con diarrea acuosa y ausencia de sed apunta a Lǐ Zhōng Wán; extremidades gélidas, somnolencia, diarrea no digerida y pulso diminuto apuntan a Sì Nì Tāng. Appendix B no contiene un par directo para Wú Zhū Yú Tāng ni Dà Jiàn Zhōng Tāng, por lo que sus ramas de cefalea de vértex y dolor insoportable deben aprenderse todavía desde las fórmulas completas.",
+      "relatedDuiYao": [
+        {
+          "number": 42,
+          "slug": "fu-zi-gan-jiang-dui-yao",
+          "title": "Fù Zǐ + Gān Jiāng",
+          "characters": "附子 + 干姜",
+          "action": "Restore devastated Yang, warm the Middle and rescue collapse from severe interior Cold.",
+          "actionEs": "Restaurar Yang devastado, calentar Centro y rescatar colapso por Frío interior grave.",
+          "formulas": "Sì Nì Tāng."
+        },
+        {
+          "number": 44,
+          "slug": "gan-jiang-bai-zhu-dui-yao",
+          "title": "Gān Jiāng + Bái Zhú",
+          "characters": "干姜 + 白术",
+          "action": "Warm the Middle, strengthen the Spleen and dry Cold-Dampness.",
+          "actionEs": "Calentar Centro, fortalecer Bazo y secar Frío-Humedad.",
+          "formulas": "Lǐ Zhōng Wán."
+        }
+      ],
       "routeTitle": "Four-step diagnostic route",
       "routeTitleEs": "Ruta diagnóstica en cuatro pasos",
       "route": [
