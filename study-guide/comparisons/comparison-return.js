@@ -64,13 +64,8 @@
       es: '← Volver a Reducir retención de alimentos'
     }
   };
-  const isFormulaGuideReturn = params.get('from') === 'formula-study-guide'
+  const hasFormulaGuideContext = params.get('from') === 'formula-study-guide'
     && Object.prototype.hasOwnProperty.call(formulaGuideLabels, focus);
-  if (!isSingleHerbsReturn && !isFormulaGuideReturn) {
-    return;
-  }
-
-  const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
   const relatedPairSlugs = (params.get('related-pairs') || '')
     .split(',')
     .filter(function(slug) {
@@ -80,7 +75,13 @@
   const currentDuiYaoSlug = currentPageName.replace(/-es\.html$/, '').replace(/\.html$/, '');
   const isDuiYaoIndex = currentDuiYaoSlug === 'dui-yao';
   const isRelatedFormulaPair = relatedPairSlugs.includes(currentDuiYaoSlug);
-  const shouldNameFormulaCategory = isDuiYaoIndex || isRelatedFormulaPair;
+  const isFormulaGuideReturn = hasFormulaGuideContext
+    && (isDuiYaoIndex || isRelatedFormulaPair);
+  if (!isSingleHerbsReturn && !isFormulaGuideReturn) {
+    return;
+  }
+
+  const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
   const guideUrl = new URL(
     isFormulaGuideReturn
       ? '/blocks/myprogress/formulas-study-guide.php'
@@ -121,9 +122,7 @@
   }
   returnLink.href = guideUrl.toString();
   returnLink.textContent = isFormulaGuideReturn
-    ? (shouldNameFormulaCategory
-      ? formulaGuideLabels[focus][isSpanish ? 'es' : 'en']
-      : (isSpanish ? '← Volver a la guía de fórmulas' : '← Back to Formula Study Guide'))
+    ? formulaGuideLabels[focus][isSpanish ? 'es' : 'en']
     : (isSpanish ? '← Volver a la guía de Single Herbs' : '← Back to Single Herbs Study Guide');
 
   if (isFormulaGuideReturn) {
@@ -139,11 +138,23 @@
         return;
       }
 
-      destination.searchParams.set('from', 'formula-study-guide');
-      destination.searchParams.set('focus', focus);
-      if (relatedPairSlugs.length) {
-        destination.searchParams.set('related-pairs', relatedPairSlugs.join(','));
+      const destinationPageName = destination.pathname.split('/').pop() || '';
+      const destinationDuiYaoSlug = destinationPageName
+        .replace(/-es\.html$/, '')
+        .replace(/\.html$/, '');
+      const shouldPreserveFormulaContext = destinationDuiYaoSlug === 'dui-yao'
+        || relatedPairSlugs.includes(destinationDuiYaoSlug);
+      if (shouldPreserveFormulaContext) {
+        destination.searchParams.set('from', 'formula-study-guide');
+        destination.searchParams.set('focus', focus);
+        if (relatedPairSlugs.length) {
+          destination.searchParams.set('related-pairs', relatedPairSlugs.join(','));
+        } else {
+          destination.searchParams.delete('related-pairs');
+        }
       } else {
+        destination.searchParams.delete('from');
+        destination.searchParams.delete('focus');
         destination.searchParams.delete('related-pairs');
       }
       link.href = destination.toString();
