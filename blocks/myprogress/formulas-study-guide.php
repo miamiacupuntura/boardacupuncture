@@ -216,6 +216,31 @@ $getboardformula = static function(string $name) use ($boardformulasbyname, $boa
     $boardname = $boardformulaaliases[$name] ?? $name;
     return $boardformulasbyname[$boardname] ?? null;
 };
+$getboardstatus = static function(array $formulas, bool $spanish) use ($getboardformula): array {
+    $total = count($formulas);
+    $included = 0;
+    foreach ($formulas as $formula) {
+        if ($getboardformula($formula['name']) !== null) {
+            $included++;
+        }
+    }
+    if ($included === 0) {
+        $state = 'none';
+        $summary = $spanish ? 'Ninguna incluida' : 'None included';
+    } elseif ($included === $total) {
+        $state = 'all';
+        $summary = $spanish ? 'Todas incluidas' : 'All included';
+    } else {
+        $state = 'some';
+        $summary = ($spanish ? 'Solo ' : 'Only ') . $included . ($spanish ? ' incluidas' : ' included');
+    }
+    return [
+        'included' => $included,
+        'total' => $total,
+        'state' => $state,
+        'label' => 'Board: ' . $included . ($spanish ? ' de ' : ' of ') . $total . ' · ' . $summary,
+    ];
+};
 $displayformulaname = static function(string $name) use ($getboardformula): string {
     return $name . ($getboardformula($name) !== null ? '*' : '');
 };
@@ -899,6 +924,7 @@ if ($selected !== null && $selectedformulasections !== []) {
     }
     $selected['formulas'] = $orderedselectedformulas;
 }
+$selectedboardstatus = $selected === null ? null : $getboardstatus($selected['formulas'], $ises);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
 
@@ -1035,7 +1061,9 @@ echo $OUTPUT->header();
 .formula-study-guide__category-header{margin-bottom:18px;padding:22px 24px;border-top:5px solid #f77e25;border-radius:12px;background:linear-gradient(135deg,#fffaf5,#f7fbfb)}
 .formula-study-guide__category-header--supplemental{border-top-color:#0b817d;background:linear-gradient(135deg,#effaf7,#fffaf5)}
 .formula-study-guide__category-header h3{margin:4px 0 8px;font-size:clamp(25px,3vw,34px)}.formula-study-guide__category-header p{max-width:800px;margin:0;color:#52677a;line-height:1.55}
-.formula-study-guide__board-zero{display:inline-flex;margin:0 0 11px;padding:6px 10px;border:1px solid #edc989;border-radius:999px;background:#fff4df;color:#8a3f08;font-size:12px;font-weight:900;letter-spacing:.035em;text-transform:uppercase}
+.formula-study-guide__board-status{display:inline-flex;width:max-content;margin:9px 0 2px;padding:5px 9px;border:1px solid #c4d7f2;border-radius:999px;background:#eef4ff;color:#214f91;font-size:11px;font-weight:900;letter-spacing:.035em;text-transform:uppercase}
+.formula-study-guide__board-status--none{border-color:#edc989;background:#fff4df;color:#8a3f08}.formula-study-guide__board-status--all{border-color:#add8cf;background:#e7f7f3;color:#075e54}
+.formula-study-guide__category-header .formula-study-guide__board-status{margin:0 0 11px;padding:6px 10px;font-size:12px}
 .formula-study-guide__chapter-shortcut{margin:0 0 18px;padding:18px 20px;border:1px solid #add8cf;border-left:5px solid #0b817d;border-radius:11px;background:#effaf7}.formula-study-guide__chapter-shortcut h4{margin:0 0 5px;font-size:20px}.formula-study-guide__chapter-shortcut>p{margin:0 0 14px;color:#496474;line-height:1.5}.formula-study-guide__chapter-shortcut-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.formula-study-guide__chapter-shortcut-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid #c7e3dd;border-radius:8px;background:#fff;color:#075e54;font-weight:800;text-decoration:none}.formula-study-guide__chapter-shortcut-link:hover{background:#e7f7f3;color:#064e47;text-decoration:none}.formula-study-guide__chapter-shortcut-link span{color:#64748b;font-size:12px;white-space:nowrap}
 .formula-study-guide__chapter-shortcut-action{margin:0 0 14px}
 .formula-study-guide__board-verification{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:16px 18px;border:1px solid #b9ddd5;border-left:5px solid #0b817d;border-radius:10px;background:#effaf7}.formula-study-guide__board-verification h4{margin:0 0 4px;font-size:17px}.formula-study-guide__board-verification p{margin:0;color:#496474;font-size:13px;line-height:1.5}.formula-study-guide__board-verification .formula-study-guide__button{flex:0 0 auto}
@@ -1144,11 +1172,13 @@ echo $OUTPUT->header();
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
+                $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
                 ?>
                 <a class="formula-study-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($categoryname); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
+                    <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
                     <p><?php echo s($copy); ?></p>
                     <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                     <small><?php echo s($iscombinedindexcard
@@ -1178,11 +1208,13 @@ echo $OUTPUT->header();
                     $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
                     $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
                     $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
+                    $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
                     ?>
                     <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Capítulo ' : 'Chapter '); ?><?php echo (int) $category['sourceChapter']; ?></span>
                         <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                         <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas principales' : 'principal formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $category['sourcePages']); ?></span>
+                        <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
                         <p><?php echo s($copy); ?></p>
                         <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                         <small><?php echo s($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →'); ?></small>
@@ -1209,7 +1241,7 @@ echo $OUTPUT->header();
                 ? (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages'])
                 : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
-            <?php if ($selected['key'] === 'treat-dryness-ch15'): ?><span class="formula-study-guide__board-zero" role="note"><?php echo s($ises ? 'Board: 0 de 8 · Ninguna está en el listado oficial' : 'Board: 0 of 8 · None are on the official list'); ?></span><?php endif; ?>
+            <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span>
             <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'); ?></strong></p>
             <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
