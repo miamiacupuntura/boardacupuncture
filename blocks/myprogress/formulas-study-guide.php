@@ -582,53 +582,70 @@ $regulatebloodchapteroverview = [
 ];
 
 $expelwindchaptersections = [
+    'board' => [
+        'key' => 'board', 'name' => 'Board formulas first',
+        'nameEs' => 'Fórmulas del Board primero', 'sourcePages' => '634–642, 647–649',
+        'copy' => 'Begin with the three formulas in the current Board guideline. Their asterisks remain visible; the remaining 14 cards then complete the Bensky chapter.',
+        'copyEs' => 'Empieza con las tres fórmulas del guideline vigente del Board. Se conservan sus asteriscos; las 14 fichas restantes completan después el capítulo de Bensky.',
+    ],
     'external' => [
-        'key' => 'external', 'name' => 'Dredge and Disperse External Wind',
-        'nameEs' => 'Desobstruir y dispersar Viento externo', 'sourcePages' => '619–643',
-        'copy' => 'First identify an external or channel-level Wind presentation, then distinguish Cold, Heat, Phlegm, Dampness, Blood deficiency, trauma, skin disease, and toxic emergency patterns.',
-        'copyEs' => 'Primero identifica un cuadro de Viento externo o de canales y luego distingue Frío, Calor, Flema, Humedad, deficiencia de Sangre, trauma, enfermedad cutánea y patrones tóxicos de urgencia.',
+        'key' => 'external', 'name' => 'Additional Bensky formulas · Dredge and Disperse External Wind',
+        'nameEs' => 'Fórmulas adicionales de Bensky · Desobstruir y dispersar Viento externo', 'sourcePages' => '619–643',
+        'copy' => 'After the Board formulas, identify an external or channel-level Wind presentation, then distinguish Cold, Heat, Phlegm, Dampness, Blood deficiency, trauma, and toxic emergency patterns.',
+        'copyEs' => 'Después de las fórmulas del Board, identifica un cuadro de Viento externo o de canales y distingue Frío, Calor, Flema, Humedad, deficiencia de Sangre, trauma y patrones tóxicos de urgencia.',
     ],
     'internal' => [
-        'key' => 'internal', 'name' => 'Pacify and Extinguish Internal Wind',
-        'nameEs' => 'Pacificar y extinguir Viento interno', 'sourcePages' => '639–655',
+        'key' => 'internal', 'name' => 'Additional Bensky formulas · Pacify and Extinguish Internal Wind',
+        'nameEs' => 'Fórmulas adicionales de Bensky · Pacificar y extinguir Viento interno', 'sourcePages' => '639–655',
         'copy' => 'Separate Heat excess generating Wind, Liver-Yang ascendance, and late-stage Blood-Yin-fluid depletion; the root determines whether to clear, anchor, direct downward, or deeply enrich.',
         'copyEs' => 'Separa Calor de exceso que genera Viento, ascenso de Yang de Hígado y agotamiento tardío de Sangre-Yin-líquidos; la raíz determina si aclarar, anclar, dirigir hacia abajo o enriquecer profundamente.',
     ],
 ];
+$expelwindchaptersourcegroups = [
+    'external' => [
+        'name' => 'Dredge and Disperse External Wind',
+        'nameEs' => 'Desobstruir y dispersar Viento externo',
+    ],
+    'internal' => [
+        'name' => 'Pacify and Extinguish Internal Wind',
+        'nameEs' => 'Pacificar y extinguir Viento interno',
+    ],
+];
 $expelwindchapterplan = [
-    ['Xiao Xu Ming Tang', 1, 'external', 'Minor Extend Life Decoction', '619–622'],
-    ['San Sheng Yin', 2, 'external', 'Drink from Three Unprepared Ingredients', '622–624'],
-    ['Chuan Xiong Cha Tiao San', 3, 'external', 'Chuanxiong Powder to Be Taken with Green Tea', '624–628'],
-    ['Cang Er Zi San', 4, 'external', 'Xanthium Powder', '628–630'],
-    ['Da Qin Jiao Tang', 5, 'external', 'Major Large Gentian Decoction', '630–634'],
-    ['Xiao Huo Luo Dan', 6, 'external', 'Minor Invigorate the Collaterals Special Pill', '634–636'],
-    ['Qian Zheng San', 7, 'external', 'Lead to Symmetry Powder', '636–637'],
-    ['Zhi Jing San', 8, 'external', 'Stop Spasms Powder', '637–638'],
-    ['Yu Zhen San', 9, 'external', 'True Jade Powder', '638–639'],
-    ['Xiao Feng San', 10, 'external', 'Eliminate Wind Powder from Orthodox Lineage', '639–642'],
-    ['Feng Yin Tang', 11, 'external', 'Wind-Drawing Decoction', '642–643'],
-    ['Ling Jiao Gou Teng Tang', 12, 'internal', 'Antelope Horn and Uncaria Decoction', '639–644'],
-    ['Zhen Gan Xi Feng Tang', 13, 'internal', 'Sedate the Liver and Extinguish Wind Decoction', '644–647'],
-    ['Tian Ma Gou Teng Yin', 14, 'internal', 'Gastrodia and Uncaria Drink', '647–649'],
-    ['San Jia Fu Mai Tang', 15, 'internal', 'Three-Shell Decoction to Restore the Pulse', '649–651'],
-    ['Da Ding Feng Zhu', 16, 'internal', 'Major Arrest Wind Pearls', '651–653'],
-    ['E Jiao Ji Zi Huang Tang', 17, 'internal', 'Ass-Hide Gelatin and Egg Yolk Decoction', '653–655'],
+    ['Xiao Feng San', 1, 'board', 'Eliminate Wind Powder from Orthodox Lineage', '639–642', 'external'],
+    ['Xiao Huo Luo Dan', 2, 'board', 'Minor Invigorate the Collaterals Special Pill', '634–636', 'external'],
+    ['Tian Ma Gou Teng Yin', 3, 'board', 'Gastrodia and Uncaria Drink', '647–649', 'internal'],
+    ['Xiao Xu Ming Tang', 4, 'external', 'Minor Extend Life Decoction', '619–622', 'external'],
+    ['San Sheng Yin', 5, 'external', 'Drink from Three Unprepared Ingredients', '622–624', 'external'],
+    ['Chuan Xiong Cha Tiao San', 6, 'external', 'Chuanxiong Powder to Be Taken with Green Tea', '624–628', 'external'],
+    ['Cang Er Zi San', 7, 'external', 'Xanthium Powder', '628–630', 'external'],
+    ['Da Qin Jiao Tang', 8, 'external', 'Major Large Gentian Decoction', '630–634', 'external'],
+    ['Qian Zheng San', 9, 'external', 'Lead to Symmetry Powder', '636–637', 'external'],
+    ['Zhi Jing San', 10, 'external', 'Stop Spasms Powder', '637–638', 'external'],
+    ['Yu Zhen San', 11, 'external', 'True Jade Powder', '638–639', 'external'],
+    ['Feng Yin Tang', 12, 'external', 'Wind-Drawing Decoction', '642–643', 'external'],
+    ['Ling Jiao Gou Teng Tang', 13, 'internal', 'Antelope Horn and Uncaria Decoction', '639–644', 'internal'],
+    ['Zhen Gan Xi Feng Tang', 14, 'internal', 'Sedate the Liver and Extinguish Wind Decoction', '644–647', 'internal'],
+    ['San Jia Fu Mai Tang', 15, 'internal', 'Three-Shell Decoction to Restore the Pulse', '649–651', 'internal'],
+    ['Da Ding Feng Zhu', 16, 'internal', 'Major Arrest Wind Pearls', '651–653', 'internal'],
+    ['E Jiao Ji Zi Huang Tang', 17, 'internal', 'Ass-Hide Gelatin and Egg Yolk Decoction', '653–655', 'internal'],
 ];
 $expelwindsupplementbyname = [];
 foreach ($expelwindchaptersourcecategory['formulas'] as $formula) {
     $expelwindsupplementbyname[$formula['name']] = $formula;
 }
 $expelwindchapterformulas = [];
-foreach ($expelwindchapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+foreach ($expelwindchapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages, $sourcesectionkey]) {
     $formula = $expelwindsupplementbyname[$name] ?? $getboardformula($name);
     if ($formula === null) {
         throw new moodle_exception('Missing Chapter 14 formula profile: ' . $name);
     }
     $formula['sequence'] = $sequence;
     $formula['chapterSectionKey'] = $sectionkey;
+    $formula['chapterSourceSectionKey'] = $sourcesectionkey;
     $formula['englishName'] = $englishname;
-    $formula['group'] = $expelwindchaptersections[$sectionkey]['name'];
-    $formula['groupEs'] = $expelwindchaptersections[$sectionkey]['nameEs'];
+    $formula['group'] = $expelwindchaptersourcegroups[$sourcesectionkey]['name'];
+    $formula['groupEs'] = $expelwindchaptersourcegroups[$sourcesectionkey]['nameEs'];
     $formula['sourcePages'] = $sourcepages;
     $expelwindchapterformulas[] = $formula;
 }
@@ -1463,7 +1480,7 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-fourteen-directory-title">
                 <h4 id="chapter-fourteen-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 14' : 'Complete Chapter 14 directory'); ?></h4>
-                <p><?php echo s($ises ? 'Las 17 fórmulas principales siguen las dos secciones de la fuente. Las fórmulas asociadas y variaciones con nombre propio permanecen dentro de la ficha principal correspondiente.' : 'The 17 principal formulas follow the source’s two sections. Associated formulas and named variations remain inside the corresponding principal card.'); ?></p>
+                <p><?php echo s($ises ? 'Las 3 fórmulas del Board aparecen primero. Después siguen las otras 14 fórmulas, organizadas según las dos secciones de la fuente. Las fórmulas asociadas y variaciones permanecen dentro de su ficha principal.' : 'The 3 Board formulas appear first. The other 14 formulas then follow, organized by the source’s two sections. Associated formulas and variations remain inside their principal card.'); ?></p>
                 <div class="formula-study-guide__chapter-directory-grid">
                     <?php foreach ($expelwindchaptersections as $sectionkey => $section): ?>
                         <?php $sectionformulas = array_values(array_filter($selected['formulas'], static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey)); ?>
