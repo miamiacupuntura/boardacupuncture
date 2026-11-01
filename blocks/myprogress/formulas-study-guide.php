@@ -1351,6 +1351,54 @@ echo $OUTPUT->header();
                     </div>
                 </section>
             <?php endif; ?>
+            <?php if (!empty($selectedguide['therapeuticClasses'])): ?>
+                <section class="formula-study-guide__scope-analysis" aria-labelledby="therapeutic-classification-title">
+                    <header class="formula-study-guide__scope-analysis-header">
+                        <span class="formula-study-guide__scope-analysis-count"><?php echo s(count($selectedguide['therapeuticClasses']) . ($ises ? ' clases terapéuticas' : ' therapeutic classes')); ?></span>
+                        <h4 id="therapeutic-classification-title"><?php echo s($ises ? $selectedguide['classificationTitleEs'] : $selectedguide['classificationTitle']); ?></h4>
+                        <p><?php echo s($ises ? $selectedguide['classificationTextEs'] : $selectedguide['classificationText']); ?></p>
+                    </header>
+                    <div class="formula-study-guide__table-wrap">
+                        <table class="formula-study-guide__table">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $ises ? 'Clase terapéutica' : 'Therapeutic class'; ?></th>
+                                    <th><?php echo $ises ? 'Qué hace' : 'What it does'; ?></th>
+                                    <th><?php echo $ises ? 'Fórmulas representativas' : 'Representative formulas'; ?></th>
+                                    <th><?php echo $ises ? 'Separador crítico' : 'Critical separator'; ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($selectedguide['therapeuticClasses'] as $therapeuticclass): ?>
+                                    <tr>
+                                        <td><strong><?php echo s($ises ? $therapeuticclass['nameEs'] : $therapeuticclass['name']); ?></strong></td>
+                                        <td><?php echo s($ises ? $therapeuticclass['logicEs'] : $therapeuticclass['logic']); ?></td>
+                                        <td>
+                                            <?php if ($therapeuticclass['boardNames'] !== []): ?>
+                                                <strong><?php echo $ises ? 'Board:' : 'Board:'; ?></strong>
+                                                <?php foreach ($therapeuticclass['boardNames'] as $classnameindex => $classname): ?>
+                                                    <?php $classboardformula = $getboardformula($classname); ?>
+                                                    <?php if ($classnameindex > 0): ?>, <?php endif; ?>
+                                                    <a href="#formula-<?php echo s((string) $classboardformula['number']); ?>"><?php echo s($displayformulaname($classname)); ?></a>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                            <?php if ($therapeuticclass['boardNames'] !== [] && $therapeuticclass['otherNames'] !== []): ?><br><?php endif; ?>
+                                            <?php if ($therapeuticclass['otherNames'] !== []): ?>
+                                                <strong><?php echo $ises ? 'Referencia:' : 'Reference:'; ?></strong>
+                                                <?php echo s(implode(', ', $therapeuticclass['otherNames'])); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo s($ises ? $therapeuticclass['separatorEs'] : $therapeuticclass['separator']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <footer class="formula-study-guide__scope-analysis-header">
+                        <p class="formula-study-guide__scope-analysis-caveat"><strong><?php echo s($ises ? 'Distinción clínica y de seguridad:' : 'Clinical and safety distinction:'); ?></strong> <?php echo s($ises ? $selectedguide['classificationCaveatEs'] : $selectedguide['classificationCaveat']); ?></p>
+                    </footer>
+                </section>
+            <?php endif; ?>
             <section class="formula-study-guide__priority" aria-labelledby="guideline-priority-title">
                 <h4 id="guideline-priority-title"><?php echo s($ises ? $selectedguide['priorityTitleEs'] : $selectedguide['priorityTitle']); ?></h4>
                 <p><?php echo s($ises ? $selectedguide['priorityTextEs'] : $selectedguide['priorityText']); ?></p>

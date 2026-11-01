@@ -581,6 +581,69 @@
       "clinicalFrameTextEs": "La elección no se basa solo en estreñimiento. Da Cheng Qi Tang combina purgación, ablandamiento salino y fuerte movimiento de Qi para aglomeración completa y grave. Xiao Cheng Qi Tang retira Mang Xiao cuando la sequedad es menos importante. Tiao Wei Cheng Qi Tang retira el par que moviliza Qi con fuerza y añade Gan Cao cuando predominan Calor-Sequedad e irritabilidad con poca distensión focal o plenitud.",
       "clinicalFrameCaveat": "These formulas are potent short-course purgatives, not routine constipation remedies. Chinese-medicine clumping does not establish a biomedical diagnosis. Severe or worsening abdominal pain, guarding, repeated vomiting, fever, blood in stool, dehydration, marked distention, or inability to pass stool or gas requires urgent evaluation for obstruction or another acute abdomen.",
       "clinicalFrameCaveatEs": "Estas fórmulas son purgantes potentes de uso breve, no remedios rutinarios para estreñimiento. La aglomeración de medicina china no establece un diagnóstico biomédico. Dolor abdominal intenso o creciente, defensa, vómitos repetidos, fiebre, sangre en heces, deshidratación, distensión marcada o incapacidad para evacuar heces o gases requiere valoración urgente por obstrucción u otro abdomen agudo.",
+      "classificationTitle": "The Purge category contains five different therapeutic classes",
+      "classificationTitleEs": "La categoría Purge contiene cinco clases terapéuticas diferentes",
+      "classificationText": "Purgatives, moistening laxatives, and harsh water-expellants are grouped together because all direct a pathogen or accumulation downward, but they do not treat the same problem. Identify what must be removed—Heat clumping, Cold accumulation, dry stool, excess complicated by deficiency, or retained water—before comparing formulas.",
+      "classificationTextEs": "Purgantes, laxantes humectantes y expelentes drásticos de agua se agrupan porque todos dirigen hacia abajo un patógeno o una acumulación, pero no tratan el mismo problema. Antes de comparar fórmulas, identifica qué debe eliminarse: aglomeración de Calor, acumulación de Frío, heces secas, exceso complicado por deficiencia o agua retenida.",
+      "classificationCaveat": "Critical distinction: moistening laxatives gently lubricate dry stool; purgatives forcefully attack material clumping; harsh expellants violently drive retained water through the stool or urine and are not constipation remedies. Several historical expellant formulas contain toxic, prohibited, or obsolete substances. These are study distinctions, not instructions for self-treatment.",
+      "classificationCaveatEs": "Distinción crítica: los laxantes humectantes lubrican suavemente heces secas; los purgantes atacan con fuerza una aglomeración material; los expelentes drásticos fuerzan la salida de agua retenida por heces u orina y no son remedios para estreñimiento. Varias fórmulas expelentes históricas contienen sustancias tóxicas, prohibidas u obsoletas. Estas son distinciones de estudio, no instrucciones para autotratamiento.",
+      "therapeuticClasses": [
+        {
+          "key": "cold-purgatives",
+          "name": "Cold purgatives",
+          "nameEs": "Purgantes fríos",
+          "boardNames": ["Da Cheng Qi Tang", "Xiao Cheng Qi Tang", "Tiao Wei Cheng Qi Tang"],
+          "otherNames": ["Da Xian Xiong Tang"],
+          "logic": "Clear interior Heat and attack hot clumping with cold, bitter or salty-downward ingredients.",
+          "logicEs": "Aclaran Calor interior y atacan aglomeración caliente con ingredientes fríos, amargos o salados que descienden.",
+          "separator": "Constipation or hard painful fullness with Heat/excess signs; the three Board Cheng Qi formulas form the core graded scale.",
+          "separatorEs": "Estreñimiento o plenitud dura y dolorosa con signos de Calor/exceso; las tres Cheng Qi del Board forman la escala gradual central."
+        },
+        {
+          "key": "warm-purgatives",
+          "name": "Warm purgatives",
+          "nameEs": "Purgantes calientes",
+          "boardNames": [],
+          "otherNames": ["Da Huang Fu Zi Tang", "Wen Pi Tang"],
+          "logic": "Warm the interior while purging Cold accumulation that blocks the bowels.",
+          "logicEs": "Calientan el interior mientras purgan acumulación de Frío que obstruye los Intestinos.",
+          "separator": "Cold signs—cold limbs, white coat and a deep-tight pulse—replace the Heat signs of the Cheng Qi family; Wen Pi Tang also supports deficient Spleen Yang.",
+          "separatorEs": "Signos de Frío—extremidades frías, capa blanca y pulso profundo-tenso—reemplazan los signos de Calor de la familia Cheng Qi; Wen Pi Tang además sostiene Yang de Bazo deficiente."
+        },
+        {
+          "key": "moistening-laxatives",
+          "name": "Moistening laxatives",
+          "nameEs": "Laxantes humectantes",
+          "boardNames": [],
+          "otherNames": ["Ma Zi Ren Wan", "Ji Chuan Jian"],
+          "logic": "Moisten and lubricate dry Intestines so stool can pass without a drastic attack.",
+          "logicEs": "Humectan y lubrican Intestinos secos para permitir el paso de las heces sin un ataque drástico.",
+          "separator": "Dry, difficult stool dominates without the severe hard clumping of Da Cheng Qi Tang; Ji Chuan Jian adds Kidney-Yang deficiency and Cold signs.",
+          "separatorEs": "Predominan heces secas y difíciles sin la aglomeración dura y grave de Da Cheng Qi Tang; Ji Chuan Jian añade deficiencia de Yang de Riñón y signos de Frío."
+        },
+        {
+          "key": "attack-and-tonify",
+          "name": "Purge while supporting deficiency",
+          "nameEs": "Purgar mientras se sostiene la deficiencia",
+          "boardNames": [],
+          "otherNames": ["Huang Long Tang", "Zeng Ye Cheng Qi Tang"],
+          "logic": "Attack a real excess while simultaneously supporting depleted Qi, Blood, Yin or fluids.",
+          "logicEs": "Atacan un exceso real mientras sostienen simultáneamente Qi, Sangre, Yin o líquidos agotados.",
+          "separator": "Use only when obstruction and deficiency coexist: Huang Long Tang supports Qi/Blood; Zeng Ye Cheng Qi Tang enriches fluids so extreme dryness can move.",
+          "separatorEs": "Solo cuando coexisten obstrucción y deficiencia: Huang Long Tang sostiene Qi/Sangre; Zeng Ye Cheng Qi Tang enriquece líquidos para movilizar sequedad extrema."
+        },
+        {
+          "key": "harsh-water-expellants",
+          "name": "Harsh water-expellants — high risk",
+          "nameEs": "Expelentes drásticos de agua — alto riesgo",
+          "boardNames": [],
+          "otherNames": ["Shi Zao Tang", "Zhou Che Wan", "Yu Gong San", "Ji Jiao Li Huang Wan", "Shu Zao Yin Zi"],
+          "logic": "Violently drive pathological retained water downward in severe excess presentations.",
+          "logicEs": "Fuerzan violentamente hacia abajo agua patológica retenida en cuadros graves de exceso.",
+          "separator": "Think water accumulation, edema or suspended fluids—not ordinary constipation. Toxicity, dehydration and electrolyte disturbance make this the highest-risk class.",
+          "separatorEs": "Piensa en acumulación de agua, edema o fluidos suspendidos; no en estreñimiento común. Toxicidad, deshidratación y alteraciones electrolíticas hacen de esta la clase de mayor riesgo."
+        }
+      ],
       "formulaSections": [
         {
           "key": "severe-complete-clumping",
@@ -676,14 +739,20 @@
       "referencesTextEs": "Estas fórmulas afinan la diferenciación después de dominar las tres tarjetas Cheng Qi obligatorias. Varias son drásticas, tóxicas u obsoletas y no deben tratarse como alternativas rutinarias.",
       "referenceGroups": [
         {
-          "title": "Change the purging strategy",
-          "titleEs": "Cambiar la estrategia de purgación",
+          "title": "Cold purgatives",
+          "titleEs": "Purgantes fríos",
           "items": [
             [
               "Da Xian Xiong Tang",
               "Heat and water clump in the chest or epigastrium; extreme hardness and pain even with light pressure. Contains toxic Gan Sui.",
               "Calor y agua se aglomeran en pecho o epigastrio; dureza y dolor extremos incluso con presión ligera. Contiene Gan Sui tóxico."
-            ],
+            ]
+          ]
+        },
+        {
+          "title": "Warm purgatives",
+          "titleEs": "Purgantes calientes",
+          "items": [
             [
               "Da Huang Fu Zi Tang",
               "Cold accumulation: abdominal or hypochondriac pain, cold extremities, white greasy coat and a deep-tight-wiry pulse.",
@@ -693,17 +762,28 @@
               "Wen Pi Tang",
               "Cold accumulation with Spleen-Yang deficiency; warms, tonifies and purges.",
               "Acumulación fría con deficiencia de Yang del Bazo; calienta, tonifica y purga."
-            ],
-            [
-              "Ma Zi Ren Wan",
-              "Heat-Dryness and Spleen bind: hard stool with normal or frequent urination; moistens and purges mildly.",
-              "Calor-Sequedad y Spleen bind: heces duras con micción normal o frecuente; humedece y purga suavemente."
             ]
           ]
         },
         {
-          "title": "Purge while protecting deficiency",
-          "titleEs": "Purgar mientras se protege la deficiencia",
+          "title": "Moistening laxatives",
+          "titleEs": "Laxantes humectantes",
+          "items": [
+            [
+              "Ma Zi Ren Wan",
+              "Heat-Dryness and Spleen bind: hard stool with normal or frequent urination; moistens and purges mildly.",
+              "Calor-Sequedad y Spleen bind: heces duras con micción normal o frecuente; humedece y purga suavemente."
+            ],
+            [
+              "Ji Chuan Jian",
+              "Constipation from Kidney-Yang deficiency and intestinal dryness, especially in older or depleted patients: difficult dry stool with clear urine, cold limbs and a weak sore low back; warms Kidney Yang and moistens the bowels.",
+              "Estreñimiento por deficiencia de Yang de Riñón y sequedad intestinal, especialmente en pacientes mayores o agotados: heces secas difíciles con orina clara, extremidades frías y zona lumbar débil y dolorida; calienta Yang de Riñón y humedece los Intestinos."
+            ]
+          ]
+        },
+        {
+          "title": "Purge while supporting deficiency",
+          "titleEs": "Purgar mientras se sostiene la deficiencia",
           "items": [
             [
               "Huang Long Tang",
@@ -718,8 +798,8 @@
           ]
         },
         {
-          "title": "Drive out excess water — high risk",
-          "titleEs": "Expulsar exceso de agua — alto riesgo",
+          "title": "Harsh water-expellants — high risk",
+          "titleEs": "Expelentes drásticos de agua — alto riesgo",
           "items": [
             [
               "Shi Zao Tang",
