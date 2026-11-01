@@ -291,10 +291,58 @@
       ]
     },
     "clear-heat": {
-      "priorityTitle": "Guideline priority: master these 5 Heat-clearing formulas first",
-      "priorityTitleEs": "Prioridad del guideline: domina primero estas 5 fórmulas que aclaran Calor",
-      "priorityText": "The current exam guideline requires the five formulas below. First distinguish excess Heat from deficiency Heat, then locate the Heat at the Qi level, Three Burners, Lung, Liver/Gallbladder or deep Yin level. Secondary chapter formulas remain collapsed for comparison and safety review.",
-      "priorityTextEs": "El guideline actual exige las cinco fórmulas siguientes. Primero distingue Calor de exceso de Calor por deficiencia; después localízalo en nivel Qi, Tres Calentadores, Pulmón, Hígado/Vesícula Biliar o nivel Yin profundo. Las fórmulas secundarias permanecen plegadas para comparación y seguridad.",
+      "priorityTitle": "Guideline priority: master 5 formulas in 4 clinical sections",
+      "priorityTitleEs": "Prioridad del guideline: domina 5 fórmulas en 4 secciones clínicas",
+      "priorityText": "First distinguish robust excess Heat from hidden or deficiency Heat. Then decide whether the dominant problem is blazing Qi-level Heat, systemic Fire-Toxin, Heat localized in an organ system, or Heat smoldering in depleted Yin. Secondary chapter formulas remain collapsed for comparison and safety review.",
+      "priorityTextEs": "Primero distingue Calor robusto de exceso de Calor oculto o por deficiencia. Después decide si domina Calor intenso del nivel Qi, Fuego-Toxina sistémico, Calor localizado en un sistema orgánico o Calor latente en Yin agotado. Las fórmulas secundarias permanecen plegadas para comparación y seguridad.",
+      "clinicalFrameTitle": "Not all Heat is the same: identify depth, toxicity, location, and root",
+      "clinicalFrameTitleEs": "No todo Calor es igual: identifica profundidad, toxicidad, localización y raíz",
+      "clinicalFrameText": "“Clear Heat” is a treatment family, not a single diagnosis. Strong cold-draining formulas fit robust excess but may further injure fluids, digestion, or Yang when used for a deficient presentation. Conversely, a Yin-nourishing formula for hidden Heat is too indirect for blazing excess or an acute toxic presentation.",
+      "clinicalFrameTextEs": "«Aclarar Calor» es una familia terapéutica, no un diagnóstico único. Las fórmulas muy frías y drenantes corresponden a exceso robusto, pero pueden lesionar más los líquidos, la digestión o el Yang si se usan en deficiencia. A la inversa, una fórmula que nutre Yin para Calor oculto es demasiado indirecta ante exceso intenso o un cuadro tóxico agudo.",
+      "clinicalFrameCaveat": "Chinese-medicine Heat patterns are not synonymous with bacterial infection, inflammation, or a measured fever and do not identify the biomedical cause. High fever with confusion, stiff neck, rash, bleeding, breathing difficulty, jaundice, severe eye pain, or dehydration requires prompt medical evaluation.",
+      "clinicalFrameCaveatEs": "Los patrones de Calor de medicina china no equivalen automáticamente a infección bacteriana, inflamación o fiebre medida y no identifican la causa biomédica. Fiebre alta con confusión, rigidez cervical, erupción, sangrado, dificultad respiratoria, ictericia, dolor ocular intenso o deshidratación requiere valoración médica inmediata.",
+      "formulaSections": [
+        {
+          "key": "qi-level-heat",
+          "name": "Clear blazing Qi-level Heat",
+          "nameEs": "Aclarar Calor intenso del nivel Qi",
+          "formulaNames": ["Bai Hu Tang"],
+          "copy": "This is a robust excess pattern in the Yangming/Qi level. The formula clears intense Heat while protecting fluids, but it is not appropriate merely because a patient has fever.",
+          "copyEs": "Es un patrón robusto de exceso en Yangming/nivel Qi. La fórmula aclara Calor intenso mientras protege líquidos, pero no corresponde simplemente porque un paciente tenga fiebre.",
+          "diagnostic": "The Four Greats—great fever, thirst, sweating, and a surging-forceful pulse—with a red tongue and clear evidence of fluid injury.",
+          "diagnosticEs": "Los Cuatro Grandes—fiebre, sed y sudoración intensas con pulso desbordante-fuerte—junto con lengua roja y lesión clara de líquidos."
+        },
+        {
+          "key": "fire-toxin",
+          "name": "Drain Fire and relieve toxicity",
+          "nameEs": "Drenar Fuego y aliviar toxicidad",
+          "formulaNames": ["Huang Lian Jie Du Tang"],
+          "copy": "Fire-Toxin is more severe and systemic than ordinary Heat. All Three Burners may be involved, with marked agitation, delirium, bleeding, or dark concentrated urine.",
+          "copyEs": "Fuego-Toxina es más grave y sistémico que Calor ordinario. Puede involucrar los Tres Calentadores con agitación marcada, delirio, sangrado u orina oscura y concentrada.",
+          "diagnostic": "High fever with severe irritability or delirium, a red tongue, and a rapid-forceful pulse; toxicity and emergency signs dominate.",
+          "diagnosticEs": "Fiebre alta con irritabilidad intensa o delirio, lengua roja y pulso rápido-fuerte; predominan toxicidad y signos de urgencia."
+        },
+        {
+          "key": "organ-heat",
+          "name": "Clear Heat from an organ system",
+          "nameEs": "Aclarar Calor de un sistema orgánico",
+          "formulaNames": ["Ma Xing Shi Gan Tang", "Long Dan Xie Gan Tang"],
+          "copy": "Once Heat is localized, organ physiology determines the presentation: Lung Heat obstructs diffusion and descent, while Liver/Gallbladder Fire or Damp-Heat moves upward to the head or downward to the genital-urinary region.",
+          "copyEs": "Una vez localizado el Calor, la fisiología del órgano determina el cuadro: Calor de Pulmón obstruye difusión y descenso, mientras Fuego o Humedad-Calor de Hígado/Vesícula asciende a cabeza o desciende a región genitourinaria.",
+          "diagnostic": "Choose by location: cough, wheezing, thirst, and nasal flaring for Lung Heat; red painful eyes, headache, irritability, or burning genital-urinary signs for Liver/Gallbladder Heat.",
+          "diagnosticEs": "Elige por localización: tos, sibilancia, sed y aleteo nasal para Calor de Pulmón; ojos rojos dolorosos, cefalea, irritabilidad o ardor genitourinario para Calor de Hígado/Vesícula."
+        },
+        {
+          "key": "hidden-deficiency-heat",
+          "name": "Clear hidden Heat from depleted Yin",
+          "nameEs": "Aclarar Calor oculto en Yin agotado",
+          "formulaNames": ["Qing Hao Bie Jia Tang"],
+          "copy": "This is not a robust excess pattern. After a febrile illness, depleted Yin can allow residual Heat to smolder deeply; treatment must vent Heat while nourishing the damaged root.",
+          "copyEs": "No es un patrón robusto de exceso. Tras una enfermedad febril, Yin agotado permite que Calor residual permanezca latente en profundidad; el tratamiento debe ventilar Calor mientras nutre la raíz lesionada.",
+          "diagnostic": "Night fever that recedes by morning without sweating, emaciation, a red tongue with little coat, and a thin-rapid rather than forceful pulse.",
+          "diagnosticEs": "Fiebre nocturna que cede por la mañana sin sudor, adelgazamiento, lengua roja con poca capa y pulso fino-rápido en vez de fuerte."
+        }
+      ],
       "routeTitle": "Four-step Heat-clearing decision route",
       "routeTitleEs": "Ruta de decisión para aclarar Calor en cuatro pasos",
       "route": [

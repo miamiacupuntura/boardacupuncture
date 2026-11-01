@@ -71,6 +71,13 @@ php -r '
             $releaseSectionNames[] = $formulaName;
         }
     }
+    $clearHeatSections = $data["categoryGuides"]["clear-heat"]["formulaSections"] ?? [];
+    $clearHeatSectionNames = [];
+    foreach ($clearHeatSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $clearHeatSectionNames[] = $formulaName;
+        }
+    }
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
             || count($data["supplementalCategories"] ?? []) !== 15
@@ -86,6 +93,13 @@ php -r '
             || $releaseSectionNames !== [
                 "Ma Huang Tang", "Gui Zhi Tang", "Ge Gen Tang", "Ren Shen Bai Du San",
                 "Sang Ju Yin", "Yin Qiao San", "Chai Ge Jie Ji Tang"
+            ]
+            || array_column($clearHeatSections, "key") !== [
+                "qi-level-heat", "fire-toxin", "organ-heat", "hidden-deficiency-heat"
+            ]
+            || $clearHeatSectionNames !== [
+                "Bai Hu Tang", "Huang Lian Jie Du Tang", "Ma Xing Shi Gan Tang",
+                "Long Dan Xie Gan Tang", "Qing Hao Bie Jia Tang"
             ]) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
@@ -99,6 +113,11 @@ grep -q "Por qué Viento-Frío y Viento-Calor deben estudiarse por separado" "$T
 grep -q '"key": "wind-cold"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "wind-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "cold-transforming-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "No todo Calor es igual: identifica profundidad, toxicidad, localización y raíz" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "qi-level-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "fire-toxin"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "organ-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "hidden-deficiency-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
@@ -212,6 +231,11 @@ grep -q "Por qué Viento-Frío y Viento-Calor deben estudiarse por separado" "$T
 grep -q '"key": "wind-cold"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "wind-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "cold-transforming-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "No todo Calor es igual: identifica profundidad, toxicidad, localización y raíz" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "qi-level-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "fire-toxin"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "organ-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "hidden-deficiency-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Categoría oficial del Board: 3 fórmulas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "3 fórmulas Board · Capítulo 9 de Bensky: 17" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente" "$TARGET_DIR/formulas-study-guide.php"
@@ -264,6 +288,7 @@ grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guid
 
 echo "CAPÍTULOS 8, 9, 10, 11, 12, 13 Y 14 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
+echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"
