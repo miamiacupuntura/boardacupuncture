@@ -72,6 +72,9 @@ done
 
 grep -q 'id="formula-vs-dui-yao"' "$TEMP_DIR/dui-yao.html"
 grep -q 'id="formula-modification-bridges"' "$TEMP_DIR/dui-yao-es.html"
+grep -q 'id="how-to-use-dui-yao-module"' "$TEMP_DIR/dui-yao-es.html"
+grep -q '¿Sabías que…?' "$TEMP_DIR/dui-yao-es.html"
+grep -q "las tres fórmulas base y las cuatro parejas sí están" "$TEMP_DIR/dui-yao-es.html"
 [[ "$(grep -o 'data-dui-modification-link=' "$TEMP_DIR/dui-yao-es.html" | wc -l)" -eq 10 ]]
 for slug in "${SLUGS[@]}"; do
     grep -q 'data-formula-choice=' "$TEMP_DIR/$slug.html"
@@ -102,6 +105,9 @@ done
 
 grep -q 'id="formula-vs-dui-yao"' "$TARGET_DIR/dui-yao.html"
 grep -q 'id="formula-modification-bridges"' "$TARGET_DIR/dui-yao-es.html"
+grep -q 'id="how-to-use-dui-yao-module"' "$TARGET_DIR/dui-yao-es.html"
+grep -q '¿Sabías que…?' "$TARGET_DIR/dui-yao-es.html"
+grep -q "las tres fórmulas base y las cuatro parejas sí están" "$TARGET_DIR/dui-yao-es.html"
 [[ "$(grep -o 'data-dui-modification-link=' "$TARGET_DIR/dui-yao-es.html" | wc -l)" -eq 10 ]]
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" && -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
