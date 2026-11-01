@@ -71,6 +71,8 @@ grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 9" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Categoría oficial del Board: 3 fórmulas" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Fuente Bensky completa: 17 fórmulas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "calm-shen-chapter-10" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 10" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 10" "$TEMP_DIR/formulas-study-guide.php"
@@ -119,6 +121,7 @@ if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
 fi
 
 grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Categoría oficial del Board: 3 fórmulas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "open-orifices-chapter-11" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato relevante para el examen · 0 de 7 en Appendix C 2026" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
@@ -128,6 +131,7 @@ grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guid
 echo "CAPÍTULOS 8, 9, 10 Y 11 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
+echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"
 echo "CAPÍTULO 10 INSTALADO: 9 fórmulas en 2 secciones (6 perfiles nuevos + 3 Board)"
 echo "CAPÍTULO 11 INSTALADO: 7 fórmulas en 2 secciones (7 perfiles Bensky, 0 Board)"
 echo "ANÁLISIS DE ALCANCE INSTALADO: METALES, ESPECIES PROTEGIDAS, INGREDIENTES REGULADOS, VÍA NASAL Y URGENCIAS"

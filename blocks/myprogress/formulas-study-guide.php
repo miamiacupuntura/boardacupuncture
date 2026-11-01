@@ -129,6 +129,17 @@ $categorycopy = [
     ],
 ];
 
+$categoryreferences = [
+    'stabilize-bind' => [
+        'Official Board category: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
+        'Categoría oficial del Board: 3 fórmulas. Referencia cruzada: el capítulo 9 completo de Bensky tiene 17; solo coinciden Si Shen Wan y Gu Jing Wan.',
+    ],
+    'stabilize-bind-chapter-9' => [
+        'Complete Bensky source: 17 formulas. Board overlap: 2. Yu Ping Feng San is the third official Board formula, but Bensky studies it in Chapter 8.',
+        'Fuente Bensky completa: 17 fórmulas. Coincidencia Board: 2. Yu Ping Feng San es la tercera fórmula oficial, pero Bensky la estudia en el capítulo 8.',
+    ],
+];
+
 $categories = [];
 foreach ($data['categories'] as $category) {
     $category['formulas'] = [];
@@ -534,6 +545,7 @@ echo $OUTPUT->header();
 .formula-study-guide__category-number{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;margin-bottom:10px;border-radius:50%;background:#e9f6f3;color:#0b6b63;font-weight:900}
 .formula-study-guide__category strong{font-size:18px;line-height:1.3}.formula-study-guide__category p{margin:7px 0 12px;color:#5b6b79;font-size:14px;line-height:1.45}.formula-study-guide__category small{margin-top:auto;color:#075e54;font-weight:800}
 .formula-study-guide__category-meta{display:block;margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
+.formula-study-guide__category-reference{display:block;margin:0 0 12px;padding:8px 9px;border-left:3px solid #2563eb;border-radius:5px;background:#eff6ff;color:#234b7b;font-size:12px;font-weight:750;line-height:1.4}.formula-study-guide__category-header .formula-study-guide__category-reference{max-width:840px;margin:12px 0 0}
 .formula-study-guide__supplement{margin-top:26px;padding:22px 24px;border:1px solid #c9ded9;border-top:4px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__supplement-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}.formula-study-guide__supplement-heading h3{margin:2px 0 5px;font-size:22px}.formula-study-guide__supplement-heading p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.formula-study-guide__supplement-badge{padding:6px 10px;border-radius:999px;background:#d9f1eb;color:#08695f;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__category--supplemental{min-height:156px;border-top-color:#0b817d}.formula-study-guide__category--supplemental .formula-study-guide__category-number{width:auto;padding:0 10px;border-radius:999px}.formula-study-guide__category--supplemental small{color:#075fc8}
 .formula-study-guide__category-header{margin-bottom:18px;padding:22px 24px;border-top:5px solid #f77e25;border-radius:12px;background:linear-gradient(135deg,#fffaf5,#f7fbfb)}
 .formula-study-guide__category-header--supplemental{border-top-color:#0b817d;background:linear-gradient(135deg,#effaf7,#fffaf5)}
@@ -611,12 +623,14 @@ echo $OUTPUT->header();
                 }
                 $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
                 $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
+                $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
                 ?>
                 <a class="formula-study-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></span>
                     <p><?php echo s($copy); ?></p>
+                    <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                     <small><?php echo s($ises ? 'Abrir categoría →' : 'Open category →'); ?></small>
                 </a>
             <?php endforeach; ?>
@@ -641,12 +655,14 @@ echo $OUTPUT->header();
                     }
                     $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
                     $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
+                    $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
                     ?>
                     <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Capítulo ' : 'Chapter '); ?><?php echo (int) $category['sourceChapter']; ?></span>
                         <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                         <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas principales' : 'principal formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $category['sourcePages']); ?></span>
                         <p><?php echo s($copy); ?></p>
+                        <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                         <small><?php echo s($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →'); ?></small>
                     </a>
                 <?php endforeach; ?>
@@ -654,6 +670,7 @@ echo $OUTPUT->header();
         </section>
     <?php else: ?>
         <?php $selectedcopy = $categorycopy[$selected['key']][$ises ? 1 : 0]; ?>
+        <?php $selectedreference = $categoryreferences[$selected['key']][$ises ? 1 : 0] ?? null; ?>
         <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>">
             <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior' : '← Previous category'); ?></a><?php endif; ?></span>
             <div class="formula-study-guide__category-nav-center">
@@ -671,6 +688,7 @@ echo $OUTPUT->header();
                 : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
             <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'); ?></strong></p>
+            <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
         <?php if (!$issupplemental && $selected['key'] !== 'tonify'): ?>
             <section class="formula-study-guide__board-verification" aria-labelledby="board-verification-title">
