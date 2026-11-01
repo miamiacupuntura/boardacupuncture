@@ -416,7 +416,6 @@ foreach ($supplementalcategories as $categorykey => $category) {
     }
 }
 $supplementalindexcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
-$supplementalindexcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
 $supplementalindexcategories[$openorificeschapteroverview['key']] = $openorificeschapteroverview;
 $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
@@ -632,12 +631,22 @@ echo $OUTPUT->header();
                 $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
                 $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
                 $iscalmshenindexcard = $category['key'] === 'calm-shen';
+                $isstabilizeindexcard = $category['key'] === 'stabilize-bind';
+                $iscombinedindexcard = $iscalmshenindexcard || $isstabilizeindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
-                $categorymeta = $iscalmshenindexcard
-                    ? ($ises ? '3 fórmulas Board · Capítulo 10 de Bensky: 9' : '3 Board formulas · Bensky Chapter 10: 9')
-                    : (count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas'));
+                if ($iscalmshenindexcard) {
+                    $categorymeta = $ises
+                        ? '3 fórmulas Board · Capítulo 10 de Bensky: 9'
+                        : '3 Board formulas · Bensky Chapter 10: 9';
+                } elseif ($isstabilizeindexcard) {
+                    $categorymeta = $ises
+                        ? '3 fórmulas Board · Capítulo 9 de Bensky: 17'
+                        : '3 Board formulas · Bensky Chapter 9: 17';
+                } else {
+                    $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
+                }
                 ?>
                 <a class="formula-study-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
@@ -645,7 +654,7 @@ echo $OUTPUT->header();
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
                     <p><?php echo s($copy); ?></p>
                     <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
-                    <small><?php echo s($iscalmshenindexcard
+                    <small><?php echo s($iscombinedindexcard
                         ? ($ises ? 'Abrir familia unificada →' : 'Open unified family →')
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
