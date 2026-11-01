@@ -139,12 +139,12 @@ $categoryreferences = [
         'Fuente Bensky completa: 17 fórmulas. Coincidencia Board: 2. Yu Ping Feng San es la tercera fórmula oficial, pero Bensky la estudia en el capítulo 8.',
     ],
     'calm-shen' => [
-        'Official Board category: 3 formulas. Cross-reference: all three also appear within the nine principal formulas of complete Bensky Chapter 10.',
-        'Categoría oficial del Board: 3 fórmulas. Referencia cruzada: las tres también aparecen entre las 9 fórmulas principales del capítulo 10 completo de Bensky.',
+        'Terminology: “Calm Shen” and “Calm the Spirit” are used interchangeably for the same formula family. Official Board category: 3 formulas. All three also appear in complete Bensky Chapter 10.',
+        'Terminología: “Calm Shen”, “Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente para la misma familia. Categoría oficial del Board: 3 fórmulas; las tres aparecen en el capítulo 10 completo de Bensky.',
     ],
     'calm-shen-chapter-10' => [
-        'Complete Bensky source: 9 formulas. Board overlap: 3—Suan Zao Ren Tang, Tian Wang Bu Xin Dan, and Gan Mai Da Zao Tang.',
-        'Fuente Bensky completa: 9 fórmulas. Coincidencia Board: 3—Suan Zao Ren Tang, Tian Wang Bu Xin Dan y Gan Mai Da Zao Tang.',
+        'Terminology: “Formulas That Calm the Spirit” is the same family called “Calm Shen” by the Board, not a second category. Complete Bensky source: 9 formulas; Board overlap: 3.',
+        'Terminología: “Fórmulas que calman el Espíritu” es la misma familia que el Board llama “Calm Shen”, no otra categoría. Fuente Bensky completa: 9 fórmulas; coincidencia Board: 3.',
     ],
 ];
 
