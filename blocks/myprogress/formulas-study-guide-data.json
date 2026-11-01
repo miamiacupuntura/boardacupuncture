@@ -2449,6 +2449,21 @@
         ["4","Choose the exit","Transform through the Middle, drain through urine, warm and mobilize water, or open channels and collaterals.","Elige la salida","Transforma por el Jiao Medio, drena por orina, calienta y moviliza agua o abre canales y colaterales."],
         ["5","Check urgent mimics","Exclude renal, cardiac, hepatic, infectious, neurologic and obstetric emergencies.","Descarta urgencias similares","Descarta urgencias renales, cardíacas, hepáticas, infecciosas, neurológicas y obstétricas."]
       ],
+      "relatedDuiYaoAnchor":"drain-damp",
+      "relatedDuiYaoTitle":"Related Duì Yào · Drain or Transform Dampness",
+      "relatedDuiYaoTitleEs":"Duì Yào relacionados · Drenar o transformar Humedad",
+      "relatedDuiYaoText":"These six official Appendix B pairs connect the chapter's major routes: strengthen Spleen transport, aromatically transform Dampness, promote urination, warm Cold-Dampness, relax painful obstruction, and support sinews and bones in chronic Wind-Damp patterns.",
+      "relatedDuiYaoTextEs":"Estas seis parejas oficiales del Appendix B conectan las rutas principales del capítulo: fortalecer el transporte de Bazo, transformar Humedad con aromáticos, promover la orina, calentar Humedad-Frío, relajar obstrucción dolorosa y sostener tendones y huesos en patrones crónicos de Viento-Humedad.",
+      "relatedDuiYaoCaveat":"A Duì Yào highlights one treatment mechanism. The pair must still be matched to temperature, location, excess or deficiency, preparation and safety; it does not replace the architecture of a complete formula.",
+      "relatedDuiYaoCaveatEs":"Un Duì Yào destaca un mecanismo terapéutico. La pareja todavía debe corresponder a temperatura, localización, exceso o deficiencia, preparación y seguridad; no sustituye la arquitectura de una fórmula completa.",
+      "relatedDuiYao":[
+        {"number":19,"slug":"bai-zhu-fu-ling-dui-yao","title":"Bái Zhú + Fú Líng","characters":"白术 + 茯苓","action":"Strengthen the Spleen while drying and draining Dampness so fluids move normally.","actionEs":"Fortalecer Bazo mientras seca y drena Humedad para que los líquidos circulen normalmente.","formulas":"Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng."},
+        {"number":20,"slug":"bai-shao-gan-cao-dui-yao","title":"Bái Sháo + Gān Cǎo","characters":"白芍 + 甘草","action":"Nourish Yin and Blood, soften tension, relax spasm and stop cramping pain in the painful-obstruction route.","actionEs":"Nutrir Yin y Sangre, suavizar tensión, relajar espasmos y detener dolor tipo calambre en la ruta de obstrucción dolorosa.","formulas":"Sháo Yào Gān Cǎo Tāng."},
+        {"number":31,"slug":"du-zhong-xu-duan-dui-yao","title":"Dù Zhòng + Xù Duàn","characters":"杜仲 + 续断","action":"Supplement the Liver and Kidneys and strengthen sinews and bones in chronic deficient Wind-Damp painful obstruction.","actionEs":"Tonificar Hígado y Riñones y fortalecer tendones y huesos en obstrucción dolorosa crónica por Viento-Humedad con deficiencia.","formulas":"Shòu Tāi Wán; Dú Huó Jì Shēng Tāng."},
+        {"number":44,"slug":"gan-jiang-bai-zhu-dui-yao","title":"Gān Jiāng + Bái Zhú","characters":"干姜 + 白术","action":"Warm the Middle, strengthen the Spleen and dry Cold-Dampness.","actionEs":"Calentar el Centro, fortalecer Bazo y secar Humedad-Frío.","formulas":"Lǐ Zhōng Wán."},
+        {"number":47,"slug":"huo-xiang-pei-lan-dui-yao","title":"Huò Xiāng + Pèi Lán","characters":"藿香 + 佩兰","action":"Aromatically transform Dampness, awaken the Spleen and relieve Summerheat-Dampness.","actionEs":"Transformar Humedad con aromáticos, despertar Bazo y aliviar Calor de Verano-Humedad.","formulas":"Huò Xiāng Zhèng Qì Sǎn modificada con Pèi Lán."},
+        {"number":48,"slug":"jin-qian-cao-hai-jin-sha-dui-yao","title":"Jīn Qián Cǎo + Hǎi Jīn Shā","characters":"金钱草 + 海金沙","action":"Promote urination, unblock painful Lin and help expel urinary or biliary stones.","actionEs":"Promover la orina, desbloquear Lin doloroso y ayudar a expulsar cálculos urinarios o biliares.","formulas":"Sān Jīn Tāng."}
+      ],
       "quickCompareTitle":"Chapter 16 principal formulas","quickCompareTitleEs":"Fórmulas principales del capítulo 16",
       "quickCompare":[
         ["Ping Wei San","Cold-Dampness stagnating in Spleen-Stomach","Middle fullness · heaviness · thick white greasy coat","Humedad-Frío estancada en Bazo-Estómago","Plenitud media · pesadez · saburra blanca grasosa espesa"],
@@ -2514,6 +2529,7 @@
         ["4","Identify movement and root","Rebellious Qi, constraint, internal Wind, Spleen weakness, Yang deficiency or residual exterior Wind changes the formula.","Identifica movimiento y raíz","Qi rebelde, constricción, Viento interno, debilidad de Bazo, deficiencia de Yang o Viento exterior residual cambia la fórmula."],
         ["5","Screen emergencies and toxicity","Do not treat stroke, seizure, poisoning, respiratory distress or a new mass as a routine Phlegm presentation.","Descarta urgencias y toxicidad","No trates ACV, convulsión, intoxicación, disnea o masa nueva como un cuadro rutinario de Flema."]
       ],
+      "relatedDuiYaoAnchor":"cough-phlegm",
       "relatedDuiYaoTitle":"Related Duì Yào · Stop Cough and Transform Phlegm",
       "relatedDuiYaoTitleEs":"Duì Yào relacionados · Detener Tos y transformar Flema",
       "relatedDuiYaoText":"These five official Appendix B pairs concentrate mechanisms that recur throughout this category: Lung diffusion and descent, drying Damp-Phlegm, opening Phlegm binding in the chest, moistening while stopping cough, and draining Lung fluid.",

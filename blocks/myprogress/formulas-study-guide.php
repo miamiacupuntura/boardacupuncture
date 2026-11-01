@@ -1776,7 +1776,8 @@ echo $OUTPUT->header();
                 $duiyaoindexpath = $ises
                     ? '/study-guide/comparisons/dui-yao-es.html'
                     : '/study-guide/comparisons/dui-yao.html';
-                $duiyaoindexurl = new moodle_url($duiyaoindexpath, [], 'cough-phlegm');
+                $duiyaoindexanchor = (string) ($selectedguide['relatedDuiYaoAnchor'] ?? 'cough-phlegm');
+                $duiyaoindexurl = new moodle_url($duiyaoindexpath, [], $duiyaoindexanchor);
                 ?>
                 <section class="formula-study-guide__dui-yao" aria-labelledby="related-dui-yao-title">
                     <header class="formula-study-guide__dui-yao-header">

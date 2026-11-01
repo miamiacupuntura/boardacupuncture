@@ -90,6 +90,7 @@ php -r '
         }
     }
     $phlegmSections = $data["categoryGuides"]["transform-phlegm-chapter-17"]["formulaSections"] ?? [];
+    $dampnessDuiYao = $data["categoryGuides"]["expel-damp-chapter-16"]["relatedDuiYao"] ?? [];
     $phlegmDuiYao = $data["categoryGuides"]["transform-phlegm-chapter-17"]["relatedDuiYao"] ?? [];
     $phlegmSectionNames = [];
     foreach ($phlegmSections as $section) {
@@ -158,6 +159,8 @@ php -r '
                 !== [5, 10, 5, 7, 6]
             || count($dampnessSectionNames) !== 33
             || count(array_unique($dampnessSectionNames)) !== 33
+            || array_column($dampnessDuiYao, "number") !== [19, 20, 31, 44, 47, 48]
+            || count(array_unique(array_column($dampnessDuiYao, "slug"))) !== 6
             || array_column($phlegmSections, "key") !== [
                 "dry-damp-transform", "clear-heat-transform", "disperse-clumping",
                 "moisten-dryness", "warm-phlegm-cold", "transform-extinguish-wind", "induce-vomiting"
@@ -329,6 +332,8 @@ grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TEMP_DIR/formulas-st
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Dato interesante: ocho fórmulas del Board" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug":"bai-zhu-fu-ling-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Drenar o transformar Humedad" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "comparisonchapternumber" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "transform-phlegm-chapter-17" "$TEMP_DIR/formulas-study-guide.php"
 grep -q '"number":"C17-18"' "$TEMP_DIR/formulas-study-guide-data.json"
@@ -470,6 +475,8 @@ grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TARGET_DIR/formulas-
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato interesante: ocho fórmulas del Board" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug":"bai-zhu-fu-ling-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Drenar o transformar Humedad" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "comparisonchapternumber" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "transform-phlegm-chapter-17" "$TARGET_DIR/formulas-study-guide.php"
 grep -q '"number":"C17-18"' "$TARGET_DIR/formulas-study-guide-data.json"
@@ -514,6 +521,7 @@ echo "SEQUEDAD INSTALADA: EXTERNA FRESCA/CÁLIDA VS. INTERNA POR AGOTAMIENTO DE 
 echo "CAPÍTULO 16 INSTALADO: 33 FÓRMULAS EN 5 SECCIONES (25 PERFILES NUEVOS + 8 BOARD)"
 echo "VISTA ÚNICA INSTALADA: EXPEL DAMPNESS ABRE DIRECTAMENTE EL CAPÍTULO 16 COMPLETO"
 echo "ANEXO INSTALADO: LAS 5 TABLAS COMPARATIVAS DEL CAPÍTULO 16 QUEDAN PLEGADAS AL FINAL"
+echo "PUENTE DUÌ YÀO INSTALADO EN EXPEL DAMPNESS: 6 PAREJAS OFICIALES RELACIONADAS"
 echo "CAPÍTULO 17 INSTALADO: 18 FÓRMULAS EN 7 SECCIONES (13 PERFILES NUEVOS + 5 BOARD)"
 echo "VISTA ÚNICA INSTALADA: TRANSFORM PHLEGM ABRE DIRECTAMENTE EL CAPÍTULO 17 COMPLETO"
 echo "ANEXO INSTALADO: LAS 7 TABLAS COMPARATIVAS DEL CAPÍTULO 17 QUEDAN PLEGADAS AL FINAL"
