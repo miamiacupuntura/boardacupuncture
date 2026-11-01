@@ -15,7 +15,8 @@
     "formulas": {
       "en": "Má Huáng Tāng.",
       "es": "Má Huáng Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 2,
@@ -33,7 +34,8 @@
     "formulas": {
       "en": "Má Huáng Tāng; Má Xìng Shí Gān Tāng.",
       "es": "Má Huáng Tāng; Má Xìng Shí Gān Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 3,
@@ -51,6 +53,19 @@
     "formulas": {
       "en": "Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng.",
       "es": "Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng."
+    },
+    "formulaBridge": {
+      "kind": "structural",
+      "label": {
+        "en": "Structural transformation",
+        "es": "Transformación estructural"
+      },
+      "base": "Má Huáng Tāng",
+      "result": "Má Xìng Shí Gān Tāng",
+      "change": {
+        "en": "Retain Má Huáng, remove Guì Zhī, add Shí Gāo, and rebalance the formula. This creates the pair but is not simple addition of the complete Duì Yào.",
+        "es": "Se conserva Má Huáng, se retira Guì Zhī, se añade Shí Gāo y se reequilibra la fórmula. Así aparece la pareja, pero no es una adición simple del Duì Yào completo."
+      }
     }
   },
   {
@@ -69,6 +84,19 @@
     "formulas": {
       "en": "Guì Zhī Tāng; Bái Sháo is doubled in Xiǎo Jiàn Zhōng Tāng.",
       "es": "Guì Zhī Tāng; Bái Sháo se duplica en Xiǎo Jiàn Zhōng Tāng."
+    },
+    "formulaBridge": {
+      "kind": "structural",
+      "label": {
+        "en": "Ratio change + one addition",
+        "es": "Cambio de proporción + una adición"
+      },
+      "base": "Guì Zhī Tāng",
+      "result": "Xiǎo Jiàn Zhōng Tāng",
+      "change": {
+        "en": "The base already contains Guì Zhī + Bái Sháo; Bái Sháo is doubled and Yí Táng is added. Do not write this as adding the complete pair.",
+        "es": "La base ya contiene Guì Zhī + Bái Sháo; se duplica Bái Sháo y se añade Yí Táng. No debe redactarse como adición de la pareja completa."
+      }
     }
   },
   {
@@ -87,7 +115,8 @@
     "formulas": {
       "en": "Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn.",
       "es": "Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 6,
@@ -105,7 +134,8 @@
     "formulas": {
       "en": "Cāng Ěr Zǐ Sǎn.",
       "es": "Cāng Ěr Zǐ Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 7,
@@ -123,7 +153,8 @@
     "formulas": {
       "en": "Sāng Jú Yǐn.",
       "es": "Sāng Jú Yǐn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 8,
@@ -141,7 +172,8 @@
     "formulas": {
       "en": "Shēng Má Gé Gēn Tāng.",
       "es": "Shēng Má Gé Gēn Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 9,
@@ -159,7 +191,8 @@
     "formulas": {
       "en": "Bǔ Zhōng Yì Qì Tāng.",
       "es": "Bǔ Zhōng Yì Qì Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 10,
@@ -177,7 +210,8 @@
     "formulas": {
       "en": "Zhī Zǐ Chǐ Tāng.",
       "es": "Zhī Zǐ Chǐ Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 11,
@@ -195,7 +229,8 @@
     "formulas": {
       "en": "Bái Hǔ Tāng.",
       "es": "Bái Hǔ Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 12,
@@ -213,6 +248,19 @@
     "formulas": {
       "en": "Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán.",
       "es": "Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán."
+    },
+    "formulaBridge": {
+      "kind": "direct",
+      "label": {
+        "en": "Direct pair addition",
+        "es": "Adición directa de la pareja"
+      },
+      "base": "Liù Wèi Dì Huáng Wán",
+      "result": "Zhī Bǎi Dì Huáng Wán",
+      "change": {
+        "en": "Add Zhī Mǔ + Huáng Bǎi when Kidney-Yin deficiency has more pronounced deficient Fire.",
+        "es": "Añadir Zhī Mǔ + Huáng Bǎi cuando la deficiencia de Yin de Riñón presenta Fuego vacío más marcado."
+      }
     }
   },
   {
@@ -231,7 +279,8 @@
     "formulas": {
       "en": "Xiè Bái Sǎn.",
       "es": "Xiè Bái Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 14,
@@ -249,7 +298,8 @@
     "formulas": {
       "en": "Jiāo Tài Wán.",
       "es": "Jiāo Tài Wán."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 15,
@@ -267,7 +317,8 @@
     "formulas": {
       "en": "Yín Qiáo Sǎn.",
       "es": "Yín Qiáo Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 16,
@@ -285,7 +336,8 @@
     "formulas": {
       "en": "Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn.",
       "es": "Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 17,
@@ -303,7 +355,8 @@
     "formulas": {
       "en": "Qīng Hāo Biē Jiǎ Tāng.",
       "es": "Qīng Hāo Biē Jiǎ Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 18,
@@ -321,7 +374,8 @@
     "formulas": {
       "en": "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng.",
       "es": "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 19,
@@ -339,7 +393,8 @@
     "formulas": {
       "en": "Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng.",
       "es": "Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 20,
@@ -357,7 +412,8 @@
     "formulas": {
       "en": "Sháo Yào Gān Cǎo Tāng.",
       "es": "Sháo Yào Gān Cǎo Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 21,
@@ -375,7 +431,8 @@
     "formulas": {
       "en": "Jié Gěng Tāng.",
       "es": "Jié Gěng Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 22,
@@ -393,7 +450,8 @@
     "formulas": {
       "en": "Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn.",
       "es": "Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 23,
@@ -411,7 +469,8 @@
     "formulas": {
       "en": "Dāng Guī Bǔ Xuè Tāng — Huáng Qí 5 : Dāng Guī 1.",
       "es": "Dāng Guī Bǔ Xuè Tāng — Huáng Qí 5 : Dāng Guī 1."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 24,
@@ -429,7 +488,8 @@
     "formulas": {
       "en": "Fó Shǒu Sǎn; Sì Wù Tāng.",
       "es": "Fó Shǒu Sǎn; Sì Wù Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 25,
@@ -447,7 +507,8 @@
     "formulas": {
       "en": "Xiāng Fù Sì Wù Tāng — an off-list exemplar built on Sì Wù Tāng.",
       "es": "Xiāng Fù Sì Wù Tāng — ejemplo fuera de lista basado en Sì Wù Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 26,
@@ -465,6 +526,19 @@
     "formulas": {
       "en": "Jiāo Ài Tāng.",
       "es": "Jiāo Ài Tāng."
+    },
+    "formulaBridge": {
+      "kind": "qualified",
+      "label": {
+        "en": "Pair + cofactor",
+        "es": "Pareja + cofactor"
+      },
+      "base": "Sì Wù Tāng",
+      "result": "Jiāo Ài Tāng",
+      "change": {
+        "en": "Add Ài Yè + Ē Jiāo and Gān Cǎo. The pair is central, but the named variant requires the additional cofactor.",
+        "es": "Añadir Ài Yè + Ē Jiāo y Gān Cǎo. La pareja es central, pero la variante nombrada requiere el cofactor adicional."
+      }
     }
   },
   {
@@ -483,7 +557,8 @@
     "formulas": {
       "en": "Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān.",
       "es": "Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 28,
@@ -501,6 +576,19 @@
     "formulas": {
       "en": "Qǐ Jú Dì Huáng Wán.",
       "es": "Qǐ Jú Dì Huáng Wán."
+    },
+    "formulaBridge": {
+      "kind": "direct",
+      "label": {
+        "en": "Direct pair addition",
+        "es": "Adición directa de la pareja"
+      },
+      "base": "Liù Wèi Dì Huáng Wán",
+      "result": "Qǐ Jú Dì Huáng Wán",
+      "change": {
+        "en": "Add Gǒu Qǐ Zǐ + Jú Huā when Liver-Kidney Yin deficiency affects the eyes.",
+        "es": "Añadir Gǒu Qǐ Zǐ + Jú Huā cuando la deficiencia de Yin de Hígado-Riñón afecta los ojos."
+      }
     }
   },
   {
@@ -519,6 +607,19 @@
     "formulas": {
       "en": "Èr Zhì Wán — the formula is the pair.",
       "es": "Èr Zhì Wán — la fórmula es la pareja."
+    },
+    "formulaBridge": {
+      "kind": "same-composition",
+      "label": {
+        "en": "Pair = formula",
+        "es": "Pareja = fórmula"
+      },
+      "base": "Hàn Lián Cǎo + Nǚ Zhēn Zǐ",
+      "result": "Èr Zhì Wán",
+      "change": {
+        "en": "The classical two-herb formula is the pair itself. This is identity of composition, not substitution; ratio, dose, preparation, and safety still matter.",
+        "es": "La fórmula clásica de dos hierbas es la propia pareja. Es identidad de composición, no sustitución; todavía importan proporción, dosis, preparación y seguridad."
+      }
     }
   },
   {
@@ -537,7 +638,8 @@
     "formulas": {
       "en": "Dà Dìng Fēng Zhū.",
       "es": "Dà Dìng Fēng Zhū."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 31,
@@ -555,7 +657,8 @@
     "formulas": {
       "en": "Shòu Tāi Wán emphasizes Xù Duàn; Dú Huó Jì Shēng Tāng emphasizes Dù Zhòng.",
       "es": "Shòu Tāi Wán enfatiza Xù Duàn; Dú Huó Jì Shēng Tāng enfatiza Dù Zhòng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 32,
@@ -573,7 +676,8 @@
     "formulas": {
       "en": "Jì Chuān Jiān.",
       "es": "Jì Chuān Jiān."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 33,
@@ -591,7 +695,8 @@
     "formulas": {
       "en": "Huái Huā Sǎn.",
       "es": "Huái Huā Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 34,
@@ -609,6 +714,19 @@
     "formulas": {
       "en": "Táo Hóng Sì Wù Tāng; Xuè Fǔ Zhú Yū Tāng.",
       "es": "Táo Hóng Sì Wù Tāng; Xuè Fǔ Zhú Yū Tāng."
+    },
+    "formulaBridge": {
+      "kind": "direct",
+      "label": {
+        "en": "Direct pair addition",
+        "es": "Adición directa de la pareja"
+      },
+      "base": "Sì Wù Tāng",
+      "result": "Táo Hóng Sì Wù Tāng",
+      "change": {
+        "en": "Add Táo Rén + Hóng Huā to shift the base toward a clearer Blood-stasis strategy.",
+        "es": "Añadir Táo Rén + Hóng Huā para orientar la base hacia una estrategia más clara contra estasis de Sangre."
+      }
     }
   },
   {
@@ -627,7 +745,8 @@
     "formulas": {
       "en": "Xiǎo Huó Luò Dān.",
       "es": "Xiǎo Huó Luò Dān."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 36,
@@ -645,7 +764,8 @@
     "formulas": {
       "en": "Xiāng Léng Wán.",
       "es": "Xiāng Léng Wán."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 37,
@@ -663,7 +783,8 @@
     "formulas": {
       "en": "Èr Chén Tāng.",
       "es": "Èr Chén Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 38,
@@ -681,7 +802,8 @@
     "formulas": {
       "en": "Xiǎo Bàn Xià Tāng; also used within Xiǎo Chái Hú Tāng and Èr Chén Tāng.",
       "es": "Xiǎo Bàn Xià Tāng; también dentro de Xiǎo Chái Hú Tāng y Èr Chén Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 39,
@@ -699,7 +821,8 @@
     "formulas": {
       "en": "Guā Lóu Xiè Bái Bàn Xià Tāng.",
       "es": "Guā Lóu Xiè Bái Bàn Xià Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 40,
@@ -717,7 +840,8 @@
     "formulas": {
       "en": "Shè Gān Má Huáng Tāng.",
       "es": "Shè Gān Má Huáng Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 41,
@@ -735,7 +859,8 @@
     "formulas": {
       "en": "Tíng Lì Dà Zǎo Xiè Fèi Tāng.",
       "es": "Tíng Lì Dà Zǎo Xiè Fèi Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 42,
@@ -753,7 +878,8 @@
     "formulas": {
       "en": "Sì Nì Tāng.",
       "es": "Sì Nì Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 43,
@@ -771,6 +897,19 @@
     "formulas": {
       "en": "Yòu Guī Wán; later versions of Shèn Qì Wán.",
       "es": "Yòu Guī Wán; versiones tardías de Shèn Qì Wán."
+    },
+    "formulaBridge": {
+      "kind": "qualified",
+      "label": {
+        "en": "Version-dependent family link",
+        "es": "Vínculo familiar dependiente de versión"
+      },
+      "base": "Liù Wèi Dì Huáng Wán",
+      "result": "Bā Wèi Dì Huáng Wán / Jīn Guì Shèn Qì Wán lineage",
+      "change": {
+        "en": "Processed Fù Zǐ plus cinnamon pivots the family toward Kidney Yang and water transformation. Some sources use Ròu Guì and others Guì Zhī, so the textual version must be identified.",
+        "es": "Fù Zǐ procesado más canela orienta la familia hacia Yang de Riñón y transformación del agua. Algunas fuentes usan Ròu Guì y otras Guì Zhī, por lo que debe identificarse la versión textual."
+      }
     }
   },
   {
@@ -789,7 +928,8 @@
     "formulas": {
       "en": "Lǐ Zhōng Wán.",
       "es": "Lǐ Zhōng Wán."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 45,
@@ -807,7 +947,8 @@
     "formulas": {
       "en": "Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng.",
       "es": "Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 46,
@@ -825,7 +966,8 @@
     "formulas": {
       "en": "Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn.",
       "es": "Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 47,
@@ -843,6 +985,19 @@
     "formulas": {
       "en": "Huò Xiāng Zhèng Qì Sǎn modified with Pèi Lán.",
       "es": "Huò Xiāng Zhèng Qì Sǎn modificada con Pèi Lán."
+    },
+    "formulaBridge": {
+      "kind": "structural",
+      "label": {
+        "en": "Add only the missing partner",
+        "es": "Añadir solo la compañera faltante"
+      },
+      "base": "Huò Xiāng Zhèng Qì Sǎn",
+      "result": "Huò Xiāng Zhèng Qì Sǎn + Pèi Lán",
+      "change": {
+        "en": "The base already contains Huò Xiāng, so only Pèi Lán is added. The resulting prescription contains the pair, but the complete pair was not added.",
+        "es": "La base ya contiene Huò Xiāng, por lo que se añade solo Pèi Lán. La prescripción resultante contiene la pareja, pero no se añadió la pareja completa."
+      }
     }
   },
   {
@@ -861,7 +1016,8 @@
     "formulas": {
       "en": "Sān Jīn Tāng.",
       "es": "Sān Jīn Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 49,
@@ -879,7 +1035,8 @@
     "formulas": {
       "en": "Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng.",
       "es": "Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng."
-    }
+    },
+    "formulaBridge": null
   },
   {
     "number": 50,
@@ -897,6 +1054,19 @@
     "formulas": {
       "en": "Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng; Chái Hú Jiā Lóng Gǔ Mǔ Lì Tāng; Zhèn Gān Xī Fēng Tāng.",
       "es": "Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng; Chái Hú Jiā Lóng Gǔ Mǔ Lì Tāng; Zhèn Gān Xī Fēng Tāng."
+    },
+    "formulaBridge": {
+      "kind": "direct",
+      "label": {
+        "en": "Direct pair addition",
+        "es": "Adición directa de la pareja"
+      },
+      "base": "Guì Zhī Tāng",
+      "result": "Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng",
+      "change": {
+        "en": "Add Lóng Gǔ + Mǔ Lì to anchor, calm, and contain deficiency leakage.",
+        "es": "Añadir Lóng Gǔ + Mǔ Lì para anclar, calmar y contener pérdidas por deficiencia."
+      }
     }
   },
   {
@@ -915,6 +1085,7 @@
     "formulas": {
       "en": "Tiān Má Gōu Téng Yǐn.",
       "es": "Tiān Má Gōu Téng Yǐn."
-    }
+    },
+    "formulaBridge": null
   }
 ]

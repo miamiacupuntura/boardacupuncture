@@ -1392,6 +1392,140 @@ function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
 
+const formulaBridgeByPair = new Map([
+  [3, {
+    kind: 'structural',
+    label: { en: 'Structural transformation', es: 'Transformación estructural' },
+    base: 'Má Huáng Tāng',
+    result: 'Má Xìng Shí Gān Tāng',
+    change: {
+      en: 'Retain Má Huáng, remove Guì Zhī, add Shí Gāo, and rebalance the formula. This creates the pair but is not simple addition of the complete Duì Yào.',
+      es: 'Se conserva Má Huáng, se retira Guì Zhī, se añade Shí Gāo y se reequilibra la fórmula. Así aparece la pareja, pero no es una adición simple del Duì Yào completo.'
+    }
+  }],
+  [4, {
+    kind: 'structural',
+    label: { en: 'Ratio change + one addition', es: 'Cambio de proporción + una adición' },
+    base: 'Guì Zhī Tāng',
+    result: 'Xiǎo Jiàn Zhōng Tāng',
+    change: {
+      en: 'The base already contains Guì Zhī + Bái Sháo; Bái Sháo is doubled and Yí Táng is added. Do not write this as adding the complete pair.',
+      es: 'La base ya contiene Guì Zhī + Bái Sháo; se duplica Bái Sháo y se añade Yí Táng. No debe redactarse como adición de la pareja completa.'
+    }
+  }],
+  [12, {
+    kind: 'direct',
+    label: { en: 'Direct pair addition', es: 'Adición directa de la pareja' },
+    base: 'Liù Wèi Dì Huáng Wán',
+    result: 'Zhī Bǎi Dì Huáng Wán',
+    change: {
+      en: 'Add Zhī Mǔ + Huáng Bǎi when Kidney-Yin deficiency has more pronounced deficient Fire.',
+      es: 'Añadir Zhī Mǔ + Huáng Bǎi cuando la deficiencia de Yin de Riñón presenta Fuego vacío más marcado.'
+    }
+  }],
+  [26, {
+    kind: 'qualified',
+    label: { en: 'Pair + cofactor', es: 'Pareja + cofactor' },
+    base: 'Sì Wù Tāng',
+    result: 'Jiāo Ài Tāng',
+    change: {
+      en: 'Add Ài Yè + Ē Jiāo and Gān Cǎo. The pair is central, but the named variant requires the additional cofactor.',
+      es: 'Añadir Ài Yè + Ē Jiāo y Gān Cǎo. La pareja es central, pero la variante nombrada requiere el cofactor adicional.'
+    }
+  }],
+  [28, {
+    kind: 'direct',
+    label: { en: 'Direct pair addition', es: 'Adición directa de la pareja' },
+    base: 'Liù Wèi Dì Huáng Wán',
+    result: 'Qǐ Jú Dì Huáng Wán',
+    change: {
+      en: 'Add Gǒu Qǐ Zǐ + Jú Huā when Liver-Kidney Yin deficiency affects the eyes.',
+      es: 'Añadir Gǒu Qǐ Zǐ + Jú Huā cuando la deficiencia de Yin de Hígado-Riñón afecta los ojos.'
+    }
+  }],
+  [29, {
+    kind: 'same-composition',
+    label: { en: 'Pair = formula', es: 'Pareja = fórmula' },
+    base: 'Hàn Lián Cǎo + Nǚ Zhēn Zǐ',
+    result: 'Èr Zhì Wán',
+    change: {
+      en: 'The classical two-herb formula is the pair itself. This is identity of composition, not substitution; ratio, dose, preparation, and safety still matter.',
+      es: 'La fórmula clásica de dos hierbas es la propia pareja. Es identidad de composición, no sustitución; todavía importan proporción, dosis, preparación y seguridad.'
+    }
+  }],
+  [34, {
+    kind: 'direct',
+    label: { en: 'Direct pair addition', es: 'Adición directa de la pareja' },
+    base: 'Sì Wù Tāng',
+    result: 'Táo Hóng Sì Wù Tāng',
+    change: {
+      en: 'Add Táo Rén + Hóng Huā to shift the base toward a clearer Blood-stasis strategy.',
+      es: 'Añadir Táo Rén + Hóng Huā para orientar la base hacia una estrategia más clara contra estasis de Sangre.'
+    }
+  }],
+  [43, {
+    kind: 'qualified',
+    label: { en: 'Version-dependent family link', es: 'Vínculo familiar dependiente de versión' },
+    base: 'Liù Wèi Dì Huáng Wán',
+    result: 'Bā Wèi Dì Huáng Wán / Jīn Guì Shèn Qì Wán lineage',
+    change: {
+      en: 'Processed Fù Zǐ plus cinnamon pivots the family toward Kidney Yang and water transformation. Some sources use Ròu Guì and others Guì Zhī, so the textual version must be identified.',
+      es: 'Fù Zǐ procesado más canela orienta la familia hacia Yang de Riñón y transformación del agua. Algunas fuentes usan Ròu Guì y otras Guì Zhī, por lo que debe identificarse la versión textual.'
+    }
+  }],
+  [47, {
+    kind: 'structural',
+    label: { en: 'Add only the missing partner', es: 'Añadir solo la compañera faltante' },
+    base: 'Huò Xiāng Zhèng Qì Sǎn',
+    result: 'Huò Xiāng Zhèng Qì Sǎn + Pèi Lán',
+    change: {
+      en: 'The base already contains Huò Xiāng, so only Pèi Lán is added. The resulting prescription contains the pair, but the complete pair was not added.',
+      es: 'La base ya contiene Huò Xiāng, por lo que se añade solo Pèi Lán. La prescripción resultante contiene la pareja, pero no se añadió la pareja completa.'
+    }
+  }],
+  [50, {
+    kind: 'direct',
+    label: { en: 'Direct pair addition', es: 'Adición directa de la pareja' },
+    base: 'Guì Zhī Tāng',
+    result: 'Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng',
+    change: {
+      en: 'Add Lóng Gǔ + Mǔ Lì to anchor, calm, and contain deficiency leakage.',
+      es: 'Añadir Lóng Gǔ + Mǔ Lì para anclar, calmar y contener pérdidas por deficiencia.'
+    }
+  }]
+]);
+
+function formulaChoiceSection(pair, language) {
+  const es = language === 'es';
+  const data = pair[language];
+  const bridge = formulaBridgeByPair.get(pair.number);
+  const bridgeRows = bridge
+    ? `<tr><th>${es ? 'Tipo de vínculo' : 'Link type'}</th><td><strong>${esc(bridge.label[language])}</strong></td></tr><tr><th>${es ? 'Fórmula base' : 'Base formula'}</th><td>${esc(bridge.base)}</td></tr><tr><th>${es ? 'Resultado' : 'Result'}</th><td>${esc(bridge.result)}</td></tr><tr><th>${es ? 'Operación real' : 'Actual operation'}</th><td>${esc(bridge.change[language])}</td></tr>`
+    : `<tr><th>${es ? 'Puente representativo' : 'Representative bridge'}</th><td>${esc(data.formulas)}</td></tr><tr><th>${es ? 'Clasificación' : 'Classification'}</th><td>${es ? 'Contexto de fórmula; no se ha documentado aquí como conversión directa de una fórmula base.' : 'Formula context; it is not documented here as a direct conversion from a base formula.'}</td></tr>`;
+  return `<section class="study-note__block" data-formula-choice="${pair.number}"><h2 class="study-note__heading study-note__heading--orange">${es ? '¿Fórmula completa, Duì Yào o fórmula + pareja?' : 'Complete formula, Duì Yào, or formula + pair?'}</h2><p>${es ? 'Usa la fórmula completa cuando el caso reproduce una arquitectura de patrón con raíz, ramas y protección. Considera la pareja para un objetivo estrecho; úsala como modificación cuando una fórmula base encaja pero le falta una función. La pareja no sustituye automáticamente la fórmula.' : 'Use the complete formula when the case reproduces a full pattern architecture with root, branches, and protection. Consider the pair for a narrow objective; use it as a modification when a base formula fits but lacks one function. The pair does not automatically replace the formula.'}</p><table class="study-note__focus"><tbody><tr><th>${es ? 'Objetivo estrecho' : 'Narrow objective'}</th><td>${esc(data.job)}</td></tr><tr><th>${es ? 'Contexto clásico' : 'Classical context'}</th><td>${esc(data.formulas)}</td></tr>${bridgeRows}<tr><th>${es ? 'Límite de examen' : 'Exam boundary'}</th><td>${es ? 'Distinguir acción compartida de equivalencia terapéutica. Composición, proporción, dosis, preparación y seguridad siguen siendo decisivas.' : 'Distinguish shared action from therapeutic equivalence. Composition, ratio, dose, preparation, and safety remain decisive.'}</td></tr></tbody></table></section>`;
+}
+
+function formulaDecisionOverview(language) {
+  const es = language === 'es';
+  const rows = [
+    [es ? 'Patrón completo con varias ramas' : 'Complete pattern with several branches', es ? 'Fórmula completa' : 'Complete formula', es ? 'Conserva la arquitectura de raíz, ramas, protección y dirección.' : 'Preserves the architecture of root, branches, protection, and direction.'],
+    [es ? 'Objetivo estrecho y bien definido' : 'Narrow, well-defined objective', es ? 'Duì Yào posible' : 'Duì Yào may fit', es ? 'La pareja concentra una relación funcional bajo juicio profesional.' : 'The pair concentrates one functional relationship under professional judgment.'],
+    [es ? 'La base encaja, pero falta una función' : 'The base fits but one function is missing', es ? 'Fórmula + Duì Yào' : 'Formula + Duì Yào', es ? 'La pareja funciona como módulo de modificación sin perder la estructura principal.' : 'The pair acts as a modification module without discarding the main structure.'],
+    [es ? 'Presentación compleja, deficiencia marcada o riesgo' : 'Complex presentation, major deficiency, or risk', es ? 'No sustituir automáticamente' : 'Do not substitute automatically', es ? 'Dos hierbas pueden omitir protección, armonización o controles de seguridad de la fórmula.' : 'Two herbs may omit protection, harmonization, or safety controls supplied by the formula.']
+  ];
+  const rowHtml = rows.map(row => `<tr><th>${esc(row[0])}</th><td><strong>${esc(row[1])}</strong></td><td>${esc(row[2])}</td></tr>`).join('');
+  return `<section class="study-note__block" id="formula-vs-dui-yao"><p class="comparison-eyebrow">${es ? 'Decisión de estudio' : 'Study decision'}</p><h2>${es ? 'Cuándo escoger una fórmula y cuándo un Duì Yào' : 'When to choose a formula and when to choose a Duì Yào'}</h2><p>${es ? 'Un Duì Yào puede ser núcleo, modificación o prescripción breve para un objetivo estrecho. No es, por definición, una fórmula comercial ni un equivalente automático de una fórmula clásica.' : 'A Duì Yào may be a core, modification, or brief prescription for a narrow objective. By definition, it is neither a commercial patent formula nor an automatic equivalent of a classical formula.'}</p><div class="formula-compare-table-wrap"><table class="formula-compare-table"><thead><tr><th>${es ? 'Situación' : 'Situation'}</th><th>${es ? 'Elección' : 'Choice'}</th><th>${es ? 'Por qué' : 'Why'}</th></tr></thead><tbody>${rowHtml}</tbody></table></div></section>`;
+}
+
+function formulaModificationOverview(language) {
+  const es = language === 'es';
+  const rows = Array.from(formulaBridgeByPair.entries()).map(([number, bridge]) => {
+    const pair = pairs.find(item => item.number === number);
+    return `<tr data-dui-modification-link="${number}"><th><a href="${pair.slug}${es ? '-es' : ''}.html">${esc(pair.title)}</a></th><td>${esc(bridge.base)}</td><td>${esc(bridge.result)}</td><td><strong>${esc(bridge.label[language])}</strong><br>${esc(bridge.change[language])}</td></tr>`;
+  }).join('');
+  return `<section class="study-note__block" id="formula-modification-bridges"><p class="comparison-eyebrow">${es ? 'Puentes con fórmulas' : 'Formula bridges'}</p><h2>${es ? 'Parejas que crean, distinguen o explican variantes clásicas' : 'Pairs that create, distinguish, or explain classical variants'}</h2><p>${es ? 'Los cuatro vínculos marcados como adición directa son los más limpios para preguntas de conversión. Los demás exigen reconocer un cofactor, una versión textual, una fórmula de dos hierbas o una reconstrucción estructural.' : 'The four links marked direct addition are the cleanest for conversion questions. The others require recognition of a cofactor, textual version, two-herb formula, or structural reconstruction.'}</p><div class="formula-compare-table-wrap"><table class="formula-compare-table"><thead><tr><th>Duì Yào</th><th>${es ? 'Base' : 'Base'}</th><th>${es ? 'Resultado' : 'Result'}</th><th>${es ? 'Lectura correcta' : 'Correct reading'}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+}
+
 function detailPage(pair, language) {
   const es = language === 'es';
   const data = pair[language];
@@ -1404,6 +1538,7 @@ function detailPage(pair, language) {
 <section class="study-note__block"><h2 class="study-note__heading">${es ? 'Una imagen, un trabajo' : 'One picture, one job'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Imagen' : 'Picture'}</th><td>${esc(data.mnemonic)}</td></tr><tr><th>${es ? 'Trabajo conjunto' : 'Combined job'}</th><td>${esc(data.job)}</td></tr><tr><th>${es ? 'Categoría' : 'Category'}</th><td>${esc(pair.category[language])}</td></tr></tbody></table></section>
 <section class="study-note__block"><h2 class="study-note__heading study-note__heading--orange">${es ? 'Cómo funciona la pareja' : 'How the pair works'}</h2><table><thead><tr><th>${es ? 'Hierba' : 'Herb'}</th><th>${es ? 'Papel dentro de la pareja' : 'Role within the pair'}</th></tr></thead><tbody>${roles}</tbody></table></section>
 <section class="study-note__block"><h2 class="study-note__heading study-note__heading--purple">${es ? 'Enfoque de examen y seguridad' : 'Exam focus and safety'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Pistas' : 'Clues'}</th><td>${esc(data.clues)}</td></tr><tr><th>${es ? 'Fórmula firma' : 'Signature formula'}</th><td>${esc(data.formulas)}</td></tr><tr><th>${es ? 'Trampa' : 'Trap'}</th><td>${esc(data.trap)}</td></tr><tr><th>${es ? 'Preparación' : 'Preparation'}</th><td>${esc(data.prep)}</td></tr><tr><th>${es ? 'Seguridad' : 'Safety'}</th><td>${esc(data.safety)}</td></tr></tbody></table></section>
+${formulaChoiceSection(pair, language)}
 </article></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Grupo independiente · Parejas Duì Yào de Appendix B' : 'Independent group · Appendix B Duì Yào pairs'}</div></footer></body></html>`;
 }
 
@@ -1474,6 +1609,8 @@ function indexPage(language) {
   return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${es ? 'Las 51 parejas Duì Yào oficiales organizadas en 15 bloques clínicos.' : 'The 51 official Duì Yào pairs organized into 15 clinical blocks.'}"><title>${es ? 'Parejas Duì Yào por categorías' : 'Duì Yào Pairs by Category'} | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="dui-yao${es ? '' : '-es'}.html"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/my/"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>AcupunctureTests</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology">${es ? '← Herbología China' : '← Chinese Herbology'}</a><a class="comparison-back" href="dui-yao${es ? '' : '-es'}.html">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="/my/">${es ? '← Dashboard' : '← Back to Dashboard'}</a></span></div></header>
 <main class="comparison-shell"><section class="comparison-hero"><p class="comparison-eyebrow">${es ? 'Paso 2 · Parejas de hierbas' : 'Step 2 · Herb pairs'}</p><h1>${es ? 'Duì Yào por bloques clínicos' : 'Duì Yào by Clinical Block'}</h1><p>${es ? 'Estudia las 51 parejas oficiales dentro de 15 categorías. Cada bloque reinicia su numeración para que puedas terminar un tema sin perder tu posición.' : 'Study all 51 official pairs within 15 categories. Numbering restarts in each block so you can finish one subject without losing your place.'}</p></section>
+${formulaDecisionOverview(language)}
+${formulaModificationOverview(language)}
 <section class="comparison-tools comparison-tools--search-only"><label><span class="sr-only">${es ? 'Buscar parejas' : 'Search pairs'}</span><input class="comparison-search" type="search" placeholder="${es ? 'Buscar pareja, categoría, trabajo o fórmula' : 'Search pair, category, job or formula'}" data-comparison-search></label></section>
 <section class="study-note__block"><p class="comparison-eyebrow">${es ? 'Navegación dentro de esta página' : 'Navigation within this page'}</p><h2>${es ? 'Duì Yào · 15 bloques de categorías' : 'Duì Yào · 15 category blocks'}</h2><p>${es ? 'Elige un bloque o continúa hacia abajo para mantener la secuencia completa.' : 'Choose a block or continue downward to preserve the full sequence.'}</p><nav class="comparison-collection-links" aria-label="${es ? 'Categorías Duì Yào' : 'Duì Yào categories'}">${categoryLinks}</nav></section>
 <header class="comparison-summary"><h2>${es ? 'Parejas disponibles' : 'Available pairs'}</h2><p><span data-visible-count>${pairs.length}</span> ${es ? 'de 51 parejas' : 'of 51 pairs'}</p></header><div>${sections}</div><p class="comparison-empty" data-comparison-empty hidden>${es ? 'Ninguna pareja coincide.' : 'No Duì Yào pairs match this search.'}</p></main><footer class="comparison-footer"><div class="comparison-shell">${es ? 'Appendix B · 51 parejas · 15 bloques clínicos' : 'Appendix B · 51 pairs · 15 clinical blocks'}</div></footer>${searchScript}</body></html>`;
@@ -1495,7 +1632,8 @@ writeFileSync(
     characters: pair.characters,
     category: pair.category,
     action: { en: pair.en.job, es: pair.es.job },
-    formulas: { en: pair.en.formulas, es: pair.es.formulas }
+    formulas: { en: pair.en.formulas, es: pair.es.formulas },
+    formulaBridge: formulaBridgeByPair.has(pair.number) ? formulaBridgeByPair.get(pair.number) : null
   })), null, 2)}\n`
 );
 console.log(`Generated ${pairs.length * 2} Duì Yào pages, 2 indexes and the structured pair dataset`);

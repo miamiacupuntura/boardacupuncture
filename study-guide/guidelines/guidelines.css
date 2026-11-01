@@ -82,9 +82,9 @@ a { color: inherit; }
 .guide-card .guide-button { align-self: flex-start; margin-top: 12px; }
 .guide-card--wide { grid-column: 1 / -1; }
 .guide-card--purple { border-top-color: var(--purple); }
-.guide-section { margin: 22px 0; padding: 26px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.guide-section { min-width: 0; margin: 22px 0; padding: 26px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
 .guide-section h2 { margin-top: 0; }
-.guide-table-wrap { overflow-x: auto; }
+.guide-table-wrap { max-width: 100%; overflow-x: auto; }
 .guide-table { width: 100%; border-collapse: collapse; }
 .guide-table th,
 .guide-table td { padding: 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -104,6 +104,7 @@ a { color: inherit; }
 .guide-actions--section { margin-top: 18px; }
 .guide-footer { margin-top: 40px; padding: 22px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 .guide-source { color: var(--muted); font-size: .88rem; }
+.guide-source a { overflow-wrap: anywhere; }
 .guide-section--annex { border-top: 5px solid var(--teal); }
 .guide-herb-roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; margin: 22px 0; padding: 0; list-style: none; counter-reset: appendix-herb; }
 .guide-herb-roster li { counter-increment: appendix-herb; position: relative; min-width: 0; padding: 11px 12px 11px 42px; border: 1px solid #d9e4eb; border-radius: 8px; background: #f8fbfc; }
@@ -163,6 +164,34 @@ a { color: inherit; }
 .guide-formula-category__list a:hover,
 .guide-formula-category__list a:focus { color: var(--teal); text-decoration: underline; }
 .guide-formula-category__priority { flex: 0 0 auto; padding: 3px 6px; border-radius: 999px; background: #dff2ed; color: #05665c; font-size: .62rem; font-weight: 900; text-transform: uppercase; }
+.guide-section--final-summary,
+.guide-section--dui-bridge,
+.guide-section--dui-modifications,
+.guide-section--hypothesis { scroll-margin-top: 24px; }
+.guide-section--final-summary { border-top: 5px solid var(--orange); background: linear-gradient(145deg, #fffdf9, #f8fcfb); }
+.guide-section--dui-bridge { border-top: 5px solid #185cca; background: linear-gradient(145deg, #f7faff, #fff); }
+.guide-section--dui-modifications { border-top: 5px solid #7652a8; background: linear-gradient(145deg, #fbf9ff, #fff); }
+.guide-section--hypothesis { border-top: 5px solid var(--teal); background: linear-gradient(145deg, #f7fcfb, #fffdf9); }
+.guide-final-examples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; margin: 18px 0 26px; }
+.guide-final-examples p { margin: 0; padding: 14px 16px; border: 1px solid #d9e4eb; border-radius: 9px; background: #fff; line-height: 1.45; }
+.guide-final-findings { columns: 2 300px; column-gap: 34px; }
+.guide-final-findings li { break-inside: avoid; margin-bottom: 10px; }
+.guide-final-priority th { min-width: 230px; }
+.guide-final-priority td:last-child { width: 180px; text-align: center; }
+.guide-inference { margin: 18px 0; padding: 18px 20px; border-left: 5px solid var(--teal); border-radius: 8px; background: #edf9f6; }
+.guide-inference p:first-child { margin-top: 0; }
+.guide-inference p:last-child { margin-bottom: 0; }
+.guide-alert--warning { border-color: #e3aa65; background: #fff7e9; color: #704114; }
+.guide-hypothetical-weights th:first-child { min-width: 230px; }
+.guide-hypothetical-weights th small { display: block; margin-top: 6px; color: var(--muted); font-weight: 500; }
+.guide-hypothetical-weights code { padding: 2px 5px; border-radius: 4px; background: #edf4f7; font-size: .72rem; }
+.guide-hypothetical-weights td:nth-child(2) { width: 130px; text-align: center; }
+.guide-hypothetical-weights tfoot { background: #edf4f7; }
+.guide-source-note { color: var(--muted); font-size: .9rem; }
+.guide-dui-bridge-table small { display: block; margin-top: 7px; color: var(--muted); line-height: 1.4; }
+.guide-dui-decision th:first-child,
+.guide-dui-modification-table th:first-child { min-width: 210px; }
+.guide-dui-question-mix td:last-child { width: 210px; text-align: center; }
 
 @media (max-width: 900px) {
   .guide-grid--three { grid-template-columns: 1fr; }
@@ -188,6 +217,8 @@ a { color: inherit; }
   .guide-herb-roster { grid-template-columns: 1fr; }
   .guide-dui-action-list,
   .guide-audit-summary { grid-template-columns: 1fr; }
+  .guide-final-examples { grid-template-columns: 1fr; }
+  .guide-final-findings { columns: 1; }
   .guide-roster-comparison__list,
   .guide-roster-change__list { columns: 1; }
   .guide-smart-search { padding: 19px 16px; }
