@@ -1649,7 +1649,13 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
-        <?php $relatedduiyaomarkup = ''; ?>
+        <?php
+        $relatedduiyaomarkup = '';
+        $deferrelatedduiyao = in_array($selected['key'], [
+            'calm-shen-chapter-10',
+            'expel-wind-chapter-14',
+        ], true);
+        ?>
         <?php if ($selectedguide !== null): ?>
             <?php if ($selectedformulasections !== []): ?>
                 <section class="formula-study-guide__medical-rationale" aria-labelledby="clinical-frame-title">
@@ -1825,7 +1831,7 @@ echo $OUTPUT->header();
                 </section>
                 <?php
                 $relatedduiyaomarkup = (string) ob_get_clean();
-                if ($selected['key'] !== 'calm-shen-chapter-10') {
+                if (!$deferrelatedduiyao) {
                     echo $relatedduiyaomarkup;
                 }
                 ?>
@@ -2332,7 +2338,7 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
-        <?php if ($selected['key'] === 'calm-shen-chapter-10'): ?>
+        <?php if ($deferrelatedduiyao): ?>
             <?php echo $relatedduiyaomarkup; ?>
         <?php endif; ?>
         <section class="formula-study-guide__formula-list" aria-label="<?php echo s($ises ? 'Fórmulas de la categoría' : 'Category formulas'); ?>">

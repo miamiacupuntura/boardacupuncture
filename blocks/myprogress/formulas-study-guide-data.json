@@ -2704,6 +2704,44 @@
         }
       ]
     },
+    "expel-wind-chapter-14": {
+      "relatedDuiYaoAnchor": "release-exterior",
+      "relatedDuiYaoTitle": "Related Duì Yào · External Wind, Painful Obstruction and Internal Wind",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Viento externo, obstrucción dolorosa y Viento interno",
+      "relatedDuiYaoText": "These three official Appendix B pairs connect exactly to the three-formula Expel Wind guideline roster. They separate Wind affecting the skin, painful Qi-Blood obstruction in the channels, and internal Liver Wind with dizziness or spasm.",
+      "relatedDuiYaoTextEs": "Estos tres pares oficiales del Appendix B conectan exactamente con las tres fórmulas de Expulsar Viento del guideline. Separan Viento que afecta la piel, obstrucción dolorosa de Qi-Sangre en los canales y Viento interno de Hígado con mareo o espasmo.",
+      "relatedDuiYaoCaveat": "Each complete pair occurs inside its linked guideline formula, but the pair does not replace the complete prescription or its safety profile. Xiǎo Huó Luò Dān contains processed toxic aconites, and acute neurologic signs require urgent medical evaluation. Only the three required Expel Wind formulas are named here.",
+      "relatedDuiYaoCaveatEs": "Cada pareja completa aparece dentro de su fórmula enlazada del guideline, pero no sustituye la prescripción completa ni su perfil de seguridad. Xiǎo Huó Luò Dān contiene acónitos tóxicos procesados y los signos neurológicos agudos requieren valoración médica urgente. Aquí solo se nombran las tres fórmulas obligatorias de Expulsar Viento.",
+      "relatedDuiYao": [
+        {
+          "number": 5,
+          "slug": "jing-jie-fang-feng-dui-yao",
+          "title": "Jīng Jiè + Fáng Fēng",
+          "characters": "荆芥 + 防风",
+          "action": "Dispel Wind from the surface and stop itching across Wind-Cold, Wind-Heat, rash and early sore presentations.",
+          "actionEs": "Expulsar Viento de la superficie y detener picor en Viento-Frío, Viento-Calor, erupciones y llagas tempranas.",
+          "formulas": "Xiāo Fēng Sǎn."
+        },
+        {
+          "number": 35,
+          "slug": "ru-xiang-mo-yao-dui-yao",
+          "title": "Rǔ Xiāng + Mò Yào",
+          "characters": "乳香 + 没药",
+          "action": "Invigorate Blood, move Qi, reduce swelling, stop pain and support tissue repair.",
+          "actionEs": "Movilizar Sangre, mover Qi, reducir hinchazón, detener dolor y apoyar reparación tisular.",
+          "formulas": "Xiǎo Huó Luò Dān."
+        },
+        {
+          "number": 51,
+          "slug": "tian-ma-gou-teng-dui-yao",
+          "title": "Tiān Má + Gōu Téng",
+          "characters": "天麻 + 钩藤",
+          "action": "Calm the Liver, extinguish internal Wind, stop dizziness and headache and ease spasms.",
+          "actionEs": "Calmar Hígado, extinguir Viento interno, detener mareo/cefalea y aliviar espasmos.",
+          "formulas": "Tiān Má Gōu Téng Yǐn."
+        }
+      ]
+    },
     "treat-dryness-ch15": {
       "priorityTitle": "Chapter 15: first decide whether dryness is external or internal",
       "priorityTitleEs": "Capítulo 15: primero decide si la Sequedad es externa o interna",

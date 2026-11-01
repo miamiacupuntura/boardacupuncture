@@ -128,6 +128,7 @@ php -r '
     $calmShenDuiYao = $data["categoryGuides"]["calm-shen-chapter-10"]["relatedDuiYao"] ?? [];
     $regulateQiDuiYao = $data["categoryGuides"]["regulate-qi-chapter-12"]["relatedDuiYao"] ?? [];
     $invigorateBloodDuiYao = $data["categoryGuides"]["regulate-blood-chapter-13"]["relatedDuiYao"] ?? [];
+    $expelWindDuiYao = $data["categoryGuides"]["expel-wind-chapter-14"]["relatedDuiYao"] ?? [];
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
     $purgeDuiYao = $data["categoryGuides"]["purge"]["relatedDuiYao"] ?? [];
     $purgeSectionNames = [];
@@ -155,6 +156,7 @@ php -r '
         "calm-shen-chapter-10" => "regulate-blood",
         "regulate-qi-chapter-12" => "descend-stomach-qi",
         "regulate-blood-chapter-13" => "regulate-blood",
+        "expel-wind-chapter-14" => "release-exterior",
         "expel-damp-chapter-16" => "drain-damp",
         "transform-phlegm-chapter-17" => "cough-phlegm",
     ];
@@ -260,6 +262,10 @@ php -r '
             || array_column($invigorateBloodDuiYao, "formulas") !== [
                 "Wēn Jīng Tāng.", "Xuè Fǔ Zhú Yū Tāng.", "Táo Hé Chéng Qì Tāng."
             ]
+            || array_column($expelWindDuiYao, "number") !== [5, 35, 51]
+            || array_column($expelWindDuiYao, "formulas") !== [
+                "Xiāo Fēng Sǎn.", "Xiǎo Huó Luò Dān.", "Tiān Má Gōu Téng Yǐn."
+            ]
             || array_column($purgeSections, "key") !== [
                 "severe-complete-clumping", "moderate-clumping", "dryness-predominant"
             ]
@@ -342,7 +348,7 @@ grep -q "Abrir familia unificada →" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'calm-shen' => 'calm-shen-chapter-10'" "$TEMP_DIR/formulas-study-guide.php"
 ! grep -q "Calm Shen main category" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "\$relatedduiyaomarkup = (string) ob_get_clean()" "$TEMP_DIR/formulas-study-guide.php"
-grep -q "selected\['key'\] === 'calm-shen-chapter-10'" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "\$deferrelatedduiyao = in_array" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "open-orifices-chapter-11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 11" "$TEMP_DIR/formulas-study-guide.php"
@@ -443,6 +449,8 @@ grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TEMP_DIR/fo
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "tao-ren-hong-hua-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Viento externo, obstrucción dolorosa y Viento interno" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "tian-ma-gou-teng-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Vínculo con fórmula del guideline" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
@@ -521,6 +529,7 @@ grep -q "Calmar el Shen / Calmar el Espíritu" "$TARGET_DIR/formulas-study-guide
 grep -q "'calm-shen' => 'calm-shen-chapter-10'" "$TARGET_DIR/formulas-study-guide.php"
 ! grep -q "Calm Shen main category" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "\$relatedduiyaomarkup = (string) ob_get_clean()" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "\$deferrelatedduiyao = in_array" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "open-orifices-chapter-11" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato relevante para el examen · 0 de 7 en Appendix C 2026" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "regulate-qi-chapter-12" "$TARGET_DIR/formulas-study-guide.php"
@@ -612,6 +621,8 @@ grep -q "Duì Yào relacionados · Restaurar la dirección del Qi" "$TARGET_DIR/
 grep -q '"slug": "ban-xia-sheng-jiang-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Movilizar Sangre y disipar estasis" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "tao-ren-hong-hua-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Viento externo, obstrucción dolorosa y Viento interno" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "tian-ma-gou-teng-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Vínculo con fórmula del guideline" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
@@ -661,9 +672,10 @@ echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE TONIFY LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA DE STABILIZE AND BIND LIMITADA AL GUIDELINE"
 echo "CALM SHEN UNIFICADO: LA TARJETA ABRE DIRECTAMENTE EL CAPÍTULO 10 COMPLETO"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 COMPARACIÓN DIVIDIDA DE CALM SHEN LIMITADA AL GUIDELINE"
-echo "BLOQUE DUÌ YÀO DE CALM SHEN MOVIDO JUSTO ANTES DE LA PRIMERA SECCIÓN DEL CAPÍTULO 10"
+echo "BLOQUES DUÌ YÀO DE CALM SHEN Y EXPEL WIND MOVIDOS JUSTO ANTES DE SU PRIMERA SECCIÓN"
 echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE REGULATE QI LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE INVIGORATE BLOOD LIMITADAS AL GUIDELINE"
+echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE EXPEL WIND LIMITADAS AL GUIDELINE"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
