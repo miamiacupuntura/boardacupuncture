@@ -11,6 +11,7 @@ $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
 $chapterfocusaliases = [
     'regulate-qi' => 'regulate-qi-chapter-12',
     'invigorate-blood' => 'regulate-blood-chapter-13',
+    'expel-wind' => 'expel-wind-chapter-14',
 ];
 $focus = $chapterfocusaliases[$focus] ?? $focus;
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
@@ -18,8 +19,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 14
-        || count($data['supplementalFormulas'] ?? []) !== 131) {
+        || count($data['supplementalCategories'] ?? []) !== 15
+        || count($data['supplementalFormulas'] ?? []) !== 145) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -116,6 +117,10 @@ $categorycopy = [
         'Compare all 23 principal formulas in Bensky Chapter 13 across Blood stasis and bleeding patterns, with Heat, Cold, deficiency, location, and urgency as decisive separators.',
         'Compara las 23 fórmulas principales del capítulo 13 de Bensky entre patrones de estasis y sangrado, usando Calor, Frío, deficiencia, localización y urgencia como separadores decisivos.',
     ],
+    'expel-wind-chapter-14' => [
+        'Compare all 17 principal formulas in Bensky Chapter 14 by external versus internal Wind, Heat, Cold, Phlegm, Blood-Yin deficiency, channel location, and urgency.',
+        'Compara las 17 fórmulas principales del capítulo 14 de Bensky por Viento externo o interno, Calor, Frío, Flema, deficiencia de Sangre-Yin, localización en canales y urgencia.',
+    ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
         'Distingue la deficiencia de Qi por órgano, hundimiento, Exterior inestable, pérdida de líquidos, Humedad e incapacidad para captar Qi.',
@@ -175,6 +180,14 @@ $categoryreferences = [
         'Complete Bensky source: 23 principal formulas in two sections. Board overlap: 4—Tao He Cheng Qi Tang, Xue Fu Zhu Yu Tang, Wen Jing Tang, and Gui Zhi Fu Ling Wan.',
         'Fuente Bensky completa: 23 fórmulas principales en dos secciones. Coincidencia Board: 4—Tao He Cheng Qi Tang, Xue Fu Zhu Yu Tang, Wen Jing Tang y Gui Zhi Fu Ling Wan.',
     ],
+    'expel-wind' => [
+        'Official Board category: 3 formulas. All three also appear among the 17 principal formulas in complete Bensky Chapter 14.',
+        'Categoría oficial del Board: 3 fórmulas. Las tres también aparecen entre las 17 fórmulas principales del capítulo 14 completo de Bensky.',
+    ],
+    'expel-wind-chapter-14' => [
+        'Complete Bensky source: 17 principal formulas in two sections. Board overlap: 3—Xiao Feng San, Xiao Huo Luo Dan, and Tian Ma Gou Teng Yin.',
+        'Fuente Bensky completa: 17 fórmulas principales en dos secciones. Coincidencia Board: 3—Xiao Feng San, Xiao Huo Luo Dan y Tian Ma Gou Teng Yin.',
+    ],
 ];
 
 $categories = [];
@@ -228,6 +241,7 @@ $calmshenchaptersourcecategory = $supplementalcategories['calm-shen-ch10'];
 $openorificeschaptersourcecategory = $supplementalcategories['open-orifices-ch11'];
 $regulateqichaptersourcecategory = $supplementalcategories['regulate-qi-ch12'];
 $regulatebloodchaptersourcecategory = $supplementalcategories['regulate-blood-ch13'];
+$expelwindchaptersourcecategory = $supplementalcategories['expel-wind-ch14'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -567,6 +581,67 @@ $regulatebloodchapteroverview = [
     'formulas' => $regulatebloodchapterformulas,
 ];
 
+$expelwindchaptersections = [
+    'external' => [
+        'key' => 'external', 'name' => 'Dredge and Disperse External Wind',
+        'nameEs' => 'Desobstruir y dispersar Viento externo', 'sourcePages' => '619–643',
+        'copy' => 'First identify an external or channel-level Wind presentation, then distinguish Cold, Heat, Phlegm, Dampness, Blood deficiency, trauma, skin disease, and toxic emergency patterns.',
+        'copyEs' => 'Primero identifica un cuadro de Viento externo o de canales y luego distingue Frío, Calor, Flema, Humedad, deficiencia de Sangre, trauma, enfermedad cutánea y patrones tóxicos de urgencia.',
+    ],
+    'internal' => [
+        'key' => 'internal', 'name' => 'Pacify and Extinguish Internal Wind',
+        'nameEs' => 'Pacificar y extinguir Viento interno', 'sourcePages' => '639–655',
+        'copy' => 'Separate Heat excess generating Wind, Liver-Yang ascendance, and late-stage Blood-Yin-fluid depletion; the root determines whether to clear, anchor, direct downward, or deeply enrich.',
+        'copyEs' => 'Separa Calor de exceso que genera Viento, ascenso de Yang de Hígado y agotamiento tardío de Sangre-Yin-líquidos; la raíz determina si aclarar, anclar, dirigir hacia abajo o enriquecer profundamente.',
+    ],
+];
+$expelwindchapterplan = [
+    ['Xiao Xu Ming Tang', 1, 'external', 'Minor Extend Life Decoction', '619–622'],
+    ['San Sheng Yin', 2, 'external', 'Drink from Three Unprepared Ingredients', '622–624'],
+    ['Chuan Xiong Cha Tiao San', 3, 'external', 'Chuanxiong Powder to Be Taken with Green Tea', '624–628'],
+    ['Cang Er Zi San', 4, 'external', 'Xanthium Powder', '628–630'],
+    ['Da Qin Jiao Tang', 5, 'external', 'Major Large Gentian Decoction', '630–634'],
+    ['Xiao Huo Luo Dan', 6, 'external', 'Minor Invigorate the Collaterals Special Pill', '634–636'],
+    ['Qian Zheng San', 7, 'external', 'Lead to Symmetry Powder', '636–637'],
+    ['Zhi Jing San', 8, 'external', 'Stop Spasms Powder', '637–638'],
+    ['Yu Zhen San', 9, 'external', 'True Jade Powder', '638–639'],
+    ['Xiao Feng San', 10, 'external', 'Eliminate Wind Powder from Orthodox Lineage', '639–642'],
+    ['Feng Yin Tang', 11, 'external', 'Wind-Drawing Decoction', '642–643'],
+    ['Ling Jiao Gou Teng Tang', 12, 'internal', 'Antelope Horn and Uncaria Decoction', '639–644'],
+    ['Zhen Gan Xi Feng Tang', 13, 'internal', 'Sedate the Liver and Extinguish Wind Decoction', '644–647'],
+    ['Tian Ma Gou Teng Yin', 14, 'internal', 'Gastrodia and Uncaria Drink', '647–649'],
+    ['San Jia Fu Mai Tang', 15, 'internal', 'Three-Shell Decoction to Restore the Pulse', '649–651'],
+    ['Da Ding Feng Zhu', 16, 'internal', 'Major Arrest Wind Pearls', '651–653'],
+    ['E Jiao Ji Zi Huang Tang', 17, 'internal', 'Ass-Hide Gelatin and Egg Yolk Decoction', '653–655'],
+];
+$expelwindsupplementbyname = [];
+foreach ($expelwindchaptersourcecategory['formulas'] as $formula) {
+    $expelwindsupplementbyname[$formula['name']] = $formula;
+}
+$expelwindchapterformulas = [];
+foreach ($expelwindchapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $expelwindsupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 14 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $expelwindchaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $expelwindchaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $expelwindchapterformulas[] = $formula;
+}
+$expelwindchapteroverview = [
+    'number' => 'S10',
+    'key' => 'expel-wind-chapter-14',
+    'name' => 'Formulas That Expel Wind · Complete Bensky Chapter 14',
+    'nameEs' => 'Fórmulas que expulsan el Viento · Capítulo 14 completo de Bensky',
+    'sourceChapter' => 14,
+    'sourcePages' => '619–657',
+    'formulas' => $expelwindchapterformulas,
+];
+
 $supplementalindexcategories = [];
 foreach ($supplementalcategories as $categorykey => $category) {
     if (!in_array($categorykey, $tonifychapterkeys, true)
@@ -575,7 +650,8 @@ foreach ($supplementalcategories as $categorykey => $category) {
             && $categorykey !== 'calm-shen-ch10'
             && $categorykey !== 'open-orifices-ch11'
             && $categorykey !== 'regulate-qi-ch12'
-            && $categorykey !== 'regulate-blood-ch13') {
+            && $categorykey !== 'regulate-blood-ch13'
+            && $categorykey !== 'expel-wind-ch14') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
@@ -587,11 +663,13 @@ $supplementalcategories[$calmshenchapteroverview['key']] = $calmshenchapteroverv
 $supplementalcategories[$openorificeschapteroverview['key']] = $openorificeschapteroverview;
 $supplementalcategories[$regulateqichapteroverview['key']] = $regulateqichapteroverview;
 $supplementalcategories[$regulatebloodchapteroverview['key']] = $regulatebloodchapteroverview;
+$supplementalcategories[$expelwindchapteroverview['key']] = $expelwindchapteroverview;
 unset($supplementalcategories['stabilize-bind-ch9']);
 unset($supplementalcategories['calm-shen-ch10']);
 unset($supplementalcategories['open-orifices-ch11']);
 unset($supplementalcategories['regulate-qi-ch12']);
 unset($supplementalcategories['regulate-blood-ch13']);
+unset($supplementalcategories['expel-wind-ch14']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -666,6 +744,11 @@ if ($ises) {
     $regulatebloodchapterparams['lang'] = 'es';
 }
 $regulatebloodchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $regulatebloodchapterparams);
+$expelwindchapterparams = ['focus' => 'expel-wind-chapter-14'];
+if ($ises) {
+    $expelwindchapterparams['lang'] = 'es';
+}
+$expelwindchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $expelwindchapterparams);
 $languageparams = $selected === null ? [] : ['focus' => $selected['key']];
 if (!$ises) {
     $languageparams['lang'] = 'es';
@@ -813,7 +896,8 @@ echo $OUTPUT->header();
                 $isstabilizeindexcard = $category['key'] === 'stabilize-bind';
                 $isregulateqiindexcard = $category['key'] === 'regulate-qi';
                 $isinvigoratebloodindexcard = $category['key'] === 'invigorate-blood';
-                $iscombinedindexcard = $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard;
+                $isexpelwindindexcard = $category['key'] === 'expel-wind';
+                $iscombinedindexcard = $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
@@ -833,6 +917,10 @@ echo $OUTPUT->header();
                     $categorymeta = $ises
                         ? '4 fórmulas Board · Capítulo 13 de Bensky: 23'
                         : '4 Board formulas · Bensky Chapter 13: 23';
+                } elseif ($isexpelwindindexcard) {
+                    $categorymeta = $ises
+                        ? '3 fórmulas Board · Capítulo 14 de Bensky: 17'
+                        : '3 Board formulas · Bensky Chapter 14: 17';
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
@@ -1349,6 +1437,49 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
+        <?php if ($selected['key'] === 'expel-wind-chapter-14'): ?>
+            <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 14, páginas 619–657.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 14, pages 619–657.'); ?></p>
+            <section class="formula-study-guide__priority" aria-labelledby="chapter-fourteen-principles-title">
+                <h4 id="chapter-fourteen-principles-title"><?php echo s($ises ? 'Principio central: localiza el Viento y determina qué lo impulsa' : 'Core principle: locate the Wind and determine what drives it'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'El Viento externo invade piel o canales y suele combinarse con Frío, Calor, Humedad o Flema. El Viento interno surge de Calor extremo, ascenso de Yang o agotamiento de Sangre, Yin y líquidos. La fórmula correcta depende de tratar simultáneamente la manifestación móvil y su raíz.'
+                    : 'External Wind invades the skin or channels and commonly combines with Cold, Heat, Dampness, or Phlegm. Internal Wind arises from extreme Heat, rising Yang, or depletion of Blood, Yin, and fluids. The correct formula treats both the moving manifestation and its root.'); ?></p>
+                <h5><?php echo s($ises ? 'Ruta de estudio del capítulo' : 'Chapter study route'); ?></h5>
+                <div class="formula-study-guide__route">
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">1</span><?php echo s($ises ? 'Externo o interno' : 'External or internal'); ?></b><p><?php echo s($ises ? 'Piel, nariz y canales apuntan a invasión; convulsión, vértigo y movimiento involuntario exigen buscar raíz interna.' : 'Skin, nose, and channels point to invasion; seizure, vertigo, and involuntary movement require an internal-root analysis.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Exceso o deficiencia' : 'Excess or deficiency'); ?></b><p><?php echo s($ises ? 'Calor alto y pulso fuerte indican exceso; lengua pelada, sequedad y pulso frágil indican agotamiento.' : 'High fever and a forceful pulse indicate excess; a peeled tongue, dryness, and frail pulse indicate depletion.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">3</span><?php echo s($ises ? 'Identifica la raíz' : 'Identify the root'); ?></b><p><?php echo s($ises ? 'Frío, Calor, Flema, Humedad, Yang ascendente o deficiencia de Sangre-Yin-líquidos.' : 'Cold, Heat, Phlegm, Dampness, rising Yang, or Blood-Yin-fluid deficiency.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Reconoce urgencias' : 'Recognize emergencies'); ?></b><p><?php echo s($ises ? 'Ictus, convulsión, pérdida de conciencia, tétanos, meningitis o crisis hipertensiva requieren atención inmediata.' : 'Stroke, seizure, loss of consciousness, tetanus, meningitis, or hypertensive crisis requires immediate care.'); ?></p></div>
+                </div>
+            </section>
+            <section class="formula-study-guide__board-verification" aria-labelledby="chapter-fourteen-board-title">
+                <div>
+                    <h4 id="chapter-fourteen-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 3 de 17' : 'Board Domains overlap · 3 of 17'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco marca Xiao Feng San (#55), Xiao Huo Luo Dan (#56) y Tian Ma Gou Teng Yin (#57). Las otras 14 fichas completan Bensky sin ampliar el listado oficial de 63.' : 'An asterisk marks Xiao Feng San (#55), Xiao Huo Luo Dan (#56), and Tian Ma Gou Teng Yin (#57). The other 14 cards complete Bensky without enlarging the official roster of 63.'); ?></p>
+                </div>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+            </section>
+            <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-fourteen-directory-title">
+                <h4 id="chapter-fourteen-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 14' : 'Complete Chapter 14 directory'); ?></h4>
+                <p><?php echo s($ises ? 'Las 17 fórmulas principales siguen las dos secciones de la fuente. Las fórmulas asociadas y variaciones con nombre propio permanecen dentro de la ficha principal correspondiente.' : 'The 17 principal formulas follow the source’s two sections. Associated formulas and named variations remain inside the corresponding principal card.'); ?></p>
+                <div class="formula-study-guide__chapter-directory-grid">
+                    <?php foreach ($expelwindchaptersections as $sectionkey => $section): ?>
+                        <?php $sectionformulas = array_values(array_filter($selected['formulas'], static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey)); ?>
+                        <section class="formula-study-guide__chapter-directory-group">
+                            <h5><a href="#chapter-section-<?php echo s($sectionkey); ?>"><?php echo s($ises ? $section['nameEs'] : $section['name']); ?> · <?php echo count($sectionformulas); ?></a></h5>
+                            <ol>
+                                <?php foreach ($sectionformulas as $chapterformula): ?>
+                                    <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </section>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
         <?php if ($selected['key'] === 'warm-interior'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-six-shortcut-title">
                 <h4 id="chapter-six-shortcut-title"><?php echo s($ises ? 'Ampliación del capítulo 6 · ' : 'Chapter 6 expansion · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></h4>
@@ -1365,9 +1496,9 @@ echo $OUTPUT->header();
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
                 $chapterformulaindex++;
-                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13'], true)
+                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
-                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13'], true)
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14'], true)
                     && $lastformulacategory !== $currentsectionkey;
                 if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
                     $formulacategory = $stabilizechaptersections[$currentsectionkey];
@@ -1399,6 +1530,12 @@ echo $OUTPUT->header();
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
                     ));
+                } elseif ($newchaptersection && $selected['key'] === 'expel-wind-chapter-14') {
+                    $formulacategory = $expelwindchaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
                 } else {
                     $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
                 }
@@ -1415,7 +1552,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13'], true)) {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -1434,7 +1571,7 @@ echo $OUTPUT->header();
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13'], true)
+                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>

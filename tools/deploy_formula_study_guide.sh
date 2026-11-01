@@ -60,16 +60,21 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "regulate-blood-ch13"
     );
+    $chapter14 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-wind-ch14"
+    );
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 14
-            || count($data["supplementalFormulas"] ?? []) !== 131
+            || count($data["supplementalCategories"] ?? []) !== 15
+            || count($data["supplementalFormulas"] ?? []) !== 145
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
             || count($chapter11) !== 7
             || count($chapter12) !== 15
-            || count($chapter13) !== 19) {
+            || count($chapter13) !== 19
+            || count($chapter14) !== 14) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
@@ -115,6 +120,13 @@ grep -q "'invigorate-blood' => 'regulate-blood-chapter-13'" "$TEMP_DIR/formulas-
 ! grep -q "Ver 19 fórmulas adicionales de Bensky · Capítulo 13" "$TEMP_DIR/formulas-study-guide.php"
 ! grep -q "Abrir las 23 fichas del capítulo 13 →" "$TEMP_DIR/formulas-study-guide.php"
 ! grep -q "Invigorate Blood main category" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "expel-wind-chapter-14" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 14" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo del capítulo 14" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "3 fórmulas Board · Capítulo 14 de Bensky: 17" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Coincidencia con los Board Domains · 3 de 17" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "'expel-wind' => 'expel-wind-chapter-14'" "$TEMP_DIR/formulas-study-guide.php"
+! grep -q "Expel Wind main category" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -177,11 +189,16 @@ grep -q "'invigorate-blood' => 'regulate-blood-chapter-13'" "$TARGET_DIR/formula
 ! grep -q "Ver 19 fórmulas adicionales de Bensky · Capítulo 13" "$TARGET_DIR/formulas-study-guide.php"
 ! grep -q "Abrir las 23 fichas del capítulo 13 →" "$TARGET_DIR/formulas-study-guide.php"
 ! grep -q "Invigorate Blood main category" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "expel-wind-chapter-14" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "3 fórmulas Board · Capítulo 14 de Bensky: 17" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Coincidencia con los Board Domains · 3 de 17" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "'expel-wind' => 'expel-wind-chapter-14'" "$TARGET_DIR/formulas-study-guide.php"
+! grep -q "Expel Wind main category" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11, 12 Y 13 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12, 13 Y 14 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"
@@ -195,6 +212,8 @@ echo "CAPÍTULO 12 INSTALADO: 20 fórmulas en 2 secciones (15 perfiles nuevos + 
 echo "VISTA ÚNICA INSTALADA: REGULATE QI ABRE DIRECTAMENTE EL CAPÍTULO 12 COMPLETO"
 echo "CAPÍTULO 13 INSTALADO: 23 fórmulas en 2 secciones (19 perfiles nuevos + 4 Board)"
 echo "VISTA ÚNICA INSTALADA: INVIGORATE BLOOD ABRE DIRECTAMENTE EL CAPÍTULO 13 COMPLETO"
+echo "CAPÍTULO 14 INSTALADO: 17 fórmulas en 2 secciones (14 perfiles nuevos + 3 Board)"
+echo "VISTA ÚNICA INSTALADA: EXPEL WIND ABRE DIRECTAMENTE EL CAPÍTULO 14 COMPLETO"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
