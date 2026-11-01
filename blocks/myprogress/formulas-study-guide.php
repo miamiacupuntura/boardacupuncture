@@ -1163,28 +1163,28 @@ echo $OUTPUT->header();
                     : ($ises ? $category['nameEs'] : $category['name']);
                 if ($iswarminteriorindexcard) {
                     $categorymeta = $ises
-                        ? 'Coincidencia Board: 4 de 11 · Capítulo 6 de Bensky'
-                        : 'Board overlap: 4 of 11 · Bensky Chapter 6';
+                        ? '4 fórmulas Board · Capítulo 6 de Bensky: 11'
+                        : '4 Board formulas · Bensky Chapter 6: 11';
                 } elseif ($iscalmshenindexcard) {
                     $categorymeta = $ises
-                        ? 'Coincidencia Board: 3 de 9 · Capítulo 10 de Bensky'
-                        : 'Board overlap: 3 of 9 · Bensky Chapter 10';
+                        ? '3 fórmulas Board · Capítulo 10 de Bensky: 9'
+                        : '3 Board formulas · Bensky Chapter 10: 9';
                 } elseif ($isstabilizeindexcard) {
                     $categorymeta = $ises
-                        ? 'Coincidencia Board: 2 de 17 · Capítulo 9 de Bensky'
-                        : 'Board overlap: 2 of 17 · Bensky Chapter 9';
+                        ? '3 fórmulas Board · Capítulo 9 de Bensky: 17'
+                        : '3 Board formulas · Bensky Chapter 9: 17';
                 } elseif ($isregulateqiindexcard) {
                     $categorymeta = $ises
-                        ? 'Coincidencia Board: 5 de 20 · Capítulo 12 de Bensky'
-                        : 'Board overlap: 5 of 20 · Bensky Chapter 12';
+                        ? '5 fórmulas Board · Capítulo 12 de Bensky: 20'
+                        : '5 Board formulas · Bensky Chapter 12: 20';
                 } elseif ($isinvigoratebloodindexcard) {
                     $categorymeta = $ises
-                        ? 'Coincidencia Board: 4 de 23 · Capítulo 13 de Bensky'
-                        : 'Board overlap: 4 of 23 · Bensky Chapter 13';
+                        ? '4 fórmulas Board · Capítulo 13 de Bensky: 23'
+                        : '4 Board formulas · Bensky Chapter 13: 23';
                 } elseif ($isexpelwindindexcard) {
                     $categorymeta = $ises
-                        ? 'Coincidencia Board: 3 de 17 · Capítulo 14 de Bensky'
-                        : 'Board overlap: 3 of 17 · Bensky Chapter 14';
+                        ? '3 fórmulas Board · Capítulo 14 de Bensky: 17'
+                        : '3 Board formulas · Bensky Chapter 14: 17';
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
@@ -1195,7 +1195,7 @@ echo $OUTPUT->header();
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($categoryname); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
-                    <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
+                    <?php if ($iscombinedindexcard): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span><?php endif; ?>
                     <p><?php echo s($copy); ?></p>
                     <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                     <small><?php echo s($iscombinedindexcard
@@ -1258,7 +1258,7 @@ echo $OUTPUT->header();
                 ? (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages'])
                 : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
-            <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span>
+            <?php if ($issupplemental || isset($unifiedfamilystatusformulas[$selected['key']])): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
             <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'); ?></strong></p>
             <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
