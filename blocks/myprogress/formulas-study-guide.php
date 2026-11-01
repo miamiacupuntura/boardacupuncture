@@ -138,6 +138,14 @@ $categoryreferences = [
         'Complete Bensky source: 17 formulas. Board overlap: 2. Yu Ping Feng San is the third official Board formula, but Bensky studies it in Chapter 8.',
         'Fuente Bensky completa: 17 fórmulas. Coincidencia Board: 2. Yu Ping Feng San es la tercera fórmula oficial, pero Bensky la estudia en el capítulo 8.',
     ],
+    'calm-shen' => [
+        'Official Board category: 3 formulas. Cross-reference: all three also appear within the nine principal formulas of complete Bensky Chapter 10.',
+        'Categoría oficial del Board: 3 fórmulas. Referencia cruzada: las tres también aparecen entre las 9 fórmulas principales del capítulo 10 completo de Bensky.',
+    ],
+    'calm-shen-chapter-10' => [
+        'Complete Bensky source: 9 formulas. Board overlap: 3—Suan Zao Ren Tang, Tian Wang Bu Xin Dan, and Gan Mai Da Zao Tang.',
+        'Fuente Bensky completa: 9 fórmulas. Coincidencia Board: 3—Suan Zao Ren Tang, Tian Wang Bu Xin Dan y Gan Mai Da Zao Tang.',
+    ],
 ];
 
 $categories = [];
