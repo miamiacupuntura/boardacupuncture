@@ -106,6 +106,7 @@ php -r '
         }
     }
     $releaseSections = $data["categoryGuides"]["release-exterior"]["formulaSections"] ?? [];
+    $releaseDuiYao = $data["categoryGuides"]["release-exterior"]["relatedDuiYao"] ?? [];
     $releaseSectionNames = [];
     foreach ($releaseSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
@@ -113,6 +114,7 @@ php -r '
         }
     }
     $clearHeatSections = $data["categoryGuides"]["clear-heat"]["formulaSections"] ?? [];
+    $clearHeatDuiYao = $data["categoryGuides"]["clear-heat"]["relatedDuiYao"] ?? [];
     $clearHeatSectionNames = [];
     foreach ($clearHeatSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
@@ -121,6 +123,7 @@ php -r '
     }
     $harmonizeDuiYao = $data["categoryGuides"]["harmonize"]["relatedDuiYao"] ?? [];
     $warmInteriorDuiYao = $data["categoryGuides"]["warm-interior"]["relatedDuiYao"] ?? [];
+    $tonifyDuiYao = $data["categoryGuides"]["tonify"]["relatedDuiYao"] ?? [];
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
     $purgeDuiYao = $data["categoryGuides"]["purge"]["relatedDuiYao"] ?? [];
     $purgeSectionNames = [];
@@ -135,6 +138,22 @@ php -r '
     foreach ($purgeReferenceGroups as $group) {
         foreach ($group["items"] ?? [] as $item) {
             $purgeReferenceNames[] = $item[0] ?? "";
+        }
+    }
+    $expectedDuiYaoAnchors = [
+        "release-exterior" => "release-exterior",
+        "clear-heat" => "clear-heat",
+        "purge" => "purgatives-laxatives",
+        "harmonize" => "harmonizing",
+        "warm-interior" => "tonics",
+        "tonify" => "tonics",
+        "expel-damp-chapter-16" => "drain-damp",
+        "transform-phlegm-chapter-17" => "cough-phlegm",
+    ];
+    foreach ($expectedDuiYaoAnchors as $guideKey => $anchor) {
+        if (($data["categoryGuides"][$guideKey]["relatedDuiYaoAnchor"] ?? "") !== $anchor) {
+            fwrite(STDERR, "ERROR: ancla Duì Yào incorrecta para {$guideKey}.\n");
+            exit(1);
         }
     }
     if (($data["version"] ?? null) !== 7
@@ -162,8 +181,11 @@ php -r '
                 !== [5, 10, 5, 7, 6]
             || count($dampnessSectionNames) !== 33
             || count(array_unique($dampnessSectionNames)) !== 33
-            || array_column($dampnessDuiYao, "number") !== [19, 20, 31, 44, 47, 48]
-            || count(array_unique(array_column($dampnessDuiYao, "slug"))) !== 6
+            || array_column($dampnessDuiYao, "number") !== [19, 31, 47]
+            || array_column($dampnessDuiYao, "formulas") !== [
+                "Wǔ Líng Sǎn.", "Dú Huó Jì Shēng Tāng.",
+                "Huò Xiāng Zhèng Qì Sǎn — modification with Pèi Lán."
+            ]
             || array_column($phlegmSections, "key") !== [
                 "dry-damp-transform", "clear-heat-transform", "disperse-clumping",
                 "moisten-dryness", "warm-phlegm-cold", "transform-extinguish-wind", "induce-vomiting"
@@ -172,8 +194,8 @@ php -r '
                 !== [6, 3, 2, 1, 2, 3, 1]
             || count($phlegmSectionNames) !== 18
             || count(array_unique($phlegmSectionNames)) !== 18
-            || array_column($phlegmDuiYao, "number") !== [2, 37, 39, 40, 41]
-            || count(array_unique(array_column($phlegmDuiYao, "slug"))) !== 5
+            || array_column($phlegmDuiYao, "number") !== [37]
+            || array_column($phlegmDuiYao, "formulas") !== ["Èr Chén Tāng."]
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -186,6 +208,11 @@ php -r '
                 "Ma Huang Tang", "Gui Zhi Tang", "Ge Gen Tang", "Ren Shen Bai Du San",
                 "Sang Ju Yin", "Yin Qiao San", "Chai Ge Jie Ji Tang"
             ]
+            || array_column($releaseDuiYao, "number") !== [1, 2, 4, 7, 15, 16, 22]
+            || array_column($releaseDuiYao, "formulas") !== [
+                "Má Huáng Tāng.", "Má Huáng Tāng.", "Guì Zhī Tāng.", "Sāng Jú Yǐn.",
+                "Yín Qiáo Sǎn.", "Yín Qiáo Sǎn.", "Guì Zhī Tāng."
+            ]
             || array_column($clearHeatSections, "key") !== [
                 "qi-level-heat", "fire-toxin", "organ-heat", "hidden-deficiency-heat"
             ]
@@ -193,10 +220,21 @@ php -r '
                 "Bai Hu Tang", "Huang Lian Jie Du Tang", "Ma Xing Shi Gan Tang",
                 "Long Dan Xie Gan Tang", "Qing Hao Bie Jia Tang"
             ]
+            || array_column($clearHeatDuiYao, "number") !== [3, 11, 17]
+            || array_column($clearHeatDuiYao, "formulas") !== [
+                "Má Xìng Shí Gān Tāng.", "Bái Hǔ Tāng.", "Qīng Hāo Biē Jiǎ Tāng."
+            ]
             || array_column($harmonizeDuiYao, "number") !== [38, 45, 46]
-            || count(array_unique(array_column($harmonizeDuiYao, "slug"))) !== 3
+            || array_column($harmonizeDuiYao, "formulas") !== [
+                "Xiǎo Chái Hú Tāng.", "Xiǎo Chái Hú Tāng.", "Sì Nì Sǎn; Xiāo Yáo Sǎn."
+            ]
             || array_column($warmInteriorDuiYao, "number") !== [42, 44]
-            || count(array_unique(array_column($warmInteriorDuiYao, "slug"))) !== 2
+            || array_column($warmInteriorDuiYao, "formulas") !== ["Sì Nì Tāng.", "Lǐ Zhōng Wán."]
+            || array_column($tonifyDuiYao, "number") !== [9, 18, 19, 24]
+            || array_column($tonifyDuiYao, "formulas") !== [
+                "Bǔ Zhōng Yì Qì Tāng.", "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng.",
+                "Sì Jūn Zǐ Tāng.", "Sì Wù Tāng."
+            ]
             || array_column($purgeSections, "key") !== [
                 "severe-complete-clumping", "moderate-clumping", "dryness-predominant"
             ]
@@ -365,7 +403,9 @@ grep -q '"slug": "chai-hu-huang-qin-dui-yao"' "$TEMP_DIR/formulas-study-guide-da
 grep -q "Duì Yào relacionados · Calentar el Centro y rescatar Yang" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "fu-zi-gan-jiang-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
-grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Transformar Flema-Humedad" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -520,7 +560,9 @@ grep -q '"slug": "chai-hu-huang-qin-dui-yao"' "$TARGET_DIR/formulas-study-guide-
 grep -q "Duì Yào relacionados · Calentar el Centro y rescatar Yang" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "fu-zi-gan-jiang-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
-grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Transformar Flema-Humedad" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Tonificar Qi y Sangre" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "ren-shen-huang-qi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
@@ -555,16 +597,17 @@ echo "SEQUEDAD INSTALADA: EXTERNA FRESCA/CÁLIDA VS. INTERNA POR AGOTAMIENTO DE 
 echo "CAPÍTULO 16 INSTALADO: 33 FÓRMULAS EN 5 SECCIONES (25 PERFILES NUEVOS + 8 BOARD)"
 echo "VISTA ÚNICA INSTALADA: EXPEL DAMPNESS ABRE DIRECTAMENTE EL CAPÍTULO 16 COMPLETO"
 echo "ANEXO INSTALADO: LAS 5 TABLAS COMPARATIVAS DEL CAPÍTULO 16 QUEDAN PLEGADAS AL FINAL"
-echo "PUENTE DUÌ YÀO INSTALADO EN EXPEL DAMPNESS: 6 PAREJAS OFICIALES RELACIONADAS"
+echo "PUENTE DUÌ YÀO INSTALADO EN EXPEL DAMPNESS: 3 PAREJAS LIMITADAS AL GUIDELINE"
 echo "CAPÍTULO 17 INSTALADO: 18 FÓRMULAS EN 7 SECCIONES (13 PERFILES NUEVOS + 5 BOARD)"
 echo "VISTA ÚNICA INSTALADA: TRANSFORM PHLEGM ABRE DIRECTAMENTE EL CAPÍTULO 17 COMPLETO"
 echo "ANEXO INSTALADO: LAS 7 TABLAS COMPARATIVAS DEL CAPÍTULO 17 QUEDAN PLEGADAS AL FINAL"
-echo "PUENTE DUÌ YÀO INSTALADO: 5 PAREJAS OFICIALES RELACIONADAS CON TOS Y FLEMA"
+echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA DE TRANSFORM PHLEGM LIMITADA AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA LIBERAR EL EXTERIOR"
-echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA ACLARAR CALOR"
+echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE CLEAR HEAT LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA OFICIAL PARA PURGAR CALOR Y ABLANDAR SEQUEDAD"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS OFICIALES PARA ARMONIZAR"
 echo "PUENTE DUÌ YÀO INSTALADO: 2 PAREJAS OFICIALES PARA CALENTAR EL INTERIOR"
+echo "PUENTE DUÌ YÀO INSTALADO: 4 PAREJAS DE TONIFY LIMITADAS AL GUIDELINE"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"

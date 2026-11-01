@@ -1758,6 +1758,7 @@ echo $OUTPUT->header();
                     </footer>
                 </section>
             <?php endif; ?>
+            <?php if (!empty($selectedguide['priorityTitle']) && !empty($selectedguide['route'])): ?>
             <section class="formula-study-guide__priority" aria-labelledby="guideline-priority-title">
                 <h4 id="guideline-priority-title"><?php echo s($ises ? $selectedguide['priorityTitleEs'] : $selectedguide['priorityTitle']); ?></h4>
                 <p><?php echo s($ises ? $selectedguide['priorityTextEs'] : $selectedguide['priorityText']); ?></p>
@@ -1771,6 +1772,7 @@ echo $OUTPUT->header();
                     <?php endforeach; ?>
                 </div>
             </section>
+            <?php endif; ?>
             <?php if (!empty($selectedguide['relatedDuiYao'])): ?>
                 <?php
                 $duiyaoindexpath = $ises
@@ -1831,7 +1833,7 @@ echo $OUTPUT->header();
                     </footer>
                 </section>
             <?php endif; ?>
-            <?php if (!in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)): ?>
+            <?php if (!in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true) && !empty($selectedguide['quickCompare'])): ?>
                 <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
                 <?php foreach ($quickcomparesections as $comparesection): ?>
                 <?php $compareformulanames = array_flip($comparesection['formulaNames']); ?>

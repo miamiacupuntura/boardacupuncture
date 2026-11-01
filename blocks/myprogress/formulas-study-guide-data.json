@@ -186,7 +186,7 @@
           "characters": "麻黄 + 杏仁",
           "action": "Restore Lung diffusion and descent to stop cough and wheezing in an exterior excess pattern.",
           "actionEs": "Restaurar difusión y descenso de Qi de Pulmón para detener tos y sibilancias en un patrón Exterior de exceso.",
-          "formulas": "Má Huáng Tāng; Má Xìng Shí Gān Tāng."
+          "formulas": "Má Huáng Tāng."
         },
         {
           "number": 4,
@@ -222,7 +222,7 @@
           "characters": "牛蒡子 + 连翘",
           "action": "Disperse Wind-Heat, resolve toxicity and benefit a swollen, painful throat.",
           "actionEs": "Dispersar Viento-Calor, resolver toxicidad y beneficiar una garganta dolorida e hinchada.",
-          "formulas": "Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn."
+          "formulas": "Yín Qiáo Sǎn."
         },
         {
           "number": 22,
@@ -231,7 +231,7 @@
           "characters": "生姜 + 大枣",
           "action": "Harmonize Ying and Wei, support the Spleen and Stomach and coordinate the exterior with the Middle Burner.",
           "actionEs": "Armonizar Ying y Wei, apoyar Bazo y Estómago y coordinar el Exterior con el Jiao Medio.",
-          "formulas": "Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn."
+          "formulas": "Guì Zhī Tāng."
         }
       ],
       "quickCompareTitle": "Core formula quick comparison",
@@ -450,10 +450,10 @@
       "relatedDuiYaoAnchor": "clear-heat",
       "relatedDuiYaoTitle": "Related Duì Yào · Clear Heat by Level, Location and Root",
       "relatedDuiYaoTitleEs": "Duì Yào relacionados · Aclarar Calor según nivel, localización y raíz",
-      "relatedDuiYaoText": "These seven official Appendix B pairs sharpen the category's decisive distinctions: hot wheezing versus smoldering Lung Heat, blazing Qi-level Heat, residual constrained Heat, deficiency Fire, superficial Heat-Toxin, and Heat lurking in depleted Yin.",
-      "relatedDuiYaoTextEs": "Estas siete parejas oficiales del Appendix B afinan las distinciones decisivas de la categoría: sibilancia caliente frente a Calor latente de Pulmón, Calor intenso del nivel Qi, Calor residual constreñido, Fuego por deficiencia, Calor-Toxicidad superficial y Calor oculto en Yin agotado.",
-      "relatedDuiYaoCaveat": "These pairs are not interchangeable. Jīn Yín Huā + Lián Qiào addresses Wind-Heat or toxicity near the surface and does not replace Huáng Lián Jiě Dú Tāng for robust Three-Burner Fire-Toxin. Likewise, deficiency-Fire and hidden-Heat pairs are too indirect for blazing excess. Match depth, location, force and fluid injury before selecting the treatment.",
-      "relatedDuiYaoCaveatEs": "Estas parejas no son intercambiables. Jīn Yín Huā + Lián Qiào trata Viento-Calor o toxicidad cercana a la superficie y no sustituye Huáng Lián Jiě Dú Tāng ante Fuego-Toxina robusto de los Tres Calentadores. Del mismo modo, las parejas para Fuego por deficiencia y Calor oculto son demasiado indirectas ante exceso intenso. Corresponde profundidad, localización, fuerza y lesión de líquidos antes de elegir el tratamiento.",
+      "relatedDuiYaoText": "These three official Appendix B pairs connect directly to formulas in this guideline category: Má Huáng + Shí Gāo for hot wheezing, Shí Gāo + Zhī Mǔ for blazing Qi-level Heat, and Qīng Hāo + Biē Jiǎ for Heat lurking in depleted Yin.",
+      "relatedDuiYaoTextEs": "Estos tres pares oficiales del Appendix B conectan directamente con fórmulas de esta categoría del guideline: Má Huáng + Shí Gāo para sibilancia caliente, Shí Gāo + Zhī Mǔ para Calor intenso del nivel Qi y Qīng Hāo + Biē Jiǎ para Calor oculto en Yin agotado.",
+      "relatedDuiYaoCaveat": "Only formulas from the five-formula Clear Heat guideline roster are shown here. Appendix B contains no direct pair for Huáng Lián Jiě Dú Tāng or Lóng Dǎn Xiè Gān Tāng, so those patterns must be differentiated from their complete formula architecture rather than from an unrelated pair.",
+      "relatedDuiYaoCaveatEs": "Aquí solo se muestran fórmulas del listado de cinco fórmulas de Aclarar Calor del guideline. Appendix B no contiene un par directo para Huáng Lián Jiě Dú Tāng ni Lóng Dǎn Xiè Gān Tāng, por lo que esos patrones deben diferenciarse desde la arquitectura completa de la fórmula y no desde una pareja ajena.",
       "relatedDuiYao": [
         {
           "number": 3,
@@ -462,16 +462,7 @@
           "characters": "麻黄 + 石膏",
           "action": "Diffuse Lung Qi while strongly clearing Lung Heat for hot wheezing.",
           "actionEs": "Difundir Qi de Pulmón mientras aclara con fuerza Calor de Pulmón para sibilancia caliente.",
-          "formulas": "Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng."
-        },
-        {
-          "number": 10,
-          "slug": "zhi-zi-dan-dou-chi-dui-yao",
-          "title": "Zhī Zǐ + Dàn Dòu Chǐ",
-          "characters": "栀子 + 淡豆豉",
-          "action": "Clear and vent constrained residual Heat from the chest after an unresolved febrile process.",
-          "actionEs": "Aclarar y ventilar Calor residual constreñido en el pecho tras un proceso febril no resuelto.",
-          "formulas": "Zhī Zǐ Chǐ Tāng."
+          "formulas": "Má Xìng Shí Gān Tāng."
         },
         {
           "number": 11,
@@ -481,33 +472,6 @@
           "action": "Clear blazing Qi-level Heat, drain Lung and Stomach Fire and protect fluids.",
           "actionEs": "Aclarar Calor intenso del nivel Qi, drenar Fuego de Pulmón y Estómago y proteger líquidos.",
           "formulas": "Bái Hǔ Tāng."
-        },
-        {
-          "number": 12,
-          "slug": "zhi-mu-huang-bai-dui-yao",
-          "title": "Zhī Mǔ + Huáng Bǎi",
-          "characters": "知母 + 黄柏",
-          "action": "Enrich Yin while draining deficiency Fire from the Kidney and lower burner.",
-          "actionEs": "Enriquecer Yin mientras drena Fuego por deficiencia de Riñón y Jiao Inferior.",
-          "formulas": "Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán."
-        },
-        {
-          "number": 13,
-          "slug": "sang-bai-pi-di-gu-pi-dui-yao",
-          "title": "Sāng Bái Pí + Dì Gǔ Pí",
-          "characters": "桑白皮 + 地骨皮",
-          "action": "Drain smoldering Lung Heat, calm cough and wheezing and clear lingering afternoon Heat.",
-          "actionEs": "Drenar Calor latente de Pulmón, calmar tos y sibilancias y aclarar Calor vespertino persistente.",
-          "formulas": "Xiè Bái Sǎn."
-        },
-        {
-          "number": 15,
-          "slug": "jin-yin-hua-lian-qiao-dui-yao",
-          "title": "Jīn Yín Huā + Lián Qiào",
-          "characters": "金银花 + 连翘",
-          "action": "Disperse Wind-Heat, clear Heat and resolve toxicity at the surface and in hot swellings.",
-          "actionEs": "Dispersar Viento-Calor, aclarar Calor y resolver toxicidad en la superficie y en hinchazones calientes.",
-          "formulas": "Yín Qiáo Sǎn."
         },
         {
           "number": 17,
@@ -725,7 +689,7 @@
       "clinicalFrameTextEs": "La elección no se basa solo en estreñimiento. Da Cheng Qi Tang combina purgación, ablandamiento salino y fuerte movimiento de Qi para aglomeración completa y grave. Xiao Cheng Qi Tang retira Mang Xiao cuando la sequedad es menos importante. Tiao Wei Cheng Qi Tang retira el par que moviliza Qi con fuerza y añade Gan Cao cuando predominan Calor-Sequedad e irritabilidad con poca distensión focal o plenitud.",
       "clinicalFrameCaveat": "These formulas are potent short-course purgatives, not routine constipation remedies. Chinese-medicine clumping does not establish a biomedical diagnosis. Severe or worsening abdominal pain, guarding, repeated vomiting, fever, blood in stool, dehydration, marked distention, or inability to pass stool or gas requires urgent evaluation for obstruction or another acute abdomen.",
       "clinicalFrameCaveatEs": "Estas fórmulas son purgantes potentes de uso breve, no remedios rutinarios para estreñimiento. La aglomeración de medicina china no establece un diagnóstico biomédico. Dolor abdominal intenso o creciente, defensa, vómitos repetidos, fiebre, sangre en heces, deshidratación, distensión marcada o incapacidad para evacuar heces o gases requiere valoración urgente por obstrucción u otro abdomen agudo.",
-      "relatedDuiYaoAnchor": "purge",
+      "relatedDuiYaoAnchor": "purgatives-laxatives",
       "relatedDuiYaoTitle": "Related Duì Yào · Purge Heat and Soften Dry Hardness",
       "relatedDuiYaoTitleEs": "Duì Yào relacionados · Purgar Calor y ablandar dureza seca",
       "relatedDuiYaoText": "This official Appendix B pair identifies the salt-softening branch of the Cheng Qi family. Dà Huáng attacks Heat accumulation while Máng Xiāo draws water into the Intestines and softens dry hardness; together they appear in Dà Chéng Qì Tāng and Tiáo Wèi Chéng Qì Tāng.",
@@ -1008,7 +972,7 @@
       "priorityTitleEs": "Prioridad del guideline: domina primero estas 4 fórmulas armonizadoras",
       "priorityText": "The current exam guideline requires the four formulas below. First locate the disharmony: Shaoyang, Liver-Spleen or Stomach-Intestines. Then separate excess from deficiency and identify the decisive symptom. Secondary chapter formulas remain collapsed for comparison and safety review.",
       "priorityTextEs": "El guideline actual exige las cuatro fórmulas siguientes. Primero localiza la desarmonía: Shaoyang, Hígado-Bazo o Estómago-Intestinos. Después separa exceso de deficiencia e identifica el síntoma decisivo. Las fórmulas secundarias del capítulo permanecen plegadas para comparación y seguridad.",
-      "relatedDuiYaoAnchor": "harmonize",
+      "relatedDuiYaoAnchor": "harmonizing",
       "relatedDuiYaoTitle": "Related Duì Yào · Harmonize Shaoyang, Liver and Middle",
       "relatedDuiYaoTitleEs": "Duì Yào relacionados · Armonizar Shaoyang, Hígado y Centro",
       "relatedDuiYaoText": "These three official Appendix B pairs map the category's principal relationships: vent and clear Shaoyang, course constrained Liver Qi while protecting Blood, and descend rebellious Stomach Qi when nausea or vomiting accompanies a half-exterior, half-interior disorder.",
@@ -1023,7 +987,7 @@
           "characters": "半夏 + 生姜",
           "action": "Descend rebellious Stomach Qi, stop vomiting and transform Phlegm.",
           "actionEs": "Descender Qi rebelde de Estómago, detener vómito y transformar Flema.",
-          "formulas": "Xiǎo Bàn Xià Tāng; also used within Xiǎo Chái Hú Tāng and Èr Chén Tāng."
+          "formulas": "Xiǎo Chái Hú Tāng."
         },
         {
           "number": 45,
@@ -1032,7 +996,7 @@
           "characters": "柴胡 + 黄芩",
           "action": "Harmonize Shaoyang by venting the pathogen outward while clearing Heat inside.",
           "actionEs": "Armonizar Shaoyang ventilando patógeno hacia afuera mientras aclara Calor interior.",
-          "formulas": "Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng."
+          "formulas": "Xiǎo Chái Hú Tāng."
         },
         {
           "number": 46,
@@ -1041,7 +1005,7 @@
           "characters": "柴胡 + 白芍",
           "action": "Course Liver Qi, nourish Blood, soften tension and relieve constraint pain.",
           "actionEs": "Mover Qi hepático, nutrir Sangre, suavizar tensión y aliviar dolor por estancamiento.",
-          "formulas": "Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn."
+          "formulas": "Sì Nì Sǎn; Xiāo Yáo Sǎn."
         }
       ],
       "routeTitle": "Four-step harmonizing decision route",
@@ -2336,7 +2300,7 @@
       "priorityTitleEs": "Prioridad del guideline: domina primero estas 4 fórmulas",
       "priorityText": "These four cards are the complete Warm the Interior roster in the current exam guideline. Use the Chapter 6 expansion only after their differences are secure.",
       "priorityTextEs": "Estas cuatro tarjetas forman el listado completo de Calentar el Interior en el guideline actual. Usa la ampliación del capítulo 6 solo después de dominar sus diferencias.",
-      "relatedDuiYaoAnchor": "warm-interior",
+      "relatedDuiYaoAnchor": "tonics",
       "relatedDuiYaoTitle": "Related Duì Yào · Warm the Middle and Rescue Yang",
       "relatedDuiYaoTitleEs": "Duì Yào relacionados · Calentar el Centro y rescatar Yang",
       "relatedDuiYaoText": "These two official Appendix B pairs anchor the category's clearest contrast. Gān Jiāng + Bái Zhú warms and strengthens a deficient Middle Burner in Lǐ Zhōng Wán; Fù Zǐ + Gān Jiāng acts at a deeper and more urgent level to restore devastated Yang in Sì Nì Tāng.",
@@ -2570,6 +2534,53 @@
         }
       ]
     },
+    "tonify": {
+      "relatedDuiYaoAnchor": "tonics",
+      "relatedDuiYaoTitle": "Related Duì Yào · Tonify Qi and Blood",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Tonificar Qi y Sangre",
+      "relatedDuiYaoText": "These four official Appendix B pairs connect directly to formulas in the eight-formula Tonify guideline roster: raise sinking Middle Qi, strongly supplement Qi, strengthen foundational Spleen transport, and nourish Blood while maintaining circulation.",
+      "relatedDuiYaoTextEs": "Estos cuatro pares oficiales del Appendix B conectan directamente con fórmulas del listado de ocho fórmulas de Tonificar del guideline: elevar Qi Medio hundido, tonificar Qi con fuerza, fortalecer el transporte básico del Bazo y nutrir Sangre manteniendo la circulación.",
+      "relatedDuiYaoCaveat": "Only formulas from this Tonify guideline category are named. Appendix B contains no direct signature pair for Shēng Mài Sǎn, Shí Quán Dà Bǔ Tāng, Liù Wèi Dì Huáng Wán or Jīn Guì Shèn Qì Wán; their Qi-Yin, combined Qi-Blood, Yin and Yang patterns must be learned from the complete formulas.",
+      "relatedDuiYaoCaveatEs": "Solo se nombran fórmulas de esta categoría Tonificar del guideline. Appendix B no contiene un par firma directo para Shēng Mài Sǎn, Shí Quán Dà Bǔ Tāng, Liù Wèi Dì Huáng Wán ni Jīn Guì Shèn Qì Wán; sus patrones de Qi-Yin, Qi-Sangre combinados, Yin y Yang deben aprenderse desde las fórmulas completas.",
+      "relatedDuiYao": [
+        {
+          "number": 9,
+          "slug": "chai-hu-sheng-ma-dui-yao",
+          "title": "Chái Hú + Shēng Má",
+          "characters": "柴胡 + 升麻",
+          "action": "Raise clear Yang and guide a tonic formula upward for sinking Middle Qi.",
+          "actionEs": "Elevar Yang claro y guiar fórmula tónica hacia arriba para Qi Medio hundido.",
+          "formulas": "Bǔ Zhōng Yì Qì Tāng."
+        },
+        {
+          "number": 18,
+          "slug": "ren-shen-huang-qi-dui-yao",
+          "title": "Rén Shēn + Huáng Qí",
+          "characters": "人参 + 黄芪",
+          "action": "Strongly supplement original and Spleen–Lung Qi, raise Yang and secure the Exterior.",
+          "actionEs": "Suplementar fuertemente Qi original y de Bazo–Pulmón, elevar Yang y asegurar Exterior.",
+          "formulas": "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng."
+        },
+        {
+          "number": 19,
+          "slug": "bai-zhu-fu-ling-dui-yao",
+          "title": "Bái Zhú + Fú Líng",
+          "characters": "白术 + 茯苓",
+          "action": "Strengthen the Spleen while drying and draining Dampness so fluids move normally.",
+          "actionEs": "Fortalecer Bazo mientras seca y drena Humedad para normalizar movimiento de líquidos.",
+          "formulas": "Sì Jūn Zǐ Tāng."
+        },
+        {
+          "number": 24,
+          "slug": "dang-gui-chuan-xiong-dui-yao",
+          "title": "Dāng Guī + Chuān Xiōng",
+          "characters": "当归 + 川芎",
+          "action": "Nourish and invigorate Blood, regulate menstruation and stop pain from deficiency with stasis.",
+          "actionEs": "Nutrir y movilizar Sangre, regular menstruación y detener dolor por deficiencia con estasis.",
+          "formulas": "Sì Wù Tāng."
+        }
+      ]
+    },
     "treat-dryness-ch15": {
       "priorityTitle": "Chapter 15: first decide whether dryness is external or internal",
       "priorityTitleEs": "Capítulo 15: primero decide si la Sequedad es externa o interna",
@@ -2677,17 +2688,14 @@
       "relatedDuiYaoAnchor":"drain-damp",
       "relatedDuiYaoTitle":"Related Duì Yào · Drain or Transform Dampness",
       "relatedDuiYaoTitleEs":"Duì Yào relacionados · Drenar o transformar Humedad",
-      "relatedDuiYaoText":"These six official Appendix B pairs connect the chapter's major routes: strengthen Spleen transport, aromatically transform Dampness, promote urination, warm Cold-Dampness, relax painful obstruction, and support sinews and bones in chronic Wind-Damp patterns.",
-      "relatedDuiYaoTextEs":"Estas seis parejas oficiales del Appendix B conectan las rutas principales del capítulo: fortalecer el transporte de Bazo, transformar Humedad con aromáticos, promover la orina, calentar Humedad-Frío, relajar obstrucción dolorosa y sostener tendones y huesos en patrones crónicos de Viento-Humedad.",
-      "relatedDuiYaoCaveat":"A Duì Yào highlights one treatment mechanism. The pair must still be matched to temperature, location, excess or deficiency, preparation and safety; it does not replace the architecture of a complete formula.",
-      "relatedDuiYaoCaveatEs":"Un Duì Yào destaca un mecanismo terapéutico. La pareja todavía debe corresponder a temperatura, localización, exceso o deficiencia, preparación y seguridad; no sustituye la arquitectura de una fórmula completa.",
+      "relatedDuiYaoText":"These three official Appendix B pairs connect directly to formulas in the eight-formula Expel Dampness guideline roster: support Spleen fluid transport in Wǔ Líng Sǎn, strengthen sinews and bones in Dú Huó Jì Shēng Tāng, and aromatically transform Dampness through a Huò Xiāng Zhèng Qì Sǎn modification.",
+      "relatedDuiYaoTextEs":"Estos tres pares oficiales del Appendix B conectan directamente con fórmulas del listado de ocho fórmulas de Expulsar Humedad del guideline: sostener el transporte de líquidos del Bazo en Wǔ Líng Sǎn, fortalecer tendones y huesos en Dú Huó Jì Shēng Tāng y transformar Humedad con aromáticos mediante una modificación de Huò Xiāng Zhèng Qì Sǎn.",
+      "relatedDuiYaoCaveat":"Only formulas from this guideline category are named in the cards. A pair may explain a core relationship or a documented modification, but it does not replace the complete formula or extend the required roster.",
+      "relatedDuiYaoCaveatEs":"Las tarjetas nombran únicamente fórmulas de esta categoría del guideline. Una pareja puede explicar una relación central o una modificación documentada, pero no sustituye la fórmula completa ni amplía el listado obligatorio.",
       "relatedDuiYao":[
-        {"number":19,"slug":"bai-zhu-fu-ling-dui-yao","title":"Bái Zhú + Fú Líng","characters":"白术 + 茯苓","action":"Strengthen the Spleen while drying and draining Dampness so fluids move normally.","actionEs":"Fortalecer Bazo mientras seca y drena Humedad para que los líquidos circulen normalmente.","formulas":"Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng."},
-        {"number":20,"slug":"bai-shao-gan-cao-dui-yao","title":"Bái Sháo + Gān Cǎo","characters":"白芍 + 甘草","action":"Nourish Yin and Blood, soften tension, relax spasm and stop cramping pain in the painful-obstruction route.","actionEs":"Nutrir Yin y Sangre, suavizar tensión, relajar espasmos y detener dolor tipo calambre en la ruta de obstrucción dolorosa.","formulas":"Sháo Yào Gān Cǎo Tāng."},
-        {"number":31,"slug":"du-zhong-xu-duan-dui-yao","title":"Dù Zhòng + Xù Duàn","characters":"杜仲 + 续断","action":"Supplement the Liver and Kidneys and strengthen sinews and bones in chronic deficient Wind-Damp painful obstruction.","actionEs":"Tonificar Hígado y Riñones y fortalecer tendones y huesos en obstrucción dolorosa crónica por Viento-Humedad con deficiencia.","formulas":"Shòu Tāi Wán; Dú Huó Jì Shēng Tāng."},
-        {"number":44,"slug":"gan-jiang-bai-zhu-dui-yao","title":"Gān Jiāng + Bái Zhú","characters":"干姜 + 白术","action":"Warm the Middle, strengthen the Spleen and dry Cold-Dampness.","actionEs":"Calentar el Centro, fortalecer Bazo y secar Humedad-Frío.","formulas":"Lǐ Zhōng Wán."},
-        {"number":47,"slug":"huo-xiang-pei-lan-dui-yao","title":"Huò Xiāng + Pèi Lán","characters":"藿香 + 佩兰","action":"Aromatically transform Dampness, awaken the Spleen and relieve Summerheat-Dampness.","actionEs":"Transformar Humedad con aromáticos, despertar Bazo y aliviar Calor de Verano-Humedad.","formulas":"Huò Xiāng Zhèng Qì Sǎn modificada con Pèi Lán."},
-        {"number":48,"slug":"jin-qian-cao-hai-jin-sha-dui-yao","title":"Jīn Qián Cǎo + Hǎi Jīn Shā","characters":"金钱草 + 海金沙","action":"Promote urination, unblock painful Lin and help expel urinary or biliary stones.","actionEs":"Promover la orina, desbloquear Lin doloroso y ayudar a expulsar cálculos urinarios o biliares.","formulas":"Sān Jīn Tāng."}
+        {"number":19,"slug":"bai-zhu-fu-ling-dui-yao","title":"Bái Zhú + Fú Líng","characters":"白术 + 茯苓","action":"Strengthen the Spleen while drying and draining Dampness so fluids move normally.","actionEs":"Fortalecer Bazo mientras seca y drena Humedad para que los líquidos circulen normalmente.","formulas":"Wǔ Líng Sǎn."},
+        {"number":31,"slug":"du-zhong-xu-duan-dui-yao","title":"Dù Zhòng + Xù Duàn","characters":"杜仲 + 续断","action":"Supplement the Liver and Kidneys and strengthen sinews and bones in chronic deficient Wind-Damp painful obstruction.","actionEs":"Tonificar Hígado y Riñones y fortalecer tendones y huesos en obstrucción dolorosa crónica por Viento-Humedad con deficiencia.","formulas":"Dú Huó Jì Shēng Tāng."},
+        {"number":47,"slug":"huo-xiang-pei-lan-dui-yao","title":"Huò Xiāng + Pèi Lán","characters":"藿香 + 佩兰","action":"Aromatically transform Dampness, awaken the Spleen and relieve Summerheat-Dampness.","actionEs":"Transformar Humedad con aromáticos, despertar Bazo y aliviar Calor de Verano-Humedad.","formulas":"Huò Xiāng Zhèng Qì Sǎn — modification with Pèi Lán."}
       ],
       "quickCompareTitle":"Chapter 16 principal formulas","quickCompareTitleEs":"Fórmulas principales del capítulo 16",
       "quickCompare":[
@@ -2755,18 +2763,14 @@
         ["5","Screen emergencies and toxicity","Do not treat stroke, seizure, poisoning, respiratory distress or a new mass as a routine Phlegm presentation.","Descarta urgencias y toxicidad","No trates ACV, convulsión, intoxicación, disnea o masa nueva como un cuadro rutinario de Flema."]
       ],
       "relatedDuiYaoAnchor":"cough-phlegm",
-      "relatedDuiYaoTitle":"Related Duì Yào · Stop Cough and Transform Phlegm",
-      "relatedDuiYaoTitleEs":"Duì Yào relacionados · Detener Tos y transformar Flema",
-      "relatedDuiYaoText":"These five official Appendix B pairs concentrate mechanisms that recur throughout this category: Lung diffusion and descent, drying Damp-Phlegm, opening Phlegm binding in the chest, moistening while stopping cough, and draining Lung fluid.",
-      "relatedDuiYaoTextEs":"Estas cinco parejas oficiales del Appendix B concentran mecanismos que reaparecen en esta categoría: difusión y descenso de Pulmón, secar Flema-Humedad, abrir opresión torácica por Flema, humedecer mientras detiene la tos y drenar líquidos de Pulmón.",
-      "relatedDuiYaoCaveat":"A Duì Yào is a focused two-herb relationship. It may explain a formula core or a modification, but it does not automatically replace the architecture, dosage, preparation or safety controls of a complete formula.",
-      "relatedDuiYaoCaveatEs":"Un Duì Yào es una relación focal de dos hierbas. Puede explicar el núcleo de una fórmula o una modificación, pero no sustituye automáticamente la arquitectura, dosis, preparación ni controles de seguridad de una fórmula completa.",
+      "relatedDuiYaoTitle":"Related Duì Yào · Transform Damp-Phlegm",
+      "relatedDuiYaoTitleEs":"Duì Yào relacionados · Transformar Flema-Humedad",
+      "relatedDuiYaoText":"This official Appendix B pair is the direct two-herb core of Èr Chén Tāng, one of the five Transform Phlegm formulas in the guideline. It combines drying and transforming Phlegm with regulation of Qi and the Middle Burner.",
+      "relatedDuiYaoTextEs":"Este par oficial del Appendix B es el núcleo directo de dos hierbas de Èr Chén Tāng, una de las cinco fórmulas de Transformar Flema del guideline. Combina secar y transformar Flema con regulación de Qi y del Jiao Medio.",
+      "relatedDuiYaoCaveat":"Only formulas from the five-formula guideline category are shown. Appendix B contains no direct signature pair for Wēn Dǎn Tāng, Bèi Mǔ Guā Lóu Sǎn, Zhǐ Sòu Sǎn or Bàn Xià Bái Zhú Tiān Má Tāng, so unrelated chapter formulas have been excluded.",
+      "relatedDuiYaoCaveatEs":"Solo se muestran fórmulas de la categoría de cinco fórmulas del guideline. Appendix B no contiene un par firma directo para Wēn Dǎn Tāng, Bèi Mǔ Guā Lóu Sǎn, Zhǐ Sòu Sǎn ni Bàn Xià Bái Zhú Tiān Má Tāng, por lo que se excluyeron fórmulas del capítulo no relacionadas.",
       "relatedDuiYao":[
-        {"number":2,"slug":"ma-huang-xing-ren-dui-yao","title":"Má Huáng + Xìng Rén","characters":"麻黄 + 杏仁","action":"Restore Lung diffusion and descent to stop cough and wheezing in appropriately balanced hot or cold formulas.","actionEs":"Restaurar difusión y descenso de Qi de Pulmón para detener tos y sibilancias en fórmulas calientes o frías bien equilibradas.","formulas":"Má Huáng Tāng; Má Xìng Shí Gān Tāng."},
-        {"number":37,"slug":"ban-xia-chen-pi-dui-yao","title":"Bàn Xià + Chén Pí","characters":"半夏 + 陈皮","action":"Dry Dampness, transform Phlegm, regulate Qi and harmonize the Middle.","actionEs":"Secar Humedad, transformar Flema, regular Qi y armonizar el Centro.","formulas":"Èr Chén Tāng."},
-        {"number":39,"slug":"gua-lou-xie-bai-dui-yao","title":"Guā Lóu + Xiè Bái","characters":"瓜蒌 + 薤白","action":"Unblock chest Yang, dissipate Phlegm binding and move Qi through the chest.","actionEs":"Desbloquear Yang torácico, disipar opresión por Flema y mover Qi en el pecho.","formulas":"Guā Lóu Xiè Bái Bàn Xià Tāng."},
-        {"number":40,"slug":"zi-wan-kuan-dong-hua-dui-yao","title":"Zǐ Wǎn + Kuǎn Dōng Huā","characters":"紫菀 + 款冬花","action":"Moisten the Lung, descend Qi, transform Phlegm and stop cough across hot or cold, acute or chronic patterns.","actionEs":"Humedecer Pulmón, descender Qi, transformar Flema y detener la tos en patrones calientes o fríos, agudos o crónicos.","formulas":"Shè Gān Má Huáng Tāng."},
-        {"number":41,"slug":"ting-li-zi-da-zao-dui-yao","title":"Tíng Lì Zǐ + Dà Zǎo","characters":"葶苈子 + 大枣","action":"Drain water and Phlegm from the Lung, calm wheezing and promote urination while protecting the Middle.","actionEs":"Drenar agua y Flema de Pulmón, calmar sibilancias y promover orina mientras protege el Centro.","formulas":"Tíng Lì Dà Zǎo Xiè Fèi Tāng."}
+        {"number":37,"slug":"ban-xia-chen-pi-dui-yao","title":"Bàn Xià + Chén Pí","characters":"半夏 + 陈皮","action":"Dry Dampness, transform Phlegm, regulate Qi and harmonize the Middle.","actionEs":"Secar Humedad, transformar Flema, regular Qi y armonizar el Centro.","formulas":"Èr Chén Tāng."}
       ],
       "quickCompareTitle":"Chapter 17 principal formulas","quickCompareTitleEs":"Fórmulas principales del capítulo 17",
       "quickCompare":[
