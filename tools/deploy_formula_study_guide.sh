@@ -44,12 +44,17 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "stabilize-bind-ch9"
     );
+    $chapter10 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "calm-shen-ch10"
+    );
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 10
-            || count($data["supplementalFormulas"] ?? []) !== 84
+            || count($data["supplementalCategories"] ?? []) !== 11
+            || count($data["supplementalFormulas"] ?? []) !== 90
             || count($chapter8) !== 45
-            || count($chapter9) !== 15) {
+            || count($chapter9) !== 15
+            || count($chapter10) !== 6) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
@@ -61,6 +66,9 @@ grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 9" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 9" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "calm-shen-chapter-10" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 10" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo del capítulo 10" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Bensky et al., Chinese Herbal Medicine: Formulas & Strategies" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Dominio Board · Fórmula #" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TEMP_DIR/formulas-study-guide.php"
@@ -102,9 +110,10 @@ grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8 Y 9 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9 Y 10 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
+echo "CAPÍTULO 10 INSTALADO: 9 fórmulas en 2 secciones (6 perfiles nuevos + 3 Board)"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
 echo "Respaldo: $BACKUP_DIR"
