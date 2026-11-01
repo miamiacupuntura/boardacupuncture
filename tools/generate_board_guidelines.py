@@ -2,13 +2,18 @@
 from pathlib import Path
 from html import escape
 from urllib.parse import quote
+import json
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "study-guide" / "guidelines"
 OFFICIAL = "https://www.ncbahm.org/"
 ACPL = "https://www.ncbahm.org/wp-content/uploads/pdf/NCBAHM_ACPL_Exam_Content_Outline-w-Bibliography_Jan_2026.pdf"
 CH = "https://www.ncbahm.org/wp-content/uploads/pdf/NCBAHM_CH_Exam_Content_Outline-w-Bibliography_Jan_2026.pdf"
+NCCAOM_2020_CH = "https://www.ncbahm.org/wp-content/uploads/pdf/2020-CH-Content-Outline-and-Bibliography-Updated-June-2021.pdf"
 APPENDIX_A_HERBS_FILE = ROOT / "tools" / "data" / "ncbahm_2026_appendix_a_herbs.txt"
+NCCAOM_2020_HERBS_FILE = ROOT / "tools" / "data" / "nccaom_2020_appendix_a_herbs.txt"
+NCCAOM_2020_FORMULAS_FILE = ROOT / "tools" / "data" / "nccaom_2020_appendix_b_formulas.txt"
+FORMULA_GUIDE_DATA_FILE = ROOT / "blocks" / "myprogress" / "formulas-study-guide-data.json"
 
 BOARDS = [
     {
@@ -108,7 +113,12 @@ def top(lang, title, alternate, back="../board-guidelines", css_version="2026102
 
 def foot(es=False, returnscript=False):
     script = '<script src="guideline-return.js?v=20261031-5"></script>' if returnscript else ''
-    return f'''</main><footer class="guide-footer"><div class="guide-shell">{'Revisado el 27 de octubre de 2026 · El temario oficial vigente siempre prevalece.' if es else 'Reviewed October 27, 2026 · The current official outline always controls.'}</div></footer>{script}</body></html>'''
+    reviewed = (
+        ('Revisado el 1 de noviembre de 2026' if es else 'Reviewed November 1, 2026')
+        if returnscript else
+        ('Revisado el 27 de octubre de 2026' if es else 'Reviewed October 27, 2026')
+    )
+    return f'''</main><footer class="guide-footer"><div class="guide-shell">{reviewed} · {'El temario oficial vigente siempre prevalece.' if es else 'The current official outline always controls.'}</div></footer>{script}</body></html>'''
 
 
 def appendix_a_herbs():
@@ -118,10 +128,88 @@ def appendix_a_herbs():
     return herbs
 
 
+def historical_rosters():
+    old_herbs = [line.strip() for line in NCCAOM_2020_HERBS_FILE.read_text(encoding="utf-8").splitlines() if line.strip()]
+    old_formulas = [line.strip() for line in NCCAOM_2020_FORMULAS_FILE.read_text(encoding="utf-8").splitlines() if line.strip()]
+    formula_data = json.loads(FORMULA_GUIDE_DATA_FILE.read_text(encoding="utf-8"))
+    current_herbs = [entry.partition(" (")[0] for entry in appendix_a_herbs()]
+    current_formulas = [formula["name"] for formula in formula_data["formulas"]]
+    expected = {
+        "NCCAOM 2020 herbs": (old_herbs, 272),
+        "NCCAOM 2020 formulas": (old_formulas, 162),
+        "NCBAHM 2026 herbs": (current_herbs, 304),
+        "NCBAHM 2026 formulas": (current_formulas, 63),
+    }
+    for label, (items, count) in expected.items():
+        if len(items) != count or len(set(items)) != count:
+            raise ValueError(f"Expected {count} unique {label}, found {len(items)} entries and {len(set(items))} unique names")
+    return old_herbs, current_herbs, old_formulas, current_formulas
+
+
+def historical_roster_annex(es=False):
+    old_herbs, current_herbs, old_formulas, current_formulas = historical_rosters()
+    herb_aliases = {"Gu Ya": "Gu Ya", "Xin Yi Hua": "Xin Yi"}
+    formula_aliases = {"Bi Xie Feng Qing Yin": "Bi Xie Fen Qing Yin"}
+
+    def normalized(name, aliases):
+        return aliases.get(name, name)
+
+    def changes(old, current, aliases):
+        old_keys = {normalized(name, aliases) for name in old}
+        current_keys = {normalized(name, aliases) for name in current}
+        removed = [name for name in old if normalized(name, aliases) not in current_keys]
+        added = [name for name in current if normalized(name, aliases) not in old_keys]
+        return sorted(removed), sorted(added)
+
+    removed_herbs, added_herbs = changes(old_herbs, current_herbs, herb_aliases)
+    removed_formulas, added_formulas = changes(old_formulas, current_formulas, formula_aliases)
+    if (len(removed_herbs), len(added_herbs), len(removed_formulas), len(added_formulas)) != (6, 38, 99, 0):
+        raise ValueError("Unexpected NCCAOM 2020 to NCBAHM 2026 roster diff")
+
+    def list_html(items, links=None):
+        links = links or {}
+        rendered = []
+        for item in items:
+            content = escape(item)
+            if item in links:
+                content = f'<a href="{links[item]}">{content}</a>'
+            rendered.append(f'<li>{content}</li>')
+        return '<ol class="guide-roster-comparison__list">' + ''.join(rendered) + '</ol>'
+
+    def change_list(items, empty):
+        if not items:
+            return f'<span class="guide-roster-change__empty">{empty}</span>'
+        return '<ul class="guide-roster-change__list">' + ''.join(f'<li>{escape(item)}</li>' for item in items) + '</ul>'
+
+    old_heading = "Antes · NCCAOM 2020" if es else "Before · NCCAOM 2020"
+    current_heading = "Ahora · NCBAHM 2026" if es else "Now · NCBAHM 2026"
+    no_entries = "Ninguna entrada nueva" if es else "No new entries"
+    removed_label = "salieron" if es else "removed"
+    added_label = "entraron" if es else "added"
+    language_query = "&amp;lang=es" if es else ""
+    historical_formula_links = {
+        "Run Chang Wan": f'/blocks/myprogress/formulas-study-guide.php?focus=historical-nccaom-formulas{language_query}#formula-H2020-01',
+        "Juan Bi Tang": f'/blocks/myprogress/formulas-study-guide.php?focus=expel-damp-chapter-16{language_query}#formula-C16-29',
+    }
+    summary_rows = [
+        (
+            "Hierbas" if es else "Herbs",
+            f'<strong>{len(removed_herbs)} {removed_label}</strong>{change_list(removed_herbs, no_entries)}',
+            f'<strong>{len(added_herbs)} {added_label}</strong>{change_list(added_herbs, no_entries)}',
+        ),
+        (
+            "Fórmulas" if es else "Formulas",
+            f'<strong>{len(removed_formulas)} {removed_label}</strong>{change_list(removed_formulas, no_entries)}',
+            f'<strong>{len(added_formulas)} {added_label}</strong>{change_list(added_formulas, no_entries)}',
+        ),
+    ]
+    return f'''<section class="guide-section guide-section--annex guide-section--historical" id="historical-roster-crosswalk"><p class="guide-eyebrow">{'Anexo histórico · NCCAOM 2020 → NCBAHM 2026' if es else 'Historical annex · NCCAOM 2020 → NCBAHM 2026'}</p><h2>{'Qué estaba antes y qué está ahora' if es else 'What was listed before and what is listed now'}</h2><p>{'Esta comparación usa el Chinese Herbology Content Outline de NCCAOM efectivo el 1 de enero de 2020 (actualizado en 2021) y el temario vigente de NCBAHM efectivo el 1 de septiembre de 2026. Compara alcance de examen, no eficacia clínica.' if es else 'This comparison uses the NCCAOM Chinese Herbology Content Outline effective January 1, 2020 (updated in 2021) and the current NCBAHM outline effective September 1, 2026. It compares exam scope, not clinical effectiveness.'}</p><div class="guide-alert guide-alert--compact"><strong>{'Comprobación solicitada:' if es else 'Requested verification:'}</strong> {'Run Chang Wan y Juan Bi Tang sí estaban en Appendix B de NCCAOM 2020. Ninguna está en el Appendix C vigente de NCBAHM 2026. Sus nombres en la tabla anterior enlazan directamente a sus fichas.' if es else 'Run Chang Wan and Juan Bi Tang were both listed in NCCAOM 2020 Appendix B. Neither appears in the current NCBAHM 2026 Appendix C. Their names in the former-roster table link directly to their profiles.'}</div><h3>{'Hierbas individuales' if es else 'Individual herbs'}</h3><div class="guide-table-wrap"><table class="guide-table guide-roster-comparison"><thead><tr><th>{old_heading} · {len(old_herbs)}</th><th>{current_heading} · {len(current_herbs)}</th></tr></thead><tbody><tr><td>{list_html(old_herbs)}</td><td>{list_html(current_herbs)}</td></tr></tbody></table></div><h3>{'Fórmulas' if es else 'Formulas'}</h3><div class="guide-table-wrap"><table class="guide-table guide-roster-comparison"><thead><tr><th>{old_heading} · {len(old_formulas)}</th><th>{current_heading} · {len(current_formulas)}</th></tr></thead><tbody><tr><td>{list_html(old_formulas, historical_formula_links)}</td><td>{list_html(current_formulas)}</td></tr></tbody></table></div><h3>{'Resumen de salidas y entradas' if es else 'Summary of removals and additions'}</h3><p>{'Para no crear cambios falsos, se normalizaron dos variantes: Xin Yi Hua → Xin Yi y Bi Xie Feng Qing Yin → Bi Xie Fen Qing Yin. Gu Ya permanece; solo cambió la identificación latina publicada.' if es else 'To avoid false changes, two name variants were normalized: Xin Yi Hua → Xin Yi and Bi Xie Feng Qing Yin → Bi Xie Fen Qing Yin. Gu Ya remains; only its published Latin identification changed.'}</p><div class="guide-table-wrap"><table class="guide-table guide-roster-change"><thead><tr><th>{'Listado' if es else 'Roster'}</th><th>{'Se fueron' if es else 'Removed'}</th><th>{'Entraron' if es else 'Added'}</th></tr></thead><tbody>{''.join(f'<tr><th>{label}</th><td>{removed}</td><td>{added}</td></tr>' for label, removed, added in summary_rows)}</tbody></table></div><div class="guide-annex-source"><strong>{'Fuentes oficiales:' if es else 'Official sources:'}</strong> <a href="{NCCAOM_2020_CH}" target="_blank" rel="noopener">NCCAOM · Chinese Herbology Content Outline 2020 ↗</a> · <a href="{CH}" target="_blank" rel="noopener">NCBAHM · Chinese Herbology Content Outline 2026 ↗</a></div></section>'''
+
+
 def appendix_a_roster(es=False):
     items = []
     for entry in appendix_a_herbs():
-        pinyin, separator, latin = entry.rpartition(" (")
+        pinyin, separator, latin = entry.partition(" (")
         if not separator or not latin.endswith(")"):
             raise ValueError(f"Invalid Appendix A herb entry: {entry}")
         herb_url = f'/blocks/myprogress/single-herbs-study-guide.php?herb={quote(pinyin)}'
@@ -141,7 +229,7 @@ def board_page(board, lang):
     alternate = f'{board["slug"]}{"" if es else "-es"}.html'
     source = board.get("source", OFFICIAL)
     herbal = board["slug"] == "chinese-herbal-medicine"
-    html = top(lang, title, alternate, css_version="20261031-5" if herbal else "20261027-7")
+    html = top(lang, title, alternate, css_version="20261101-1" if herbal else "20261027-7")
     html += f'''<section class="guide-hero"><p class="guide-eyebrow">{'Guía de Board' if es else 'Board guideline'}</p><h1>{escape(title)}</h1><p>{escape(summary)}</p></section>'''
     if herbal:
         html += f'''<div class="guide-alert"><strong>{'Documento de lectura continua.' if es else 'Continuous reading document.'}</strong> {'Lee de arriba hacia abajo sin cambiar de página. Esta guía contiene el orden de estudio, los cambios principales, las prioridades y el control final.' if es else 'Read from top to bottom without changing pages. This guide contains the study order, key changes, priorities and final review.'}</div>'''
@@ -210,6 +298,7 @@ def board_page(board, lang):
     html += '</div></section>'
     if herbal:
         html += appendix_a_roster(es)
+        html += historical_roster_annex(es)
         html += f'''<section class="guide-section"><p class="guide-eyebrow">{'Cierre del documento' if es else 'Document close'}</p><h2>{'Fuente y control de versión' if es else 'Source and version control'}</h2><p>{'El alcance vigente publicado por NCBAHM controla la preparación. Antes del examen confirma la fecha efectiva del temario y de los Apéndices A–D.' if es else 'The current scope published by NCBAHM controls preparation. Before the exam, confirm the effective date of the outline and Appendices A–D.'}</p><p class="guide-source"><a href="{CH}" target="_blank" rel="noopener">{CH}</a></p></section>'''
     else:
         html += f'''<section class="guide-section"><h2>{'Recursos recomendados' if es else 'Recommended resources'}</h2><div class="guide-resource-list">'''

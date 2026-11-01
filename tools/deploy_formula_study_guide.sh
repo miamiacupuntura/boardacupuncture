@@ -74,6 +74,10 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-damp-ch16"
     );
+    $historical = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
+    );
     $dampnessSections = $data["categoryGuides"]["expel-damp-chapter-16"]["formulaSections"] ?? [];
     $dampnessSectionNames = [];
     foreach ($dampnessSections as $section) {
@@ -120,8 +124,8 @@ php -r '
     if (($data["version"] ?? null) !== 7
             || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 17
-            || count($data["supplementalFormulas"] ?? []) !== 178
+            || count($data["supplementalCategories"] ?? []) !== 18
+            || count($data["supplementalFormulas"] ?? []) !== 179
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -131,6 +135,8 @@ php -r '
             || count($chapter14) !== 14
             || count($chapter15) !== 8
             || count($chapter16) !== 25
+            || count($historical) !== 1
+            || array_column($historical, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
                 "transform-harmonize-middle", "clear-damp-heat", "promote-urination",
                 "warm-transform-water", "dispel-wind-damp"
@@ -213,6 +219,8 @@ grep -q '"key": "attack-and-tonify"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "harsh-water-expellants"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"Ji Chuan Jian"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"Run Chang Wan"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "historical-nccaom-formulas"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "NCCAOM 2020 · retirada del listado vigente" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "el uso clínico frecuente no garantiza inclusión en el Board" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "therapeuticClasses" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "boardScopeTitle" "$TEMP_DIR/formulas-study-guide.php"
@@ -365,6 +373,8 @@ grep -q '"key": "attack-and-tonify"' "$TARGET_DIR/formulas-study-guide-data.json
 grep -q '"key": "harsh-water-expellants"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"Ji Chuan Jian"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"Run Chang Wan"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "historical-nccaom-formulas"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "NCCAOM 2020 · retirada del listado vigente" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "el uso clínico frecuente no garantiza inclusión en el Board" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "therapeuticClasses" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "boardScopeTitle" "$TARGET_DIR/formulas-study-guide.php"

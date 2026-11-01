@@ -65,13 +65,11 @@ curl -fsSL \
     -o "$TEMP_DIR/single-herb-card-index.json"
 
 for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
-    if [[ ! -f "$TARGET_DIR/$page" ]]; then
-        echo "ERROR: falta la página activa $TARGET_DIR/$page"
-        exit 1
-    fi
-    cp -a "$TARGET_DIR/$page" "$TEMP_DIR/$page"
+    curl -fsSL \
+        "$REPOSITORY/$REVISION/study-guide/guidelines/$page" \
+        -o "$TEMP_DIR/$page"
     sed -E -i \
-        -e 's/guidelines\.css\?v=20261031-[0-9]+/guidelines.css?v=20261031-6/g' \
+        -e 's/guidelines\.css\?v=[0-9-]+/guidelines.css?v=20261101-1/g' \
         -e 's/guideline-return\.js\?v=20261031-[0-9]+/guideline-return.js?v=20261031-6/g' \
         "$TEMP_DIR/$page"
 done
@@ -95,9 +93,13 @@ grep -q "Included in the current Board guideline" "$TEMP_DIR/guideline-search.js
 grep -q "calm-shen-chapter-10" "$TEMP_DIR/guideline-search.js"
 grep -q "single-herb-card-index.json" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
-grep -q "guidelines.css?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "guidelines.css?v=20261101-1" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261031-6" "$TEMP_DIR/chinese-herbal-medicine-es.html"
+grep -q "Historical annex · NCCAOM 2020 → NCBAHM 2026" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "Run Chang Wan and Juan Bi Tang were both listed" "$TEMP_DIR/chinese-herbal-medicine.html"
+grep -q "Anexo histórico · NCCAOM 2020 → NCBAHM 2026" "$TEMP_DIR/chinese-herbal-medicine-es.html"
+grep -q "guide-roster-comparison" "$TEMP_DIR/guidelines.css"
 
 mkdir -p "$BACKUP_DIR"
 cp -a "$TARGET_DIR/guidelines.css" "$BACKUP_DIR/"
@@ -143,6 +145,10 @@ grep -q "guideline-search.js?v=20261031-3" "$TARGET_DIR/guideline-return.js"
 grep -q "Mu Li San" "$TARGET_DIR/guideline-search.js"
 grep -q "single-herbs-study-guide.php?herb=" "$TARGET_DIR/guideline-search.js"
 grep -q "Included in the current Board guideline" "$TARGET_DIR/guideline-search.js"
+grep -q "Historical annex · NCCAOM 2020 → NCBAHM 2026" "$TARGET_DIR/chinese-herbal-medicine.html"
+grep -q "Run Chang Wan and Juan Bi Tang were both listed" "$TARGET_DIR/chinese-herbal-medicine.html"
+grep -q "Anexo histórico · NCCAOM 2020 → NCBAHM 2026" "$TARGET_DIR/chinese-herbal-medicine-es.html"
+grep -q "guide-roster-comparison" "$TARGET_DIR/guidelines.css"
 grep -q "guideline-return.js?v=20261031-6" "$TARGET_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261031-6" "$TARGET_DIR/chinese-herbal-medicine-es.html"
 grep -q "single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"

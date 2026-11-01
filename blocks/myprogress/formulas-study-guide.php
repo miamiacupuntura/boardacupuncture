@@ -21,8 +21,8 @@ if (!is_array($data)
         || ($data['version'] ?? null) !== 7
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 17
-        || count($data['supplementalFormulas'] ?? []) !== 178) {
+        || count($data['supplementalCategories'] ?? []) !== 18
+        || count($data['supplementalFormulas'] ?? []) !== 179) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -131,6 +131,10 @@ $categorycopy = [
         'Compare eight principal formulas in Bensky Chapter 15 by external versus internal dryness, cool versus warm dryness, organ location, fluid damage, rebellious Qi, thirst, and constipation.',
         'Compara las ocho fórmulas principales del capítulo 15 de Bensky por Sequedad externa o interna, fresca o cálida, localización orgánica, lesión de líquidos, Qi rebelde, sed y estreñimiento.',
     ],
+    'historical-nccaom-formulas' => [
+        'Historical reference profiles document formulas that appeared in the former NCCAOM roster but are outside the current NCBAHM Appendix C.',
+        'Las fichas de referencia histórica documentan fórmulas del listado anterior de NCCAOM que están fuera del Appendix C vigente de NCBAHM.',
+    ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
         'Distingue la deficiencia de Qi por órgano, hundimiento, Exterior inestable, pérdida de líquidos, Humedad e incapacidad para captar Qi.',
@@ -205,6 +209,10 @@ $categoryreferences = [
     'expel-wind-chapter-14' => [
         'Complete Bensky source: 17 principal formulas in two sections. Board overlap: 3—Xiao Feng San, Xiao Huo Luo Dan, and Tian Ma Gou Teng Yin.',
         'Fuente Bensky completa: 17 fórmulas principales en dos secciones. Coincidencia Board: 3—Xiao Feng San, Xiao Huo Luo Dan y Tian Ma Gou Teng Yin.',
+    ],
+    'historical-nccaom-formulas' => [
+        'Historical status: Run Chang Wan appears in NCCAOM 2020 Appendix B, but not in the current NCBAHM 2026 Appendix C.',
+        'Estatus histórico: Run Chang Wan aparece en Appendix B de NCCAOM 2020, pero no en el Appendix C vigente de NCBAHM 2026.',
     ],
 ];
 
@@ -1023,6 +1031,7 @@ unset($supplementalcategories['expel-damp-ch16']);
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
 $issupplemental = $selected !== null && isset($supplementalcategories[$selected['key']]);
+$ishistoricalrosterpage = $selected !== null && ($selected['sourceType'] ?? '') === 'historical-roster';
 $istonifychapterpage = $selected !== null
     && ($selected['key'] === 'tonify-chapter-8' || in_array($selected['key'], $tonifychapterkeys, true));
 $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-cold';
@@ -1363,15 +1372,24 @@ echo $OUTPUT->header();
                     $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
                     $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
                     $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
+                    $ishistoricalcategory = ($category['sourceType'] ?? '') === 'historical-roster';
                     ?>
                     <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
-                        <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Capítulo ' : 'Chapter '); ?><?php echo (int) $category['sourceChapter']; ?></span>
+                        <span class="formula-study-guide__category-number"><?php echo s($ishistoricalcategory
+                            ? ($ises ? 'Listado histórico' : 'Historical roster')
+                            : (($ises ? 'Capítulo ' : 'Chapter ') . (int) $category['sourceChapter'])); ?></span>
                         <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
-                        <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo $ises ? 'fórmulas principales' : 'principal formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $category['sourcePages']); ?></span>
+                        <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ishistoricalcategory
+                            ? ($ises ? 'ficha histórica' : 'historical profile')
+                            : ($ises ? 'fórmulas principales' : 'principal formulas')); ?> · <?php echo s($ishistoricalcategory
+                            ? $category['sourcePages']
+                            : (($ises ? 'págs. ' : 'pp. ') . $category['sourcePages'])); ?></span>
                         <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
                         <p><?php echo s($copy); ?></p>
                         <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
-                        <small><?php echo s($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →'); ?></small>
+                        <small><?php echo s($ishistoricalcategory
+                            ? ($ises ? 'Abrir ficha histórica →' : 'Open historical profile →')
+                            : ($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →')); ?></small>
                     </a>
                 <?php endforeach; ?>
             </div>
@@ -1392,11 +1410,15 @@ echo $OUTPUT->header();
         </nav>
         <section class="formula-study-guide__category-header<?php echo $issupplemental ? ' formula-study-guide__category-header--supplemental' : ''; ?>" aria-labelledby="selected-category-title">
             <p class="formula-study-guide__eyebrow"><?php echo s($issupplemental
-                ? (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages'])
+                ? ($ishistoricalrosterpage
+                    ? (($ises ? 'Listado histórico · ' : 'Historical roster · ') . $selected['sourceChapter'] . ' · ' . $selected['sourcePages'])
+                    : (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages']))
                 : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
             <?php if ($issupplemental || isset($unifiedfamilystatusformulas[$selected['key']])): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
-            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'); ?></strong></p>
+            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $ishistoricalrosterpage
+                ? ($ises ? 'ficha histórica en esta sección.' : 'historical profile in this section.')
+                : ($issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.')); ?></strong></p>
             <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
         <?php if (!$issupplemental && $selected['key'] !== 'tonify'): ?>
@@ -2221,9 +2243,12 @@ echo $OUTPUT->header();
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
                 } elseif ($issupplemental) {
-                    $formulalabel = ($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence']
-                        . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
-                        . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
+                    $formulalabel = $ishistoricalrosterpage
+                        ? (($ises ? 'Ficha histórica ' : 'Historical profile ') . $formula['sequence']
+                            . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']) . ' · ' . $formula['sourcePages'])
+                        : (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence']
+                            . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
+                            . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages']);
                 } else {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $formula['number']
                         . ' ' . ($ises ? 'de' : 'of') . ' 63';
@@ -2298,9 +2323,11 @@ echo $OUTPUT->header();
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Principal del guideline' : 'Guideline core'); ?></span><?php endif; ?>
-                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s(is_numeric($formula['number'])
-                                ? (($ises ? 'Dominio Board · Fórmula #' : 'Board Domain · Formula #') . $formula['number'])
-                                : (($ises ? 'Bensky · Capítulo ' : 'Bensky · Chapter ') . $selected['sourceChapter'])); ?></span><?php endif; ?>
+                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($ishistoricalrosterpage
+                                ? ($ises ? 'NCCAOM 2020 · retirada del listado vigente' : 'NCCAOM 2020 · removed from current roster')
+                                : (is_numeric($formula['number'])
+                                    ? (($ises ? 'Dominio Board · Fórmula #' : 'Board Domain · Formula #') . $formula['number'])
+                                    : (($ises ? 'Bensky · Capítulo ' : 'Bensky · Chapter ') . $selected['sourceChapter']))); ?></span><?php endif; ?>
                             <span class="formula-study-guide__risk<?php echo $tier !== 'standard' ? ' formula-study-guide__risk--' . s($tier) : ''; ?>"><?php echo s($risklabel); ?></span>
                         </div>
                     </header>

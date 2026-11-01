@@ -4571,6 +4571,15 @@
       "nameEs": "Fórmulas que expulsan la Humedad · perfiles del capítulo 16 de Bensky",
       "sourceChapter": 16,
       "sourcePages": "685–765"
+    },
+    {
+      "number": "H1",
+      "key": "historical-nccaom-formulas",
+      "name": "Historical NCCAOM Formula Profiles",
+      "nameEs": "Fichas históricas de fórmulas NCCAOM",
+      "sourceType": "historical-roster",
+      "sourceChapter": "NCCAOM 2020",
+      "sourcePages": "Appendix B"
     }
   ],
   "supplementalFormulas": [
@@ -8497,6 +8506,34 @@
       "safety":"Contraindicated in pregnancy and unsuitable for debilitated patients without modification. Verify Fang Ji identity and prepared Tian Nan Xing. Migratory joint pain requires diagnostic evaluation for inflammatory, infectious or crystal disease.","safetyEs":"Contraindicada en embarazo e inadecuada para debilitados sin modificación. Verificar identidad de Fang Ji y Tian Nan Xing preparado. Dolor articular migratorio requiere diagnóstico de enfermedad inflamatoria, infecciosa o por cristales.","safetyTier":"critical",
       "examFocus":"Pain migration is the Wind signature; the many directional herbs make the formula applicable above, middle and below.","examFocusEs":"La migración del dolor es la firma de Viento; las múltiples hierbas direccionales hacen aplicable la fórmula arriba, medio y abajo.",
       "comparison":"For marked deficiency choose Du Huo Ji Sheng Tang or San Bi Tang; this formula mainly treats the branch of migratory obstruction.","comparisonEs":"Con deficiencia marcada elige Du Huo Ji Sheng Tang o San Bi Tang; esta trata principalmente la rama de obstrucción migratoria."
+    },
+    {
+      "number": "H2020-01",
+      "sequence": 1,
+      "name": "Run Chang Wan",
+      "englishName": "Moisten the Intestines Pill",
+      "categoryKey": "historical-nccaom-formulas",
+      "group": "Nourish Blood and Moisten the Intestines",
+      "groupEs": "Nutrir Sangre y humedecer los Intestinos",
+      "sourcePages": "Appendix B",
+      "kings": "Dang Gui, Sheng Di Huang",
+      "pattern": "Blood and fluid deficiency causing dry, desiccated Intestines.",
+      "patternEs": "Deficiencia de Sangre y líquidos que causa Intestinos secos y desecados.",
+      "action": "Nourishes Blood, enriches fluids, moistens the Intestines, and moves stool.",
+      "actionEs": "Nutre Sangre, enriquece líquidos, humedece los Intestinos y moviliza las heces.",
+      "clue": "Chronic dry constipation after illness, childbirth, or blood loss, with pallor, dizziness, and dry skin.",
+      "clueEs": "Estreñimiento seco crónico después de enfermedad, parto o pérdida de Sangre, con palidez, mareo y piel seca.",
+      "ingredients": "Dang Gui, Sheng Di Huang, Tao Ren, Huo Ma Ren and Zhi Ke.",
+      "ingredientsEs": "Dang Gui, Sheng Di Huang, Tao Ren, Huo Ma Ren y Zhi Ke.",
+      "safety": "New severe constipation, vomiting, marked abdominal distention, bleeding, or inability to pass gas requires urgent medical evaluation. Professional assessment is required before prescribing during pregnancy or postpartum.",
+      "safetyEs": "Estreñimiento nuevo intenso, vómito, distensión abdominal marcada, sangrado o incapacidad para expulsar gases requiere evaluación médica urgente. Se necesita valoración profesional antes de prescribir durante embarazo o posparto.",
+      "safetyTier": "high",
+      "examFocus": "Run Chang Wan was listed in NCCAOM 2020 Appendix B, but it is not in the current NCBAHM 2026 Appendix C. Study it as a historical comparison: Blood-fluid deficiency and dryness separate it from the Heat-Dryness excess of Ma Zi Ren Wan and the Kidney-Yang deficiency-Cold of Ji Chuan Jian.",
+      "examFocusEs": "Run Chang Wan figuraba en Appendix B de NCCAOM 2020, pero no está en el Appendix C vigente de NCBAHM 2026. Estúdiala como comparación histórica: deficiencia de Sangre-líquidos y sequedad la separan del exceso de Calor-Sequedad de Ma Zi Ren Wan y del Frío por deficiencia de Yang de Riñón de Ji Chuan Jian.",
+      "ingredientRoles": "Dang Gui and Sheng Di Huang restore the deficient Blood-fluid substrate; Huo Ma Ren and Tao Ren moisten and lubricate; Zhi Ke moves Qi so the enriched Intestines can conduct stool.",
+      "ingredientRolesEs": "Dang Gui y Sheng Di Huang restauran el sustrato deficiente de Sangre-líquidos; Huo Ma Ren y Tao Ren humedecen y lubrican; Zhi Ke mueve Qi para que los Intestinos enriquecidos conduzcan las heces.",
+      "comparison": "Ma Zi Ren Wan is more excess-oriented and treats Heat-Dryness with focal distention; Ji Chuan Jian warms Kidney Yang for constipation with Cold and clear copious urine.",
+      "comparisonEs": "Ma Zi Ren Wan se orienta más a exceso y trata Calor-Sequedad con distensión focal; Ji Chuan Jian calienta Yang de Riñón para estreñimiento con Frío y orina clara abundante."
     }
   ]
 }
