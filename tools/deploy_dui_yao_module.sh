@@ -114,6 +114,16 @@ for slug in "${SLUGS[@]}"; do
     grep -q 'comparison-return.js?v=20261101-3' "$TEMP_DIR/$slug.html"
     grep -q 'comparison-return.js?v=20261101-3' "$TEMP_DIR/$slug-es.html"
 done
+if grep -q '<th>Representative bridge</th>' "$TEMP_DIR"/*-dui-yao.html; then
+    echo "ERROR: una ficha inglesa repite el contexto clásico como puente representativo." >&2
+    exit 1
+fi
+if grep -q '<th>Puente representativo</th>' "$TEMP_DIR"/*-dui-yao-es.html; then
+    echo "ERROR: una ficha española repite el contexto clásico como puente representativo." >&2
+    exit 1
+fi
+grep -q '<th>Classification</th>' "$TEMP_DIR/ban-xia-sheng-jiang-dui-yao.html"
+grep -q '<th>Clasificación</th>' "$TEMP_DIR/ban-xia-sheng-jiang-dui-yao-es.html"
 
 mkdir -p "$BACKUP_DIR"
 for file in dui-yao-data.json dui-yao.html dui-yao-es.html comparison-return.js; do
@@ -147,6 +157,16 @@ grep -q 'comparison-return.js?v=20261101-3' "$TARGET_DIR/dui-yao.html"
 grep -q '¿Sabías que…?' "$TARGET_DIR/dui-yao-es.html"
 grep -q "las tres fórmulas base y las cuatro parejas sí están" "$TARGET_DIR/dui-yao-es.html"
 [[ "$(grep -o 'data-dui-modification-link=' "$TARGET_DIR/dui-yao-es.html" | wc -l)" -eq 10 ]]
+if grep -q '<th>Representative bridge</th>' "$TARGET_DIR"/*-dui-yao.html; then
+    echo "ERROR: una ficha inglesa instalada repite el contexto clásico como puente representativo." >&2
+    exit 1
+fi
+if grep -q '<th>Puente representativo</th>' "$TARGET_DIR"/*-dui-yao-es.html; then
+    echo "ERROR: una ficha española instalada repite el contexto clásico como puente representativo." >&2
+    exit 1
+fi
+grep -q '<th>Classification</th>' "$TARGET_DIR/ban-xia-sheng-jiang-dui-yao.html"
+grep -q '<th>Clasificación</th>' "$TARGET_DIR/ban-xia-sheng-jiang-dui-yao-es.html"
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" && -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
@@ -159,4 +179,5 @@ fi
 echo "MÓDULO DUÌ YÀO INSTALADO: 51 parejas, 102 fichas bilingües y 10 puentes con fórmulas"
 echo "RETORNO CONTEXTUAL INSTALADO: LAS 14 CATEGORÍAS DE FÓRMULAS CONSERVAN SU PUNTO DE ORIGEN"
 echo "DISTINCIÓN SEMÁNTICA INSTALADA: LAS PAREJAS NO RELACIONADAS ELIMINAN EL RETORNO A FÓRMULAS"
+echo "TABLAS CORREGIDAS: EL CONTEXTO CLÁSICO NO SE DUPLICA COMO PUENTE REPRESENTATIVO"
 echo "Respaldo: $BACKUP_DIR"
