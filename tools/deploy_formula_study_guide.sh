@@ -120,6 +120,7 @@ php -r '
         }
     }
     $purgeSections = $data["categoryGuides"]["purge"]["formulaSections"] ?? [];
+    $purgeDuiYao = $data["categoryGuides"]["purge"]["relatedDuiYao"] ?? [];
     $purgeSectionNames = [];
     foreach ($purgeSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
@@ -196,6 +197,8 @@ php -r '
             || $purgeSectionNames !== [
                 "Da Cheng Qi Tang", "Xiao Cheng Qi Tang", "Tiao Wei Cheng Qi Tang"
             ]
+            || array_column($purgeDuiYao, "number") !== [49]
+            || array_column($purgeDuiYao, "slug") !== ["da-huang-mang-xiao-dui-yao"]
             || array_column($purgeTherapeuticClasses, "key") !== [
                 "cold-purgatives", "warm-purgatives", "moistening-laxatives",
                 "attack-and-tonify", "harsh-water-expellants"
@@ -349,6 +352,8 @@ grep -q "Duì Yào relacionados · Liberar Viento-Frío o Viento-Calor" "$TEMP_D
 grep -q '"slug": "ma-huang-gui-zhi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Aclarar Calor según nivel, localización y raíz" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "shi-gao-zhi-mu-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Purgar Calor y ablandar dureza seca" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "da-huang-mang-xiao-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
@@ -498,6 +503,8 @@ grep -q "Duì Yào relacionados · Liberar Viento-Frío o Viento-Calor" "$TARGET
 grep -q '"slug": "ma-huang-gui-zhi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Aclarar Calor según nivel, localización y raíz" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug": "shi-gao-zhi-mu-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Purgar Calor y ablandar dureza seca" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"slug": "da-huang-mang-xiao-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
@@ -541,6 +548,7 @@ echo "ANEXO INSTALADO: LAS 7 TABLAS COMPARATIVAS DEL CAPÍTULO 17 QUEDAN PLEGADA
 echo "PUENTE DUÌ YÀO INSTALADO: 5 PAREJAS OFICIALES RELACIONADAS CON TOS Y FLEMA"
 echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA LIBERAR EL EXTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA ACLARAR CALOR"
+echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA OFICIAL PARA PURGAR CALOR Y ABLANDAR SEQUEDAD"
 echo "RETORNO DUÌ YÀO PREPARADO PARA LAS 14 CATEGORÍAS DE FÓRMULAS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"

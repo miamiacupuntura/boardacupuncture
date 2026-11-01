@@ -725,6 +725,24 @@
       "clinicalFrameTextEs": "La elección no se basa solo en estreñimiento. Da Cheng Qi Tang combina purgación, ablandamiento salino y fuerte movimiento de Qi para aglomeración completa y grave. Xiao Cheng Qi Tang retira Mang Xiao cuando la sequedad es menos importante. Tiao Wei Cheng Qi Tang retira el par que moviliza Qi con fuerza y añade Gan Cao cuando predominan Calor-Sequedad e irritabilidad con poca distensión focal o plenitud.",
       "clinicalFrameCaveat": "These formulas are potent short-course purgatives, not routine constipation remedies. Chinese-medicine clumping does not establish a biomedical diagnosis. Severe or worsening abdominal pain, guarding, repeated vomiting, fever, blood in stool, dehydration, marked distention, or inability to pass stool or gas requires urgent evaluation for obstruction or another acute abdomen.",
       "clinicalFrameCaveatEs": "Estas fórmulas son purgantes potentes de uso breve, no remedios rutinarios para estreñimiento. La aglomeración de medicina china no establece un diagnóstico biomédico. Dolor abdominal intenso o creciente, defensa, vómitos repetidos, fiebre, sangre en heces, deshidratación, distensión marcada o incapacidad para evacuar heces o gases requiere valoración urgente por obstrucción u otro abdomen agudo.",
+      "relatedDuiYaoAnchor": "purge",
+      "relatedDuiYaoTitle": "Related Duì Yào · Purge Heat and Soften Dry Hardness",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Purgar Calor y ablandar dureza seca",
+      "relatedDuiYaoText": "This official Appendix B pair identifies the salt-softening branch of the Cheng Qi family. Dà Huáng attacks Heat accumulation while Máng Xiāo draws water into the Intestines and softens dry hardness; together they appear in Dà Chéng Qì Tāng and Tiáo Wèi Chéng Qì Tāng.",
+      "relatedDuiYaoTextEs": "Este par oficial del Appendix B identifica la rama que ablanda con sal de la familia Cheng Qi. Dà Huáng ataca acumulación de Calor mientras Máng Xiāo atrae agua a los Intestinos y ablanda dureza seca; juntos aparecen en Dà Chéng Qì Tāng y Tiáo Wèi Chéng Qì Tāng.",
+      "relatedDuiYaoCaveat": "The pair alone does not choose between the two formulas. Severe focal distention, fullness, dryness and hardness require the complete Dà Chéng Qì Tāng architecture with Hòu Pò and Zhǐ Shí; mild Dry-Heat with little focal distention or fullness points to Tiáo Wèi Chéng Qì Tāng and its moderating Zhì Gān Cǎo. Xiǎo Chéng Qì Tāng omits Máng Xiāo because dryness is less pronounced.",
+      "relatedDuiYaoCaveatEs": "El par por sí solo no decide entre las dos fórmulas. Distensión focal, plenitud, sequedad y dureza intensas requieren la arquitectura completa de Dà Chéng Qì Tāng con Hòu Pò y Zhǐ Shí; Calor-Sequedad leve con poca distensión focal o plenitud apunta a Tiáo Wèi Chéng Qì Tāng y su Zhì Gān Cǎo moderador. Xiǎo Chéng Qì Tāng omite Máng Xiāo porque la sequedad es menos pronunciada.",
+      "relatedDuiYao": [
+        {
+          "number": 49,
+          "slug": "da-huang-mang-xiao-dui-yao",
+          "title": "Dà Huáng + Máng Xiāo",
+          "characters": "大黄 + 芒硝",
+          "action": "Purge Heat accumulation and soften dry hardness in Yangming bowel excess.",
+          "actionEs": "Purgar acumulación de Calor y ablandar dureza seca en exceso intestinal Yangming.",
+          "formulas": "Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng."
+        }
+      ],
       "classificationTitle": "The Purge category contains five different therapeutic classes",
       "classificationTitleEs": "La categoría Purge contiene cinco clases terapéuticas diferentes",
       "classificationText": "Purgatives, moistening laxatives, and harsh water-expellants are grouped together because all direct a pathogen or accumulation downward, but they do not treat the same problem. Identify what must be removed—Heat clumping, Cold accumulation, dry stool, excess complicated by deficiency, or retained water—before comparing formulas.",
