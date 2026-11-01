@@ -64,6 +64,13 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-wind-ch14"
     );
+    $releaseSections = $data["categoryGuides"]["release-exterior"]["formulaSections"] ?? [];
+    $releaseSectionNames = [];
+    foreach ($releaseSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $releaseSectionNames[] = $formulaName;
+        }
+    }
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
             || count($data["supplementalCategories"] ?? []) !== 15
@@ -74,13 +81,24 @@ php -r '
             || count($chapter11) !== 7
             || count($chapter12) !== 15
             || count($chapter13) !== 19
-            || count($chapter14) !== 14) {
+            || count($chapter14) !== 14
+            || array_column($releaseSections, "key") !== ["wind-cold", "wind-heat", "cold-transforming-heat"]
+            || $releaseSectionNames !== [
+                "Ma Huang Tang", "Gui Zhi Tang", "Ge Gen Tang", "Ren Shen Bai Du San",
+                "Sang Ju Yin", "Yin Qiao San", "Chai Ge Jie Ji Tang"
+            ]) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
 ' "$TEMP_DIR/formulas-study-guide-data.json"
 
 grep -q "tonify-chapter-8" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "selectedformulasections" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "clinical-section-" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Por qué Viento-Frío y Viento-Calor deben estudiarse por separado" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "wind-cold"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "wind-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "cold-transforming-heat"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
@@ -188,6 +206,12 @@ if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
 fi
 
 grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "selectedformulasections" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "clinical-section-" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Por qué Viento-Frío y Viento-Calor deben estudiarse por separado" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "wind-cold"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "wind-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "cold-transforming-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Categoría oficial del Board: 3 fórmulas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "3 fórmulas Board · Capítulo 9 de Bensky: 17" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente" "$TARGET_DIR/formulas-study-guide.php"
@@ -239,6 +263,7 @@ grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-s
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
 echo "CAPÍTULOS 8, 9, 10, 11, 12, 13 Y 14 INSTALADOS EN MOODLE"
+echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"

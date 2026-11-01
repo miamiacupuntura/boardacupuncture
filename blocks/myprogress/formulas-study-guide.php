@@ -853,6 +853,31 @@ $isstabilizechapterpage = $selected !== null && $selected['key'] === 'stabilize-
 $iscalmshenchapterpage = $selected !== null && $selected['key'] === 'calm-shen-chapter-10';
 $isopenorificeschapterpage = $selected !== null && $selected['key'] === 'open-orifices-chapter-11';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
+$selectedformulasections = $selectedguide['formulaSections'] ?? [];
+$selectedformulasectionbyname = [];
+if ($selected !== null && $selectedformulasections !== []) {
+    $selectedformulasbyname = [];
+    foreach ($selected['formulas'] as $selectedformula) {
+        $selectedformulasbyname[$selectedformula['name']] = $selectedformula;
+    }
+    $orderedselectedformulas = [];
+    foreach ($selectedformulasections as $formulasection) {
+        foreach ($formulasection['formulaNames'] as $formulaname) {
+            if (!isset($selectedformulasbyname[$formulaname])) {
+                throw new moodle_exception('Missing formula in clinical section: ' . $formulaname);
+            }
+            if (isset($selectedformulasectionbyname[$formulaname])) {
+                throw new moodle_exception('Formula assigned to multiple clinical sections: ' . $formulaname);
+            }
+            $selectedformulasectionbyname[$formulaname] = $formulasection;
+            $orderedselectedformulas[] = $selectedformulasbyname[$formulaname];
+        }
+    }
+    if (count($orderedselectedformulas) !== count($selected['formulas'])) {
+        throw new moodle_exception('Clinical sections do not cover every selected formula.');
+    }
+    $selected['formulas'] = $orderedselectedformulas;
+}
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
 
@@ -1287,6 +1312,45 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
         <?php if ($selectedguide !== null): ?>
+            <?php if ($selectedformulasections !== []): ?>
+                <section class="formula-study-guide__medical-rationale" aria-labelledby="clinical-frame-title">
+                    <div class="formula-study-guide__medical-rationale-header">
+                        <span class="formula-study-guide__medical-rationale-stat"><?php echo s(count($selected['formulas']) . ($ises ? ' fórmulas Board · ' : ' Board formulas · ') . count($selectedformulasections) . ($ises ? ' secciones clínicas' : ' clinical sections')); ?></span>
+                        <h4 id="clinical-frame-title"><?php echo s($ises ? $selectedguide['clinicalFrameTitleEs'] : $selectedguide['clinicalFrameTitle']); ?></h4>
+                        <p><?php echo s($ises ? $selectedguide['clinicalFrameTextEs'] : $selectedguide['clinicalFrameText']); ?></p>
+                    </div>
+                    <div class="formula-study-guide__table-wrap">
+                        <table class="formula-study-guide__table">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $ises ? 'Sección clínica' : 'Clinical section'; ?></th>
+                                    <th><?php echo $ises ? 'Centro diagnóstico' : 'Diagnostic center'; ?></th>
+                                    <th><?php echo $ises ? 'Fórmulas Board' : 'Board formulas'; ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($selectedformulasections as $formulasection): ?>
+                                    <tr>
+                                        <td><?php echo s($ises ? $formulasection['nameEs'] : $formulasection['name']); ?></td>
+                                        <td><?php echo s($ises ? $formulasection['diagnosticEs'] : $formulasection['diagnostic']); ?></td>
+                                        <td class="formula-study-guide__medical-rationale-board">
+                                            <?php foreach ($formulasection['formulaNames'] as $sectionformulaindex => $sectionformulaname): ?>
+                                                <?php $sectionboardformula = $getboardformula($sectionformulaname); ?>
+                                                <?php if ($sectionformulaindex > 0): ?>, <?php endif; ?>
+                                                <a href="#formula-<?php echo s((string) $sectionboardformula['number']); ?>"><?php echo s($displayformulaname($sectionformulaname)); ?></a>
+                                            <?php endforeach; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="formula-study-guide__medical-rationale-header formula-study-guide__medical-rationale-secondary">
+                        <h4><?php echo s($ises ? 'Aclaración médica importante' : 'Important medical clarification'); ?></h4>
+                        <p><?php echo s($ises ? $selectedguide['clinicalFrameCaveatEs'] : $selectedguide['clinicalFrameCaveat']); ?></p>
+                    </div>
+                </section>
+            <?php endif; ?>
             <section class="formula-study-guide__priority" aria-labelledby="guideline-priority-title">
                 <h4 id="guideline-priority-title"><?php echo s($ises ? $selectedguide['priorityTitleEs'] : $selectedguide['priorityTitle']); ?></h4>
                 <p><?php echo s($ises ? $selectedguide['priorityTextEs'] : $selectedguide['priorityText']); ?></p>
@@ -1300,29 +1364,36 @@ echo $OUTPUT->header();
                     <?php endforeach; ?>
                 </div>
             </section>
-            <section class="formula-study-guide__compare" aria-labelledby="core-comparison-title">
-                <h4 id="core-comparison-title"><?php echo s($ises ? $selectedguide['quickCompareTitleEs'] : $selectedguide['quickCompareTitle']); ?></h4>
-                <div class="formula-study-guide__table-wrap">
-                    <table class="formula-study-guide__table">
-                        <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
-                        <tbody>
-                            <?php foreach ($selectedguide['quickCompare'] as $row): ?>
-                                <?php $boardmatch = $getboardformula($row[0]); ?>
-                                <tr>
-                                    <td>
-                                        <?php echo s($displayformulaname($row[0])); ?>
-                                        <?php if ($boardmatch !== null): ?>
-                                            <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
-                                    <td><?php echo s($ises ? $row[4] : $row[2]); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
+            <?php foreach ($quickcomparesections as $comparesection): ?>
+                <?php $compareformulanames = array_flip($comparesection['formulaNames']); ?>
+                <?php $comparerows = array_values(array_filter($selectedguide['quickCompare'], static fn(array $row): bool => isset($compareformulanames[$row[0]]))); ?>
+                <section class="formula-study-guide__compare" aria-labelledby="core-comparison-<?php echo s($comparesection['key']); ?>-title">
+                    <h4 id="core-comparison-<?php echo s($comparesection['key']); ?>-title"><?php echo s($selectedformulasections !== []
+                        ? (($ises ? 'Comparación · ' : 'Comparison · ') . ($ises ? $comparesection['nameEs'] : $comparesection['name']))
+                        : ($ises ? $selectedguide['quickCompareTitleEs'] : $selectedguide['quickCompareTitle'])); ?></h4>
+                    <div class="formula-study-guide__table-wrap">
+                        <table class="formula-study-guide__table">
+                            <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
+                            <tbody>
+                                <?php foreach ($comparerows as $row): ?>
+                                    <?php $boardmatch = $getboardformula($row[0]); ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo s($displayformulaname($row[0])); ?>
+                                            <?php if ($boardmatch !== null): ?>
+                                                <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
+                                        <td><?php echo s($ises ? $row[4] : $row[2]); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            <?php endforeach; ?>
         <?php endif; ?>
         <?php if ($selected['key'] === 'calm-shen'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-ten-shortcut-title">
@@ -1761,10 +1832,12 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
         <section class="formula-study-guide__formula-list" aria-label="<?php echo s($ises ? 'Fórmulas de la categoría' : 'Category formulas'); ?>">
-            <?php $chapterformulaindex = 0; $lastformulacategory = null; ?>
+            <?php $chapterformulaindex = 0; $lastformulacategory = null; $lastclinicalsectionkey = null; ?>
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
                 $chapterformulaindex++;
+                $clinicalsection = $selectedformulasectionbyname[$formula['name']] ?? null;
+                $newclinicalsection = $clinicalsection !== null && $lastclinicalsectionkey !== $clinicalsection['key'];
                 $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
                 $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14'], true)
@@ -1811,6 +1884,9 @@ echo $OUTPUT->header();
                 $formulacategoryguide = $newchaptersection && $selected['key'] === 'tonify-chapter-8'
                     ? ($data['categoryGuides'][$formula['categoryKey']] ?? null) : null;
                 $lastformulacategory = $currentsectionkey;
+                if ($clinicalsection !== null) {
+                    $lastclinicalsectionkey = $clinicalsection['key'];
+                }
                 $tier = $formula['safetyTier'];
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
@@ -1881,6 +1957,14 @@ echo $OUTPUT->header();
                             </div>
                         </section>
                     <?php endif; ?>
+                <?php endif; ?>
+                <?php if ($newclinicalsection): ?>
+                    <section class="formula-study-guide__chapter-section" id="clinical-section-<?php echo s($clinicalsection['key']); ?>">
+                        <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Sección clínica del guideline' : 'Guideline clinical section'); ?></p>
+                        <h4><?php echo s($ises ? $clinicalsection['nameEs'] : $clinicalsection['name']); ?></h4>
+                        <p><?php echo s($ises ? $clinicalsection['copyEs'] : $clinicalsection['copy']); ?></p>
+                        <span class="formula-study-guide__chapter-section-meta"><?php echo count($clinicalsection['formulaNames']); ?> <?php echo $ises ? 'fórmulas Board' : 'Board formulas'; ?></span>
+                    </section>
                 <?php endif; ?>
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
                     <header class="formula-study-guide__formula-heading">

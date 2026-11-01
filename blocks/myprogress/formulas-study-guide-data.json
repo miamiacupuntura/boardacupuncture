@@ -88,10 +88,48 @@
   ],
   "categoryGuides": {
     "release-exterior": {
-      "priorityTitle": "Guideline priority: master these 7 formulas first",
-      "priorityTitleEs": "Prioridad del guideline: domina primero estas 7 fórmulas",
-      "priorityText": "The cards below are the core formulas in the current exam guideline. Secondary formulas are kept in a collapsed comparison section so they support—not compete with—the required material.",
-      "priorityTextEs": "Las tarjetas siguientes son las fórmulas centrales del guideline actual. Las fórmulas secundarias quedan en una sección comparativa plegable para apoyar, no competir con, el material requerido.",
+      "priorityTitle": "Guideline priority: master 7 formulas in 3 clinical sections",
+      "priorityTitleEs": "Prioridad del guideline: domina 7 fórmulas en 3 secciones clínicas",
+      "priorityText": "Begin by separating Wind-Cold from Wind-Heat, then recognize the transitional pattern in which unresolved Cold is changing into Heat. Secondary formulas remain in a collapsed comparison section so they support—not compete with—the required material.",
+      "priorityTextEs": "Empieza separando Viento-Frío de Viento-Calor y después reconoce el patrón transicional en que el Frío no resuelto se transforma en Calor. Las fórmulas secundarias permanecen en una comparación plegable para apoyar, no competir con, el material obligatorio.",
+      "clinicalFrameTitle": "Why Wind-Cold and Wind-Heat must be separated",
+      "clinicalFrameTitleEs": "Por qué Viento-Frío y Viento-Calor deben estudiarse por separado",
+      "clinicalFrameText": "The first decision is the thermal direction of the exterior pattern. Wind-Cold is dominated by contraction and obstruction; Wind-Heat shows early Heat, dryness, or throat/Lung irritation. The treatment direction changes accordingly, so combining all seven cards in one uninterrupted list hides the most important diagnostic fork.",
+      "clinicalFrameTextEs": "La primera decisión es la dirección térmica del patrón exterior. Viento-Frío está dominado por contracción y obstrucción; Viento-Calor muestra Calor temprano, sequedad o irritación de garganta/Pulmón. La dirección terapéutica cambia en consecuencia, por lo que reunir las siete fichas en una lista continua oculta la bifurcación diagnóstica principal.",
+      "clinicalFrameCaveat": "These are Chinese-medicine pattern descriptions, not modern etiologic diagnoses. They do not determine whether an illness is viral or bacterial. Respiratory distress, persistent high fever, confusion, cyanosis, severe dehydration, or rapidly worsening symptoms require prompt medical evaluation.",
+      "clinicalFrameCaveatEs": "Estas son descripciones de patrones de medicina china, no diagnósticos etiológicos modernos. No determinan si una enfermedad es viral o bacteriana. Dificultad respiratoria, fiebre alta persistente, confusión, cianosis, deshidratación grave o empeoramiento rápido requieren valoración médica inmediata.",
+      "formulaSections": [
+        {
+          "key": "wind-cold",
+          "name": "Release Wind-Cold",
+          "nameEs": "Liberar Viento-Frío",
+          "formulaNames": ["Ma Huang Tang", "Gui Zhi Tang", "Ge Gen Tang", "Ren Shen Bai Du San"],
+          "copy": "Cold contracts and obstructs the exterior. First distinguish closed excess without sweat, Ying-Wei disharmony with spontaneous sweat, muscle-layer rigidity, and Wind-Cold-Dampness occurring over Qi deficiency.",
+          "copyEs": "El Frío contrae y obstruye el Exterior. Primero distingue exceso cerrado sin sudor, desarmonía Ying-Wei con sudor espontáneo, rigidez de la capa muscular y Viento-Frío-Humedad sobre deficiencia de Qi.",
+          "diagnostic": "Chills and aversion to Cold are prominent; secretions tend to be clear, thirst is absent or mild, and the pulse is usually floating with tight, moderate, or soggy qualities.",
+          "diagnosticEs": "Predominan escalofríos y aversión al Frío; las secreciones tienden a ser claras, la sed es ausente o leve y el pulso suele ser flotante con cualidades tensas, moderadas o empapadas."
+        },
+        {
+          "key": "wind-heat",
+          "name": "Release Wind-Heat",
+          "nameEs": "Liberar Viento-Calor",
+          "formulaNames": ["Sang Ju Yin", "Yin Qiao San"],
+          "copy": "Heat begins to dominate the Wei level and Lung. Decide whether the presentation is mild and cough-centered or stronger, with fever, thirst, sore throat, and Heat-Toxin signs.",
+          "copyEs": "El Calor empieza a dominar el nivel Wei y Pulmón. Decide si el cuadro es leve y centrado en tos o más fuerte, con fiebre, sed, dolor de garganta y signos de Calor-Toxicidad.",
+          "diagnostic": "Fever is more prominent than chills; thirst, sore throat, headache, mild sweating, and a floating-rapid pulse support Wind-Heat.",
+          "diagnosticEs": "La fiebre predomina sobre los escalofríos; sed, dolor de garganta, cefalea, sudor leve y pulso flotante-rápido apoyan Viento-Calor."
+        },
+        {
+          "key": "cold-transforming-heat",
+          "name": "Wind-Cold transforming into Heat",
+          "nameEs": "Viento-Frío transformándose en Calor",
+          "formulaNames": ["Chai Ge Jie Ji Tang"],
+          "copy": "This is a bridge pattern rather than pure Wind-Cold or pure Wind-Heat. The exterior constraint remains, but internal Heat is becoming more obvious.",
+          "copyEs": "Es un patrón puente, no Viento-Frío puro ni Viento-Calor puro. La constricción exterior persiste, pero el Calor interno se vuelve cada vez más evidente.",
+          "diagnostic": "Fever rises as chills decline, with increasing thirst, headache, eye or orbital pain, and signs that the pathogen is moving inward.",
+          "diagnosticEs": "La fiebre aumenta mientras disminuyen los escalofríos, con sed creciente, cefalea, dolor ocular u orbitario y signos de que el patógeno se interioriza."
+        }
+      ],
       "routeTitle": "Four-step diagnostic route",
       "routeTitleEs": "Ruta diagnóstica en cuatro pasos",
       "route": [
