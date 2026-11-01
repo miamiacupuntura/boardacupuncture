@@ -1649,6 +1649,7 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
+        <?php $relatedduiyaomarkup = ''; ?>
         <?php if ($selectedguide !== null): ?>
             <?php if ($selectedformulasections !== []): ?>
                 <section class="formula-study-guide__medical-rationale" aria-labelledby="clinical-frame-title">
@@ -1764,6 +1765,7 @@ echo $OUTPUT->header();
             <?php endif; ?>
             <?php if (!empty($selectedguide['relatedDuiYao'])): ?>
                 <?php
+                ob_start();
                 $duiyaoindexpath = $ises
                     ? '/study-guide/comparisons/dui-yao-es.html'
                     : '/study-guide/comparisons/dui-yao.html';
@@ -1821,6 +1823,12 @@ echo $OUTPUT->header();
                         <a class="formula-study-guide__button" href="<?php echo $duiyaoindexurl->out(false); ?>"><?php echo s($ises ? 'Ver el bloque Duì Yào completo →' : 'Open the complete Duì Yào block →'); ?></a>
                     </footer>
                 </section>
+                <?php
+                $relatedduiyaomarkup = (string) ob_get_clean();
+                if ($selected['key'] !== 'calm-shen-chapter-10') {
+                    echo $relatedduiyaomarkup;
+                }
+                ?>
             <?php endif; ?>
             <?php if (!in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true) && !empty($selectedguide['quickCompare'])): ?>
                 <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
@@ -2323,6 +2331,9 @@ echo $OUTPUT->header();
                         : 'Scope note: the Board does not publish a formula-by-formula medical rationale. This is a clinical and educational hypothesis based on pattern coverage, applicability, safety, and syllabus organization—not an official Board statement.'); ?></p>
                 </div>
             </section>
+        <?php endif; ?>
+        <?php if ($selected['key'] === 'calm-shen-chapter-10'): ?>
+            <?php echo $relatedduiyaomarkup; ?>
         <?php endif; ?>
         <section class="formula-study-guide__formula-list" aria-label="<?php echo s($ises ? 'Fórmulas de la categoría' : 'Category formulas'); ?>">
             <?php $chapterformulaindex = 0; $lastformulacategory = null; $lastclinicalsectionkey = null; ?>
