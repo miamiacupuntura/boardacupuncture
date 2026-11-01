@@ -64,6 +64,17 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-wind-ch14"
     );
+    $chapter15 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "treat-dryness-ch15"
+    );
+    $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
+    $drynessSectionNames = [];
+    foreach ($drynessSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $drynessSectionNames[] = $formulaName;
+        }
+    }
     $releaseSections = $data["categoryGuides"]["release-exterior"]["formulaSections"] ?? [];
     $releaseSectionNames = [];
     foreach ($releaseSections as $section) {
@@ -95,8 +106,8 @@ php -r '
     }
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 15
-            || count($data["supplementalFormulas"] ?? []) !== 145
+            || count($data["supplementalCategories"] ?? []) !== 16
+            || count($data["supplementalFormulas"] ?? []) !== 153
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -104,6 +115,14 @@ php -r '
             || count($chapter12) !== 15
             || count($chapter13) !== 19
             || count($chapter14) !== 14
+            || count($chapter15) !== 8
+            || array_column($drynessSections, "key") !== [
+                "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
+            ]
+            || $drynessSectionNames !== [
+                "Xing Su San", "Sang Xing Tang", "Qing Zao Jiu Fei Tang", "Sha Shen Mai Men Dong Tang",
+                "Mai Men Dong Tang", "Yang Yin Qing Fei Tang", "Yu Ye Tang", "Zeng Ye Tang"
+            ]
             || array_column($releaseSections, "key") !== ["wind-cold", "wind-heat", "cold-transforming-heat"]
             || $releaseSectionNames !== [
                 "Ma Huang Tang", "Gui Zhi Tang", "Ge Gen Tang", "Ren Shen Bai Du San",
@@ -240,6 +259,13 @@ grep -q "\['Xiao Huo Luo Dan', 2, 'board'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "\['Tian Ma Gou Teng Yin', 3, 'board'" "$TEMP_DIR/formulas-study-guide.php"
 grep -Fq "return \$name . (\$getboardformula(\$name) !== null ? '*' : '');" "$TEMP_DIR/formulas-study-guide.php"
 ! grep -q "Expel Wind main category" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "treat-dryness-ch15" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number": "C15-08"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "gently-disperse-external-dryness"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key": "enrich-yin-internal-dryness"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Dato interesante: el Board no tiene una categoría propia para tratar Sequedad" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Las seis fórmulas asociadas permanecen dentro de sus fichas principales" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "0 de 8 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -353,11 +379,18 @@ grep -q "\['Xiao Huo Luo Dan', 2, 'board'" "$TARGET_DIR/formulas-study-guide.php
 grep -q "\['Tian Ma Gou Teng Yin', 3, 'board'" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "return \$name . (\$getboardformula(\$name) !== null ? '*' : '');" "$TARGET_DIR/formulas-study-guide.php"
 ! grep -q "Expel Wind main category" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "treat-dryness-ch15" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number": "C15-08"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "gently-disperse-external-dryness"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key": "enrich-yin-internal-dryness"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Dato interesante: el Board no tiene una categoría propia para tratar Sequedad" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Las seis fórmulas asociadas permanecen dentro de sus fichas principales" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "0 de 8 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11, 12, 13 Y 14 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14 Y 15 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
@@ -379,8 +412,11 @@ echo "VISTA ÚNICA INSTALADA: INVIGORATE BLOOD ABRE DIRECTAMENTE EL CAPÍTULO 13
 echo "CAPÍTULO 14 INSTALADO: 17 fórmulas (14 perfiles nuevos + 3 Board; 2 secciones de la fuente)"
 echo "PRIORIDAD INSTALADA: LAS 3 FÓRMULAS BOARD APARECEN PRIMERO"
 echo "EXPLICACIÓN MÉDICA INSTALADA: COBERTURA DE PATRONES, SEGURIDAD Y LÍMITES CLÍNICOS"
-echo "DATOS INTERESANTES INSTALADOS: HIPÓTESIS CLÍNICAS Y CURRICULARES PARA LOS CAPÍTULOS 5–13"
+echo "DATOS INTERESANTES INSTALADOS: HIPÓTESIS CLÍNICAS Y CURRICULARES PARA LOS CAPÍTULOS 5–15"
 echo "VISTA ÚNICA INSTALADA: EXPEL WIND ABRE DIRECTAMENTE EL CAPÍTULO 14 COMPLETO"
+echo "CAPÍTULO 15 INSTALADO: 8 FÓRMULAS PRINCIPALES EN 2 SECCIONES (0 BOARD)"
+echo "FÓRMULAS ASOCIADAS INSTALADAS: 6 VARIANTES DENTRO DE SUS FICHAS PRINCIPALES"
+echo "SEQUEDAD INSTALADA: EXTERNA FRESCA/CÁLIDA VS. INTERNA POR AGOTAMIENTO DE LÍQUIDOS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"

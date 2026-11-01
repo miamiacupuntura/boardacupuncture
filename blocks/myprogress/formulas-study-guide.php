@@ -19,8 +19,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 15
-        || count($data['supplementalFormulas'] ?? []) !== 145) {
+        || count($data['supplementalCategories'] ?? []) !== 16
+        || count($data['supplementalFormulas'] ?? []) !== 153) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -120,6 +120,10 @@ $categorycopy = [
     'expel-wind-chapter-14' => [
         'Compare all 17 principal formulas in Bensky Chapter 14 by external versus internal Wind, Heat, Cold, Phlegm, Blood-Yin deficiency, channel location, and urgency.',
         'Compara las 17 fórmulas principales del capítulo 14 de Bensky por Viento externo o interno, Calor, Frío, Flema, deficiencia de Sangre-Yin, localización en canales y urgencia.',
+    ],
+    'treat-dryness-ch15' => [
+        'Compare eight principal formulas in Bensky Chapter 15 by external versus internal dryness, cool versus warm dryness, organ location, fluid damage, rebellious Qi, thirst, and constipation.',
+        'Compara las ocho fórmulas principales del capítulo 15 de Bensky por Sequedad externa o interna, fresca o cálida, localización orgánica, lesión de líquidos, Qi rebelde, sed y estreñimiento.',
     ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
@@ -812,6 +816,23 @@ $chapterinterestinginsights = [
         'value' => 'The nineteen additional formulas are clinically important for avoiding a dangerous shortcut: moving Blood can worsen active bleeding, while stopping bleeding without addressing stasis can retain the cause. Acute or heavy bleeding is an emergency.',
         'valueEs' => 'Las diecinueve fórmulas adicionales son importantes para evitar un atajo peligroso: mover Sangre puede empeorar sangrado activo, mientras detenerlo sin tratar estasis puede retener la causa. Sangrado agudo o abundante es una urgencia.',
     ],
+    'treat-dryness-ch15' => [
+        'title' => 'Interesting point: the Board has no dedicated Treat Dryness category',
+        'titleEs' => 'Dato interesante: el Board no tiene una categoría propia para tratar Sequedad',
+        'stat' => '0 of 8 direct overlaps',
+        'statEs' => '0 de 8 coincidencias directas',
+        'intro' => 'None of the eight principal Chapter 15 formulas appears in the current 63-formula roster. The Board nevertheless tests pieces of the same physiology through formulas that clear Heat, transform Phlegm, tonify Yin, generate fluids, regulate Qi, and moisten the Intestines.',
+        'introEs' => 'Ninguna de las ocho fórmulas principales del capítulo 15 aparece en el listado vigente de 63. Sin embargo, el Board evalúa partes de la misma fisiología mediante fórmulas que aclaran Calor, transforman Flema, tonifican Yin, generan líquidos, regulan Qi y humedecen Intestinos.',
+        'rows' => [
+            ['coverage' => 'Heat with thirst and injury to fluids', 'coverageEs' => 'Calor con sed y lesión de líquidos', 'boardNames' => ['Bai Hu Tang', 'Qing Hao Bie Jia Tang'], 'additional' => 'Chapter 15 distinguishes a still-active external dryness pathogen from established internal Yin-fluid depletion.', 'additionalEs' => 'El capítulo 15 distingue un patógeno de Sequedad externa todavía activo del agotamiento interno ya establecido de Yin-líquidos.'],
+            ['coverage' => 'Lung dryness, cough, Phlegm, and rebellious Qi', 'coverageEs' => 'Sequedad de Pulmón, tos, Flema y Qi rebelde', 'boardNames' => ['Bei Mu Gua Lou San', 'Ding Chuan Tang'], 'additional' => 'The chapter grades cool versus warm dryness, superficial versus Qi-level penetration, and Lung-Stomach Yin failure.', 'additionalEs' => 'El capítulo gradúa Sequedad fresca o cálida, penetración superficial o al nivel Qi y falla de Yin de Pulmón-Estómago.'],
+            ['coverage' => 'Yin-fluid deficiency with thirst or dry constipation', 'coverageEs' => 'Deficiencia de Yin-líquidos con sed o estreñimiento seco', 'boardNames' => ['Liu Wei Di Huang Wan'], 'additional' => 'Ma Zi Ren Wan appears only in the supplemental purge taxonomy; Yu Ye Tang and Zeng Ye Tang further separate nonascending primal Qi with copious urine from exhausted intestinal fluids after febrile disease.', 'additionalEs' => 'Ma Zi Ren Wan aparece solo en la taxonomía suplementaria de purgación; Yu Ye Tang y Zeng Ye Tang separan además Qi primordial no ascendente con orina copiosa de líquidos intestinales agotados tras enfermedad febril.'],
+        ],
+        'hypothesis' => 'A plausible curricular explanation is that the Board distributes dryness across broader mechanisms—Heat, Phlegm, Yin deficiency, Qi rebellion, and constipation—instead of preserving it as a separate climatic and internal-fluid chapter.',
+        'hypothesisEs' => 'Una explicación curricular plausible es que el Board distribuye Sequedad entre mecanismos más amplios—Calor, Flema, deficiencia de Yin, Qi rebelde y estreñimiento—en vez de conservarla como capítulo climático y de líquidos internos separado.',
+        'value' => 'The chapter remains valuable because the same dry cough can require gentle warming dispersion, cooling dispersion, deep moistening, Qi support, or Yin enrichment. Treating external and internal dryness as interchangeable can trap a pathogen or further injure depleted fluids.',
+        'valueEs' => 'El capítulo sigue siendo valioso porque una misma tos seca puede requerir dispersión cálida suave, dispersión fresca, humectación profunda, apoyo de Qi o enriquecimiento de Yin. Tratar Sequedad externa e interna como intercambiables puede retener un patógeno o lesionar más los líquidos agotados.',
+    ],
 ];
 
 $supplementalindexcategories = [];
@@ -1315,7 +1336,9 @@ echo $OUTPUT->header();
             <?php if ($selectedformulasections !== []): ?>
                 <section class="formula-study-guide__medical-rationale" aria-labelledby="clinical-frame-title">
                     <div class="formula-study-guide__medical-rationale-header">
-                        <span class="formula-study-guide__medical-rationale-stat"><?php echo s(count($selected['formulas']) . ($ises ? ' fórmulas Board · ' : ' Board formulas · ') . count($selectedformulasections) . ($ises ? ' secciones clínicas' : ' clinical sections')); ?></span>
+                        <span class="formula-study-guide__medical-rationale-stat"><?php echo s(count($selected['formulas'])
+                            . ($issupplemental ? ($ises ? ' fórmulas principales · ' : ' principal formulas · ') : ($ises ? ' fórmulas Board · ' : ' Board formulas · '))
+                            . count($selectedformulasections) . ($ises ? ' secciones clínicas' : ' clinical sections')); ?></span>
                         <h4 id="clinical-frame-title"><?php echo s($ises ? $selectedguide['clinicalFrameTitleEs'] : $selectedguide['clinicalFrameTitle']); ?></h4>
                         <p><?php echo s($ises ? $selectedguide['clinicalFrameTextEs'] : $selectedguide['clinicalFrameText']); ?></p>
                     </div>
@@ -1325,7 +1348,7 @@ echo $OUTPUT->header();
                                 <tr>
                                     <th><?php echo $ises ? 'Sección clínica' : 'Clinical section'; ?></th>
                                     <th><?php echo $ises ? 'Centro diagnóstico' : 'Diagnostic center'; ?></th>
-                                    <th><?php echo $ises ? 'Fórmulas Board' : 'Board formulas'; ?></th>
+                                    <th><?php echo $issupplemental ? ($ises ? 'Fórmulas principales' : 'Principal formulas') : ($ises ? 'Fórmulas Board' : 'Board formulas'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1335,9 +1358,9 @@ echo $OUTPUT->header();
                                         <td><?php echo s($ises ? $formulasection['diagnosticEs'] : $formulasection['diagnostic']); ?></td>
                                         <td class="formula-study-guide__medical-rationale-board">
                                             <?php foreach ($formulasection['formulaNames'] as $sectionformulaindex => $sectionformulaname): ?>
-                                                <?php $sectionboardformula = $getboardformula($sectionformulaname); ?>
+                                                <?php $sectionformula = $getboardformula($sectionformulaname) ?? ($selectedformulasbyname[$sectionformulaname] ?? null); ?>
                                                 <?php if ($sectionformulaindex > 0): ?>, <?php endif; ?>
-                                                <a href="#formula-<?php echo s((string) $sectionboardformula['number']); ?>"><?php echo s($displayformulaname($sectionformulaname)); ?></a>
+                                                <a href="#formula-<?php echo s(preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $sectionformula['number'])); ?>"><?php echo s($displayformulaname($sectionformulaname)); ?></a>
                                             <?php endforeach; ?>
                                         </td>
                                     </tr>
@@ -2016,10 +2039,14 @@ echo $OUTPUT->header();
                 <?php endif; ?>
                 <?php if ($newclinicalsection): ?>
                     <section class="formula-study-guide__chapter-section" id="clinical-section-<?php echo s($clinicalsection['key']); ?>">
-                        <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Sección clínica del guideline' : 'Guideline clinical section'); ?></p>
+                        <p class="formula-study-guide__eyebrow"><?php echo s($issupplemental
+                            ? ($ises ? 'Sección clínica del capítulo' : 'Chapter clinical section')
+                            : ($ises ? 'Sección clínica del guideline' : 'Guideline clinical section')); ?></p>
                         <h4><?php echo s($ises ? $clinicalsection['nameEs'] : $clinicalsection['name']); ?></h4>
                         <p><?php echo s($ises ? $clinicalsection['copyEs'] : $clinicalsection['copy']); ?></p>
-                        <span class="formula-study-guide__chapter-section-meta"><?php echo count($clinicalsection['formulaNames']); ?> <?php echo $ises ? 'fórmulas Board' : 'Board formulas'; ?></span>
+                        <span class="formula-study-guide__chapter-section-meta"><?php echo count($clinicalsection['formulaNames']); ?> <?php echo $issupplemental
+                            ? ($ises ? 'fórmulas principales' : 'principal formulas')
+                            : ($ises ? 'fórmulas Board' : 'Board formulas'); ?></span>
                     </section>
                 <?php endif; ?>
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
