@@ -1,8 +1,15 @@
 # Resumen maestro de tips y trucos de estudio
 
-Estado: borrador interno; no se muestra todavía al estudiante.
+Estado: inventario interno en desarrollo; una primera selección revisada ya se muestra al estudiante.
 
 Última actualización: 2026-11-01.
+
+Desarrollo iniciado:
+
+- Bloque de acceso añadido al dashboard debajo de **NCBAHM Board Guidelines**.
+- Primera colección navegable en `tips-and-tricks.html` y `tips-and-tricks-es.html`.
+- Filtros iniciales: fórmulas, hierbas, no confundir, memoria y seguridad.
+- El inventario maestro continúa siendo interno; solo los tips revisados pasan a la página visible.
 
 ## Propósito
 
