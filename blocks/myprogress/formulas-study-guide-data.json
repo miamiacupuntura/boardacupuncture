@@ -587,6 +587,12 @@
       "classificationTextEs": "Purgantes, laxantes humectantes y expelentes drásticos de agua se agrupan porque todos dirigen hacia abajo un patógeno o una acumulación, pero no tratan el mismo problema. Antes de comparar fórmulas, identifica qué debe eliminarse: aglomeración de Calor, acumulación de Frío, heces secas, exceso complicado por deficiencia o agua retenida.",
       "classificationCaveat": "Critical distinction: moistening laxatives gently lubricate dry stool; purgatives forcefully attack material clumping; harsh expellants violently drive retained water through the stool or urine and are not constipation remedies. Several historical expellant formulas contain toxic, prohibited, or obsolete substances. These are study distinctions, not instructions for self-treatment.",
       "classificationCaveatEs": "Distinción crítica: los laxantes humectantes lubrican suavemente heces secas; los purgantes atacan con fuerza una aglomeración material; los expelentes drásticos fuerzan la salida de agua retenida por heces u orina y no son remedios para estreñimiento. Varias fórmulas expelentes históricas contienen sustancias tóxicas, prohibidas u obsoletas. Estas son distinciones de estudio, no instrucciones para autotratamiento.",
+      "boardScopeTitle": "Interesting point: common clinical use does not guarantee Board inclusion",
+      "boardScopeTitleEs": "Dato interesante: el uso clínico frecuente no garantiza inclusión en el Board",
+      "boardScopeText": "Run Chang Wan is widely taught and used in clinical practice for dry constipation from Blood and fluid deficiency, yet the current Appendix C does not include it. The Purge category selects only the three Cheng Qi formulas, creating a tightly graded comparison of Yangming organ Heat clumping and ingredient architecture. A reasonable curricular interpretation is that the blueprint prioritized this high-contrast family and omitted chronic deficiency-constipation variants to keep the required list compact.",
+      "boardScopeTextEs": "Run Chang Wan es una fórmula muy enseñada y utilizada en la práctica para estreñimiento seco por deficiencia de Sangre y líquidos, pero el Appendix C vigente no la incluye. La categoría Purge selecciona únicamente las tres fórmulas Cheng Qi, creando una comparación gradual muy definida de aglomeración de Calor en el órgano Yangming y arquitectura de ingredientes. Una interpretación curricular razonable es que el temario priorizó esta familia de alto contraste y omitió variantes de estreñimiento crónico por deficiencia para mantener compacta la lista obligatoria.",
+      "boardScopeCaveat": "The Board does not publish a formula-by-formula explanation for omissions. This is therefore a documented curricular hypothesis—not an official reason and not a judgment that Run Chang Wan is unimportant or ineffective.",
+      "boardScopeCaveatEs": "El Board no publica una explicación fórmula por fórmula de las omisiones. Por tanto, esta es una hipótesis curricular documentada, no una razón oficial ni un juicio de que Run Chang Wan sea poco importante o ineficaz.",
       "therapeuticClasses": [
         {
           "key": "cold-purgatives",
@@ -615,11 +621,11 @@
           "name": "Moistening laxatives",
           "nameEs": "Laxantes humectantes",
           "boardNames": [],
-          "otherNames": ["Ma Zi Ren Wan", "Ji Chuan Jian"],
+          "otherNames": ["Ma Zi Ren Wan", "Run Chang Wan", "Ji Chuan Jian"],
           "logic": "Moisten and lubricate dry Intestines so stool can pass without a drastic attack.",
           "logicEs": "Humectan y lubrican Intestinos secos para permitir el paso de las heces sin un ataque drástico.",
-          "separator": "Dry, difficult stool dominates without the severe hard clumping of Da Cheng Qi Tang; Ji Chuan Jian adds Kidney-Yang deficiency and Cold signs.",
-          "separatorEs": "Predominan heces secas y difíciles sin la aglomeración dura y grave de Da Cheng Qi Tang; Ji Chuan Jian añade deficiencia de Yang de Riñón y signos de Frío."
+          "separator": "Ma Zi Ren Wan points to Heat-Dryness with Spleen bind; Run Chang Wan to Blood/fluid deficiency; Ji Chuan Jian to Kidney-Yang deficiency with Cold signs.",
+          "separatorEs": "Ma Zi Ren Wan apunta a Calor-Sequedad con Spleen bind; Run Chang Wan a deficiencia de Sangre/líquidos; Ji Chuan Jian a deficiencia de Yang de Riñón con signos de Frío."
         },
         {
           "key": "attack-and-tonify",
@@ -773,6 +779,11 @@
               "Ma Zi Ren Wan",
               "Heat-Dryness and Spleen bind: hard stool with normal or frequent urination; moistens and purges mildly.",
               "Calor-Sequedad y Spleen bind: heces duras con micción normal o frecuente; humedece y purga suavemente."
+            ],
+            [
+              "Run Chang Wan",
+              "Blood and fluid deficiency fail to moisten the Intestines: dry difficult stool after illness, childbirth or blood loss with pallor, dizziness and dry skin; nourishes Blood and moistens rather than attacking clumping.",
+              "Deficiencia de Sangre y líquidos que no humedecen los Intestinos: heces secas difíciles tras enfermedad, parto o pérdida de Sangre, con palidez, mareo y piel seca; nutre Sangre y humedece en vez de atacar una aglomeración."
             ],
             [
               "Ji Chuan Jian",

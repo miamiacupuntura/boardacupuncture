@@ -129,13 +129,16 @@ php -r '
             || ($purgeTherapeuticClasses[0]["boardNames"] ?? []) !== [
                 "Da Cheng Qi Tang", "Xiao Cheng Qi Tang", "Tiao Wei Cheng Qi Tang"
             ]
+            || ($purgeTherapeuticClasses[2]["otherNames"] ?? []) !== [
+                "Ma Zi Ren Wan", "Run Chang Wan", "Ji Chuan Jian"
+            ]
             || array_column($purgeReferenceGroups, "title") !== [
                 "Cold purgatives", "Warm purgatives", "Moistening laxatives",
                 "Purge while supporting deficiency", "Harsh water-expellants — high risk"
             ]
             || $purgeReferenceNames !== [
                 "Da Xian Xiong Tang", "Da Huang Fu Zi Tang", "Wen Pi Tang",
-                "Ma Zi Ren Wan", "Ji Chuan Jian", "Huang Long Tang",
+                "Ma Zi Ren Wan", "Run Chang Wan", "Ji Chuan Jian", "Huang Long Tang",
                 "Zeng Ye Cheng Qi Tang", "Shi Zao Tang", "Zhou Che Wan",
                 "Yu Gong San", "Ji Jiao Li Huang Wan", "Shu Zao Yin Zi"
             ]) {
@@ -167,7 +170,10 @@ grep -q '"key": "moistening-laxatives"' "$TEMP_DIR/formulas-study-guide-data.jso
 grep -q '"key": "attack-and-tonify"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "harsh-water-expellants"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"Ji Chuan Jian"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"Run Chang Wan"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "el uso clínico frecuente no garantiza inclusión en el Board" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "therapeuticClasses" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "boardScopeTitle" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 8" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo de fórmulas que tonifican" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "stabilize-bind-chapter-9" "$TEMP_DIR/formulas-study-guide.php"
@@ -297,7 +303,10 @@ grep -q '"key": "moistening-laxatives"' "$TARGET_DIR/formulas-study-guide-data.j
 grep -q '"key": "attack-and-tonify"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "harsh-water-expellants"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"Ji Chuan Jian"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"Run Chang Wan"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "el uso clínico frecuente no garantiza inclusión en el Board" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "therapeuticClasses" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "boardScopeTitle" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Categoría oficial del Board: 3 fórmulas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "3 fórmulas Board · Capítulo 9 de Bensky: 17" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente" "$TARGET_DIR/formulas-study-guide.php"
@@ -353,6 +362,7 @@ echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A 
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
 echo "CLASIFICACIÓN PURGE INSTALADA: PURGANTES FRÍOS/CALIENTES, LAXANTES, ATAQUE-TONIFICACIÓN Y EXPELENTES"
+echo "RUN CHANG WAN INSTALADA: LAXANTE HUMECTANTE SECUNDARIO, SIN ASTERISCO BOARD"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"
