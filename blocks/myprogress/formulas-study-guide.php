@@ -1823,7 +1823,7 @@ echo $OUTPUT->header();
                                 <h5><?php echo s($duiyaopair['title']); ?></h5>
                                 <span class="formula-study-guide__dui-yao-characters"><?php echo s($duiyaopair['characters']); ?></span>
                                 <p><?php echo s($ises ? $duiyaopair['actionEs'] : $duiyaopair['action']); ?></p>
-                                <small><strong><?php echo $ises ? 'Fórmula firma:' : 'Signature formula:'; ?></strong> <?php echo s($duiyaopair['formulas']); ?><br><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></small>
+                                <small><strong><?php echo $ises ? 'Vínculo con fórmula del guideline:' : 'Guideline formula link:'; ?></strong> <?php echo s($duiyaopair['formulas']); ?><br><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></small>
                             </a>
                         <?php endforeach; ?>
                     </div>

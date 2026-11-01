@@ -2581,6 +2581,53 @@
         }
       ]
     },
+    "regulate-qi-chapter-12": {
+      "relatedDuiYaoAnchor": "descend-stomach-qi",
+      "relatedDuiYaoTitle": "Related Duì Yào · Restore the Direction of Qi",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Restaurar la dirección del Qi",
+      "relatedDuiYaoText": "These four official Appendix B pairs connect directly to formulas in the five-formula Regulate Qi guideline roster. They clarify Lung diffusion and descent, Stomach harmony, Phlegm-Qi obstruction and rebellious Stomach Qi without adding formulas outside the category.",
+      "relatedDuiYaoTextEs": "Estos cuatro pares oficiales del Appendix B conectan directamente con fórmulas del listado de cinco fórmulas de Regular Qi del guideline. Aclaran difusión y descenso de Pulmón, armonía de Estómago, obstrucción de Flema-Qi y Qi rebelde de Estómago sin añadir fórmulas externas a la categoría.",
+      "relatedDuiYaoCaveat": "These are ingredient-level guideline links, not claims that each pair alone defines the complete formula. Appendix B contains no direct pair for Yuè Jú Wán; its six-stagnation architecture must be learned from the full prescription. Only the five required Regulate Qi formulas are named here.",
+      "relatedDuiYaoCaveatEs": "Estos son vínculos del guideline a nivel de ingredientes, no afirmaciones de que cada pareja defina por sí sola la fórmula completa. Appendix B no contiene un par directo para Yuè Jú Wán; su arquitectura de seis estancamientos debe aprenderse desde la prescripción completa. Aquí solo se nombran las cinco fórmulas obligatorias de Regular Qi.",
+      "relatedDuiYao": [
+        {
+          "number": 2,
+          "slug": "ma-huang-xing-ren-dui-yao",
+          "title": "Má Huáng + Xìng Rén",
+          "characters": "麻黄 + 杏仁",
+          "action": "Restore Lung diffusion and descent to stop cough and wheezing in appropriately balanced hot or cold formulas.",
+          "actionEs": "Restaurar difusión y descenso de Qi pulmonar para detener tos/sibilancias en fórmulas calientes o frías bien equilibradas.",
+          "formulas": "Dìng Chuǎn Tāng."
+        },
+        {
+          "number": 22,
+          "slug": "sheng-jiang-da-zao-dui-yao",
+          "title": "Shēng Jiāng + Dà Zǎo",
+          "characters": "生姜 + 大枣",
+          "action": "Harmonize Ying and Wei, support the Spleen and Stomach and buffer harsher medicinals.",
+          "actionEs": "Armonizar Ying y Wei, apoyar Bazo/Estómago y amortiguar medicinas más fuertes.",
+          "formulas": "Jú Pí Zhú Rú Tāng."
+        },
+        {
+          "number": 37,
+          "slug": "ban-xia-chen-pi-dui-yao",
+          "title": "Bàn Xià + Chén Pí",
+          "characters": "半夏 + 陈皮",
+          "action": "Dry Dampness, transform Phlegm, regulate Qi and harmonize the Middle.",
+          "actionEs": "Secar Humedad, transformar Flema, regular Qi y armonizar Centro.",
+          "formulas": "Sū Zǐ Jiàng Qì Tāng."
+        },
+        {
+          "number": 38,
+          "slug": "ban-xia-sheng-jiang-dui-yao",
+          "title": "Bàn Xià + Shēng Jiāng",
+          "characters": "半夏 + 生姜",
+          "action": "Descend rebellious Stomach Qi, stop vomiting and transform Phlegm.",
+          "actionEs": "Descender Qi rebelde de Estómago, detener vómito y transformar Flema.",
+          "formulas": "Bàn Xià Hòu Pò Tāng."
+        }
+      ]
+    },
     "treat-dryness-ch15": {
       "priorityTitle": "Chapter 15: first decide whether dryness is external or internal",
       "priorityTitleEs": "Capítulo 15: primero decide si la Sequedad es externa o interna",
