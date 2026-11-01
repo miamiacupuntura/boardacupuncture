@@ -4175,9 +4175,156 @@
       "nameEs": "Fórmulas que abren los orificios sensoriales · perfiles del capítulo 11 de Bensky",
       "sourceChapter": 11,
       "sourcePages": "485–502"
+    },
+    {
+      "number": "S8",
+      "key": "regulate-qi-ch12",
+      "name": "Formulas That Regulate the Qi · Bensky Chapter 12 source profiles",
+      "nameEs": "Fórmulas que regulan el Qi · perfiles del capítulo 12 de Bensky",
+      "sourceChapter": 12,
+      "sourcePages": "505–554"
     }
   ],
   "supplementalFormulas": [
+    {
+      "number": "C12-02", "sequence": 2, "name": "Chai Hu Shu Gan San", "englishName": "Bupleurum Powder to Dredge the Liver", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "512–513", "kings": "Chai Hu",
+      "pattern": "Liver Qi constraint with pain and distention, sometimes beginning to affect the Blood.", "patternEs": "Estancamiento de Qi de Hígado con dolor y distensión, a veces comenzando a afectar la Sangre.",
+      "action": "Spreads Liver Qi, harmonizes the Blood, and alleviates pain.", "actionEs": "Expande el Qi de Hígado, armoniza la Sangre y alivia el dolor.",
+      "clue": "Hypochondriac pain and distention, sighing, irritability, belching, abdominal fullness, and a wiry pulse.", "clueEs": "Dolor y distensión hipocondríacos, suspiros, irritabilidad, eructos, plenitud abdominal y pulso de cuerda.",
+      "ingredients": "Chai Hu, Chen Pi, Chuan Xiong, Xiang Fu, Zhi Ke, Shao Yao and Zhi Gan Cao.", "ingredientsEs": "Chai Hu, Chen Pi, Chuan Xiong, Xiang Fu, Zhi Ke, Shao Yao y Zhi Gan Cao.",
+      "safety": "Use cautiously in pregnancy and in Yin or Blood deficiency because the formula is moving and dispersing. Persistent or severe chest, abdominal, or flank pain requires medical evaluation.", "safetyEs": "Usar con cautela durante el embarazo y en deficiencia de Yin o Sangre por su acción movilizante y dispersante. Dolor persistente o intenso de pecho, abdomen o costado requiere evaluación médica.", "safetyTier": "standard",
+      "examFocus": "Choose it when Liver Qi constraint is clearly painful: Chuan Xiong and Xiang Fu make it more analgesic and Blood-moving than Xiao Yao San.", "examFocusEs": "Elígela cuando el estancamiento de Qi de Hígado es claramente doloroso: Chuan Xiong y Xiang Fu la hacen más analgésica y movilizadora de Sangre que Xiao Yao San.",
+      "comparison": "Xiao Yao San emphasizes Liver-Spleen disharmony with deficiency; this formula emphasizes excess constraint with pain and distention.", "comparisonEs": "Xiao Yao San enfatiza desarmonía Hígado-Bazo con deficiencia; esta fórmula enfatiza estancamiento de exceso con dolor y distensión."
+    },
+    {
+      "number": "C12-03", "sequence": 3, "name": "Shu Gan Tang", "englishName": "Dredge the Liver Decoction", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "513–514", "kings": "Xiang Fu, Chuan Lian Zi",
+      "pattern": "Liver Qi stagnation with Blood stasis causing fixed rib-side or hypochondriac pain.", "patternEs": "Estancamiento de Qi de Hígado con estasis de Sangre que causa dolor fijo costal o hipocondríaco.",
+      "action": "Spreads Liver Qi, invigorates Blood, and relieves pain.", "actionEs": "Expande el Qi de Hígado, moviliza la Sangre y alivia el dolor.",
+      "clue": "Fixed pain beneath the left rib cage, pain after trauma, or pain aggravated by anger, with a wiry pulse.", "clueEs": "Dolor fijo bajo el reborde costal izquierdo, dolor tras trauma o agravado por ira, con pulso de cuerda.",
+      "ingredients": "Xiang Fu, Chuan Lian Zi, Yan Hu Suo, Chen Pi, Zhi Ke, Chuan Xiong and Shao Yao.", "ingredientsEs": "Xiang Fu, Chuan Lian Zi, Yan Hu Suo, Chen Pi, Zhi Ke, Chuan Xiong y Shao Yao.",
+      "safety": "Moving herbs require caution in pregnancy, bleeding disorders, and anticoagulant use. New fixed rib or abdominal pain, trauma, fever, or shortness of breath requires medical assessment.", "safetyEs": "Las hierbas movilizantes exigen cautela en embarazo, trastornos hemorrágicos y uso de anticoagulantes. Dolor fijo nuevo costal o abdominal, trauma, fiebre o disnea requiere evaluación médica.", "safetyTier": "high",
+      "examFocus": "The decisive addition is Blood stasis: pain is more fixed and focal than in simple Liver Qi constraint.", "examFocusEs": "La adición decisiva es estasis de Sangre: el dolor es más fijo y focal que en estancamiento simple de Qi de Hígado."
+    },
+    {
+      "number": "C12-04", "sequence": 4, "name": "Zhi Shi Xie Bai Gui Zhi Tang", "englishName": "Unripe Bitter Orange, Chinese Garlic, and Cinnamon Twig Decoction", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "514–516", "kings": "Gua Lou, Xie Bai",
+      "pattern": "Painful obstruction of the chest from turbid Phlegm and congealed Qi obstructing the chest Yang.", "patternEs": "Obstrucción dolorosa del pecho por Flema turbia y Qi congelado que bloquean el Yang torácico.",
+      "action": "Unblocks the Yang, moves Qi, transforms Phlegm, and relieves chest pain.", "actionEs": "Desbloquea el Yang, mueve el Qi, transforma Flema y alivia dolor torácico.",
+      "clue": "Chest fullness or stabbing pain radiating to the back, wheezing or cough, a white greasy coat, and a submerged wiry or tight pulse.", "clueEs": "Plenitud o dolor punzante torácico irradiado a espalda, sibilancia o tos, saburra blanca grasosa y pulso sumergido de cuerda o tenso.",
+      "ingredients": "Gua Lou, Xie Bai, Zhi Shi, Hou Po and Gui Zhi.", "ingredientsEs": "Gua Lou, Xie Bai, Zhi Shi, Hou Po y Gui Zhi.",
+      "safety": "Chest pain radiating to the back or arm, sweating, breathlessness, fainting, or new severe symptoms may indicate a medical emergency. Not a substitute for cardiac evaluation.", "safetyEs": "Dolor torácico irradiado a espalda o brazo, sudoración, disnea, desmayo o síntomas nuevos intensos pueden indicar una urgencia. No sustituye evaluación cardíaca.", "safetyTier": "critical",
+      "examFocus": "Think chest Bi from Phlegm plus Cold-congealed Qi: painful chest obstruction with a white greasy coat, not Heat signs.", "examFocusEs": "Piensa en Bi torácico por Flema más Qi congelado por Frío: obstrucción dolorosa del pecho con saburra blanca grasosa, no signos de Calor."
+    },
+    {
+      "number": "C12-06", "sequence": 6, "name": "Hou Po Wen Zhong Tang", "englishName": "Magnolia Bark Decoction for Warming the Middle", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "519–521", "kings": "Hou Po",
+      "pattern": "Damp-Cold obstructing the Spleen and Stomach and constraining the Middle Burner Qi dynamic.", "patternEs": "Humedad-Frío que obstruye Bazo y Estómago y constriñe la dinámica del Qi del Jiao Medio.",
+      "action": "Warms the Middle, moves Qi, dries Dampness, and disperses fullness.", "actionEs": "Calienta el Centro, mueve Qi, seca Humedad y dispersa plenitud.",
+      "clue": "Epigastric and abdominal distention and fullness, poor appetite, heavy limbs, diarrhea, and a white slippery coat.", "clueEs": "Distensión y plenitud epigástrica y abdominal, poco apetito, pesadez de extremidades, diarrea y saburra blanca resbaladiza.",
+      "ingredients": "Hou Po, Chen Pi, Zhi Gan Cao, Cao Dou Kou, Fu Ling, Mu Xiang, Gan Jiang and Sheng Jiang.", "ingredientsEs": "Hou Po, Chen Pi, Zhi Gan Cao, Cao Dou Kou, Fu Ling, Mu Xiang, Gan Jiang y Sheng Jiang.",
+      "safety": "Inappropriate for Heat, Yin deficiency, or dry presentations. Persistent abdominal distention, vomiting, fever, bleeding, or severe pain requires medical evaluation.", "safetyEs": "Inadecuada para cuadros de Calor, deficiencia de Yin o sequedad. Distensión persistente, vómitos, fiebre, sangrado o dolor intenso requiere evaluación médica.", "safetyTier": "standard",
+      "examFocus": "The triad is Damp-Cold, Middle-Burner Qi stagnation, and fullness: warm, dry, and move simultaneously.", "examFocusEs": "La tríada es Humedad-Frío, estancamiento de Qi del Jiao Medio y plenitud: calentar, secar y mover simultáneamente."
+    },
+    {
+      "number": "C12-07", "sequence": 7, "name": "Liang Fu Wan", "englishName": "Galangal and Cyperus Pill", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "521–522", "kings": "Gao Liang Jiang, Xiang Fu",
+      "pattern": "Cold congealing in the Stomach together with Liver Qi stagnation.", "patternEs": "Frío que se congela en Estómago junto con estancamiento de Qi de Hígado.",
+      "action": "Warms the Stomach, moves Qi, and alleviates pain.", "actionEs": "Calienta el Estómago, mueve Qi y alivia el dolor.",
+      "clue": "Epigastric pain that responds favorably to warmth and may be related to emotional stress or cold food.", "clueEs": "Dolor epigástrico que mejora con calor y puede relacionarse con estrés emocional o alimentos fríos.",
+      "ingredients": "Gao Liang Jiang and Xiang Fu.", "ingredientsEs": "Gao Liang Jiang y Xiang Fu.",
+      "safety": "Inappropriate for Heat or Yin-deficient Stomach pain. Severe, recurrent, nocturnal, bleeding-associated, or unexplained epigastric pain requires medical assessment.", "safetyEs": "Inadecuada para dolor de Estómago por Calor o deficiencia de Yin. Dolor epigástrico intenso, recurrente, nocturno, con sangrado o inexplicado requiere evaluación médica.", "safetyTier": "standard",
+      "examFocus": "A two-herb formula: Gao Liang Jiang treats Cold pain while Xiang Fu treats the Qi constraint that makes it recur.", "examFocusEs": "Fórmula de dos hierbas: Gao Liang Jiang trata dolor por Frío y Xiang Fu el estancamiento de Qi que lo hace recurrir."
+    },
+    {
+      "number": "C12-08", "sequence": 8, "name": "Jin Ling Zi San", "englishName": "Melia Toosendan Powder", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "522–524", "kings": "Chuan Lian Zi, Yan Hu Suo",
+      "pattern": "Liver Qi constraint transforming into Heat with associated Blood stasis.", "patternEs": "Estancamiento de Qi de Hígado que se transforma en Calor con estasis de Sangre asociada.",
+      "action": "Spreads Liver Qi, drains Heat, invigorates Blood, and relieves pain.", "actionEs": "Expande Qi de Hígado, drena Calor, moviliza Sangre y alivia dolor.",
+      "clue": "Intermittent epigastric, hypochondriac, hernial, or menstrual pain with irritability, bitter taste, a red yellow-coated tongue, and a wiry or rapid pulse.", "clueEs": "Dolor intermitente epigástrico, hipocondríaco, herniario o menstrual con irritabilidad, sabor amargo, lengua roja con saburra amarilla y pulso de cuerda o rápido.",
+      "ingredients": "Chuan Lian Zi and Yan Hu Suo.", "ingredientsEs": "Chuan Lian Zi y Yan Hu Suo.",
+      "safety": "Chuan Lian Zi has dose-related toxicity and this moving pair is generally avoided in pregnancy. Persistent severe abdominal, pelvic, or testicular pain requires prompt medical evaluation.", "safetyEs": "Chuan Lian Zi presenta toxicidad relacionada con dosis y este par movilizante suele evitarse en embarazo. Dolor abdominal, pélvico o testicular intenso y persistente requiere evaluación médica rápida.", "safetyTier": "high",
+      "examFocus": "A two-herb pain formula for constrained Qi plus Blood stasis with Heat: bitter taste, red tongue, and yellow coat separate it from cold pain formulas.", "examFocusEs": "Fórmula analgésica de dos hierbas para Qi estancado más estasis de Sangre con Calor: sabor amargo, lengua roja y saburra amarilla la separan de fórmulas para dolor frío."
+    },
+    {
+      "number": "C12-09", "sequence": 9, "name": "Si Mo Tang", "englishName": "Four Milled-Herb Decoction", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "525–527", "kings": "Ren Shen, Wu Yao",
+      "pattern": "Qi constraint affecting the upper and middle burners with deficiency underneath.", "patternEs": "Estancamiento de Qi que afecta Jiao Superior y Medio con deficiencia subyacente.",
+      "action": "Moves Qi, directs rebellion downward, broadens the chest, and supports Qi.", "actionEs": "Mueve Qi, dirige rebelión hacia abajo, ensancha el pecho y apoya el Qi.",
+      "clue": "Irritability, chest oppression, labored breathing or wheezing, epigastric focal distention and fullness, poor appetite, and a wiry pulse.", "clueEs": "Irritabilidad, opresión torácica, respiración trabajosa o sibilancia, distensión focal epigástrica y plenitud, poco apetito y pulso de cuerda.",
+      "ingredients": "Ren Shen, Wu Yao, Chen Xiang and Bing Lang.", "ingredientsEs": "Ren Shen, Wu Yao, Chen Xiang y Bing Lang.",
+      "safety": "This strongly moving formula is not for pregnancy or marked deficiency without constraint. Chen Xiang requires verified legal sourcing; acute breathing difficulty or chest pain requires urgent care.", "safetyEs": "Esta fórmula fuertemente movilizante no corresponde a embarazo ni deficiencia marcada sin estancamiento. Chen Xiang exige procedencia legal verificada; dificultad respiratoria aguda o dolor torácico requiere atención urgente.", "safetyTier": "high",
+      "examFocus": "It regulates a disordered Qi dynamic in all directions while Ren Shen protects an underlying deficiency.", "examFocusEs": "Regula una dinámica desordenada del Qi en todas direcciones mientras Ren Shen protege la deficiencia subyacente."
+    },
+    {
+      "number": "C12-10", "sequence": 10, "name": "Tian Tai Wu Yao San", "englishName": "Top-Quality Lindera Powder", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "527–529", "kings": "Wu Yao, Qing Pi",
+      "pattern": "Cold invading the Liver channel and causing Qi stagnation in the lower abdomen.", "patternEs": "Frío que invade el canal de Hígado y causa estancamiento de Qi en abdomen inferior.",
+      "action": "Moves Qi, spreads the Liver, disperses Cold, and alleviates pain.", "actionEs": "Mueve Qi, expande Hígado, dispersa Frío y alivia dolor.",
+      "clue": "Lower abdominal pain radiating to the testicles, swollen or distended testes, a pale white-coated tongue, and a submerged slow or wiry pulse.", "clueEs": "Dolor abdominal inferior irradiado a testículos, testículos hinchados o distendidos, lengua pálida con saburra blanca y pulso sumergido lento o de cuerda.",
+      "ingredients": "Wu Yao, Mu Xiang, Xiao Hui Xiang, Qing Pi, Gao Liang Jiang, Bing Lang, Chuan Lian Zi and Ba Dou processed by the traditional roasting method.", "ingredientsEs": "Wu Yao, Mu Xiang, Xiao Hui Xiang, Qing Pi, Gao Liang Jiang, Bing Lang, Chuan Lian Zi y Ba Dou procesado mediante el método tradicional de tostado.",
+      "safety": "The historical preparation used toxic Ba Dou as a processing aid; it should not remain in a modern finished formula. Contraindicated in pregnancy. Sudden testicular pain or swelling is an emergency because torsion must be excluded.", "safetyEs": "La preparación histórica usaba Ba Dou tóxico como auxiliar de procesamiento; no debe permanecer en una fórmula moderna terminada. Contraindicada en embarazo. Dolor o hinchazón testicular súbita es urgencia porque debe excluirse torsión.", "safetyTier": "critical",
+      "examFocus": "Cold in the Liver channel is the signature: lower abdominal-to-testicular pain with pale tongue and a deep slow pulse.", "examFocusEs": "Frío en canal de Hígado es la firma: dolor de abdomen inferior a testículo con lengua pálida y pulso profundo lento."
+    },
+    {
+      "number": "C12-11", "sequence": 11, "name": "Ju He Wan", "englishName": "Tangerine Seed Pill", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "529–531", "kings": "Ju He",
+      "pattern": "Damp-Cold invading the Liver channel and binding Qi in the scrotum.", "patternEs": "Humedad-Frío que invade el canal de Hígado y bloquea Qi en escroto.",
+      "action": "Moves Qi, warms the Liver channel, disperses Cold, drains Dampness, and softens hardness.", "actionEs": "Mueve Qi, calienta canal de Hígado, dispersa Frío, drena Humedad y ablanda dureza.",
+      "clue": "Unilateral testicular swelling with colicky pain toward the umbilicus, hard swollen scrotum, or yellow fluid oozing from scrotal lesions.", "clueEs": "Hinchazón testicular unilateral con dolor cólico hacia ombligo, escroto duro e hinchado o exudación amarilla de lesiones escrotales.",
+      "ingredients": "Ju He, Hai Zao, Kun Bu, Hai Dai, Chuan Lian Zi, Tao Ren, Hou Po, Mu Xiang, Zhi Shi, Yan Hu Suo, Gui Xin and Mu Tong.", "ingredientsEs": "Ju He, Hai Zao, Kun Bu, Hai Dai, Chuan Lian Zi, Tao Ren, Hou Po, Mu Xiang, Zhi Shi, Yan Hu Suo, Gui Xin y Mu Tong.",
+      "safety": "Avoid in pregnancy and verify that Mu Tong is Aristolochia-free. Testicular swelling, severe pain, fever, ulceration, or a hard mass requires urgent medical or urologic evaluation.", "safetyEs": "Evitar durante embarazo y verificar que Mu Tong no contenga Aristolochia. Hinchazón testicular, dolor intenso, fiebre, ulceración o masa dura requiere evaluación médica o urológica urgente.", "safetyTier": "critical",
+      "examFocus": "Compared with Tian Tai Wu Yao San, Dampness and actual swelling or hardness are more prominent.", "examFocusEs": "Comparada con Tian Tai Wu Yao San, la Humedad y la hinchazón o dureza real son más prominentes."
+    },
+    {
+      "number": "C12-12", "sequence": 12, "name": "Nuan Gan Jian", "englishName": "Warm the Liver Decoction", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "531–533", "kings": "Rou Gui, Xiao Hui Xiang",
+      "pattern": "Liver Qi stagnation with deficiency of Liver Yang and Blood and Cold in the lower abdomen.", "patternEs": "Estancamiento de Qi de Hígado con deficiencia de Yang y Sangre de Hígado y Frío en abdomen inferior.",
+      "action": "Warms and tonifies the Liver and Kidneys, moves Qi, and alleviates pain.", "actionEs": "Calienta y tonifica Hígado y Riñones, mueve Qi y alivia dolor.",
+      "clue": "Sharp localized lower abdominal or scrotal pain aggravated by cold, with a pale tongue and a submerged tight pulse.", "clueEs": "Dolor agudo localizado en abdomen inferior o escroto agravado por frío, con lengua pálida y pulso sumergido tenso.",
+      "ingredients": "Dang Gui, Gou Qi Zi, Xiao Hui Xiang, Rou Gui, Wu Yao, Chen Xiang, Fu Ling and Sheng Jiang.", "ingredientsEs": "Dang Gui, Gou Qi Zi, Xiao Hui Xiang, Rou Gui, Wu Yao, Chen Xiang, Fu Ling y Sheng Jiang.",
+      "safety": "Inappropriate for Damp-Heat or excess Heat. Use caution in pregnancy and verify sustainable Chen Xiang sourcing. Acute scrotal pain or swelling requires emergency evaluation.", "safetyEs": "Inadecuada para Humedad-Calor o Calor de exceso. Usar cautela en embarazo y verificar procedencia sostenible de Chen Xiang. Dolor o hinchazón escrotal aguda requiere evaluación urgente.", "safetyTier": "high",
+      "examFocus": "Unlike the more excess-oriented cold hernia formulas, this one combines warming and moving with nourishment of Liver Blood.", "examFocusEs": "A diferencia de fórmulas herniarias frías más orientadas a exceso, combina calentar y mover con nutrición de Sangre de Hígado."
+    },
+    {
+      "number": "C12-13", "sequence": 13, "name": "Qi Ge San", "englishName": "Open Up the Diaphragm Powder", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "533–535", "kings": "Sha Ren, Yu Jin",
+      "pattern": "Qi stagnation obstructing the diaphragm with Phlegm and dryness from damaged fluids.", "patternEs": "Estancamiento de Qi que obstruye diafragma con Flema y sequedad por líquidos lesionados.",
+      "action": "Moves Qi, opens the diaphragm, transforms Phlegm, moistens dryness, and facilitates swallowing.", "actionEs": "Mueve Qi, abre diafragma, transforma Flema, humedece sequedad y facilita deglución.",
+      "clue": "Choking or constriction on swallowing, chest focal distention, difficult bowel movements, dry mouth and throat, red tongue with white coat, and a thin wiry pulse.", "clueEs": "Ahogo o constricción al tragar, distensión focal torácica, evacuación difícil, boca y garganta secas, lengua roja con saburra blanca y pulso fino de cuerda.",
+      "ingredients": "Sha Ren, Yu Jin, Sha Shen, Dan Shen, Fu Ling, Chuan Bei Mu and He Ye Di.", "ingredientsEs": "Sha Ren, Yu Jin, Sha Shen, Dan Shen, Fu Ling, Chuan Bei Mu y He Ye Di.",
+      "safety": "Progressive or painful swallowing, choking, aspiration, weight loss, bleeding, or a neck or chest mass requires urgent medical investigation. Moving herbs require caution in pregnancy.", "safetyEs": "Deglución progresivamente difícil o dolorosa, ahogo, aspiración, pérdida de peso, sangrado o masa cervical o torácica requiere investigación médica urgente. Hierbas movilizantes exigen cautela en embarazo.", "safetyTier": "high",
+      "examFocus": "The combination of obstruction and dryness is decisive: it moves Qi and Phlegm without further consuming damaged fluids.", "examFocusEs": "La combinación de obstrucción y sequedad es decisiva: mueve Qi y Flema sin consumir más los líquidos lesionados."
+    },
+    {
+      "number": "C12-14", "sequence": 14, "name": "Jia Wei Wu Yao Tang", "englishName": "Augmented Lindera Decoction", "categoryKey": "regulate-qi-ch12", "group": "Promote the Movement of Qi", "groupEs": "Promover el movimiento del Qi", "sourcePages": "535–536", "kings": "Xiang Fu, Wu Yao",
+      "pattern": "Menstrual pain from Qi stagnation causing secondary Blood stasis.", "patternEs": "Dolor menstrual por estancamiento de Qi que causa estasis secundaria de Sangre.",
+      "action": "Moves Qi, regulates menstruation, invigorates Blood, and alleviates pain.", "actionEs": "Mueve Qi, regula menstruación, moviliza Sangre y alivia dolor.",
+      "clue": "Premenstrual lower abdominal and breast distention with scanty dark clotted flow, a normal white-coated tongue, and a wiry tight pulse.", "clueEs": "Distensión premenstrual de abdomen inferior y mamas con flujo escaso oscuro y coágulos, lengua normal con saburra blanca y pulso de cuerda tenso.",
+      "ingredients": "Wu Yao, Sha Ren, Mu Xiang, Yan Hu Suo and Xiang Fu.", "ingredientsEs": "Wu Yao, Sha Ren, Mu Xiang, Yan Hu Suo y Xiang Fu.",
+      "safety": "Not used during pregnancy. Severe new pelvic pain, very heavy bleeding, fainting, fever, or possible pregnancy requires urgent assessment.", "safetyEs": "No usar durante embarazo. Dolor pélvico nuevo intenso, sangrado muy abundante, desmayo, fiebre o posible embarazo requiere evaluación urgente.", "safetyTier": "high",
+      "examFocus": "Pain before or early in menstruation with distention, scant dark blood, and clots identifies Qi stagnation leading to Blood stasis.", "examFocusEs": "Dolor antes o al inicio de menstruación con distensión, sangre oscura escasa y coágulos identifica estancamiento de Qi que conduce a estasis de Sangre."
+    },
+    {
+      "number": "C12-17", "sequence": 17, "name": "Xuan Fu Dai Zhe Tang", "englishName": "Inula and Haematite Decoction", "categoryKey": "regulate-qi-ch12", "group": "Direct Rebellious Qi Downward", "groupEs": "Dirigir el Qi rebelde hacia abajo", "sourcePages": "542–544", "kings": "Xuan Fu Hua",
+      "pattern": "Stomach Qi deficiency with turbid Phlegm obstructing the epigastrium and causing rebellious Qi.", "patternEs": "Deficiencia de Qi de Estómago con Flema turbia que obstruye epigastrio y causa Qi rebelde.",
+      "action": "Directs rebellious Qi downward, transforms Phlegm, harmonizes the Stomach, and supports Qi.", "actionEs": "Dirige Qi rebelde hacia abajo, transforma Flema, armoniza Estómago y apoya Qi.",
+      "clue": "Unremitting belching, hiccup, regurgitation, nausea or vomiting with hard epigastric focal distention, white slippery coat, and a wiry deficient pulse.", "clueEs": "Eructo incesante, hipo, regurgitación, náusea o vómito con distensión focal epigástrica dura, saburra blanca resbaladiza y pulso de cuerda deficiente.",
+      "ingredients": "Xuan Fu Hua, Dai Zhe Shi, Zhi Ban Xia, Sheng Jiang, Ren Shen, Zhi Gan Cao and Da Zao.", "ingredientsEs": "Xuan Fu Hua, Dai Zhe Shi, Zhi Ban Xia, Sheng Jiang, Ren Shen, Zhi Gan Cao y Da Zao.",
+      "safety": "Dai Zhe Shi is heavy and requires caution in pregnancy; processed Ban Xia is required. Persistent vomiting, blood, dehydration, weight loss, chest pain, or hard progressive distention requires medical evaluation.", "safetyEs": "Dai Zhe Shi es pesado y exige cautela en embarazo; Ban Xia debe estar procesada. Vómito persistente, sangre, deshidratación, pérdida de peso, dolor torácico o distensión dura progresiva requiere evaluación médica.", "safetyTier": "high",
+      "examFocus": "Hard epigastric focal distention plus incessant belching distinguishes it from simpler nausea formulas; deficiency and Phlegm coexist.", "examFocusEs": "Distensión focal epigástrica dura más eructo incesante la distingue de fórmulas simples para náusea; coexisten deficiencia y Flema.",
+      "comparison": "Ju Pi Zhu Ru Tang treats deficient Stomach Heat and hiccup; this formula treats deficient Stomach Qi with turbid Phlegm and hard focal distention.", "comparisonEs": "Ju Pi Zhu Ru Tang trata Calor de Estómago por deficiencia e hipo; esta fórmula trata Qi de Estómago deficiente con Flema turbia y distensión focal dura."
+    },
+    {
+      "number": "C12-19", "sequence": 19, "name": "Ding Xiang Shi Di Tang", "englishName": "Clove and Persimmon Calyx Decoction", "categoryKey": "regulate-qi-ch12", "group": "Direct Rebellious Qi Downward", "groupEs": "Dirigir el Qi rebelde hacia abajo", "sourcePages": "547–549", "kings": "Ding Xiang, Shi Di",
+      "pattern": "Stomach deficiency-Cold causing rebellious Qi to rise.", "patternEs": "Frío por deficiencia de Estómago que hace ascender Qi rebelde.",
+      "action": "Warms and supports the Stomach, directs rebellious Qi downward, and stops hiccup.", "actionEs": "Calienta y apoya Estómago, dirige Qi rebelde hacia abajo y detiene hipo.",
+      "clue": "Hiccup, belching, or vomiting with epigastric oppression, focal chest distention, pale white-coated tongue, and a submerged slow pulse.", "clueEs": "Hipo, eructo o vómito con opresión epigástrica, distensión focal torácica, lengua pálida con saburra blanca y pulso sumergido lento.",
+      "ingredients": "Ding Xiang, Shi Di, Ren Shen and Sheng Jiang.", "ingredientsEs": "Ding Xiang, Shi Di, Ren Shen y Sheng Jiang.",
+      "safety": "Inappropriate for Heat-type hiccup or vomiting. Persistent hiccup, vomiting, dehydration, blood, neurologic symptoms, or chest pain requires medical assessment.", "safetyEs": "Inadecuada para hipo o vómito de tipo Calor. Hipo persistente, vómito, deshidratación, sangre, síntomas neurológicos o dolor torácico requiere evaluación médica.", "safetyTier": "standard",
+      "examFocus": "Cold-deficiency signs are decisive: pale tongue, white coat, slow submerged pulse, and relief with warmth.", "examFocusEs": "Los signos de Frío-deficiencia son decisivos: lengua pálida, saburra blanca, pulso lento sumergido y mejoría con calor."
+    },
+    {
+      "number": "C12-20", "sequence": 20, "name": "Da Ban Xia Tang", "englishName": "Major Pinellia Decoction", "categoryKey": "regulate-qi-ch12", "group": "Direct Rebellious Qi Downward", "groupEs": "Dirigir el Qi rebelde hacia abajo", "sourcePages": "549–552", "kings": "Zhi Ban Xia",
+      "pattern": "Chronic Stomach reflux from Middle-Burner deficiency-Cold with Phlegm, dryness, and damaged Qi and fluids.", "patternEs": "Reflujo crónico de Estómago por Frío-deficiencia del Jiao Medio con Flema, sequedad y lesión de Qi y líquidos.",
+      "action": "Harmonizes the Stomach, directs rebellious Qi downward, augments Qi, and moistens dryness.", "actionEs": "Armoniza Estómago, dirige Qi rebelde hacia abajo, aumenta Qi y humedece sequedad.",
+      "clue": "Vomiting long after eating that brings relief, firm epigastric fullness, fatigue, emaciation, and either sheep-dropping dry stools or scant loose stools.", "clueEs": "Vómito mucho después de comer que trae alivio, plenitud epigástrica firme, fatiga, emaciación y heces secas como bolitas o heces sueltas escasas.",
+      "ingredients": "Zhi Ban Xia 15–30 g, Ren Shen 9 g and honey 9–15 g in the source formula.", "ingredientsEs": "Zhi Ban Xia 15–30 g, Ren Shen 9 g y miel 9–15 g en la fórmula fuente.",
+      "safety": "Processed Ban Xia and professional dosing are essential. Delayed vomiting of retained food, progressive weight loss, dehydration, severe constipation, abdominal mass, blood, or suspected obstruction requires urgent medical investigation.", "safetyEs": "Ban Xia procesada y dosificación profesional son esenciales. Vómito tardío de alimento retenido, pérdida progresiva de peso, deshidratación, estreñimiento grave, masa abdominal, sangre o sospecha de obstrucción requiere investigación médica urgente.", "safetyTier": "high",
+      "examFocus": "Timing is the separator: vomiting occurs a considerable time after eating and relieves the patient; deficiency, Phlegm, and damaged fluids coexist.", "examFocusEs": "El momento es el separador: el vómito ocurre mucho después de comer y alivia; coexisten deficiencia, Flema y líquidos lesionados.",
+      "comparison": "Xiao Ban Xia Tang treats excess thin fluids with more immediate vomiting; Da Ban Xia Tang treats chronic delayed vomiting with deficiency and dryness.", "comparisonEs": "Xiao Ban Xia Tang trata líquidos finos de exceso con vómito más inmediato; Da Ban Xia Tang trata vómito crónico tardío con deficiencia y sequedad.",
+      "associated": [["Xiao Ban Xia Tang", "Ban Xia and Sheng Jiang for vomiting from thin mucus in the Stomach without deficiency dryness.", "Ban Xia y Sheng Jiang para vómito por moco fino en Estómago sin sequedad por deficiencia."], ["Xiao Ban Xia Jia Fu Ling Tang", "Adds Fu Ling when habitual thin-fluid accumulation, thirst, palpitations, or focal epigastric distention is more prominent.", "Añade Fu Ling cuando predominan acumulación habitual de líquidos finos, sed, palpitaciones o distensión focal epigástrica."], ["Gan Jiang Ren Shen Ban Xia Wan", "Warms and tonifies the Middle for pregnancy vomiting or Spleen-Stomach deficiency-Cold with Phlegm.", "Calienta y tonifica el Centro para vómito del embarazo o Frío-deficiencia de Bazo-Estómago con Flema."]]
+    },
     {
       "number": "S1",
       "sequence": 1,
@@ -7175,16 +7322,48 @@
       "comparison": "Suan Zao Ren Tang nourishes deficient Liver Blood/Yin with irritability and night sweating; Ding Zhi Wan emphasizes weak Heart Qi, fright and Phlegm turbidity.",
       "comparisonEs": "Suan Zao Ren Tang nutre Sangre/Yin de Hígado deficientes con irritabilidad y sudor nocturno; Ding Zhi Wan enfatiza Qi de Corazón débil, sobresalto y turbidez de Flema.",
       "variations": [
-        ["Yang-family Ding Zhi Wan", "A historical variation for Heart Qi deficiency and fright; any historical cinnabar component is obsolete.", "Variación histórica para deficiencia de Qi de Corazón y sobresalto; cualquier componente histórico de cinabrio es obsoleto."],
-        ["Wondrous Lantern Ding Zhi Wan", "A later named variation; use only as a comparative source profile.", "Variación posterior con nombre propio; usar solo como perfil comparativo de la fuente."]
+        [
+          "Yang-family Ding Zhi Wan",
+          "A historical variation for Heart Qi deficiency and fright; any historical cinnabar component is obsolete.",
+          "Variación histórica para deficiencia de Qi de Corazón y sobresalto; cualquier componente histórico de cinabrio es obsoleto."
+        ],
+        [
+          "Wondrous Lantern Ding Zhi Wan",
+          "A later named variation; use only as a comparative source profile.",
+          "Variación posterior con nombre propio; usar solo como perfil comparativo de la fuente."
+        ]
       ],
       "associated": [
-        ["Hu Po Duo Mei Wan", "For hyperactive Liver Yang harassing the Heart; historical pig blood and gold foil are omitted and endangered antelope horn requires an ethical substitute.", "Para Yang de Hígado hiperactivo que hostiga Corazón; se omiten sangre de cerdo y lámina de oro históricas, y el cuerno de antílope amenazado exige sustitución ética."],
-        ["Long Chi Qing Hun San", "For Heart Qi deficiency complicated by Blood stasis.", "Para deficiencia de Qi de Corazón complicada por estasis de Sangre."],
-        ["Kong Zi Zhen Zhong Dan", "For Heart-Kidney disharmony complicated by Phlegm-Fire.", "Para desarmonía Corazón-Riñón complicada por Flema-Fuego."],
-        ["Miao Xiang San", "For generalized Heart Qi deficiency; any historical cinnabar is excluded.", "Para deficiencia generalizada de Qi de Corazón; se excluye cualquier cinabrio histórico."],
-        ["Jiao Tai Wan", "Huang Lian and Rou Gui restore Heart-Kidney communication when Cold below coexists with Fire above.", "Huang Lian y Rou Gui restauran la comunicación Corazón-Riñón cuando coexisten Frío abajo y Fuego arriba."],
-        ["Ban Xia Shu Mi Tang", "For Phlegm-Dampness in the middle burner preventing Yang from entering Yin at night.", "Para Flema-Humedad en el Jiao Medio que impide que Yang entre en Yin por la noche."]
+        [
+          "Hu Po Duo Mei Wan",
+          "For hyperactive Liver Yang harassing the Heart; historical pig blood and gold foil are omitted and endangered antelope horn requires an ethical substitute.",
+          "Para Yang de Hígado hiperactivo que hostiga Corazón; se omiten sangre de cerdo y lámina de oro históricas, y el cuerno de antílope amenazado exige sustitución ética."
+        ],
+        [
+          "Long Chi Qing Hun San",
+          "For Heart Qi deficiency complicated by Blood stasis.",
+          "Para deficiencia de Qi de Corazón complicada por estasis de Sangre."
+        ],
+        [
+          "Kong Zi Zhen Zhong Dan",
+          "For Heart-Kidney disharmony complicated by Phlegm-Fire.",
+          "Para desarmonía Corazón-Riñón complicada por Flema-Fuego."
+        ],
+        [
+          "Miao Xiang San",
+          "For generalized Heart Qi deficiency; any historical cinnabar is excluded.",
+          "Para deficiencia generalizada de Qi de Corazón; se excluye cualquier cinabrio histórico."
+        ],
+        [
+          "Jiao Tai Wan",
+          "Huang Lian and Rou Gui restore Heart-Kidney communication when Cold below coexists with Fire above.",
+          "Huang Lian y Rou Gui restauran la comunicación Corazón-Riñón cuando coexisten Frío abajo y Fuego arriba."
+        ],
+        [
+          "Ban Xia Shu Mi Tang",
+          "For Phlegm-Dampness in the middle burner preventing Yang from entering Yin at night.",
+          "Para Flema-Humedad en el Jiao Medio que impide que Yang entre en Yin por la noche."
+        ]
       ]
     },
     {
@@ -7265,11 +7444,36 @@
       "comparison": "Zhu Sha An Shen Wan centers on blazing Heart Fire; Ci Zhu Wan centers on floating Yang and Heart-Kidney disconnection with ear/eye signs.",
       "comparisonEs": "Zhu Sha An Shen Wan se centra en Fuego intenso de Corazón; Ci Zhu Wan, en Yang flotante y desconexión Corazón-Riñón con signos de oído/ojos.",
       "modifications": [
-        ["Seizures with abundant Phlegm", "Add Zhi Ban Xia, Dan Nan Xing and Dai Zhe Shi.", "Convulsiones con Flema abundante", "Añadir Zhi Ban Xia, Dan Nan Xing y Dai Zhe Shi."],
-        ["Concurrent Liver-Kidney Yin deficiency", "Combine with Liu Wei Di Huang Wan.", "Deficiencia simultánea de Yin de Hígado-Riñón", "Combinar con Liu Wei Di Huang Wan."],
-        ["Phlegm-Heat in the chest", "Combine with Wen Dan Tang.", "Flema-Calor en el pecho", "Combinar con Wen Dan Tang."],
-        ["Irritability, fever and severe insomnia", "Add Zhi Zi and Lian Zi Xin.", "Irritabilidad, fiebre e insomnio grave", "Añadir Zhi Zi y Lian Zi Xin."],
-        ["Severe palpitations", "Add Long Chi and Zi Bei Chi.", "Palpitaciones graves", "Añadir Long Chi y Zi Bei Chi."]
+        [
+          "Seizures with abundant Phlegm",
+          "Add Zhi Ban Xia, Dan Nan Xing and Dai Zhe Shi.",
+          "Convulsiones con Flema abundante",
+          "Añadir Zhi Ban Xia, Dan Nan Xing y Dai Zhe Shi."
+        ],
+        [
+          "Concurrent Liver-Kidney Yin deficiency",
+          "Combine with Liu Wei Di Huang Wan.",
+          "Deficiencia simultánea de Yin de Hígado-Riñón",
+          "Combinar con Liu Wei Di Huang Wan."
+        ],
+        [
+          "Phlegm-Heat in the chest",
+          "Combine with Wen Dan Tang.",
+          "Flema-Calor en el pecho",
+          "Combinar con Wen Dan Tang."
+        ],
+        [
+          "Irritability, fever and severe insomnia",
+          "Add Zhi Zi and Lian Zi Xin.",
+          "Irritabilidad, fiebre e insomnio grave",
+          "Añadir Zhi Zi y Lian Zi Xin."
+        ],
+        [
+          "Severe palpitations",
+          "Add Long Chi and Zi Bei Chi.",
+          "Palpitaciones graves",
+          "Añadir Long Chi y Zi Bei Chi."
+        ]
       ]
     },
     {
@@ -7298,9 +7502,24 @@
       "comparison": "Zhu Sha An Shen Wan treats Heart Fire injuring Yin and Blood; Sheng Tie Luo Yin adds an extensive Phlegm-transforming and orifice-opening strategy for acute mania.",
       "comparisonEs": "Zhu Sha An Shen Wan trata Fuego de Corazón que lesiona Yin y Sangre; Sheng Tie Luo Yin añade una estrategia amplia para transformar Flema y abrir orificios en manía aguda.",
       "modifications": [
-        ["Thirst, parched mouth and lips", "Add Shi Gao, Zhi Mu and Shi Hu.", "Sed con boca y labios resecos", "Añadir Shi Gao, Zhi Mu y Shi Hu."],
-        ["Pronounced Phlegm-Heat", "Add Huang Lian, Sheng Di Huang, Zhu Ru and Zhi Shi.", "Flema-Calor pronunciada", "Añadir Huang Lian, Sheng Di Huang, Zhu Ru y Zhi Shi."],
-        ["Abdominal fullness with constipation", "Combine with Tiao Wei Cheng Qi Tang only after professional differentiation.", "Plenitud abdominal con estreñimiento", "Combinar con Tiao Wei Cheng Qi Tang solo tras diferenciación profesional."]
+        [
+          "Thirst, parched mouth and lips",
+          "Add Shi Gao, Zhi Mu and Shi Hu.",
+          "Sed con boca y labios resecos",
+          "Añadir Shi Gao, Zhi Mu y Shi Hu."
+        ],
+        [
+          "Pronounced Phlegm-Heat",
+          "Add Huang Lian, Sheng Di Huang, Zhu Ru and Zhi Shi.",
+          "Flema-Calor pronunciada",
+          "Añadir Huang Lian, Sheng Di Huang, Zhu Ru y Zhi Shi."
+        ],
+        [
+          "Abdominal fullness with constipation",
+          "Combine with Tiao Wei Cheng Qi Tang only after professional differentiation.",
+          "Plenitud abdominal con estreñimiento",
+          "Combinar con Tiao Wei Cheng Qi Tang solo tras diferenciación profesional."
+        ]
       ]
     },
     {
@@ -7329,7 +7548,12 @@
       "comparison": "Zhu Sha An Shen Wan focuses on blazing Heart Fire; Zhen Zhu Mu Wan focuses on Liver Yang rising from a Blood-Yin deficient root.",
       "comparisonEs": "Zhu Sha An Shen Wan se centra en Fuego intenso de Corazón; Zhen Zhu Mu Wan, en Yang de Hígado que asciende desde una raíz de deficiencia de Sangre-Yin.",
       "modifications": [
-        ["More severe presentation", "Add Ci Shi, Mu Li or Long Gu after professional review.", "Presentación más grave", "Añadir Ci Shi, Mu Li o Long Gu tras revisión profesional."]
+        [
+          "More severe presentation",
+          "Add Ci Shi, Mu Li or Long Gu after professional review.",
+          "Presentación más grave",
+          "Añadir Ci Shi, Mu Li o Long Gu tras revisión profesional."
+        ]
       ]
     },
     {
@@ -7384,7 +7608,11 @@
       "comparison": "Among the Three Treasures, this is the coldest and strongest for intense pathogenic Heat; Zi Xue Dan emphasizes internal Wind and convulsions, while Zhi Bao Dan emphasizes turbid Phlegm and opening the orifices.",
       "comparisonEs": "Entre los Tres Tesoros, es la más fría y potente para Calor patógeno intenso; Zi Xue Dan enfatiza Viento interno y convulsiones, y Zhi Bao Dan Flema turbia y apertura de orificios.",
       "variations": [
-        ["Niu Huang Cheng Qi Tang", "A source variation combining the principal formula with Da Huang when Pericardium Heat and impaired consciousness coexist with Yangming organ-stage constipation and thirst; this is an emergency professional-use profile.", "Variación de la fuente que combina la fórmula principal con Da Huang cuando Calor de Pericardio y alteración de conciencia coexisten con estreñimiento y sed del nivel órgano Yangming; es un perfil de urgencia y uso profesional."]
+        [
+          "Niu Huang Cheng Qi Tang",
+          "A source variation combining the principal formula with Da Huang when Pericardium Heat and impaired consciousness coexist with Yangming organ-stage constipation and thirst; this is an emergency professional-use profile.",
+          "Variación de la fuente que combina la fórmula principal con Da Huang cuando Calor de Pericardio y alteración de conciencia coexisten con estreñimiento y sed del nivel órgano Yangming; es un perfil de urgencia y uso profesional."
+        ]
       ]
     },
     {
@@ -7465,7 +7693,11 @@
       "comparison": "Bao Long Wan is the simpler historical antecedent for acute childhood convulsions; Hui Chun Dan adds more Wind-extinguishing, spasm-stopping, Qi-regulating, digestive and heat-draining support for more severe cases.",
       "comparisonEs": "Bao Long Wan es el antecedente histórico más simple para convulsiones infantiles agudas; Hui Chun Dan añade mayor apoyo para extinguir Viento, detener espasmos, regular Qi, armonizar digestión y drenar Calor en casos más graves.",
       "associated": [
-        ["Bao Long Wan", "A simpler associated formula that clears Heat, transforms Phlegm, opens the sensory orifices and calms the Spirit in acute childhood convulsions; historical cinnabar and realgar components are excluded.", "Fórmula asociada más simple que aclara Calor, transforma Flema, abre los orificios sensoriales y calma el Shen en convulsiones infantiles agudas; se excluyen cinabrio y rejalgar históricos."]
+        [
+          "Bao Long Wan",
+          "A simpler associated formula that clears Heat, transforms Phlegm, opens the sensory orifices and calms the Spirit in acute childhood convulsions; historical cinnabar and realgar components are excluded.",
+          "Fórmula asociada más simple que aclara Calor, transforma Flema, abre los orificios sensoriales y calma el Shen en convulsiones infantiles agudas; se excluyen cinabrio y rejalgar históricos."
+        ]
       ]
     },
     {

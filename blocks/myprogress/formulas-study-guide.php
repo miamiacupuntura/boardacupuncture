@@ -13,8 +13,8 @@ $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafil
 if (!is_array($data)
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 12
-        || count($data['supplementalFormulas'] ?? []) !== 97) {
+        || count($data['supplementalCategories'] ?? []) !== 13
+        || count($data['supplementalFormulas'] ?? []) !== 112) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -103,6 +103,10 @@ $categorycopy = [
         'Compare seven principal formulas in Bensky Chapter 11 by hot versus cold closure, Heat, Phlegm, internal Wind, and emergency safety.',
         'Compara las siete fórmulas principales del capítulo 11 de Bensky por cierre caliente o frío, Calor, Flema, Viento interno y seguridad de urgencia.',
     ],
+    'regulate-qi-chapter-12' => [
+        'Compare all 20 principal formulas in Bensky Chapter 12 by Qi constraint, organ location, Cold, Heat, Phlegm, deficiency, and the direction of rebellious Qi.',
+        'Compara las 20 fórmulas principales del capítulo 12 de Bensky por estancamiento de Qi, localización orgánica, Frío, Calor, Flema, deficiencia y dirección del Qi rebelde.',
+    ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
         'Distingue la deficiencia de Qi por órgano, hundimiento, Exterior inestable, pérdida de líquidos, Humedad e incapacidad para captar Qi.',
@@ -145,6 +149,14 @@ $categoryreferences = [
     'calm-shen-chapter-10' => [
         'Terminology: “Formulas That Calm the Spirit” is the same family called “Calm Shen” by the Board, not a second category. Complete Bensky source: 9 formulas; Board overlap: 3.',
         'Terminología: “Fórmulas que calman el Espíritu” es la misma familia que el Board llama “Calm Shen”, no otra categoría. Fuente Bensky completa: 9 fórmulas; coincidencia Board: 3.',
+    ],
+    'regulate-qi' => [
+        'Official Board category: 5 formulas. All five also appear among the 20 principal formulas in complete Bensky Chapter 12.',
+        'Categoría oficial del Board: 5 fórmulas. Las cinco también aparecen entre las 20 fórmulas principales del capítulo 12 completo de Bensky.',
+    ],
+    'regulate-qi-chapter-12' => [
+        'Complete Bensky source: 20 principal formulas. Board overlap: 5—Yue Ju Wan, Ban Xia Hou Po Tang, Su Zi Jiang Qi Tang, Ding Chuan Tang, and Ju Pi Zhu Ru Tang.',
+        'Fuente Bensky completa: 20 fórmulas principales. Coincidencia Board: 5—Yue Ju Wan, Ban Xia Hou Po Tang, Su Zi Jiang Qi Tang, Ding Chuan Tang y Ju Pi Zhu Ru Tang.',
     ],
 ];
 
@@ -197,6 +209,7 @@ $warmchaptercategory = $supplementalcategories['warm-interior-cold'];
 $stabilizechaptersourcecategory = $supplementalcategories['stabilize-bind-ch9'];
 $calmshenchaptersourcecategory = $supplementalcategories['calm-shen-ch10'];
 $openorificeschaptersourcecategory = $supplementalcategories['open-orifices-ch11'];
+$regulateqichaptersourcecategory = $supplementalcategories['regulate-qi-ch12'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -405,13 +418,78 @@ $openorificeschapteroverview = [
     'formulas' => $openorificeschapterformulas,
 ];
 
+$regulateqichaptersections = [
+    'move' => [
+        'key' => 'move', 'name' => 'Promote the Movement of Qi',
+        'nameEs' => 'Promover el movimiento del Qi', 'sourcePages' => '506–536',
+        'copy' => 'Locate constraint in the whole body, chest, throat, Middle Burner, Liver channel, lower abdomen, or menstruation before choosing how strongly to move Qi.',
+        'copyEs' => 'Localiza el estancamiento en todo el cuerpo, pecho, garganta, Jiao Medio, canal de Hígado, abdomen inferior o menstruación antes de elegir con qué intensidad mover el Qi.',
+    ],
+    'descend' => [
+        'key' => 'descend', 'name' => 'Direct Rebellious Qi Downward',
+        'nameEs' => 'Dirigir el Qi rebelde hacia abajo', 'sourcePages' => '536–552',
+        'copy' => 'Separate Lung rebellion with cough or wheezing from Stomach rebellion with hiccup, nausea, retching, or vomiting, then distinguish excess from deficiency.',
+        'copyEs' => 'Separa rebelión de Pulmón con tos o sibilancias de rebelión de Estómago con hipo, náusea, arcadas o vómito, y luego distingue exceso de deficiencia.',
+    ],
+];
+$regulateqichapterplan = [
+    ['Yue Ju Wan', 1, 'move', 'Escape Restraint Pill', '507–511'],
+    ['Chai Hu Shu Gan San', 2, 'move', 'Bupleurum Powder to Dredge the Liver', '512–513'],
+    ['Shu Gan Tang', 3, 'move', 'Dredge the Liver Decoction', '513–514'],
+    ['Zhi Shi Xie Bai Gui Zhi Tang', 4, 'move', 'Unripe Bitter Orange, Chinese Garlic, and Cinnamon Twig Decoction', '514–516'],
+    ['Ban Xia Hou Po Tang', 5, 'move', 'Pinellia and Magnolia Bark Decoction', '516–519'],
+    ['Hou Po Wen Zhong Tang', 6, 'move', 'Magnolia Bark Decoction for Warming the Middle', '519–521'],
+    ['Liang Fu Wan', 7, 'move', 'Galangal and Cyperus Pill', '521–522'],
+    ['Jin Ling Zi San', 8, 'move', 'Melia Toosendan Powder', '522–524'],
+    ['Si Mo Tang', 9, 'move', 'Four Milled-Herb Decoction', '525–527'],
+    ['Tian Tai Wu Yao San', 10, 'move', 'Top-Quality Lindera Powder', '527–529'],
+    ['Ju He Wan', 11, 'move', 'Tangerine Seed Pill', '529–531'],
+    ['Nuan Gan Jian', 12, 'move', 'Warm the Liver Decoction', '531–533'],
+    ['Qi Ge San', 13, 'move', 'Open Up the Diaphragm Powder', '533–535'],
+    ['Jia Wei Wu Yao Tang', 14, 'move', 'Augmented Lindera Decoction', '535–536'],
+    ['Su Zi Jiang Qi Tang', 15, 'descend', 'Perilla Fruit Decoction for Directing Qi Downward', '537–540'],
+    ['Ding Chuan Tang', 16, 'descend', 'Arrest Wheezing Decoction', '540–542'],
+    ['Xuan Fu Dai Zhe Tang', 17, 'descend', 'Inula and Haematite Decoction', '542–544'],
+    ['Ju Pi Zhu Ru Tang', 18, 'descend', 'Tangerine Peel and Bamboo Shavings Decoction', '544–547'],
+    ['Ding Xiang Shi Di Tang', 19, 'descend', 'Clove and Persimmon Calyx Decoction', '547–549'],
+    ['Da Ban Xia Tang', 20, 'descend', 'Major Pinellia Decoction', '549–552'],
+];
+$regulateqisupplementbyname = [];
+foreach ($regulateqichaptersourcecategory['formulas'] as $formula) {
+    $regulateqisupplementbyname[$formula['name']] = $formula;
+}
+$regulateqichapterformulas = [];
+foreach ($regulateqichapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $regulateqisupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 12 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $regulateqichaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $regulateqichaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $regulateqichapterformulas[] = $formula;
+}
+$regulateqichapteroverview = [
+    'number' => 'S8',
+    'key' => 'regulate-qi-chapter-12',
+    'name' => 'Formulas That Regulate the Qi · Complete Bensky Chapter 12',
+    'nameEs' => 'Fórmulas que regulan el Qi · Capítulo 12 completo de Bensky',
+    'sourceChapter' => 12,
+    'sourcePages' => '505–554',
+    'formulas' => $regulateqichapterformulas,
+];
+
 $supplementalindexcategories = [];
 foreach ($supplementalcategories as $categorykey => $category) {
     if (!in_array($categorykey, $tonifychapterkeys, true)
             && $categorykey !== 'warm-interior-cold'
             && $categorykey !== 'stabilize-bind-ch9'
             && $categorykey !== 'calm-shen-ch10'
-            && $categorykey !== 'open-orifices-ch11') {
+            && $categorykey !== 'open-orifices-ch11'
+            && $categorykey !== 'regulate-qi-ch12') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
@@ -421,9 +499,11 @@ $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
 $supplementalcategories[$calmshenchapteroverview['key']] = $calmshenchapteroverview;
 $supplementalcategories[$openorificeschapteroverview['key']] = $openorificeschapteroverview;
+$supplementalcategories[$regulateqichapteroverview['key']] = $regulateqichapteroverview;
 unset($supplementalcategories['stabilize-bind-ch9']);
 unset($supplementalcategories['calm-shen-ch10']);
 unset($supplementalcategories['open-orifices-ch11']);
+unset($supplementalcategories['regulate-qi-ch12']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -434,6 +514,7 @@ $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-c
 $isstabilizechapterpage = $selected !== null && $selected['key'] === 'stabilize-bind-chapter-9';
 $iscalmshenchapterpage = $selected !== null && $selected['key'] === 'calm-shen-chapter-10';
 $isopenorificeschapterpage = $selected !== null && $selected['key'] === 'open-orifices-chapter-11';
+$isregulateqichapterpage = $selected !== null && $selected['key'] === 'regulate-qi-chapter-12';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
@@ -488,6 +569,16 @@ if ($ises) {
     $openorificeschapterparams['lang'] = 'es';
 }
 $openorificeschapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $openorificeschapterparams);
+$regulateqiparentparams = ['focus' => 'regulate-qi'];
+if ($ises) {
+    $regulateqiparentparams['lang'] = 'es';
+}
+$regulateqiparenturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $regulateqiparentparams);
+$regulateqichapterparams = ['focus' => 'regulate-qi-chapter-12'];
+if ($ises) {
+    $regulateqichapterparams['lang'] = 'es';
+}
+$regulateqichapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $regulateqichapterparams);
 $languageparams = $selected === null ? [] : ['focus' => $selected['key']];
 if (!$ises) {
     $languageparams['lang'] = 'es';
@@ -632,7 +723,8 @@ echo $OUTPUT->header();
                 $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
                 $iscalmshenindexcard = $category['key'] === 'calm-shen';
                 $isstabilizeindexcard = $category['key'] === 'stabilize-bind';
-                $iscombinedindexcard = $iscalmshenindexcard || $isstabilizeindexcard;
+                $isregulateqiindexcard = $category['key'] === 'regulate-qi';
+                $iscombinedindexcard = $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
@@ -644,6 +736,10 @@ echo $OUTPUT->header();
                     $categorymeta = $ises
                         ? '3 fórmulas Board · Capítulo 9 de Bensky: 17'
                         : '3 Board formulas · Bensky Chapter 9: 17';
+                } elseif ($isregulateqiindexcard) {
+                    $categorymeta = $ises
+                        ? '5 fórmulas Board · Capítulo 12 de Bensky: 20'
+                        : '5 Board formulas · Bensky Chapter 12: 20';
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
@@ -703,6 +799,7 @@ echo $OUTPUT->header();
                 <?php if ($iswarmchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calentar el Interior' : '← Warm the Interior main category'); ?></a><?php endif; ?>
                 <?php if ($isstabilizechapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizeparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Estabilizar y contener' : '← Stabilize and Bind main category'); ?></a><?php endif; ?>
                 <?php if ($iscalmshenchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $calmshenparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calmar el Shen' : '← Calm Shen main category'); ?></a><?php endif; ?>
+                <?php if ($isregulateqichapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqiparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Regular el Qi' : '← Regulate Qi main category'); ?></a><?php endif; ?>
                 <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
             </div>
             <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
@@ -724,6 +821,22 @@ echo $OUTPUT->header();
                         : 'Open the complete Appendix C list—63 formulas in 14 categories—to verify directly which formulas belong to the guideline.'); ?></p>
                 </div>
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir en Board Domain →' : 'Open in Board Domain →'); ?></a>
+            </section>
+        <?php endif; ?>
+        <?php if ($selected['key'] === 'regulate-qi'): ?>
+            <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-twelve-shortcut-title">
+                <h4 id="chapter-twelve-shortcut-title"><?php echo s($ises ? 'Capítulo 12 completo · 20 fórmulas principales' : 'Complete Chapter 12 · 20 principal formulas'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'La categoría oficial del Board contiene cinco fórmulas. El capítulo completo añade otras quince y organiza toda la familia en dos movimientos: promover el movimiento del Qi y dirigir el Qi rebelde hacia abajo.'
+                    : 'The official Board category contains five formulas. The complete chapter adds fifteen more and organizes the entire family around two movements: promoting Qi movement and directing rebellious Qi downward.'); ?></p>
+                <div class="formula-study-guide__board-roster">
+                    <h5><?php echo s($ises ? 'Coincidencia exacta con Appendix C 2026 · 5 de 20' : 'Exact overlap with the 2026 Appendix C · 5 of 20'); ?></h5>
+                    <p><?php echo s('Yue Ju Wan*, Ban Xia Hou Po Tang*, Su Zi Jiang Qi Tang*, Ding Chuan Tang*, Ju Pi Zhu Ru Tang*.'); ?></p>
+                </div>
+                <div class="formula-study-guide__chapter-shortcut-actions">
+                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqichapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 12 completo →' : 'Open complete Chapter 12 →'); ?></a>
+                    <a class="formula-study-guide__button" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                </div>
             </section>
         <?php endif; ?>
         <?php if ($selected['key'] === 'tonify'): ?>
@@ -1074,6 +1187,49 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
+        <?php if ($selected['key'] === 'regulate-qi-chapter-12'): ?>
+            <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 12, páginas 505–554.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 12, pages 505–554.'); ?></p>
+            <section class="formula-study-guide__priority" aria-labelledby="chapter-twelve-principles-title">
+                <h4 id="chapter-twelve-principles-title"><?php echo s($ises ? 'Principio central: localiza el bloqueo y sigue la dirección del Qi' : 'Core principle: locate the obstruction and follow the direction of Qi'); ?></h4>
+                <p><?php echo s($ises
+                    ? 'Primero determina si el problema dominante es Qi estancado que necesita movimiento o Qi rebelde que necesita descenso. Después localiza Hígado, pecho, garganta, Jiao Medio, Pulmón o Estómago y confirma Frío, Calor, Flema, Humedad, Sangre, alimento o deficiencia.'
+                    : 'First decide whether the dominant problem is stagnant Qi that needs movement or rebellious Qi that needs descent. Then locate the Liver, chest, throat, Middle Burner, Lung, or Stomach and confirm Cold, Heat, Phlegm, Dampness, Blood, food, or deficiency.'); ?></p>
+                <h5><?php echo s($ises ? 'Ruta de estudio del capítulo' : 'Chapter study route'); ?></h5>
+                <div class="formula-study-guide__route">
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">1</span><?php echo s($ises ? 'Movimiento o descenso' : 'Movement or descent'); ?></b><p><?php echo s($ises ? 'Dolor y distensión apuntan a estancamiento; tos, sibilancia, hipo o vómito indican rebelión.' : 'Pain and distention point to stagnation; cough, wheezing, hiccup, or vomiting indicate rebellion.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Localiza el órgano' : 'Locate the organ'); ?></b><p><?php echo s($ises ? 'Hígado y canales, pecho y garganta, Pulmón o Estómago.' : 'Liver and channels, chest and throat, Lung, or Stomach.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">3</span><?php echo s($ises ? 'Identifica el acompañante' : 'Identify the companion'); ?></b><p><?php echo s($ises ? 'Frío, Calor, Flema, Humedad, Sangre, alimento, sequedad o deficiencia.' : 'Cold, Heat, Phlegm, Dampness, Blood, food, dryness, or deficiency.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Usa el separador decisivo' : 'Use the decisive separator'); ?></b><p><?php echo s($ises ? 'Momento del vómito, tipo de esputo, sed, lengua, pulso y relación con emociones, comida o frío.' : 'Timing of vomiting, sputum quality, thirst, tongue, pulse, and relationship to emotion, food, or Cold.'); ?></p></div>
+                </div>
+            </section>
+            <section class="formula-study-guide__board-verification" aria-labelledby="chapter-twelve-board-title">
+                <div>
+                    <h4 id="chapter-twelve-board-title"><?php echo s($ises ? 'Dato relevante para el examen · 5 de 20 en Appendix C 2026' : 'Exam-relevant fact · 5 of 20 in the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco marca las cinco fórmulas del capítulo que sí pertenecen al listado oficial vigente. Las otras quince amplían la comparación clínica de Bensky, pero no deben desplazar la prioridad de las fórmulas Board.' : 'An asterisk marks the five chapter formulas that belong to the current official roster. The other fifteen extend Bensky’s clinical comparison but should not displace Board-formula priority.'); ?></p>
+                </div>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+            </section>
+            <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-twelve-directory-title">
+                <h4 id="chapter-twelve-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 12' : 'Complete Chapter 12 directory'); ?></h4>
+                <p><?php echo s($ises ? 'Las 20 fórmulas principales siguen las dos secciones de la fuente. Las fórmulas asociadas y variaciones con nombre propio se conservan dentro de la ficha principal correspondiente.' : 'The 20 principal formulas follow the source’s two sections. Associated formulas and named variations remain inside the corresponding principal card.'); ?></p>
+                <div class="formula-study-guide__chapter-directory-grid">
+                    <?php foreach ($regulateqichaptersections as $sectionkey => $section): ?>
+                        <?php $sectionformulas = array_values(array_filter($selected['formulas'], static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey)); ?>
+                        <section class="formula-study-guide__chapter-directory-group">
+                            <h5><a href="#chapter-section-<?php echo s($sectionkey); ?>"><?php echo s($ises ? $section['nameEs'] : $section['name']); ?> · <?php echo count($sectionformulas); ?></a></h5>
+                            <ol>
+                                <?php foreach ($sectionformulas as $chapterformula): ?>
+                                    <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </section>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
         <?php if ($selected['key'] === 'warm-interior'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-six-shortcut-title">
                 <h4 id="chapter-six-shortcut-title"><?php echo s($ises ? 'Ampliación del capítulo 6 · ' : 'Chapter 6 expansion · '); ?><?php echo count($warmchaptercategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?></h4>
@@ -1090,9 +1246,9 @@ echo $OUTPUT->header();
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
                 $chapterformulaindex++;
-                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11'], true)
+                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
-                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11'], true)
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12'], true)
                     && $lastformulacategory !== $currentsectionkey;
                 if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
                     $formulacategory = $stabilizechaptersections[$currentsectionkey];
@@ -1108,6 +1264,12 @@ echo $OUTPUT->header();
                     ));
                 } elseif ($newchaptersection && $selected['key'] === 'open-orifices-chapter-11') {
                     $formulacategory = $openorificeschaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
+                } elseif ($newchaptersection && $selected['key'] === 'regulate-qi-chapter-12') {
+                    $formulacategory = $regulateqichaptersections[$currentsectionkey];
                     $formulacategory['formulas'] = array_values(array_filter(
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
@@ -1128,7 +1290,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11'], true)) {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -1147,7 +1309,7 @@ echo $OUTPUT->header();
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11'], true)
+                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
@@ -1211,7 +1373,7 @@ echo $OUTPUT->header();
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Hierba(s) emperador' : 'King herb(s)'; ?></strong><span><?php echo s($formula['kings']); ?></span></div>
                     </div>
                     <?php if (isset($formula['examFocus'])): ?>
-                        <p class="formula-study-guide__exam-focus"><strong><?php echo $selected['key'] === 'open-orifices-chapter-11'
+                        <p class="formula-study-guide__exam-focus"><strong><?php echo $issupplemental && $getboardformula($formula['name']) === null
                             ? ($ises ? 'Clave de estudio (fuera del Appendix C 2026):' : 'Study key (outside the 2026 Appendix C):')
                             : ($ises ? 'Enfoque de examen:' : 'Exam focus:'); ?></strong> <?php echo s($ises ? $formula['examFocusEs'] : $formula['examFocus']); ?></p>
                     <?php endif; ?>

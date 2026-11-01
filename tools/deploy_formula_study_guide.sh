@@ -52,14 +52,19 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "open-orifices-ch11"
     );
+    $chapter12 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "regulate-qi-ch12"
+    );
     if (count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 12
-            || count($data["supplementalFormulas"] ?? []) !== 97
+            || count($data["supplementalCategories"] ?? []) !== 13
+            || count($data["supplementalFormulas"] ?? []) !== 112
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
-            || count($chapter11) !== 7) {
+            || count($chapter11) !== 7
+            || count($chapter12) !== 15) {
         fwrite(STDERR, "ERROR: los datos de fórmulas no pasaron la validación.\n");
         exit(1);
     }
@@ -87,6 +92,11 @@ grep -q "open-orifices-chapter-11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Complete Chapter 11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Listado completo del capítulo 11" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Dato relevante para el examen · 0 de 7 en Appendix C 2026" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "regulate-qi-chapter-12" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Complete Chapter 12" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Listado completo del capítulo 12" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "5 fórmulas Board · Capítulo 12 de Bensky: 20" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Dato relevante para el examen · 5 de 20 en Appendix C 2026" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -135,11 +145,14 @@ grep -q "Fuente Bensky completa: 9 fórmulas; coincidencia Board: 3" "$TARGET_DI
 grep -q "Calmar el Shen / Calmar el Espíritu" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "open-orifices-chapter-11" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato relevante para el examen · 0 de 7 en Appendix C 2026" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "regulate-qi-chapter-12" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "5 fórmulas Board · Capítulo 12 de Bensky: 20" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Dato relevante para el examen · 5 de 20 en Appendix C 2026" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10 Y 11 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11 Y 12 INSTALADOS EN MOODLE"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"
@@ -149,6 +162,8 @@ echo "REFERENCIA TERMINOLÓGICA INSTALADA: CALM SHEN = CALM THE SPIRIT; BOARD (3
 echo "TARJETA UNIFICADA INSTALADA: CALM SHEN / CALM THE SPIRIT APARECE UNA SOLA VEZ EN EL ÍNDICE"
 echo "CAPÍTULO 11 INSTALADO: 7 fórmulas en 2 secciones (7 perfiles Bensky, 0 Board)"
 echo "ANÁLISIS DE ALCANCE INSTALADO: METALES, ESPECIES PROTEGIDAS, INGREDIENTES REGULADOS, VÍA NASAL Y URGENCIAS"
+echo "CAPÍTULO 12 INSTALADO: 20 fórmulas en 2 secciones (15 perfiles nuevos + 5 Board)"
+echo "TARJETA UNIFICADA INSTALADA: REGULATE QI APARECE UNA SOLA VEZ EN EL ÍNDICE"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"
