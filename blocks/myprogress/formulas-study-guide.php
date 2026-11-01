@@ -838,6 +838,7 @@ echo $OUTPUT->header();
 .formula-study-guide__chapter-shortcut-action{margin:0 0 14px}
 .formula-study-guide__board-verification{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:16px 18px;border:1px solid #b9ddd5;border-left:5px solid #0b817d;border-radius:10px;background:#effaf7}.formula-study-guide__board-verification h4{margin:0 0 4px;font-size:17px}.formula-study-guide__board-verification p{margin:0;color:#496474;font-size:13px;line-height:1.5}.formula-study-guide__board-verification .formula-study-guide__button{flex:0 0 auto}
 .formula-study-guide__scope-analysis{margin:0 0 20px;border:1px solid #edc989;border-left:5px solid #d97706;border-radius:11px;background:#fffaf0;overflow:hidden}.formula-study-guide__scope-analysis-header{padding:18px 20px}.formula-study-guide__scope-analysis-header h4{margin:0 0 7px;font-size:20px}.formula-study-guide__scope-analysis-header p{margin:0;color:#68543a;line-height:1.55}.formula-study-guide__scope-analysis-header p+p{margin-top:8px}.formula-study-guide__scope-analysis-caveat{font-size:13px}.formula-study-guide__scope-analysis .formula-study-guide__table-wrap{background:#fff}.formula-study-guide__scope-analysis .formula-study-guide__table td:first-child{white-space:normal}.formula-study-guide__scope-analysis-count{display:inline-flex;align-items:center;margin-right:6px;padding:3px 7px;border-radius:999px;background:#ffedd5;color:#9a3412;font-size:11px;font-weight:900;white-space:nowrap}
+.formula-study-guide__medical-rationale{margin:0 0 20px;border:1px solid #c4d7f2;border-left:5px solid #315fa5;border-radius:11px;background:#f5f8ff;overflow:hidden}.formula-study-guide__medical-rationale-header{padding:18px 20px}.formula-study-guide__medical-rationale-header h4{margin:0 0 7px;color:#173f78;font-size:20px}.formula-study-guide__medical-rationale-header p{margin:0;color:#435d7a;line-height:1.55}.formula-study-guide__medical-rationale-header p+p{margin-top:8px}.formula-study-guide__medical-rationale .formula-study-guide__table-wrap{background:#fff}.formula-study-guide__medical-rationale .formula-study-guide__table td:first-child{white-space:normal}.formula-study-guide__medical-rationale-secondary{border-top:1px solid #c4d7f2;background:#eef4ff}.formula-study-guide__medical-rationale-caveat{font-size:13px}
 .formula-study-guide__chapter-shortcut-actions{display:flex;gap:9px;flex-wrap:wrap}
 .formula-study-guide__board-roster{margin:16px 0;padding:15px;border:1px solid #b9ddd5;border-radius:9px;background:#fff}.formula-study-guide__board-roster h5{margin:0 0 4px;font-size:16px}.formula-study-guide__board-roster>p{margin:0 0 12px;color:#496474;font-size:13px}.formula-study-guide__board-roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.formula-study-guide__board-roster-group{padding:11px 12px;border:1px solid #d8e8e4;border-radius:8px;background:#f8fbfa}.formula-study-guide__board-roster-group h6{margin:0 0 7px;color:#075e54;font-size:13px}.formula-study-guide__board-roster-group ul{margin:0;padding:0;list-style:none}.formula-study-guide__board-roster-group li+li{margin-top:7px}.formula-study-guide__board-roster-formula{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.formula-study-guide__board-roster-formula a{color:#172033;font-weight:800;text-decoration:none}.formula-study-guide__board-roster-formula a:hover{color:#075e54;text-decoration:underline}.formula-study-guide__board-roster-meta{display:block;margin-top:2px;color:#64748b;font-size:11px;line-height:1.35}.formula-study-guide__board-roster-number{flex:0 0 auto;padding:3px 6px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;white-space:nowrap}
 .formula-study-guide__chapter-directory{margin:0 0 20px;padding:22px;border:1px solid #c9ded9;border-top:5px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__chapter-directory h4{margin:0 0 7px;font-size:22px}.formula-study-guide__chapter-directory>p{margin:0 0 16px;color:#496474;line-height:1.55}.formula-study-guide__chapter-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.formula-study-guide__chapter-directory-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__chapter-directory-group h5{margin:0 0 8px;font-size:16px}.formula-study-guide__chapter-directory-group h5 a{color:#075e54;text-decoration:none}.formula-study-guide__chapter-directory-group h5 a:hover{text-decoration:underline}.formula-study-guide__chapter-directory-group ol{margin:0;padding-left:22px;columns:2;column-gap:22px}.formula-study-guide__chapter-directory-group li{margin:0 0 5px;break-inside:avoid;color:#52677a;font-size:13px;line-height:1.35}.formula-study-guide__chapter-directory-group li a{color:#334155;text-decoration:none}.formula-study-guide__chapter-directory-group li a:hover{color:#075fc8;text-decoration:underline}
@@ -1477,6 +1478,61 @@ echo $OUTPUT->header();
                     <p><?php echo s($ises ? 'El asterisco marca Xiao Feng San (#55), Xiao Huo Luo Dan (#56) y Tian Ma Gou Teng Yin (#57). Las otras 14 fichas completan Bensky sin ampliar el listado oficial de 63.' : 'An asterisk marks Xiao Feng San (#55), Xiao Huo Luo Dan (#56), and Tian Ma Gou Teng Yin (#57). The other 14 cards complete Bensky without enlarging the official roster of 63.'); ?></p>
                 </div>
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+            </section>
+            <section class="formula-study-guide__medical-rationale" aria-labelledby="chapter-fourteen-medical-rationale-title">
+                <div class="formula-study-guide__medical-rationale-header">
+                    <h4 id="chapter-fourteen-medical-rationale-title"><?php echo s($ises ? 'Explicación médica: por qué estas tres son representativas' : 'Medical explanation: why these three are representative'); ?></h4>
+                    <p><?php echo s($ises
+                        ? 'En medicina china, “Viento” no designa una sola enfermedad. Describe manifestaciones súbitas, cambiantes o móviles—como prurito migratorio, espasmo, temblor y vértigo—y obliga a preguntar dónde se manifiesta y qué mecanismo lo impulsa.'
+                        : 'In Chinese medicine, “Wind” does not name a single disease. It describes sudden, changing, or moving manifestations—such as migrating itch, spasm, tremor, and vertigo—and requires asking where it appears and what mechanism drives it.'); ?></p>
+                    <p><?php echo s($ises
+                        ? 'Las tres fórmulas del Board condensan tres territorios clínicos amplios: piel, canales dolorosos e Interior. Juntas permiten evaluar localización, raíz y manifestación sin convertir todo el capítulo clásico en contenido prioritario de examen.'
+                        : 'The three Board formulas condense three broad clinical territories: skin, painful channels, and the Interior. Together they test location, root, and manifestation without making the entire classical chapter a primary exam priority.'); ?></p>
+                </div>
+                <div class="formula-study-guide__table-wrap">
+                    <table class="formula-study-guide__table">
+                        <thead>
+                            <tr>
+                                <th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th>
+                                <th><?php echo $ises ? 'Dónde se manifiesta' : 'Where it manifests'; ?></th>
+                                <th><?php echo $ises ? 'Mecanismo' : 'Mechanism'; ?></th>
+                                <th><?php echo $ises ? 'Presentación característica' : 'Characteristic presentation'; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><?php echo s($displayformulaname('Xiao Feng San')); ?></td>
+                                <td><?php echo s($ises ? 'Piel' : 'Skin'); ?></td>
+                                <td><?php echo s($ises ? 'Viento-Humedad-Calor con Sequedad de Sangre subyacente' : 'Wind-Damp-Heat with underlying Blood dryness'); ?></td>
+                                <td><?php echo s($ises ? 'Erupción roja, exudativa, cambiante y muy pruriginosa' : 'Red, weeping, changing, intensely itchy eruption'); ?></td>
+                            </tr>
+                            <tr>
+                                <td><?php echo s($displayformulaname('Xiao Huo Luo Dan')); ?></td>
+                                <td><?php echo s($ises ? 'Canales y articulaciones' : 'Channels and joints'); ?></td>
+                                <td><?php echo s($ises ? 'Viento-Frío-Humedad, Flema y estasis de Sangre' : 'Wind-Cold-Dampness, Phlegm, and Blood stasis'); ?></td>
+                                <td><?php echo s($ises ? 'Dolor crónico agravado por frío, rigidez, entumecimiento y movilidad reducida' : 'Chronic cold-aggravated pain, stiffness, numbness, and reduced movement'); ?></td>
+                            </tr>
+                            <tr>
+                                <td><?php echo s($displayformulaname('Tian Ma Gou Teng Yin')); ?></td>
+                                <td><?php echo s($ises ? 'Interior · Hígado' : 'Interior · Liver'); ?></td>
+                                <td><?php echo s($ises ? 'Ascenso de Yang de Hígado que genera Viento interno' : 'Rising Liver Yang generating internal Wind'); ?></td>
+                                <td><?php echo s($ises ? 'Cefalea, vértigo, tinnitus e insomnio; en casos graves, temblor o espasmo' : 'Headache, vertigo, tinnitus, and insomnia; in severe cases, tremor or spasm'); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="formula-study-guide__medical-rationale-header formula-study-guide__medical-rationale-secondary">
+                    <h4><?php echo s($ises ? 'Por qué las otras 14 siguen siendo importantes' : 'Why the other 14 still matter'); ?></h4>
+                    <p><?php echo s($ises
+                        ? 'Bensky conserva el mapa clásico completo. Las fórmulas restantes incluyen cuadros neurológicos agudos que hoy son urgencias; ingredientes históricos tóxicos; materiales animales protegidos o restringidos; y patrones muy especializados de agotamiento de Yin después de enfermedades febriles graves.'
+                        : 'Bensky preserves the complete classical map. The remaining formulas include acute neurologic presentations that are emergencies today; historically toxic ingredients; protected or restricted animal materials; and highly specialized Yin-depletion patterns after severe febrile disease.'); ?></p>
+                    <p><?php echo s($ises
+                        ? 'Por eso son valiosas para comprender diagnóstico diferencial, historia, seguridad y límites clínicos, aunque no formen parte del listado oficial de 63 fórmulas. Ictus, convulsiones, pérdida de conciencia, tétanos, meningitis o crisis hipertensiva requieren atención médica inmediata; una fórmula clásica no sustituye el tratamiento agudo.'
+                        : 'They therefore remain valuable for understanding differential diagnosis, history, safety, and clinical limits even though they are outside the official 63-formula roster. Stroke, seizure, loss of consciousness, tetanus, meningitis, or hypertensive crisis require immediate medical care; a classical formula does not replace acute treatment.'); ?></p>
+                    <p class="formula-study-guide__medical-rationale-caveat"><?php echo s($ises
+                        ? 'Nota de alcance: el Board no publica una justificación médica fórmula por fórmula. Esta es una interpretación clínica y educativa basada en la cobertura de patrones, la aplicabilidad y la seguridad; no una declaración oficial del Board.'
+                        : 'Scope note: the Board does not publish a formula-by-formula medical rationale. This is a clinical and educational interpretation based on pattern coverage, applicability, and safety—not an official Board statement.'); ?></p>
+                </div>
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-fourteen-directory-title">
                 <h4 id="chapter-fourteen-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 14' : 'Complete Chapter 14 directory'); ?></h4>
