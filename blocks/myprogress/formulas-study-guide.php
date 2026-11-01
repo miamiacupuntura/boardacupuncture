@@ -8,6 +8,9 @@ require_login();
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
+if ($focus === 'invigorate-blood') {
+    $focus = 'regulate-blood-chapter-13';
+}
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
 $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafile), true) : null;
 if (!is_array($data)
@@ -1080,17 +1083,6 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
-        <?php if ($selected['key'] === 'invigorate-blood'): ?>
-            <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-thirteen-shortcut-title">
-                <h4 id="chapter-thirteen-shortcut-title"><?php echo s($ises ? 'Capítulo 13 completo · 23 fórmulas' : 'Complete Chapter 13 · 23 formulas'); ?></h4>
-                <p><?php echo s($ises
-                    ? 'Las cuatro fórmulas oficiales de Movilizar Sangre aparecen en el capítulo. La ampliación añade once fórmulas principales para estasis y ocho para detener sangrado, conservadas como perfiles académicos separados del listado Board.'
-                    : 'All four official Invigorate Blood formulas appear in the chapter. The expansion adds eleven principal stasis formulas and eight formulas that stop bleeding, retained as academic profiles separate from the Board roster.'); ?></p>
-                <div class="formula-study-guide__chapter-shortcut-actions">
-                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulatebloodchapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 13 completo →' : 'Open complete Chapter 13 →'); ?></a>
-                </div>
-            </section>
-        <?php endif; ?>
         <?php if ($selected['key'] === 'stabilize-bind-chapter-9'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
                 ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 9, páginas 419–454.'
@@ -1609,39 +1601,6 @@ echo $OUTPUT->header();
                         <?php endforeach; ?>
                     </div>
                     <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulateqichapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir las 20 fichas del capítulo 12 →' : 'Open all 20 Chapter 12 profiles →'); ?></a>
-                </div>
-            </details>
-        <?php endif; ?>
-        <?php if ($selected['key'] === 'invigorate-blood'): ?>
-            <details class="formula-study-guide__additional">
-                <summary><?php echo s($ises
-                    ? 'Ver 19 fórmulas adicionales de Bensky · Capítulo 13'
-                    : 'View 19 additional Bensky formulas · Chapter 13'); ?></summary>
-                <div class="formula-study-guide__additional-body">
-                    <p><?php echo s($ises
-                        ? 'Estas fórmulas completan el capítulo 13, pero no pertenecen al listado oficial vigente de 63 fórmulas del Board. Selecciona un nombre para abrir su ficha completa.'
-                        : 'These formulas complete Chapter 13 but are not part of the current official 63-formula Board roster. Select a name to open its complete profile.'); ?></p>
-                    <div class="formula-study-guide__additional-grid">
-                        <?php foreach ($regulatebloodchaptersections as $sectionkey => $section): ?>
-                            <?php
-                            $additionalformulas = array_values(array_filter(
-                                $regulatebloodchapterformulas,
-                                static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey
-                                    && $getboardformula($formula['name']) === null
-                            ));
-                            ?>
-                            <section class="formula-study-guide__additional-group">
-                                <h5><?php echo s(($ises ? $section['nameEs'] : $section['name']) . ' · ' . count($additionalformulas)); ?></h5>
-                                <ol>
-                                    <?php foreach ($additionalformulas as $additionalformula): ?>
-                                        <?php $additionalformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $additionalformula['number']); ?>
-                                        <li><a href="<?php echo $regulatebloodchapterurl->out(false); ?>#formula-<?php echo s($additionalformulaid); ?>"><?php echo s($additionalformula['name']); ?></a></li>
-                                    <?php endforeach; ?>
-                                </ol>
-                            </section>
-                        <?php endforeach; ?>
-                    </div>
-                    <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $regulatebloodchapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir las 23 fichas del capítulo 13 →' : 'Open all 23 Chapter 13 profiles →'); ?></a>
                 </div>
             </details>
         <?php endif; ?>
