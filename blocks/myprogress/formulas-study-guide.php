@@ -1777,7 +1777,22 @@ echo $OUTPUT->header();
                     ? '/study-guide/comparisons/dui-yao-es.html'
                     : '/study-guide/comparisons/dui-yao.html';
                 $duiyaoindexanchor = (string) ($selectedguide['relatedDuiYaoAnchor'] ?? 'cough-phlegm');
-                $duiyaoindexurl = new moodle_url($duiyaoindexpath, [], $duiyaoindexanchor);
+                $duiyaoreturnfocusmap = [
+                    'tonify-chapter-8' => 'tonify',
+                    'stabilize-bind-chapter-9' => 'stabilize-bind',
+                    'calm-shen-chapter-10' => 'calm-shen',
+                    'regulate-qi-chapter-12' => 'regulate-qi',
+                    'regulate-blood-chapter-13' => 'invigorate-blood',
+                    'expel-wind-chapter-14' => 'expel-wind',
+                    'expel-damp-chapter-16' => 'expel-damp',
+                    'transform-phlegm-chapter-17' => 'transform-phlegm',
+                ];
+                $duiyaoreturnfocus = $duiyaoreturnfocusmap[$selected['key']] ?? $selected['key'];
+                $duiyaoreturnparams = $duiyaoreturnfocus === '' ? [] : [
+                    'from' => 'formula-study-guide',
+                    'focus' => $duiyaoreturnfocus,
+                ];
+                $duiyaoindexurl = new moodle_url($duiyaoindexpath, $duiyaoreturnparams, $duiyaoindexanchor);
                 ?>
                 <section class="formula-study-guide__dui-yao" aria-labelledby="related-dui-yao-title">
                     <header class="formula-study-guide__dui-yao-header">
@@ -1792,7 +1807,7 @@ echo $OUTPUT->header();
                         <?php foreach ($selectedguide['relatedDuiYao'] as $duiyaopair): ?>
                             <?php
                             $duiyaopath = '/study-guide/comparisons/' . $duiyaopair['slug'] . ($ises ? '-es' : '') . '.html';
-                            $duiyaourl = new moodle_url($duiyaopath);
+                            $duiyaourl = new moodle_url($duiyaopath, $duiyaoreturnparams);
                             ?>
                             <a class="formula-study-guide__dui-yao-card" href="<?php echo $duiyaourl->out(false); ?>">
                                 <span class="formula-study-guide__dui-yao-number"><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>

@@ -58,6 +58,7 @@ if ! command -v curl >/dev/null 2>&1 || ! command -v php >/dev/null 2>&1; then
 fi
 
 curl -fsSL "$RAW_BASE/dui-yao-data.json" -o "$TEMP_DIR/dui-yao-data.json"
+curl -fsSL "$RAW_BASE/comparison-return.js" -o "$TEMP_DIR/comparison-return.js"
 php -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     if (count($data) !== 51) {
@@ -97,16 +98,22 @@ done
 grep -q 'id="formula-vs-dui-yao"' "$TEMP_DIR/dui-yao.html"
 grep -q 'id="formula-modification-bridges"' "$TEMP_DIR/dui-yao-es.html"
 grep -q 'id="how-to-use-dui-yao-module"' "$TEMP_DIR/dui-yao-es.html"
+grep -q 'formula-study-guide' "$TEMP_DIR/comparison-return.js"
+grep -q "'digestive'" "$TEMP_DIR/comparison-return.js"
+grep -q 'comparison-return.js?v=20261101-1' "$TEMP_DIR/dui-yao.html"
+grep -q 'comparison-return.js?v=20261101-1' "$TEMP_DIR/dui-yao-es.html"
 grep -q '¿Sabías que…?' "$TEMP_DIR/dui-yao-es.html"
 grep -q "las tres fórmulas base y las cuatro parejas sí están" "$TEMP_DIR/dui-yao-es.html"
 [[ "$(grep -o 'data-dui-modification-link=' "$TEMP_DIR/dui-yao-es.html" | wc -l)" -eq 10 ]]
 for slug in "${SLUGS[@]}"; do
     grep -q 'data-formula-choice=' "$TEMP_DIR/$slug.html"
     grep -q 'data-formula-choice=' "$TEMP_DIR/$slug-es.html"
+    grep -q 'comparison-return.js?v=20261101-1' "$TEMP_DIR/$slug.html"
+    grep -q 'comparison-return.js?v=20261101-1' "$TEMP_DIR/$slug-es.html"
 done
 
 mkdir -p "$BACKUP_DIR"
-for file in dui-yao-data.json dui-yao.html dui-yao-es.html; do
+for file in dui-yao-data.json dui-yao.html dui-yao-es.html comparison-return.js; do
     [[ -f "$TARGET_DIR/$file" ]] && cp -a "$TARGET_DIR/$file" "$BACKUP_DIR/"
 done
 for slug in "${SLUGS[@]}"; do
@@ -119,7 +126,7 @@ OWNERSHIP_SOURCE="$TARGET_DIR"
 [[ -f "$TARGET_DIR/dui-yao.html" ]] && OWNERSHIP_SOURCE="$TARGET_DIR/dui-yao.html"
 OWNER="$(stat -c '%U' "$OWNERSHIP_SOURCE")"
 GROUP="$(stat -c '%G' "$OWNERSHIP_SOURCE")"
-for file in dui-yao-data.json dui-yao.html dui-yao-es.html; do
+for file in dui-yao-data.json dui-yao.html dui-yao-es.html comparison-return.js; do
     install -m 0644 -o "$OWNER" -g "$GROUP" "$TEMP_DIR/$file" "$TARGET_DIR/$file"
 done
 for slug in "${SLUGS[@]}"; do
@@ -130,6 +137,8 @@ done
 grep -q 'id="formula-vs-dui-yao"' "$TARGET_DIR/dui-yao.html"
 grep -q 'id="formula-modification-bridges"' "$TARGET_DIR/dui-yao-es.html"
 grep -q 'id="how-to-use-dui-yao-module"' "$TARGET_DIR/dui-yao-es.html"
+grep -q 'formula-study-guide' "$TARGET_DIR/comparison-return.js"
+grep -q 'comparison-return.js?v=20261101-1' "$TARGET_DIR/dui-yao.html"
 grep -q '¿Sabías que…?' "$TARGET_DIR/dui-yao-es.html"
 grep -q "las tres fórmulas base y las cuatro parejas sí están" "$TARGET_DIR/dui-yao-es.html"
 [[ "$(grep -o 'data-dui-modification-link=' "$TARGET_DIR/dui-yao-es.html" | wc -l)" -eq 10 ]]
@@ -143,4 +152,5 @@ if [[ "${SKIP_CACHE_PURGE:-0}" != "1" && -f "$MOODLE_ROOT/admin/cli/purge_caches
 fi
 
 echo "MÓDULO DUÌ YÀO INSTALADO: 51 parejas, 102 fichas bilingües y 10 puentes con fórmulas"
+echo "RETORNO CONTEXTUAL INSTALADO: LAS 14 CATEGORÍAS DE FÓRMULAS CONSERVAN SU PUNTO DE ORIGEN"
 echo "Respaldo: $BACKUP_DIR"
