@@ -924,7 +924,18 @@ if ($selected !== null && $selectedformulasections !== []) {
     }
     $selected['formulas'] = $orderedselectedformulas;
 }
-$selectedboardstatus = $selected === null ? null : $getboardstatus($selected['formulas'], $ises);
+$unifiedfamilystatusformulas = [
+    'warm-interior' => $warmchaptercategory['formulas'],
+    'stabilize-bind' => $stabilizechapteroverview['formulas'],
+    'calm-shen' => $calmshenchapteroverview['formulas'],
+    'regulate-qi' => $regulateqichapteroverview['formulas'],
+    'invigorate-blood' => $regulatebloodchapteroverview['formulas'],
+    'expel-wind' => $expelwindchapteroverview['formulas'],
+];
+$selectedstatusformulas = $selected === null
+    ? []
+    : ($unifiedfamilystatusformulas[$selected['key']] ?? $selected['formulas']);
+$selectedboardstatus = $selected === null ? null : $getboardstatus($selectedstatusformulas, $ises);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
 
@@ -1140,39 +1151,45 @@ echo $OUTPUT->header();
                 $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
                 $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
                 $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
+                $iswarminteriorindexcard = $category['key'] === 'warm-interior';
                 $iscalmshenindexcard = $category['key'] === 'calm-shen';
                 $isstabilizeindexcard = $category['key'] === 'stabilize-bind';
                 $isregulateqiindexcard = $category['key'] === 'regulate-qi';
                 $isinvigoratebloodindexcard = $category['key'] === 'invigorate-blood';
                 $isexpelwindindexcard = $category['key'] === 'expel-wind';
-                $iscombinedindexcard = $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard;
+                $iscombinedindexcard = $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
-                if ($iscalmshenindexcard) {
+                if ($iswarminteriorindexcard) {
                     $categorymeta = $ises
-                        ? '3 fórmulas Board · Capítulo 10 de Bensky: 9'
-                        : '3 Board formulas · Bensky Chapter 10: 9';
+                        ? 'Coincidencia Board: 4 de 11 · Capítulo 6 de Bensky'
+                        : 'Board overlap: 4 of 11 · Bensky Chapter 6';
+                } elseif ($iscalmshenindexcard) {
+                    $categorymeta = $ises
+                        ? 'Coincidencia Board: 3 de 9 · Capítulo 10 de Bensky'
+                        : 'Board overlap: 3 of 9 · Bensky Chapter 10';
                 } elseif ($isstabilizeindexcard) {
                     $categorymeta = $ises
-                        ? '3 fórmulas Board · Capítulo 9 de Bensky: 17'
-                        : '3 Board formulas · Bensky Chapter 9: 17';
+                        ? 'Coincidencia Board: 2 de 17 · Capítulo 9 de Bensky'
+                        : 'Board overlap: 2 of 17 · Bensky Chapter 9';
                 } elseif ($isregulateqiindexcard) {
                     $categorymeta = $ises
-                        ? '5 fórmulas Board · Capítulo 12 de Bensky: 20'
-                        : '5 Board formulas · Bensky Chapter 12: 20';
+                        ? 'Coincidencia Board: 5 de 20 · Capítulo 12 de Bensky'
+                        : 'Board overlap: 5 of 20 · Bensky Chapter 12';
                 } elseif ($isinvigoratebloodindexcard) {
                     $categorymeta = $ises
-                        ? '4 fórmulas Board · Capítulo 13 de Bensky: 23'
-                        : '4 Board formulas · Bensky Chapter 13: 23';
+                        ? 'Coincidencia Board: 4 de 23 · Capítulo 13 de Bensky'
+                        : 'Board overlap: 4 of 23 · Bensky Chapter 13';
                 } elseif ($isexpelwindindexcard) {
                     $categorymeta = $ises
-                        ? '3 fórmulas Board · Capítulo 14 de Bensky: 17'
-                        : '3 Board formulas · Bensky Chapter 14: 17';
+                        ? 'Coincidencia Board: 3 de 17 · Capítulo 14 de Bensky'
+                        : 'Board overlap: 3 of 17 · Bensky Chapter 14';
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
-                $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
+                $categorystatusformulas = $unifiedfamilystatusformulas[$category['key']] ?? $category['formulas'];
+                $categoryboardstatus = $getboardstatus($categorystatusformulas, $ises);
                 ?>
                 <a class="formula-study-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
