@@ -1008,6 +1008,42 @@
       "priorityTitleEs": "Prioridad del guideline: domina primero estas 4 fórmulas armonizadoras",
       "priorityText": "The current exam guideline requires the four formulas below. First locate the disharmony: Shaoyang, Liver-Spleen or Stomach-Intestines. Then separate excess from deficiency and identify the decisive symptom. Secondary chapter formulas remain collapsed for comparison and safety review.",
       "priorityTextEs": "El guideline actual exige las cuatro fórmulas siguientes. Primero localiza la desarmonía: Shaoyang, Hígado-Bazo o Estómago-Intestinos. Después separa exceso de deficiencia e identifica el síntoma decisivo. Las fórmulas secundarias del capítulo permanecen plegadas para comparación y seguridad.",
+      "relatedDuiYaoAnchor": "harmonize",
+      "relatedDuiYaoTitle": "Related Duì Yào · Harmonize Shaoyang, Liver and Middle",
+      "relatedDuiYaoTitleEs": "Duì Yào relacionados · Armonizar Shaoyang, Hígado y Centro",
+      "relatedDuiYaoText": "These three official Appendix B pairs map the category's principal relationships: vent and clear Shaoyang, course constrained Liver Qi while protecting Blood, and descend rebellious Stomach Qi when nausea or vomiting accompanies a half-exterior, half-interior disorder.",
+      "relatedDuiYaoTextEs": "Estos tres pares oficiales del Appendix B trazan las relaciones principales de la categoría: ventilar y aclarar Shaoyang, movilizar Qi de Hígado constreñido mientras protege Sangre y descender Qi rebelde de Estómago cuando náusea o vómito acompañan un trastorno mitad exterior y mitad interior.",
+      "relatedDuiYaoCaveat": "Do not merge the branches. Chái Hú + Huáng Qín points to Shaoyang Heat, while Chái Hú + Bái Sháo points to Liver constraint with tension or Blood involvement. Bàn Xià + Shēng Jiāng explains the nausea-vomiting branch of Xiǎo Chái Hú Tāng, not the Cold-Heat clumping architecture of Bàn Xià Xiè Xīn Tāng; Appendix B contains no direct pair for that fourth formula.",
+      "relatedDuiYaoCaveatEs": "No mezcles las ramas. Chái Hú + Huáng Qín apunta a Calor Shaoyang, mientras Chái Hú + Bái Sháo apunta a constricción de Hígado con tensión o participación de Sangre. Bàn Xià + Shēng Jiāng explica la rama de náusea-vómito de Xiǎo Chái Hú Tāng, no la arquitectura de aglomeración Frío-Calor de Bàn Xià Xiè Xīn Tāng; Appendix B no contiene un par directo para esa cuarta fórmula.",
+      "relatedDuiYao": [
+        {
+          "number": 38,
+          "slug": "ban-xia-sheng-jiang-dui-yao",
+          "title": "Bàn Xià + Shēng Jiāng",
+          "characters": "半夏 + 生姜",
+          "action": "Descend rebellious Stomach Qi, stop vomiting and transform Phlegm.",
+          "actionEs": "Descender Qi rebelde de Estómago, detener vómito y transformar Flema.",
+          "formulas": "Xiǎo Bàn Xià Tāng; also used within Xiǎo Chái Hú Tāng and Èr Chén Tāng."
+        },
+        {
+          "number": 45,
+          "slug": "chai-hu-huang-qin-dui-yao",
+          "title": "Chái Hú + Huáng Qín",
+          "characters": "柴胡 + 黄芩",
+          "action": "Harmonize Shaoyang by venting the pathogen outward while clearing Heat inside.",
+          "actionEs": "Armonizar Shaoyang ventilando patógeno hacia afuera mientras aclara Calor interior.",
+          "formulas": "Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng."
+        },
+        {
+          "number": 46,
+          "slug": "chai-hu-bai-shao-dui-yao",
+          "title": "Chái Hú + Bái Sháo",
+          "characters": "柴胡 + 白芍",
+          "action": "Course Liver Qi, nourish Blood, soften tension and relieve constraint pain.",
+          "actionEs": "Mover Qi hepático, nutrir Sangre, suavizar tensión y aliviar dolor por estancamiento.",
+          "formulas": "Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn."
+        }
+      ],
       "routeTitle": "Four-step harmonizing decision route",
       "routeTitleEs": "Ruta de decisión para armonizar en cuatro pasos",
       "route": [
