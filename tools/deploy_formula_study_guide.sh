@@ -90,6 +90,7 @@ php -r '
         }
     }
     $phlegmSections = $data["categoryGuides"]["transform-phlegm-chapter-17"]["formulaSections"] ?? [];
+    $phlegmDuiYao = $data["categoryGuides"]["transform-phlegm-chapter-17"]["relatedDuiYao"] ?? [];
     $phlegmSectionNames = [];
     foreach ($phlegmSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
@@ -165,6 +166,8 @@ php -r '
                 !== [6, 3, 2, 1, 2, 3, 1]
             || count($phlegmSectionNames) !== 18
             || count(array_unique($phlegmSectionNames)) !== 18
+            || array_column($phlegmDuiYao, "number") !== [2, 37, 39, 40, 41]
+            || count(array_unique(array_column($phlegmDuiYao, "slug"))) !== 5
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -333,6 +336,9 @@ grep -q '"key":"dry-damp-transform"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key":"induce-vomiting"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "'transform-phlegm' => 'transform-phlegm-chapter-17'" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "related-dui-yao-title" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Metales tóxicos históricos" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Clave de estudio (fuera del Appendix C 2026)" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Included in the current Board guideline" "$TEMP_DIR/formulas-study-guide.php"
@@ -471,6 +477,9 @@ grep -q '"key":"dry-damp-transform"' "$TARGET_DIR/formulas-study-guide-data.json
 grep -q '"key":"induce-vomiting"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "'transform-phlegm' => 'transform-phlegm-chapter-17'" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "related-dui-yao-title" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"slug":"ban-xia-chen-pi-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Duì Yào relacionados · Detener Tos y transformar Flema" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
@@ -508,6 +517,7 @@ echo "ANEXO INSTALADO: LAS 5 TABLAS COMPARATIVAS DEL CAPÍTULO 16 QUEDAN PLEGADA
 echo "CAPÍTULO 17 INSTALADO: 18 FÓRMULAS EN 7 SECCIONES (13 PERFILES NUEVOS + 5 BOARD)"
 echo "VISTA ÚNICA INSTALADA: TRANSFORM PHLEGM ABRE DIRECTAMENTE EL CAPÍTULO 17 COMPLETO"
 echo "ANEXO INSTALADO: LAS 7 TABLAS COMPARATIVAS DEL CAPÍTULO 17 QUEDAN PLEGADAS AL FINAL"
+echo "PUENTE DUÌ YÀO INSTALADO: 5 PAREJAS OFICIALES RELACIONADAS CON TOS Y FLEMA"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DE FÓRMULAS BOARD"
 echo "BOTÓN ESPAÑOL INSTALADO EN LA GUÍA DE HERBOLOGÍA"
 echo "NOMBRE UNIFORME INSTALADO: Board Guideline · Chinese Herbal Medicine"

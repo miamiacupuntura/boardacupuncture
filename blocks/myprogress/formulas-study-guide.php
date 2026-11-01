@@ -1338,6 +1338,7 @@ echo $OUTPUT->header();
 .formula-study-guide__chapter-section{margin:18px 0 0;padding:20px 22px;border-left:6px solid #0b817d;border-radius:11px;background:linear-gradient(135deg,#eaf8f5,#fff7ed)}.formula-study-guide__chapter-section .formula-study-guide__eyebrow{margin-bottom:5px}.formula-study-guide__chapter-section h4{margin:0 0 7px;font-size:25px}.formula-study-guide__chapter-section>p{margin:0;color:#496474;line-height:1.55}.formula-study-guide__chapter-section-meta{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;background:#fff;color:#52677a;font-size:12px;font-weight:800}
 .formula-study-guide__priority{margin:0 0 18px;padding:20px 22px;border:1px solid #b9dfd7;border-left:5px solid #0b817d;border-radius:11px;background:#eef9f6}.formula-study-guide__priority h4{margin:0 0 7px;font-size:20px}.formula-study-guide__priority h5{margin:17px 0 0;font-size:15px}.formula-study-guide__priority>p{margin:0;color:#496474;line-height:1.55}
 .formula-study-guide__route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.formula-study-guide__route-step{padding:13px;border-radius:9px;background:#fff}.formula-study-guide__route-step b{display:flex;align-items:center;gap:8px;color:#123246}.formula-study-guide__route-number{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-size:12px}.formula-study-guide__route-step p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}
+.formula-study-guide__dui-yao{margin:0 0 20px;padding:22px;border:1px solid #d8d4f0;border-top:5px solid #6d4bc3;border-radius:12px;background:linear-gradient(135deg,#faf8ff,#f3fbfa)}.formula-study-guide__dui-yao-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.formula-study-guide__dui-yao-header h4{margin:2px 0 7px;font-size:22px}.formula-study-guide__dui-yao-header p{max-width:790px;margin:0;color:#52677a;line-height:1.55}.formula-study-guide__dui-yao-count{flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#ece7fb;color:#5a37ac;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__dui-yao-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.formula-study-guide__dui-yao-card{display:flex;min-height:212px;flex-direction:column;padding:14px;border:1px solid #e2def3;border-radius:10px;background:#fff;color:inherit;text-decoration:none}.formula-study-guide__dui-yao-card:hover{border-color:#8b6bd1;color:inherit;text-decoration:none;box-shadow:0 5px 14px rgba(71,50,122,.12)}.formula-study-guide__dui-yao-number{color:#6d4bc3;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.formula-study-guide__dui-yao-card h5{margin:6px 0 2px;font-size:16px;line-height:1.3}.formula-study-guide__dui-yao-characters{color:#7a6b8d;font-size:13px}.formula-study-guide__dui-yao-card p{margin:10px 0;color:#52677a;font-size:13px;line-height:1.45}.formula-study-guide__dui-yao-card small{display:block;margin-top:auto;color:#394b5a;font-size:11px;line-height:1.4}.formula-study-guide__dui-yao-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding-top:15px;border-top:1px solid #ded9ef}.formula-study-guide__dui-yao-footer p{margin:0;color:#5f5670;font-size:12px;line-height:1.5}
 .formula-study-guide__compare{margin:0 0 20px;border:1px solid #d8e1e7;border-radius:11px;background:#fff;overflow:hidden}.formula-study-guide__compare h4{margin:0;padding:16px 18px;background:#f5f8fa;font-size:18px}.formula-study-guide__table-wrap{overflow-x:auto}.formula-study-guide__table{width:100%;border-collapse:collapse}.formula-study-guide__table th,.formula-study-guide__table td{padding:11px 14px;border-top:1px solid #e2e8ec;text-align:left;vertical-align:top}.formula-study-guide__table th{color:#334155;font-size:12px;text-transform:uppercase}.formula-study-guide__table td{color:#52677a;line-height:1.4}.formula-study-guide__table td:first-child{color:#17232a;font-weight:800;white-space:nowrap}
 .formula-study-guide__domain-badge{display:inline-flex;align-items:center;margin:5px 0 0;padding:4px 7px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;white-space:nowrap}.formula-study-guide__domain-badge:hover{background:#c9ddff;color:#0b3b8c;text-decoration:none}
 .formula-study-guide__category-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px}.formula-study-guide__category-nav>span{flex:1}.formula-study-guide__category-nav>span:last-child{text-align:right}.formula-study-guide__category-nav-center{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap}
@@ -1357,10 +1358,11 @@ echo $OUTPUT->header();
 .formula-study-guide__references{margin:20px 0;border:1px solid #d8e1e7;border-radius:11px;background:#fff}.formula-study-guide__references>summary{padding:16px 18px;color:#334155;font-size:17px;font-weight:900;cursor:pointer}.formula-study-guide__references-body{padding:0 18px 18px}.formula-study-guide__references-body>p{margin:0 0 15px;color:#52677a;line-height:1.5}.formula-study-guide__reference-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__reference-group{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__reference-group h5{margin:0 0 10px;font-size:15px}.formula-study-guide__reference-group ul{margin:0;padding-left:18px}.formula-study-guide__reference-group li{margin:0 0 9px;color:#52677a;line-height:1.4}.formula-study-guide__reference-group li:last-child{margin-bottom:0}.formula-study-guide__reference-group strong{color:#17232a}
 .formula-study-guide__additional{margin:20px 0;border:1px solid #add8cf;border-left:5px solid #0b817d;border-radius:11px;background:#effaf7}.formula-study-guide__additional>summary{padding:17px 18px;color:#075e54;font-size:18px;font-weight:900;cursor:pointer}.formula-study-guide__additional-body{padding:0 18px 18px}.formula-study-guide__additional-body>p{margin:0 0 15px;color:#496474;line-height:1.5}.formula-study-guide__additional-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:15px}.formula-study-guide__additional-group{padding:15px;border-radius:9px;background:#fff}.formula-study-guide__additional-group h5{margin:0 0 9px;color:#17232a;font-size:15px}.formula-study-guide__additional-group ol{margin:0;padding-left:22px}.formula-study-guide__additional-group li{margin:0 0 7px;color:#52677a;line-height:1.4}.formula-study-guide__additional-group a{color:#174c69;font-weight:750;text-decoration:none}.formula-study-guide__additional-group a:hover{color:#075fc8;text-decoration:underline}
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
+@media(max-width:1050px){.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
+@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
 <main class="formula-study-guide">
     <header class="formula-study-guide__top">
@@ -1410,7 +1412,8 @@ echo $OUTPUT->header();
                 $isinvigoratebloodindexcard = $category['key'] === 'invigorate-blood';
                 $isexpelwindindexcard = $category['key'] === 'expel-wind';
                 $isexpeldampindexcard = $category['key'] === 'expel-damp';
-                $iscombinedindexcard = $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard;
+                $istransformphlegmindexcard = $category['key'] === 'transform-phlegm';
+                $iscombinedindexcard = $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
@@ -1442,6 +1445,10 @@ echo $OUTPUT->header();
                     $categorymeta = $ises
                         ? '8 fórmulas Board · Capítulo 16 de Bensky: 33'
                         : '8 Board formulas · Bensky Chapter 16: 33';
+                } elseif ($istransformphlegmindexcard) {
+                    $categorymeta = $ises
+                        ? '5 fórmulas Board · Capítulo 17 de Bensky: 18'
+                        : '5 Board formulas · Bensky Chapter 17: 18';
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
@@ -1764,6 +1771,43 @@ echo $OUTPUT->header();
                     <?php endforeach; ?>
                 </div>
             </section>
+            <?php if (!empty($selectedguide['relatedDuiYao'])): ?>
+                <?php
+                $duiyaoindexpath = $ises
+                    ? '/study-guide/comparisons/dui-yao-es.html'
+                    : '/study-guide/comparisons/dui-yao.html';
+                $duiyaoindexurl = new moodle_url($duiyaoindexpath, [], 'cough-phlegm');
+                ?>
+                <section class="formula-study-guide__dui-yao" aria-labelledby="related-dui-yao-title">
+                    <header class="formula-study-guide__dui-yao-header">
+                        <div>
+                            <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Appendix B · Parejas oficiales' : 'Appendix B · Official pairs'); ?></p>
+                            <h4 id="related-dui-yao-title"><?php echo s($ises ? $selectedguide['relatedDuiYaoTitleEs'] : $selectedguide['relatedDuiYaoTitle']); ?></h4>
+                            <p><?php echo s($ises ? $selectedguide['relatedDuiYaoTextEs'] : $selectedguide['relatedDuiYaoText']); ?></p>
+                        </div>
+                        <span class="formula-study-guide__dui-yao-count"><?php echo s(count($selectedguide['relatedDuiYao']) . ($ises ? ' parejas relacionadas' : ' related pairs')); ?></span>
+                    </header>
+                    <div class="formula-study-guide__dui-yao-grid">
+                        <?php foreach ($selectedguide['relatedDuiYao'] as $duiyaopair): ?>
+                            <?php
+                            $duiyaopath = '/study-guide/comparisons/' . $duiyaopair['slug'] . ($ises ? '-es' : '') . '.html';
+                            $duiyaourl = new moodle_url($duiyaopath);
+                            ?>
+                            <a class="formula-study-guide__dui-yao-card" href="<?php echo $duiyaourl->out(false); ?>">
+                                <span class="formula-study-guide__dui-yao-number"><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>
+                                <h5><?php echo s($duiyaopair['title']); ?></h5>
+                                <span class="formula-study-guide__dui-yao-characters"><?php echo s($duiyaopair['characters']); ?></span>
+                                <p><?php echo s($ises ? $duiyaopair['actionEs'] : $duiyaopair['action']); ?></p>
+                                <small><strong><?php echo $ises ? 'Fórmula firma:' : 'Signature formula:'; ?></strong> <?php echo s($duiyaopair['formulas']); ?><br><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></small>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <footer class="formula-study-guide__dui-yao-footer">
+                        <p><strong><?php echo s($ises ? 'Límite de estudio:' : 'Study boundary:'); ?></strong> <?php echo s($ises ? $selectedguide['relatedDuiYaoCaveatEs'] : $selectedguide['relatedDuiYaoCaveat']); ?></p>
+                        <a class="formula-study-guide__button" href="<?php echo $duiyaoindexurl->out(false); ?>"><?php echo s($ises ? 'Ver el bloque Duì Yào completo →' : 'Open the complete Duì Yào block →'); ?></a>
+                    </footer>
+                </section>
+            <?php endif; ?>
             <?php if (!in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)): ?>
                 <?php $quickcomparesections = $selectedformulasections !== [] ? $selectedformulasections : [['key' => 'all', 'name' => $selectedguide['quickCompareTitle'], 'nameEs' => $selectedguide['quickCompareTitleEs'], 'formulaNames' => array_column($selectedguide['quickCompare'], 0)]]; ?>
                 <?php foreach ($quickcomparesections as $comparesection): ?>
