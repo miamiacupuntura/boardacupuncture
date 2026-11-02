@@ -7,6 +7,21 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 TARGET_DIR="${GUIDELINE_DIR:-}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
+PHP_BIN="${PHP_BIN:-}"
+
+if [[ -z "$PHP_BIN" ]]; then
+    for php_candidate in php php8.4 php8.3 php8.2 php8.1 php8.0; do
+        if command -v "$php_candidate" >/dev/null 2>&1; then
+            PHP_BIN="$(command -v "$php_candidate")"
+            break
+        fi
+    done
+fi
+
+if [[ -z "$PHP_BIN" || ! -x "$PHP_BIN" ]]; then
+    echo "ERROR: no se encontró PHP CLI. Indica la ruta con PHP_BIN=/ruta/al/php"
+    exit 1
+fi
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash deploy_herbal_guideline_search.sh COMMIT_DE_40_CARACTERES"
@@ -46,6 +61,7 @@ if [[ -z "$TARGET_DIR" || ! -f "$TARGET_DIR/guideline-return.js" || ! -f "$TARGE
 fi
 
 echo "Guía detectada: $TARGET_DIR"
+echo "PHP CLI detectado: $PHP_BIN"
 
 TEMP_DIR="$(mktemp -d)"
 BACKUP_DIR="$BACKUP_ROOT/boardacupuncture-guideline-search-$(date +%Y%m%d-%H%M%S)"
@@ -80,16 +96,16 @@ for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
         "$TEMP_DIR/$page"
 done
 
-php -l "$TEMP_DIR/single-herbs-study-guide.php" >/dev/null
-php -l "$TEMP_DIR/single-herbs-properties-table.php" >/dev/null
-php -r '
+"$PHP_BIN" -l "$TEMP_DIR/single-herbs-study-guide.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/single-herbs-properties-table.php" >/dev/null
+"$PHP_BIN" -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) {
         fwrite(STDERR, "ERROR: el índice de tarjetas no contiene las 304 hierbas.\n");
         exit(1);
     }
 ' "$TEMP_DIR/single-herb-card-index.json"
-php -r '
+"$PHP_BIN" -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     $total = (int)($data["total"] ?? 0);
     $verified = (int)($data["verified"] ?? 0);
@@ -193,9 +209,9 @@ install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
-        runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+        runuser -u www-data -- "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
     else
-        php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+        "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
     fi
 fi
 
