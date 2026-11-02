@@ -155,6 +155,37 @@ class block_menu extends block_base {
             . $url->out(false) . '">' . s($label) . '</a>';
     }
 
+    /**
+     * Render a complementary-course link when the named Moodle course can be opened.
+     *
+     * Hidden courses remain available to administrators and other users with the
+     * hidden-course capability. Students see a disabled item until the course is
+     * made visible, which avoids sending them to an access-denied page.
+     *
+     * @param string $fullname Exact Moodle course full name.
+     * @return string
+     */
+    private function complementary_course_button(string $fullname): string {
+        global $DB, $USER;
+
+        $course = $DB->get_record('course', ['fullname' => $fullname], 'id,fullname,visible', IGNORE_MULTIPLE);
+        if (!$course) {
+            return '<span class="module-school-dashboard-panel__action module-school-dashboard-panel__action--pending">'
+                . s($fullname) . '</span>';
+        }
+
+        $context = context_course::instance($course->id);
+        $canviewhidden = has_capability('moodle/course:viewhiddencourses', $context, $USER->id);
+        if (!$course->visible && !$canviewhidden) {
+            return '<span class="module-school-dashboard-panel__action module-school-dashboard-panel__action--pending">'
+                . s($fullname) . '</span>';
+        }
+
+        $url = new moodle_url('/course/view.php', ['id' => $course->id]);
+        return '<a class="module-school-dashboard-panel__action" href="' . $url->out(false) . '">'
+            . s($course->fullname) . '</a>';
+    }
+
     public function get_content() {
         global $USER, $DB;
 
@@ -282,11 +313,22 @@ class block_menu extends block_base {
             ];
 
             $boardcards = '';
+            $boardlevelcards = '';
             foreach ($boarddashboard as $subject) {
                 $progress = $this->get_board_progress($subject['progressids']);
                 $grade = min(100, max(0, (float) $progress['grade']));
+                $subjectcontext = context_course::instance(
+                    (int) $subject['progressids'][0],
+                    IGNORE_MISSING
+                );
+                $showstaffresources = is_siteadmin($USER)
+                    || ($subjectcontext
+                        && has_capability('moodle/course:manageactivities', $subjectcontext, $USER->id));
                 $actions = '';
                 foreach ($subject['resources'] as $resource) {
+                    if (!$showstaffresources && in_array($resource[1], ['Exam Key', 'Games'], true)) {
+                        continue;
+                    }
                     $actions .= $this->board_resource_button(
                         $resource[0],
                         $resource[1],
@@ -308,8 +350,10 @@ class block_menu extends block_base {
                     $actions .= '<a class="board-hub__action comparisons-dashboard-link" href="'
                         . $libraryurl->out(false) . '">Library</a>';
                 }
-                $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
-                    . $studyguideurl->out(false) . '">Study Guide</a>';
+                if ($showstaffresources) {
+                    $actions .= '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
+                        . $studyguideurl->out(false) . '">Study Guide</a>';
+                }
 
                 $lastexam = 'No exam taken yet';
                 if ($progress['lastexam'] !== '') {
@@ -318,7 +362,7 @@ class block_menu extends block_base {
                 }
 
                 $boardcards .= '<article class="board-hub__card">'
-                    . '<h3>' . s($subject['name']) . '</h3>'
+                    . '<h3>' . s($subject['name'] . ' School Level') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__progress"><strong>' . format_float($progress['grade'], 2, true)
                     . '%</strong><span>' . $progress['passed'] . ' of ' . number_format($progress['total'])
@@ -327,36 +371,84 @@ class block_menu extends block_base {
                     . '<p class="board-hub__last"><strong>Last exam:</strong><br>' . $lastexam . '</p>'
                     . '<div class="board-hub__actions">' . $actions . '</div>'
                     . '</article>';
+
+                if ($subject['area'] === 'herbology') {
+                    $mockquestionsurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'formulas',
+                    ]);
+                    $mockquestionsaction = '<a class="board-hub__action board-hub__action--board-mock" href="'
+                        . $mockquestionsurl->out(false) . '">Mock Questions</a>';
+                } else {
+                    $mockquestionsaction = '<span class="board-hub__action board-hub__action--pending '
+                        . 'board-hub__action--board-mock" aria-disabled="true">Mock Questions</span>';
+                }
+                $simulationaction = '<span class="board-hub__action board-hub__action--pending '
+                    . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
+                $boardlevelactions = $mockquestionsaction . $simulationaction;
+
+                $boardlevelcards .= '<article class="board-hub__card board-hub__card--board-level">'
+                    . '<h3>' . s($subject['name'] . ' Board Level') . '</h3>'
+                    . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
+                    . '<div class="board-hub__actions">' . $boardlevelactions . '</div>'
+                    . '</article>';
             }
 
-            $internalmedicineurl = (new moodle_url('/blocks/myprogress/module-school.php', [
-                'module' => 'internalmedicine',
-            ]))->out(false);
-            $orthopedicsurl = (new moodle_url('/blocks/myprogress/module-school.php', [
-                'module' => 'orthopedics',
-            ]))->out(false);
-            $advancedacupunctureurl = (new moodle_url('/blocks/myprogress/module-school.php', [
-                'module' => 'advancedacupuncture',
-            ]))->out(false);
+            $complementarycourses = [
+                'Anatomy & Physiology Module Exams',
+                'Biochemistry, Labwork & Imaging Module Exams',
+                'General Biology Module Exams',
+                'Musculoskeletal Module Exams',
+                'Orthopedic Assessment Module Exams',
+                'Pharmacology Module Exams',
+                'Pharmacognosy & Drug Interactions Module Exams',
+                'Behavioral Medicine Module Exams',
+                'Pathology Module Exams',
+                'Asian Bodywork Module Exams',
+                'Medical Terminology Module Exams',
+                'Diagnosis Methods Module Exams',
+                'Diagnosis Systems Module Exams',
+                'Essentials of Chinese Medicine Module Exams',
+                'Introduction to Needles Module Exams',
+                'Herbal Comp Review Module Exams',
+                'Acupuncture Comp Review Module Exams',
+                'Gynecology Module Exams',
+                'Internal Medicine Module Exams',
+                'Dietary Therapy Module Exams',
+                'Classics of Chinese Medicine Module Exams',
+                'Advanced Acupuncture Module Exams',
+                'Practice Management & State Law Module Exams',
+                'Practice Management',
+            ];
+            $complementarycoursebuttons = '';
+            foreach ($complementarycourses as $coursename) {
+                $complementarycoursebuttons .= $this->complementary_course_button($coursename);
+            }
+            $boardguidelinesurl = (new moodle_url('/study-guide/board-guidelines.html'))->out(false);
 
             $this->content->text = <<<HTML
 <section class="board-hub" aria-labelledby="board-hub-title">
   <header class="board-hub__heading">
     <p>BOARD PREPARATION</p>
     <h2 id="board-hub-title">Your NCBAHM Board Preparation</h2>
-    <span>Track your progress and open Questions, Simulation, Exam Keys, Games, Study Guides or Comparisons directly from one screen.</span>
+    <span>Continue School Level resources or open the separate Board Level Mock Questions and Simulation workspaces.</span>
   </header>
+  <aside class="board-guidelines-dashboard-panel" aria-label="NCBAHM Board Guidelines">
+    <div>
+      <strong>NCBAHM Board Guidelines</strong>
+      <span>Current study scope, official-list boundaries and a separate guideline for each Board.</span>
+    </div>
+    <a class="board-guidelines-dashboard-link" href="{$boardguidelinesurl}">Open Board Guidelines</a>
+  </aside>
   <div class="board-hub__grid">{$boardcards}</div>
+  <div class="board-hub__grid board-hub__grid--board-level" aria-label="Board Level modules">{$boardlevelcards}</div>
   <aside class="module-school-dashboard-panel" aria-labelledby="module-school-dashboard-title">
     <div class="module-school-dashboard-panel__copy">
-      <p>INTEGRATED CLINICAL MODULES</p>
-      <h3 id="module-school-dashboard-title">Module School</h3>
-      <span>Study patterns, symptoms, herbs, formulas and acupuncture points together in independent clinical modules.</span>
+      <p>COMPLEMENTARY COURSES</p>
+      <h3 id="module-school-dashboard-title">Complementary Courses School Level</h3>
+      <span>Open the complementary School Level course you want to study.</span>
     </div>
-    <nav class="module-school-dashboard-panel__actions" aria-label="Module School subjects">
-      <a class="module-school-dashboard-link" href="{$internalmedicineurl}">Internal Medicine</a>
-      <a href="{$orthopedicsurl}">Orthopedics</a>
-      <a href="{$advancedacupunctureurl}">Advanced Acupuncture</a>
+    <nav class="module-school-dashboard-panel__actions" aria-label="Complementary Courses School Level">
+      {$complementarycoursebuttons}
     </nav>
   </aside>
 </section>
