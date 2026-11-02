@@ -63,6 +63,12 @@ curl -fsSL \
 curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herb-card-index.json" \
     -o "$TEMP_DIR/single-herb-card-index.json"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-properties-table.php" \
+    -o "$TEMP_DIR/single-herbs-properties-table.php"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/single-herb-properties.json" \
+    -o "$TEMP_DIR/single-herb-properties.json"
 
 for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
     curl -fsSL \
@@ -75,6 +81,7 @@ for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
 done
 
 php -l "$TEMP_DIR/single-herbs-study-guide.php" >/dev/null
+php -l "$TEMP_DIR/single-herbs-properties-table.php" >/dev/null
 php -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) {
@@ -82,6 +89,17 @@ php -r '
         exit(1);
     }
 ' "$TEMP_DIR/single-herb-card-index.json"
+php -r '
+    $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+    $total = (int)($data["total"] ?? 0);
+    $verified = (int)($data["verified"] ?? 0);
+    $doseOnly = (int)($data["doseOnly"] ?? 0);
+    $pending = (int)($data["pending"] ?? 0);
+    if ($total !== 304 || count($data["herbs"] ?? []) !== 304 || $verified < 170 || $verified + $doseOnly + $pending !== 304) {
+        fwrite(STDERR, "ERROR: cobertura inválida en la tabla de propiedades.\n");
+        exit(1);
+    }
+' "$TEMP_DIR/single-herb-properties.json"
 grep -q "guide-smart-search" "$TEMP_DIR/guidelines.css"
 grep -q "guide-herb-roster__card-link" "$TEMP_DIR/guidelines.css"
 grep -q "guidelines.css?v=20261101-3" "$TEMP_DIR/guideline-return.js"
@@ -94,6 +112,9 @@ grep -q "Included in the current Board guideline" "$TEMP_DIR/guideline-search.js
 grep -q "calm-shen-chapter-10" "$TEMP_DIR/guideline-search.js"
 grep -q "single-herb-card-index.json" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "focus' => 'properties" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "single-herbs-properties-table.php" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "Master herb properties table" "$TEMP_DIR/single-herbs-properties-table.php"
 grep -q "guidelines.css?v=20261101-3" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine-es.html"
@@ -143,6 +164,11 @@ cp -a "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php" "$BACKUP_DIR
 if [[ -f "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" ]]; then
     cp -a "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" "$BACKUP_DIR/"
 fi
+for properties_file in single-herbs-properties-table.php single-herb-properties.json; do
+    if [[ -f "$MOODLE_ROOT/blocks/myprogress/$properties_file" ]]; then
+        cp -a "$MOODLE_ROOT/blocks/myprogress/$properties_file" "$BACKUP_DIR/"
+    fi
+done
 
 OWNER="$(stat -c '%U' "$TARGET_DIR/guideline-return.js")"
 GROUP="$(stat -c '%G' "$TARGET_DIR/guideline-return.js")"
@@ -160,6 +186,10 @@ install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-study-guide.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
+install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
+    "$TEMP_DIR/single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
+    "$TEMP_DIR/single-herb-properties.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
@@ -214,9 +244,14 @@ grep -q "guideline-return.js?v=20261101-2" "$TARGET_DIR/chinese-herbal-medicine-
 grep -q "single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
+grep -q "single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "Master herb properties table" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
+grep -q '"doseAppendixSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 
 echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
 echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
 echo "304 HIERBAS ENLAZADAS CON SUS TARJETAS DE SINGLE HERBS"
+echo "TABLA DE PROPIEDADES INSTALADA: SABOR, TEMPERATURA, MERIDIANOS Y DOSIS"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DEL GUIDELINE"
 echo "Respaldo: $BACKUP_DIR"

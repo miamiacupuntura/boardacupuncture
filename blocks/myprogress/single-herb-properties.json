@@ -1,0 +1,6091 @@
+{
+    "version": 1,
+    "source": "NCBAHM Appendix A roster plus verified Single Herbs profiles",
+    "doseAppendixSource": "User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams",
+    "total": 304,
+    "verified": 176,
+    "doseOnly": 49,
+    "pending": 79,
+    "herbs": [
+        {
+            "name": "Ai Ye",
+            "latin": "Artemisiae argyi Folium",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Spleen, Kidney",
+                "es": "Hígado, Bazo, Riñón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Ba Dou",
+            "latin": "Crotonis Fructus",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "hot; very toxic",
+                "es": "caliente; muy tóxica"
+            },
+            "channels": {
+                "en": "Stomach, Large Intestine, Lung",
+                "es": "Estómago, Intestino Grueso, Pulmón"
+            },
+            "dose": "0.1–0.3 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ba Ji Tian",
+            "latin": "Morindae officinalis Radix",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, acrid",
+                "es": "Dulce, acre"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Bai Bian Dou",
+            "latin": "Lablab Semen album",
+            "guideNumber": 8,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Bai Bu",
+            "latin": "Stemonae Radix",
+            "guideNumber": 15,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Dou Kou",
+            "latin": "Amomi Fructus rotundus",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach",
+                "es": "Pulmón, Bazo, Estómago"
+            },
+            "dose": "3–6 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Bai Guo",
+            "latin": "Ginkgo Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bai He",
+            "latin": "Lilii Bulbus",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Bai Hua She",
+            "latin": "Agkistrodon/Bungarus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Hua She She Cao",
+            "latin": "Hedyotis diffusae Herba",
+            "guideNumber": 6,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Ji",
+            "latin": "Bletillae Rhizoma",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet, astringent",
+                "es": "Amarga, dulce, astringente"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Liver",
+                "es": "Pulmón, Estómago, Hígado"
+            },
+            "dose": "3–9 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Bai Jiang Can",
+            "latin": "Bombyx Batryticatus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Jiang Cao",
+            "latin": "Patriniae Herba",
+            "guideNumber": 6,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Jie Zi",
+            "latin": "Sinapis Semen",
+            "guideNumber": 14,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Mao Gen",
+            "latin": "Imperatae Rhizoma",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Bladder",
+                "es": "Pulmón, Estómago, Vejiga"
+            },
+            "dose": "9–30 g; larger fresh-herb doses are traditional",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Bai Qian",
+            "latin": "Cynanchi stauntonii Rhizoma",
+            "guideNumber": 14,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Shao",
+            "latin": "Paeoniae Radix alba",
+            "guideNumber": 24,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sour",
+                "es": "Amarga, ácida"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Tou Weng",
+            "latin": "Pulsatillae Radix",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Bai Wei",
+            "latin": "Cynanchi atrati Radix",
+            "guideNumber": 7,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, salty",
+                "es": "Amarga, salada"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Kidney",
+                "es": "Pulmón, Estómago, Riñón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Xian Pi",
+            "latin": "Dictamni Cortex",
+            "guideNumber": 5,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Zhi",
+            "latin": "Angelicae dahuricae Radix",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, aromatic",
+                "es": "Acre, aromática"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Bai Zhu",
+            "latin": "Atractylodis macrocephalae Rhizoma",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Bai Zi Ren",
+            "latin": "Platycladi Semen",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Ban Lan Gen",
+            "latin": "Isatidis/Baphicacanthis Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Ban Xia",
+            "latin": "Pinelliae Rhizoma",
+            "guideNumber": 14,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm; toxic raw",
+                "es": "tibia; tóxica cruda"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach",
+                "es": "Pulmón, Bazo, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ban Zhi Lian",
+            "latin": "Scutellariae barbatae Herba",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bi Ba",
+            "latin": "Piperis longi Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bi Xie",
+            "latin": "Dioscoreae hypoglaucae Rhizoma",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bian Xu",
+            "latin": "Polygoni avicularis Herba",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Bie Jia",
+            "latin": "Trionycis Carapax",
+            "guideNumber": 7,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Bing Lang",
+            "latin": "Arecae Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Bing Pian",
+            "latin": "Borneolum",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Less than 0.1 g"
+        },
+        {
+            "name": "Bo He",
+            "latin": "Menthae haplocalycis Herba",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, aromatic",
+                "es": "Acre, aromática"
+            },
+            "temperature": {
+                "en": "cool",
+                "es": "fresca"
+            },
+            "channels": {
+                "en": "Lung, Liver",
+                "es": "Pulmón, Hígado"
+            },
+            "dose": "3–6 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Bu Gu Zhi",
+            "latin": "Psoraleae Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Cang Er Zi",
+            "latin": "Xanthii Fructus",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm; toxic",
+                "es": "tibia; tóxica"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Cang Zhu",
+            "latin": "Atractylodis Rhizoma",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Cao Dou Kou",
+            "latin": "Alpiniae katsumadai Semen",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "3–6 g",
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Cao Guo",
+            "latin": "Tsaoko Fructus",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Cao Wu",
+            "latin": "Aconiti kusnezoffii Radix",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "hot; very toxic",
+                "es": "caliente; muy tóxica"
+            },
+            "channels": {
+                "en": "Heart, Liver, Kidney, Spleen",
+                "es": "Corazón, Hígado, Riñón, Bazo"
+            },
+            "dose": "1.5–3 g study range; prolonged pre-decoction",
+            "appendixDose": null
+        },
+        {
+            "name": "Ce Bai Ye",
+            "latin": "Platycladi Cacumen",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, astringent",
+                "es": "Amarga, astringente"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Liver, Large Intestine",
+                "es": "Pulmón, Hígado, Intestino Grueso"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Chai Hu",
+            "latin": "Bupleuri Radix",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Liver, Gallbladder",
+                "es": "Hígado, Vesícula Biliar"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Chan Tui",
+            "latin": "Cicadae Periostracum",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Liver",
+                "es": "Pulmón, Hígado"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Che Qian Zi",
+            "latin": "Plantaginis Semen",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Chen Pi",
+            "latin": "Citri reticulatae Pericarpium",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach",
+                "es": "Pulmón, Bazo, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Chen Xiang",
+            "latin": "Aquilariae Lignum resinatum",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Kidney",
+                "es": "Bazo, Estómago, Riñón"
+            },
+            "dose": "1.5–4.5 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Chi Shao",
+            "latin": "Paeoniae Radix rubra",
+            "guideNumber": 4,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sour",
+                "es": "Amarga, ácida"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Liver",
+                "es": "Hígado"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Chi Shi Zhi",
+            "latin": "Halloysitum rubrum",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Chi Xiao Dou",
+            "latin": "Phaseoli Semen",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Chuan Bei Mu",
+            "latin": "Fritillariae cirrhosae Bulbus",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Heart",
+                "es": "Pulmón, Corazón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Chuan Lian Zi",
+            "latin": "Toosendan Fructus",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold; toxic",
+                "es": "fría; tóxica"
+            },
+            "channels": {
+                "en": "Liver, Stomach, Small Intestine, Bladder",
+                "es": "Hígado, Estómago, Intestino Delgado, Vejiga"
+            },
+            "dose": "4.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Chuan Mu Tong",
+            "latin": "Clematidis armandii Caulis",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Chuan Niu Xi",
+            "latin": "Cyathulae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Chuan Wu",
+            "latin": "Aconiti Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Chuan Xin Lian",
+            "latin": "Andrographitis Herba",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Chuan Xiong",
+            "latin": "Chuanxiong Rhizoma",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Chun Pi",
+            "latin": "Ailanthi Cortex",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, astringent",
+                "es": "Amarga, astringente"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Large Intestine, Stomach, Liver",
+                "es": "Intestino Grueso, Estómago, Hígado"
+            },
+            "dose": "6–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ci Ji Li",
+            "latin": "Tribuli Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Ci Shi",
+            "latin": "Magnetitum",
+            "guideNumber": 28,
+            "status": "verified",
+            "flavor": {
+                "en": "Pungent, salty",
+                "es": "Picante, salada"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Liver, Kidney",
+                "es": "Corazón, Hígado, Riñón"
+            },
+            "dose": "9–30 g; crush and predecoct",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Ci Wu Jia",
+            "latin": "Acanthopanacis senticosi Radix et Caulis",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Cong Bai",
+            "latin": "Allii fistulosi Bulbus",
+            "guideNumber": 1,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Da Fu Pi",
+            "latin": "Arecae Pericarpium",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Large Intestine, Small Intestine",
+                "es": "Bazo, Estómago, Intestino Grueso, Intestino Delgado"
+            },
+            "dose": "4.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Da Huang",
+            "latin": "Rhei Radix et Rhizoma",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Large Intestine, Liver, Stomach",
+                "es": "Corazón, Intestino Grueso, Hígado, Estómago"
+            },
+            "dose": "3–12 g",
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Da Ji",
+            "latin": "Cirsii japonici Herba sive Radix",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Da Qing Ye",
+            "latin": "Isatidis Folium",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Da Zao",
+            "latin": "Jujubae Fructus",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "3–12 fruits",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Dai Zhe Shi",
+            "latin": "Haematitum",
+            "guideNumber": 31,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Liver, Heart",
+                "es": "Hígado, Corazón"
+            },
+            "dose": "9–30 g; crush and predecoct",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Dan Dou Chi",
+            "latin": "Sojae Semen preparatum",
+            "guideNumber": 2,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Dan Shen",
+            "latin": "Salviae miltiorrhizae Radix",
+            "guideNumber": 4,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Heart, Pericardium, Liver",
+                "es": "Corazón, Pericardio, Hígado"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Dan Zhu Ye",
+            "latin": "Lophateri Herba",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Stomach, Small Intestine",
+                "es": "Corazón, Estómago, Intestino Delgado"
+            },
+            "dose": "6–9 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Dang Gui",
+            "latin": "Angelicae sinensis Radix",
+            "guideNumber": 10,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, acrid",
+                "es": "Dulce, acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Heart, Spleen",
+                "es": "Hígado, Corazón, Bazo"
+            },
+            "dose": "4.5–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Dang Shen",
+            "latin": "Codonopsis Radix",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Lung, Spleen",
+                "es": "Pulmón, Bazo"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Deng Xin Cao",
+            "latin": "Junci Medulla",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Di Fu Zi",
+            "latin": "Kochiae Fructus",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Di Gu Pi",
+            "latin": "Lycii Cortex",
+            "guideNumber": 7,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Liver, Kidney",
+                "es": "Pulmón, Hígado, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Di Long",
+            "latin": "Pheretima",
+            "guideNumber": 31,
+            "status": "verified",
+            "flavor": {
+                "en": "Salty",
+                "es": "Salada"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Liver, Lung, Spleen, Bladder",
+                "es": "Hígado, Pulmón, Bazo, Vejiga"
+            },
+            "dose": "4.5–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Di Yu",
+            "latin": "Sanguisorbae Radix",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sour",
+                "es": "Amarga, ácida"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Liver, Large Intestine",
+                "es": "Hígado, Intestino Grueso"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Ding Xiang",
+            "latin": "Caryophylli Flos",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Dong Chong Xia Cao",
+            "latin": "Cordyceps",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Kidney",
+                "es": "Pulmón, Riñón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Dong Gua Zi",
+            "latin": "Benincasae Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Dong Kui Zi",
+            "latin": "Malvae Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Du Huo",
+            "latin": "Angelicae pubescentis Radix",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Kidney, Bladder",
+                "es": "Riñón, Vejiga"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Du Zhong",
+            "latin": "Eucommiae Cortex",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, slightly acrid",
+                "es": "Dulce, ligeramente acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "E Jiao",
+            "latin": "Asini Corii Colla",
+            "guideNumber": 24,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Lung, Liver, Kidney",
+                "es": "Pulmón, Hígado, Riñón"
+            },
+            "dose": "5–15 g; dissolve separately",
+            "appendixDose": null
+        },
+        {
+            "name": "E Zhu",
+            "latin": "Curcumae Rhizoma",
+            "guideNumber": 19,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Fan Xie Ye",
+            "latin": "Sennae Folium",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Large Intestine",
+                "es": "Intestino Grueso"
+            },
+            "dose": "1.5–3 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Fang Feng",
+            "latin": "Saposhnikoviae Radix",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Bladder, Liver, Spleen",
+                "es": "Vejiga, Hígado, Bazo"
+            },
+            "dose": "4.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Feng Mi",
+            "latin": "Mel",
+            "guideNumber": 10,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Fo Shou",
+            "latin": "Citri sarcodactylis Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Fu Ling",
+            "latin": "Poria",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Fu Pen Zi",
+            "latin": "Rubi Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Fu Shen",
+            "latin": "Poriae Sclerotium pararadicis",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Fu Xiao Mai",
+            "latin": "Tritici Fructus levis",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cool",
+                "es": "fresca"
+            },
+            "channels": {
+                "en": "Heart",
+                "es": "Corazón"
+            },
+            "dose": "15–30 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Fu Zi",
+            "latin": "Aconiti Radix lateralis",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "hot; toxic",
+                "es": "caliente; tóxica"
+            },
+            "channels": {
+                "en": "Heart, Kidney, Spleen",
+                "es": "Corazón, Riñón, Bazo"
+            },
+            "dose": "3–15 g study range; prolonged pre-decoction",
+            "appendixDose": null
+        },
+        {
+            "name": "Gan Cao",
+            "latin": "Glycyrrhizae Radix",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral (raw), slightly warm (prepared)",
+                "es": "neutra (cruda), ligeramente tibia (preparada)"
+            },
+            "channels": {
+                "en": "Heart, Lung, Spleen, Stomach; all channels",
+                "es": "Corazón, Pulmón, Bazo, Estómago; todos los canales"
+            },
+            "dose": "2–10 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Gan Jiang",
+            "latin": "Zingiberis Rhizoma",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "hot",
+                "es": "caliente"
+            },
+            "channels": {
+                "en": "Heart, Lung, Spleen, Stomach",
+                "es": "Corazón, Pulmón, Bazo, Estómago"
+            },
+            "dose": "3–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Gan Sui",
+            "latin": "Kansui Radix",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "cold; toxic",
+                "es": "fría; tóxica"
+            },
+            "channels": {
+                "en": "Kidney, Large Intestine, Lung",
+                "es": "Riñón, Intestino Grueso, Pulmón"
+            },
+            "dose": "0.5–1.5 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Gao Ben",
+            "latin": "Ligustici Rhizoma",
+            "guideNumber": 1,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Gao Liang Jiang",
+            "latin": "Alpiniae officinarum Rhizoma",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "hot",
+                "es": "caliente"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "3–6 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Ge Gen",
+            "latin": "Puerariae Radix",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, acrid",
+                "es": "Dulce, acre"
+            },
+            "temperature": {
+                "en": "cool",
+                "es": "fresca"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "9–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ge Jie",
+            "latin": "Gecko",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Gou Ji",
+            "latin": "Cibotii Rhizoma",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Gou Qi Zi",
+            "latin": "Lycii Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Gou Teng",
+            "latin": "Uncariae Ramulus cum Uncis",
+            "guideNumber": 31,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cool",
+                "es": "fresca"
+            },
+            "channels": {
+                "en": "Liver, Pericardium",
+                "es": "Hígado, Pericardio"
+            },
+            "dose": "6–15 g; add near the end",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Gu Sui Bu",
+            "latin": "Drynariae Rhizoma",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Gu Ya (Setariae",
+            "latin": "Oryzae) Fructus germinatus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Gua Lou",
+            "latin": "Trichosanthis Fructus",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Large Intestine",
+                "es": "Pulmón, Estómago, Intestino Grueso"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Gua Lou Pi",
+            "latin": "Trichosanthis Pericarpium",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Gua Lou Ren",
+            "latin": "Trichosanthis Semen",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Large Intestine",
+                "es": "Pulmón, Estómago, Intestino Grueso"
+            },
+            "dose": "9–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Gui Ban",
+            "latin": "Testudinis Plastrum",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Gui Zhi",
+            "latin": "Cinnamomi Ramulus",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Heart, Lung, Bladder",
+                "es": "Corazón, Pulmón, Vejiga"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Hai Jin Sha",
+            "latin": "Lygodii Spora",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Hai Piao Xiao",
+            "latin": "Sepia Endoconcha",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Hai Tong Pi",
+            "latin": "Erythrinae Cortex",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver",
+                "es": "Hígado"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Hai Zao",
+            "latin": "Sargassum",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Han Fang Ji",
+            "latin": "Stephaniae tetrandrae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Han Lian Cao",
+            "latin": "Ecliptae Herba",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "He Huan Pi",
+            "latin": "Albiziae Cortex",
+            "guideNumber": 29,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Liver",
+                "es": "Corazón, Hígado"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "He Shou Wu",
+            "latin": "Polygoni multiflori Radix",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "He Tao Ren",
+            "latin": "Juglandis Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "He Ye",
+            "latin": "Nelumbinis Folium",
+            "guideNumber": 6,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, Spleen, Stomach",
+                "es": "Hígado, Bazo, Estómago"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "He Zi",
+            "latin": "Chebulae Fructus",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sour, astringent",
+                "es": "Amarga, ácida, astringente"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Lung, Large Intestine",
+                "es": "Pulmón, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Hei Zhi Ma",
+            "latin": "Sesami Semen nigrum",
+            "guideNumber": 10,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, Kidney, Large Intestine",
+                "es": "Hígado, Riñón, Intestino Grueso"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Hong Hua",
+            "latin": "Carthami Flos",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Hou Po",
+            "latin": "Magnoliae officinalis Cortex",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach, Large Intestine",
+                "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Hu Jiao",
+            "latin": "Piperis Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Hua Jiao",
+            "latin": "Zanthoxyli Pericarpium",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Hua Shi",
+            "latin": "Talcum",
+            "guideNumber": 8,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Huai Mi",
+            "latin": "Sophorae Flos immaturus",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Liver, Large Intestine",
+                "es": "Hígado, Intestino Grueso"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Huai Niu Xi",
+            "latin": "Achyranthis bidentatae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Huang Bai",
+            "latin": "Phellodendri Cortex",
+            "guideNumber": 5,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Kidney, Bladder, Large Intestine",
+                "es": "Riñón, Vejiga, Intestino Grueso"
+            },
+            "dose": "3–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Huang Jing",
+            "latin": "Polygonati Rhizoma",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Huang Lian",
+            "latin": "Coptidis Rhizoma",
+            "guideNumber": 5,
+            "status": "verified",
+            "flavor": {
+                "en": "Very bitter",
+                "es": "Muy amarga"
+            },
+            "temperature": {
+                "en": "very cold",
+                "es": "muy fría"
+            },
+            "channels": {
+                "en": "Heart, Liver, Stomach, Large Intestine",
+                "es": "Corazón, Hígado, Estómago, Intestino Grueso"
+            },
+            "dose": "1.5–4.5 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Huang Qi",
+            "latin": "Astragali Radix",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen",
+                "es": "Pulmón, Bazo"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Huang Qin",
+            "latin": "Scutellariae Radix",
+            "guideNumber": 5,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Gallbladder, Stomach, Large Intestine",
+                "es": "Pulmón, Vesícula Biliar, Estómago, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Huo Ma Ren",
+            "latin": "Cannabis Semen",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Large Intestine, Spleen, Stomach",
+                "es": "Intestino Grueso, Bazo, Estómago"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Huo Xiang",
+            "latin": "Pogostemonis/Agastaches Herba",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach",
+                "es": "Pulmón, Bazo, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ji Nei Jin",
+            "latin": "Gigeriae galli Endothelium corneum",
+            "guideNumber": 17,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Small Intestine, Bladder",
+                "es": "Bazo, Estómago, Intestino Delgado, Vejiga"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ji Xue Teng",
+            "latin": "Spatholobi Caulis",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Jiang Huang",
+            "latin": "Curcumae longae Rhizoma",
+            "guideNumber": 19,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Liver",
+                "es": "Bazo, Hígado"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Jie Geng",
+            "latin": "Platycodi Radix",
+            "guideNumber": 15,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Jin Qian Cao",
+            "latin": "Lysimachiae Herba",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 60 g"
+        },
+        {
+            "name": "Jin Yin Hua",
+            "latin": "Lonicerae Flos",
+            "guideNumber": 6,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Heart, Stomach",
+                "es": "Pulmón, Corazón, Estómago"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 60 g"
+        },
+        {
+            "name": "Jin Ying Zi",
+            "latin": "Rosae laevigatae Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Jing Jie",
+            "latin": "Schizonepetae Herba",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung, Liver",
+                "es": "Pulmón, Hígado"
+            },
+            "dose": "3–10 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Jing Mi",
+            "latin": "Oryzae Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Ju Hong",
+            "latin": "Citri reticulatae Exocarpium rubrum",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen",
+                "es": "Pulmón, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ju Hua",
+            "latin": "Chrysanthemi Flos",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet, bitter",
+                "es": "Acre, dulce, amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Liver",
+                "es": "Pulmón, Hígado"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Jue Ming Zi",
+            "latin": "Cassiae Semen",
+            "guideNumber": 3,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Ku Shen",
+            "latin": "Sophorae flavescentis Radix",
+            "guideNumber": 5,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Kuan Dong Hua",
+            "latin": "Farfarae Flos",
+            "guideNumber": 15,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, slightly bitter",
+                "es": "Acre, ligeramente amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Kun Bu",
+            "latin": "Eckloniae Thallus",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Lai Fu Zi",
+            "latin": "Raphani Semen",
+            "guideNumber": 17,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach",
+                "es": "Pulmón, Bazo, Estómago"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Lian Qiao",
+            "latin": "Forsythiae Fructus",
+            "guideNumber": 6,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, slightly acrid",
+                "es": "Amarga, ligeramente acre"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Lung, Gallbladder",
+                "es": "Corazón, Pulmón, Vesícula Biliar"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Lian Xu",
+            "latin": "Nelumbinis Stamen",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, astringent",
+                "es": "Dulce, astringente"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Kidney",
+                "es": "Corazón, Riñón"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Lian Zi",
+            "latin": "Nelumbinis Semen",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, astringent",
+                "es": "Dulce, astringente"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Kidney, Spleen",
+                "es": "Corazón, Riñón, Bazo"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Lian Zi Xin",
+            "latin": "Nelumbinis Plumula",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Kidney",
+                "es": "Corazón, Riñón"
+            },
+            "dose": "1.5–3 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ling Yang Jiao",
+            "latin": "Saigae tataricae Cornu",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Ling Zhi",
+            "latin": "Ganoderma",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Liu Huang",
+            "latin": "Sulfur",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Long Dan Cao",
+            "latin": "Gentianae Radix",
+            "guideNumber": 5,
+            "status": "verified",
+            "flavor": {
+                "en": "Very bitter",
+                "es": "Muy amarga"
+            },
+            "temperature": {
+                "en": "very cold",
+                "es": "muy fría"
+            },
+            "channels": {
+                "en": "Liver, Gallbladder, Bladder",
+                "es": "Hígado, Vesícula Biliar, Vejiga"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Long Gu",
+            "latin": "Fossilia Ossis Mastodi",
+            "guideNumber": 28,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, astringent",
+                "es": "Dulce, astringente"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Liver, Kidney",
+                "es": "Corazón, Hígado, Riñón"
+            },
+            "dose": "15–30 g; crush and predecoct",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Long Yan Rou",
+            "latin": "Longan Arillus",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 60 g"
+        },
+        {
+            "name": "Lu Dou",
+            "latin": "Phaseoli radiati Semen",
+            "guideNumber": 8,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Lu Gen",
+            "latin": "Phragmitis Rhizoma",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "15–30 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Lu Hui",
+            "latin": "Aloe",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Liver, Large Intestine",
+                "es": "Hígado, Intestino Grueso"
+            },
+            "dose": "0.6–1.5 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Lu Lu Tong",
+            "latin": "Liquidambaris Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Lu Rong",
+            "latin": "Cervi Cornu pantotrichum",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, salty",
+                "es": "Dulce, salada"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "1–3 g powder or separately prepared",
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Ma Bo",
+            "latin": "Lasiosphaera/Calvatia",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Ma Huang",
+            "latin": "Ephedrae Herba",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, slightly bitter",
+                "es": "Acre, ligeramente amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Bladder",
+                "es": "Pulmón, Vejiga"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ma Huang Gen",
+            "latin": "Ephedrae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Mai Men Dong",
+            "latin": "Ophiopogonis Radix",
+            "guideNumber": 26,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Heart, Lung, Stomach",
+                "es": "Corazón, Pulmón, Estómago"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Mai Ya",
+            "latin": "Hordei Fructus germinatus",
+            "guideNumber": 17,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Liver",
+                "es": "Bazo, Estómago, Hígado"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Man Jing Zi",
+            "latin": "Viticis Fructus",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Bladder, Liver, Stomach",
+                "es": "Vejiga, Hígado, Estómago"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Mang Xiao",
+            "latin": "Natrii Sulfas",
+            "guideNumber": 9,
+            "status": "verified",
+            "flavor": {
+                "en": "Salty, bitter",
+                "es": "Salada, amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Stomach, Large Intestine",
+                "es": "Estómago, Intestino Grueso"
+            },
+            "dose": "6–18 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Mei Gui Hua",
+            "latin": "Rosae rugosae Flos",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Mo Yao",
+            "latin": "Myrrha",
+            "guideNumber": 19,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Liver, Spleen",
+                "es": "Corazón, Hígado, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Mu Dan Pi",
+            "latin": "Moutan Cortex",
+            "guideNumber": 4,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Heart, Liver, Kidney",
+                "es": "Corazón, Hígado, Riñón"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Mu Gua",
+            "latin": "Chaenomelis Fructus",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Sour",
+                "es": "Ácida"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Mu Li",
+            "latin": "Ostreae Concha",
+            "guideNumber": 28,
+            "status": "verified",
+            "flavor": {
+                "en": "Salty, astringent",
+                "es": "Salada, astringente"
+            },
+            "temperature": {
+                "en": "cool",
+                "es": "fresca"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "9–30 g; crush and predecoct",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Mu Tong",
+            "latin": "Akebiae Caulis",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Mu Xiang",
+            "latin": "Aucklandiae Radix",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Large Intestine, Gallbladder",
+                "es": "Bazo, Estómago, Intestino Grueso, Vesícula Biliar"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Mu Zei",
+            "latin": "Equiseti hiemalis Herba",
+            "guideNumber": 2,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Niu Bang Zi",
+            "latin": "Arctii Fructus",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "6–12 g, crushed",
+            "appendixDose": null
+        },
+        {
+            "name": "Niu Huang",
+            "latin": "Bovis Calculus",
+            "guideNumber": 30,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Liver",
+                "es": "Corazón, Hígado"
+            },
+            "dose": "0.15–0.35 g as powder; not a routine decoction herb",
+            "appendixDose": null
+        },
+        {
+            "name": "Nu Zhen Zi",
+            "latin": "Ligustri lucidi Fructus",
+            "guideNumber": 26,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
+            },
+            "temperature": {
+                "en": "cool",
+                "es": "fresca"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Ou Jie",
+            "latin": "Nelumbinis Nodus rhizomatis",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Pang Da Hai",
+            "latin": "Sterculiae lychnophorae Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Pei Lan",
+            "latin": "Eupatorii Herba",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Pi Pa Ye",
+            "latin": "Eriobotryae Folium",
+            "guideNumber": 15,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Pu Gong Ying",
+            "latin": "Taraxaci Herba",
+            "guideNumber": 6,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Liver, Stomach",
+                "es": "Hígado, Estómago"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Pu Huang",
+            "latin": "Typhae Pollen",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, Pericardium",
+                "es": "Hígado, Pericardio"
+            },
+            "dose": "3–9 g, decoct in a bag",
+            "appendixDose": null
+        },
+        {
+            "name": "Qian Cao",
+            "latin": "Rubiae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Qian Hu",
+            "latin": "Peucedani Radix",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Qian Shi",
+            "latin": "Euryales Semen",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Qiang Huo",
+            "latin": "Notopterygii Rhizoma Seu Radix",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Bladder, Kidney",
+                "es": "Vejiga, Riñón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Qin Jiao",
+            "latin": "Gentianae macrophyllae Radix",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Stomach, Liver, Gallbladder",
+                "es": "Estómago, Hígado, Vesícula Biliar"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Qin Pi",
+            "latin": "Fraxini Cortex",
+            "guideNumber": 5,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Qing Dai",
+            "latin": "Indigo naturalis",
+            "guideNumber": 4,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Qing Hao",
+            "latin": "Artemisiae annuae Herba",
+            "guideNumber": 7,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "cold and aromatic",
+                "es": "fría y aromática"
+            },
+            "channels": {
+                "en": "Liver, Gallbladder, Kidney",
+                "es": "Hígado, Vesícula Biliar, Riñón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Qing Pi",
+            "latin": "Citri reticulatae viride Pericarpium",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Gallbladder, Stomach",
+                "es": "Hígado, Vesícula Biliar, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Quan Xie",
+            "latin": "Scorpio",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Qu Mai",
+            "latin": "Dianthi Herba",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Ren Shen",
+            "latin": "Ginseng Radix",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Heart",
+                "es": "Pulmón, Bazo, Corazón"
+            },
+            "dose": "1.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Rou Cong Rong",
+            "latin": "Cistanches Herba",
+            "guideNumber": 10,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, salty",
+                "es": "Dulce, salada"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Kidney, Large Intestine",
+                "es": "Riñón, Intestino Grueso"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Rou Dou Kou",
+            "latin": "Myristicae Semen",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Large Intestine",
+                "es": "Bazo, Estómago, Intestino Grueso"
+            },
+            "dose": "3–9 g; roasted and crushed late",
+            "appendixDose": null
+        },
+        {
+            "name": "Rou Gui",
+            "latin": "Cinnamomi Cortex",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "hot",
+                "es": "caliente"
+            },
+            "channels": {
+                "en": "Heart, Kidney, Liver, Spleen",
+                "es": "Corazón, Riñón, Hígado, Bazo"
+            },
+            "dose": "1.5–4.5 g; add late",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Ru Xiang",
+            "latin": "Olibanum",
+            "guideNumber": 19,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Heart, Liver, Spleen",
+                "es": "Corazón, Hígado, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "San Leng",
+            "latin": "Sparganii Rhizoma",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "San Qi",
+            "latin": "Notoginseng Radix",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Stomach",
+                "es": "Hígado, Estómago"
+            },
+            "dose": "3–9 g decoction; 1–3 g powder",
+            "appendixDose": null
+        },
+        {
+            "name": "Sang Bai Pi",
+            "latin": "Mori Cortex",
+            "guideNumber": 15,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Sang Ji Sheng",
+            "latin": "Taxilli Herba",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Sang Piao Xiao",
+            "latin": "Mantidis Ootheca",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Sang Shen",
+            "latin": "Mori Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Sang Ye",
+            "latin": "Mori Folium",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Liver",
+                "es": "Pulmón, Hígado"
+            },
+            "dose": "4.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Sang Zhi",
+            "latin": "Mori Ramulus",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver",
+                "es": "Hígado"
+            },
+            "dose": "9–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Sha Ren",
+            "latin": "Amomi Fructus",
+            "guideNumber": 16,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Kidney",
+                "es": "Bazo, Estómago, Riñón"
+            },
+            "dose": "3–6 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Sha Shen",
+            "latin": "Glehniae/Adenophorae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Sha Yuan Ji Li",
+            "latin": "Astragali complanati Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Shan Dou Gen",
+            "latin": "Sophorae tonkinensis Radix",
+            "guideNumber": 6,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Shan Yao",
+            "latin": "Dioscoreae Rhizoma",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Spleen, Lung, Kidney",
+                "es": "Bazo, Pulmón, Riñón"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Shan Zha",
+            "latin": "Crataegi Fructus",
+            "guideNumber": 17,
+            "status": "verified",
+            "flavor": {
+                "en": "Sour, sweet",
+                "es": "Ácida, dulce"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Liver",
+                "es": "Bazo, Estómago, Hígado"
+            },
+            "dose": "9–12 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Shan Zhu Yu",
+            "latin": "Corni Fructus",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Sour, astringent",
+                "es": "Ácida, astringente"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "She Chuang Zi",
+            "latin": "Cnidii Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "She Gan",
+            "latin": "Belamcandae Rhizoma",
+            "guideNumber": 6,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "She Xiang",
+            "latin": "Moschus",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Less than 0.1 g"
+        },
+        {
+            "name": "Shen Qu",
+            "latin": "Massa medicata fermentata",
+            "guideNumber": 17,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Sheng Di Huang",
+            "latin": "Rehmanniae Radix",
+            "guideNumber": 4,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Liver, Kidney",
+                "es": "Corazón, Hígado, Riñón"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Sheng Jiang",
+            "latin": "Zingiberis Rhizoma recens",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach",
+                "es": "Pulmón, Bazo, Estómago"
+            },
+            "dose": "3–10 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Sheng Ma",
+            "latin": "Cimicifugae Rhizoma",
+            "guideNumber": 2,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach, Large Intestine",
+                "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Shi Chang Pu",
+            "latin": "Acori tatarinowii Rhizoma",
+            "guideNumber": 30,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Picante, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Heart, Stomach",
+                "es": "Corazón, Estómago"
+            },
+            "dose": "3–9 g; preserve its aromatic oils",
+            "appendixDose": null
+        },
+        {
+            "name": "Shi Gao",
+            "latin": "Gypsum fibrosum",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "very cold",
+                "es": "muy fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "15–60 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Shi Hu",
+            "latin": "Dendrobii Herba",
+            "guideNumber": 26,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, slightly salty",
+                "es": "Dulce, ligeramente salada"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Stomach, Kidney",
+                "es": "Estómago, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Shi Jue Ming",
+            "latin": "Haliotidis Concha",
+            "guideNumber": 31,
+            "status": "verified",
+            "flavor": {
+                "en": "Salty",
+                "es": "Salada"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "9–30 g; crush and predecoct",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Shi Wei",
+            "latin": "Pyrrosiae Folium",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 60 g"
+        },
+        {
+            "name": "Shu Di Huang",
+            "latin": "Rehmanniae Radix preparata",
+            "guideNumber": 24,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Shui Niu Jiao",
+            "latin": "Bubali Cornu",
+            "guideNumber": 4,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Si Gua Luo",
+            "latin": "Luffae Fructus Retinervus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Suan Zao Ren",
+            "latin": "Ziziphi spinosae Semen",
+            "guideNumber": 29,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, sour",
+                "es": "Dulce, ácida"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Liver, Gallbladder, Spleen",
+                "es": "Corazón, Hígado, Vesícula Biliar, Bazo"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Suo Yang",
+            "latin": "Cynomorii Herba",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney, Large Intestine",
+                "es": "Hígado, Riñón, Intestino Grueso"
+            },
+            "dose": "6–15 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Tai Zi Shen",
+            "latin": "Pseudostellariae Radix",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Tan Xiang",
+            "latin": "Santali albi Lignum",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Lung",
+                "es": "Bazo, Estómago, Pulmón"
+            },
+            "dose": "1.5–4.5 g",
+            "appendixDose": "Less than 0.1 g / Up to 6 g (source lists both)"
+        },
+        {
+            "name": "Tao Ren",
+            "latin": "Persicae Semen",
+            "guideNumber": 10,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Liver, Large Intestine, Lung",
+                "es": "Corazón, Hígado, Intestino Grueso, Pulmón"
+            },
+            "dose": "4.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Tian Hua Fen",
+            "latin": "Trichosanthis Radix",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, slightly sweet",
+                "es": "Amarga, ligeramente dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "9–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Tian Ma",
+            "latin": "Gastrodiae Rhizoma",
+            "guideNumber": 31,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver",
+                "es": "Hígado"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Tian Men Dong",
+            "latin": "Asparagi Radix",
+            "guideNumber": 26,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
+            },
+            "temperature": {
+                "en": "very cold",
+                "es": "muy fría"
+            },
+            "channels": {
+                "en": "Lung, Kidney",
+                "es": "Pulmón, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Tian Nan Xing",
+            "latin": "Arisaematis Rhizoma",
+            "guideNumber": 14,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "warm; toxic",
+                "es": "tibia; tóxica"
+            },
+            "channels": {
+                "en": "Lung, Liver, Spleen",
+                "es": "Pulmón, Hígado, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ting Li Zi",
+            "latin": "Lepidii/Descurainiae Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Tong Cao",
+            "latin": "Tetrapanacis Medulla",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Tu Bie Chong",
+            "latin": "Eupolyphaga/Steleophaga",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Tu Fu Ling",
+            "latin": "Smilacis glabrae Rhizoma",
+            "guideNumber": 6,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Tu Si Zi",
+            "latin": "Cuscutae Semen",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, acrid",
+                "es": "Dulce, acre"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, Kidney, Spleen",
+                "es": "Hígado, Riñón, Bazo"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Wang Bu Liu Xing",
+            "latin": "Vaccariae Semen",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Wei Ling Xian",
+            "latin": "Clematidis Radix",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, salty",
+                "es": "Acre, salada"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Bladder",
+                "es": "Vejiga"
+            },
+            "dose": "6–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Wu Gong",
+            "latin": "Scolopendra",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Wu Jia Pi",
+            "latin": "Acanthopanacis Cortex",
+            "guideNumber": 12,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "4.5–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Wu Ling Zhi",
+            "latin": "Trogopterori Faeces",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Wu Mei",
+            "latin": "Mume Fructus",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Sour, astringent",
+                "es": "Ácida, astringente"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, Spleen, Lung, Large Intestine",
+                "es": "Hígado, Bazo, Pulmón, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Wu Wei Zi",
+            "latin": "Schisandrae Fructus",
+            "guideNumber": 27,
+            "status": "verified",
+            "flavor": {
+                "en": "Sour, sweet",
+                "es": "Ácida, dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Heart, Kidney, Lung",
+                "es": "Corazón, Riñón, Pulmón"
+            },
+            "dose": "2–6 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Wu Yao",
+            "latin": "Linderae Radix",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Wu Zhu Yu",
+            "latin": "Evodiae Fructus",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "hot; slightly toxic",
+                "es": "caliente; ligeramente tóxica"
+            },
+            "channels": {
+                "en": "Liver, Spleen, Stomach, Kidney",
+                "es": "Hígado, Bazo, Estómago, Riñón"
+            },
+            "dose": "1.5–4.5 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Xi Xian Cao",
+            "latin": "Siegesbeckiae Herba",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Xi Xin",
+            "latin": "Asari Radix et Rhizoma",
+            "guideNumber": 1,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 3 g"
+        },
+        {
+            "name": "Xi Yang Shen",
+            "latin": "Panacis quinquefolii Radix",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Xia Ku Cao",
+            "latin": "Prunellae Spica",
+            "guideNumber": 3,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Xian He Cao",
+            "latin": "Agrimoniae Herba",
+            "guideNumber": 20,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, astringent",
+                "es": "Amarga, astringente"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Lung, Liver, Spleen",
+                "es": "Pulmón, Hígado, Bazo"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 60 g"
+        },
+        {
+            "name": "Xian Mao",
+            "latin": "Curculiginis Rhizoma",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "hot; toxic",
+                "es": "caliente; tóxica"
+            },
+            "channels": {
+                "en": "Kidney, Liver, Spleen",
+                "es": "Riñón, Hígado, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Xiang Fu",
+            "latin": "Cyperi Rhizoma",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, slightly bitter, slightly sweet",
+                "es": "Acre, ligeramente amarga, ligeramente dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Liver, San Jiao",
+                "es": "Hígado, San Jiao"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Xiang Ru",
+            "latin": "Moslae Herba",
+            "guideNumber": 1,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Xiao Hui Xiang",
+            "latin": "Foeniculi Fructus",
+            "guideNumber": 21,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney, Spleen, Stomach",
+                "es": "Hígado, Riñón, Bazo, Estómago"
+            },
+            "dose": "3–6 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Xiao Ji",
+            "latin": "Cirsii Herba",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Xie Bai",
+            "latin": "Allii macrostemi Bulbus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Xin Yi",
+            "latin": "Magnoliae Flos",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, aromatic",
+                "es": "Acre, aromática"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
+            },
+            "dose": "3–9 g, wrapped",
+            "appendixDose": null
+        },
+        {
+            "name": "Xing Ren",
+            "latin": "Armeniacae Semen",
+            "guideNumber": 10,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "slightly warm; slightly toxic",
+                "es": "ligeramente tibia; ligeramente tóxica"
+            },
+            "channels": {
+                "en": "Lung, Large Intestine",
+                "es": "Pulmón, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Xu Duan",
+            "latin": "Dipsaci Radix",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 20 g"
+        },
+        {
+            "name": "Xuan Fu Hua",
+            "latin": "Inulae Flos",
+            "guideNumber": 14,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid, salty",
+                "es": "Amarga, acre, salada"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen, Stomach, Large Intestine",
+                "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Xuan Shen",
+            "latin": "Scrophulariae Radix",
+            "guideNumber": 4,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, salty, sweet",
+                "es": "Amarga, salada, dulce"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Kidney",
+                "es": "Pulmón, Estómago, Riñón"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Yan Hu Suo",
+            "latin": "Corydalis Rhizoma",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Ye Jiao Teng",
+            "latin": "Polygoni multiflori Caulis",
+            "guideNumber": 29,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "neutral",
+                "es": "neutra"
+            },
+            "channels": {
+                "en": "Heart, Liver",
+                "es": "Corazón, Hígado"
+            },
+            "dose": "9–30 g",
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Ye Ju Hua",
+            "latin": "Chrysanthemi indici Flos",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Yi Mu Cao",
+            "latin": "Leonuri Herba",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Yi Tang",
+            "latin": "Maltosum",
+            "guideNumber": 23,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Lung",
+                "es": "Bazo, Estómago, Pulmón"
+            },
+            "dose": "30–60 g; dissolve in strained decoction",
+            "appendixDose": "Up to 60 g"
+        },
+        {
+            "name": "Yi Yi Ren",
+            "latin": "Coicis Semen",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Yi Zhi Ren",
+            "latin": "Alpiniae oxyphyllae Fructus",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid",
+                "es": "Acre"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Kidney, Spleen",
+                "es": "Riñón, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": "Up to 6 g"
+        },
+        {
+            "name": "Yin Chen",
+            "latin": "Artemisiae scopariae Herba",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Yin Yang Huo",
+            "latin": "Epimedii Herba",
+            "guideNumber": 25,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
+            },
+            "dose": "6–15 g",
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Yu Jin",
+            "latin": "Curcumae Radix",
+            "guideNumber": 19,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Liver, Gallbladder, Lung",
+                "es": "Corazón, Hígado, Vesícula Biliar, Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Yu Xing Cao",
+            "latin": "Houttuyniae Herba",
+            "guideNumber": 6,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 30 g"
+        },
+        {
+            "name": "Yu Zhu",
+            "latin": "Polygonati odorati Rhizoma",
+            "guideNumber": null,
+            "status": "dose-only",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": "Up to 15 g"
+        },
+        {
+            "name": "Yuan Zhi",
+            "latin": "Polygalae Radix",
+            "guideNumber": 29,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, picante"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Heart, Kidney, Lung",
+                "es": "Corazón, Riñón, Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zao Jiao Ci",
+            "latin": "Gleditsiae Spina",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Ze Lan",
+            "latin": "Lycopi Herba",
+            "guideNumber": 19,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
+            },
+            "channels": {
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Ze Xie",
+            "latin": "Alismatis Rhizoma",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Zhe Bei Mu",
+            "latin": "Fritillariae thunbergii Bulbus",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Lung, Heart",
+                "es": "Pulmón, Corazón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zhen Zhu",
+            "latin": "Margarita",
+            "guideNumber": 28,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet, salty",
+                "es": "Dulce, salada"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Liver",
+                "es": "Corazón, Hígado"
+            },
+            "dose": "0.3–1 g as finely ground powder; do not decoct like a shell",
+            "appendixDose": "Up to 1 g"
+        },
+        {
+            "name": "Zhi Ke",
+            "latin": "Aurantii Fructus",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zhi Mu",
+            "latin": "Anemarrhenae Radix",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
+            },
+            "temperature": {
+                "en": "cold and moistening",
+                "es": "fría y humectante"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Kidney",
+                "es": "Pulmón, Estómago, Riñón"
+            },
+            "dose": "6–12 g",
+            "appendixDose": "Up to 12 g"
+        },
+        {
+            "name": "Zhi Shi",
+            "latin": "Aurantii Fructus immaturus",
+            "guideNumber": 18,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Spleen, Stomach, Large Intestine",
+                "es": "Bazo, Estómago, Intestino Grueso"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zhi Zi",
+            "latin": "Gardeniae Fructus",
+            "guideNumber": 3,
+            "status": "verified",
+            "flavor": {
+                "en": "Bitter",
+                "es": "Amarga"
+            },
+            "temperature": {
+                "en": "cold",
+                "es": "fría"
+            },
+            "channels": {
+                "en": "Heart, Lung, San Jiao",
+                "es": "Corazón, Pulmón, San Jiao"
+            },
+            "dose": "6–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zhu Ling",
+            "latin": "Polyporus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Zhu Ru",
+            "latin": "Bambusae Caulis in taeniam",
+            "guideNumber": 13,
+            "status": "verified",
+            "flavor": {
+                "en": "Sweet",
+                "es": "Dulce"
+            },
+            "temperature": {
+                "en": "slightly cold",
+                "es": "ligeramente fría"
+            },
+            "channels": {
+                "en": "Lung, Stomach, Gallbladder",
+                "es": "Pulmón, Estómago, Vesícula Biliar"
+            },
+            "dose": "6–12 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zi Cao",
+            "latin": "Arnebiae/Lithospermi Radix",
+            "guideNumber": 4,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Zi Su Ye",
+            "latin": "Perillae Folium",
+            "guideNumber": 1,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, aromatic",
+                "es": "Acre, aromática"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung, Spleen",
+                "es": "Pulmón, Bazo"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        },
+        {
+            "name": "Zi Su Zi",
+            "latin": "Perillae Fructus",
+            "guideNumber": null,
+            "status": "pending",
+            "flavor": {
+                "en": null,
+                "es": null
+            },
+            "temperature": {
+                "en": null,
+                "es": null
+            },
+            "channels": {
+                "en": null,
+                "es": null
+            },
+            "dose": null,
+            "appendixDose": null
+        },
+        {
+            "name": "Zi Wan",
+            "latin": "Asteris Radix",
+            "guideNumber": 15,
+            "status": "verified",
+            "flavor": {
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
+            },
+            "temperature": {
+                "en": "warm",
+                "es": "tibia"
+            },
+            "channels": {
+                "en": "Lung",
+                "es": "Pulmón"
+            },
+            "dose": "3–9 g",
+            "appendixDose": null
+        }
+    ]
+}
