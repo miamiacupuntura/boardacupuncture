@@ -63,6 +63,9 @@ $moistannex = [
     ],
 ];
 
+// Make the cross-category herbs available to the shared Duì Yào reference block.
+$duiyaoadditionalherbs = array_column($moistannex, 'name');
+
 $moistcharts = [[
     'title' => $moisttext('Moisten Intestines and promote bowel movement', 'Humedecer intestinos y promover evacuación'),
     'figure' => $moisttext('Yang figure 4.2 · module values', 'Figura 4.2 de Yang · valores del módulo'),

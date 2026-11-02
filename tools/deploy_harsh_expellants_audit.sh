@@ -89,6 +89,8 @@ grep -Fq "Tonify Yin" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "Tonify Yang" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "Tonify Blood" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "Tonify Qi" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "\$duiyaoadditionalherbs = array_column(\$moistannex, 'name');" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "including its cross-category references" "$TEMP_DIR/$REFERENCE_PATH"
 grep -Fq '"en": "Bitter"' "$TEMP_DIR/$PROPERTIES_PATH"
 grep -Fq '"dose": "0.1–0.3 g/day; defatted only"' "$TEMP_DIR/$PROPERTIES_PATH"
 
