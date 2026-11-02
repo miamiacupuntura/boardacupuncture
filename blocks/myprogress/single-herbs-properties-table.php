@@ -25,7 +25,7 @@ $propertylang = $ises ? 'es' : 'en';
             <div class="single-herbs-properties__stats" aria-label="<?php echo s($ises ? 'Cobertura de la tabla' : 'Table coverage'); ?>">
                 <span><strong><?php echo (int)$propertiesdata['total']; ?></strong><?php echo s($ises ? ' oficiales' : ' official'); ?></span>
                 <span><strong><?php echo (int)$propertiesdata['verified']; ?></strong><?php echo s($ises ? ' fichas detalladas' : ' detailed profiles'); ?></span>
-                <span><strong><?php echo (int)($propertiesdata['propertiesOnly'] ?? 0); ?></strong><?php echo s($ises ? ' con propiedades del Chart 6' : ' with Chart 6 properties'); ?></span>
+                <span><strong><?php echo (int)($propertiesdata['propertiesOnly'] ?? 0); ?></strong><?php echo s($ises ? ' con propiedades de tablas fuente' : ' with source-table properties'); ?></span>
                 <span><strong><?php echo (int)$propertiesdata['doseOnly']; ?></strong><?php echo s($ises ? ' solo con dosis del apéndice' : ' appendix-dose only'); ?></span>
             </div>
         </div>
@@ -33,8 +33,8 @@ $propertylang = $ises ? 'es' : 'en';
         <div class="single-herbs-properties__source-note">
             <strong><?php echo s($ises ? 'Cómo leer la dosis:' : 'How to read dosage:'); ?></strong>
             <?php echo s($ises
-                ? '“Dosis de estudio” procede de la ficha detallada. “Appendix 1” es el límite diario excepcional del texto suministrado. “Chart 6” completa propiedades, pero no aporta dosis para todas sus hierbas.'
-                : '“Study dose” comes from the detailed profile. “Appendix 1” is the exceptional daily limit in the supplied text. “Chart 6” completes properties but does not provide dosage for every herb.'); ?>
+                ? '“Dosis de estudio” procede de la ficha detallada. “Appendix 1” es el límite diario excepcional del texto suministrado. Las tablas Chart 6 y Actions and Indications completan propiedades, pero no aportan dosis para todas sus hierbas.'
+                : '“Study dose” comes from the detailed profile. “Appendix 1” is the exceptional daily limit in the supplied text. The Chart 6 and Actions and Indications tables complete properties but do not provide dosage for every herb.'); ?>
         </div>
 
         <div class="single-herbs-properties__controls">
@@ -43,7 +43,7 @@ $propertylang = $ises ? 'es' : 'en';
             <div class="single-herbs-properties__filters" role="group" aria-label="<?php echo s($ises ? 'Filtrar cobertura' : 'Filter coverage'); ?>">
                 <button type="button" class="is-active" data-properties-filter="all"><?php echo s($ises ? 'Todas' : 'All'); ?></button>
                 <button type="button" data-properties-filter="verified"><?php echo s($ises ? 'Verificadas' : 'Verified'); ?></button>
-                <button type="button" data-properties-filter="properties-only"><?php echo s($ises ? 'Propiedades Chart 6' : 'Chart 6 properties'); ?></button>
+                <button type="button" data-properties-filter="properties-only"><?php echo s($ises ? 'Propiedades de tablas' : 'Table properties'); ?></button>
                 <button type="button" data-properties-filter="dose-only"><?php echo s($ises ? 'Solo dosis' : 'Dose only'); ?></button>
                 <button type="button" data-properties-filter="pending"><?php echo s($ises ? 'Pendientes' : 'Pending'); ?></button>
             </div>
@@ -80,7 +80,7 @@ $propertylang = $ises ? 'es' : 'en';
                     $statuslabel = $status === 'verified'
                         ? ($ises ? 'Verificada' : 'Verified')
                         : ($status === 'properties-only'
-                            ? ($ises ? 'Propiedades Chart 6' : 'Chart 6 properties')
+                            ? ($ises ? 'Propiedades de tabla' : 'Table properties')
                             : ($status === 'dose-only'
                             ? ($ises ? 'Solo dosis' : 'Dose only')
                             : ($ises ? 'Pendiente' : 'Pending')));

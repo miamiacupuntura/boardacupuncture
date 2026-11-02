@@ -96,10 +96,72 @@ $chartProfiles = [
     ['Bu Gu Zhi', 'Psoraleae Fructus', 'Acrid, bitter; very warm', 'Acre, amarga; muy tibia', 'Kidney, Spleen', 'Riñón, Bazo'],
     ['Gui Ban', 'Testudinis Plastrum', 'Salty, sweet; cold', 'Salada, dulce; fría', 'Heart, Kidney, Liver', 'Corazón, Riñón, Hígado'],
 ];
+$supplementalSourceByKey = [];
 foreach ($chartProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $channelsEn, $channelsEs]) {
     if (!isset($detailedProfileKeys[$keyFor($name)])) {
         $english[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEn, 'channels' => $channelsEn, 'dose' => null];
         $spanish[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEs, 'channels' => $channelsEs, 'dose' => null];
+        $supplementalSourceByKey[$keyFor($name)] = 'king-herbs-chart';
+    }
+}
+
+// The user-provided NCCAOM Actions and Indications table supplies additional
+// property rows. Only unambiguous official-roster matches are retained; action
+// paragraphs and uncertain OCR matches are intentionally excluded.
+$actionsProfiles = [
+    ['Bai Hua She She Cao', 'Oldenlandiae Herba', 'Bitter, sweet; cold', 'Amarga, dulce; fría', 'Liver, Stomach, Large Intestine, Small Intestine', 'Hígado, Estómago, Intestino Grueso, Intestino Delgado'],
+    ['Bai Jiang Can', 'Bombyx Batryticatus', 'Acrid, salty; neutral', 'Acre, salada; neutra', 'Liver, Lung', 'Hígado, Pulmón'],
+    ['Bai Tou Weng', 'Pulsatillae Radix', 'Bitter; cold', 'Amarga; fría', 'Liver, Stomach, Large Intestine', 'Hígado, Estómago, Intestino Grueso'],
+    ['Bai Xian Pi', 'Dictamni Cortex', 'Bitter; cold', 'Amarga; fría', 'Spleen, Stomach', 'Bazo, Estómago'],
+    ['Ban Zhi Lian', 'Scutellariae Barbatae Herba', 'Acrid, slightly bitter; cool', 'Acre, ligeramente amarga; fresca', 'Liver, Lung, Stomach', 'Hígado, Pulmón, Estómago'],
+    ['Bing Pian', 'Borneolum', 'Acrid, bitter; slightly cold', 'Acre, amarga; ligeramente fría', 'Heart, Spleen', 'Corazón, Bazo'],
+    ['Chi Xiao Dou', 'Vignae Semen', 'Sweet, sour; neutral', 'Dulce, agria; neutra', 'Heart, Small Intestine', 'Corazón, Intestino Delgado'],
+    ['Chuan Xin Lian', 'Andrographis Herba', 'Bitter; cold', 'Amarga; fría', 'Large Intestine, Lung, Small Intestine, Stomach', 'Intestino Grueso, Pulmón, Intestino Delgado, Estómago'],
+    ['Cong Bai', 'Allii Fistulosi Bulbus', 'Acrid; warm', 'Acre; tibia', 'Lung, Stomach', 'Pulmón, Estómago'],
+    ['Da Ji', 'Cirsii Japonici Herba seu Radix', 'Sweet; cool', 'Dulce; fresca', 'Liver, Spleen, Heart', 'Hígado, Bazo, Corazón'],
+    ['Da Qing Ye', 'Isatidis Folium', 'Bitter, salty; very cold', 'Amarga, salada; muy fría', 'Heart, Lung, Stomach', 'Corazón, Pulmón, Estómago'],
+    ['Dong Kui Zi', 'Malvae Semen', 'Sweet; cold', 'Dulce; fría', 'Bladder, Large Intestine, Small Intestine', 'Vejiga, Intestino Grueso, Intestino Delgado'],
+    ['Fo Shou', 'Citri Sarcodactylis Fructus', 'Acrid, bitter; warm', 'Acre, amarga; tibia', 'Liver, Lung, Stomach, Spleen', 'Hígado, Pulmón, Estómago, Bazo'],
+    ['Ge Jie', 'Gecko', 'Salty; neutral', 'Salada; neutra', 'Lung, Kidney', 'Pulmón, Riñón'],
+    ['Hai Jin Sha', 'Lygodii Spora', 'Sweet, bland; cold', 'Dulce, insípida; fría', 'Bladder, Small Intestine', 'Vejiga, Intestino Delgado'],
+    ['Han Lian Cao', 'Ecliptae Herba', 'Sweet, sour; cool', 'Dulce, agria; fresca', 'Kidney, Liver', 'Riñón, Hígado'],
+    ['He Shou Wu', 'Polygoni Multiflori Radix Praeparata', 'Bitter, sweet, astringent; slightly warm', 'Amarga, dulce, astringente; ligeramente tibia', 'Liver, Kidney', 'Hígado, Riñón'],
+    ['Huang Jing', 'Polygonati Rhizoma', 'Sweet; neutral', 'Dulce; neutra', 'Kidney, Lung, Spleen', 'Riñón, Pulmón, Bazo'],
+    ['Ji Xue Teng', 'Spatholobi Caulis', 'Bitter, sweet; warm', 'Amarga, dulce; tibia', 'Heart, Liver, Spleen', 'Corazón, Hígado, Bazo'],
+    ['Jin Qian Cao', 'Lysimachiae Herba', 'Sweet, salty; slightly cold', 'Dulce, salada; ligeramente fría', 'Bladder, Gallbladder, Kidney, Liver', 'Vejiga, Vesícula Biliar, Riñón, Hígado'],
+    ['Kun Bu', 'Eckloniae Thallus', 'Salty; cold', 'Salada; fría', 'Kidney, Liver, Stomach', 'Riñón, Hígado, Estómago'],
+    ['Ling Zhi', 'Ganoderma', 'Sweet; neutral', 'Dulce; neutra', 'Heart, Liver, Lung', 'Corazón, Hígado, Pulmón'],
+    ['Liu Huang', 'Sulfur', 'Sour; hot, toxic', 'Agria; caliente, tóxica', 'Kidney, Large Intestine, Pericardium', 'Riñón, Intestino Grueso, Pericardio'],
+    ['Lu Dou', 'Vignae Radiatae Semen', 'Sweet; cold', 'Dulce; fría', 'Heart, Stomach', 'Corazón, Estómago'],
+    ['Lu Lu Tong', 'Liquidambaris Fructus', 'Bitter; neutral', 'Amarga; neutra', 'Liver, Stomach', 'Hígado, Estómago'],
+    ['Ma Bo', 'Lasiosphaera seu Calvatia', 'Acrid; neutral', 'Acre; neutra', 'Lung', 'Pulmón'],
+    ['Mei Gui Hua', 'Rosae Rugosae Flos', 'Sweet, slightly bitter; warm', 'Dulce, ligeramente amarga; tibia', 'Liver, Spleen', 'Hígado, Bazo'],
+    ['Ou Jie', 'Nelumbinis Nodus Rhizomatis', 'Sweet, astringent; neutral', 'Dulce, astringente; neutra', 'Lung, Stomach, Liver', 'Pulmón, Estómago, Hígado'],
+    ['Pang Da Hai', 'Sterculiae Lychnophorae Semen', 'Sweet; cold', 'Dulce; fría', 'Large Intestine, Lung', 'Intestino Grueso, Pulmón'],
+    ['Pei Lan', 'Eupatorii Herba', 'Acrid; neutral', 'Acre; neutra', 'Spleen, Stomach', 'Bazo, Estómago'],
+    ['Qin Pi', 'Fraxini Cortex', 'Bitter, astringent; cold', 'Amarga, astringente; fría', 'Gallbladder, Large Intestine, Liver, Stomach', 'Vesícula Biliar, Intestino Grueso, Hígado, Estómago'],
+    ['Qing Dai', 'Indigo Naturalis', 'Salty; cold', 'Salada; fría', 'Liver, Lung, Stomach', 'Hígado, Pulmón, Estómago'],
+    ['Quan Xie', 'Scorpio', 'Salty, acrid; neutral, toxic', 'Salada, acre; neutra, tóxica', 'Liver', 'Hígado'],
+    ['Sha Yuan Ji Li', 'Astragali Complanati Semen', 'Sweet; warm', 'Dulce; tibia', 'Kidney, Liver', 'Riñón, Hígado'],
+    ['She Xiang', 'Moschus', 'Acrid; warm, aromatic', 'Acre; tibia, aromática', 'Heart, Spleen, Liver', 'Corazón, Bazo, Hígado'],
+    ['Si Gua Luo', 'Luffae Fructus Retinervus', 'Sweet; neutral', 'Dulce; neutra', 'Lung, Stomach, Liver', 'Pulmón, Estómago, Hígado'],
+    ['Ting Li Zi', 'Lepidii seu Descurainiae Semen', 'Acrid, bitter; very cold', 'Acre, amarga; muy fría', 'Lung, Bladder', 'Pulmón, Vejiga'],
+    ['Tong Cao', 'Tetrapanacis Medulla', 'Sweet, bland; slightly cold', 'Dulce, insípida; ligeramente fría', 'Lung, Stomach', 'Pulmón, Estómago'],
+    ['Wu Gong', 'Scolopendra', 'Acrid; warm, toxic', 'Acre; tibia, tóxica', 'Liver', 'Hígado'],
+    ['Wu Ling Zhi', 'Trogopterori Faeces', 'Bitter, sweet; warm', 'Amarga, dulce; tibia', 'Liver', 'Hígado'],
+    ['Xi Yang Shen', 'Panacis Quinquefolii Radix', 'Sweet, slightly bitter; cold', 'Dulce, ligeramente amarga; fría', 'Heart, Kidney, Lung', 'Corazón, Riñón, Pulmón'],
+    ['Xiao Ji', 'Cirsii Herba', 'Sweet; cool', 'Dulce; fresca', 'Liver, Heart', 'Hígado, Corazón'],
+    ['Xie Bai', 'Allii Macrostemonis Bulbus', 'Acrid, bitter; warm', 'Acre, amarga; tibia', 'Large Intestine, Lung, Stomach', 'Intestino Grueso, Pulmón, Estómago'],
+    ['Ye Ju Hua', 'Chrysanthemi Indici Flos', 'Bitter, acrid; slightly cold', 'Amarga, acre; ligeramente fría', 'Lung, Liver', 'Pulmón, Hígado'],
+    ['Yu Xing Cao', 'Houttuyniae Herba', 'Acrid; cool', 'Acre; fresca', 'Lung, Large Intestine', 'Pulmón, Intestino Grueso'],
+    ['Yu Zhu', 'Polygonati Odorati Rhizoma', 'Sweet; slightly cold', 'Dulce; ligeramente fría', 'Lung, Stomach', 'Pulmón, Estómago'],
+];
+foreach ($actionsProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $channelsEn, $channelsEs]) {
+    $key = $keyFor($name);
+    if (!isset($detailedProfileKeys[$key]) && !isset($supplementalSourceByKey[$key])) {
+        $english[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEn, 'channels' => $channelsEn, 'dose' => null];
+        $spanish[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEs, 'channels' => $channelsEs, 'dose' => null];
+        $supplementalSourceByKey[$key] = 'actions-indications-table';
     }
 }
 
@@ -170,7 +232,7 @@ foreach ($index['herbs'] ?? [] as $card) {
         'latin' => $card['latin'],
         'guideNumber' => $card['guideNumber'],
         'status' => $hasDetailedProfile ? 'verified' : ($hasPropertiesOnly ? 'properties-only' : ($hasAppendixDose ? 'dose-only' : 'pending')),
-        'propertySource' => $hasDetailedProfile ? 'detailed-profile' : ($hasPropertiesOnly ? 'king-herbs-chart' : null),
+        'propertySource' => $hasDetailedProfile ? 'detailed-profile' : ($hasPropertiesOnly ? ($supplementalSourceByKey[$key] ?? 'supplemental-table') : null),
         'flavor' => ['en' => $flavorEn, 'es' => $flavorEs],
         'temperature' => ['en' => $temperatureEn, 'es' => $temperatureEs],
         'channels' => ['en' => $profileEn['channels'] ?? null, 'es' => $profileEs['channels'] ?? null],
@@ -190,6 +252,7 @@ $payload = [
     'source' => 'NCBAHM Appendix A roster plus verified Single Herbs profiles',
     'doseAppendixSource' => 'User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams',
     'propertyChartSource' => 'User-provided Chart 6: Property of King Herbs',
+    'actionsTableSource' => 'User-provided NCCAOM Herbs: Actions and Indications table; property fields only',
     'total' => $total,
     'verified' => $verified,
     'propertiesOnly' => $propertiesOnly,

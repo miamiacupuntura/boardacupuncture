@@ -3,11 +3,12 @@
     "source": "NCBAHM Appendix A roster plus verified Single Herbs profiles",
     "doseAppendixSource": "User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams",
     "propertyChartSource": "User-provided Chart 6: Property of King Herbs",
+    "actionsTableSource": "User-provided NCCAOM Herbs: Actions and Indications table; property fields only",
     "total": 304,
     "verified": 176,
-    "propertiesOnly": 12,
-    "doseOnly": 45,
-    "pending": 71,
+    "propertiesOnly": 58,
+    "doseOnly": 23,
+    "pending": 47,
     "herbs": [
         {
             "name": "Ai Ye",
@@ -202,19 +203,19 @@
             "name": "Bai Hua She She Cao",
             "latin": "Hedyotis diffusae Herba",
             "guideNumber": 6,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Stomach, Large Intestine, Small Intestine",
+                "es": "Hígado, Estómago, Intestino Grueso, Intestino Delgado"
             },
             "dose": null,
             "appendixDose": null
@@ -244,19 +245,19 @@
             "name": "Bai Jiang Can",
             "latin": "Bombyx Batryticatus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, salty",
+                "es": "Acre, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Lung",
+                "es": "Hígado, Pulmón"
             },
             "dose": null,
             "appendixDose": null
@@ -370,19 +371,19 @@
             "name": "Bai Tou Weng",
             "latin": "Pulsatillae Radix",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Stomach, Large Intestine",
+                "es": "Hígado, Estómago, Intestino Grueso"
             },
             "dose": null,
             "appendixDose": "Up to 12 g"
@@ -412,19 +413,19 @@
             "name": "Bai Xian Pi",
             "latin": "Dictamni Cortex",
             "guideNumber": 5,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -538,19 +539,19 @@
             "name": "Ban Zhi Lian",
             "latin": "Scutellariae barbatae Herba",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, slightly bitter",
+                "es": "Acre, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Lung, Stomach",
+                "es": "Hígado, Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -664,19 +665,19 @@
             "name": "Bing Pian",
             "latin": "Borneolum",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Spleen",
+                "es": "Corazón, Bazo"
             },
             "dose": null,
             "appendixDose": "Less than 0.1 g"
@@ -1000,19 +1001,19 @@
             "name": "Chi Xiao Dou",
             "latin": "Phaseoli Semen",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, sour",
+                "es": "Dulce, agria"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Small Intestine",
+                "es": "Corazón, Intestino Delgado"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -1126,19 +1127,19 @@
             "name": "Chuan Xin Lian",
             "latin": "Andrographitis Herba",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Lung, Small Intestine, Stomach",
+                "es": "Intestino Grueso, Pulmón, Intestino Delgado, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -1252,19 +1253,19 @@
             "name": "Cong Bai",
             "latin": "Allii fistulosi Bulbus",
             "guideNumber": 1,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -1315,19 +1316,19 @@
             "name": "Da Ji",
             "latin": "Cirsii japonici Herba sive Radix",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Spleen, Heart",
+                "es": "Hígado, Bazo, Corazón"
             },
             "dose": null,
             "appendixDose": "Up to 15 g"
@@ -1336,19 +1337,19 @@
             "name": "Da Qing Ye",
             "latin": "Isatidis Folium",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, salty",
+                "es": "Amarga, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "very cold",
+                "es": "muy fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Lung, Stomach",
+                "es": "Corazón, Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -1672,19 +1673,19 @@
             "name": "Dong Kui Zi",
             "latin": "Malvae Fructus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Large Intestine, Small Intestine",
+                "es": "Vejiga, Intestino Grueso, Intestino Delgado"
             },
             "dose": null,
             "appendixDose": null
@@ -1840,19 +1841,19 @@
             "name": "Fo Shou",
             "latin": "Citri sarcodactylis Fructus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Lung, Stomach, Spleen",
+                "es": "Hígado, Pulmón, Estómago, Bazo"
             },
             "dose": null,
             "appendixDose": null
@@ -2092,19 +2093,19 @@
             "name": "Ge Jie",
             "latin": "Gecko",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty",
+                "es": "Salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Kidney",
+                "es": "Pulmón, Riñón"
             },
             "dose": null,
             "appendixDose": "Up to 6 g"
@@ -2323,19 +2324,19 @@
             "name": "Hai Jin Sha",
             "latin": "Lygodii Spora",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Small Intestine",
+                "es": "Vejiga, Intestino Delgado"
             },
             "dose": null,
             "appendixDose": null
@@ -2428,19 +2429,19 @@
             "name": "Han Lian Cao",
             "latin": "Ecliptae Herba",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, sour",
+                "es": "Dulce, agria"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Liver",
+                "es": "Riñón, Hígado"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -2470,19 +2471,19 @@
             "name": "He Shou Wu",
             "latin": "Polygoni multiflori Radix",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sweet, astringent",
+                "es": "Amarga, dulce, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
             "dose": null,
             "appendixDose": "Up to 20 g"
@@ -2743,19 +2744,19 @@
             "name": "Huang Jing",
             "latin": "Polygonati Rhizoma",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Lung, Spleen",
+                "es": "Riñón, Pulmón, Bazo"
             },
             "dose": null,
             "appendixDose": "Up to 20 g"
@@ -2890,19 +2891,19 @@
             "name": "Ji Xue Teng",
             "latin": "Spatholobi Caulis",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver, Spleen",
+                "es": "Corazón, Hígado, Bazo"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -2953,19 +2954,19 @@
             "name": "Jin Qian Cao",
             "latin": "Lysimachiae Herba",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, salty",
+                "es": "Dulce, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Gallbladder, Kidney, Liver",
+                "es": "Vejiga, Vesícula Biliar, Riñón, Hígado"
             },
             "dose": null,
             "appendixDose": "Up to 60 g"
@@ -3163,19 +3164,19 @@
             "name": "Kun Bu",
             "latin": "Eckloniae Thallus",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty",
+                "es": "Salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Liver, Stomach",
+                "es": "Riñón, Hígado, Estómago"
             },
             "dose": null,
             "appendixDose": "Up to 15 g"
@@ -3310,19 +3311,19 @@
             "name": "Ling Zhi",
             "latin": "Ganoderma",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver, Lung",
+                "es": "Corazón, Hígado, Pulmón"
             },
             "dose": null,
             "appendixDose": null
@@ -3331,19 +3332,19 @@
             "name": "Liu Huang",
             "latin": "Sulfur",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sour",
+                "es": "Agria"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "hot, toxic",
+                "es": "caliente, tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Large Intestine, Pericardium",
+                "es": "Riñón, Intestino Grueso, Pericardio"
             },
             "dose": null,
             "appendixDose": null
@@ -3415,19 +3416,19 @@
             "name": "Lu Dou",
             "latin": "Phaseoli radiati Semen",
             "guideNumber": 8,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Stomach",
+                "es": "Corazón, Estómago"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -3478,19 +3479,19 @@
             "name": "Lu Lu Tong",
             "latin": "Liquidambaris Fructus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Stomach",
+                "es": "Hígado, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -3520,19 +3521,19 @@
             "name": "Ma Bo",
             "latin": "Lasiosphaera/Calvatia",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung",
+                "es": "Pulmón"
             },
             "dose": null,
             "appendixDose": "Up to 3 g"
@@ -3667,19 +3668,19 @@
             "name": "Mei Gui Hua",
             "latin": "Rosae rugosae Flos",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
             },
             "dose": null,
             "appendixDose": null
@@ -3898,19 +3899,19 @@
             "name": "Ou Jie",
             "latin": "Nelumbinis Nodus rhizomatis",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, astringent",
+                "es": "Dulce, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach, Liver",
+                "es": "Pulmón, Estómago, Hígado"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -3919,19 +3920,19 @@
             "name": "Pang Da Hai",
             "latin": "Sterculiae lychnophorae Semen",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Lung",
+                "es": "Intestino Grueso, Pulmón"
             },
             "dose": null,
             "appendixDose": null
@@ -3940,19 +3941,19 @@
             "name": "Pei Lan",
             "latin": "Eupatorii Herba",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -4129,19 +4130,19 @@
             "name": "Qin Pi",
             "latin": "Fraxini Cortex",
             "guideNumber": 5,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, astringent",
+                "es": "Amarga, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Gallbladder, Large Intestine, Liver, Stomach",
+                "es": "Vesícula Biliar, Intestino Grueso, Hígado, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -4150,19 +4151,19 @@
             "name": "Qing Dai",
             "latin": "Indigo naturalis",
             "guideNumber": 4,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty",
+                "es": "Salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Lung, Stomach",
+                "es": "Hígado, Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": "Up to 6 g"
@@ -4213,19 +4214,19 @@
             "name": "Quan Xie",
             "latin": "Scorpio",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty, acrid",
+                "es": "Salada, acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral, toxic",
+                "es": "neutra, tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
             "dose": null,
             "appendixDose": "Up to 3 g"
@@ -4570,19 +4571,19 @@
             "name": "Sha Yuan Ji Li",
             "latin": "Astragali complanati Semen",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Liver",
+                "es": "Riñón, Hígado"
             },
             "dose": null,
             "appendixDose": null
@@ -4717,19 +4718,19 @@
             "name": "She Xiang",
             "latin": "Moschus",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm, aromatic",
+                "es": "tibia, aromática"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Spleen, Liver",
+                "es": "Corazón, Bazo, Hígado"
             },
             "dose": null,
             "appendixDose": "Less than 0.1 g"
@@ -4969,19 +4970,19 @@
             "name": "Si Gua Luo",
             "latin": "Luffae Fructus Retinervus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach, Liver",
+                "es": "Pulmón, Estómago, Hígado"
             },
             "dose": null,
             "appendixDose": null
@@ -5179,19 +5180,19 @@
             "name": "Ting Li Zi",
             "latin": "Lepidii/Descurainiae Semen",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "very cold",
+                "es": "muy fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Bladder",
+                "es": "Pulmón, Vejiga"
             },
             "dose": null,
             "appendixDose": null
@@ -5200,19 +5201,19 @@
             "name": "Tong Cao",
             "latin": "Tetrapanacis Medulla",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -5326,19 +5327,19 @@
             "name": "Wu Gong",
             "latin": "Scolopendra",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm, toxic",
+                "es": "tibia, tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
             "dose": null,
             "appendixDose": "Up to 3 g"
@@ -5368,19 +5369,19 @@
             "name": "Wu Ling Zhi",
             "latin": "Trogopterori Faeces",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
             "dose": null,
             "appendixDose": null
@@ -5515,19 +5516,19 @@
             "name": "Xi Yang Shen",
             "latin": "Panacis quinquefolii Radix",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Kidney, Lung",
+                "es": "Corazón, Riñón, Pulmón"
             },
             "dose": null,
             "appendixDose": "Up to 6 g"
@@ -5662,19 +5663,19 @@
             "name": "Xiao Ji",
             "latin": "Cirsii Herba",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Heart",
+                "es": "Hígado, Corazón"
             },
             "dose": null,
             "appendixDose": "Up to 15 g"
@@ -5683,19 +5684,19 @@
             "name": "Xie Bai",
             "latin": "Allii macrostemi Bulbus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Lung, Stomach",
+                "es": "Intestino Grueso, Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": null
@@ -5851,19 +5852,19 @@
             "name": "Ye Ju Hua",
             "latin": "Chrysanthemi indici Flos",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Liver",
+                "es": "Pulmón, Hígado"
             },
             "dose": null,
             "appendixDose": null
@@ -6019,19 +6020,19 @@
             "name": "Yu Xing Cao",
             "latin": "Houttuyniae Herba",
             "guideNumber": 6,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Large Intestine",
+                "es": "Pulmón, Intestino Grueso"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -6040,19 +6041,19 @@
             "name": "Yu Zhu",
             "latin": "Polygonati odorati Rhizoma",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "actions-indications-table",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
             },
             "dose": null,
             "appendixDose": "Up to 15 g"

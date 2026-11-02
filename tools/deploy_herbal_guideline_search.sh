@@ -267,6 +267,7 @@ grep -q "Master herb properties table" "$MOODLE_ROOT/blocks/myprogress/single-he
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"doseAppendixSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"propertyChartSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
+grep -q '"actionsTableSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 
 echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
 echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
