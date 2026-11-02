@@ -62,9 +62,9 @@ curl -fsSL "$REPOSITORY/$REVISION/$GUIDE_RELATIVE_PATH" -o "$TEMP_GUIDE"
 
 "$PHP_BIN" -l "$TEMP_FILE" >/dev/null
 "$PHP_BIN" -l "$TEMP_GUIDE" >/dev/null
-grep -q "Complete chapter atlas: 33 source monographs" "$TEMP_FILE"
+grep -q "Board guideline atlas: 10 source-chapter herbs" "$TEMP_FILE"
 grep -q "Chapter 5 selection framework" "$TEMP_FILE"
-grep -q "Snake products and sloughed skin" "$TEMP_FILE"
+grep -q "Source-chapter annex · Outside the current Board guideline" "$TEMP_FILE"
 grep -q "scanned pp. 323–369" "$TEMP_FILE"
 grep -q "single-herbs-guide__chapter-atlas>.single-herbs-guide__profiles" "$TEMP_GUIDE"
 grep -q "single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs" "$TEMP_GUIDE"
@@ -78,6 +78,18 @@ fi
 CHAPTER_HERB_COUNT="$(grep -c "'core' => \(true\|false\)\]," "$TEMP_FILE")"
 if [[ "$CHAPTER_HERB_COUNT" -ne 33 ]]; then
     echo "ERROR: se esperaban 33 monografías y se detectaron $CHAPTER_HERB_COUNT"
+    exit 1
+fi
+
+GUIDELINE_COUNT="$(sed -n '/^\$dampguidelinenames = \[/,/^\];/p' "$TEMP_FILE" | grep -c "^    '")"
+if [[ "$GUIDELINE_COUNT" -ne 10 ]]; then
+    echo "ERROR: se esperaban 10 hierbas del capítulo dentro del guideline y se detectaron $GUIDELINE_COUNT"
+    exit 1
+fi
+
+ANNEX_COUNT="$(sed -n '/^\$dampchapterannex = \[/,/^\];/p' "$TEMP_FILE" | grep -c "^    '")"
+if [[ "$ANNEX_COUNT" -ne 23 ]]; then
+    echo "ERROR: se esperaban 23 nombres fuera del guideline y se detectaron $ANNEX_COUNT"
     exit 1
 fi
 
@@ -101,7 +113,8 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
 fi
 
 echo "CAPÍTULO WIND-DAMP INSTALADO CORRECTAMENTE"
-echo "33 monografías fuente"
+echo "10 monografías del capítulo incluidas en el guideline"
+echo "23 nombres fuente aislados en un anexo sin descripciones"
 echo "9 perfiles Board"
 echo "12 preguntas de repaso"
 echo "Atlas ajustado a columnas amplias y diseño móvil de una columna"
