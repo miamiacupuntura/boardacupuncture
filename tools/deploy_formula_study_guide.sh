@@ -82,6 +82,10 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "digestive-ch18"
     );
+    $chapter19 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-parasites-ch19"
+    );
     $historical = array_filter(
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
@@ -108,6 +112,13 @@ php -r '
     foreach ($digestiveSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
             $digestiveSectionNames[] = $formulaName;
+        }
+    }
+    $parasiteSections = $data["categoryGuides"]["expel-parasites-chapter-19"]["formulaSections"] ?? [];
+    $parasiteSectionNames = [];
+    foreach ($parasiteSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $parasiteSectionNames[] = $formulaName;
         }
     }
     $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
@@ -182,8 +193,8 @@ php -r '
     if (($data["version"] ?? null) !== 7
             || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 20
-            || count($data["supplementalFormulas"] ?? []) !== 199
+            || count($data["supplementalCategories"] ?? []) !== 21
+            || count($data["supplementalFormulas"] ?? []) !== 202
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -195,6 +206,7 @@ php -r '
             || count($chapter16) !== 25
             || count($chapter17) !== 13
             || count($chapter18) !== 7
+            || count($chapter19) !== 3
             || count($historical) !== 1
             || array_column($historical, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
@@ -231,6 +243,10 @@ php -r '
             ]
             || array_column($digestiveDuiYao, "number") !== [37]
             || array_column($digestiveDuiYao, "formulas") !== ["Bǎo Hé Wán."]
+            || array_column($parasiteSections, "key") !== ["expel-intestinal-parasites"]
+            || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $parasiteSections)
+                !== [3]
+            || $parasiteSectionNames !== ["Wu Mei Wan", "Hua Chong Wan", "Bu Dai Wan"]
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -457,6 +473,12 @@ grep -q "1 fórmula Board · Capítulo 18 de Bensky: 8" "$TEMP_DIR/formulas-stud
 grep -q "Dato interesante: una fórmula Board ancla un continuo de ocho fórmulas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Bǎo Hé Wán\." "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "The seven supplemental Chapter 18 formulas are deliberately excluded" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "expel-parasites-chapter-19" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number":"C19-03"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"expel-intestinal-parasites"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Dato interesante: el Board omite las tres fórmulas antiparasitarias" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "0 de 3 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Qian Dan es un compuesto de plomo extremadamente tóxico" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "related-dui-yao-title" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TEMP_DIR/formulas-study-guide.php"
@@ -639,6 +661,12 @@ grep -q "1 fórmula Board · Capítulo 18 de Bensky: 8" "$TARGET_DIR/formulas-st
 grep -q "Dato interesante: una fórmula Board ancla un continuo de ocho fórmulas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Bǎo Hé Wán\." "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "The seven supplemental Chapter 18 formulas are deliberately excluded" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "expel-parasites-chapter-19" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number":"C19-03"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"expel-intestinal-parasites"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Dato interesante: el Board omite las tres fórmulas antiparasitarias" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "0 de 3 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Qian Dan es un compuesto de plomo extremadamente tóxico" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "related-dui-yao-title" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TARGET_DIR/formulas-study-guide.php"
@@ -671,7 +699,7 @@ grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 Y 18 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 Y 19 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
@@ -709,6 +737,8 @@ echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA DE TRANSFORM PHLEGM LIMITADA AL GUIDE
 echo "CAPÍTULO 18 INSTALADO: 8 FÓRMULAS EN 2 SECCIONES (7 PERFILES NUEVOS + 1 BOARD)"
 echo "VISTA ÚNICA INSTALADA: DIGESTIVE ABRE DIRECTAMENTE EL CAPÍTULO 18 COMPLETO"
 echo "PUENTE DUÌ YÀO INSTALADO: BÀN XIÀ + CHÉN PÍ LIMITADO A BǍO HÉ WÁN DEL GUIDELINE"
+echo "CAPÍTULO 19 INSTALADO: 3 FÓRMULAS EN 1 SECCIÓN (3 PERFILES SUPLEMENTARIOS, 0 BOARD)"
+echo "SEGURIDAD DEL CAPÍTULO 19 INSTALADA: PLOMO, BOTÁNICOS TÓXICOS Y PREPARACIONES HISTÓRICAS OBSOLETAS"
 echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA LIBERAR EL EXTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE CLEAR HEAT LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA OFICIAL PARA PURGAR CALOR Y ABLANDAR SEQUEDAD"
