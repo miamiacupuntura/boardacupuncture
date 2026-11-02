@@ -970,6 +970,7 @@ ob_start();
 .single-herbs-guide__safety{padding:19px 21px;border-left:5px solid #b45309;border-radius:10px;background:#fff7ed;color:#713f12;line-height:1.55}.single-herbs-guide__safety strong{display:block;margin-bottom:6px}
 .single-herbs-guide__recall{display:grid;gap:9px}.single-herbs-guide__recall details{border:1px solid #dce4e8;border-radius:9px;background:#fff}.single-herbs-guide__recall summary{cursor:pointer;padding:15px 17px;color:#17364a;font-weight:800}.single-herbs-guide__recall details[open] summary{border-bottom:1px solid #e4eaed;background:#f6fafb}.single-herbs-guide__recall p{margin:0;padding:15px 17px;color:#52677a;line-height:1.5}.single-herbs-guide__source{font-size:13px}
 .single-herbs-guide__final-question summary{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:start;line-height:1.5}.single-herbs-guide__final-number{color:#6d28d9;font-size:12px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}.single-herbs-guide__final-answer{padding:15px 17px;background:linear-gradient(145deg,#faf8ff,#f6fbfa)}.single-herbs-guide__final-answer>strong{display:block;color:#0d665e}.single-herbs-guide__final-answer p{padding:8px 0 0}.single-herbs-guide__final-question[open]{border-color:#8b5cf6;box-shadow:0 4px 12px rgba(109,40,217,.08)}
+.single-herbs-guide__final-controls{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 14px}.single-herbs-guide__final-controls button{min-height:40px;padding:8px 14px;border:1px solid #7c3aed;border-radius:8px;background:#fff;color:#6d28d9;font-weight:900;cursor:pointer}.single-herbs-guide__final-controls button:first-child{background:#7c3aed;color:#fff}.single-herbs-guide__final-controls button:hover{box-shadow:0 3px 10px rgba(109,40,217,.16)}
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-properties__controls{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
 @media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1468,6 +1469,27 @@ ob_start();
         link.href = formulaUrl.pathname + formulaUrl.search;
     });
     <?php endif; ?>
+
+    const finalReview = document.querySelector('.single-herbs-guide__final-review');
+    if (finalReview) {
+        const finalQuestions = Array.from(finalReview.querySelectorAll('.single-herbs-guide__final-question'));
+        const openAll = document.querySelector('[data-final-open-all]');
+        const closeAll = document.querySelector('[data-final-close-all]');
+        if (openAll) {
+            openAll.addEventListener('click', function() {
+                finalQuestions.forEach(function(question) {
+                    question.open = true;
+                });
+            });
+        }
+        if (closeAll) {
+            closeAll.addEventListener('click', function() {
+                finalQuestions.forEach(function(question) {
+                    question.open = false;
+                });
+            });
+        }
+    }
 
     const deck = document.querySelector('[data-yang-deck]');
     if (!deck) {

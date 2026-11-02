@@ -205,6 +205,10 @@ $mixedcards = [
 <section class="single-herbs-guide__section" aria-labelledby="mixed-review-deck">
     <h4 id="mixed-review-deck"><?php echo s($mixedtext('Final Review · ' . count($mixedcards) . ' consecutive questions', 'Repaso final · ' . count($mixedcards) . ' preguntas consecutivas')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($mixedtext('One question represents each completed Board category. Answer first; then open it to verify the category, decisive distinction and any validated formula bridge.', 'Una pregunta representa cada categoría Board terminada. Responde primero; luego ábrela para verificar la categoría, la distinción decisiva y cualquier puente de fórmula validado.')); ?></p>
+    <div class="single-herbs-guide__final-controls" aria-label="<?php echo s($mixedtext('Final Review answer controls', 'Controles de respuestas del repaso final')); ?>">
+        <button type="button" data-final-open-all><?php echo s($mixedtext('Open all answers', 'Abrir todas las respuestas')); ?></button>
+        <button type="button" data-final-close-all><?php echo s($mixedtext('Close all answers', 'Cerrar todas las respuestas')); ?></button>
+    </div>
     <div class="single-herbs-guide__recall single-herbs-guide__final-review">
         <?php foreach ($mixedcards as $index => $card): ?>
             <details class="single-herbs-guide__final-question">
