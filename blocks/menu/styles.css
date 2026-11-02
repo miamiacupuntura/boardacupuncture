@@ -862,6 +862,10 @@ a.herb-board__topic:focus {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.herb-board__subcategories-grid--single {
+    grid-template-columns: minmax(0, 1fr);
+}
+
 .herb-board__subcategories--downward {
     border-color: #e3c49d;
     border-left-color: #a75a16;
@@ -870,6 +874,16 @@ a.herb-board__topic:focus {
 
 .herb-board__subcategories--downward .herb-board__subcategories-kicker {
     color: #934d12;
+}
+
+.herb-board__subcategories--dampness {
+    border-color: #b8d8e8;
+    border-left-color: #176b9a;
+    background: #f4f9fc;
+}
+
+.herb-board__subcategories--dampness .herb-board__subcategories-kicker {
+    color: #176b9a;
 }
 
 .herb-board__topic--subcategory {
@@ -922,6 +936,15 @@ a.herb-board__topic:focus {
 .herb-board__downward-draining .herb-board__scope-badge {
     background: #fff0df;
     color: #85420e;
+}
+
+.herb-board__drain-dampness {
+    border-top-color: #176b9a;
+}
+
+.herb-board__drain-dampness .herb-board__scope-badge {
+    background: #e7f2f8;
+    color: #115579;
 }
 
 .herb-board__clear-heat-heading {
@@ -980,6 +1003,28 @@ a.herb-board__topic:focus {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 11px;
+}
+
+.herb-board__herb-group + .herb-board__herb-group {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid #d9e4eb;
+}
+
+.herb-board__herb-group-heading {
+    margin-bottom: 10px;
+}
+
+.herb-board__herb-group-heading .herb-board__subheading {
+    margin-bottom: 3px;
+}
+
+.herb-board__herb-group-heading p {
+    max-width: 900px;
+    margin: 0;
+    color: #64748b;
+    font-size: .82rem;
+    line-height: 1.45;
 }
 
 .herb-board__herb-card {

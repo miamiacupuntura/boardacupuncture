@@ -332,6 +332,87 @@ $downwardsections = [
         ],
     ],
 ];
+$draindampnesssections = [
+    'drain-dampness' => [
+        'number' => '4',
+        'name' => 'Herbs that Drain Dampness',
+        'focus' => 'Promote urination, transform fluid accumulation and differentiate edema, painful urinary dribbling, jaundice and wind-damp obstruction.',
+        'distinction' => 'Choose by mechanism and site: Fu Ling supports the Spleen while draining; Zhu Ling and Ze Xie emphasize urination; urinary-dribbling herbs differ by heat, blood, stones or turbidity; Yin Chen targets jaundice; Han Fang Ji and related agents reach wind-damp edema but carry substantially greater safety concerns.',
+        'herbgroups' => [
+            [
+                'name' => 'Fluid metabolism and edema',
+                'focus' => 'Core diuretics and fluid-pathway herbs, differentiated by tonification, temperature and channel emphasis.',
+                'herbs' => [
+                    ['name' => 'Fú Líng', 'pharmaceutical' => 'Poria', 'nature' => 'Sweet, bland · neutral', 'dose' => '9–15 g', 'use' => 'Promotes urination without injuring qi, strengthens the Spleen and calms the spirit.'],
+                    ['name' => 'Zhū Líng', 'pharmaceutical' => 'Polyporus', 'nature' => 'Sweet, bland · slightly cool', 'dose' => '6–12 g', 'use' => 'Promotes urination more strongly than Fu Ling but has no Spleen-tonifying action.'],
+                    ['name' => 'Zé Xiè', 'pharmaceutical' => 'Alismatis Rhizoma', 'nature' => 'Sweet, bland · cold', 'dose' => '4.5–9 g', 'use' => 'Drains lower-burner dampness and clears Kidney ministerial fire.'],
+                    ['name' => 'Yì Yǐ Rén', 'pharmaceutical' => 'Coicis Semen', 'nature' => 'Sweet, bland · slightly cold', 'dose' => '9–30 g', 'use' => 'Drains dampness, strengthens the Spleen, treats wind-damp obstruction and helps expel pus.'],
+                    ['name' => 'Chē Qián Zǐ', 'pharmaceutical' => 'Plantaginis Semen', 'nature' => 'Sweet · cold', 'dose' => '9–15 g, bagged', 'use' => 'Promotes urination, clears damp-heat, solidifies stool, brightens the eyes and transforms phlegm.'],
+                    ['name' => 'Huá Shí', 'pharmaceutical' => 'Talcum', 'nature' => 'Sweet, bland · cold', 'dose' => '9–15 g, bagged', 'use' => 'Clears summerheat and damp-heat through urination; also used topically for damp skin lesions.'],
+                    ['name' => 'Mù Tōng', 'pharmaceutical' => 'Akebiae Caulis', 'nature' => 'Bitter · slightly cold', 'dose' => '3–6 g', 'use' => 'Promotes urination, drains Heart fire through the Small Intestine and promotes lactation.'],
+                    ['name' => 'Chuān Mù Tōng', 'pharmaceutical' => 'Clematidis armandii Caulis', 'nature' => 'Bland, bitter · cold', 'dose' => '3–6 g', 'use' => 'Used similarly to Mu Tong for damp-heat, painful urination and blocked fluid pathways.'],
+                    ['name' => 'Tōng Cǎo', 'pharmaceutical' => 'Tetrapanacis Medulla', 'nature' => 'Sweet, bland · slightly cold', 'dose' => '2–4.5 g', 'use' => 'Gently promotes urination through the Lung and Stomach and supports lactation.'],
+                    ['name' => 'Dēng Xīn Cǎo', 'pharmaceutical' => 'Junci Medulla', 'nature' => 'Sweet, bland · slightly cold', 'dose' => '1.5–4.5 g', 'use' => 'Guides Heart and Lung heat downward through the urine; traditionally used for restlessness.'],
+                ],
+            ],
+            [
+                'name' => 'Painful urinary dribbling and damp-heat',
+                'focus' => 'Select by burning heat, blood, stones, turbidity, itching or Liver/Gallbladder involvement.',
+                'herbs' => [
+                    ['name' => 'Qú Mài', 'pharmaceutical' => 'Dianthi Herba', 'nature' => 'Bitter · cold', 'dose' => '9–15 g', 'use' => 'Clears hot or bloody urinary dribbling and also moves blood stasis.'],
+                    ['name' => 'Biǎn Xù', 'pharmaceutical' => 'Polygoni avicularis Herba', 'nature' => 'Bitter · slightly cold', 'dose' => '9–15 g', 'use' => 'Clears Bladder damp-heat, promotes urination and relieves damp-heat itching.'],
+                    ['name' => 'Shí Wéi', 'pharmaceutical' => 'Pyrrosiae Folium', 'nature' => 'Bitter, sweet · slightly cold', 'dose' => '6–9 g', 'use' => 'Treats hot, stony or bloody urinary dribbling, cools blood and clears Lung heat.'],
+                    ['name' => 'Dì Fū Zǐ', 'pharmaceutical' => 'Kochiae Fructus', 'nature' => 'Sweet, bitter · cold', 'dose' => '9–15 g', 'use' => 'Promotes urination and treats damp-heat itching of the skin and genital region.'],
+                    ['name' => 'Jīn Qián Cǎo', 'pharmaceutical' => 'Lysimachiae Herba', 'nature' => 'Sweet, salty · slightly cold', 'dose' => '15–30 g', 'use' => 'Expels urinary and biliary stones, clears damp-heat jaundice and resolves toxic swelling.'],
+                    ['name' => 'Guǎng Jīn Qián Cǎo', 'pharmaceutical' => 'Desmodii styracifolii Herba', 'nature' => 'Sweet, bland · cool', 'dose' => '15–30 g', 'use' => 'Primarily treats urinary stones, painful urinary dribbling and blood in the urine.'],
+                    ['name' => 'Lián Qián Cǎo', 'pharmaceutical' => 'Glechomae Herba', 'nature' => 'Slightly sweet · slightly cold', 'dose' => '15–30 g', 'use' => 'Clears heat, promotes urination and addresses swelling, toxicity and cough.'],
+                    ['name' => 'Hǎi Jīn Shā', 'pharmaceutical' => 'Lygodii Spora', 'nature' => 'Sweet, bland · cold', 'dose' => '6–15 g, bagged', 'use' => 'Excels at rough, stony painful urination and also treats biliary stones.'],
+                    ['name' => 'Yù Mǐ Xū', 'pharmaceutical' => 'Maydis Stigma', 'nature' => 'Sweet, bland · neutral', 'dose' => '15–30 g', 'use' => 'Promotes urination, reduces edema and clears damp-heat from the Liver and Gallbladder.'],
+                ],
+            ],
+            [
+                'name' => 'Turbidity, jaundice and special functions',
+                'focus' => 'Separate clear from turbid, combine drainage with bowel or skin actions, or focus on jaundice and toxicity.',
+                'herbs' => [
+                    ['name' => 'Bì Xiè', 'pharmaceutical' => 'Dioscoreae hypoglaucae Rhizoma', 'nature' => 'Bitter · neutral', 'dose' => '9–15 g', 'use' => 'Separates the clear from the turbid for cloudy urine or discharge and treats wind-damp obstruction.'],
+                    ['name' => 'Mián Bì Xiè', 'pharmaceutical' => 'Dioscoreae septemlobae Rhizoma', 'nature' => 'Bitter · neutral', 'dose' => '9–15 g', 'use' => 'Used interchangeably with Bi Xie to separate clear from turbid and expel dampness.'],
+                    ['name' => 'Dōng Guā Zǐ', 'pharmaceutical' => 'Benincasae Semen', 'nature' => 'Sweet · cold', 'dose' => '9–15 g', 'use' => 'Clears heat, transforms phlegm and expels pus in Lung or intestinal abscess patterns.'],
+                    ['name' => 'Dōng Guā Pí', 'pharmaceutical' => 'Benincasae Exocarpium', 'nature' => 'Sweet, bland · slightly cold', 'dose' => '15–30 g', 'use' => 'Gently promotes urination and reduces edema without strongly injuring normal qi.'],
+                    ['name' => 'Dōng Kuí Guǒ', 'pharmaceutical' => 'Malvae Fructus', 'nature' => 'Sweet · cold', 'dose' => '3–9 g', 'use' => 'Promotes urination and lactation and moistens the Intestines when constipation accompanies edema.'],
+                    ['name' => 'Qīng Má Zǐ', 'pharmaceutical' => 'Abutili Semen', 'nature' => 'Bitter · neutral', 'dose' => '3–9 g', 'use' => 'Clears heat, resolves dampness and toxicity, and treats superficial visual obstruction.'],
+                    ['name' => 'Chì Xiǎo Dòu', 'pharmaceutical' => 'Phaseoli Semen', 'nature' => 'Sweet, sour · neutral', 'dose' => '9–30 g', 'use' => 'Promotes urination, reduces edema, resolves toxicity and disperses swelling.'],
+                    ['name' => 'Yīn Chén', 'pharmaceutical' => 'Artemisiae scopariae Herba', 'nature' => 'Bitter · slightly cold', 'dose' => '9–30 g', 'use' => 'The principal herb for damp-heat jaundice; also used in cold-damp jaundice with appropriate warming partners.'],
+                ],
+            ],
+            [
+                'name' => 'Wind-damp edema and higher-risk agents',
+                'focus' => 'Powerful or toxic agents that require verified identity, precise dosing and professional supervision.',
+                'herbs' => [
+                    ['name' => 'Hàn Fáng Jǐ', 'pharmaceutical' => 'Stephaniae tetrandrae Radix', 'nature' => 'Bitter, acrid · cold · toxic', 'dose' => '4.5–9 g', 'use' => 'Strongly drains lower-burner dampness and edema and treats hot wind-damp painful obstruction.', 'risk' => true],
+                    ['name' => 'Mù Fáng Jǐ', 'pharmaceutical' => 'Cocculi Radix', 'nature' => 'Bitter, acrid · cold', 'dose' => '6–12 g', 'use' => 'Dispels wind-dampness, unblocks the channels and reduces edema with urinary difficulty.'],
+                    ['name' => 'Bàn Biān Lián', 'pharmaceutical' => 'Lobeliae chinensis Herba', 'nature' => 'Sweet, bland · slightly cold · toxic', 'dose' => '3–15 g', 'use' => 'Promotes urination, cools the blood and resolves toxicity in edema or toxic swelling patterns.', 'risk' => true],
+                ],
+            ],
+        ],
+        'warnings' => [
+            'IDENTITY ALERT: do not use Guan Mu Tong, Guang Fang Ji or any Aristolochia source. Aristolochic acid is nephrotoxic and carcinogenic; morphology alone is insufficient, so chemical verification of identity and absence of aristolochic acid is essential.',
+            'PREGNANCY: Mu Tong is traditionally contraindicated; Chuan Mu Tong, Qu Mai, Yi Yi Ren, Dong Kui Guo, Qing Ma Zi, Han Fang Ji and other downward or blood-moving herbs require avoidance or specialist assessment. Historical abortifacient claims are not treatment guidance.',
+            'Talcum must never be inhaled or injected. Che Qian Zi and Hai Jin Sha are decocted in a bag; correct pharmaceutical preparation matters for seeds, spores, minerals and processed products.',
+            'Han Fang Ji overdose has caused vomiting, tremor, ataxia, convulsions, quadriplegia and fatal respiratory failure. Ban Bian Lian overdose may cause salivation, diarrhea, pulse changes, spasms and fatal respiratory paralysis.',
+            'Long or excessive use of draining herbs may injure fluids, yin, Spleen qi or Kidney qi. Painful urination, blood in urine, jaundice, edema, breathing difficulty, stones, fever or suspected poisoning requires biomedical assessment.',
+        ],
+        'annex' => [
+            'comparison' => 'Fu Ling is the best Spleen-supporting core drain, Zhu Ling is more purely diuretic, and Ze Xie is colder and reaches Kidney/Bladder damp-heat. Qu Mai favors heat and blood, Bian Xu balanced damp-heat, Bi Xie predominant turbidity, Shi Wei bleeding, and Hai Jin Sha or Jin Qian Cao stones. Yin Chen is specific for jaundice; Jin Qian Cao adds stone-softening; Dong Kui Guo adds constipation; Han Fang Ji emphasizes lower-body edema and hot wind-damp obstruction.',
+            'preparation' => 'Use a cloth bag for Plantaginis Semen, Talcum and Lygodii Spora. Crush seeds when the monograph specifies it. Raw and processed forms may change temperature or emphasis: raw Coicis Semen drains more, dry-fried forms support the Spleen; salt-processing directs some herbs toward the Kidney. These notes are identification and Board-review points, not household preparation instructions.',
+            'nomenclature' => 'Common names are unsafe guides in this chapter. Mu Tong, Fang Ji, Jin Qian Cao and Bi Xie each have regional or historical substitutes. Require the pharmaceutical and botanical identity; for Fang Ji and Mu Tong products, verify the absence of Aristolochia and aristolochic acid by appropriate chemical methods.',
+            'supplemental' => [
+                'Historical/source-reported only—not a recommendation: the monographs discuss treatment of abscesses, snakebite, schistosomiasis, syphilitic lesions, diabetes, hypertension and other serious diseases. These claims do not replace evidence-based diagnosis or care.',
+                'The chapter summary groups herbs by bland leaching, bitter-cold draining, slippery movement through the orifices, stone resolution, blood involvement, jaundice, itching and wind-damp obstruction; the groups above preserve those distinctions without creating new materia-medica categories.',
+                'Product quality notes remain relevant for examination and dispensing: correct species, plant part, processing, freedom from foreign matter and appropriate chemical testing can materially change safety.',
+            ],
+        ],
+    ],
+];
 $selectedbensky = null;
 $selectedbenskygroup = '';
 if ($track === 'herbs' && $sectionkey !== '' && isset($clearheatsections[$sectionkey])) {
@@ -340,6 +421,9 @@ if ($track === 'herbs' && $sectionkey !== '' && isset($clearheatsections[$sectio
 } else if ($track === 'herbs' && $sectionkey !== '' && isset($downwardsections[$sectionkey])) {
     $selectedbensky = $downwardsections[$sectionkey];
     $selectedbenskygroup = 'downward-draining';
+} else if ($track === 'herbs' && $sectionkey !== '' && isset($draindampnesssections[$sectionkey])) {
+    $selectedbensky = $draindampnesssections[$sectionkey];
+    $selectedbenskygroup = 'drain-dampness';
 } else if ($sectionkey !== '') {
     $sectionkey = '';
 }
@@ -487,6 +571,13 @@ echo $OUTPUT->header();
                         'drain downward',
                     ], true) || (strpos($normalizedname, 'downward') !== false
                         && (strpos($normalizedname, 'drain') !== false || strpos($normalizedname, 'herb') !== false));
+                    $isdraindampness = in_array($normalizedname, [
+                        'herbs that drain dampness',
+                        'drain dampness',
+                        'draining dampness',
+                        'herbs that drain damp',
+                    ], true) || (strpos($normalizedname, 'damp') !== false
+                        && strpos($normalizedname, 'drain') !== false);
                 ?>
                     <div class="herb-board__topic">
                         <strong><?php echo $topic['number'] === 0 ? 'G' : $topic['number']; ?></strong>
@@ -551,6 +642,37 @@ echo $OUTPUT->header();
                                 main Yang-based card. These three Bensky sections are study supplements, not replacements.</p>
                         </section>
                     <?php } ?>
+                    <?php if ($isdraindampness) { ?>
+                        <section class="herb-board__subcategories herb-board__subcategories--dampness"
+                            aria-labelledby="drain-dampness-subcategories-title">
+                            <div class="herb-board__subcategories-heading">
+                                <span class="herb-board__subcategories-kicker">Bensky chapter</span>
+                                <h4 id="drain-dampness-subcategories-title">Herbs that Drain Dampness</h4>
+                            </div>
+                            <div class="herb-board__subcategories-grid herb-board__subcategories-grid--single">
+                                <?php foreach ($draindampnesssections as $subcategorykey => $subcategory) {
+                                    $subcategoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                                        'track' => 'herbs',
+                                        'section' => $subcategorykey,
+                                    ], 'bensky-section');
+                                    $isselected = $sectionkey === $subcategorykey;
+                                ?>
+                                    <a class="herb-board__topic herb-board__topic--subcategory<?php echo $isselected ? ' herb-board__topic--selected' : ''; ?>"
+                                        href="<?php echo $subcategoryurl->out(false); ?>"
+                                        <?php echo $isselected ? 'aria-current="page"' : ''; ?>>
+                                        <strong><?php echo s($subcategory['number']); ?></strong>
+                                        <span>
+                                            <?php echo s($subcategory['name']); ?>
+                                            <small><?php echo s($subcategory['focus']); ?></small>
+                                        </span>
+                                    </a>
+                                <?php } ?>
+                            </div>
+                            <p class="herb-board__subcategories-note">The original course topic remains the main
+                                Yang-based card. This Bensky chapter adds 30 grouped materia-medica profiles, high-yield
+                                comparisons and persistent safety alerts.</p>
+                        </section>
+                    <?php } ?>
                 <?php } ?>
                 <div class="herb-board__topic herb-board__topic--mixed">
                     <strong>M</strong>
@@ -560,7 +682,9 @@ echo $OUTPUT->header();
         </section>
 
         <?php if ($selectedbensky) { ?>
-            <section class="herb-board__panel herb-board__clear-heat<?php echo $selectedbenskygroup === 'downward-draining' ? ' herb-board__downward-draining' : ''; ?>"
+            <section class="herb-board__panel herb-board__clear-heat<?php echo $selectedbenskygroup === 'downward-draining'
+                ? ' herb-board__downward-draining'
+                : ($selectedbenskygroup === 'drain-dampness' ? ' herb-board__drain-dampness' : ''); ?>"
                 id="bensky-section" aria-labelledby="bensky-section-title">
                 <header class="herb-board__clear-heat-heading">
                     <div>
@@ -570,7 +694,9 @@ echo $OUTPUT->header();
                     </div>
                     <span class="herb-board__scope-badge"><?php echo $selectedbenskygroup === 'downward-draining'
                         ? '3-section Downward-Draining structure'
-                        : '5-section Clear Heat structure'; ?></span>
+                        : ($selectedbenskygroup === 'drain-dampness'
+                            ? '30 materia-medica profiles · 4 study groups'
+                            : '5-section Clear Heat structure'); ?></span>
                 </header>
 
                 <div class="herb-board__high-yield">
@@ -578,22 +704,38 @@ echo $OUTPUT->header();
                     <span><?php echo s($selectedbensky['distinction']); ?></span>
                 </div>
 
-                <h4 class="herb-board__subheading">Core herbs</h4>
-                <div class="herb-board__herbs">
-                    <?php foreach ($selectedbensky['coreherbs'] as $herb) { ?>
-                        <article class="herb-board__herb-card<?php echo !empty($herb['nature']) && strpos(core_text::strtolower($herb['nature']), 'toxic') !== false ? ' herb-board__herb-card--toxic' : ''; ?>">
-                            <h5><?php echo s($herb['name']); ?></h5>
-                            <span><?php echo s($herb['pharmaceutical']); ?></span>
-                            <?php if (!empty($herb['nature']) || !empty($herb['dose'])) { ?>
-                                <div class="herb-board__herb-meta">
-                                    <?php if (!empty($herb['nature'])) { ?><small><?php echo s($herb['nature']); ?></small><?php } ?>
-                                    <?php if (!empty($herb['dose'])) { ?><small>Dose: <?php echo s($herb['dose']); ?></small><?php } ?>
-                                </div>
+                <?php $herbgroups = $selectedbensky['herbgroups'] ?? [[
+                    'name' => 'Core herbs',
+                    'focus' => '',
+                    'herbs' => $selectedbensky['coreherbs'] ?? [],
+                ]]; ?>
+                <?php foreach ($herbgroups as $herbgroup) { ?>
+                    <section class="herb-board__herb-group">
+                        <div class="herb-board__herb-group-heading">
+                            <h4 class="herb-board__subheading"><?php echo s($herbgroup['name']); ?></h4>
+                            <?php if (!empty($herbgroup['focus'])) { ?><p><?php echo s($herbgroup['focus']); ?></p><?php } ?>
+                        </div>
+                        <div class="herb-board__herbs">
+                            <?php foreach ($herbgroup['herbs'] as $herb) {
+                                $istoxic = !empty($herb['risk'])
+                                    || (!empty($herb['nature'])
+                                        && strpos(core_text::strtolower($herb['nature']), 'toxic') !== false);
+                            ?>
+                                <article class="herb-board__herb-card<?php echo $istoxic ? ' herb-board__herb-card--toxic' : ''; ?>">
+                                    <h5><?php echo s($herb['name']); ?></h5>
+                                    <span><?php echo s($herb['pharmaceutical']); ?></span>
+                                    <?php if (!empty($herb['nature']) || !empty($herb['dose'])) { ?>
+                                        <div class="herb-board__herb-meta">
+                                            <?php if (!empty($herb['nature'])) { ?><small><?php echo s($herb['nature']); ?></small><?php } ?>
+                                            <?php if (!empty($herb['dose'])) { ?><small>Dose: <?php echo s($herb['dose']); ?></small><?php } ?>
+                                        </div>
+                                    <?php } ?>
+                                    <p><?php echo s($herb['use']); ?></p>
+                                </article>
                             <?php } ?>
-                            <p><?php echo s($herb['use']); ?></p>
-                        </article>
-                    <?php } ?>
-                </div>
+                        </div>
+                    </section>
+                <?php } ?>
 
                 <aside class="herb-board__safety" aria-labelledby="bensky-safety-title">
                     <h4 id="bensky-safety-title">Safety stays visible</h4>
