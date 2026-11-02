@@ -9,6 +9,7 @@ MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 PHP_BIN="${PHP_BIN:-}"
 CATEGORY_PATH="blocks/myprogress/single-herbs-category-harsh-expellants.php"
+MOIST_PATH="blocks/myprogress/single-herbs-category-moist-laxatives.php"
 GUIDE_PATH="blocks/myprogress/single-herbs-study-guide.php"
 PROPERTIES_PATH="blocks/myprogress/single-herb-properties.json"
 REFERENCE_PATH="blocks/myprogress/single-herbs-dui-yao-reference.php"
@@ -24,7 +25,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     exit 1
 fi
 
-for relative_path in "$CATEGORY_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
     if [[ ! -f "$MOODLE_ROOT/$relative_path" ]]; then
         echo "ERROR: no se encontró el archivo activo $MOODLE_ROOT/$relative_path"
         exit 1
@@ -58,12 +59,13 @@ echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
 
 "$PHP_BIN" -l "$TEMP_DIR/$CATEGORY_PATH" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/$MOIST_PATH" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/$GUIDE_PATH" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/$REFERENCE_PATH" >/dev/null
 python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
@@ -79,6 +81,14 @@ grep -Fq "data-dui-yao-pair" "$TEMP_DIR/$REFERENCE_PATH"
 grep -Fq "'name' => 'Hong Da Ji', 'latin' => 'Knoxiae Radix', 'official' => false" "$TEMP_DIR/$CATEGORY_PATH"
 grep -Fq "3–6 g decoction; ≤3 g powder" "$TEMP_DIR/$CATEGORY_PATH"
 grep -Fq "0.1–0.3 g/day; correctly defatted preparation only" "$TEMP_DIR/$CATEGORY_PATH"
+grep -Fq "Cross-category reference · Official herbs with secondary bowel-moistening action" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Primary category:" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Relieve Coughing and Wheezing" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Invigorate Blood and Dispel Stasis" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Tonify Yin" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Tonify Yang" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Tonify Blood" "$TEMP_DIR/$MOIST_PATH"
+grep -Fq "Tonify Qi" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq '"en": "Bitter"' "$TEMP_DIR/$PROPERTIES_PATH"
 grep -Fq '"dose": "0.1–0.3 g/day; defatted only"' "$TEMP_DIR/$PROPERTIES_PATH"
 
@@ -102,7 +112,7 @@ if [[ "$DUI_PAIR_COUNT" -ne 51 ]]; then
 fi
 
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     target="$MOODLE_ROOT/$relative_path"
     temporary="$TEMP_DIR/$relative_path"
     backup_target="$BACKUP_DIR/$relative_path"
@@ -120,6 +130,7 @@ for relative_path in "$CATEGORY_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFEREN
 done
 
 "$PHP_BIN" -l "$MOODLE_ROOT/$CATEGORY_PATH" >/dev/null
+"$PHP_BIN" -l "$MOODLE_ROOT/$MOIST_PATH" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/$GUIDE_PATH" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/$REFERENCE_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$PROPERTIES_PATH" >/dev/null
@@ -132,6 +143,7 @@ fi
 echo "REFERENCIAS DUÌ YÀO INSTALADAS EN TODAS LAS CATEGORÍAS"
 echo "Las coincidencias se calculan desde las 51 parejas vigentes"
 echo "Las categorías sin pareja muestran una nota breve con enlace al índice"
+echo "Categoría 10: seis referencias cruzadas ampliadas con su categoría principal"
 echo "Con asterisco: Gan Sui y Ba Dou"
 echo "Sin asterisco: Hong Da Ji, Yuan Hua y Qian Niu Zi"
 echo "Duì Yào: ninguna de estas cinco hierbas pertenece a las 51 parejas vigentes"
