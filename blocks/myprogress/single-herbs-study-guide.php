@@ -956,6 +956,7 @@ ob_start();
 .single-herbs-guide__formula-leads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__formula-lead{padding:17px;border:1px solid #d9e2e7;border-left:4px solid #7c3aed;border-radius:10px;background:#faf8ff}.single-herbs-guide__formula-lead h5{margin:0 0 7px;color:#50259a;font-size:17px}.single-herbs-guide__formula-lead p{margin:0;color:#52677a;line-height:1.55}.single-herbs-guide__formula-lead strong{color:#25364a}
 .single-herbs-properties__summary{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.single-herbs-properties__summary h4{margin:0 0 7px}.single-herbs-properties__summary p{max-width:690px;margin:0;color:#60717e;line-height:1.55}.single-herbs-properties__stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.single-herbs-properties__stats span{padding:8px 10px;border-radius:8px;background:#eef6ff;color:#38526e;font-size:12px;font-weight:700}.single-herbs-properties__stats strong{margin-right:4px;color:#174ea6;font-size:16px}.single-herbs-properties__source-note{margin:16px 0;padding:13px 15px;border-left:4px solid #2563eb;border-radius:7px;background:#eff6ff;color:#36536f;font-size:13px;line-height:1.5}.single-herbs-properties__controls{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:8px 14px;align-items:end;margin:18px 0}.single-herbs-properties__controls label{grid-column:1/-1;font-weight:800;color:#17364a}.single-herbs-properties__controls input{min-height:42px;padding:8px 11px;border:1px solid #aebbc5;border-radius:8px}.single-herbs-properties__filters{display:flex;gap:5px;flex-wrap:wrap}.single-herbs-properties__filters button{min-height:38px;padding:7px 10px;border:1px solid #bdcbd4;border-radius:999px;background:#fff;color:#405565;font-size:12px;font-weight:800}.single-herbs-properties__filters button.is-active{border-color:#2563eb;background:#2563eb;color:#fff}.single-herbs-properties__results{margin:0;color:#60717e;font-size:13px;white-space:nowrap}.single-herbs-properties__table-wrap{overflow:auto;border:1px solid #d9e2e7;border-radius:10px}.single-herbs-properties__table{width:100%;min-width:940px;border-collapse:collapse;background:#fff;font-size:13px}.single-herbs-properties__table th,.single-herbs-properties__table td{padding:11px 12px;border-bottom:1px solid #e4eaee;text-align:left;vertical-align:top}.single-herbs-properties__table thead th{position:sticky;top:0;background:#edf7f5;color:#153c4b;font-size:12px;text-transform:uppercase;letter-spacing:.03em}.single-herbs-properties__table tbody th{min-width:165px;color:#17364a}.single-herbs-properties__table tbody th a{color:#075eaa;font-weight:900}.single-herbs-properties__table small{display:block;margin-top:3px;color:#6b7b87;font-weight:500}.single-herbs-properties__status{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:900;text-transform:uppercase;white-space:nowrap}.single-herbs-properties__status--verified{background:#dcfce7;color:#166534}.single-herbs-properties__status--dose-only{background:#dbeafe;color:#1d4ed8}.single-herbs-properties__status--pending{background:#fff1e5;color:#9a4a12}.single-herbs-properties__empty-results{padding:20px;text-align:center;color:#64748b}
 .single-herbs-guide__yang-deck{max-width:820px;margin:0 auto}.single-herbs-guide__yang-card{display:none;min-height:300px;overflow:hidden;border:1px solid #d7e0e5;border-top:5px solid #7c3aed;border-radius:13px;background:#fff;box-shadow:0 7px 22px rgba(15,23,42,.08)}.single-herbs-guide__yang-card.is-active{display:block}.single-herbs-guide__yang-face{min-height:295px;padding:25px 27px}.single-herbs-guide__yang-face--back{display:none;background:linear-gradient(145deg,#faf8ff,#f6fbfa)}.single-herbs-guide__yang-card.is-flipped .single-herbs-guide__yang-face--front{display:none}.single-herbs-guide__yang-card.is-flipped .single-herbs-guide__yang-face--back{display:block}.single-herbs-guide__yang-label{display:block;margin-bottom:17px;color:#6d28d9;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.single-herbs-guide__yang-question{margin:0;color:#17364a;font-size:clamp(20px,2.4vw,27px);line-height:1.35}.single-herbs-guide__yang-answer{margin:0;color:#405565;font-size:16px;line-height:1.65}.single-herbs-guide__yang-answer strong{color:#0d665e}.single-herbs-guide__yang-controls{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:13px}.single-herbs-guide__yang-control{min-height:42px;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:900;cursor:pointer}.single-herbs-guide__yang-control:hover{background:#f1f5f9}.single-herbs-guide__yang-control--next{justify-self:end}.single-herbs-guide__yang-control--flip{border-color:#7c3aed;background:#7c3aed;color:#fff}.single-herbs-guide__yang-control--flip:hover{background:#6d28d9}.single-herbs-guide__yang-progress{margin:10px 0 0;color:#60717e;font-size:13px;text-align:center}.single-herbs-guide__scope-note{margin-top:14px;padding:12px 15px;border-radius:8px;background:#fff8e8;color:#725110;line-height:1.5}
+.single-herbs-guide__yang-deck.is-consecutive{max-width:920px}.single-herbs-guide__yang-controls.is-consecutive-controls{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 14px}.single-herbs-guide__yang-controls.is-consecutive-controls .single-herbs-guide__yang-control{min-height:40px;border-color:#7c3aed;color:#6d28d9}.single-herbs-guide__yang-controls.is-consecutive-controls .single-herbs-guide__yang-control:first-child{background:#7c3aed;color:#fff}.single-herbs-guide__yang-controls.is-consecutive-controls .single-herbs-guide__yang-control:hover{box-shadow:0 3px 10px rgba(109,40,217,.16)}.single-herbs-guide__yang-question-item{overflow:hidden;margin-bottom:12px;border:1px solid #d7e0e5;border-left:5px solid #7c3aed;border-radius:11px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}.single-herbs-guide__yang-question-item summary{position:relative;cursor:pointer;padding:19px 54px 19px 21px;list-style:none}.single-herbs-guide__yang-question-item summary::-webkit-details-marker{display:none}.single-herbs-guide__yang-question-item summary:after{content:'+';position:absolute;right:18px;top:18px;display:flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:21px;font-weight:900}.single-herbs-guide__yang-question-item[open] summary:after{content:'−'}.single-herbs-guide__yang-question-item[open]{border-color:#8b5cf6;box-shadow:0 5px 15px rgba(109,40,217,.1)}.single-herbs-guide__yang-question-item .single-herbs-guide__yang-label{margin-bottom:8px}.single-herbs-guide__yang-question-item .single-herbs-guide__yang-question{font-size:clamp(18px,2vw,23px)}.single-herbs-guide__yang-sequence-answer{padding:18px 21px;border-top:1px solid #e3dcfa;background:linear-gradient(145deg,#faf8ff,#f6fbfa)}.single-herbs-guide__yang-sequence-answer .single-herbs-guide__yang-label{margin-bottom:8px}.single-herbs-guide__scope-note{margin-top:14px;padding:12px 15px;border-radius:8px;background:#fff8e8;color:#725110;line-height:1.5}
 .single-herbs-properties__status--properties-only{background:#ede9fe;color:#6d28d9}
 .single-herbs-intro__callout{padding:22px;border-left:5px solid #7c3aed;border-radius:11px;background:linear-gradient(135deg,#faf8ff,#f3faf8)}.single-herbs-intro__callout h4{margin:0 0 8px}.single-herbs-intro__callout p:last-child{margin:0;color:#405565;line-height:1.65}.single-herbs-intro__section{margin-top:30px}.single-herbs-intro__section>h4{margin:0 0 8px;color:#123246;font-size:22px}.single-herbs-intro__section>h5{margin:22px 0 10px;color:#17364a;font-size:17px}.single-herbs-intro__section>p{color:#52677a;line-height:1.62}.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:15px}.single-herbs-intro__timeline article,.single-herbs-intro__profile-grid article,.single-herbs-intro__relationships article,.single-herbs-intro__special-grid article,.single-herbs-intro__reading-levels article,.single-herbs-intro__dose-factors article,.single-herbs-intro__processing-grid article,.single-herbs-intro__safety-grid article{padding:15px;border:1px solid #dce4e8;border-radius:9px;background:#f9fbfc}.single-herbs-intro :is(article) strong{display:block;margin-bottom:5px;color:#17364a}.single-herbs-intro :is(article) span,.single-herbs-intro :is(article) p{color:#5b6b79;font-size:13px;line-height:1.5}.single-herbs-intro__taste-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px}.single-herbs-intro__taste-grid article{padding:15px;border-left:4px solid #f77e25;border-radius:8px;background:#fff7f0}.single-herbs-intro__nature-scale{display:grid;grid-template-columns:repeat(5,1fr);overflow:hidden;margin:15px 0;border-radius:9px;color:#fff;text-align:center;font-weight:900}.single-herbs-intro__nature-scale span{padding:13px 7px}.single-herbs-intro__nature-scale .is-hot{background:#b91c1c}.single-herbs-intro__nature-scale .is-warm{background:#ea580c}.single-herbs-intro__nature-scale .is-neutral{background:#64748b}.single-herbs-intro__nature-scale .is-cool{background:#0284c7}.single-herbs-intro__nature-scale .is-cold{background:#1d4ed8}.single-herbs-intro__methods{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.single-herbs-intro__methods span{padding:7px 10px;border-radius:999px;background:#eaf5f3;color:#0d665e;font-size:12px;font-weight:800}.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.single-herbs-intro__two-column article,.single-herbs-intro__direction-grid article{padding:17px;border:1px solid #dce4e8;border-radius:10px;background:#fff}.single-herbs-intro__direction-grid strong{color:#6d28d9!important;font-size:17px}.single-herbs-intro__reading-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:14px}.single-herbs-intro__workflow{display:grid;gap:8px;margin:14px 0;padding-left:24px}.single-herbs-intro__workflow li{padding:9px 12px;border-radius:7px;background:#f6fafb;color:#405565}.single-herbs-intro .single-herbs-guide__safety{margin-top:15px}.single-herbs-intro .single-herbs-guide__source{margin-top:28px;color:#6b7b87;line-height:1.55}
 .single-herbs-intro__special-grid small{display:block;margin-top:8px;color:#6d28d9;font-size:11px;font-weight:700;line-height:1.45}.single-herbs-intro__delivery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:13px}.single-herbs-intro__delivery-grid article{padding:15px;border:1px solid #dce4e8;border-top:3px solid #0b817d;border-radius:9px;background:#fff}
@@ -1283,7 +1284,7 @@ ob_start();
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-yang-questions-title">
                     <h4 id="topic-one-yang-questions-title">Yang questions for this category</h4>
-                    <p class="single-herbs-guide__section-lead">One study card holds all selected Chapter 2 questions. Think through the question, reveal the answer, then move to the next card. References outside the current list are explicitly identified.</p>
+                    <p class="single-herbs-guide__section-lead"><?php echo s($ises ? 'Todas las preguntas seleccionadas del capítulo 2 aparecen consecutivamente. Responde primero; después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.' : 'All selected Chapter 2 questions appear consecutively. Answer first; then open each response, or use the controls to open and close them all.'); ?></p>
                     <div class="single-herbs-guide__yang-deck" data-yang-deck data-card-label="<?php echo $ises ? 'Tarjeta' : 'Card'; ?>" data-of-label="<?php echo $ises ? 'de' : 'of'; ?>">
                         <?php foreach ($yangquestions as $questionindex => $yangquestion): ?>
                             <article class="single-herbs-guide__yang-card<?php echo $questionindex === 0 ? ' is-active' : ''; ?>" data-yang-card aria-hidden="<?php echo $questionindex === 0 ? 'false' : 'true'; ?>">
@@ -1546,37 +1547,79 @@ ob_start();
         return;
     }
     const cards = Array.from(deck.querySelectorAll('[data-yang-card]'));
-    const previous = deck.querySelector('[data-yang-prev]');
-    const next = deck.querySelector('[data-yang-next]');
-    const flip = deck.querySelector('[data-yang-flip]');
+    const controls = deck.querySelector('.single-herbs-guide__yang-controls');
     const progress = deck.querySelector('[data-yang-progress]');
-    let current = 0;
-
-    function showCard(index) {
-        current = (index + cards.length) % cards.length;
-        cards.forEach(function(card, cardindex) {
-            const active = cardindex === current;
-            card.classList.toggle('is-active', active);
-            card.classList.remove('is-flipped');
-            card.setAttribute('aria-hidden', active ? 'false' : 'true');
-        });
-        flip.textContent = flip.dataset.showLabel;
-        progress.textContent = deck.dataset.cardLabel + ' ' + (current + 1) + ' ' + deck.dataset.ofLabel + ' ' + cards.length;
-    }
-
-    if (!cards.length || !previous || !next || !flip || !progress) {
+    if (!cards.length || !controls) {
         return;
     }
-    previous.addEventListener('click', function() {
-        showCard(current - 1);
+
+    const isSpanishDeck = (deck.dataset.cardLabel || '').toLowerCase() === 'tarjeta';
+    const sectionHeading = deck.parentElement ? deck.parentElement.querySelector('h4') : null;
+    const sectionLead = deck.previousElementSibling;
+    const questions = [];
+    deck.classList.add('is-consecutive');
+    if (sectionHeading) {
+        sectionHeading.textContent = isSpanishDeck
+            ? 'Preguntas de Yang · ' + cards.length + ' preguntas consecutivas'
+            : 'Yang Review · ' + cards.length + ' consecutive questions';
+    }
+    if (sectionLead && sectionLead.classList.contains('single-herbs-guide__section-lead')) {
+        sectionLead.textContent = isSpanishDeck
+            ? 'Todas las preguntas aparecen consecutivamente. Responde primero; después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas. Las referencias externas se identifican dentro de las respuestas.'
+            : 'All questions appear consecutively. Answer first; then open each response, or use the controls to open and close them all. External references are identified inside the answers.';
+    }
+
+    cards.forEach(function(card) {
+        const front = card.querySelector('.single-herbs-guide__yang-face--front');
+        const back = card.querySelector('.single-herbs-guide__yang-face--back');
+        if (!front || !back) {
+            return;
+        }
+        const question = document.createElement('details');
+        const summary = document.createElement('summary');
+        const answer = document.createElement('div');
+        question.className = 'single-herbs-guide__yang-question-item';
+        answer.className = 'single-herbs-guide__yang-sequence-answer';
+        Array.from(front.childNodes).forEach(function(node) {
+            summary.appendChild(node.cloneNode(true));
+        });
+        Array.from(back.childNodes).forEach(function(node) {
+            answer.appendChild(node.cloneNode(true));
+        });
+        question.appendChild(summary);
+        question.appendChild(answer);
+        card.replaceWith(question);
+        questions.push(question);
     });
-    next.addEventListener('click', function() {
-        showCard(current + 1);
+
+    controls.classList.add('is-consecutive-controls');
+    controls.setAttribute('aria-label', isSpanishDeck ? 'Controles de respuestas de Yang' : 'Yang answer controls');
+    controls.replaceChildren();
+    const openAll = document.createElement('button');
+    const closeAll = document.createElement('button');
+    openAll.type = 'button';
+    closeAll.type = 'button';
+    openAll.className = 'single-herbs-guide__yang-control';
+    closeAll.className = 'single-herbs-guide__yang-control';
+    openAll.textContent = isSpanishDeck ? 'Abrir todas las respuestas' : 'Open all answers';
+    closeAll.textContent = isSpanishDeck ? 'Cerrar todas las respuestas' : 'Close all answers';
+    controls.appendChild(openAll);
+    controls.appendChild(closeAll);
+    if (questions.length) {
+        deck.insertBefore(controls, questions[0]);
+    }
+    if (progress) {
+        progress.remove();
+    }
+    openAll.addEventListener('click', function() {
+        questions.forEach(function(question) {
+            question.open = true;
+        });
     });
-    flip.addEventListener('click', function() {
-        const activeCard = cards[current];
-        const flipped = activeCard.classList.toggle('is-flipped');
-        flip.textContent = flipped ? flip.dataset.hideLabel : flip.dataset.showLabel;
+    closeAll.addEventListener('click', function() {
+        questions.forEach(function(question) {
+            question.open = false;
+        });
     });
 })();
 </script>
