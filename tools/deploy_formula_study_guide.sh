@@ -90,6 +90,10 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "treat-abscesses-ch20"
     );
+    $chapter21 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "external-application-ch21"
+    );
     $historical = array_filter(
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
@@ -130,6 +134,13 @@ php -r '
     foreach ($abscessSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
             $abscessSectionNames[] = $formulaName;
+        }
+    }
+    $externalApplicationSections = $data["categoryGuides"]["external-application-chapter-21"]["formulaSections"] ?? [];
+    $externalApplicationSectionNames = [];
+    foreach ($externalApplicationSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $externalApplicationSectionNames[] = $formulaName;
         }
     }
     $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
@@ -204,8 +215,8 @@ php -r '
     if (($data["version"] ?? null) !== 7
             || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 22
-            || count($data["supplementalFormulas"] ?? []) !== 216
+            || count($data["supplementalCategories"] ?? []) !== 23
+            || count($data["supplementalFormulas"] ?? []) !== 227
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -219,6 +230,7 @@ php -r '
             || count($chapter18) !== 7
             || count($chapter19) !== 3
             || count($chapter20) !== 14
+            || count($chapter21) !== 11
             || count($historical) !== 1
             || array_column($historical, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
@@ -270,6 +282,16 @@ php -r '
                 "Qian Jin Nei Tuo San", "San Zhong Kui Jian Tang", "Wei Jing Tang",
                 "Da Huang Mu Dan Tang", "Qing Chang Yin", "Yi Yi Fu Zi Bai Jiang San",
                 "Qing Xin Li Ge Tang", "Shi Liu Wei Liu Qi Yin"
+            ]
+            || array_column($externalApplicationSections, "key") !== [
+                "external-formulas-external-disorders", "external-formulas-internal-disorders"
+            ]
+            || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $externalApplicationSections)
+                !== [7, 4]
+            || $externalApplicationSectionNames !== [
+                "Bing Peng San", "Jin Huang San / Jin Huang Gao", "Zi Dang Gao", "Er Qing Gao",
+                "Qing Dai San", "Ku Shen Tang", "Hai Tong Pi Tang", "Wu Zhu Yu Gao",
+                "Bi Ba Bing", "San Leng Xi Ru Fang", "An Tai Zhu Gao"
             ]
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
@@ -511,6 +533,13 @@ grep -q "Las fórmulas históricas nunca deben retrasar" "$TEMP_DIR/formulas-stu
 grep -q "El acónito procesado puede causar arritmia mortal" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "estas fórmulas no tratan cáncer" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "0 de 14 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "external-application-chapter-21" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number":"C21-11"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"external-formulas-external-disorders"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"external-formulas-internal-disorders"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "El uso externo aún puede causar intoxicación" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Minium es insegura" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "0 de 11 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "related-dui-yao-title" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TEMP_DIR/formulas-study-guide.php"
@@ -707,6 +736,13 @@ grep -q "Las fórmulas históricas nunca deben retrasar" "$TARGET_DIR/formulas-s
 grep -q "El acónito procesado puede causar arritmia mortal" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "estas fórmulas no tratan cáncer" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "0 de 14 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "external-application-chapter-21" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number":"C21-11"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"external-formulas-external-disorders"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"external-formulas-internal-disorders"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "El uso externo aún puede causar intoxicación" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Minium es insegura" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "0 de 11 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "related-dui-yao-title" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TARGET_DIR/formulas-study-guide.php"

@@ -24,8 +24,8 @@ if (!is_array($data)
         || ($data['version'] ?? null) !== 7
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 22
-        || count($data['supplementalFormulas'] ?? []) !== 216) {
+        || count($data['supplementalCategories'] ?? []) !== 23
+        || count($data['supplementalFormulas'] ?? []) !== 227) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -97,6 +97,10 @@ $categorycopy = [
     'treat-abscesses-chapter-20' => [
         'Compare all fourteen principal Chapter 20 formulas by external versus internal location, lesion stage, Heat versus Cold, pus, deficiency and emergency priority.',
         'Compara las catorce fórmulas principales del capítulo 20 por localización externa o interna, etapa de la lesión, Calor o Frío, pus, deficiencia y prioridad de urgencia.',
+    ],
+    'external-application-chapter-21' => [
+        'Compare all eleven principal Chapter 21 formulas by dosage form, tissue integrity, moisture, temperature, lesion stage, internal versus external intent and modern safety.',
+        'Compara las once fórmulas principales del capítulo 21 por forma de aplicación, integridad del tejido, humedad, temperatura, etapa, intención interna o externa y seguridad moderna.',
     ],
     'dispel-summerheat' => [
         'Choose among five Summerheat strategies: clear mild Heat, release constrained Exterior, drain Dampness, restore Qi and fluids, or preserve severely damaged Yin.',
@@ -212,6 +216,10 @@ $categoryreferences = [
     'treat-abscesses-chapter-20' => [
         'Complete Bensky source: 14 principal formulas in two sections. Board overlap: 0. All profiles are supplemental and require modern medical or surgical triage before historical pattern comparison.',
         'Fuente Bensky completa: 14 fórmulas principales en dos secciones. Coincidencia Board: 0. Todas las fichas son suplementarias y exigen triaje médico o quirúrgico moderno antes de comparar patrones históricos.',
+    ],
+    'external-application-chapter-21' => [
+        'Complete Bensky source: 11 principal formulas in two sections. Board overlap: 0. All profiles are supplemental; associated formulas and variations remain reference comparisons with explicit modern safety boundaries.',
+        'Fuente Bensky completa: 11 fórmulas principales en dos secciones. Coincidencia Board: 0. Todas las fichas son suplementarias; fórmulas asociadas y variaciones quedan como comparaciones con límites modernos explícitos de seguridad.',
     ],
     'stabilize-bind' => [
         'Official Board category: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
@@ -341,6 +349,7 @@ $transformphlegmchaptersourcecategory = $supplementalcategories['transform-phleg
 $digestivechaptersourcecategory = $supplementalcategories['digestive-ch18'];
 $expelparasiteschaptersourcecategory = $supplementalcategories['expel-parasites-ch19'];
 $treatabscesseschaptersourcecategory = $supplementalcategories['treat-abscesses-ch20'];
+$externalapplicationchaptersourcecategory = $supplementalcategories['external-application-ch21'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -1101,6 +1110,62 @@ $treatabscesseschapteroverview = [
     'formulas' => $treatabscesseschapterformulas,
 ];
 
+$externalapplicationchaptersections = [
+    'external-formulas-external-disorders' => [
+        'key' => 'external-formulas-external-disorders', 'name' => 'External Formulas for External Disorders',
+        'nameEs' => 'Fórmulas externas para trastornos externos', 'sourcePages' => '896–903',
+        'copy' => 'Compare powders, plasters, ointments, washes and warming compresses by tissue integrity, moisture, temperature and lesion stage.',
+        'copyEs' => 'Compara polvos, emplastos, ungüentos, lavados y compresas calientes según integridad del tejido, humedad, temperatura y etapa de lesión.',
+    ],
+    'external-formulas-internal-disorders' => [
+        'key' => 'external-formulas-internal-disorders', 'name' => 'External Formulas for Internal Disorders',
+        'nameEs' => 'Fórmulas externas para trastornos internos', 'sourcePages' => '904–905',
+        'copy' => 'Separate external point applications, warming cakes, breast washes and a hazardous historical pregnancy plaster from definitive internal diagnosis and care.',
+        'copyEs' => 'Separa aplicaciones externas en puntos, tortas calientes, lavados mamarios y un emplasto histórico peligroso del embarazo del diagnóstico y cuidado interno definitivos.',
+    ],
+];
+$externalapplicationchapterplan = [
+    ['Bing Peng San', 1, 'external-formulas-external-disorders', 'Borneol and Borax Powder', '896–897'],
+    ['Jin Huang San / Jin Huang Gao', 2, 'external-formulas-external-disorders', 'Golden-Yellow Powder / Golden-Yellow Plaster', '897–898'],
+    ['Zi Dang Gao', 3, 'external-formulas-external-disorders', 'Lithospermum/Arnebia and Tangkuei Ointment', '898–899'],
+    ['Er Qing Gao', 4, 'external-formulas-external-disorders', 'Double-Dark Plaster', '899–900'],
+    ['Qing Dai San', 5, 'external-formulas-external-disorders', 'Indigo Powder', '900–901'],
+    ['Ku Shen Tang', 6, 'external-formulas-external-disorders', 'Sophora Root Wash', '901–902'],
+    ['Hai Tong Pi Tang', 7, 'external-formulas-external-disorders', 'Erythrina Wash', '902–903'],
+    ['Wu Zhu Yu Gao', 8, 'external-formulas-internal-disorders', 'Evodia Plaster', '904'],
+    ['Bi Ba Bing', 9, 'external-formulas-internal-disorders', 'Long Pepper Cake', '904'],
+    ['San Leng Xi Ru Fang', 10, 'external-formulas-internal-disorders', 'Sparganium Breast Wash', '904'],
+    ['An Tai Zhu Gao', 11, 'external-formulas-internal-disorders', 'Fetus-Quieting Plaster', '904–905'],
+];
+$externalapplicationsupplementbyname = [];
+foreach ($externalapplicationchaptersourcecategory['formulas'] as $formula) {
+    $externalapplicationsupplementbyname[$formula['name']] = $formula;
+}
+$externalapplicationchapterformulas = [];
+foreach ($externalapplicationchapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $externalapplicationsupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 21 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['chapterSourceSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $externalapplicationchaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $externalapplicationchaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $externalapplicationchapterformulas[] = $formula;
+}
+$externalapplicationchapteroverview = [
+    'number' => 'S17',
+    'key' => 'external-application-chapter-21',
+    'name' => 'Formulas for External Application · Complete Bensky Chapter 21',
+    'nameEs' => 'Fórmulas para aplicación externa · Capítulo 21 completo de Bensky',
+    'sourceChapter' => 21,
+    'sourcePages' => '893–906',
+    'formulas' => $externalapplicationchapterformulas,
+];
+
 $chapterinterestinginsights = [
     'dispel-summerheat' => [
         'title' => 'Interesting point: Summerheat may be distributed across other Board competencies',
@@ -1322,6 +1387,23 @@ $chapterinterestinginsights = [
         'value' => 'The chapter remains valuable for learning that “abscess” is not one pattern: Heat versus Cold, pus stage, location and constitutional strength change the strategy. Its modern lesson is equally important—pattern comparison begins only after emergencies and structural disease are addressed.',
         'valueEs' => 'El capítulo sigue siendo valioso para aprender que “absceso” no es un solo patrón: Calor o Frío, etapa del pus, localización y fuerza constitucional cambian la estrategia. Su lección moderna es igual de importante: la comparación de patrones empieza después de atender urgencias y enfermedad estructural.',
     ],
+    'external-application-chapter-21' => [
+        'title' => 'Interesting point: the chapter is organized by route of administration, but external use can still create systemic toxicity and emergencies',
+        'titleEs' => 'Dato interesante: el capítulo se organiza por vía de administración, pero el uso externo aún puede causar toxicidad sistémica y urgencias',
+        'stat' => '0 of 11 direct overlaps',
+        'statEs' => '0 de 11 coincidencias directas',
+        'intro' => 'The source compares powders, ointments, plasters, washes, compresses and point applications. Modern safety reframes the chapter around intact versus open tissue, contamination, absorption, burns, toxic ingredients and conditions that require diagnosis rather than a topical preparation.',
+        'introEs' => 'La fuente compara polvos, ungüentos, emplastos, lavados, compresas y aplicaciones en puntos. La seguridad moderna replantea el capítulo alrededor de tejido intacto o abierto, contaminación, absorción, quemaduras, ingredientes tóxicos y afecciones que requieren diagnóstico, no un preparado tópico.',
+        'rows' => [
+            ['coverage' => 'Hot swelling and weeping skin', 'coverageEs' => 'Hinchazón caliente y piel exudativa', 'boardNames' => [], 'additional' => 'Golden-Yellow, Double-Dark and Indigo preparations separate a swelling ready to head, firm clumping, first-stage trauma and wet Damp-Heat lesions.', 'additionalEs' => 'Preparaciones Golden-Yellow, Double-Dark e Indigo separan hinchazón por formar cabeza, aglomeración firme, trauma temprano y lesiones húmedas por Humedad-Calor.'],
+            ['coverage' => 'Dry skin, stubborn itch and later trauma', 'coverageEs' => 'Piel seca, prurito persistente y trauma tardío', 'boardNames' => [], 'additional' => 'Zi Dang Gao moistens; Ku Shen Tang washes a larger itchy area; Hai Tong Pi Tang introduces warming only after acute inflammation subsides.', 'additionalEs' => 'Zi Dang Gao humecta; Ku Shen Tang lava un área pruriginosa mayor; Hai Tong Pi Tang introduce calor solo tras ceder la inflamación aguda.'],
+            ['coverage' => 'External treatment of internal complaints', 'coverageEs' => 'Tratamiento externo de síntomas internos', 'boardNames' => [], 'additional' => 'Point plasters, herb cakes, a breast wash and a pregnancy plaster preserve historical route logic, but none replaces diagnosis of oral disease, hypertension, persistent nasal disease, mastitis or obstetric symptoms.', 'additionalEs' => 'Emplastos en puntos, tortas herbales, lavado mamario y emplasto del embarazo conservan lógica histórica de vía, pero ninguno sustituye diagnosticar enfermedad oral, hipertensión, enfermedad nasal persistente, mastitis o síntomas obstétricos.'],
+        ],
+        'hypothesis' => 'A plausible curricular explanation is that the current Board roster emphasizes orally administered foundational formulas, while external preparations are highly product-, site-, sanitation- and procedure-dependent and include multiple obsolete toxic substances.',
+        'hypothesisEs' => 'Una explicación curricular plausible es que el listado Board vigente enfatiza fórmulas orales fundamentales, mientras los preparados externos dependen mucho de producto, sitio, higiene y procedimiento e incluyen varias sustancias tóxicas obsoletas.',
+        'value' => 'The chapter remains useful because dosage form changes clinical reasoning: wet versus dry, intact versus open, cooling versus warming and brief versus occlusive exposure all matter. Its strongest modern lesson is that “external” never means harmless.',
+        'valueEs' => 'El capítulo sigue siendo útil porque la forma cambia el razonamiento: húmedo o seco, intacto o abierto, refrescar o calentar y exposición breve u oclusiva importan. Su lección moderna más fuerte es que “externo” nunca significa inocuo.',
+    ],
     'treat-dryness-ch15' => [
         'title' => 'Interesting point: the Board has no dedicated Treat Dryness category',
         'titleEs' => 'Dato interesante: el Board no tiene una categoría propia para tratar Sequedad',
@@ -1355,7 +1437,8 @@ foreach ($supplementalcategories as $categorykey => $category) {
             && $categorykey !== 'transform-phlegm-ch17'
             && $categorykey !== 'digestive-ch18'
             && $categorykey !== 'expel-parasites-ch19'
-            && $categorykey !== 'treat-abscesses-ch20') {
+            && $categorykey !== 'treat-abscesses-ch20'
+            && $categorykey !== 'external-application-ch21') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
@@ -1363,6 +1446,7 @@ $supplementalindexcategories[$tonifychapteroverview['key']] = $tonifychapterover
 $supplementalindexcategories[$openorificeschapteroverview['key']] = $openorificeschapteroverview;
 $supplementalindexcategories[$expelparasiteschapteroverview['key']] = $expelparasiteschapteroverview;
 $supplementalindexcategories[$treatabscesseschapteroverview['key']] = $treatabscesseschapteroverview;
+$supplementalindexcategories[$externalapplicationchapteroverview['key']] = $externalapplicationchapteroverview;
 $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
 $supplementalcategories[$calmshenchapteroverview['key']] = $calmshenchapteroverview;
@@ -1375,6 +1459,7 @@ $supplementalcategories[$transformphlegmchapteroverview['key']] = $transformphle
 $supplementalcategories[$digestivechapteroverview['key']] = $digestivechapteroverview;
 $supplementalcategories[$expelparasiteschapteroverview['key']] = $expelparasiteschapteroverview;
 $supplementalcategories[$treatabscesseschapteroverview['key']] = $treatabscesseschapteroverview;
+$supplementalcategories[$externalapplicationchapteroverview['key']] = $externalapplicationchapteroverview;
 unset($supplementalcategories['stabilize-bind-ch9']);
 unset($supplementalcategories['calm-shen-ch10']);
 unset($supplementalcategories['open-orifices-ch11']);
@@ -1386,6 +1471,7 @@ unset($supplementalcategories['transform-phlegm-ch17']);
 unset($supplementalcategories['digestive-ch18']);
 unset($supplementalcategories['expel-parasites-ch19']);
 unset($supplementalcategories['treat-abscesses-ch20']);
+unset($supplementalcategories['external-application-ch21']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -2605,10 +2691,10 @@ echo $OUTPUT->header();
                 $clinicalsection = $selectedformulasectionbyname[$formula['name']] ?? null;
                 $newclinicalsection = $clinicalsection !== null
                     && $lastclinicalsectionkey !== $clinicalsection['key']
-                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true);
-                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)
+                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true);
+                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
-                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)
                     && $lastformulacategory !== $currentsectionkey;
                 if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
                     $formulacategory = $stabilizechaptersections[$currentsectionkey];
@@ -2676,6 +2762,12 @@ echo $OUTPUT->header();
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
                     ));
+                } elseif ($newchaptersection && $selected['key'] === 'external-application-chapter-21') {
+                    $formulacategory = $externalapplicationchaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
                 } else {
                     $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
                 }
@@ -2695,7 +2787,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)) {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -2717,7 +2809,7 @@ echo $OUTPUT->header();
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)
+                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
