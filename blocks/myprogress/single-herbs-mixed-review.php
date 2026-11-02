@@ -56,7 +56,7 @@ $mixedcards = [
     ],
     [
         'category' => $mixedtext('Category 5 · Clear Heat and Dry Damp', 'Categoría 5 · Aclarar Calor y secar Humedad'),
-        'question' => $mixedtext('Match the San Huang and Long Dan Cao to their strongest Board location: Upper Burner/Lung, Middle Burner/Stomach-Heart, Lower Burner/Kidney, or Liver-Gallbladder Damp-Heat.', 'Relaciona los San Huang y Long Dan Cao con su localización Board más fuerte: Jiao Superior/Pulmón, Jiao Medio/Estómago-Corazón, Jiao Inferior/Riñón o Humedad-Calor de Hígado-Vesícula.'),
+        'question' => $mixedtext('San Huang (三黄) means “Three Huangs”—sān is the number three in Chinese—and refers here to Huang Qin, Huang Lian and Huang Bai. Match these three herbs and Long Dan Cao to their strongest Board location: Upper Burner/Lung, Middle Burner/Stomach-Heart, Lower Burner/Kidney, or Liver-Gallbladder Damp-Heat.', 'San Huang (三黄) significa «Tres Huang»: sān es el número tres en chino y aquí se refiere a Huang Qin, Huang Lian y Huang Bai. Relaciona estas tres hierbas y Long Dan Cao con su localización Board más fuerte: Jiao Superior/Pulmón, Jiao Medio/Estómago-Corazón, Jiao Inferior/Riñón o Humedad-Calor de Hígado-Vesícula.'),
         'answer' => $mixedtext('Huang Qin: Upper Burner and Lung Heat. Huang Lian: Middle Burner plus Heart/Stomach Fire. Huang Bai: Lower Burner, Kidney deficiency Fire and Damp-Heat below. Long Dan Cao: strongest bitter-cold drain for Liver-Gallbladder Fire and Damp-Heat.', 'Huang Qin: Jiao Superior y Calor de Pulmón. Huang Lian: Jiao Medio más Fuego de Corazón/Estómago. Huang Bai: Jiao Inferior, Fuego deficiente de Riñón y Humedad-Calor abajo. Long Dan Cao: drenaje amargo-frío más fuerte para Fuego y Humedad-Calor de Hígado-Vesícula.'),
     ],
     [
