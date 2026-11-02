@@ -1847,7 +1847,7 @@ echo $OUTPUT->header();
                     <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="formula-study-guide__category-number"><?php echo s($ishistoricalcategory
                             ? ($ises ? 'Listado histórico' : 'Historical roster')
-                            : (($ises ? 'Capítulo ' : 'Chapter ') . (int) $category['sourceChapter'])); ?></span>
+                            : (($ises ? 'Capítulo Bensky ' : 'Bensky Chapter ') . (int) $category['sourceChapter'])); ?></span>
                         <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                         <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ishistoricalcategory
                             ? ($ises ? 'ficha histórica' : 'historical profile')
