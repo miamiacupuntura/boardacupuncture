@@ -997,7 +997,7 @@ ob_start();
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
             <div class="single-herbs-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
-                <span class="single-herbs-guide__back single-herbs-guide__back--active" aria-current="page">Single Herbs</span>
+                <a class="single-herbs-guide__back single-herbs-guide__back--active" aria-current="page" href="<?php echo $categoryindexurl->out(false); ?>">Single Herbs</a>
                 <a class="single-herbs-guide__back" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
                 <a class="single-herbs-guide__back" href="<?php echo $formulasurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
             </div>
