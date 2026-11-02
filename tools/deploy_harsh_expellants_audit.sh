@@ -91,6 +91,8 @@ grep -Fq "Tonify Blood" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "Tonify Qi" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "\$duiyaoadditionalherbs = array_column(\$moistannex, 'name');" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "including its cross-category references" "$TEMP_DIR/$REFERENCE_PATH"
+grep -Fq "Huo Ma Ren has no Duì Yào pair in the current 51-pair roster" "$TEMP_DIR/$REFERENCE_PATH"
+grep -Fq "The pairs shown below do not belong to the moist-laxative category" "$TEMP_DIR/$REFERENCE_PATH"
 grep -Fq '"en": "Bitter"' "$TEMP_DIR/$PROPERTIES_PATH"
 grep -Fq '"dose": "0.1–0.3 g/day; defatted only"' "$TEMP_DIR/$PROPERTIES_PATH"
 

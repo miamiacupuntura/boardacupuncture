@@ -90,6 +90,13 @@ $duiyaoindexurl = new moodle_url($ises
 
 <section class="single-herbs-guide__section single-herbs-guide__dui-yao-reference" data-dui-yao-reference aria-labelledby="single-herbs-dui-yao-title">
     <h4 id="single-herbs-dui-yao-title"><?php echo s($ises ? 'Referencia Duì Yào' : 'Duì Yào reference'); ?></h4>
+    <?php if ((int) $selectedguidenumber === 10): ?>
+        <p class="single-herbs-guide__scope-note"><strong><?php echo s($ises
+            ? 'Huo Ma Ren no tiene ninguna pareja Duì Yào en el listado vigente de 51 parejas.'
+            : 'Huo Ma Ren has no Duì Yào pair in the current 51-pair roster.'); ?></strong> <?php echo s($ises
+            ? 'Yu Li Ren tampoco tiene una coincidencia vigente. Las parejas mostradas a continuación no pertenecen a la categoría de laxantes humectantes: aparecen solamente porque contienen Xing Ren, Tao Ren, Dang Gui o Rou Cong Rong, hierbas de otras categorías que pueden humedecer intestinos y facilitar la evacuación como acción secundaria. Esta referencia no amplía el núcleo de la categoría.'
+            : 'Yu Li Ren also has no current match. The pairs shown below do not belong to the moist-laxative category: they appear only because they contain Xing Ren, Tao Ren, Dang Gui or Rou Cong Rong, herbs from other categories that can moisten the Intestines and facilitate bowel movement as a secondary action. This reference does not expand the category core.'); ?></p>
+    <?php endif; ?>
     <?php if ($duiyaomatches): ?>
         <p class="single-herbs-guide__section-lead"><?php echo s($ises
             ? count($duiyaomatches) . ' pareja(s) vigente(s) contienen al menos una hierba nombrada en esta página, incluidas sus referencias cruzadas.'
