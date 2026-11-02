@@ -159,13 +159,11 @@ $mixedcards = [
     ],
 ];
 
-// Every visit changes the sequence so recall depends on the clue, not the category order.
-shuffle($mixedcards);
 ?>
 
 <section class="single-herbs-guide__section" aria-labelledby="mixed-review-method">
-    <h4 id="mixed-review-method"><?php echo s($mixedtext('Mixed Review: pass through three gates', 'Repaso mixto: atraviesa tres puertas')); ?></h4>
-    <p class="single-herbs-guide__section-lead"><?php echo s($mixedtext('Do not guess the herb from one symptom. Each card asks you to rebuild the Board route before revealing the answer.', 'No adivines la hierba por un solo síntoma. Cada tarjeta te pide reconstruir la ruta Board antes de revelar la respuesta.')); ?></p>
+    <h4 id="mixed-review-method"><?php echo s($mixedtext('Final Review: pass through three gates', 'Repaso final: atraviesa tres puertas')); ?></h4>
+    <p class="single-herbs-guide__section-lead"><?php echo s($mixedtext('Do not guess the herb from one symptom. Each visible question asks you to rebuild the Board route before opening the answer.', 'No adivines la hierba por un solo síntoma. Cada pregunta visible te pide reconstruir la ruta Board antes de abrir la respuesta.')); ?></p>
     <div class="single-herbs-guide__decision">
         <div><strong><?php echo s($mixedtext('1 · Pattern', '1 · Patrón')); ?></strong><span><?php echo s($mixedtext('Hot or Cold? Excess or deficiency? Exterior or Interior?', '¿Calor o Frío? ¿Exceso o deficiencia? ¿Exterior o Interior?')); ?></span></div>
         <div><strong><?php echo s($mixedtext('2 · Mechanism', '2 · Mecanismo')); ?></strong><span><?php echo s($mixedtext('Release, clear, drain, transform, move, tonify or secure?', '¿Liberar, aclarar, drenar, transformar, mover, tonificar o contener?')); ?></span></div>
@@ -173,32 +171,26 @@ shuffle($mixedcards);
     </div>
     <aside class="single-herbs-guide__memory-path">
         <p class="single-herbs-guide__memory-line"><?php echo s($mixedtext('Imagine the Board control room: the first gate names the terrain, the second chooses the lever, and the third reads the one warning light that separates look-alike herbs.', 'Imagina la sala de control del Board: la primera puerta nombra el terreno, la segunda elige la palanca y la tercera lee la única luz de alarma que separa hierbas parecidas.')); ?></p>
-        <p><?php echo s($mixedtext('Say your three-part answer aloud before flipping: “Pattern → mechanism → decisive herb.” The cards are reshuffled every time this page opens.', 'Di en voz alta tu respuesta de tres partes antes de voltear: “Patrón → mecanismo → hierba decisiva”. Las tarjetas se mezclan cada vez que abres esta página.')); ?></p>
+        <p><?php echo s($mixedtext('Say your three-part answer aloud before opening each answer: “Pattern → mechanism → decisive herb.” Work through the questions consecutively from top to bottom.', 'Di en voz alta tu respuesta de tres partes antes de abrir cada respuesta: “Patrón → mecanismo → hierba decisiva”. Resuelve las preguntas consecutivamente de arriba hacia abajo.')); ?></p>
     </aside>
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="mixed-review-deck">
-    <h4 id="mixed-review-deck"><?php echo s($mixedtext('30-category challenge deck', 'Baraja de desafío de 30 categorías')); ?></h4>
-    <p class="single-herbs-guide__section-lead"><?php echo s($mixedtext('One card represents each completed Board category. Answer first; then flip to verify the distinction and any validated formula bridge.', 'Una tarjeta representa cada categoría Board terminada. Responde primero; luego voltéala para verificar la distinción y cualquier puente de fórmula validado.')); ?></p>
-    <div class="single-herbs-guide__yang-deck" data-yang-deck data-card-label="<?php echo s($mixedtext('Challenge', 'Reto')); ?>" data-of-label="<?php echo s($mixedtext('of', 'de')); ?>">
+    <h4 id="mixed-review-deck"><?php echo s($mixedtext('Final Review · ' . count($mixedcards) . ' consecutive questions', 'Repaso final · ' . count($mixedcards) . ' preguntas consecutivas')); ?></h4>
+    <p class="single-herbs-guide__section-lead"><?php echo s($mixedtext('One question represents each completed Board category. Answer first; then open it to verify the category, decisive distinction and any validated formula bridge.', 'Una pregunta representa cada categoría Board terminada. Responde primero; luego ábrela para verificar la categoría, la distinción decisiva y cualquier puente de fórmula validado.')); ?></p>
+    <div class="single-herbs-guide__recall single-herbs-guide__final-review">
         <?php foreach ($mixedcards as $index => $card): ?>
-            <article class="single-herbs-guide__yang-card<?php echo $index === 0 ? ' is-active' : ''; ?>" data-yang-card aria-hidden="<?php echo $index === 0 ? 'false' : 'true'; ?>">
-                <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--front">
-                    <span class="single-herbs-guide__yang-label"><?php echo s($mixedtext('Mixed challenge', 'Reto mixto') . ' ' . ($index + 1) . ' ' . $mixedtext('of', 'de') . ' ' . count($mixedcards)); ?></span>
-                    <p class="single-herbs-guide__yang-question"><?php echo s($card['question']); ?></p>
+            <details class="single-herbs-guide__final-question">
+                <summary>
+                    <span class="single-herbs-guide__final-number"><?php echo s($mixedtext('Question', 'Pregunta')); ?> <?php echo $index + 1; ?></span>
+                    <span><?php echo s($card['question']); ?></span>
+                </summary>
+                <div class="single-herbs-guide__final-answer">
+                    <strong><?php echo s($card['category']); ?></strong>
+                    <p><?php echo s($card['answer']); ?></p>
                 </div>
-                <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--back">
-                    <span class="single-herbs-guide__yang-label"><?php echo s($card['category']); ?></span>
-                    <p class="single-herbs-guide__yang-answer"><?php echo s($card['answer']); ?></p>
-                </div>
-            </article>
+            </details>
         <?php endforeach; ?>
-        <div class="single-herbs-guide__yang-controls">
-            <button class="single-herbs-guide__yang-control" type="button" data-yang-prev>← <?php echo s($mixedtext('Previous', 'Anterior')); ?></button>
-            <button class="single-herbs-guide__yang-control single-herbs-guide__yang-control--flip" type="button" data-yang-flip data-show-label="<?php echo s($mixedtext('Show answer', 'Mostrar respuesta')); ?>" data-hide-label="<?php echo s($mixedtext('Show challenge', 'Mostrar reto')); ?>"><?php echo s($mixedtext('Show answer', 'Mostrar respuesta')); ?></button>
-            <button class="single-herbs-guide__yang-control single-herbs-guide__yang-control--next" type="button" data-yang-next><?php echo s($mixedtext('Next', 'Siguiente')); ?> →</button>
-        </div>
-        <p class="single-herbs-guide__yang-progress" data-yang-progress><?php echo s($mixedtext('Challenge', 'Reto')); ?> 1 <?php echo s($mixedtext('of', 'de')); ?> <?php echo count($mixedcards); ?></p>
     </div>
 </section>
 
