@@ -58,12 +58,23 @@ $relationships = [
 ];
 
 $specialdecoction = [
-    ['Decoct first', 'Decocer primero', 'Toxic substances requiring prolonged preparation, minerals/shells and some bulky lightweight materials.', 'Sustancias tóxicas que requieren preparación prolongada, minerales/conchas y algunos materiales ligeros voluminosos.'],
-    ['Add near the end', 'Añadir al final', 'Aromatic or volatile herbs whose active qualities may be lost with prolonged cooking.', 'Hierbas aromáticas o volátiles cuyas cualidades activas pueden perderse con cocción prolongada.'],
-    ['Wrap before decocting', 'Envolver antes de decocer', 'Fine hairs, tiny seeds or powders that could irritate or cloud the strained liquid.', 'Vellos finos, semillas pequeñas o polvos que podrían irritar o enturbiar el líquido colado.'],
-    ['Prepare separately', 'Preparar por separado', 'Rare or expensive substances when separate extraction protects their intended use.', 'Sustancias raras o costosas cuando la extracción separada protege su uso previsto.'],
-    ['Dissolve after straining', 'Disolver después de colar', 'Sticky substances that could adhere to the pot or other ingredients and burn.', 'Sustancias pegajosas que podrían adherirse a la olla u otros ingredientes y quemarse.'],
-    ['Take with the decoction', 'Tomar con la decocción', 'Certain finely powdered substances are administered with, rather than cooked inside, the strained liquid.', 'Ciertas sustancias finamente pulverizadas se administran con el líquido colado en vez de cocinarse dentro de él.'],
+    ['Decoct first', 'Decocer primero', 'Toxic substances requiring prolonged preparation, minerals/shells and some bulky lightweight materials.', 'Sustancias tóxicas que requieren preparación prolongada, minerales/conchas y algunos materiales ligeros voluminosos.', 'Examples: prepared aconites; Shi Jue Ming, Long Gu, Mu Li, Ci Shi, Gui Ban, Bie Jia and Shi Gao.', 'Ejemplos: acónitos preparados; Shi Jue Ming, Long Gu, Mu Li, Ci Shi, Gui Ban, Bie Jia y Shi Gao.'],
+    ['Add near the end', 'Añadir al final', 'Aromatic or volatile herbs whose active qualities may be lost with prolonged cooking.', 'Hierbas aromáticas o volátiles cuyas cualidades activas pueden perderse con cocción prolongada.', 'Examples: Bo He, Mu Xiang, Sha Ren, Bai Dou Kou and Qing Hao; Da Huang when a stronger purgative action is intended.', 'Ejemplos: Bo He, Mu Xiang, Sha Ren, Bai Dou Kou y Qing Hao; Da Huang cuando se busca una acción purgante más fuerte.'],
+    ['Wrap before decocting', 'Envolver antes de decocer', 'Fine hairs, tiny seeds or powders that could irritate or cloud the strained liquid.', 'Vellos finos, semillas pequeñas o polvos que podrían irritar o enturbiar el líquido colado.', 'Examples: Xuan Fu Hua, Che Qian Zi and Chi Shi Zhi.', 'Ejemplos: Xuan Fu Hua, Che Qian Zi y Chi Shi Zhi.'],
+    ['Prepare separately', 'Preparar por separado', 'Rare or expensive substances when separate extraction protects their intended use.', 'Sustancias raras o costosas cuando la extracción separada protege su uso previsto.', 'Examples: Ren Shen, Xi Yang Shen and Lu Rong.', 'Ejemplos: Ren Shen, Xi Yang Shen y Lu Rong.'],
+    ['Dissolve after straining', 'Disolver después de colar', 'Sticky substances that could adhere to the pot or other ingredients and burn.', 'Sustancias pegajosas que podrían adherirse a la olla u otros ingredientes y quemarse.', 'Examples: E Jiao and Yi Tang.', 'Ejemplos: E Jiao y Yi Tang.'],
+    ['Take with the decoction', 'Tomar con la decocción', 'Certain finely powdered substances are administered with, rather than cooked inside, the strained liquid.', 'Ciertas sustancias finamente pulverizadas se administran con el líquido colado en vez de cocinarse dentro de él.', 'Examples: Chuan Bei Mu, San Qi, Niu Huang and Zhu Li.', 'Ejemplos: Chuan Bei Mu, San Qi, Niu Huang y Zhu Li.'],
+];
+
+$deliveryforms = [
+    ['Decoction', 'Decocción', 'Highly adaptable liquid form; traditionally favored when rapid adjustment to the presentation is needed.', 'Forma líquida muy adaptable; tradicionalmente favorecida cuando se necesita ajuste rápido a la presentación.'],
+    ['Boiled powder', 'Polvo hervido', 'A smaller powdered dose briefly decocted before administration.', 'Una dosis menor pulverizada que se decoce brevemente antes de administrarse.'],
+    ['Pill', 'Píldora', 'Generally slower and milder; the binding medium affects dissolution and use.', 'Generalmente más lenta y suave; el medio aglutinante influye en disolución y uso.'],
+    ['Powder', 'Polvo', 'Convenient, absorbable and easy to store; its action is often described between decoctions and pills.', 'Conveniente, absorbible y fácil de almacenar; su acción suele situarse entre decocciones y píldoras.'],
+    ['Syrup', 'Jarabe', 'A concentrated liquid commonly associated with chronic deficiency, cough or throat presentations.', 'Líquido concentrado comúnmente asociado con deficiencia crónica, tos o problemas de garganta.'],
+    ['External plaster', 'Emplasto externo', 'Medicinal material applied externally; not interchangeable with an internal preparation.', 'Material medicinal aplicado externamente; no es intercambiable con una preparación interna.'],
+    ['Medicinal wine', 'Vino medicinal', 'Substances steeped in wine; the solvent influences extraction and traditional direction.', 'Sustancias maceradas en vino; el solvente influye en extracción y dirección tradicional.'],
+    ['Modern extract', 'Extracto moderno', 'Granules, tablets, capsules or drops require product-specific concentration and dosing information.', 'Gránulos, tabletas, cápsulas o gotas requieren información específica de concentración y dosis del producto.'],
 ];
 
 $safetypillars = [
@@ -256,7 +267,13 @@ $safetypillars = [
 
         <h5><?php echo s($introtext('Special decoction instructions to recognize', 'Instrucciones especiales de decocción que debes reconocer')); ?></h5>
         <div class="single-herbs-intro__special-grid">
-            <?php foreach ($specialdecoction as [$titleEn, $titleEs, $bodyEn, $bodyEs]): ?>
+            <?php foreach ($specialdecoction as [$titleEn, $titleEs, $bodyEn, $bodyEs, $examplesEn, $examplesEs]): ?>
+                <article><strong><?php echo s($introtext($titleEn, $titleEs)); ?></strong><span><?php echo s($introtext($bodyEn, $bodyEs)); ?></span><small><?php echo s($introtext($examplesEn, $examplesEs)); ?></small></article>
+            <?php endforeach; ?>
+        </div>
+        <h5><?php echo s($introtext('Common delivery forms', 'Formas comunes de administración')); ?></h5>
+        <div class="single-herbs-intro__delivery-grid">
+            <?php foreach ($deliveryforms as [$titleEn, $titleEs, $bodyEn, $bodyEs]): ?>
                 <article><strong><?php echo s($introtext($titleEn, $titleEs)); ?></strong><span><?php echo s($introtext($bodyEn, $bodyEs)); ?></span></article>
             <?php endforeach; ?>
         </div>
@@ -264,6 +281,18 @@ $safetypillars = [
             'Decoctions are adaptable and historically common, but cooking time, sequence, timing and temperature vary with the formula. Follow the written prescription and pharmacist instructions rather than applying one method to every herb.',
             'Las decocciones son adaptables e históricamente comunes, pero tiempo, secuencia, momento y temperatura varían según la fórmula. Sigue la prescripción escrita y las instrucciones farmacéuticas en vez de aplicar un método a todas las hierbas.'
         )); ?></p>
+    </section>
+
+    <section class="single-herbs-intro__section" aria-labelledby="single-herbs-intro-conservation">
+        <h4 id="single-herbs-intro-conservation"><?php echo s($introtext('Conservation, protected species and current scope', 'Conservación, especies protegidas y alcance vigente')); ?></h4>
+        <p><?php echo s($introtext(
+            'International controls such as CITES can restrict or prohibit trade in plant and animal species used historically in materia medica. Status and permit requirements can change, and cultivated material may still be affected by rules covering a wild relative.',
+            'Controles internacionales como CITES pueden restringir o prohibir el comercio de especies vegetales y animales utilizadas históricamente en materia médica. El estatus y los permisos pueden cambiar, y material cultivado puede verse afectado por reglas que cubren un pariente silvestre.'
+        )); ?></p>
+        <div class="single-herbs-guide__safety"><strong><?php echo s($introtext('Board and clinical rule', 'Regla para Board y clínica')); ?></strong><?php echo s($introtext(
+            'Do not treat an obsolete, protected or prohibited substance as an active therapeutic option. Learn its identity and appropriate substitution, then verify the current Appendix D, CITES status and applicable law rather than relying on an older textbook list.',
+            'No trates una sustancia obsoleta, protegida o prohibida como opción terapéutica activa. Aprende su identidad y sustitución apropiada y verifica Appendix D, estatus CITES y legislación vigente en vez de depender de una lista antigua.'
+        )); ?></div>
     </section>
 
     <section class="single-herbs-intro__section" aria-labelledby="single-herbs-intro-safety-pillars">
@@ -295,7 +324,7 @@ $safetypillars = [
     </section>
 
     <p class="single-herbs-guide__source"><strong><?php echo s($introtext('Source note:', 'Nota de fuente:')); ?></strong> <?php echo s($introtext(
-        'Educational synthesis based on the supplied introduction excerpts covering materia-medica history, monograph use, identification, tastes and properties, channels, direction, combination theory, dosage, processing, delivery and safety.',
-        'Síntesis educativa basada en los fragmentos introductorios suministrados sobre historia de la materia médica, uso de monografías, identificación, sabores y propiedades, meridianos, dirección, combinaciones, dosis, procesamiento, administración y seguridad.'
+        'Educational synthesis based on the supplied introduction excerpts covering materia-medica history, monograph use, identification, tastes and properties, channels, direction, combination theory, dosage, processing, delivery forms, conservation and safety.',
+        'Síntesis educativa basada en los fragmentos introductorios suministrados sobre historia de la materia médica, uso de monografías, identificación, sabores y propiedades, meridianos, dirección, combinaciones, dosis, procesamiento, formas de administración, conservación y seguridad.'
     )); ?></p>
 </section>

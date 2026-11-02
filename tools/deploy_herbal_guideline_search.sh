@@ -140,6 +140,8 @@ grep -q "Master herb properties table" "$TEMP_DIR/single-herbs-properties-table.
 grep -q "single-herbs-introduction.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "From materia medica to a Board decision" "$TEMP_DIR/single-herbs-introduction.php"
 grep -q "Five safety pillars" "$TEMP_DIR/single-herbs-introduction.php"
+grep -q "Common delivery forms" "$TEMP_DIR/single-herbs-introduction.php"
+grep -q "Conservation, protected species and current scope" "$TEMP_DIR/single-herbs-introduction.php"
 grep -q "guidelines.css?v=20261101-3" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine-es.html"
