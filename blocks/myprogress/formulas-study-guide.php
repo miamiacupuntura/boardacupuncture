@@ -1442,7 +1442,6 @@ foreach ($supplementalcategories as $categorykey => $category) {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
-$supplementalindexcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalindexcategories[$openorificeschapteroverview['key']] = $openorificeschapteroverview;
 $supplementalindexcategories[$expelparasiteschapteroverview['key']] = $expelparasiteschapteroverview;
 $supplementalindexcategories[$treatabscesseschapteroverview['key']] = $treatabscesseschapteroverview;
@@ -1509,6 +1508,7 @@ if ($selected !== null && $selectedformulasections !== []) {
     $selected['formulas'] = $orderedselectedformulas;
 }
 $unifiedfamilystatusformulas = [
+    'tonify' => $categories['tonify']['formulas'],
     'warm-interior' => $warmchaptercategory['formulas'],
     'stabilize-bind' => $stabilizechapteroverview['formulas'],
     'calm-shen' => $calmshenchapteroverview['formulas'],
@@ -1644,6 +1644,7 @@ echo $OUTPUT->header();
 .formula-study-guide__category-number{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;margin-bottom:10px;border-radius:50%;background:#e9f6f3;color:#0b6b63;font-weight:900}
 .formula-study-guide__category strong{font-size:18px;line-height:1.3}.formula-study-guide__category p{margin:7px 0 12px;color:#5b6b79;font-size:14px;line-height:1.45}.formula-study-guide__category small{margin-top:auto;color:#075e54;font-weight:800}
 .formula-study-guide__category-meta{display:block;margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
+.formula-study-guide__category--board-priority{border-top-color:#0b817d;background:linear-gradient(155deg,#f4fbf9 0,#fff 48%)}.formula-study-guide__chapter-merge{display:block;margin:2px 0 12px;padding:10px 11px;border:1px solid #b9ddd5;border-radius:8px;background:#eef8f6}.formula-study-guide__chapter-merge b{display:block;color:#075e54;font-size:13px}.formula-study-guide__chapter-merge span{display:block;margin-top:3px;color:#52677a;font-size:12px;font-weight:700;line-height:1.4}
 .formula-study-guide__category-reference{display:block;margin:0 0 12px;padding:8px 9px;border-left:3px solid #2563eb;border-radius:5px;background:#eff6ff;color:#234b7b;font-size:12px;font-weight:750;line-height:1.4}.formula-study-guide__category-header .formula-study-guide__category-reference{max-width:840px;margin:12px 0 0}
 .formula-study-guide__supplement{margin-top:26px;padding:22px 24px;border:1px solid #c9ded9;border-top:4px solid #0b817d;border-radius:12px;background:#f2faf8}.formula-study-guide__supplement-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}.formula-study-guide__supplement-heading h3{margin:2px 0 5px;font-size:22px}.formula-study-guide__supplement-heading p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.formula-study-guide__supplement-badge{padding:6px 10px;border-radius:999px;background:#d9f1eb;color:#08695f;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__category--supplemental{min-height:156px;border-top-color:#0b817d}.formula-study-guide__category--supplemental .formula-study-guide__category-number{width:auto;padding:0 10px;border-radius:999px}.formula-study-guide__category--supplemental small{color:#075fc8}
 .formula-study-guide__category-header{margin-bottom:18px;padding:22px 24px;border-top:5px solid #f77e25;border-radius:12px;background:linear-gradient(135deg,#fffaf5,#f7fbfb)}
@@ -1730,6 +1731,7 @@ echo $OUTPUT->header();
                 $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
                 $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
                 $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
+                $istonifyindexcard = $category['key'] === 'tonify';
                 $iswarminteriorindexcard = $category['key'] === 'warm-interior';
                 $iscalmshenindexcard = $category['key'] === 'calm-shen';
                 $isstabilizeindexcard = $category['key'] === 'stabilize-bind';
@@ -1739,11 +1741,19 @@ echo $OUTPUT->header();
                 $isexpeldampindexcard = $category['key'] === 'expel-damp';
                 $istransformphlegmindexcard = $category['key'] === 'transform-phlegm';
                 $isdigestiveindexcard = $category['key'] === 'digestive';
-                $iscombinedindexcard = $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard || $isdigestiveindexcard;
+                $iscombinedindexcard = $istonifyindexcard || $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard || $isdigestiveindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
-                if ($iswarminteriorindexcard) {
+                if ($istonifyindexcard) {
+                    $categorymeta = $ises
+                        ? 'Prioridad Board · 8 fórmulas oficiales'
+                        : 'Board priority · 8 official formulas';
+                    $copy = $ises
+                        ? 'Empieza con las 8 fórmulas oficiales de Tonify; después amplía el estudio a las 45 fórmulas principales del capítulo 8.'
+                        : 'Start with the 8 official Tonify formulas; then expand to all 45 principal formulas in Chapter 8.';
+                    $reference = null;
+                } elseif ($iswarminteriorindexcard) {
                     $categorymeta = $ises
                         ? '4 fórmulas Board · Capítulo 6 de Bensky: 11'
                         : '4 Board formulas · Bensky Chapter 6: 11';
@@ -1782,18 +1792,30 @@ echo $OUTPUT->header();
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
-                $categorystatusformulas = $unifiedfamilystatusformulas[$category['key']] ?? $category['formulas'];
+                $categorystatusformulas = $istonifyindexcard
+                    ? $category['formulas']
+                    : ($unifiedfamilystatusformulas[$category['key']] ?? $category['formulas']);
                 $categoryboardstatus = $getboardstatus($categorystatusformulas, $ises);
                 ?>
-                <a class="formula-study-guide__category" href="<?php echo $categoryurl->out(false); ?>">
+                <a class="formula-study-guide__category<?php echo $istonifyindexcard ? ' formula-study-guide__category--board-priority' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>">
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($categoryname); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
                     <?php if ($iscombinedindexcard): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span><?php endif; ?>
                     <p><?php echo s($copy); ?></p>
+                    <?php if ($istonifyindexcard): ?>
+                        <span class="formula-study-guide__chapter-merge">
+                            <b><?php echo s($ises ? 'Capítulo 8 completo' : 'Complete Chapter 8'); ?></b>
+                            <span><?php echo s($ises
+                                ? '45 fórmulas principales · 9 coincidencias con el Board'
+                                : '45 principal formulas · 9 Board overlaps'); ?></span>
+                        </span>
+                    <?php endif; ?>
                     <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                     <small><?php echo s($iscombinedindexcard
-                        ? ($ises ? 'Abrir familia unificada →' : 'Open unified family →')
+                        ? ($istonifyindexcard
+                            ? ($ises ? 'Abrir familia unificada · Board primero →' : 'Open unified family · Board first →')
+                            : ($ises ? 'Abrir familia unificada →' : 'Open unified family →'))
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
             <?php endforeach; ?>
