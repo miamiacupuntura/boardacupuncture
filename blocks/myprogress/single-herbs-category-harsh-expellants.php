@@ -10,7 +10,7 @@ $harshtext = static function(string $english, string $spanish) use ($ises): stri
 $harshherbs = [
     [
         'name' => 'Gan Sui', 'latin' => 'Kansui Radix', 'official' => true,
-        'properties' => $harshtext('Bitter, sweet; cold; toxic', 'Amarga, dulce; fría; tóxica'),
+        'properties' => $harshtext('Bitter; cold; toxic', 'Amarga; fría; tóxica'),
         'channels' => $harshtext('Kidney, Large Intestine, Lung', 'Riñón, Intestino Grueso, Pulmón'), 'dose' => '0.5–1.5 g',
         'identity' => $harshtext('The strongest cathartic of the classic trio; drives retained fluid from channels and collaterals.', 'El catártico más fuerte del trío clásico; expulsa líquido retenido de canales y colaterales.'),
         'clue' => $harshtext('Severe generalized edema, ascites or chest fluid with a channel-distribution clue.', 'Edema generalizado severo, ascitis o líquido torácico con una pista de distribución en canales.'),
@@ -19,8 +19,8 @@ $harshherbs = [
         'caution' => $harshtext('Toxic and specialist-only. Traditionally incompatible with Gan Cao; avoid in pregnancy and weakness. Study range only.', 'Tóxica y solo para especialistas. Tradicionalmente incompatible con Gan Cao; evitar en embarazo y debilidad. Rango solo para estudio.'),
     ],
     [
-        'name' => 'Hong Da Ji', 'latin' => 'Knoxiae Radix / Euphorbiae pekinensis Radix', 'official' => false,
-        'properties' => $harshtext('Bitter; cold; toxic', 'Amarga; fría; tóxica'),
+        'name' => 'Hong Da Ji', 'latin' => 'Knoxiae Radix', 'official' => false,
+        'properties' => $harshtext('Bitter, acrid; cold; slightly toxic', 'Amarga, acre; fría; ligeramente tóxica'),
         'channels' => $harshtext('Lung, Kidney, Large Intestine', 'Pulmón, Riñón, Intestino Grueso'), 'dose' => '1.5–3 g',
         'identity' => $harshtext('Harshly drives water from the internal organs and reduces firm nodules and swelling.', 'Expulsa drásticamente agua de los órganos internos y reduce nódulos firmes e hinchazón.'),
         'clue' => $harshtext('Severe retained fluid centered in the internal organs, sometimes with nodules.', 'Retención severa de líquido centrada en órganos internos, a veces con nódulos.'),
@@ -41,22 +41,22 @@ $harshherbs = [
     [
         'name' => 'Qian Niu Zi', 'latin' => 'Pharbitidis Semen', 'official' => false,
         'properties' => $harshtext('Bitter; cold; toxic', 'Amarga; fría; tóxica'),
-        'channels' => $harshtext('Lung, Kidney, Large Intestine', 'Pulmón, Riñón, Intestino Grueso'), 'dose' => '3–6 g',
+        'channels' => $harshtext('Lung, Kidney, Large Intestine', 'Pulmón, Riñón, Intestino Grueso'), 'dose' => $harshtext('3–6 g decoction; ≤3 g powder', '3–6 g en decocción; ≤3 g en polvo'),
         'identity' => $harshtext('Purges water and stool downward, reduces edema and expels intestinal parasites.', 'Purga agua y heces hacia abajo, reduce edema y expulsa parásitos intestinales.'),
         'clue' => $harshtext('Edema or ascites with constipation and a parasite clue.', 'Edema o ascitis con estreñimiento y una pista de parásitos.'),
         'memory' => $harshtext('Qian Niu Zi turns the water wheel: one chute empties fluid and another empties the bowel.', 'Qian Niu Zi gira la rueda de agua: un canal vacía líquido y otro vacía el intestino.'),
         'unique' => $harshtext('Yang: downward strength 80 and toxicity 70. Its parasite action separates it from the classic trio.', 'Yang: fuerza descendente 80 y toxicidad 70. Su acción antiparasitaria la separa del trío clásico.'),
-        'caution' => $harshtext('Module recognition: outside current Appendix A. Toxic and specialist-only; avoid in pregnancy and weakness.', 'Reconocimiento del módulo: fuera del Appendix A vigente. Tóxica y solo para especialistas; evitar en embarazo y debilidad.'),
+        'caution' => $harshtext('Module recognition: outside current Appendix A. Toxic and specialist-only; avoid in pregnancy and weakness, and do not combine with Ba Dou.', 'Reconocimiento del módulo: fuera del Appendix A vigente. Tóxica y solo para especialistas; evitar en embarazo y debilidad, y no combinar con Ba Dou.'),
     ],
     [
         'name' => 'Ba Dou', 'latin' => 'Crotonis Fructus', 'official' => true,
         'properties' => $harshtext('Acrid; hot; very toxic', 'Acre; caliente; muy tóxica'),
-        'channels' => $harshtext('Stomach, Large Intestine, Lung', 'Estómago, Intestino Grueso, Pulmón'), 'dose' => '0.1–0.3 g',
+        'channels' => $harshtext('Stomach, Large Intestine, Lung', 'Estómago, Intestino Grueso, Pulmón'), 'dose' => $harshtext('0.1–0.3 g/day; correctly defatted preparation only', '0.1–0.3 g/día; solo preparación correctamente desgrasada'),
         'identity' => $harshtext('A violent hot cathartic for severe Cold accumulation; also drives out water and congested phlegm.', 'Un catártico caliente y violento para acumulación severa de Frío; también expulsa agua y flema congestionada.'),
         'clue' => $harshtext('Severe internal Cold obstruction: hot-for-Cold, the thermal opposite of Da Huang.', 'Obstrucción interna severa por Frío: caliente para Frío, el opuesto térmico de Da Huang.'),
         'memory' => $harshtext('Ba Dou is the red-hot emergency charge: it breaks Cold blockage but carries the largest danger sign.', 'Ba Dou es la carga de emergencia al rojo vivo: rompe el bloqueo por Frío, pero lleva la señal de mayor peligro.'),
         'unique' => $harshtext('The thermal exception in this mostly cold group and the highest toxicity index, 100, in Yang figure 4.3.', 'La excepción térmica del grupo mayormente frío y el índice máximo de toxicidad, 100, en la figura 4.3 de Yang.'),
-        'caution' => $harshtext('Very toxic, specialist-only and never for self-treatment. Contraindicated in pregnancy and weakness. Study range only.', 'Muy tóxica, solo para especialistas y nunca para automedicación. Contraindicada en embarazo y debilidad. Rango solo para estudio.'),
+        'caution' => $harshtext('Very toxic, specialist-only and never for self-treatment. Contraindicated in pregnancy and weakness; do not combine with Qian Niu Zi. Raw seeds, oil and vapors are hazardous.', 'Muy tóxica, solo para especialistas y nunca para automedicación. Contraindicada en embarazo y debilidad; no combinar con Qian Niu Zi. Las semillas crudas, el aceite y los vapores son peligrosos.'),
     ],
 ];
 
@@ -100,7 +100,8 @@ $harshquestions = [
     </div>
     <p class="single-herbs-guide__scope-note"><strong><?php echo s($harshtext('Critical safety:', 'Seguridad crítica:')); ?></strong> <?php echo s($harshtext('Severe abdominal pain, persistent vomiting, inability to pass gas, marked edema or breathing difficulty requires urgent assessment. Gan Sui, Hong Da Ji and Yuan Hua are traditionally incompatible with Gan Cao.', 'Dolor abdominal severo, vómitos persistentes, incapacidad para expulsar gases, edema marcado o dificultad respiratoria requiere evaluación urgente. Gan Sui, Hong Da Ji y Yuan Hua son tradicionalmente incompatibles con Gan Cao.')); ?></p>
     <aside class="single-herbs-guide__memory-path"><p class="single-herbs-guide__memory-line"><?php echo s($harshtext('Enter the flooded basement of the study house.', 'Entra al sótano inundado de la casa de estudio.')); ?></p><p><?php echo s($harshtext('Gan Sui opens the main pipes; Hong Da Ji pumps the organ rooms; Yuan Hua empties side cavities; Qian Niu Zi turns the water-and-bowel wheel; Ba Dou is the red-hot charge for Cold blockage.', 'Gan Sui abre las tuberías principales; Hong Da Ji bombea las habitaciones-órganos; Yuan Hua vacía cavidades laterales; Qian Niu Zi gira la rueda de agua e intestino; Ba Dou es la carga al rojo vivo para bloqueo por Frío.')); ?></p><p><strong><?php echo s($harshtext('Location → temperature → toxicity.', 'Localización → temperatura → toxicidad.')); ?></strong></p></aside>
-    <h5 class="single-herbs-guide__catalog-heading"><?php echo s($harshtext('Current module herbs', 'Hierbas del módulo vigente')); ?></h5>
+    <h5 class="single-herbs-guide__catalog-heading"><?php echo s($harshtext('Module roster · current guideline status', 'Listado del módulo · estado en el guideline vigente')); ?></h5>
+    <p class="single-herbs-guide__section-lead"><?php echo s($harshtext('Only Gan Sui and Ba Dou are in the current Board guideline and therefore carry an asterisk. Hong Da Ji, Yuan Hua and Qian Niu Zi remain here for source-chapter comparison without an asterisk.', 'Solo Gan Sui y Ba Dou están en el guideline Board vigente y por eso llevan asterisco. Hong Da Ji, Yuan Hua y Qian Niu Zi permanecen aquí para la comparación del capítulo fuente, sin asterisco.')); ?></p>
     <ol class="single-herbs-guide__category-herbs"><?php foreach ($harshherbs as $categoryherb): ?><li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge<?php echo $categoryherb['official'] ? '' : ' single-herbs-guide__category-herb-badge--outside'; ?>"><?php echo s($categoryherb['official'] ? $harshtext('Module + current Appendix A', 'Módulo + Appendix A vigente') : $harshtext('Module only · outside current Appendix A', 'Solo módulo · fuera del Appendix A vigente')); ?></span></div><p><?php echo s($categoryherb['identity']); ?></p></li><?php endforeach; ?></ol>
     <div class="single-herbs-guide__annex"><h5 class="single-herbs-guide__catalog-heading"><?php echo s($harshtext('Annex · Related official recognition', 'Anexo · Reconocimiento oficial relacionado')); ?></h5><ol class="single-herbs-guide__category-herbs"><li class="single-herbs-guide__category-herb"><div class="single-herbs-guide__category-herb-head"><strong>Ting Li Zi</strong><em>Lepidii/Descurainiae Semen</em><span class="single-herbs-guide__category-herb-badge"><?php echo s($harshtext('Current Appendix A · outside this module', 'Appendix A vigente · fuera de este módulo')); ?></span></div><p><?php echo s($harshtext('Drains Lung water and descends Lung Qi but belongs to another study category; it is not added to this cathartic core.', 'Drena agua de Pulmón y desciende Qi de Pulmón, pero pertenece a otra categoría; no se añade al núcleo catártico.')); ?></p></li></ol></div>
 </section>

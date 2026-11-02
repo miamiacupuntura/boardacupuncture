@@ -1048,6 +1048,11 @@ ob_start();
             : ($selectedguidenumber !== null
                 ? $stripstudyguidenumber((string) $selected['name'])
                 : $selected['name'])));
+        if ($istopiceleven) {
+            $focustitle = $ises
+                ? 'Expulsores drásticos descendentes (Catárticos) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
+                : 'Downward Draining Harsh Expellants (Cathartics) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)';
+        }
         ?>
         <section class="single-herbs-guide__workspace" aria-labelledby="single-herbs-focus-title">
             <div class="single-herbs-guide__workspace-header">
@@ -1441,6 +1446,11 @@ ob_start();
                     <?php
                     $categoryguidenumber = (int) $category['guide_number'];
                     $categorydisplayname = $stripstudyguidenumber((string) $category['name']);
+                    if ($categoryguidenumber === 11) {
+                        $categorydisplayname = $ises
+                            ? 'Expulsores drásticos descendentes (Catárticos) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
+                            : 'Downward Draining Harsh Expellants (Cathartics) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)';
+                    }
                     $categoryparams = ['focus' => (string) $category['number']];
                     if ($ises) {
                         $categoryparams['lang'] = 'es';

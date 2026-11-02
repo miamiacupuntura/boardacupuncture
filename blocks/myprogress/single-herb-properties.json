@@ -53,7 +53,7 @@
                 "en": "Stomach, Large Intestine, Lung",
                 "es": "Estómago, Intestino Grueso, Pulmón"
             },
-            "dose": "0.1–0.3 g",
+            "dose": "0.1–0.3 g/day; defatted only",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2204,8 +2204,8 @@
             "status": "verified",
             "propertySource": "detailed-profile",
             "flavor": {
-                "en": "Bitter, sweet",
-                "es": "Amarga, dulce"
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
                 "en": "cold; toxic",
