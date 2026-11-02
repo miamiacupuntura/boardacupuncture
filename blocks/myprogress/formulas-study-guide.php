@@ -18,6 +18,22 @@ $chapterfocusaliases = [
     'digestive' => 'digestive-chapter-18',
 ];
 $focus = $chapterfocusaliases[$focus] ?? $focus;
+$boardcategorybenskychapters = [
+    'release-exterior' => 1,
+    'clear-heat' => 2,
+    'purge' => 3,
+    'harmonize' => 4,
+    'expel-damp' => 16,
+    'warm-interior' => 6,
+    'tonify' => 8,
+    'regulate-qi' => 12,
+    'invigorate-blood' => 13,
+    'stabilize-bind' => 9,
+    'calm-shen' => 10,
+    'expel-wind' => 14,
+    'transform-phlegm' => 17,
+    'digestive' => 18,
+];
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
 $data = is_readable($datafile) ? json_decode((string) file_get_contents($datafile), true) : null;
 if (!is_array($data)
@@ -1711,17 +1727,17 @@ echo $OUTPUT->header();
     <?php if ($selected === null): ?>
         <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title">
             <div>
-                <h3 id="formula-categories-title"><?php echo s($ises ? 'Índice de categorías de fórmulas' : 'Formula category index'); ?></h3>
+                <h3 id="formula-categories-title"><?php echo s($ises ? 'Categorías del Board y capítulos de Bensky' : 'Board categories and Bensky chapters'); ?></h3>
                 <p><?php echo s($ises
-                    ? 'El orden y la numeración coinciden con la biblioteca actual de Herbs Practice Exams. Abre una categoría para estudiar sus fórmulas en secuencia.'
-                    : 'The order and numbering match the current Herbs Practice Exams library. Open a category to study its formulas in sequence.'); ?></p>
+                    ? 'Las 14 categorías oficiales del Board aparecen primero; los capítulos suplementarios de Bensky continúan en el mismo catálogo.'
+                    : 'The 14 official Board categories appear first; supplemental Bensky chapters continue in the same catalog.'); ?></p>
             </div>
             <div class="formula-study-guide__stats" aria-label="<?php echo s($ises ? 'Totales de la guía' : 'Guide totals'); ?>">
                 <div class="formula-study-guide__stat"><strong>14</strong><span><?php echo $ises ? 'categorías' : 'categories'; ?></span></div>
                 <div class="formula-study-guide__stat"><strong>63</strong><span><?php echo $ises ? 'fórmulas' : 'formulas'; ?></span></div>
             </div>
         </section>
-        <section class="formula-study-guide__grid" aria-label="<?php echo s($ises ? 'Categorías de fórmulas' : 'Formula categories'); ?>">
+        <section class="formula-study-guide__grid" aria-label="<?php echo s($ises ? 'Categorías del Board y capítulos de Bensky' : 'Board categories and Bensky chapters'); ?>">
             <?php foreach ($categories as $category): ?>
                 <?php
                 $categoryparams = ['focus' => $category['key']];
@@ -1742,13 +1758,14 @@ echo $OUTPUT->header();
                 $istransformphlegmindexcard = $category['key'] === 'transform-phlegm';
                 $isdigestiveindexcard = $category['key'] === 'digestive';
                 $iscombinedindexcard = $istonifyindexcard || $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard || $isdigestiveindexcard;
+                $benskychapternumber = $boardcategorybenskychapters[$category['key']];
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
                 if ($istonifyindexcard) {
                     $categorymeta = $ises
-                        ? 'Prioridad Board · 8 fórmulas oficiales'
-                        : 'Board priority · 8 official formulas';
+                        ? 'Prioridad Board · 8 fórmulas oficiales · Capítulo Bensky 8'
+                        : 'Board priority · 8 official formulas · Bensky Chapter 8';
                     $copy = $ises
                         ? 'Empieza con las 8 fórmulas oficiales de Tonify; después amplía el estudio a las 45 fórmulas principales del capítulo 8.'
                         : 'Start with the 8 official Tonify formulas; then expand to all 45 principal formulas in Chapter 8.';
@@ -1790,7 +1807,9 @@ echo $OUTPUT->header();
                         ? '1 fórmula Board · Capítulo 18 de Bensky: 8'
                         : '1 Board formula · Bensky Chapter 18: 8';
                 } else {
-                    $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
+                    $categorymeta = count($category['formulas'])
+                        . ($ises ? ' fórmulas Board · Capítulo Bensky ' : ' Board formulas · Bensky Chapter ')
+                        . $benskychapternumber;
                 }
                 $categorystatusformulas = $istonifyindexcard
                     ? $category['formulas']
@@ -1819,50 +1838,36 @@ echo $OUTPUT->header();
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
             <?php endforeach; ?>
-        </section>
-        <section class="formula-study-guide__supplement" aria-labelledby="supplemental-formula-title">
-            <div class="formula-study-guide__supplement-heading">
-                <div>
-                    <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Capítulos suplementarios' : 'Supplementary chapters'); ?></p>
-                    <h3 id="supplemental-formula-title"><?php echo s($ises ? 'Fórmulas adicionales de la fuente' : 'Additional source formulas'); ?></h3>
-                    <p><?php echo s($ises
-                        ? 'Amplían el estudio del libro sin cambiar las 63 fórmulas ni los totales del banco oficial de práctica.'
-                        : 'These extend study from the source text without changing the 63 formulas or official practice-bank totals.'); ?></p>
-                </div>
-                <span class="formula-study-guide__supplement-badge"><?php echo s($ises ? 'Separadas del listado Board' : 'Separate from Board roster'); ?></span>
-            </div>
-            <div class="formula-study-guide__grid">
-                <?php foreach ($supplementalindexcategories as $category): ?>
-                    <?php
-                    $categoryparams = ['focus' => $category['key']];
-                    if ($ises) {
-                        $categoryparams['lang'] = 'es';
-                    }
-                    $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
-                    $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
-                    $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
-                    $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
-                    $ishistoricalcategory = ($category['sourceType'] ?? '') === 'historical-roster';
-                    ?>
-                    <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
-                        <span class="formula-study-guide__category-number"><?php echo s($ishistoricalcategory
-                            ? ($ises ? 'Listado histórico' : 'Historical roster')
-                            : (($ises ? 'Capítulo Bensky ' : 'Bensky Chapter ') . (int) $category['sourceChapter'])); ?></span>
-                        <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
-                        <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ishistoricalcategory
-                            ? ($ises ? 'ficha histórica' : 'historical profile')
-                            : ($ises ? 'fórmulas principales' : 'principal formulas')); ?> · <?php echo s($ishistoricalcategory
-                            ? $category['sourcePages']
-                            : (($ises ? 'págs. ' : 'pp. ') . $category['sourcePages'])); ?></span>
-                        <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
-                        <p><?php echo s($copy); ?></p>
-                        <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
-                        <small><?php echo s($ishistoricalcategory
-                            ? ($ises ? 'Abrir ficha histórica →' : 'Open historical profile →')
-                            : ($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →')); ?></small>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <?php foreach ($supplementalindexcategories as $category): ?>
+                <?php
+                $categoryparams = ['focus' => $category['key']];
+                if ($ises) {
+                    $categoryparams['lang'] = 'es';
+                }
+                $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
+                $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
+                $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
+                $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
+                $ishistoricalcategory = ($category['sourceType'] ?? '') === 'historical-roster';
+                ?>
+                <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
+                    <span class="formula-study-guide__category-number"><?php echo s($ishistoricalcategory
+                        ? ($ises ? 'Listado histórico' : 'Historical roster')
+                        : (($ises ? 'Capítulo Bensky ' : 'Bensky Chapter ') . (int) $category['sourceChapter'])); ?></span>
+                    <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
+                    <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ishistoricalcategory
+                        ? ($ises ? 'ficha histórica' : 'historical profile')
+                        : ($ises ? 'fórmulas principales' : 'principal formulas')); ?> · <?php echo s($ishistoricalcategory
+                        ? $category['sourcePages']
+                        : (($ises ? 'págs. ' : 'pp. ') . $category['sourcePages'])); ?></span>
+                    <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
+                    <p><?php echo s($copy); ?></p>
+                    <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
+                    <small><?php echo s($ishistoricalcategory
+                        ? ($ises ? 'Abrir ficha histórica →' : 'Open historical profile →')
+                        : ($ises ? 'Abrir capítulo suplementario →' : 'Open supplementary chapter →')); ?></small>
+                </a>
+            <?php endforeach; ?>
         </section>
     <?php else: ?>
         <?php $selectedcopy = $categorycopy[$selected['key']][$ises ? 1 : 0]; ?>
