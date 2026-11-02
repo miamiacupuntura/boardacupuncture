@@ -7,6 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 TARGET_DIR="${GUIDELINE_DIR:-}"
+DUI_YAO_DIR="${DUI_YAO_DIR:-}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 PHP_BIN="${PHP_BIN:-}"
 
@@ -31,6 +32,11 @@ fi
 
 if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     echo "ERROR: no se encontró Moodle en $MOODLE_ROOT"
+    exit 1
+fi
+
+if [[ ! -f "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide.php" ]]; then
+    echo "ERROR: no se encontró la guía de Fórmulas en $MOODLE_ROOT/blocks/myprogress"
     exit 1
 fi
 
@@ -61,7 +67,29 @@ if [[ -z "$TARGET_DIR" || ! -f "$TARGET_DIR/guideline-return.js" || ! -f "$TARGE
     exit 1
 fi
 
+if [[ -z "$DUI_YAO_DIR" ]]; then
+    DUI_YAO_CANDIDATES=(
+        "$(dirname "$TARGET_DIR")/comparisons"
+        "/var/www/acupuncturetests-study-guide/current/comparisons"
+        "$MOODLE_ROOT/study-guide/comparisons"
+        "$(dirname "$MOODLE_ROOT")/study-guide/comparisons"
+        "/var/www/html/study-guide/comparisons"
+    )
+    for candidate in "${DUI_YAO_CANDIDATES[@]}"; do
+        if [[ -f "$candidate/dui-yao.html" && -f "$candidate/dui-yao-es.html" ]]; then
+            DUI_YAO_DIR="$candidate"
+            break
+        fi
+    done
+fi
+
+if [[ -z "$DUI_YAO_DIR" || ! -f "$DUI_YAO_DIR/dui-yao.html" || ! -f "$DUI_YAO_DIR/dui-yao-es.html" ]]; then
+    echo "ERROR: no se encontró el módulo Duì Yào activo. Indica su ruta con DUI_YAO_DIR=/ruta/study-guide/comparisons"
+    exit 1
+fi
+
 echo "Guía detectada: $TARGET_DIR"
+echo "Módulo Duì Yào detectado: $DUI_YAO_DIR"
 echo "PHP CLI detectado: $PHP_BIN"
 
 TEMP_DIR="$(mktemp -d)"
@@ -77,6 +105,15 @@ done
 curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-study-guide.php" \
     -o "$TEMP_DIR/single-herbs-study-guide.php"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/formulas-study-guide.php" \
+    -o "$TEMP_DIR/formulas-study-guide.php"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/study-guide/comparisons/dui-yao.html" \
+    -o "$TEMP_DIR/dui-yao.html"
+curl -fsSL \
+    "$REPOSITORY/$REVISION/study-guide/comparisons/dui-yao-es.html" \
+    -o "$TEMP_DIR/dui-yao-es.html"
 curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herb-card-index.json" \
     -o "$TEMP_DIR/single-herb-card-index.json"
@@ -110,6 +147,7 @@ for page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
 done
 
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-study-guide.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/formulas-study-guide.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-properties-table.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-category-cool-acrid.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-introduction.php" >/dev/null
@@ -154,6 +192,10 @@ grep -q "Bensky · Summary of Comparative Functions" "$TEMP_DIR/single-herbs-stu
 grep -q "Bensky · Summary of Comparative Functions" "$TEMP_DIR/single-herbs-category-cool-acrid.php"
 grep -q "single-herbs-guide__yang-question-item" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "Abrir todas las respuestas" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "single-herbs-guide__module-switcher" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "formula-study-guide__module-switcher" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "data-herbology-module-switcher" "$TEMP_DIR/dui-yao.html"
+grep -q "data-herbology-module-switcher" "$TEMP_DIR/dui-yao-es.html"
 grep -q '"benskyChapterOneSource"' "$TEMP_DIR/single-herb-properties.json"
 grep -q '"benskyMergeRule"' "$TEMP_DIR/single-herb-properties.json"
 grep -q "single-herbs-introduction.php" "$TEMP_DIR/single-herbs-study-guide.php"
@@ -212,6 +254,9 @@ fi
 cp -a "$TARGET_DIR/chinese-herbal-medicine.html" "$BACKUP_DIR/"
 cp -a "$TARGET_DIR/chinese-herbal-medicine-es.html" "$BACKUP_DIR/"
 cp -a "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php" "$BACKUP_DIR/"
+cp -a "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide.php" "$BACKUP_DIR/"
+cp -a "$DUI_YAO_DIR/dui-yao.html" "$BACKUP_DIR/"
+cp -a "$DUI_YAO_DIR/dui-yao-es.html" "$BACKUP_DIR/"
 if [[ -f "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" ]]; then
     cp -a "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" "$BACKUP_DIR/"
 fi
@@ -236,6 +281,8 @@ MOODLE_GROUP="$(stat -c '%G' "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-study-guide.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
+    "$TEMP_DIR/formulas-study-guide.php" "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide.php"
+install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
@@ -249,6 +296,11 @@ install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-study-guide-es.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide-es.php"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herb-properties.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
+
+DUI_OWNER="$(stat -c '%U' "$DUI_YAO_DIR/dui-yao.html")"
+DUI_GROUP="$(stat -c '%G' "$DUI_YAO_DIR/dui-yao.html")"
+install -m 0644 -o "$DUI_OWNER" -g "$DUI_GROUP" "$TEMP_DIR/dui-yao.html" "$DUI_YAO_DIR/dui-yao.html"
+install -m 0644 -o "$DUI_OWNER" -g "$DUI_GROUP" "$TEMP_DIR/dui-yao-es.html" "$DUI_YAO_DIR/dui-yao-es.html"
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
@@ -310,6 +362,10 @@ grep -q "Bensky · Summary of Comparative Functions" "$MOODLE_ROOT/blocks/myprog
 grep -q "Bensky · Summary of Comparative Functions" "$MOODLE_ROOT/blocks/myprogress/single-herbs-category-cool-acrid.php"
 grep -q "single-herbs-guide__yang-question-item" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "Abrir todas las respuestas" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "single-herbs-guide__module-switcher" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "formula-study-guide__module-switcher" "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide.php"
+grep -q "data-herbology-module-switcher" "$DUI_YAO_DIR/dui-yao.html"
+grep -q "data-herbology-module-switcher" "$DUI_YAO_DIR/dui-yao-es.html"
 grep -q "single-herbs-introduction.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "From materia medica to a Board decision" "$MOODLE_ROOT/blocks/myprogress/single-herbs-introduction.php"
 grep -q "Final Review · .* consecutive questions" "$MOODLE_ROOT/blocks/myprogress/single-herbs-mixed-review.php"
@@ -330,6 +386,7 @@ echo "304 HIERBAS ENLAZADAS CON SUS TARJETAS DE SINGLE HERBS"
 echo "TABLA DE PROPIEDADES INSTALADA: SABOR, TEMPERATURA, MERIDIANOS Y DOSIS"
 echo "SUMMARY OF COMPARATIVE FUNCTIONS INSTALADO EN TOPICS 1 Y 2 SIN REEMPLAZAR A YANG"
 echo "PREGUNTAS DE YANG CONSECUTIVAS: RESPUESTAS INDIVIDUALES, ABRIR TODAS Y CERRAR TODAS"
+echo "NAVEGACIÓN DIRECTA INSTALADA: SINGLE HERBS ↔ DUÌ YÀO ↔ FÓRMULAS"
 echo "INTRODUCTION TO SINGLE HERBS INSTALADA: HISTORIA, PROPIEDADES, DOSIS, PROCESAMIENTO Y SEGURIDAD"
 echo "FINAL REVIEW INSTALADO: PREGUNTAS CONSECUTIVAS VISIBLES Y RESPUESTAS DESPLEGABLES"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DEL GUIDELINE"

@@ -895,6 +895,10 @@ $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
     'view' => 'library',
 ]);
+$formulasurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $ises ? ['lang' => 'es'] : []);
+$duiyaourl = new moodle_url($ises
+    ? '/study-guide/comparisons/dui-yao-es.html'
+    : '/study-guide/comparisons/dui-yao.html');
 $dashboardurl = new moodle_url('/my/');
 $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
@@ -920,9 +924,11 @@ ob_start();
 .single-herbs-guide h2{margin:0 0 9px;font-size:clamp(29px,4vw,42px);line-height:1.12}
 .single-herbs-guide__lead{max-width:760px;margin:0;color:#5b6b79;font-size:16px;line-height:1.6}
 .single-herbs-guide__marker-note{margin:7px 0 0;color:#075e54;font-size:13px;font-weight:800}
-.single-herbs-guide__actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.single-herbs-guide__actions{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .single-herbs-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
 .single-herbs-guide__back:hover{background:#f1f5f9;text-decoration:none}
+.single-herbs-guide__back--active{border-color:#0b817d;background:#0b817d;color:#fff}.single-herbs-guide__back--active:hover{background:#0b817d;color:#fff}
 .single-herbs-guide__overview{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin-bottom:24px;padding:23px 26px;border-left:5px solid #0b817d;border-radius:12px;background:#eef8f6;box-shadow:0 3px 12px rgba(15,23,42,.05)}
 .single-herbs-guide__overview h3{margin:0 0 7px;font-size:21px}.single-herbs-guide__overview p{margin:0;color:#52677a;line-height:1.55}
 .single-herbs-guide__count{display:flex;min-width:116px;flex-direction:column;align-items:center;padding:13px 18px;border-radius:10px;background:#fff;color:#0f5f58}
@@ -974,7 +980,7 @@ ob_start();
 .single-herbs-guide__final-controls{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 14px}.single-herbs-guide__final-controls button{min-height:40px;padding:8px 14px;border:1px solid #7c3aed;border-radius:8px;background:#fff;color:#6d28d9;font-weight:900;cursor:pointer}.single-herbs-guide__final-controls button:first-child{background:#7c3aed;color:#fff}.single-herbs-guide__final-controls button:hover{box-shadow:0 3px 10px rgba(109,40,217,.16)}
 .single-herbs-guide__bensky-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.single-herbs-guide__bensky-card{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #2563eb;border-radius:11px;background:#fff}.single-herbs-guide__bensky-card h5{margin:0;padding:15px 17px;background:#eff6ff;color:#174ea6}.single-herbs-guide__bensky-card table{width:100%;border-collapse:collapse;font-size:13px}.single-herbs-guide__bensky-card th,.single-herbs-guide__bensky-card td{padding:10px 12px;border-top:1px solid #e4eaee;text-align:left;vertical-align:top;line-height:1.45}.single-herbs-guide__bensky-card th{width:31%;color:#0d665e}.single-herbs-guide__bensky-source{margin-top:14px;padding:12px 15px;border-left:4px solid #2563eb;border-radius:7px;background:#eff6ff;color:#36536f;font-size:13px;line-height:1.5}
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-properties__controls{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
+@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{align-items:flex-start;margin-top:16px}.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{justify-content:flex-start}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-properties__controls{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
 @media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid,.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid,.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid,.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:1fr}.single-herbs-intro__nature-scale{grid-template-columns:1fr}.single-herbs-intro__nature-scale span{padding:9px}}
 </style>
@@ -990,11 +996,18 @@ ob_start();
             <p class="single-herbs-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente del Board' : '* Included in the current Board guideline'); ?></p>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
-            <a class="single-herbs-guide__back" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
-            <a class="single-herbs-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-            <a class="single-herbs-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Biblioteca' : '← Library'; ?></a>
-            <a class="single-herbs-guide__back" href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
-            <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
+            <div class="single-herbs-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
+                <span class="single-herbs-guide__back single-herbs-guide__back--active" aria-current="page">Single Herbs</span>
+                <a class="single-herbs-guide__back" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
+                <a class="single-herbs-guide__back" href="<?php echo $formulasurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
+            </div>
+            <div class="single-herbs-guide__utility-actions">
+                <a class="single-herbs-guide__back" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
+                <a class="single-herbs-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                <a class="single-herbs-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Biblioteca' : '← Library'; ?></a>
+                <a class="single-herbs-guide__back" href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
+                <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
+            </div>
         </nav>
     </header>
 

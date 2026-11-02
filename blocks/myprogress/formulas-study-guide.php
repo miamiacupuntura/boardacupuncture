@@ -1590,6 +1590,10 @@ $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
     'view' => 'library',
 ]);
+$singleherbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $ises ? ['lang' => 'es'] : []);
+$duiyaomoduleurl = new moodle_url($ises
+    ? '/study-guide/comparisons/dui-yao-es.html'
+    : '/study-guide/comparisons/dui-yao.html');
 $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
     : '/study-guide/guidelines/chinese-herbal-medicine.html';
@@ -1630,10 +1634,12 @@ echo $OUTPUT->header();
 .formula-study-guide h2{margin:0 0 9px;font-size:clamp(29px,4vw,42px);line-height:1.12}
 .formula-study-guide__lead{max-width:760px;margin:0;color:#5b6b79;font-size:16px;line-height:1.6}
 .formula-study-guide__marker-note{margin:7px 0 0;color:#075e54;font-size:13px;font-weight:800}
-.formula-study-guide__actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.formula-study-guide__actions{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .formula-study-guide__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
 .formula-study-guide__button:hover{background:#f1f5f9;color:#17232a;text-decoration:none}
 .formula-study-guide__button--primary{border-color:#2563eb;background:#2563eb;color:#fff}.formula-study-guide__button--primary:hover{background:#1d4ed8;color:#fff}
+.formula-study-guide__button--active{border-color:#0b817d;background:#0b817d;color:#fff}.formula-study-guide__button--active:hover{background:#0b817d;color:#fff}
 .formula-study-guide__overview{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin-bottom:24px;padding:23px 26px;border-left:5px solid #0b817d;border-radius:12px;background:#eef8f6;box-shadow:0 3px 12px rgba(15,23,42,.05)}
 .formula-study-guide__overview h3{margin:0 0 7px;font-size:22px}.formula-study-guide__overview p{margin:0;color:#52677a;line-height:1.55}
 .formula-study-guide__stats{display:flex;gap:10px}.formula-study-guide__stat{min-width:92px;padding:13px 15px;border-radius:10px;background:#fff;color:#0f5f58;text-align:center}.formula-study-guide__stat strong{display:block;font-size:28px;line-height:1}.formula-study-guide__stat span{display:block;margin-top:5px;font-size:11px;font-weight:800;text-transform:uppercase}
@@ -1685,7 +1691,7 @@ echo $OUTPUT->header();
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:1050px){.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{justify-content:flex-start;margin-top:15px}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
@@ -1700,10 +1706,17 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente del Board' : '* Included in the current Board guideline'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
-            <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
-            <a class="formula-study-guide__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-            <a class="formula-study-guide__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Biblioteca' : '← Library'); ?></a>
-            <a class="formula-study-guide__button" href="<?php echo $herbologyurl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
+            <div class="formula-study-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
+                <a class="formula-study-guide__button" href="<?php echo $singleherbsurl->out(false); ?>">Single Herbs</a>
+                <a class="formula-study-guide__button" href="<?php echo $duiyaomoduleurl->out(false); ?>">Duì Yào</a>
+                <span class="formula-study-guide__button formula-study-guide__button--active" aria-current="page"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></span>
+            </div>
+            <div class="formula-study-guide__utility-actions">
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
+                <a class="formula-study-guide__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                <a class="formula-study-guide__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Biblioteca' : '← Library'); ?></a>
+                <a class="formula-study-guide__button" href="<?php echo $herbologyurl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
+            </div>
         </nav>
     </header>
 
