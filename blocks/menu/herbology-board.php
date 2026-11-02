@@ -32,7 +32,7 @@ if ($sectionkey !== '') {
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $dashboardurl = new moodle_url('/my/');
-$singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs']);
+$singleherbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php');
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas']);
 
 $PAGE->set_url($pageurl);
