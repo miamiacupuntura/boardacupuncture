@@ -68,6 +68,8 @@ python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
 EXPECTED_TITLE='Downward Draining Harsh Expellants (Cathartics) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
 grep -Fq "$EXPECTED_TITLE" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Only Gan Sui and Ba Dou are in the current Board guideline" "$TEMP_DIR/$CATEGORY_PATH"
+grep -Fq "No match in the current 51-pair Duì Yào roster" "$TEMP_DIR/$CATEGORY_PATH"
+grep -Fq "Gan Sui–Gan Cao and Ba Dou–Qian Niu Zi are incompatibility or prohibited-combination relationships, not Duì Yào" "$TEMP_DIR/$CATEGORY_PATH"
 grep -Fq "'name' => 'Hong Da Ji', 'latin' => 'Knoxiae Radix', 'official' => false" "$TEMP_DIR/$CATEGORY_PATH"
 grep -Fq "3–6 g decoction; ≤3 g powder" "$TEMP_DIR/$CATEGORY_PATH"
 grep -Fq "0.1–0.3 g/day; correctly defatted preparation only" "$TEMP_DIR/$CATEGORY_PATH"
@@ -104,5 +106,6 @@ fi
 echo "CATEGORÍA 11 ACTUALIZADA CORRECTAMENTE"
 echo "Con asterisco: Gan Sui y Ba Dou"
 echo "Sin asterisco: Hong Da Ji, Yuan Hua y Qian Niu Zi"
+echo "Duì Yào: ninguna de estas cinco hierbas pertenece a las 51 parejas vigentes"
 echo "Propiedades, identidad botánica, dosis y advertencias auditadas"
 echo "Respaldo: $BACKUP_DIR"
