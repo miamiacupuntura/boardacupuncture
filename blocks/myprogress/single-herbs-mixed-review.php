@@ -6,6 +6,33 @@ $mixedtext = static function(string $english, string $spanish) use ($ises): stri
     return $ises ? $spanish : $english;
 };
 
+$mixedguidelineherbnames = [];
+foreach (($cardindex['herbs'] ?? []) as $guidelineherb) {
+    $guidelineherbname = trim((string)($guidelineherb['name'] ?? ''));
+    if ($guidelineherbname !== '') {
+        $mixedguidelineherbnames[$guidelineherbname] = true;
+    }
+}
+$mixedguidelineherbnames = array_keys($mixedguidelineherbnames);
+usort($mixedguidelineherbnames, static function(string $left, string $right): int {
+    return strlen($right) <=> strlen($left);
+});
+$mixedherbpattern = $mixedguidelineherbnames
+    ? '/(?<![\p{L}\p{N}])(' . implode('|', array_map('preg_quote', $mixedguidelineherbnames)) . ')(?![\p{L}\p{N}]|\*)/iu'
+    : null;
+$mixedmarkguidelineherbs = static function(string $text) use ($mixedherbpattern): string {
+    if ($mixedherbpattern === null) {
+        return $text;
+    }
+    return (string)preg_replace_callback(
+        $mixedherbpattern,
+        static function(array $matches): string {
+            return $matches[1] . '*';
+        },
+        $text
+    );
+};
+
 $mixedcards = [
     [
         'category' => $mixedtext('Category 1 · Release Wind-Cold', 'Categoría 1 · Liberar Viento-Frío'),
@@ -183,11 +210,11 @@ $mixedcards = [
             <details class="single-herbs-guide__final-question">
                 <summary>
                     <span class="single-herbs-guide__final-number"><?php echo s($mixedtext('Question', 'Pregunta')); ?> <?php echo $index + 1; ?></span>
-                    <span><?php echo s($card['question']); ?></span>
+                    <span><?php echo s($mixedmarkguidelineherbs($card['question'])); ?></span>
                 </summary>
                 <div class="single-herbs-guide__final-answer">
                     <strong><?php echo s($card['category']); ?></strong>
-                    <p><?php echo s($card['answer']); ?></p>
+                    <p><?php echo s($mixedmarkguidelineherbs($card['answer'])); ?></p>
                 </div>
             </details>
         <?php endforeach; ?>
