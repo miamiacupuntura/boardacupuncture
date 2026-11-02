@@ -33,8 +33,8 @@ $propertylang = $ises ? 'es' : 'en';
         <div class="single-herbs-properties__source-note">
             <strong><?php echo s($ises ? 'Cómo leer la dosis:' : 'How to read dosage:'); ?></strong>
             <?php echo s($ises
-                ? '“Dosis de estudio” procede de la ficha detallada. “Appendix 1” es el límite diario excepcional del texto suministrado. Las tablas Chart 6 y Actions and Indications completan propiedades, pero no aportan dosis para todas sus hierbas.'
-                : '“Study dose” comes from the detailed profile. “Appendix 1” is the exceptional daily limit in the supplied text. The Chart 6 and Actions and Indications tables complete properties but do not provide dosage for every herb.'); ?>
+                ? '“Dosis de estudio” procede de la ficha detallada. “Appendix 1” es el límite diario excepcional del texto suministrado. Las tablas Chart 6 y Actions and Indications completan propiedades. Bensky completa únicamente campos vacíos; nunca reemplaza valores existentes de Yang.'
+                : '“Study dose” comes from the detailed profile. “Appendix 1” is the exceptional daily limit in the supplied text. Chart 6 and Actions and Indications complete properties. Bensky fills empty fields only and never replaces an existing Yang value.'); ?>
         </div>
 
         <div class="single-herbs-properties__controls">
@@ -73,6 +73,9 @@ $propertylang = $ises ? 'es' : 'en';
                     $temperature = $propertyrow['temperature'][$propertylang] ?? null;
                     $channels = $propertyrow['channels'][$propertylang] ?? null;
                     $dose = $propertyrow['dose'] ?? null;
+                    $propertysource = $propertyrow['propertySource'] ?? null;
+                    $dosesource = $propertyrow['doseSource'] ?? null;
+                    $benskyreference = $propertyrow['benskyReference'] ?? null;
                     $appendixdose = $propertyrow['appendixDose'] ?? null;
                     $searchtext = implode(' ', array_filter([
                         $propertyrow['name'], $propertyrow['latin'], $flavor, $temperature, $channels, $dose, $appendixdose,
@@ -80,7 +83,9 @@ $propertylang = $ises ? 'es' : 'en';
                     $statuslabel = $status === 'verified'
                         ? ($ises ? 'Verificada' : 'Verified')
                         : ($status === 'properties-only'
-                            ? ($ises ? 'Propiedades de tabla' : 'Table properties')
+                            ? ($propertysource === 'bensky-chapter-1'
+                                ? ($ises ? 'Suplemento Bensky' : 'Bensky supplement')
+                                : ($ises ? 'Propiedades de tabla' : 'Table properties'))
                             : ($status === 'dose-only'
                             ? ($ises ? 'Solo dosis' : 'Dose only')
                             : ($ises ? 'Pendiente' : 'Pending')));
@@ -92,10 +97,11 @@ $propertylang = $ises ? 'es' : 'en';
                         <td><?php echo $channels ? s($channels) : '<span aria-label="Pending">—</span>'; ?></td>
                         <td>
                             <?php if ($dose): ?><span><?php echo s($dose); ?></span><?php endif; ?>
+                            <?php if ($dose && $dosesource === 'bensky-chapter-1'): ?><small><?php echo s('Bensky · ' . ($ises ? 'capítulo 1' : 'Chapter 1') . ($benskyreference ? ' · ' . $benskyreference : '')); ?></small><?php endif; ?>
                             <?php if ($appendixdose): ?><small><?php echo s('Appendix 1 · ' . ($ises ? str_replace(['Less than', 'Up to', '(source lists both)'], ['Menos de', 'Hasta', '(la fuente muestra ambos)'], $appendixdose) : $appendixdose)); ?></small><?php endif; ?>
                             <?php if (!$dose && !$appendixdose): ?><span aria-label="Pending">—</span><?php endif; ?>
                         </td>
-                        <td><span class="single-herbs-properties__status single-herbs-properties__status--<?php echo s($status); ?>"><?php echo s($statuslabel); ?></span></td>
+                        <td><span class="single-herbs-properties__status single-herbs-properties__status--<?php echo s($status); ?>"><?php echo s($statuslabel); ?></span><?php if ($propertysource === 'bensky-chapter-1' && $benskyreference): ?><small><?php echo s('Bensky · ' . ($ises ? 'capítulo 1' : 'Chapter 1') . ' · ' . $benskyreference); ?></small><?php endif; ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

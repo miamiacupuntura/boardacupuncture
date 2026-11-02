@@ -84,6 +84,9 @@ curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-properties-table.php" \
     -o "$TEMP_DIR/single-herbs-properties-table.php"
 curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-category-cool-acrid.php" \
+    -o "$TEMP_DIR/single-herbs-category-cool-acrid.php"
+curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-introduction.php" \
     -o "$TEMP_DIR/single-herbs-introduction.php"
 curl -fsSL \
@@ -108,6 +111,7 @@ done
 
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-study-guide.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-properties-table.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/single-herbs-category-cool-acrid.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-introduction.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-mixed-review.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-study-guide-es.php" >/dev/null
@@ -145,6 +149,11 @@ grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "focus' => 'properties" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "single-herbs-properties-table.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "Master herb properties table" "$TEMP_DIR/single-herbs-properties-table.php"
+grep -q "Bensky supplement" "$TEMP_DIR/single-herbs-properties-table.php"
+grep -q "Bensky · Summary of Comparative Functions" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "Bensky · Summary of Comparative Functions" "$TEMP_DIR/single-herbs-category-cool-acrid.php"
+grep -q '"benskyChapterOneSource"' "$TEMP_DIR/single-herb-properties.json"
+grep -q '"benskyMergeRule"' "$TEMP_DIR/single-herb-properties.json"
 grep -q "single-herbs-introduction.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "From materia medica to a Board decision" "$TEMP_DIR/single-herbs-introduction.php"
 grep -q "Five safety pillars" "$TEMP_DIR/single-herbs-introduction.php"
@@ -204,7 +213,7 @@ cp -a "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php" "$BACKUP_DIR
 if [[ -f "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" ]]; then
     cp -a "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" "$BACKUP_DIR/"
 fi
-for properties_file in single-herbs-properties-table.php single-herbs-introduction.php single-herbs-mixed-review.php single-herbs-study-guide-es.php single-herb-properties.json; do
+for properties_file in single-herbs-properties-table.php single-herbs-category-cool-acrid.php single-herbs-introduction.php single-herbs-mixed-review.php single-herbs-study-guide-es.php single-herb-properties.json; do
     if [[ -f "$MOODLE_ROOT/blocks/myprogress/$properties_file" ]]; then
         cp -a "$MOODLE_ROOT/blocks/myprogress/$properties_file" "$BACKUP_DIR/"
     fi
@@ -228,6 +237,8 @@ install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
+    "$TEMP_DIR/single-herbs-category-cool-acrid.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-category-cool-acrid.php"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-introduction.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-introduction.php"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
@@ -292,6 +303,9 @@ grep -q "guidelineHerbs" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guid
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 grep -q "single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "Master herb properties table" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+grep -q "Bensky supplement" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+grep -q "Bensky · Summary of Comparative Functions" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "Bensky · Summary of Comparative Functions" "$MOODLE_ROOT/blocks/myprogress/single-herbs-category-cool-acrid.php"
 grep -q "single-herbs-introduction.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "From materia medica to a Board decision" "$MOODLE_ROOT/blocks/myprogress/single-herbs-introduction.php"
 grep -q "Final Review · .* consecutive questions" "$MOODLE_ROOT/blocks/myprogress/single-herbs-mixed-review.php"
@@ -303,11 +317,14 @@ grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.js
 grep -q '"doseAppendixSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"propertyChartSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"actionsTableSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
+grep -q '"benskyChapterOneSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
+grep -q '"benskyMergeRule"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 
 echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
 echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
 echo "304 HIERBAS ENLAZADAS CON SUS TARJETAS DE SINGLE HERBS"
 echo "TABLA DE PROPIEDADES INSTALADA: SABOR, TEMPERATURA, MERIDIANOS Y DOSIS"
+echo "SUMMARY OF COMPARATIVE FUNCTIONS INSTALADO EN TOPICS 1 Y 2 SIN REEMPLAZAR A YANG"
 echo "INTRODUCTION TO SINGLE HERBS INSTALADA: HISTORIA, PROPIEDADES, DOSIS, PROCESAMIENTO Y SEGURIDAD"
 echo "FINAL REVIEW INSTALADO: PREGUNTAS CONSECUTIVAS VISIBLES Y RESPUESTAS DESPLEGABLES"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DEL GUIDELINE"

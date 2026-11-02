@@ -165,6 +165,61 @@ foreach ($actionsProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $chan
     }
 }
 
+// User-provided Bensky Chapter 1 excerpts are used only to complete fields that
+// are still empty. They never replace a detailed Yang-based profile or any
+// existing property value. Page references follow the printed chapter pages.
+$benskyChapterOneSource = 'Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1 (user-provided excerpts)';
+$benskyChapterOneProfiles = [
+    ['Cong Bai', 'Allii fistulosi Bulbus', 'Acrid; warm', 'Acre; tibia', 'Lung, Stomach', 'Pulmón, Estómago', '3–9 g', 'p. 34'],
+    ['Gao Ben', 'Ligustici Rhizoma', 'Acrid; warm', 'Acre; tibia', 'Bladder, Governing Vessel', 'Vejiga, Vaso Gobernador', '3–9 g', 'p. 22'],
+    ['Xi Xin', 'Asari Herba', 'Acrid; warm', 'Acre; tibia', 'Lung, Heart, Kidney', 'Pulmón, Corazón, Riñón', '1–3 g', 'pp. 27–29'],
+    ['Xiang Ru', 'Moslae Herba', 'Acrid, aromatic; slightly warm', 'Acre, aromática; ligeramente tibia', 'Lung, Stomach', 'Pulmón, Estómago', '3–9 g', 'p. 37'],
+    ['Dan Dou Chi', 'Sojae Semen preparatum', 'Sweet, slightly bitter; cold or warm depending on preparation', 'Dulce, ligeramente amarga; fría o tibia según la preparación', 'Lung, Stomach', 'Pulmón, Estómago', '6–12 g', 'pp. 63–65'],
+    ['Mu Zei', 'Equiseti hiemalis Herba', 'Sweet, bitter; neutral', 'Dulce, amarga; neutra', 'Liver, Lung, Gallbladder', 'Hígado, Pulmón, Vesícula Biliar', '3–9 g', 'p. 69'],
+];
+$benskyReferenceByKey = [];
+$benskyDoseSourceByKey = [];
+foreach ($benskyChapterOneProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $channelsEn, $channelsEs, $dose, $reference]) {
+    $key = $keyFor($name);
+    $existingName = null;
+    foreach (array_keys($english) as $candidateName) {
+        if ($keyFor((string)$candidateName) === $key) {
+            $existingName = (string)$candidateName;
+            break;
+        }
+    }
+    if ($existingName === null) {
+        $english[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEn, 'channels' => $channelsEn, 'dose' => $dose];
+        $spanish[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEs, 'channels' => $channelsEs, 'dose' => $dose];
+        $supplementalSourceByKey[$key] = 'bensky-chapter-1';
+        $benskyDoseSourceByKey[$key] = 'bensky-chapter-1';
+    } else {
+        $spanishName = $existingName;
+        foreach (array_keys($spanish) as $candidateName) {
+            if ($keyFor((string)$candidateName) === $key) {
+                $spanishName = (string)$candidateName;
+                break;
+            }
+        }
+        if (empty($english[$existingName]['properties'])) {
+            $english[$existingName]['properties'] = $propertiesEn;
+            $spanish[$spanishName]['properties'] = $propertiesEs;
+            $supplementalSourceByKey[$key] = 'bensky-chapter-1';
+        }
+        if (empty($english[$existingName]['channels'])) {
+            $english[$existingName]['channels'] = $channelsEn;
+            $spanish[$spanishName]['channels'] = $channelsEs;
+            $supplementalSourceByKey[$key] = 'bensky-chapter-1';
+        }
+        if (empty($english[$existingName]['dose'])) {
+            $english[$existingName]['dose'] = $dose;
+            $spanish[$spanishName]['dose'] = $dose;
+            $benskyDoseSourceByKey[$key] = 'bensky-chapter-1';
+        }
+    }
+    $benskyReferenceByKey[$key] = $reference;
+}
+
 $appendixGroups = [
     'Less than 0.1 g' => 'Bing Pian|She Xiang|Tan Xiang',
     'Up to 1 g' => 'Zhen Zhu|Zhu Sha',
@@ -237,7 +292,9 @@ foreach ($index['herbs'] ?? [] as $card) {
         'temperature' => ['en' => $temperatureEn, 'es' => $temperatureEs],
         'channels' => ['en' => $profileEn['channels'] ?? null, 'es' => $profileEs['channels'] ?? null],
         'dose' => $profileEn['dose'] ?? null,
+        'doseSource' => $benskyDoseSourceByKey[$key] ?? null,
         'appendixDose' => $appendixDose[$key] ?? null,
+        'benskyReference' => $benskyReferenceByKey[$key] ?? null,
     ];
 }
 
@@ -253,6 +310,8 @@ $payload = [
     'doseAppendixSource' => 'User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams',
     'propertyChartSource' => 'User-provided Chart 6: Property of King Herbs',
     'actionsTableSource' => 'User-provided NCCAOM Herbs: Actions and Indications table; property fields only',
+    'benskyChapterOneSource' => $benskyChapterOneSource,
+    'benskyMergeRule' => 'Bensky fills empty fields only; existing Yang-based profiles are never replaced',
     'total' => $total,
     'verified' => $verified,
     'propertiesOnly' => $propertiesOnly,

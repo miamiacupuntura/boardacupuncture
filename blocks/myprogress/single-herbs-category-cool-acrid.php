@@ -191,6 +191,46 @@ $coolquestions = [
     <p class="single-herbs-guide__yang-note"><strong><?php echo s($cooltext('Reading rule:', 'Regla de lectura:')); ?></strong> <?php echo s($cooltext('these are relative indices transcribed from Yang, Figures 2.6 and 2.7—not doses or efficacy percentages. Bo He and Niu Bang Zi are equally cold, but Bo He is much lighter and more dispersing.', 'son índices relativos transcritos de Yang, figuras 2.6 y 2.7; no son dosis ni porcentajes de eficacia. Bo He y Niu Bang Zi son igualmente frías, pero Bo He es mucho más ligera y dispersante.')); ?></p>
 </section>
 
+<section class="single-herbs-guide__section" aria-labelledby="topic-two-bensky-summary-title">
+    <h4 id="topic-two-bensky-summary-title"><?php echo s($cooltext('Bensky · Summary of Comparative Functions', 'Bensky · Resumen de funciones comparativas')); ?></h4>
+    <p class="single-herbs-guide__section-lead"><?php echo s($cooltext('Bensky organizes this group by dispersing strength, eye action, gentle venting and Yang-raising direction. This section supplements Yang without changing any Yang value.', 'Bensky organiza este grupo por fuerza dispersante, acción ocular, exteriorización suave y dirección ascendente del Yang. Esta sección complementa a Yang sin cambiar ningún valor de Yang.')); ?></p>
+    <div class="single-herbs-guide__bensky-grid">
+        <article class="single-herbs-guide__bensky-card">
+            <h5><?php echo s($cooltext('1 · Wind-Heat and rash dispersion', '1 · Dispersión de Viento-Calor y erupciones')); ?></h5>
+            <table><tbody>
+                <tr><th><?php echo s($cooltext('Strength order', 'Orden de fuerza')); ?></th><td>Bo He* → Niu Bang Zi* → Chan Tui* → Sang Ye* → Ju Hua*</td></tr>
+                <tr><th>Bo He*</th><td><?php echo s($cooltext('Strongest light, sweat-promoting dispersion; head, throat and constrained Liver Qi.', 'Mayor dispersión ligera y sudorífica; cabeza, garganta y Qi de Hígado estancado.')); ?></td></tr>
+                <tr><th>Niu Bang Zi*</th><td><?php echo s($cooltext('Throat toxicity, heavier seed and bowel-moistening direction.', 'Toxicidad de garganta, semilla más pesada y dirección humectante hacia intestino.')); ?></td></tr>
+                <tr><th>Chan Tui*</th><td><?php echo s($cooltext('Gentler rash, itching, voice and spasm clues.', 'Pistas más suaves de erupción, prurito, voz y espasmos.')); ?></td></tr>
+                <tr><th>Sang Ye* / Ju Hua*</th><td><?php echo s($cooltext('Less sweat-focused; separate Lung dryness from Liver-eye Heat.', 'Menos centradas en sudor; separa sequedad de Pulmón de Calor de Hígado-ojos.')); ?></td></tr>
+            </tbody></table>
+        </article>
+        <article class="single-herbs-guide__bensky-card">
+            <h5><?php echo s($cooltext('2 · The eye distinction', '2 · La distinción ocular')); ?></h5>
+            <table><tbody>
+                <tr><th>Ju Hua*</th><td><?php echo s($cooltext('Clears Liver Heat and nourishes/benefits the eyes; choose when redness, pain or dizziness dominates.', 'Aclara Calor de Hígado y nutre/beneficia los ojos; elige cuando dominan enrojecimiento, dolor o mareo.')); ?></td></tr>
+                <tr><th>Mu Zei*</th><td><?php echo s($cooltext('Does not nourish the eyes; specializes in removing superficial visual obstruction or membrane-like conjunctival findings.', 'No nutre los ojos; se especializa en retirar obstrucción visual superficial o hallazgos membranosos conjuntivales.')); ?></td></tr>
+            </tbody></table>
+        </article>
+        <article class="single-herbs-guide__bensky-card">
+            <h5><?php echo s($cooltext('3 · Gentle exterior venting', '3 · Exteriorización suave del Exterior')); ?></h5>
+            <table><tbody>
+                <tr><th>Dan Dou Chi*</th><td><?php echo s($cooltext('Mildly vents exterior pathogens at either a superficial or more deeply constrained level and relieves constraint.', 'Exterioriza suavemente patógenos del Exterior tanto superficiales como más profundamente constreñidos y alivia la constricción.')); ?></td></tr>
+                <tr><th>Da Dou Juan</th><td><?php echo s($cooltext('Historical comparison: focuses more on summer warm disease and Damp-Heat. It is not in the current 304-herb roster.', 'Comparación histórica: se enfoca más en enfermedad tibia de verano y Humedad-Calor. No está en el listado vigente de 304 hierbas.')); ?></td></tr>
+            </tbody></table>
+        </article>
+        <article class="single-herbs-guide__bensky-card">
+            <h5><?php echo s($cooltext('4 · Release and raise Yang', '4 · Liberar y elevar Yang')); ?></h5>
+            <table><tbody>
+                <tr><th>Chai Hu*</th><td><?php echo s($cooltext('Strongest fever-reducing direction; alternating chills and fever identifies Shaoyang.', 'Dirección más fuerte para reducir fiebre; alternancia de frío y fiebre identifica Shaoyang.')); ?></td></tr>
+                <tr><th>Ge Gen*</th><td><?php echo s($cooltext('Yangming muscle layer, stiff neck and fluid generation.', 'Capa muscular Yangming, rigidez cervical y generación de líquidos.')); ?></td></tr>
+                <tr><th>Sheng Ma*</th><td><?php echo s($cooltext('Less potent for dispersing Heat, but strongest here for raising clear Yang and relieving Heat toxicity.', 'Menos potente para dispersar Calor, pero la más fuerte aquí para elevar Yang claro y aliviar Calor-Toxina.')); ?></td></tr>
+            </tbody></table>
+        </article>
+    </div>
+    <p class="single-herbs-guide__bensky-source"><strong><?php echo s($cooltext('Source and boundary:', 'Fuente y límite:')); ?></strong> <?php echo s($cooltext('paraphrased from Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1, pp. 82–83, using the supplied text. Existing Yang profiles, figures and doses remain unchanged.', 'síntesis de Bensky et al., Chinese Herbal Medicine: Materia Medica, 3.ª ed., capítulo 1, pp. 82–83, usando el texto suministrado. Los perfiles, gráficos y dosis existentes de Yang permanecen sin cambios.')); ?></p>
+</section>
+
 <section class="single-herbs-guide__section" aria-labelledby="topic-two-decision-title">
     <h4 id="topic-two-decision-title"><?php echo s($cooltext('Fast decision map', 'Mapa de decisión rápida')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($cooltext('Find the dominant clue first; then confirm temperature, channel and secondary action.', 'Encuentra primero la pista dominante; luego confirma temperatura, canal y acción secundaria.')); ?></p>

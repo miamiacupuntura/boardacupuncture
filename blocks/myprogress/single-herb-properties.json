@@ -4,11 +4,13 @@
     "doseAppendixSource": "User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams",
     "propertyChartSource": "User-provided Chart 6: Property of King Herbs",
     "actionsTableSource": "User-provided NCCAOM Herbs: Actions and Indications table; property fields only",
+    "benskyChapterOneSource": "Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1 (user-provided excerpts)",
+    "benskyMergeRule": "Bensky fills empty fields only; existing Yang-based profiles are never replaced",
     "total": 304,
     "verified": 176,
-    "propertiesOnly": 58,
-    "doseOnly": 23,
-    "pending": 47,
+    "propertiesOnly": 63,
+    "doseOnly": 22,
+    "pending": 43,
     "herbs": [
         {
             "name": "Ai Ye",
@@ -29,7 +31,9 @@
                 "es": "Hígado, Bazo, Riñón"
             },
             "dose": "3–9 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Ba Dou",
@@ -50,7 +54,9 @@
                 "es": "Estómago, Intestino Grueso, Pulmón"
             },
             "dose": "0.1–0.3 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ba Ji Tian",
@@ -71,7 +77,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Bian Dou",
@@ -92,7 +100,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Bu",
@@ -113,7 +123,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Dou Kou",
@@ -134,7 +146,9 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–6 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Guo",
@@ -155,7 +169,9 @@
                 "es": "Riñón, Pulmón"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai He",
@@ -176,7 +192,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Hua She",
@@ -197,7 +215,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Hua She She Cao",
@@ -218,7 +238,9 @@
                 "es": "Hígado, Estómago, Intestino Grueso, Intestino Delgado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Ji",
@@ -239,7 +261,9 @@
                 "es": "Pulmón, Estómago, Hígado"
             },
             "dose": "3–9 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Jiang Can",
@@ -260,7 +284,9 @@
                 "es": "Hígado, Pulmón"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Jiang Cao",
@@ -281,7 +307,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Jie Zi",
@@ -302,7 +330,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Mao Gen",
@@ -323,7 +353,9 @@
                 "es": "Pulmón, Estómago, Vejiga"
             },
             "dose": "9–30 g; larger fresh-herb doses are traditional",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Qian",
@@ -344,7 +376,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Shao",
@@ -365,7 +399,9 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Tou Weng",
@@ -386,7 +422,9 @@
                 "es": "Hígado, Estómago, Intestino Grueso"
             },
             "dose": null,
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Wei",
@@ -407,7 +445,9 @@
                 "es": "Pulmón, Estómago, Riñón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Xian Pi",
@@ -428,7 +468,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Zhi",
@@ -449,7 +491,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bai Zhu",
@@ -470,7 +514,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Bai Zi Ren",
@@ -491,7 +537,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Ban Lan Gen",
@@ -512,7 +560,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ban Xia",
@@ -533,7 +583,9 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ban Zhi Lian",
@@ -554,7 +606,9 @@
                 "es": "Hígado, Pulmón, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bi Ba",
@@ -575,7 +629,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bi Xie",
@@ -596,7 +652,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bian Xu",
@@ -617,7 +675,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Bie Jia",
@@ -638,7 +698,9 @@
                 "es": "Hígado, Bazo"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Bing Lang",
@@ -659,7 +721,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Bing Pian",
@@ -680,7 +744,9 @@
                 "es": "Corazón, Bazo"
             },
             "dose": null,
-            "appendixDose": "Less than 0.1 g"
+            "doseSource": null,
+            "appendixDose": "Less than 0.1 g",
+            "benskyReference": null
         },
         {
             "name": "Bo He",
@@ -701,7 +767,9 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "3–6 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Bu Gu Zhi",
@@ -722,7 +790,9 @@
                 "es": "Riñón, Bazo"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Cang Er Zi",
@@ -743,7 +813,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Cang Zhu",
@@ -764,7 +836,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Cao Dou Kou",
@@ -785,7 +859,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
-            "appendixDose": "Up to 3 g"
+            "doseSource": null,
+            "appendixDose": "Up to 3 g",
+            "benskyReference": null
         },
         {
             "name": "Cao Guo",
@@ -806,7 +882,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Cao Wu",
@@ -827,7 +905,9 @@
                 "es": "Corazón, Hígado, Riñón, Bazo"
             },
             "dose": "1.5–3 g study range; prolonged pre-decoction",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ce Bai Ye",
@@ -848,7 +928,9 @@
                 "es": "Pulmón, Hígado, Intestino Grueso"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Chai Hu",
@@ -869,7 +951,9 @@
                 "es": "Hígado, Vesícula Biliar"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chan Tui",
@@ -890,7 +974,9 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Che Qian Zi",
@@ -911,7 +997,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Chen Pi",
@@ -932,7 +1020,9 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chen Xiang",
@@ -953,7 +1043,9 @@
                 "es": "Bazo, Estómago, Riñón"
             },
             "dose": "1.5–4.5 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Chi Shao",
@@ -974,7 +1066,9 @@
                 "es": "Hígado"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chi Shi Zhi",
@@ -995,7 +1089,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Chi Xiao Dou",
@@ -1016,7 +1112,9 @@
                 "es": "Corazón, Intestino Delgado"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Chuan Bei Mu",
@@ -1037,7 +1135,9 @@
                 "es": "Pulmón, Corazón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chuan Lian Zi",
@@ -1058,7 +1158,9 @@
                 "es": "Hígado, Estómago, Intestino Delgado, Vejiga"
             },
             "dose": "4.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chuan Mu Tong",
@@ -1079,7 +1181,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chuan Niu Xi",
@@ -1100,7 +1204,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chuan Wu",
@@ -1121,7 +1227,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chuan Xin Lian",
@@ -1142,7 +1250,9 @@
                 "es": "Intestino Grueso, Pulmón, Intestino Delgado, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chuan Xiong",
@@ -1163,7 +1273,9 @@
                 "es": "Hígado, Vesícula Biliar, Pericardio"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Chun Pi",
@@ -1184,7 +1296,9 @@
                 "es": "Intestino Grueso, Estómago, Hígado"
             },
             "dose": "6–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ci Ji Li",
@@ -1205,7 +1319,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ci Shi",
@@ -1226,7 +1342,9 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "9–30 g; crush and predecoct",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Ci Wu Jia",
@@ -1247,7 +1365,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Cong Bai",
@@ -1267,8 +1387,10 @@
                 "en": "Lung, Stomach",
                 "es": "Pulmón, Estómago"
             },
-            "dose": null,
-            "appendixDose": null
+            "dose": "3–9 g",
+            "doseSource": "bensky-chapter-1",
+            "appendixDose": null,
+            "benskyReference": "p. 34"
         },
         {
             "name": "Da Fu Pi",
@@ -1289,7 +1411,9 @@
                 "es": "Bazo, Estómago, Intestino Grueso, Intestino Delgado"
             },
             "dose": "4.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Da Huang",
@@ -1310,7 +1434,9 @@
                 "es": "Corazón, Intestino Grueso, Hígado, Estómago"
             },
             "dose": "3–12 g",
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Da Ji",
@@ -1331,7 +1457,9 @@
                 "es": "Hígado, Bazo, Corazón"
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Da Qing Ye",
@@ -1352,7 +1480,9 @@
                 "es": "Corazón, Pulmón, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Da Zao",
@@ -1373,7 +1503,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–12 fruits",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Dai Zhe Shi",
@@ -1394,28 +1526,32 @@
                 "es": "Hígado, Corazón"
             },
             "dose": "9–30 g; crush and predecoct",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Dan Dou Chi",
             "latin": "Sojae Semen preparatum",
             "guideNumber": 2,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-chapter-1",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold or warm depending on preparation",
+                "es": "fría o tibia según la preparación"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
             },
-            "dose": null,
-            "appendixDose": null
+            "dose": "6–12 g",
+            "doseSource": "bensky-chapter-1",
+            "appendixDose": null,
+            "benskyReference": "pp. 63–65"
         },
         {
             "name": "Dan Shen",
@@ -1436,7 +1572,9 @@
                 "es": "Corazón, Pericardio, Hígado"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Dan Zhu Ye",
@@ -1457,7 +1595,9 @@
                 "es": "Corazón, Estómago, Intestino Delgado"
             },
             "dose": "6–9 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Dang Gui",
@@ -1478,7 +1618,9 @@
                 "es": "Hígado, Corazón, Bazo"
             },
             "dose": "4.5–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Dang Shen",
@@ -1499,7 +1641,9 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Deng Xin Cao",
@@ -1520,7 +1664,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Di Fu Zi",
@@ -1541,7 +1687,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Di Gu Pi",
@@ -1562,7 +1710,9 @@
                 "es": "Pulmón, Hígado, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Di Long",
@@ -1583,7 +1733,9 @@
                 "es": "Hígado, Pulmón, Bazo, Vejiga"
             },
             "dose": "4.5–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Di Yu",
@@ -1604,7 +1756,9 @@
                 "es": "Hígado, Intestino Grueso"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Ding Xiang",
@@ -1625,7 +1779,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 3 g"
+            "doseSource": null,
+            "appendixDose": "Up to 3 g",
+            "benskyReference": null
         },
         {
             "name": "Dong Chong Xia Cao",
@@ -1646,7 +1802,9 @@
                 "es": "Pulmón, Riñón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Dong Gua Zi",
@@ -1667,7 +1825,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Dong Kui Zi",
@@ -1688,7 +1848,9 @@
                 "es": "Vejiga, Intestino Grueso, Intestino Delgado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Du Huo",
@@ -1709,7 +1871,9 @@
                 "es": "Riñón, Vejiga"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Du Zhong",
@@ -1730,7 +1894,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "E Jiao",
@@ -1751,7 +1917,9 @@
                 "es": "Pulmón, Hígado, Riñón"
             },
             "dose": "5–15 g; dissolve separately",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "E Zhu",
@@ -1772,7 +1940,9 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Fan Xie Ye",
@@ -1793,7 +1963,9 @@
                 "es": "Intestino Grueso"
             },
             "dose": "1.5–3 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Fang Feng",
@@ -1814,7 +1986,9 @@
                 "es": "Vejiga, Hígado, Bazo"
             },
             "dose": "4.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Feng Mi",
@@ -1835,7 +2009,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Fo Shou",
@@ -1856,7 +2032,9 @@
                 "es": "Hígado, Pulmón, Estómago, Bazo"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Fu Ling",
@@ -1877,7 +2055,9 @@
                 "es": "Corazón, Bazo, Pulmón"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Fu Pen Zi",
@@ -1898,7 +2078,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Fu Shen",
@@ -1919,7 +2101,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Fu Xiao Mai",
@@ -1940,7 +2124,9 @@
                 "es": "Corazón"
             },
             "dose": "15–30 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Fu Zi",
@@ -1961,7 +2147,9 @@
                 "es": "Corazón, Riñón, Bazo"
             },
             "dose": "3–15 g study range; prolonged pre-decoction",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gan Cao",
@@ -1982,7 +2170,9 @@
                 "es": "Corazón, Pulmón, Bazo, Estómago; todos los canales"
             },
             "dose": "2–10 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gan Jiang",
@@ -2003,7 +2193,9 @@
                 "es": "Corazón, Pulmón, Bazo, Estómago"
             },
             "dose": "3–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gan Sui",
@@ -2024,28 +2216,32 @@
                 "es": "Riñón, Intestino Grueso, Pulmón"
             },
             "dose": "0.5–1.5 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gao Ben",
             "latin": "Ligustici Rhizoma",
             "guideNumber": 1,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-chapter-1",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Governing Vessel",
+                "es": "Vejiga, Vaso Gobernador"
             },
-            "dose": null,
-            "appendixDose": null
+            "dose": "3–9 g",
+            "doseSource": "bensky-chapter-1",
+            "appendixDose": null,
+            "benskyReference": "p. 22"
         },
         {
             "name": "Gao Liang Jiang",
@@ -2066,7 +2262,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Ge Gen",
@@ -2087,7 +2285,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "9–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ge Jie",
@@ -2108,7 +2308,9 @@
                 "es": "Pulmón, Riñón"
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Gou Ji",
@@ -2129,7 +2331,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Gou Qi Zi",
@@ -2150,7 +2354,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gou Teng",
@@ -2171,7 +2377,9 @@
                 "es": "Hígado, Pericardio"
             },
             "dose": "6–15 g; add near the end",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Gu Sui Bu",
@@ -2192,7 +2400,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gu Ya (Setariae",
@@ -2213,7 +2423,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gua Lou",
@@ -2234,7 +2446,9 @@
                 "es": "Pulmón, Estómago, Intestino Grueso"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Gua Lou Pi",
@@ -2255,7 +2469,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gua Lou Ren",
@@ -2276,7 +2492,9 @@
                 "es": "Pulmón, Estómago, Intestino Grueso"
             },
             "dose": "9–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Gui Ban",
@@ -2297,7 +2515,9 @@
                 "es": "Corazón, Riñón, Hígado"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Gui Zhi",
@@ -2318,7 +2538,9 @@
                 "es": "Corazón, Pulmón, Vejiga"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hai Jin Sha",
@@ -2339,7 +2561,9 @@
                 "es": "Vejiga, Intestino Delgado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hai Piao Xiao",
@@ -2360,7 +2584,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hai Tong Pi",
@@ -2381,7 +2607,9 @@
                 "es": "Hígado"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hai Zao",
@@ -2402,7 +2630,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Han Fang Ji",
@@ -2423,7 +2653,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Han Lian Cao",
@@ -2444,7 +2676,9 @@
                 "es": "Riñón, Hígado"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "He Huan Pi",
@@ -2465,7 +2699,9 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "He Shou Wu",
@@ -2486,7 +2722,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": null,
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "He Tao Ren",
@@ -2507,7 +2745,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "He Ye",
@@ -2528,7 +2768,9 @@
                 "es": "Hígado, Bazo, Estómago"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "He Zi",
@@ -2549,7 +2791,9 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Hei Zhi Ma",
@@ -2570,7 +2814,9 @@
                 "es": "Hígado, Riñón, Intestino Grueso"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Hong Hua",
@@ -2591,7 +2837,9 @@
                 "es": "Corazón, Hígado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hou Po",
@@ -2612,7 +2860,9 @@
                 "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hu Jiao",
@@ -2633,7 +2883,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Hua Jiao",
@@ -2654,7 +2906,9 @@
                 "es": "Riñón, Bazo, Estómago"
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Hua Shi",
@@ -2675,7 +2929,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Huai Mi",
@@ -2696,7 +2952,9 @@
                 "es": "Hígado, Intestino Grueso"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Huai Niu Xi",
@@ -2717,7 +2975,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Huang Bai",
@@ -2738,7 +2998,9 @@
                 "es": "Riñón, Vejiga, Intestino Grueso"
             },
             "dose": "3–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Huang Jing",
@@ -2759,7 +3021,9 @@
                 "es": "Riñón, Pulmón, Bazo"
             },
             "dose": null,
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Huang Lian",
@@ -2780,7 +3044,9 @@
                 "es": "Corazón, Hígado, Estómago, Intestino Grueso"
             },
             "dose": "1.5–4.5 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Huang Qi",
@@ -2801,7 +3067,9 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Huang Qin",
@@ -2822,7 +3090,9 @@
                 "es": "Pulmón, Vesícula Biliar, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Huo Ma Ren",
@@ -2843,7 +3113,9 @@
                 "es": "Intestino Grueso, Bazo, Estómago"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Huo Xiang",
@@ -2864,7 +3136,9 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ji Nei Jin",
@@ -2885,7 +3159,9 @@
                 "es": "Bazo, Estómago, Intestino Delgado, Vejiga"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ji Xue Teng",
@@ -2906,7 +3182,9 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Jiang Huang",
@@ -2927,7 +3205,9 @@
                 "es": "Bazo, Hígado"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Jie Geng",
@@ -2948,7 +3228,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Jin Qian Cao",
@@ -2969,7 +3251,9 @@
                 "es": "Vejiga, Vesícula Biliar, Riñón, Hígado"
             },
             "dose": null,
-            "appendixDose": "Up to 60 g"
+            "doseSource": null,
+            "appendixDose": "Up to 60 g",
+            "benskyReference": null
         },
         {
             "name": "Jin Yin Hua",
@@ -2990,7 +3274,9 @@
                 "es": "Pulmón, Corazón, Estómago"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 60 g"
+            "doseSource": null,
+            "appendixDose": "Up to 60 g",
+            "benskyReference": null
         },
         {
             "name": "Jin Ying Zi",
@@ -3011,7 +3297,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Jing Jie",
@@ -3032,7 +3320,9 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "3–10 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Jing Mi",
@@ -3053,7 +3343,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ju Hong",
@@ -3074,7 +3366,9 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ju Hua",
@@ -3095,7 +3389,9 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Jue Ming Zi",
@@ -3116,7 +3412,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ku Shen",
@@ -3137,7 +3435,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Kuan Dong Hua",
@@ -3158,7 +3458,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Kun Bu",
@@ -3179,7 +3481,9 @@
                 "es": "Riñón, Hígado, Estómago"
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Lai Fu Zi",
@@ -3200,7 +3504,9 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Lian Qiao",
@@ -3221,7 +3527,9 @@
                 "es": "Corazón, Pulmón, Vesícula Biliar"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Lian Xu",
@@ -3242,7 +3550,9 @@
                 "es": "Corazón, Riñón"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Lian Zi",
@@ -3263,7 +3573,9 @@
                 "es": "Corazón, Riñón, Bazo"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Lian Zi Xin",
@@ -3284,7 +3596,9 @@
                 "es": "Corazón, Riñón"
             },
             "dose": "1.5–3 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ling Yang Jiao",
@@ -3305,7 +3619,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Ling Zhi",
@@ -3326,7 +3642,9 @@
                 "es": "Corazón, Hígado, Pulmón"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Liu Huang",
@@ -3347,7 +3665,9 @@
                 "es": "Riñón, Intestino Grueso, Pericardio"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Long Dan Cao",
@@ -3368,7 +3688,9 @@
                 "es": "Hígado, Vesícula Biliar, Vejiga"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Long Gu",
@@ -3389,7 +3711,9 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "15–30 g; crush and predecoct",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Long Yan Rou",
@@ -3410,7 +3734,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 60 g"
+            "doseSource": null,
+            "appendixDose": "Up to 60 g",
+            "benskyReference": null
         },
         {
             "name": "Lu Dou",
@@ -3431,7 +3757,9 @@
                 "es": "Corazón, Estómago"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Lu Gen",
@@ -3452,7 +3780,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "15–30 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Lu Hui",
@@ -3473,7 +3803,9 @@
                 "es": "Hígado, Intestino Grueso"
             },
             "dose": "0.6–1.5 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Lu Lu Tong",
@@ -3494,7 +3826,9 @@
                 "es": "Hígado, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Lu Rong",
@@ -3515,7 +3849,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "1–3 g powder or separately prepared",
-            "appendixDose": "Up to 3 g"
+            "doseSource": null,
+            "appendixDose": "Up to 3 g",
+            "benskyReference": null
         },
         {
             "name": "Ma Bo",
@@ -3536,7 +3872,9 @@
                 "es": "Pulmón"
             },
             "dose": null,
-            "appendixDose": "Up to 3 g"
+            "doseSource": null,
+            "appendixDose": "Up to 3 g",
+            "benskyReference": null
         },
         {
             "name": "Ma Huang",
@@ -3557,7 +3895,9 @@
                 "es": "Pulmón, Vejiga"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ma Huang Gen",
@@ -3578,7 +3918,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Mai Men Dong",
@@ -3599,7 +3941,9 @@
                 "es": "Corazón, Pulmón, Estómago"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Mai Ya",
@@ -3620,7 +3964,9 @@
                 "es": "Bazo, Estómago, Hígado"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Man Jing Zi",
@@ -3641,7 +3987,9 @@
                 "es": "Vejiga, Hígado, Estómago"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Mang Xiao",
@@ -3662,7 +4010,9 @@
                 "es": "Estómago, Intestino Grueso"
             },
             "dose": "6–18 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Mei Gui Hua",
@@ -3683,7 +4033,9 @@
                 "es": "Hígado, Bazo"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Mo Yao",
@@ -3704,7 +4056,9 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Mu Dan Pi",
@@ -3725,7 +4079,9 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Mu Gua",
@@ -3746,7 +4102,9 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Mu Li",
@@ -3767,7 +4125,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g; crush and predecoct",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Mu Tong",
@@ -3788,7 +4148,9 @@
                 "es": "Vejiga, Corazón, Intestino Delgado"
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Mu Xiang",
@@ -3809,28 +4171,32 @@
                 "es": "Bazo, Estómago, Intestino Grueso, Vesícula Biliar"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Mu Zei",
             "latin": "Equiseti hiemalis Herba",
             "guideNumber": 2,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-chapter-1",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Lung, Gallbladder",
+                "es": "Hígado, Pulmón, Vesícula Biliar"
             },
-            "dose": null,
-            "appendixDose": null
+            "dose": "3–9 g",
+            "doseSource": "bensky-chapter-1",
+            "appendixDose": null,
+            "benskyReference": "p. 69"
         },
         {
             "name": "Niu Bang Zi",
@@ -3851,7 +4217,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–12 g, crushed",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Niu Huang",
@@ -3872,7 +4240,9 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "0.15–0.35 g as powder; not a routine decoction herb",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Nu Zhen Zi",
@@ -3893,7 +4263,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Ou Jie",
@@ -3914,7 +4286,9 @@
                 "es": "Pulmón, Estómago, Hígado"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Pang Da Hai",
@@ -3935,7 +4309,9 @@
                 "es": "Intestino Grueso, Pulmón"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Pei Lan",
@@ -3956,7 +4332,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Pi Pa Ye",
@@ -3977,7 +4355,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Pu Gong Ying",
@@ -3998,7 +4378,9 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Pu Huang",
@@ -4019,7 +4401,9 @@
                 "es": "Hígado, Pericardio"
             },
             "dose": "3–9 g, decoct in a bag",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qian Cao",
@@ -4040,7 +4424,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qian Hu",
@@ -4061,7 +4447,9 @@
                 "es": "Pulmón"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qian Shi",
@@ -4082,7 +4470,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Qiang Huo",
@@ -4103,7 +4493,9 @@
                 "es": "Vejiga, Riñón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qin Jiao",
@@ -4124,7 +4516,9 @@
                 "es": "Estómago, Hígado, Vesícula Biliar"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qin Pi",
@@ -4145,7 +4539,9 @@
                 "es": "Vesícula Biliar, Intestino Grueso, Hígado, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qing Dai",
@@ -4166,7 +4562,9 @@
                 "es": "Hígado, Pulmón, Estómago"
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Qing Hao",
@@ -4187,7 +4585,9 @@
                 "es": "Hígado, Vesícula Biliar, Riñón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Qing Pi",
@@ -4208,7 +4608,9 @@
                 "es": "Hígado, Vesícula Biliar, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Quan Xie",
@@ -4229,7 +4631,9 @@
                 "es": "Hígado"
             },
             "dose": null,
-            "appendixDose": "Up to 3 g"
+            "doseSource": null,
+            "appendixDose": "Up to 3 g",
+            "benskyReference": null
         },
         {
             "name": "Qu Mai",
@@ -4250,7 +4654,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Ren Shen",
@@ -4271,7 +4677,9 @@
                 "es": "Pulmón, Bazo, Corazón"
             },
             "dose": "1.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Rou Cong Rong",
@@ -4292,7 +4700,9 @@
                 "es": "Riñón, Intestino Grueso"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Rou Dou Kou",
@@ -4313,7 +4723,9 @@
                 "es": "Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g; roasted and crushed late",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Rou Gui",
@@ -4334,7 +4746,9 @@
                 "es": "Corazón, Riñón, Hígado, Bazo"
             },
             "dose": "1.5–4.5 g; add late",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Ru Xiang",
@@ -4355,7 +4769,9 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "San Leng",
@@ -4376,7 +4792,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "San Qi",
@@ -4397,7 +4815,9 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "3–9 g decoction; 1–3 g powder",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sang Bai Pi",
@@ -4418,7 +4838,9 @@
                 "es": "Pulmón"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sang Ji Sheng",
@@ -4439,7 +4861,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Sang Piao Xiao",
@@ -4460,7 +4884,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sang Shen",
@@ -4481,7 +4907,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sang Ye",
@@ -4502,7 +4930,9 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "4.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sang Zhi",
@@ -4523,7 +4953,9 @@
                 "es": "Hígado"
             },
             "dose": "9–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sha Ren",
@@ -4544,7 +4976,9 @@
                 "es": "Bazo, Estómago, Riñón"
             },
             "dose": "3–6 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Sha Shen",
@@ -4565,7 +4999,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sha Yuan Ji Li",
@@ -4586,7 +5022,9 @@
                 "es": "Riñón, Hígado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Shan Dou Gen",
@@ -4607,7 +5045,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Shan Yao",
@@ -4628,7 +5068,9 @@
                 "es": "Bazo, Pulmón, Riñón"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Shan Zha",
@@ -4649,7 +5091,9 @@
                 "es": "Bazo, Estómago, Hígado"
             },
             "dose": "9–12 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Shan Zhu Yu",
@@ -4670,7 +5114,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "She Chuang Zi",
@@ -4691,7 +5137,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "She Gan",
@@ -4712,7 +5160,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "She Xiang",
@@ -4733,7 +5183,9 @@
                 "es": "Corazón, Bazo, Hígado"
             },
             "dose": null,
-            "appendixDose": "Less than 0.1 g"
+            "doseSource": null,
+            "appendixDose": "Less than 0.1 g",
+            "benskyReference": null
         },
         {
             "name": "Shen Qu",
@@ -4754,7 +5206,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Sheng Di Huang",
@@ -4775,7 +5229,9 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Sheng Jiang",
@@ -4796,7 +5252,9 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–10 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Sheng Ma",
@@ -4817,7 +5275,9 @@
                 "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Shi Chang Pu",
@@ -4838,7 +5298,9 @@
                 "es": "Corazón, Estómago"
             },
             "dose": "3–9 g; preserve its aromatic oils",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Shi Gao",
@@ -4859,7 +5321,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "15–60 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Shi Hu",
@@ -4880,7 +5344,9 @@
                 "es": "Estómago, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Shi Jue Ming",
@@ -4901,7 +5367,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g; crush and predecoct",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Shi Wei",
@@ -4922,7 +5390,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 60 g"
+            "doseSource": null,
+            "appendixDose": "Up to 60 g",
+            "benskyReference": null
         },
         {
             "name": "Shu Di Huang",
@@ -4943,7 +5413,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Shui Niu Jiao",
@@ -4964,7 +5436,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Si Gua Luo",
@@ -4985,7 +5459,9 @@
                 "es": "Pulmón, Estómago, Hígado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Suan Zao Ren",
@@ -5006,7 +5482,9 @@
                 "es": "Corazón, Hígado, Vesícula Biliar, Bazo"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Suo Yang",
@@ -5027,7 +5505,9 @@
                 "es": "Hígado, Riñón, Intestino Grueso"
             },
             "dose": "6–15 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tai Zi Shen",
@@ -5048,7 +5528,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Tan Xiang",
@@ -5069,7 +5551,9 @@
                 "es": "Bazo, Estómago, Pulmón"
             },
             "dose": "1.5–4.5 g",
-            "appendixDose": "Less than 0.1 g / Up to 6 g (source lists both)"
+            "doseSource": null,
+            "appendixDose": "Less than 0.1 g / Up to 6 g (source lists both)",
+            "benskyReference": null
         },
         {
             "name": "Tao Ren",
@@ -5090,7 +5574,9 @@
                 "es": "Corazón, Hígado, Intestino Grueso, Pulmón"
             },
             "dose": "4.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tian Hua Fen",
@@ -5111,7 +5597,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "9–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Tian Ma",
@@ -5132,7 +5620,9 @@
                 "es": "Hígado"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tian Men Dong",
@@ -5153,7 +5643,9 @@
                 "es": "Pulmón, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Tian Nan Xing",
@@ -5174,7 +5666,9 @@
                 "es": "Pulmón, Hígado, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ting Li Zi",
@@ -5195,7 +5689,9 @@
                 "es": "Pulmón, Vejiga"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tong Cao",
@@ -5216,7 +5712,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tu Bie Chong",
@@ -5237,7 +5735,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tu Fu Ling",
@@ -5258,7 +5758,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Tu Si Zi",
@@ -5279,7 +5781,9 @@
                 "es": "Hígado, Riñón, Bazo"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Wang Bu Liu Xing",
@@ -5300,7 +5804,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Wei Ling Xian",
@@ -5321,7 +5827,9 @@
                 "es": "Vejiga"
             },
             "dose": "6–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Wu Gong",
@@ -5342,7 +5850,9 @@
                 "es": "Hígado"
             },
             "dose": null,
-            "appendixDose": "Up to 3 g"
+            "doseSource": null,
+            "appendixDose": "Up to 3 g",
+            "benskyReference": null
         },
         {
             "name": "Wu Jia Pi",
@@ -5363,7 +5873,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "4.5–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Wu Ling Zhi",
@@ -5384,7 +5896,9 @@
                 "es": "Hígado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Wu Mei",
@@ -5405,7 +5919,9 @@
                 "es": "Hígado, Bazo, Pulmón, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Wu Wei Zi",
@@ -5426,7 +5942,9 @@
                 "es": "Corazón, Riñón, Pulmón"
             },
             "dose": "2–6 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Wu Yao",
@@ -5447,7 +5965,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Wu Zhu Yu",
@@ -5468,7 +5988,9 @@
                 "es": "Hígado, Bazo, Estómago, Riñón"
             },
             "dose": "1.5–4.5 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Xi Xian Cao",
@@ -5489,28 +6011,32 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xi Xin",
             "latin": "Asari Radix et Rhizoma",
             "guideNumber": 1,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-chapter-1",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Heart, Kidney",
+                "es": "Pulmón, Corazón, Riñón"
             },
-            "dose": null,
-            "appendixDose": "Up to 3 g"
+            "dose": "1–3 g",
+            "doseSource": "bensky-chapter-1",
+            "appendixDose": "Up to 3 g",
+            "benskyReference": "pp. 27–29"
         },
         {
             "name": "Xi Yang Shen",
@@ -5531,7 +6057,9 @@
                 "es": "Corazón, Riñón, Pulmón"
             },
             "dose": null,
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Xia Ku Cao",
@@ -5552,7 +6080,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xian He Cao",
@@ -5573,7 +6103,9 @@
                 "es": "Pulmón, Hígado, Bazo"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 60 g"
+            "doseSource": null,
+            "appendixDose": "Up to 60 g",
+            "benskyReference": null
         },
         {
             "name": "Xian Mao",
@@ -5594,7 +6126,9 @@
                 "es": "Riñón, Hígado, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xiang Fu",
@@ -5615,28 +6149,32 @@
                 "es": "Hígado, San Jiao"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xiang Ru",
             "latin": "Moslae Herba",
             "guideNumber": 1,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-chapter-1",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, aromatic",
+                "es": "Acre, aromática"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
             },
-            "dose": null,
-            "appendixDose": null
+            "dose": "3–9 g",
+            "doseSource": "bensky-chapter-1",
+            "appendixDose": null,
+            "benskyReference": "p. 37"
         },
         {
             "name": "Xiao Hui Xiang",
@@ -5657,7 +6195,9 @@
                 "es": "Hígado, Riñón, Bazo, Estómago"
             },
             "dose": "3–6 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xiao Ji",
@@ -5678,7 +6218,9 @@
                 "es": "Hígado, Corazón"
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Xie Bai",
@@ -5699,7 +6241,9 @@
                 "es": "Intestino Grueso, Pulmón, Estómago"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xin Yi",
@@ -5720,7 +6264,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–9 g, wrapped",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xing Ren",
@@ -5741,7 +6287,9 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xu Duan",
@@ -5762,7 +6310,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 20 g"
+            "doseSource": null,
+            "appendixDose": "Up to 20 g",
+            "benskyReference": null
         },
         {
             "name": "Xuan Fu Hua",
@@ -5783,7 +6333,9 @@
                 "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Xuan Shen",
@@ -5804,7 +6356,9 @@
                 "es": "Pulmón, Estómago, Riñón"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Yan Hu Suo",
@@ -5825,7 +6379,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ye Jiao Teng",
@@ -5846,7 +6402,9 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "9–30 g",
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Ye Ju Hua",
@@ -5867,7 +6425,9 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Yi Mu Cao",
@@ -5888,7 +6448,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Yi Tang",
@@ -5909,7 +6471,9 @@
                 "es": "Bazo, Estómago, Pulmón"
             },
             "dose": "30–60 g; dissolve in strained decoction",
-            "appendixDose": "Up to 60 g"
+            "doseSource": null,
+            "appendixDose": "Up to 60 g",
+            "benskyReference": null
         },
         {
             "name": "Yi Yi Ren",
@@ -5930,7 +6494,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Yi Zhi Ren",
@@ -5951,7 +6517,9 @@
                 "es": "Riñón, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": "Up to 6 g"
+            "doseSource": null,
+            "appendixDose": "Up to 6 g",
+            "benskyReference": null
         },
         {
             "name": "Yin Chen",
@@ -5972,7 +6540,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Yin Yang Huo",
@@ -5993,7 +6563,9 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Yu Jin",
@@ -6014,7 +6586,9 @@
                 "es": "Corazón, Hígado, Vesícula Biliar, Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Yu Xing Cao",
@@ -6035,7 +6609,9 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": null,
-            "appendixDose": "Up to 30 g"
+            "doseSource": null,
+            "appendixDose": "Up to 30 g",
+            "benskyReference": null
         },
         {
             "name": "Yu Zhu",
@@ -6056,7 +6632,9 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": null,
-            "appendixDose": "Up to 15 g"
+            "doseSource": null,
+            "appendixDose": "Up to 15 g",
+            "benskyReference": null
         },
         {
             "name": "Yuan Zhi",
@@ -6077,7 +6655,9 @@
                 "es": "Corazón, Riñón, Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zao Jiao Ci",
@@ -6098,7 +6678,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ze Lan",
@@ -6119,7 +6701,9 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Ze Xie",
@@ -6140,7 +6724,9 @@
                 "es": "Riñón, Vejiga"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zhe Bei Mu",
@@ -6161,7 +6747,9 @@
                 "es": "Pulmón, Corazón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zhen Zhu",
@@ -6182,7 +6770,9 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "0.3–1 g as finely ground powder; do not decoct like a shell",
-            "appendixDose": "Up to 1 g"
+            "doseSource": null,
+            "appendixDose": "Up to 1 g",
+            "benskyReference": null
         },
         {
             "name": "Zhi Ke",
@@ -6203,7 +6793,9 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zhi Mu",
@@ -6224,7 +6816,9 @@
                 "es": "Pulmón, Estómago, Riñón"
             },
             "dose": "6–12 g",
-            "appendixDose": "Up to 12 g"
+            "doseSource": null,
+            "appendixDose": "Up to 12 g",
+            "benskyReference": null
         },
         {
             "name": "Zhi Shi",
@@ -6245,7 +6839,9 @@
                 "es": "Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zhi Zi",
@@ -6266,7 +6862,9 @@
                 "es": "Corazón, Pulmón, San Jiao"
             },
             "dose": "6–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zhu Ling",
@@ -6287,7 +6885,9 @@
                 "es": "Bazo, Riñón, Vejiga"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zhu Ru",
@@ -6308,7 +6908,9 @@
                 "es": "Pulmón, Estómago, Vesícula Biliar"
             },
             "dose": "6–12 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zi Cao",
@@ -6329,7 +6931,9 @@
                 "es": null
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zi Su Ye",
@@ -6350,7 +6954,9 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zi Su Zi",
@@ -6371,7 +6977,9 @@
                 "es": "Intestino Grueso, Pulmón"
             },
             "dose": null,
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         },
         {
             "name": "Zi Wan",
@@ -6392,7 +7000,9 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
-            "appendixDose": null
+            "doseSource": null,
+            "appendixDose": null,
+            "benskyReference": null
         }
     ]
 }
