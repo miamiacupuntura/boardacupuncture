@@ -15,6 +15,7 @@ $chapterfocusaliases = [
     'expel-wind' => 'expel-wind-chapter-14',
     'expel-damp' => 'expel-damp-chapter-16',
     'transform-phlegm' => 'transform-phlegm-chapter-17',
+    'digestive' => 'digestive-chapter-18',
 ];
 $focus = $chapterfocusaliases[$focus] ?? $focus;
 $datafile = __DIR__ . '/formulas-study-guide-data.json';
@@ -23,8 +24,8 @@ if (!is_array($data)
         || ($data['version'] ?? null) !== 7
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 19
-        || count($data['supplementalFormulas'] ?? []) !== 192) {
+        || count($data['supplementalCategories'] ?? []) !== 20
+        || count($data['supplementalFormulas'] ?? []) !== 199) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -84,6 +85,10 @@ $categorycopy = [
     'digestive' => [
         'Recognize food retention and the hallmark sour, foul and greasy signs.',
         'Reconoce retención de alimentos y sus signos ácidos, fétidos y grasosos característicos.',
+    ],
+    'digestive-chapter-18' => [
+        'Compare all eight principal Chapter 18 formulas by excess versus deficiency, Damp-Heat, stool pattern, parasites, focal fullness and alcohol-Dampness.',
+        'Compara las ocho fórmulas principales del capítulo 18 por exceso o deficiencia, Humedad-Calor, patrón de heces, parásitos, plenitud focal y Humedad por alcohol.',
     ],
     'dispel-summerheat' => [
         'Choose among five Summerheat strategies: clear mild Heat, release constrained Exterior, drain Dampness, restore Qi and fluids, or preserve severely damaged Yin.',
@@ -183,6 +188,14 @@ $categoryreferences = [
     'transform-phlegm-chapter-17' => [
         'Complete Bensky source: 18 principal formulas in seven sections. Board overlap: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San, and Ban Xia Bai Zhu Tian Ma Tang.',
         'Fuente Bensky completa: 18 fórmulas principales en siete secciones. Coincidencia Board: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San y Ban Xia Bai Zhu Tian Ma Tang.',
+    ],
+    'digestive' => [
+        'Official Board category: 1 formula—Bao He Wan. It also appears among the eight principal formulas in complete Bensky Chapter 18.',
+        'Categoría oficial del Board: 1 fórmula—Bao He Wan. También aparece entre las ocho fórmulas principales del capítulo 18 completo de Bensky.',
+    ],
+    'digestive-chapter-18' => [
+        'Complete Bensky source: 8 principal formulas in two sections. Board overlap: 1—Bao He Wan. The other seven profiles are clearly supplemental.',
+        'Fuente Bensky completa: 8 fórmulas principales en dos secciones. Coincidencia Board: 1—Bao He Wan. Las otras siete fichas son claramente suplementarias.',
     ],
     'stabilize-bind' => [
         'Official Board category: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
@@ -309,6 +322,7 @@ $regulatebloodchaptersourcecategory = $supplementalcategories['regulate-blood-ch
 $expelwindchaptersourcecategory = $supplementalcategories['expel-wind-ch14'];
 $expeldampchaptersourcecategory = $supplementalcategories['expel-damp-ch16'];
 $transformphlegmchaptersourcecategory = $supplementalcategories['transform-phlegm-ch17'];
+$digestivechaptersourcecategory = $supplementalcategories['digestive-ch18'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -915,6 +929,59 @@ $transformphlegmchapteroverview = [
     'formulas' => $transformphlegmchapterformulas,
 ];
 
+$digestivechaptersections = [
+    'reduce-transform-food' => [
+        'key' => 'reduce-transform-food', 'name' => 'Reduce Food Accumulation and Transform Stagnation',
+        'nameEs' => 'Reducir acumulación de alimentos y transformar estancamiento', 'sourcePages' => '826–835',
+        'copy' => 'Grade primarily excessive accumulation from mild acute food retention through Damp-Heat obstruction, forceful purging and pediatric parasites.',
+        'copyEs' => 'Gradúa acumulación principalmente excesiva desde retención alimentaria aguda leve hasta obstrucción por Humedad-Calor, purgación fuerte y parásitos pediátricos.',
+    ],
+    'reduce-tonify-food' => [
+        'key' => 'reduce-tonify-food', 'name' => 'Reduce Food Stagnation but Also Tonify',
+        'nameEs' => 'Reducir estancamiento alimentario y también tonificar', 'sourcePages' => '835–842',
+        'copy' => 'Support a deficient Spleen and Stomach while reducing food, Qi, Phlegm or alcohol-Damp accumulation according to the dominant mechanism.',
+        'copyEs' => 'Apoya Bazo y Estómago deficientes mientras reduce acumulación de alimento, Qi, Flema o Humedad por alcohol según el mecanismo dominante.',
+    ],
+];
+$digestivechapterplan = [
+    ['Bao He Wan', 1, 'reduce-transform-food', 'Preserve Harmony Pill', '826–829'],
+    ['Zhi Shi Dao Zhi Wan', 2, 'reduce-transform-food', 'Unripe Bitter Orange Pill to Guide Out Stagnation', '829–831'],
+    ['Mu Xiang Bing Lang Wan', 3, 'reduce-transform-food', 'Aucklandia and Betel Nut Pill', '831–833'],
+    ['Fei Er Wan', 4, 'reduce-transform-food', 'Fat Baby Pill', '833–835'],
+    ['Jian Pi Wan', 5, 'reduce-tonify-food', 'Strengthen the Spleen Pill', '835–837'],
+    ['Zhi Zhu Wan', 6, 'reduce-tonify-food', 'Unripe Bitter Orange and Atractylodes Pill', '837–839'],
+    ['Zhi Shi Xiao Pi Wan', 7, 'reduce-tonify-food', 'Unripe Bitter Orange Pill to Reduce Focal Distention', '839–841'],
+    ['Ge Hua Jie Cheng San', 8, 'reduce-tonify-food', 'Kudzu Flower Powder to Relieve Hangovers', '841–842'],
+];
+$digestivesupplementbyname = [];
+foreach ($digestivechaptersourcecategory['formulas'] as $formula) {
+    $digestivesupplementbyname[$formula['name']] = $formula;
+}
+$digestivechapterformulas = [];
+foreach ($digestivechapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $digestivesupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 18 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['chapterSourceSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $digestivechaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $digestivechaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $digestivechapterformulas[] = $formula;
+}
+$digestivechapteroverview = [
+    'number' => 'S14',
+    'key' => 'digestive-chapter-18',
+    'name' => 'Formulas That Reduce Food Stagnation · Complete Bensky Chapter 18',
+    'nameEs' => 'Fórmulas que reducen el estancamiento alimentario · Capítulo 18 completo de Bensky',
+    'sourceChapter' => 18,
+    'sourcePages' => '823–843',
+    'formulas' => $digestivechapterformulas,
+];
+
 $chapterinterestinginsights = [
     'dispel-summerheat' => [
         'title' => 'Interesting point: Summerheat may be distributed across other Board competencies',
@@ -1085,6 +1152,23 @@ $chapterinterestinginsights = [
         'value' => 'The other 25 profiles matter because “Dampness” does not prescribe a single action. The decisive choice may be to aromatically transform, clear Heat, promote urination, warm Yang, move Qi, nourish deficiency, or unblock channels.',
         'valueEs' => 'Los otros 25 perfiles importan porque “Humedad” no prescribe una sola acción. La decisión puede ser transformar aromáticamente, aclarar Calor, promover orina, calentar Yang, mover Qi, nutrir deficiencia o desobstruir canales.',
     ],
+    'digestive-chapter-18' => [
+        'title' => 'Interesting point: one Board formula anchors an eight-formula excess-to-deficiency continuum',
+        'titleEs' => 'Dato interesante: una fórmula Board ancla un continuo de ocho fórmulas entre exceso y deficiencia',
+        'stat' => '1 of 8 in the Board roster',
+        'statEs' => '1 de 8 en el listado Board',
+        'intro' => 'Bao He Wan provides the mild, high-yield archetype for acute food stagnation. The seven supplemental formulas show how the strategy changes when accumulation becomes Damp-Heat, requires purging, involves parasites, rests on Spleen deficiency, creates focal clumping, or follows alcohol excess.',
+        'introEs' => 'Bao He Wan ofrece el arquetipo suave y de alto rendimiento para estancamiento alimentario agudo. Las siete fórmulas suplementarias muestran cómo cambia la estrategia cuando la acumulación se vuelve Humedad-Calor, exige purgación, implica parásitos, descansa sobre deficiencia de Bazo, forma aglomeración focal o sigue al exceso de alcohol.',
+        'rows' => [
+            ['coverage' => 'Acute uncomplicated food stagnation', 'coverageEs' => 'Estancamiento alimentario agudo no complicado', 'boardNames' => ['Bao He Wan'], 'additional' => 'The Board formula combines food reduction with Qi regulation and Phlegm transformation without strong purging or tonification.', 'additionalEs' => 'La fórmula Board combina reducción de alimento con regulación de Qi y transformación de Flema sin purgación fuerte ni tonificación.'],
+            ['coverage' => 'Damp-Heat, constipation, dysentery or parasites', 'coverageEs' => 'Humedad-Calor, estreñimiento, disentería o parásitos', 'boardNames' => [], 'additional' => 'Zhi Shi Dao Zhi Wan, Mu Xiang Bing Lang Wan and Fei Er Wan require much stronger excess confirmation and modern safety screening.', 'additionalEs' => 'Zhi Shi Dao Zhi Wan, Mu Xiang Bing Lang Wan y Fei Er Wan exigen confirmar exceso con mucha mayor claridad y revisión moderna de seguridad.'],
+            ['coverage' => 'Spleen deficiency, focal fullness and alcohol-Dampness', 'coverageEs' => 'Deficiencia de Bazo, plenitud focal y Humedad por alcohol', 'boardNames' => [], 'additional' => 'Jian Pi Wan, Zhi Zhu Wan, Zhi Shi Xiao Pi Wan and Ge Hua Jie Cheng San grade how much tonification, movement, Heat treatment and water regulation are needed.', 'additionalEs' => 'Jian Pi Wan, Zhi Zhu Wan, Zhi Shi Xiao Pi Wan y Ge Hua Jie Cheng San gradúan cuánta tonificación, movilización, aclaramiento de Calor y regulación de agua se necesita.'],
+        ],
+        'hypothesis' => 'A plausible curricular logic is that Bao He Wan captures the reusable core of acute food stagnation, while the omitted formulas depend on narrower mixed patterns, stronger purgatives, pediatric parasite care or alcohol-related safety contexts.',
+        'hypothesisEs' => 'Una lógica curricular plausible es que Bao He Wan captura el núcleo reutilizable del estancamiento alimentario agudo, mientras las fórmulas omitidas dependen de patrones mixtos más estrechos, purgantes fuertes, atención parasitaria pediátrica o contextos de seguridad relacionados con alcohol.',
+        'value' => 'The chapter prevents a dangerous shortcut: not every distended abdomen is simple food retention, and reduction can worsen deficiency. Pressure response, stool, urine, tongue, pulse, age and exposure history determine both treatment and urgency.',
+        'valueEs' => 'El capítulo evita un atajo peligroso: no todo abdomen distendido es simple retención alimentaria y reducir puede empeorar deficiencia. Respuesta a presión, heces, orina, lengua, pulso, edad e historia de exposición determinan tratamiento y urgencia.',
+    ],
     'treat-dryness-ch15' => [
         'title' => 'Interesting point: the Board has no dedicated Treat Dryness category',
         'titleEs' => 'Dato interesante: el Board no tiene una categoría propia para tratar Sequedad',
@@ -1115,7 +1199,8 @@ foreach ($supplementalcategories as $categorykey => $category) {
             && $categorykey !== 'regulate-blood-ch13'
             && $categorykey !== 'expel-wind-ch14'
             && $categorykey !== 'expel-damp-ch16'
-            && $categorykey !== 'transform-phlegm-ch17') {
+            && $categorykey !== 'transform-phlegm-ch17'
+            && $categorykey !== 'digestive-ch18') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
@@ -1130,6 +1215,7 @@ $supplementalcategories[$regulatebloodchapteroverview['key']] = $regulatebloodch
 $supplementalcategories[$expelwindchapteroverview['key']] = $expelwindchapteroverview;
 $supplementalcategories[$expeldampchapteroverview['key']] = $expeldampchapteroverview;
 $supplementalcategories[$transformphlegmchapteroverview['key']] = $transformphlegmchapteroverview;
+$supplementalcategories[$digestivechapteroverview['key']] = $digestivechapteroverview;
 unset($supplementalcategories['stabilize-bind-ch9']);
 unset($supplementalcategories['calm-shen-ch10']);
 unset($supplementalcategories['open-orifices-ch11']);
@@ -1138,6 +1224,7 @@ unset($supplementalcategories['regulate-blood-ch13']);
 unset($supplementalcategories['expel-wind-ch14']);
 unset($supplementalcategories['expel-damp-ch16']);
 unset($supplementalcategories['transform-phlegm-ch17']);
+unset($supplementalcategories['digestive-ch18']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -1183,6 +1270,7 @@ $unifiedfamilystatusformulas = [
     'expel-wind' => $expelwindchapteroverview['formulas'],
     'expel-damp' => $expeldampchapteroverview['formulas'],
     'transform-phlegm' => $transformphlegmchapteroverview['formulas'],
+    'digestive' => $digestivechapteroverview['formulas'],
 ];
 $selectedstatusformulas = $selected === null
     ? []
@@ -1403,7 +1491,8 @@ echo $OUTPUT->header();
                 $isexpelwindindexcard = $category['key'] === 'expel-wind';
                 $isexpeldampindexcard = $category['key'] === 'expel-damp';
                 $istransformphlegmindexcard = $category['key'] === 'transform-phlegm';
-                $iscombinedindexcard = $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard;
+                $isdigestiveindexcard = $category['key'] === 'digestive';
+                $iscombinedindexcard = $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard || $isdigestiveindexcard;
                 $categoryname = $iscalmshenindexcard
                     ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
                     : ($ises ? $category['nameEs'] : $category['name']);
@@ -1439,6 +1528,10 @@ echo $OUTPUT->header();
                     $categorymeta = $ises
                         ? '5 fórmulas Board · Capítulo 17 de Bensky: 18'
                         : '5 Board formulas · Bensky Chapter 17: 18';
+                } elseif ($isdigestiveindexcard) {
+                    $categorymeta = $ises
+                        ? '1 fórmula Board · Capítulo 18 de Bensky: 8'
+                        : '1 Board formula · Bensky Chapter 18: 8';
                 } else {
                     $categorymeta = count($category['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas');
                 }
@@ -1654,6 +1747,7 @@ echo $OUTPUT->header();
         $deferrelatedduiyao = in_array($selected['key'], [
             'calm-shen-chapter-10',
             'expel-wind-chapter-14',
+            'digestive-chapter-18',
         ], true);
         ?>
         <?php if ($selectedguide !== null): ?>
@@ -1785,6 +1879,7 @@ echo $OUTPUT->header();
                     'expel-wind-chapter-14' => 'expel-wind',
                     'expel-damp-chapter-16' => 'expel-damp',
                     'transform-phlegm-chapter-17' => 'transform-phlegm',
+                    'digestive-chapter-18' => 'digestive',
                 ];
                 $duiyaoreturnfocus = $duiyaoreturnfocusmap[$selected['key']] ?? $selected['key'];
                 $duiyaoreturnparams = $duiyaoreturnfocus === '' ? [] : [
@@ -2349,10 +2444,10 @@ echo $OUTPUT->header();
                 $clinicalsection = $selectedformulasectionbyname[$formula['name']] ?? null;
                 $newclinicalsection = $clinicalsection !== null
                     && $lastclinicalsectionkey !== $clinicalsection['key']
-                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true);
-                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)
+                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18'], true);
+                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
-                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18'], true)
                     && $lastformulacategory !== $currentsectionkey;
                 if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
                     $formulacategory = $stabilizechaptersections[$currentsectionkey];
@@ -2402,6 +2497,12 @@ echo $OUTPUT->header();
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
                     ));
+                } elseif ($newchaptersection && $selected['key'] === 'digestive-chapter-18') {
+                    $formulacategory = $digestivechaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
                 } else {
                     $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
                 }
@@ -2421,7 +2522,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)) {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -2443,7 +2544,7 @@ echo $OUTPUT->header();
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17'], true)
+                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>

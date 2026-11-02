@@ -78,6 +78,10 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "transform-phlegm-ch17"
     );
+    $chapter18 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "digestive-ch18"
+    );
     $historical = array_filter(
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
@@ -96,6 +100,14 @@ php -r '
     foreach ($phlegmSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
             $phlegmSectionNames[] = $formulaName;
+        }
+    }
+    $digestiveSections = $data["categoryGuides"]["digestive-chapter-18"]["formulaSections"] ?? [];
+    $digestiveDuiYao = $data["categoryGuides"]["digestive-chapter-18"]["relatedDuiYao"] ?? [];
+    $digestiveSectionNames = [];
+    foreach ($digestiveSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $digestiveSectionNames[] = $formulaName;
         }
     }
     $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
@@ -159,6 +171,7 @@ php -r '
         "expel-wind-chapter-14" => "release-exterior",
         "expel-damp-chapter-16" => "drain-damp",
         "transform-phlegm-chapter-17" => "cough-phlegm",
+        "digestive-chapter-18" => "cough-phlegm",
     ];
     foreach ($expectedDuiYaoAnchors as $guideKey => $anchor) {
         if (($data["categoryGuides"][$guideKey]["relatedDuiYaoAnchor"] ?? "") !== $anchor) {
@@ -169,8 +182,8 @@ php -r '
     if (($data["version"] ?? null) !== 7
             || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 19
-            || count($data["supplementalFormulas"] ?? []) !== 192
+            || count($data["supplementalCategories"] ?? []) !== 20
+            || count($data["supplementalFormulas"] ?? []) !== 199
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -181,6 +194,7 @@ php -r '
             || count($chapter15) !== 8
             || count($chapter16) !== 25
             || count($chapter17) !== 13
+            || count($chapter18) !== 7
             || count($historical) !== 1
             || array_column($historical, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
@@ -206,6 +220,17 @@ php -r '
             || count(array_unique($phlegmSectionNames)) !== 18
             || array_column($phlegmDuiYao, "number") !== [37]
             || array_column($phlegmDuiYao, "formulas") !== ["Èr Chén Tāng."]
+            || array_column($digestiveSections, "key") !== [
+                "reduce-transform-food", "reduce-tonify-food"
+            ]
+            || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $digestiveSections)
+                !== [4, 4]
+            || $digestiveSectionNames !== [
+                "Bao He Wan", "Zhi Shi Dao Zhi Wan", "Mu Xiang Bing Lang Wan", "Fei Er Wan",
+                "Jian Pi Wan", "Zhi Zhu Wan", "Zhi Shi Xiao Pi Wan", "Ge Hua Jie Cheng San"
+            ]
+            || array_column($digestiveDuiYao, "number") !== [37]
+            || array_column($digestiveDuiYao, "formulas") !== ["Bǎo Hé Wán."]
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -423,6 +448,15 @@ grep -q '"key":"dry-damp-transform"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key":"induce-vomiting"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "'transform-phlegm' => 'transform-phlegm-chapter-17'" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "digestive-chapter-18" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number":"C18-08"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"reduce-transform-food"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"reduce-tonify-food"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "'digestive' => 'digestive-chapter-18'" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "1 fórmula Board · Capítulo 18 de Bensky: 8" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Dato interesante: una fórmula Board ancla un continuo de ocho fórmulas" "$TEMP_DIR/formulas-study-guide.php"
+grep -q "Bǎo Hé Wán\." "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "The seven supplemental Chapter 18 formulas are deliberately excluded" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "related-dui-yao-title" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TEMP_DIR/formulas-study-guide.php"
@@ -596,6 +630,15 @@ grep -q '"key":"dry-damp-transform"' "$TARGET_DIR/formulas-study-guide-data.json
 grep -q '"key":"induce-vomiting"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "'transform-phlegm' => 'transform-phlegm-chapter-17'" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "digestive-chapter-18" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number":"C18-08"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"reduce-transform-food"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"reduce-tonify-food"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "'digestive' => 'digestive-chapter-18'" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "1 fórmula Board · Capítulo 18 de Bensky: 8" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Dato interesante: una fórmula Board ancla un continuo de ocho fórmulas" "$TARGET_DIR/formulas-study-guide.php"
+grep -q "Bǎo Hé Wán\." "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "The seven supplemental Chapter 18 formulas are deliberately excluded" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "related-dui-yao-title" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TARGET_DIR/formulas-study-guide.php"
@@ -628,7 +671,7 @@ grep -q "Español" "$TARGET_DIR/study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "← Board Guideline · Chinese Herbal Medicine" "$TARGET_DIR/study-guide.php"
 
-echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15, 16 Y 17 INSTALADOS EN MOODLE"
+echo "CAPÍTULOS 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 Y 18 INSTALADOS EN MOODLE"
 echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A CALOR"
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
@@ -663,6 +706,9 @@ echo "CAPÍTULO 17 INSTALADO: 18 FÓRMULAS EN 7 SECCIONES (13 PERFILES NUEVOS + 
 echo "VISTA ÚNICA INSTALADA: TRANSFORM PHLEGM ABRE DIRECTAMENTE EL CAPÍTULO 17 COMPLETO"
 echo "ANEXO INSTALADO: LAS 7 TABLAS COMPARATIVAS DEL CAPÍTULO 17 QUEDAN PLEGADAS AL FINAL"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA DE TRANSFORM PHLEGM LIMITADA AL GUIDELINE"
+echo "CAPÍTULO 18 INSTALADO: 8 FÓRMULAS EN 2 SECCIONES (7 PERFILES NUEVOS + 1 BOARD)"
+echo "VISTA ÚNICA INSTALADA: DIGESTIVE ABRE DIRECTAMENTE EL CAPÍTULO 18 COMPLETO"
+echo "PUENTE DUÌ YÀO INSTALADO: BÀN XIÀ + CHÉN PÍ LIMITADO A BǍO HÉ WÁN DEL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 7 PAREJAS OFICIALES PARA LIBERAR EL EXTERIOR"
 echo "PUENTE DUÌ YÀO INSTALADO: 3 PAREJAS DE CLEAR HEAT LIMITADAS AL GUIDELINE"
 echo "PUENTE DUÌ YÀO INSTALADO: 1 PAREJA OFICIAL PARA PURGAR CALOR Y ABLANDAR SEQUEDAD"
