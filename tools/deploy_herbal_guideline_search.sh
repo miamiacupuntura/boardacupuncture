@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+trap 'status=$?; echo "ERROR: despliegue detenido en la línea $LINENO: $BASH_COMMAND (código $status)" >&2' ERR
 
 REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
