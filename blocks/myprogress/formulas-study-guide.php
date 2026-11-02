@@ -1803,7 +1803,7 @@ echo $OUTPUT->header();
                     <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
                     <strong><?php echo s($categoryname); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
-                    <?php if ($iscombinedindexcard): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span><?php endif; ?>
+                    <span class="formula-study-guide__board-status<?php echo $iscombinedindexcard ? ' formula-study-guide__board-status--' . s($categoryboardstatus['state']) : ''; ?>"><?php echo s($categoryboardstatus['label']); ?></span>
                     <p><?php echo s($copy); ?></p>
                     <?php if ($istonifyindexcard): ?>
                         <span class="formula-study-guide__chapter-merge">
