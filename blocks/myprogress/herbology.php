@@ -33,7 +33,7 @@ echo $OUTPUT->header();
     <div class="herbology-card">
       <h3>Single Herbs</h3>
       <p>Study and practice individual Chinese herbs.</p>
-      <a class="herbology-button" href="<?php echo new moodle_url("/course/view.php", ["id"=>45]); ?>">Open Single Herbs →</a>
+      <a class="herbology-button" href="<?php echo new moodle_url("/blocks/myprogress/single-herbs-study-guide.php"); ?>">Open Single Herbs →</a>
     </div>
     <div class="herbology-card">
       <h3>Formulas</h3>
