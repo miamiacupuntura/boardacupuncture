@@ -171,9 +171,175 @@ $clearheatsections = [
         ],
     ],
 ];
-$selectedclearheat = null;
+$downwardsections = [
+    'purgatives' => [
+        'number' => '3.1',
+        'name' => 'Purgatives',
+        'focus' => 'Cold, downward-draining substances for excess heat, dry stool and intestinal accumulation.',
+        'distinction' => 'Da Huang has the broadest action and also clears heat and moves blood; Mang Xiao moistens dryness and softens hardness; Fan Xie Ye is a focused, stronger purgative; Lu Hui also drains Liver fire and kills parasites.',
+        'coreherbs' => [
+            [
+                'name' => 'Dà Huáng',
+                'pharmaceutical' => 'Rhei Radix et Rhizoma',
+                'nature' => 'Bitter · cold',
+                'dose' => '3–15 g',
+                'use' => 'Drains heat and purges accumulation; also clears fire toxicity, cools and moves blood, and drains damp-heat.',
+            ],
+            [
+                'name' => 'Máng Xiāo',
+                'pharmaceutical' => 'Natrii Sulfas',
+                'nature' => 'Salty, bitter · cold',
+                'dose' => '6–18 g',
+                'use' => 'Purges accumulation, moistens intestinal dryness and softens hard stool or focal hardness.',
+            ],
+            [
+                'name' => 'Fān Xiè Yè',
+                'pharmaceutical' => 'Sennae Folium',
+                'nature' => 'Sweet, bitter · cold',
+                'dose' => '1.5–3 g mild; 4.5–9 g strong',
+                'use' => 'A focused, strong purgative for heat accumulation and constipation; the source also notes edema use.',
+            ],
+            [
+                'name' => 'Lú Huì',
+                'pharmaceutical' => 'Aloe',
+                'nature' => 'Bitter · cold',
+                'dose' => '1.5–4.5 g',
+                'use' => 'Drains fire and purges accumulation, clears Liver fire and traditionally kills parasites.',
+            ],
+        ],
+        'warnings' => [
+            'Pregnancy and lactation restrictions differ by substance: Da Huang requires great caution; Mang Xiao is contraindicated in pregnancy; Fan Xie Ye is contraindicated in pregnancy, breastfeeding and heavy bleeding; Lu Hui is contraindicated in pregnancy and used cautiously during lactation.',
+            'Avoid or use only with expert supervision in Spleen/Stomach cold or deficiency, frailty, qi/blood deficiency, dehydration, active intestinal inflammation or an undifferentiated abdominal emergency.',
+            'Overuse may cause severe diarrhea, cramping, vomiting, dehydration and electrolyte loss. Long-term anthraquinone exposure can injure the gastrointestinal tract and liver and may cause hypokalemia.',
+            'Aloe drug is the dried yellow latex, not aloe-vera gel. Excess can cause gastrointestinal or urinary bleeding, colitis and allergic reactions.',
+        ],
+        'annex' => [
+            'comparison' => 'Da Huang is broad and especially suited to excess heat while also addressing blood and damp-heat. Mang Xiao is selected when dryness and hardness predominate. Fan Xie Ye is stronger and narrower, so smaller doses are emphasized. Lu Hui adds Liver-fire and parasite indications.',
+            'preparation' => 'Add Da Huang late or decoct it separately for about three minutes when a stronger purgative action is intended. Dissolve Mang Xiao into the strained decoction or warm water; do not decoct it. Prepare Fan Xie Ye as a tea or add it late. Lu Hui is used in pills or capsules and is not decocted.',
+            'nomenclature' => 'Pharmaceutical names distinguish the mineral Natrii Sulfas, medicinal Aloe latex and the accepted botanical sources of rhubarb and senna from similarly named commercial products.',
+            'supplemental' => [
+                'Historical/source-reported indications and mechanisms are traditional materia-medica descriptions, not instructions for self-treatment.',
+                'Persistent constipation with severe pain, vomiting, bleeding, fever, distention or inability to pass gas requires prompt biomedical assessment.',
+            ],
+        ],
+    ],
+    'moist-laxatives' => [
+        'number' => '3.2',
+        'name' => 'Moist Laxatives',
+        'focus' => 'Oil-rich seeds that moisten the Intestines when dryness contributes to constipation.',
+        'distinction' => 'Huo Ma Ren is gentler, nourishing and suited to deficiency dryness; Yu Li Ren is stronger, promotes urination and is more often used when excess and edema accompany constipation.',
+        'coreherbs' => [
+            [
+                'name' => 'Huǒ Má Rén',
+                'pharmaceutical' => 'Cannabis Semen',
+                'nature' => 'Sweet · neutral',
+                'dose' => '9–15 g, crushed',
+                'use' => 'Moistens the Intestines, nourishes yin and supports bowel movement in dry or deficiency constipation.',
+            ],
+            [
+                'name' => 'Yù Lǐ Rén',
+                'pharmaceutical' => 'Pruni Semen',
+                'nature' => 'Acrid, bitter · neutral',
+                'dose' => '3–9 g, crushed',
+                'use' => 'Moistens the Intestines and promotes urination to reduce edema; stronger and more draining than Huo Ma Ren.',
+            ],
+        ],
+        'warnings' => [
+            'Use Yu Li Ren cautiously during pregnancy and in yin or fluid deficiency because its downward-draining action may further injure fluids.',
+            'Excessive Huo Ma Ren can cause nausea, vomiting, diarrhea, numbness, agitation, confusion, dilated pupils or loss of consciousness.',
+            'Neither seed is appropriate for unexplained severe abdominal pain, suspected obstruction or persistent constipation requiring diagnostic evaluation.',
+        ],
+        'annex' => [
+            'comparison' => 'Both seeds contain oils that moisten the Intestines. Huo Ma Ren is milder and more nourishing; Yu Li Ren is more forceful, adds a diuretic action and fits excess-type edema and constipation more closely.',
+            'preparation' => 'Crush the seeds before use. Species identity, storage and rancidity matter for oil-rich medicinal seeds.',
+            'nomenclature' => 'Cannabis Semen refers to the medicinal seed, not cannabis flower or resin. Pruni Semen designates the accepted yuliren botanical sources rather than culinary stone-fruit kernels in general.',
+            'supplemental' => [
+                'Traditional texts caution that Yu Li Ren can injure fluids and frame it as short-term treatment of the branch rather than unsupervised long-term therapy.',
+            ],
+        ],
+    ],
+    'harsh-expellants' => [
+        'number' => '3.3',
+        'name' => 'Harsh Expellants',
+        'focus' => 'Toxic, forceful cathartics that expel severe pathogenic water, phlegm or accumulation.',
+        'distinction' => 'Qian Niu Zi is the most moderate and also addresses parasites and food stagnation. Gan Sui, Jing Da Ji and Yuan Hua are short-term severe-water remedies with different tissue emphases. Ba Dou is hot for cold accumulation; Shang Lu expels water through both bowel and bladder.',
+        'coreherbs' => [
+            [
+                'name' => 'Qiān Niú Zǐ',
+                'pharmaceutical' => 'Pharbitidis Semen',
+                'nature' => 'Bitter · cold · toxic',
+                'dose' => '3–6 g decoction; ≤3 g powder',
+                'use' => 'Drains water, reduces accumulation and traditionally kills parasites; more moderate than the other harsh expellants.',
+            ],
+            [
+                'name' => 'Gān Suì',
+                'pharmaceutical' => 'Kansui Radix',
+                'nature' => 'Bitter · cold · toxic',
+                'dose' => '0.5–1.5 g',
+                'use' => 'Forcefully drains water downward and reduces focal distention, hidden fluid and phlegm accumulation.',
+            ],
+            [
+                'name' => 'Hóng Dà Jǐ',
+                'pharmaceutical' => 'Knoxiae Radix',
+                'nature' => 'Bitter, acrid · cold · slightly toxic',
+                'dose' => '1.5–3 g',
+                'use' => 'Drives pathogenic fluids downward and can be applied externally for toxic sores or scrofula.',
+            ],
+            [
+                'name' => 'Jīng Dà Jǐ',
+                'pharmaceutical' => 'Euphorbiae pekinensis Radix',
+                'nature' => 'Bitter, acrid · cold · toxic',
+                'dose' => '1.5–3 g',
+                'use' => 'A stronger da ji form for severe water and thin-mucus accumulation; also used externally in the source tradition.',
+            ],
+            [
+                'name' => 'Yuán Huā',
+                'pharmaceutical' => 'Genkwa Flos',
+                'nature' => 'Bitter, acrid · warm · toxic',
+                'dose' => '1.5–3 g',
+                'use' => 'Drives out water and thin mucus, especially from the chest and Lung; also has external antiparasitic uses.',
+            ],
+            [
+                'name' => 'Bā Dòu',
+                'pharmaceutical' => 'Crotonis Fructus',
+                'nature' => 'Acrid · hot · highly toxic',
+                'dose' => '0.1–0.3 g/day, defatted only',
+                'use' => 'Violently purges severe cold accumulation, drives out water and breaks up clogged phlegm; raw forms are not for internal use.',
+            ],
+            [
+                'name' => 'Shāng Lù',
+                'pharmaceutical' => 'Phytolaccae Radix',
+                'nature' => 'Bitter · cold · highly toxic',
+                'dose' => '3–9 g',
+                'use' => 'Expels pathogenic water through the bowel and bladder and is traditionally applied externally for hot sores and swelling.',
+            ],
+        ],
+        'warnings' => [
+            'HIGH-RISK GROUP: these substances can cause life-threatening gastrointestinal, renal, neurologic, respiratory and cardiovascular toxicity. They are not appropriate for self-prescribing or home experimentation.',
+            'Contraindicated during pregnancy. Avoid in frail or debilitated patients and use only briefly in carefully selected excess patterns under expert supervision.',
+            'Do not combine Qian Niu Zi with Ba Dou. Traditional antagonism with Gan Cao is especially emphasized for Gan Sui, Jing Da Ji and Yuan Hua; the source recommends avoiding Euphorbiae pekinensis Radix with Gan Cao while evidence remains unsettled.',
+            'Ba Dou is exceptionally hazardous: the source reports 15–20 seeds or about 20 drops of croton oil as potentially lethal. Seeds, oil and vapors can severely irritate skin, eyes, nose and mucosa. Only a correctly defatted pharmaceutical preparation is described for internal use.',
+            'Shang Lu poisoning may progress from vomiting and diarrhea to bleeding, hypotension, bradycardia, coma, respiratory or cardiac paralysis and death. Its raw-root dust can injure the eyes, nose and gastrointestinal tract.',
+        ],
+        'annex' => [
+            'comparison' => 'Gan Sui, Jing Da Ji and Yuan Hua treat severe edema and chest/abdominal fluid but differ in emphasis: Gan Sui reaches hidden pockets and channels; da ji drains water from yin and yang organs; Yuan Hua especially drains chest/Lung phlegm and thin mucus. Ba Dou is hot and fits cold accumulation, whereas Da Huang is cold and fits heat accumulation. Shang Lu opens both bowel and urinary routes; Qian Niu Zi is comparatively moderate.',
+            'preparation' => 'Vinegar processing reduces toxicity in Gan Sui, Jing Da Ji, Yuan Hua and Shang Lu. Ba Dou should be defatted as Crotonis Fructus pulveratum; controlled oil removal is preferred to unpredictable heating. Processing reduces risk but does not make these herbs suitable for unsupervised use.',
+            'nomenclature' => 'Historical da ji may refer to Knoxiae Radix or Euphorbiae pekinensis Radix; this resource separates Hong Da Ji and Jing Da Ji. Botanical and processed-form verification is essential for every herb in this group.',
+            'supplemental' => [
+                'Historical/source-reported only—not a recommendation: the monographs describe treatment of ascites, pleuritis, severe edema, abscesses, chronic diarrhea and other dangerous conditions. These require conventional diagnostic and emergency care.',
+                'The source reports extensive poisoning syndromes and preparation traditions because product identity and processing materially change toxicity; those descriptions are not household preparation instructions.',
+            ],
+        ],
+    ],
+];
+$selectedbensky = null;
+$selectedbenskygroup = '';
 if ($track === 'herbs' && $sectionkey !== '' && isset($clearheatsections[$sectionkey])) {
-    $selectedclearheat = $clearheatsections[$sectionkey];
+    $selectedbensky = $clearheatsections[$sectionkey];
+    $selectedbenskygroup = 'clear-heat';
+} else if ($track === 'herbs' && $sectionkey !== '' && isset($downwardsections[$sectionkey])) {
+    $selectedbensky = $downwardsections[$sectionkey];
+    $selectedbenskygroup = 'downward-draining';
 } else if ($sectionkey !== '') {
     $sectionkey = '';
 }
@@ -312,6 +478,15 @@ echo $OUTPUT->header();
                 <?php foreach ($topics as $topic) {
                     $normalizedname = core_text::strtolower(trim(strip_tags($topic['name'])));
                     $isclearheat = in_array($normalizedname, ['clear heat', 'herbs that clear heat'], true);
+                    $isdownwarddraining = in_array($normalizedname, [
+                        'downward-draining herbs',
+                        'downward draining herbs',
+                        'downward-draining',
+                        'downward draining',
+                        'herbs that drain downward',
+                        'drain downward',
+                    ], true) || (strpos($normalizedname, 'downward') !== false
+                        && (strpos($normalizedname, 'drain') !== false || strpos($normalizedname, 'herb') !== false));
                 ?>
                     <div class="herb-board__topic">
                         <strong><?php echo $topic['number'] === 0 ? 'G' : $topic['number']; ?></strong>
@@ -328,7 +503,7 @@ echo $OUTPUT->header();
                                     $subcategoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
                                         'track' => 'herbs',
                                         'section' => $subcategorykey,
-                                    ], 'clear-heat-section');
+                                    ], 'bensky-section');
                                     $isselected = $sectionkey === $subcategorykey;
                                 ?>
                                     <a class="herb-board__topic herb-board__topic--subcategory<?php echo $isselected ? ' herb-board__topic--selected' : ''; ?>"
@@ -346,6 +521,36 @@ echo $OUTPUT->header();
                                 Yang-based card. These five Bensky sections are study supplements, not replacements.</p>
                         </section>
                     <?php } ?>
+                    <?php if ($isdownwarddraining) { ?>
+                        <section class="herb-board__subcategories herb-board__subcategories--downward"
+                            aria-labelledby="downward-draining-subcategories-title">
+                            <div class="herb-board__subcategories-heading">
+                                <span class="herb-board__subcategories-kicker">Subcategories</span>
+                                <h4 id="downward-draining-subcategories-title">Downward-Draining Herbs sections</h4>
+                            </div>
+                            <div class="herb-board__subcategories-grid herb-board__subcategories-grid--three">
+                                <?php foreach ($downwardsections as $subcategorykey => $subcategory) {
+                                    $subcategoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                                        'track' => 'herbs',
+                                        'section' => $subcategorykey,
+                                    ], 'bensky-section');
+                                    $isselected = $sectionkey === $subcategorykey;
+                                ?>
+                                    <a class="herb-board__topic herb-board__topic--subcategory<?php echo $isselected ? ' herb-board__topic--selected' : ''; ?>"
+                                        href="<?php echo $subcategoryurl->out(false); ?>"
+                                        <?php echo $isselected ? 'aria-current="page"' : ''; ?>>
+                                        <strong><?php echo s($subcategory['number']); ?></strong>
+                                        <span>
+                                            <?php echo s($subcategory['name']); ?>
+                                            <small><?php echo s($subcategory['focus']); ?></small>
+                                        </span>
+                                    </a>
+                                <?php } ?>
+                            </div>
+                            <p class="herb-board__subcategories-note">The original Downward-Draining topic remains the
+                                main Yang-based card. These three Bensky sections are study supplements, not replacements.</p>
+                        </section>
+                    <?php } ?>
                 <?php } ?>
                 <div class="herb-board__topic herb-board__topic--mixed">
                     <strong>M</strong>
@@ -354,38 +559,46 @@ echo $OUTPUT->header();
             </div>
         </section>
 
-        <?php if ($selectedclearheat) { ?>
-            <section class="herb-board__panel herb-board__clear-heat" id="clear-heat-section"
-                aria-labelledby="clear-heat-section-title">
+        <?php if ($selectedbensky) { ?>
+            <section class="herb-board__panel herb-board__clear-heat<?php echo $selectedbenskygroup === 'downward-draining' ? ' herb-board__downward-draining' : ''; ?>"
+                id="bensky-section" aria-labelledby="bensky-section-title">
                 <header class="herb-board__clear-heat-heading">
                     <div>
-                        <p class="herb-board__eyebrow">BENSKY SUPPLEMENT · SECTION <?php echo s($selectedclearheat['number']); ?></p>
-                        <h3 id="clear-heat-section-title"><?php echo s($selectedclearheat['name']); ?></h3>
-                        <p><?php echo s($selectedclearheat['focus']); ?></p>
+                        <p class="herb-board__eyebrow">BENSKY SUPPLEMENT · SECTION <?php echo s($selectedbensky['number']); ?></p>
+                        <h3 id="bensky-section-title"><?php echo s($selectedbensky['name']); ?></h3>
+                        <p><?php echo s($selectedbensky['focus']); ?></p>
                     </div>
-                    <span class="herb-board__scope-badge">5-section Clear Heat structure</span>
+                    <span class="herb-board__scope-badge"><?php echo $selectedbenskygroup === 'downward-draining'
+                        ? '3-section Downward-Draining structure'
+                        : '5-section Clear Heat structure'; ?></span>
                 </header>
 
                 <div class="herb-board__high-yield">
                     <strong>High-yield distinction</strong>
-                    <span><?php echo s($selectedclearheat['distinction']); ?></span>
+                    <span><?php echo s($selectedbensky['distinction']); ?></span>
                 </div>
 
                 <h4 class="herb-board__subheading">Core herbs</h4>
                 <div class="herb-board__herbs">
-                    <?php foreach ($selectedclearheat['coreherbs'] as $herb) { ?>
-                        <article class="herb-board__herb-card">
+                    <?php foreach ($selectedbensky['coreherbs'] as $herb) { ?>
+                        <article class="herb-board__herb-card<?php echo !empty($herb['nature']) && strpos(core_text::strtolower($herb['nature']), 'toxic') !== false ? ' herb-board__herb-card--toxic' : ''; ?>">
                             <h5><?php echo s($herb['name']); ?></h5>
                             <span><?php echo s($herb['pharmaceutical']); ?></span>
+                            <?php if (!empty($herb['nature']) || !empty($herb['dose'])) { ?>
+                                <div class="herb-board__herb-meta">
+                                    <?php if (!empty($herb['nature'])) { ?><small><?php echo s($herb['nature']); ?></small><?php } ?>
+                                    <?php if (!empty($herb['dose'])) { ?><small>Dose: <?php echo s($herb['dose']); ?></small><?php } ?>
+                                </div>
+                            <?php } ?>
                             <p><?php echo s($herb['use']); ?></p>
                         </article>
                     <?php } ?>
                 </div>
 
-                <aside class="herb-board__safety" aria-labelledby="clear-heat-safety-title">
-                    <h4 id="clear-heat-safety-title">Safety stays visible</h4>
+                <aside class="herb-board__safety" aria-labelledby="bensky-safety-title">
+                    <h4 id="bensky-safety-title">Safety stays visible</h4>
                     <ul>
-                        <?php foreach ($selectedclearheat['warnings'] as $warning) { ?>
+                        <?php foreach ($selectedbensky['warnings'] as $warning) { ?>
                             <li><?php echo s($warning); ?></li>
                         <?php } ?>
                     </ul>
@@ -399,20 +612,20 @@ echo $OUTPUT->header();
                     <div class="herb-board__annex-body">
                         <section>
                             <h4>Comparative notes</h4>
-                            <p><?php echo s($selectedclearheat['annex']['comparison']); ?></p>
+                            <p><?php echo s($selectedbensky['annex']['comparison']); ?></p>
                         </section>
                         <section>
                             <h4>Preparation and product notes</h4>
-                            <p><?php echo s($selectedclearheat['annex']['preparation']); ?></p>
+                            <p><?php echo s($selectedbensky['annex']['preparation']); ?></p>
                         </section>
                         <section>
                             <h4>Nomenclature and identity</h4>
-                            <p><?php echo s($selectedclearheat['annex']['nomenclature']); ?></p>
+                            <p><?php echo s($selectedbensky['annex']['nomenclature']); ?></p>
                         </section>
                         <section class="herb-board__annex-wide">
                             <h4>Supplemental/source notes</h4>
                             <ul>
-                                <?php foreach ($selectedclearheat['annex']['supplemental'] as $note) { ?>
+                                <?php foreach ($selectedbensky['annex']['supplemental'] as $note) { ?>
                                     <li><?php echo s($note); ?></li>
                                 <?php } ?>
                             </ul>
