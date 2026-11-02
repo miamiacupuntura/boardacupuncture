@@ -101,7 +101,8 @@ if ($requestedherbcard !== null && !empty($requestedherbcard['guideNumber'])) {
 $selected = null;
 $ismixed = $focus === 'mixed';
 $isproperties = $focus === 'properties';
-if (!$ismixed && !$isproperties && $focus !== '' && ctype_digit($focus)) {
+$isintroduction = $focus === 'introduction';
+if (!$ismixed && !$isproperties && !$isintroduction && $focus !== '' && ctype_digit($focus)) {
     $number = (int) $focus;
     if (isset($categories[$number])) {
         $selected = $categories[$number];
@@ -346,7 +347,11 @@ $istopicthirtyone = $selected !== null
         || stripos($selectedname, 'Extinguish Wind and Stop Tremors') !== false
     );
 
-if ($isproperties) {
+if ($isintroduction) {
+    $workspaceintro = $ises
+        ? 'Construye una base para estudiar hierbas individuales: historia, identidad, propiedades, meridianos, dirección, combinaciones, dosis, procesamiento y seguridad.'
+        : 'Build a foundation for single-herb study: history, identity, properties, channels, direction, combinations, dosage, processing and safety.';
+} else if ($isproperties) {
     $workspaceintro = $ises
         ? 'Consulta las 304 hierbas oficiales por sabor, temperatura, meridianos y dosis, con búsqueda y cobertura verificada claramente identificada.'
         : 'Review all 304 official herbs by flavor, temperature, channels and dosage, with search and verified coverage clearly identified.';
@@ -929,6 +934,7 @@ ob_start();
 .single-herbs-guide__category strong{font-size:16px;line-height:1.35}.single-herbs-guide__category small{margin-top:auto;padding-top:12px;color:#19706a;font-weight:800}
 .single-herbs-guide__category--mixed{border-top-color:#0b817d;background:#f6fbfa}.single-herbs-guide__category--mixed .single-herbs-guide__category-number{background:#dff2ee;color:#0d665e}
 .single-herbs-guide__category--properties{border-top-color:#2563eb;background:#f7faff}.single-herbs-guide__category--properties .single-herbs-guide__category-number{background:#dbeafe;color:#1d4ed8}
+.single-herbs-guide__category--introduction{border-top-color:#7c3aed;background:#faf8ff}.single-herbs-guide__category--introduction .single-herbs-guide__category-number{background:#ede9fe;color:#6d28d9}
 .single-herbs-guide__empty{padding:34px;border:1px dashed #aeb8c0;border-radius:12px;background:#fff;text-align:center;color:#64748b}
 .single-herbs-guide__requested-card{margin:0 0 22px;padding:20px 22px;border:1px solid #c9ded9;border-left:5px solid #0b817d;border-radius:11px;background:#f2faf8}.single-herbs-guide__requested-card h3{margin:2px 0 5px;font-size:23px}.single-herbs-guide__requested-card p{margin:0;color:#52677a;line-height:1.5}.single-herbs-guide__requested-card .single-herbs-guide__eyebrow{margin-bottom:4px}.single-herbs-guide__requested-card-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.single-herbs-guide__card-target{scroll-margin-top:24px;animation:single-herb-card-highlight 2.2s ease}.single-herbs-guide__card-target>summary,.single-herbs-guide__card-target.single-herbs-guide__category-herb{box-shadow:0 0 0 4px rgba(11,129,125,.2)}@keyframes single-herb-card-highlight{0%,55%{transform:translateY(-2px)}100%{transform:none}}
 .single-herbs-guide__workspace{padding:28px;border:1px solid #d9e2e7;border-top:5px solid #0b817d;border-radius:13px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
@@ -951,6 +957,7 @@ ob_start();
 .single-herbs-properties__summary{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.single-herbs-properties__summary h4{margin:0 0 7px}.single-herbs-properties__summary p{max-width:690px;margin:0;color:#60717e;line-height:1.55}.single-herbs-properties__stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.single-herbs-properties__stats span{padding:8px 10px;border-radius:8px;background:#eef6ff;color:#38526e;font-size:12px;font-weight:700}.single-herbs-properties__stats strong{margin-right:4px;color:#174ea6;font-size:16px}.single-herbs-properties__source-note{margin:16px 0;padding:13px 15px;border-left:4px solid #2563eb;border-radius:7px;background:#eff6ff;color:#36536f;font-size:13px;line-height:1.5}.single-herbs-properties__controls{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:8px 14px;align-items:end;margin:18px 0}.single-herbs-properties__controls label{grid-column:1/-1;font-weight:800;color:#17364a}.single-herbs-properties__controls input{min-height:42px;padding:8px 11px;border:1px solid #aebbc5;border-radius:8px}.single-herbs-properties__filters{display:flex;gap:5px;flex-wrap:wrap}.single-herbs-properties__filters button{min-height:38px;padding:7px 10px;border:1px solid #bdcbd4;border-radius:999px;background:#fff;color:#405565;font-size:12px;font-weight:800}.single-herbs-properties__filters button.is-active{border-color:#2563eb;background:#2563eb;color:#fff}.single-herbs-properties__results{margin:0;color:#60717e;font-size:13px;white-space:nowrap}.single-herbs-properties__table-wrap{overflow:auto;border:1px solid #d9e2e7;border-radius:10px}.single-herbs-properties__table{width:100%;min-width:940px;border-collapse:collapse;background:#fff;font-size:13px}.single-herbs-properties__table th,.single-herbs-properties__table td{padding:11px 12px;border-bottom:1px solid #e4eaee;text-align:left;vertical-align:top}.single-herbs-properties__table thead th{position:sticky;top:0;background:#edf7f5;color:#153c4b;font-size:12px;text-transform:uppercase;letter-spacing:.03em}.single-herbs-properties__table tbody th{min-width:165px;color:#17364a}.single-herbs-properties__table tbody th a{color:#075eaa;font-weight:900}.single-herbs-properties__table small{display:block;margin-top:3px;color:#6b7b87;font-weight:500}.single-herbs-properties__status{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:900;text-transform:uppercase;white-space:nowrap}.single-herbs-properties__status--verified{background:#dcfce7;color:#166534}.single-herbs-properties__status--dose-only{background:#dbeafe;color:#1d4ed8}.single-herbs-properties__status--pending{background:#fff1e5;color:#9a4a12}.single-herbs-properties__empty-results{padding:20px;text-align:center;color:#64748b}
 .single-herbs-guide__yang-deck{max-width:820px;margin:0 auto}.single-herbs-guide__yang-card{display:none;min-height:300px;overflow:hidden;border:1px solid #d7e0e5;border-top:5px solid #7c3aed;border-radius:13px;background:#fff;box-shadow:0 7px 22px rgba(15,23,42,.08)}.single-herbs-guide__yang-card.is-active{display:block}.single-herbs-guide__yang-face{min-height:295px;padding:25px 27px}.single-herbs-guide__yang-face--back{display:none;background:linear-gradient(145deg,#faf8ff,#f6fbfa)}.single-herbs-guide__yang-card.is-flipped .single-herbs-guide__yang-face--front{display:none}.single-herbs-guide__yang-card.is-flipped .single-herbs-guide__yang-face--back{display:block}.single-herbs-guide__yang-label{display:block;margin-bottom:17px;color:#6d28d9;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.single-herbs-guide__yang-question{margin:0;color:#17364a;font-size:clamp(20px,2.4vw,27px);line-height:1.35}.single-herbs-guide__yang-answer{margin:0;color:#405565;font-size:16px;line-height:1.65}.single-herbs-guide__yang-answer strong{color:#0d665e}.single-herbs-guide__yang-controls{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:13px}.single-herbs-guide__yang-control{min-height:42px;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:900;cursor:pointer}.single-herbs-guide__yang-control:hover{background:#f1f5f9}.single-herbs-guide__yang-control--next{justify-self:end}.single-herbs-guide__yang-control--flip{border-color:#7c3aed;background:#7c3aed;color:#fff}.single-herbs-guide__yang-control--flip:hover{background:#6d28d9}.single-herbs-guide__yang-progress{margin:10px 0 0;color:#60717e;font-size:13px;text-align:center}.single-herbs-guide__scope-note{margin-top:14px;padding:12px 15px;border-radius:8px;background:#fff8e8;color:#725110;line-height:1.5}
 .single-herbs-properties__status--properties-only{background:#ede9fe;color:#6d28d9}
+.single-herbs-intro__callout{padding:22px;border-left:5px solid #7c3aed;border-radius:11px;background:linear-gradient(135deg,#faf8ff,#f3faf8)}.single-herbs-intro__callout h4{margin:0 0 8px}.single-herbs-intro__callout p:last-child{margin:0;color:#405565;line-height:1.65}.single-herbs-intro__section{margin-top:30px}.single-herbs-intro__section>h4{margin:0 0 8px;color:#123246;font-size:22px}.single-herbs-intro__section>h5{margin:22px 0 10px;color:#17364a;font-size:17px}.single-herbs-intro__section>p{color:#52677a;line-height:1.62}.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:15px}.single-herbs-intro__timeline article,.single-herbs-intro__profile-grid article,.single-herbs-intro__relationships article,.single-herbs-intro__special-grid article,.single-herbs-intro__reading-levels article,.single-herbs-intro__dose-factors article,.single-herbs-intro__processing-grid article,.single-herbs-intro__safety-grid article{padding:15px;border:1px solid #dce4e8;border-radius:9px;background:#f9fbfc}.single-herbs-intro :is(article) strong{display:block;margin-bottom:5px;color:#17364a}.single-herbs-intro :is(article) span,.single-herbs-intro :is(article) p{color:#5b6b79;font-size:13px;line-height:1.5}.single-herbs-intro__taste-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px}.single-herbs-intro__taste-grid article{padding:15px;border-left:4px solid #f77e25;border-radius:8px;background:#fff7f0}.single-herbs-intro__nature-scale{display:grid;grid-template-columns:repeat(5,1fr);overflow:hidden;margin:15px 0;border-radius:9px;color:#fff;text-align:center;font-weight:900}.single-herbs-intro__nature-scale span{padding:13px 7px}.single-herbs-intro__nature-scale .is-hot{background:#b91c1c}.single-herbs-intro__nature-scale .is-warm{background:#ea580c}.single-herbs-intro__nature-scale .is-neutral{background:#64748b}.single-herbs-intro__nature-scale .is-cool{background:#0284c7}.single-herbs-intro__nature-scale .is-cold{background:#1d4ed8}.single-herbs-intro__methods{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.single-herbs-intro__methods span{padding:7px 10px;border-radius:999px;background:#eaf5f3;color:#0d665e;font-size:12px;font-weight:800}.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.single-herbs-intro__two-column article,.single-herbs-intro__direction-grid article{padding:17px;border:1px solid #dce4e8;border-radius:10px;background:#fff}.single-herbs-intro__direction-grid strong{color:#6d28d9!important;font-size:17px}.single-herbs-intro__reading-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:14px}.single-herbs-intro__workflow{display:grid;gap:8px;margin:14px 0;padding-left:24px}.single-herbs-intro__workflow li{padding:9px 12px;border-radius:7px;background:#f6fafb;color:#405565}.single-herbs-intro .single-herbs-guide__safety{margin-top:15px}.single-herbs-intro .single-herbs-guide__source{margin-top:28px;color:#6b7b87;line-height:1.55}
 .single-herbs-guide__profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .single-herbs-guide__profile{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #f77e25;border-radius:10px;background:#fff}
 .single-herbs-guide__profile summary{position:relative;cursor:pointer;padding:17px 42px 17px 17px;list-style:none}.single-herbs-guide__profile summary::-webkit-details-marker{display:none}.single-herbs-guide__profile summary:after{content:'+';position:absolute;right:16px;top:16px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:19px;font-weight:900}.single-herbs-guide__profile[open] summary:after{content:'−'}
@@ -963,6 +970,8 @@ ob_start();
 .single-herbs-guide__recall{display:grid;gap:9px}.single-herbs-guide__recall details{border:1px solid #dce4e8;border-radius:9px;background:#fff}.single-herbs-guide__recall summary{cursor:pointer;padding:15px 17px;color:#17364a;font-weight:800}.single-herbs-guide__recall details[open] summary{border-bottom:1px solid #e4eaed;background:#f6fafb}.single-herbs-guide__recall p{margin:0;padding:15px 17px;color:#52677a;line-height:1.5}.single-herbs-guide__source{font-size:13px}
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{justify-content:flex-start;margin-top:16px}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-properties__controls{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}}
+@media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid,.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid,.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid,.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid{grid-template-columns:1fr}.single-herbs-intro__nature-scale{grid-template-columns:1fr}.single-herbs-intro__nature-scale span{padding:9px}}
 </style>
 
 <main class="single-herbs-guide">
@@ -999,22 +1008,26 @@ ob_start();
         </section>
     <?php endif; ?>
 
-    <?php if ($selected !== null || $ismixed || $isproperties): ?>
+    <?php if ($selected !== null || $ismixed || $isproperties || $isintroduction): ?>
         <?php
-        $focuslabel = $isproperties
+        $focuslabel = $isintroduction
+            ? ($ises ? 'Fundamentos' : 'Foundations')
+            : ($isproperties
             ? ($ises ? 'Referencia Board' : 'Board Reference')
             : ($ismixed
             ? ($ises ? 'Repaso mixto' : 'Mixed Review')
             : ($selectedguidenumber !== null
                 ? ($ises ? 'Categoría ' : 'Category ') . $selectedguidenumber
-                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number'])));
-        $focustitle = $isproperties
+                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']))));
+        $focustitle = $isintroduction
+            ? ($ises ? 'Introducción a las hierbas individuales' : 'Introduction to Single Herbs')
+            : ($isproperties
             ? ($ises ? 'Tabla de propiedades de hierbas' : 'Herb Properties Table')
             : ($ismixed
             ? ($ises ? 'Repaso mixto' : 'Mixed Review')
             : ($selectedguidenumber !== null
                 ? $stripstudyguidenumber((string) $selected['name'])
-                : $selected['name']));
+                : $selected['name'])));
         ?>
         <section class="single-herbs-guide__workspace" aria-labelledby="single-herbs-focus-title">
             <div class="single-herbs-guide__workspace-header">
@@ -1037,7 +1050,9 @@ ob_start();
                     <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
                 </nav>
             <?php endif; ?>
-            <?php if ($isproperties): ?>
+            <?php if ($isintroduction): ?>
+                <?php require(__DIR__ . '/single-herbs-introduction.php'); ?>
+            <?php elseif ($isproperties): ?>
                 <?php require(__DIR__ . '/single-herbs-properties-table.php'); ?>
             <?php elseif ($ismixed): ?>
                 <?php require(__DIR__ . '/single-herbs-mixed-review.php'); ?>
@@ -1331,16 +1346,28 @@ ob_start();
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
             <div>
                 <h3 id="single-herbs-categories-title">Board-aligned category index</h3>
-                <p><?php echo s($ises ? 'Las categorías siguen el Board Level e incluyen una tabla maestra de propiedades y un espacio de repaso mixto.' : 'Categories follow Board Level and include a master properties table plus a Mixed Review workspace.'); ?></p>
+                <p><?php echo s($ises ? 'Comienza con la introducción, continúa por las categorías del Board Level y termina con la tabla maestra y el repaso mixto.' : 'Start with the introduction, continue through Board Level categories, and finish with the master table and Mixed Review.'); ?></p>
             </div>
             <div class="single-herbs-guide__count" aria-label="Category count">
-                <strong><?php echo count($studyguidecategories) + 2; ?></strong>
+                <strong><?php echo count($studyguidecategories) + 3; ?></strong>
                 <span><?php echo s($ises ? 'áreas de estudio' : 'study areas'); ?></span>
             </div>
         </section>
 
         <?php if ($studyguidecategories): ?>
             <section class="single-herbs-guide__grid" aria-label="Single Herbs categories">
+                <?php
+                $introductionparams = ['focus' => 'introduction'];
+                if ($ises) {
+                    $introductionparams['lang'] = 'es';
+                }
+                $introductionurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $introductionparams);
+                ?>
+                <a class="single-herbs-guide__category single-herbs-guide__category--introduction" href="<?php echo $introductionurl->out(false); ?>">
+                    <span class="single-herbs-guide__category-number">I</span>
+                    <strong><?php echo s($ises ? 'Introducción a las hierbas individuales' : 'Introduction to Single Herbs'); ?></strong>
+                    <small><?php echo s($ises ? 'Historia · propiedades · meridianos · dosis · seguridad →' : 'History · properties · channels · dosage · safety →'); ?></small>
+                </a>
                 <?php foreach ($studyguidecategories as $category): ?>
                     <?php
                     $categoryguidenumber = (int) $category['guide_number'];

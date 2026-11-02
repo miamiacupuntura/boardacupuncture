@@ -84,6 +84,9 @@ curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-properties-table.php" \
     -o "$TEMP_DIR/single-herbs-properties-table.php"
 curl -fsSL \
+    "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-introduction.php" \
+    -o "$TEMP_DIR/single-herbs-introduction.php"
+curl -fsSL \
     "$REPOSITORY/$REVISION/blocks/myprogress/single-herb-properties.json" \
     -o "$TEMP_DIR/single-herb-properties.json"
 
@@ -99,6 +102,7 @@ done
 
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-study-guide.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-properties-table.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/single-herbs-introduction.php" >/dev/null
 "$PHP_BIN" -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) {
@@ -133,6 +137,9 @@ grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "focus' => 'properties" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "single-herbs-properties-table.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "Master herb properties table" "$TEMP_DIR/single-herbs-properties-table.php"
+grep -q "single-herbs-introduction.php" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "From materia medica to a Board decision" "$TEMP_DIR/single-herbs-introduction.php"
+grep -q "Five safety pillars" "$TEMP_DIR/single-herbs-introduction.php"
 grep -q "guidelines.css?v=20261101-3" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine.html"
 grep -q "guideline-return.js?v=20261101-2" "$TEMP_DIR/chinese-herbal-medicine-es.html"
@@ -182,7 +189,7 @@ cp -a "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php" "$BACKUP_DIR
 if [[ -f "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" ]]; then
     cp -a "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" "$BACKUP_DIR/"
 fi
-for properties_file in single-herbs-properties-table.php single-herb-properties.json; do
+for properties_file in single-herbs-properties-table.php single-herbs-introduction.php single-herb-properties.json; do
     if [[ -f "$MOODLE_ROOT/blocks/myprogress/$properties_file" ]]; then
         cp -a "$MOODLE_ROOT/blocks/myprogress/$properties_file" "$BACKUP_DIR/"
     fi
@@ -206,6 +213,8 @@ install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
+    "$TEMP_DIR/single-herbs-introduction.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-introduction.php"
 install -m 0644 -o "$MOODLE_OWNER" -g "$MOODLE_GROUP" \
     "$TEMP_DIR/single-herb-properties.json" "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 
@@ -264,6 +273,8 @@ grep -q "guidelineHerbs" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guid
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 grep -q "single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "Master herb properties table" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
+grep -q "single-herbs-introduction.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "From materia medica to a Board decision" "$MOODLE_ROOT/blocks/myprogress/single-herbs-introduction.php"
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"doseAppendixSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"propertyChartSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
@@ -273,5 +284,6 @@ echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
 echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
 echo "304 HIERBAS ENLAZADAS CON SUS TARJETAS DE SINGLE HERBS"
 echo "TABLA DE PROPIEDADES INSTALADA: SABOR, TEMPERATURA, MERIDIANOS Y DOSIS"
+echo "INTRODUCTION TO SINGLE HERBS INSTALADA: HISTORIA, PROPIEDADES, DOSIS, PROCESAMIENTO Y SEGURIDAD"
 echo "ASTERISCO INSTALADO EN NOMBRES INDIVIDUALES DEL GUIDELINE"
 echo "Respaldo: $BACKUP_DIR"
