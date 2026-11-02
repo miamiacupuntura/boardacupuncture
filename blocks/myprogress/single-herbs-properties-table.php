@@ -24,7 +24,8 @@ $propertylang = $ises ? 'es' : 'en';
             </div>
             <div class="single-herbs-properties__stats" aria-label="<?php echo s($ises ? 'Cobertura de la tabla' : 'Table coverage'); ?>">
                 <span><strong><?php echo (int)$propertiesdata['total']; ?></strong><?php echo s($ises ? ' oficiales' : ' official'); ?></span>
-                <span><strong><?php echo (int)$propertiesdata['verified']; ?></strong><?php echo s($ises ? ' fichas verificadas' : ' verified profiles'); ?></span>
+                <span><strong><?php echo (int)$propertiesdata['verified']; ?></strong><?php echo s($ises ? ' fichas detalladas' : ' detailed profiles'); ?></span>
+                <span><strong><?php echo (int)($propertiesdata['propertiesOnly'] ?? 0); ?></strong><?php echo s($ises ? ' con propiedades del Chart 6' : ' with Chart 6 properties'); ?></span>
                 <span><strong><?php echo (int)$propertiesdata['doseOnly']; ?></strong><?php echo s($ises ? ' solo con dosis del apéndice' : ' appendix-dose only'); ?></span>
             </div>
         </div>
@@ -32,8 +33,8 @@ $propertylang = $ises ? 'es' : 'en';
         <div class="single-herbs-properties__source-note">
             <strong><?php echo s($ises ? 'Cómo leer la dosis:' : 'How to read dosage:'); ?></strong>
             <?php echo s($ises
-                ? '“Dosis de estudio” procede de la ficha detallada. “Appendix 1” es el límite diario excepcional del texto suministrado y no sustituye la individualización clínica.'
-                : '“Study dose” comes from the detailed profile. “Appendix 1” is the exceptional daily limit in the supplied text and does not replace clinical individualization.'); ?>
+                ? '“Dosis de estudio” procede de la ficha detallada. “Appendix 1” es el límite diario excepcional del texto suministrado. “Chart 6” completa propiedades, pero no aporta dosis para todas sus hierbas.'
+                : '“Study dose” comes from the detailed profile. “Appendix 1” is the exceptional daily limit in the supplied text. “Chart 6” completes properties but does not provide dosage for every herb.'); ?>
         </div>
 
         <div class="single-herbs-properties__controls">
@@ -42,6 +43,7 @@ $propertylang = $ises ? 'es' : 'en';
             <div class="single-herbs-properties__filters" role="group" aria-label="<?php echo s($ises ? 'Filtrar cobertura' : 'Filter coverage'); ?>">
                 <button type="button" class="is-active" data-properties-filter="all"><?php echo s($ises ? 'Todas' : 'All'); ?></button>
                 <button type="button" data-properties-filter="verified"><?php echo s($ises ? 'Verificadas' : 'Verified'); ?></button>
+                <button type="button" data-properties-filter="properties-only"><?php echo s($ises ? 'Propiedades Chart 6' : 'Chart 6 properties'); ?></button>
                 <button type="button" data-properties-filter="dose-only"><?php echo s($ises ? 'Solo dosis' : 'Dose only'); ?></button>
                 <button type="button" data-properties-filter="pending"><?php echo s($ises ? 'Pendientes' : 'Pending'); ?></button>
             </div>
@@ -77,9 +79,11 @@ $propertylang = $ises ? 'es' : 'en';
                     ]));
                     $statuslabel = $status === 'verified'
                         ? ($ises ? 'Verificada' : 'Verified')
-                        : ($status === 'dose-only'
+                        : ($status === 'properties-only'
+                            ? ($ises ? 'Propiedades Chart 6' : 'Chart 6 properties')
+                            : ($status === 'dose-only'
                             ? ($ises ? 'Solo dosis' : 'Dose only')
-                            : ($ises ? 'Pendiente' : 'Pending'));
+                            : ($ises ? 'Pendiente' : 'Pending')));
                     ?>
                     <tr data-properties-row data-status="<?php echo s($status); ?>" data-search="<?php echo s(strtolower($searchtext)); ?>">
                         <th scope="row"><a href="<?php echo $herburl->out(false); ?>"><?php echo s($propertyrow['name']); ?></a><small><?php echo s($propertyrow['latin']); ?></small></th>

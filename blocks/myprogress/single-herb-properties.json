@@ -2,16 +2,19 @@
     "version": 1,
     "source": "NCBAHM Appendix A roster plus verified Single Herbs profiles",
     "doseAppendixSource": "User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams",
+    "propertyChartSource": "User-provided Chart 6: Property of King Herbs",
     "total": 304,
     "verified": 176,
-    "doseOnly": 49,
-    "pending": 79,
+    "propertiesOnly": 12,
+    "doseOnly": 45,
+    "pending": 71,
     "herbs": [
         {
             "name": "Ai Ye",
             "latin": "Artemisiae argyi Folium",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -32,6 +35,7 @@
             "latin": "Crotonis Fructus",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -52,6 +56,7 @@
             "latin": "Morindae officinalis Radix",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, acrid",
                 "es": "Dulce, acre"
@@ -72,6 +77,7 @@
             "latin": "Lablab Semen album",
             "guideNumber": 8,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -92,6 +98,7 @@
             "latin": "Stemonae Radix",
             "guideNumber": 15,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bitter",
                 "es": "Dulce, amarga"
@@ -112,6 +119,7 @@
             "latin": "Amomi Fructus rotundus",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -131,18 +139,19 @@
             "name": "Bai Guo",
             "latin": "Ginkgo Semen",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bitter, astringent",
+                "es": "Dulce, amarga, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral, slightly toxic",
+                "es": "neutra, ligeramente tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Lung",
+                "es": "Riñón, Pulmón"
             },
             "dose": null,
             "appendixDose": null
@@ -152,6 +161,7 @@
             "latin": "Lilii Bulbus",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -172,6 +182,7 @@
             "latin": "Agkistrodon/Bungarus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -192,6 +203,7 @@
             "latin": "Hedyotis diffusae Herba",
             "guideNumber": 6,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -212,6 +224,7 @@
             "latin": "Bletillae Rhizoma",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet, astringent",
                 "es": "Amarga, dulce, astringente"
@@ -232,6 +245,7 @@
             "latin": "Bombyx Batryticatus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -252,6 +266,7 @@
             "latin": "Patriniae Herba",
             "guideNumber": 6,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -272,6 +287,7 @@
             "latin": "Sinapis Semen",
             "guideNumber": 14,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -292,6 +308,7 @@
             "latin": "Imperatae Rhizoma",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -312,6 +329,7 @@
             "latin": "Cynanchi stauntonii Rhizoma",
             "guideNumber": 14,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -332,6 +350,7 @@
             "latin": "Paeoniae Radix alba",
             "guideNumber": 24,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sour",
                 "es": "Amarga, ácida"
@@ -352,6 +371,7 @@
             "latin": "Pulsatillae Radix",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -372,6 +392,7 @@
             "latin": "Cynanchi atrati Radix",
             "guideNumber": 7,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, salty",
                 "es": "Amarga, salada"
@@ -392,6 +413,7 @@
             "latin": "Dictamni Cortex",
             "guideNumber": 5,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -412,6 +434,7 @@
             "latin": "Angelicae dahuricae Radix",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, aromatic",
                 "es": "Acre, aromática"
@@ -432,6 +455,7 @@
             "latin": "Atractylodis macrocephalae Rhizoma",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -452,6 +476,7 @@
             "latin": "Platycladi Semen",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -472,6 +497,7 @@
             "latin": "Isatidis/Baphicacanthis Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -492,6 +518,7 @@
             "latin": "Pinelliae Rhizoma",
             "guideNumber": 14,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -512,6 +539,7 @@
             "latin": "Scutellariae barbatae Herba",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -532,6 +560,7 @@
             "latin": "Piperis longi Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -552,6 +581,7 @@
             "latin": "Dioscoreae hypoglaucae Rhizoma",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -572,6 +602,7 @@
             "latin": "Polygoni avicularis Herba",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -591,18 +622,19 @@
             "name": "Bie Jia",
             "latin": "Trionycis Carapax",
             "guideNumber": 7,
-            "status": "dose-only",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty",
+                "es": "Salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -612,6 +644,7 @@
             "latin": "Arecae Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -632,6 +665,7 @@
             "latin": "Borneolum",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -652,6 +686,7 @@
             "latin": "Menthae haplocalycis Herba",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, aromatic",
                 "es": "Acre, aromática"
@@ -671,18 +706,19 @@
             "name": "Bu Gu Zhi",
             "latin": "Psoraleae Fructus",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "very warm",
+                "es": "muy tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Spleen",
+                "es": "Riñón, Bazo"
             },
             "dose": null,
             "appendixDose": null
@@ -692,6 +728,7 @@
             "latin": "Xanthii Fructus",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -712,6 +749,7 @@
             "latin": "Atractylodis Rhizoma",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -732,6 +770,7 @@
             "latin": "Alpiniae katsumadai Semen",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -752,6 +791,7 @@
             "latin": "Tsaoko Fructus",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -772,6 +812,7 @@
             "latin": "Aconiti kusnezoffii Radix",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -792,6 +833,7 @@
             "latin": "Platycladi Cacumen",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, astringent",
                 "es": "Amarga, astringente"
@@ -812,6 +854,7 @@
             "latin": "Bupleuri Radix",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -832,6 +875,7 @@
             "latin": "Cicadae Periostracum",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -852,6 +896,7 @@
             "latin": "Plantaginis Semen",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -872,6 +917,7 @@
             "latin": "Citri reticulatae Pericarpium",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -892,6 +938,7 @@
             "latin": "Aquilariae Lignum resinatum",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -912,6 +959,7 @@
             "latin": "Paeoniae Radix rubra",
             "guideNumber": 4,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sour",
                 "es": "Amarga, ácida"
@@ -932,6 +980,7 @@
             "latin": "Halloysitum rubrum",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -952,6 +1001,7 @@
             "latin": "Phaseoli Semen",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -972,6 +1022,7 @@
             "latin": "Fritillariae cirrhosae Bulbus",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -992,6 +1043,7 @@
             "latin": "Toosendan Fructus",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -1012,6 +1064,7 @@
             "latin": "Clematidis armandii Caulis",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1032,6 +1085,7 @@
             "latin": "Cyathulae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1052,6 +1106,7 @@
             "latin": "Aconiti Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1072,6 +1127,7 @@
             "latin": "Andrographitis Herba",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1091,18 +1147,19 @@
             "name": "Chuan Xiong",
             "latin": "Chuanxiong Rhizoma",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Gallbladder, Pericardium",
+                "es": "Hígado, Vesícula Biliar, Pericardio"
             },
             "dose": null,
             "appendixDose": null
@@ -1112,6 +1169,7 @@
             "latin": "Ailanthi Cortex",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, astringent",
                 "es": "Amarga, astringente"
@@ -1132,6 +1190,7 @@
             "latin": "Tribuli Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1152,6 +1211,7 @@
             "latin": "Magnetitum",
             "guideNumber": 28,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Pungent, salty",
                 "es": "Picante, salada"
@@ -1172,6 +1232,7 @@
             "latin": "Acanthopanacis senticosi Radix et Caulis",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1192,6 +1253,7 @@
             "latin": "Allii fistulosi Bulbus",
             "guideNumber": 1,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1212,6 +1274,7 @@
             "latin": "Arecae Pericarpium",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -1232,6 +1295,7 @@
             "latin": "Rhei Radix et Rhizoma",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -1252,6 +1316,7 @@
             "latin": "Cirsii japonici Herba sive Radix",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1272,6 +1337,7 @@
             "latin": "Isatidis Folium",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1292,6 +1358,7 @@
             "latin": "Jujubae Fructus",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1312,6 +1379,7 @@
             "latin": "Haematitum",
             "guideNumber": 31,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -1332,6 +1400,7 @@
             "latin": "Sojae Semen preparatum",
             "guideNumber": 2,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1352,6 +1421,7 @@
             "latin": "Salviae miltiorrhizae Radix",
             "guideNumber": 4,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -1372,6 +1442,7 @@
             "latin": "Lophateri Herba",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bland",
                 "es": "Dulce, insípida"
@@ -1392,6 +1463,7 @@
             "latin": "Angelicae sinensis Radix",
             "guideNumber": 10,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, acrid",
                 "es": "Dulce, acre"
@@ -1412,6 +1484,7 @@
             "latin": "Codonopsis Radix",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1432,6 +1505,7 @@
             "latin": "Junci Medulla",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1452,6 +1526,7 @@
             "latin": "Kochiae Fructus",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1472,6 +1547,7 @@
             "latin": "Lycii Cortex",
             "guideNumber": 7,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1492,6 +1568,7 @@
             "latin": "Pheretima",
             "guideNumber": 31,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Salty",
                 "es": "Salada"
@@ -1512,6 +1589,7 @@
             "latin": "Sanguisorbae Radix",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sour",
                 "es": "Amarga, ácida"
@@ -1532,6 +1610,7 @@
             "latin": "Caryophylli Flos",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1552,6 +1631,7 @@
             "latin": "Cordyceps",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1572,6 +1652,7 @@
             "latin": "Benincasae Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1592,6 +1673,7 @@
             "latin": "Malvae Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1612,6 +1694,7 @@
             "latin": "Angelicae pubescentis Radix",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -1632,6 +1715,7 @@
             "latin": "Eucommiae Cortex",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, slightly acrid",
                 "es": "Dulce, ligeramente acre"
@@ -1652,6 +1736,7 @@
             "latin": "Asini Corii Colla",
             "guideNumber": 24,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1672,6 +1757,7 @@
             "latin": "Curcumae Rhizoma",
             "guideNumber": 19,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -1692,6 +1778,7 @@
             "latin": "Sennae Folium",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bitter",
                 "es": "Dulce, amarga"
@@ -1712,6 +1799,7 @@
             "latin": "Saposhnikoviae Radix",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -1732,6 +1820,7 @@
             "latin": "Mel",
             "guideNumber": 10,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1752,6 +1841,7 @@
             "latin": "Citri sarcodactylis Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1771,18 +1861,19 @@
             "name": "Fu Ling",
             "latin": "Poria",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Spleen, Lung",
+                "es": "Corazón, Bazo, Pulmón"
             },
             "dose": null,
             "appendixDose": null
@@ -1792,6 +1883,7 @@
             "latin": "Rubi Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1812,6 +1904,7 @@
             "latin": "Poriae Sclerotium pararadicis",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1832,6 +1925,7 @@
             "latin": "Tritici Fructus levis",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1852,6 +1946,7 @@
             "latin": "Aconiti Radix lateralis",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -1872,6 +1967,7 @@
             "latin": "Glycyrrhizae Radix",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -1892,6 +1988,7 @@
             "latin": "Zingiberis Rhizoma",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -1912,6 +2009,7 @@
             "latin": "Kansui Radix",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -1932,6 +2030,7 @@
             "latin": "Ligustici Rhizoma",
             "guideNumber": 1,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -1952,6 +2051,7 @@
             "latin": "Alpiniae officinarum Rhizoma",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -1972,6 +2072,7 @@
             "latin": "Puerariae Radix",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, acrid",
                 "es": "Dulce, acre"
@@ -1992,6 +2093,7 @@
             "latin": "Gecko",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2012,6 +2114,7 @@
             "latin": "Cibotii Rhizoma",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2032,6 +2135,7 @@
             "latin": "Lycii Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2052,6 +2156,7 @@
             "latin": "Uncariae Ramulus cum Uncis",
             "guideNumber": 31,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2072,6 +2177,7 @@
             "latin": "Drynariae Rhizoma",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -2092,6 +2198,7 @@
             "latin": "Oryzae) Fructus germinatus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2112,6 +2219,7 @@
             "latin": "Trichosanthis Fructus",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, slightly bitter",
                 "es": "Dulce, ligeramente amarga"
@@ -2132,6 +2240,7 @@
             "latin": "Trichosanthis Pericarpium",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2152,6 +2261,7 @@
             "latin": "Trichosanthis Semen",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bitter",
                 "es": "Dulce, amarga"
@@ -2171,18 +2281,19 @@
             "name": "Gui Ban",
             "latin": "Testudinis Plastrum",
             "guideNumber": null,
-            "status": "dose-only",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty, sweet",
+                "es": "Salada, dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Kidney, Liver",
+                "es": "Corazón, Riñón, Hígado"
             },
             "dose": null,
             "appendixDose": "Up to 30 g"
@@ -2192,6 +2303,7 @@
             "latin": "Cinnamomi Ramulus",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -2212,6 +2324,7 @@
             "latin": "Lygodii Spora",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2232,6 +2345,7 @@
             "latin": "Sepia Endoconcha",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2252,6 +2366,7 @@
             "latin": "Erythrinae Cortex",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -2272,6 +2387,7 @@
             "latin": "Sargassum",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2292,6 +2408,7 @@
             "latin": "Stephaniae tetrandrae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2312,6 +2429,7 @@
             "latin": "Ecliptae Herba",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2332,6 +2450,7 @@
             "latin": "Albiziae Cortex",
             "guideNumber": 29,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2352,6 +2471,7 @@
             "latin": "Polygoni multiflori Radix",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2372,6 +2492,7 @@
             "latin": "Juglandis Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2392,6 +2513,7 @@
             "latin": "Nelumbinis Folium",
             "guideNumber": 6,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -2412,6 +2534,7 @@
             "latin": "Chebulae Fructus",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sour, astringent",
                 "es": "Amarga, ácida, astringente"
@@ -2432,6 +2555,7 @@
             "latin": "Sesami Semen nigrum",
             "guideNumber": 10,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2451,18 +2575,19 @@
             "name": "Hong Hua",
             "latin": "Carthami Flos",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver",
+                "es": "Corazón, Hígado"
             },
             "dose": null,
             "appendixDose": null
@@ -2472,6 +2597,7 @@
             "latin": "Magnoliae officinalis Cortex",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -2492,6 +2618,7 @@
             "latin": "Piperis Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2511,18 +2638,19 @@
             "name": "Hua Jiao",
             "latin": "Zanthoxyli Pericarpium",
             "guideNumber": null,
-            "status": "dose-only",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "hot, slightly toxic",
+                "es": "caliente, ligeramente tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Spleen, Stomach",
+                "es": "Riñón, Bazo, Estómago"
             },
             "dose": null,
             "appendixDose": "Up to 6 g"
@@ -2532,6 +2660,7 @@
             "latin": "Talcum",
             "guideNumber": 8,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2552,6 +2681,7 @@
             "latin": "Sophorae Flos immaturus",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -2572,6 +2702,7 @@
             "latin": "Achyranthis bidentatae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2592,6 +2723,7 @@
             "latin": "Phellodendri Cortex",
             "guideNumber": 5,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -2612,6 +2744,7 @@
             "latin": "Polygonati Rhizoma",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2632,6 +2765,7 @@
             "latin": "Coptidis Rhizoma",
             "guideNumber": 5,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Very bitter",
                 "es": "Muy amarga"
@@ -2652,6 +2786,7 @@
             "latin": "Astragali Radix",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2672,6 +2807,7 @@
             "latin": "Scutellariae Radix",
             "guideNumber": 5,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -2692,6 +2828,7 @@
             "latin": "Cannabis Semen",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2712,6 +2849,7 @@
             "latin": "Pogostemonis/Agastaches Herba",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -2732,6 +2870,7 @@
             "latin": "Gigeriae galli Endothelium corneum",
             "guideNumber": 17,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2752,6 +2891,7 @@
             "latin": "Spatholobi Caulis",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2772,6 +2912,7 @@
             "latin": "Curcumae longae Rhizoma",
             "guideNumber": 19,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -2792,6 +2933,7 @@
             "latin": "Platycodi Radix",
             "guideNumber": 15,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -2812,6 +2954,7 @@
             "latin": "Lysimachiae Herba",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2832,6 +2975,7 @@
             "latin": "Lonicerae Flos",
             "guideNumber": 6,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -2852,6 +2996,7 @@
             "latin": "Rosae laevigatae Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2872,6 +3017,7 @@
             "latin": "Schizonepetae Herba",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -2892,6 +3038,7 @@
             "latin": "Oryzae Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2912,6 +3059,7 @@
             "latin": "Citri reticulatae Exocarpium rubrum",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -2932,6 +3080,7 @@
             "latin": "Chrysanthemi Flos",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet, bitter",
                 "es": "Acre, dulce, amarga"
@@ -2952,6 +3101,7 @@
             "latin": "Cassiae Semen",
             "guideNumber": 3,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2972,6 +3122,7 @@
             "latin": "Sophorae flavescentis Radix",
             "guideNumber": 5,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -2992,6 +3143,7 @@
             "latin": "Farfarae Flos",
             "guideNumber": 15,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, slightly bitter",
                 "es": "Acre, ligeramente amarga"
@@ -3012,6 +3164,7 @@
             "latin": "Eckloniae Thallus",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3032,6 +3185,7 @@
             "latin": "Raphani Semen",
             "guideNumber": 17,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -3052,6 +3206,7 @@
             "latin": "Forsythiae Fructus",
             "guideNumber": 6,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, slightly acrid",
                 "es": "Amarga, ligeramente acre"
@@ -3072,6 +3227,7 @@
             "latin": "Nelumbinis Stamen",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, astringent",
                 "es": "Dulce, astringente"
@@ -3092,6 +3248,7 @@
             "latin": "Nelumbinis Semen",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, astringent",
                 "es": "Dulce, astringente"
@@ -3112,6 +3269,7 @@
             "latin": "Nelumbinis Plumula",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -3132,6 +3290,7 @@
             "latin": "Saigae tataricae Cornu",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3152,6 +3311,7 @@
             "latin": "Ganoderma",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3172,6 +3332,7 @@
             "latin": "Sulfur",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3192,6 +3353,7 @@
             "latin": "Gentianae Radix",
             "guideNumber": 5,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Very bitter",
                 "es": "Muy amarga"
@@ -3212,6 +3374,7 @@
             "latin": "Fossilia Ossis Mastodi",
             "guideNumber": 28,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, astringent",
                 "es": "Dulce, astringente"
@@ -3232,6 +3395,7 @@
             "latin": "Longan Arillus",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3252,6 +3416,7 @@
             "latin": "Phaseoli radiati Semen",
             "guideNumber": 8,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3272,6 +3437,7 @@
             "latin": "Phragmitis Rhizoma",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -3292,6 +3458,7 @@
             "latin": "Aloe",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -3312,6 +3479,7 @@
             "latin": "Liquidambaris Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3332,6 +3500,7 @@
             "latin": "Cervi Cornu pantotrichum",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, salty",
                 "es": "Dulce, salada"
@@ -3352,6 +3521,7 @@
             "latin": "Lasiosphaera/Calvatia",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3372,6 +3542,7 @@
             "latin": "Ephedrae Herba",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, slightly bitter",
                 "es": "Acre, ligeramente amarga"
@@ -3392,6 +3563,7 @@
             "latin": "Ephedrae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3412,6 +3584,7 @@
             "latin": "Ophiopogonis Radix",
             "guideNumber": 26,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, slightly bitter",
                 "es": "Dulce, ligeramente amarga"
@@ -3432,6 +3605,7 @@
             "latin": "Hordei Fructus germinatus",
             "guideNumber": 17,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -3452,6 +3626,7 @@
             "latin": "Viticis Fructus",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -3472,6 +3647,7 @@
             "latin": "Natrii Sulfas",
             "guideNumber": 9,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Salty, bitter",
                 "es": "Salada, amarga"
@@ -3492,6 +3668,7 @@
             "latin": "Rosae rugosae Flos",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3512,6 +3689,7 @@
             "latin": "Myrrha",
             "guideNumber": 19,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -3532,6 +3710,7 @@
             "latin": "Moutan Cortex",
             "guideNumber": 4,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -3552,6 +3731,7 @@
             "latin": "Chaenomelis Fructus",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sour",
                 "es": "Ácida"
@@ -3572,6 +3752,7 @@
             "latin": "Ostreae Concha",
             "guideNumber": 28,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Salty, astringent",
                 "es": "Salada, astringente"
@@ -3591,18 +3772,19 @@
             "name": "Mu Tong",
             "latin": "Akebiae Caulis",
             "guideNumber": null,
-            "status": "dose-only",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Heart, Small Intestine",
+                "es": "Vejiga, Corazón, Intestino Delgado"
             },
             "dose": null,
             "appendixDose": "Up to 6 g"
@@ -3612,6 +3794,7 @@
             "latin": "Aucklandiae Radix",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -3632,6 +3815,7 @@
             "latin": "Equiseti hiemalis Herba",
             "guideNumber": 2,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3652,6 +3836,7 @@
             "latin": "Arctii Fructus",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -3672,6 +3857,7 @@
             "latin": "Bovis Calculus",
             "guideNumber": 30,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -3692,6 +3878,7 @@
             "latin": "Ligustri lucidi Fructus",
             "guideNumber": 26,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bitter",
                 "es": "Dulce, amarga"
@@ -3712,6 +3899,7 @@
             "latin": "Nelumbinis Nodus rhizomatis",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3732,6 +3920,7 @@
             "latin": "Sterculiae lychnophorae Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3752,6 +3941,7 @@
             "latin": "Eupatorii Herba",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3772,6 +3962,7 @@
             "latin": "Eriobotryae Folium",
             "guideNumber": 15,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -3792,6 +3983,7 @@
             "latin": "Taraxaci Herba",
             "guideNumber": 6,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -3812,6 +4004,7 @@
             "latin": "Typhae Pollen",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -3832,6 +4025,7 @@
             "latin": "Rubiae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3852,6 +4046,7 @@
             "latin": "Peucedani Radix",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -3872,6 +4067,7 @@
             "latin": "Euryales Semen",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3892,6 +4088,7 @@
             "latin": "Notopterygii Rhizoma Seu Radix",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -3912,6 +4109,7 @@
             "latin": "Gentianae macrophyllae Radix",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -3932,6 +4130,7 @@
             "latin": "Fraxini Cortex",
             "guideNumber": 5,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3952,6 +4151,7 @@
             "latin": "Indigo naturalis",
             "guideNumber": 4,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -3972,6 +4172,7 @@
             "latin": "Artemisiae annuae Herba",
             "guideNumber": 7,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -3992,6 +4193,7 @@
             "latin": "Citri reticulatae viride Pericarpium",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -4012,6 +4214,7 @@
             "latin": "Scorpio",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4032,6 +4235,7 @@
             "latin": "Dianthi Herba",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4052,6 +4256,7 @@
             "latin": "Ginseng Radix",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, slightly bitter",
                 "es": "Dulce, ligeramente amarga"
@@ -4072,6 +4277,7 @@
             "latin": "Cistanches Herba",
             "guideNumber": 10,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, salty",
                 "es": "Dulce, salada"
@@ -4092,6 +4298,7 @@
             "latin": "Myristicae Semen",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -4112,6 +4319,7 @@
             "latin": "Cinnamomi Cortex",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -4132,6 +4340,7 @@
             "latin": "Olibanum",
             "guideNumber": 19,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -4152,6 +4361,7 @@
             "latin": "Sparganii Rhizoma",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4172,6 +4382,7 @@
             "latin": "Notoginseng Radix",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, slightly bitter",
                 "es": "Dulce, ligeramente amarga"
@@ -4192,6 +4403,7 @@
             "latin": "Mori Cortex",
             "guideNumber": 15,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -4212,6 +4424,7 @@
             "latin": "Taxilli Herba",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -4232,6 +4445,7 @@
             "latin": "Mantidis Ootheca",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4252,6 +4466,7 @@
             "latin": "Mori Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4272,6 +4487,7 @@
             "latin": "Mori Folium",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -4292,6 +4508,7 @@
             "latin": "Mori Ramulus",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -4312,6 +4529,7 @@
             "latin": "Amomi Fructus",
             "guideNumber": 16,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -4332,6 +4550,7 @@
             "latin": "Glehniae/Adenophorae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4352,6 +4571,7 @@
             "latin": "Astragali complanati Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4372,6 +4592,7 @@
             "latin": "Sophorae tonkinensis Radix",
             "guideNumber": 6,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -4392,6 +4613,7 @@
             "latin": "Dioscoreae Rhizoma",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -4412,6 +4634,7 @@
             "latin": "Crataegi Fructus",
             "guideNumber": 17,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sour, sweet",
                 "es": "Ácida, dulce"
@@ -4432,6 +4655,7 @@
             "latin": "Corni Fructus",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sour, astringent",
                 "es": "Ácida, astringente"
@@ -4452,6 +4676,7 @@
             "latin": "Cnidii Fructus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4472,6 +4697,7 @@
             "latin": "Belamcandae Rhizoma",
             "guideNumber": 6,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -4492,6 +4718,7 @@
             "latin": "Moschus",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4512,6 +4739,7 @@
             "latin": "Massa medicata fermentata",
             "guideNumber": 17,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -4532,6 +4760,7 @@
             "latin": "Rehmanniae Radix",
             "guideNumber": 4,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bitter",
                 "es": "Dulce, amarga"
@@ -4552,6 +4781,7 @@
             "latin": "Zingiberis Rhizoma recens",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -4572,6 +4802,7 @@
             "latin": "Cimicifugae Rhizoma",
             "guideNumber": 2,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -4592,6 +4823,7 @@
             "latin": "Acori tatarinowii Rhizoma",
             "guideNumber": 30,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Picante, amarga"
@@ -4612,6 +4844,7 @@
             "latin": "Gypsum fibrosum",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -4632,6 +4865,7 @@
             "latin": "Dendrobii Herba",
             "guideNumber": 26,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, slightly salty",
                 "es": "Dulce, ligeramente salada"
@@ -4652,6 +4886,7 @@
             "latin": "Haliotidis Concha",
             "guideNumber": 31,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Salty",
                 "es": "Salada"
@@ -4672,6 +4907,7 @@
             "latin": "Pyrrosiae Folium",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4692,6 +4928,7 @@
             "latin": "Rehmanniae Radix preparata",
             "guideNumber": 24,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -4712,6 +4949,7 @@
             "latin": "Bubali Cornu",
             "guideNumber": 4,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4732,6 +4970,7 @@
             "latin": "Luffae Fructus Retinervus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4752,6 +4991,7 @@
             "latin": "Ziziphi spinosae Semen",
             "guideNumber": 29,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, sour",
                 "es": "Dulce, ácida"
@@ -4772,6 +5012,7 @@
             "latin": "Cynomorii Herba",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -4792,6 +5033,7 @@
             "latin": "Pseudostellariae Radix",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4812,6 +5054,7 @@
             "latin": "Santali albi Lignum",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -4832,6 +5075,7 @@
             "latin": "Persicae Semen",
             "guideNumber": 10,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -4852,6 +5096,7 @@
             "latin": "Trichosanthis Radix",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, slightly sweet",
                 "es": "Amarga, ligeramente dulce"
@@ -4872,6 +5117,7 @@
             "latin": "Gastrodiae Rhizoma",
             "guideNumber": 31,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -4892,6 +5138,7 @@
             "latin": "Asparagi Radix",
             "guideNumber": 26,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, bitter",
                 "es": "Dulce, amarga"
@@ -4912,6 +5159,7 @@
             "latin": "Arisaematis Rhizoma",
             "guideNumber": 14,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -4932,6 +5180,7 @@
             "latin": "Lepidii/Descurainiae Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4952,6 +5201,7 @@
             "latin": "Tetrapanacis Medulla",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4972,6 +5222,7 @@
             "latin": "Eupolyphaga/Steleophaga",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -4992,6 +5243,7 @@
             "latin": "Smilacis glabrae Rhizoma",
             "guideNumber": 6,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5012,6 +5264,7 @@
             "latin": "Cuscutae Semen",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, acrid",
                 "es": "Dulce, acre"
@@ -5032,6 +5285,7 @@
             "latin": "Vaccariae Semen",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5052,6 +5306,7 @@
             "latin": "Clematidis Radix",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, salty",
                 "es": "Acre, salada"
@@ -5072,6 +5327,7 @@
             "latin": "Scolopendra",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5092,6 +5348,7 @@
             "latin": "Acanthopanacis Cortex",
             "guideNumber": 12,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -5112,6 +5369,7 @@
             "latin": "Trogopterori Faeces",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5132,6 +5390,7 @@
             "latin": "Mume Fructus",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sour, astringent",
                 "es": "Ácida, astringente"
@@ -5152,6 +5411,7 @@
             "latin": "Schisandrae Fructus",
             "guideNumber": 27,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sour, sweet",
                 "es": "Ácida, dulce"
@@ -5172,6 +5432,7 @@
             "latin": "Linderae Radix",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5192,6 +5453,7 @@
             "latin": "Evodiae Fructus",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -5212,6 +5474,7 @@
             "latin": "Siegesbeckiae Herba",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5232,6 +5495,7 @@
             "latin": "Asari Radix et Rhizoma",
             "guideNumber": 1,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5252,6 +5516,7 @@
             "latin": "Panacis quinquefolii Radix",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5272,6 +5537,7 @@
             "latin": "Prunellae Spica",
             "guideNumber": 3,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5292,6 +5558,7 @@
             "latin": "Agrimoniae Herba",
             "guideNumber": 20,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, astringent",
                 "es": "Amarga, astringente"
@@ -5312,6 +5579,7 @@
             "latin": "Curculiginis Rhizoma",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -5332,6 +5600,7 @@
             "latin": "Cyperi Rhizoma",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, slightly bitter, slightly sweet",
                 "es": "Acre, ligeramente amarga, ligeramente dulce"
@@ -5352,6 +5621,7 @@
             "latin": "Moslae Herba",
             "guideNumber": 1,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5372,6 +5642,7 @@
             "latin": "Foeniculi Fructus",
             "guideNumber": 21,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -5392,6 +5663,7 @@
             "latin": "Cirsii Herba",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5412,6 +5684,7 @@
             "latin": "Allii macrostemi Bulbus",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5432,6 +5705,7 @@
             "latin": "Magnoliae Flos",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, aromatic",
                 "es": "Acre, aromática"
@@ -5452,6 +5726,7 @@
             "latin": "Armeniacae Semen",
             "guideNumber": 10,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -5472,6 +5747,7 @@
             "latin": "Dipsaci Radix",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5492,6 +5768,7 @@
             "latin": "Inulae Flos",
             "guideNumber": 14,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid, salty",
                 "es": "Amarga, acre, salada"
@@ -5512,6 +5789,7 @@
             "latin": "Scrophulariae Radix",
             "guideNumber": 4,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, salty, sweet",
                 "es": "Amarga, salada, dulce"
@@ -5532,6 +5810,7 @@
             "latin": "Corydalis Rhizoma",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5552,6 +5831,7 @@
             "latin": "Polygoni multiflori Caulis",
             "guideNumber": 29,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -5572,6 +5852,7 @@
             "latin": "Chrysanthemi indici Flos",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5592,6 +5873,7 @@
             "latin": "Leonuri Herba",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5612,6 +5894,7 @@
             "latin": "Maltosum",
             "guideNumber": 23,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -5632,6 +5915,7 @@
             "latin": "Coicis Semen",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5652,6 +5936,7 @@
             "latin": "Alpiniae oxyphyllae Fructus",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -5672,6 +5957,7 @@
             "latin": "Artemisiae scopariae Herba",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5692,6 +5978,7 @@
             "latin": "Epimedii Herba",
             "guideNumber": 25,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, sweet",
                 "es": "Acre, dulce"
@@ -5712,6 +5999,7 @@
             "latin": "Curcumae Radix",
             "guideNumber": 19,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -5732,6 +6020,7 @@
             "latin": "Houttuyniae Herba",
             "guideNumber": 6,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5752,6 +6041,7 @@
             "latin": "Polygonati odorati Rhizoma",
             "guideNumber": null,
             "status": "dose-only",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5772,6 +6062,7 @@
             "latin": "Polygalae Radix",
             "guideNumber": 29,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, picante"
@@ -5792,6 +6083,7 @@
             "latin": "Gleditsiae Spina",
             "guideNumber": null,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -5812,6 +6104,7 @@
             "latin": "Lycopi Herba",
             "guideNumber": 19,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -5831,18 +6124,19 @@
             "name": "Ze Xie",
             "latin": "Alismatis Rhizoma",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Bladder",
+                "es": "Riñón, Vejiga"
             },
             "dose": null,
             "appendixDose": null
@@ -5852,6 +6146,7 @@
             "latin": "Fritillariae thunbergii Bulbus",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -5872,6 +6167,7 @@
             "latin": "Margarita",
             "guideNumber": 28,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet, salty",
                 "es": "Dulce, salada"
@@ -5892,6 +6188,7 @@
             "latin": "Aurantii Fructus",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -5912,6 +6209,7 @@
             "latin": "Anemarrhenae Radix",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, sweet",
                 "es": "Amarga, dulce"
@@ -5932,6 +6230,7 @@
             "latin": "Aurantii Fructus immaturus",
             "guideNumber": 18,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter, acrid",
                 "es": "Amarga, acre"
@@ -5952,6 +6251,7 @@
             "latin": "Gardeniae Fructus",
             "guideNumber": 3,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Bitter",
                 "es": "Amarga"
@@ -5971,18 +6271,19 @@
             "name": "Zhu Ling",
             "latin": "Polyporus",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cool",
+                "es": "ligeramente fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Kidney, Bladder",
+                "es": "Bazo, Riñón, Vejiga"
             },
             "dose": null,
             "appendixDose": null
@@ -5992,6 +6293,7 @@
             "latin": "Bambusae Caulis in taeniam",
             "guideNumber": 13,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Sweet",
                 "es": "Dulce"
@@ -6012,6 +6314,7 @@
             "latin": "Arnebiae/Lithospermi Radix",
             "guideNumber": 4,
             "status": "pending",
+            "propertySource": null,
             "flavor": {
                 "en": null,
                 "es": null
@@ -6032,6 +6335,7 @@
             "latin": "Perillae Folium",
             "guideNumber": 1,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, aromatic",
                 "es": "Acre, aromática"
@@ -6051,18 +6355,19 @@
             "name": "Zi Su Zi",
             "latin": "Perillae Fructus",
             "guideNumber": null,
-            "status": "pending",
+            "status": "properties-only",
+            "propertySource": "king-herbs-chart",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Lung",
+                "es": "Intestino Grueso, Pulmón"
             },
             "dose": null,
             "appendixDose": null
@@ -6072,6 +6377,7 @@
             "latin": "Asteris Radix",
             "guideNumber": 15,
             "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"

@@ -76,6 +76,33 @@ foreach ($topicOne as [$name, $latin, $propertiesEn, $propertiesEs, $channelsEn,
     $spanish[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEs, 'channels' => $channelsEs, 'dose' => $dose];
 }
 
+// Chart 6 supplied by the user contains properties for 60 formula-leading herbs.
+// Only rows that complete an official herb not already covered by a detailed profile are added.
+$detailedProfileKeys = [];
+foreach (array_keys($english) as $profileName) {
+    $detailedProfileKeys[$keyFor($profileName)] = true;
+}
+$chartProfiles = [
+    ['Bie Jia', 'Trionycis Carapax', 'Salty; slightly cold', 'Salada; ligeramente fría', 'Liver, Spleen', 'Hígado, Bazo'],
+    ['Mu Tong', 'Akebiae Caulis', 'Bitter; cool', 'Amarga; fresca', 'Bladder, Heart, Small Intestine', 'Vejiga, Corazón, Intestino Delgado'],
+    ['Ze Xie', 'Alismatis Rhizoma', 'Sweet, bland; cold', 'Dulce, insípida; fría', 'Kidney, Bladder', 'Riñón, Vejiga'],
+    ['Zhu Ling', 'Polyporus', 'Sweet, bland; slightly cool', 'Dulce, insípida; ligeramente fresca', 'Spleen, Kidney, Bladder', 'Bazo, Riñón, Vejiga'],
+    ['Fu Ling', 'Poria', 'Sweet, bland; neutral', 'Dulce, insípida; neutra', 'Heart, Spleen, Lung', 'Corazón, Bazo, Pulmón'],
+    ['Hua Jiao', 'Zanthoxyli Pericarpium', 'Acrid; hot, slightly toxic', 'Acre; caliente, ligeramente tóxica', 'Kidney, Spleen, Stomach', 'Riñón, Bazo, Estómago'],
+    ['Zi Su Zi', 'Perillae Fructus', 'Acrid; warm', 'Acre; tibia', 'Large Intestine, Lung', 'Intestino Grueso, Pulmón'],
+    ['Bai Guo', 'Ginkgo Semen', 'Sweet, bitter, astringent; neutral, slightly toxic', 'Dulce, amarga, astringente; neutra, ligeramente tóxica', 'Kidney, Lung', 'Riñón, Pulmón'],
+    ['Hong Hua', 'Carthami Flos', 'Acrid; warm', 'Acre; tibia', 'Heart, Liver', 'Corazón, Hígado'],
+    ['Chuan Xiong', 'Chuanxiong Rhizoma', 'Acrid; warm', 'Acre; tibia', 'Liver, Gallbladder, Pericardium', 'Hígado, Vesícula Biliar, Pericardio'],
+    ['Bu Gu Zhi', 'Psoraleae Fructus', 'Acrid, bitter; very warm', 'Acre, amarga; muy tibia', 'Kidney, Spleen', 'Riñón, Bazo'],
+    ['Gui Ban', 'Testudinis Plastrum', 'Salty, sweet; cold', 'Salada, dulce; fría', 'Heart, Kidney, Liver', 'Corazón, Riñón, Hígado'],
+];
+foreach ($chartProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $channelsEn, $channelsEs]) {
+    if (!isset($detailedProfileKeys[$keyFor($name)])) {
+        $english[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEn, 'channels' => $channelsEn, 'dose' => null];
+        $spanish[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEs, 'channels' => $channelsEs, 'dose' => null];
+    }
+}
+
 $appendixGroups = [
     'Less than 0.1 g' => 'Bing Pian|She Xiang|Tan Xiang',
     'Up to 1 g' => 'Zhen Zhu|Zhu Sha',
@@ -119,6 +146,7 @@ $splitProperties = static function(?string $value): array {
 
 $rows = [];
 $verified = 0;
+$propertiesOnly = 0;
 $doseOnly = 0;
 foreach ($index['herbs'] ?? [] as $card) {
     $key = $keyFor((string)$card['name']);
@@ -127,9 +155,13 @@ foreach ($index['herbs'] ?? [] as $card) {
     [$flavorEn, $temperatureEn] = $splitProperties($profileEn['properties'] ?? null);
     [$flavorEs, $temperatureEs] = $splitProperties($profileEs['properties'] ?? null);
     $hasProfile = $profileEn !== null;
+    $hasDetailedProfile = isset($detailedProfileKeys[$key]);
+    $hasPropertiesOnly = $hasProfile && !$hasDetailedProfile;
     $hasAppendixDose = isset($appendixDose[$key]);
-    if ($hasProfile) {
+    if ($hasDetailedProfile) {
         $verified++;
+    } elseif ($hasPropertiesOnly) {
+        $propertiesOnly++;
     } elseif ($hasAppendixDose) {
         $doseOnly++;
     }
@@ -137,7 +169,8 @@ foreach ($index['herbs'] ?? [] as $card) {
         'name' => $card['name'],
         'latin' => $card['latin'],
         'guideNumber' => $card['guideNumber'],
-        'status' => $hasProfile ? 'verified' : ($hasAppendixDose ? 'dose-only' : 'pending'),
+        'status' => $hasDetailedProfile ? 'verified' : ($hasPropertiesOnly ? 'properties-only' : ($hasAppendixDose ? 'dose-only' : 'pending')),
+        'propertySource' => $hasDetailedProfile ? 'detailed-profile' : ($hasPropertiesOnly ? 'king-herbs-chart' : null),
         'flavor' => ['en' => $flavorEn, 'es' => $flavorEs],
         'temperature' => ['en' => $temperatureEn, 'es' => $temperatureEs],
         'channels' => ['en' => $profileEn['channels'] ?? null, 'es' => $profileEs['channels'] ?? null],
@@ -147,20 +180,22 @@ foreach ($index['herbs'] ?? [] as $card) {
 }
 
 $total = count($rows);
-$pending = $total - $verified - $doseOnly;
-if ($total !== 304 || $verified < 170 || $verified + $doseOnly + $pending !== $total) {
-    throw new RuntimeException("Invalid table coverage: total=$total verified=$verified doseOnly=$doseOnly pending=$pending");
+$pending = $total - $verified - $propertiesOnly - $doseOnly;
+if ($total !== 304 || $verified < 170 || $propertiesOnly < 10 || $verified + $propertiesOnly + $doseOnly + $pending !== $total) {
+    throw new RuntimeException("Invalid table coverage: total=$total verified=$verified propertiesOnly=$propertiesOnly doseOnly=$doseOnly pending=$pending");
 }
 
 $payload = [
     'version' => 1,
     'source' => 'NCBAHM Appendix A roster plus verified Single Herbs profiles',
     'doseAppendixSource' => 'User-provided Appendix 1: Daily dosages for individual crude herbs above 6–9 grams',
+    'propertyChartSource' => 'User-provided Chart 6: Property of King Herbs',
     'total' => $total,
     'verified' => $verified,
+    'propertiesOnly' => $propertiesOnly,
     'doseOnly' => $doseOnly,
     'pending' => $pending,
     'herbs' => $rows,
 ];
 file_put_contents($outputPath, json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n");
-fwrite(STDOUT, "Built $outputPath: $total total, $verified verified, $doseOnly dose-only, $pending pending.\n");
+fwrite(STDOUT, "Built $outputPath: $total total, $verified detailed, $propertiesOnly properties-only, $doseOnly dose-only, $pending pending.\n");

@@ -110,9 +110,10 @@ done
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     $total = (int)($data["total"] ?? 0);
     $verified = (int)($data["verified"] ?? 0);
+    $propertiesOnly = (int)($data["propertiesOnly"] ?? 0);
     $doseOnly = (int)($data["doseOnly"] ?? 0);
     $pending = (int)($data["pending"] ?? 0);
-    if ($total !== 304 || count($data["herbs"] ?? []) !== 304 || $verified < 170 || $verified + $doseOnly + $pending !== 304) {
+    if ($total !== 304 || count($data["herbs"] ?? []) !== 304 || $verified < 170 || $propertiesOnly < 10 || $verified + $propertiesOnly + $doseOnly + $pending !== 304) {
         fwrite(STDERR, "ERROR: cobertura inválida en la tabla de propiedades.\n");
         exit(1);
     }
@@ -265,6 +266,7 @@ grep -q "single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/sing
 grep -q "Master herb properties table" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 grep -q '"doseAppendixSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
+grep -q '"propertyChartSource"' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json"
 
 echo "BÚSQUEDA INTELIGENTE INSTALADA EN LA GUÍA DE HERBOLOGÍA"
 echo "Busca secciones, 304 hierbas, fórmulas Board y fórmulas Bensky"
