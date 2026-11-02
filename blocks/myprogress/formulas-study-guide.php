@@ -24,8 +24,8 @@ if (!is_array($data)
         || ($data['version'] ?? null) !== 7
         || count($data['categories'] ?? []) !== 14
         || count($data['formulas'] ?? []) !== 63
-        || count($data['supplementalCategories'] ?? []) !== 21
-        || count($data['supplementalFormulas'] ?? []) !== 202) {
+        || count($data['supplementalCategories'] ?? []) !== 22
+        || count($data['supplementalFormulas'] ?? []) !== 216) {
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
@@ -93,6 +93,10 @@ $categorycopy = [
     'expel-parasites-chapter-19' => [
         'Compare the three principal Chapter 19 formulas by mixed Heat-Cold, direct attack versus support, constitutional deficiency, pediatric wasting and modern toxicity.',
         'Compara las tres fórmulas principales del capítulo 19 por Calor-Frío mixto, ataque directo frente a apoyo, deficiencia constitucional, emaciación pediátrica y toxicidad moderna.',
+    ],
+    'treat-abscesses-chapter-20' => [
+        'Compare all fourteen principal Chapter 20 formulas by external versus internal location, lesion stage, Heat versus Cold, pus, deficiency and emergency priority.',
+        'Compara las catorce fórmulas principales del capítulo 20 por localización externa o interna, etapa de la lesión, Calor o Frío, pus, deficiencia y prioridad de urgencia.',
     ],
     'dispel-summerheat' => [
         'Choose among five Summerheat strategies: clear mild Heat, release constrained Exterior, drain Dampness, restore Qi and fluids, or preserve severely damaged Yin.',
@@ -204,6 +208,10 @@ $categoryreferences = [
     'expel-parasites-chapter-19' => [
         'Complete Bensky source: 3 principal formulas in one section. Board overlap: 0. All three profiles are supplemental, and two are primarily retained for historical toxicity recognition.',
         'Fuente Bensky completa: 3 fórmulas principales en una sección. Coincidencia Board: 0. Las tres fichas son suplementarias y dos se conservan principalmente para reconocer toxicidad histórica.',
+    ],
+    'treat-abscesses-chapter-20' => [
+        'Complete Bensky source: 14 principal formulas in two sections. Board overlap: 0. All profiles are supplemental and require modern medical or surgical triage before historical pattern comparison.',
+        'Fuente Bensky completa: 14 fórmulas principales en dos secciones. Coincidencia Board: 0. Todas las fichas son suplementarias y exigen triaje médico o quirúrgico moderno antes de comparar patrones históricos.',
     ],
     'stabilize-bind' => [
         'Official Board category: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
@@ -332,6 +340,7 @@ $expeldampchaptersourcecategory = $supplementalcategories['expel-damp-ch16'];
 $transformphlegmchaptersourcecategory = $supplementalcategories['transform-phlegm-ch17'];
 $digestivechaptersourcecategory = $supplementalcategories['digestive-ch18'];
 $expelparasiteschaptersourcecategory = $supplementalcategories['expel-parasites-ch19'];
+$treatabscesseschaptersourcecategory = $supplementalcategories['treat-abscesses-ch20'];
 
 $tonifyboardgroups = [
     'tonify-qi-ch8' => ['Si Jun Zi Tang', 'Bu Zhong Yi Qi Tang', 'Sheng Mai San', 'Yu Ping Feng San'],
@@ -1033,6 +1042,65 @@ $expelparasiteschapteroverview = [
     'formulas' => $expelparasiteschapterformulas,
 ];
 
+$treatabscesseschaptersections = [
+    'external-abscesses-sores' => [
+        'key' => 'external-abscesses-sores', 'name' => 'Treat External Abscesses and Sores',
+        'nameEs' => 'Tratar abscesos y llagas externas', 'sourcePages' => '861–877',
+        'copy' => 'Compare the lesion stage and the balance of Heat, Cold, pus, stasis and constitutional deficiency while preserving urgent infection and mass evaluation.',
+        'copyEs' => 'Compara etapa de lesión y equilibrio de Calor, Frío, pus, estasis y deficiencia constitucional, manteniendo evaluación urgente de infección y masas.',
+    ],
+    'internal-abscesses' => [
+        'key' => 'internal-abscesses', 'name' => 'Treat Internal Abscesses',
+        'nameEs' => 'Tratar abscesos internos', 'sourcePages' => '878–890',
+        'copy' => 'Separate Lung, intestinal, throat and deep toxic-swelling patterns, with emergency biomedical or surgical care taking priority whenever indicated.',
+        'copyEs' => 'Separa patrones pulmonares, intestinales, faríngeos y de hinchazón tóxica profunda, dando prioridad a atención biomédica o quirúrgica urgente cuando corresponda.',
+    ],
+];
+$treatabscesseschapterplan = [
+    ['Xian Fang Huo Ming Yin', 1, 'external-abscesses-sores', "Immortals' Formula for Sustaining Life", '861–863'],
+    ['Wu Wei Xiao Du Yin', 2, 'external-abscesses-sores', 'Five-Ingredient Drink to Eliminate Toxin', '863–865'],
+    ['Si Miao Yong An Tang', 3, 'external-abscesses-sores', 'Four-Valiant Decoction for Well-Being', '865–867'],
+    ['Tuo Li Xiao Du Yin', 4, 'external-abscesses-sores', 'Support the Interior and Eliminate Toxin Drink', '867–869'],
+    ['Yang He Tang', 5, 'external-abscesses-sores', 'Balmy Yang Decoction', '869–872'],
+    ['Shi Wei Bai Du San', 6, 'external-abscesses-sores', 'Ten-Ingredient Powder to Overcome Toxicity', '872–873'],
+    ['Qian Jin Nei Tuo San', 7, 'external-abscesses-sores', 'Powder to Support the Interior Worth a Thousand Gold Pieces', '873–875'],
+    ['San Zhong Kui Jian Tang', 8, 'external-abscesses-sores', 'Decoction to Disperse Swelling and Ulcerate What Is Hard', '875–877'],
+    ['Wei Jing Tang', 9, 'internal-abscesses', 'Reed Decoction', '878–880'],
+    ['Da Huang Mu Dan Tang', 10, 'internal-abscesses', 'Rhubarb and Moutan Decoction', '880–882'],
+    ['Qing Chang Yin', 11, 'internal-abscesses', 'Clear the Intestines Drink', '882–884'],
+    ['Yi Yi Fu Zi Bai Jiang San', 12, 'internal-abscesses', 'Coix, Aconite Accessory Root, and Patrinia Powder', '884–886'],
+    ['Qing Xin Li Ge Tang', 13, 'internal-abscesses', 'Clear the Heart and Enable the Diaphragm Decoction', '886–888'],
+    ['Shi Liu Wei Liu Qi Yin', 14, 'internal-abscesses', 'Sixteen-Ingredient Drink for Qi Flow', '888–890'],
+];
+$treatabscessessupplementbyname = [];
+foreach ($treatabscesseschaptersourcecategory['formulas'] as $formula) {
+    $treatabscessessupplementbyname[$formula['name']] = $formula;
+}
+$treatabscesseschapterformulas = [];
+foreach ($treatabscesseschapterplan as [$name, $sequence, $sectionkey, $englishname, $sourcepages]) {
+    $formula = $treatabscessessupplementbyname[$name] ?? $getboardformula($name);
+    if ($formula === null) {
+        throw new moodle_exception('Missing Chapter 20 formula profile: ' . $name);
+    }
+    $formula['sequence'] = $sequence;
+    $formula['chapterSectionKey'] = $sectionkey;
+    $formula['chapterSourceSectionKey'] = $sectionkey;
+    $formula['englishName'] = $englishname;
+    $formula['group'] = $treatabscesseschaptersections[$sectionkey]['name'];
+    $formula['groupEs'] = $treatabscesseschaptersections[$sectionkey]['nameEs'];
+    $formula['sourcePages'] = $sourcepages;
+    $treatabscesseschapterformulas[] = $formula;
+}
+$treatabscesseschapteroverview = [
+    'number' => 'S16',
+    'key' => 'treat-abscesses-chapter-20',
+    'name' => 'Formulas That Treat Abscesses and Sores · Complete Bensky Chapter 20',
+    'nameEs' => 'Fórmulas que tratan abscesos y llagas · Capítulo 20 completo de Bensky',
+    'sourceChapter' => 20,
+    'sourcePages' => '859–891',
+    'formulas' => $treatabscesseschapterformulas,
+];
+
 $chapterinterestinginsights = [
     'dispel-summerheat' => [
         'title' => 'Interesting point: Summerheat may be distributed across other Board competencies',
@@ -1237,6 +1305,23 @@ $chapterinterestinginsights = [
         'value' => 'The chapter remains useful for source literacy and pattern logic, especially the mixed Heat-Cold architecture of Wu Mei Wan. Its practical lesson is also a safety lesson: do not substitute historical formulas for diagnosis and evidence-based antiparasitic care.',
         'valueEs' => 'El capítulo sigue siendo útil para comprender la fuente y la lógica de patrones, sobre todo la arquitectura Calor-Frío mixta de Wu Mei Wan. Su lección práctica también es de seguridad: no sustituir diagnóstico y atención antiparasitaria basada en evidencia por fórmulas históricas.',
     ],
+    'treat-abscesses-chapter-20' => [
+        'title' => 'Interesting point: all fourteen formulas sit outside the Board roster, while modern diagnosis determines whether treatment is medical, surgical or oncologic',
+        'titleEs' => 'Dato interesante: las catorce fórmulas están fuera del listado Board, mientras el diagnóstico moderno determina si el tratamiento es médico, quirúrgico u oncológico',
+        'stat' => '0 of 14 direct overlaps',
+        'statEs' => '0 de 14 coincidencias directas',
+        'intro' => 'The source chapter supplies a detailed stage-and-constitution map for lesions, but its historical category combines conditions that modern medicine separates urgently: superficial infection, deep abscess, ischemia, appendicitis, airway disease and solid masses.',
+        'introEs' => 'El capítulo fuente ofrece un mapa detallado de etapa y constitución para lesiones, pero su categoría histórica reúne afecciones que la medicina moderna separa con urgencia: infección superficial, absceso profundo, isquemia, apendicitis, enfermedad de vía aérea y masas sólidas.',
+        'rows' => [
+            ['coverage' => 'Early hot external sores', 'coverageEs' => 'Llagas externas calientes y tempranas', 'boardNames' => [], 'additional' => 'Xian Fang Huo Ming Yin, Wu Wei Xiao Du Yin and Shi Wei Bai Du San grade toxin clearing, Blood movement, exterior release and whether pus has formed.', 'additionalEs' => 'Xian Fang Huo Ming Yin, Wu Wei Xiao Du Yin y Shi Wei Bai Du San gradúan aclaramiento de toxicidad, movimiento de Sangre, liberación Exterior y si ya se formó pus.'],
+            ['coverage' => 'Cold or deficient chronic lesions', 'coverageEs' => 'Lesiones crónicas frías o deficientes', 'boardNames' => [], 'additional' => 'Tuo Li Xiao Du Yin, Yang He Tang and Qian Jin Nei Tuo San distinguish watery pus, failure to heal, constitutional weakness and pale nonhot swelling.', 'additionalEs' => 'Tuo Li Xiao Du Yin, Yang He Tang y Qian Jin Nei Tuo San distinguen pus acuoso, falta de cicatrización, debilidad constitucional e hinchazón pálida no caliente.'],
+            ['coverage' => 'Internal abscesses and dangerous mimics', 'coverageEs' => 'Abscesos internos e imitadores peligrosos', 'boardNames' => [], 'additional' => 'The six internal formulas preserve Lung, intestinal and throat pattern logic, but imaging, airway management, antibiotics, drainage and surgery take priority when indicated.', 'additionalEs' => 'Las seis fórmulas internas conservan lógica de patrones pulmonares, intestinales y faríngeos, pero imagen, manejo de vía aérea, antibióticos, drenaje y cirugía tienen prioridad cuando proceda.'],
+        ],
+        'hypothesis' => 'A plausible curricular explanation is that the formulas are highly stage- and disease-specific, while several source indications now depend on urgent diagnostics, procedures and toxic or endangered ingredients outside a compact foundational roster.',
+        'hypothesisEs' => 'Una explicación curricular plausible es que las fórmulas dependen mucho de etapa y enfermedad, mientras varias indicaciones de fuente ahora exigen diagnóstico urgente, procedimientos e ingredientes tóxicos o amenazados fuera de un listado fundacional compacto.',
+        'value' => 'The chapter remains valuable for learning that “abscess” is not one pattern: Heat versus Cold, pus stage, location and constitutional strength change the strategy. Its modern lesson is equally important—pattern comparison begins only after emergencies and structural disease are addressed.',
+        'valueEs' => 'El capítulo sigue siendo valioso para aprender que “absceso” no es un solo patrón: Calor o Frío, etapa del pus, localización y fuerza constitucional cambian la estrategia. Su lección moderna es igual de importante: la comparación de patrones empieza después de atender urgencias y enfermedad estructural.',
+    ],
     'treat-dryness-ch15' => [
         'title' => 'Interesting point: the Board has no dedicated Treat Dryness category',
         'titleEs' => 'Dato interesante: el Board no tiene una categoría propia para tratar Sequedad',
@@ -1269,13 +1354,15 @@ foreach ($supplementalcategories as $categorykey => $category) {
             && $categorykey !== 'expel-damp-ch16'
             && $categorykey !== 'transform-phlegm-ch17'
             && $categorykey !== 'digestive-ch18'
-            && $categorykey !== 'expel-parasites-ch19') {
+            && $categorykey !== 'expel-parasites-ch19'
+            && $categorykey !== 'treat-abscesses-ch20') {
         $supplementalindexcategories[$categorykey] = $category;
     }
 }
 $supplementalindexcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalindexcategories[$openorificeschapteroverview['key']] = $openorificeschapteroverview;
 $supplementalindexcategories[$expelparasiteschapteroverview['key']] = $expelparasiteschapteroverview;
+$supplementalindexcategories[$treatabscesseschapteroverview['key']] = $treatabscesseschapteroverview;
 $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
 $supplementalcategories[$calmshenchapteroverview['key']] = $calmshenchapteroverview;
@@ -1287,6 +1374,7 @@ $supplementalcategories[$expeldampchapteroverview['key']] = $expeldampchapterove
 $supplementalcategories[$transformphlegmchapteroverview['key']] = $transformphlegmchapteroverview;
 $supplementalcategories[$digestivechapteroverview['key']] = $digestivechapteroverview;
 $supplementalcategories[$expelparasiteschapteroverview['key']] = $expelparasiteschapteroverview;
+$supplementalcategories[$treatabscesseschapteroverview['key']] = $treatabscesseschapteroverview;
 unset($supplementalcategories['stabilize-bind-ch9']);
 unset($supplementalcategories['calm-shen-ch10']);
 unset($supplementalcategories['open-orifices-ch11']);
@@ -1297,6 +1385,7 @@ unset($supplementalcategories['expel-damp-ch16']);
 unset($supplementalcategories['transform-phlegm-ch17']);
 unset($supplementalcategories['digestive-ch18']);
 unset($supplementalcategories['expel-parasites-ch19']);
+unset($supplementalcategories['treat-abscesses-ch20']);
 
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
@@ -2516,10 +2605,10 @@ echo $OUTPUT->header();
                 $clinicalsection = $selectedformulasectionbyname[$formula['name']] ?? null;
                 $newclinicalsection = $clinicalsection !== null
                     && $lastclinicalsectionkey !== $clinicalsection['key']
-                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19'], true);
-                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19'], true)
+                    && !in_array($selected['key'], ['expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true);
+                $currentsectionkey = in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)
                     ? $formula['chapterSectionKey'] : $formula['categoryKey'];
-                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19'], true)
+                $newchaptersection = in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)
                     && $lastformulacategory !== $currentsectionkey;
                 if ($newchaptersection && $selected['key'] === 'stabilize-bind-chapter-9') {
                     $formulacategory = $stabilizechaptersections[$currentsectionkey];
@@ -2581,6 +2670,12 @@ echo $OUTPUT->header();
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
                     ));
+                } elseif ($newchaptersection && $selected['key'] === 'treat-abscesses-chapter-20') {
+                    $formulacategory = $treatabscesseschaptersections[$currentsectionkey];
+                    $formulacategory['formulas'] = array_values(array_filter(
+                        $selected['formulas'],
+                        static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
+                    ));
                 } else {
                     $formulacategory = $newchaptersection ? $supplementalcategories[$formula['categoryKey']] : null;
                 }
@@ -2600,7 +2695,7 @@ echo $OUTPUT->header();
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
-                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19'], true)) {
+                if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)) {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
@@ -2622,7 +2717,7 @@ echo $OUTPUT->header();
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
                         <h4><?php echo s($ises ? $formulacategory['nameEs'] : $formulacategory['name']); ?></h4>
-                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19'], true)
+                        <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>

@@ -86,6 +86,10 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "expel-parasites-ch19"
     );
+    $chapter20 = array_filter(
+        $data["supplementalFormulas"] ?? [],
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "treat-abscesses-ch20"
+    );
     $historical = array_filter(
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
@@ -119,6 +123,13 @@ php -r '
     foreach ($parasiteSections as $section) {
         foreach ($section["formulaNames"] ?? [] as $formulaName) {
             $parasiteSectionNames[] = $formulaName;
+        }
+    }
+    $abscessSections = $data["categoryGuides"]["treat-abscesses-chapter-20"]["formulaSections"] ?? [];
+    $abscessSectionNames = [];
+    foreach ($abscessSections as $section) {
+        foreach ($section["formulaNames"] ?? [] as $formulaName) {
+            $abscessSectionNames[] = $formulaName;
         }
     }
     $drynessSections = $data["categoryGuides"]["treat-dryness-ch15"]["formulaSections"] ?? [];
@@ -193,8 +204,8 @@ php -r '
     if (($data["version"] ?? null) !== 7
             || count($data["categories"] ?? []) !== 14
             || count($data["formulas"] ?? []) !== 63
-            || count($data["supplementalCategories"] ?? []) !== 21
-            || count($data["supplementalFormulas"] ?? []) !== 202
+            || count($data["supplementalCategories"] ?? []) !== 22
+            || count($data["supplementalFormulas"] ?? []) !== 216
             || count($chapter8) !== 45
             || count($chapter9) !== 15
             || count($chapter10) !== 6
@@ -207,6 +218,7 @@ php -r '
             || count($chapter17) !== 13
             || count($chapter18) !== 7
             || count($chapter19) !== 3
+            || count($chapter20) !== 14
             || count($historical) !== 1
             || array_column($historical, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
@@ -247,6 +259,18 @@ php -r '
             || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $parasiteSections)
                 !== [3]
             || $parasiteSectionNames !== ["Wu Mei Wan", "Hua Chong Wan", "Bu Dai Wan"]
+            || array_column($abscessSections, "key") !== [
+                "external-abscesses-sores", "internal-abscesses"
+            ]
+            || array_map(static fn(array $section): int => count($section["formulaNames"] ?? []), $abscessSections)
+                !== [8, 6]
+            || $abscessSectionNames !== [
+                "Xian Fang Huo Ming Yin", "Wu Wei Xiao Du Yin", "Si Miao Yong An Tang",
+                "Tuo Li Xiao Du Yin", "Yang He Tang", "Shi Wei Bai Du San",
+                "Qian Jin Nei Tuo San", "San Zhong Kui Jian Tang", "Wei Jing Tang",
+                "Da Huang Mu Dan Tang", "Qing Chang Yin", "Yi Yi Fu Zi Bai Jiang San",
+                "Qing Xin Li Ge Tang", "Shi Liu Wei Liu Qi Yin"
+            ]
             || array_column($drynessSections, "key") !== [
                 "gently-disperse-external-dryness", "enrich-yin-internal-dryness"
             ]
@@ -479,6 +503,14 @@ grep -q '"key":"expel-intestinal-parasites"' "$TEMP_DIR/formulas-study-guide-dat
 grep -q "Dato interesante: el Board omite las tres fórmulas antiparasitarias" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "0 de 3 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Qian Dan es un compuesto de plomo extremadamente tóxico" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "treat-abscesses-chapter-20" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"number":"C20-14"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"external-abscesses-sores"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q '"key":"internal-abscesses"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Las fórmulas históricas nunca deben retrasar" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "El acónito procesado puede causar arritmia mortal" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "estas fórmulas no tratan cáncer" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "0 de 14 coincidencias directas" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "related-dui-yao-title" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TEMP_DIR/formulas-study-guide.php"
@@ -667,6 +699,14 @@ grep -q '"key":"expel-intestinal-parasites"' "$TARGET_DIR/formulas-study-guide-d
 grep -q "Dato interesante: el Board omite las tres fórmulas antiparasitarias" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "0 de 3 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Qian Dan es un compuesto de plomo extremadamente tóxico" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "treat-abscesses-chapter-20" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"number":"C20-14"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"external-abscesses-sores"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q '"key":"internal-abscesses"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Las fórmulas históricas nunca deben retrasar" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "El acónito procesado puede causar arritmia mortal" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "estas fórmulas no tratan cáncer" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "0 de 14 coincidencias directas" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "related-dui-yao-title" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'from' => 'formula-study-guide'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'related-pairs'" "$TARGET_DIR/formulas-study-guide.php"
