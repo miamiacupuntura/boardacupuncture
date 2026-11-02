@@ -9,7 +9,9 @@ MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 PHP_BIN="${PHP_BIN:-}"
 RELATIVE_PATH="blocks/myprogress/single-herbs-category-drain-dampness.php"
+GUIDE_RELATIVE_PATH="blocks/myprogress/single-herbs-study-guide.php"
 TARGET="$MOODLE_ROOT/$RELATIVE_PATH"
+GUIDE_TARGET="$MOODLE_ROOT/$GUIDE_RELATIVE_PATH"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash deploy_wind_damp_chapter.sh COMMIT_DE_40_CARACTERES"
@@ -23,6 +25,11 @@ fi
 
 if [[ ! -f "$TARGET" ]]; then
     echo "ERROR: no se encontró la categoría activa en $TARGET"
+    exit 1
+fi
+
+if [[ ! -f "$GUIDE_TARGET" ]]; then
+    echo "ERROR: no se encontró la guía activa en $GUIDE_TARGET"
     exit 1
 fi
 
@@ -42,6 +49,7 @@ fi
 
 TEMP_DIR="$(mktemp -d)"
 TEMP_FILE="$TEMP_DIR/single-herbs-category-drain-dampness.php"
+TEMP_GUIDE="$TEMP_DIR/single-herbs-study-guide.php"
 BACKUP_DIR="$BACKUP_ROOT/wind-damp-chapter-$(date +%Y%m%d-%H%M%S)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
@@ -50,12 +58,16 @@ echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando capítulo Wind-Damp desde $REVISION..."
 
 curl -fsSL "$REPOSITORY/$REVISION/$RELATIVE_PATH" -o "$TEMP_FILE"
+curl -fsSL "$REPOSITORY/$REVISION/$GUIDE_RELATIVE_PATH" -o "$TEMP_GUIDE"
 
 "$PHP_BIN" -l "$TEMP_FILE" >/dev/null
+"$PHP_BIN" -l "$TEMP_GUIDE" >/dev/null
 grep -q "Complete chapter atlas: 33 source monographs" "$TEMP_FILE"
 grep -q "Chapter 5 selection framework" "$TEMP_FILE"
 grep -q "Snake products and sloughed skin" "$TEMP_FILE"
 grep -q "scanned pp. 323–369" "$TEMP_FILE"
+grep -q "single-herbs-guide__chapter-atlas>.single-herbs-guide__profiles" "$TEMP_GUIDE"
+grep -q "single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs" "$TEMP_GUIDE"
 
 QUESTION_COUNT="$(grep -c "^    \[\$damptext(" "$TEMP_FILE")"
 if [[ "$QUESTION_COUNT" -ne 12 ]]; then
@@ -71,12 +83,18 @@ fi
 
 mkdir -p "$BACKUP_DIR"
 cp -a "$TARGET" "$BACKUP_DIR/"
+cp -a "$GUIDE_TARGET" "$BACKUP_DIR/"
 
 OWNER_GROUP="$(stat -c '%u:%g' "$TARGET")"
 FILE_MODE="$(stat -c '%a' "$TARGET")"
 install -o "${OWNER_GROUP%:*}" -g "${OWNER_GROUP#*:}" -m "$FILE_MODE" "$TEMP_FILE" "$TARGET"
 
+GUIDE_OWNER_GROUP="$(stat -c '%u:%g' "$GUIDE_TARGET")"
+GUIDE_FILE_MODE="$(stat -c '%a' "$GUIDE_TARGET")"
+install -o "${GUIDE_OWNER_GROUP%:*}" -g "${GUIDE_OWNER_GROUP#*:}" -m "$GUIDE_FILE_MODE" "$TEMP_GUIDE" "$GUIDE_TARGET"
+
 "$PHP_BIN" -l "$TARGET" >/dev/null
+"$PHP_BIN" -l "$GUIDE_TARGET" >/dev/null
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -86,4 +104,5 @@ echo "CAPÍTULO WIND-DAMP INSTALADO CORRECTAMENTE"
 echo "33 monografías fuente"
 echo "9 perfiles Board"
 echo "12 preguntas de repaso"
+echo "Atlas ajustado a columnas amplias y diseño móvil de una columna"
 echo "Respaldo: $BACKUP_DIR"
