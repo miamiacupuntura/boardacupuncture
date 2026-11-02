@@ -995,7 +995,7 @@ ob_start();
             <p class="single-herbs-guide__lead"><?php echo s($ises
                 ? 'Conecta patrones de categoría, pistas clínicas decisivas, comparaciones y memoria activa para reconocer cada hierba en el Board.'
                 : 'Connect category patterns, decisive clinical clues, comparisons and active recall to recognize each herb on the Board.'); ?></p>
-            <p class="single-herbs-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente del Board' : '* Included in the current Board guideline'); ?></p>
+            <p class="single-herbs-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente 2026' : '* Included in the current guideline 2026'); ?></p>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
             <div class="single-herbs-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
