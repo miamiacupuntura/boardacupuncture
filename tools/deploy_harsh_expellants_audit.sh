@@ -10,6 +10,16 @@ BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 PHP_BIN="${PHP_BIN:-}"
 CATEGORY_PATH="blocks/myprogress/single-herbs-category-harsh-expellants.php"
 MOIST_PATH="blocks/myprogress/single-herbs-category-moist-laxatives.php"
+LABEL_CATEGORY_PATHS=(
+    "blocks/myprogress/single-herbs-category-clear-deficient-heat.php"
+    "blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
+    "blocks/myprogress/single-herbs-category-clear-summer-heat.php"
+    "blocks/myprogress/single-herbs-category-cool-transform-phlegm.php"
+    "blocks/myprogress/single-herbs-category-downward-draining-purgatives.php"
+    "blocks/myprogress/single-herbs-category-drain-dampness.php"
+    "blocks/myprogress/single-herbs-category-relieve-cough-wheezing.php"
+    "blocks/myprogress/single-herbs-category-warm-transform-phlegm.php"
+)
 GUIDE_PATH="blocks/myprogress/single-herbs-study-guide.php"
 PROPERTIES_PATH="blocks/myprogress/single-herb-properties.json"
 REFERENCE_PATH="blocks/myprogress/single-herbs-dui-yao-reference.php"
@@ -25,7 +35,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     exit 1
 fi
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
     if [[ ! -f "$MOODLE_ROOT/$relative_path" ]]; then
         echo "ERROR: no se encontró el archivo activo $MOODLE_ROOT/$relative_path"
         exit 1
@@ -59,15 +69,14 @@ echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
 
-"$PHP_BIN" -l "$TEMP_DIR/$CATEGORY_PATH" >/dev/null
-"$PHP_BIN" -l "$TEMP_DIR/$MOIST_PATH" >/dev/null
-"$PHP_BIN" -l "$TEMP_DIR/$GUIDE_PATH" >/dev/null
-"$PHP_BIN" -l "$TEMP_DIR/$REFERENCE_PATH" >/dev/null
+for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$REFERENCE_PATH"; do
+    "$PHP_BIN" -l "$TEMP_DIR/$php_path" >/dev/null
+done
 python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
 python3 -m json.tool "$TEMP_DIR/$DUI_DATA_PATH" >/dev/null
 
@@ -98,6 +107,14 @@ grep -Fq "The pairs shown below do not belong to the moist-laxative category" "$
 grep -Fq '"en": "Bitter"' "$TEMP_DIR/$PROPERTIES_PATH"
 grep -Fq '"dose": "0.1–0.3 g/day; defatted only"' "$TEMP_DIR/$PROPERTIES_PATH"
 
+for label_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}"; do
+    if grep -Fq "current Appendix A" "$TEMP_DIR/$label_path"; then
+        echo "ERROR: la etiqueta antigua todavía aparece en $label_path"
+        exit 1
+    fi
+    grep -Fq "current guideline 2026" "$TEMP_DIR/$label_path"
+done
+
 OFFICIAL_COUNT="$(grep -c "'official' => true" "$TEMP_DIR/$CATEGORY_PATH")"
 OUTSIDE_COUNT="$(grep -c "'official' => false" "$TEMP_DIR/$CATEGORY_PATH")"
 if [[ "$OFFICIAL_COUNT" -ne 2 || "$OUTSIDE_COUNT" -ne 3 ]]; then
@@ -118,7 +135,7 @@ if [[ "$DUI_PAIR_COUNT" -ne 51 ]]; then
 fi
 
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     target="$MOODLE_ROOT/$relative_path"
     temporary="$TEMP_DIR/$relative_path"
     backup_target="$BACKUP_DIR/$relative_path"
@@ -135,10 +152,9 @@ for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "$GUIDE_PATH" "$PROPERTIES_P
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$file_mode" "$temporary" "$target"
 done
 
-"$PHP_BIN" -l "$MOODLE_ROOT/$CATEGORY_PATH" >/dev/null
-"$PHP_BIN" -l "$MOODLE_ROOT/$MOIST_PATH" >/dev/null
-"$PHP_BIN" -l "$MOODLE_ROOT/$GUIDE_PATH" >/dev/null
-"$PHP_BIN" -l "$MOODLE_ROOT/$REFERENCE_PATH" >/dev/null
+for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$REFERENCE_PATH"; do
+    "$PHP_BIN" -l "$MOODLE_ROOT/$php_path" >/dev/null
+done
 python3 -m json.tool "$MOODLE_ROOT/$PROPERTIES_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$DUI_DATA_PATH" >/dev/null
 
@@ -150,6 +166,7 @@ echo "REFERENCIAS DUÌ YÀO INSTALADAS EN TODAS LAS CATEGORÍAS"
 echo "Las coincidencias se calculan desde las 51 parejas vigentes"
 echo "Las categorías sin pareja muestran una nota breve con enlace al índice"
 echo "Categoría 10: seis referencias cruzadas ampliadas con su categoría principal"
+echo "Etiquetas actualizadas: current guideline 2026 en todas las categorías afectadas"
 echo "Con asterisco: Gan Sui y Ba Dou"
 echo "Sin asterisco: Hong Da Ji, Yuan Hua y Qian Niu Zi"
 echo "Duì Yào: ninguna de estas cinco hierbas pertenece a las 51 parejas vigentes"
