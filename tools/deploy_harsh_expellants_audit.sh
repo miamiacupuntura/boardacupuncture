@@ -14,6 +14,7 @@ LABEL_CATEGORY_PATHS=(
     "blocks/myprogress/single-herbs-category-cool-acrid.php"
     "blocks/myprogress/single-herbs-category-clear-heat-cool-blood.php"
     "blocks/myprogress/single-herbs-category-clear-heat-dry-damp.php"
+    "blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
     "blocks/myprogress/single-herbs-category-clear-deficient-heat.php"
     "blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
     "blocks/myprogress/single-herbs-category-clear-summer-heat.php"
@@ -125,6 +126,22 @@ expected_category_five = {
     'Ku Shen': (149, 5),
     'Qin Pi': (197, 5),
 }
+expected_category_six = {
+    'Bai Hua She She Cao': (10, 6),
+    'Bai Jiang Cao': (13, 6),
+    'He Ye': (120, 6),
+    'Jin Yin Hua': (142, 6),
+    'Lian Qiao': (153, 6),
+    'Pu Gong Ying': (190, 6),
+    'Shan Dou Gen': (219, 6),
+    'She Gan': (224, 6),
+    'Tu Fu Ling': (250, 6),
+    'Yu Xing Cao': (287, 6),
+}
+expected_unassigned_toxicity_context = {
+    'Ban Lan Gen': (24, None),
+    'Da Qing Ye': (64, None),
+}
 expected_cross_category_seven = {
     'Bai Wei': (19, 7),
     'Di Gu Pi': (74, 7),
@@ -133,6 +150,8 @@ expected_guideline_entries = expected_category_two.copy()
 expected_guideline_entries.update(expected_category_three)
 expected_guideline_entries.update(expected_category_four)
 expected_guideline_entries.update(expected_category_five)
+expected_guideline_entries.update(expected_category_six)
+expected_guideline_entries.update(expected_unassigned_toxicity_context)
 expected_guideline_entries.update(expected_cross_category_seven)
 for name, (expected_id, expected_guide) in expected_guideline_entries.items():
     herb = by_name.get(name, {})
@@ -235,6 +254,14 @@ if grep -Fq "Annex · Additional official recognition herbs" "$TEMP_DIR/blocks/m
     echo "ERROR: Ku Shen, Qin Pi o Bai Xian Pi todavía aparecen como anexo de la Categoría 5"
     exit 1
 fi
+grep -Fq "Study these ten official herbs as Category 6" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+grep -Fq "\$toxinguidelinecheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+grep -Fq "\$toxincategorycheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+grep -Fq "2 official guideline entries without a primary category · click to open" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+if grep -Fq "Annex · Additional official recognition herbs" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"; then
+    echo "ERROR: hierbas oficiales de la Categoría 6 todavía aparecen como anexo"
+    exit 1
+fi
 grep -Fq "single-herbs-guide__annex-toggle" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "3 contextual entries outside the 2026 guideline · click to open" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Categoría principal" "$TEMP_DIR/$GUIDE_TRANSLATION_PATH"
@@ -331,6 +358,7 @@ echo "Categoría 2: 11 hierbas oficiales; Dan Dou Chi y Mu Zei integradas, sin a
 echo "Categoría 3: 9 hierbas oficiales; tres comparaciones externas ocultas al final"
 echo "Categoría 4: 8 hierbas oficiales; Bai Wei y Di Gu Pi como referencias de Categoría 7"
 echo "Categoría 5: 7 hierbas oficiales; Ku Shen, Qin Pi y Bai Xian Pi integradas, sin anexo"
+echo "Categoría 6: 10 hierbas oficiales; Da Qing Ye y Ban Lan Gen ocultas al final sin categoría primaria"
 echo "Popup del guideline: 304 hierbas con IDs estables 001–304 y búsqueda"
 echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Anexo Viento-Frío: plegado y movido al final de la categoría"
