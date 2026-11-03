@@ -48,6 +48,7 @@ GUIDE_NUMBER_BY_CATEGORY = {
     "extinguish-wind-stop-tremors": 31,
     # Chapter 17 has its own specialFocus=bensky17 route.
     "expel-parasites": None,
+    # Chapter 18 has its own specialFocus=bensky18 route.
     "external-application": None,
 }
 
@@ -272,6 +273,8 @@ def main() -> None:
         herb["guideNumber"] = GUIDE_NUMBER_BY_CATEGORY[herb["benskyCategory"]["code"]]
         if herb["benskyCategory"]["code"] == "expel-parasites":
             herb["specialFocus"] = "bensky17"
+        elif herb["benskyCategory"]["code"] == "external-application":
+            herb["specialFocus"] = "bensky18"
 
     catalog["routedToDetailedStudy"] = sum(
         herb.get("guideNumber") is not None or bool(herb.get("specialFocus"))

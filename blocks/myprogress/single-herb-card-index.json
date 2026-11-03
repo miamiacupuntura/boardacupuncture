@@ -2,7 +2,7 @@
   "version": 2,
   "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
   "total": 304,
-  "routedToDetailedStudy": 302,
+  "routedToDetailedStudy": 304,
   "herbs": [
     {
       "name": "Ai Ye",
@@ -1762,6 +1762,7 @@
       "latin": "Sulfur",
       "id": 159,
       "guideNumber": null,
+      "specialFocus": "bensky18",
       "benskyCategory": {
         "code": "external-application",
         "en": "Substances for External Application",
@@ -2468,6 +2469,7 @@
       "latin": "Cnidii Fructus",
       "id": 223,
       "guideNumber": null,
+      "specialFocus": "bensky18",
       "benskyCategory": {
         "code": "external-application",
         "en": "Substances for External Application",

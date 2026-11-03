@@ -13,6 +13,7 @@ ROSTER = ROOT / "tools" / "data" / "ncbahm_2026_appendix_a_herbs.txt"
 OUTPUT = ROOT / "blocks" / "myprogress" / "single-herb-card-index.json"
 BENSKY_CHAPTER_FOUR = ROOT / "blocks" / "myprogress" / "single-herbs-bensky-chapter-four.php"
 BENSKY_CHAPTER_SEVENTEEN = ROOT / "blocks" / "myprogress" / "single-herbs-bensky-chapter-seventeen.php"
+BENSKY_CHAPTER_EIGHTEEN = ROOT / "blocks" / "myprogress" / "single-herbs-bensky-chapter-eighteen.php"
 
 CATEGORY_FILES = {
     1: ROOT / "blocks" / "myprogress" / "single-herbs-study-guide.php",
@@ -106,6 +107,13 @@ def main() -> None:
             BENSKY_CHAPTER_SEVENTEEN.read_text(encoding="utf-8"),
         )
     }
+    chapter_eighteen_names = {
+        normalized(name)
+        for name in re.findall(
+            r"'name'\s*=>\s*'([^']+)'",
+            BENSKY_CHAPTER_EIGHTEEN.read_text(encoding="utf-8"),
+        )
+    }
     entries = roster_entries()
     entries.sort(key=lambda entry: normalized(str(entry["name"])))
     routed = 0
@@ -118,7 +126,9 @@ def main() -> None:
             entry["specialFocus"] = "bensky4"
         elif key in chapter_seventeen_names:
             entry["specialFocus"] = "bensky17"
-        if guide_number is not None or key in chapter_four_names or key in chapter_seventeen_names:
+        elif key in chapter_eighteen_names:
+            entry["specialFocus"] = "bensky18"
+        if guide_number is not None or key in chapter_four_names or key in chapter_seventeen_names or key in chapter_eighteen_names:
             routed += 1
     payload = {
         "version": 2,
