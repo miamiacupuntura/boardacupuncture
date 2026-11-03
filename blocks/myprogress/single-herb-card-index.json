@@ -2,7 +2,7 @@
   "version": 2,
   "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
   "total": 304,
-  "routedToDetailedStudy": 201,
+  "routedToDetailedStudy": 203,
   "herbs": [
     {
       "name": "Ai Ye",
@@ -261,7 +261,7 @@
       "name": "Ban Lan Gen",
       "latin": "Isatidis/Baphicacanthis Radix",
       "id": 24,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -701,7 +701,7 @@
       "name": "Da Qing Ye",
       "latin": "Isatidis Folium",
       "id": 64,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -1317,7 +1317,7 @@
       "name": "He Ye",
       "latin": "Nelumbinis Folium",
       "id": 120,
-      "guideNumber": 6,
+      "guideNumber": 8,
       "benskyCategory": {
         "code": "clear-summerheat",
         "en": "Herbs that Clear Summerheat",

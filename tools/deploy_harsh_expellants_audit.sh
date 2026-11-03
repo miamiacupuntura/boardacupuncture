@@ -100,6 +100,11 @@ if catalog.get('version') != 2:
     raise SystemExit(f"ERROR: versión del índice={catalog.get('version')!r}; se esperaba 2")
 if catalog.get('total') != 304 or len(herbs) != 304:
     raise SystemExit(f"ERROR: el índice debe contener 304 hierbas; contiene {len(herbs)}")
+expected_routed = sum(herb.get('guideNumber') is not None for herb in herbs)
+if catalog.get('routedToDetailedStudy') != 203 or expected_routed != 203:
+    raise SystemExit(
+        f"ERROR: rutas detalladas={catalog.get('routedToDetailedStudy')!r}/{expected_routed!r}; se esperaban 203"
+    )
 if ids != list(range(1, 305)):
     raise SystemExit('ERROR: los IDs del guideline deben ser únicos y consecutivos de 1 a 304')
 if herbs[0].get('name') != 'Ai Ye' or herbs[-1].get('name') != 'Zi Wan':
@@ -160,7 +165,8 @@ expected_category_five = {
 expected_category_six = {
     'Bai Hua She She Cao': (10, 6),
     'Bai Jiang Cao': (13, 6),
-    'He Ye': (120, 6),
+    'Ban Lan Gen': (24, 6),
+    'Da Qing Ye': (64, 6),
     'Jin Yin Hua': (142, 6),
     'Lian Qiao': (153, 6),
     'Pu Gong Ying': (190, 6),
@@ -169,9 +175,8 @@ expected_category_six = {
     'Tu Fu Ling': (250, 6),
     'Yu Xing Cao': (287, 6),
 }
-expected_unassigned_toxicity_context = {
-    'Ban Lan Gen': (24, None),
-    'Da Qing Ye': (64, None),
+expected_cross_category_eight = {
+    'He Ye': (120, 8),
 }
 expected_cross_category_seven = {
     'Bai Wei': (19, 7),
@@ -182,8 +187,8 @@ expected_guideline_entries.update(expected_category_three)
 expected_guideline_entries.update(expected_category_four)
 expected_guideline_entries.update(expected_category_five)
 expected_guideline_entries.update(expected_category_six)
-expected_guideline_entries.update(expected_unassigned_toxicity_context)
 expected_guideline_entries.update(expected_cross_category_seven)
+expected_guideline_entries.update(expected_cross_category_eight)
 for name, (expected_id, expected_guide) in expected_guideline_entries.items():
     herb = by_name.get(name, {})
     actual = (herb.get('id'), herb.get('guideNumber'))
@@ -287,12 +292,18 @@ if grep -Fq "Annex · Additional official recognition herbs" "$TEMP_DIR/blocks/m
     echo "ERROR: Ku Shen, Qin Pi o Bai Xian Pi todavía aparecen como anexo de la Categoría 5"
     exit 1
 fi
-grep -Fq "Study these ten official herbs as Category 6" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+grep -Fq "Study these eleven official herbs as Category 6" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
 grep -Fq "\$toxinguidelinecheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
 grep -Fq "\$toxincategorycheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
-grep -Fq "2 official guideline entries without a primary category · click to open" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
-if grep -Fq "Annex · Additional official recognition herbs" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"; then
-    echo "ERROR: hierbas oficiales de la Categoría 6 todavía aparecen como anexo"
+grep -Fq "'name' => 'Da Qing Ye'" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+grep -Fq "'name' => 'Ban Lan Gen'" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+grep -Fq "Primary Bensky category herbs" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"
+if grep -Fq "without a primary category" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"; then
+    echo "ERROR: Da Qing Ye o Ban Lan Gen todavía aparecen sin categoría primaria"
+    exit 1
+fi
+if grep -Fq "'name' => 'He Ye'" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-resolve-toxicity.php"; then
+    echo "ERROR: He Ye todavía aparece como hierba principal de la Categoría 6"
     exit 1
 fi
 grep -Fq "single-herbs-guide__annex-toggle" "$TEMP_DIR/$GUIDE_PATH"
@@ -391,8 +402,9 @@ echo "Categoría 2: 11 hierbas oficiales; Dan Dou Chi y Mu Zei integradas, sin a
 echo "Categoría 3: 9 hierbas oficiales; tres comparaciones externas ocultas al final"
 echo "Categoría 4: 8 hierbas oficiales; Bai Wei y Di Gu Pi como referencias de Categoría 7"
 echo "Categoría 5: 7 hierbas oficiales; Ku Shen, Qin Pi y Bai Xian Pi integradas, sin anexo"
-echo "Categoría 6: 10 hierbas oficiales; Da Qing Ye y Ban Lan Gen ocultas al final sin categoría primaria"
-echo "Popup del guideline: 304 hierbas con IDs estables 001–304 y búsqueda"
+echo "Categoría 6: 11 hierbas Bensky; Da Qing Ye y Ban Lan Gen integradas, sin anexo"
+echo "Categoría 8: He Ye ruteada según su categoría primaria Bensky"
+echo "Popup del guideline: 304 hierbas con IDs estables 001–304, categoría Bensky y búsqueda"
 echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Anexo Viento-Frío: plegado y movido al final de la categoría"
 echo "Categoría 1: 13 hierbas oficiales; solo 3 entradas externas permanecen en el anexo"

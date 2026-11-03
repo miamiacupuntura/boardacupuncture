@@ -10,6 +10,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = ROOT / "blocks/myprogress/single-herb-card-index.json"
 
+# The detailed-study route must follow the same primary Bensky category used by
+# the roster. These entries previously inherited Board/module routing or no
+# route at all, which produced a misleading "no primary category" annex.
+GUIDE_NUMBER_OVERRIDES = {
+    "Ban Lan Gen": 6,
+    "Da Qing Ye": 6,
+    "He Ye": 8,
+}
+
 
 CATEGORIES = {
     "warm-acrid-release-exterior": (
@@ -228,6 +237,12 @@ def main() -> None:
 
     for herb in herbs:
         herb["benskyCategory"] = assignments[herb["name"]]
+        if herb["name"] in GUIDE_NUMBER_OVERRIDES:
+            herb["guideNumber"] = GUIDE_NUMBER_OVERRIDES[herb["name"]]
+
+    catalog["routedToDetailedStudy"] = sum(
+        herb.get("guideNumber") is not None for herb in herbs
+    )
 
     catalog["benskySource"] = (
         "Bensky, Clavey, Stöger, and Gamble, Chinese Herbal Medicine: "
