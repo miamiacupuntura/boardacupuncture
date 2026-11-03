@@ -10,13 +10,44 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = ROOT / "blocks/myprogress/single-herb-card-index.json"
 
-# The detailed-study route must follow the same primary Bensky category used by
-# the roster. These entries previously inherited Board/module routing or no
-# route at all, which produced a misleading "no primary category" annex.
-GUIDE_NUMBER_OVERRIDES = {
-    "Ban Lan Gen": 6,
-    "Da Qing Ye": 6,
-    "He Ye": 8,
+# Direct study routes follow the primary Bensky category, not the first file in
+# which a herb happens to be mentioned. Cross-category comparisons and annexes
+# otherwise send herbs to neighboring cards and distort the card totals.
+GUIDE_NUMBER_BY_CATEGORY = {
+    "warm-acrid-release-exterior": 1,
+    "cool-acrid-release-exterior": 2,
+    "clear-heat-drain-fire": 3,
+    "cool-blood": 4,
+    "clear-heat-dry-dampness": 5,
+    "clear-heat-resolve-toxicity": 6,
+    "clear-deficiency-heat": 7,
+    "clear-summerheat": 8,
+    "downward-draining-purgatives": 9,
+    "moist-laxatives": 10,
+    "harsh-expellants": 11,
+    # Chapter 4 has its own specialFocus=bensky4 route.
+    "drain-dampness": None,
+    "dispel-wind-dampness": 12,
+    "cool-transform-phlegm-heat": 13,
+    "warm-transform-cold-phlegm": 14,
+    "stop-coughing-calm-wheezing": 15,
+    "aromatic-transform-dampness": 16,
+    "relieve-food-stagnation": 17,
+    "regulate-qi": 18,
+    "invigorate-blood": 19,
+    "stop-bleeding": 20,
+    "warm-interior-expel-cold": 21,
+    "tonify-qi": 23,
+    "tonify-blood": 24,
+    "tonify-yang": 25,
+    "tonify-yin": 26,
+    "stabilize-bind": 27,
+    "anchor-settle-calm-spirit": 28,
+    "nourish-heart-calm-spirit": 29,
+    "open-orifices": 30,
+    "extinguish-wind-stop-tremors": 31,
+    "expel-parasites": None,
+    "external-application": None,
 }
 
 
@@ -237,8 +268,7 @@ def main() -> None:
 
     for herb in herbs:
         herb["benskyCategory"] = assignments[herb["name"]]
-        if herb["name"] in GUIDE_NUMBER_OVERRIDES:
-            herb["guideNumber"] = GUIDE_NUMBER_OVERRIDES[herb["name"]]
+        herb["guideNumber"] = GUIDE_NUMBER_BY_CATEGORY[herb["benskyCategory"]["code"]]
 
     catalog["routedToDetailedStudy"] = sum(
         herb.get("guideNumber") is not None or bool(herb.get("specialFocus"))

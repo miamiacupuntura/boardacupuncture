@@ -104,6 +104,49 @@ $benskychapterlabel = static function(?int $guidenumber) use ($benskychapterbygu
     return 'Bensky · ' . ($ises ? 'Capítulo ' : 'Chapter ') . $benskychapterbyguidenumber[$guidenumber];
 };
 
+// Canonical card identity is independent from the legacy Moodle section title.
+// Chapter 4 now has its own card 12, so the old section labels from this point
+// are one category behind. These names and category codes keep titles, counts
+// and direct herb routes aligned with the actual detailed content.
+$canonicalcategories = [
+    1 => ['code' => 'warm-acrid-release-exterior', 'en' => 'Warm, Acrid Herbs that Release the Exterior', 'es' => 'Hierbas tibias y acres que liberan el Exterior'],
+    2 => ['code' => 'cool-acrid-release-exterior', 'en' => 'Cool, Acrid Herbs that Release the Exterior', 'es' => 'Hierbas frescas y acres que liberan el Exterior'],
+    3 => ['code' => 'clear-heat-drain-fire', 'en' => 'Herbs that Clear Heat and Drain Fire', 'es' => 'Hierbas que aclaran Calor y drenan Fuego'],
+    4 => ['code' => 'cool-blood', 'en' => 'Herbs that Cool the Blood', 'es' => 'Hierbas que enfrían la Sangre'],
+    5 => ['code' => 'clear-heat-dry-dampness', 'en' => 'Herbs that Clear Heat and Dry Dampness', 'es' => 'Hierbas que aclaran Calor y secan Humedad'],
+    6 => ['code' => 'clear-heat-resolve-toxicity', 'en' => 'Herbs that Clear Heat and Resolve Toxicity', 'es' => 'Hierbas que aclaran Calor y resuelven toxicidad'],
+    7 => ['code' => 'clear-deficiency-heat', 'en' => 'Herbs that Clear Heat from Deficiency', 'es' => 'Hierbas que aclaran Calor por deficiencia'],
+    8 => ['code' => 'clear-summerheat', 'en' => 'Herbs that Clear Summerheat', 'es' => 'Hierbas que aclaran Calor de Verano'],
+    9 => ['code' => 'downward-draining-purgatives', 'en' => 'Downward-Draining Purgatives', 'es' => 'Purgantes que drenan hacia abajo'],
+    10 => ['code' => 'moist-laxatives', 'en' => 'Moist Laxatives', 'es' => 'Laxantes humectantes'],
+    11 => ['code' => 'harsh-expellants', 'en' => 'Harsh Expellants', 'es' => 'Expulsores drásticos'],
+    12 => ['code' => 'dispel-wind-dampness', 'en' => 'Herbs that Dispel Wind-Dampness', 'es' => 'Hierbas que expulsan Viento-Humedad'],
+    13 => ['code' => 'cool-transform-phlegm-heat', 'en' => 'Herbs that Cool and Transform Phlegm-Heat', 'es' => 'Hierbas que enfrían y transforman Flema-Calor'],
+    14 => ['code' => 'warm-transform-cold-phlegm', 'en' => 'Herbs that Warm and Transform Cold-Phlegm', 'es' => 'Hierbas que calientan y transforman Flema-Frío'],
+    15 => ['code' => 'stop-coughing-calm-wheezing', 'en' => 'Herbs that Stop Coughing and Calm Wheezing', 'es' => 'Hierbas que detienen la tos y calman las sibilancias'],
+    16 => ['code' => 'aromatic-transform-dampness', 'en' => 'Aromatic Herbs that Transform Dampness', 'es' => 'Hierbas aromáticas que transforman Humedad'],
+    17 => ['code' => 'relieve-food-stagnation', 'en' => 'Herbs that Relieve Food Stagnation', 'es' => 'Hierbas que alivian el estancamiento de alimentos'],
+    18 => ['code' => 'regulate-qi', 'en' => 'Herbs that Regulate the Qi', 'es' => 'Hierbas que regulan el Qi'],
+    19 => ['code' => 'invigorate-blood', 'en' => 'Herbs that Invigorate the Blood', 'es' => 'Hierbas que vigorizan la Sangre'],
+    20 => ['code' => 'stop-bleeding', 'en' => 'Herbs that Stop Bleeding', 'es' => 'Hierbas que detienen el sangrado'],
+    21 => ['code' => 'warm-interior-expel-cold', 'en' => 'Herbs that Warm the Interior and Expel Cold', 'es' => 'Hierbas que calientan el Interior y expulsan Frío'],
+    23 => ['code' => 'tonify-qi', 'en' => 'Herbs that Tonify Qi', 'es' => 'Hierbas que tonifican Qi'],
+    24 => ['code' => 'tonify-blood', 'en' => 'Herbs that Tonify Blood', 'es' => 'Hierbas que tonifican Sangre'],
+    25 => ['code' => 'tonify-yang', 'en' => 'Herbs that Tonify Yang', 'es' => 'Hierbas que tonifican Yang'],
+    26 => ['code' => 'tonify-yin', 'en' => 'Herbs that Tonify Yin', 'es' => 'Hierbas que tonifican Yin'],
+    27 => ['code' => 'stabilize-bind', 'en' => 'Herbs that Stabilize and Bind', 'es' => 'Hierbas que estabilizan y contienen'],
+    28 => ['code' => 'anchor-settle-calm-spirit', 'en' => 'Substances that Anchor, Settle, and Calm the Spirit', 'es' => 'Sustancias que anclan, asientan y calman el Shen'],
+    29 => ['code' => 'nourish-heart-calm-spirit', 'en' => 'Herbs that Nourish the Heart and Calm the Spirit', 'es' => 'Hierbas que nutren el Corazón y calman el Shen'],
+    30 => ['code' => 'open-orifices', 'en' => 'Aromatic Substances that Open the Orifices', 'es' => 'Sustancias aromáticas que abren los orificios'],
+    31 => ['code' => 'extinguish-wind-stop-tremors', 'en' => 'Substances that Extinguish Wind and Stop Tremors', 'es' => 'Sustancias que extinguen Viento y detienen temblores'],
+];
+$canonicalcategorytitle = static function(?int $guidenumber) use ($canonicalcategories, $ises): string {
+    if ($guidenumber === null || !isset($canonicalcategories[$guidenumber])) {
+        return '';
+    }
+    return (string)$canonicalcategories[$guidenumber][$ises ? 'es' : 'en'];
+};
+
 $studyguidecategories = [];
 foreach ($categories as $sectionnumber => $category) {
     $guidenumber = $extractstudyguidenumber((string) $category['name']);
@@ -121,7 +164,7 @@ $normalizeherbname = static function(string $value): string {
 $cardindex = null;
 $guidelineherbkeys = [];
 $guidelineherbroster = [];
-$categoryherbcounts = [];
+$benskycategorycounts = [];
 $cardindexpath = __DIR__ . '/single-herb-card-index.json';
 if (is_readable($cardindexpath)) {
     $decodedcardindex = json_decode(file_get_contents($cardindexpath), true);
@@ -137,9 +180,9 @@ if (is_readable($cardindexpath)) {
                     'latin' => (string)($herbcard['latin'] ?? ''),
                     'bensky_category' => (string)($herbcard['benskyCategory'][$ises ? 'es' : 'en'] ?? ''),
                 ];
-                $herbguide = (int)($herbcard['guideNumber'] ?? 0);
-                if ($herbguide > 0) {
-                    $categoryherbcounts[$herbguide] = ($categoryherbcounts[$herbguide] ?? 0) + 1;
+                $benskycategorycode = (string)($herbcard['benskyCategory']['code'] ?? '');
+                if ($benskycategorycode !== '') {
+                    $benskycategorycounts[$benskycategorycode] = ($benskycategorycounts[$benskycategorycode] ?? 0) + 1;
                 }
             }
         }
@@ -418,6 +461,41 @@ $istopicthirtyone = $selected !== null
         || stripos($selectedname, 'Herbs that Extinguish Wind and Stop Tremors') !== false
         || stripos($selectedname, 'Extinguish Wind and Stop Tremors') !== false
     );
+
+// The numeric prefix is the stable category identity. Do not let a stale or
+// shifted Moodle section title select the neighboring card's content.
+if ($selectedguidenumber !== null) {
+    $istopicone = $selectedguidenumber === 1;
+    $istopictwo = $selectedguidenumber === 2;
+    $istopicthree = $selectedguidenumber === 3;
+    $istopicfour = $selectedguidenumber === 4;
+    $istopicfive = $selectedguidenumber === 5;
+    $istopicsix = $selectedguidenumber === 6;
+    $istopicseven = $selectedguidenumber === 7;
+    $istopiceight = $selectedguidenumber === 8;
+    $istopicnine = $selectedguidenumber === 9;
+    $istopicten = $selectedguidenumber === 10;
+    $istopiceleven = $selectedguidenumber === 11;
+    $istopictwelve = $selectedguidenumber === 12;
+    $istopicthirteen = $selectedguidenumber === 13;
+    $istopicfourteen = $selectedguidenumber === 14;
+    $istopicfifteen = $selectedguidenumber === 15;
+    $istopicsixteen = $selectedguidenumber === 16;
+    $istopicseventeen = $selectedguidenumber === 17;
+    $istopiceighteen = $selectedguidenumber === 18;
+    $istopicnineteen = $selectedguidenumber === 19;
+    $istopictwenty = $selectedguidenumber === 20;
+    $istopictwentyone = $selectedguidenumber === 21;
+    $istopictwentythree = $selectedguidenumber === 23;
+    $istopictwentyfour = $selectedguidenumber === 24;
+    $istopictwentyfive = $selectedguidenumber === 25;
+    $istopictwentysix = $selectedguidenumber === 26;
+    $istopictwentyseven = $selectedguidenumber === 27;
+    $istopictwentyeight = $selectedguidenumber === 28;
+    $istopictwentynine = $selectedguidenumber === 29;
+    $istopicthirty = $selectedguidenumber === 30;
+    $istopicthirtyone = $selectedguidenumber === 31;
+}
 
 if ($isbenskychapterfour) {
     $workspaceintro = $ises
@@ -1254,13 +1332,8 @@ ob_start();
             : ($ismixed
             ? ($ises ? 'Repaso final' : 'Final Review')
             : ($selectedguidenumber !== null
-                ? $stripstudyguidenumber((string) $selected['name'])
+                ? ($canonicalcategorytitle($selectedguidenumber) ?: $stripstudyguidenumber((string) $selected['name']))
                 : $selected['name']))));
-        if ($istopiceleven) {
-            $focustitle = $ises
-                ? 'Expulsores drásticos descendentes (Catárticos) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
-                : 'Downward Draining Harsh Expellants (Cathartics) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)';
-        }
         ?>
         <section class="single-herbs-guide__workspace" aria-labelledby="single-herbs-focus-title">
             <div class="single-herbs-guide__workspace-header">
@@ -1681,13 +1754,24 @@ ob_start();
                     <?php
                     $categoryguidenumber = (int) $category['guide_number'];
                     $categorydisplayguidenumber = $displaystudyguidenumber($categoryguidenumber);
-                    $categoryherbcount = (int)($categoryherbcounts[$categoryguidenumber] ?? 0);
+                    $canonicalcategory = $canonicalcategories[$categoryguidenumber] ?? null;
+                    $canonicalcategorycode = (string)($canonicalcategory['code'] ?? '');
+                    $categoryherbcount = (int)($benskycategorycounts[$canonicalcategorycode] ?? 0);
                     $categorybenskychapter = $benskychapterlabel($categoryguidenumber);
-                    $categorydisplayname = $stripstudyguidenumber((string) $category['name']);
-                    if ($categoryguidenumber === 11) {
-                        $categorydisplayname = $ises
-                            ? 'Expulsores drásticos descendentes (Catárticos) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
-                            : 'Downward Draining Harsh Expellants (Cathartics) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)';
+                    $categorydisplayname = $canonicalcategorytitle($categoryguidenumber)
+                        ?: $stripstudyguidenumber((string) $category['name']);
+                    if ($categoryguidenumber === 12) {
+                        $categoryfooter = $ises
+                            ? $categoryherbcount . ' hierbas oficiales · atlas de 33 monografías · seguridad y comparaciones →'
+                            : $categoryherbcount . ' official herbs · 33-monograph atlas · safety and comparisons →';
+                    } else if ($categoryherbcount > 0) {
+                        $categoryfooter = $ises
+                            ? $categoryherbcount . ' hierbas oficiales · marco de estudio · seguridad y comparaciones →'
+                            : $categoryherbcount . ' official herbs · study framework · safety and comparisons →';
+                    } else {
+                        $categoryfooter = $ises
+                            ? 'Atlas clínico · marco de estudio · seguridad y comparaciones →'
+                            : 'Clinical atlas · study framework · safety and comparisons →';
                     }
                     $categoryparams = ['focus' => (string) $category['number']];
                     if ($ises) {
@@ -1711,13 +1795,7 @@ ob_start();
                             <?php if ($categorybenskychapter !== ''): ?><span class="single-herbs-guide__bensky-chapter"><?php echo s($categorybenskychapter); ?></span><?php endif; ?>
                         </span>
                         <strong><?php echo $categorydisplayname; ?></strong>
-                        <small><?php echo s($categoryherbcount > 0
-                            ? ($ises
-                                ? $categoryherbcount . ' hierbas oficiales · marco de estudio · seguridad y comparaciones →'
-                                : $categoryherbcount . ' official herbs · study framework · safety and comparisons →')
-                            : ($ises
-                                ? 'Atlas clínico · marco de estudio · seguridad y comparaciones →'
-                                : 'Clinical atlas · study framework · safety and comparisons →')); ?></small>
+                        <small><?php echo s($categoryfooter); ?></small>
                     </a>
                 <?php endforeach; ?>
                 <?php

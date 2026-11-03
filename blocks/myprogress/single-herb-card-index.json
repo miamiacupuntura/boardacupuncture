@@ -2,7 +2,7 @@
   "version": 2,
   "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
   "total": 304,
-  "routedToDetailedStudy": 225,
+  "routedToDetailedStudy": 301,
   "herbs": [
     {
       "name": "Ai Ye",
@@ -19,7 +19,7 @@
       "name": "Ba Dou",
       "latin": "Crotonis Fructus",
       "id": 2,
-      "guideNumber": 9,
+      "guideNumber": 11,
       "benskyCategory": {
         "code": "harsh-expellants",
         "en": "Harsh Expellants",
@@ -41,7 +41,7 @@
       "name": "Bai Bian Dou",
       "latin": "Lablab Semen album",
       "id": 4,
-      "guideNumber": 8,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -74,7 +74,7 @@
       "name": "Bai Guo",
       "latin": "Ginkgo Semen",
       "id": 7,
-      "guideNumber": null,
+      "guideNumber": 15,
       "benskyCategory": {
         "code": "stop-coughing-calm-wheezing",
         "en": "Herbs that Stop Coughing and Calm Wheezing",
@@ -85,7 +85,7 @@
       "name": "Bai He",
       "latin": "Lilii Bulbus",
       "id": 8,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -129,7 +129,7 @@
       "name": "Bai Jiang Can",
       "latin": "Bombyx Batryticatus",
       "id": 12,
-      "guideNumber": null,
+      "guideNumber": 31,
       "benskyCategory": {
         "code": "extinguish-wind-stop-tremors",
         "en": "Substances that Extinguish Wind and Stop Tremors",
@@ -195,7 +195,7 @@
       "name": "Bai Tou Weng",
       "latin": "Pulsatillae Radix",
       "id": 18,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -250,7 +250,7 @@
       "name": "Bai Zi Ren",
       "latin": "Platycladi Semen",
       "id": 23,
-      "guideNumber": null,
+      "guideNumber": 29,
       "benskyCategory": {
         "code": "nourish-heart-calm-spirit",
         "en": "Herbs that Nourish the Heart and Calm the Spirit",
@@ -283,7 +283,7 @@
       "name": "Ban Zhi Lian",
       "latin": "Scutellariae barbatae Herba",
       "id": 26,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -294,7 +294,7 @@
       "name": "Bi Ba",
       "latin": "Piperis longi Fructus",
       "id": 27,
-      "guideNumber": null,
+      "guideNumber": 21,
       "benskyCategory": {
         "code": "warm-interior-expel-cold",
         "en": "Herbs that Warm the Interior and Expel Cold",
@@ -329,7 +329,7 @@
       "name": "Bie Jia",
       "latin": "Trionycis Carapax",
       "id": 30,
-      "guideNumber": 7,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -351,7 +351,7 @@
       "name": "Bing Pian",
       "latin": "Borneolum",
       "id": 32,
-      "guideNumber": null,
+      "guideNumber": 30,
       "benskyCategory": {
         "code": "open-orifices",
         "en": "Aromatic Substances that Open the Orifices",
@@ -373,7 +373,7 @@
       "name": "Bu Gu Zhi",
       "latin": "Psoraleae Fructus",
       "id": 34,
-      "guideNumber": null,
+      "guideNumber": 25,
       "benskyCategory": {
         "code": "tonify-yang",
         "en": "Herbs that Tonify Yang",
@@ -384,7 +384,7 @@
       "name": "Cang Er Zi",
       "latin": "Xanthii Fructus",
       "id": 35,
-      "guideNumber": 12,
+      "guideNumber": 1,
       "benskyCategory": {
         "code": "warm-acrid-release-exterior",
         "en": "Warm, Acrid Herbs that Release the Exterior",
@@ -428,7 +428,7 @@
       "name": "Cao Wu",
       "latin": "Aconiti kusnezoffii Radix",
       "id": 39,
-      "guideNumber": 21,
+      "guideNumber": 12,
       "benskyCategory": {
         "code": "dispel-wind-dampness",
         "en": "Herbs that Dispel Wind-Dampness",
@@ -517,7 +517,7 @@
       "name": "Chi Shi Zhi",
       "latin": "Halloysitum rubrum",
       "id": 47,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -574,7 +574,7 @@
       "name": "Chuan Niu Xi",
       "latin": "Cyathulae Radix",
       "id": 52,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -585,7 +585,7 @@
       "name": "Chuan Wu",
       "latin": "Aconiti Radix",
       "id": 53,
-      "guideNumber": null,
+      "guideNumber": 12,
       "benskyCategory": {
         "code": "dispel-wind-dampness",
         "en": "Herbs that Dispel Wind-Dampness",
@@ -596,7 +596,7 @@
       "name": "Chuan Xin Lian",
       "latin": "Andrographitis Herba",
       "id": 54,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -607,7 +607,7 @@
       "name": "Chuan Xiong",
       "latin": "Chuanxiong Rhizoma",
       "id": 55,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -629,7 +629,7 @@
       "name": "Ci Ji Li",
       "latin": "Tribuli Fructus",
       "id": 57,
-      "guideNumber": null,
+      "guideNumber": 31,
       "benskyCategory": {
         "code": "extinguish-wind-stop-tremors",
         "en": "Substances that Extinguish Wind and Stop Tremors",
@@ -651,7 +651,7 @@
       "name": "Ci Wu Jia",
       "latin": "Acanthopanacis senticosi Radix et Caulis",
       "id": 59,
-      "guideNumber": null,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -695,7 +695,7 @@
       "name": "Da Ji",
       "latin": "Cirsii japonici Herba sive Radix",
       "id": 63,
-      "guideNumber": null,
+      "guideNumber": 20,
       "benskyCategory": {
         "code": "stop-bleeding",
         "en": "Herbs that Stop Bleeding",
@@ -750,7 +750,7 @@
       "name": "Dan Shen",
       "latin": "Salviae miltiorrhizae Radix",
       "id": 68,
-      "guideNumber": 4,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -772,7 +772,7 @@
       "name": "Dang Gui",
       "latin": "Angelicae sinensis Radix",
       "id": 70,
-      "guideNumber": 10,
+      "guideNumber": 24,
       "benskyCategory": {
         "code": "tonify-blood",
         "en": "Herbs that Tonify Blood",
@@ -851,7 +851,7 @@
       "name": "Ding Xiang",
       "latin": "Caryophylli Flos",
       "id": 77,
-      "guideNumber": null,
+      "guideNumber": 21,
       "benskyCategory": {
         "code": "warm-interior-expel-cold",
         "en": "Herbs that Warm the Interior and Expel Cold",
@@ -873,7 +873,7 @@
       "name": "Dong Gua Zi",
       "latin": "Benincasae Semen",
       "id": 79,
-      "guideNumber": null,
+      "guideNumber": 6,
       "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
@@ -963,7 +963,7 @@
       "name": "Feng Mi",
       "latin": "Mel",
       "id": 87,
-      "guideNumber": 10,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -974,7 +974,7 @@
       "name": "Fo Shou",
       "latin": "Citri sarcodactylis Fructus",
       "id": 88,
-      "guideNumber": null,
+      "guideNumber": 18,
       "benskyCategory": {
         "code": "regulate-qi",
         "en": "Herbs that Regulate the Qi",
@@ -997,7 +997,7 @@
       "name": "Fu Pen Zi",
       "latin": "Rubi Fructus",
       "id": 90,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -1008,7 +1008,7 @@
       "name": "Fu Shen",
       "latin": "Poriae Sclerotium pararadicis",
       "id": 91,
-      "guideNumber": null,
+      "guideNumber": 29,
       "benskyCategory": {
         "code": "nourish-heart-calm-spirit",
         "en": "Herbs that Nourish the Heart and Calm the Spirit",
@@ -1063,7 +1063,7 @@
       "name": "Gan Sui",
       "latin": "Kansui Radix",
       "id": 96,
-      "guideNumber": 9,
+      "guideNumber": 11,
       "benskyCategory": {
         "code": "harsh-expellants",
         "en": "Harsh Expellants",
@@ -1107,7 +1107,7 @@
       "name": "Ge Jie",
       "latin": "Gecko",
       "id": 100,
-      "guideNumber": null,
+      "guideNumber": 25,
       "benskyCategory": {
         "code": "tonify-yang",
         "en": "Herbs that Tonify Yang",
@@ -1118,7 +1118,7 @@
       "name": "Gou Ji",
       "latin": "Cibotii Rhizoma",
       "id": 101,
-      "guideNumber": null,
+      "guideNumber": 12,
       "benskyCategory": {
         "code": "dispel-wind-dampness",
         "en": "Herbs that Dispel Wind-Dampness",
@@ -1129,7 +1129,7 @@
       "name": "Gou Qi Zi",
       "latin": "Lycii Fructus",
       "id": 102,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -1162,7 +1162,7 @@
       "name": "Gu Ya (Setariae",
       "latin": "Oryzae) Fructus germinatus",
       "id": 105,
-      "guideNumber": null,
+      "guideNumber": 17,
       "benskyCategory": {
         "code": "relieve-food-stagnation",
         "en": "Herbs that Relieve Food Stagnation",
@@ -1206,7 +1206,7 @@
       "name": "Gui Ban",
       "latin": "Testudinis Plastrum",
       "id": 109,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -1240,7 +1240,7 @@
       "name": "Hai Piao Xiao",
       "latin": "Sepia Endoconcha",
       "id": 112,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -1262,7 +1262,7 @@
       "name": "Hai Zao",
       "latin": "Sargassum",
       "id": 114,
-      "guideNumber": null,
+      "guideNumber": 13,
       "benskyCategory": {
         "code": "cool-transform-phlegm-heat",
         "en": "Herbs that Cool and Transform Phlegm-Heat",
@@ -1285,7 +1285,7 @@
       "name": "Han Lian Cao",
       "latin": "Ecliptae Herba",
       "id": 116,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -1307,7 +1307,7 @@
       "name": "He Shou Wu",
       "latin": "Polygoni multiflori Radix",
       "id": 118,
-      "guideNumber": null,
+      "guideNumber": 24,
       "benskyCategory": {
         "code": "tonify-blood",
         "en": "Herbs that Tonify Blood",
@@ -1318,7 +1318,7 @@
       "name": "He Tao Ren",
       "latin": "Juglandis Semen",
       "id": 119,
-      "guideNumber": null,
+      "guideNumber": 25,
       "benskyCategory": {
         "code": "tonify-yang",
         "en": "Herbs that Tonify Yang",
@@ -1351,7 +1351,7 @@
       "name": "Hei Zhi Ma",
       "latin": "Sesami Semen nigrum",
       "id": 122,
-      "guideNumber": 10,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -1362,7 +1362,7 @@
       "name": "Hong Hua",
       "latin": "Carthami Flos",
       "id": 123,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -1384,7 +1384,7 @@
       "name": "Hu Jiao",
       "latin": "Piperis Fructus",
       "id": 125,
-      "guideNumber": null,
+      "guideNumber": 21,
       "benskyCategory": {
         "code": "warm-interior-expel-cold",
         "en": "Herbs that Warm the Interior and Expel Cold",
@@ -1395,7 +1395,7 @@
       "name": "Hua Jiao",
       "latin": "Zanthoxyli Pericarpium",
       "id": 126,
-      "guideNumber": null,
+      "guideNumber": 21,
       "benskyCategory": {
         "code": "warm-interior-expel-cold",
         "en": "Herbs that Warm the Interior and Expel Cold",
@@ -1406,7 +1406,7 @@
       "name": "Hua Shi",
       "latin": "Talcum",
       "id": 127,
-      "guideNumber": 8,
+      "guideNumber": null,
       "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
@@ -1429,7 +1429,7 @@
       "name": "Huai Niu Xi",
       "latin": "Achyranthis bidentatae Radix",
       "id": 129,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -1451,7 +1451,7 @@
       "name": "Huang Jing",
       "latin": "Polygonati Rhizoma",
       "id": 131,
-      "guideNumber": null,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -1495,7 +1495,7 @@
       "name": "Huo Ma Ren",
       "latin": "Cannabis Semen",
       "id": 135,
-      "guideNumber": 9,
+      "guideNumber": 10,
       "benskyCategory": {
         "code": "moist-laxatives",
         "en": "Moist Laxatives",
@@ -1528,7 +1528,7 @@
       "name": "Ji Xue Teng",
       "latin": "Spatholobi Caulis",
       "id": 138,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -1550,7 +1550,7 @@
       "name": "Jie Geng",
       "latin": "Platycodi Radix",
       "id": 140,
-      "guideNumber": 15,
+      "guideNumber": 14,
       "benskyCategory": {
         "code": "warm-transform-cold-phlegm",
         "en": "Herbs that Warm and Transform Cold-Phlegm",
@@ -1584,7 +1584,7 @@
       "name": "Jin Ying Zi",
       "latin": "Rosae laevigatae Fructus",
       "id": 143,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -1606,7 +1606,7 @@
       "name": "Jing Mi",
       "latin": "Oryzae Semen",
       "id": 145,
-      "guideNumber": null,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -1672,7 +1672,7 @@
       "name": "Kun Bu",
       "latin": "Eckloniae Thallus",
       "id": 151,
-      "guideNumber": null,
+      "guideNumber": 13,
       "benskyCategory": {
         "code": "cool-transform-phlegm-heat",
         "en": "Herbs that Cool and Transform Phlegm-Heat",
@@ -1738,7 +1738,7 @@
       "name": "Ling Yang Jiao",
       "latin": "Saigae tataricae Cornu",
       "id": 157,
-      "guideNumber": null,
+      "guideNumber": 31,
       "benskyCategory": {
         "code": "extinguish-wind-stop-tremors",
         "en": "Substances that Extinguish Wind and Stop Tremors",
@@ -1749,7 +1749,7 @@
       "name": "Ling Zhi",
       "latin": "Ganoderma",
       "id": 158,
-      "guideNumber": null,
+      "guideNumber": 29,
       "benskyCategory": {
         "code": "nourish-heart-calm-spirit",
         "en": "Herbs that Nourish the Heart and Calm the Spirit",
@@ -1793,7 +1793,7 @@
       "name": "Long Yan Rou",
       "latin": "Longan Arillus",
       "id": 162,
-      "guideNumber": null,
+      "guideNumber": 24,
       "benskyCategory": {
         "code": "tonify-blood",
         "en": "Herbs that Tonify Blood",
@@ -1837,7 +1837,7 @@
       "name": "Lu Lu Tong",
       "latin": "Liquidambaris Fructus",
       "id": 166,
-      "guideNumber": null,
+      "guideNumber": 12,
       "benskyCategory": {
         "code": "dispel-wind-dampness",
         "en": "Herbs that Dispel Wind-Dampness",
@@ -1859,7 +1859,7 @@
       "name": "Ma Bo",
       "latin": "Lasiosphaera/Calvatia",
       "id": 168,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -1881,7 +1881,7 @@
       "name": "Ma Huang Gen",
       "latin": "Ephedrae Radix",
       "id": 170,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -1936,7 +1936,7 @@
       "name": "Mei Gui Hua",
       "latin": "Rosae rugosae Flos",
       "id": 175,
-      "guideNumber": null,
+      "guideNumber": 18,
       "benskyCategory": {
         "code": "regulate-qi",
         "en": "Herbs that Regulate the Qi",
@@ -2058,7 +2058,7 @@
       "name": "Ou Jie",
       "latin": "Nelumbinis Nodus rhizomatis",
       "id": 186,
-      "guideNumber": null,
+      "guideNumber": 20,
       "benskyCategory": {
         "code": "stop-bleeding",
         "en": "Herbs that Stop Bleeding",
@@ -2069,7 +2069,7 @@
       "name": "Pang Da Hai",
       "latin": "Sterculiae lychnophorae Semen",
       "id": 187,
-      "guideNumber": null,
+      "guideNumber": 15,
       "benskyCategory": {
         "code": "stop-coughing-calm-wheezing",
         "en": "Herbs that Stop Coughing and Calm Wheezing",
@@ -2124,7 +2124,7 @@
       "name": "Qian Cao",
       "latin": "Rubiae Radix",
       "id": 192,
-      "guideNumber": null,
+      "guideNumber": 20,
       "benskyCategory": {
         "code": "stop-bleeding",
         "en": "Herbs that Stop Bleeding",
@@ -2146,7 +2146,7 @@
       "name": "Qian Shi",
       "latin": "Euryales Semen",
       "id": 194,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -2235,7 +2235,7 @@
       "name": "Quan Xie",
       "latin": "Scorpio",
       "id": 202,
-      "guideNumber": null,
+      "guideNumber": 31,
       "benskyCategory": {
         "code": "extinguish-wind-stop-tremors",
         "en": "Substances that Extinguish Wind and Stop Tremors",
@@ -2257,7 +2257,7 @@
       "name": "Rou Cong Rong",
       "latin": "Cistanches Herba",
       "id": 204,
-      "guideNumber": 10,
+      "guideNumber": 25,
       "benskyCategory": {
         "code": "tonify-yang",
         "en": "Herbs that Tonify Yang",
@@ -2301,7 +2301,7 @@
       "name": "San Leng",
       "latin": "Sparganii Rhizoma",
       "id": 208,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -2345,7 +2345,7 @@
       "name": "Sang Piao Xiao",
       "latin": "Mantidis Ootheca",
       "id": 212,
-      "guideNumber": null,
+      "guideNumber": 27,
       "benskyCategory": {
         "code": "stabilize-bind",
         "en": "Herbs that Stabilize and Bind",
@@ -2356,7 +2356,7 @@
       "name": "Sang Shen",
       "latin": "Mori Fructus",
       "id": 213,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -2400,7 +2400,7 @@
       "name": "Sha Shen",
       "latin": "Glehniae/Adenophorae Radix",
       "id": 217,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -2411,7 +2411,7 @@
       "name": "Sha Yuan Ji Li",
       "latin": "Astragali complanati Semen",
       "id": 218,
-      "guideNumber": null,
+      "guideNumber": 25,
       "benskyCategory": {
         "code": "tonify-yang",
         "en": "Herbs that Tonify Yang",
@@ -2488,7 +2488,7 @@
       "name": "She Xiang",
       "latin": "Moschus",
       "id": 225,
-      "guideNumber": null,
+      "guideNumber": 30,
       "benskyCategory": {
         "code": "open-orifices",
         "en": "Aromatic Substances that Open the Orifices",
@@ -2621,7 +2621,7 @@
       "name": "Si Gua Luo",
       "latin": "Luffae Fructus Retinervus",
       "id": 237,
-      "guideNumber": null,
+      "guideNumber": 12,
       "benskyCategory": {
         "code": "dispel-wind-dampness",
         "en": "Herbs that Dispel Wind-Dampness",
@@ -2654,7 +2654,7 @@
       "name": "Tai Zi Shen",
       "latin": "Pseudostellariae Radix",
       "id": 240,
-      "guideNumber": null,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -2676,7 +2676,7 @@
       "name": "Tao Ren",
       "latin": "Persicae Semen",
       "id": 242,
-      "guideNumber": 10,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -2731,7 +2731,7 @@
       "name": "Ting Li Zi",
       "latin": "Lepidii/Descurainiae Semen",
       "id": 247,
-      "guideNumber": null,
+      "guideNumber": 15,
       "benskyCategory": {
         "code": "stop-coughing-calm-wheezing",
         "en": "Herbs that Stop Coughing and Calm Wheezing",
@@ -2754,7 +2754,7 @@
       "name": "Tu Bie Chong",
       "latin": "Eupolyphaga/Steleophaga",
       "id": 249,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -2787,7 +2787,7 @@
       "name": "Wang Bu Liu Xing",
       "latin": "Vaccariae Semen",
       "id": 252,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -2809,7 +2809,7 @@
       "name": "Wu Gong",
       "latin": "Scolopendra",
       "id": 254,
-      "guideNumber": null,
+      "guideNumber": 31,
       "benskyCategory": {
         "code": "extinguish-wind-stop-tremors",
         "en": "Substances that Extinguish Wind and Stop Tremors",
@@ -2831,7 +2831,7 @@
       "name": "Wu Ling Zhi",
       "latin": "Trogopterori Faeces",
       "id": 256,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -2864,7 +2864,7 @@
       "name": "Wu Yao",
       "latin": "Linderae Radix",
       "id": 259,
-      "guideNumber": null,
+      "guideNumber": 18,
       "benskyCategory": {
         "code": "regulate-qi",
         "en": "Herbs that Regulate the Qi",
@@ -2908,7 +2908,7 @@
       "name": "Xi Yang Shen",
       "latin": "Panacis quinquefolii Radix",
       "id": 263,
-      "guideNumber": null,
+      "guideNumber": 23,
       "benskyCategory": {
         "code": "tonify-qi",
         "en": "Herbs that Tonify Qi",
@@ -2985,7 +2985,7 @@
       "name": "Xiao Ji",
       "latin": "Cirsii Herba",
       "id": 270,
-      "guideNumber": null,
+      "guideNumber": 20,
       "benskyCategory": {
         "code": "stop-bleeding",
         "en": "Herbs that Stop Bleeding",
@@ -2996,7 +2996,7 @@
       "name": "Xie Bai",
       "latin": "Allii macrostemi Bulbus",
       "id": 271,
-      "guideNumber": null,
+      "guideNumber": 18,
       "benskyCategory": {
         "code": "regulate-qi",
         "en": "Herbs that Regulate the Qi",
@@ -3018,7 +3018,7 @@
       "name": "Xing Ren",
       "latin": "Armeniacae Semen",
       "id": 273,
-      "guideNumber": 10,
+      "guideNumber": 15,
       "benskyCategory": {
         "code": "stop-coughing-calm-wheezing",
         "en": "Herbs that Stop Coughing and Calm Wheezing",
@@ -3029,7 +3029,7 @@
       "name": "Xu Duan",
       "latin": "Dipsaci Radix",
       "id": 274,
-      "guideNumber": null,
+      "guideNumber": 25,
       "benskyCategory": {
         "code": "tonify-yang",
         "en": "Herbs that Tonify Yang",
@@ -3062,7 +3062,7 @@
       "name": "Yan Hu Suo",
       "latin": "Corydalis Rhizoma",
       "id": 277,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -3084,7 +3084,7 @@
       "name": "Ye Ju Hua",
       "latin": "Chrysanthemi indici Flos",
       "id": 279,
-      "guideNumber": null,
+      "guideNumber": 6,
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -3095,7 +3095,7 @@
       "name": "Yi Mu Cao",
       "latin": "Leonuri Herba",
       "id": 280,
-      "guideNumber": null,
+      "guideNumber": 19,
       "benskyCategory": {
         "code": "invigorate-blood",
         "en": "Herbs that Invigorate the Blood",
@@ -3185,7 +3185,7 @@
       "name": "Yu Zhu",
       "latin": "Polygonati odorati Rhizoma",
       "id": 288,
-      "guideNumber": null,
+      "guideNumber": 26,
       "benskyCategory": {
         "code": "tonify-yin",
         "en": "Herbs that Tonify Yin",
@@ -3207,7 +3207,7 @@
       "name": "Zao Jiao Ci",
       "latin": "Gleditsiae Spina",
       "id": 290,
-      "guideNumber": null,
+      "guideNumber": 14,
       "benskyCategory": {
         "code": "warm-transform-cold-phlegm",
         "en": "Herbs that Warm and Transform Cold-Phlegm",
@@ -3352,7 +3352,7 @@
       "name": "Zi Su Zi",
       "latin": "Perillae Fructus",
       "id": 303,
-      "guideNumber": null,
+      "guideNumber": 15,
       "benskyCategory": {
         "code": "stop-coughing-calm-wheezing",
         "en": "Herbs that Stop Coughing and Calm Wheezing",
