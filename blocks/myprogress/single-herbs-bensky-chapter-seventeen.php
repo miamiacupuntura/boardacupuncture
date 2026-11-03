@@ -23,6 +23,14 @@ $b17herbs = [
     ['name' => 'Chang Shan', 'latin' => 'Dichroae Radix', 'meta' => $b17text('Bitter, acrid, cold, toxic · Heart, Liver, Lung · 4.5–9 g', 'Amarga, acre, fría, tóxica · Corazón, Hígado, Pulmón · 4.5–9 g'), 'focus' => $b17text('Checks malarial disorders by transforming accumulated phlegm; it can also induce vomiting to expel congested phlegm.', 'Controla trastornos maláricos transformando Flema acumulada; también puede inducir vómito para expulsar Flema congestionada.'), 'clue' => $b17text('Malaria rooted in phlegm and Dampness; Chai Hu treats the lesser-yang branch while Chang Shan attacks the phlegm root.', 'Malaria arraigada en Flema y Humedad; Chai Hu trata la rama Shaoyang y Chang Shan ataca la raíz de Flema.'), 'safety' => $b17text('Contraindicated in pregnancy; use cautiously in debilitated patients. Toxic doses cause violent vomiting, bleeding, arrhythmia, hypotension and circulatory failure.', 'Contraindicada en embarazo; cautela en debilitados. Dosis tóxicas causan vómito violento, sangrado, arritmia, hipotensión y falla circulatoria.'), 'preparation' => $b17text('Bran- or wine-preparation reduces vomiting and gastrointestinal irritation. Shu Qi leaf is stronger and more emetic.', 'Preparación con salvado o vino reduce vómito e irritación gastrointestinal. La hoja Shu Qi es más fuerte y emética.'), 'official' => false],
 ];
 
+// Separate the single current-guideline entry from the 12 source-only monographs.
+$b17officialherbs = array_values(array_filter($b17herbs, static function(array $herb): bool {
+    return $herb['official'];
+}));
+$b17sourceherbs = array_values(array_filter($b17herbs, static function(array $herb): bool {
+    return !$herb['official'];
+}));
+
 $b17questions = [
     [$b17text('Which herb is the only current 2026 official herb in this chapter?', '¿Cuál es la única hierba oficial vigente 2026 de este capítulo?'), '<strong>Bing Lang (Arecae Semen).</strong>'],
     [$b17text('Which sweet, warm herb is especially suitable for children with roundworms and food accumulation?', '¿Qué hierba dulce y tibia es especialmente apropiada para niños con ascárides y acumulación alimentaria?'), '<strong>Shi Jun Zi.</strong>'],
@@ -56,12 +64,14 @@ $b17questions = [
 <section class="single-herbs-guide__section single-herbs-guide__chapter-atlas" aria-labelledby="bensky-seventeen-atlas">
     <h4 id="bensky-seventeen-atlas"><?php echo s($b17text('Source-chapter atlas: 13 monographs', 'Atlas del capítulo fuente: 13 monografías')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($b17text('Bing Lang is the only entry in the current 304-herb Board roster. The remaining profiles preserve the complete source chapter for recognition, comparison and safety study.', 'Bing Lang es la única entrada del listado Board vigente de 304 hierbas. Los perfiles restantes preservan el capítulo fuente completo para reconocimiento, comparación y seguridad.')); ?></p>
-    <ol class="single-herbs-guide__category-herbs">
-        <?php foreach ($b17herbs as $herb): ?>
-            <li class="single-herbs-guide__category-herb<?php echo $herb['official'] ? ' single-herbs-guide__category-herb--core' : ''; ?>">
+    <h5 class="single-herbs-guide__catalog-heading"><?php echo s($b17text('Current 2026 guideline herb', 'Hierba del guideline vigente 2026')); ?></h5>
+    <p class="single-herbs-guide__catalog-intro"><?php echo s($b17text('Bing Lang is presented first and separately because it is the only Chapter 17 monograph included in the current guideline.', 'Bing Lang se presenta primero y por separado porque es la única monografía del capítulo 17 incluida en el guideline vigente.')); ?></p>
+    <ol class="single-herbs-guide__category-herbs single-herbs-guide__category-herbs--featured">
+        <?php foreach ($b17officialherbs as $herb): ?>
+            <li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core">
                 <div class="single-herbs-guide__category-herb-head">
                     <strong><?php echo s($herb['name']); ?></strong><em><?php echo s($herb['latin']); ?></em>
-                    <span class="single-herbs-guide__category-herb-badge<?php echo $herb['official'] ? '' : ' single-herbs-guide__category-herb-badge--outside'; ?>"><?php echo s($herb['official'] ? $b17text('Current 2026 guideline', 'Guideline vigente 2026') : $b17text('Source monograph / addendum', 'Monografía fuente / adenda')); ?></span>
+                    <span class="single-herbs-guide__category-herb-badge"><?php echo s($b17text('Current 2026 guideline', 'Guideline vigente 2026')); ?></span>
                 </div>
                 <span class="single-herbs-guide__category-herb-common"><?php echo s($herb['meta']); ?></span>
                 <p><?php echo s($herb['focus']); ?></p>
@@ -73,6 +83,27 @@ $b17questions = [
             </li>
         <?php endforeach; ?>
     </ol>
+    <div class="single-herbs-guide__annex">
+        <h5 class="single-herbs-guide__catalog-heading"><?php echo s($b17text('12 source monographs outside the current 2026 guideline', '12 monografías fuente fuera del guideline vigente 2026')); ?></h5>
+        <p class="single-herbs-guide__catalog-intro"><?php echo s($b17text('These entries remain grouped below for Bensky source recognition, comparison and safety study; they do not expand the current Board roster.', 'Estas entradas permanecen agrupadas abajo para reconocimiento de la fuente Bensky, comparación y estudio de seguridad; no amplían el listado Board vigente.')); ?></p>
+        <ol class="single-herbs-guide__category-herbs single-herbs-guide__category-herbs--continue">
+            <?php foreach ($b17sourceherbs as $herb): ?>
+                <li class="single-herbs-guide__category-herb">
+                    <div class="single-herbs-guide__category-herb-head">
+                        <strong><?php echo s($herb['name']); ?></strong><em><?php echo s($herb['latin']); ?></em>
+                        <span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside"><?php echo s($b17text('Source monograph / addendum', 'Monografía fuente / adenda')); ?></span>
+                    </div>
+                    <span class="single-herbs-guide__category-herb-common"><?php echo s($herb['meta']); ?></span>
+                    <p><?php echo s($herb['focus']); ?></p>
+                    <div class="single-herbs-guide__category-herb-context">
+                        <p><strong><?php echo s($b17text('Decisive clue', 'Pista decisiva')); ?></strong><span><?php echo s($herb['clue']); ?></span></p>
+                        <p><strong><?php echo s($b17text('Safety', 'Seguridad')); ?></strong><span><?php echo s($herb['safety']); ?></span></p>
+                        <p><strong><?php echo s($b17text('Preparation / identity', 'Preparación / identidad')); ?></strong><span><?php echo s($herb['preparation']); ?></span></p>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="bensky-seventeen-comparisons">
