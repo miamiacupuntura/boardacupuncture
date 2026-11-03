@@ -624,6 +624,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Allii Fistulosi Bulbus',
         'common' => 'Scallion or Green Onion',
         'boardfocus' => false,
+        'guideline' => true,
+        'category' => 'Category 1 · Warm, Acrid Herbs that Release the Exterior',
+        'reason' => 'Included here because it belongs to the same textbook Wind-Cold family and represents the very early, superficial stage; it is in the overall 2026 guideline but is not one of the nine herbs named in this category heading.',
         'note' => 'Gently releases the Exterior in the very early stage of Wind-Cold and may be used topically for abscesses and sores.',
     ],
     [
@@ -631,6 +634,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Centipedae Herba',
         'common' => 'Centipeda Herb',
         'boardfocus' => false,
+        'guideline' => false,
+        'category' => 'Textbook category · Warm, Acrid Herbs that Release the Exterior',
+        'reason' => 'Included only to recognize a nasal Wind-Cold specialist and distinguish it from Xin Yi Hua and Bai Zhi; this source monograph is outside the 2026 guideline.',
         'note' => 'Expels Wind-Cold, opens the nasal passages and is especially associated with nasal obstruction, discharge and cough.',
     ],
     [
@@ -645,6 +651,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Ligustici Rhizoma et Radix',
         'common' => 'Chinese Lovage Root',
         'boardfocus' => false,
+        'guideline' => true,
+        'category' => 'Category 1 · Warm, Acrid Herbs that Release the Exterior',
+        'reason' => 'Included to preserve the high-yield location contrast: Gao Ben targets vertex headache, while Qiang Huo favors the occiput and Bai Zhi the forehead. It is in the overall 2026 guideline but not named in this category heading.',
         'note' => 'Expels Wind-Cold and is strongly associated with headache at the vertex.',
     ],
     [
@@ -687,6 +696,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Zingiberis Rhizomatis Recens Cortex',
         'common' => 'Fresh Ginger Rhizome Skin',
         'boardfocus' => false,
+        'guideline' => false,
+        'category' => 'Category 12 · Herbs that Drain Dampness',
+        'reason' => 'Included only to distinguish the peel from Sheng Jiang: the fresh rhizome releases the Exterior and harmonizes the Stomach, whereas the peel primarily promotes urination and reduces edema. The peel is outside the 2026 guideline.',
         'note' => 'The peel has a cooler, more superficial emphasis and promotes urination to reduce edema.',
     ],
     [
@@ -694,6 +706,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Asari Herba',
         'common' => 'Chinese Wild Ginger or Asarum',
         'boardfocus' => false,
+        'guideline' => true,
+        'category' => 'Category 1 · Warm, Acrid Herbs that Release the Exterior',
+        'reason' => 'Included because it belongs to the broader Wind-Cold family and adds the distinctive combination of Cold pain, nasal opening and Lung warming. It is in the overall 2026 guideline but not named in this category heading.',
         'note' => 'Treats Wind-Cold pain, especially with Dampness or underlying Kidney-Yang deficiency; warms the Lung and opens the nose.',
     ],
     [
@@ -701,6 +716,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Moslae Herba',
         'common' => 'Elsholtzia',
         'boardfocus' => false,
+        'guideline' => true,
+        'category' => 'Category 1 · Warm, Acrid Exterior release; cross-reference to Category 8 · Clear Summerheat',
+        'reason' => 'Included as the summer bridge: it releases an Exterior pattern while transforming Dampness and promoting urination. This explains its comparison with Wind-Cold herbs and its additional appearance in the Summerheat annex.',
         'note' => 'Releases the Exterior in summer, transforms Dampness, promotes urination and reduces swelling.',
     ],
     [
@@ -715,6 +733,9 @@ $windcoldcategoryherbs = [
         'latin' => 'Perillae Caulis',
         'common' => 'Perilla Stalk',
         'boardfocus' => false,
+        'guideline' => false,
+        'category' => 'Category 18 · Herbs that Regulate Qi',
+        'reason' => 'Included only to distinguish parts of the same plant: Zi Su Ye is the Exterior-releasing leaf, whereas Zi Su Geng is the stalk used mainly to move Qi, relieve chest constraint and calm the fetus. The stalk is outside the 2026 guideline.',
         'note' => 'Moves Qi, relieves chest and epigastric constraint, harmonizes the Middle and helps calm the fetus.',
     ],
     [
@@ -971,6 +992,7 @@ ob_start();
 .single-herbs-guide__memory-path{margin-top:18px;padding:19px 21px;border-left:5px solid #0b817d;border-radius:10px;background:linear-gradient(135deg,#eef8f6,#f8fbff);color:#405565;line-height:1.6}.single-herbs-guide__memory-path strong{color:#0d665e}.single-herbs-guide__memory-path p{margin:0}.single-herbs-guide__memory-path p+p{margin-top:8px}.single-herbs-guide__memory-line{font-size:17px;font-weight:900;color:#123246!important}
 .single-herbs-guide__house{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 18px;margin:13px 0;padding:0;list-style:none}.single-herbs-guide__house li{color:#52677a}.single-herbs-guide__house strong{color:#17364a}
 .single-herbs-guide__catalog-heading{margin:25px 0 0;color:#123246;font-size:19px}.single-herbs-guide__catalog-intro{margin:6px 0 14px;color:#60717e;line-height:1.5}.single-herbs-guide__category-herbs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none;counter-reset:wind-cold-herb}.single-herbs-guide__category-herb{counter-increment:wind-cold-herb;position:relative;padding:14px 15px 14px 48px;border:1px solid #dde4e8;border-radius:9px;background:#fbfcfd}.single-herbs-guide__category-herb:before{content:counter(wind-cold-herb);position:absolute;left:14px;top:14px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:12px;font-weight:900}.single-herbs-guide__category-herb--core{border-left:4px solid #0b817d;background:#f7fcfb}.single-herbs-guide__category-herb:not(.single-herbs-guide__category-herb--core){border-left:4px solid #d97706;background:#fffaf2}.single-herbs-guide__category-herb-head{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}.single-herbs-guide__category-herb-head strong{color:#17364a}.single-herbs-guide__category-herb-head em{color:#6b7b87;font-size:12px}.single-herbs-guide__category-herb-badge{display:inline-flex;padding:2px 7px;border-radius:999px;background:#dff2ee;color:#0d665e;font-size:10px;font-weight:900;text-transform:uppercase}.single-herbs-guide__category-herb-badge--outside{background:#ffedd5;color:#9a3412}.single-herbs-guide__category-herb-common{display:block;margin-top:3px;color:#9a4a12;font-size:12px;font-weight:800}.single-herbs-guide__category-herb p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}.single-herbs-guide__annex{margin-top:24px;padding-top:20px;border-top:1px dashed #d3dce2}.single-herbs-guide__annex .single-herbs-guide__catalog-heading{margin-top:0;color:#8a461b}
+.single-herbs-guide__category-herb-context{display:grid;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid #eadfce}.single-herbs-guide__category-herb-context p{display:grid;grid-template-columns:112px minmax(0,1fr);gap:8px;margin:0}.single-herbs-guide__category-herb-context strong{color:#8a461b;font-size:11px;text-transform:uppercase}.single-herbs-guide__category-herb-context span{color:#52677a;font-size:13px;line-height:1.45}
 .single-herbs-guide__annex-rows{display:grid;gap:12px}.single-herbs-guide__annex-row{padding:16px 18px;border:1px solid #dce4e8;border-left:5px solid #0b817d;border-radius:10px;background:#f7fcfb}.single-herbs-guide__annex-row--outside{border-color:#eadfce;border-left-color:#d97706;background:#fffaf2}.single-herbs-guide__annex-row .single-herbs-guide__catalog-heading{margin:0;color:#0d665e}.single-herbs-guide__annex-row--outside .single-herbs-guide__catalog-heading{color:#8a461b}.single-herbs-guide__annex-row .single-herbs-guide__catalog-intro{margin:6px 0 10px}.single-herbs-guide__annex-row .single-herbs-guide__chapter-annex-names{margin:0;padding-top:10px;border-top:1px solid #dbe7e4;color:#52677a;font-size:13px;font-weight:700;line-height:1.65}.single-herbs-guide__annex-row--outside .single-herbs-guide__chapter-annex-names{border-top-color:#eadfce}
 .single-herbs-guide__functional-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;margin:0;padding:0;list-style:none}.single-herbs-guide__functional-summary li{display:flex;gap:6px;align-items:flex-start;padding:12px 14px;border:1px solid #dce4e8;border-left:4px solid #0b817d;border-radius:8px;background:#f8fbfb;color:#52677a;line-height:1.45}.single-herbs-guide__functional-summary strong{color:#17364a}.single-herbs-guide__functional-summary span{flex:1}
 .single-herbs-guide__yang-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__yang-chart{padding:16px;border:1px solid #dce4e8;border-radius:10px;background:#fff}.single-herbs-guide__yang-chart h5{margin:0;color:#17364a;font-size:16px}.single-herbs-guide__yang-chart small{display:block;margin:2px 0 12px;color:#7a647e}.single-herbs-guide__yang-bar{display:grid;grid-template-columns:82px minmax(0,1fr) 30px;gap:8px;align-items:center;margin-top:7px;font-size:11px;color:#4c6070}.single-herbs-guide__yang-bar-track{height:8px;overflow:hidden;border-radius:99px;background:#e9eef2}.single-herbs-guide__yang-bar-fill{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#ef5b72,#f48276)}.single-herbs-guide__yang-bar b{text-align:right;color:#17364a;font-size:11px}.single-herbs-guide__yang-note{margin-top:13px;padding:12px 15px;border-radius:8px;background:#f4f0ff;color:#5b4283;font-size:13px;line-height:1.5}
@@ -999,6 +1021,7 @@ ob_start();
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{align-items:flex-start;margin-top:16px}.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{justify-content:flex-start}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-guide__functional-summary,.single-herbs-properties__controls,.single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
 @media(max-width:720px){.single-herbs-guide__roster-modal{padding:10px}.single-herbs-guide__roster-dialog{max-height:94vh}.single-herbs-guide__roster-header{padding:18px 17px 14px}.single-herbs-guide__roster-header h3{font-size:20px}.single-herbs-guide__roster-tools{padding:13px 17px 10px}.single-herbs-guide__roster-list{grid-template-columns:1fr;padding:0 17px 18px}}
+@media(max-width:520px){.single-herbs-guide__category-herb-context p{grid-template-columns:1fr;gap:2px}}
 @media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid,.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid,.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid,.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:1fr}.single-herbs-intro__nature-scale{grid-template-columns:1fr}.single-herbs-intro__nature-scale span{padding:9px}}
 </style>
@@ -1184,17 +1207,23 @@ ob_start();
 
                     <div class="single-herbs-guide__annex">
                         <h5 class="single-herbs-guide__catalog-heading">Annex · Additional Wind-Cold materia medica</h5>
-                        <p class="single-herbs-guide__catalog-intro">These related herbs or plant parts add textbook context but are outside this current Board category list. Use them for recognition only; they do not expand the category scope.</p>
+                        <p class="single-herbs-guide__catalog-intro">This annex has two limited purposes: preserve high-yield textbook distinctions around the nine heading herbs, and prevent confusion between related plant parts or cross-category actions. Each card identifies its primary category, its exact reason for appearing here and whether it belongs to the overall 2026 guideline. These are not seven additional core herbs for this category.</p>
                         <ol class="single-herbs-guide__category-herbs">
                             <?php foreach ($windcoldannexherbs as $categoryherb): ?>
                                 <li class="single-herbs-guide__category-herb">
                                     <div class="single-herbs-guide__category-herb-head">
                                         <strong><?php echo s($categoryherb['name']); ?></strong>
                                         <em><?php echo s($categoryherb['latin']); ?></em>
-                                        <span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside">Outside this Board category list</span>
+                                        <span class="single-herbs-guide__category-herb-badge<?php echo $categoryherb['guideline'] ? '' : ' single-herbs-guide__category-herb-badge--outside'; ?>"><?php echo s($categoryherb['guideline']
+                                            ? 'In 2026 guideline · not named in this category heading'
+                                            : 'Source monograph · outside 2026 guideline'); ?></span>
                                     </div>
                                     <span class="single-herbs-guide__category-herb-common"><?php echo s($categoryherb['common']); ?></span>
                                     <p><?php echo s($categoryherb['note']); ?></p>
+                                    <div class="single-herbs-guide__category-herb-context">
+                                        <p><strong>Primary category</strong><span><?php echo s($categoryherb['category']); ?></span></p>
+                                        <p><strong>Why it appears here</strong><span><?php echo s($categoryherb['reason']); ?></span></p>
+                                    </div>
                                 </li>
                             <?php endforeach; ?>
                         </ol>

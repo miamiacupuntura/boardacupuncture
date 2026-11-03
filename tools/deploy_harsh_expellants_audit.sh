@@ -21,6 +21,7 @@ LABEL_CATEGORY_PATHS=(
     "blocks/myprogress/single-herbs-category-warm-transform-phlegm.php"
 )
 GUIDE_PATH="blocks/myprogress/single-herbs-study-guide.php"
+GUIDE_TRANSLATION_PATH="blocks/myprogress/single-herbs-study-guide-es.php"
 CARD_INDEX_PATH="blocks/myprogress/single-herb-card-index.json"
 PROPERTIES_PATH="blocks/myprogress/single-herb-properties.json"
 REFERENCE_PATH="blocks/myprogress/single-herbs-dui-yao-reference.php"
@@ -36,7 +37,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     exit 1
 fi
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
     if [[ ! -f "$MOODLE_ROOT/$relative_path" ]]; then
         echo "ERROR: no se encontró el archivo activo $MOODLE_ROOT/$relative_path"
         exit 1
@@ -70,12 +71,12 @@ echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
 
-for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$REFERENCE_PATH"; do
+for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$REFERENCE_PATH"; do
     "$PHP_BIN" -l "$TEMP_DIR/$php_path" >/dev/null
 done
 python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
@@ -160,6 +161,10 @@ grep -Fq "data-guideline-roster-open" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "data-guideline-roster-modal" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "data-guideline-roster-search" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "data-guideline-roster-item" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "Primary category" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "Why it appears here" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "Categoría principal" "$TEMP_DIR/$GUIDE_TRANSLATION_PATH"
+grep -Fq "Por qué aparece aquí" "$TEMP_DIR/$GUIDE_TRANSLATION_PATH"
 grep -Fq "\$duiyaoadditionalherbs = array_column(\$moistannex, 'name');" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "including its cross-category references" "$TEMP_DIR/$REFERENCE_PATH"
 grep -Fq "Huo Ma Ren has no Duì Yào pair in the current 51-pair roster" "$TEMP_DIR/$REFERENCE_PATH"
@@ -208,7 +213,7 @@ if [[ "$DUI_PAIR_COUNT" -ne 51 ]]; then
 fi
 
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     target="$MOODLE_ROOT/$relative_path"
     temporary="$TEMP_DIR/$relative_path"
     backup_target="$BACKUP_DIR/$relative_path"
@@ -225,7 +230,7 @@ for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}"
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$file_mode" "$temporary" "$target"
 done
 
-for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$REFERENCE_PATH"; do
+for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$REFERENCE_PATH"; do
     "$PHP_BIN" -l "$MOODLE_ROOT/$php_path" >/dev/null
 done
 python3 -m json.tool "$MOODLE_ROOT/$PROPERTIES_PATH" >/dev/null
@@ -249,5 +254,6 @@ echo "Categorías 13–15: monografías formales, anexos y mapa comparativo actu
 echo "Anexos del capítulo 6: guideline vigente arriba y monografías fuente debajo"
 echo "Categoría 15: resumen funcional completo y pareja oficial 40/51 registrados"
 echo "Popup del guideline: 304 hierbas con IDs estables 001–304 y búsqueda"
+echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Hai Zao, Zao Jiao Ci, Ting Li Zi y Zi Su Zi: perfiles verificados y completos"
 echo "Respaldo: $BACKUP_DIR"
