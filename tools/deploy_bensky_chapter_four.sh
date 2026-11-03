@@ -18,6 +18,7 @@ FILES=(
     "blocks/myprogress/single-herb-properties.json"
     "blocks/myprogress/single-herbs-properties-table.php"
     "blocks/myprogress/single-herbs-safety-dispensing.php"
+    "blocks/myprogress/single-herbs-actions-indications.php"
 )
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -59,6 +60,7 @@ for relative_path in "${FILES[@]}"; do
         && "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-eighteen.php" \
         && "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" \
         && "$relative_path" != "blocks/myprogress/single-herbs-safety-dispensing.php" \
+        && "$relative_path" != "blocks/myprogress/single-herbs-actions-indications.php" \
         && ! -f "$target" ]]; then
         echo "ERROR: no se encontró el archivo activo $target"
         exit 1
@@ -74,6 +76,7 @@ done
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-actions-indications.php" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-properties.json" >/dev/null
 
@@ -85,6 +88,7 @@ INDEX_FILE="$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
 PROPERTIES_FILE="$TEMP_DIR/blocks/myprogress/single-herb-properties.json"
 PROPERTIES_TABLE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php"
 SAFETY_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php"
+ACTIONS_INDICATIONS_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-actions-indications.php"
 GUIDE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php"
 
 grep -Fq "Board guideline atlas: 21 official herbs" "$CHAPTER_FILE"
@@ -98,6 +102,11 @@ grep -Fq "focus === 'safety_dispensing'" "$GUIDE_FILE"
 grep -Fq "single-herbs-safety-dispensing.php" "$GUIDE_FILE"
 grep -Fq "data-safety-category-filter" "$SAFETY_FILE"
 grep -Fq "data-safety-topic-filter" "$SAFETY_FILE"
+grep -Fq "focus === 'actions_indications'" "$GUIDE_FILE"
+grep -Fq "single-herbs-actions-indications.php" "$GUIDE_FILE"
+grep -Fq "data-ai-category-filter" "$ACTIONS_INDICATIONS_FILE"
+grep -Fq "data-ai-sort" "$ACTIONS_INDICATIONS_FILE"
+grep -Fq "Every source action remains paired with its own indication" "$ACTIONS_INDICATIONS_FILE"
 grep -Fq "single-herbs-bensky-chapter-seventeen.php" "$GUIDE_FILE"
 grep -Fq "focus' => 'bensky17'" "$GUIDE_FILE"
 grep -Fq "single-herbs-bensky-chapter-eighteen.php" "$GUIDE_FILE"
@@ -225,6 +234,7 @@ done
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-safety-dispensing.php" >/dev/null
+"$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-actions-indications.php" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json" >/dev/null
 

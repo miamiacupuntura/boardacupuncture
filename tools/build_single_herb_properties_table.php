@@ -451,6 +451,14 @@ foreach ($index['herbs'] ?? [] as $card) {
         'temperature' => ['en' => $temperatureEn, 'es' => $temperatureEs],
         'channels' => ['en' => $profileEn['channels'] ?? null, 'es' => $profileEs['channels'] ?? null],
         'dose' => $profileEn['dose'] ?? null,
+        'actionSummary' => [
+            'en' => $profileEn['identity'] ?? $profileEn['focus'] ?? null,
+            'es' => $profileEs['identity'] ?? $profileEs['focus'] ?? null,
+        ],
+        'indicationSummary' => [
+            'en' => $profileEn['clue'] ?? $profileEn['distinction'] ?? null,
+            'es' => $profileEs['clue'] ?? $profileEs['distinction'] ?? null,
+        ],
         'safetyNote' => [
             'en' => $profileEn['caution'] ?? $profileEn['safety'] ?? null,
             'es' => $profileEs['caution'] ?? $profileEs['safety'] ?? null,
