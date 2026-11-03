@@ -113,6 +113,7 @@ grep -Fq "data-safety-topic-filter" "$SAFETY_FILE"
 grep -Fq "single-herb-safety-supplement.json" "$SAFETY_FILE"
 grep -Fq '.single-herbs-safety .single-herbs-properties__table-wrap{overflow:visible}' "$GUIDE_FILE"
 grep -Fq '.single-herbs-safety__table thead th{z-index:5' "$GUIDE_FILE"
+grep -Fq '.single-herbs-safety__floating-head{position:fixed' "$GUIDE_FILE"
 grep -Fq 'max-height:calc(100vh - 88px);overflow:auto' "$GUIDE_FILE"
 for language in en es; do
     rendered_safety="$TEMP_DIR/safety-dispensing-$language.html"
@@ -143,6 +144,8 @@ grep -Fq 'Safety and dispensing recall questions' "$TEMP_DIR/safety-dispensing-e
 grep -Fq 'Preguntas de repaso de seguridad y dispensación' "$TEMP_DIR/safety-dispensing-es.html"
 grep -Fq 'data-safety-open-all' "$SAFETY_FILE"
 grep -Fq 'data-safety-close-all' "$SAFETY_FILE"
+grep -Fq 'syncFloatingHead' "$SAFETY_FILE"
+grep -Fq "document.body.appendChild(floatingHead)" "$SAFETY_FILE"
 python3 - "$TEMP_DIR/safety-dispensing-en.html" "$TEMP_DIR/safety-dispensing-es.html" <<'PY'
 import sys
 
@@ -348,7 +351,7 @@ echo "Capítulo 19: 0 perfiles oficiales · 12 sustancias por toxicidad · 5 de 
 echo "Preguntas: formato unificado Yang + Bensky y controles abrir/cerrar en las 34 tarjetas"
 echo "Pop-up por tarjeta: listado oficial filtrado, buscador, enlaces directos y estado vacío verificados"
 echo "Tabla maestra: 304 hierbas oficiales · 33 categorías Bensky · orden y filtro por categoría verificados"
-echo "Seguridad y dispensación: encabezado fijo · 20 preguntas arriba · 304 filas completas · 0 guiones"
+echo "Seguridad y dispensación: encabezado flotante verificado · 20 preguntas arriba · 304 filas completas · 0 guiones"
 echo "Acciones e indicaciones: 304 hierbas del guideline · 0 faltantes · columna editorial eliminada"
 echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT · capítulo 18=$CHAPTER_EIGHTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"

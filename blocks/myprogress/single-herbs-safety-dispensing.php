@@ -369,6 +369,9 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
         const rows = Array.from(root.querySelectorAll('[data-safety-row]'));
         const count = root.querySelector('[data-safety-count]');
         const empty = root.querySelector('[data-safety-empty]');
+        const tableWrap = root.querySelector('.single-herbs-properties__table-wrap');
+        const table = root.querySelector('.single-herbs-safety__table');
+        const tableHead = table ? table.querySelector('thead') : null;
         const tbody = root.querySelector('tbody');
         const sortButton = root.querySelector('[data-safety-sort]');
         const sortHeader = root.querySelector('[data-safety-sort-header]');
@@ -376,6 +379,70 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
         const reviewQuestions = Array.from(root.querySelectorAll('[data-safety-question]'));
         const openAllQuestions = root.querySelector('[data-safety-open-all]');
         const closeAllQuestions = root.querySelector('[data-safety-close-all]');
+        let floatingFrame = 0;
+        let floatingHead = null;
+        let floatingTable = null;
+        let floatingSortButton = null;
+        let floatingSortIndicator = null;
+        let floatingCells = [];
+        const originalHeadCells = tableHead ? Array.from(tableHead.querySelectorAll('th')) : [];
+        if (tableWrap && table && tableHead) {
+            floatingHead = document.createElement('div');
+            floatingHead.className = 'single-herbs-safety__floating-head';
+            floatingHead.setAttribute('aria-hidden', 'true');
+            floatingTable = table.cloneNode(false);
+            floatingTable.appendChild(tableHead.cloneNode(true));
+            floatingHead.appendChild(floatingTable);
+            document.body.appendChild(floatingHead);
+            floatingCells = Array.from(floatingTable.querySelectorAll('th'));
+            floatingSortButton = floatingTable.querySelector('[data-safety-sort]');
+            floatingSortIndicator = floatingTable.querySelector('[data-safety-sort-indicator]');
+            if (floatingSortButton) {
+                floatingSortButton.addEventListener('click', function() {
+                    sortButton.click();
+                });
+            }
+        }
+        const fixedTopOffset = function() {
+            let offset = 0;
+            document.querySelectorAll('.navbar.fixed-top, header.fixed-top, [data-region="header"].fixed-top').forEach(function(element) {
+                const rect = element.getBoundingClientRect();
+                const position = window.getComputedStyle(element).position;
+                if ((position === 'fixed' || position === 'sticky') && rect.top <= 1 && rect.bottom > 0 && rect.height < 180) {
+                    offset = Math.max(offset, rect.bottom);
+                }
+            });
+            return Math.max(0, Math.round(offset));
+        };
+        const syncFloatingHead = function() {
+            floatingFrame = 0;
+            if (!floatingHead || !floatingTable || !tableWrap || !table || !tableHead) return;
+            const wrapRect = tableWrap.getBoundingClientRect();
+            const tableRect = table.getBoundingClientRect();
+            const top = fixedTopOffset();
+            const headHeight = tableHead.getBoundingClientRect().height;
+            const left = Math.max(0, wrapRect.left);
+            const right = Math.min(window.innerWidth, wrapRect.right);
+            const visible = tableRect.top < top && tableRect.bottom > top + headHeight && right > left;
+            floatingHead.classList.toggle('is-visible', visible);
+            if (!visible) return;
+            floatingHead.style.top = top + 'px';
+            floatingHead.style.left = left + 'px';
+            floatingHead.style.width = (right - left) + 'px';
+            floatingTable.style.width = Math.max(table.scrollWidth, tableRect.width) + 'px';
+            floatingTable.style.marginLeft = (tableRect.left - left) + 'px';
+            originalHeadCells.forEach(function(cell, index) {
+                const width = cell.getBoundingClientRect().width;
+                if (!floatingCells[index]) return;
+                floatingCells[index].style.width = width + 'px';
+                floatingCells[index].style.minWidth = width + 'px';
+                floatingCells[index].style.maxWidth = width + 'px';
+            });
+        };
+        const scheduleFloatingHead = function() {
+            if (floatingFrame) return;
+            floatingFrame = window.requestAnimationFrame(syncFloatingHead);
+        };
         const collator = new Intl.Collator(<?php echo json_encode($ises ? 'es' : 'en'); ?>, {sensitivity: 'base', numeric: true});
         const normalize = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
         const refresh = function() {
@@ -392,6 +459,7 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             });
             count.textContent = String(visible);
             empty.hidden = visible !== 0;
+            scheduleFloatingHead();
         };
         input.addEventListener('input', refresh);
         categoryFilter.addEventListener('change', refresh);
@@ -408,6 +476,9 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             sortButton.dataset.direction = next;
             sortHeader.setAttribute('aria-sort', next);
             sortIndicator.textContent = next === 'ascending' ? '↑' : (next === 'descending' ? '↓' : '⇅');
+            if (floatingSortButton) floatingSortButton.dataset.direction = next;
+            if (floatingSortIndicator) floatingSortIndicator.textContent = sortIndicator.textContent;
+            scheduleFloatingHead();
         });
         if (openAllQuestions) {
             openAllQuestions.addEventListener('click', function() {
@@ -419,6 +490,13 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
                 reviewQuestions.forEach(question => { question.open = false; });
             });
         }
+        window.addEventListener('scroll', scheduleFloatingHead, {passive: true});
+        window.addEventListener('resize', scheduleFloatingHead);
+        if (tableWrap) tableWrap.addEventListener('scroll', scheduleFloatingHead, {passive: true});
+        if ('ResizeObserver' in window && table) {
+            new ResizeObserver(scheduleFloatingHead).observe(table);
+        }
+        scheduleFloatingHead();
     })();
     </script>
 <?php endif; ?>
