@@ -61,7 +61,8 @@ foreach ($categories as $sectionnumber => $category) {
 
 $normalizeherbname = static function(string $value): string {
     $value = strtolower(trim((string) preg_replace('/\s*\*$/', '', $value)));
-    return trim((string) preg_replace('/[^a-z0-9]+/', ' ', $value));
+    $value = trim((string) preg_replace('/[^a-z0-9]+/', ' ', $value));
+    return $value === 'xin yi hua' ? 'xin yi' : $value;
 };
 $cardindex = null;
 $guidelineherbkeys = [];
@@ -624,6 +625,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Allii Fistulosi Bulbus',
         'common' => 'Scallion or Green Onion',
         'boardfocus' => false,
+        'primarycategory' => 1,
         'category' => 'Category 1 · Warm, Acrid Herbs that Release the Exterior',
         'reason' => 'Included here because it belongs to the same textbook Wind-Cold family and represents the very early, superficial stage; it is in the overall 2026 guideline but is not one of the nine herbs named in this category heading.',
         'note' => 'Gently releases the Exterior in the very early stage of Wind-Cold and may be used topically for abscesses and sores.',
@@ -633,6 +635,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Centipedae Herba',
         'common' => 'Centipeda Herb',
         'boardfocus' => false,
+        'primarycategory' => 1,
         'category' => 'Textbook category · Warm, Acrid Herbs that Release the Exterior',
         'reason' => 'Included only to recognize a nasal Wind-Cold specialist and distinguish it from Xin Yi Hua and Bai Zhi; this source monograph is outside the 2026 guideline.',
         'note' => 'Expels Wind-Cold, opens the nasal passages and is especially associated with nasal obstruction, discharge and cough.',
@@ -649,6 +652,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Ligustici Rhizoma et Radix',
         'common' => 'Chinese Lovage Root',
         'boardfocus' => false,
+        'primarycategory' => 1,
         'category' => 'Category 1 · Warm, Acrid Herbs that Release the Exterior',
         'reason' => 'Included to preserve the high-yield location contrast: Gao Ben targets vertex headache, while Qiang Huo favors the occiput and Bai Zhi the forehead. It is in the overall 2026 guideline but not named in this category heading.',
         'note' => 'Expels Wind-Cold and is strongly associated with headache at the vertex.',
@@ -693,6 +697,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Zingiberis Rhizomatis Recens Cortex',
         'common' => 'Fresh Ginger Rhizome Skin',
         'boardfocus' => false,
+        'primarycategory' => 12,
         'category' => 'Category 12 · Herbs that Drain Dampness',
         'reason' => 'Included only to distinguish the peel from Sheng Jiang: the fresh rhizome releases the Exterior and harmonizes the Stomach, whereas the peel primarily promotes urination and reduces edema. The peel is outside the 2026 guideline.',
         'note' => 'The peel has a cooler, more superficial emphasis and promotes urination to reduce edema.',
@@ -702,6 +707,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Asari Herba',
         'common' => 'Chinese Wild Ginger or Asarum',
         'boardfocus' => false,
+        'primarycategory' => 1,
         'category' => 'Category 1 · Warm, Acrid Herbs that Release the Exterior',
         'reason' => 'Included because it belongs to the broader Wind-Cold family and adds the distinctive combination of Cold pain, nasal opening and Lung warming. It is in the overall 2026 guideline but not named in this category heading.',
         'note' => 'Treats Wind-Cold pain, especially with Dampness or underlying Kidney-Yang deficiency; warms the Lung and opens the nose.',
@@ -711,6 +717,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Moslae Herba',
         'common' => 'Elsholtzia',
         'boardfocus' => false,
+        'primarycategory' => 1,
         'category' => 'Category 1 · Warm, Acrid Exterior release; cross-reference to Category 8 · Clear Summerheat',
         'reason' => 'Included as the summer bridge: it releases an Exterior pattern while transforming Dampness and promoting urination. This explains its comparison with Wind-Cold herbs and its additional appearance in the Summerheat annex.',
         'note' => 'Releases the Exterior in summer, transforms Dampness, promotes urination and reduces swelling.',
@@ -727,6 +734,7 @@ $windcoldcategoryherbs = [
         'latin' => 'Perillae Caulis',
         'common' => 'Perilla Stalk',
         'boardfocus' => false,
+        'primarycategory' => 18,
         'category' => 'Category 18 · Herbs that Regulate Qi',
         'reason' => 'Included only to distinguish parts of the same plant: Zi Su Ye is the Exterior-releasing leaf, whereas Zi Su Geng is the stalk used mainly to move Qi, relieve chest constraint and calm the fetus. The stalk is outside the 2026 guideline.',
         'note' => 'Moves Qi, relieves chest and epigastric constraint, harmonizes the Middle and helps calm the fetus.',
@@ -743,11 +751,14 @@ $windcoldcategoryherbs = [
 $windcoldguidelinecheck = static function(array $herb) use ($guidelineherbkeys, $normalizeherbname): bool {
     return isset($guidelineherbkeys[$normalizeherbname((string)$herb['name'])]);
 };
-$windcoldboardherbs = array_values(array_filter($windcoldcategoryherbs, static function(array $herb) use ($windcoldguidelinecheck): bool {
-    return !empty($herb['boardfocus']) || $windcoldguidelinecheck($herb);
+$windcoldcategorycheck = static function(array $herb): bool {
+    return !empty($herb['boardfocus']) || (int)($herb['primarycategory'] ?? 0) === 1;
+};
+$windcoldboardherbs = array_values(array_filter($windcoldcategoryherbs, static function(array $herb) use ($windcoldguidelinecheck, $windcoldcategorycheck): bool {
+    return $windcoldguidelinecheck($herb) && $windcoldcategorycheck($herb);
 }));
-$windcoldannexherbs = array_values(array_filter($windcoldcategoryherbs, static function(array $herb) use ($windcoldguidelinecheck): bool {
-    return empty($herb['boardfocus']) && !$windcoldguidelinecheck($herb);
+$windcoldannexherbs = array_values(array_filter($windcoldcategoryherbs, static function(array $herb) use ($windcoldguidelinecheck, $windcoldcategorycheck): bool {
+    return !$windcoldguidelinecheck($herb) || !$windcoldcategorycheck($herb);
 }));
 
 $yangcomparisoncharts = [
