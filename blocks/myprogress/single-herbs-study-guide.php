@@ -121,6 +121,7 @@ $normalizeherbname = static function(string $value): string {
 $cardindex = null;
 $guidelineherbkeys = [];
 $guidelineherbroster = [];
+$categoryherbcounts = [];
 $cardindexpath = __DIR__ . '/single-herb-card-index.json';
 if (is_readable($cardindexpath)) {
     $decodedcardindex = json_decode(file_get_contents($cardindexpath), true);
@@ -136,6 +137,10 @@ if (is_readable($cardindexpath)) {
                     'latin' => (string)($herbcard['latin'] ?? ''),
                     'bensky_category' => (string)($herbcard['benskyCategory'][$ises ? 'es' : 'en'] ?? ''),
                 ];
+                $herbguide = (int)($herbcard['guideNumber'] ?? 0);
+                if ($herbguide > 0) {
+                    $categoryherbcounts[$herbguide] = ($categoryherbcounts[$herbguide] ?? 0) + 1;
+                }
             }
         }
     }
@@ -1076,14 +1081,14 @@ ob_start();
 .single-herbs-guide__count{display:flex;min-width:116px;flex-direction:column;align-items:center;padding:13px 18px;border-radius:10px;background:#fff;color:#0f5f58}
 .single-herbs-guide__count strong{font-size:29px;line-height:1}.single-herbs-guide__count span{margin-top:5px;font-size:12px;font-weight:800;text-transform:uppercase}
 .single-herbs-guide__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-.single-herbs-guide__category{display:flex;min-height:135px;flex-direction:column;padding:18px;border:1px solid #d9e2e7;border-top:4px solid #f77e25;border-radius:11px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 2px 8px rgba(15,23,42,.05);transition:transform .15s ease,box-shadow .15s ease}
+.single-herbs-guide__category{display:flex;min-height:155px;flex-direction:column;padding:18px;border:1px solid #ead8ca;border-top:4px solid #f77e25;border-radius:11px;background:#fff7f0;color:inherit;text-decoration:none;box-shadow:0 2px 8px rgba(15,23,42,.05);transition:transform .15s ease,box-shadow .15s ease}
 .single-herbs-guide__category:hover{color:inherit;text-decoration:none;transform:translateY(-2px);box-shadow:0 7px 18px rgba(15,23,42,.1)}
 .single-herbs-guide__category-number{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;margin-bottom:12px;border-radius:50%;background:#fff0e5;color:#a64f12;font-weight:900}
 .single-herbs-guide__category-reference{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.single-herbs-guide__category-reference .single-herbs-guide__category-number{flex:0 0 34px;margin-bottom:0}.single-herbs-guide__bensky-chapter{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid #c9ded9;border-radius:999px;background:#eef8f6;color:#0d665e;font-size:11px;font-weight:900;letter-spacing:.02em}
-.single-herbs-guide__category strong{font-size:16px;line-height:1.35}.single-herbs-guide__category small{margin-top:auto;padding-top:12px;color:#19706a;font-weight:800}
-.single-herbs-guide__category--mixed{border-top-color:#0b817d;background:#f6fbfa}.single-herbs-guide__category--mixed .single-herbs-guide__category-number{background:#dff2ee;color:#0d665e}
-.single-herbs-guide__category--properties{border-top-color:#2563eb;background:#f7faff}.single-herbs-guide__category--properties .single-herbs-guide__category-number{background:#dbeafe;color:#1d4ed8}
-.single-herbs-guide__category--introduction{border-top-color:#7c3aed;background:#faf8ff}.single-herbs-guide__category--introduction .single-herbs-guide__category-number{background:#ede9fe;color:#6d28d9}
+.single-herbs-guide__category strong{font-size:16px;line-height:1.35}.single-herbs-guide__category small{margin-top:auto;padding-top:12px;color:#19706a;font-weight:800;line-height:1.45}
+.single-herbs-guide__category--mixed .single-herbs-guide__category-number{background:#dff2ee;color:#0d665e}
+.single-herbs-guide__category--properties .single-herbs-guide__category-number{background:#dbeafe;color:#1d4ed8}
+.single-herbs-guide__category--introduction .single-herbs-guide__category-number{background:#ede9fe;color:#6d28d9}
 .single-herbs-guide__category--bensky-reference{border-top-color:#f77e25;background:#fff7f0}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{background:#fff0e5;color:#a64f12}.single-herbs-guide__category--bensky-reference small{color:#19706a}
 .single-herbs-guide__empty{padding:34px;border:1px dashed #aeb8c0;border-radius:12px;background:#fff;text-align:center;color:#64748b}
 .single-herbs-guide__requested-card{margin:0 0 22px;padding:20px 22px;border:1px solid #c9ded9;border-left:5px solid #0b817d;border-radius:11px;background:#f2faf8}.single-herbs-guide__requested-card h3{margin:2px 0 5px;font-size:23px}.single-herbs-guide__requested-card p{margin:0;color:#52677a;line-height:1.5}.single-herbs-guide__requested-card .single-herbs-guide__eyebrow{margin-bottom:4px}.single-herbs-guide__requested-card-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.single-herbs-guide__card-target{scroll-margin-top:24px;animation:single-herb-card-highlight 2.2s ease}.single-herbs-guide__card-target>summary,.single-herbs-guide__card-target.single-herbs-guide__category-herb{box-shadow:0 0 0 4px rgba(11,129,125,.2)}@keyframes single-herb-card-highlight{0%,55%{transform:translateY(-2px)}100%{transform:none}}
@@ -1665,7 +1670,10 @@ ob_start();
                 $introductionurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $introductionparams);
                 ?>
                 <a class="single-herbs-guide__category single-herbs-guide__category--introduction" href="<?php echo $introductionurl->out(false); ?>">
-                    <span class="single-herbs-guide__category-number">I</span>
+                    <span class="single-herbs-guide__category-reference">
+                        <span class="single-herbs-guide__category-number">I</span>
+                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Guía de estudio' : 'Study guide'); ?></span>
+                    </span>
                     <strong><?php echo s($ises ? 'Introducción a las hierbas individuales' : 'Introduction to Single Herbs'); ?></strong>
                     <small><?php echo s($ises ? 'Historia · propiedades · meridianos · dosis · seguridad →' : 'History · properties · channels · dosage · safety →'); ?></small>
                 </a>
@@ -1673,6 +1681,7 @@ ob_start();
                     <?php
                     $categoryguidenumber = (int) $category['guide_number'];
                     $categorydisplayguidenumber = $displaystudyguidenumber($categoryguidenumber);
+                    $categoryherbcount = (int)($categoryherbcounts[$categoryguidenumber] ?? 0);
                     $categorybenskychapter = $benskychapterlabel($categoryguidenumber);
                     $categorydisplayname = $stripstudyguidenumber((string) $category['name']);
                     if ($categoryguidenumber === 11) {
@@ -1702,7 +1711,13 @@ ob_start();
                             <?php if ($categorybenskychapter !== ''): ?><span class="single-herbs-guide__bensky-chapter"><?php echo s($categorybenskychapter); ?></span><?php endif; ?>
                         </span>
                         <strong><?php echo $categorydisplayname; ?></strong>
-                        <small>Open study framework →</small>
+                        <small><?php echo s($categoryherbcount > 0
+                            ? ($ises
+                                ? $categoryherbcount . ' hierbas oficiales · marco de estudio · seguridad y comparaciones →'
+                                : $categoryherbcount . ' official herbs · study framework · safety and comparisons →')
+                            : ($ises
+                                ? 'Atlas clínico · marco de estudio · seguridad y comparaciones →'
+                                : 'Clinical atlas · study framework · safety and comparisons →')); ?></small>
                     </a>
                 <?php endforeach; ?>
                 <?php
@@ -1713,7 +1728,10 @@ ob_start();
                 $propertiesurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $propertiesparams);
                 ?>
                 <a class="single-herbs-guide__category single-herbs-guide__category--properties" href="<?php echo $propertiesurl->out(false); ?>">
-                    <span class="single-herbs-guide__category-number">T</span>
+                    <span class="single-herbs-guide__category-reference">
+                        <span class="single-herbs-guide__category-number">T</span>
+                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Referencia' : 'Reference'); ?></span>
+                    </span>
                     <strong><?php echo s($ises ? 'Tabla de propiedades de hierbas' : 'Herb Properties Table'); ?></strong>
                     <small><?php echo s($ises ? '304 hierbas · sabor · temperatura · meridianos · dosis →' : '304 herbs · flavor · temperature · channels · dose →'); ?></small>
                 </a>
@@ -1725,7 +1743,10 @@ ob_start();
                 $mixedurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $mixedparams);
                 ?>
                 <a class="single-herbs-guide__category single-herbs-guide__category--mixed" href="<?php echo $mixedurl->out(false); ?>">
-                    <span class="single-herbs-guide__category-number">M</span>
+                    <span class="single-herbs-guide__category-reference">
+                        <span class="single-herbs-guide__category-number">M</span>
+                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Repaso final' : 'Final review'); ?></span>
+                    </span>
                     <strong><?php echo s($ises ? 'Repaso final' : 'Final Review'); ?></strong>
                     <small><?php echo s($ises ? 'Abrir preguntas consecutivas →' : 'Open consecutive questions →'); ?></small>
                 </a>
