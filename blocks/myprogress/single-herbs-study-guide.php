@@ -993,6 +993,7 @@ ob_start();
 .single-herbs-guide__house{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 18px;margin:13px 0;padding:0;list-style:none}.single-herbs-guide__house li{color:#52677a}.single-herbs-guide__house strong{color:#17364a}
 .single-herbs-guide__catalog-heading{margin:25px 0 0;color:#123246;font-size:19px}.single-herbs-guide__catalog-intro{margin:6px 0 14px;color:#60717e;line-height:1.5}.single-herbs-guide__category-herbs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none;counter-reset:wind-cold-herb}.single-herbs-guide__category-herb{counter-increment:wind-cold-herb;position:relative;padding:14px 15px 14px 48px;border:1px solid #dde4e8;border-radius:9px;background:#fbfcfd}.single-herbs-guide__category-herb:before{content:counter(wind-cold-herb);position:absolute;left:14px;top:14px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:12px;font-weight:900}.single-herbs-guide__category-herb--core{border-left:4px solid #0b817d;background:#f7fcfb}.single-herbs-guide__category-herb:not(.single-herbs-guide__category-herb--core){border-left:4px solid #d97706;background:#fffaf2}.single-herbs-guide__category-herb-head{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}.single-herbs-guide__category-herb-head strong{color:#17364a}.single-herbs-guide__category-herb-head em{color:#6b7b87;font-size:12px}.single-herbs-guide__category-herb-badge{display:inline-flex;padding:2px 7px;border-radius:999px;background:#dff2ee;color:#0d665e;font-size:10px;font-weight:900;text-transform:uppercase}.single-herbs-guide__category-herb-badge--outside{background:#ffedd5;color:#9a3412}.single-herbs-guide__category-herb-common{display:block;margin-top:3px;color:#9a4a12;font-size:12px;font-weight:800}.single-herbs-guide__category-herb p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}.single-herbs-guide__annex{margin-top:24px;padding-top:20px;border-top:1px dashed #d3dce2}.single-herbs-guide__annex .single-herbs-guide__catalog-heading{margin-top:0;color:#8a461b}
 .single-herbs-guide__category-herb-context{display:grid;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid #eadfce}.single-herbs-guide__category-herb-context p{display:grid;grid-template-columns:112px minmax(0,1fr);gap:8px;margin:0}.single-herbs-guide__category-herb-context strong{color:#8a461b;font-size:11px;text-transform:uppercase}.single-herbs-guide__category-herb-context span{color:#52677a;font-size:13px;line-height:1.45}
+.single-herbs-guide__annex-toggle{margin-top:28px;overflow:hidden;border:1px solid #e3d7c7;border-left:5px solid #d97706;border-radius:10px;background:#fffaf2}.single-herbs-guide__annex-toggle>summary{position:relative;display:flex;flex-direction:column;gap:3px;padding:16px 52px 16px 18px;color:#8a461b;cursor:pointer;list-style:none}.single-herbs-guide__annex-toggle>summary::-webkit-details-marker{display:none}.single-herbs-guide__annex-toggle>summary:after{content:'+';position:absolute;right:17px;top:50%;display:flex;width:27px;height:27px;align-items:center;justify-content:center;border-radius:50%;background:#ffedd5;color:#9a3412;font-size:20px;font-weight:900;transform:translateY(-50%)}.single-herbs-guide__annex-toggle[open]>summary:after{content:'−'}.single-herbs-guide__annex-toggle>summary strong{font-size:16px}.single-herbs-guide__annex-toggle>summary span{color:#7b695e;font-size:12px;font-weight:700}.single-herbs-guide__annex-toggle-content{padding:0 18px 18px;border-top:1px solid #eadfce}.single-herbs-guide__annex-toggle-content>.single-herbs-guide__catalog-intro{margin-top:14px}
 .single-herbs-guide__annex-rows{display:grid;gap:12px}.single-herbs-guide__annex-row{padding:16px 18px;border:1px solid #dce4e8;border-left:5px solid #0b817d;border-radius:10px;background:#f7fcfb}.single-herbs-guide__annex-row--outside{border-color:#eadfce;border-left-color:#d97706;background:#fffaf2}.single-herbs-guide__annex-row .single-herbs-guide__catalog-heading{margin:0;color:#0d665e}.single-herbs-guide__annex-row--outside .single-herbs-guide__catalog-heading{color:#8a461b}.single-herbs-guide__annex-row .single-herbs-guide__catalog-intro{margin:6px 0 10px}.single-herbs-guide__annex-row .single-herbs-guide__chapter-annex-names{margin:0;padding-top:10px;border-top:1px solid #dbe7e4;color:#52677a;font-size:13px;font-weight:700;line-height:1.65}.single-herbs-guide__annex-row--outside .single-herbs-guide__chapter-annex-names{border-top-color:#eadfce}
 .single-herbs-guide__functional-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;margin:0;padding:0;list-style:none}.single-herbs-guide__functional-summary li{display:flex;gap:6px;align-items:flex-start;padding:12px 14px;border:1px solid #dce4e8;border-left:4px solid #0b817d;border-radius:8px;background:#f8fbfb;color:#52677a;line-height:1.45}.single-herbs-guide__functional-summary strong{color:#17364a}.single-herbs-guide__functional-summary span{flex:1}
 .single-herbs-guide__yang-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.single-herbs-guide__yang-chart{padding:16px;border:1px solid #dce4e8;border-radius:10px;background:#fff}.single-herbs-guide__yang-chart h5{margin:0;color:#17364a;font-size:16px}.single-herbs-guide__yang-chart small{display:block;margin:2px 0 12px;color:#7a647e}.single-herbs-guide__yang-bar{display:grid;grid-template-columns:82px minmax(0,1fr) 30px;gap:8px;align-items:center;margin-top:7px;font-size:11px;color:#4c6070}.single-herbs-guide__yang-bar-track{height:8px;overflow:hidden;border-radius:99px;background:#e9eef2}.single-herbs-guide__yang-bar-fill{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#ef5b72,#f48276)}.single-herbs-guide__yang-bar b{text-align:right;color:#17364a;font-size:11px}.single-herbs-guide__yang-note{margin-top:13px;padding:12px 15px;border-radius:8px;background:#f4f0ff;color:#5b4283;font-size:13px;line-height:1.5}
@@ -1205,29 +1206,6 @@ ob_start();
                         <?php endforeach; ?>
                     </ol>
 
-                    <div class="single-herbs-guide__annex">
-                        <h5 class="single-herbs-guide__catalog-heading">Annex · Additional Wind-Cold materia medica</h5>
-                        <p class="single-herbs-guide__catalog-intro">This annex has two limited purposes: preserve high-yield textbook distinctions around the nine heading herbs, and prevent confusion between related plant parts or cross-category actions. Each card identifies its primary category, its exact reason for appearing here and whether it belongs to the overall 2026 guideline. These are not seven additional core herbs for this category.</p>
-                        <ol class="single-herbs-guide__category-herbs">
-                            <?php foreach ($windcoldannexherbs as $categoryherb): ?>
-                                <li class="single-herbs-guide__category-herb">
-                                    <div class="single-herbs-guide__category-herb-head">
-                                        <strong><?php echo s($categoryherb['name']); ?></strong>
-                                        <em><?php echo s($categoryherb['latin']); ?></em>
-                                        <span class="single-herbs-guide__category-herb-badge<?php echo $categoryherb['guideline'] ? '' : ' single-herbs-guide__category-herb-badge--outside'; ?>"><?php echo s($categoryherb['guideline']
-                                            ? 'In 2026 guideline · not named in this category heading'
-                                            : 'Source monograph · outside 2026 guideline'); ?></span>
-                                    </div>
-                                    <span class="single-herbs-guide__category-herb-common"><?php echo s($categoryherb['common']); ?></span>
-                                    <p><?php echo s($categoryherb['note']); ?></p>
-                                    <div class="single-herbs-guide__category-herb-context">
-                                        <p><strong>Primary category</strong><span><?php echo s($categoryherb['category']); ?></span></p>
-                                        <p><strong>Why it appears here</strong><span><?php echo s($categoryherb['reason']); ?></span></p>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ol>
-                    </div>
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-yang-title">
@@ -1432,6 +1410,35 @@ ob_start();
                 </section>
 
                 <p class="single-herbs-guide__note single-herbs-guide__source"><strong>Sources used for this prototype:</strong> Bensky, Clavey, Stöger and Gamble, <em>Chinese Herbal Medicine: Materia Medica</em>, 3rd ed., category and individual monographs; and Yang, <em>Chinese Herbal Medicines: Comparisons and Characteristics</em>, 2nd ed., Chapter 2. This is educational review material and not prescribing guidance.</p>
+
+                <details class="single-herbs-guide__annex-toggle">
+                    <summary>
+                        <strong>Annex · Additional Wind-Cold materia medica</strong>
+                        <span>7 contextual entries · click to open</span>
+                    </summary>
+                    <div class="single-herbs-guide__annex-toggle-content">
+                        <p class="single-herbs-guide__catalog-intro">This annex has two limited purposes: preserve high-yield textbook distinctions around the nine heading herbs, and prevent confusion between related plant parts or cross-category actions. Each card identifies its primary category, its exact reason for appearing here and whether it belongs to the overall 2026 guideline. These are not seven additional core herbs for this category.</p>
+                        <ol class="single-herbs-guide__category-herbs">
+                            <?php foreach ($windcoldannexherbs as $categoryherb): ?>
+                                <li class="single-herbs-guide__category-herb">
+                                    <div class="single-herbs-guide__category-herb-head">
+                                        <strong><?php echo s($categoryherb['name']); ?></strong>
+                                        <em><?php echo s($categoryherb['latin']); ?></em>
+                                        <span class="single-herbs-guide__category-herb-badge<?php echo $categoryherb['guideline'] ? '' : ' single-herbs-guide__category-herb-badge--outside'; ?>"><?php echo s($categoryherb['guideline']
+                                            ? 'In 2026 guideline · not named in this category heading'
+                                            : 'Source monograph · outside 2026 guideline'); ?></span>
+                                    </div>
+                                    <span class="single-herbs-guide__category-herb-common"><?php echo s($categoryherb['common']); ?></span>
+                                    <p><?php echo s($categoryherb['note']); ?></p>
+                                    <div class="single-herbs-guide__category-herb-context">
+                                        <p><strong>Primary category</strong><span><?php echo s($categoryherb['category']); ?></span></p>
+                                        <p><strong>Why it appears here</strong><span><?php echo s($categoryherb['reason']); ?></span></p>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ol>
+                    </div>
+                </details>
             <?php elseif ($istopictwo): ?>
                 <?php require(__DIR__ . '/single-herbs-category-cool-acrid.php'); ?>
             <?php elseif ($istopicthree): ?>
