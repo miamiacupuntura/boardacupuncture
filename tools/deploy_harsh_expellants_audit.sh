@@ -36,6 +36,7 @@ FORMULA_ROSTER_PATH="blocks/myprogress/formula-board-roster-2026.json"
 BOARD_GUIDELINE_EN_PATH="study-guide/guidelines/chinese-herbal-medicine.html"
 BOARD_GUIDELINE_ES_PATH="study-guide/guidelines/chinese-herbal-medicine-es.html"
 BOARD_GUIDELINE_CSS_PATH="study-guide/guidelines/guidelines.css"
+FORMULA_PREVIEW_PATH="study-guide/guidelines/formulas-appendix-c-2026-preview.html"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash deploy_harsh_expellants_audit.sh COMMIT_DE_40_CARACTERES"
@@ -81,7 +82,7 @@ echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$FORMULA_PREVIEW_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
@@ -414,9 +415,13 @@ PY
 grep -Fq "Study 63 detailed profiles in 14 internal categories" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
 grep -Fq "all 181 official formulas" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
 grep -Fq "\$isofficialformula" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
+if [[ "$(grep -o 'data-search=' "$TEMP_DIR/$FORMULA_PREVIEW_PATH" | wc -l)" -ne 181 ]]; then
+    echo "ERROR: la vista previa independiente no contiene 181 fórmulas"
+    exit 1
+fi
 
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$FORMULA_PREVIEW_PATH"; do
     target="$MOODLE_ROOT/$relative_path"
     temporary="$TEMP_DIR/$relative_path"
     backup_target="$BACKUP_DIR/$relative_path"
