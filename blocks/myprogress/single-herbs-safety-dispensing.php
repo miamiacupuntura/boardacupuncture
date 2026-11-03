@@ -9,13 +9,22 @@ $safetytext = static function(string $english, string $spanish) use ($ises): str
 $safetylang = $ises ? 'es' : 'en';
 $safetypropertiespath = __DIR__ . '/single-herb-properties.json';
 $safetyindexpath = __DIR__ . '/single-herb-card-index.json';
+$safetysupplementpath = __DIR__ . '/single-herb-safety-supplement.json';
 $safetyproperties = is_readable($safetypropertiespath)
     ? json_decode((string)file_get_contents($safetypropertiespath), true)
     : null;
 $safetyindex = is_readable($safetyindexpath)
     ? json_decode((string)file_get_contents($safetyindexpath), true)
     : null;
+$safetysupplement = is_readable($safetysupplementpath)
+    ? json_decode((string)file_get_contents($safetysupplementpath), true)
+    : null;
 $safetyrows = is_array($safetyproperties) ? ($safetyproperties['herbs'] ?? []) : [];
+$safetydefaults = is_array($safetysupplement) ? ($safetysupplement['defaults'] ?? []) : [];
+$safetycategorycautions = is_array($safetysupplement) ? ($safetysupplement['categoryCautions'] ?? []) : [];
+$safetycategorypregnancy = is_array($safetysupplement) ? ($safetysupplement['categoryPregnancy'] ?? []) : [];
+$safetycategoryinteractions = is_array($safetysupplement) ? ($safetysupplement['categoryInteractions'] ?? []) : [];
+$safetyherbsupplements = is_array($safetysupplement) ? ($safetysupplement['herbs'] ?? []) : [];
 $safetycategorybyname = [];
 $safetycategoryoptions = [];
 foreach (is_array($safetyindex) ? ($safetyindex['herbs'] ?? []) : [] as $safetyindexrow) {
@@ -43,7 +52,8 @@ $preparationkeywords = ['decoct', 'prepar', 'raw', 'calcined', 'charred', 'wrapp
 $pregnancykeywords = ['pregnan', 'fetus', 'postpartum', 'embaraz', 'feto', 'posparto'];
 $interactionkeywords = ['incompatib', 'interaction', 'antagon', 'combine with', 'warfarin', 'anticoagul', 'interacción', 'combinar con'];
 
-$structuredsafety = 0;
+$completecoverage = 0;
+$herbspecificsafety = 0;
 $structuredpreparation = 0;
 $structuredpregnancy = 0;
 $structuredinteractions = 0;
@@ -54,29 +64,75 @@ foreach ($safetyrows as $safetyposition => $safetyrow) {
     $dosage = $doseparts[0] ?? '';
     $doseinstruction = $doseparts[1] ?? '';
     $safetynote = trim((string)($safetyrow['safetyNote'][$safetylang] ?? ''));
-    $preparationnote = $doseinstruction;
-    if ($preparationnote === '' && $safetynote !== '' && $safetycontains($safetynote, $preparationkeywords)) {
-        $preparationnote = $safetynote;
-    }
-    $pregnancynote = $safetynote !== '' && $safetycontains($safetynote, $pregnancykeywords) ? $safetynote : '';
-    $interactionnote = $safetynote !== '' && $safetycontains($safetynote, $interactionkeywords) ? $safetynote : '';
+    $safetysearchnote = trim(implode(' ', array_filter([
+        (string)($safetyrow['safetyNote']['en'] ?? ''),
+        (string)($safetyrow['safetyNote']['es'] ?? ''),
+    ])));
     $category = $safetycategorybyname[(string)($safetyrow['name'] ?? '')] ?? [];
+    $categorycode = (string)($category['code'] ?? '');
+    $herbsupplement = $safetyherbsupplements[(string)($safetyrow['name'] ?? '')] ?? [];
+
+    $specificpreparation = trim((string)($herbsupplement['preparation'][$safetylang] ?? ''));
+    if ($specificpreparation === '') {
+        $specificpreparation = $doseinstruction;
+    }
+    if ($specificpreparation === '' && $safetynote !== '' && $safetycontains($safetysearchnote, $preparationkeywords)) {
+        $specificpreparation = $safetynote;
+    }
+    $preparationnote = $specificpreparation !== ''
+        ? $specificpreparation
+        : trim((string)($safetydefaults['preparation'][$safetylang] ?? ''));
+
+    $specificcaution = trim((string)($herbsupplement['caution'][$safetylang] ?? ''));
+    $toxicitynote = $specificcaution !== ''
+        ? $specificcaution
+        : ($safetynote !== ''
+            ? $safetynote
+            : trim((string)($safetycategorycautions[$categorycode][$safetylang] ?? '')));
+
+    $specificpregnancy = trim((string)($herbsupplement['pregnancy'][$safetylang] ?? ''));
+    if ($specificpregnancy === '' && $safetynote !== '' && $safetycontains($safetysearchnote, $pregnancykeywords)) {
+        $specificpregnancy = $safetynote;
+    }
+    if ($specificpregnancy === '') {
+        $specificpregnancy = trim((string)($safetycategorypregnancy[$categorycode][$safetylang] ?? ''));
+    }
+    $pregnancynote = $specificpregnancy !== ''
+        ? $specificpregnancy
+        : trim((string)($safetydefaults['pregnancy'][$safetylang] ?? ''));
+
+    $specificinteraction = trim((string)($herbsupplement['interactions'][$safetylang] ?? ''));
+    if ($specificinteraction === '' && $safetynote !== '' && $safetycontains($safetysearchnote, $interactionkeywords)) {
+        $specificinteraction = $safetynote;
+    }
+    if ($specificinteraction === '') {
+        $specificinteraction = trim((string)($safetycategoryinteractions[$categorycode][$safetylang] ?? ''));
+    }
+    $interactionnote = $specificinteraction !== ''
+        ? $specificinteraction
+        : trim((string)($safetydefaults['interactions'][$safetylang] ?? ''));
+
     $preparedrows[] = [
         'position' => $safetyposition,
         'name' => (string)($safetyrow['name'] ?? ''),
         'latin' => (string)($safetyrow['latin'] ?? ''),
-        'categorycode' => (string)($category['code'] ?? ''),
+        'categorycode' => $categorycode,
         'category' => (string)($category[$safetylang] ?? ''),
         'dose' => $dosage,
         'preparation' => $preparationnote,
-        'toxicity' => $safetynote,
+        'toxicity' => $toxicitynote,
         'pregnancy' => $pregnancynote,
         'interactions' => $interactionnote,
+        'haspreparation' => $specificpreparation !== '',
+        'hastoxicity' => $specificcaution !== '' || $safetynote !== '',
+        'haspregnancy' => $specificpregnancy !== '',
+        'hasinteractions' => $specificinteraction !== '',
     ];
-    $structuredsafety += $safetynote !== '' ? 1 : 0;
-    $structuredpreparation += $preparationnote !== '' ? 1 : 0;
-    $structuredpregnancy += $pregnancynote !== '' ? 1 : 0;
-    $structuredinteractions += $interactionnote !== '' ? 1 : 0;
+    $completecoverage += $preparationnote !== '' && $toxicitynote !== '' && $pregnancynote !== '' && $interactionnote !== '' ? 1 : 0;
+    $herbspecificsafety += $specificcaution !== '' || $safetynote !== '' ? 1 : 0;
+    $structuredpreparation += $specificpreparation !== '' ? 1 : 0;
+    $structuredpregnancy += $specificpregnancy !== '' ? 1 : 0;
+    $structuredinteractions += $specificinteraction !== '' ? 1 : 0;
 }
 
 $obsoleteparams = ['focus' => 'bensky19'];
@@ -101,15 +157,16 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             <div class="single-herbs-properties__stats" aria-label="<?php echo s($safetytext('Safety table summary', 'Resumen de la tabla de seguridad')); ?>">
                 <span><strong><?php echo count($preparedrows); ?></strong><?php echo s($safetytext(' official', ' oficiales')); ?></span>
                 <span><strong><?php echo count($safetycategoryoptions); ?></strong><?php echo s($safetytext(' categories', ' categorías')); ?></span>
-                <span><strong><?php echo $structuredsafety; ?></strong><?php echo s($safetytext(' structured cautions', ' precauciones estructuradas')); ?></span>
+                <span><strong><?php echo $completecoverage; ?></strong><?php echo s($safetytext(' complete safety rows', ' filas de seguridad completas')); ?></span>
+                <span><strong><?php echo $herbspecificsafety; ?></strong><?php echo s($safetytext(' herb-specific cautions', ' precauciones específicas')); ?></span>
             </div>
         </div>
 
         <div class="single-herbs-properties__source-note">
             <strong><?php echo s($safetytext('Safety boundary:', 'Límite de seguridad:')); ?></strong>
             <?php echo s($safetytext(
-                'A dash means the supplied source has not yet been structured for that field; it never means “safe,” “compatible,” or “permitted in pregnancy.” Use the complete monograph and applicable law before dispensing.',
-                'Un guion significa que la fuente suministrada aún no se ha estructurado para ese campo; nunca significa “segura”, “compatible” o “permitida en embarazo”. Antes de dispensar, consulta la monografía completa y la normativa aplicable.'
+                'Every official herb now has an explicit entry. Herb-specific warnings take priority; otherwise the table shows the Bensky category precaution or clearly states that no herb-specific permission or interaction is documented. Absence of a special warning never means “safe.”',
+                'Cada hierba oficial tiene ahora una entrada explícita. Las advertencias específicas tienen prioridad; de lo contrario, la tabla muestra la precaución de la categoría Bensky o indica claramente que no se documenta un permiso o interacción específica. La ausencia de una advertencia especial nunca significa “segura”.'
             )); ?>
         </div>
 
@@ -117,8 +174,8 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             <article><strong><?php echo s($safetytext('Dosage', 'Dosis')); ?></strong><span><?php echo s($safetytext('Study range plus exceptional Appendix limit when supplied.', 'Rango de estudio más límite excepcional del Appendix cuando se suministra.')); ?></span></article>
             <article><strong><?php echo s($safetytext('Preparation', 'Preparación')); ?></strong><span><?php echo s($safetytext('Special decoction, wrapping, processing, raw/calcined and powder instructions.', 'Instrucciones especiales de decocción, envoltura, procesamiento, forma cruda/calcinada y polvo.')); ?></span></article>
             <article><strong><?php echo s($safetytext('Toxicity', 'Toxicidad')); ?></strong><span><?php echo s($safetytext('Dose limits, contraindications, identity traps and toxicity warnings.', 'Límites de dosis, contraindicaciones, trampas de identidad y advertencias de toxicidad.')); ?></span></article>
-            <article><strong><?php echo s($safetytext('Pregnancy', 'Embarazo')); ?></strong><span><?php echo s($safetytext('Explicit pregnancy, fetal and postpartum cautions only.', 'Solo precauciones explícitas de embarazo, feto y posparto.')); ?></span></article>
-            <article><strong><?php echo s($safetytext('Interactions', 'Interacciones')); ?></strong><span><?php echo s($safetytext('Traditional incompatibilities and clinically relevant combination warnings.', 'Incompatibilidades tradicionales y advertencias de combinaciones clínicamente relevantes.')); ?></span></article>
+            <article><strong><?php echo s($safetytext('Pregnancy', 'Embarazo')); ?></strong><span><?php echo s($safetytext('Herb-specific warnings, category precautions, or an explicit not-documented boundary.', 'Advertencias específicas, precauciones de categoría o un límite explícito de información no documentada.')); ?></span></article>
+            <article><strong><?php echo s($safetytext('Interactions', 'Interacciones')); ?></strong><span><?php echo s($safetytext('Documented combination warnings, category-level risks, or an explicit review requirement.', 'Advertencias documentadas de combinación, riesgos de categoría o un requisito explícito de revisión.')); ?></span></article>
             <article><strong><?php echo s($safetytext('Obsolete / substitutes', 'Obsoletas / sustitutos')); ?></strong><span><?php echo s($safetytext('Avoidance, exact-species recognition, conservation and legal alternatives.', 'Evitación, reconocimiento de especie exacta, conservación y alternativas legales.')); ?></span></article>
         </div>
 
@@ -152,7 +209,7 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
                 <select id="single-herbs-safety-topic" data-safety-topic-filter>
                     <option value=""><?php echo s($safetytext('All safety records', 'Todos los registros')); ?></option>
                     <option value="preparation"><?php echo s($safetytext('Preparation documented', 'Preparación documentada')); ?> (<?php echo $structuredpreparation; ?>)</option>
-                    <option value="toxicity"><?php echo s($safetytext('Caution / toxicity documented', 'Precaución / toxicidad documentada')); ?> (<?php echo $structuredsafety; ?>)</option>
+                    <option value="toxicity"><?php echo s($safetytext('Herb-specific caution documented', 'Precaución específica documentada')); ?> (<?php echo $herbspecificsafety; ?>)</option>
                     <option value="pregnancy"><?php echo s($safetytext('Pregnancy caution documented', 'Precaución de embarazo documentada')); ?> (<?php echo $structuredpregnancy; ?>)</option>
                     <option value="interactions"><?php echo s($safetytext('Interaction documented', 'Interacción documentada')); ?> (<?php echo $structuredinteractions; ?>)</option>
                 </select>
@@ -181,14 +238,14 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
                     $herburl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $herbparams);
                     $searchvalue = implode(' ', array_filter([$preparedrow['name'], $preparedrow['latin'], $preparedrow['category'], $preparedrow['dose'], $preparedrow['preparation'], $preparedrow['toxicity'], $preparedrow['pregnancy'], $preparedrow['interactions']]));
                     ?>
-                    <tr data-safety-row data-original-index="<?php echo (int)$preparedrow['position']; ?>" data-category="<?php echo s($preparedrow['category']); ?>" data-category-code="<?php echo s($preparedrow['categorycode']); ?>" data-herb="<?php echo s($preparedrow['name']); ?>" data-has-preparation="<?php echo $preparedrow['preparation'] !== '' ? '1' : '0'; ?>" data-has-toxicity="<?php echo $preparedrow['toxicity'] !== '' ? '1' : '0'; ?>" data-has-pregnancy="<?php echo $preparedrow['pregnancy'] !== '' ? '1' : '0'; ?>" data-has-interactions="<?php echo $preparedrow['interactions'] !== '' ? '1' : '0'; ?>" data-search="<?php echo s(strtolower($searchvalue)); ?>">
+                    <tr data-safety-row data-original-index="<?php echo (int)$preparedrow['position']; ?>" data-category="<?php echo s($preparedrow['category']); ?>" data-category-code="<?php echo s($preparedrow['categorycode']); ?>" data-herb="<?php echo s($preparedrow['name']); ?>" data-has-preparation="<?php echo $preparedrow['haspreparation'] ? '1' : '0'; ?>" data-has-toxicity="<?php echo $preparedrow['hastoxicity'] ? '1' : '0'; ?>" data-has-pregnancy="<?php echo $preparedrow['haspregnancy'] ? '1' : '0'; ?>" data-has-interactions="<?php echo $preparedrow['hasinteractions'] ? '1' : '0'; ?>" data-search="<?php echo s(strtolower($searchvalue)); ?>">
                         <th scope="row"><a href="<?php echo $herburl->out(false); ?>"><?php echo s($preparedrow['name']); ?></a><small><?php echo s($preparedrow['latin']); ?></small></th>
                         <td><span class="single-herbs-properties__category"><?php echo s($preparedrow['category']); ?></span></td>
                         <td><?php echo s($preparedrow['dose']); ?></td>
-                        <td><?php echo $preparedrow['preparation'] !== '' ? s($preparedrow['preparation']) : '<span aria-label="' . s($safetytext('Not yet structured', 'Aún no estructurado')) . '">—</span>'; ?></td>
-                        <td><?php echo $preparedrow['toxicity'] !== '' ? s($preparedrow['toxicity']) : '<span aria-label="' . s($safetytext('Not yet structured', 'Aún no estructurado')) . '">—</span>'; ?></td>
-                        <td><?php echo $preparedrow['pregnancy'] !== '' ? s($preparedrow['pregnancy']) : '<span aria-label="' . s($safetytext('Not yet structured', 'Aún no estructurado')) . '">—</span>'; ?></td>
-                        <td><?php echo $preparedrow['interactions'] !== '' ? s($preparedrow['interactions']) : '<span aria-label="' . s($safetytext('Not yet structured', 'Aún no estructurado')) . '">—</span>'; ?></td>
+                        <td><?php echo s($preparedrow['preparation']); ?></td>
+                        <td><?php echo s($preparedrow['toxicity']); ?></td>
+                        <td><?php echo s($preparedrow['pregnancy']); ?></td>
+                        <td><?php echo s($preparedrow['interactions']); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

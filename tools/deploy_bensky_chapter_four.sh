@@ -17,6 +17,7 @@ FILES=(
     "blocks/myprogress/single-herb-card-index.json"
     "blocks/myprogress/single-herb-properties.json"
     "blocks/myprogress/single-herb-actions-indications-supplement.json"
+    "blocks/myprogress/single-herb-safety-supplement.json"
     "blocks/myprogress/single-herbs-properties-table.php"
     "blocks/myprogress/single-herbs-safety-dispensing.php"
     "blocks/myprogress/single-herbs-actions-indications.php"
@@ -63,6 +64,7 @@ for relative_path in "${FILES[@]}"; do
         && "$relative_path" != "blocks/myprogress/single-herbs-safety-dispensing.php" \
         && "$relative_path" != "blocks/myprogress/single-herbs-actions-indications.php" \
         && "$relative_path" != "blocks/myprogress/single-herb-actions-indications-supplement.json" \
+        && "$relative_path" != "blocks/myprogress/single-herb-safety-supplement.json" \
         && ! -f "$target" ]]; then
         echo "ERROR: no se encontró el archivo activo $target"
         exit 1
@@ -82,6 +84,7 @@ done
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-properties.json" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-actions-indications-supplement.json" >/dev/null
+python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-safety-supplement.json" >/dev/null
 
 CHAPTER_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-four.php"
 CHAPTER_SEVENTEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php"
@@ -90,6 +93,7 @@ CHAPTER_NINETEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-n
 INDEX_FILE="$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
 PROPERTIES_FILE="$TEMP_DIR/blocks/myprogress/single-herb-properties.json"
 ACTIONS_INDICATIONS_DATA_FILE="$TEMP_DIR/blocks/myprogress/single-herb-actions-indications-supplement.json"
+SAFETY_SUPPLEMENT_FILE="$TEMP_DIR/blocks/myprogress/single-herb-safety-supplement.json"
 PROPERTIES_TABLE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php"
 SAFETY_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php"
 ACTIONS_INDICATIONS_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-actions-indications.php"
@@ -106,6 +110,27 @@ grep -Fq "focus === 'safety_dispensing'" "$GUIDE_FILE"
 grep -Fq "single-herbs-safety-dispensing.php" "$GUIDE_FILE"
 grep -Fq "data-safety-category-filter" "$SAFETY_FILE"
 grep -Fq "data-safety-topic-filter" "$SAFETY_FILE"
+grep -Fq "single-herb-safety-supplement.json" "$SAFETY_FILE"
+for language in en es; do
+    rendered_safety="$TEMP_DIR/safety-dispensing-$language.html"
+    "$PHP_BIN" -r '
+        define("MOODLE_INTERNAL", true);
+        function s($value) { return htmlspecialchars((string)$value, ENT_QUOTES, "UTF-8"); }
+        class moodle_url {
+            public function __construct($path = "", $params = []) {}
+            public function out($escaped = true) { return "#"; }
+        }
+        $ises = $argv[2] === "es";
+        include $argv[1];
+    ' "$SAFETY_FILE" "$language" > "$rendered_safety"
+    rendered_safety_count="$(grep -c '<tr data-safety-row' "$rendered_safety")"
+    if [[ "$rendered_safety_count" -ne 304 ]] || grep -Fq '>—<' "$rendered_safety"; then
+        echo "ERROR: la tabla de precauciones $language no contiene 304 filas completas"
+        exit 1
+    fi
+done
+grep -Fq '<strong>304</strong> complete safety rows' "$TEMP_DIR/safety-dispensing-en.html"
+grep -Fq '<strong>304</strong> filas de seguridad completas' "$TEMP_DIR/safety-dispensing-es.html"
 grep -Fq "focus === 'actions_indications'" "$GUIDE_FILE"
 grep -Fq "single-herbs-actions-indications.php" "$GUIDE_FILE"
 grep -Fq "data-ai-category-filter" "$ACTIONS_INDICATIONS_FILE"
@@ -197,13 +222,14 @@ if [[ "$CHAPTER_NINETEEN_TOXICITY_COUNT" -ne 12 || "$CHAPTER_NINETEEN_ENDANGERED
     exit 1
 fi
 
-python3 - "$INDEX_FILE" "$PROPERTIES_FILE" "$ACTIONS_INDICATIONS_DATA_FILE" <<'PY'
+python3 - "$INDEX_FILE" "$PROPERTIES_FILE" "$ACTIONS_INDICATIONS_DATA_FILE" "$SAFETY_SUPPLEMENT_FILE" <<'PY'
 import json
 import sys
 
 index = json.load(open(sys.argv[1], encoding='utf-8'))
 properties = json.load(open(sys.argv[2], encoding='utf-8'))
 actions_supplement = json.load(open(sys.argv[3], encoding='utf-8'))
+safety_supplement = json.load(open(sys.argv[4], encoding='utf-8'))
 index_rows = index.get('herbs', [])
 property_rows = properties.get('herbs', [])
 index_names = [row.get('name') for row in index_rows]
@@ -245,6 +271,15 @@ if any(
     for row in supplement_rows.values()
 ):
     raise SystemExit('ERROR: el suplemento contiene acciones o indicaciones incompletas')
+safety_category_rows = safety_supplement.get('categoryCautions', {})
+category_codes = {row['benskyCategory']['code'] for row in index_rows}
+if set(safety_category_rows) != category_codes:
+    raise SystemExit('ERROR: el suplemento de precauciones no cubre exactamente las 33 categorías Bensky')
+if any(not all((row.get(key) or '').strip() for key in ('en', 'es')) for row in safety_category_rows.values()):
+    raise SystemExit('ERROR: existen precauciones de categoría no bilingües')
+safety_herb_rows = safety_supplement.get('herbs', {})
+if not set(safety_herb_rows).issubset(set(index_names)):
+    raise SystemExit('ERROR: el suplemento de precauciones incluye hierbas fuera del guideline')
 safety_rows = [row for row in property_rows if all((row.get('safetyNote') or {}).get(key) for key in ('en', 'es'))]
 if len(safety_rows) < 180:
     raise SystemExit(f'ERROR: solo se detectaron {len(safety_rows)} notas de seguridad bilingües estructuradas')
@@ -276,6 +311,7 @@ done
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-actions-indications-supplement.json" >/dev/null
+python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-safety-supplement.json" >/dev/null
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -289,7 +325,7 @@ echo "Capítulo 19: 0 perfiles oficiales · 12 sustancias por toxicidad · 5 de 
 echo "Preguntas: formato unificado Yang + Bensky y controles abrir/cerrar en las 34 tarjetas"
 echo "Pop-up por tarjeta: listado oficial filtrado, buscador, enlaces directos y estado vacío verificados"
 echo "Tabla maestra: 304 hierbas oficiales · 33 categorías Bensky · orden y filtro por categoría verificados"
-echo "Seguridad y dispensación: categoría, dosis, preparación, toxicidad, embarazo, interacciones y sustitutos verificados"
+echo "Seguridad y dispensación: 304 filas completas · 0 guiones · preparación, precauciones, embarazo e interacciones verificadas"
 echo "Acciones e indicaciones: 304 hierbas del guideline · 0 faltantes · columna editorial eliminada"
 echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT · capítulo 18=$CHAPTER_EIGHTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"
