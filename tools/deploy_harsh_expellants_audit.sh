@@ -105,6 +105,37 @@ if ids != list(range(1, 305)):
 if herbs[0].get('name') != 'Ai Ye' or herbs[-1].get('name') != 'Zi Wan':
     raise SystemExit('ERROR: el orden alfabético estable del índice no coincide con Ai Ye…Zi Wan')
 by_name = {herb.get('name'): herb for herb in herbs}
+if not catalog.get('benskySource'):
+    raise SystemExit('ERROR: falta la fuente de clasificación de Bensky en el índice')
+for herb in herbs:
+    category = herb.get('benskyCategory')
+    if not isinstance(category, dict):
+        raise SystemExit(f"ERROR: {herb.get('name')}: falta benskyCategory")
+    for key in ('code', 'en', 'es'):
+        if not isinstance(category.get(key), str) or not category[key].strip():
+            raise SystemExit(f"ERROR: {herb.get('name')}: benskyCategory.{key} está vacío")
+expected_bensky_categories = {
+    # These checks deliberately cross current Study Guide routing boundaries.
+    'He Ye': 'clear-summerheat',
+    'Bai Bian Dou': 'tonify-qi',
+    'Hua Shi': 'drain-dampness',
+    'Dan Shen': 'invigorate-blood',
+    'Dang Gui': 'tonify-blood',
+    'Xing Ren': 'stop-coughing-calm-wheezing',
+    'Cang Er Zi': 'warm-acrid-release-exterior',
+    # Author-dependent placements that must follow Bensky, not Board/Yang routing.
+    'Bie Jia': 'tonify-yin',
+    'Cao Wu': 'dispel-wind-dampness',
+    'Chuan Wu': 'dispel-wind-dampness',
+    'Jie Geng': 'warm-transform-cold-phlegm',
+    'Long Yan Rou': 'tonify-blood',
+}
+for name, expected_code in expected_bensky_categories.items():
+    actual_code = by_name[name]['benskyCategory']['code']
+    if actual_code != expected_code:
+        raise SystemExit(
+            f'ERROR: {name}: categoría Bensky={actual_code!r}; se esperaba {expected_code!r}'
+        )
 expected_category_two = {
     'Dan Dou Chi': (67, 2),
     'Mu Zei': (182, 2),
@@ -219,6 +250,8 @@ grep -Fq "data-guideline-roster-open" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "data-guideline-roster-modal" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "data-guideline-roster-search" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "data-guideline-roster-item" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "primary Bensky category" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "single-herbs-guide__roster-category" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Primary category" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Why it appears here" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Study these thirteen official herbs as Category 1" "$TEMP_DIR/$GUIDE_PATH"

@@ -80,6 +80,7 @@ if (is_readable($cardindexpath)) {
                     'id' => (int)($herbcard['id'] ?? ($herbposition + 1)),
                     'name' => $herbname,
                     'latin' => (string)($herbcard['latin'] ?? ''),
+                    'bensky_category' => (string)($herbcard['benskyCategory'][$ises ? 'es' : 'en'] ?? ''),
                 ];
             }
         }
@@ -964,7 +965,7 @@ ob_start();
 .single-herbs-guide__roster-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:22px 24px 17px;border-bottom:1px solid #e1e8ec;background:linear-gradient(135deg,#eef8f6,#f8fbff)}.single-herbs-guide__roster-header h3{margin:0 0 5px;color:#123246;font-size:24px}.single-herbs-guide__roster-header p{margin:0;color:#5b6b79;line-height:1.45}
 .single-herbs-guide__roster-close{display:inline-flex;width:40px;height:40px;flex:0 0 40px;align-items:center;justify-content:center;border:1px solid #bdcbd4;border-radius:50%;background:#fff;color:#334155;font-size:25px;line-height:1;cursor:pointer}.single-herbs-guide__roster-close:hover{background:#edf4f6}
 .single-herbs-guide__roster-tools{padding:15px 24px 11px}.single-herbs-guide__roster-search{display:block;color:#17364a;font-size:13px;font-weight:900}.single-herbs-guide__roster-search input{display:block;width:100%;min-height:44px;margin-top:6px;padding:9px 12px;border:1px solid #aebbc5;border-radius:8px;background:#fff;color:#17232a;font-size:15px}.single-herbs-guide__roster-count{margin:9px 0 0;color:#60717e;font-size:13px;font-weight:800}
-.single-herbs-guide__roster-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:0;padding:0 24px 24px;overflow:auto;list-style:none}.single-herbs-guide__roster-item[hidden]{display:none}.single-herbs-guide__roster-item a{display:grid;grid-template-columns:55px minmax(0,1fr);gap:10px;align-items:center;min-height:58px;padding:9px 11px;border:1px solid #dce4e8;border-radius:9px;background:#fbfcfd;color:inherit;text-decoration:none}.single-herbs-guide__roster-item a:hover{border-color:#0b817d;background:#f2faf8;text-decoration:none}.single-herbs-guide__roster-id{display:inline-flex;align-items:center;justify-content:center;padding:6px 5px;border-radius:6px;background:#dff2ee;color:#0d665e;font-size:11px;font-weight:900;letter-spacing:.04em}.single-herbs-guide__roster-name{display:block;color:#17364a;font-weight:900}.single-herbs-guide__roster-latin{display:block;margin-top:2px;color:#6b7b87;font-size:12px;font-style:italic}
+.single-herbs-guide__roster-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:0;padding:0 24px 24px;overflow:auto;list-style:none}.single-herbs-guide__roster-item[hidden]{display:none}.single-herbs-guide__roster-item a{display:grid;grid-template-columns:55px minmax(0,1fr);gap:10px;align-items:center;min-height:76px;padding:10px 11px;border:1px solid #dce4e8;border-radius:9px;background:#fbfcfd;color:inherit;text-decoration:none}.single-herbs-guide__roster-item a:hover{border-color:#0b817d;background:#f2faf8;text-decoration:none}.single-herbs-guide__roster-id{display:inline-flex;align-items:center;justify-content:center;padding:6px 5px;border-radius:6px;background:#dff2ee;color:#0d665e;font-size:11px;font-weight:900;letter-spacing:.04em}.single-herbs-guide__roster-name{display:block;color:#17364a;font-weight:900}.single-herbs-guide__roster-latin{display:block;margin-top:2px;color:#6b7b87;font-size:12px;font-style:italic}.single-herbs-guide__roster-category{display:block;margin-top:5px;color:#8a461b;font-size:11px;font-weight:800;line-height:1.35}.single-herbs-guide__roster-category b{color:#0d665e;text-transform:uppercase;letter-spacing:.03em}
 .single-herbs-guide__actions{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
 .single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .single-herbs-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
@@ -1070,14 +1071,14 @@ ob_start();
                     <p class="single-herbs-guide__eyebrow"><?php echo s($ises ? 'Guideline vigente 2026' : 'Current guideline 2026'); ?></p>
                     <h3 id="single-herbs-guideline-roster-title"><?php echo s($ises ? 'Listado oficial de hierbas' : 'Official herb roster'); ?></h3>
                     <p id="single-herbs-guideline-roster-description"><?php echo s($ises
-                        ? 'Cada hierba tiene un ID estable asignado en orden alfabético. Selecciona una para abrir su ficha.'
-                        : 'Each herb has a stable ID assigned in alphabetical order. Select one to open its card.'); ?></p>
+                        ? 'Cada hierba tiene un ID estable y su categoría primaria según Bensky. Selecciona una para abrir su ficha.'
+                        : 'Each herb has a stable ID and its primary Bensky category. Select one to open its card.'); ?></p>
                 </div>
                 <button class="single-herbs-guide__roster-close" type="button" data-guideline-roster-close aria-label="<?php echo s($ises ? 'Cerrar listado de hierbas' : 'Close herb roster'); ?>">&times;</button>
             </header>
             <div class="single-herbs-guide__roster-tools">
                 <label class="single-herbs-guide__roster-search">
-                    <?php echo s($ises ? 'Buscar por ID, pinyin o nombre farmacéutico' : 'Search by ID, pinyin or pharmaceutical name'); ?>
+                    <?php echo s($ises ? 'Buscar por ID, pinyin, nombre farmacéutico o categoría de Bensky' : 'Search by ID, pinyin, pharmaceutical name, or Bensky category'); ?>
                     <input type="search" data-guideline-roster-search autocomplete="off" placeholder="<?php echo s($ises ? 'Ej.: 041, Chuan Bei Mu…' : 'Example: 041, Chuan Bei Mu…'); ?>">
                 </label>
                 <p class="single-herbs-guide__roster-count" data-guideline-roster-count aria-live="polite"><?php echo count($guidelineherbroster) . ' ' . s($ises ? 'hierbas mostradas' : 'herbs shown'); ?></p>
@@ -1090,7 +1091,7 @@ ob_start();
                     }
                     $rosterurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $rosterparams);
                     $rosterid = str_pad((string)$guidelineherb['id'], 3, '0', STR_PAD_LEFT);
-                    $rostersearch = $rosterid . ' ' . $guidelineherb['name'] . ' ' . $guidelineherb['latin'];
+                    $rostersearch = $rosterid . ' ' . $guidelineherb['name'] . ' ' . $guidelineherb['latin'] . ' ' . $guidelineherb['bensky_category'];
                     ?>
                     <li class="single-herbs-guide__roster-item" id="guideline-herb-<?php echo s($rosterid); ?>" data-guideline-roster-item data-guideline-roster-search-value="<?php echo s($rostersearch); ?>">
                         <a href="<?php echo $rosterurl->out(false); ?>">
@@ -1098,6 +1099,7 @@ ob_start();
                             <span>
                                 <span class="single-herbs-guide__roster-name"><?php echo s($guidelineherb['name']); ?></span>
                                 <?php if ($guidelineherb['latin'] !== ''): ?><span class="single-herbs-guide__roster-latin"><?php echo s($guidelineherb['latin']); ?></span><?php endif; ?>
+                                <span class="single-herbs-guide__roster-category"><b>Bensky</b> · <?php echo s($guidelineherb['bensky_category']); ?></span>
                             </span>
                         </a>
                     </li>

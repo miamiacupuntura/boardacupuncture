@@ -8,1825 +8,3346 @@
       "name": "Ai Ye",
       "latin": "Artemisiae argyi Folium",
       "id": 1,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Ba Dou",
       "latin": "Crotonis Fructus",
       "id": 2,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "harsh-expellants",
+        "en": "Harsh Expellants",
+        "es": "Expulsantes drásticos"
+      }
     },
     {
       "name": "Ba Ji Tian",
       "latin": "Morindae officinalis Radix",
       "id": 3,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Bai Bian Dou",
       "latin": "Lablab Semen album",
       "id": 4,
-      "guideNumber": 8
+      "guideNumber": 8,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Bai Bu",
       "latin": "Stemonae Radix",
       "id": 5,
-      "guideNumber": 15
+      "guideNumber": 15,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Bai Dou Kou",
       "latin": "Amomi Fructus rotundus",
       "id": 6,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Bai Guo",
       "latin": "Ginkgo Semen",
       "id": 7,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Bai He",
       "latin": "Lilii Bulbus",
       "id": 8,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Bai Hua She",
       "latin": "Agkistrodon/Bungarus",
       "id": 9,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Bai Hua She She Cao",
       "latin": "Hedyotis diffusae Herba",
       "id": 10,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Bai Ji",
       "latin": "Bletillae Rhizoma",
       "id": 11,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Bai Jiang Can",
       "latin": "Bombyx Batryticatus",
       "id": 12,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Bai Jiang Cao",
       "latin": "Patriniae Herba",
       "id": 13,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Bai Jie Zi",
       "latin": "Sinapis Semen",
       "id": 14,
-      "guideNumber": 14
+      "guideNumber": 14,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Bai Mao Gen",
       "latin": "Imperatae Rhizoma",
       "id": 15,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Bai Qian",
       "latin": "Cynanchi stauntonii Rhizoma",
       "id": 16,
-      "guideNumber": 14
+      "guideNumber": 14,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Bai Shao",
       "latin": "Paeoniae Radix alba",
       "id": 17,
-      "guideNumber": 24
+      "guideNumber": 24,
+      "benskyCategory": {
+        "code": "tonify-blood",
+        "en": "Herbs that Tonify Blood",
+        "es": "Hierbas que tonifican Sangre"
+      }
     },
     {
       "name": "Bai Tou Weng",
       "latin": "Pulsatillae Radix",
       "id": 18,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Bai Wei",
       "latin": "Cynanchi atrati Radix",
       "id": 19,
-      "guideNumber": 7
+      "guideNumber": 7,
+      "benskyCategory": {
+        "code": "clear-deficiency-heat",
+        "en": "Herbs that Clear Heat from Deficiency",
+        "es": "Hierbas que aclaran Calor por deficiencia"
+      }
     },
     {
       "name": "Bai Xian Pi",
       "latin": "Dictamni Cortex",
       "id": 20,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Bai Zhi",
       "latin": "Angelicae dahuricae Radix",
       "id": 21,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Bai Zhu",
       "latin": "Atractylodis macrocephalae Rhizoma",
       "id": 22,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Bai Zi Ren",
       "latin": "Platycladi Semen",
       "id": 23,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "Ban Lan Gen",
       "latin": "Isatidis/Baphicacanthis Radix",
       "id": 24,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Ban Xia",
       "latin": "Pinelliae Rhizoma",
       "id": 25,
-      "guideNumber": 14
+      "guideNumber": 14,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Ban Zhi Lian",
       "latin": "Scutellariae barbatae Herba",
       "id": 26,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Bi Ba",
       "latin": "Piperis longi Fructus",
       "id": 27,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Bi Xie",
       "latin": "Dioscoreae hypoglaucae Rhizoma",
       "id": 28,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Bian Xu",
       "latin": "Polygoni avicularis Herba",
       "id": 29,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Bie Jia",
       "latin": "Trionycis Carapax",
       "id": 30,
-      "guideNumber": 7
+      "guideNumber": 7,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Bing Lang",
       "latin": "Arecae Semen",
       "id": 31,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "expel-parasites",
+        "en": "Herbs that Expel Parasites",
+        "es": "Hierbas que expulsan parásitos"
+      }
     },
     {
       "name": "Bing Pian",
       "latin": "Borneolum",
       "id": 32,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "open-orifices",
+        "en": "Aromatic Substances that Open the Orifices",
+        "es": "Sustancias aromáticas que abren los orificios"
+      }
     },
     {
       "name": "Bo He",
       "latin": "Menthae haplocalycis Herba",
       "id": 33,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Bu Gu Zhi",
       "latin": "Psoraleae Fructus",
       "id": 34,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Cang Er Zi",
       "latin": "Xanthii Fructus",
       "id": 35,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Cang Zhu",
       "latin": "Atractylodis Rhizoma",
       "id": 36,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Cao Dou Kou",
       "latin": "Alpiniae katsumadai Semen",
       "id": 37,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Cao Guo",
       "latin": "Tsaoko Fructus",
       "id": 38,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Cao Wu",
       "latin": "Aconiti kusnezoffii Radix",
       "id": 39,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Ce Bai Ye",
       "latin": "Platycladi Cacumen",
       "id": 40,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Chai Hu",
       "latin": "Bupleuri Radix",
       "id": 41,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Chan Tui",
       "latin": "Cicadae Periostracum",
       "id": 42,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Che Qian Zi",
       "latin": "Plantaginis Semen",
       "id": 43,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Chen Pi",
       "latin": "Citri reticulatae Pericarpium",
       "id": 44,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Chen Xiang",
       "latin": "Aquilariae Lignum resinatum",
       "id": 45,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Chi Shao",
       "latin": "Paeoniae Radix rubra",
       "id": 46,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Chi Shi Zhi",
       "latin": "Halloysitum rubrum",
       "id": 47,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Chi Xiao Dou",
       "latin": "Phaseoli Semen",
       "id": 48,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Chuan Bei Mu",
       "latin": "Fritillariae cirrhosae Bulbus",
       "id": 49,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Chuan Lian Zi",
       "latin": "Toosendan Fructus",
       "id": 50,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Chuan Mu Tong",
       "latin": "Clematidis armandii Caulis",
       "id": 51,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Chuan Niu Xi",
       "latin": "Cyathulae Radix",
       "id": 52,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Chuan Wu",
       "latin": "Aconiti Radix",
       "id": 53,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Chuan Xin Lian",
       "latin": "Andrographitis Herba",
       "id": 54,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Chuan Xiong",
       "latin": "Chuanxiong Rhizoma",
       "id": 55,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Chun Pi",
       "latin": "Ailanthi Cortex",
       "id": 56,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Ci Ji Li",
       "latin": "Tribuli Fructus",
       "id": 57,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Ci Shi",
       "latin": "Magnetitum",
       "id": 58,
-      "guideNumber": 28
+      "guideNumber": 28,
+      "benskyCategory": {
+        "code": "anchor-settle-calm-spirit",
+        "en": "Substances that Anchor, Settle, and Calm the Spirit",
+        "es": "Sustancias que anclan, asientan y calman el Shen"
+      }
     },
     {
       "name": "Ci Wu Jia",
       "latin": "Acanthopanacis senticosi Radix et Caulis",
       "id": 59,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Cong Bai",
       "latin": "Allii fistulosi Bulbus",
       "id": 60,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Da Fu Pi",
       "latin": "Arecae Pericarpium",
       "id": 61,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Da Huang",
       "latin": "Rhei Radix et Rhizoma",
       "id": 62,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "downward-draining-purgatives",
+        "en": "Downward-Draining Purgatives",
+        "es": "Purgantes que drenan hacia abajo"
+      }
     },
     {
       "name": "Da Ji",
       "latin": "Cirsii japonici Herba sive Radix",
       "id": 63,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Da Qing Ye",
       "latin": "Isatidis Folium",
       "id": 64,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Da Zao",
       "latin": "Jujubae Fructus",
       "id": 65,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Dai Zhe Shi",
       "latin": "Haematitum",
       "id": 66,
-      "guideNumber": 31
+      "guideNumber": 31,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Dan Dou Chi",
       "latin": "Sojae Semen preparatum",
       "id": 67,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Dan Shen",
       "latin": "Salviae miltiorrhizae Radix",
       "id": 68,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Dan Zhu Ye",
       "latin": "Lophateri Herba",
       "id": 69,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Dang Gui",
       "latin": "Angelicae sinensis Radix",
       "id": 70,
-      "guideNumber": 10
+      "guideNumber": 10,
+      "benskyCategory": {
+        "code": "tonify-blood",
+        "en": "Herbs that Tonify Blood",
+        "es": "Hierbas que tonifican Sangre"
+      }
     },
     {
       "name": "Dang Shen",
       "latin": "Codonopsis Radix",
       "id": 71,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Deng Xin Cao",
       "latin": "Junci Medulla",
       "id": 72,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Di Fu Zi",
       "latin": "Kochiae Fructus",
       "id": 73,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Di Gu Pi",
       "latin": "Lycii Cortex",
       "id": 74,
-      "guideNumber": 7
+      "guideNumber": 7,
+      "benskyCategory": {
+        "code": "clear-deficiency-heat",
+        "en": "Herbs that Clear Heat from Deficiency",
+        "es": "Hierbas que aclaran Calor por deficiencia"
+      }
     },
     {
       "name": "Di Long",
       "latin": "Pheretima",
       "id": 75,
-      "guideNumber": 31
+      "guideNumber": 31,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Di Yu",
       "latin": "Sanguisorbae Radix",
       "id": 76,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Ding Xiang",
       "latin": "Caryophylli Flos",
       "id": 77,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Dong Chong Xia Cao",
       "latin": "Cordyceps",
       "id": 78,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Dong Gua Zi",
       "latin": "Benincasae Semen",
       "id": 79,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Dong Kui Zi",
       "latin": "Malvae Fructus",
       "id": 80,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Du Huo",
       "latin": "Angelicae pubescentis Radix",
       "id": 81,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Du Zhong",
       "latin": "Eucommiae Cortex",
       "id": 82,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "E Jiao",
       "latin": "Asini Corii Colla",
       "id": 83,
-      "guideNumber": 24
+      "guideNumber": 24,
+      "benskyCategory": {
+        "code": "tonify-blood",
+        "en": "Herbs that Tonify Blood",
+        "es": "Hierbas que tonifican Sangre"
+      }
     },
     {
       "name": "E Zhu",
       "latin": "Curcumae Rhizoma",
       "id": 84,
-      "guideNumber": 19
+      "guideNumber": 19,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Fan Xie Ye",
       "latin": "Sennae Folium",
       "id": 85,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "downward-draining-purgatives",
+        "en": "Downward-Draining Purgatives",
+        "es": "Purgantes que drenan hacia abajo"
+      }
     },
     {
       "name": "Fang Feng",
       "latin": "Saposhnikoviae Radix",
       "id": 86,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Feng Mi",
       "latin": "Mel",
       "id": 87,
-      "guideNumber": 10
+      "guideNumber": 10,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Fo Shou",
       "latin": "Citri sarcodactylis Fructus",
       "id": 88,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Fu Ling",
       "latin": "Poria",
       "id": 89,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Fu Pen Zi",
       "latin": "Rubi Fructus",
       "id": 90,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Fu Shen",
       "latin": "Poriae Sclerotium pararadicis",
       "id": 91,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "Fu Xiao Mai",
       "latin": "Tritici Fructus levis",
       "id": 92,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Fu Zi",
       "latin": "Aconiti Radix lateralis",
       "id": 93,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Gan Cao",
       "latin": "Glycyrrhizae Radix",
       "id": 94,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Gan Jiang",
       "latin": "Zingiberis Rhizoma",
       "id": 95,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Gan Sui",
       "latin": "Kansui Radix",
       "id": 96,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "harsh-expellants",
+        "en": "Harsh Expellants",
+        "es": "Expulsantes drásticos"
+      }
     },
     {
       "name": "Gao Ben",
       "latin": "Ligustici Rhizoma",
       "id": 97,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Gao Liang Jiang",
       "latin": "Alpiniae officinarum Rhizoma",
       "id": 98,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Ge Gen",
       "latin": "Puerariae Radix",
       "id": 99,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Ge Jie",
       "latin": "Gecko",
       "id": 100,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Gou Ji",
       "latin": "Cibotii Rhizoma",
       "id": 101,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Gou Qi Zi",
       "latin": "Lycii Fructus",
       "id": 102,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Gou Teng",
       "latin": "Uncariae Ramulus cum Uncis",
       "id": 103,
-      "guideNumber": 31
+      "guideNumber": 31,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Gu Sui Bu",
       "latin": "Drynariae Rhizoma",
       "id": 104,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Gu Ya (Setariae",
       "latin": "Oryzae) Fructus germinatus",
       "id": 105,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "relieve-food-stagnation",
+        "en": "Herbs that Relieve Food Stagnation",
+        "es": "Hierbas que alivian estancamiento de alimentos"
+      }
     },
     {
       "name": "Gua Lou",
       "latin": "Trichosanthis Fructus",
       "id": 106,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Gua Lou Pi",
       "latin": "Trichosanthis Pericarpium",
       "id": 107,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Gua Lou Ren",
       "latin": "Trichosanthis Semen",
       "id": 108,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Gui Ban",
       "latin": "Testudinis Plastrum",
       "id": 109,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Gui Zhi",
       "latin": "Cinnamomi Ramulus",
       "id": 110,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Hai Jin Sha",
       "latin": "Lygodii Spora",
       "id": 111,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Hai Piao Xiao",
       "latin": "Sepia Endoconcha",
       "id": 112,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Hai Tong Pi",
       "latin": "Erythrinae Cortex",
       "id": 113,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Hai Zao",
       "latin": "Sargassum",
       "id": 114,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Han Fang Ji",
       "latin": "Stephaniae tetrandrae Radix",
       "id": 115,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Han Lian Cao",
       "latin": "Ecliptae Herba",
       "id": 116,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "He Huan Pi",
       "latin": "Albiziae Cortex",
       "id": 117,
-      "guideNumber": 29
+      "guideNumber": 29,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "He Shou Wu",
       "latin": "Polygoni multiflori Radix",
       "id": 118,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-blood",
+        "en": "Herbs that Tonify Blood",
+        "es": "Hierbas que tonifican Sangre"
+      }
     },
     {
       "name": "He Tao Ren",
       "latin": "Juglandis Semen",
       "id": 119,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "He Ye",
       "latin": "Nelumbinis Folium",
       "id": 120,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-summerheat",
+        "en": "Herbs that Clear Summerheat",
+        "es": "Hierbas que aclaran Calor de Verano"
+      }
     },
     {
       "name": "He Zi",
       "latin": "Chebulae Fructus",
       "id": 121,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Hei Zhi Ma",
       "latin": "Sesami Semen nigrum",
       "id": 122,
-      "guideNumber": 10
+      "guideNumber": 10,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Hong Hua",
       "latin": "Carthami Flos",
       "id": 123,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Hou Po",
       "latin": "Magnoliae officinalis Cortex",
       "id": 124,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Hu Jiao",
       "latin": "Piperis Fructus",
       "id": 125,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Hua Jiao",
       "latin": "Zanthoxyli Pericarpium",
       "id": 126,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Hua Shi",
       "latin": "Talcum",
       "id": 127,
-      "guideNumber": 8
+      "guideNumber": 8,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Huai Mi",
       "latin": "Sophorae Flos immaturus",
       "id": 128,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Huai Niu Xi",
       "latin": "Achyranthis bidentatae Radix",
       "id": 129,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Huang Bai",
       "latin": "Phellodendri Cortex",
       "id": 130,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Huang Jing",
       "latin": "Polygonati Rhizoma",
       "id": 131,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Huang Lian",
       "latin": "Coptidis Rhizoma",
       "id": 132,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Huang Qi",
       "latin": "Astragali Radix",
       "id": 133,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Huang Qin",
       "latin": "Scutellariae Radix",
       "id": 134,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Huo Ma Ren",
       "latin": "Cannabis Semen",
       "id": 135,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "moist-laxatives",
+        "en": "Moist Laxatives",
+        "es": "Laxantes humectantes"
+      }
     },
     {
       "name": "Huo Xiang",
       "latin": "Pogostemonis/Agastaches Herba",
       "id": 136,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Ji Nei Jin",
       "latin": "Gigeriae galli Endothelium corneum",
       "id": 137,
-      "guideNumber": 17
+      "guideNumber": 17,
+      "benskyCategory": {
+        "code": "relieve-food-stagnation",
+        "en": "Herbs that Relieve Food Stagnation",
+        "es": "Hierbas que alivian estancamiento de alimentos"
+      }
     },
     {
       "name": "Ji Xue Teng",
       "latin": "Spatholobi Caulis",
       "id": 138,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Jiang Huang",
       "latin": "Curcumae longae Rhizoma",
       "id": 139,
-      "guideNumber": 19
+      "guideNumber": 19,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Jie Geng",
       "latin": "Platycodi Radix",
       "id": 140,
-      "guideNumber": 15
+      "guideNumber": 15,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Jin Qian Cao",
       "latin": "Lysimachiae Herba",
       "id": 141,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Jin Yin Hua",
       "latin": "Lonicerae Flos",
       "id": 142,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Jin Ying Zi",
       "latin": "Rosae laevigatae Fructus",
       "id": 143,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Jing Jie",
       "latin": "Schizonepetae Herba",
       "id": 144,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Jing Mi",
       "latin": "Oryzae Semen",
       "id": 145,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Ju Hong",
       "latin": "Citri reticulatae Exocarpium rubrum",
       "id": 146,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Ju Hua",
       "latin": "Chrysanthemi Flos",
       "id": 147,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Jue Ming Zi",
       "latin": "Cassiae Semen",
       "id": 148,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Ku Shen",
       "latin": "Sophorae flavescentis Radix",
       "id": 149,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Kuan Dong Hua",
       "latin": "Farfarae Flos",
       "id": 150,
-      "guideNumber": 15
+      "guideNumber": 15,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Kun Bu",
       "latin": "Eckloniae Thallus",
       "id": 151,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Lai Fu Zi",
       "latin": "Raphani Semen",
       "id": 152,
-      "guideNumber": 17
+      "guideNumber": 17,
+      "benskyCategory": {
+        "code": "relieve-food-stagnation",
+        "en": "Herbs that Relieve Food Stagnation",
+        "es": "Hierbas que alivian estancamiento de alimentos"
+      }
     },
     {
       "name": "Lian Qiao",
       "latin": "Forsythiae Fructus",
       "id": 153,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Lian Xu",
       "latin": "Nelumbinis Stamen",
       "id": 154,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Lian Zi",
       "latin": "Nelumbinis Semen",
       "id": 155,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Lian Zi Xin",
       "latin": "Nelumbinis Plumula",
       "id": 156,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Ling Yang Jiao",
       "latin": "Saigae tataricae Cornu",
       "id": 157,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Ling Zhi",
       "latin": "Ganoderma",
       "id": 158,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "Liu Huang",
       "latin": "Sulfur",
       "id": 159,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "external-application",
+        "en": "Substances for External Application",
+        "es": "Sustancias para aplicación externa"
+      }
     },
     {
       "name": "Long Dan Cao",
       "latin": "Gentianae Radix",
       "id": 160,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Long Gu",
       "latin": "Fossilia Ossis Mastodi",
       "id": 161,
-      "guideNumber": 28
+      "guideNumber": 28,
+      "benskyCategory": {
+        "code": "anchor-settle-calm-spirit",
+        "en": "Substances that Anchor, Settle, and Calm the Spirit",
+        "es": "Sustancias que anclan, asientan y calman el Shen"
+      }
     },
     {
       "name": "Long Yan Rou",
       "latin": "Longan Arillus",
       "id": 162,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-blood",
+        "en": "Herbs that Tonify Blood",
+        "es": "Hierbas que tonifican Sangre"
+      }
     },
     {
       "name": "Lu Dou",
       "latin": "Phaseoli radiati Semen",
       "id": 163,
-      "guideNumber": 8
+      "guideNumber": 8,
+      "benskyCategory": {
+        "code": "clear-summerheat",
+        "en": "Herbs that Clear Summerheat",
+        "es": "Hierbas que aclaran Calor de Verano"
+      }
     },
     {
       "name": "Lu Gen",
       "latin": "Phragmitis Rhizoma",
       "id": 164,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Lu Hui",
       "latin": "Aloe",
       "id": 165,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "downward-draining-purgatives",
+        "en": "Downward-Draining Purgatives",
+        "es": "Purgantes que drenan hacia abajo"
+      }
     },
     {
       "name": "Lu Lu Tong",
       "latin": "Liquidambaris Fructus",
       "id": 166,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Lu Rong",
       "latin": "Cervi Cornu pantotrichum",
       "id": 167,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Ma Bo",
       "latin": "Lasiosphaera/Calvatia",
       "id": 168,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Ma Huang",
       "latin": "Ephedrae Herba",
       "id": 169,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Ma Huang Gen",
       "latin": "Ephedrae Radix",
       "id": 170,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Mai Men Dong",
       "latin": "Ophiopogonis Radix",
       "id": 171,
-      "guideNumber": 26
+      "guideNumber": 26,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Mai Ya",
       "latin": "Hordei Fructus germinatus",
       "id": 172,
-      "guideNumber": 17
+      "guideNumber": 17,
+      "benskyCategory": {
+        "code": "relieve-food-stagnation",
+        "en": "Herbs that Relieve Food Stagnation",
+        "es": "Hierbas que alivian estancamiento de alimentos"
+      }
     },
     {
       "name": "Man Jing Zi",
       "latin": "Viticis Fructus",
       "id": 173,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Mang Xiao",
       "latin": "Natrii Sulfas",
       "id": 174,
-      "guideNumber": 9
+      "guideNumber": 9,
+      "benskyCategory": {
+        "code": "downward-draining-purgatives",
+        "en": "Downward-Draining Purgatives",
+        "es": "Purgantes que drenan hacia abajo"
+      }
     },
     {
       "name": "Mei Gui Hua",
       "latin": "Rosae rugosae Flos",
       "id": 175,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Mo Yao",
       "latin": "Myrrha",
       "id": 176,
-      "guideNumber": 19
+      "guideNumber": 19,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Mu Dan Pi",
       "latin": "Moutan Cortex",
       "id": 177,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Mu Gua",
       "latin": "Chaenomelis Fructus",
       "id": 178,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Mu Li",
       "latin": "Ostreae Concha",
       "id": 179,
-      "guideNumber": 28
+      "guideNumber": 28,
+      "benskyCategory": {
+        "code": "anchor-settle-calm-spirit",
+        "en": "Substances that Anchor, Settle, and Calm the Spirit",
+        "es": "Sustancias que anclan, asientan y calman el Shen"
+      }
     },
     {
       "name": "Mu Tong",
       "latin": "Akebiae Caulis",
       "id": 180,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Mu Xiang",
       "latin": "Aucklandiae Radix",
       "id": 181,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Mu Zei",
       "latin": "Equiseti hiemalis Herba",
       "id": 182,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Niu Bang Zi",
       "latin": "Arctii Fructus",
       "id": 183,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Niu Huang",
       "latin": "Bovis Calculus",
       "id": 184,
-      "guideNumber": 30
+      "guideNumber": 30,
+      "benskyCategory": {
+        "code": "open-orifices",
+        "en": "Aromatic Substances that Open the Orifices",
+        "es": "Sustancias aromáticas que abren los orificios"
+      }
     },
     {
       "name": "Nu Zhen Zi",
       "latin": "Ligustri lucidi Fructus",
       "id": 185,
-      "guideNumber": 26
+      "guideNumber": 26,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Ou Jie",
       "latin": "Nelumbinis Nodus rhizomatis",
       "id": 186,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Pang Da Hai",
       "latin": "Sterculiae lychnophorae Semen",
       "id": 187,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Pei Lan",
       "latin": "Eupatorii Herba",
       "id": 188,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Pi Pa Ye",
       "latin": "Eriobotryae Folium",
       "id": 189,
-      "guideNumber": 15
+      "guideNumber": 15,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Pu Gong Ying",
       "latin": "Taraxaci Herba",
       "id": 190,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Pu Huang",
       "latin": "Typhae Pollen",
       "id": 191,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Qian Cao",
       "latin": "Rubiae Radix",
       "id": 192,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Qian Hu",
       "latin": "Peucedani Radix",
       "id": 193,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Qian Shi",
       "latin": "Euryales Semen",
       "id": 194,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Qiang Huo",
       "latin": "Notopterygii Rhizoma Seu Radix",
       "id": 195,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Qin Jiao",
       "latin": "Gentianae macrophyllae Radix",
       "id": 196,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Qin Pi",
       "latin": "Fraxini Cortex",
       "id": 197,
-      "guideNumber": 5
+      "guideNumber": 5,
+      "benskyCategory": {
+        "code": "clear-heat-dry-dampness",
+        "en": "Herbs that Clear Heat and Dry Dampness",
+        "es": "Hierbas que aclaran Calor y secan Humedad"
+      }
     },
     {
       "name": "Qing Dai",
       "latin": "Indigo naturalis",
       "id": 198,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Qing Hao",
       "latin": "Artemisiae annuae Herba",
       "id": 199,
-      "guideNumber": 7
+      "guideNumber": 7,
+      "benskyCategory": {
+        "code": "clear-deficiency-heat",
+        "en": "Herbs that Clear Heat from Deficiency",
+        "es": "Hierbas que aclaran Calor por deficiencia"
+      }
     },
     {
       "name": "Qing Pi",
       "latin": "Citri reticulatae viride Pericarpium",
       "id": 200,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Qu Mai",
       "latin": "Dianthi Herba",
       "id": 201,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Quan Xie",
       "latin": "Scorpio",
       "id": 202,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Ren Shen",
       "latin": "Ginseng Radix",
       "id": 203,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Rou Cong Rong",
       "latin": "Cistanches Herba",
       "id": 204,
-      "guideNumber": 10
+      "guideNumber": 10,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Rou Dou Kou",
       "latin": "Myristicae Semen",
       "id": 205,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Rou Gui",
       "latin": "Cinnamomi Cortex",
       "id": 206,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Ru Xiang",
       "latin": "Olibanum",
       "id": 207,
-      "guideNumber": 19
+      "guideNumber": 19,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "San Leng",
       "latin": "Sparganii Rhizoma",
       "id": 208,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "San Qi",
       "latin": "Notoginseng Radix",
       "id": 209,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Sang Bai Pi",
       "latin": "Mori Cortex",
       "id": 210,
-      "guideNumber": 15
+      "guideNumber": 15,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Sang Ji Sheng",
       "latin": "Taxilli Herba",
       "id": 211,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Sang Piao Xiao",
       "latin": "Mantidis Ootheca",
       "id": 212,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Sang Shen",
       "latin": "Mori Fructus",
       "id": 213,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Sang Ye",
       "latin": "Mori Folium",
       "id": 214,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Sang Zhi",
       "latin": "Mori Ramulus",
       "id": 215,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Sha Ren",
       "latin": "Amomi Fructus",
       "id": 216,
-      "guideNumber": 16
+      "guideNumber": 16,
+      "benskyCategory": {
+        "code": "aromatic-transform-dampness",
+        "en": "Aromatic Herbs that Transform Dampness",
+        "es": "Hierbas aromáticas que transforman Humedad"
+      }
     },
     {
       "name": "Sha Shen",
       "latin": "Glehniae/Adenophorae Radix",
       "id": 217,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Sha Yuan Ji Li",
       "latin": "Astragali complanati Semen",
       "id": 218,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Shan Dou Gen",
       "latin": "Sophorae tonkinensis Radix",
       "id": 219,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Shan Yao",
       "latin": "Dioscoreae Rhizoma",
       "id": 220,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Shan Zha",
       "latin": "Crataegi Fructus",
       "id": 221,
-      "guideNumber": 17
+      "guideNumber": 17,
+      "benskyCategory": {
+        "code": "relieve-food-stagnation",
+        "en": "Herbs that Relieve Food Stagnation",
+        "es": "Hierbas que alivian estancamiento de alimentos"
+      }
     },
     {
       "name": "Shan Zhu Yu",
       "latin": "Corni Fructus",
       "id": 222,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "She Chuang Zi",
       "latin": "Cnidii Fructus",
       "id": 223,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "external-application",
+        "en": "Substances for External Application",
+        "es": "Sustancias para aplicación externa"
+      }
     },
     {
       "name": "She Gan",
       "latin": "Belamcandae Rhizoma",
       "id": 224,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "She Xiang",
       "latin": "Moschus",
       "id": 225,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "open-orifices",
+        "en": "Aromatic Substances that Open the Orifices",
+        "es": "Sustancias aromáticas que abren los orificios"
+      }
     },
     {
       "name": "Shen Qu",
       "latin": "Massa medicata fermentata",
       "id": 226,
-      "guideNumber": 17
+      "guideNumber": 17,
+      "benskyCategory": {
+        "code": "relieve-food-stagnation",
+        "en": "Herbs that Relieve Food Stagnation",
+        "es": "Hierbas que alivian estancamiento de alimentos"
+      }
     },
     {
       "name": "Sheng Di Huang",
       "latin": "Rehmanniae Radix",
       "id": 227,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Sheng Jiang",
       "latin": "Zingiberis Rhizoma recens",
       "id": 228,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Sheng Ma",
       "latin": "Cimicifugae Rhizoma",
       "id": 229,
-      "guideNumber": 2
+      "guideNumber": 2,
+      "benskyCategory": {
+        "code": "cool-acrid-release-exterior",
+        "en": "Cool, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas frescas y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Shi Chang Pu",
       "latin": "Acori tatarinowii Rhizoma",
       "id": 230,
-      "guideNumber": 30
+      "guideNumber": 30,
+      "benskyCategory": {
+        "code": "open-orifices",
+        "en": "Aromatic Substances that Open the Orifices",
+        "es": "Sustancias aromáticas que abren los orificios"
+      }
     },
     {
       "name": "Shi Gao",
       "latin": "Gypsum fibrosum",
       "id": 231,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Shi Hu",
       "latin": "Dendrobii Herba",
       "id": 232,
-      "guideNumber": 26
+      "guideNumber": 26,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Shi Jue Ming",
       "latin": "Haliotidis Concha",
       "id": 233,
-      "guideNumber": 31
+      "guideNumber": 31,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Shi Wei",
       "latin": "Pyrrosiae Folium",
       "id": 234,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Shu Di Huang",
       "latin": "Rehmanniae Radix preparata",
       "id": 235,
-      "guideNumber": 24
+      "guideNumber": 24,
+      "benskyCategory": {
+        "code": "tonify-blood",
+        "en": "Herbs that Tonify Blood",
+        "es": "Hierbas que tonifican Sangre"
+      }
     },
     {
       "name": "Shui Niu Jiao",
       "latin": "Bubali Cornu",
       "id": 236,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Si Gua Luo",
       "latin": "Luffae Fructus Retinervus",
       "id": 237,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Suan Zao Ren",
       "latin": "Ziziphi spinosae Semen",
       "id": 238,
-      "guideNumber": 29
+      "guideNumber": 29,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "Suo Yang",
       "latin": "Cynomorii Herba",
       "id": 239,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Tai Zi Shen",
       "latin": "Pseudostellariae Radix",
       "id": 240,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Tan Xiang",
       "latin": "Santali albi Lignum",
       "id": 241,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Tao Ren",
       "latin": "Persicae Semen",
       "id": 242,
-      "guideNumber": 10
+      "guideNumber": 10,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Tian Hua Fen",
       "latin": "Trichosanthis Radix",
       "id": 243,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Tian Ma",
       "latin": "Gastrodiae Rhizoma",
       "id": 244,
-      "guideNumber": 31
+      "guideNumber": 31,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Tian Men Dong",
       "latin": "Asparagi Radix",
       "id": 245,
-      "guideNumber": 26
+      "guideNumber": 26,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Tian Nan Xing",
       "latin": "Arisaematis Rhizoma",
       "id": 246,
-      "guideNumber": 14
+      "guideNumber": 14,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Ting Li Zi",
       "latin": "Lepidii/Descurainiae Semen",
       "id": 247,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Tong Cao",
       "latin": "Tetrapanacis Medulla",
       "id": 248,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Tu Bie Chong",
       "latin": "Eupolyphaga/Steleophaga",
       "id": 249,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Tu Fu Ling",
       "latin": "Smilacis glabrae Rhizoma",
       "id": 250,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Tu Si Zi",
       "latin": "Cuscutae Semen",
       "id": 251,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Wang Bu Liu Xing",
       "latin": "Vaccariae Semen",
       "id": 252,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Wei Ling Xian",
       "latin": "Clematidis Radix",
       "id": 253,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Wu Gong",
       "latin": "Scolopendra",
       "id": 254,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "extinguish-wind-stop-tremors",
+        "en": "Substances that Extinguish Wind and Stop Tremors",
+        "es": "Sustancias que extinguen Viento y detienen temblores"
+      }
     },
     {
       "name": "Wu Jia Pi",
       "latin": "Acanthopanacis Cortex",
       "id": 255,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Wu Ling Zhi",
       "latin": "Trogopterori Faeces",
       "id": 256,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Wu Mei",
       "latin": "Mume Fructus",
       "id": 257,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Wu Wei Zi",
       "latin": "Schisandrae Fructus",
       "id": 258,
-      "guideNumber": 27
+      "guideNumber": 27,
+      "benskyCategory": {
+        "code": "stabilize-bind",
+        "en": "Herbs that Stabilize and Bind",
+        "es": "Hierbas que estabilizan y contienen"
+      }
     },
     {
       "name": "Wu Yao",
       "latin": "Linderae Radix",
       "id": 259,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Wu Zhu Yu",
       "latin": "Evodiae Fructus",
       "id": 260,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Xi Xian Cao",
       "latin": "Siegesbeckiae Herba",
       "id": 261,
-      "guideNumber": 12
+      "guideNumber": 12,
+      "benskyCategory": {
+        "code": "dispel-wind-dampness",
+        "en": "Herbs that Dispel Wind-Dampness",
+        "es": "Hierbas que expulsan Viento-Humedad"
+      }
     },
     {
       "name": "Xi Xin",
       "latin": "Asari Radix et Rhizoma",
       "id": 262,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Xi Yang Shen",
       "latin": "Panacis quinquefolii Radix",
       "id": 263,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Xia Ku Cao",
       "latin": "Prunellae Spica",
       "id": 264,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Xian He Cao",
       "latin": "Agrimoniae Herba",
       "id": 265,
-      "guideNumber": 20
+      "guideNumber": 20,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Xian Mao",
       "latin": "Curculiginis Rhizoma",
       "id": 266,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Xiang Fu",
       "latin": "Cyperi Rhizoma",
       "id": 267,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Xiang Ru",
       "latin": "Moslae Herba",
       "id": 268,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Xiao Hui Xiang",
       "latin": "Foeniculi Fructus",
       "id": 269,
-      "guideNumber": 21
+      "guideNumber": 21,
+      "benskyCategory": {
+        "code": "warm-interior-expel-cold",
+        "en": "Herbs that Warm the Interior and Expel Cold",
+        "es": "Hierbas que calientan el Interior y expulsan Frío"
+      }
     },
     {
       "name": "Xiao Ji",
       "latin": "Cirsii Herba",
       "id": 270,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-bleeding",
+        "en": "Herbs that Stop Bleeding",
+        "es": "Hierbas que detienen el sangrado"
+      }
     },
     {
       "name": "Xie Bai",
       "latin": "Allii macrostemi Bulbus",
       "id": 271,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Xin Yi",
       "latin": "Magnoliae Flos",
       "id": 272,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Xing Ren",
       "latin": "Armeniacae Semen",
       "id": 273,
-      "guideNumber": 10
+      "guideNumber": 10,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Xu Duan",
       "latin": "Dipsaci Radix",
       "id": 274,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Xuan Fu Hua",
       "latin": "Inulae Flos",
       "id": 275,
-      "guideNumber": 14
+      "guideNumber": 14,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Xuan Shen",
       "latin": "Scrophulariae Radix",
       "id": 276,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Yan Hu Suo",
       "latin": "Corydalis Rhizoma",
       "id": 277,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Ye Jiao Teng",
       "latin": "Polygoni multiflori Caulis",
       "id": 278,
-      "guideNumber": 29
+      "guideNumber": 29,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "Ye Ju Hua",
       "latin": "Chrysanthemi indici Flos",
       "id": 279,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Yi Mu Cao",
       "latin": "Leonuri Herba",
       "id": 280,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Yi Tang",
       "latin": "Maltosum",
       "id": 281,
-      "guideNumber": 23
+      "guideNumber": 23,
+      "benskyCategory": {
+        "code": "tonify-qi",
+        "en": "Herbs that Tonify Qi",
+        "es": "Hierbas que tonifican Qi"
+      }
     },
     {
       "name": "Yi Yi Ren",
       "latin": "Coicis Semen",
       "id": 282,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Yi Zhi Ren",
       "latin": "Alpiniae oxyphyllae Fructus",
       "id": 283,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Yin Chen",
       "latin": "Artemisiae scopariae Herba",
       "id": 284,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Yin Yang Huo",
       "latin": "Epimedii Herba",
       "id": 285,
-      "guideNumber": 25
+      "guideNumber": 25,
+      "benskyCategory": {
+        "code": "tonify-yang",
+        "en": "Herbs that Tonify Yang",
+        "es": "Hierbas que tonifican Yang"
+      }
     },
     {
       "name": "Yu Jin",
       "latin": "Curcumae Radix",
       "id": 286,
-      "guideNumber": 19
+      "guideNumber": 19,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Yu Xing Cao",
       "latin": "Houttuyniae Herba",
       "id": 287,
-      "guideNumber": 6
+      "guideNumber": 6,
+      "benskyCategory": {
+        "code": "clear-heat-resolve-toxicity",
+        "en": "Herbs that Clear Heat and Resolve Toxicity",
+        "es": "Hierbas que aclaran Calor y resuelven toxicidad"
+      }
     },
     {
       "name": "Yu Zhu",
       "latin": "Polygonati odorati Rhizoma",
       "id": 288,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "tonify-yin",
+        "en": "Herbs that Tonify Yin",
+        "es": "Hierbas que tonifican Yin"
+      }
     },
     {
       "name": "Yuan Zhi",
       "latin": "Polygalae Radix",
       "id": 289,
-      "guideNumber": 29
+      "guideNumber": 29,
+      "benskyCategory": {
+        "code": "nourish-heart-calm-spirit",
+        "en": "Herbs that Nourish the Heart and Calm the Spirit",
+        "es": "Hierbas que nutren el Corazón y calman el Shen"
+      }
     },
     {
       "name": "Zao Jiao Ci",
       "latin": "Gleditsiae Spina",
       "id": 290,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "warm-transform-cold-phlegm",
+        "en": "Herbs that Warm and Transform Cold-Phlegm",
+        "es": "Hierbas que calientan y transforman Flema-Frío"
+      }
     },
     {
       "name": "Ze Lan",
       "latin": "Lycopi Herba",
       "id": 291,
-      "guideNumber": 19
+      "guideNumber": 19,
+      "benskyCategory": {
+        "code": "invigorate-blood",
+        "en": "Herbs that Invigorate the Blood",
+        "es": "Hierbas que vigorizan la Sangre"
+      }
     },
     {
       "name": "Ze Xie",
       "latin": "Alismatis Rhizoma",
       "id": 292,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Zhe Bei Mu",
       "latin": "Fritillariae thunbergii Bulbus",
       "id": 293,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Zhen Zhu",
       "latin": "Margarita",
       "id": 294,
-      "guideNumber": 28
+      "guideNumber": 28,
+      "benskyCategory": {
+        "code": "anchor-settle-calm-spirit",
+        "en": "Substances that Anchor, Settle, and Calm the Spirit",
+        "es": "Sustancias que anclan, asientan y calman el Shen"
+      }
     },
     {
       "name": "Zhi Ke",
       "latin": "Aurantii Fructus",
       "id": 295,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Zhi Mu",
       "latin": "Anemarrhenae Radix",
       "id": 296,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Zhi Shi",
       "latin": "Aurantii Fructus immaturus",
       "id": 297,
-      "guideNumber": 18
+      "guideNumber": 18,
+      "benskyCategory": {
+        "code": "regulate-qi",
+        "en": "Herbs that Regulate the Qi",
+        "es": "Hierbas que regulan el Qi"
+      }
     },
     {
       "name": "Zhi Zi",
       "latin": "Gardeniae Fructus",
       "id": 298,
-      "guideNumber": 3
+      "guideNumber": 3,
+      "benskyCategory": {
+        "code": "clear-heat-drain-fire",
+        "en": "Herbs that Clear Heat and Drain Fire",
+        "es": "Hierbas que aclaran Calor y drenan Fuego"
+      }
     },
     {
       "name": "Zhu Ling",
       "latin": "Polyporus",
       "id": 299,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "drain-dampness",
+        "en": "Herbs that Drain Dampness",
+        "es": "Hierbas que drenan Humedad"
+      }
     },
     {
       "name": "Zhu Ru",
       "latin": "Bambusae Caulis in taeniam",
       "id": 300,
-      "guideNumber": 13
+      "guideNumber": 13,
+      "benskyCategory": {
+        "code": "cool-transform-phlegm-heat",
+        "en": "Herbs that Cool and Transform Phlegm-Heat",
+        "es": "Hierbas que enfrían y transforman Flema-Calor"
+      }
     },
     {
       "name": "Zi Cao",
       "latin": "Arnebiae/Lithospermi Radix",
       "id": 301,
-      "guideNumber": 4
+      "guideNumber": 4,
+      "benskyCategory": {
+        "code": "cool-blood",
+        "en": "Herbs that Cool the Blood",
+        "es": "Hierbas que enfrían la Sangre"
+      }
     },
     {
       "name": "Zi Su Ye",
       "latin": "Perillae Folium",
       "id": 302,
-      "guideNumber": 1
+      "guideNumber": 1,
+      "benskyCategory": {
+        "code": "warm-acrid-release-exterior",
+        "en": "Warm, Acrid Herbs that Release the Exterior",
+        "es": "Hierbas tibias y acres que liberan el Exterior"
+      }
     },
     {
       "name": "Zi Su Zi",
       "latin": "Perillae Fructus",
       "id": 303,
-      "guideNumber": null
+      "guideNumber": null,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     },
     {
       "name": "Zi Wan",
       "latin": "Asteris Radix",
       "id": 304,
-      "guideNumber": 15
+      "guideNumber": 15,
+      "benskyCategory": {
+        "code": "stop-coughing-calm-wheezing",
+        "en": "Herbs that Stop Coughing and Calm Wheezing",
+        "es": "Hierbas que detienen la tos y calman las sibilancias"
+      }
     }
-  ]
+  ],
+  "benskySource": "Bensky, Clavey, Stöger, and Gamble, Chinese Herbal Medicine: Materia Medica, 3rd ed. (primary monograph category)"
 }
