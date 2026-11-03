@@ -50,6 +50,19 @@ $stripstudyguidenumber = static function(string $name): string {
     return trim((string) preg_replace('/^\s*\d+\.?\s+/', '', $name));
 };
 
+// Chapter 4 is a complete study card inserted before the former card 12.
+// Keep the stored course/category numbers stable while presenting a continuous
+// public sequence. The former numbering skipped 22, so inserting Chapter 4 at
+// 12 shifts stored cards 12–21 and closes that gap; stored 23–31 stay 23–31.
+$displaystudyguidenumber = static function(?int $internalnumber): ?int {
+    if ($internalnumber === null) {
+        return null;
+    }
+    return $internalnumber >= 12 && $internalnumber <= 21
+        ? $internalnumber + 1
+        : $internalnumber;
+};
+
 // The orange number is the study-guide card, not the Bensky chapter.
 // Several cards split one Bensky chapter into its clinical subcategories.
 $benskychapterbyguidenumber = [
@@ -164,6 +177,7 @@ if (!$ismixed && !$isproperties && !$isintroduction && $focus !== '' && ctype_di
 
 $selectedname = $selected !== null ? (string) $selected['name'] : '';
 $selectedguidenumber = $selected !== null ? $extractstudyguidenumber($selectedname) : null;
+$selecteddisplayguidenumber = $displaystudyguidenumber($selectedguidenumber);
 $istopicone = $selected !== null
     && stripos($selectedname, 'Ma Huang') !== false
     && stripos($selectedname, 'Gui Zhi') !== false
@@ -920,6 +934,29 @@ if ($ises) {
 $pageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $pageparams);
 $categoryindexparams = $ises ? ['lang' => 'es'] : [];
 $categoryindexurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryindexparams);
+$benskyfourparams = ['focus' => 'bensky4'];
+if ($ises) {
+    $benskyfourparams['lang'] = 'es';
+}
+$benskyfoururl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $benskyfourparams);
+$benskyfourpreviousurl = null;
+$benskyfournexturl = null;
+foreach ($studyguidecategories as $benskyfourneighbor) {
+    $neighborinternalnumber = (int)$benskyfourneighbor['guide_number'];
+    if ($neighborinternalnumber !== 11 && $neighborinternalnumber !== 12) {
+        continue;
+    }
+    $neighborparams = ['focus' => (string)$benskyfourneighbor['number']];
+    if ($ises) {
+        $neighborparams['lang'] = 'es';
+    }
+    $neighborurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $neighborparams);
+    if ($neighborinternalnumber === 11) {
+        $benskyfourpreviousurl = $neighborurl;
+    } else {
+        $benskyfournexturl = $neighborurl;
+    }
+}
 $mixedreviewparams = ['focus' => 'mixed'];
 if ($ises) {
     $mixedreviewparams['lang'] = 'es';
@@ -931,9 +968,13 @@ $previouscategory = null;
 $nextcategory = null;
 $mixedpreviouscategory = null;
 $mixedpreviouscategoryurl = null;
+$mixedpreviousdisplayguidenumber = null;
 $laststudyguidenumber = $studyguidecategories
     ? max(array_column($studyguidecategories, 'guide_number'))
     : 0;
+$lastdisplaystudyguidenumber = $displaystudyguidenumber($laststudyguidenumber) ?? 0;
+$previousdisplayguidenumber = null;
+$nextdisplayguidenumber = null;
 if ($selected !== null && $selectedguidenumber !== null) {
     $categorynumbers = array_keys($studyguidecategories);
     $currentcategoryindex = array_search($selected['number'], $categorynumbers, true);
@@ -944,6 +985,7 @@ if ($selected !== null && $selectedguidenumber !== null) {
         }
         $previouscategory = $studyguidecategories[$categorynumbers[$currentcategoryindex - 1]];
         $previouscategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $previousparams);
+        $previousdisplayguidenumber = $displaystudyguidenumber((int)$previouscategory['guide_number']);
     }
     if ($currentcategoryindex !== false && $currentcategoryindex < count($categorynumbers) - 1) {
         $nextparams = ['focus' => (string) $categorynumbers[$currentcategoryindex + 1]];
@@ -952,11 +994,20 @@ if ($selected !== null && $selectedguidenumber !== null) {
         }
         $nextcategory = $studyguidecategories[$categorynumbers[$currentcategoryindex + 1]];
         $nextcategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $nextparams);
+        $nextdisplayguidenumber = $displaystudyguidenumber((int)$nextcategory['guide_number']);
+    }
+    if ($selectedguidenumber === 11) {
+        $nextcategoryurl = $benskyfoururl;
+        $nextdisplayguidenumber = 12;
+    } else if ($selectedguidenumber === 12) {
+        $previouscategoryurl = $benskyfoururl;
+        $previousdisplayguidenumber = 12;
     }
 }
 if ($ismixed && $studyguidecategories) {
     $mixedprevioussection = array_key_last($studyguidecategories);
     $mixedpreviouscategory = $studyguidecategories[$mixedprevioussection];
+    $mixedpreviousdisplayguidenumber = $displaystudyguidenumber((int)$mixedpreviouscategory['guide_number']);
     $mixedpreviousparams = ['focus' => (string) $mixedprevioussection];
     if ($ises) {
         $mixedpreviousparams['lang'] = 'es';
@@ -1033,7 +1084,7 @@ ob_start();
 .single-herbs-guide__category--mixed{border-top-color:#0b817d;background:#f6fbfa}.single-herbs-guide__category--mixed .single-herbs-guide__category-number{background:#dff2ee;color:#0d665e}
 .single-herbs-guide__category--properties{border-top-color:#2563eb;background:#f7faff}.single-herbs-guide__category--properties .single-herbs-guide__category-number{background:#dbeafe;color:#1d4ed8}
 .single-herbs-guide__category--introduction{border-top-color:#7c3aed;background:#faf8ff}.single-herbs-guide__category--introduction .single-herbs-guide__category-number{background:#ede9fe;color:#6d28d9}
-.single-herbs-guide__category--bensky-reference{border-top-color:#0b817d;background:#f3faf8}.single-herbs-guide__category--bensky-reference:hover{transform:none;box-shadow:0 2px 8px rgba(15,23,42,.05)}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{width:40px;flex-basis:40px;background:#dff2ee;color:#0d665e;font-size:12px}.single-herbs-guide__category--bensky-reference small{color:#52677a}
+.single-herbs-guide__category--bensky-reference{border-top-color:#f77e25;background:#fff7f0}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{background:#fff0e5;color:#a64f12}.single-herbs-guide__category--bensky-reference small{color:#19706a}
 .single-herbs-guide__empty{padding:34px;border:1px dashed #aeb8c0;border-radius:12px;background:#fff;text-align:center;color:#64748b}
 .single-herbs-guide__requested-card{margin:0 0 22px;padding:20px 22px;border:1px solid #c9ded9;border-left:5px solid #0b817d;border-radius:11px;background:#f2faf8}.single-herbs-guide__requested-card h3{margin:2px 0 5px;font-size:23px}.single-herbs-guide__requested-card p{margin:0;color:#52677a;line-height:1.5}.single-herbs-guide__requested-card .single-herbs-guide__eyebrow{margin-bottom:4px}.single-herbs-guide__requested-card-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.single-herbs-guide__card-target{scroll-margin-top:24px;animation:single-herb-card-highlight 2.2s ease}.single-herbs-guide__card-target>summary,.single-herbs-guide__card-target.single-herbs-guide__category-herb{box-shadow:0 0 0 4px rgba(11,129,125,.2)}@keyframes single-herb-card-highlight{0%,55%{transform:translateY(-2px)}100%{transform:none}}
 .single-herbs-guide__workspace{padding:28px;border:1px solid #d9e2e7;border-top:5px solid #0b817d;border-radius:13px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
@@ -1178,7 +1229,7 @@ ob_start();
         <?php
         $selectedbenskychapter = $benskychapterlabel($selectedguidenumber);
         $focuslabel = $isbenskychapterfour
-            ? ($ises ? 'Capítulo fuente completo' : 'Complete source chapter')
+            ? (($ises ? 'Tarjeta de la guía 12' : 'Study-guide card 12') . ' · ' . ($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'))
             : ($isintroduction
             ? ($ises ? 'Fundamentos' : 'Foundations')
             : ($isproperties
@@ -1186,7 +1237,7 @@ ob_start();
             : ($ismixed
             ? ($ises ? 'Repaso final' : 'Final Review')
             : ($selectedguidenumber !== null
-                ? (($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $selectedguidenumber
+                ? (($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $selecteddisplayguidenumber
                     . ($selectedbenskychapter !== '' ? ' · ' . $selectedbenskychapter : ''))
                 : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number'])))));
         $focustitle = $isbenskychapterfour
@@ -1216,13 +1267,19 @@ ob_start();
             </div>
             <?php if ($selected !== null): ?>
                 <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php endif; ?></span>
-                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $selectedguidenumber . ' / ' . $laststudyguidenumber . ($selectedbenskychapter !== '' ? ' · ' . $selectedbenskychapter : '')); ?></strong>
-                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
+                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previousdisplayguidenumber); ?></a><?php endif; ?></span>
+                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $selecteddisplayguidenumber . ' / ' . $lastdisplaystudyguidenumber . ($selectedbenskychapter !== '' ? ' · ' . $selectedbenskychapter : '')); ?></strong>
+                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextdisplayguidenumber . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
+                </nav>
+            <?php elseif ($isbenskychapterfour): ?>
+                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
+                    <a class="single-herbs-guide__back" href="<?php echo $benskyfourpreviousurl !== null ? $benskyfourpreviousurl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 11' : '← Previous Category · 11'); ?></a>
+                    <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 12 / ' : 'Card 12 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4')); ?></strong>
+                    <a class="single-herbs-guide__back" href="<?php echo $benskyfournexturl !== null ? $benskyfournexturl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 13 →' : 'Next Category · 13 →'); ?></a>
                 </nav>
             <?php elseif ($ismixed): ?>
                 <nav aria-label="<?php echo s($ises ? 'Navegación del repaso final' : 'Final Review navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <span><?php if ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviouscategory['guide_number']); ?></a><?php endif; ?></span>
+                    <span><?php if ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
                     <strong style="color:#0d665e"><?php echo s($ises ? 'Repaso final' : 'Final Review'); ?></strong>
                     <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
                 </nav>
@@ -1582,9 +1639,9 @@ ob_start();
             <?php endif; ?>
         </section>
         <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
-            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($previouscategory['name']); ?>" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previouscategory['guide_number']); ?></a><?php elseif ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviouscategory['guide_number']); ?></a><?php endif; ?></span>
+            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previousdisplayguidenumber); ?></a><?php elseif ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
             <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
-            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" title="<?php echo s($nextcategory['name']); ?>" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextcategory['guide_number'] . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
+            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextdisplayguidenumber . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
         </nav>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
@@ -1593,7 +1650,7 @@ ob_start();
                 <p><?php echo s($ises ? 'Comienza con la introducción, continúa por las categorías del Board Level y termina con la tabla maestra y el repaso final.' : 'Start with the introduction, continue through Board Level categories, and finish with the master table and Final Review.'); ?></p>
             </div>
             <div class="single-herbs-guide__count" aria-label="Category count">
-                <strong><?php echo count($studyguidecategories) + 3; ?></strong>
+                <strong><?php echo count($studyguidecategories) + 4; ?></strong>
                 <span><?php echo s($ises ? 'áreas de estudio' : 'study areas'); ?></span>
             </div>
         </section>
@@ -1615,6 +1672,7 @@ ob_start();
                 <?php foreach ($studyguidecategories as $category): ?>
                     <?php
                     $categoryguidenumber = (int) $category['guide_number'];
+                    $categorydisplayguidenumber = $displaystudyguidenumber($categoryguidenumber);
                     $categorybenskychapter = $benskychapterlabel($categoryguidenumber);
                     $categorydisplayname = $stripstudyguidenumber((string) $category['name']);
                     if ($categoryguidenumber === 11) {
@@ -1629,16 +1687,9 @@ ob_start();
                     $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
                     ?>
                     <?php if ($categoryguidenumber === 12): ?>
-                        <?php
-                        $benskyfourparams = ['focus' => 'bensky4'];
-                        if ($ises) {
-                            $benskyfourparams['lang'] = 'es';
-                        }
-                        $benskyfoururl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $benskyfourparams);
-                        ?>
                         <a id="bensky-chapter-four-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskyfoururl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 4: Hierbas que drenan Humedad' : 'Bensky Chapter 4: Herbs that Drain Dampness'); ?>">
                             <span class="single-herbs-guide__category-reference">
-                                <span class="single-herbs-guide__category-number">B4</span>
+                                <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 12' : 'Study-guide card 12'); ?>">12</span>
                                 <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'); ?></span>
                             </span>
                             <strong><?php echo s($ises ? 'Hierbas que drenan Humedad' : 'Herbs that Drain Dampness'); ?></strong>
@@ -1647,7 +1698,7 @@ ob_start();
                     <?php endif; ?>
                     <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="single-herbs-guide__category-reference">
-                            <span class="single-herbs-guide__category-number" aria-label="<?php echo s(($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $categoryguidenumber); ?>"><?php echo $categoryguidenumber; ?></span>
+                            <span class="single-herbs-guide__category-number" aria-label="<?php echo s(($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $categorydisplayguidenumber); ?>"><?php echo $categorydisplayguidenumber; ?></span>
                             <?php if ($categorybenskychapter !== ''): ?><span class="single-herbs-guide__bensky-chapter"><?php echo s($categorybenskychapter); ?></span><?php endif; ?>
                         </span>
                         <strong><?php echo $categorydisplayname; ?></strong>
