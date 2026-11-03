@@ -1241,10 +1241,12 @@ ob_start();
 .single-herbs-guide__safety{padding:19px 21px;border-left:5px solid #b45309;border-radius:10px;background:#fff7ed;color:#713f12;line-height:1.55}.single-herbs-guide__safety strong{display:block;margin-bottom:6px}
 .single-herbs-guide__recall{display:grid;gap:9px}.single-herbs-guide__recall details{border:1px solid #dce4e8;border-radius:9px;background:#fff}.single-herbs-guide__recall summary{cursor:pointer;padding:15px 17px;color:#17364a;font-weight:800}.single-herbs-guide__recall details[open] summary{border-bottom:1px solid #e4eaed;background:#f6fafb}.single-herbs-guide__recall p{margin:0;padding:15px 17px;color:#52677a;line-height:1.5}.single-herbs-guide__source{font-size:13px}
 .single-herbs-guide__final-question summary{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:start;line-height:1.5}.single-herbs-guide__final-number{color:#6d28d9;font-size:12px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}.single-herbs-guide__final-answer{padding:15px 17px;background:linear-gradient(145deg,#faf8ff,#f6fbfa)}.single-herbs-guide__final-answer>strong{display:block;color:#0d665e}.single-herbs-guide__final-answer p{padding:8px 0 0}.single-herbs-guide__final-question[open]{border-color:#8b5cf6;box-shadow:0 4px 12px rgba(109,40,217,.08)}
+.single-herbs-guide__unified-questions .single-herbs-guide__final-question summary{grid-template-columns:150px minmax(0,1fr)}.single-herbs-guide__final-number small{display:block;margin-top:3px;color:#8b5cf6;font-size:9px;font-weight:800;letter-spacing:.04em;line-height:1.35;text-transform:uppercase}
 .single-herbs-guide__final-controls{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 14px}.single-herbs-guide__final-controls button{min-height:40px;padding:8px 14px;border:1px solid #7c3aed;border-radius:8px;background:#fff;color:#6d28d9;font-weight:900;cursor:pointer}.single-herbs-guide__final-controls button:first-child{background:#7c3aed;color:#fff}.single-herbs-guide__final-controls button:hover{box-shadow:0 3px 10px rgba(109,40,217,.16)}
 .single-herbs-guide__bensky-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.single-herbs-guide__bensky-card{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #2563eb;border-radius:11px;background:#fff}.single-herbs-guide__bensky-card h5{margin:0;padding:15px 17px;background:#eff6ff;color:#174ea6}.single-herbs-guide__bensky-card table{width:100%;border-collapse:collapse;font-size:13px}.single-herbs-guide__bensky-card th,.single-herbs-guide__bensky-card td{padding:10px 12px;border-top:1px solid #e4eaee;text-align:left;vertical-align:top;line-height:1.45}.single-herbs-guide__bensky-card th{width:31%;color:#0d665e}.single-herbs-guide__bensky-source{margin-top:14px;padding:12px 15px;border-left:4px solid #2563eb;border-radius:7px;background:#eff6ff;color:#36536f;font-size:13px;line-height:1.5}
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{align-items:flex-start;margin-top:16px}.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{justify-content:flex-start}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-guide__functional-summary,.single-herbs-properties__controls,.single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
+@media(max-width:720px){.single-herbs-guide__unified-questions .single-herbs-guide__final-question summary{grid-template-columns:1fr}}
 @media(max-width:720px){.single-herbs-guide__roster-modal{padding:10px}.single-herbs-guide__roster-dialog{max-height:94vh}.single-herbs-guide__roster-header{padding:18px 17px 14px}.single-herbs-guide__roster-header h3{font-size:20px}.single-herbs-guide__roster-tools{padding:13px 17px 10px}.single-herbs-guide__roster-list{grid-template-columns:1fr;padding:0 17px 18px}}
 @media(max-width:520px){.single-herbs-guide__category-herb-context p{grid-template-columns:1fr;gap:2px}}
 @media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -2052,84 +2054,198 @@ ob_start();
                 });
             });
         }
-    }
-
-    const deck = document.querySelector('[data-yang-deck]');
-    if (!deck) {
-        return;
-    }
-    const cards = Array.from(deck.querySelectorAll('[data-yang-card]'));
-    const controls = deck.querySelector('.single-herbs-guide__yang-controls');
-    const progress = deck.querySelector('[data-yang-progress]');
-    if (!cards.length || !controls) {
         return;
     }
 
-    const isSpanishDeck = (deck.dataset.cardLabel || '').toLowerCase() === 'tarjeta';
-    const sectionHeading = deck.parentElement ? deck.parentElement.querySelector('h4') : null;
-    const sectionLead = deck.previousElementSibling;
-    const questions = [];
-    deck.classList.add('is-consecutive');
-    if (sectionHeading) {
-        sectionHeading.textContent = isSpanishDeck
-            ? 'Preguntas de Yang · ' + cards.length + ' preguntas consecutivas'
-            : 'Yang Review · ' + cards.length + ' consecutive questions';
+    const workspace = document.querySelector('.single-herbs-guide__workspace');
+    if (!workspace) {
+        return;
     }
-    if (sectionLead && sectionLead.classList.contains('single-herbs-guide__section-lead')) {
-        sectionLead.textContent = isSpanishDeck
-            ? 'Todas las preguntas aparecen consecutivamente. Responde primero; después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas. Las referencias externas se identifican dentro de las respuestas.'
-            : 'All questions appear consecutively. Answer first; then open each response, or use the controls to open and close them all. External references are identified inside the answers.';
-    }
-
-    cards.forEach(function(card) {
-        const front = card.querySelector('.single-herbs-guide__yang-face--front');
-        const back = card.querySelector('.single-herbs-guide__yang-face--back');
-        if (!front || !back) {
-            return;
+    const isSpanishQuestions = <?php echo $ises ? 'true' : 'false'; ?>;
+    const hasLegacyYangQuestions = workspace.querySelector('[data-yang-deck]') !== null;
+    const questionSections = [];
+    const registerSection = function(section) {
+        if (section && !questionSections.includes(section)) {
+            questionSections.push(section);
         }
-        const question = document.createElement('details');
-        const summary = document.createElement('summary');
-        const answer = document.createElement('div');
-        question.className = 'single-herbs-guide__yang-question-item';
-        answer.className = 'single-herbs-guide__yang-sequence-answer';
-        Array.from(front.childNodes).forEach(function(node) {
-            summary.appendChild(node.cloneNode(true));
+    };
+
+    // Convert every legacy Yang deck to the compact Chapter 17 disclosure format.
+    Array.from(workspace.querySelectorAll('[data-yang-deck]')).forEach(function(deck) {
+        registerSection(deck.closest('.single-herbs-guide__section'));
+        Array.from(deck.querySelectorAll('[data-yang-card]')).forEach(function(card) {
+            const front = card.querySelector('.single-herbs-guide__yang-face--front');
+            const back = card.querySelector('.single-herbs-guide__yang-face--back');
+            const questionText = front ? front.querySelector('.single-herbs-guide__yang-question') : null;
+            const answerText = back ? back.querySelector('.single-herbs-guide__yang-answer') : null;
+            if (!front || !back || !questionText || !answerText) {
+                return;
+            }
+            const originalLabel = front.querySelector('.single-herbs-guide__yang-label');
+            const sourceParts = originalLabel ? originalLabel.textContent.split('·') : [];
+            const question = document.createElement('details');
+            const summary = document.createElement('summary');
+            const number = document.createElement('span');
+            const prompt = document.createElement('span');
+            const answer = document.createElement('div');
+            question.className = 'single-herbs-guide__final-question';
+            question.dataset.questionSource = sourceParts.length > 1
+                ? sourceParts.slice(1).join('·').trim()
+                : (isSpanishQuestions ? 'Yang · capítulo' : 'Yang · chapter');
+            number.className = 'single-herbs-guide__final-number';
+            Array.from(questionText.childNodes).forEach(function(node) {
+                prompt.appendChild(node.cloneNode(true));
+            });
+            answer.className = 'single-herbs-guide__final-answer';
+            Array.from(answerText.childNodes).forEach(function(node) {
+                answer.appendChild(node.cloneNode(true));
+            });
+            summary.appendChild(number);
+            summary.appendChild(prompt);
+            question.appendChild(summary);
+            question.appendChild(answer);
+            card.replaceWith(question);
         });
-        Array.from(back.childNodes).forEach(function(node) {
-            answer.appendChild(node.cloneNode(true));
-        });
-        question.appendChild(summary);
-        question.appendChild(answer);
-        card.replaceWith(question);
-        questions.push(question);
     });
 
-    controls.classList.add('is-consecutive-controls');
-    controls.setAttribute('aria-label', isSpanishDeck ? 'Controles de respuestas de Yang' : 'Yang answer controls');
-    controls.replaceChildren();
+    // Register Bensky questions and the older quick-recall questions so all sources merge.
+    Array.from(workspace.querySelectorAll('.single-herbs-guide__recall')).forEach(function(recall) {
+        if (!recall.classList.contains('single-herbs-guide__final-review')) {
+            registerSection(recall.closest('.single-herbs-guide__section'));
+        }
+    });
+    questionSections.sort(function(left, right) {
+        return left === right ? 0 : (left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+    });
+    if (!questionSections.length) {
+        return;
+    }
+
+    const primarySection = questionSections[0];
+    const unifiedQuestions = [];
+    questionSections.forEach(function(section) {
+        const isBenskySection = /^bensky-/.test(section.getAttribute('aria-labelledby') || '');
+        const heading = section.querySelector('h4');
+        const headingText = heading ? heading.textContent.trim() : '';
+        const chapterMatch = headingText.match(/(?:chapter|capítulo)\s+(\d+)/i);
+        const benskySource = isSpanishQuestions
+            ? 'Bensky · capítulo ' + (chapterMatch ? chapterMatch[1] : '')
+            : 'Bensky · Chapter ' + (chapterMatch ? chapterMatch[1] : '');
+        Array.from(section.querySelectorAll('details')).forEach(function(question) {
+            if (question.closest('.single-herbs-guide__annex-toggle')) {
+                return;
+            }
+            const summary = question.querySelector(':scope > summary');
+            if (!summary) {
+                return;
+            }
+            if (!question.classList.contains('single-herbs-guide__final-question')) {
+                const prompt = document.createElement('span');
+                Array.from(summary.childNodes).forEach(function(node) {
+                    prompt.appendChild(node.cloneNode(true));
+                });
+                const number = document.createElement('span');
+                number.className = 'single-herbs-guide__final-number';
+                summary.replaceChildren(number, prompt);
+                const answer = document.createElement('div');
+                answer.className = 'single-herbs-guide__final-answer';
+                Array.from(question.childNodes).forEach(function(node) {
+                    if (node !== summary) {
+                        answer.appendChild(node);
+                    }
+                });
+                question.appendChild(answer);
+                question.classList.add('single-herbs-guide__final-question');
+                question.dataset.questionSource = isSpanishQuestions ? 'Repaso Bensky' : 'Bensky review';
+            } else if (!question.dataset.questionSource) {
+                question.dataset.questionSource = isBenskySection
+                    ? benskySource.replace(/\s+$/, '')
+                    : (isSpanishQuestions ? 'Repaso Bensky' : 'Bensky review');
+            }
+            unifiedQuestions.push(question);
+        });
+    });
+    if (!unifiedQuestions.length) {
+        return;
+    }
+    const hasBenskyReviewQuestions = unifiedQuestions.some(function(question) {
+        return !/^Yang\b/i.test(question.dataset.questionSource || '');
+    });
+
+    const heading = primarySection.querySelector('h4');
+    let lead = primarySection.querySelector(':scope > .single-herbs-guide__section-lead');
+    if (!lead) {
+        lead = document.createElement('p');
+        lead.className = 'single-herbs-guide__section-lead';
+        if (heading) {
+            heading.insertAdjacentElement('afterend', lead);
+        } else {
+            primarySection.prepend(lead);
+        }
+    }
+    if (heading) {
+        const questionCountLabel = isSpanishQuestions
+            ? (unifiedQuestions.length === 1 ? ' pregunta' : ' preguntas')
+            : (unifiedQuestions.length === 1 ? ' question' : ' questions');
+        heading.textContent = isSpanishQuestions
+            ? 'Repaso unificado del capítulo · ' + unifiedQuestions.length + questionCountLabel
+            : 'Unified chapter review · ' + unifiedQuestions.length + questionCountLabel;
+    }
+    if (hasLegacyYangQuestions && hasBenskyReviewQuestions) {
+        lead.textContent = isSpanishQuestions
+            ? 'Las preguntas anteriores de Yang y las nuevas preguntas de repaso Bensky aparecen en una sola secuencia. Responde primero y después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.'
+            : 'Earlier Yang questions and newer Bensky review questions now appear in one sequence. Answer first, then open each response, or use the controls to open and close them all.';
+    } else if (hasLegacyYangQuestions) {
+        lead.textContent = isSpanishQuestions
+            ? 'Todas las preguntas de Yang y de repaso del capítulo aparecen en una sola secuencia. Responde primero y después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.'
+            : 'All Yang and chapter-review questions appear in one sequence. Answer first, then open each response, or use the controls to open and close them all.';
+    } else {
+        lead.textContent = isSpanishQuestions
+            ? 'Responde mentalmente antes de abrir cada elemento, o usa los controles para abrir y cerrar todas las respuestas.'
+            : 'Answer mentally before opening each item, or use the controls to open and close all answers.';
+    }
+
+    const controls = document.createElement('div');
     const openAll = document.createElement('button');
     const closeAll = document.createElement('button');
+    const questionList = document.createElement('div');
+    controls.className = 'single-herbs-guide__final-controls';
+    controls.setAttribute('aria-label', isSpanishQuestions ? 'Controles de respuestas del capítulo' : 'Chapter answer controls');
     openAll.type = 'button';
     closeAll.type = 'button';
-    openAll.className = 'single-herbs-guide__yang-control';
-    closeAll.className = 'single-herbs-guide__yang-control';
-    openAll.textContent = isSpanishDeck ? 'Abrir todas las respuestas' : 'Open all answers';
-    closeAll.textContent = isSpanishDeck ? 'Cerrar todas las respuestas' : 'Close all answers';
+    openAll.textContent = isSpanishQuestions ? 'Abrir todas las respuestas' : 'Open all answers';
+    closeAll.textContent = isSpanishQuestions ? 'Cerrar todas las respuestas' : 'Close all answers';
     controls.appendChild(openAll);
     controls.appendChild(closeAll);
-    if (questions.length) {
-        deck.insertBefore(controls, questions[0]);
-    }
-    if (progress) {
-        progress.remove();
-    }
+    questionList.className = 'single-herbs-guide__recall single-herbs-guide__unified-questions';
+    unifiedQuestions.forEach(function(question, index) {
+        const number = question.querySelector(':scope > summary .single-herbs-guide__final-number');
+        const source = question.dataset.questionSource || (isSpanishQuestions ? 'Repaso del capítulo' : 'Chapter review');
+        if (number) {
+            number.replaceChildren();
+            number.appendChild(document.createTextNode((isSpanishQuestions ? 'Pregunta ' : 'Question ') + (index + 1)));
+            const sourceLabel = document.createElement('small');
+            sourceLabel.textContent = source;
+            number.appendChild(sourceLabel);
+        }
+        questionList.appendChild(question);
+    });
+
+    Array.from(primarySection.querySelectorAll(':scope > [data-yang-deck], :scope > .single-herbs-guide__recall, :scope > .single-herbs-guide__final-controls')).forEach(function(element) {
+        element.remove();
+    });
+    lead.insertAdjacentElement('afterend', controls);
+    controls.insertAdjacentElement('afterend', questionList);
+    questionSections.slice(1).forEach(function(section) {
+        section.remove();
+    });
     openAll.addEventListener('click', function() {
-        questions.forEach(function(question) {
+        unifiedQuestions.forEach(function(question) {
             question.open = true;
         });
     });
     closeAll.addEventListener('click', function() {
-        questions.forEach(function(question) {
+        unifiedQuestions.forEach(function(question) {
             question.open = false;
         });
     });
