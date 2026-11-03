@@ -74,16 +74,79 @@ $fireherbs = [
         'formulas' => $firetext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro de las 63 fórmulas Board vigentes.'),
         'caution' => $firetext('Traditionally contraindicated in pregnancy and incompatible with Wu Tou/Aconitum substances.', 'Tradicionalmente contraindicada en embarazo e incompatible con sustancias Wu Tou/Aconitum.'),
     ],
+    [
+        'name' => 'Xia Ku Cao', 'latin' => 'Prunellae Spica',
+        'properties' => $firetext('Bitter, acrid; cold', 'Amarga, acre; fría'),
+        'channels' => $firetext('Liver, Gallbladder', 'Hígado, Vesícula Biliar'), 'dose' => '9–15 g',
+        'identity' => $firetext('Clears Liver Fire, brightens the eyes and dissipates nodules and clumps.', 'Aclara Fuego de Hígado, mejora los ojos y disipa nódulos y masas.'),
+        'clue' => $firetext('Red painful eyes, headache or dizziness from Liver Fire together with neck nodules, scrofula or thyroid-like swelling.', 'Ojos rojos y dolorosos, cefalea o mareo por Fuego de Hígado junto con nódulos cervicales, escrófula o inflamación semejante a bocio.'),
+        'memory' => $firetext('The selfheal spike extinguishes Liver Fire above and softens hard knots along the neck.', 'La espiga de prunela apaga Fuego de Hígado arriba y ablanda nudos duros del cuello.'),
+        'unique' => $firetext('Its exam fingerprint is the combination of Liver-Fire eye symptoms and the ability to dissipate nodules.', 'Su huella de examen combina síntomas oculares por Fuego de Hígado con la capacidad de disipar nódulos.'),
+        'formulas' => $firetext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $firetext('Use cautiously with Spleen or Stomach weakness and chronic loose stools.', 'Usar con precaución ante debilidad de Bazo o Estómago y heces sueltas crónicas.'),
+    ],
+    [
+        'name' => 'Jue Ming Zi', 'latin' => 'Cassiae Semen',
+        'properties' => $firetext('Sweet, bitter, salty; slightly cold', 'Dulce, amarga, salada; ligeramente fría'),
+        'channels' => $firetext('Liver, Kidney, Large Intestine', 'Hígado, Riñón, Intestino Grueso'), 'dose' => '9–15 g',
+        'identity' => $firetext('Clears Liver Heat, brightens the eyes and moistens the intestines to unblock the bowels.', 'Aclara Calor de Hígado, mejora los ojos y humedece los intestinos para desbloquear las evacuaciones.'),
+        'clue' => $firetext('Red painful or light-sensitive eyes from Liver Heat accompanied by dry constipation.', 'Ojos rojos, dolorosos o sensibles a la luz por Calor de Hígado acompañados de estreñimiento seco.'),
+        'memory' => $firetext('Cassia seed clears the eye lamps and oils the lower hallway so stool can pass.', 'La semilla de casia aclara las lámparas de los ojos y aceita el pasillo inferior para permitir la evacuación.'),
+        'unique' => $firetext('Unlike the heavy shell Shi Jue Ming, this seed clears Liver Heat while its oil moistens the Large Intestine.', 'A diferencia de la concha pesada Shi Jue Ming, esta semilla aclara Calor de Hígado mientras su aceite humedece el Intestino Grueso.'),
+        'formulas' => $firetext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $firetext('Its laxative effect may worsen diarrhea, dehydration or low blood pressure.', 'Su efecto laxante puede agravar diarrea, deshidratación o presión baja.'),
+    ],
+    [
+        'name' => 'Lian Zi Xin', 'latin' => 'Nelumbinis Plumula',
+        'properties' => $firetext('Bitter; cold', 'Amarga; fría'),
+        'channels' => $firetext('Heart, Kidney', 'Corazón, Riñón'), 'dose' => '1.5–3 g',
+        'identity' => $firetext('Clears Heart Fire, calms the spirit and restores communication between Heart and Kidney.', 'Aclara Fuego de Corazón, calma el espíritu y restablece comunicación entre Corazón y Riñón.'),
+        'clue' => $firetext('Intense Heart irritability, insomnia, agitation, mouth or tongue sores, or disharmony between Heart and Kidney.', 'Irritabilidad intensa de Corazón, insomnio, agitación, lesiones de boca o lengua, o desarmonía entre Corazón y Riñón.'),
+        'memory' => $firetext('The lotus seed heart turns off the red alarm panel and reconnects the upstairs Heart to the basement Kidney.', 'El corazón de la semilla de loto apaga el panel rojo de alarma y reconecta el Corazón de arriba con el Riñón del sótano.'),
+        'unique' => $firetext('Unlike He Ye, another lotus part, it does not raise clear Yang; its primary classification follows its strong Heart-Fire action.', 'A diferencia de He Ye, otra parte del loto, no eleva Yang claro; su clasificación primaria sigue su acción potente sobre Fuego de Corazón.'),
+        'formulas' => $firetext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $firetext('Do not confuse Lian Zi Xin with Lian Zi seed, Lian Xu stamen or He Ye leaf; the lotus parts are not interchangeable.', 'No confundas Lian Zi Xin con la semilla Lian Zi, el estambre Lian Xu o la hoja He Ye; las partes del loto no son intercambiables.'),
+    ],
 ];
 
-$fireannex = [
-    ['name' => 'Xia Ku Cao', 'latin' => 'Prunellae Spica', 'status' => $firetext('In official 2026 Appendix A', 'En el Apéndice A oficial 2026'), 'note' => $firetext('Clears Liver Fire, benefits the eyes and dissipates nodules; not named in this six-herb module title.', 'Aclara Fuego de Hígado, beneficia los ojos y disipa nódulos; no está nombrada en el título de este módulo de seis hierbas.')],
-    ['name' => 'Jue Ming Zi', 'latin' => 'Cassiae Semen', 'status' => $firetext('In official 2026 Appendix A', 'En el Apéndice A oficial 2026'), 'note' => $firetext('Clears Liver Heat, brightens the eyes and moistens the intestines; retained for recognition only.', 'Aclara Calor de Hígado, mejora los ojos y humedece intestinos; se conserva solo para reconocimiento.')],
-    ['name' => 'Lian Zi Xin', 'latin' => 'Nelumbinis Plumula', 'status' => $firetext('In official 2026 Appendix A', 'En el Apéndice A oficial 2026'), 'note' => $firetext('Clears Heart Fire and calms agitation; it belongs to the wider Heat-clearing chapter, not this module sequence.', 'Aclara Fuego de Corazón y calma agitación; pertenece al capítulo amplio de aclarar Calor, no a la secuencia de este módulo.')],
-    ['name' => 'Zhu Ye / Ku Zhu Ye', 'latin' => 'Bambusae Folium', 'status' => $firetext('Outside current guideline 2026', 'Fuera del guideline vigente 2026'), 'note' => $firetext('Stronger than Dan Zhu Ye for clearing chest and Heart Heat; included only to prevent a common name confusion.', 'Más potente que Dan Zhu Ye para aclarar Calor de pecho y Corazón; se incluye solo para evitar una confusión frecuente de nombres.')],
-    ['name' => 'Ya Zhi Cao', 'latin' => 'Commelinae Herba', 'status' => $firetext('Outside current guideline 2026', 'Fuera del guideline vigente 2026'), 'note' => $firetext('Stronger but shorter acting than Dan Zhu Ye for cooling and urination; recognition only.', 'Más fuerte pero de acción más corta que Dan Zhu Ye para enfriar y promover orina; solo reconocimiento.')],
-    ['name' => 'Mi Meng Hua · Qing Xiang Zi · Gu Jing Cao', 'latin' => $firetext('Eye-focused materia medica', 'Materia médica enfocada en ojos'), 'status' => $firetext('Outside current guideline 2026', 'Fuera del guideline vigente 2026'), 'note' => $firetext('Broader textbook herbs that clear Liver Heat and benefit the eyes. They are not part of this Board module.', 'Hierbas del texto amplio que aclaran Calor de Hígado y benefician los ojos. No forman parte de este módulo Board.')],
+$fireherbs = array_map(static function(array $herb): array {
+    $herb['primarycategory'] = 3;
+    return $herb;
+}, $fireherbs);
+
+$fireguidelinecheck = static function(array $herb) use ($guidelineherbkeys, $normalizeherbname): bool {
+    return isset($guidelineherbkeys[$normalizeherbname((string)$herb['name'])]);
+};
+$firecategorycheck = static function(array $herb): bool {
+    return (int)($herb['primarycategory'] ?? 0) === 3;
+};
+$fireherbs = array_values(array_filter($fireherbs, static function(array $herb) use ($fireguidelinecheck, $firecategorycheck): bool {
+    return $fireguidelinecheck($herb) && $firecategorycheck($herb);
+}));
+
+$firecontextcandidates = [
+    [
+        'name' => 'Zhu Ye / Ku Zhu Ye', 'latin' => 'Bambusae Folium', 'primarycategory' => 3,
+        'category' => $firetext('Textbook Category 3 · Herbs that Clear Heat and Drain Fire', 'Categoría 3 del texto · Hierbas que aclaran Calor y drenan Fuego'),
+        'note' => $firetext('Stronger than Dan Zhu Ye for clearing chest and Heart Heat.', 'Más potente que Dan Zhu Ye para aclarar Calor de pecho y Corazón.'),
+        'reason' => $firetext('Retained only to prevent confusion between Zhu Ye and the official herb Dan Zhu Ye. Zhu Ye/Ku Zhu Ye is outside the current 2026 guideline.', 'Se conserva únicamente para evitar confusión entre Zhu Ye y la hierba oficial Dan Zhu Ye. Zhu Ye/Ku Zhu Ye está fuera del guideline vigente 2026.'),
+    ],
+    [
+        'name' => 'Ya Zhi Cao', 'latin' => 'Commelinae Herba', 'primarycategory' => 3,
+        'category' => $firetext('Textbook Category 3 · Herbs that Clear Heat and Drain Fire', 'Categoría 3 del texto · Hierbas que aclaran Calor y drenan Fuego'),
+        'note' => $firetext('Stronger but shorter acting than Dan Zhu Ye for cooling and promoting urination.', 'Más fuerte pero de acción más corta que Dan Zhu Ye para enfriar y promover orina.'),
+        'reason' => $firetext('Included only for the source comparison with Dan Zhu Ye; Ya Zhi Cao is outside the current 2026 guideline.', 'Se incluye únicamente por la comparación de la fuente con Dan Zhu Ye; Ya Zhi Cao está fuera del guideline vigente 2026.'),
+    ],
+    [
+        'name' => 'Mi Meng Hua · Qing Xiang Zi · Gu Jing Cao', 'latin' => $firetext('Eye-focused materia medica', 'Materia médica enfocada en ojos'), 'primarycategory' => 3,
+        'category' => $firetext('Textbook Category 3 · Herbs that Clear Heat and Drain Fire', 'Categoría 3 del texto · Hierbas que aclaran Calor y drenan Fuego'),
+        'note' => $firetext('Broader textbook herbs that clear Liver Heat and benefit the eyes.', 'Hierbas del texto amplio que aclaran Calor de Hígado y benefician los ojos.'),
+        'reason' => $firetext('Retained only to preserve the eye-herb comparison. None of these three names appears in the current 2026 guideline.', 'Se conserva únicamente para mantener la comparación de hierbas para los ojos. Ninguno de estos tres nombres aparece en el guideline vigente 2026.'),
+    ],
 ];
+$fireannex = array_values(array_filter($firecontextcandidates, static function(array $herb) use ($fireguidelinecheck, $firecategorycheck): bool {
+    return !$fireguidelinecheck($herb) || !$firecategorycheck($herb);
+}));
 
 $firecharts = [
     ['title' => $firetext('Clears Heat and generates fluids', 'Aclara Calor y genera líquidos'), 'figure' => 'Yang Fig. 3.3', 'items' => ['Shi Gao' => 100, 'Tian Hua Fen' => 80, 'Lu Gen' => 60]],
@@ -98,6 +161,9 @@ $firedecisions = [
     [$firetext('Irritability plus Damp-Heat or bleeding', 'Irritabilidad más Humedad-Calor o sangrado'), 'Zhi Zi'],
     [$firetext('Heart Heat draining through urine', 'Calor de Corazón drenado por orina'), 'Dan Zhu Ye'],
     [$firetext('Severe thirst, dryness, swelling or pus', 'Sed intensa, sequedad, inflamación o pus'), 'Tian Hua Fen'],
+    [$firetext('Liver Fire + eyes + nodules', 'Fuego de Hígado + ojos + nódulos'), 'Xia Ku Cao'],
+    [$firetext('Liver Heat eyes + dry constipation', 'Ojos por Calor de Hígado + estreñimiento seco'), 'Jue Ming Zi'],
+    [$firetext('Heart Fire + agitation or insomnia', 'Fuego de Corazón + agitación o insomnio'), 'Lian Zi Xin'],
 ];
 
 $firecomparisons = [
@@ -127,21 +193,16 @@ $firequestions = [
     </div>
     <p class="single-herbs-guide__scope-note"><strong><?php echo s($firetext('General precautions:', 'Precauciones generales:')); ?></strong> <?php echo s($firetext('cold and especially bitter-cold herbs may injure Spleen/Stomach Yang, worsen loose stools and create Dampness when used too strongly or too long. Confirm true Heat rather than treating color or fever alone.', 'las hierbas frías, especialmente amargas-frías, pueden lesionar Yang de Bazo/Estómago, empeorar heces sueltas y crear Humedad si se usan con demasiada fuerza o tiempo. Confirma Calor verdadero en vez de tratar solo color o fiebre.')); ?></p>
     <aside class="single-herbs-guide__memory-path" aria-label="<?php echo s($firetext('Heat-control house memory path', 'Recorrido mnemotécnico de la casa para controlar Calor')); ?>">
-        <p class="single-herbs-guide__memory-line"><?php echo s($firetext('The Exterior house is now overheating inside—activate the six-part fire system.', 'La casa del Exterior ahora se sobrecalienta por dentro: activa el sistema contra incendios de seis partes.')); ?></p>
-        <p><?php echo s($firetext('Shi Gao is the extinguisher; Zhi Mu is the sprinkler that restores water; Lu Gen is the cool reed pipe that settles the kitchen; Zhi Zi opens the three-floor drain; Dan Zhu Ye is the Heart-to-urine gutter; Tian Hua Fen refills the dry tank and softens hot swelling.', 'Shi Gao es el extintor; Zhi Mu es el rociador que repone agua; Lu Gen es la caña fresca que calma la cocina; Zhi Zi abre el drenaje de tres pisos; Dan Zhu Ye es la canaleta de Corazón a orina; Tian Hua Fen rellena el tanque seco y ablanda la inflamación caliente.')); ?></p>
+        <p class="single-herbs-guide__memory-line"><?php echo s($firetext('The Exterior house is now overheating inside—activate the nine-part fire system.', 'La casa del Exterior ahora se sobrecalienta por dentro: activa el sistema contra incendios de nueve partes.')); ?></p>
+        <p><?php echo s($firetext('Shi Gao is the extinguisher; Zhi Mu is the sprinkler that restores water; Lu Gen is the cool reed pipe that settles the kitchen; Zhi Zi opens the three-floor drain; Dan Zhu Ye is the Heart-to-urine gutter; Tian Hua Fen refills the dry tank and softens hot swelling; Xia Ku Cao cools the Liver room and loosens neck knots; Jue Ming Zi clears the eye lamps and oils the bowel; Lian Zi Xin shuts off the Heart alarm.', 'Shi Gao es el extintor; Zhi Mu es el rociador que repone agua; Lu Gen es la caña fresca que calma la cocina; Zhi Zi abre el drenaje de tres pisos; Dan Zhu Ye es la canaleta de Corazón a orina; Tian Hua Fen rellena el tanque seco y ablanda la inflamación caliente; Xia Ku Cao enfría el cuarto del Hígado y afloja nudos del cuello; Jue Ming Zi aclara las lámparas de los ojos y lubrica el intestino; Lian Zi Xin apaga la alarma del Corazón.')); ?></p>
         <p><strong><?php echo s($firetext('First locate the fire; then ask whether fluids are intact, injured or blocked.', 'Primero localiza el fuego; luego pregunta si los líquidos están intactos, lesionados o bloqueados.')); ?></strong></p>
     </aside>
 
     <h5 class="single-herbs-guide__catalog-heading"><?php echo s($firetext('Current Board category herbs', 'Hierbas de la categoría Board vigente')); ?></h5>
-    <p class="single-herbs-guide__catalog-intro"><?php echo s($firetext('Study these six herbs named in the module first. The annex remains separate.', 'Estudia primero estas seis hierbas nombradas en el módulo. El anexo permanece separado.')); ?></p>
+    <p class="single-herbs-guide__catalog-intro"><?php echo s($firetext('Study these nine official herbs as Category 3. The original six remain the heading core; Xia Ku Cao, Jue Ming Zi and Lian Zi Xin are included because each satisfies both required conditions: it is in the current guideline 2026 and its primary classification is Herbs that Clear Heat and Drain Fire.', 'Estudia estas nueve hierbas oficiales como Categoría 3. Las seis originales siguen siendo el núcleo del encabezado; Xia Ku Cao, Jue Ming Zi y Lian Zi Xin se incluyen porque cada una cumple las dos condiciones requeridas: está en el guideline vigente 2026 y su clasificación primaria es Hierbas que aclaran Calor y drenan Fuego.')); ?></p>
     <ol class="single-herbs-guide__category-herbs">
-        <?php foreach ($fireherbs as $categoryherb): ?><li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge"><?php echo s($firetext('In Board category list', 'En el listado de la categoría Board')); ?></span></div><p><?php echo s($categoryherb['identity']); ?></p></li><?php endforeach; ?>
+        <?php foreach ($fireherbs as $categoryherb): ?><li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge"><?php echo s($firetext('In current guideline 2026 · Category 3', 'En el guideline vigente 2026 · Categoría 3')); ?></span></div><p><?php echo s($categoryherb['identity']); ?></p></li><?php endforeach; ?>
     </ol>
-    <div class="single-herbs-guide__annex">
-        <h5 class="single-herbs-guide__catalog-heading"><?php echo s($firetext('Annex · Wider textbook recognition', 'Anexo · Reconocimiento del texto más amplio')); ?></h5>
-        <p class="single-herbs-guide__catalog-intro"><?php echo s($firetext('These names are not mixed into the six-herb sequence. Each label states whether the herb remains in the official 2026 Appendix A.', 'Estos nombres no se mezclan con la secuencia de seis hierbas. Cada etiqueta indica si la hierba permanece en el Apéndice A oficial 2026.')); ?></p>
-        <ol class="single-herbs-guide__category-herbs"><?php foreach ($fireannex as $categoryherb): ?><li class="single-herbs-guide__category-herb"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside"><?php echo s($categoryherb['status']); ?></span></div><p><?php echo s($categoryherb['note']); ?></p></li><?php endforeach; ?></ol>
-    </div>
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-three-yang-title">
@@ -177,3 +238,25 @@ $firequestions = [
 <section class="single-herbs-guide__section" aria-labelledby="topic-three-recall-title"><h4 id="topic-three-recall-title"><?php echo s($firetext('Quick recall', 'Repaso rápido')); ?></h4><div class="single-herbs-guide__recall"><details><summary><?php echo s($firetext('Which herb fits the Four Greats?', '¿Qué hierba corresponde a los Cuatro Grandes?')); ?></summary><p><strong>Shi Gao.</strong> <?php echo s($firetext('It is the strongest broad Qi-level Yangming Heat clearer.', 'Es la más potente para aclarar Calor amplio del nivel Qi Yangming.')); ?></p></details><details><summary><?php echo s($firetext('Which herb clears Heat but also directly nourishes Yin?', '¿Qué hierba aclara Calor y además nutre directamente Yin?')); ?></summary><p><strong>Zhi Mu.</strong> <?php echo s($firetext('Its bitter-cold nature is unusually moistening.', 'Su naturaleza amarga-fría es inusualmente humectante.')); ?></p></details><details><summary><?php echo s($firetext('Lu Gen or Tian Hua Fen when vomiting dominates?', '¿Lu Gen o Tian Hua Fen cuando domina el vómito?')); ?></summary><p><strong>Lu Gen.</strong> <?php echo s($firetext('Choose Tian Hua Fen when dryness, wasting-thirst, swelling or pus is more decisive.', 'Elige Tian Hua Fen cuando sean más decisivas sequedad, consunción con sed, inflamación o pus.')); ?></p></details><details><summary><?php echo s($firetext('Zhi Zi or Dan Zhu Ye for broad three-Burner Fire?', '¿Zhi Zi o Dan Zhu Ye para Fuego amplio de los tres Calentadores?')); ?></summary><p><strong>Zhi Zi.</strong> <?php echo s($firetext('Dan Zhu Ye is the milder Heart–Small Intestine urinary-drainage choice.', 'Dan Zhu Ye es la opción más suave para drenar por orina Calor de Corazón–Intestino Delgado.')); ?></p></details></div></section>
 
 <p class="single-herbs-guide__note single-herbs-guide__source"><strong><?php echo s($firetext('Sources:', 'Fuentes:')); ?></strong> Bensky, Clavey, Stöger and Gamble, <em>Chinese Herbal Medicine: Materia Medica</em>, 3rd ed.; Yang, <em>Chinese Herbal Medicines: Comparisons and Characteristics</em>, 2nd ed., Chapter 3; NCBAHM Chinese Herbology Content Outline, effective September 1, 2026. <?php echo s($firetext('Educational review only; not prescribing guidance.', 'Solo para repaso educativo; no constituye guía de prescripción.')); ?></p>
+
+<details class="single-herbs-guide__annex-toggle">
+    <summary>
+        <strong><?php echo s($firetext('Annex · Source comparisons outside the Category 3 core', 'Anexo · Comparaciones de fuente fuera del núcleo de Categoría 3')); ?></strong>
+        <span><?php echo s($firetext('3 contextual entries outside the 2026 guideline · click to open', '3 entradas contextuales fuera del guideline 2026 · haz clic para abrir')); ?></span>
+    </summary>
+    <div class="single-herbs-guide__annex-toggle-content">
+        <p class="single-herbs-guide__catalog-intro"><?php echo s($firetext('These entries remain hidden at the end because they fail the guideline condition. They preserve a name distinction or textbook comparison and do not expand Category 3.', 'Estas entradas permanecen ocultas al final porque no cumplen la condición del guideline. Conservan una distinción de nombres o comparación del texto y no amplían la Categoría 3.')); ?></p>
+        <ol class="single-herbs-guide__category-herbs">
+            <?php foreach ($fireannex as $categoryherb): ?>
+                <li class="single-herbs-guide__category-herb">
+                    <div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside"><?php echo s($firetext('Source comparison · outside 2026 guideline', 'Comparación de fuente · fuera del guideline 2026')); ?></span></div>
+                    <p><?php echo s($categoryherb['note']); ?></p>
+                    <div class="single-herbs-guide__category-herb-context">
+                        <p><strong><?php echo s($firetext('Primary category', 'Categoría principal')); ?></strong><span><?php echo s($categoryherb['category']); ?></span></p>
+                        <p><strong><?php echo s($firetext('Why it appears here', 'Por qué aparece aquí')); ?></strong><span><?php echo s($categoryherb['reason']); ?></span></p>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+</details>

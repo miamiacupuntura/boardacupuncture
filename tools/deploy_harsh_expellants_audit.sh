@@ -106,7 +106,14 @@ expected_category_two = {
     'Dan Dou Chi': (67, 2),
     'Mu Zei': (182, 2),
 }
-for name, (expected_id, expected_guide) in expected_category_two.items():
+expected_category_three = {
+    'Jue Ming Zi': (148, 3),
+    'Lian Zi Xin': (156, 3),
+    'Xia Ku Cao': (264, 3),
+}
+expected_guideline_entries = expected_category_two.copy()
+expected_guideline_entries.update(expected_category_three)
+for name, (expected_id, expected_guide) in expected_guideline_entries.items():
     herb = by_name.get(name, {})
     actual = (herb.get('id'), herb.get('guideNumber'))
     if actual != (expected_id, expected_guide):
@@ -182,6 +189,14 @@ grep -Fq "\$coolguidelinecheck" "$TEMP_DIR/blocks/myprogress/single-herbs-catego
 grep -Fq "\$coolcategorycheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-acrid.php"
 if grep -Fq "Annex · Additional official recognition herbs" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-acrid.php"; then
     echo "ERROR: Dan Dou Chi y Mu Zei todavía aparecen como anexo de la Categoría 2"
+    exit 1
+fi
+grep -Fq "Study these nine official herbs as Category 3" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
+grep -Fq "\$fireguidelinecheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
+grep -Fq "\$firecategorycheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
+grep -Fq "3 contextual entries outside the 2026 guideline · click to open" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
+if grep -Fq "Annex · Wider textbook recognition" "$TEMP_DIR/blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"; then
+    echo "ERROR: Xia Ku Cao, Jue Ming Zi o Lian Zi Xin todavía aparecen en el anexo de la Categoría 3"
     exit 1
 fi
 grep -Fq "single-herbs-guide__annex-toggle" "$TEMP_DIR/$GUIDE_PATH"
@@ -277,6 +292,7 @@ echo "Categorías 13–15: monografías formales, anexos y mapa comparativo actu
 echo "Anexos del capítulo 6: guideline vigente arriba y monografías fuente debajo"
 echo "Categoría 15: resumen funcional completo y pareja oficial 40/51 registrados"
 echo "Categoría 2: 11 hierbas oficiales; Dan Dou Chi y Mu Zei integradas, sin anexo"
+echo "Categoría 3: 9 hierbas oficiales; tres comparaciones externas ocultas al final"
 echo "Popup del guideline: 304 hierbas con IDs estables 001–304 y búsqueda"
 echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Anexo Viento-Frío: plegado y movido al final de la categoría"
