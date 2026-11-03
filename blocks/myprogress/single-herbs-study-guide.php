@@ -185,6 +185,13 @@ if (is_readable($cardindexpath)) {
                     'name' => $herbname,
                     'latin' => (string)($herbcard['latin'] ?? ''),
                     'bensky_category' => (string)($herbcard['benskyCategory'][$ises ? 'es' : 'en'] ?? ''),
+                    'guide_number' => (int)($herbcard['guideNumber'] ?? 0),
+                    // Chapter 4 contains one current herb in its source annex
+                    // that belongs to another primary guide card. Only entries
+                    // without a guide number count toward a special chapter card.
+                    'special_focus' => empty($herbcard['guideNumber'])
+                        ? (string)($herbcard['specialFocus'] ?? '')
+                        : '',
                 ];
                 $benskycategorycode = (string)($herbcard['benskyCategory']['code'] ?? '');
                 if ($benskycategorycode !== '') {
@@ -1199,6 +1206,7 @@ ob_start();
 .single-herbs-guide__roster-close{display:inline-flex;width:40px;height:40px;flex:0 0 40px;align-items:center;justify-content:center;border:1px solid #bdcbd4;border-radius:50%;background:#fff;color:#334155;font-size:25px;line-height:1;cursor:pointer}.single-herbs-guide__roster-close:hover{background:#edf4f6}
 .single-herbs-guide__roster-tools{padding:15px 24px 11px}.single-herbs-guide__roster-search{display:block;color:#17364a;font-size:13px;font-weight:900}.single-herbs-guide__roster-search input{display:block;width:100%;min-height:44px;margin-top:6px;padding:9px 12px;border:1px solid #aebbc5;border-radius:8px;background:#fff;color:#17232a;font-size:15px}.single-herbs-guide__roster-count{margin:9px 0 0;color:#60717e;font-size:13px;font-weight:800}
 .single-herbs-guide__roster-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:0;padding:0 24px 24px;overflow:auto;list-style:none}.single-herbs-guide__roster-item[hidden]{display:none}.single-herbs-guide__roster-item a{display:grid;grid-template-columns:55px minmax(0,1fr);gap:10px;align-items:center;min-height:76px;padding:10px 11px;border:1px solid #dce4e8;border-radius:9px;background:#fbfcfd;color:inherit;text-decoration:none}.single-herbs-guide__roster-item a:hover{border-color:#0b817d;background:#f2faf8;text-decoration:none}.single-herbs-guide__roster-id{display:inline-flex;align-items:center;justify-content:center;padding:6px 5px;border-radius:6px;background:#dff2ee;color:#0d665e;font-size:11px;font-weight:900;letter-spacing:.04em}.single-herbs-guide__roster-name{display:block;color:#17364a;font-weight:900}.single-herbs-guide__roster-latin{display:block;margin-top:2px;color:#6b7b87;font-size:12px;font-style:italic}.single-herbs-guide__roster-category{display:block;margin-top:5px;color:#8a461b;font-size:11px;font-weight:800;line-height:1.35}.single-herbs-guide__roster-category b{color:#0d665e;text-transform:uppercase;letter-spacing:.03em}
+.single-herbs-guide__roster-empty{margin:0 24px 24px;padding:22px;border:1px dashed #c7d3da;border-radius:10px;background:#f8fafc;color:#52677a;text-align:center;line-height:1.55}.single-herbs-guide__roster-empty[hidden]{display:none}
 .single-herbs-guide__actions{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
 .single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .single-herbs-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
@@ -1210,14 +1218,15 @@ ob_start();
 .single-herbs-guide__count strong{font-size:29px;line-height:1}.single-herbs-guide__count span{margin-top:5px;font-size:12px;font-weight:800;text-transform:uppercase}
 .single-herbs-guide__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
 .single-herbs-guide__category{display:flex;min-height:155px;flex-direction:column;padding:18px;border:1px solid #ead8ca;border-top:4px solid #f77e25;border-radius:11px;background:#fff7f0;color:inherit;text-decoration:none;box-shadow:0 2px 8px rgba(15,23,42,.05);transition:transform .15s ease,box-shadow .15s ease}
-.single-herbs-guide__category:hover{color:inherit;text-decoration:none;transform:translateY(-2px);box-shadow:0 7px 18px rgba(15,23,42,.1)}
+.single-herbs-guide__category:hover{color:inherit;text-decoration:none;transform:translateY(-2px);box-shadow:0 7px 18px rgba(15,23,42,.1)}.single-herbs-guide__category-link{display:flex;flex:1;flex-direction:column;color:inherit;text-decoration:none}.single-herbs-guide__category-link:hover{color:inherit;text-decoration:none}
 .single-herbs-guide__category-number{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;margin-bottom:12px;border-radius:50%;background:#fff0e5;color:#a64f12;font-weight:900}
 .single-herbs-guide__category-reference{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.single-herbs-guide__category-reference .single-herbs-guide__category-number{flex:0 0 34px;margin-bottom:0}.single-herbs-guide__bensky-chapter{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid #c9ded9;border-radius:999px;background:#eef8f6;color:#0d665e;font-size:11px;font-weight:900;letter-spacing:.02em}
 .single-herbs-guide__category strong{font-size:16px;line-height:1.35}.single-herbs-guide__category small{margin-top:auto;padding-top:12px;color:#19706a;font-weight:800;line-height:1.45}
+.single-herbs-guide__category-roster-trigger{display:block;width:100%;margin-top:auto;padding:12px 0 0;border:0;background:transparent;color:#19706a;font-size:12px;font-weight:800;line-height:1.45;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}.single-herbs-guide__category-roster-trigger:hover{color:#0b817d}.single-herbs-guide__category-roster-trigger:after{content:' ⓘ';font-size:11px;text-decoration:none}
 .single-herbs-guide__category--mixed .single-herbs-guide__category-number{background:#dff2ee;color:#0d665e}
 .single-herbs-guide__category--properties .single-herbs-guide__category-number{background:#dbeafe;color:#1d4ed8}
 .single-herbs-guide__category--introduction .single-herbs-guide__category-number{background:#ede9fe;color:#6d28d9}
-.single-herbs-guide__category--bensky-reference{border-top-color:#f77e25;background:#fff7f0}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{background:#fff0e5;color:#a64f12}.single-herbs-guide__category--bensky-reference small{color:#19706a}
+.single-herbs-guide__category--bensky-reference{border-top-color:#f77e25;background:#fff7f0}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{background:#fff0e5;color:#a64f12}.single-herbs-guide__category--bensky-reference small,.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-roster-trigger{color:#19706a}
 .single-herbs-guide__empty{padding:34px;border:1px dashed #aeb8c0;border-radius:12px;background:#fff;text-align:center;color:#64748b}
 .single-herbs-guide__requested-card{margin:0 0 22px;padding:20px 22px;border:1px solid #c9ded9;border-left:5px solid #0b817d;border-radius:11px;background:#f2faf8}.single-herbs-guide__requested-card h3{margin:2px 0 5px;font-size:23px}.single-herbs-guide__requested-card p{margin:0;color:#52677a;line-height:1.5}.single-herbs-guide__requested-card .single-herbs-guide__eyebrow{margin-bottom:4px}.single-herbs-guide__requested-card-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.single-herbs-guide__card-target{scroll-margin-top:24px;animation:single-herb-card-highlight 2.2s ease}.single-herbs-guide__card-target>summary,.single-herbs-guide__card-target.single-herbs-guide__category-herb{box-shadow:0 0 0 4px rgba(11,129,125,.2)}@keyframes single-herb-card-highlight{0%,55%{transform:translateY(-2px)}100%{transform:none}}
 .single-herbs-guide__workspace{padding:28px;border:1px solid #d9e2e7;border-top:5px solid #0b817d;border-radius:13px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
@@ -1307,8 +1316,8 @@ ob_start();
             <header class="single-herbs-guide__roster-header">
                 <div>
                     <p class="single-herbs-guide__eyebrow"><?php echo s($ises ? 'Guideline vigente 2026' : 'Current guideline 2026'); ?></p>
-                    <h3 id="single-herbs-guideline-roster-title"><?php echo s($ises ? 'Listado oficial de hierbas' : 'Official herb roster'); ?></h3>
-                    <p id="single-herbs-guideline-roster-description"><?php echo s($ises
+                    <h3 id="single-herbs-guideline-roster-title" data-guideline-roster-title><?php echo s($ises ? 'Listado oficial de hierbas' : 'Official herb roster'); ?></h3>
+                    <p id="single-herbs-guideline-roster-description" data-guideline-roster-description><?php echo s($ises
                         ? 'Cada hierba tiene un ID estable y su categoría primaria según Bensky. Selecciona una para abrir su ficha.'
                         : 'Each herb has a stable ID and its primary Bensky category. Select one to open its card.'); ?></p>
                 </div>
@@ -1331,7 +1340,7 @@ ob_start();
                     $rosterid = str_pad((string)$guidelineherb['id'], 3, '0', STR_PAD_LEFT);
                     $rostersearch = $rosterid . ' ' . $guidelineherb['name'] . ' ' . $guidelineherb['latin'] . ' ' . $guidelineherb['bensky_category'];
                     ?>
-                    <li class="single-herbs-guide__roster-item" id="guideline-herb-<?php echo s($rosterid); ?>" data-guideline-roster-item data-guideline-roster-search-value="<?php echo s($rostersearch); ?>">
+                    <li class="single-herbs-guide__roster-item" id="guideline-herb-<?php echo s($rosterid); ?>" data-guideline-roster-item data-guideline-roster-search-value="<?php echo s($rostersearch); ?>" data-guideline-roster-guide="<?php echo (int)$guidelineherb['guide_number']; ?>" data-guideline-roster-special="<?php echo s($guidelineherb['special_focus']); ?>">
                         <a href="<?php echo $rosterurl->out(false); ?>">
                             <span class="single-herbs-guide__roster-id">ID <?php echo s($rosterid); ?></span>
                             <span>
@@ -1343,6 +1352,9 @@ ob_start();
                     </li>
                 <?php endforeach; ?>
             </ol>
+            <p class="single-herbs-guide__roster-empty" data-guideline-roster-empty hidden><?php echo s($ises
+                ? 'Este capítulo no contiene sustancias incluidas en el guideline vigente 2026. Consulta la ficha para reconocimiento histórico, seguridad y sustitutos legales.'
+                : 'This chapter contains no substances included in the current 2026 guideline. Open the card for historical recognition, safety, and legal substitutes.'); ?></p>
         </section>
     </div>
 
@@ -1869,48 +1881,49 @@ ob_start();
                     $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
                     ?>
                     <?php if ($categoryguidenumber === 12): ?>
-                        <a id="bensky-chapter-four-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskyfoururl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 4: Hierbas que drenan Humedad' : 'Bensky Chapter 4: Herbs that Drain Dampness'); ?>">
-                            <span class="single-herbs-guide__category-reference">
-                                <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 12' : 'Study-guide card 12'); ?>">12</span>
-                                <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'); ?></span>
-                            </span>
-                            <strong><?php echo s($ises ? 'Hierbas que drenan Humedad' : 'Herbs that Drain Dampness'); ?></strong>
-                            <small><?php echo s($ises ? '21 hierbas oficiales · atlas de 30 monografías · seguridad y comparaciones →' : '21 official herbs · 30-monograph atlas · safety and comparisons →'); ?></small>
-                        </a>
+                        <article id="bensky-chapter-four-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference">
+                            <a class="single-herbs-guide__category-link" href="<?php echo $benskyfoururl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 4: Hierbas que drenan Humedad' : 'Bensky Chapter 4: Herbs that Drain Dampness'); ?>">
+                                <span class="single-herbs-guide__category-reference">
+                                    <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 12' : 'Study-guide card 12'); ?>">12</span>
+                                    <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'); ?></span>
+                                </span>
+                                <strong><?php echo s($ises ? 'Hierbas que drenan Humedad' : 'Herbs that Drain Dampness'); ?></strong>
+                            </a>
+                            <button class="single-herbs-guide__category-roster-trigger" type="button" aria-haspopup="dialog" aria-controls="single-herbs-guideline-roster" aria-expanded="false" data-category-roster-open data-roster-special="bensky4" data-roster-count="21" data-roster-title="<?php echo s($ises ? 'Hierbas oficiales · Bensky, capítulo 4' : 'Official herbs · Bensky, Chapter 4'); ?>" aria-label="<?php echo s($ises ? 'Ver las 21 hierbas oficiales del capítulo 4' : 'View the 21 official herbs in Chapter 4'); ?>"><?php echo s($ises ? '21 hierbas oficiales · atlas de 30 monografías · seguridad y comparaciones →' : '21 official herbs · 30-monograph atlas · safety and comparisons →'); ?></button>
+                        </article>
                     <?php endif; ?>
-                    <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
-                        <span class="single-herbs-guide__category-reference">
-                            <span class="single-herbs-guide__category-number" aria-label="<?php echo s(($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $categorydisplayguidenumber); ?>"><?php echo $categorydisplayguidenumber; ?></span>
-                            <?php if ($categorybenskychapter !== ''): ?><span class="single-herbs-guide__bensky-chapter"><?php echo s($categorybenskychapter); ?></span><?php endif; ?>
-                        </span>
-                        <strong><?php echo $categorydisplayname; ?></strong>
-                        <small><?php echo s($categoryfooter); ?></small>
-                    </a>
+                    <article class="single-herbs-guide__category">
+                        <a class="single-herbs-guide__category-link" href="<?php echo $categoryurl->out(false); ?>">
+                            <span class="single-herbs-guide__category-reference">
+                                <span class="single-herbs-guide__category-number" aria-label="<?php echo s(($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $categorydisplayguidenumber); ?>"><?php echo $categorydisplayguidenumber; ?></span>
+                                <?php if ($categorybenskychapter !== ''): ?><span class="single-herbs-guide__bensky-chapter"><?php echo s($categorybenskychapter); ?></span><?php endif; ?>
+                            </span>
+                            <strong><?php echo $categorydisplayname; ?></strong>
+                        </a>
+                        <button class="single-herbs-guide__category-roster-trigger" type="button" aria-haspopup="dialog" aria-controls="single-herbs-guideline-roster" aria-expanded="false" data-category-roster-open data-roster-guide="<?php echo $categoryguidenumber; ?>" data-roster-count="<?php echo $categoryherbcount; ?>" data-roster-title="<?php echo s($categorydisplayname); ?>" aria-label="<?php echo s(($ises ? 'Ver las ' : 'View the ') . $categoryherbcount . ($ises ? ' hierbas oficiales de ' : ' official herbs in ') . $categorydisplayname); ?>"><?php echo s($categoryfooter); ?></button>
+                    </article>
                 <?php endforeach; ?>
-                <a id="bensky-chapter-seventeen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskyseventeenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 17: Hierbas que expulsan parásitos' : 'Bensky Chapter 17: Herbs that Expel Parasites'); ?>">
-                    <span class="single-herbs-guide__category-reference">
-                        <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 32' : 'Study-guide card 32'); ?>">32</span>
-                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 17' : 'Bensky · Chapter 17'); ?></span>
-                    </span>
-                    <strong><?php echo s($ises ? 'Hierbas que expulsan parásitos' : 'Herbs that Expel Parasites'); ?></strong>
-                    <small><?php echo s($ises ? '1 hierba oficial · atlas de 13 monografías · seguridad y comparaciones →' : '1 official herb · 13-monograph atlas · safety and comparisons →'); ?></small>
-                </a>
-                <a id="bensky-chapter-eighteen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskyeighteenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 18: Sustancias para aplicación externa' : 'Bensky Chapter 18: Substances for Topical Application'); ?>">
-                    <span class="single-herbs-guide__category-reference">
-                        <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 33' : 'Study-guide card 33'); ?>">33</span>
-                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 18' : 'Bensky · Chapter 18'); ?></span>
-                    </span>
-                    <strong><?php echo s($ises ? 'Sustancias para aplicación externa' : 'Substances for Topical Application'); ?></strong>
-                    <small><?php echo s($ises ? '2 sustancias oficiales · atlas de 13 monografías · seguridad y comparaciones →' : '2 official substances · 13-monograph atlas · safety and comparisons →'); ?></small>
-                </a>
-                <a id="bensky-chapter-nineteen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskynineteenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 19: Sustancias obsoletas' : 'Bensky Chapter 19: Obsolete Substances'); ?>">
-                    <span class="single-herbs-guide__category-reference">
-                        <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 34' : 'Study-guide card 34'); ?>">34</span>
-                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 19' : 'Bensky · Chapter 19'); ?></span>
-                    </span>
-                    <strong><?php echo s($ises ? 'Sustancias obsoletas' : 'Obsolete Substances'); ?></strong>
-                    <small><?php echo s($ises ? '0 sustancias oficiales · atlas de seguridad de 17 monografías · toxicidad, conservación y sustitutos →' : '0 official substances · 17-monograph safety atlas · toxicity, conservation and substitutes →'); ?></small>
-                </a>
+                <article id="bensky-chapter-seventeen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference">
+                    <a class="single-herbs-guide__category-link" href="<?php echo $benskyseventeenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 17: Hierbas que expulsan parásitos' : 'Bensky Chapter 17: Herbs that Expel Parasites'); ?>">
+                        <span class="single-herbs-guide__category-reference"><span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 32' : 'Study-guide card 32'); ?>">32</span><span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 17' : 'Bensky · Chapter 17'); ?></span></span>
+                        <strong><?php echo s($ises ? 'Hierbas que expulsan parásitos' : 'Herbs that Expel Parasites'); ?></strong>
+                    </a>
+                    <button class="single-herbs-guide__category-roster-trigger" type="button" aria-haspopup="dialog" aria-controls="single-herbs-guideline-roster" aria-expanded="false" data-category-roster-open data-roster-special="bensky17" data-roster-count="1" data-roster-title="<?php echo s($ises ? 'Hierbas oficiales · Bensky, capítulo 17' : 'Official herbs · Bensky, Chapter 17'); ?>" aria-label="<?php echo s($ises ? 'Ver la hierba oficial del capítulo 17' : 'View the official herb in Chapter 17'); ?>"><?php echo s($ises ? '1 hierba oficial · atlas de 13 monografías · seguridad y comparaciones →' : '1 official herb · 13-monograph atlas · safety and comparisons →'); ?></button>
+                </article>
+                <article id="bensky-chapter-eighteen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference">
+                    <a class="single-herbs-guide__category-link" href="<?php echo $benskyeighteenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 18: Sustancias para aplicación externa' : 'Bensky Chapter 18: Substances for Topical Application'); ?>">
+                        <span class="single-herbs-guide__category-reference"><span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 33' : 'Study-guide card 33'); ?>">33</span><span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 18' : 'Bensky · Chapter 18'); ?></span></span>
+                        <strong><?php echo s($ises ? 'Sustancias para aplicación externa' : 'Substances for Topical Application'); ?></strong>
+                    </a>
+                    <button class="single-herbs-guide__category-roster-trigger" type="button" aria-haspopup="dialog" aria-controls="single-herbs-guideline-roster" aria-expanded="false" data-category-roster-open data-roster-special="bensky18" data-roster-count="2" data-roster-title="<?php echo s($ises ? 'Sustancias oficiales · Bensky, capítulo 18' : 'Official substances · Bensky, Chapter 18'); ?>" aria-label="<?php echo s($ises ? 'Ver las 2 sustancias oficiales del capítulo 18' : 'View the 2 official substances in Chapter 18'); ?>"><?php echo s($ises ? '2 sustancias oficiales · atlas de 13 monografías · seguridad y comparaciones →' : '2 official substances · 13-monograph atlas · safety and comparisons →'); ?></button>
+                </article>
+                <article id="bensky-chapter-nineteen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference">
+                    <a class="single-herbs-guide__category-link" href="<?php echo $benskynineteenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 19: Sustancias obsoletas' : 'Bensky Chapter 19: Obsolete Substances'); ?>">
+                        <span class="single-herbs-guide__category-reference"><span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 34' : 'Study-guide card 34'); ?>">34</span><span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 19' : 'Bensky · Chapter 19'); ?></span></span>
+                        <strong><?php echo s($ises ? 'Sustancias obsoletas' : 'Obsolete Substances'); ?></strong>
+                    </a>
+                    <button class="single-herbs-guide__category-roster-trigger" type="button" aria-haspopup="dialog" aria-controls="single-herbs-guideline-roster" aria-expanded="false" data-category-roster-open data-roster-special="bensky19" data-roster-count="0" data-roster-title="<?php echo s($ises ? 'Sustancias oficiales · Bensky, capítulo 19' : 'Official substances · Bensky, Chapter 19'); ?>" aria-label="<?php echo s($ises ? 'Ver el estado del guideline para el capítulo 19' : 'View the guideline status for Chapter 19'); ?>"><?php echo s($ises ? '0 sustancias oficiales · atlas de seguridad de 17 monografías · toxicidad, conservación y sustitutos →' : '0 official substances · 17-monograph safety atlas · toxicity, conservation and substitutes →'); ?></button>
+                </article>
                 <?php
                 $propertiesparams = ['focus' => 'properties'];
                 if ($ises) {
@@ -1955,9 +1968,17 @@ ob_start();
     const rosterClose = rosterModal ? rosterModal.querySelector('[data-guideline-roster-close]') : null;
     const rosterSearch = rosterModal ? rosterModal.querySelector('[data-guideline-roster-search]') : null;
     const rosterCount = rosterModal ? rosterModal.querySelector('[data-guideline-roster-count]') : null;
+    const rosterTitle = rosterModal ? rosterModal.querySelector('[data-guideline-roster-title]') : null;
+    const rosterDescription = rosterModal ? rosterModal.querySelector('[data-guideline-roster-description]') : null;
+    const rosterEmpty = rosterModal ? rosterModal.querySelector('[data-guideline-roster-empty]') : null;
     const rosterItems = rosterModal ? Array.from(rosterModal.querySelectorAll('[data-guideline-roster-item]')) : [];
+    const categoryRosterTriggers = Array.from(document.querySelectorAll('[data-category-roster-open]'));
+    const allRosterTriggers = [rosterTrigger].concat(categoryRosterTriggers).filter(Boolean);
+    const defaultRosterTitle = rosterTitle ? rosterTitle.textContent : '';
+    const defaultRosterDescription = rosterDescription ? rosterDescription.textContent : '';
     let rosterPreviousFocus = null;
     let previousBodyOverflow = '';
+    let rosterScope = null;
     const normalizeRosterSearch = function(value) {
         return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     };
@@ -1965,7 +1986,10 @@ ob_start();
         const query = normalizeRosterSearch(rosterSearch ? rosterSearch.value : '');
         let visible = 0;
         rosterItems.forEach(function(item) {
-            const matches = !query || normalizeRosterSearch(item.dataset.guidelineRosterSearchValue).includes(query);
+            const matchesScope = !rosterScope
+                || (rosterScope.type === 'guide' && item.dataset.guidelineRosterGuide === rosterScope.value)
+                || (rosterScope.type === 'special' && item.dataset.guidelineRosterSpecial === rosterScope.value);
+            const matches = matchesScope && (!query || normalizeRosterSearch(item.dataset.guidelineRosterSearchValue).includes(query));
             item.hidden = !matches;
             if (matches) {
                 visible += 1;
@@ -1974,15 +1998,53 @@ ob_start();
         if (rosterCount && rosterModal) {
             rosterCount.textContent = visible + ' ' + rosterModal.dataset.countLabel;
         }
+        if (rosterEmpty) {
+            rosterEmpty.hidden = !rosterScope || visible !== 0 || query !== '';
+        }
     };
-    const openRoster = function() {
-        if (!rosterModal || !rosterTrigger) {
+    const setRosterScope = function(trigger) {
+        const guideNumber = trigger ? trigger.dataset.rosterGuide : '';
+        const specialFocus = trigger ? trigger.dataset.rosterSpecial : '';
+        rosterScope = guideNumber
+            ? {type: 'guide', value: guideNumber}
+            : (specialFocus ? {type: 'special', value: specialFocus} : null);
+        if (rosterSearch) {
+            rosterSearch.value = '';
+        }
+        if (!rosterScope) {
+            if (rosterTitle) {
+                rosterTitle.textContent = defaultRosterTitle;
+            }
+            if (rosterDescription) {
+                rosterDescription.textContent = defaultRosterDescription;
+            }
+            return;
+        }
+        const expectedCount = Number(trigger.dataset.rosterCount || 0);
+        if (rosterTitle) {
+            rosterTitle.textContent = trigger.dataset.rosterTitle || defaultRosterTitle;
+        }
+        if (rosterDescription) {
+            rosterDescription.textContent = expectedCount === 0
+                ? <?php echo json_encode($ises
+                    ? 'No hay entradas oficiales de esta tarjeta en el guideline vigente 2026.'
+                    : 'There are no official entries from this card in the current 2026 guideline.', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>
+                : expectedCount + ' ' + <?php echo json_encode($ises
+                    ? 'entradas oficiales. Selecciona una para abrir su ficha.'
+                    : 'official entries. Select one to open its card.', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+        }
+    };
+    const openRoster = function(trigger) {
+        if (!rosterModal || !trigger) {
             return;
         }
         rosterPreviousFocus = document.activeElement;
         previousBodyOverflow = document.body.style.overflow;
+        setRosterScope(trigger);
         rosterModal.hidden = false;
-        rosterTrigger.setAttribute('aria-expanded', 'true');
+        allRosterTriggers.forEach(function(candidate) {
+            candidate.setAttribute('aria-expanded', candidate === trigger ? 'true' : 'false');
+        });
         document.body.style.overflow = 'hidden';
         updateRoster();
         window.requestAnimationFrame(function() {
@@ -1994,9 +2056,9 @@ ob_start();
             return;
         }
         rosterModal.hidden = true;
-        if (rosterTrigger) {
-            rosterTrigger.setAttribute('aria-expanded', 'false');
-        }
+        allRosterTriggers.forEach(function(trigger) {
+            trigger.setAttribute('aria-expanded', 'false');
+        });
         document.body.style.overflow = previousBodyOverflow;
         if (rosterPreviousFocus && typeof rosterPreviousFocus.focus === 'function') {
             rosterPreviousFocus.focus();
@@ -2005,7 +2067,7 @@ ob_start();
     if (rosterTrigger && rosterModal) {
         rosterTrigger.addEventListener('click', function() {
             if (rosterModal.hidden) {
-                openRoster();
+                openRoster(rosterTrigger);
             } else {
                 closeRoster();
             }
@@ -2043,6 +2105,13 @@ ob_start();
             }
         });
     }
+    categoryRosterTriggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            openRoster(trigger);
+        });
+    });
 
     const requestedHerb = <?php echo json_encode($requestedherbcard['name'] ?? '', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
     const guidelineHerbs = new Set(<?php echo json_encode(array_keys($guidelineherbkeys), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>);
