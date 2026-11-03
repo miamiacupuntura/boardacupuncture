@@ -154,7 +154,7 @@ CATEGORIES = {
     "relieve-food-stagnation": (
         "Herbs that Relieve Food Stagnation",
         "Hierbas que alivian estancamiento de alimentos",
-        "Gu Ya (Setariae, Ji Nei Jin, Lai Fu Zi, Mai Ya, Shan Zha, Shen Qu",
+        "Gu Ya, Ji Nei Jin, Lai Fu Zi, Mai Ya, Shan Zha, Shen Qu",
     ),
     "regulate-qi": (
         "Herbs that Regulate the Qi",

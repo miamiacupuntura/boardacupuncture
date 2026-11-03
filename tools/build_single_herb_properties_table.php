@@ -31,7 +31,21 @@ $extractProfiles = static function(string $file, bool $spanish): array {
         $selected = ['number' => 1, 'name' => 'Builder'];
         $requestedherb = '';
         $requestedherbcard = null;
+        $normalizeherbname = static function(string $value): string {
+            $value = strtolower(trim((string)preg_replace('/\s*\*$/', '', $value)));
+            $value = trim((string)preg_replace('/[^a-z0-9]+/', ' ', $value));
+            return $value === 'xin yi hua' ? 'xin yi' : $value;
+        };
         $guidelineherbkeys = [];
+        $indexFile = dirname($profileFile) . '/single-herb-card-index.json';
+        $indexData = is_readable($indexFile)
+            ? json_decode((string)file_get_contents($indexFile), true)
+            : null;
+        foreach (is_array($indexData) ? ($indexData['herbs'] ?? []) : [] as $indexHerb) {
+            if (!empty($indexHerb['name'])) {
+                $guidelineherbkeys[$normalizeherbname((string)$indexHerb['name'])] = true;
+            }
+        }
         $categoryindexurl = new moodle_url('#');
         ob_start();
         include $profileFile;

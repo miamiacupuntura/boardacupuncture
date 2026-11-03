@@ -15,6 +15,8 @@ FILES=(
     "blocks/myprogress/single-herbs-bensky-chapter-eighteen.php"
     "blocks/myprogress/single-herbs-bensky-chapter-nineteen.php"
     "blocks/myprogress/single-herb-card-index.json"
+    "blocks/myprogress/single-herb-properties.json"
+    "blocks/myprogress/single-herbs-properties-table.php"
 )
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -68,13 +70,17 @@ done
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-eighteen.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json" >/dev/null
+python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-properties.json" >/dev/null
 
 CHAPTER_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-four.php"
 CHAPTER_SEVENTEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php"
 CHAPTER_EIGHTEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-eighteen.php"
 CHAPTER_NINETEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php"
 INDEX_FILE="$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
+PROPERTIES_FILE="$TEMP_DIR/blocks/myprogress/single-herb-properties.json"
+PROPERTIES_TABLE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php"
 GUIDE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php"
 
 grep -Fq "Board guideline atlas: 21 official herbs" "$CHAPTER_FILE"
@@ -93,6 +99,12 @@ grep -Fq "Open all answers" "$GUIDE_FILE"
 grep -Fq "data-category-roster-open" "$GUIDE_FILE"
 grep -Fq "data-guideline-roster-special" "$GUIDE_FILE"
 grep -Fq "single-herbs-guide__roster-empty" "$GUIDE_FILE"
+grep -Fq "single-herbs-properties__category" "$GUIDE_FILE"
+grep -Fq "Categoría" "$PROPERTIES_TABLE_FILE"
+if grep -Eq "data-properties-filter|single-herbs-properties__status|>Estado<|>Status<" "$PROPERTIES_TABLE_FILE"; then
+    echo "ERROR: la tabla maestra todavía contiene controles o columnas de estado"
+    exit 1
+fi
 grep -Fq "Source-chapter atlas: 13 monographs" "$CHAPTER_SEVENTEEN_FILE"
 grep -Fq "Source-chapter atlas: 17 obsolete substances" "$CHAPTER_NINETEEN_FILE"
 grep -Fq "max(\$lastdisplaystudyguidenumber, 34)" "$GUIDE_FILE"
@@ -140,6 +152,32 @@ if [[ "$CHAPTER_NINETEEN_TOXICITY_COUNT" -ne 12 || "$CHAPTER_NINETEEN_ENDANGERED
     exit 1
 fi
 
+python3 - "$INDEX_FILE" "$PROPERTIES_FILE" <<'PY'
+import json
+import sys
+
+index = json.load(open(sys.argv[1], encoding='utf-8'))
+properties = json.load(open(sys.argv[2], encoding='utf-8'))
+index_rows = index.get('herbs', [])
+property_rows = properties.get('herbs', [])
+index_names = [row.get('name') for row in index_rows]
+property_names = [row.get('name') for row in property_rows]
+
+if len(index_rows) != 304 or len(set(index_names)) != 304:
+    raise SystemExit('ERROR: el índice no contiene 304 hierbas oficiales únicas')
+if len(property_rows) != 304 or len(set(property_names)) != 304:
+    raise SystemExit('ERROR: la tabla maestra no contiene 304 hierbas oficiales únicas')
+if set(index_names) != set(property_names):
+    raise SystemExit('ERROR: el índice y la tabla maestra no contienen el mismo roster')
+if any(not all((row.get('benskyCategory') or {}).get(key) for key in ('code', 'en', 'es')) for row in index_rows):
+    raise SystemExit('ERROR: existen hierbas sin categoría Bensky completa')
+gu_ya = next((row for row in index_rows if row.get('name') == 'Gu Ya'), None)
+if not gu_ya or gu_ya.get('latin') != 'Setariae (Oryzae) Fructus germinatus':
+    raise SystemExit('ERROR: Gu Ya no coincide con Appendix A')
+if len({row['benskyCategory']['code'] for row in index_rows}) != 33:
+    raise SystemExit('ERROR: se esperaban 33 categorías Bensky')
+PY
+
 mkdir -p "$BACKUP_DIR"
 for relative_path in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative_path"
@@ -160,7 +198,9 @@ done
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-eighteen.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" >/dev/null
+"$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" >/dev/null
+python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json" >/dev/null
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -173,5 +213,6 @@ echo "Capítulo 18: 2 perfiles oficiales · 13 monografías · 12 preguntas"
 echo "Capítulo 19: 0 perfiles oficiales · 12 sustancias por toxicidad · 5 de especies protegidas · 15 preguntas"
 echo "Preguntas: formato unificado Yang + Bensky y controles abrir/cerrar en las 34 tarjetas"
 echo "Pop-up por tarjeta: listado oficial filtrado, buscador, enlaces directos y estado vacío verificados"
+echo "Tabla maestra: 304 hierbas oficiales · 33 categorías Bensky · columna de estado eliminada"
 echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT · capítulo 18=$CHAPTER_EIGHTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"

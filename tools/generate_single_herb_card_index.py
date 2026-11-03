@@ -73,7 +73,9 @@ def roster_entries() -> list[dict[str, object]]:
         line = line.strip()
         if not line:
             continue
-        pinyin, separator, latin = line.rpartition(" (")
+        # Split at the first delimiter because some pharmaceutical names contain
+        # their own parenthetical qualifier (for example Setariae (Oryzae)).
+        pinyin, separator, latin = line.partition(" (")
         if not separator or not latin.endswith(")"):
             raise ValueError(f"Invalid Appendix A entry: {line}")
         entries.append({"name": pinyin, "latin": latin[:-1]})
