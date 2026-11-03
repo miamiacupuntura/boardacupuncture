@@ -107,12 +107,44 @@ $coolherbs = [
         'formulas' => $cooltext('Supporting lifting ingredient in Bu Zhong Yi Qi Tang; Huang Qi is the chief of that current Board formula.', 'Ingrediente ascendente de apoyo en Bu Zhong Yi Qi Tang; Huang Qi es la hierba principal de esa fórmula Board vigente.'),
         'caution' => $cooltext('Use cautiously with Yin deficiency, rising Yang, wheezing or rebellious Qi.', 'Usar con precaución ante deficiencia de Yin, ascenso de Yang, sibilancias o Qi rebelde.'),
     ],
+    [
+        'name' => 'Dan Dou Chi', 'latin' => 'Sojae Semen preparatum',
+        'properties' => $cooltext('Sweet, slightly bitter; cold or warm depending on preparation', 'Dulce, ligeramente amarga; fría o tibia según la preparación'),
+        'channels' => $cooltext('Lung, Stomach', 'Pulmón, Estómago'), 'dose' => '6–12 g',
+        'identity' => $cooltext('Gently releases constrained exterior pathogens and relieves restlessness without the forceful dispersing action of the main Wind-Heat herbs.', 'Libera suavemente patógenos constreñidos en el Exterior y alivia inquietud sin la acción dispersante intensa de las principales hierbas para Viento-Calor.'),
+        'clue' => $cooltext('A mild exterior or warm-pathogen presentation with irritability, restlessness or lingering constraint.', 'Una presentación exterior o por patógeno tibio de carácter leve con irritabilidad, inquietud o constricción persistente.'),
+        'memory' => $cooltext('Prepared soybean quietly vents a closed room: it releases lingering constraint and settles restlessness.', 'La soja preparada ventila silenciosamente una habitación cerrada: libera la constricción persistente y calma la inquietud.'),
+        'unique' => $cooltext('Bensky distinguishes it as the gentle exterior vent: it may act at a superficial level or when the pathogen is more deeply constrained.', 'Bensky la distingue como la exteriorización suave del Exterior: puede actuar en el nivel superficial o cuando el patógeno está más profundamente constreñido.'),
+        'formulas' => $cooltext('Supporting exterior-venting ingredient in Yin Qiao San; Jin Yin Hua and Lian Qiao lead that current Board formula.', 'Ingrediente de apoyo que exterioriza en Yin Qiao San; Jin Yin Hua y Lian Qiao dirigen esa fórmula Board vigente.'),
+        'caution' => $cooltext('Use cautiously with spontaneous sweating or a deficiency presentation without exterior or Heat constraint.', 'Usar con precaución ante sudoración espontánea o una presentación de deficiencia sin constricción exterior ni de Calor.'),
+    ],
+    [
+        'name' => 'Mu Zei', 'latin' => 'Equiseti hiemalis Herba',
+        'properties' => $cooltext('Sweet, bitter; neutral', 'Dulce, amarga; neutra'),
+        'channels' => $cooltext('Liver, Lung, Gallbladder', 'Hígado, Pulmón, Vesícula Biliar'), 'dose' => '3–9 g',
+        'identity' => $cooltext('Disperses Wind-Heat and removes superficial visual obstruction, especially membrane-like conjunctival findings.', 'Dispersa Viento-Calor y elimina obstrucción visual superficial, especialmente hallazgos conjuntivales semejantes a membranas.'),
+        'clue' => $cooltext('Red or painful eyes with superficial clouding, membrane-like growth or visual obstruction from Wind-Heat.', 'Ojos rojos o dolorosos con nubosidad superficial, crecimiento semejante a membrana u obstrucción visual por Viento-Calor.'),
+        'memory' => $cooltext('The jointed scouring rush brushes a thin film from the surface of the eye.', 'La cola de caballo articulada cepilla una película fina de la superficie del ojo.'),
+        'unique' => $cooltext('Unlike Ju Hua, Mu Zei does not nourish the eyes; its exam distinction is removing superficial visual obstruction.', 'A diferencia de Ju Hua, Mu Zei no nutre los ojos; su distinción de examen es eliminar la obstrucción visual superficial.'),
+        'formulas' => $cooltext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $cooltext('Use cautiously when eye symptoms arise from Liver-Kidney Yin or Blood deficiency without Wind-Heat.', 'Usar con precaución cuando los síntomas oculares provienen de deficiencia de Yin de Hígado-Riñón o de Sangre sin Viento-Calor.'),
+    ],
 ];
 
-$coolannex = [
-    ['name' => 'Dan Dou Chi', 'latin' => 'Sojae Semen preparatum', 'common' => $cooltext('Prepared Soybean', 'Soja preparada'), 'note' => $cooltext('Gently releases the Exterior and relieves restlessness. It appears in the official 2026 Appendix A, but is not named in this category module title.', 'Libera suavemente el Exterior y alivia inquietud. Aparece en el Apéndice A oficial 2026, pero no está nombrada en el título de este módulo.')],
-    ['name' => 'Mu Zei', 'latin' => 'Equiseti hiemalis Herba', 'common' => $cooltext('Scouring Rush', 'Cola de caballo áspera'), 'note' => $cooltext('Disperses Wind-Heat and reduces superficial visual obstruction. It appears in the official 2026 Appendix A, but is retained here as annex recognition.', 'Dispersa Viento-Calor y reduce obstrucción visual superficial. Aparece en el Apéndice A oficial 2026, pero se conserva aquí como reconocimiento de anexo.')],
-];
+$coolherbs = array_map(static function(array $herb): array {
+    $herb['primarycategory'] = 2;
+    return $herb;
+}, $coolherbs);
+
+$coolguidelinecheck = static function(array $herb) use ($guidelineherbkeys, $normalizeherbname): bool {
+    return isset($guidelineherbkeys[$normalizeherbname((string)$herb['name'])]);
+};
+$coolcategorycheck = static function(array $herb): bool {
+    return (int)($herb['primarycategory'] ?? 0) === 2;
+};
+$coolherbs = array_values(array_filter($coolherbs, static function(array $herb) use ($coolguidelinecheck, $coolcategorycheck): bool {
+    return $coolguidelinecheck($herb) && $coolcategorycheck($herb);
+}));
 
 $coolcharts = [
     ['title' => $cooltext('Relative coldness', 'Frialdad relativa'), 'figure' => 'Yang Fig. 2.6', 'items' => ['Bo He' => 100, 'Niu Bang Zi' => 100, 'Sang Ye' => 80, 'Chan Tui' => 40, 'Ju Hua' => 40, 'Sheng Ma' => 20, 'Man Jing Zi' => 20]],
@@ -129,6 +161,8 @@ $cooldecisions = [
     [$cooltext('Stiff neck + thirst or diarrhea', 'Rigidez cervical + sed o diarrea'), 'Ge Gen'],
     [$cooltext('Alternating chills and fever', 'Alternancia de frío y fiebre'), 'Chai Hu'],
     [$cooltext('Toxicity + prolapse or sinking', 'Toxicidad + prolapso o hundimiento'), 'Sheng Ma'],
+    [$cooltext('Gentle venting + restlessness', 'Exteriorización suave + inquietud'), 'Dan Dou Chi'],
+    [$cooltext('Superficial visual obstruction', 'Obstrucción visual superficial'), 'Mu Zei'],
 ];
 
 $coolcomparisons = [
@@ -157,29 +191,20 @@ $coolquestions = [
     <p class="single-herbs-guide__scope-note"><strong><?php echo s($cooltext('General precautions:', 'Precauciones generales:')); ?></strong> <?php echo s($cooltext('these ascending and dispersing herbs can consume Qi and fluids when overused. Adjust for constitution, season and severity, and use caution with deficiency, spontaneous sweating, bleeding or pregnancy.', 'estas hierbas ascendentes y dispersantes pueden consumir Qi y líquidos si se usan en exceso. Ajusta según constitución, estación y gravedad, y usa precaución ante deficiencia, sudoración espontánea, sangrado o embarazo.')); ?></p>
     <aside class="single-herbs-guide__memory-path" aria-label="<?php echo s($cooltext('Wind-Heat house memory path', 'Recorrido mnemotécnico de la casa de Viento-Calor')); ?>">
         <p class="single-herbs-guide__memory-line"><?php echo s($cooltext('Return to the Exterior house—now summer heat has entered upstairs.', 'Regresa a la casa del Exterior: ahora el calor de verano entró al piso superior.')); ?></p>
-        <p><?php echo s($cooltext('Bo He opens the windows; Niu Bang Zi clears the throat and hallway; Chan Tui sheds the curtains; Sang Ye moistens the dry Lung room; Ju Hua cools the eye lamps; Man Jing Zi reaches the roof; Ge Gen loosens the stiff staircase; Chai Hu opens the half-inside door; Sheng Ma runs the elevator upward.', 'Bo He abre las ventanas; Niu Bang Zi despeja la garganta y el pasillo; Chan Tui muda las cortinas; Sang Ye humedece el cuarto seco del Pulmón; Ju Hua enfría las lámparas de los ojos; Man Jing Zi llega al techo; Ge Gen afloja la escalera rígida; Chai Hu abre la puerta medio interior; Sheng Ma sube el ascensor.')); ?></p>
+        <p><?php echo s($cooltext('Bo He opens the windows; Niu Bang Zi clears the throat and hallway; Chan Tui sheds the curtains; Sang Ye moistens the dry Lung room; Ju Hua cools the eye lamps; Man Jing Zi reaches the roof; Ge Gen loosens the stiff staircase; Chai Hu opens the half-inside door; Sheng Ma runs the elevator upward; Dan Dou Chi quietly vents the closed room; Mu Zei brushes a film from the eye.', 'Bo He abre las ventanas; Niu Bang Zi despeja la garganta y el pasillo; Chan Tui muda las cortinas; Sang Ye humedece el cuarto seco del Pulmón; Ju Hua enfría las lámparas de los ojos; Man Jing Zi llega al techo; Ge Gen afloja la escalera rígida; Chai Hu abre la puerta medio interior; Sheng Ma sube el ascensor; Dan Dou Chi ventila suavemente la habitación cerrada; Mu Zei cepilla una película del ojo.')); ?></p>
         <p><strong><?php echo s($cooltext('Acrid disperses, Cool clears, and light herbs rise to the head and Upper Jiao.', 'Lo acre dispersa, lo fresco aclara y las hierbas ligeras suben a la cabeza y al Jiao Superior.')); ?></strong></p>
     </aside>
 
     <h5 class="single-herbs-guide__catalog-heading"><?php echo s($cooltext('Current Board category herbs', 'Hierbas de la categoría Board vigente')); ?></h5>
-    <p class="single-herbs-guide__catalog-intro"><?php echo s($cooltext('Study these nine named herbs first. The annex does not enlarge this module boundary.', 'Estudia primero estas nueve hierbas nombradas. El anexo no amplía el límite de este módulo.')); ?></p>
+    <p class="single-herbs-guide__catalog-intro"><?php echo s($cooltext('Study these eleven official herbs as Category 2. The original nine remain the heading core; Dan Dou Chi and Mu Zei are included here because each satisfies both required conditions: it is in the current guideline 2026 and its primary classification is Cool, Acrid Herbs that Release the Exterior.', 'Estudia estas once hierbas oficiales como Categoría 2. Las nueve originales siguen siendo el núcleo del encabezado; Dan Dou Chi y Mu Zei se incluyen aquí porque cada una cumple las dos condiciones requeridas: está en el guideline vigente 2026 y su clasificación primaria es Hierbas frescas y acres que liberan el Exterior.')); ?></p>
     <ol class="single-herbs-guide__category-herbs">
         <?php foreach ($coolherbs as $categoryherb): ?>
             <li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core">
-                <div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge"><?php echo s($cooltext('In Board category list', 'En el listado de la categoría Board')); ?></span></div>
+                <div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge"><?php echo s($cooltext('In current guideline 2026 · Category 2', 'En el guideline vigente 2026 · Categoría 2')); ?></span></div>
                 <p><?php echo s($categoryherb['identity']); ?></p>
             </li>
         <?php endforeach; ?>
     </ol>
-    <div class="single-herbs-guide__annex">
-        <h5 class="single-herbs-guide__catalog-heading"><?php echo s($cooltext('Annex · Additional official recognition herbs', 'Anexo · Hierbas oficiales adicionales para reconocimiento')); ?></h5>
-        <p class="single-herbs-guide__catalog-intro"><?php echo s($cooltext('These herbs remain in the official Appendix A but are not mixed into the nine-herb study sequence above.', 'Estas hierbas permanecen en el Apéndice A oficial, pero no se mezclan con la secuencia de nueve hierbas anterior.')); ?></p>
-        <ol class="single-herbs-guide__category-herbs">
-            <?php foreach ($coolannex as $categoryherb): ?>
-                <li class="single-herbs-guide__category-herb"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside"><?php echo s($cooltext('Annex recognition', 'Reconocimiento de anexo')); ?></span></div><span class="single-herbs-guide__category-herb-common"><?php echo s($categoryherb['common']); ?></span><p><?php echo s($categoryherb['note']); ?></p></li>
-            <?php endforeach; ?>
-        </ol>
-    </div>
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-two-yang-title">

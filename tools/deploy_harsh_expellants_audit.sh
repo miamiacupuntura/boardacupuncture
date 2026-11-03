@@ -11,6 +11,7 @@ PHP_BIN="${PHP_BIN:-}"
 CATEGORY_PATH="blocks/myprogress/single-herbs-category-harsh-expellants.php"
 MOIST_PATH="blocks/myprogress/single-herbs-category-moist-laxatives.php"
 LABEL_CATEGORY_PATHS=(
+    "blocks/myprogress/single-herbs-category-cool-acrid.php"
     "blocks/myprogress/single-herbs-category-clear-deficient-heat.php"
     "blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
     "blocks/myprogress/single-herbs-category-clear-summer-heat.php"
@@ -100,6 +101,16 @@ if ids != list(range(1, 305)):
     raise SystemExit('ERROR: los IDs del guideline deben ser únicos y consecutivos de 1 a 304')
 if herbs[0].get('name') != 'Ai Ye' or herbs[-1].get('name') != 'Zi Wan':
     raise SystemExit('ERROR: el orden alfabético estable del índice no coincide con Ai Ye…Zi Wan')
+by_name = {herb.get('name'): herb for herb in herbs}
+expected_category_two = {
+    'Dan Dou Chi': (67, 2),
+    'Mu Zei': (182, 2),
+}
+for name, (expected_id, expected_guide) in expected_category_two.items():
+    herb = by_name.get(name, {})
+    actual = (herb.get('id'), herb.get('guideNumber'))
+    if actual != (expected_id, expected_guide):
+        raise SystemExit(f'ERROR: {name}: ID/categoría={actual!r}; se esperaba {(expected_id, expected_guide)!r}')
 PY
 
 python3 - "$TEMP_DIR/$PROPERTIES_PATH" <<'PY'
@@ -166,6 +177,13 @@ grep -Fq "Why it appears here" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Study these thirteen official herbs as Category 1" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "\$windcoldguidelinecheck" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "\$windcoldcategorycheck" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "Study these eleven official herbs as Category 2" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-acrid.php"
+grep -Fq "\$coolguidelinecheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-acrid.php"
+grep -Fq "\$coolcategorycheck" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-acrid.php"
+if grep -Fq "Annex · Additional official recognition herbs" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-acrid.php"; then
+    echo "ERROR: Dan Dou Chi y Mu Zei todavía aparecen como anexo de la Categoría 2"
+    exit 1
+fi
 grep -Fq "single-herbs-guide__annex-toggle" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "3 contextual entries outside the 2026 guideline · click to open" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Categoría principal" "$TEMP_DIR/$GUIDE_TRANSLATION_PATH"
@@ -258,6 +276,7 @@ echo "Propiedades, identidad botánica, dosis y advertencias auditadas"
 echo "Categorías 13–15: monografías formales, anexos y mapa comparativo actualizados"
 echo "Anexos del capítulo 6: guideline vigente arriba y monografías fuente debajo"
 echo "Categoría 15: resumen funcional completo y pareja oficial 40/51 registrados"
+echo "Categoría 2: 11 hierbas oficiales; Dan Dou Chi y Mu Zei integradas, sin anexo"
 echo "Popup del guideline: 304 hierbas con IDs estables 001–304 y búsqueda"
 echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Anexo Viento-Frío: plegado y movido al final de la categoría"
