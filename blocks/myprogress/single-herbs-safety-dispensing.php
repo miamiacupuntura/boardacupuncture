@@ -135,6 +135,89 @@ foreach ($safetyrows as $safetyposition => $safetyrow) {
     $structuredinteractions += $specificinteraction !== '' ? 1 : 0;
 }
 
+$safetyquestions = [
+    [
+        $safetytext('What does a “not documented here” statement mean in the pregnancy or interaction column?', '¿Qué significa una frase de “no documentado aquí” en la columna de embarazo o interacciones?'),
+        $safetytext('It marks the boundary of the structured table. It never means that the herb is safe, permitted in pregnancy, or free of interactions; the complete monograph, medicines and patient context must still be reviewed.', 'Marca el límite de la tabla estructurada. Nunca significa que la hierba sea segura, permitida en embarazo o libre de interacciones; todavía deben revisarse la monografía completa, los medicamentos y el contexto del paciente.'),
+    ],
+    [
+        $safetytext('Bai Tou Weng has no additional herb-specific warning in this table. Which category precaution still applies?', 'Bai Tou Weng no tiene una advertencia adicional específica en esta tabla. ¿Qué precaución de categoría todavía se aplica?'),
+        $safetytext('It belongs to herbs that clear Heat and resolve toxicity: its cold, clearing nature requires caution with Spleen/Stomach deficiency or chronic diarrhea, and serious infection requires biomedical evaluation.', 'Pertenece a las hierbas que aclaran Calor y resuelven toxicidad: su naturaleza fría y depurativa exige cautela en deficiencia de Bazo/Estómago o diarrea crónica, y una infección grave requiere evaluación biomédica.'),
+    ],
+    [
+        $safetytext('What is the non-negotiable dispensing rule for Ban Xia?', '¿Cuál es la regla de dispensación no negociable para Ban Xia?'),
+        $safetytext('Use only properly processed Ban Xia for internal administration. Raw material is toxic; avoid it with bleeding or yin-deficiency dry cough, and remember that sedative effects may be intensified by barbiturates.', 'Usar solo Ban Xia correctamente procesada para administración interna. La materia cruda es tóxica; evitarla con sangrado o tos seca por deficiencia de yin y recordar que los barbitúricos pueden intensificar los efectos sedantes.'),
+    ],
+    [
+        $safetytext('Which processing and interaction warnings identify Chuan Wu as a high-risk herb?', '¿Qué advertencias de procesamiento e interacción identifican a Chuan Wu como una hierba de alto riesgo?'),
+        $safetytext('Only properly processed material may be used, with the prescribed extended pre-decoction. Raw, underprocessed or excessive Chuan Wu is cardiotoxic and neurotoxic; avoid antiarrhythmics, cardiotoxic drugs, stimulants and other aconite products.', 'Solo puede usarse material correctamente procesado, con la decocción previa prolongada indicada. Chuan Wu cruda, insuficientemente procesada o excesiva es cardiotóxica y neurotóxica; evitar antiarrítmicos, fármacos cardiotóxicos, estimulantes y otros productos de acónito.'),
+    ],
+    [
+        $safetytext('Why is Ba Dou never a self-treatment herb?', '¿Por qué Ba Dou nunca es una hierba de automedicación?'),
+        $safetytext('It is a very toxic harsh expellant requiring specialist-only dosing and the correctly defatted preparation. It is contraindicated in pregnancy and weakness, and must not be combined with Qian Niu Zi.', 'Es un expulsor drástico muy tóxico que requiere dosificación exclusiva de especialista y la preparación correctamente desgrasada. Está contraindicada en embarazo y debilidad, y no debe combinarse con Qian Niu Zi.'),
+    ],
+    [
+        $safetytext('Which history and medication clues make Ma Huang unsafe or inappropriate?', '¿Qué antecedentes y medicamentos vuelven insegura o inapropiada a Ma Huang?'),
+        $safetytext('Uncontrolled hypertension, significant heart disease, hyperthyroidism, insomnia and spontaneous sweating are major cautions. Avoid additive stimulation with MAO inhibitors, stimulants, decongestants and medicines that raise heart rate or blood pressure.', 'Hipertensión no controlada, cardiopatía importante, hipertiroidismo, insomnio y sudor espontáneo son precauciones principales. Evitar estimulación aditiva con inhibidores de MAO, estimulantes, descongestionantes y medicamentos que aumentan frecuencia cardíaca o presión arterial.'),
+    ],
+    [
+        $safetytext('What common safety rule links Chuan Mu Tong, Mu Tong and Han Fang Ji?', '¿Qué regla de seguridad común relaciona Chuan Mu Tong, Mu Tong y Han Fang Ji?'),
+        $safetytext('Exact botanical identity is mandatory. Use only authenticated species and never accept unidentified or aristolochic-acid-containing substitutes; for Han Fang Ji, also monitor kidney function and fluid status.', 'La identidad botánica exacta es obligatoria. Usar solo especies autenticadas y nunca aceptar sustitutos no identificados o con ácido aristolóquico; con Han Fang Ji, además vigilar función renal y estado de líquidos.'),
+    ],
+    [
+        $safetytext('What two distinctions must be checked before dispensing He Shou Wu?', '¿Qué dos distinciones deben verificarse antes de dispensar He Shou Wu?'),
+        $safetytext('Prepared and unprepared forms have different actions and are not interchangeable. Review liver disease and hepatotoxic medicines because clinically significant hepatotoxicity has been reported; also use caution with anticoagulants, glucose-lowering drugs and laxatives.', 'Las formas preparada y sin preparar tienen acciones distintas y no son intercambiables. Revisar enfermedad hepática y medicamentos hepatotóxicos porque se ha descrito hepatotoxicidad clínicamente significativa; también usar cautela con anticoagulantes, hipoglucemiantes y laxantes.'),
+    ],
+    [
+        $safetytext('What preparation prevents avoidable Bai Guo toxicity?', '¿Qué preparación previene toxicidad evitable por Bai Guo?'),
+        $safetytext('Use mature, properly prepared seeds, cook them thoroughly and remove the toxic embryo when required. Excessive or raw use may cause nausea, vomiting, dyspnea, seizures or loss of consciousness.', 'Usar semillas maduras y correctamente preparadas, cocinarlas por completo y retirar el embrión tóxico cuando corresponda. El uso excesivo o crudo puede causar náuseas, vómitos, disnea, convulsiones o pérdida de conciencia.'),
+    ],
+    [
+        $safetytext('Which shared dispensing rule applies to She Xiang and Bing Pian?', '¿Qué regla de dispensación comparten She Xiang y Bing Pian?'),
+        $safetytext('Do not decoct them; add only the prescribed small amount to pills, powders or topical preparations. Both are potent aromatic substances and are avoided in pregnancy; She Xiang additionally requires legal authenticated sourcing.', 'No deben decoctarse; añadir solo la pequeña cantidad indicada a píldoras, polvos o preparados tópicos. Ambas son sustancias aromáticas potentes y se evitan en embarazo; She Xiang además requiere origen legal y autenticado.'),
+    ],
+    [
+        $safetytext('How do the preparation instructions for Gui Ban, Bie Jia and Hua Shi differ?', '¿Cómo difieren las instrucciones de preparación de Gui Ban, Bie Jia y Hua Shi?'),
+        $safetytext('Crush and pre-decoct the heavy Gui Ban and Bie Jia before the other herbs. Wrap the fine mineral Hua Shi in cloth or a decoction bag before boiling.', 'Triturar y realizar decocción previa de las pesadas Gui Ban y Bie Jia antes de las demás hierbas. Envolver el mineral fino Hua Shi en tela o bolsa de decocción antes de hervir.'),
+    ],
+    [
+        $safetytext('Which three seeds require a mechanical preparation step immediately before or during decoction?', '¿Qué tres semillas requieren un paso mecánico inmediatamente antes o durante la decocción?'),
+        $safetytext('Che Qian Zi is wrapped in cloth or a decoction bag because it becomes mucilaginous. Ting Li Zi and Zi Su Zi are crushed immediately before decoction.', 'Che Qian Zi se envuelve en tela o bolsa porque se vuelve mucilaginosa. Ting Li Zi y Zi Su Zi se trituran inmediatamente antes de la decocción.'),
+    ],
+    [
+        $safetytext('Name the pregnancy rule shared by strong blood-moving herbs such as Hong Hua, San Leng, Chuan Niu Xi, Huai Niu Xi, Yi Mu Cao, Tu Bie Chong and Wang Bu Liu Xing.', 'Indica la regla de embarazo compartida por movilizadoras fuertes de Sangre como Hong Hua, San Leng, Chuan Niu Xi, Huai Niu Xi, Yi Mu Cao, Tu Bie Chong y Wang Bu Liu Xing.'),
+        $safetytext('They are contraindicated or avoided during pregnancy because they invigorate Blood, break accumulations, guide Blood downward or stimulate the uterus and labor pathways. A specialist exception requires a compelling indication.', 'Están contraindicadas o se evitan durante el embarazo porque vigorizan Sangre, rompen acumulaciones, guían Sangre hacia abajo o estimulan útero y vías del parto. Una excepción especializada requiere una indicación imprescindible.'),
+    ],
+    [
+        $safetytext('What safety pattern links Quan Xie and Wu Gong?', '¿Qué patrón de seguridad relaciona Quan Xie y Wu Gong?'),
+        $safetytext('Both are toxic animal substances requiring exact low dosing. Avoid them with Blood deficiency, bleeding tendency or pregnancy, and confirm allergy risk and legal authenticated sourcing.', 'Ambas son sustancias animales tóxicas que requieren dosis bajas exactas. Evitarlas en deficiencia de Sangre, tendencia al sangrado o embarazo y confirmar riesgo de alergia y origen legal autenticado.'),
+    ],
+    [
+        $safetytext('When may Liu Huang be considered internally, and what is prohibited?', '¿Cuándo puede considerarse Liu Huang internamente y qué está prohibido?'),
+        $safetytext('It is primarily external. Internal use requires the specifically prepared form, a clear Kidney-yang deficiency indication and expert supervision; crude sulfur must never be taken internally or applied unsupervised to large damaged skin areas.', 'Es principalmente externa. El uso interno requiere la forma específicamente preparada, una indicación clara de deficiencia de Yang de Riñón y supervisión experta; nunca debe ingerirse azufre crudo ni aplicarse sin supervisión sobre áreas extensas de piel lesionada.'),
+    ],
+    [
+        $safetytext('Which medication class deserves special review with herbs that invigorate Blood?', '¿Qué clase de medicamentos requiere revisión especial con hierbas que vigorizan Sangre?'),
+        $safetytext('Anticoagulant, antiplatelet and thrombolytic medicines, because additive bleeding may occur. Bleeding disorders, heavy menses, procedures and pregnancy also change the risk assessment.', 'Medicamentos anticoagulantes, antiagregantes y trombolíticos, porque puede ocurrir sangrado aditivo. Trastornos hemorrágicos, menstruación abundante, procedimientos y embarazo también cambian la evaluación de riesgo.'),
+    ],
+    [
+        $safetytext('What must be monitored when a dampness-draining herb is combined with a pharmaceutical diuretic?', '¿Qué debe vigilarse al combinar una hierba que drena Humedad con un diurético farmacéutico?'),
+        $safetytext('Fluid balance, electrolytes, blood pressure and kidney function. Yin-fluid deficiency, dehydration and marked urinary frequency increase concern.', 'Equilibrio de líquidos, electrolitos, presión arterial y función renal. Deficiencia de líquidos yin, deshidratación y frecuencia urinaria marcada aumentan la preocupación.'),
+    ],
+    [
+        $safetytext('Which medicines require interaction review with herbs that calm the Spirit or strongly extinguish Wind?', '¿Qué medicamentos requieren revisión de interacción con hierbas que calman Shen o extinguen Viento con fuerza?'),
+        $safetytext('Sedatives, hypnotics, anxiolytics, anticonvulsants, antihypertensives, neurologic medicines and alcohol may produce additive effects. Heavy mineral substances may also need separation from oral medicines.', 'Sedantes, hipnóticos, ansiolíticos, anticonvulsivos, antihipertensivos, medicamentos neurológicos y alcohol pueden producir efectos aditivos. Las sustancias minerales pesadas también pueden requerir separación de medicamentos orales.'),
+    ],
+    [
+        $safetytext('Why should stabilizing and binding herbs not be used too early?', '¿Por qué no deben usarse demasiado pronto las hierbas que estabilizan y contienen?'),
+        $safetytext('Their astringent action can trap an unresolved exterior pathogen, Heat, Dampness or another excess that still needs to be expelled. First confirm that leakage—not retained pathogenic excess—is the treatment target.', 'Su acción astringente puede atrapar un patógeno exterior no resuelto, Calor, Humedad u otro exceso que todavía debe expulsarse. Primero confirmar que la pérdida —y no un exceso patógeno retenido— es el objetivo.'),
+    ],
+    [
+        $safetytext('What is the correct hierarchy for answering any safety question in this unit?', '¿Cuál es la jerarquía correcta para responder cualquier pregunta de seguridad de esta unidad?'),
+        $safetytext('Start with the herb-specific warning and preparation. Then apply the Bensky category precaution, review pregnancy and medication interactions, confirm exact identity and legal sourcing, and finally consult the complete monograph and applicable law before dispensing.', 'Comenzar con la advertencia y preparación específicas de la hierba. Luego aplicar la precaución de categoría Bensky, revisar embarazo e interacciones medicamentosas, confirmar identidad exacta y origen legal y, por último, consultar la monografía completa y la normativa aplicable antes de dispensar.'),
+    ],
+];
+
 $obsoleteparams = ['focus' => 'bensky19'];
 if ($ises) {
     $obsoleteparams['lang'] = 'es';
@@ -252,6 +335,29 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             </table>
         </div>
         <p class="single-herbs-properties__empty-results" data-safety-empty hidden><?php echo s($safetytext('No herbs match these filters.', 'Ninguna hierba coincide con estos filtros.')); ?></p>
+
+        <section class="single-herbs-guide__section single-herbs-safety__review" aria-labelledby="single-herbs-safety-questions">
+            <h4 id="single-herbs-safety-questions"><?php echo s($safetytext('Safety and dispensing recall questions', 'Preguntas de repaso de seguridad y dispensación')); ?></h4>
+            <p class="single-herbs-guide__section-lead"><?php echo s($safetytext(
+                'Answer before opening each panel. These questions test the same hierarchy used by the table: exact herb, preparation, category risk, pregnancy, interactions, identity and legal sourcing.',
+                'Responde antes de abrir cada panel. Estas preguntas evalúan la misma jerarquía de la tabla: hierba exacta, preparación, riesgo de categoría, embarazo, interacciones, identidad y origen legal.'
+            )); ?></p>
+            <div class="single-herbs-guide__final-controls" aria-label="<?php echo s($safetytext('Safety answer controls', 'Controles de respuestas de seguridad')); ?>">
+                <button type="button" data-safety-open-all><?php echo s($safetytext('Open all answers', 'Abrir todas las respuestas')); ?></button>
+                <button type="button" data-safety-close-all><?php echo s($safetytext('Close all answers', 'Cerrar todas las respuestas')); ?></button>
+            </div>
+            <div class="single-herbs-guide__recall single-herbs-safety__questions" data-safety-questions>
+                <?php foreach ($safetyquestions as $questionindex => $safetyquestion): ?>
+                    <details class="single-herbs-guide__final-question" data-safety-question>
+                        <summary>
+                            <span class="single-herbs-guide__final-number"><?php echo s($safetytext('Question', 'Pregunta') . ' ' . ($questionindex + 1)); ?></span>
+                            <span><?php echo s($safetyquestion[0]); ?></span>
+                        </summary>
+                        <div class="single-herbs-guide__final-answer"><p><?php echo s($safetyquestion[1]); ?></p></div>
+                    </details>
+                <?php endforeach; ?>
+            </div>
+        </section>
     </section>
     <script>
     (function() {
@@ -267,6 +373,9 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
         const sortButton = root.querySelector('[data-safety-sort]');
         const sortHeader = root.querySelector('[data-safety-sort-header]');
         const sortIndicator = root.querySelector('[data-safety-sort-indicator]');
+        const reviewQuestions = Array.from(root.querySelectorAll('[data-safety-question]'));
+        const openAllQuestions = root.querySelector('[data-safety-open-all]');
+        const closeAllQuestions = root.querySelector('[data-safety-close-all]');
         const collator = new Intl.Collator(<?php echo json_encode($ises ? 'es' : 'en'); ?>, {sensitivity: 'base', numeric: true});
         const normalize = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
         const refresh = function() {
@@ -300,6 +409,16 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             sortHeader.setAttribute('aria-sort', next);
             sortIndicator.textContent = next === 'ascending' ? '↑' : (next === 'descending' ? '↓' : '⇅');
         });
+        if (openAllQuestions) {
+            openAllQuestions.addEventListener('click', function() {
+                reviewQuestions.forEach(question => { question.open = true; });
+            });
+        }
+        if (closeAllQuestions) {
+            closeAllQuestions.addEventListener('click', function() {
+                reviewQuestions.forEach(question => { question.open = false; });
+            });
+        }
     })();
     </script>
 <?php endif; ?>

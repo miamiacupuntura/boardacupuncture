@@ -1969,7 +1969,7 @@ ob_start();
                         <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Seguridad' : 'Safety'); ?></span>
                     </span>
                     <strong><?php echo s($ises ? 'Seguridad y dispensación' : 'Safety and dispensing'); ?></strong>
-                    <small><?php echo s($ises ? '304 hierbas · categoría · dosis · preparación · toxicidad · embarazo · interacciones · sustitutos →' : '304 herbs · category · dosage · preparation · toxicity · pregnancy · interactions · substitutes →'); ?></small>
+                    <small><?php echo s($ises ? '304 hierbas · precauciones completas · 20 preguntas y respuestas →' : '304 herbs · complete precautions · 20 questions and answers →'); ?></small>
                 </a>
                 <?php
                 $propertiesparams = ['focus' => 'properties'];

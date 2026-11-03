@@ -124,13 +124,22 @@ for language in en es; do
         include $argv[1];
     ' "$SAFETY_FILE" "$language" > "$rendered_safety"
     rendered_safety_count="$(grep -c '<tr data-safety-row' "$rendered_safety")"
+    rendered_safety_question_count="$(grep -c 'data-safety-question>' "$rendered_safety")"
     if [[ "$rendered_safety_count" -ne 304 ]] || grep -Fq '>—<' "$rendered_safety"; then
         echo "ERROR: la tabla de precauciones $language no contiene 304 filas completas"
+        exit 1
+    fi
+    if [[ "$rendered_safety_question_count" -ne 20 ]]; then
+        echo "ERROR: la unidad de precauciones $language no contiene 20 preguntas y respuestas"
         exit 1
     fi
 done
 grep -Fq '<strong>304</strong> complete safety rows' "$TEMP_DIR/safety-dispensing-en.html"
 grep -Fq '<strong>304</strong> filas de seguridad completas' "$TEMP_DIR/safety-dispensing-es.html"
+grep -Fq 'Safety and dispensing recall questions' "$TEMP_DIR/safety-dispensing-en.html"
+grep -Fq 'Preguntas de repaso de seguridad y dispensación' "$TEMP_DIR/safety-dispensing-es.html"
+grep -Fq 'data-safety-open-all' "$SAFETY_FILE"
+grep -Fq 'data-safety-close-all' "$SAFETY_FILE"
 grep -Fq "focus === 'actions_indications'" "$GUIDE_FILE"
 grep -Fq "single-herbs-actions-indications.php" "$GUIDE_FILE"
 grep -Fq "data-ai-category-filter" "$ACTIONS_INDICATIONS_FILE"
@@ -325,7 +334,7 @@ echo "Capítulo 19: 0 perfiles oficiales · 12 sustancias por toxicidad · 5 de 
 echo "Preguntas: formato unificado Yang + Bensky y controles abrir/cerrar en las 34 tarjetas"
 echo "Pop-up por tarjeta: listado oficial filtrado, buscador, enlaces directos y estado vacío verificados"
 echo "Tabla maestra: 304 hierbas oficiales · 33 categorías Bensky · orden y filtro por categoría verificados"
-echo "Seguridad y dispensación: 304 filas completas · 0 guiones · preparación, precauciones, embarazo e interacciones verificadas"
+echo "Seguridad y dispensación: 304 filas completas · 0 guiones · 20 preguntas y respuestas bilingües verificadas"
 echo "Acciones e indicaciones: 304 hierbas del guideline · 0 faltantes · columna editorial eliminada"
 echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT · capítulo 18=$CHAPTER_EIGHTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"
