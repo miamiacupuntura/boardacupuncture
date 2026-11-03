@@ -30,6 +30,12 @@ CARD_INDEX_PATH="blocks/myprogress/single-herb-card-index.json"
 PROPERTIES_PATH="blocks/myprogress/single-herb-properties.json"
 REFERENCE_PATH="blocks/myprogress/single-herbs-dui-yao-reference.php"
 DUI_DATA_PATH="study-guide/comparisons/dui-yao-data.json"
+FORMULA_GUIDE_PATH="blocks/myprogress/formulas-study-guide.php"
+FORMULA_DATA_PATH="blocks/myprogress/formulas-study-guide-data.json"
+FORMULA_ROSTER_PATH="blocks/myprogress/formula-board-roster-2026.json"
+BOARD_GUIDELINE_EN_PATH="study-guide/guidelines/chinese-herbal-medicine.html"
+BOARD_GUIDELINE_ES_PATH="study-guide/guidelines/chinese-herbal-medicine-es.html"
+BOARD_GUIDELINE_CSS_PATH="study-guide/guidelines/guidelines.css"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash deploy_harsh_expellants_audit.sh COMMIT_DE_40_CARACTERES"
@@ -41,7 +47,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     exit 1
 fi
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH"; do
     if [[ ! -f "$MOODLE_ROOT/$relative_path" ]]; then
         echo "ERROR: no se encontró el archivo activo $MOODLE_ROOT/$relative_path"
         exit 1
@@ -75,17 +81,19 @@ echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
 
-for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$REFERENCE_PATH"; do
+for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$REFERENCE_PATH" "$FORMULA_GUIDE_PATH"; do
     "$PHP_BIN" -l "$TEMP_DIR/$php_path" >/dev/null
 done
 python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
 python3 -m json.tool "$TEMP_DIR/$CARD_INDEX_PATH" >/dev/null
 python3 -m json.tool "$TEMP_DIR/$DUI_DATA_PATH" >/dev/null
+python3 -m json.tool "$TEMP_DIR/$FORMULA_DATA_PATH" >/dev/null
+python3 -m json.tool "$TEMP_DIR/$FORMULA_ROSTER_PATH" >/dev/null
 
 python3 - "$TEMP_DIR/$CARD_INDEX_PATH" <<'PY'
 import json
@@ -357,8 +365,58 @@ if [[ "$DUI_PAIR_COUNT" -ne 51 ]]; then
     exit 1
 fi
 
+python3 - "$TEMP_DIR/$FORMULA_ROSTER_PATH" "$TEMP_DIR/$FORMULA_DATA_PATH" "$TEMP_DIR/$BOARD_GUIDELINE_EN_PATH" "$TEMP_DIR/$BOARD_GUIDELINE_ES_PATH" <<'PY'
+import json
+import re
+import sys
+
+roster_path, profiles_path, english_path, spanish_path = sys.argv[1:]
+with open(roster_path, encoding='utf-8') as source:
+    roster = json.load(source)
+with open(profiles_path, encoding='utf-8') as source:
+    profiles = json.load(source)
+
+formulas = roster.get('formulas', [])
+if roster.get('version') != 1 or roster.get('total') != 181 or len(formulas) != 181:
+    raise SystemExit('ERROR: el listado oficial debe contener exactamente 181 fórmulas')
+if [item.get('id') for item in formulas] != list(range(1, 182)):
+    raise SystemExit('ERROR: los IDs oficiales de fórmulas deben ser consecutivos de 1 a 181')
+if len({item.get('name') for item in formulas}) != 181:
+    raise SystemExit('ERROR: el listado oficial contiene nombres de fórmulas duplicados')
+if any(not item.get('englishName') for item in formulas):
+    raise SystemExit('ERROR: falta al menos un nombre inglés oficial de fórmula')
+if len(profiles.get('formulas', [])) != 63 or len(profiles.get('categories', [])) != 14:
+    raise SystemExit('ERROR: se esperaban 63 fichas detalladas en 14 categorías internas')
+
+official_names = {item.get('name') for item in formulas}
+official_aliases = {'Jin Gui Shen Qi Wan': 'Shen Qi Wan'}
+missing_profiles = [
+    profile.get('name')
+    for profile in profiles.get('formulas', [])
+    if official_aliases.get(profile.get('name'), profile.get('name')) not in official_names
+]
+if missing_profiles:
+    raise SystemExit(
+        'ERROR: estas fichas internas no se encontraron en el Appendix C oficial: '
+        + ', '.join(missing_profiles)
+    )
+
+for path in (english_path, spanish_path):
+    html = open(path, encoding='utf-8').read()
+    if len(re.findall(r'data-official-formula-id="\d+"', html)) != 181:
+        raise SystemExit(f'ERROR: {path} no contiene las 181 fórmulas oficiales')
+    if len(re.findall(r'data-formula-core-profile="\d+"', html)) != 63:
+        raise SystemExit(f'ERROR: {path} no contiene las 63 fichas detalladas del núcleo')
+    if 'NCBAHM_CH_Exam_Content_Outline-w-Bibliography_Jan_2026.pdf' not in html:
+        raise SystemExit(f'ERROR: {path} no enlaza la fuente oficial de NCBAHM 2026')
+PY
+
+grep -Fq "Study 63 detailed profiles in 14 internal categories" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
+grep -Fq "all 181 official formulas" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
+grep -Fq "\$isofficialformula" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
+
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH"; do
     target="$MOODLE_ROOT/$relative_path"
     temporary="$TEMP_DIR/$relative_path"
     backup_target="$BACKUP_DIR/$relative_path"
@@ -375,12 +433,14 @@ for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}"
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$file_mode" "$temporary" "$target"
 done
 
-for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$REFERENCE_PATH"; do
+for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$REFERENCE_PATH" "$FORMULA_GUIDE_PATH"; do
     "$PHP_BIN" -l "$MOODLE_ROOT/$php_path" >/dev/null
 done
 python3 -m json.tool "$MOODLE_ROOT/$PROPERTIES_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$CARD_INDEX_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$DUI_DATA_PATH" >/dev/null
+python3 -m json.tool "$MOODLE_ROOT/$FORMULA_DATA_PATH" >/dev/null
+python3 -m json.tool "$MOODLE_ROOT/$FORMULA_ROSTER_PATH" >/dev/null
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -409,4 +469,6 @@ echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Anexo Viento-Frío: plegado y movido al final de la categoría"
 echo "Categoría 1: 13 hierbas oficiales; solo 3 entradas externas permanecen en el anexo"
 echo "Hai Zao, Zao Jiao Ci, Ting Li Zi y Zi Su Zi: perfiles verificados y completos"
+echo "Appendix C 2026: 181 fórmulas oficiales con ID, pinyin y nombre inglés"
+echo "Las 63 fichas anteriores quedan identificadas únicamente como perfiles detallados internos"
 echo "Respaldo: $BACKUP_DIR"

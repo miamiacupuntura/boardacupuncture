@@ -45,6 +45,17 @@ if (!is_array($data)
     throw new moodle_exception('The Formula Study Guide data is temporarily unavailable.');
 }
 
+$officialrosterfile = __DIR__ . '/formula-board-roster-2026.json';
+$officialroster = is_readable($officialrosterfile)
+    ? json_decode((string) file_get_contents($officialrosterfile), true)
+    : null;
+if (!is_array($officialroster)
+        || ($officialroster['version'] ?? null) !== 1
+        || ($officialroster['total'] ?? null) !== 181
+        || count($officialroster['formulas'] ?? []) !== 181) {
+    throw new moodle_exception('The official 2026 NCBAHM Appendix C roster is temporarily unavailable.');
+}
+
 $categorycopy = [
     'release-exterior' => [
         'Release external pathogens and distinguish Wind-Cold from Wind-Heat presentations.',
@@ -135,8 +146,8 @@ $categorycopy = [
         'Estudia el capítulo completo de tonificación en seis secciones: Qi, Sangre, Qi y Sangre, Yin, Yang y Yin-Yang combinados.',
     ],
     'stabilize-bind-chapter-9' => [
-        'Study all 17 principal formulas in Bensky Chapter 9 across five leakage-control sections while preserving the separate official Board roster.',
-        'Estudia las 17 fórmulas principales del capítulo 9 de Bensky en cinco secciones de control de pérdidas, conservando separado el listado oficial del Board.',
+        'Study all 17 principal formulas in Bensky Chapter 9 across five leakage-control sections while preserving the separate official NCBAHM Appendix C roster.',
+        'Estudia las 17 fórmulas principales del capítulo 9 de Bensky en cinco secciones de control de pérdidas, conservando separado el listado oficial del Appendix C de NCBAHM.',
     ],
     'calm-shen-chapter-10' => [
         'Compare all nine principal formulas in Bensky Chapter 10 by deficiency, Fire, Phlegm, floating Yang, sensory signs, and safety.',
@@ -202,84 +213,84 @@ $categorycopy = [
 
 $categoryreferences = [
     'expel-damp' => [
-        'Official Board category: 8 formulas. All eight also appear among the 33 principal formulas in complete Bensky Chapter 16.',
-        'Categoría oficial del Board: 8 fórmulas. Las ocho también aparecen entre las 33 fórmulas principales del capítulo 16 completo de Bensky.',
+        'Original detailed-profile group: 8 formulas. All eight also appear among the 33 principal formulas in complete Bensky Chapter 16.',
+        'Grupo original de fichas detalladas: 8 fórmulas. Las ocho también aparecen entre las 33 fórmulas principales del capítulo 16 completo de Bensky.',
     ],
     'expel-damp-chapter-16' => [
-        'Complete Bensky source: 33 principal formulas in five sections. Board overlap: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang, and Du Huo Ji Sheng Tang.',
-        'Fuente Bensky completa: 33 fórmulas principales en cinco secciones. Coincidencia Board: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang y Du Huo Ji Sheng Tang.',
+        'Complete Bensky source: 33 principal formulas in five sections. Original 63-profile overlap: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang, and Du Huo Ji Sheng Tang.',
+        'Fuente Bensky completa: 33 fórmulas principales en cinco secciones. Coincidencia con las 63 fichas originales: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang y Du Huo Ji Sheng Tang.',
     ],
     'transform-phlegm' => [
-        'Official Board category: 5 formulas. All five also appear among the 18 principal formulas in complete Bensky Chapter 17.',
-        'Categoría oficial del Board: 5 fórmulas. Las cinco también aparecen entre las 18 fórmulas principales del capítulo 17 completo de Bensky.',
+        'Original detailed-profile group: 5 formulas. All five also appear among the 18 principal formulas in complete Bensky Chapter 17.',
+        'Grupo original de fichas detalladas: 5 fórmulas. Las cinco también aparecen entre las 18 fórmulas principales del capítulo 17 completo de Bensky.',
     ],
     'transform-phlegm-chapter-17' => [
-        'Complete Bensky source: 18 principal formulas in seven sections. Board overlap: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San, and Ban Xia Bai Zhu Tian Ma Tang.',
-        'Fuente Bensky completa: 18 fórmulas principales en siete secciones. Coincidencia Board: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San y Ban Xia Bai Zhu Tian Ma Tang.',
+        'Complete Bensky source: 18 principal formulas in seven sections. Original 63-profile overlap: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San, and Ban Xia Bai Zhu Tian Ma Tang.',
+        'Fuente Bensky completa: 18 fórmulas principales en siete secciones. Coincidencia con las 63 fichas originales: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San y Ban Xia Bai Zhu Tian Ma Tang.',
     ],
     'digestive' => [
-        'Official Board category: 1 formula—Bao He Wan. It also appears among the eight principal formulas in complete Bensky Chapter 18.',
-        'Categoría oficial del Board: 1 fórmula—Bao He Wan. También aparece entre las ocho fórmulas principales del capítulo 18 completo de Bensky.',
+        'Original detailed-profile group: 1 formula—Bao He Wan. It also appears among the eight principal formulas in complete Bensky Chapter 18.',
+        'Grupo original de fichas detalladas: 1 fórmula—Bao He Wan. También aparece entre las ocho fórmulas principales del capítulo 18 completo de Bensky.',
     ],
     'digestive-chapter-18' => [
-        'Complete Bensky source: 8 principal formulas in two sections. Board overlap: 1—Bao He Wan. The other seven profiles are clearly supplemental.',
-        'Fuente Bensky completa: 8 fórmulas principales en dos secciones. Coincidencia Board: 1—Bao He Wan. Las otras siete fichas son claramente suplementarias.',
+        'Complete Bensky source: 8 principal formulas in two sections. Original 63-profile overlap: 1—Bao He Wan. The other seven profiles are clearly supplemental.',
+        'Fuente Bensky completa: 8 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 1—Bao He Wan. Las otras siete fichas son claramente suplementarias.',
     ],
     'expel-parasites-chapter-19' => [
-        'Complete Bensky source: 3 principal formulas in one section. Board overlap: 0. All three profiles are supplemental, and two are primarily retained for historical toxicity recognition.',
-        'Fuente Bensky completa: 3 fórmulas principales en una sección. Coincidencia Board: 0. Las tres fichas son suplementarias y dos se conservan principalmente para reconocer toxicidad histórica.',
+        'Complete Bensky source: 3 principal formulas in one section. Original 63-profile overlap: 0. All three profiles are supplemental, and two are primarily retained for historical toxicity recognition.',
+        'Fuente Bensky completa: 3 fórmulas principales en una sección. Coincidencia con las 63 fichas originales: 0. Las tres fichas son suplementarias y dos se conservan principalmente para reconocer toxicidad histórica.',
     ],
     'treat-abscesses-chapter-20' => [
-        'Complete Bensky source: 14 principal formulas in two sections. Board overlap: 0. All profiles are supplemental and require modern medical or surgical triage before historical pattern comparison.',
-        'Fuente Bensky completa: 14 fórmulas principales en dos secciones. Coincidencia Board: 0. Todas las fichas son suplementarias y exigen triaje médico o quirúrgico moderno antes de comparar patrones históricos.',
+        'Complete Bensky source: 14 principal formulas in two sections. Original 63-profile overlap: 0. All profiles are supplemental and require modern medical or surgical triage before historical pattern comparison.',
+        'Fuente Bensky completa: 14 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 0. Todas las fichas son suplementarias y exigen triaje médico o quirúrgico moderno antes de comparar patrones históricos.',
     ],
     'external-application-chapter-21' => [
-        'Complete Bensky source: 11 principal formulas in two sections. Board overlap: 0. All profiles are supplemental; associated formulas and variations remain reference comparisons with explicit modern safety boundaries.',
-        'Fuente Bensky completa: 11 fórmulas principales en dos secciones. Coincidencia Board: 0. Todas las fichas son suplementarias; fórmulas asociadas y variaciones quedan como comparaciones con límites modernos explícitos de seguridad.',
+        'Complete Bensky source: 11 principal formulas in two sections. Original 63-profile overlap: 0. All profiles are supplemental; associated formulas and variations remain reference comparisons with explicit modern safety boundaries.',
+        'Fuente Bensky completa: 11 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 0. Todas las fichas son suplementarias; fórmulas asociadas y variaciones quedan como comparaciones con límites modernos explícitos de seguridad.',
     ],
     'stabilize-bind' => [
-        'Official Board category: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
-        'Categoría oficial del Board: 3 fórmulas. Referencia cruzada: el capítulo 9 completo de Bensky tiene 17; solo coinciden Si Shen Wan y Gu Jing Wan.',
+        'Original detailed-profile group: 3 formulas. Cross-reference: complete Bensky Chapter 9 has 17 formulas; only Si Shen Wan and Gu Jing Wan overlap.',
+        'Grupo original de fichas detalladas: 3 fórmulas. Referencia cruzada: el capítulo 9 completo de Bensky tiene 17; solo coinciden Si Shen Wan y Gu Jing Wan.',
     ],
     'stabilize-bind-chapter-9' => [
-        'Complete Bensky source: 17 formulas. Board overlap: 2. Yu Ping Feng San is the third official Board formula, but Bensky studies it in Chapter 8.',
-        'Fuente Bensky completa: 17 fórmulas. Coincidencia Board: 2. Yu Ping Feng San es la tercera fórmula oficial, pero Bensky la estudia en el capítulo 8.',
+        'Complete Bensky source: 17 formulas. Original 63-profile overlap: 2. Yu Ping Feng San is the third internal Stabilize and Bind profile and is also in official Appendix C, but Bensky studies it in Chapter 8.',
+        'Fuente Bensky completa: 17 fórmulas. Coincidencia con las 63 fichas originales: 2. Yu Ping Feng San es la tercera ficha interna de Estabilizar y contener y también aparece en el Appendix C oficial, pero Bensky la estudia en el capítulo 8.',
     ],
     'calm-shen' => [
-        'Terminology: “Calm Shen” and “Calm the Spirit” are used interchangeably for the same formula family. Official Board category: 3 formulas. All three also appear in complete Bensky Chapter 10.',
-        'Terminología: “Calm Shen”, “Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente para la misma familia. Categoría oficial del Board: 3 fórmulas; las tres aparecen en el capítulo 10 completo de Bensky.',
+        'Terminology: “Calm Shen” and “Calm the Spirit” are used interchangeably for the same formula family. Original detailed-profile group: 3 formulas. All three also appear in complete Bensky Chapter 10.',
+        'Terminología: “Calm Shen”, “Calmar el Shen” y “Calmar el Espíritu” se usan indistintamente para la misma familia. Grupo original de fichas detalladas: 3 fórmulas; las tres aparecen en el capítulo 10 completo de Bensky.',
     ],
     'calm-shen-chapter-10' => [
-        'Terminology: “Formulas That Calm the Spirit” is the same family called “Calm Shen” by the Board, not a second category. Complete Bensky source: 9 formulas; Board overlap: 3.',
-        'Terminología: “Fórmulas que calman el Espíritu” es la misma familia que el Board llama “Calm Shen”, no otra categoría. Fuente Bensky completa: 9 fórmulas; coincidencia Board: 3.',
+        'Terminology: “Formulas That Calm the Spirit” is the same family called “Calm Shen” by the platform, not a second category. Complete Bensky source: 9 formulas; Original 63-profile overlap: 3.',
+        'Terminología: “Fórmulas que calman el Espíritu” es la misma familia que la plataforma llama “Calm Shen”, no otra categoría. Fuente Bensky completa: 9 fórmulas; coincidencia con las 63 fichas originales: 3.',
     ],
     'regulate-qi' => [
-        'Official Board category: 5 formulas. All five also appear among the 20 principal formulas in complete Bensky Chapter 12.',
-        'Categoría oficial del Board: 5 fórmulas. Las cinco también aparecen entre las 20 fórmulas principales del capítulo 12 completo de Bensky.',
+        'Original detailed-profile group: 5 formulas. All five also appear among the 20 principal formulas in complete Bensky Chapter 12.',
+        'Grupo original de fichas detalladas: 5 fórmulas. Las cinco también aparecen entre las 20 fórmulas principales del capítulo 12 completo de Bensky.',
     ],
     'regulate-qi-chapter-12' => [
-        'Complete Bensky source: 20 principal formulas. Board overlap: 5—Yue Ju Wan, Ban Xia Hou Po Tang, Su Zi Jiang Qi Tang, Ding Chuan Tang, and Ju Pi Zhu Ru Tang.',
-        'Fuente Bensky completa: 20 fórmulas principales. Coincidencia Board: 5—Yue Ju Wan, Ban Xia Hou Po Tang, Su Zi Jiang Qi Tang, Ding Chuan Tang y Ju Pi Zhu Ru Tang.',
+        'Complete Bensky source: 20 principal formulas. Original 63-profile overlap: 5—Yue Ju Wan, Ban Xia Hou Po Tang, Su Zi Jiang Qi Tang, Ding Chuan Tang, and Ju Pi Zhu Ru Tang.',
+        'Fuente Bensky completa: 20 fórmulas principales. Coincidencia con las 63 fichas originales: 5—Yue Ju Wan, Ban Xia Hou Po Tang, Su Zi Jiang Qi Tang, Ding Chuan Tang y Ju Pi Zhu Ru Tang.',
     ],
     'invigorate-blood' => [
-        'Official Board category: 4 formulas. All four also appear among the 23 principal formulas in complete Bensky Chapter 13.',
-        'Categoría oficial del Board: 4 fórmulas. Las cuatro también aparecen entre las 23 fórmulas principales del capítulo 13 completo de Bensky.',
+        'Original detailed-profile group: 4 formulas. All four also appear among the 23 principal formulas in complete Bensky Chapter 13.',
+        'Grupo original de fichas detalladas: 4 fórmulas. Las cuatro también aparecen entre las 23 fórmulas principales del capítulo 13 completo de Bensky.',
     ],
     'regulate-blood-chapter-13' => [
-        'Complete Bensky source: 23 principal formulas in two sections. Board overlap: 4—Tao He Cheng Qi Tang, Xue Fu Zhu Yu Tang, Wen Jing Tang, and Gui Zhi Fu Ling Wan.',
-        'Fuente Bensky completa: 23 fórmulas principales en dos secciones. Coincidencia Board: 4—Tao He Cheng Qi Tang, Xue Fu Zhu Yu Tang, Wen Jing Tang y Gui Zhi Fu Ling Wan.',
+        'Complete Bensky source: 23 principal formulas in two sections. Original 63-profile overlap: 4—Tao He Cheng Qi Tang, Xue Fu Zhu Yu Tang, Wen Jing Tang, and Gui Zhi Fu Ling Wan.',
+        'Fuente Bensky completa: 23 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 4—Tao He Cheng Qi Tang, Xue Fu Zhu Yu Tang, Wen Jing Tang y Gui Zhi Fu Ling Wan.',
     ],
     'expel-wind' => [
-        'Official Board category: 3 formulas. All three also appear among the 17 principal formulas in complete Bensky Chapter 14.',
-        'Categoría oficial del Board: 3 fórmulas. Las tres también aparecen entre las 17 fórmulas principales del capítulo 14 completo de Bensky.',
+        'Original detailed-profile group: 3 formulas. All three also appear among the 17 principal formulas in complete Bensky Chapter 14.',
+        'Grupo original de fichas detalladas: 3 fórmulas. Las tres también aparecen entre las 17 fórmulas principales del capítulo 14 completo de Bensky.',
     ],
     'expel-wind-chapter-14' => [
-        'Complete Bensky source: 17 principal formulas in two sections. Board overlap: 3—Xiao Feng San, Xiao Huo Luo Dan, and Tian Ma Gou Teng Yin.',
-        'Fuente Bensky completa: 17 fórmulas principales en dos secciones. Coincidencia Board: 3—Xiao Feng San, Xiao Huo Luo Dan y Tian Ma Gou Teng Yin.',
+        'Complete Bensky source: 17 principal formulas in two sections. Original 63-profile overlap: 3—Xiao Feng San, Xiao Huo Luo Dan, and Tian Ma Gou Teng Yin.',
+        'Fuente Bensky completa: 17 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 3—Xiao Feng San, Xiao Huo Luo Dan y Tian Ma Gou Teng Yin.',
     ],
     'historical-nccaom-formulas' => [
-        'Historical status: Run Chang Wan appears in NCCAOM 2020 Appendix B, but not in the current NCBAHM 2026 Appendix C.',
-        'Estatus histórico: Run Chang Wan aparece en Appendix B de NCCAOM 2020, pero no en el Appendix C vigente de NCBAHM 2026.',
+        'Official 2026 status: Run Chang Wan appears in NCBAHM Appendix C. This profile is stored outside the original 63-profile internal sequence, but it remains official.',
+        'Estatus oficial 2026: Run Chang Wan aparece en Appendix C de NCBAHM. Esta ficha está fuera de la secuencia interna original de 63 perfiles, pero sigue siendo oficial.',
     ],
 ];
 
@@ -305,11 +316,22 @@ $getboardformula = static function(string $name) use ($boardformulasbyname, $boa
     $boardname = $boardformulaaliases[$name] ?? $name;
     return $boardformulasbyname[$boardname] ?? null;
 };
-$getboardstatus = static function(array $formulas, bool $spanish) use ($getboardformula): array {
+$officialformulasbyname = [];
+foreach ($officialroster['formulas'] as $officialformula) {
+    $officialformulasbyname[$officialformula['name']] = $officialformula;
+}
+$officialformulaaliases = [
+    'Jin Gui Shen Qi Wan' => 'Shen Qi Wan',
+];
+$isofficialformula = static function(string $name) use ($officialformulasbyname, $officialformulaaliases): bool {
+    $officialname = $officialformulaaliases[$name] ?? $name;
+    return isset($officialformulasbyname[$officialname]);
+};
+$getboardstatus = static function(array $formulas, bool $spanish) use ($isofficialformula): array {
     $total = count($formulas);
     $included = 0;
     foreach ($formulas as $formula) {
-        if ($getboardformula($formula['name']) !== null) {
+        if ($isofficialformula($formula['name'])) {
             $included++;
         }
     }
@@ -327,11 +349,11 @@ $getboardstatus = static function(array $formulas, bool $spanish) use ($getboard
         'included' => $included,
         'total' => $total,
         'state' => $state,
-        'label' => 'Board: ' . $included . ($spanish ? ' de ' : ' of ') . $total . ' · ' . $summary,
+        'label' => 'Appendix C: ' . $included . ($spanish ? ' de ' : ' of ') . $total . ' · ' . $summary,
     ];
 };
-$displayformulaname = static function(string $name) use ($getboardformula): string {
-    return $name . ($getboardformula($name) !== null ? '*' : '');
+$displayformulaname = static function(string $name) use ($isofficialformula): string {
+    return $name . ($isofficialformula($name) ? '*' : '');
 };
 $supplementalcategories = [];
 foreach ($data['supplementalCategories'] as $category) {
@@ -707,16 +729,16 @@ $regulatebloodchapteroverview = [
 
 $expelwindchaptersections = [
     'board' => [
-        'key' => 'board', 'name' => 'Board formulas first',
-        'nameEs' => 'Fórmulas del Board primero', 'sourcePages' => '634–642, 647–649',
-        'copy' => 'Begin with the three formulas in the current Board guideline. Their asterisks remain visible; the remaining 14 cards then complete the Bensky chapter.',
-        'copyEs' => 'Empieza con las tres fórmulas del guideline vigente del Board. Se conservan sus asteriscos; las 14 fichas restantes completan después el capítulo de Bensky.',
+        'key' => 'board', 'name' => 'Detailed core profiles first',
+        'nameEs' => 'Fichas detalladas del núcleo primero', 'sourcePages' => '634–642, 647–649',
+        'copy' => 'Begin with the three original detailed profiles. Official 2026 membership is shown independently by an asterisk; the remaining 14 cards then complete the Bensky chapter.',
+        'copyEs' => 'Empieza con las tres fichas detalladas originales. La pertenencia oficial de 2026 se muestra de forma independiente con asterisco; las 14 fichas restantes completan después el capítulo de Bensky.',
     ],
     'external' => [
         'key' => 'external', 'name' => 'Additional Bensky formulas · Dredge and Disperse External Wind',
         'nameEs' => 'Fórmulas adicionales de Bensky · Desobstruir y dispersar Viento externo', 'sourcePages' => '619–643',
-        'copy' => 'After the Board formulas, identify an external or channel-level Wind presentation, then distinguish Cold, Heat, Phlegm, Dampness, Blood deficiency, trauma, and toxic emergency patterns.',
-        'copyEs' => 'Después de las fórmulas del Board, identifica un cuadro de Viento externo o de canales y distingue Frío, Calor, Flema, Humedad, deficiencia de Sangre, trauma y patrones tóxicos de urgencia.',
+        'copy' => 'After the detailed core profiles, identify an external or channel-level Wind presentation, then distinguish Cold, Heat, Phlegm, Dampness, Blood deficiency, trauma, and toxic emergency patterns.',
+        'copyEs' => 'Después de las fichas detalladas del núcleo, identifica un cuadro de Viento externo o de canales y distingue Frío, Calor, Flema, Humedad, deficiencia de Sangre, trauma y patrones tóxicos de urgencia.',
     ],
     'internal' => [
         'key' => 'internal', 'name' => 'Additional Bensky formulas · Pacify and Extinguish Internal Wind',
@@ -1184,27 +1206,27 @@ $externalapplicationchapteroverview = [
 
 $chapterinterestinginsights = [
     'dispel-summerheat' => [
-        'title' => 'Interesting point: Summerheat may be distributed across other Board competencies',
-        'titleEs' => 'Dato interesante: el Calor de Verano puede estar distribuido entre otras competencias del Board',
+        'title' => 'Interesting point: the original 63-profile sequence distributed Summerheat across broader study groups',
+        'titleEs' => 'Dato interesante: la secuencia original de 63 fichas distribuyó Calor de Verano entre grupos de estudio más amplios',
         'stat' => '0 of 7 direct overlaps',
         'statEs' => '0 de 7 coincidencias directas',
-        'intro' => 'The current roster has no dedicated Dispel Summerheat category, yet it tests several component mechanisms through formulas filed under Clear Heat, Expel Dampness, and Tonify.',
-        'introEs' => 'El listado vigente no tiene una categoría propia de Dispersar Calor de Verano, aunque evalúa varios mecanismos componentes mediante fórmulas clasificadas en Aclarar Calor, Expulsar Humedad y Tonificar.',
+        'intro' => 'The platform’s original sequence has no dedicated Dispel Summerheat category, yet several component mechanisms appear under Clear Heat, Expel Dampness, and Tonify. Official membership is checked separately against all 181 formulas.',
+        'introEs' => 'La secuencia original de la plataforma no tiene una categoría propia de Dispersar Calor de Verano, aunque varios mecanismos aparecen en Aclarar Calor, Expulsar Humedad y Tonificar. La pertenencia oficial se comprueba por separado contra las 181 fórmulas.',
         'rows' => [
             ['coverage' => 'Strong Heat with thirst and fluid injury', 'coverageEs' => 'Calor intenso con sed y lesión de líquidos', 'boardNames' => ['Bai Hu Tang'], 'additional' => 'Seasonal Heat presentations differentiated by exterior signs, Dampness, and residual Heat.', 'additionalEs' => 'Cuadros estacionales de Calor diferenciados por signos de Exterior, Humedad y Calor residual.'],
             ['coverage' => 'Dampness with exterior and digestive symptoms', 'coverageEs' => 'Humedad con síntomas exteriores y digestivos', 'boardNames' => ['Huo Xiang Zheng Qi San'], 'additional' => 'Xiang Ru San, Liu Yi San, and related formulas grade the balance of Summerheat, Dampness, water, and the exterior.', 'additionalEs' => 'Xiang Ru San, Liu Yi San y fórmulas relacionadas gradúan el equilibrio entre Calor de Verano, Humedad, agua y Exterior.'],
             ['coverage' => 'Qi-Yin and fluid depletion after Heat', 'coverageEs' => 'Agotamiento de Qi-Yin y líquidos después del Calor', 'boardNames' => ['Sheng Mai San'], 'additional' => 'Qing Shu Yi Qi Tang and Wu Shi Lian Mei Tang add narrower recovery patterns after prolonged seasonal Heat.', 'additionalEs' => 'Qing Shu Yi Qi Tang y Wu Shi Lian Mei Tang añaden patrones de recuperación más específicos tras Calor estacional prolongado.'],
         ],
-        'hypothesis' => 'A reasonable hypothesis is that the Board tests the underlying Heat, Dampness, exterior, and Qi-Yin mechanisms without preserving Summerheat as a separate climatic chapter.',
-        'hypothesisEs' => 'Una sospecha razonable es que el Board evalúa los mecanismos subyacentes de Calor, Humedad, Exterior y Qi-Yin sin conservar Calor de Verano como capítulo climático independiente.',
+        'hypothesis' => 'This is an internal organizational choice, not evidence that NCBAHM excludes Summerheat formulas; the official 181-formula roster controls scope.',
+        'hypothesisEs' => 'Esta es una decisión organizativa interna, no evidencia de que NCBAHM excluya fórmulas de Calor de Verano; el listado oficial de 181 controla el alcance.',
         'value' => 'The seven formulas still matter because season, climate, humidity, thirst, sweating, and digestive signs change the treatment strategy. Suspected heat stroke or severe dehydration requires emergency care.',
         'valueEs' => 'Las siete fórmulas siguen siendo importantes porque estación, clima, humedad, sed, sudoración y signos digestivos cambian la estrategia. Sospecha de golpe de calor o deshidratación grave requiere urgencias.',
     ],
     'warm-interior-cold' => [
         'title' => 'Interesting point: four formulas sample four clinically distinct depths of Interior Cold',
         'titleEs' => 'Dato interesante: cuatro fórmulas representan cuatro profundidades clínicas del Frío interno',
-        'stat' => '4 of 11 in the Board roster',
-        'statEs' => '4 de 11 en el listado Board',
+        'stat' => '4 of 11 in the original 63-profile sequence',
+        'statEs' => '4 de 11 en la secuencia original de 63 fichas',
         'intro' => 'The selected formulas form a compact diagnostic ladder from Middle-Burner deficiency-Cold to counterflow, severe abdominal Cold, and collapse of Yang.',
         'introEs' => 'Las fórmulas seleccionadas forman una escala diagnóstica compacta: Frío-deficiencia del Jiao Medio, contracorriente, Frío abdominal intenso y colapso de Yang.',
         'rows' => [
@@ -1218,27 +1240,27 @@ $chapterinterestinginsights = [
         'valueEs' => 'Las fórmulas omitidas refinan localización y raíz; no son intercambiables. Colapso, shock, dolor abdominal intenso o fórmulas con Fu Zi requieren valoración urgente y revisión especializada.',
     ],
     'exterior-interior-excess' => [
-        'title' => 'Interesting point: the Board may decompose mixed formulas into foundational strategies',
-        'titleEs' => 'Dato interesante: el Board puede descomponer las fórmulas mixtas en estrategias fundamentales',
+        'title' => 'Interesting point: the original 63-profile sequence decomposes mixed formulas into foundational strategies',
+        'titleEs' => 'Dato interesante: la secuencia original de 63 fichas descompone fórmulas mixtas en estrategias fundamentales',
         'stat' => '0 of 6 direct overlaps',
         'statEs' => '0 de 6 coincidencias directas',
-        'intro' => 'This chapter is built from simultaneous exterior and interior disease. The current roster tests many of the component strategies, but not these six combined prescriptions as their own category.',
-        'introEs' => 'Este capítulo se construye sobre enfermedad simultánea de Exterior e Interior. El listado vigente evalúa muchas estrategias componentes, pero no estas seis prescripciones combinadas como categoría propia.',
+        'intro' => 'This chapter is built from simultaneous exterior and interior disease. The original 63-profile sequence teaches many component strategies, but did not group these six combined prescriptions as a separate category.',
+        'introEs' => 'Este capítulo se construye sobre enfermedad simultánea de Exterior e Interior. La secuencia original de 63 fichas enseña muchas estrategias componentes, pero no agrupó estas seis prescripciones combinadas como categoría separada.',
         'rows' => [
             ['coverage' => 'Harmonize Shaoyang and purge Yangming', 'coverageEs' => 'Armonizar Shaoyang y purgar Yangming', 'boardNames' => ['Xiao Chai Hu Tang', 'Da Cheng Qi Tang'], 'additional' => 'Da Chai Hu Tang integrates both operations in one mixed excess presentation.', 'additionalEs' => 'Da Chai Hu Tang integra ambas operaciones en un solo cuadro mixto de exceso.'],
             ['coverage' => 'Release the exterior while clearing interior Heat', 'coverageEs' => 'Liberar Exterior mientras se aclara Calor interno', 'boardNames' => ['Ge Gen Tang', 'Huang Lian Jie Du Tang'], 'additional' => 'Ge Gen Huang Qin Huang Lian Tang and Fang Feng Tong Sheng San require more specific combinations of diarrhea, Heat, and exterior constraint.', 'additionalEs' => 'Ge Gen Huang Qin Huang Lian Tang y Fang Feng Tong Sheng San exigen combinaciones más específicas de diarrea, Calor y constricción exterior.'],
             ['coverage' => 'Treat exterior signs with interior Cold-Dampness or deficiency', 'coverageEs' => 'Tratar signos exteriores con Frío-Humedad o deficiencia interna', 'boardNames' => ['Huo Xiang Zheng Qi San', 'Li Zhong Wan'], 'additional' => 'Wu Ji San and Gui Zhi Ren Shen Tang combine warming, releasing, transforming, and tonifying in narrower mixed patterns.', 'additionalEs' => 'Wu Ji San y Gui Zhi Ren Shen Tang combinan calentar, liberar, transformar y tonificar en patrones mixtos más estrechos.'],
         ],
-        'hypothesis' => 'A plausible explanation is that the Board favors clearer single-strategy anchors, then expects the learner to reason through combinations rather than memorize a separate hybrid category.',
-        'hypothesisEs' => 'Una explicación plausible es que el Board favorece anclas claras de una estrategia y espera que el estudiante razone las combinaciones en vez de memorizar una categoría híbrida separada.',
+        'hypothesis' => 'This is a platform study design: it favors clear single-strategy anchors before mixed formulas. It is not an inference about the official 181-formula roster.',
+        'hypothesisEs' => 'Este es un diseño de estudio de la plataforma: favorece anclas de una estrategia antes de las fórmulas mixtas. No es una inferencia sobre el listado oficial de 181 fórmulas.',
         'value' => 'Bensky’s six formulas remain valuable precisely because real patients can show two layers at once. Their complexity also increases the risk of treating the wrong layer or applying an overly strong method.',
         'valueEs' => 'Las seis fórmulas de Bensky siguen siendo valiosas precisamente porque un paciente real puede mostrar dos capas a la vez. Su complejidad también aumenta el riesgo de tratar la capa equivocada o aplicar un método demasiado fuerte.',
     ],
     'tonify-chapter-8' => [
         'title' => 'Interesting point: nine prototypes compress a forty-five-formula tonification chapter',
         'titleEs' => 'Dato interesante: nueve prototipos comprimen un capítulo de cuarenta y cinco fórmulas tónicas',
-        'stat' => '9 of 45 across Board domains',
-        'statEs' => '9 de 45 entre los dominios Board',
+        'stat' => '9 of 45 across core profiles',
+        'statEs' => '9 de 45 entre las fichas del núcleo',
         'intro' => 'Eight formulas appear under Tonify and Yu Ping Feng San appears under Stabilize and Bind. Together they sample the major deficient substances and several clinically important dynamics.',
         'introEs' => 'Ocho fórmulas aparecen en Tonificar y Yu Ping Feng San aparece en Estabilizar y contener. Juntas representan las principales sustancias deficientes y varias dinámicas clínicas importantes.',
         'rows' => [
@@ -1252,29 +1274,29 @@ $chapterinterestinginsights = [
         'valueEs' => 'Esas ramas importan clínicamente porque una misma palabra—«deficiencia»—puede ocultar órganos, temperaturas, líquidos, contextos reproductivos y patógenos secundarios distintos.',
     ],
     'stabilize-bind-chapter-9' => [
-        'title' => 'Interesting point: the official category samples three kinds of leakage, but one lives in another Bensky chapter',
-        'titleEs' => 'Dato interesante: la categoría oficial representa tres tipos de pérdida, pero una fórmula vive en otro capítulo de Bensky',
-        'stat' => '2 of 17 overlap here; 3 in the Board domain',
-        'statEs' => '2 de 17 coinciden aquí; 3 en el dominio Board',
-        'intro' => 'Si Shen Wan and Gu Jing Wan overlap directly with Chapter 9. Yu Ping Feng San is the third official Stabilize and Bind formula, but Bensky places it in Chapter 8 because it tonifies defensive Qi while securing the exterior.',
-        'introEs' => 'Si Shen Wan y Gu Jing Wan coinciden directamente con el capítulo 9. Yu Ping Feng San es la tercera fórmula oficial de Estabilizar y contener, pero Bensky la coloca en el capítulo 8 porque tonifica Qi defensivo mientras asegura el Exterior.',
+        'title' => 'Interesting point: the original detailed group samples three kinds of leakage, but one lives in another Bensky chapter',
+        'titleEs' => 'Dato interesante: el grupo detallado original representa tres tipos de pérdida, pero una fórmula está en otro capítulo de Bensky',
+        'stat' => '2 of 17 overlap here; 3 in the core profile',
+        'statEs' => '2 de 17 coinciden aquí; 3 en el núcleo detallado',
+        'intro' => 'Si Shen Wan and Gu Jing Wan overlap directly with Chapter 9. Yu Ping Feng San is the third internal Stabilize and Bind profile and also belongs to official Appendix C, but Bensky places it in Chapter 8 because it tonifies defensive Qi while securing the exterior.',
+        'introEs' => 'Si Shen Wan y Gu Jing Wan coinciden directamente con el capítulo 9. Yu Ping Feng San es la tercera ficha interna de Estabilizar y contener y también pertenece al Appendix C oficial, pero Bensky la coloca en el capítulo 8 porque tonifica Qi defensivo mientras asegura el Exterior.',
         'rows' => [
             ['coverage' => 'Unstable exterior with spontaneous sweating and recurrent invasion', 'coverageEs' => 'Exterior inestable con sudor espontáneo e invasiones repetidas', 'boardNames' => ['Yu Ping Feng San'], 'additional' => 'Mu Li San offers another sweating pattern, while Chapter 9 also separates Lung leakage and late-stage cough.', 'additionalEs' => 'Mu Li San ofrece otro patrón de sudoración, mientras el capítulo 9 también separa pérdida de Pulmón y tos tardía.'],
             ['coverage' => 'Chronic intestinal leakage from Spleen-Kidney Yang deficiency', 'coverageEs' => 'Pérdida intestinal crónica por deficiencia de Yang de Bazo-Riñón', 'boardNames' => ['Si Shen Wan'], 'additional' => 'Bensky distinguishes deficiency-Cold diarrhea, Damp-Heat residue, prolapse, and different levels of astringency.', 'additionalEs' => 'Bensky distingue diarrea por Frío-deficiencia, residuo de Humedad-Calor, prolapso y distintos grados de astringencia.'],
             ['coverage' => 'Persistent uterine bleeding with deficiency and constrained Heat', 'coverageEs' => 'Sangrado uterino persistente con deficiencia y Calor constreñido', 'boardNames' => ['Gu Jing Wan'], 'additional' => 'The chapter adds essence, urinary, pregnancy, vaginal discharge, and other gynecologic leakage patterns.', 'additionalEs' => 'El capítulo añade patrones de pérdida de Esencia, urinarios, embarazo, flujo vaginal y otras pérdidas ginecológicas.'],
         ],
-        'hypothesis' => 'The Board may be sampling three high-yield leakage territories—exterior, intestines, and uterus—while leaving the chapter’s many organ- and discharge-specific binders as advanced differentiation.',
-        'hypothesisEs' => 'El Board puede estar representando tres territorios de pérdida de alto rendimiento—Exterior, Intestinos y útero—y dejando los numerosos astringentes específicos por órgano y secreción como diferenciación avanzada.',
+        'hypothesis' => 'The original platform sequence sampled three high-yield leakage territories—exterior, intestines, and uterus—while the official 181-formula roster is evaluated independently.',
+        'hypothesisEs' => 'La secuencia original de la plataforma representó tres territorios de pérdida de alto rendimiento—Exterior, Intestinos y útero—mientras el listado oficial de 181 se evalúa de forma independiente.',
         'value' => 'The omitted formulas teach an essential safety rule: never bind an unresolved pathogen or excess. Color, odor, temperature, timing, and the presence of Heat or Dampness change whether astringency is appropriate.',
         'valueEs' => 'Las fórmulas omitidas enseñan una regla esencial de seguridad: nunca contener un patógeno o exceso no resuelto. Color, olor, temperatura, momento y presencia de Calor o Humedad cambian si la astringencia es apropiada.',
     ],
     'calm-shen-chapter-10' => [
-        'title' => 'Interesting point: the Board favors nourishing Shen formulas over the mineral-heavy historical branch',
-        'titleEs' => 'Dato interesante: el Board favorece fórmulas que nutren el Shen sobre la rama histórica rica en minerales',
-        'stat' => '3 of 9 in the Board roster',
-        'statEs' => '3 de 9 en el listado Board',
-        'intro' => 'All three official formulas belong to the nourishing side of the chapter and present recognizable deficiency patterns rather than relying primarily on heavy settling substances.',
-        'introEs' => 'Las tres fórmulas oficiales pertenecen al lado nutritivo del capítulo y presentan patrones reconocibles de deficiencia, en vez de depender principalmente de sustancias pesadas que asientan.',
+        'title' => 'Interesting point: the original detailed sequence emphasizes nourishing Shen formulas over the mineral-heavy historical branch',
+        'titleEs' => 'Dato interesante: la secuencia detallada original enfatiza fórmulas que nutren el Shen sobre la rama histórica rica en minerales',
+        'stat' => '3 of 9 in the original 63-profile sequence',
+        'statEs' => '3 de 9 en la secuencia original de 63 fichas',
+        'intro' => 'All three formulas selected for the original detailed sequence belong to the nourishing side of the chapter and present recognizable deficiency patterns rather than relying primarily on heavy settling substances. Official Appendix C membership is shown independently by the asterisk.',
+        'introEs' => 'Las tres fórmulas seleccionadas para la secuencia detallada original pertenecen al lado nutritivo del capítulo y presentan patrones reconocibles de deficiencia, en vez de depender principalmente de sustancias pesadas que asientan. La pertenencia al Appendix C oficial se indica de forma independiente con el asterisco.',
         'rows' => [
             ['coverage' => 'Liver Blood and Heart Yin deficiency with insomnia', 'coverageEs' => 'Deficiencia de Sangre de Hígado y Yin de Corazón con insomnio', 'boardNames' => ['Suan Zao Ren Tang'], 'additional' => 'Ding Zhi Wan and Huang Lian E Jiao Tang add Qi deficiency, Phlegm, constrained Fire, and Heart-Kidney disharmony.', 'additionalEs' => 'Ding Zhi Wan y Huang Lian E Jiao Tang añaden deficiencia de Qi, Flema, Fuego constreñido y desarmonía Corazón-Riñón.'],
             ['coverage' => 'Heart-Kidney Yin and Blood deficiency', 'coverageEs' => 'Deficiencia de Yin y Sangre de Corazón-Riñón', 'boardNames' => ['Tian Wang Bu Xin Dan'], 'additional' => 'Bensky grades deeper Fire, sensory symptoms, and heavier anchoring methods.', 'additionalEs' => 'Bensky gradúa Fuego más profundo, síntomas sensoriales y métodos de anclaje más pesados.'],
@@ -1286,28 +1308,28 @@ $chapterinterestinginsights = [
         'valueEs' => 'Las seis fórmulas adicionales siguen siendo importantes para reconocer Fuego, Flema, cambios sensoriales y estrategias sedantes históricas; pero el Zhu Sha histórico contiene mercurio y no debe considerarse un ingrediente moderno rutinario.',
     ],
     'open-orifices-chapter-11' => [
-        'title' => 'Interesting point: an entire classical family can remain outside a modern national roster',
-        'titleEs' => 'Dato interesante: una familia clásica completa puede quedar fuera de un listado nacional moderno',
-        'stat' => '0 of 7 direct overlaps',
-        'statEs' => '0 de 7 coincidencias directas',
+        'title' => 'Interesting point: the original 63-profile sequence omitted this entire classical family',
+        'titleEs' => 'Dato interesante: la secuencia original de 63 fichas omitió esta familia clásica completa',
+        'stat' => '0 of 7 in the original detailed sequence',
+        'statEs' => '0 de 7 en la secuencia detallada original',
         'intro' => 'The seven formulas address hot or cold sensory-orifice closure with impaired consciousness—presentations that overlap modern neurologic, infectious, toxicologic, or cardiopulmonary emergencies.',
         'introEs' => 'Las siete fórmulas tratan cierre caliente o frío de los orificios sensoriales con alteración de conciencia, cuadros que se superponen con urgencias neurológicas, infecciosas, toxicológicas o cardiopulmonares modernas.',
         'rows' => [
-            ['coverage' => 'Routine Board roster', 'coverageEs' => 'Listado terapéutico rutinario del Board', 'boardNames' => [], 'additional' => 'Bensky preserves hot closure, cold closure, pediatric convulsion, Phlegm, internal Wind, and historical revival strategies.', 'additionalEs' => 'Bensky conserva cierre caliente, cierre frío, convulsión pediátrica, Flema, Viento interno y estrategias históricas de reanimación.'],
+            ['coverage' => 'Original detailed-profile sequence', 'coverageEs' => 'Secuencia original de fichas detalladas', 'boardNames' => [], 'additional' => 'Bensky preserves hot closure, cold closure, pediatric convulsion, Phlegm, internal Wind, and historical revival strategies.', 'additionalEs' => 'Bensky conserva cierre caliente, cierre frío, convulsión pediátrica, Flema, Viento interno y estrategias históricas de reanimación.'],
             ['coverage' => 'Modern emergency and safety competence', 'coverageEs' => 'Competencia moderna de urgencia y seguridad', 'boardNames' => [], 'additional' => 'The chapter requires recognizing protected species, animal-derived substances, metals, variable substitutions, and a hazardous nasal administration route.', 'additionalEs' => 'El capítulo exige reconocer especies protegidas, sustancias animales, metales, sustituciones variables y una vía nasal peligrosa.'],
         ],
-        'hypothesis' => 'The strongest suspicion is not that the theory lacks value, but that emergency acuity, obsolete or restricted ingredients, substitution variability, and standardization problems make the family poorly suited to a routine national formula roster.',
-        'hypothesisEs' => 'La sospecha más fuerte no es que la teoría carezca de valor, sino que la urgencia, los ingredientes obsoletos o restringidos, la variabilidad de sustituciones y los problemas de estandarización hacen que la familia sea poco adecuada para un listado nacional rutinario.',
+        'hypothesis' => 'The internal omission should not be mistaken for an official NCBAHM exclusion. Emergency acuity, obsolete or restricted ingredients, substitution variability, and standardization problems still help explain why these formulas require special contextual treatment.',
+        'hypothesisEs' => 'La omisión interna no debe confundirse con una exclusión oficial de NCBAHM. La urgencia, los ingredientes obsoletos o restringidos, la variabilidad de sustituciones y los problemas de estandarización sí ayudan a explicar por qué estas fórmulas requieren un tratamiento contextual especial.',
         'value' => 'Its educational value is safety recognition and differential diagnosis. Altered consciousness, seizure, collapse, severe fever, or respiratory compromise requires emergency services, not self-treatment with a classical formula.',
         'valueEs' => 'Su valor educativo está en reconocer seguridad y diagnóstico diferencial. Alteración de conciencia, convulsión, colapso, fiebre grave o compromiso respiratorio requieren urgencias, no automedicación con una fórmula clásica.',
     ],
     'regulate-qi-chapter-12' => [
         'title' => 'Interesting point: five formulas map the two master directions of Qi pathology',
         'titleEs' => 'Dato interesante: cinco fórmulas cartografían las dos direcciones maestras de la patología del Qi',
-        'stat' => '5 of 20 in the Board roster',
-        'statEs' => '5 de 20 en el listado Board',
-        'intro' => 'The Board sample includes Qi that is stuck and Qi that rebels upward, then distributes those dynamics across general constraint, throat, Lung, and Stomach presentations.',
-        'introEs' => 'La muestra del Board incluye Qi estancado y Qi que asciende en contracorriente, y distribuye esas dinámicas entre cuadros generales, garganta, Pulmón y Estómago.',
+        'stat' => '5 of 20 in the original 63-profile sequence',
+        'statEs' => '5 de 20 en la secuencia original de 63 fichas',
+        'intro' => 'The original detailed sample includes Qi that is stuck and Qi that rebels upward, then distributes those dynamics across general constraint, throat, Lung, and Stomach presentations.',
+        'introEs' => 'La muestra detallada original incluye Qi estancado y Qi que asciende en contracorriente, y distribuye esas dinámicas entre cuadros generales, garganta, Pulmón y Estómago.',
         'rows' => [
             ['coverage' => 'General constraint and Phlegm-Qi in the throat', 'coverageEs' => 'Estancamiento general y Flema-Qi en garganta', 'boardNames' => ['Yue Ju Wan', 'Ban Xia Hou Po Tang'], 'additional' => 'Bensky adds Liver-channel pain, chest obstruction, Middle-Burner Cold, hernia, menstrual, and food-related variants.', 'additionalEs' => 'Bensky añade variantes de dolor del canal de Hígado, obstrucción torácica, Frío del Jiao Medio, hernia, menstruación y alimento.'],
             ['coverage' => 'Rebellious Lung Qi with Cold-Phlegm or Phlegm-Heat', 'coverageEs' => 'Qi rebelde de Pulmón con Flema-Frío o Flema-Calor', 'boardNames' => ['Su Zi Jiang Qi Tang', 'Ding Chuan Tang'], 'additional' => 'The wider chapter grades deficiency below, exterior constraint, sputum quality, wheezing, and the strength of descent.', 'additionalEs' => 'El capítulo amplio gradúa deficiencia abajo, constricción exterior, calidad del esputo, sibilancia y fuerza del descenso.'],
@@ -1319,12 +1341,12 @@ $chapterinterestinginsights = [
         'valueEs' => 'Las fórmulas omitidas importan porque un mismo síntoma—dolor, tos, hipo o vómito—puede requerir tratamiento opuesto según dirección, momento, temperatura y raíz.',
     ],
     'regulate-blood-chapter-13' => [
-        'title' => 'Interesting point: the Board samples Blood stasis, but none of the chapter’s stop-bleeding formulas',
-        'titleEs' => 'Dato interesante: el Board representa estasis de Sangre, pero ninguna fórmula hemostática del capítulo',
-        'stat' => '4 of 23 in the Board roster',
-        'statEs' => '4 de 23 en el listado Board',
-        'intro' => 'All four overlaps come from the section that invigorates Blood and dispels stasis. The eight principal stop-bleeding formulas and eleven additional stasis formulas remain outside the official roster.',
-        'introEs' => 'Las cuatro coincidencias provienen de la sección que vigoriza Sangre y dispersa estasis. Las ocho fórmulas principales para detener sangrado y once fórmulas adicionales de estasis quedan fuera del listado oficial.',
+        'title' => 'Interesting point: the original 63-profile sequence sampled Blood stasis more deeply than stop-bleeding formulas',
+        'titleEs' => 'Dato interesante: la secuencia original de 63 fichas desarrolló más estasis de Sangre que fórmulas hemostáticas',
+        'stat' => '4 of 23 in the original 63-profile sequence',
+        'statEs' => '4 de 23 en la secuencia original de 63 fichas',
+        'intro' => 'All four original deep profiles come from the section that invigorates Blood and dispels stasis. The asterisk now checks every chapter formula independently against all 181 official entries.',
+        'introEs' => 'Las cuatro fichas profundas originales provienen de la sección que vigoriza Sangre y dispersa estasis. El asterisco ahora comprueba cada fórmula del capítulo de forma independiente contra las 181 entradas oficiales.',
         'rows' => [
             ['coverage' => 'Heat-stasis in the Lower Burner and Qi-stasis in the chest', 'coverageEs' => 'Calor-estasis en Jiao Inferior y Qi-estasis en pecho', 'boardNames' => ['Tao He Cheng Qi Tang', 'Xue Fu Zhu Yu Tang'], 'additional' => 'Bensky adds trauma, postpartum stasis, severe fixed pain, chronic masses, collaterals, and stronger breaking methods.', 'additionalEs' => 'Bensky añade trauma, estasis posparto, dolor fijo intenso, masas crónicas, colaterales y métodos de ruptura más fuertes.'],
             ['coverage' => 'Gynecologic Cold-stasis and uterine masses', 'coverageEs' => 'Frío-estasis ginecológico y masas uterinas', 'boardNames' => ['Wen Jing Tang', 'Gui Zhi Fu Ling Wan'], 'additional' => 'The broader chapter distinguishes deficiency, pregnancy, postpartum recovery, menstrual pain, and different degrees of Blood nourishment.', 'additionalEs' => 'El capítulo amplio distingue deficiencia, embarazo, recuperación posparto, dolor menstrual y distintos grados de nutrición de Sangre.'],
@@ -1336,12 +1358,12 @@ $chapterinterestinginsights = [
         'valueEs' => 'Las diecinueve fórmulas adicionales son importantes para evitar un atajo peligroso: mover Sangre puede empeorar sangrado activo, mientras detenerlo sin tratar estasis puede retener la causa. Sangrado agudo o abundante es una urgencia.',
     ],
     'expel-damp-chapter-16' => [
-        'title' => 'Interesting point: eight Board formulas preserve one archetype from every major Dampness route',
-        'titleEs' => 'Dato interesante: ocho fórmulas del Board conservan un arquetipo de cada gran ruta de Humedad',
-        'stat' => '8 of 33 in the Board roster',
-        'statEs' => '8 de 33 en el listado Board',
-        'intro' => 'The Board sample reaches all five sections, but compresses 25 additional Bensky profiles into eight high-yield anchors for the Middle Burner, Damp-Heat, water pathways, Yang deficiency, and painful obstruction.',
-        'introEs' => 'La muestra del Board alcanza las cinco secciones, pero comprime 25 perfiles adicionales de Bensky en ocho anclas de alto rendimiento para Jiao Medio, Humedad-Calor, vías del agua, deficiencia de Yang y obstrucción dolorosa.',
+        'title' => 'Interesting point: eight detailed core profiles preserve one archetype from every major Dampness route',
+        'titleEs' => 'Dato interesante: ocho fichas detalladas conservan un arquetipo de cada gran ruta de Humedad',
+        'stat' => '8 of 33 in the original 63-profile sequence',
+        'statEs' => '8 de 33 en la secuencia original de 63 fichas',
+        'intro' => 'The original detailed sample reaches all five sections, but compresses 25 additional Bensky profiles into eight high-yield anchors for the Middle Burner, Damp-Heat, water pathways, Yang deficiency, and painful obstruction.',
+        'introEs' => 'La muestra detallada original alcanza las cinco secciones, pero comprime 25 perfiles adicionales de Bensky en ocho anclas de alto rendimiento para Jiao Medio, Humedad-Calor, vías del agua, deficiencia de Yang y obstrucción dolorosa.',
         'rows' => [
             ['coverage' => 'Transform the Middle and clear Damp-Heat', 'coverageEs' => 'Transformar el Centro y aclarar Humedad-Calor', 'boardNames' => ['Ping Wei San', 'Huo Xiang Zheng Qi San', 'Ba Zheng San'], 'additional' => 'The full chapter adds Summerheat, epidemic toxin, jaundice, vaginal discharge, severe fullness, and several urinary or joint variants.', 'additionalEs' => 'El capítulo completo añade Calor de Verano, toxicidad epidémica, ictericia, flujo vaginal, plenitud intensa y varias variantes urinarias o articulares.'],
             ['coverage' => 'Open and regulate the water pathways', 'coverageEs' => 'Abrir y regular las vías del agua', 'boardNames' => ['Wu Ling San', 'Zhu Ling Tang', 'Wu Pi San'], 'additional' => 'Fang Ji Huang Qi Tang and Fang Ji Fu Ling Tang refine exterior deficiency, skin edema, and constrained Yang-Qi.', 'additionalEs' => 'Fang Ji Huang Qi Tang y Fang Ji Fu Ling Tang refinan deficiencia Exterior, edema cutáneo y Yang-Qi constreñido.'],
@@ -1353,14 +1375,14 @@ $chapterinterestinginsights = [
         'valueEs' => 'Los otros 25 perfiles importan porque “Humedad” no prescribe una sola acción. La decisión puede ser transformar aromáticamente, aclarar Calor, promover orina, calentar Yang, mover Qi, nutrir deficiencia o desobstruir canales.',
     ],
     'digestive-chapter-18' => [
-        'title' => 'Interesting point: one Board formula anchors an eight-formula excess-to-deficiency continuum',
-        'titleEs' => 'Dato interesante: una fórmula Board ancla un continuo de ocho fórmulas entre exceso y deficiencia',
-        'stat' => '1 of 8 in the Board roster',
-        'statEs' => '1 de 8 en el listado Board',
+        'title' => 'Interesting point: one original core profile anchors an eight-formula excess-to-deficiency continuum',
+        'titleEs' => 'Dato interesante: una ficha original del núcleo ancla un continuo de ocho fórmulas entre exceso y deficiencia',
+        'stat' => '1 of 8 in the original 63-profile sequence',
+        'statEs' => '1 de 8 en la secuencia original de 63 fichas',
         'intro' => 'Bao He Wan provides the mild, high-yield archetype for acute food stagnation. The seven supplemental formulas show how the strategy changes when accumulation becomes Damp-Heat, requires purging, involves parasites, rests on Spleen deficiency, creates focal clumping, or follows alcohol excess.',
         'introEs' => 'Bao He Wan ofrece el arquetipo suave y de alto rendimiento para estancamiento alimentario agudo. Las siete fórmulas suplementarias muestran cómo cambia la estrategia cuando la acumulación se vuelve Humedad-Calor, exige purgación, implica parásitos, descansa sobre deficiencia de Bazo, forma aglomeración focal o sigue al exceso de alcohol.',
         'rows' => [
-            ['coverage' => 'Acute uncomplicated food stagnation', 'coverageEs' => 'Estancamiento alimentario agudo no complicado', 'boardNames' => ['Bao He Wan'], 'additional' => 'The Board formula combines food reduction with Qi regulation and Phlegm transformation without strong purging or tonification.', 'additionalEs' => 'La fórmula Board combina reducción de alimento con regulación de Qi y transformación de Flema sin purgación fuerte ni tonificación.'],
+            ['coverage' => 'Acute uncomplicated food stagnation', 'coverageEs' => 'Estancamiento alimentario agudo no complicado', 'boardNames' => ['Bao He Wan'], 'additional' => 'The core profile combines food reduction with Qi regulation and Phlegm transformation without strong purging or tonification.', 'additionalEs' => 'La ficha del núcleo combina reducción de alimento con regulación de Qi y transformación de Flema sin purgación fuerte ni tonificación.'],
             ['coverage' => 'Damp-Heat, constipation, dysentery or parasites', 'coverageEs' => 'Humedad-Calor, estreñimiento, disentería o parásitos', 'boardNames' => [], 'additional' => 'Zhi Shi Dao Zhi Wan, Mu Xiang Bing Lang Wan and Fei Er Wan require much stronger excess confirmation and modern safety screening.', 'additionalEs' => 'Zhi Shi Dao Zhi Wan, Mu Xiang Bing Lang Wan y Fei Er Wan exigen confirmar exceso con mucha mayor claridad y revisión moderna de seguridad.'],
             ['coverage' => 'Spleen deficiency, focal fullness and alcohol-Dampness', 'coverageEs' => 'Deficiencia de Bazo, plenitud focal y Humedad por alcohol', 'boardNames' => [], 'additional' => 'Jian Pi Wan, Zhi Zhu Wan, Zhi Shi Xiao Pi Wan and Ge Hua Jie Cheng San grade how much tonification, movement, Heat treatment and water regulation are needed.', 'additionalEs' => 'Jian Pi Wan, Zhi Zhu Wan, Zhi Shi Xiao Pi Wan y Ge Hua Jie Cheng San gradúan cuánta tonificación, movilización, aclaramiento de Calor y regulación de agua se necesita.'],
         ],
@@ -1374,8 +1396,8 @@ $chapterinterestinginsights = [
         'titleEs' => 'Dato interesante: el Board omite las tres fórmulas antiparasitarias mientras la atención moderna es específica para cada organismo',
         'stat' => '0 of 3 direct overlaps',
         'statEs' => '0 de 3 coincidencias directas',
-        'intro' => 'The chapter preserves three very different historical strategies: complex harmonization with Wu Mei Wan, direct toxic attack with Hua Chong Wan, and antiparasitic treatment plus constitutional support with Bu Dai Wan. None belongs to the current 63-formula roster.',
-        'introEs' => 'El capítulo conserva tres estrategias históricas muy diferentes: armonización compleja con Wu Mei Wan, ataque tóxico directo con Hua Chong Wan y tratamiento antiparasitario más apoyo constitucional con Bu Dai Wan. Ninguna pertenece al listado vigente de 63 fórmulas.',
+        'intro' => 'The chapter preserves three very different historical strategies: complex harmonization with Wu Mei Wan, direct toxic attack with Hua Chong Wan, and antiparasitic treatment plus constitutional support with Bu Dai Wan. None belongs to the platform’s original 63-profile sequence; the asterisk independently identifies official Appendix C membership.',
+        'introEs' => 'El capítulo conserva tres estrategias históricas muy diferentes: armonización compleja con Wu Mei Wan, ataque tóxico directo con Hua Chong Wan y tratamiento antiparasitario más apoyo constitucional con Bu Dai Wan. Ninguna pertenece a la secuencia interna original de 63 fichas; el asterisco identifica de forma independiente la pertenencia oficial al Appendix C.',
         'rows' => [
             ['coverage' => 'Mixed Heat-Cold with deficiency', 'coverageEs' => 'Calor-Frío mixto con deficiencia', 'boardNames' => [], 'additional' => 'Wu Mei Wan combines sour binding, bitter draining, acrid warming and tonification for a narrow terminal-yin pattern.', 'additionalEs' => 'Wu Mei Wan combina contención ácida, drenaje amargo, calentamiento acre y tonificación para un patrón estrecho de yin terminal.'],
             ['coverage' => 'Direct destruction and expulsion', 'coverageEs' => 'Destrucción y expulsión directa', 'boardNames' => [], 'additional' => 'Hua Chong Wan contains a lead compound and other high-risk substances; the source preparation is obsolete and unsafe.', 'additionalEs' => 'Hua Chong Wan contiene un compuesto de plomo y otras sustancias de alto riesgo; la preparación de la fuente es obsoleta e insegura.'],
@@ -1387,10 +1409,10 @@ $chapterinterestinginsights = [
         'valueEs' => 'El capítulo sigue siendo útil para comprender la fuente y la lógica de patrones, sobre todo la arquitectura Calor-Frío mixta de Wu Mei Wan. Su lección práctica también es de seguridad: no sustituir diagnóstico y atención antiparasitaria basada en evidencia por fórmulas históricas.',
     ],
     'treat-abscesses-chapter-20' => [
-        'title' => 'Interesting point: all fourteen formulas sit outside the Board roster, while modern diagnosis determines whether treatment is medical, surgical or oncologic',
-        'titleEs' => 'Dato interesante: las catorce fórmulas están fuera del listado Board, mientras el diagnóstico moderno determina si el tratamiento es médico, quirúrgico u oncológico',
-        'stat' => '0 of 14 direct overlaps',
-        'statEs' => '0 de 14 coincidencias directas',
+        'title' => 'Interesting point: the original 63-profile sequence omitted this chapter, while the official 181-formula roster includes selected entries',
+        'titleEs' => 'Dato interesante: la secuencia original de 63 fichas omitió este capítulo, mientras el listado oficial de 181 incluye entradas seleccionadas',
+        'stat' => '0 original core profiles · official status shown by asterisk',
+        'statEs' => '0 fichas originales del núcleo · estatus oficial indicado con asterisco',
         'intro' => 'The source chapter supplies a detailed stage-and-constitution map for lesions, but its historical category combines conditions that modern medicine separates urgently: superficial infection, deep abscess, ischemia, appendicitis, airway disease and solid masses.',
         'introEs' => 'El capítulo fuente ofrece un mapa detallado de etapa y constitución para lesiones, pero su categoría histórica reúne afecciones que la medicina moderna separa con urgencia: infección superficial, absceso profundo, isquemia, apendicitis, enfermedad de vía aérea y masas sólidas.',
         'rows' => [
@@ -1415,25 +1437,25 @@ $chapterinterestinginsights = [
             ['coverage' => 'Dry skin, stubborn itch and later trauma', 'coverageEs' => 'Piel seca, prurito persistente y trauma tardío', 'boardNames' => [], 'additional' => 'Zi Dang Gao moistens; Ku Shen Tang washes a larger itchy area; Hai Tong Pi Tang introduces warming only after acute inflammation subsides.', 'additionalEs' => 'Zi Dang Gao humecta; Ku Shen Tang lava un área pruriginosa mayor; Hai Tong Pi Tang introduce calor solo tras ceder la inflamación aguda.'],
             ['coverage' => 'External treatment of internal complaints', 'coverageEs' => 'Tratamiento externo de síntomas internos', 'boardNames' => [], 'additional' => 'Point plasters, herb cakes, a breast wash and a pregnancy plaster preserve historical route logic, but none replaces diagnosis of oral disease, hypertension, persistent nasal disease, mastitis or obstetric symptoms.', 'additionalEs' => 'Emplastos en puntos, tortas herbales, lavado mamario y emplasto del embarazo conservan lógica histórica de vía, pero ninguno sustituye diagnosticar enfermedad oral, hipertensión, enfermedad nasal persistente, mastitis o síntomas obstétricos.'],
         ],
-        'hypothesis' => 'A plausible curricular explanation is that the current Board roster emphasizes orally administered foundational formulas, while external preparations are highly product-, site-, sanitation- and procedure-dependent and include multiple obsolete toxic substances.',
-        'hypothesisEs' => 'Una explicación curricular plausible es que el listado Board vigente enfatiza fórmulas orales fundamentales, mientras los preparados externos dependen mucho de producto, sitio, higiene y procedimiento e incluyen varias sustancias tóxicas obsoletas.',
+        'hypothesis' => 'The absence of these profiles from the original internal sequence must not be treated as an official exclusion. Appendix C membership is checked independently by asterisk.',
+        'hypothesisEs' => 'La ausencia de estas fichas en la secuencia interna original no debe tratarse como exclusión oficial. La pertenencia al Appendix C se comprueba de forma independiente con asterisco.',
         'value' => 'The chapter remains useful because dosage form changes clinical reasoning: wet versus dry, intact versus open, cooling versus warming and brief versus occlusive exposure all matter. Its strongest modern lesson is that “external” never means harmless.',
         'valueEs' => 'El capítulo sigue siendo útil porque la forma cambia el razonamiento: húmedo o seco, intacto o abierto, refrescar o calentar y exposición breve u oclusiva importan. Su lección moderna más fuerte es que “externo” nunca significa inocuo.',
     ],
     'treat-dryness-ch15' => [
-        'title' => 'Interesting point: the Board has no dedicated Treat Dryness category',
-        'titleEs' => 'Dato interesante: el Board no tiene una categoría propia para tratar Sequedad',
+        'title' => 'Interesting point: the platform’s original 14-group sequence has no dedicated Treat Dryness category',
+        'titleEs' => 'Dato interesante: la secuencia original de 14 grupos de la plataforma no tiene una categoría propia para tratar Sequedad',
         'stat' => '0 of 8 direct overlaps',
         'statEs' => '0 de 8 coincidencias directas',
-        'intro' => 'None of the eight principal Chapter 15 formulas appears in the current 63-formula roster. The Board nevertheless tests pieces of the same physiology through formulas that clear Heat, transform Phlegm, tonify Yin, generate fluids, regulate Qi, and moisten the Intestines.',
-        'introEs' => 'Ninguna de las ocho fórmulas principales del capítulo 15 aparece en el listado vigente de 63. Sin embargo, el Board evalúa partes de la misma fisiología mediante fórmulas que aclaran Calor, transforman Flema, tonifican Yin, generan líquidos, regulan Qi y humedecen Intestinos.',
+        'intro' => 'None of the eight principal Chapter 15 formulas belongs to the platform’s original 63-profile sequence. Official 2026 membership is checked separately against all 181 Appendix C formulas and shown with an asterisk.',
+        'introEs' => 'Ninguna de las ocho fórmulas principales del capítulo 15 pertenece a la secuencia interna original de 63 fichas. La pertenencia oficial de 2026 se comprueba por separado contra las 181 fórmulas del Appendix C y se muestra con asterisco.',
         'rows' => [
             ['coverage' => 'Heat with thirst and injury to fluids', 'coverageEs' => 'Calor con sed y lesión de líquidos', 'boardNames' => ['Bai Hu Tang', 'Qing Hao Bie Jia Tang'], 'additional' => 'Chapter 15 distinguishes a still-active external dryness pathogen from established internal Yin-fluid depletion.', 'additionalEs' => 'El capítulo 15 distingue un patógeno de Sequedad externa todavía activo del agotamiento interno ya establecido de Yin-líquidos.'],
             ['coverage' => 'Lung dryness, cough, Phlegm, and rebellious Qi', 'coverageEs' => 'Sequedad de Pulmón, tos, Flema y Qi rebelde', 'boardNames' => ['Bei Mu Gua Lou San', 'Ding Chuan Tang'], 'additional' => 'The chapter grades cool versus warm dryness, superficial versus Qi-level penetration, and Lung-Stomach Yin failure.', 'additionalEs' => 'El capítulo gradúa Sequedad fresca o cálida, penetración superficial o al nivel Qi y falla de Yin de Pulmón-Estómago.'],
             ['coverage' => 'Yin-fluid deficiency with thirst or dry constipation', 'coverageEs' => 'Deficiencia de Yin-líquidos con sed o estreñimiento seco', 'boardNames' => ['Liu Wei Di Huang Wan'], 'additional' => 'Ma Zi Ren Wan appears only in the supplemental purge taxonomy; Yu Ye Tang and Zeng Ye Tang further separate nonascending primal Qi with copious urine from exhausted intestinal fluids after febrile disease.', 'additionalEs' => 'Ma Zi Ren Wan aparece solo en la taxonomía suplementaria de purgación; Yu Ye Tang y Zeng Ye Tang separan además Qi primordial no ascendente con orina copiosa de líquidos intestinales agotados tras enfermedad febril.'],
         ],
-        'hypothesis' => 'A plausible curricular explanation is that the Board distributes dryness across broader mechanisms—Heat, Phlegm, Yin deficiency, Qi rebellion, and constipation—instead of preserving it as a separate climatic and internal-fluid chapter.',
-        'hypothesisEs' => 'Una explicación curricular plausible es que el Board distribuye Sequedad entre mecanismos más amplios—Calor, Flema, deficiencia de Yin, Qi rebelde y estreñimiento—en vez de conservarla como capítulo climático y de líquidos internos separado.',
+        'hypothesis' => 'The internal platform organization distributes dryness across broader mechanisms—Heat, Phlegm, Yin deficiency, Qi rebellion, and constipation. This does not alter official Appendix C membership.',
+        'hypothesisEs' => 'La organización interna de la plataforma distribuye Sequedad entre mecanismos más amplios—Calor, Flema, deficiencia de Yin, Qi rebelde y estreñimiento. Esto no modifica la pertenencia oficial al Appendix C.',
         'value' => 'The chapter remains valuable because the same dry cough can require gentle warming dispersion, cooling dispersion, deep moistening, Qi support, or Yin enrichment. Treating external and internal dryness as interchangeable can trap a pathogen or further injure depleted fluids.',
         'valueEs' => 'El capítulo sigue siendo valioso porque una misma tos seca puede requerir dispersión cálida suave, dispersión fresca, humectación profunda, apoyo de Qi o enriquecimiento de Yin. Tratar Sequedad externa e interna como intercambiables puede retener un patógeno o lesionar más los líquidos agotados.',
     ],
@@ -1701,9 +1723,9 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Guía de estudio · Fórmulas' : 'Study Guide · Formulas'); ?></p>
             <h2><?php echo s($pagetitle); ?></h2>
             <p class="formula-study-guide__lead"><?php echo s($ises
-                ? 'Estudia las 63 fórmulas principales en 14 categorías. Cada ficha conecta patrón, acción, pista decisiva, arquitectura y seguridad.'
-                : 'Study the 63 core formulas in 14 categories. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
-            <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente del Board' : '* Included in the current Board guideline'); ?></p>
+                ? 'Estudia las 63 fichas detalladas en 14 categorías internas y comprueba su alcance contra las 181 fórmulas oficiales. Cada ficha conecta patrón, acción, pista decisiva, arquitectura y seguridad.'
+                : 'Study 63 detailed profiles in 14 internal categories and verify their scope against all 181 official formulas. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
+            <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el Appendix C oficial de NCBAHM 2026' : '* Included in the official 2026 NCBAHM Appendix C'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
             <div class="formula-study-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
@@ -1723,17 +1745,18 @@ echo $OUTPUT->header();
     <?php if ($selected === null): ?>
         <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title">
             <div>
-                <h3 id="formula-categories-title"><?php echo s($ises ? 'Categorías del Board con referencia Bensky' : 'Board categories with Bensky references'); ?></h3>
+                <h3 id="formula-categories-title"><?php echo s($ises ? '63 fichas detalladas con referencia Bensky' : '63 detailed profiles with Bensky references'); ?></h3>
                 <p><?php echo s($ises
-                    ? 'Cada tarjeta oficial muestra su categoría del Board y el capítulo correspondiente de Bensky. El listado histórico independiente aparece al final.'
-                    : 'Each official card shows its Board category and corresponding Bensky chapter. The independent historical roster appears last.'); ?></p>
+                    ? 'El número 63 proviene del archivo interno de fichas detalladas de la plataforma; no es un total publicado por NCBAHM. Estas fichas no sustituyen el listado oficial completo de 181 fórmulas del Appendix C. Cada tarjeta conserva su categoría de estudio y el capítulo correspondiente de Bensky.'
+                    : 'The number 63 comes from the platform’s internal detailed-profile data file; it is not an NCBAHM-published total. These profiles do not replace the complete official Appendix C roster of 181 formulas. Each card preserves its study category and corresponding Bensky chapter.'); ?></p>
             </div>
             <div class="formula-study-guide__stats" aria-label="<?php echo s($ises ? 'Totales de la guía' : 'Guide totals'); ?>">
                 <div class="formula-study-guide__stat"><strong>14</strong><span><?php echo $ises ? 'categorías' : 'categories'; ?></span></div>
-                <div class="formula-study-guide__stat"><strong>63</strong><span><?php echo $ises ? 'fórmulas' : 'formulas'; ?></span></div>
+                <div class="formula-study-guide__stat"><strong>63</strong><span><?php echo $ises ? 'fichas detalladas' : 'detailed profiles'; ?></span></div>
+                <div class="formula-study-guide__stat"><strong>181</strong><span><?php echo $ises ? 'fórmulas oficiales' : 'official formulas'; ?></span></div>
             </div>
         </section>
-        <section class="formula-study-guide__grid" aria-label="<?php echo s($ises ? 'Categorías del Board con referencia Bensky' : 'Board categories with Bensky references'); ?>">
+        <section class="formula-study-guide__grid" aria-label="<?php echo s($ises ? 'Fichas detalladas con referencia Bensky' : 'Detailed profiles with Bensky references'); ?>">
             <?php foreach ($categories as $category): ?>
                 <?php
                 $categoryparams = ['focus' => $category['key']];
@@ -1760,51 +1783,51 @@ echo $OUTPUT->header();
                     : ($ises ? $category['nameEs'] : $category['name']);
                 if ($istonifyindexcard) {
                     $categorymeta = $ises
-                        ? 'Prioridad Board · 8 fórmulas oficiales · Capítulo Bensky 8'
-                        : 'Board priority · 8 official formulas · Bensky Chapter 8';
+                        ? 'Núcleo detallado · 8 fichas · Capítulo Bensky 8'
+                        : 'Detailed core · 8 profiles · Bensky Chapter 8';
                     $copy = $ises
-                        ? 'Empieza con las 8 fórmulas oficiales de Tonify; después amplía el estudio a las 45 fórmulas principales del capítulo 8.'
-                        : 'Start with the 8 official Tonify formulas; then expand to all 45 principal formulas in Chapter 8.';
+                        ? 'Empieza con las 8 fichas detalladas de Tonify; después amplía el estudio a las 45 fórmulas principales del capítulo 8.'
+                        : 'Start with the 8 detailed Tonify profiles; then expand to all 45 principal formulas in Chapter 8.';
                     $reference = null;
                 } elseif ($iswarminteriorindexcard) {
                     $categorymeta = $ises
-                        ? '4 fórmulas Board · Capítulo 6 de Bensky: 11'
-                        : '4 Board formulas · Bensky Chapter 6: 11';
+                        ? '4 fichas detalladas · Capítulo 6 de Bensky: 11'
+                        : '4 detailed core profiles · Bensky Chapter 6: 11';
                 } elseif ($iscalmshenindexcard) {
                     $categorymeta = $ises
-                        ? '3 fórmulas Board · Capítulo 10 de Bensky: 9'
-                        : '3 Board formulas · Bensky Chapter 10: 9';
+                        ? '3 fichas detalladas · Capítulo 10 de Bensky: 9'
+                        : '3 detailed core profiles · Bensky Chapter 10: 9';
                 } elseif ($isstabilizeindexcard) {
                     $categorymeta = $ises
-                        ? '3 fórmulas Board · Capítulo 9 de Bensky: 17'
-                        : '3 Board formulas · Bensky Chapter 9: 17';
+                        ? '3 fichas detalladas · Capítulo 9 de Bensky: 17'
+                        : '3 detailed core profiles · Bensky Chapter 9: 17';
                 } elseif ($isregulateqiindexcard) {
                     $categorymeta = $ises
-                        ? '5 fórmulas Board · Capítulo 12 de Bensky: 20'
-                        : '5 Board formulas · Bensky Chapter 12: 20';
+                        ? '5 fichas detalladas · Capítulo 12 de Bensky: 20'
+                        : '5 detailed core profiles · Bensky Chapter 12: 20';
                 } elseif ($isinvigoratebloodindexcard) {
                     $categorymeta = $ises
-                        ? '4 fórmulas Board · Capítulo 13 de Bensky: 23'
-                        : '4 Board formulas · Bensky Chapter 13: 23';
+                        ? '4 fichas detalladas · Capítulo 13 de Bensky: 23'
+                        : '4 detailed core profiles · Bensky Chapter 13: 23';
                 } elseif ($isexpelwindindexcard) {
                     $categorymeta = $ises
-                        ? '3 fórmulas Board · Capítulo 14 de Bensky: 17'
-                        : '3 Board formulas · Bensky Chapter 14: 17';
+                        ? '3 fichas detalladas · Capítulo 14 de Bensky: 17'
+                        : '3 detailed core profiles · Bensky Chapter 14: 17';
                 } elseif ($isexpeldampindexcard) {
                     $categorymeta = $ises
-                        ? '8 fórmulas Board · Capítulo 16 de Bensky: 33'
-                        : '8 Board formulas · Bensky Chapter 16: 33';
+                        ? '8 fichas detalladas · Capítulo 16 de Bensky: 33'
+                        : '8 detailed core profiles · Bensky Chapter 16: 33';
                 } elseif ($istransformphlegmindexcard) {
                     $categorymeta = $ises
-                        ? '5 fórmulas Board · Capítulo 17 de Bensky: 18'
-                        : '5 Board formulas · Bensky Chapter 17: 18';
+                        ? '5 fichas detalladas · Capítulo 17 de Bensky: 18'
+                        : '5 detailed core profiles · Bensky Chapter 17: 18';
                 } elseif ($isdigestiveindexcard) {
                     $categorymeta = $ises
-                        ? '1 fórmula Board · Capítulo 18 de Bensky: 8'
-                        : '1 Board formula · Bensky Chapter 18: 8';
+                        ? '1 ficha detallada · Capítulo 18 de Bensky: 8'
+                        : '1 detailed core profile · Bensky Chapter 18: 8';
                 } else {
                     $categorymeta = count($category['formulas'])
-                        . ($ises ? ' fórmulas Board · Capítulo Bensky ' : ' Board formulas · Bensky Chapter ')
+                        . ($ises ? ' fichas detalladas · Capítulo Bensky ' : ' detailed core profiles · Bensky Chapter ')
                         . $benskychapternumber;
                 }
                 $categorystatusformulas = $istonifyindexcard
@@ -1822,14 +1845,14 @@ echo $OUTPUT->header();
                         <span class="formula-study-guide__chapter-merge">
                             <b><?php echo s($ises ? 'Capítulo 8 completo' : 'Complete Chapter 8'); ?></b>
                             <span><?php echo s($ises
-                                ? '45 fórmulas principales · 9 coincidencias con el Board'
-                                : '45 principal formulas · 9 Board overlaps'); ?></span>
+                                ? '45 fórmulas principales · 9 coincidencias con las 63 fichas originales'
+                                : '45 principal formulas · 9 Original 63-profile overlaps'); ?></span>
                         </span>
                     <?php endif; ?>
                     <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
                     <small><?php echo s($iscombinedindexcard
                         ? ($istonifyindexcard
-                            ? ($ises ? 'Abrir familia unificada · Board primero →' : 'Open unified family · Board first →')
+                            ? ($ises ? 'Abrir familia unificada · fichas detalladas primero →' : 'Open unified family · detailed profiles first →')
                             : ($ises ? 'Abrir familia unificada →' : 'Open unified family →'))
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
@@ -1887,18 +1910,18 @@ echo $OUTPUT->header();
                 <div>
                     <h4 id="board-verification-title"><?php echo s($ises ? 'Comprueba el listado oficial del Board' : 'Verify the official Board list'); ?></h4>
                     <p><?php echo s($ises
-                        ? 'Abre el listado completo del Appendix C —63 fórmulas en 14 categorías— para comprobar directamente cuáles pertenecen al guideline.'
-                        : 'Open the complete Appendix C list—63 formulas in 14 categories—to verify directly which formulas belong to the guideline.'); ?></p>
+                        ? 'Abre el listado oficial completo del Appendix C —181 fórmulas— para comprobar directamente cuáles pertenecen al guideline. Las 14 categorías y 63 fichas son la organización interna de esta plataforma.'
+                        : 'Open the complete official Appendix C roster—181 formulas—to verify directly which formulas belong to the guideline. The 14 categories and 63 profiles are this platform’s internal organization.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir en Board Domain →' : 'Open in Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir listado oficial →' : 'Open official roster →'); ?></a>
             </section>
         <?php endif; ?>
         <?php if ($selected['key'] === 'tonify'): ?>
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-eight-shortcut-title">
                 <h4 id="chapter-eight-shortcut-title"><?php echo s($ises ? 'Capítulo 8 completo · 45 fórmulas' : 'Complete Chapter 8 · 45 formulas'); ?></h4>
                 <p><?php echo s($ises
-                    ? 'El capítulo está dividido en seis tipos de tonificación. Nueve de sus fórmulas aparecen en los Board Domains: ocho en Tonify y una en Stabilize and Bind.'
-                    : 'The chapter is divided into six tonification types. Nine of its formulas appear in the Board Domains: eight in Tonify and one in Stabilize and Bind.'); ?></p>
+                    ? 'El capítulo está dividido en seis tipos de tonificación. Nueve de sus fórmulas aparecen en la secuencia detallada del núcleo: ocho en Tonify y una en Stabilize and Bind.'
+                    : 'The chapter is divided into six tonification types. Nine of its formulas appear in the detailed core sequence: eight in Tonify and one in Stabilize and Bind.'); ?></p>
                 <?php
                 $masterchapterparams = ['focus' => 'tonify-chapter-8'];
                 if ($ises) {
@@ -1907,12 +1930,12 @@ echo $OUTPUT->header();
                 $masterchapterurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $masterchapterparams);
                 ?>
                 <section class="formula-study-guide__board-roster" aria-labelledby="chapter-eight-board-roster-title">
-                    <h5 id="chapter-eight-board-roster-title"><?php echo s($ises ? 'Fórmulas de este capítulo incluidas en los Board Domains · 9' : 'Chapter formulas included in the Board Domains · 9'); ?></h5>
+                    <h5 id="chapter-eight-board-roster-title"><?php echo s($ises ? 'Fórmulas de este capítulo incluidas en la secuencia detallada del núcleo · 9' : 'Chapter formulas included in the detailed core sequence · 9'); ?></h5>
                     <p><?php echo s($ises
-                        ? 'La categoría grande indica el tipo exacto de tonificación del capítulo; debajo de cada fórmula aparece su dominio oficial del Board. Usa el enlace para comprobar estas fórmulas directamente contra el listado completo de 63 fórmulas del Appendix C.'
-                        : 'The group heading gives the exact chapter tonification type; each formula also shows its official Board domain. Use the link to verify these formulas directly against the complete 63-formula Appendix C list.'); ?></p>
+                        ? 'La categoría grande indica el tipo exacto de tonificación del capítulo. Usa el enlace para comprobar estas fórmulas directamente contra el listado oficial completo de 181 fórmulas del Appendix C.'
+                        : 'The group heading gives the exact chapter tonification type. Use the link to verify these formulas directly against the complete official Appendix C roster of 181 formulas.'); ?></p>
                     <div class="formula-study-guide__chapter-shortcut-action">
-                        <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir en Board Domain →' : 'Open in Board Domain →'); ?></a>
+                        <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir listado oficial →' : 'Open official roster →'); ?></a>
                     </div>
                     <div class="formula-study-guide__board-roster-grid">
                         <?php foreach ($tonifyboardgroups as $chaptercategorykey => $boardformulanames): ?>
@@ -1941,7 +1964,7 @@ echo $OUTPUT->header();
                                         <li class="formula-study-guide__board-roster-formula">
                                             <span>
                                                 <strong><?php echo s($displayformulaname($boardformula['name'])); ?></strong>
-                                                <small class="formula-study-guide__board-roster-meta"><?php echo s(($ises ? 'Dominio Board: ' : 'Board domain: ') . $boardcategoryname); ?></small>
+                                                <small class="formula-study-guide__board-roster-meta"><?php echo s(($ises ? 'Ficha del núcleo: ' : 'core profile: ') . $boardcategoryname); ?></small>
                                             </span>
                                             <span class="formula-study-guide__board-roster-number"><?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $boardformula['number']); ?></span>
                                         </li>
@@ -2016,7 +2039,7 @@ echo $OUTPUT->header();
                 <section class="formula-study-guide__medical-rationale" aria-labelledby="clinical-frame-title">
                     <div class="formula-study-guide__medical-rationale-header">
                         <span class="formula-study-guide__medical-rationale-stat"><?php echo s(count($selected['formulas'])
-                            . ($issupplemental ? ($ises ? ' fórmulas principales · ' : ' principal formulas · ') : ($ises ? ' fórmulas Board · ' : ' Board formulas · '))
+                            . ($issupplemental ? ($ises ? ' fórmulas principales · ' : ' principal formulas · ') : ($ises ? ' fichas detalladas · ' : ' detailed core profiles · '))
                             . count($selectedformulasections) . ($ises ? ' secciones clínicas' : ' clinical sections')); ?></span>
                         <h4 id="clinical-frame-title"><?php echo s($ises ? $selectedguide['clinicalFrameTitleEs'] : $selectedguide['clinicalFrameTitle']); ?></h4>
                         <p><?php echo s($ises ? $selectedguide['clinicalFrameTextEs'] : $selectedguide['clinicalFrameText']); ?></p>
@@ -2027,7 +2050,7 @@ echo $OUTPUT->header();
                                 <tr>
                                     <th><?php echo $ises ? 'Sección clínica' : 'Clinical section'; ?></th>
                                     <th><?php echo $ises ? 'Centro diagnóstico' : 'Diagnostic center'; ?></th>
-                                    <th><?php echo $issupplemental ? ($ises ? 'Fórmulas principales' : 'Principal formulas') : ($ises ? 'Fórmulas Board' : 'Board formulas'); ?></th>
+                                    <th><?php echo $issupplemental ? ($ises ? 'Fórmulas principales' : 'Principal formulas') : ($ises ? 'Fichas detalladas' : 'detailed core profiles'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2211,7 +2234,7 @@ echo $OUTPUT->header();
                                         <td>
                                             <?php echo s($displayformulaname($row[0])); ?>
                                             <?php if ($boardmatch !== null): ?>
-                                                <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
+                                                <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En la secuencia detallada del núcleo · Fórmula ' : 'detailed core sequence · Formula ') . $boardmatch['number']); ?></span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -2229,8 +2252,8 @@ echo $OUTPUT->header();
             <section class="formula-study-guide__chapter-shortcut" aria-labelledby="chapter-nine-shortcut-title">
                 <h4 id="chapter-nine-shortcut-title"><?php echo s($ises ? 'Capítulo 9 completo · 17 fórmulas' : 'Complete Chapter 9 · 17 formulas'); ?></h4>
                 <p><?php echo s($ises
-                    ? 'Dos fórmulas del capítulo 9 de Bensky aparecen en los Board Domains—Si Shen Wan (#50) y Gu Jing Wan (#51)—y la ampliación añade 15 perfiles principales relacionados. Yu Ping Feng San (#49) sigue siendo la tercera fórmula oficial de esta categoría, pero Bensky la estudia en el capítulo 8.'
-                    : 'Two formulas in Bensky Chapter 9 appear in the Board Domains—Si Shen Wan (#50) and Gu Jing Wan (#51)—and the expansion adds 15 related principal profiles. Yu Ping Feng San (#49) remains the third official formula in this category, but Bensky discusses it in Chapter 8.'); ?></p>
+                    ? 'Dos fórmulas del capítulo 9 de Bensky aparecen en la secuencia detallada del núcleo—Si Shen Wan (#50) y Gu Jing Wan (#51)—y la ampliación añade 15 perfiles principales relacionados. Yu Ping Feng San (#49) es la tercera ficha interna de esta categoría y también pertenece al Appendix C oficial, pero Bensky la estudia en el capítulo 8.'
+                    : 'Two formulas in Bensky Chapter 9 appear in the detailed core sequence—Si Shen Wan (#50) and Gu Jing Wan (#51)—and the expansion adds 15 related principal profiles. Yu Ping Feng San (#49) is the third internal profile in this category and also belongs to official Appendix C, but Bensky discusses it in Chapter 8.'); ?></p>
                 <div class="formula-study-guide__chapter-shortcut-actions">
                     <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizechapterurl->out(false); ?>"><?php echo s($ises ? 'Abrir el capítulo 9 completo →' : 'Open complete Chapter 9 →'); ?></a>
                 </div>
@@ -2255,10 +2278,10 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-nine-board-title">
                 <div>
-                    <h4 id="chapter-nine-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 2 de 17' : 'Board Domains overlap · 2 of 17'); ?></h4>
-                    <p><?php echo s($ises ? 'Marcadas en el directorio y en sus fichas: Si Shen Wan es la fórmula Board #50 y Gu Jing Wan la #51. Las otras 15 fichas proceden del capítulo 9 de Bensky y no modifican el listado oficial de 63.' : 'Marked in the directory and on their cards: Si Shen Wan is Board formula #50 and Gu Jing Wan is #51. The other 15 cards come from Bensky Chapter 9 and do not change the official roster of 63.'); ?></p>
+                    <h4 id="chapter-nine-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cada fórmula incluida entre las 181 oficiales. Las fichas sin asterisco se conservan como ampliación académica de Bensky.' : 'An asterisk identifies every formula included among the 181 official entries. Unstarred profiles remain as an academic Bensky expansion.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-nine-directory-title">
                 <h4 id="chapter-nine-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 9' : 'Complete Chapter 9 directory'); ?></h4>
@@ -2273,7 +2296,7 @@ echo $OUTPUT->header();
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
                                     <li>
                                         <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a>
-                                        <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Dominio Board #' : 'Board Domain #') . $chapterformula['number']); ?></span><?php endif; ?>
+                                        <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Ficha del núcleo #' : 'Core profile #') . $chapterformula['number']); ?></span><?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
                             </ol>
@@ -2301,10 +2324,10 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-ten-board-title">
                 <div>
-                    <h4 id="chapter-ten-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 3 de 9' : 'Board Domains overlap · 3 of 9'); ?></h4>
-                    <p><?php echo s($ises ? 'Marcadas en el directorio y en sus fichas: Suan Zao Ren Tang (#52), Tian Wang Bu Xin Dan (#53) y Gan Mai Da Zao Tang (#54). Las otras seis fichas son ampliaciones académicas de Bensky y no modifican el listado oficial de 63.' : 'Marked in the directory and on their cards: Suan Zao Ren Tang (#52), Tian Wang Bu Xin Dan (#53), and Gan Mai Da Zao Tang (#54). The other six cards are academic Bensky expansions and do not change the official roster of 63.'); ?></p>
+                    <h4 id="chapter-ten-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cada fórmula incluida entre las 181 oficiales. Las fichas sin asterisco se conservan como ampliación académica de Bensky.' : 'An asterisk identifies every formula included among the 181 official entries. Unstarred profiles remain as an academic Bensky expansion.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-ten-directory-title">
                 <h4 id="chapter-ten-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 10' : 'Complete Chapter 10 directory'); ?></h4>
@@ -2319,7 +2342,7 @@ echo $OUTPUT->header();
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
                                     <li>
                                         <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a>
-                                        <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Dominio Board #' : 'Board Domain #') . $chapterformula['number']); ?></span><?php endif; ?>
+                                        <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Ficha del núcleo #' : 'Core profile #') . $chapterformula['number']); ?></span><?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
                             </ol>
@@ -2347,10 +2370,10 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-eleven-board-title">
                 <div>
-                    <h4 id="chapter-eleven-board-title"><?php echo s($ises ? 'Dato relevante para el examen · 0 de 7 en Appendix C 2026' : 'Exam-relevant fact · 0 of 7 in the 2026 Appendix C'); ?></h4>
-                    <p><?php echo s($ises ? 'Ninguna de las siete fórmulas principales del capítulo 11 aparece en el listado oficial vigente de 63 fórmulas de NCBAHM. Por eso no llevan asterisco y no deben recibir prioridad principal de examen; se conservan como ampliación académica de Bensky.' : 'None of the seven principal Chapter 11 formulas appears in the current official NCBAHM roster of 63 formulas. They therefore carry no asterisk and should not receive primary exam priority; they remain as an academic Bensky expansion.'); ?></p>
+                    <h4 id="chapter-eleven-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cualquier fórmula incluida entre las 181 oficiales. Las fichas sin asterisco se conservan para reconocimiento académico y seguridad, no como expansión del alcance oficial.' : 'An asterisk identifies any formula included among the 181 official entries. Unstarred profiles are retained for academic recognition and safety, not as an expansion of official scope.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__scope-analysis" aria-labelledby="chapter-eleven-scope-analysis-title">
                 <header class="formula-study-guide__scope-analysis-header">
@@ -2433,10 +2456,10 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-twelve-board-title">
                 <div>
-                    <h4 id="chapter-twelve-board-title"><?php echo s($ises ? 'Dato relevante para el examen · 5 de 20 en Appendix C 2026' : 'Exam-relevant fact · 5 of 20 in the 2026 Appendix C'); ?></h4>
-                    <p><?php echo s($ises ? 'El asterisco marca las cinco fórmulas del capítulo que sí pertenecen al listado oficial vigente. Las otras quince amplían la comparación clínica de Bensky, pero no deben desplazar la prioridad de las fórmulas Board.' : 'An asterisk marks the five chapter formulas that belong to the current official roster. The other fifteen extend Bensky’s clinical comparison but should not displace Board-formula priority.'); ?></p>
+                    <h4 id="chapter-twelve-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cada fórmula incluida entre las 181 oficiales. La pertenencia oficial se calcula desde el listado completo y no desde las cinco fichas internas originales de esta categoría.' : 'An asterisk identifies every formula included among the 181 official entries. Official membership is calculated from the complete roster, not from this category’s five original internal profiles.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-twelve-directory-title">
                 <h4 id="chapter-twelve-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 12' : 'Complete Chapter 12 directory'); ?></h4>
@@ -2476,10 +2499,10 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-thirteen-board-title">
                 <div>
-                    <h4 id="chapter-thirteen-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 4 de 23' : 'Board Domains overlap · 4 of 23'); ?></h4>
-                    <p><?php echo s($ises ? 'El asterisco marca Tao He Cheng Qi Tang (#45), Xue Fu Zhu Yu Tang (#46), Wen Jing Tang (#47) y Gui Zhi Fu Ling Wan (#48). Las otras 19 fichas completan Bensky sin ampliar el listado oficial de 63.' : 'An asterisk marks Tao He Cheng Qi Tang (#45), Xue Fu Zhu Yu Tang (#46), Wen Jing Tang (#47), and Gui Zhi Fu Ling Wan (#48). The other 19 cards complete Bensky without enlarging the official roster of 63.'); ?></p>
+                    <h4 id="chapter-thirteen-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cada fórmula incluida entre las 181 oficiales. Las demás fichas completan el capítulo de Bensky sin ampliar el alcance oficial.' : 'An asterisk identifies every formula included among the 181 official entries. The remaining profiles complete the Bensky chapter without expanding official scope.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-thirteen-directory-title">
                 <h4 id="chapter-thirteen-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 13' : 'Complete Chapter 13 directory'); ?></h4>
@@ -2520,14 +2543,14 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-sixteen-board-title">
                 <div>
-                    <h4 id="chapter-sixteen-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 8 de 33' : 'Board Domains overlap · 8 of 33'); ?></h4>
-                    <p><?php echo s($ises ? 'El asterisco marca Ping Wei San (#20), Huo Xiang Zheng Qi San (#21), Ba Zheng San (#22), Wu Ling San (#23), Zhu Ling Tang (#24), Wu Pi San (#25), Zhen Wu Tang (#26) y Du Huo Ji Sheng Tang (#27). Las otras 25 fichas completan Bensky sin ampliar el listado oficial de 63.' : 'An asterisk marks Ping Wei San (#20), Huo Xiang Zheng Qi San (#21), Ba Zheng San (#22), Wu Ling San (#23), Zhu Ling Tang (#24), Wu Pi San (#25), Zhen Wu Tang (#26), and Du Huo Ji Sheng Tang (#27). The other 25 cards complete Bensky without enlarging the official roster of 63.'); ?></p>
+                    <h4 id="chapter-sixteen-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cada fórmula incluida entre las 181 oficiales. Las demás fichas completan el capítulo de Bensky sin ampliar el alcance oficial.' : 'An asterisk identifies every formula included among the 181 official entries. The remaining profiles complete the Bensky chapter without expanding official scope.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-sixteen-directory-title">
                 <h4 id="chapter-sixteen-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 16' : 'Complete Chapter 16 directory'); ?></h4>
-                <p><?php echo s($ises ? 'Las 33 fórmulas principales siguen las cinco secciones de la fuente. El asterisco conserva visibles las ocho fórmulas del Board.' : 'The 33 principal formulas follow the source’s five sections. An asterisk keeps the eight Board formulas visible.'); ?></p>
+                <p><?php echo s($ises ? 'Las 33 fórmulas principales siguen las cinco secciones de la fuente. El asterisco identifica cuáles pertenecen al Appendix C oficial.' : 'The 33 principal formulas follow the source’s five sections. An asterisk identifies those that belong to official Appendix C.'); ?></p>
                 <div class="formula-study-guide__chapter-directory-grid">
                     <?php foreach ($expeldampchaptersections as $sectionkey => $section): ?>
                         <?php $sectionformulas = array_values(array_filter($selected['formulas'], static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey)); ?>
@@ -2563,10 +2586,10 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-fourteen-board-title">
                 <div>
-                    <h4 id="chapter-fourteen-board-title"><?php echo s($ises ? 'Coincidencia con los Board Domains · 3 de 17' : 'Board Domains overlap · 3 of 17'); ?></h4>
-                    <p><?php echo s($ises ? 'El asterisco marca Xiao Feng San (#55), Xiao Huo Luo Dan (#56) y Tian Ma Gou Teng Yin (#57). Las otras 14 fichas completan Bensky sin ampliar el listado oficial de 63.' : 'An asterisk marks Xiao Feng San (#55), Xiao Huo Luo Dan (#56), and Tian Ma Gou Teng Yin (#57). The other 14 cards complete Bensky without enlarging the official roster of 63.'); ?></p>
+                    <h4 id="chapter-fourteen-board-title"><?php echo s($ises ? 'Comprobación contra Appendix C 2026' : 'Check against the 2026 Appendix C'); ?></h4>
+                    <p><?php echo s($ises ? 'El asterisco identifica cada fórmula incluida entre las 181 oficiales. Las demás fichas completan el capítulo de Bensky sin ampliar el alcance oficial.' : 'An asterisk identifies every formula included among the 181 official entries. The remaining profiles complete the Bensky chapter without expanding official scope.'); ?></p>
                 </div>
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Board Domain →' : 'Verify Board Domain →'); ?></a>
+                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Comprobar Appendix C →' : 'Verify Appendix C →'); ?></a>
             </section>
             <section class="formula-study-guide__medical-rationale" aria-labelledby="chapter-fourteen-medical-rationale-title">
                 <div class="formula-study-guide__medical-rationale-header">
@@ -2575,8 +2598,8 @@ echo $OUTPUT->header();
                         ? 'En medicina china, “Viento” no designa una sola enfermedad. Describe manifestaciones súbitas, cambiantes o móviles—como prurito migratorio, espasmo, temblor y vértigo—y obliga a preguntar dónde se manifiesta y qué mecanismo lo impulsa.'
                         : 'In Chinese medicine, “Wind” does not name a single disease. It describes sudden, changing, or moving manifestations—such as migrating itch, spasm, tremor, and vertigo—and requires asking where it appears and what mechanism drives it.'); ?></p>
                     <p><?php echo s($ises
-                        ? 'Las tres fórmulas del Board condensan tres territorios clínicos amplios: piel, canales dolorosos e Interior. Juntas permiten evaluar localización, raíz y manifestación sin convertir todo el capítulo clásico en contenido prioritario de examen.'
-                        : 'The three Board formulas condense three broad clinical territories: skin, painful channels, and the Interior. Together they test location, root, and manifestation without making the entire classical chapter a primary exam priority.'); ?></p>
+                        ? 'Las tres fichas detalladas del núcleo condensan tres territorios clínicos amplios: piel, canales dolorosos e Interior. Juntas permiten evaluar localización, raíz y manifestación sin convertir todo el capítulo clásico en contenido prioritario de examen.'
+                        : 'The three detailed core profiles condense three broad clinical territories: skin, painful channels, and the Interior. Together they test location, root, and manifestation without making the entire classical chapter a primary exam priority.'); ?></p>
                 </div>
                 <div class="formula-study-guide__table-wrap">
                     <table class="formula-study-guide__table">
@@ -2616,8 +2639,8 @@ echo $OUTPUT->header();
                         ? 'Bensky conserva el mapa clásico completo. Las fórmulas restantes incluyen cuadros neurológicos agudos que hoy son urgencias; ingredientes históricos tóxicos; materiales animales protegidos o restringidos; y patrones muy especializados de agotamiento de Yin después de enfermedades febriles graves.'
                         : 'Bensky preserves the complete classical map. The remaining formulas include acute neurologic presentations that are emergencies today; historically toxic ingredients; protected or restricted animal materials; and highly specialized Yin-depletion patterns after severe febrile disease.'); ?></p>
                     <p><?php echo s($ises
-                        ? 'Por eso son valiosas para comprender diagnóstico diferencial, historia, seguridad y límites clínicos, aunque no formen parte del listado oficial de 63 fórmulas. Ictus, convulsiones, pérdida de conciencia, tétanos, meningitis o crisis hipertensiva requieren atención médica inmediata; una fórmula clásica no sustituye el tratamiento agudo.'
-                        : 'They therefore remain valuable for understanding differential diagnosis, history, safety, and clinical limits even though they are outside the official 63-formula roster. Stroke, seizure, loss of consciousness, tetanus, meningitis, or hypertensive crisis require immediate medical care; a classical formula does not replace acute treatment.'); ?></p>
+                        ? 'Por eso son valiosas para comprender diagnóstico diferencial, historia, seguridad y límites clínicos. El asterisco distingue las que sí pertenecen al Appendix C oficial de 181 fórmulas. Ictus, convulsiones, pérdida de conciencia, tétanos, meningitis o crisis hipertensiva requieren atención médica inmediata; una fórmula clásica no sustituye el tratamiento agudo.'
+                        : 'They therefore remain valuable for understanding differential diagnosis, history, safety, and clinical limits. The asterisk distinguishes those that belong to the official 181-formula Appendix C. Stroke, seizure, loss of consciousness, tetanus, meningitis, or hypertensive crisis require immediate medical care; a classical formula does not replace acute treatment.'); ?></p>
                     <p class="formula-study-guide__medical-rationale-caveat"><?php echo s($ises
                         ? 'Nota de alcance: el Board no publica una justificación médica fórmula por fórmula. Esta es una interpretación clínica y educativa basada en la cobertura de patrones, la aplicabilidad y la seguridad; no una declaración oficial del Board.'
                         : 'Scope note: the Board does not publish a formula-by-formula medical rationale. This is a clinical and educational interpretation based on pattern coverage, applicability, and safety—not an official Board statement.'); ?></p>
@@ -2625,7 +2648,7 @@ echo $OUTPUT->header();
             </section>
             <section class="formula-study-guide__chapter-directory" aria-labelledby="chapter-fourteen-directory-title">
                 <h4 id="chapter-fourteen-directory-title"><?php echo s($ises ? 'Listado completo del capítulo 14' : 'Complete Chapter 14 directory'); ?></h4>
-                <p><?php echo s($ises ? 'Las 3 fórmulas del Board aparecen primero. Después siguen las otras 14 fórmulas, organizadas según las dos secciones de la fuente. Las fórmulas asociadas y variaciones permanecen dentro de su ficha principal.' : 'The 3 Board formulas appear first. The other 14 formulas then follow, organized by the source’s two sections. Associated formulas and variations remain inside their principal card.'); ?></p>
+                <p><?php echo s($ises ? 'Las 3 fichas detalladas del núcleo aparecen primero. Después siguen las otras 14 fórmulas, organizadas según las dos secciones de la fuente. Las fórmulas asociadas y variaciones permanecen dentro de su ficha principal.' : 'The 3 detailed core profiles appear first. The other 14 formulas then follow, organized by the source’s two sections. Associated formulas and variations remain inside their principal card.'); ?></p>
                 <div class="formula-study-guide__chapter-directory-grid">
                     <?php foreach ($expelwindchaptersections as $sectionkey => $section): ?>
                         <?php $sectionformulas = array_values(array_filter($selected['formulas'], static fn(array $formula): bool => $formula['chapterSectionKey'] === $sectionkey)); ?>
@@ -2665,9 +2688,9 @@ echo $OUTPUT->header();
                     <table class="formula-study-guide__table">
                         <thead>
                             <tr>
-                                <th><?php echo $ises ? 'Cobertura clínica que el Board ya evalúa' : 'Clinical coverage the Board already tests'; ?></th>
-                                <th><?php echo $ises ? 'Fórmulas Board representativas' : 'Representative Board formulas'; ?></th>
-                                <th><?php echo $ises ? 'Qué añade Bensky fuera del Board' : 'What Bensky adds outside the Board'; ?></th>
+                                <th><?php echo $ises ? 'Cobertura clínica representada en las fichas detalladas' : 'Clinical coverage represented in the detailed profiles'; ?></th>
+                                <th><?php echo $ises ? 'Fichas detalladas representativas' : 'Representative detailed core profiles'; ?></th>
+                                <th><?php echo $ises ? 'Qué añade el capítulo completo de Bensky' : 'What the complete Bensky chapter adds'; ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -2676,7 +2699,7 @@ echo $OUTPUT->header();
                                 <tr>
                                     <td><?php echo s($ises ? $insightrow['coverageEs'] : $insightrow['coverage']); ?></td>
                                     <td class="formula-study-guide__medical-rationale-board"><?php echo s($boardlabels === []
-                                        ? ($ises ? 'Ninguna fórmula directa en el listado vigente' : 'No direct formula in the current roster')
+                                        ? ($ises ? 'Ninguna ficha detallada directa' : 'No direct detailed profile')
                                         : implode(', ', $boardlabels)); ?></td>
                                     <td><?php echo s($ises ? $insightrow['additionalEs'] : $insightrow['additional']); ?></td>
                                 </tr>
@@ -2852,7 +2875,7 @@ echo $OUTPUT->header();
                                                 <td>
                                                     <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($boardmatch !== null): ?>
-                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
+                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En la secuencia detallada del núcleo · Fórmula ' : 'detailed core sequence · Formula ') . $boardmatch['number']); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -2874,7 +2897,7 @@ echo $OUTPUT->header();
                         <p><?php echo s($ises ? $clinicalsection['copyEs'] : $clinicalsection['copy']); ?></p>
                         <span class="formula-study-guide__chapter-section-meta"><?php echo count($clinicalsection['formulaNames']); ?> <?php echo $issupplemental
                             ? ($ises ? 'fórmulas principales' : 'principal formulas')
-                            : ($ises ? 'fórmulas Board' : 'Board formulas'); ?></span>
+                            : ($ises ? 'fichas detalladas' : 'detailed core profiles'); ?></span>
                     </section>
                 <?php endif; ?>
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
@@ -2885,11 +2908,11 @@ echo $OUTPUT->header();
                             <?php if ($issupplemental): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
-                            <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Principal del guideline' : 'Guideline core'); ?></span><?php endif; ?>
+                            <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Ficha detallada del núcleo' : 'Detailed core profile'); ?></span><?php endif; ?>
                             <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($ishistoricalrosterpage
-                                ? ($ises ? 'NCCAOM 2020 · retirada del listado vigente' : 'NCCAOM 2020 · removed from current roster')
+                                ? ($ises ? 'Appendix C 2026 · oficial' : 'Appendix C 2026 · official')
                                 : (is_numeric($formula['number'])
-                                    ? (($ises ? 'Dominio Board · Fórmula #' : 'Board Domain · Formula #') . $formula['number'])
+                                    ? (($ises ? 'Ficha del núcleo · Fórmula #' : 'Core profile · Formula #') . $formula['number'])
                                     : (($ises ? 'Bensky · Capítulo ' : 'Bensky · Chapter ') . $selected['sourceChapter']))); ?></span><?php endif; ?>
                             <span class="formula-study-guide__risk<?php echo $tier !== 'standard' ? ' formula-study-guide__risk--' . s($tier) : ''; ?>"><?php echo s($risklabel); ?></span>
                         </div>
@@ -2901,7 +2924,7 @@ echo $OUTPUT->header();
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Hierba(s) emperador' : 'King herb(s)'; ?></strong><span><?php echo s($formula['kings']); ?></span></div>
                     </div>
                     <?php if (isset($formula['examFocus'])): ?>
-                        <p class="formula-study-guide__exam-focus"><strong><?php echo $issupplemental && $getboardformula($formula['name']) === null
+                        <p class="formula-study-guide__exam-focus"><strong><?php echo $issupplemental && !$isofficialformula($formula['name'])
                             ? ($ises ? 'Clave de estudio (fuera del Appendix C 2026):' : 'Study key (outside the 2026 Appendix C):')
                             : ($ises ? 'Enfoque de examen:' : 'Exam focus:'); ?></strong> <?php echo s($ises ? $formula['examFocusEs'] : $formula['examFocus']); ?></p>
                     <?php endif; ?>
@@ -3000,7 +3023,7 @@ echo $OUTPUT->header();
                                                 <td>
                                                     <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($boardmatch !== null): ?>
-                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En los Board Domains · Fórmula ' : 'Board Domains · Formula ') . $boardmatch['number']); ?></span>
+                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En la secuencia detallada del núcleo · Fórmula ' : 'detailed core sequence · Formula ') . $boardmatch['number']); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>

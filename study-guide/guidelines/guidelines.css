@@ -110,12 +110,12 @@ a { color: inherit; }
 .guide-herb-roster li { counter-increment: appendix-herb; position: relative; min-width: 0; padding: 11px 12px 11px 42px; border: 1px solid #d9e4eb; border-radius: 8px; background: #f8fbfc; }
 .guide-herb-roster li::before { content: counter(appendix-herb); position: absolute; top: 11px; left: 11px; color: var(--teal); font-size: .76rem; font-weight: 900; }
 .guide-herb-roster strong,
-.guide-herb-roster span { display: block; overflow-wrap: anywhere; }
+.guide-herb-roster span { display: inline; overflow-wrap: anywhere; }
 .guide-herb-roster strong { font-size: .91rem; }
-.guide-herb-roster__card-link { display: block; color: var(--ink); text-decoration: none; }
+.guide-herb-roster__card-link { display: inline; color: var(--ink); text-decoration: none; }
 .guide-herb-roster__card-link:hover strong { color: #075fc8; text-decoration: underline; }
 .guide-herb-roster__card-link:focus-visible { border-radius: 4px; outline: 3px solid #185cca; outline-offset: 3px; }
-.guide-herb-roster span { margin-top: 2px; color: var(--muted); font-size: .77rem; font-style: italic; line-height: 1.35; }
+.guide-herb-roster span { color: var(--muted); font-size: .77rem; line-height: 1.35; }
 .guide-section--historical { scroll-margin-top: 24px; }
 .guide-alert--compact { margin: 18px 0 24px; padding: 14px 16px; }
 .guide-roster-comparison { table-layout: fixed; }
@@ -153,6 +153,13 @@ a { color: inherit; }
 .guide-formula-roster__status { padding: 13px 15px; border-radius: 8px; background: #edf4f7; color: var(--muted); }
 .guide-formula-roster__status--error { background: #fff3e8; color: #8a461b; }
 .guide-formula-roster__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.guide-official-formula-roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; margin: 20px 0; padding: 0; list-style: none; counter-reset: appendix-formula; }
+.guide-official-formula-roster li { counter-increment: appendix-formula; position: relative; min-width: 0; padding: 11px 12px 11px 42px; border: 1px solid #d9e4eb; border-radius: 8px; background: #f8fbfc; color: var(--ink); font-size: .82rem; line-height: 1.4; overflow-wrap: anywhere; }
+.guide-official-formula-roster li::before { content: counter(appendix-formula); position: absolute; top: 11px; left: 11px; color: var(--teal); font-size: .76rem; font-weight: 900; }
+.guide-official-formula-roster a { color: var(--ink); text-decoration: none; }
+.guide-official-formula-roster a:hover strong { color: #075fc8; text-decoration: underline; }
+.guide-official-formula-roster a:focus-visible { border-radius: 4px; outline: 3px solid #185cca; outline-offset: 3px; }
+.guide-official-formula-roster span { color: var(--muted); }
 .guide-formula-category { min-width: 0; overflow: hidden; border: 1px solid #d9e4eb; border-radius: 10px; background: #f8fbfc; }
 .guide-formula-category__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 15px; border-bottom: 1px solid #d9e4eb; background: #edf7f5; }
 .guide-formula-category__heading h4 { margin: 0; font-size: .96rem; line-height: 1.35; }
@@ -197,6 +204,7 @@ a { color: inherit; }
   .guide-grid--three { grid-template-columns: 1fr; }
   .guide-grid--three .guide-card--wide { grid-column: auto; }
   .guide-herb-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .guide-official-formula-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .guide-audit-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -215,6 +223,7 @@ a { color: inherit; }
   .guide-actions { width: 100%; flex-direction: column; }
   .guide-resource-list { grid-template-columns: 1fr; }
   .guide-herb-roster { grid-template-columns: 1fr; }
+  .guide-official-formula-roster { grid-template-columns: 1fr; }
   .guide-dui-action-list,
   .guide-audit-summary { grid-template-columns: 1fr; }
   .guide-final-examples { grid-template-columns: 1fr; }

@@ -1098,7 +1098,7 @@ ob_start();
                             <span class="single-herbs-guide__roster-id">ID <?php echo s($rosterid); ?></span>
                             <span>
                                 <span class="single-herbs-guide__roster-name"><?php echo s($guidelineherb['name']); ?></span>
-                                <?php if ($guidelineherb['latin'] !== ''): ?><span class="single-herbs-guide__roster-latin"><?php echo s($guidelineherb['latin']); ?></span><?php endif; ?>
+                                <?php if ($guidelineherb['latin'] !== ''): ?><span class="single-herbs-guide__roster-latin"> (<em><?php echo s($guidelineherb['latin']); ?></em>)</span><?php endif; ?>
                                 <span class="single-herbs-guide__roster-category"><b>Bensky</b> · <?php echo s($guidelineherb['bensky_category']); ?></span>
                             </span>
                         </a>

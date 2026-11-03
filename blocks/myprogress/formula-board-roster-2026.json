@@ -1,0 +1,914 @@
+{
+  "version": 1,
+  "effectiveDate": "2026-09-01",
+  "source": "NCBAHM Chinese Herbology Exam Content Outline, Appendix C",
+  "sourceUrl": "https://www.ncbahm.org/wp-content/uploads/pdf/NCBAHM_CH_Exam_Content_Outline-w-Bibliography_Jan_2026.pdf",
+  "total": 181,
+  "formulas": [
+    {
+      "id": 1,
+      "name": "Ba Zhen Tang",
+      "englishName": "Eight-Treasure Decoction"
+    },
+    {
+      "id": 2,
+      "name": "Ba Zheng San",
+      "englishName": "Eight-Herb Powder for Rectification"
+    },
+    {
+      "id": 3,
+      "name": "Bai He Gu Jin Tang",
+      "englishName": "Lily Bulb Decoction to Preserve the Metal"
+    },
+    {
+      "id": 4,
+      "name": "Bai Hu Tang",
+      "englishName": "White Tiger Decoction"
+    },
+    {
+      "id": 5,
+      "name": "Bai Tou Weng Tang",
+      "englishName": "Pulsatilla Decoction"
+    },
+    {
+      "id": 6,
+      "name": "Ban Xia Bai Zhu Tian Ma Tang",
+      "englishName": "Pinellia, White Atractylodes, and Gastrodia Decoction"
+    },
+    {
+      "id": 7,
+      "name": "Ban Xia Hou Po Tang",
+      "englishName": "Pinellia and Magnolia Bark Decoction"
+    },
+    {
+      "id": 8,
+      "name": "Ban Xia Xie Xin Tang",
+      "englishName": "Pinellia Decoction to Drain the Epigastrium"
+    },
+    {
+      "id": 9,
+      "name": "Bao He Wan",
+      "englishName": "Preserve Harmony Pill"
+    },
+    {
+      "id": 10,
+      "name": "Bei Mu Gua Lou San",
+      "englishName": "Fritillaria and Trichosanthes Fruit Powder"
+    },
+    {
+      "id": 11,
+      "name": "Bu Fei Tang",
+      "englishName": "Tonify the Lungs Decoction"
+    },
+    {
+      "id": 12,
+      "name": "Bu Yang Huan Wu Tang",
+      "englishName": "Tonify the Yang to Restore Five (-Tenths) Decoction"
+    },
+    {
+      "id": 13,
+      "name": "Bu Zhong Yi Qi Tang",
+      "englishName": "Tonify the Middle to Augment the Qi Decoction"
+    },
+    {
+      "id": 14,
+      "name": "Cang Er Zi San",
+      "englishName": "Xanthium Powder"
+    },
+    {
+      "id": 15,
+      "name": "Chai Ge Jie Ji Tang",
+      "englishName": "Bupleurum and Kudzu Decoction to Release the Muscle Layer"
+    },
+    {
+      "id": 16,
+      "name": "Chai Hu Gui Zhi Tang",
+      "englishName": "Bupleurum and Cinnamon Twig Decoction"
+    },
+    {
+      "id": 17,
+      "name": "Chai Hu Jia Long Gu Mu Li Tang",
+      "englishName": "Bupleurum plus Dragon Bone and Oyster Shell Decoction"
+    },
+    {
+      "id": 18,
+      "name": "Chai Hu Shu Gan San",
+      "englishName": "Bupleurum Powder to Dredge the Liver"
+    },
+    {
+      "id": 19,
+      "name": "Chuan Xiong Cha Tiao San",
+      "englishName": "Chuanxiong Powder to be Taken with Green Tea"
+    },
+    {
+      "id": 20,
+      "name": "Da Bu Yin Wan",
+      "englishName": "Great Tonify the Yin Pill"
+    },
+    {
+      "id": 21,
+      "name": "Da Chai Hu Tang",
+      "englishName": "Major Bupleurum Decoction"
+    },
+    {
+      "id": 22,
+      "name": "Da Cheng Qi Tang",
+      "englishName": "Major Order the Qi Decoction"
+    },
+    {
+      "id": 23,
+      "name": "Da Jian Zhong Tang",
+      "englishName": "Major Construct the Middle Decoction"
+    },
+    {
+      "id": 24,
+      "name": "Da Huang Mu Dan Tang",
+      "englishName": "Rhubarb and Moutan Decoction"
+    },
+    {
+      "id": 25,
+      "name": "Da Qing Long Tang",
+      "englishName": "Major Bluegreen Dragon Decoction"
+    },
+    {
+      "id": 26,
+      "name": "Dan Shen Yin",
+      "englishName": "Salvia Drink"
+    },
+    {
+      "id": 27,
+      "name": "Dang Gui Bu Xue Tang",
+      "englishName": "Tangkuei Decoction to Tonify the Blood"
+    },
+    {
+      "id": 28,
+      "name": "Dang Gui Liu Huang Tang",
+      "englishName": "Tangkuei and Six-Yellow Decoction"
+    },
+    {
+      "id": 29,
+      "name": "Dang Gui Shao Yao San",
+      "englishName": "Tangkuei and Peony Powder"
+    },
+    {
+      "id": 30,
+      "name": "Dang Gui Si Ni Tang",
+      "englishName": "Tangkuei Decoction for Frigid Extremities"
+    },
+    {
+      "id": 31,
+      "name": "Dang Gui Yin Zi",
+      "englishName": "Tangkuei Drink"
+    },
+    {
+      "id": 32,
+      "name": "Dao Chi San",
+      "englishName": "Guide Out the Red Powder"
+    },
+    {
+      "id": 33,
+      "name": "Ding Chuan Tang",
+      "englishName": "Arrest Wheezing Decoction"
+    },
+    {
+      "id": 34,
+      "name": "Ding Zhi Wan",
+      "englishName": "Settle the Emotions Pill"
+    },
+    {
+      "id": 35,
+      "name": "Du Huo Ji Sheng Tang",
+      "englishName": "Pubescent Angelica and Taxillus Decoction"
+    },
+    {
+      "id": 36,
+      "name": "Du Qi Wan",
+      "englishName": "Capital Qi Pill"
+    },
+    {
+      "id": 37,
+      "name": "Er Chen Tang",
+      "englishName": "Two-Aged (Herb) Decoction"
+    },
+    {
+      "id": 38,
+      "name": "Er Miao San",
+      "englishName": "Two-Marvel Powder"
+    },
+    {
+      "id": 39,
+      "name": "Er Xian Tang",
+      "englishName": "Two-Immortal Decoction"
+    },
+    {
+      "id": 40,
+      "name": "Er Zhi Wan",
+      "englishName": "Two-Solstice Pill"
+    },
+    {
+      "id": 41,
+      "name": "Fang Feng Tong Sheng San",
+      "englishName": "Saposhnikovia Powder That Sagely Unblocks"
+    },
+    {
+      "id": 42,
+      "name": "Fang Ji Huang Qi Tang",
+      "englishName": "Stephania and Astragalus Decoction"
+    },
+    {
+      "id": 43,
+      "name": "Fu Yuan Huo Xue Tang",
+      "englishName": "Revive Health by Invigorating the Blood Decoction"
+    },
+    {
+      "id": 44,
+      "name": "Fu Zi Li Zhong Wan",
+      "englishName": "Aconite Accessory Root Pill to Regulate the Middle"
+    },
+    {
+      "id": 45,
+      "name": "Gan Mai Da Zao Tang",
+      "englishName": "Licorice, Wheat, and Jujube Decoction"
+    },
+    {
+      "id": 46,
+      "name": "Ge Gen Huang Qin Huang Lian Tang",
+      "englishName": "Kudzu, Scutellaria, and Coptis Decoction"
+    },
+    {
+      "id": 47,
+      "name": "Ge Gen Tang",
+      "englishName": "Kudzu Decoction"
+    },
+    {
+      "id": 48,
+      "name": "Ge Xia Zhu Yu Tang",
+      "englishName": "Drive Out Stasis Below the Diaphragm Decoction"
+    },
+    {
+      "id": 49,
+      "name": "Gu Jing Wan",
+      "englishName": "Stabilize the Menses Pill"
+    },
+    {
+      "id": 50,
+      "name": "Gua Lou Xie Bai Ban Xia Tang",
+      "englishName": "Trichosanthes Fruit, Chinese Garlic, and Pinellia Decoction"
+    },
+    {
+      "id": 51,
+      "name": "Gui Pi Tang",
+      "englishName": "Restore the Spleen Decoction"
+    },
+    {
+      "id": 52,
+      "name": "Gui Zhi Fu Ling Wan",
+      "englishName": "Cinnamon Twig and Poria Pill"
+    },
+    {
+      "id": 53,
+      "name": "Gui Zhi Jia Long Gu Mu Li Tang",
+      "englishName": "Cinnamon Twig Decoction plus Dragon Bone and Oyster Shell"
+    },
+    {
+      "id": 54,
+      "name": "Gui Zhi Shao Yao Zhi Mu Tang",
+      "englishName": "Cinnamon Twig, Peony, and Anemarrhena Decoction"
+    },
+    {
+      "id": 55,
+      "name": "Gui Zhi Tang",
+      "englishName": "Cinnamon Twig Decoction"
+    },
+    {
+      "id": 56,
+      "name": "Huai Hua San",
+      "englishName": "Sophora Japonica Flower Powder"
+    },
+    {
+      "id": 57,
+      "name": "Huang Lian E Jiao Tang",
+      "englishName": "Coptis and Ass-Hide Gelatin Decoction"
+    },
+    {
+      "id": 58,
+      "name": "Huang Lian Jie Du Tang",
+      "englishName": "Coptis Decoction to Resolve Toxicity"
+    },
+    {
+      "id": 59,
+      "name": "Huang Qi Jian Zhong Tang",
+      "englishName": "Astragalus Decoction to Construct the Middle"
+    },
+    {
+      "id": 60,
+      "name": "Huo Xiang Zheng Qi San",
+      "englishName": "Patchouli/Agastache Powder to Rectify the Qi"
+    },
+    {
+      "id": 61,
+      "name": "Ji Chuan Jian",
+      "englishName": "Benefit the River (Flow) Decoction"
+    },
+    {
+      "id": 62,
+      "name": "Jia Jian Wei Rui Tang",
+      "englishName": "Modified Solomon's Seal Decoction"
+    },
+    {
+      "id": 63,
+      "name": "Jia Wei Xiao Yao San",
+      "englishName": "Augmented Rambling Powder"
+    },
+    {
+      "id": 64,
+      "name": "Jiao Ai Tang",
+      "englishName": "Ass-Hide Gelatin and Mugwort Decoction"
+    },
+    {
+      "id": 65,
+      "name": "Jin Ling Zi San",
+      "englishName": "Melia Toosendan Powder"
+    },
+    {
+      "id": 66,
+      "name": "Jin Suo Gu Jing Wan",
+      "englishName": "Metal Lock Pill to Stabilize the Essence"
+    },
+    {
+      "id": 67,
+      "name": "Jing Fang Bai Du San",
+      "englishName": "Schizonepeta and Saposhnikovia Powder to Overcome Pathogenic Influences"
+    },
+    {
+      "id": 68,
+      "name": "Ju Pi Zhu Ru Tang",
+      "englishName": "Tangerine Peel and Bamboo Shavings Decoction"
+    },
+    {
+      "id": 69,
+      "name": "Juan Bi Tang",
+      "englishName": "Remove Painful Obstructions from Awakening of the Mind in Medical Studies"
+    },
+    {
+      "id": 70,
+      "name": "Li Zhong Wan",
+      "englishName": "Regulate the Middle Pill"
+    },
+    {
+      "id": 71,
+      "name": "Liang Fu Wan",
+      "englishName": "Galangal and Cyperus Pill"
+    },
+    {
+      "id": 72,
+      "name": "Liang Ge San",
+      "englishName": "Cool the Diaphragm Powder"
+    },
+    {
+      "id": 73,
+      "name": "Ling Gui Zhu Gan Tang",
+      "englishName": "Poria, Cinnamon Twig, Atractylodes, and Licorice Decoction"
+    },
+    {
+      "id": 74,
+      "name": "Ling Jiao Gou Teng Yin",
+      "englishName": "Antelope Horn and Uncaria Decoction"
+    },
+    {
+      "id": 75,
+      "name": "Liu Jun Zi Tang",
+      "englishName": "Six-Gentlemen Decoction"
+    },
+    {
+      "id": 76,
+      "name": "Liu Wei Di Huang Wan",
+      "englishName": "Six-Ingredient Pill with Rehmannia"
+    },
+    {
+      "id": 77,
+      "name": "Liu Yi San",
+      "englishName": "Six-to-One Powder"
+    },
+    {
+      "id": 78,
+      "name": "Long Dan Xie Gan Tang",
+      "englishName": "Gentian Decoction to Drain the Liver"
+    },
+    {
+      "id": 79,
+      "name": "Ma Huang Tang",
+      "englishName": "Ephedra Decoction"
+    },
+    {
+      "id": 80,
+      "name": "Ma Xing Shi Gan Tang",
+      "englishName": "Ephedra, Apricot Kernel, Gypsum and Licorice Decoction"
+    },
+    {
+      "id": 81,
+      "name": "Ma Zi Ren Wan",
+      "englishName": "Hemp Seed Pill"
+    },
+    {
+      "id": 82,
+      "name": "Mai Men Dong Tang",
+      "englishName": "Ophiopogonis Decoction"
+    },
+    {
+      "id": 83,
+      "name": "Mu Li San",
+      "englishName": "Oyster Shell Powder"
+    },
+    {
+      "id": 84,
+      "name": "Nuan Gan Jian",
+      "englishName": "Warm the Liver Decoction"
+    },
+    {
+      "id": 85,
+      "name": "Ping Wei San",
+      "englishName": "Calm the Stomach Powder"
+    },
+    {
+      "id": 86,
+      "name": "Pu Ji Xiao Du Yin",
+      "englishName": "Universal Benefit Drink to Eliminate Toxin"
+    },
+    {
+      "id": 87,
+      "name": "Qi Ju Di Huang Wan",
+      "englishName": "Lycium Fruit, Chrysanthemum, and Rehmannia Pill"
+    },
+    {
+      "id": 88,
+      "name": "Qian Zheng San",
+      "englishName": "Lead to Symmetry Powder"
+    },
+    {
+      "id": 89,
+      "name": "Qiang Huo Sheng Shi Tang",
+      "englishName": "Notopterygium Decoction to Overcome Dampness"
+    },
+    {
+      "id": 90,
+      "name": "Qing Gu San",
+      "englishName": "Cool the Bones Powder"
+    },
+    {
+      "id": 91,
+      "name": "Qing Hao Bie Jia Tang",
+      "englishName": "Sweet Wormwood and Soft-shelled Turtle Shell Decoction"
+    },
+    {
+      "id": 92,
+      "name": "Qing Qi Hua Tan Wan",
+      "englishName": "Clear the Qi and Transform Phlegm Pill"
+    },
+    {
+      "id": 93,
+      "name": "Qing Wei San",
+      "englishName": "Clear the Stomach Powder"
+    },
+    {
+      "id": 94,
+      "name": "Qing Wen Bai Du Yin",
+      "englishName": "Clear Epidemics and Overcome Toxicity Drink"
+    },
+    {
+      "id": 95,
+      "name": "Qing Ying Tang",
+      "englishName": "Clear the Nutritive Level Decoction"
+    },
+    {
+      "id": 96,
+      "name": "Qing Zao Jiu Fei Tang",
+      "englishName": "Clear Dryness and Rescue the Lungs Decoction"
+    },
+    {
+      "id": 97,
+      "name": "Ren Shen Bai Du San",
+      "englishName": "Ginseng Powder to Overcome Pathogenic Influences"
+    },
+    {
+      "id": 98,
+      "name": "Run Chang Wan",
+      "englishName": "Moisten the Intestines Pill from Master Shen's Book"
+    },
+    {
+      "id": 99,
+      "name": "San Ren Tang",
+      "englishName": "Three-Seed Decoction"
+    },
+    {
+      "id": 100,
+      "name": "San Zi Yang Qin Tang",
+      "englishName": "Three-Seed Decoction to Nourish One's Parents"
+    },
+    {
+      "id": 101,
+      "name": "Sang Ju Yin",
+      "englishName": "Mulberry Leaf and Chrysanthemum Drink"
+    },
+    {
+      "id": 102,
+      "name": "Sang Piao Xiao San",
+      "englishName": "Mantis Egg-Case Powder"
+    },
+    {
+      "id": 103,
+      "name": "Sang Xing Tang",
+      "englishName": "Mulberry Leaf and Apricot Kernel Decoction"
+    },
+    {
+      "id": 104,
+      "name": "Sha Shen Mai Men Dong Tang",
+      "englishName": "Glehnia and Ophiopogonis Decoction"
+    },
+    {
+      "id": 105,
+      "name": "Shao Fu Zhu Yu Tang",
+      "englishName": "Drive Out Stasis from the Lower Abdomen Decoction"
+    },
+    {
+      "id": 106,
+      "name": "Shao Yao Gan Cao Tang",
+      "englishName": "Peony and Licorice Decoction"
+    },
+    {
+      "id": 107,
+      "name": "Shao Yao Tang",
+      "englishName": "Peony Decoction"
+    },
+    {
+      "id": 108,
+      "name": "Shen Fu Tang",
+      "englishName": "Ginseng and Aconite Accessory Root Decoction"
+    },
+    {
+      "id": 109,
+      "name": "Shen Ling Bai Zhu San",
+      "englishName": "Ginseng, Poria, and White Atractylodes Powder"
+    },
+    {
+      "id": 110,
+      "name": "Shen Qi Wan",
+      "englishName": "Kidney Qi Pill"
+    },
+    {
+      "id": 111,
+      "name": "Shen Tong Zhu Yu Tang",
+      "englishName": "Drive Out Stasis from a Painful Body Decoction"
+    },
+    {
+      "id": 112,
+      "name": "Sheng Hua Tang",
+      "englishName": "Generating and Transforming Decoction"
+    },
+    {
+      "id": 113,
+      "name": "Sheng Mai San",
+      "englishName": "Generate the Pulse Powder"
+    },
+    {
+      "id": 114,
+      "name": "Sheng Ma Ge Gen Tang",
+      "englishName": "Cimicifuga and Kudzu Decoction"
+    },
+    {
+      "id": 115,
+      "name": "Shi Hui San",
+      "englishName": "Ten Partially-charred Substances Powder"
+    },
+    {
+      "id": 116,
+      "name": "Shi Pi Yin",
+      "englishName": "Bolster the Spleen Drink"
+    },
+    {
+      "id": 117,
+      "name": "Shi Quan Da Bu Tang",
+      "englishName": "All-Inclusive Great Tonifying Decoction"
+    },
+    {
+      "id": 118,
+      "name": "Shi Xiao San",
+      "englishName": "Sudden Smile Powder"
+    },
+    {
+      "id": 119,
+      "name": "Shou Tai Wan",
+      "englishName": "Fetus Longevity Pill"
+    },
+    {
+      "id": 120,
+      "name": "Si Jun Zi Tang",
+      "englishName": "Four-Gentlemen Decoction"
+    },
+    {
+      "id": 121,
+      "name": "Si Miao Wan",
+      "englishName": "Four-Marvel Pill"
+    },
+    {
+      "id": 122,
+      "name": "Si Ni San",
+      "englishName": "Frigid Extremities Powder"
+    },
+    {
+      "id": 123,
+      "name": "Si Ni Tang",
+      "englishName": "Frigid Extremities Decoction"
+    },
+    {
+      "id": 124,
+      "name": "Si Shen Wan",
+      "englishName": "Four-Miracle Pill"
+    },
+    {
+      "id": 125,
+      "name": "Si Wu Tang",
+      "englishName": "Four-Substance Decoction"
+    },
+    {
+      "id": 126,
+      "name": "Su Zi Jiang Qi Tang",
+      "englishName": "Perilla Fruit Decoction for Directing Qi Downward"
+    },
+    {
+      "id": 127,
+      "name": "Suan Zao Ren Tang",
+      "englishName": "Sour Jujube Decoction"
+    },
+    {
+      "id": 128,
+      "name": "Taishan Pan Shi San",
+      "englishName": "Taishan Bedrock Powder"
+    },
+    {
+      "id": 129,
+      "name": "Tao He Cheng Qi Tang",
+      "englishName": "Peach Pit Decoction to Order the Qi"
+    },
+    {
+      "id": 130,
+      "name": "Tao Hong Si Wu Tang",
+      "englishName": "Four-Substance Decoction with Safflower and Peach Pit"
+    },
+    {
+      "id": 131,
+      "name": "Tian Ma Gou Teng Yin",
+      "englishName": "Gastrodia and Uncaria Drink"
+    },
+    {
+      "id": 132,
+      "name": "Tian Tai Wu Yao San",
+      "englishName": "Top-Quality Lindera Powder"
+    },
+    {
+      "id": 133,
+      "name": "Tian Wang Bu Xin Dan",
+      "englishName": "Emperor of Heaven's Special Pill to Tonify the Heart"
+    },
+    {
+      "id": 134,
+      "name": "Tiao Wei Cheng Qi Tang",
+      "englishName": "Regulate the Stomach and Order the Qi Decoction"
+    },
+    {
+      "id": 135,
+      "name": "Tong Xie Yao Fang",
+      "englishName": "Important Formula for Painful Diarrhea"
+    },
+    {
+      "id": 136,
+      "name": "Wan Dai Tang",
+      "englishName": "End Discharge Decoction"
+    },
+    {
+      "id": 137,
+      "name": "Wen Dan Tang",
+      "englishName": "Warm Gallbladder Decoction"
+    },
+    {
+      "id": 138,
+      "name": "Wen Jing Tang",
+      "englishName": "Flow-Warming Decoction"
+    },
+    {
+      "id": 139,
+      "name": "Wu Ling San",
+      "englishName": "Five-Ingredient Powder with Poria"
+    },
+    {
+      "id": 140,
+      "name": "Wu Pi San",
+      "englishName": "Five-Peel Powder"
+    },
+    {
+      "id": 141,
+      "name": "Wu Wei Xiao Du Yin",
+      "englishName": "Five-Ingredient Drink to Eliminate Toxin"
+    },
+    {
+      "id": 142,
+      "name": "Wu Zhu Yu Tang",
+      "englishName": "Evodia Decoction"
+    },
+    {
+      "id": 143,
+      "name": "Xi Jiao Di Huang Wan",
+      "englishName": "Rhinoceros Horn and Rehmannia Decoction"
+    },
+    {
+      "id": 144,
+      "name": "Xiang Sha Liu Jun Zi Tang",
+      "englishName": "Six-Gentlemen Decoction with Aucklandia and Amomum"
+    },
+    {
+      "id": 145,
+      "name": "Xiang Su San",
+      "englishName": "Cyperus and Perilla Leaf Powder"
+    },
+    {
+      "id": 146,
+      "name": "Xiao Chai Hu Tang",
+      "englishName": "Minor Bupleurum Decoction"
+    },
+    {
+      "id": 147,
+      "name": "Xiao Cheng Qi Tang",
+      "englishName": "Minor Order the Qi Decoction"
+    },
+    {
+      "id": 148,
+      "name": "Xiao Feng San",
+      "englishName": "Eliminate Wind Powder from Orthodox Lineage"
+    },
+    {
+      "id": 149,
+      "name": "Xiao Huo Luo Dan",
+      "englishName": "Minor Invigorate the Collaterals Special Pill"
+    },
+    {
+      "id": 150,
+      "name": "Xiao Ji Yin Zi",
+      "englishName": "Small Thistle Drink"
+    },
+    {
+      "id": 151,
+      "name": "Xiao Jian Zhong Tang",
+      "englishName": "Minor Construct the Middle Decoction"
+    },
+    {
+      "id": 152,
+      "name": "Xiao Qing Long Tang",
+      "englishName": "Minor Bluegreen Dragon Decoction"
+    },
+    {
+      "id": 153,
+      "name": "Xiao Yao San",
+      "englishName": "Rambling Powder"
+    },
+    {
+      "id": 154,
+      "name": "Xie Bai San",
+      "englishName": "Drain the White Powder"
+    },
+    {
+      "id": 155,
+      "name": "Xie Huang San",
+      "englishName": "Drain the Yellow Powder"
+    },
+    {
+      "id": 156,
+      "name": "Xie Xin Tang",
+      "englishName": "Drain the Epigastrium Decoction"
+    },
+    {
+      "id": 157,
+      "name": "Xing Su San",
+      "englishName": "Apricot Kernel and Perilla Leaf Powder"
+    },
+    {
+      "id": 158,
+      "name": "Xuan Fu Dai Zhe Tang",
+      "englishName": "Inula and Hematite Decoction"
+    },
+    {
+      "id": 159,
+      "name": "Xue Fu Zhu Yu Tang",
+      "englishName": "Drive Out Stasis from the Mansion of Blood Decoction"
+    },
+    {
+      "id": 160,
+      "name": "Yang He Tang",
+      "englishName": "Balmy Yang Decoction"
+    },
+    {
+      "id": 161,
+      "name": "Yi Guan Jian",
+      "englishName": "Linking Decoction"
+    },
+    {
+      "id": 162,
+      "name": "Yin Chen Hao Tang",
+      "englishName": "Virgate Wormwood Decoction"
+    },
+    {
+      "id": 163,
+      "name": "Yin Qiao San",
+      "englishName": "Honeysuckle and Forsythia Powder"
+    },
+    {
+      "id": 164,
+      "name": "You Gui Wan",
+      "englishName": "Restore the Right (Kidney) Pill"
+    },
+    {
+      "id": 165,
+      "name": "You Gui Yin",
+      "englishName": "Restore the Right (Kidney) Drink"
+    },
+    {
+      "id": 166,
+      "name": "Yu Nu Jian",
+      "englishName": "Jade Woman Decoction"
+    },
+    {
+      "id": 167,
+      "name": "Yu Ping Feng San",
+      "englishName": "Jade Windscreen Powder"
+    },
+    {
+      "id": 168,
+      "name": "Yue Ju Wan",
+      "englishName": "Escape Restraint Pill"
+    },
+    {
+      "id": 169,
+      "name": "Zeng Ye Cheng Qi Tang",
+      "englishName": "Increase the Fluids and Order the Qi Decoction"
+    },
+    {
+      "id": 170,
+      "name": "Zeng Ye Tang",
+      "englishName": "Increase the Fluids Decoction"
+    },
+    {
+      "id": 171,
+      "name": "Zhen Gan Xi Feng Tang",
+      "englishName": "Sedate the Liver and Extinguish Wind Decoction"
+    },
+    {
+      "id": 172,
+      "name": "Zhen Ren Yang Zang Tang",
+      "englishName": "True Man's Decoction to Nourish the Organs"
+    },
+    {
+      "id": 173,
+      "name": "Zhen Wu Tang",
+      "englishName": "True Warrior Decoction"
+    },
+    {
+      "id": 174,
+      "name": "Zhi Bai Di Huang Wan",
+      "englishName": "Anemarrhena, Phellodendron, and Rehmannia Pill"
+    },
+    {
+      "id": 175,
+      "name": "Zhi Gan Cao Tang",
+      "englishName": "Prepared Licorice Decoction"
+    },
+    {
+      "id": 176,
+      "name": "Zhi Sou San",
+      "englishName": "Stop Coughing Powder"
+    },
+    {
+      "id": 177,
+      "name": "Zhu Ling Tang",
+      "englishName": "Polyporus Decoction"
+    },
+    {
+      "id": 178,
+      "name": "Zhu Ye Shi Gao Tang",
+      "englishName": "Lophatherum and Gypsum Decoction"
+    },
+    {
+      "id": 179,
+      "name": "Zuo Gui Wan",
+      "englishName": "Restore the Left (Kidney) Pill"
+    },
+    {
+      "id": 180,
+      "name": "Zuo Gui Yin",
+      "englishName": "Restore the Left (Kidney) Drink"
+    },
+    {
+      "id": 181,
+      "name": "Zuo Jin Wan",
+      "englishName": "Left Metal Pill"
+    }
+  ]
+}
