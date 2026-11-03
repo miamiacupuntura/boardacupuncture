@@ -1025,6 +1025,7 @@ ob_start();
 .single-herbs-guide__category--mixed{border-top-color:#0b817d;background:#f6fbfa}.single-herbs-guide__category--mixed .single-herbs-guide__category-number{background:#dff2ee;color:#0d665e}
 .single-herbs-guide__category--properties{border-top-color:#2563eb;background:#f7faff}.single-herbs-guide__category--properties .single-herbs-guide__category-number{background:#dbeafe;color:#1d4ed8}
 .single-herbs-guide__category--introduction{border-top-color:#7c3aed;background:#faf8ff}.single-herbs-guide__category--introduction .single-herbs-guide__category-number{background:#ede9fe;color:#6d28d9}
+.single-herbs-guide__category--bensky-reference{border-top-color:#0b817d;background:#f3faf8}.single-herbs-guide__category--bensky-reference:hover{transform:none;box-shadow:0 2px 8px rgba(15,23,42,.05)}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{width:40px;flex-basis:40px;background:#dff2ee;color:#0d665e;font-size:12px}.single-herbs-guide__category--bensky-reference small{color:#52677a}
 .single-herbs-guide__empty{padding:34px;border:1px dashed #aeb8c0;border-radius:12px;background:#fff;text-align:center;color:#64748b}
 .single-herbs-guide__requested-card{margin:0 0 22px;padding:20px 22px;border:1px solid #c9ded9;border-left:5px solid #0b817d;border-radius:11px;background:#f2faf8}.single-herbs-guide__requested-card h3{margin:2px 0 5px;font-size:23px}.single-herbs-guide__requested-card p{margin:0;color:#52677a;line-height:1.5}.single-herbs-guide__requested-card .single-herbs-guide__eyebrow{margin-bottom:4px}.single-herbs-guide__requested-card-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.single-herbs-guide__card-target{scroll-margin-top:24px;animation:single-herb-card-highlight 2.2s ease}.single-herbs-guide__card-target>summary,.single-herbs-guide__card-target.single-herbs-guide__category-herb{box-shadow:0 0 0 4px rgba(11,129,125,.2)}@keyframes single-herb-card-highlight{0%,55%{transform:translateY(-2px)}100%{transform:none}}
 .single-herbs-guide__workspace{padding:28px;border:1px solid #d9e2e7;border-top:5px solid #0b817d;border-radius:13px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
@@ -1613,6 +1614,16 @@ ob_start();
                     }
                     $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
                     ?>
+                    <?php if ($categoryguidenumber === 12): ?>
+                        <article id="bensky-chapter-four-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" aria-label="<?php echo s($ises ? 'Bensky, capítulo 4: Hierbas que drenan Humedad' : 'Bensky Chapter 4: Herbs that Drain Dampness'); ?>">
+                            <span class="single-herbs-guide__category-reference">
+                                <span class="single-herbs-guide__category-number">B4</span>
+                                <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'); ?></span>
+                            </span>
+                            <strong><?php echo s($ises ? 'Hierbas que drenan Humedad' : 'Herbs that Drain Dampness'); ?></strong>
+                            <small><?php echo s($ises ? 'Capítulo fuente recibido · 21 hierbas del guideline identificadas · tarjeta detallada pendiente' : 'Source chapter received · 21 guideline herbs identified · detailed card pending'); ?></small>
+                        </article>
+                    <?php endif; ?>
                     <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="single-herbs-guide__category-reference">
                             <span class="single-herbs-guide__category-number" aria-label="<?php echo s(($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $categoryguidenumber); ?>"><?php echo $categoryguidenumber; ?></span>
