@@ -48,8 +48,8 @@ $propertylang = $ises ? 'es' : 'en';
         <div class="single-herbs-properties__source-note">
             <strong><?php echo s($ises ? 'Cómo leer la dosis:' : 'How to read dosage:'); ?></strong>
             <?php echo s($ises
-                ? 'La categoría es la clasificación primaria de Bensky. “Dosis de estudio” procede de la ficha detallada y “Appendix 1” es el límite diario excepcional del texto suministrado. Un guion indica que la fuente disponible no aporta ese dato.'
-                : 'Category is the primary Bensky classification. “Study dose” comes from the detailed profile and “Appendix 1” is the exceptional daily limit in the supplied text. A dash means that the available source does not provide that field.'); ?>
+                ? 'La categoría es la clasificación primaria de Bensky. Las propiedades, meridianos y dosis de las 304 hierbas están completos; Bensky completa los campos que no aparecían en las tablas previas. “Appendix 1” muestra el límite diario excepcional del texto suministrado.'
+                : 'Category is the primary Bensky classification. Properties, channels and dosage are complete for all 304 herbs; Bensky supplies fields absent from the earlier tables. “Appendix 1” shows the exceptional daily limit in the supplied text.'); ?>
         </div>
 
         <div class="single-herbs-properties__controls">
@@ -100,6 +100,7 @@ $propertylang = $ises ? 'es' : 'en';
                         <td>
                             <?php if ($dose): ?><span><?php echo s($dose); ?></span><?php endif; ?>
                             <?php if ($dose && $dosesource === 'bensky-chapter-1'): ?><small><?php echo s('Bensky · ' . ($ises ? 'capítulo 1' : 'Chapter 1') . ($benskyreference ? ' · ' . $benskyreference : '')); ?></small><?php endif; ?>
+                            <?php if ($dose && $dosesource === 'bensky-supplied-monographs'): ?><small><?php echo s($ises ? 'Bensky · monografía suministrada' : 'Bensky · supplied monograph'); ?></small><?php endif; ?>
                             <?php if ($appendixdose): ?><small><?php echo s('Appendix 1 · ' . ($ises ? str_replace(['Less than', 'Up to', '(source lists both)'], ['Menos de', 'Hasta', '(la fuente muestra ambos)'], $appendixdose) : $appendixdose)); ?></small><?php endif; ?>
                             <?php if (!$dose && !$appendixdose): ?><span aria-label="<?php echo s($ises ? 'Sin dato' : 'No data'); ?>">—</span><?php endif; ?>
                         </td>

@@ -234,6 +234,151 @@ foreach ($benskyChapterOneProfiles as [$name, $latin, $propertiesEn, $properties
     $benskyReferenceByKey[$key] = $reference;
 }
 
+// The remaining property gaps are completed from the Bensky monographs
+// supplied by the user. These rows are deliberately explicit instead of
+// inferred from prose: a build can therefore audit every bilingual field and
+// never confuse a comparison herb with the herb whose monograph is being read.
+$benskySuppliedSource = 'Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed. (user-provided monographs)';
+$benskySuppliedProfiles = [
+    ['Bai Bian Dou', 'Lablab Semen album', 'Sweet; slightly warm', 'Dulce; ligeramente tibia', 'Spleen, Stomach', 'Bazo, Estómago', '9–15 g'],
+    ['Bai He', 'Lilii Bulbus', 'Sweet, slightly bitter; slightly cold', 'Dulce, ligeramente amarga; ligeramente fría', 'Heart, Lung', 'Corazón, Pulmón', '6–12 g'],
+    ['Bai Zi Ren', 'Platycladi Semen', 'Sweet; neutral', 'Dulce; neutra', 'Heart, Kidney, Large Intestine', 'Corazón, Riñón, Intestino Grueso', '9–15 g'],
+    ['Bian Xu', 'Polygoni avicularis Herba', 'Bitter; slightly cold', 'Amarga; ligeramente fría', 'Bladder', 'Vejiga', '9–15 g'],
+    ['Che Qian Zi', 'Plantaginis Semen', 'Sweet; cold', 'Dulce; fría', 'Bladder, Kidney, Liver, Lung', 'Vejiga, Riñón, Hígado, Pulmón', '9–15 g; decoct in a bag'],
+    ['Chi Shi Zhi', 'Halloysitum Rubrum', 'Sweet, sour, astringent; warm', 'Dulce, agria, astringente; tibia', 'Large Intestine, Stomach', 'Intestino Grueso, Estómago', '9–15 g'],
+    ['Deng Xin Cao', 'Junci Medulla', 'Sweet, bland; slightly cold', 'Dulce, insípida; ligeramente fría', 'Heart, Lung, Small Intestine', 'Corazón, Pulmón, Intestino Delgado', '1.5–4.5 g'],
+    ['Di Fu Zi', 'Kochiae Fructus', 'Sweet, bitter; cold', 'Dulce, amarga; fría', 'Bladder, Kidney', 'Vejiga, Riñón', '9–15 g'],
+    ['Ding Xiang', 'Caryophylli Flos', 'Acrid; warm', 'Acre; tibia', 'Kidney, Spleen, Stomach', 'Riñón, Bazo, Estómago', '1.5–4.5 g'],
+    ['Feng Mi', 'Mel', 'Sweet; neutral', 'Dulce; neutra', 'Large Intestine, Lung, Spleen', 'Intestino Grueso, Pulmón, Bazo', '15–30 g'],
+    ['Gou Ji', 'Cibotii Rhizoma', 'Bitter, sweet; warm', 'Amarga, dulce; tibia', 'Liver, Kidney', 'Hígado, Riñón', '6–12 g'],
+    ['Hai Zao', 'Sargassum', 'Bitter, salty; cold', 'Amarga, salada; fría', 'Kidney, Liver, Lung, Stomach', 'Riñón, Hígado, Pulmón, Estómago', '6–15 g'],
+    ['Hua Shi', 'Talcum', 'Sweet, bland; cold', 'Dulce, insípida; fría', 'Stomach, Bladder', 'Estómago, Vejiga', '9–15 g; decoct in a bag'],
+    ['Ling Yang Jiao', 'Saigae tataricae Cornu', 'Salty; cold', 'Salada; fría', 'Heart, Liver', 'Corazón, Hígado', '1.5–3 g in decoction; 0.3–0.6 g as powder'],
+    ['Long Yan Rou', 'Longan Arillus', 'Sweet; warm', 'Dulce; tibia', 'Heart, Spleen', 'Corazón, Bazo', '9–15 g'],
+    ['Qian Shi', 'Euryales Semen', 'Sweet, astringent; neutral', 'Dulce, astringente; neutra', 'Spleen, Kidney', 'Bazo, Riñón', '9–15 g'],
+    ['Qu Mai', 'Dianthi Herba', 'Bitter; cold', 'Amarga; fría', 'Bladder, Heart, Small Intestine', 'Vejiga, Corazón, Intestino Delgado', '9–15 g'],
+    ['Shi Wei', 'Pyrrosiae Folium', 'Bitter, sweet; slightly cold', 'Amarga, dulce; ligeramente fría', 'Bladder, Lung', 'Vejiga, Pulmón', '6–9 g'],
+    ['Tai Zi Shen', 'Pseudostellariae Radix', 'Sweet, slightly bitter; neutral', 'Dulce, ligeramente amarga; neutra', 'Spleen, Lung', 'Bazo, Pulmón', '9–30 g'],
+    ['Xu Duan', 'Dipsaci Radix', 'Bitter, acrid; slightly warm', 'Amarga, acre; ligeramente tibia', 'Liver, Kidney', 'Hígado, Riñón', '6–12 g'],
+    ['Yi Mu Cao', 'Leonuri Herba', 'Acrid, bitter; slightly cold', 'Acre, amarga; ligeramente fría', 'Heart, Liver, Bladder', 'Corazón, Hígado, Vejiga', '9–30 g'],
+    ['Yi Yi Ren', 'Coicis Semen', 'Sweet, bland; slightly cold', 'Dulce, insípida; ligeramente fría', 'Lung, Spleen, Stomach, Kidney', 'Pulmón, Bazo, Estómago, Riñón', '9–30 g'],
+    ['Bai Hua She', 'Agkistrodon seu Bungarus', 'Sweet, salty; warm, toxic', 'Dulce, salada; tibia, tóxica', 'Liver', 'Hígado', '3–9 g in decoction; 1–1.5 g as powder'],
+    ['Bi Ba', 'Piperis longi Fructus', 'Acrid; hot', 'Acre; caliente', 'Stomach, Large Intestine', 'Estómago, Intestino Grueso', '1.5–3 g'],
+    ['Bi Xie', 'Dioscoreae hypoglaucae Rhizoma', 'Bitter; neutral', 'Amarga; neutra', 'Bladder, Liver, Stomach', 'Vejiga, Hígado, Estómago', '9–15 g'],
+    ['Bing Lang', 'Arecae Semen', 'Acrid, bitter; warm', 'Acre, amarga; tibia', 'Large Intestine, Stomach', 'Intestino Grueso, Estómago', '6–15 g'],
+    ['Chuan Mu Tong', 'Clematidis armandii Caulis', 'Bland, bitter; cold', 'Insípida, amarga; fría', 'Bladder, Heart, Small Intestine', 'Vejiga, Corazón, Intestino Delgado', '3–6 g'],
+    ['Chuan Niu Xi', 'Cyathulae Radix', 'Sweet, bitter, sour; neutral', 'Dulce, amarga, agria; neutra', 'Liver, Kidney', 'Hígado, Riñón', '6–15 g'],
+    ['Chuan Wu', 'Aconiti Radix', 'Acrid, bitter; hot, very toxic', 'Acre, amarga; caliente, muy tóxica', 'Heart, Liver, Kidney, Spleen', 'Corazón, Hígado, Riñón, Bazo', '1.5–3 g; prepared form only'],
+    ['Ci Ji Li', 'Tribuli Fructus', 'Bitter, acrid; neutral', 'Amarga, acre; neutra', 'Liver', 'Hígado', '6–15 g'],
+    ['Ci Wu Jia', 'Acanthopanacis Senticosi Radix et Rhizoma seu Caulis', 'Acrid, slightly bitter; warm', 'Acre, ligeramente amarga; tibia', 'Heart, Kidney, Spleen', 'Corazón, Riñón, Bazo', '9–27 g'],
+    ['Dong Gua Zi', 'Benincasae Semen', 'Sweet; cool', 'Dulce; fresca', 'Lung, Large Intestine', 'Pulmón, Intestino Grueso', '9–30 g'],
+    ['Fu Pen Zi', 'Rubi Fructus', 'Sweet, sour; slightly warm', 'Dulce, agria; ligeramente tibia', 'Kidney, Liver', 'Riñón, Hígado', '6–12 g'],
+    ['Fu Shen', 'Poria cum Radix Pini', 'Sweet, bland; neutral', 'Dulce, insípida; neutra', 'Heart, Spleen', 'Corazón, Bazo', '9–15 g'],
+    ['Gou Qi Zi', 'Lycii Fructus', 'Sweet; neutral', 'Dulce; neutra', 'Liver, Lung, Kidney', 'Hígado, Pulmón, Riñón', '6–12 g'],
+    ['Hai Piao Xiao', 'Sepiae Endoconcha', 'Salty, astringent; warm', 'Salada, astringente; tibia', 'Liver, Kidney', 'Hígado, Riñón', '6–12 g'],
+    ['Han Fang Ji', 'Stephaniae tetrandrae Radix', 'Bitter, acrid; cold', 'Amarga, acre; fría', 'Bladder, Spleen, Kidney', 'Vejiga, Bazo, Riñón', '4.5–9 g'],
+    ['He Tao Ren', 'Juglandis Semen', 'Sweet; warm', 'Dulce; tibia', 'Kidney, Lung, Large Intestine', 'Riñón, Pulmón, Intestino Grueso', '9–15 g'],
+    ['Hu Jiao', 'Piperis Fructus', 'Acrid; hot', 'Acre; caliente', 'Stomach, Large Intestine', 'Estómago, Intestino Grueso', '1.5–4.5 g'],
+    ['Huai Niu Xi', 'Achyranthis bidentatae Radix', 'Bitter, sour; neutral', 'Amarga, agria; neutra', 'Liver, Kidney', 'Hígado, Riñón', '6–15 g'],
+    ['Jin Ying Zi', 'Rosae laevigatae Fructus', 'Sour, astringent; neutral', 'Agria, astringente; neutra', 'Kidney, Bladder, Large Intestine', 'Riñón, Vejiga, Intestino Grueso', '6–12 g'],
+    ['Jing Mi', 'Oryzae Semen', 'Sweet; neutral', 'Dulce; neutra', 'Spleen, Stomach', 'Bazo, Estómago', '9–15 g'],
+    ['Ma Huang Gen', 'Ephedrae Radix et Rhizoma', 'Sweet, astringent; neutral', 'Dulce, astringente; neutra', 'Lung', 'Pulmón', '3–9 g'],
+    ['Qian Cao', 'Rubiae Radix', 'Bitter; cold', 'Amarga; fría', 'Liver', 'Hígado', '6–15 g'],
+    ['San Leng', 'Sparganii Rhizoma', 'Bitter, acrid; neutral', 'Amarga, acre; neutra', 'Liver, Spleen', 'Hígado, Bazo', '3–9 g'],
+    ['Sang Piao Xiao', 'Mantidis Ootheca', 'Sweet, salty; neutral', 'Dulce, salada; neutra', 'Liver, Kidney', 'Hígado, Riñón', '6–12 g'],
+    ['Sang Shen', 'Mori Fructus', 'Sweet; cold', 'Dulce; fría', 'Heart, Liver, Kidney', 'Corazón, Hígado, Riñón', '9–15 g'],
+    ['Sha Shen', 'Adenophorae seu Glehniae Radix', 'Sweet, slightly bitter; slightly cold', 'Dulce, ligeramente amarga; ligeramente fría', 'Lung, Stomach', 'Pulmón, Estómago', '9–15 g'],
+    ['She Chuang Zi', 'Cnidii Fructus', 'Acrid, bitter; warm, slightly toxic', 'Acre, amarga; tibia, ligeramente tóxica', 'Kidney', 'Riñón', '3–9 g'],
+    ['Tu Bie Chong', 'Eupolyphaga seu Steleophaga', 'Salty; cold, slightly toxic', 'Salada; fría, ligeramente tóxica', 'Liver', 'Hígado', '3–9 g'],
+    ['Wang Bu Liu Xing', 'Vaccariae Semen', 'Bitter; neutral', 'Amarga; neutra', 'Liver, Stomach', 'Hígado, Estómago', '4.5–9 g'],
+    ['Wu Yao', 'Linderae Radix', 'Acrid; warm', 'Acre; tibia', 'Bladder, Kidney, Lung, Spleen', 'Vejiga, Riñón, Pulmón, Bazo', '3–9 g'],
+    ['Xi Xian Cao', 'Siegesbeckiae Herba', 'Acrid, bitter; cold', 'Acre, amarga; fría', 'Liver, Kidney', 'Hígado, Riñón', '9–12 g'],
+    ['Yan Hu Suo', 'Corydalis Rhizoma', 'Acrid, bitter; warm', 'Acre, amarga; tibia', 'Heart, Liver, Spleen', 'Corazón, Hígado, Bazo', '3–9 g'],
+    ['Yin Chen', 'Artemisiae scopariae Herba', 'Bitter; slightly cold', 'Amarga; ligeramente fría', 'Liver, Spleen, Gallbladder, Stomach', 'Hígado, Bazo, Vesícula Biliar, Estómago', '9–30 g'],
+    ['Zao Jiao Ci', 'Gleditsiae Spina', 'Acrid; warm', 'Acre; tibia', 'Liver, Stomach, Lung', 'Hígado, Estómago, Pulmón', '3–9 g'],
+];
+foreach ($benskySuppliedProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $channelsEn, $channelsEs, $dose]) {
+    $key = $keyFor($name);
+    if (isset($detailedProfileKeys[$key]) || isset($supplementalSourceByKey[$key])) {
+        continue;
+    }
+    $english[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEn, 'channels' => $channelsEn, 'dose' => $dose];
+    $spanish[$name] = ['name' => $name, 'latin' => $latin, 'properties' => $propertiesEs, 'channels' => $channelsEs, 'dose' => $dose];
+    $supplementalSourceByKey[$key] = 'bensky-supplied-monographs';
+    $benskyDoseSourceByKey[$key] = 'bensky-supplied-monographs';
+    $benskyReferenceByKey[$key] = 'Bensky materia-medica monograph';
+}
+
+// Some supplemental tables already supplied reliable properties but omitted
+// dosage. Complete those final dose cells from the same Bensky monographs.
+$benskySuppliedDoses = [
+    'Bai Guo' => '4.5–9 g',
+    'Bai Jiang Can' => '3–9 g',
+    'Bai Tou Weng' => '6–15 g',
+    'Ban Zhi Lian' => '15–30 g',
+    'Bie Jia' => '9–24 g; pre-decoct',
+    'Bing Pian' => '0.03–0.1 g',
+    'Bu Gu Zhi' => '6–15 g',
+    'Chi Xiao Dou' => '9–30 g',
+    'Chuan Xin Lian' => '6–15 g',
+    'Chuan Xiong' => '3–9 g',
+    'Da Ji' => '9–15 g',
+    'Dong Kui Zi' => '3–9 g',
+    'Fo Shou' => '3–9 g',
+    'Fu Ling' => '9–15 g',
+    'Ge Jie' => '3–6 g',
+    'Gui Ban' => '9–24 g; pre-decoct',
+    'Hai Jin Sha' => '6–15 g; decoct in a bag',
+    'Han Lian Cao' => '9–15 g',
+    'He Shou Wu' => '9–30 g',
+    'Hong Hua' => '3–9 g',
+    'Hua Jiao' => '1.5–6 g',
+    'Huang Jing' => '9–30 g',
+    'Ji Xue Teng' => '9–15 g',
+    'Jin Qian Cao' => '15–60 g',
+    'Kun Bu' => '6–12 g',
+    'Ling Zhi' => '3–15 g',
+    'Liu Huang' => '1.5–3 g',
+    'Lu Dou' => '15–60 g',
+    'Lu Lu Tong' => '4.5–9 g',
+    'Ma Bo' => '1.5–6 g; decoct in a bag',
+    'Mei Gui Hua' => '3–6 g',
+    'Mu Tong' => '3–6 g',
+    'Ou Jie' => '9–15 g',
+    'Pang Da Hai' => '2–3 pieces',
+    'Quan Xie' => '1.5–4.5 g',
+    'Sha Yuan Ji Li' => '9–15 g',
+    'She Xiang' => '0.03–0.1 g',
+    'Si Gua Luo' => '6–12 g',
+    'Ting Li Zi' => '3–9 g',
+    'Tong Cao' => '3–6 g',
+    'Wu Gong' => '1–3 g',
+    'Wu Ling Zhi' => '4.5–9 g',
+    'Xi Yang Shen' => '3–6 g',
+    'Xiao Ji' => '9–15 g',
+    'Xie Bai' => '4.5–9 g',
+    'Ye Ju Hua' => '9–15 g',
+    'Yu Zhu' => '6–12 g',
+    'Ze Xie' => '4.5–9 g',
+    'Zhu Ling' => '6–15 g',
+    'Zi Su Zi' => '6–12 g',
+];
+foreach ($benskySuppliedDoses as $name => $dose) {
+    $key = $keyFor($name);
+    foreach (array_keys($english) as $candidateName) {
+        if ($keyFor((string)$candidateName) !== $key || !empty($english[$candidateName]['dose'])) {
+            continue;
+        }
+        $english[$candidateName]['dose'] = $dose;
+        if (isset($spanish[$candidateName])) {
+            $spanish[$candidateName]['dose'] = $dose;
+        }
+        $benskyDoseSourceByKey[$key] = 'bensky-supplied-monographs';
+        $benskyReferenceByKey[$key] = 'Bensky materia-medica monograph';
+        break;
+    }
+}
+
 $appendixGroups = [
     'Less than 0.1 g' => 'Bing Pian|She Xiang|Tan Xiang',
     'Up to 1 g' => 'Zhen Zhu|Zhu Sha',
@@ -314,7 +459,14 @@ foreach ($index['herbs'] ?? [] as $card) {
 
 $total = count($rows);
 $pending = $total - $verified - $propertiesOnly - $doseOnly;
-if ($total !== 304 || $verified < 170 || $propertiesOnly < 10 || $verified + $propertiesOnly + $doseOnly + $pending !== $total) {
+$incomplete = array_filter($rows, static function(array $row): bool {
+    return empty($row['flavor']['en']) || empty($row['flavor']['es'])
+        || empty($row['temperature']['en']) || empty($row['temperature']['es'])
+        || empty($row['channels']['en']) || empty($row['channels']['es'])
+        || empty($row['dose']);
+});
+if ($total !== 304 || $verified < 170 || $propertiesOnly < 10 || $doseOnly !== 0 || $pending !== 0
+        || $incomplete || $verified + $propertiesOnly + $doseOnly + $pending !== $total) {
     throw new RuntimeException("Invalid table coverage: total=$total verified=$verified propertiesOnly=$propertiesOnly doseOnly=$doseOnly pending=$pending");
 }
 
@@ -325,6 +477,7 @@ $payload = [
     'propertyChartSource' => 'User-provided Chart 6: Property of King Herbs',
     'actionsTableSource' => 'User-provided NCCAOM Herbs: Actions and Indications table; property fields only',
     'benskyChapterOneSource' => $benskyChapterOneSource,
+    'benskySuppliedSource' => $benskySuppliedSource,
     'benskyMergeRule' => 'Bensky fills empty fields only; existing Yang-based profiles are never replaced',
     'total' => $total,
     'verified' => $verified,

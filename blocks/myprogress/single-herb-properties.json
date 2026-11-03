@@ -5,12 +5,13 @@
     "propertyChartSource": "User-provided Chart 6: Property of King Herbs",
     "actionsTableSource": "User-provided NCCAOM Herbs: Actions and Indications table; property fields only",
     "benskyChapterOneSource": "Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1 (user-provided excerpts)",
+    "benskySuppliedSource": "Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed. (user-provided monographs)",
     "benskyMergeRule": "Bensky fills empty fields only; existing Yang-based profiles are never replaced",
     "total": 304,
     "verified": 194,
-    "propertiesOnly": 54,
-    "doseOnly": 22,
-    "pending": 34,
+    "propertiesOnly": 110,
+    "doseOnly": 0,
+    "pending": 0,
     "herbs": [
         {
             "name": "Ai Ye",
@@ -85,24 +86,24 @@
             "name": "Bai Bian Dou",
             "latin": "Lablab Semen album",
             "guideNumber": 23,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bai Bu",
@@ -168,56 +169,56 @@
                 "en": "Kidney, Lung",
                 "es": "Riñón, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bai He",
             "latin": "Lilii Bulbus",
             "guideNumber": 26,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Lung",
+                "es": "Corazón, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bai Hua She",
             "latin": "Agkistrodon/Bungarus",
             "guideNumber": 12,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, salty",
+                "es": "Dulce, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm, toxic",
+                "es": "tibia, tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g in decoction; 1–1.5 g as powder",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bai Hua She She Cao",
@@ -283,10 +284,10 @@
                 "en": "Liver, Lung",
                 "es": "Hígado, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bai Jiang Cao",
@@ -421,10 +422,10 @@
                 "en": "Liver, Stomach, Large Intestine",
                 "es": "Hígado, Estómago, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 12 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bai Wei",
@@ -522,24 +523,24 @@
             "name": "Bai Zi Ren",
             "latin": "Platycladi Semen",
             "guideNumber": 29,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Kidney, Large Intestine",
+                "es": "Corazón, Riñón, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ban Lan Gen",
@@ -605,79 +606,79 @@
                 "en": "Liver, Lung, Stomach",
                 "es": "Hígado, Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "15–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bi Ba",
             "latin": "Piperis longi Fructus",
             "guideNumber": 21,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "hot",
+                "es": "caliente"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Stomach, Large Intestine",
+                "es": "Estómago, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–3 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bi Xie",
             "latin": "Dioscoreae hypoglaucae Rhizoma",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Liver, Stomach",
+                "es": "Vejiga, Hígado, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bian Xu",
             "latin": "Polygoni avicularis Herba",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder",
+                "es": "Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bie Jia",
@@ -697,33 +698,33 @@
                 "en": "Liver, Spleen",
                 "es": "Hígado, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–24 g; pre-decoct",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bing Lang",
             "latin": "Arecae Semen",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Stomach",
+                "es": "Intestino Grueso, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bing Pian",
@@ -743,10 +744,10 @@
                 "en": "Heart, Spleen",
                 "es": "Corazón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "0.03–0.1 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Less than 0.1 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Bo He",
@@ -789,10 +790,10 @@
                 "en": "Kidney, Spleen",
                 "es": "Riñón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Cang Er Zi",
@@ -982,24 +983,24 @@
             "name": "Che Qian Zi",
             "latin": "Plantaginis Semen",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Kidney, Liver, Lung",
+                "es": "Vejiga, Riñón, Hígado, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g; decoct in a bag",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chen Pi",
@@ -1074,24 +1075,24 @@
             "name": "Chi Shi Zhi",
             "latin": "Halloysitum rubrum",
             "guideNumber": 27,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, sour, astringent",
+                "es": "Dulce, agria, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Stomach",
+                "es": "Intestino Grueso, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chi Xiao Dou",
@@ -1111,10 +1112,10 @@
                 "en": "Heart, Small Intestine",
                 "es": "Corazón, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chuan Bei Mu",
@@ -1166,70 +1167,70 @@
             "name": "Chuan Mu Tong",
             "latin": "Clematidis armandii Caulis",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bland, bitter",
+                "es": "Insípida, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Heart, Small Intestine",
+                "es": "Vejiga, Corazón, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chuan Niu Xi",
             "latin": "Cyathulae Radix",
             "guideNumber": 19,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bitter, sour",
+                "es": "Dulce, amarga, agria"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chuan Wu",
             "latin": "Aconiti Radix",
             "guideNumber": 12,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "hot, very toxic",
+                "es": "caliente, muy tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver, Kidney, Spleen",
+                "es": "Corazón, Hígado, Riñón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–3 g; prepared form only",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chuan Xin Lian",
@@ -1249,10 +1250,10 @@
                 "en": "Large Intestine, Lung, Small Intestine, Stomach",
                 "es": "Intestino Grueso, Pulmón, Intestino Delgado, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chuan Xiong",
@@ -1272,10 +1273,10 @@
                 "en": "Liver, Gallbladder, Pericardium",
                 "es": "Hígado, Vesícula Biliar, Pericardio"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Chun Pi",
@@ -1304,24 +1305,24 @@
             "name": "Ci Ji Li",
             "latin": "Tribuli Fructus",
             "guideNumber": 31,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ci Shi",
@@ -1350,24 +1351,24 @@
             "name": "Ci Wu Jia",
             "latin": "Acanthopanacis senticosi Radix et Caulis",
             "guideNumber": 23,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, slightly bitter",
+                "es": "Acre, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Kidney, Spleen",
+                "es": "Corazón, Riñón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–27 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Cong Bai",
@@ -1456,10 +1457,10 @@
                 "en": "Liver, Spleen, Heart",
                 "es": "Hígado, Bazo, Corazón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Da Qing Ye",
@@ -1649,47 +1650,47 @@
             "name": "Deng Xin Cao",
             "latin": "Junci Medulla",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Lung, Small Intestine",
+                "es": "Corazón, Pulmón, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–4.5 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Di Fu Zi",
             "latin": "Kochiae Fructus",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bitter",
+                "es": "Dulce, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Kidney",
+                "es": "Vejiga, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Di Gu Pi",
@@ -1764,24 +1765,24 @@
             "name": "Ding Xiang",
             "latin": "Caryophylli Flos",
             "guideNumber": 21,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Spleen, Stomach",
+                "es": "Riñón, Bazo, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–4.5 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Dong Chong Xia Cao",
@@ -1810,24 +1811,24 @@
             "name": "Dong Gua Zi",
             "latin": "Benincasae Semen",
             "guideNumber": 6,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cool",
+                "es": "fresca"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Large Intestine",
+                "es": "Pulmón, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Dong Kui Zi",
@@ -1847,10 +1848,10 @@
                 "en": "Bladder, Large Intestine, Small Intestine",
                 "es": "Vejiga, Intestino Grueso, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Du Huo",
@@ -1994,24 +1995,24 @@
             "name": "Feng Mi",
             "latin": "Mel",
             "guideNumber": 23,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Large Intestine, Lung, Spleen",
+                "es": "Intestino Grueso, Pulmón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "15–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Fo Shou",
@@ -2031,10 +2032,10 @@
                 "en": "Liver, Lung, Stomach, Spleen",
                 "es": "Hígado, Pulmón, Estómago, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Fu Ling",
@@ -2054,56 +2055,56 @@
                 "en": "Heart, Spleen, Lung",
                 "es": "Corazón, Bazo, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Fu Pen Zi",
             "latin": "Rubi Fructus",
             "guideNumber": 27,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, sour",
+                "es": "Dulce, agria"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Liver",
+                "es": "Riñón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Fu Shen",
             "latin": "Poriae Sclerotium pararadicis",
             "guideNumber": 29,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Spleen",
+                "es": "Corazón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Fu Xiao Mai",
@@ -2307,56 +2308,56 @@
                 "en": "Lung, Kidney",
                 "es": "Pulmón, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Gou Ji",
             "latin": "Cibotii Rhizoma",
             "guideNumber": 12,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Gou Qi Zi",
             "latin": "Lycii Fructus",
             "guideNumber": 26,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Lung, Kidney",
+                "es": "Hígado, Pulmón, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Gou Teng",
@@ -2514,10 +2515,10 @@
                 "en": "Heart, Kidney, Liver",
                 "es": "Corazón, Riñón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–24 g; pre-decoct",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Gui Zhi",
@@ -2560,33 +2561,33 @@
                 "en": "Bladder, Small Intestine",
                 "es": "Vejiga, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g; decoct in a bag",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Hai Piao Xiao",
             "latin": "Sepia Endoconcha",
             "guideNumber": 27,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty, astringent",
+                "es": "Salada, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Hai Tong Pi",
@@ -2615,47 +2616,47 @@
             "name": "Hai Zao",
             "latin": "Sargassum",
             "guideNumber": 13,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, salty",
+                "es": "Amarga, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Liver, Lung, Stomach",
+                "es": "Riñón, Hígado, Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Han Fang Ji",
             "latin": "Stephaniae tetrandrae Radix",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Spleen, Kidney",
+                "es": "Vejiga, Bazo, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Han Lian Cao",
@@ -2675,10 +2676,10 @@
                 "en": "Kidney, Liver",
                 "es": "Riñón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "He Huan Pi",
@@ -2721,33 +2722,33 @@
                 "en": "Liver, Kidney",
                 "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "He Tao Ren",
             "latin": "Juglandis Semen",
             "guideNumber": 25,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Lung, Large Intestine",
+                "es": "Riñón, Pulmón, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "He Ye",
@@ -2836,10 +2837,10 @@
                 "en": "Heart, Liver",
                 "es": "Corazón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Hou Po",
@@ -2868,24 +2869,24 @@
             "name": "Hu Jiao",
             "latin": "Piperis Fructus",
             "guideNumber": 21,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "hot",
+                "es": "caliente"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Stomach, Large Intestine",
+                "es": "Estómago, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–4.5 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Hua Jiao",
@@ -2905,33 +2906,33 @@
                 "en": "Kidney, Spleen, Stomach",
                 "es": "Riñón, Bazo, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Hua Shi",
             "latin": "Talcum",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Stomach, Bladder",
+                "es": "Estómago, Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g; decoct in a bag",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Huai Mi",
@@ -2960,24 +2961,24 @@
             "name": "Huai Niu Xi",
             "latin": "Achyranthis bidentatae Radix",
             "guideNumber": 19,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sour",
+                "es": "Amarga, agria"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Huang Bai",
@@ -3020,10 +3021,10 @@
                 "en": "Kidney, Lung, Spleen",
                 "es": "Riñón, Pulmón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Huang Lian",
@@ -3181,10 +3182,10 @@
                 "en": "Heart, Liver, Spleen",
                 "es": "Corazón, Hígado, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Jiang Huang",
@@ -3250,10 +3251,10 @@
                 "en": "Bladder, Gallbladder, Kidney, Liver",
                 "es": "Vejiga, Vesícula Biliar, Riñón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "15–60 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 60 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Jin Yin Hua",
@@ -3282,24 +3283,24 @@
             "name": "Jin Ying Zi",
             "latin": "Rosae laevigatae Fructus",
             "guideNumber": 27,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sour, astringent",
+                "es": "Agria, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Bladder, Large Intestine",
+                "es": "Riñón, Vejiga, Intestino Grueso"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Jing Jie",
@@ -3328,24 +3329,24 @@
             "name": "Jing Mi",
             "latin": "Oryzae Semen",
             "guideNumber": 23,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ju Hong",
@@ -3480,10 +3481,10 @@
                 "en": "Kidney, Liver, Stomach",
                 "es": "Riñón, Hígado, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Lai Fu Zi",
@@ -3604,24 +3605,24 @@
             "name": "Ling Yang Jiao",
             "latin": "Saigae tataricae Cornu",
             "guideNumber": 31,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty",
+                "es": "Salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver",
+                "es": "Corazón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–3 g in decoction; 0.3–0.6 g as powder",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ling Zhi",
@@ -3641,10 +3642,10 @@
                 "en": "Heart, Liver, Lung",
                 "es": "Corazón, Hígado, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Liu Huang",
@@ -3664,10 +3665,10 @@
                 "en": "Kidney, Large Intestine, Pericardium",
                 "es": "Riñón, Intestino Grueso, Pericardio"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–3 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Long Dan Cao",
@@ -3719,24 +3720,24 @@
             "name": "Long Yan Rou",
             "latin": "Longan Arillus",
             "guideNumber": 24,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Spleen",
+                "es": "Corazón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 60 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Lu Dou",
@@ -3756,10 +3757,10 @@
                 "en": "Heart, Stomach",
                 "es": "Corazón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "15–60 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Lu Gen",
@@ -3825,10 +3826,10 @@
                 "en": "Liver, Stomach",
                 "es": "Hígado, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Lu Rong",
@@ -3871,10 +3872,10 @@
                 "en": "Lung",
                 "es": "Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–6 g; decoct in a bag",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ma Huang",
@@ -3903,24 +3904,24 @@
             "name": "Ma Huang Gen",
             "latin": "Ephedrae Radix",
             "guideNumber": 27,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, astringent",
+                "es": "Dulce, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung",
+                "es": "Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Mai Men Dong",
@@ -4032,10 +4033,10 @@
                 "en": "Liver, Spleen",
                 "es": "Hígado, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Mo Yao",
@@ -4147,10 +4148,10 @@
                 "en": "Bladder, Heart, Small Intestine",
                 "es": "Vejiga, Corazón, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Mu Xiang",
@@ -4285,10 +4286,10 @@
                 "en": "Lung, Stomach, Liver",
                 "es": "Pulmón, Estómago, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Pang Da Hai",
@@ -4308,10 +4309,10 @@
                 "en": "Large Intestine, Lung",
                 "es": "Intestino Grueso, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "2–3 pieces",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Pei Lan",
@@ -4409,24 +4410,24 @@
             "name": "Qian Cao",
             "latin": "Rubiae Radix",
             "guideNumber": 20,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Qian Hu",
@@ -4455,24 +4456,24 @@
             "name": "Qian Shi",
             "latin": "Euryales Semen",
             "guideNumber": 27,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, astringent",
+                "es": "Dulce, astringente"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Kidney",
+                "es": "Bazo, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Qiang Huo",
@@ -4616,24 +4617,24 @@
             "name": "Qu Mai",
             "latin": "Dianthi Herba",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Heart, Small Intestine",
+                "es": "Vejiga, Corazón, Intestino Delgado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Quan Xie",
@@ -4653,10 +4654,10 @@
                 "en": "Liver",
                 "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1.5–4.5 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ren Shen",
@@ -4777,24 +4778,24 @@
             "name": "San Leng",
             "latin": "Sparganii Rhizoma",
             "guideNumber": 19,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Spleen",
+                "es": "Hígado, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "San Qi",
@@ -4869,47 +4870,47 @@
             "name": "Sang Piao Xiao",
             "latin": "Mantidis Ootheca",
             "guideNumber": 27,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, salty",
+                "es": "Dulce, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Sang Shen",
             "latin": "Mori Fructus",
             "guideNumber": 26,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver, Kidney",
+                "es": "Corazón, Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Sang Ye",
@@ -4984,24 +4985,24 @@
             "name": "Sha Shen",
             "latin": "Glehniae/Adenophorae Radix",
             "guideNumber": 26,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Stomach",
+                "es": "Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Sha Yuan Ji Li",
@@ -5021,10 +5022,10 @@
                 "en": "Kidney, Liver",
                 "es": "Riñón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Shan Dou Gen",
@@ -5122,24 +5123,24 @@
             "name": "She Chuang Zi",
             "latin": "Cnidii Fructus",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm, slightly toxic",
+                "es": "tibia, ligeramente tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney",
+                "es": "Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "She Gan",
@@ -5182,10 +5183,10 @@
                 "en": "Heart, Spleen, Liver",
                 "es": "Corazón, Bazo, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "0.03–0.1 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Less than 0.1 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Shen Qu",
@@ -5375,24 +5376,24 @@
             "name": "Shi Wei",
             "latin": "Pyrrosiae Folium",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, sweet",
+                "es": "Amarga, dulce"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Lung",
+                "es": "Vejiga, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 60 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Shu Di Huang",
@@ -5458,10 +5459,10 @@
                 "en": "Lung, Stomach, Liver",
                 "es": "Pulmón, Estómago, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Suan Zao Ren",
@@ -5513,24 +5514,24 @@
             "name": "Tai Zi Shen",
             "latin": "Pseudostellariae Radix",
             "guideNumber": 23,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, slightly bitter",
+                "es": "Dulce, ligeramente amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Spleen, Lung",
+                "es": "Bazo, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Tan Xiang",
@@ -5688,10 +5689,10 @@
                 "en": "Lung, Bladder",
                 "es": "Pulmón, Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Tong Cao",
@@ -5711,33 +5712,33 @@
                 "en": "Lung, Stomach",
                 "es": "Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Tu Bie Chong",
             "latin": "Eupolyphaga/Steleophaga",
             "guideNumber": 19,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Salty",
+                "es": "Salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold, slightly toxic",
+                "es": "fría, ligeramente tóxica"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver",
+                "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Tu Fu Ling",
@@ -5789,24 +5790,24 @@
             "name": "Wang Bu Liu Xing",
             "latin": "Vaccariae Semen",
             "guideNumber": 19,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Stomach",
+                "es": "Hígado, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Wei Ling Xian",
@@ -5849,10 +5850,10 @@
                 "en": "Liver",
                 "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "1–3 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Wu Jia Pi",
@@ -5895,10 +5896,10 @@
                 "en": "Liver",
                 "es": "Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Wu Mei",
@@ -5950,24 +5951,24 @@
             "name": "Wu Yao",
             "latin": "Linderae Radix",
             "guideNumber": 18,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Bladder, Kidney, Lung, Spleen",
+                "es": "Vejiga, Riñón, Pulmón, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Wu Zhu Yu",
@@ -5996,24 +5997,24 @@
             "name": "Xi Xian Cao",
             "latin": "Siegesbeckiae Herba",
             "guideNumber": 12,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Xi Xin",
@@ -6056,10 +6057,10 @@
                 "en": "Heart, Kidney, Lung",
                 "es": "Corazón, Riñón, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–6 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Xia Ku Cao",
@@ -6217,10 +6218,10 @@
                 "en": "Liver, Heart",
                 "es": "Hígado, Corazón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Xie Bai",
@@ -6240,10 +6241,10 @@
                 "en": "Large Intestine, Lung, Stomach",
                 "es": "Intestino Grueso, Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Xin Yi",
@@ -6295,24 +6296,24 @@
             "name": "Xu Duan",
             "latin": "Dipsaci Radix",
             "guideNumber": 25,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, acrid",
+                "es": "Amarga, acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Kidney",
+                "es": "Hígado, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Xuan Fu Hua",
@@ -6364,24 +6365,24 @@
             "name": "Yan Hu Suo",
             "latin": "Corydalis Rhizoma",
             "guideNumber": 19,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver, Spleen",
+                "es": "Corazón, Hígado, Bazo"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ye Jiao Teng",
@@ -6424,33 +6425,33 @@
                 "en": "Lung, Liver",
                 "es": "Pulmón, Hígado"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Yi Mu Cao",
             "latin": "Leonuri Herba",
             "guideNumber": 19,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid, bitter",
+                "es": "Acre, amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Heart, Liver, Bladder",
+                "es": "Corazón, Hígado, Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Yi Tang",
@@ -6479,24 +6480,24 @@
             "name": "Yi Yi Ren",
             "latin": "Coicis Semen",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Sweet, bland",
+                "es": "Dulce, insípida"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Lung, Spleen, Stomach, Kidney",
+                "es": "Pulmón, Bazo, Estómago, Riñón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Yi Zhi Ren",
@@ -6525,24 +6526,24 @@
             "name": "Yin Chen",
             "latin": "Artemisiae scopariae Herba",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter",
+                "es": "Amarga"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "slightly cold",
+                "es": "ligeramente fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Spleen, Gallbladder, Stomach",
+                "es": "Hígado, Bazo, Vesícula Biliar, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "9–30 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Yin Yang Huo",
@@ -6631,10 +6632,10 @@
                 "en": "Lung, Stomach",
                 "es": "Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Yuan Zhi",
@@ -6663,24 +6664,24 @@
             "name": "Zao Jiao Ci",
             "latin": "Gleditsiae Spina",
             "guideNumber": 14,
-            "status": "pending",
-            "propertySource": null,
+            "status": "properties-only",
+            "propertySource": "bensky-supplied-monographs",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Stomach, Lung",
+                "es": "Hígado, Estómago, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Ze Lan",
@@ -6723,10 +6724,10 @@
                 "en": "Kidney, Bladder",
                 "es": "Riñón, Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "4.5–9 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Zhe Bei Mu",
@@ -6884,10 +6885,10 @@
                 "en": "Spleen, Kidney, Bladder",
                 "es": "Bazo, Riñón, Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Zhu Ru",
@@ -6976,10 +6977,10 @@
                 "en": "Large Intestine, Lung",
                 "es": "Intestino Grueso, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–12 g",
+            "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
-            "benskyReference": null
+            "benskyReference": "Bensky materia-medica monograph"
         },
         {
             "name": "Zi Wan",

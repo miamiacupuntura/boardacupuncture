@@ -169,6 +169,17 @@ if len(property_rows) != 304 or len(set(property_names)) != 304:
     raise SystemExit('ERROR: la tabla maestra no contiene 304 hierbas oficiales únicas')
 if set(index_names) != set(property_names):
     raise SystemExit('ERROR: el índice y la tabla maestra no contienen el mismo roster')
+if any(
+    not (row.get('flavor') or {}).get('en')
+    or not (row.get('flavor') or {}).get('es')
+    or not (row.get('temperature') or {}).get('en')
+    or not (row.get('temperature') or {}).get('es')
+    or not (row.get('channels') or {}).get('en')
+    or not (row.get('channels') or {}).get('es')
+    or not row.get('dose')
+    for row in property_rows
+):
+    raise SystemExit('ERROR: existen hierbas con propiedades, meridianos o dosis incompletos')
 if any(not all((row.get('benskyCategory') or {}).get(key) for key in ('code', 'en', 'es')) for row in index_rows):
     raise SystemExit('ERROR: existen hierbas sin categoría Bensky completa')
 gu_ya = next((row for row in index_rows if row.get('name') == 'Gu Ya'), None)
