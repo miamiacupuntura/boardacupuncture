@@ -19,6 +19,7 @@ LABEL_CATEGORY_PATHS=(
     "blocks/myprogress/single-herbs-category-clear-deficient-heat.php"
     "blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
     "blocks/myprogress/single-herbs-category-clear-summer-heat.php"
+    "blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"
     "blocks/myprogress/single-herbs-category-cool-transform-phlegm.php"
     "blocks/myprogress/single-herbs-category-downward-draining-purgatives.php"
     "blocks/myprogress/single-herbs-category-drain-dampness.php"
@@ -144,9 +145,9 @@ if catalog.get('version') != 2:
 if catalog.get('total') != 304 or len(herbs) != 304:
     raise SystemExit(f"ERROR: el índice debe contener 304 hierbas; contiene {len(herbs)}")
 expected_routed = sum(herb.get('guideNumber') is not None for herb in herbs)
-if catalog.get('routedToDetailedStudy') != 203 or expected_routed != 203:
+if catalog.get('routedToDetailedStudy') != 204 or expected_routed != 204:
     raise SystemExit(
-        f"ERROR: rutas detalladas={catalog.get('routedToDetailedStudy')!r}/{expected_routed!r}; se esperaban 203"
+        f"ERROR: rutas detalladas={catalog.get('routedToDetailedStudy')!r}/{expected_routed!r}; se esperaban 204"
     )
 if ids != list(range(1, 305)):
     raise SystemExit('ERROR: los IDs del guideline deben ser únicos y consecutivos de 1 a 304')
@@ -225,6 +226,16 @@ expected_cross_category_seven = {
     'Bai Wei': (19, 7),
     'Di Gu Pi': (74, 7),
 }
+expected_category_sixteen = {
+    'Bai Dou Kou': (6, 16),
+    'Cang Zhu': (36, 16),
+    'Cao Dou Kou': (37, 16),
+    'Cao Guo': (38, 16),
+    'Hou Po': (124, 16),
+    'Huo Xiang': (136, 16),
+    'Pei Lan': (188, 16),
+    'Sha Ren': (216, 16),
+}
 expected_guideline_entries = expected_category_two.copy()
 expected_guideline_entries.update(expected_category_three)
 expected_guideline_entries.update(expected_category_four)
@@ -232,11 +243,25 @@ expected_guideline_entries.update(expected_category_five)
 expected_guideline_entries.update(expected_category_six)
 expected_guideline_entries.update(expected_cross_category_seven)
 expected_guideline_entries.update(expected_cross_category_eight)
+expected_guideline_entries.update(expected_category_sixteen)
 for name, (expected_id, expected_guide) in expected_guideline_entries.items():
     herb = by_name.get(name, {})
     actual = (herb.get('id'), herb.get('guideNumber'))
     if actual != (expected_id, expected_guide):
         raise SystemExit(f'ERROR: {name}: ID/categoría={actual!r}; se esperaba {(expected_id, expected_guide)!r}')
+
+expected_aromatic_names = set(expected_category_sixteen)
+actual_aromatic_names = {
+    herb['name']
+    for herb in herbs
+    if herb.get('guideNumber') == 16
+    and herb.get('benskyCategory', {}).get('code') == 'aromatic-transform-dampness'
+}
+if actual_aromatic_names != expected_aromatic_names:
+    raise SystemExit(
+        'ERROR: Categoría 16 no coincide con las ocho hierbas Bensky + guideline 2026: '
+        f'{sorted(actual_aromatic_names)!r}'
+    )
 PY
 
 python3 - "$TEMP_DIR/$PROPERTIES_PATH" <<'PY'
@@ -247,8 +272,8 @@ with open(sys.argv[1], encoding='utf-8') as source:
     catalog = json.load(source)
 
 expected_counts = {
-    'verified': 180,
-    'propertiesOnly': 61,
+    'verified': 181,
+    'propertiesOnly': 60,
     'doseOnly': 21,
     'pending': 42,
 }
@@ -266,6 +291,8 @@ expected = {
     'Gua Lou': ('verified', '9–21 g', 'Lung, Stomach, Large Intestine'),
     'Pi Pa Ye': ('verified', '6–15 g', 'Lung, Stomach'),
     'Zi Wan': ('verified', '5–9 g', 'Lung'),
+    'Pei Lan': ('verified', '3–9 g', 'Spleen, Stomach'),
+    'Sha Ren': ('verified', '3–6 g', 'Spleen, Stomach'),
 }
 for name, values in expected.items():
     item = herbs[name]
@@ -372,6 +399,15 @@ grep -Fq "Monographs in current guideline 2026" "$TEMP_DIR/blocks/myprogress/sin
 grep -Fq "Source monographs outside current guideline 2026" "$TEMP_DIR/blocks/myprogress/single-herbs-category-relieve-cough-wheezing.php"
 grep -Fq "37/51 · Ban Xia + Chen Pi" "$TEMP_DIR/blocks/myprogress/single-herbs-category-warm-transform-phlegm.php"
 grep -Fq "41/51 · Ting Li Zi + Da Zao" "$TEMP_DIR/blocks/myprogress/single-herbs-category-relieve-cough-wheezing.php"
+grep -Fq "eight herbs satisfy both conditions" "$TEMP_DIR/blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"
+grep -Fq "'name' => 'Pei Lan'" "$TEMP_DIR/blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"
+grep -Fq "Huo Xiang + Pei Lan · Duì Yào 47/51" "$TEMP_DIR/blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"
+grep -Fq "'name' => 'Hong Dou Kou'" "$TEMP_DIR/blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"
+grep -Fq "8 current herbs + 1 source-only monograph · click to open" "$TEMP_DIR/blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"
+if grep -Fq "Pei Lan—outside this current list" "$TEMP_DIR/blocks/myprogress/single-herbs-category-aromatic-transform-dampness.php"; then
+    echo "ERROR: Pei Lan todavía aparece fuera del núcleo de la Categoría 16"
+    exit 1
+fi
 
 for label_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}"; do
     if grep -Fq "current Appendix A" "$TEMP_DIR/$label_path"; then
@@ -540,6 +576,9 @@ echo "Categoría 4: 8 hierbas oficiales; Bai Wei y Di Gu Pi como referencias de 
 echo "Categoría 5: 7 hierbas oficiales; Ku Shen, Qin Pi y Bai Xian Pi integradas, sin anexo"
 echo "Categoría 6: 11 hierbas Bensky; Da Qing Ye y Ban Lan Gen integradas, sin anexo"
 echo "Categoría 8: He Ye ruteada según su categoría primaria Bensky"
+echo "Categoría 16: 8 hierbas cumplen guideline 2026 + capítulo 7 de Bensky; Pei Lan integrada"
+echo "Categoría 16: Hong Dou Kou queda en el anexo final como monografía fuente externa"
+echo "Categoría 16: Huo Xiang + Pei Lan, pareja oficial 47/51 registrada"
 echo "Popup del guideline: 304 hierbas con IDs estables 001–304, categoría Bensky y búsqueda"
 echo "Anexo Viento-Frío: categoría principal y motivo pedagógico explícitos"
 echo "Anexo Viento-Frío: plegado y movido al final de la categoría"

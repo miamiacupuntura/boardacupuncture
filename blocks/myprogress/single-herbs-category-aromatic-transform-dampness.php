@@ -9,7 +9,7 @@ $aromatictext = static function(string $english, string $spanish) use ($ises): s
 $aromaticherbs = [
     [
         'name' => 'Huo Xiang',
-        'latin' => 'Pogostemonis/Agastachis Herba',
+        'latin' => 'Pogostemonis/Agastaches Herba',
         'properties' => $aromatictext('Acrid; slightly warm', 'Acre; ligeramente tibia'),
         'channels' => $aromatictext('Lung, Spleen, Stomach', 'Pulmón, Bazo, Estómago'),
         'dose' => '3–9 g',
@@ -34,6 +34,34 @@ $aromaticherbs = [
             'Sus aceites volátiles favorecen cocción corta o adición tardía; usar con cautela en deficiencia de Yin o sequedad marcada.'
         ),
         'formulas' => [[21, 'huo-xiang-zheng-qi-san', 'Huo Xiang Zheng Qi San', $aromatictext('chief', 'principal')]],
+    ],
+    [
+        'name' => 'Pei Lan',
+        'latin' => 'Eupatorii Herba',
+        'properties' => $aromatictext('Acrid; neutral', 'Acre; neutra'),
+        'channels' => $aromatictext('Spleen, Stomach', 'Bazo, Estómago'),
+        'dose' => '3–9 g',
+        'identity' => $aromatictext(
+            'Aromatically transforms Dampness, awakens the Spleen, regulates the Middle and dispels turbid filth.',
+            'Transforma Humedad aromáticamente, despierta el Bazo, regula el Centro y dispersa turbidez fétida.'
+        ),
+        'clue' => $aromatictext(
+            'Dampness with a sweet-sticky or foul taste, bad breath, excessive salivation and a greasy tongue coating.',
+            'Humedad con sabor dulce-pegajoso o fétido, mal aliento, salivación excesiva y capa lingual grasosa.'
+        ),
+        'memory' => $aromatictext(
+            'The neutral fragrant cleaner removes the sticky, foul residue from the damp kitchen without adding much heat.',
+            'La limpiadora fragante y neutra elimina el residuo pegajoso y fétido de la cocina húmeda sin añadir mucho calor.'
+        ),
+        'unique' => $aromatictext(
+            'More neutral and harmonious than Huo Xiang; especially recognizable for foul or sweet-sticky turbidity in the mouth.',
+            'Más neutra y armoniosa que Huo Xiang; se reconoce especialmente por turbidez fétida o dulce-pegajosa en la boca.'
+        ),
+        'caution' => $aromatictext(
+            'Bensky notes pyrrolizidine alkaloids and restrictions in some countries; avoid prolonged or high-dose use and verify product quality and local rules. Double the study dose when used fresh.',
+            'Bensky señala alcaloides pirrolizidínicos y restricciones en algunos países; evitar uso prolongado o en dosis altas y verificar calidad del producto y normas locales. Duplicar la dosis de estudio cuando se usa fresca.'
+        ),
+        'formulas' => [],
     ],
     [
         'name' => 'Cang Zhu',
@@ -95,15 +123,15 @@ $aromaticherbs = [
         'name' => 'Sha Ren',
         'latin' => 'Amomi Fructus',
         'properties' => $aromatictext('Acrid; warm', 'Acre; tibia'),
-        'channels' => $aromatictext('Spleen, Stomach, Kidney', 'Bazo, Estómago, Riñón'),
+        'channels' => $aromatictext('Spleen, Stomach', 'Bazo, Estómago'),
         'dose' => '3–6 g',
         'identity' => $aromatictext(
             'Moves Middle-Jiao Qi, transforms Dampness, warms the Middle, stops diarrhea and calms the fetus.',
             'Mueve Qi del Jiao Medio, transforma Humedad, calienta el Centro, detiene diarrea y calma el feto.'
         ),
         'clue' => $aromatictext(
-            'Damp obstruction with distension or nausea plus pregnancy, restless fetus, diarrhea or Kidney involvement.',
-            'Obstrucción por Humedad con distensión o náusea más embarazo, feto inquieto, diarrea o participación de Riñón.'
+            'Damp obstruction with distension or nausea plus pregnancy, restless fetus or diarrhea from Spleen Cold.',
+            'Obstrucción por Humedad con distensión o náusea más embarazo, feto inquieto o diarrea por Frío de Bazo.'
         ),
         'memory' => $aromatictext(
             'The fastest spice cart moves Qi through the kitchen, secures the pregnancy room and warms the lower floor.',
@@ -205,7 +233,27 @@ $aromaticherbs = [
     ],
 ];
 
+$aromaticchapterorder = array_flip([
+    'Cang Zhu',
+    'Hou Po',
+    'Huo Xiang',
+    'Pei Lan',
+    'Sha Ren',
+    'Bai Dou Kou',
+    'Cao Dou Kou',
+    'Cao Guo',
+]);
+usort($aromaticherbs, static function(array $left, array $right) use ($aromaticchapterorder): int {
+    return $aromaticchapterorder[$left['name']] <=> $aromaticchapterorder[$right['name']];
+});
+
 $aromaticcomparisons = [
+    [
+        '/study-guide/comparisons/huo-xiang-pei-lan-dui-yao.html',
+        '/study-guide/comparisons/huo-xiang-pei-lan-dui-yao-es.html',
+        'Huo Xiang + Pei Lan · Duì Yào 47/51',
+        $aromatictext('Current official pair: stronger Exterior release and antiemetic action versus neutral removal of foul, sweet-sticky turbidity.', 'Pareja oficial vigente: mayor liberación del Exterior y acción antiemética frente a eliminación neutra de turbidez fétida, dulce-pegajosa.'),
+    ],
     [
         '/study-guide/comparisons/hou-po-vs-cang-zhu.html',
         '/study-guide/comparisons/hou-po-vs-cang-zhu-es.html',
@@ -243,7 +291,7 @@ $aromaticquestions = [
     ],
     [
         $aromatictext('How do Huo Xiang and Pei Lan differ?', '¿Cómo difieren Huo Xiang y Pei Lan?'),
-        $aromatictext('Huo Xiang is slightly warm, stronger for Middle-Jiao Qi, nausea, vomiting and Exterior Cold-Dampness. Pei Lan—outside this current list—is neutral and especially clears foul, sweet-sticky turbidity.', 'Huo Xiang es ligeramente tibia y más fuerte para Qi del Centro, náusea, vómito y Frío-Humedad Exterior. Pei Lan, fuera de esta lista vigente, es neutra y destaca para turbidez fétida, dulce-pegajosa.'),
+        $aromatictext('Huo Xiang is slightly warm and stronger for nausea, vomiting and Exterior Cold-Dampness. Pei Lan is neutral and especially clears foul, sweet-sticky turbidity.', 'Huo Xiang es ligeramente tibia y más fuerte para náusea, vómito y Frío-Humedad Exterior. Pei Lan es neutra y destaca para turbidez fétida, dulce-pegajosa.'),
     ],
     [
         $aromatictext('What are Yang’s two opposite rankings for the four seed spices?', '¿Cuáles son los dos órdenes opuestos de Yang para las cuatro semillas aromáticas?'),
@@ -258,6 +306,31 @@ $aromaticquestions = [
         $aromatictext('Protect volatile oils by crushing the fruits and adding aromatic herbs late or cooking briefly. Prolonged or excessive warm-dry use can consume Yin and fluids.', 'Proteger aceites volátiles triturando frutos y añadiendo aromáticas tarde o cocinándolas poco. El uso tibio-secante prolongado o excesivo puede consumir Yin y líquidos.'),
     ],
 ];
+
+$aromaticguidelinemonographs = [
+    'ID 036 · Cang Zhu (Atractylodis Rhizoma)',
+    'ID 124 · Hou Po (Magnoliae officinalis Cortex)',
+    'ID 136 · Huo Xiang (Pogostemonis/Agastaches Herba)',
+    'ID 188 · Pei Lan (Eupatorii Herba)',
+    'ID 216 · Sha Ren (Amomi Fructus)',
+    'ID 006 · Bai Dou Kou (Amomi Fructus rotundus)',
+    'ID 037 · Cao Dou Kou (Alpiniae katsumadai Semen)',
+    'ID 038 · Cao Guo (Tsaoko Fructus)',
+];
+
+$aromaticchapterannex = [
+    [
+        'name' => 'Hong Dou Kou',
+        'latin' => 'Galangae Fructus',
+        'properties' => $aromatictext('Acrid; warm', 'Acre; tibia'),
+        'channels' => $aromatictext('Spleen, Lung', 'Bazo, Pulmón'),
+        'dose' => '3–6 g',
+        'reason' => $aromatictext(
+            'Formal Bensky Chapter 7 monograph, retained for source recognition; it is not an entry in the current 304-herb guideline roster.',
+            'Monografía formal del capítulo 7 de Bensky, conservada para reconocimiento de la fuente; no figura en el listado vigente de 304 hierbas del guideline.'
+        ),
+    ],
+];
 ?>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-sixteen-foundations">
@@ -268,6 +341,7 @@ $aromaticquestions = [
     )); ?></p>
     <div class="single-herbs-guide__decision">
         <div><strong><?php echo s($aromatictext('Exterior + vomiting', 'Exterior + vómito')); ?></strong><span>Huo Xiang</span></div>
+        <div><strong><?php echo s($aromatictext('Foul sweet-sticky turbidity', 'Turbidez fétida dulce-pegajosa')); ?></strong><span>Pei Lan</span></div>
         <div><strong><?php echo s($aromatictext('Strongest drying', 'Secado más fuerte')); ?></strong><span>Cang Zhu</span></div>
         <div><strong><?php echo s($aromatictext('Fullness + descending Qi', 'Plenitud + descenso de Qi')); ?></strong><span>Hou Po</span></div>
         <div><strong><?php echo s($aromatictext('Pregnancy + fastest Qi movement', 'Embarazo + movimiento rápido de Qi')); ?></strong><span>Sha Ren</span></div>
@@ -275,12 +349,12 @@ $aromaticquestions = [
     <aside class="single-herbs-guide__memory-path">
         <p class="single-herbs-guide__memory-line"><?php echo s($aromatictext('Enter the damp spice kitchen.', 'Entra a la cocina húmeda de las especias.')); ?></p>
         <p><?php echo s($aromatictext(
-            'Huo Xiang opens the door and calms the vomiting guest. Cang Zhu runs the strongest dryer. Hou Po flattens the swollen counter. Sha Ren moves the carts and protects the pregnancy room. Cao Dou Kou is the second-hot furnace, Cao Guo the hottest furnace and malaria bell, while Bai Dou Kou opens the appetite and Lung windows.',
-            'Huo Xiang abre la puerta y calma al huésped que vomita. Cang Zhu enciende la secadora más fuerte. Hou Po aplana el mostrador distendido. Sha Ren mueve los carros y protege el cuarto del embarazo. Cao Dou Kou es el segundo horno caliente, Cao Guo el horno más fuerte y campana de malaria, mientras Bai Dou Kou abre ventanas de apetito y Pulmón.'
+            'Cang Zhu runs the strongest dryer. Hou Po flattens the swollen counter. Huo Xiang opens the door and calms the vomiting guest; Pei Lan removes the foul sticky residue. Sha Ren moves the carts and protects the pregnancy room. Bai Dou Kou opens the appetite and Lung windows, Cao Dou Kou is the second-hot furnace, and Cao Guo the hottest furnace and malaria bell.',
+            'Cang Zhu enciende la secadora más fuerte. Hou Po aplana el mostrador distendido. Huo Xiang abre la puerta y calma al huésped que vomita; Pei Lan elimina el residuo fétido y pegajoso. Sha Ren mueve los carros y protege el cuarto del embarazo. Bai Dou Kou abre las ventanas de apetito y Pulmón, Cao Dou Kou es el segundo horno caliente y Cao Guo el horno más fuerte y campana de malaria.'
         )); ?></p>
         <p><strong><?php echo s($aromatictext('Wet blanket → wake Spleen → move Qi → identify the companion clue.', 'Manta mojada → despertar Bazo → mover Qi → identificar la pista acompañante.')); ?></strong></p>
     </aside>
-    <p class="single-herbs-guide__scope-note"><strong><?php echo s($aromatictext('Current Board list:', 'Lista Board vigente:')); ?></strong> <?php echo s($aromatictext('the seven requested herbs are shown once each. Pei Lan and other Yang comparison herbs are explicitly marked outside this category whenever they appear in a question.', 'las siete hierbas solicitadas aparecen una vez cada una. Pei Lan y otras comparaciones de Yang se marcan explícitamente fuera de esta categoría cuando aparecen en una pregunta.')); ?></p>
+    <p class="single-herbs-guide__scope-note"><strong><?php echo s($aromatictext('Current guideline 2026 + Bensky category:', 'Guideline vigente 2026 + categoría Bensky:')); ?></strong> <?php echo s($aromatictext('eight herbs satisfy both conditions and are integrated once each in the core sequence. Product variants and source-only monographs are documented in the final collapsed annex.', 'ocho hierbas cumplen ambas condiciones y están integradas una sola vez en la secuencia central. Las variantes de producto y las monografías exclusivas de la fuente se documentan en el anexo final plegado.')); ?></p>
     <ol class="single-herbs-guide__category-herbs">
         <?php foreach ($aromaticherbs as $herb): ?>
             <li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core">
@@ -384,6 +458,7 @@ $aromaticquestions = [
     <h4 id="topic-sixteen-recall"><?php echo s($aromatictext('Quick recall', 'Repaso rápido')); ?></h4>
     <div class="single-herbs-guide__recall">
         <details><summary><?php echo s($aromatictext('Exterior Cold-Dampness plus vomiting?', '¿Frío-Humedad Exterior más vómito?')); ?></summary><p><strong>Huo Xiang.</strong></p></details>
+        <details><summary><?php echo s($aromatictext('Foul or sweet-sticky turbidity with bad breath?', '¿Turbidez fétida o dulce-pegajosa con mal aliento?')); ?></summary><p><strong>Pei Lan.</strong></p></details>
         <details><summary><?php echo s($aromatictext('Strongest direct Dampness drying?', '¿Secado directo de Humedad más fuerte?')); ?></summary><p><strong>Cang Zhu.</strong></p></details>
         <details><summary><?php echo s($aromatictext('Distension and fullness with downward Qi movement?', '¿Distensión y plenitud con movimiento descendente de Qi?')); ?></summary><p><strong>Hou Po.</strong></p></details>
         <details><summary><?php echo s($aromatictext('Pregnancy plus Damp obstruction?', '¿Embarazo más obstrucción por Humedad?')); ?></summary><p><strong>Sha Ren.</strong></p></details>
@@ -391,4 +466,28 @@ $aromaticquestions = [
     </div>
 </section>
 
-<p class="single-herbs-guide__note single-herbs-guide__source"><strong><?php echo s($aromatictext('Sources:', 'Fuentes:')); ?></strong> <?php echo s($aromatictext('Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed.; Yang, Chinese Herbal Medicines: Comparisons and Characteristics, 2nd ed., Chapter 7; current 2026 NCBAHM Appendix A. Educational Board review only, not prescribing guidance.', 'Bensky et al., Chinese Herbal Medicine: Materia Medica, 3.ª ed.; Yang, Chinese Herbal Medicines: Comparisons and Characteristics, 2.ª ed., capítulo 7; Appendix A vigente del NCBAHM 2026. Solo repaso educativo Board, no guía de prescripción.')); ?></p>
+<p class="single-herbs-guide__note single-herbs-guide__source"><strong><?php echo s($aromatictext('Sources:', 'Fuentes:')); ?></strong> <?php echo s($aromatictext('Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 7, pp. 467–489; Yang, Chinese Herbal Medicines: Comparisons and Characteristics, 2nd ed., Chapter 7; current 2026 NCBAHM Appendix A. Educational Board review only, not prescribing guidance.', 'Bensky et al., Chinese Herbal Medicine: Materia Medica, 3.ª ed., capítulo 7, pp. 467–489; Yang, Chinese Herbal Medicines: Comparisons and Characteristics, 2.ª ed., capítulo 7; Appendix A vigente del NCBAHM 2026. Solo repaso educativo Board, no guía de prescripción.')); ?></p>
+
+<details class="single-herbs-guide__annex-toggle">
+    <summary>
+        <strong><?php echo s($aromatictext('Chapter 7 recognition annex · source boundaries', 'Anexo de reconocimiento del capítulo 7 · límites de la fuente')); ?></strong>
+        <span><?php echo s($aromatictext('8 current herbs + 1 source-only monograph · click to open', '8 hierbas vigentes + 1 monografía exclusiva de la fuente · haz clic para abrir')); ?></span>
+    </summary>
+    <div class="single-herbs-guide__annex-toggle-content">
+        <p class="single-herbs-guide__catalog-intro"><?php echo s($aromatictext('The core requires both conditions: presence in the current 2026 guideline and placement in Bensky Chapter 7. This annex records the complete audit without expanding the official sequence.', 'El núcleo exige ambas condiciones: presencia en el guideline vigente 2026 y ubicación en el capítulo 7 de Bensky. Este anexo registra la auditoría completa sin ampliar la secuencia oficial.')); ?></p>
+        <div class="single-herbs-guide__annex-rows">
+            <div class="single-herbs-guide__annex-row single-herbs-guide__annex-row--current">
+                <h5 class="single-herbs-guide__catalog-heading"><?php echo s($aromatictext('Monographs in current guideline 2026', 'Monografías en el guideline vigente 2026')); ?></h5>
+                <p class="single-herbs-guide__chapter-annex-names"><?php echo s(implode(' · ', $aromaticguidelinemonographs)); ?></p>
+            </div>
+            <div class="single-herbs-guide__annex-row single-herbs-guide__annex-row--outside">
+                <h5 class="single-herbs-guide__catalog-heading"><?php echo s($aromatictext('Source monograph outside current guideline 2026', 'Monografía fuente fuera del guideline vigente 2026')); ?></h5>
+                <?php foreach ($aromaticchapterannex as $chapterherb): ?>
+                    <p class="single-herbs-guide__chapter-annex-names"><strong><?php echo s($chapterherb['name']); ?></strong> · <em><?php echo s($chapterherb['latin']); ?></em> · <?php echo s($chapterherb['properties']); ?> · <?php echo s($chapterherb['channels']); ?> · <?php echo s($chapterherb['dose']); ?></p>
+                    <p class="single-herbs-guide__catalog-intro"><?php echo s($chapterherb['reason']); ?></p>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <p class="single-herbs-guide__scope-note"><strong><?php echo s($aromatictext('Product distinction:', 'Distinción de productos:')); ?></strong> <?php echo s($aromatictext('Guang Huo Xiang (Pogostemonis Herba) and Tu Huo Xiang (Agastaches Herba) remain under the single official Huo Xiang entry; they do not receive separate guideline IDs or duplicate core cards.', 'Guang Huo Xiang (Pogostemonis Herba) y Tu Huo Xiang (Agastaches Herba) permanecen bajo la única entrada oficial Huo Xiang; no reciben IDs separados del guideline ni tarjetas centrales duplicadas.')); ?></p>
+    </div>
+</details>

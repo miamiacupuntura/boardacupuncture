@@ -50,6 +50,13 @@ ALIASES = {
     "ci zhi": "ci shi",
 }
 
+# Cross-category annexes also contain ``'name' =>`` records. Keep their cards
+# routed to the primary detailed category rather than the earlier annex file.
+ROUTE_OVERRIDES = {
+    "bai wei": 7,
+    "di gu pi": 7,
+}
+
 
 def normalized(value: str) -> str:
     value = re.sub(r"\s*\*$", "", value).strip().lower()
@@ -88,7 +95,8 @@ def main() -> None:
     routed = 0
     for herb_id, entry in enumerate(entries, start=1):
         entry["id"] = herb_id
-        guide_number = routes.get(normalized(str(entry["name"])))
+        key = normalized(str(entry["name"]))
+        guide_number = ROUTE_OVERRIDES.get(key, routes.get(key))
         entry["guideNumber"] = guide_number
         if guide_number is not None:
             routed += 1

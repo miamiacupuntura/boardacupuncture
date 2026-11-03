@@ -7,8 +7,8 @@
     "benskyChapterOneSource": "Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1 (user-provided excerpts)",
     "benskyMergeRule": "Bensky fills empty fields only; existing Yang-based profiles are never replaced",
     "total": 304,
-    "verified": 180,
-    "propertiesOnly": 61,
+    "verified": 181,
+    "propertiesOnly": 60,
     "doseOnly": 21,
     "pending": 42,
     "herbs": [
@@ -4316,9 +4316,9 @@
         {
             "name": "Pei Lan",
             "latin": "Eupatorii Herba",
-            "guideNumber": null,
-            "status": "properties-only",
-            "propertySource": "actions-indications-table",
+            "guideNumber": 16,
+            "status": "verified",
+            "propertySource": "detailed-profile",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -4331,7 +4331,7 @@
                 "en": "Spleen, Stomach",
                 "es": "Bazo, Estómago"
             },
-            "dose": null,
+            "dose": "3–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4972,8 +4972,8 @@
                 "es": "tibia"
             },
             "channels": {
-                "en": "Spleen, Stomach, Kidney",
-                "es": "Bazo, Estómago, Riñón"
+                "en": "Spleen, Stomach",
+                "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
             "doseSource": null,

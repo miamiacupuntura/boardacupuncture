@@ -2,7 +2,7 @@
   "version": 2,
   "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
   "total": 304,
-  "routedToDetailedStudy": 203,
+  "routedToDetailedStudy": 204,
   "herbs": [
     {
       "name": "Ai Ye",
@@ -2065,7 +2065,7 @@
       "name": "Pei Lan",
       "latin": "Eupatorii Herba",
       "id": 188,
-      "guideNumber": null,
+      "guideNumber": 16,
       "benskyCategory": {
         "code": "aromatic-transform-dampness",
         "en": "Aromatic Herbs that Transform Dampness",
