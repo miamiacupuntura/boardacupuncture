@@ -41,16 +41,95 @@ $bloodherbs = [
         'formulas' => $bloodtext('Supporting ingredient in Qing Hao Bie Jia Tang; Qing Hao and Bie Jia are the leading pair in that current Board formula.', 'Ingrediente de apoyo en Qing Hao Bie Jia Tang; Qing Hao y Bie Jia son la pareja principal de esa fórmula Board vigente.'),
         'caution' => $bloodtext('Use cautiously in pregnancy, heavy menstruation or bleeding without stasis. It moves Blood as well as cooling it.', 'Usar con precaución en embarazo, menstruación abundante o sangrado sin estasis. Moviliza Sangre además de enfriarla.'),
     ],
+    [
+        'name' => 'Shui Niu Jiao', 'latin' => 'Bubali Cornu',
+        'properties' => $bloodtext('Bitter, salty; cold', 'Amarga, salada; fría'),
+        'channels' => $bloodtext('Heart, Liver', 'Corazón, Hígado'), 'dose' => '15–30 g, decoct first',
+        'identity' => $bloodtext('Cools Blood, stops bleeding, clears Heat-toxin and calms delirium or convulsions from intense Heat.', 'Enfría Sangre, detiene sangrado, aclara Calor-Toxina y calma delirio o convulsiones por Calor intenso.'),
+        'clue' => $bloodtext('Intense Blood-level Heat with high fever, delirium, convulsions, dark rashes or reckless bleeding.', 'Calor intenso del nivel Sangre con fiebre alta, delirio, convulsiones, erupciones oscuras o sangrado imprudente.'),
+        'memory' => $bloodtext('The heavy water-buffalo horn enters the raging red river and forces its hottest surge to settle.', 'El pesado cuerno de búfalo de agua entra en el río rojo embravecido y obliga a calmar su oleada más caliente.'),
+        'unique' => $bloodtext('This animal-derived substance is reserved for the most intense Blood Heat, toxicity and agitation among the Category 4 herbs.', 'Esta sustancia de origen animal se reserva para el Calor de Sangre, toxicidad y agitación más intensos entre las hierbas de Categoría 4.'),
+        'formulas' => $bloodtext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $bloodtext('Animal-derived medicinal. Decoct first and avoid use in Cold or deficiency presentations without intense Heat.', 'Medicinal de origen animal. Decocer primero y evitar en presentaciones de Frío o deficiencia sin Calor intenso.'),
+    ],
+    [
+        'name' => 'Chi Shao', 'latin' => 'Paeoniae Radix rubra',
+        'properties' => $bloodtext('Bitter, sour; slightly cold', 'Amarga, ácida; ligeramente fría'),
+        'channels' => $bloodtext('Liver', 'Hígado'), 'dose' => '6–15 g',
+        'identity' => $bloodtext('Cools excess Blood Heat, invigorates Blood, dispels stasis and relieves pain.', 'Enfría Calor de Sangre por exceso, moviliza Sangre, disipa estasis y alivia dolor.'),
+        'clue' => $bloodtext('Blood Heat accompanied by fixed pain, abdominal masses, traumatic swelling or other clear signs of stasis.', 'Calor de Sangre acompañado de dolor fijo, masas abdominales, inflamación traumática u otros signos claros de estasis.'),
+        'memory' => $bloodtext('Red peony cools the river while pushing a stuck red boat back into motion.', 'La peonía roja enfría el río mientras vuelve a poner en movimiento una embarcación roja atascada.'),
+        'unique' => $bloodtext('Compared with Mu Dan Pi, Chi Shao is stronger for excess Blood Heat, stasis, swelling and pain and does not emphasize deficiency Heat.', 'Comparada con Mu Dan Pi, Chi Shao es más fuerte para Calor de Sangre por exceso, estasis, inflamación y dolor, y no enfatiza Calor por deficiencia.'),
+        'formulas' => $bloodtext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $bloodtext('Use cautiously in pregnancy, heavy menstrual bleeding or bleeding without stasis.', 'Usar con precaución en embarazo, sangrado menstrual abundante o sangrado sin estasis.'),
+    ],
+    [
+        'name' => 'Zi Cao', 'latin' => 'Arnebiae/Lithospermi Radix',
+        'properties' => $bloodtext('Sweet, salty; cold', 'Dulce, salada; fría'),
+        'channels' => $bloodtext('Heart, Liver', 'Corazón, Hígado'), 'dose' => '3–9 g',
+        'identity' => $bloodtext('Cools and invigorates Blood, resolves toxicity and vents rashes and lesions.', 'Enfría y moviliza Sangre, resuelve toxicidad y exterioriza erupciones y lesiones.'),
+        'clue' => $bloodtext('Dark-red or purple rash that is not venting properly, especially with toxicity, sores or burns.', 'Erupción rojo oscuro o púrpura que no exterioriza correctamente, especialmente con toxicidad, llagas o quemaduras.'),
+        'memory' => $bloodtext('The purple root cools the red river and opens a gate so the trapped rash can reach the skin.', 'La raíz púrpura enfría el río rojo y abre una compuerta para que la erupción atrapada alcance la piel.'),
+        'unique' => $bloodtext('Its defining Category 4 combination is strong Blood cooling plus rash ventilation and toxicity resolution.', 'Su combinación distintiva en Categoría 4 es enfriamiento potente de Sangre más exteriorización de erupciones y resolución de toxicidad.'),
+        'formulas' => $bloodtext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $bloodtext('Use cautiously with Spleen deficiency, chronic loose stools or pregnancy.', 'Usar con precaución ante deficiencia de Bazo, heces sueltas crónicas o embarazo.'),
+    ],
+    [
+        'name' => 'Qing Dai', 'latin' => 'Indigo naturalis',
+        'properties' => $bloodtext('Salty; cold', 'Salada; fría'),
+        'channels' => $bloodtext('Liver, Lung, Stomach', 'Hígado, Pulmón, Estómago'), 'dose' => '1.5–3 g in powder or pill; current guideline maximum 6 g',
+        'identity' => $bloodtext('Cools Blood, clears Liver Fire, resolves Heat-toxin and arrests convulsions from Heat.', 'Enfría Sangre, aclara Fuego de Hígado, resuelve Calor-Toxina y detiene convulsiones por Calor.'),
+        'clue' => $bloodtext('Blood Heat with toxic rash or bleeding plus Liver Fire, childhood convulsions or a severe hot swollen throat.', 'Calor de Sangre con erupción tóxica o sangrado más Fuego de Hígado, convulsiones infantiles o garganta muy caliente e inflamada.'),
+        'memory' => $bloodtext('Indigo powder cools the red river blue, extinguishes the Liver flame and settles spasms.', 'El polvo índigo tiñe de azul y enfría el río rojo, apaga la llama del Hígado y calma espasmos.'),
+        'unique' => $bloodtext('Unlike decocted roots, Qing Dai is a mineral-like prepared powder used directly; Liver Fire and Heat-toxin distinguish it.', 'A diferencia de las raíces en decocción, Qing Dai es un polvo preparado semejante a mineral que se usa directamente; Fuego de Hígado y Calor-Toxina la distinguen.'),
+        'formulas' => $bloodtext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $bloodtext('Do not decoct as an ordinary root. Use cautiously with Spleen-Stomach Cold or chronic digestive weakness.', 'No decocer como una raíz ordinaria. Usar con precaución ante Frío de Bazo-Estómago o debilidad digestiva crónica.'),
+    ],
+    [
+        'name' => 'Dan Shen', 'latin' => 'Salviae miltiorrhizae Radix',
+        'properties' => $bloodtext('Bitter; slightly cold', 'Amarga; ligeramente fría'),
+        'channels' => $bloodtext('Heart, Pericardium, Liver', 'Corazón, Pericardio, Hígado'), 'dose' => '6–15 g',
+        'identity' => $bloodtext('Invigorates and cools Blood, dispels stasis, relieves pain and calms irritability and restlessness.', 'Moviliza y enfría Sangre, disipa estasis, alivia dolor y calma irritabilidad e inquietud.'),
+        'clue' => $bloodtext('Blood Heat or stasis with chest, abdominal or menstrual pain plus irritability or disturbed sleep.', 'Calor o estasis de Sangre con dolor torácico, abdominal o menstrual más irritabilidad o sueño alterado.'),
+        'memory' => $bloodtext('Red sage stirs the hot red river around the Heart and leaves the control room calmer.', 'La salvia roja mueve el río rojo caliente alrededor del Corazón y deja más tranquila la sala de control.'),
+        'unique' => $bloodtext('Its Heart-Pericardium affinity joins Blood movement and cooling with a Shen-calming effect.', 'Su afinidad por Corazón-Pericardio une movimiento y enfriamiento de Sangre con un efecto calmante sobre el Shen.'),
+        'formulas' => $bloodtext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro del listado Board vigente de 63 fórmulas.'),
+        'caution' => $bloodtext('Use cautiously with anticoagulant therapy, bleeding disorders or pregnancy; traditionally incompatible with Li Lu.', 'Usar con precaución con terapia anticoagulante, trastornos hemorrágicos o embarazo; tradicionalmente incompatible con Li Lu.'),
+    ],
 ];
 
-$bloodannex = [
-    ['name' => 'Shui Niu Jiao', 'latin' => 'Bubali Cornu', 'note' => $bloodtext('For intense Blood Heat, toxicity, delirium or convulsions. Animal-derived and in official Appendix A, but outside this three-herb module title.', 'Para Calor intenso de Sangre, toxicidad, delirio o convulsiones. Es de origen animal y está en el Apéndice A oficial, pero fuera del título de este módulo de tres hierbas.')],
-    ['name' => 'Chi Shao', 'latin' => 'Paeoniae Radix rubra', 'note' => $bloodtext('Cools excess Blood Heat and moves stasis more strongly than Mu Dan Pi; official Appendix A, classified primarily with Blood-invigorating herbs.', 'Enfría Calor de Sangre por exceso y moviliza estasis con más fuerza que Mu Dan Pi; está en el Apéndice A oficial y se clasifica principalmente con hierbas que movilizan Sangre.')],
-    ['name' => 'Zi Cao', 'latin' => 'Arnebiae/Lithospermi Radix', 'note' => $bloodtext('Strong Blood cooling with rash ventilation and toxicity resolution; in official Appendix A, recognition only here.', 'Potente enfriamiento de Sangre con exteriorización de erupciones y resolución de toxicidad; está en el Apéndice A oficial, solo para reconocimiento aquí.')],
-    ['name' => 'Qing Dai', 'latin' => 'Indigo naturalis', 'note' => $bloodtext('Cools Blood and clears Liver Fire and toxicity; in official Appendix A and outside this module sequence.', 'Enfría Sangre y aclara Fuego de Hígado y toxicidad; está en el Apéndice A oficial y fuera de la secuencia de este módulo.')],
-    ['name' => 'Dan Shen', 'latin' => 'Salviae miltiorrhizae Radix', 'note' => $bloodtext('Cools and invigorates Blood while calming the Shen; in official Appendix A, primarily studied with Blood-invigorating herbs.', 'Enfría y moviliza Sangre mientras calma el Shen; está en el Apéndice A oficial y se estudia principalmente con hierbas que movilizan Sangre.')],
-    ['name' => 'Bai Wei · Di Gu Pi', 'latin' => $bloodtext('Deficiency-Heat distinctions', 'Distinciones de Calor por deficiencia'), 'note' => $bloodtext('Both are in official Appendix A. Bai Wei vents residual Heat; Di Gu Pi favors steaming-bone disorder with sweating. Mu Dan Pi favors the no-sweating presentation and also moves Blood.', 'Ambas están en el Apéndice A oficial. Bai Wei libera Calor residual; Di Gu Pi favorece calor en los huesos con sudoración. Mu Dan Pi favorece el cuadro sin sudor y además moviliza Sangre.')],
+$bloodherbs = array_map(static function(array $herb): array {
+    $herb['primarycategory'] = 4;
+    return $herb;
+}, $bloodherbs);
+
+$bloodguidelinecheck = static function(array $herb) use ($guidelineherbkeys, $normalizeherbname): bool {
+    return isset($guidelineherbkeys[$normalizeherbname((string)$herb['name'])]);
+};
+$bloodcategorycheck = static function(array $herb): bool {
+    return (int)($herb['primarycategory'] ?? 0) === 4;
+};
+$bloodherbs = array_values(array_filter($bloodherbs, static function(array $herb) use ($bloodguidelinecheck, $bloodcategorycheck): bool {
+    return $bloodguidelinecheck($herb) && $bloodcategorycheck($herb);
+}));
+
+$bloodcontextcandidates = [
+    [
+        'name' => 'Bai Wei', 'latin' => 'Cynanchi atrati Radix', 'primarycategory' => 7,
+        'category' => $bloodtext('Category 7 · Herbs that Clear Deficiency Heat', 'Categoría 7 · Hierbas que aclaran Calor por deficiencia'),
+        'note' => $bloodtext('Vents residual or constraint Heat and clears Deficiency Heat.', 'Exterioriza Calor residual o constreñido y aclara Calor por deficiencia.'),
+        'reason' => $bloodtext('Included only to contrast Deficiency-Heat patterns: Bai Wei can vent residual Heat, while Mu Dan Pi cools Blood and also moves stasis. Bai Wei is official but its primary category is 7, not 4.', 'Se incluye únicamente para contrastar patrones de Calor por deficiencia: Bai Wei puede exteriorizar Calor residual, mientras Mu Dan Pi enfría Sangre y también moviliza estasis. Bai Wei es oficial, pero su categoría primaria es 7, no 4.'),
+    ],
+    [
+        'name' => 'Di Gu Pi', 'latin' => 'Lycii Cortex', 'primarycategory' => 7,
+        'category' => $bloodtext('Category 7 · Herbs that Clear Deficiency Heat', 'Categoría 7 · Hierbas que aclaran Calor por deficiencia'),
+        'note' => $bloodtext('Clears steaming-bone Deficiency Heat, especially when sweating accompanies the pattern.', 'Aclara Calor por deficiencia con calor en los huesos, especialmente cuando el patrón se acompaña de sudoración.'),
+        'reason' => $bloodtext('Included only to preserve the classic contrast: Di Gu Pi favors bone steaming with sweating; Mu Dan Pi favors the no-sweating presentation and moves Blood. Di Gu Pi is official but its primary category is 7, not 4.', 'Se incluye únicamente para conservar el contraste clásico: Di Gu Pi favorece calor en los huesos con sudoración; Mu Dan Pi favorece el cuadro sin sudor y moviliza Sangre. Di Gu Pi es oficial, pero su categoría primaria es 7, no 4.'),
+    ],
 ];
+$bloodannex = array_values(array_filter($bloodcontextcandidates, static function(array $herb) use ($bloodguidelinecheck, $bloodcategorycheck): bool {
+    return !$bloodguidelinecheck($herb) || !$bloodcategorycheck($herb);
+}));
 
 $bloodcharts = [
     ['title' => $bloodtext('Relative Blood-cooling action', 'Acción relativa para enfriar Sangre'), 'figure' => 'Yang Fig. 3.2', 'items' => ['Sheng Di Huang' => 100, 'Mu Dan Pi' => 60]],
@@ -61,6 +140,11 @@ $blooddecisions = [
     [$bloodtext('Blood Heat + bleeding + Yin injury', 'Calor de Sangre + sangrado + lesión de Yin'), 'Sheng Di Huang'],
     [$bloodtext('Yin injury + toxic throat or nodules', 'Lesión de Yin + garganta tóxica o nódulos'), 'Xuan Shen'],
     [$bloodtext('Blood Heat + stasis or no-sweat bone steaming', 'Calor de Sangre + estasis o calor óseo sin sudor'), 'Mu Dan Pi'],
+    [$bloodtext('Intense Blood Heat + delirium or convulsions', 'Calor intenso de Sangre + delirio o convulsiones'), 'Shui Niu Jiao'],
+    [$bloodtext('Excess Blood Heat + fixed pain or swelling', 'Calor de Sangre por exceso + dolor fijo o inflamación'), 'Chi Shao'],
+    [$bloodtext('Dark rash that must vent', 'Erupción oscura que debe exteriorizar'), 'Zi Cao'],
+    [$bloodtext('Blood Heat + Liver Fire or Heat-toxin', 'Calor de Sangre + Fuego de Hígado o Calor-Toxina'), 'Qing Dai'],
+    [$bloodtext('Blood stasis + Heart irritability', 'Estasis de Sangre + irritabilidad de Corazón'), 'Dan Shen'],
 ];
 
 $bloodcomparisons = [
@@ -88,11 +172,10 @@ $bloodquestions = [
         <article><strong><?php echo s($bloodtext('Treatment tension', 'Tensión terapéutica')); ?></strong><span><?php echo s($bloodtext('Cold must quiet reckless Blood, but excessive cold can congeal it. Favor herbs that also nourish fluids or move stasis.', 'El frío debe calmar Sangre imprudente, pero el frío excesivo puede coagularla. Favorece hierbas que además nutren líquidos o movilizan estasis.')); ?></span></article>
     </div>
     <p class="single-herbs-guide__scope-note"><strong><?php echo s($bloodtext('General precautions:', 'Precauciones generales:')); ?></strong> <?php echo s($bloodtext('these cold, rich herbs may injure Spleen/Stomach function. Blood-moving members require caution in pregnancy or active bleeding. Severe fever, delirium or uncontrolled bleeding requires urgent biomedical care.', 'estas hierbas frías y ricas pueden lesionar la función Bazo/Estómago. Las que movilizan Sangre requieren precaución en embarazo o sangrado activo. Fiebre intensa, delirio o sangrado no controlado requiere atención biomédica urgente.')); ?></p>
-    <aside class="single-herbs-guide__memory-path" aria-label="<?php echo s($bloodtext('Blood river memory path', 'Recorrido mnemotécnico del río de Sangre')); ?>"><p class="single-herbs-guide__memory-line"><?php echo s($bloodtext('Below the overheated house runs a red river. Three guardians cool it differently.', 'Debajo de la casa sobrecalentada corre un río rojo. Tres guardianes lo enfrían de manera diferente.')); ?></p><p><?php echo s($bloodtext('Sheng Di Huang pours dark restorative water into the river; Xuan Shen raises Kidney water to the toxic throat and softens knots; Mu Dan Pi cools the river while stirring it so it does not congeal.', 'Sheng Di Huang vierte agua oscura restauradora en el río; Xuan Shen eleva agua de Riñón hacia la garganta tóxica y ablanda nudos; Mu Dan Pi enfría el río mientras lo mueve para que no se coagule.')); ?></p><p><strong><?php echo s($bloodtext('Cool, nourish or move: identify which need dominates.', 'Enfriar, nutrir o mover: identifica qué necesidad domina.')); ?></strong></p></aside>
+    <aside class="single-herbs-guide__memory-path" aria-label="<?php echo s($bloodtext('Blood river memory path', 'Recorrido mnemotécnico del río de Sangre')); ?>"><p class="single-herbs-guide__memory-line"><?php echo s($bloodtext('Below the overheated house runs a red river. Eight guardians cool it differently.', 'Debajo de la casa sobrecalentada corre un río rojo. Ocho guardianes lo enfrían de manera diferente.')); ?></p><p><?php echo s($bloodtext('Sheng Di Huang restores dark cooling water; Xuan Shen raises Kidney water to the toxic throat; Mu Dan Pi cools while stirring; Shui Niu Jiao settles the fiercest surge; Chi Shao pushes stasis; Zi Cao vents the trapped rash; Qing Dai extinguishes Liver Fire; Dan Shen moves the Heart river and calms the control room.', 'Sheng Di Huang repone agua oscura y fresca; Xuan Shen eleva agua de Riñón hacia la garganta tóxica; Mu Dan Pi enfría mientras mueve; Shui Niu Jiao calma la oleada más intensa; Chi Shao empuja la estasis; Zi Cao exterioriza la erupción atrapada; Qing Dai apaga Fuego de Hígado; Dan Shen mueve el río del Corazón y calma la sala de control.')); ?></p><p><strong><?php echo s($bloodtext('Cool, nourish, vent or move: identify which need dominates.', 'Enfriar, nutrir, exteriorizar o mover: identifica qué necesidad domina.')); ?></strong></p></aside>
 
-    <h5 class="single-herbs-guide__catalog-heading"><?php echo s($bloodtext('Current Board category herbs', 'Hierbas de la categoría Board vigente')); ?></h5><p class="single-herbs-guide__catalog-intro"><?php echo s($bloodtext('Study these three herbs named in the module first. The annex remains separate.', 'Estudia primero estas tres hierbas nombradas en el módulo. El anexo permanece separado.')); ?></p>
-    <ol class="single-herbs-guide__category-herbs"><?php foreach ($bloodherbs as $categoryherb): ?><li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge"><?php echo s($bloodtext('In Board category list', 'En el listado de la categoría Board')); ?></span></div><p><?php echo s($categoryherb['identity']); ?></p></li><?php endforeach; ?></ol>
-    <div class="single-herbs-guide__annex"><h5 class="single-herbs-guide__catalog-heading"><?php echo s($bloodtext('Annex · Additional official recognition herbs', 'Anexo · Hierbas oficiales adicionales para reconocimiento')); ?></h5><p class="single-herbs-guide__catalog-intro"><?php echo s($bloodtext('All names below remain in official Appendix A, but they are not mixed into this module’s three-herb sequence.', 'Todos los nombres siguientes permanecen en el Apéndice A oficial, pero no se mezclan con la secuencia de tres hierbas de este módulo.')); ?></p><ol class="single-herbs-guide__category-herbs"><?php foreach ($bloodannex as $categoryherb): ?><li class="single-herbs-guide__category-herb"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside"><?php echo s($bloodtext('Official annex recognition', 'Reconocimiento oficial de anexo')); ?></span></div><p><?php echo s($categoryherb['note']); ?></p></li><?php endforeach; ?></ol></div>
+    <h5 class="single-herbs-guide__catalog-heading"><?php echo s($bloodtext('Current Board category herbs', 'Hierbas de la categoría Board vigente')); ?></h5><p class="single-herbs-guide__catalog-intro"><?php echo s($bloodtext('Study these eight official herbs as Category 4. The original three remain the heading core; Shui Niu Jiao, Chi Shao, Zi Cao, Qing Dai and Dan Shen are included because each satisfies both required conditions: it is in the current guideline 2026 and its primary classification is Herbs that Clear Heat and Cool the Blood.', 'Estudia estas ocho hierbas oficiales como Categoría 4. Las tres originales siguen siendo el núcleo del encabezado; Shui Niu Jiao, Chi Shao, Zi Cao, Qing Dai y Dan Shen se incluyen porque cada una cumple las dos condiciones requeridas: está en el guideline vigente 2026 y su clasificación primaria es Hierbas que aclaran Calor y enfrían Sangre.')); ?></p>
+    <ol class="single-herbs-guide__category-herbs"><?php foreach ($bloodherbs as $categoryherb): ?><li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core"><div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge"><?php echo s($bloodtext('In current guideline 2026 · Category 4', 'En el guideline vigente 2026 · Categoría 4')); ?></span></div><p><?php echo s($categoryherb['identity']); ?></p></li><?php endforeach; ?></ol>
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-four-yang-title"><h4 id="topic-four-yang-title"><?php echo s($bloodtext('Yang comparative fingerprint', 'Huella comparativa de Yang')); ?></h4><p class="single-herbs-guide__section-lead"><?php echo s($bloodtext('The figures separate pure Blood cooling from Kidney-Heat clearing. Absence from a bar is not absence of clinical function.', 'Las figuras separan enfriamiento puro de Sangre de aclarar Calor de Riñón. La ausencia de una barra no significa ausencia de función clínica.')); ?></p><div class="single-herbs-guide__yang-charts"><?php foreach ($bloodcharts as $chart): ?><article class="single-herbs-guide__yang-chart"><h5><?php echo s($chart['title']); ?></h5><small><?php echo s($chart['figure']); ?></small><?php foreach ($chart['items'] as $herbname => $value): ?><div class="single-herbs-guide__yang-bar"><span><?php echo s($herbname); ?></span><span class="single-herbs-guide__yang-bar-track"><span class="single-herbs-guide__yang-bar-fill" style="width:<?php echo (int) $value; ?>%"></span></span><b><?php echo (int) $value; ?></b></div><?php endforeach; ?></article><?php endforeach; ?></div><p class="single-herbs-guide__yang-note"><strong><?php echo s($bloodtext('Reading rule:', 'Regla de lectura:')); ?></strong> <?php echo s($bloodtext('Sheng Di Huang dominates direct Blood cooling and fluid generation. Xuan Shen shares strong Kidney-Heat reach but shifts toward Yin-level Fire and toxicity. Mu Dan Pi trades some pure cooling strength for Blood movement.', 'Sheng Di Huang domina el enfriamiento directo de Sangre y generación de líquidos. Xuan Shen comparte un alcance fuerte sobre Calor de Riñón, pero se dirige a Fuego del nivel Yin y toxicidad. Mu Dan Pi cambia parte de la potencia de enfriamiento por movimiento de Sangre.')); ?></p></section>
@@ -110,3 +193,25 @@ $bloodquestions = [
 <section class="single-herbs-guide__section" aria-labelledby="topic-four-recall-title"><h4 id="topic-four-recall-title"><?php echo s($bloodtext('Quick recall', 'Repaso rápido')); ?></h4><div class="single-herbs-guide__recall"><details><summary><?php echo s($bloodtext('Which herb best joins Blood cooling, bleeding control and Yin generation?', '¿Qué hierba combina mejor enfriar Sangre, controlar sangrado y generar Yin?')); ?></summary><p><strong>Sheng Di Huang.</strong> <?php echo s($bloodtext('It is strongest when Blood Heat and fluid injury coexist.', 'Es la más fuerte cuando coexisten Calor de Sangre y lesión de líquidos.')); ?></p></details><details><summary><?php echo s($bloodtext('Which herb points to toxic sore throat and hard nodules?', '¿Qué hierba señala garganta tóxica y dolorosa con nódulos duros?')); ?></summary><p><strong>Xuan Shen.</strong> <?php echo s($bloodtext('Its salty quality softens hardness while it drains Fire and resolves toxicity.', 'Su cualidad salada ablanda durezas mientras drena Fuego y resuelve toxicidad.')); ?></p></details><details><summary><?php echo s($bloodtext('Which herb cools Blood while preventing stasis?', '¿Qué hierba enfría Sangre mientras evita estasis?')); ?></summary><p><strong>Mu Dan Pi.</strong> <?php echo s($bloodtext('Its acrid movement distinguishes it from purely cooling herbs.', 'Su movimiento acre la distingue de hierbas puramente enfriadoras.')); ?></p></details></div></section>
 
 <p class="single-herbs-guide__note single-herbs-guide__source"><strong><?php echo s($bloodtext('Sources:', 'Fuentes:')); ?></strong> Bensky, Clavey, Stöger and Gamble, <em>Chinese Herbal Medicine: Materia Medica</em>, 3rd ed.; Yang, <em>Chinese Herbal Medicines: Comparisons and Characteristics</em>, 2nd ed., Chapter 3; NCBAHM Chinese Herbology Content Outline, effective September 1, 2026. <?php echo s($bloodtext('Educational review only; not prescribing guidance.', 'Solo para repaso educativo; no constituye guía de prescripción.')); ?></p>
+
+<details class="single-herbs-guide__annex-toggle">
+    <summary>
+        <strong><?php echo s($bloodtext('Cross-category references · Deficiency-Heat distinctions', 'Referencias cruzadas · Distinciones de Calor por deficiencia')); ?></strong>
+        <span><?php echo s($bloodtext('2 official Category 7 herbs · click to open', '2 hierbas oficiales de Categoría 7 · haz clic para abrir')); ?></span>
+    </summary>
+    <div class="single-herbs-guide__annex-toggle-content">
+        <p class="single-herbs-guide__catalog-intro"><?php echo s($bloodtext('Bai Wei and Di Gu Pi remain hidden at the end because they pass the guideline condition but fail the Category 4 condition. They appear only to clarify the classic comparison with Mu Dan Pi.', 'Bai Wei y Di Gu Pi permanecen ocultas al final porque cumplen la condición del guideline, pero no la condición de Categoría 4. Aparecen únicamente para aclarar la comparación clásica con Mu Dan Pi.')); ?></p>
+        <ol class="single-herbs-guide__category-herbs">
+            <?php foreach ($bloodannex as $categoryherb): ?>
+                <li class="single-herbs-guide__category-herb">
+                    <div class="single-herbs-guide__category-herb-head"><strong><?php echo s($categoryherb['name']); ?></strong><em><?php echo s($categoryherb['latin']); ?></em><span class="single-herbs-guide__category-herb-badge single-herbs-guide__category-herb-badge--outside"><?php echo s($bloodtext('Current guideline 2026 · primary Category 7', 'Guideline vigente 2026 · Categoría primaria 7')); ?></span></div>
+                    <p><?php echo s($categoryherb['note']); ?></p>
+                    <div class="single-herbs-guide__category-herb-context">
+                        <p><strong><?php echo s($bloodtext('Primary category', 'Categoría principal')); ?></strong><span><?php echo s($categoryherb['category']); ?></span></p>
+                        <p><strong><?php echo s($bloodtext('Why it appears here', 'Por qué aparece aquí')); ?></strong><span><?php echo s($categoryherb['reason']); ?></span></p>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+</details>
