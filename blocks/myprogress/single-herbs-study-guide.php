@@ -748,10 +748,10 @@ $windcoldcategoryherbs = [
 ];
 
 $windcoldboardherbs = array_values(array_filter($windcoldcategoryherbs, static function(array $herb): bool {
-    return $herb['boardfocus'];
+    return !empty($herb['boardfocus']) || !empty($herb['guideline']);
 }));
 $windcoldannexherbs = array_values(array_filter($windcoldcategoryherbs, static function(array $herb): bool {
-    return !$herb['boardfocus'];
+    return empty($herb['boardfocus']) && empty($herb['guideline']);
 }));
 
 $yangcomparisoncharts = [
@@ -1191,14 +1191,14 @@ ob_start();
                         <p>Walk through the house to remember the group: <strong>Ma Huang opens the locked door; Gui Zhi warms the branches; Zi Su Ye settles the kitchen; Jing Jie sweeps the skin; Fang Feng raises a Wind shield; Qiang Huo climbs the neck; Bai Zhi clears the forehead and sinuses; Sheng Jiang stops at the Stomach; Xin Yi Hua opens at the nose.</strong></p>
                     </aside>
                     <h5 class="single-herbs-guide__catalog-heading">Current Board guideline herbs</h5>
-                    <p class="single-herbs-guide__catalog-intro">Study these nine herbs first. They are the herbs named in the current Board category guideline.</p>
+                    <p class="single-herbs-guide__catalog-intro">Study these thirteen official herbs as Category 1. The nine herbs named in the category heading remain the original core, and Cong Bai, Gao Ben, Xi Xin and Xiang Ru are added here because they are also in the current 2026 guideline and share this primary classification.</p>
                     <ol class="single-herbs-guide__category-herbs">
                         <?php foreach ($windcoldboardherbs as $categoryherb): ?>
                             <li class="single-herbs-guide__category-herb single-herbs-guide__category-herb--core">
                                 <div class="single-herbs-guide__category-herb-head">
                                     <strong><?php echo s($categoryherb['name']); ?></strong>
                                     <em><?php echo s($categoryherb['latin']); ?></em>
-                                    <span class="single-herbs-guide__category-herb-badge">In Board category list</span>
+                                    <span class="single-herbs-guide__category-herb-badge">In current guideline 2026</span>
                                 </div>
                                 <span class="single-herbs-guide__category-herb-common"><?php echo s($categoryherb['common']); ?></span>
                                 <p><?php echo s($categoryherb['note']); ?></p>
@@ -1414,10 +1414,10 @@ ob_start();
                 <details class="single-herbs-guide__annex-toggle">
                     <summary>
                         <strong>Annex · Additional Wind-Cold materia medica</strong>
-                        <span>7 contextual entries · click to open</span>
+                        <span>3 contextual entries outside the 2026 guideline · click to open</span>
                     </summary>
                     <div class="single-herbs-guide__annex-toggle-content">
-                        <p class="single-herbs-guide__catalog-intro">This annex has two limited purposes: preserve high-yield textbook distinctions around the nine heading herbs, and prevent confusion between related plant parts or cross-category actions. Each card identifies its primary category, its exact reason for appearing here and whether it belongs to the overall 2026 guideline. These are not seven additional core herbs for this category.</p>
+                        <p class="single-herbs-guide__catalog-intro">These three entries remain hidden at the end because they are outside the 2026 guideline. They are retained only to recognize a source monograph or distinguish a related plant part; they do not expand Category 1.</p>
                         <ol class="single-herbs-guide__category-herbs">
                             <?php foreach ($windcoldannexherbs as $categoryherb): ?>
                                 <li class="single-herbs-guide__category-herb">
