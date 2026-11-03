@@ -151,6 +151,12 @@ $studyguidecategories = [];
 foreach ($categories as $sectionnumber => $category) {
     $guidenumber = $extractstudyguidenumber((string) $category['name']);
     if ($guidenumber !== null) {
+        // Legacy guide 22 duplicates the Warm-Interior section. Its complete
+        // canonical content lives in stored guide 21, displayed publicly as
+        // card 22 after the Chapter 4 insertion.
+        if ($guidenumber === 22) {
+            continue;
+        }
         $category['guide_number'] = $guidenumber;
         $studyguidecategories[$sectionnumber] = $category;
     }
