@@ -62,14 +62,19 @@ $propertylang = $ises ? 'es' : 'en';
             <table class="single-herbs-properties__table">
                 <thead><tr>
                     <th scope="col"><?php echo s($ises ? 'Hierba' : 'Herb'); ?></th>
-                    <th scope="col"><?php echo s($ises ? 'Categoría' : 'Category'); ?></th>
+                    <th scope="col" aria-sort="none" data-properties-sort-header>
+                        <button type="button" class="single-herbs-properties__sort-button" data-properties-sort data-direction="none">
+                            <span><?php echo s($ises ? 'Categoría' : 'Category'); ?></span>
+                            <span class="single-herbs-properties__sort-indicator" data-properties-sort-indicator aria-hidden="true">⇅</span>
+                        </button>
+                    </th>
                     <th scope="col"><?php echo s($ises ? 'Sabor' : 'Flavor'); ?></th>
                     <th scope="col"><?php echo s($ises ? 'Temperatura / naturaleza' : 'Temperature / nature'); ?></th>
                     <th scope="col"><?php echo s($ises ? 'Meridianos' : 'Channels'); ?></th>
                     <th scope="col"><?php echo s($ises ? 'Dosis' : 'Dose'); ?></th>
                 </tr></thead>
                 <tbody>
-                <?php foreach ($propertyrows as $propertyrow): ?>
+                <?php foreach ($propertyrows as $propertyindex => $propertyrow): ?>
                     <?php
                     $herbparams = ['herb' => (string)$propertyrow['name']];
                     if ($ises) {
@@ -91,7 +96,11 @@ $propertylang = $ises ? 'es' : 'en';
                         $flavor, $temperature, $channels, $dose, $appendixdose,
                     ]));
                     ?>
-                    <tr data-properties-row data-search="<?php echo s(strtolower($searchtext)); ?>">
+                    <tr data-properties-row
+                        data-original-index="<?php echo (int)$propertyindex; ?>"
+                        data-category="<?php echo s((string)$categorylabel); ?>"
+                        data-herb="<?php echo s((string)$propertyrow['name']); ?>"
+                        data-search="<?php echo s(strtolower($searchtext)); ?>">
                         <th scope="row"><a href="<?php echo $herburl->out(false); ?>"><?php echo s($propertyrow['name']); ?></a><small><?php echo s($propertyrow['latin']); ?></small></th>
                         <td><span class="single-herbs-properties__category"><?php echo $categorylabel ? s($categorylabel) : '—'; ?></span></td>
                         <td><?php echo $flavor ? s($flavor) : '<span aria-label="' . s($ises ? 'Sin dato' : 'No data') . '">—</span>'; ?></td>
@@ -119,6 +128,16 @@ $propertylang = $ises ? 'es' : 'en';
         const rows = Array.from(root.querySelectorAll('[data-properties-row]'));
         const count = root.querySelector('[data-properties-count]');
         const empty = root.querySelector('[data-properties-empty]');
+        const tbody = root.querySelector('tbody');
+        const sortButton = root.querySelector('[data-properties-sort]');
+        const sortHeader = root.querySelector('[data-properties-sort-header]');
+        const sortIndicator = root.querySelector('[data-properties-sort-indicator]');
+        const sortLabels = <?php echo json_encode([
+            'none' => $ises ? 'Ordenar por categoría de A a Z' : 'Sort category A to Z',
+            'ascending' => $ises ? 'Orden ascendente por categoría. Cambiar a descendente' : 'Category sorted ascending. Change to descending',
+            'descending' => $ises ? 'Orden descendente por categoría. Volver al orden original' : 'Category sorted descending. Return to original order',
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+        const collator = new Intl.Collator(<?php echo json_encode($ises ? 'es' : 'en'); ?>, {sensitivity: 'base', numeric: true});
         const normalize = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
         const refresh = function() {
             const query = normalize(input.value);
@@ -132,6 +151,24 @@ $propertylang = $ises ? 'es' : 'en';
             empty.hidden = visible !== 0;
         };
         input.addEventListener('input', refresh);
+        sortButton.addEventListener('click', function() {
+            const current = sortButton.dataset.direction || 'none';
+            const next = current === 'none' ? 'ascending' : (current === 'ascending' ? 'descending' : 'none');
+            const sorted = rows.slice().sort(function(a, b) {
+                if (next === 'none') {
+                    return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
+                }
+                const categoryOrder = collator.compare(a.dataset.category || '', b.dataset.category || '');
+                const herbOrder = collator.compare(a.dataset.herb || '', b.dataset.herb || '');
+                const order = categoryOrder || herbOrder;
+                return next === 'ascending' ? order : -order;
+            });
+            sorted.forEach(row => tbody.appendChild(row));
+            sortButton.dataset.direction = next;
+            sortButton.setAttribute('aria-label', sortLabels[next]);
+            sortHeader.setAttribute('aria-sort', next);
+            sortIndicator.textContent = next === 'ascending' ? '↑' : (next === 'descending' ? '↓' : '⇅');
+        });
     })();
     </script>
 <?php endif; ?>
