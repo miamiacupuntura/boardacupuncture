@@ -13,6 +13,7 @@ MOIST_PATH="blocks/myprogress/single-herbs-category-moist-laxatives.php"
 LABEL_CATEGORY_PATHS=(
     "blocks/myprogress/single-herbs-category-cool-acrid.php"
     "blocks/myprogress/single-herbs-category-clear-heat-cool-blood.php"
+    "blocks/myprogress/single-herbs-category-clear-heat-dry-damp.php"
     "blocks/myprogress/single-herbs-category-clear-deficient-heat.php"
     "blocks/myprogress/single-herbs-category-clear-heat-drain-fire.php"
     "blocks/myprogress/single-herbs-category-clear-summer-heat.php"
