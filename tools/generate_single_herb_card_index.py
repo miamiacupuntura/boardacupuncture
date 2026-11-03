@@ -84,14 +84,16 @@ def category_routes() -> dict[str, int]:
 def main() -> None:
     routes = category_routes()
     entries = roster_entries()
+    entries.sort(key=lambda entry: normalized(str(entry["name"])))
     routed = 0
-    for entry in entries:
+    for herb_id, entry in enumerate(entries, start=1):
+        entry["id"] = herb_id
         guide_number = routes.get(normalized(str(entry["name"])))
         entry["guideNumber"] = guide_number
         if guide_number is not None:
             routed += 1
     payload = {
-        "version": 1,
+        "version": 2,
         "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
         "total": len(entries),
         "routedToDetailedStudy": routed,

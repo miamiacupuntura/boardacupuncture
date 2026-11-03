@@ -21,6 +21,7 @@ LABEL_CATEGORY_PATHS=(
     "blocks/myprogress/single-herbs-category-warm-transform-phlegm.php"
 )
 GUIDE_PATH="blocks/myprogress/single-herbs-study-guide.php"
+CARD_INDEX_PATH="blocks/myprogress/single-herb-card-index.json"
 PROPERTIES_PATH="blocks/myprogress/single-herb-properties.json"
 REFERENCE_PATH="blocks/myprogress/single-herbs-dui-yao-reference.php"
 DUI_DATA_PATH="study-guide/comparisons/dui-yao-data.json"
@@ -35,7 +36,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     exit 1
 fi
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH"; do
     if [[ ! -f "$MOODLE_ROOT/$relative_path" ]]; then
         echo "ERROR: no se encontró el archivo activo $MOODLE_ROOT/$relative_path"
         exit 1
@@ -69,7 +70,7 @@ echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
@@ -78,7 +79,27 @@ for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GU
     "$PHP_BIN" -l "$TEMP_DIR/$php_path" >/dev/null
 done
 python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
+python3 -m json.tool "$TEMP_DIR/$CARD_INDEX_PATH" >/dev/null
 python3 -m json.tool "$TEMP_DIR/$DUI_DATA_PATH" >/dev/null
+
+python3 - "$TEMP_DIR/$CARD_INDEX_PATH" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding='utf-8') as source:
+    catalog = json.load(source)
+
+herbs = catalog.get('herbs', [])
+ids = [herb.get('id') for herb in herbs]
+if catalog.get('version') != 2:
+    raise SystemExit(f"ERROR: versión del índice={catalog.get('version')!r}; se esperaba 2")
+if catalog.get('total') != 304 or len(herbs) != 304:
+    raise SystemExit(f"ERROR: el índice debe contener 304 hierbas; contiene {len(herbs)}")
+if ids != list(range(1, 305)):
+    raise SystemExit('ERROR: los IDs del guideline deben ser únicos y consecutivos de 1 a 304')
+if herbs[0].get('name') != 'Ai Ye' or herbs[-1].get('name') != 'Zi Wan':
+    raise SystemExit('ERROR: el orden alfabético estable del índice no coincide con Ai Ye…Zi Wan')
+PY
 
 python3 - "$TEMP_DIR/$PROPERTIES_PATH" <<'PY'
 import json
@@ -135,6 +156,10 @@ grep -Fq "Tonify Blood" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "Tonify Qi" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "In current guideline 2026" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "Included in the current guideline 2026" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "data-guideline-roster-open" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "data-guideline-roster-modal" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "data-guideline-roster-search" "$TEMP_DIR/$GUIDE_PATH"
+grep -Fq "data-guideline-roster-item" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "\$duiyaoadditionalherbs = array_column(\$moistannex, 'name');" "$TEMP_DIR/$MOIST_PATH"
 grep -Fq "including its cross-category references" "$TEMP_DIR/$REFERENCE_PATH"
 grep -Fq "Huo Ma Ren has no Duì Yào pair in the current 51-pair roster" "$TEMP_DIR/$REFERENCE_PATH"
@@ -183,7 +208,7 @@ if [[ "$DUI_PAIR_COUNT" -ne 51 ]]; then
 fi
 
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH"; do
     target="$MOODLE_ROOT/$relative_path"
     temporary="$TEMP_DIR/$relative_path"
     backup_target="$BACKUP_DIR/$relative_path"
@@ -204,6 +229,7 @@ for php_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GU
     "$PHP_BIN" -l "$MOODLE_ROOT/$php_path" >/dev/null
 done
 python3 -m json.tool "$MOODLE_ROOT/$PROPERTIES_PATH" >/dev/null
+python3 -m json.tool "$MOODLE_ROOT/$CARD_INDEX_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$DUI_DATA_PATH" >/dev/null
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
@@ -222,5 +248,6 @@ echo "Propiedades, identidad botánica, dosis y advertencias auditadas"
 echo "Categorías 13–15: monografías formales, anexos y mapa comparativo actualizados"
 echo "Anexos del capítulo 6: guideline vigente arriba y monografías fuente debajo"
 echo "Categoría 15: resumen funcional completo y pareja oficial 40/51 registrados"
+echo "Popup del guideline: 304 hierbas con IDs estables 001–304 y búsqueda"
 echo "Hai Zao, Zao Jiao Ci, Ting Li Zi y Zi Su Zi: perfiles verificados y completos"
 echo "Respaldo: $BACKUP_DIR"

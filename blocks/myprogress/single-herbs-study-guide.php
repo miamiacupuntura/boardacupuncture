@@ -65,15 +65,21 @@ $normalizeherbname = static function(string $value): string {
 };
 $cardindex = null;
 $guidelineherbkeys = [];
+$guidelineherbroster = [];
 $cardindexpath = __DIR__ . '/single-herb-card-index.json';
 if (is_readable($cardindexpath)) {
     $decodedcardindex = json_decode(file_get_contents($cardindexpath), true);
     if (is_array($decodedcardindex)) {
         $cardindex = $decodedcardindex;
-        foreach ($cardindex['herbs'] ?? [] as $herbcard) {
+        foreach ($cardindex['herbs'] ?? [] as $herbposition => $herbcard) {
             $herbname = (string)($herbcard['name'] ?? '');
             if ($herbname !== '') {
                 $guidelineherbkeys[$normalizeherbname($herbname)] = true;
+                $guidelineherbroster[] = [
+                    'id' => (int)($herbcard['id'] ?? ($herbposition + 1)),
+                    'name' => $herbname,
+                    'latin' => (string)($herbcard['latin'] ?? ''),
+                ];
             }
         }
     }
@@ -923,7 +929,14 @@ ob_start();
 .single-herbs-guide__eyebrow{margin:0 0 6px;color:#08746f;font-size:13px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .single-herbs-guide h2{margin:0 0 9px;font-size:clamp(29px,4vw,42px);line-height:1.12}
 .single-herbs-guide__lead{max-width:760px;margin:0;color:#5b6b79;font-size:16px;line-height:1.6}
-.single-herbs-guide__marker-note{margin:7px 0 0;color:#075e54;font-size:13px;font-weight:800}
+.single-herbs-guide__marker-note{display:inline-flex;align-items:center;gap:8px;margin:7px 0 0;padding:0;border:0;background:transparent;color:#075e54;font-size:13px;font-weight:800;text-align:left;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;cursor:pointer}
+.single-herbs-guide__marker-note:hover{color:#0b817d}.single-herbs-guide__marker-count{display:inline-flex;min-width:31px;height:23px;align-items:center;justify-content:center;padding:0 7px;border-radius:999px;background:#dff2ee;color:#0d665e;font-size:11px;text-decoration:none}
+.single-herbs-guide__roster-modal[hidden]{display:none!important}.single-herbs-guide__roster-modal{position:fixed;z-index:10000;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.72)}
+.single-herbs-guide__roster-dialog{display:flex;width:min(980px,100%);max-height:min(88vh,850px);flex-direction:column;overflow:hidden;border:1px solid #d4dee4;border-radius:15px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.32)}
+.single-herbs-guide__roster-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:22px 24px 17px;border-bottom:1px solid #e1e8ec;background:linear-gradient(135deg,#eef8f6,#f8fbff)}.single-herbs-guide__roster-header h3{margin:0 0 5px;color:#123246;font-size:24px}.single-herbs-guide__roster-header p{margin:0;color:#5b6b79;line-height:1.45}
+.single-herbs-guide__roster-close{display:inline-flex;width:40px;height:40px;flex:0 0 40px;align-items:center;justify-content:center;border:1px solid #bdcbd4;border-radius:50%;background:#fff;color:#334155;font-size:25px;line-height:1;cursor:pointer}.single-herbs-guide__roster-close:hover{background:#edf4f6}
+.single-herbs-guide__roster-tools{padding:15px 24px 11px}.single-herbs-guide__roster-search{display:block;color:#17364a;font-size:13px;font-weight:900}.single-herbs-guide__roster-search input{display:block;width:100%;min-height:44px;margin-top:6px;padding:9px 12px;border:1px solid #aebbc5;border-radius:8px;background:#fff;color:#17232a;font-size:15px}.single-herbs-guide__roster-count{margin:9px 0 0;color:#60717e;font-size:13px;font-weight:800}
+.single-herbs-guide__roster-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:0;padding:0 24px 24px;overflow:auto;list-style:none}.single-herbs-guide__roster-item[hidden]{display:none}.single-herbs-guide__roster-item a{display:grid;grid-template-columns:55px minmax(0,1fr);gap:10px;align-items:center;min-height:58px;padding:9px 11px;border:1px solid #dce4e8;border-radius:9px;background:#fbfcfd;color:inherit;text-decoration:none}.single-herbs-guide__roster-item a:hover{border-color:#0b817d;background:#f2faf8;text-decoration:none}.single-herbs-guide__roster-id{display:inline-flex;align-items:center;justify-content:center;padding:6px 5px;border-radius:6px;background:#dff2ee;color:#0d665e;font-size:11px;font-weight:900;letter-spacing:.04em}.single-herbs-guide__roster-name{display:block;color:#17364a;font-weight:900}.single-herbs-guide__roster-latin{display:block;margin-top:2px;color:#6b7b87;font-size:12px;font-style:italic}
 .single-herbs-guide__actions{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
 .single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .single-herbs-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
@@ -985,6 +998,7 @@ ob_start();
 .single-herbs-guide__bensky-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.single-herbs-guide__bensky-card{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #2563eb;border-radius:11px;background:#fff}.single-herbs-guide__bensky-card h5{margin:0;padding:15px 17px;background:#eff6ff;color:#174ea6}.single-herbs-guide__bensky-card table{width:100%;border-collapse:collapse;font-size:13px}.single-herbs-guide__bensky-card th,.single-herbs-guide__bensky-card td{padding:10px 12px;border-top:1px solid #e4eaee;text-align:left;vertical-align:top;line-height:1.45}.single-herbs-guide__bensky-card th{width:31%;color:#0d665e}.single-herbs-guide__bensky-source{margin-top:14px;padding:12px 15px;border-left:4px solid #2563eb;border-radius:7px;background:#eff6ff;color:#36536f;font-size:13px;line-height:1.5}
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{align-items:flex-start;margin-top:16px}.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{justify-content:flex-start}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-guide__functional-summary,.single-herbs-properties__controls,.single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs{grid-template-columns:1fr}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
+@media(max-width:720px){.single-herbs-guide__roster-modal{padding:10px}.single-herbs-guide__roster-dialog{max-height:94vh}.single-herbs-guide__roster-header{padding:18px 17px 14px}.single-herbs-guide__roster-header h3{font-size:20px}.single-herbs-guide__roster-tools{padding:13px 17px 10px}.single-herbs-guide__roster-list{grid-template-columns:1fr;padding:0 17px 18px}}
 @media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid,.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid,.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid,.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:1fr}.single-herbs-intro__nature-scale{grid-template-columns:1fr}.single-herbs-intro__nature-scale span{padding:9px}}
 </style>
@@ -997,7 +1011,10 @@ ob_start();
             <p class="single-herbs-guide__lead"><?php echo s($ises
                 ? 'Conecta patrones de categoría, pistas clínicas decisivas, comparaciones y memoria activa para reconocer cada hierba en el Board.'
                 : 'Connect category patterns, decisive clinical clues, comparisons and active recall to recognize each herb on the Board.'); ?></p>
-            <p class="single-herbs-guide__marker-note"><?php echo s($ises ? '* Incluida en el guideline vigente 2026' : '* Included in the current guideline 2026'); ?></p>
+            <button class="single-herbs-guide__marker-note" type="button" data-guideline-roster-open aria-haspopup="dialog" aria-controls="single-herbs-guideline-roster" aria-expanded="false">
+                <span><?php echo s($ises ? '* Incluida en el guideline vigente 2026 · ver listado' : '* Included in the current guideline 2026 · view list'); ?></span>
+                <span class="single-herbs-guide__marker-count" aria-label="<?php echo s(($ises ? 'Total de hierbas: ' : 'Total herbs: ') . count($guidelineherbroster)); ?>"><?php echo count($guidelineherbroster); ?></span>
+            </button>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
             <div class="single-herbs-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
@@ -1014,6 +1031,49 @@ ob_start();
             </div>
         </nav>
     </header>
+
+    <div class="single-herbs-guide__roster-modal" id="single-herbs-guideline-roster" data-guideline-roster-modal data-count-label="<?php echo s($ises ? 'hierbas mostradas' : 'herbs shown'); ?>" hidden>
+        <section class="single-herbs-guide__roster-dialog" role="dialog" aria-modal="true" aria-labelledby="single-herbs-guideline-roster-title" aria-describedby="single-herbs-guideline-roster-description" tabindex="-1">
+            <header class="single-herbs-guide__roster-header">
+                <div>
+                    <p class="single-herbs-guide__eyebrow"><?php echo s($ises ? 'Guideline vigente 2026' : 'Current guideline 2026'); ?></p>
+                    <h3 id="single-herbs-guideline-roster-title"><?php echo s($ises ? 'Listado oficial de hierbas' : 'Official herb roster'); ?></h3>
+                    <p id="single-herbs-guideline-roster-description"><?php echo s($ises
+                        ? 'Cada hierba tiene un ID estable asignado en orden alfabético. Selecciona una para abrir su ficha.'
+                        : 'Each herb has a stable ID assigned in alphabetical order. Select one to open its card.'); ?></p>
+                </div>
+                <button class="single-herbs-guide__roster-close" type="button" data-guideline-roster-close aria-label="<?php echo s($ises ? 'Cerrar listado de hierbas' : 'Close herb roster'); ?>">&times;</button>
+            </header>
+            <div class="single-herbs-guide__roster-tools">
+                <label class="single-herbs-guide__roster-search">
+                    <?php echo s($ises ? 'Buscar por ID, pinyin o nombre farmacéutico' : 'Search by ID, pinyin or pharmaceutical name'); ?>
+                    <input type="search" data-guideline-roster-search autocomplete="off" placeholder="<?php echo s($ises ? 'Ej.: 041, Chuan Bei Mu…' : 'Example: 041, Chuan Bei Mu…'); ?>">
+                </label>
+                <p class="single-herbs-guide__roster-count" data-guideline-roster-count aria-live="polite"><?php echo count($guidelineherbroster) . ' ' . s($ises ? 'hierbas mostradas' : 'herbs shown'); ?></p>
+            </div>
+            <ol class="single-herbs-guide__roster-list">
+                <?php foreach ($guidelineherbroster as $guidelineherb):
+                    $rosterparams = ['herb' => $guidelineherb['name']];
+                    if ($ises) {
+                        $rosterparams['lang'] = 'es';
+                    }
+                    $rosterurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $rosterparams);
+                    $rosterid = str_pad((string)$guidelineherb['id'], 3, '0', STR_PAD_LEFT);
+                    $rostersearch = $rosterid . ' ' . $guidelineherb['name'] . ' ' . $guidelineherb['latin'];
+                    ?>
+                    <li class="single-herbs-guide__roster-item" id="guideline-herb-<?php echo s($rosterid); ?>" data-guideline-roster-item data-guideline-roster-search-value="<?php echo s($rostersearch); ?>">
+                        <a href="<?php echo $rosterurl->out(false); ?>">
+                            <span class="single-herbs-guide__roster-id">ID <?php echo s($rosterid); ?></span>
+                            <span>
+                                <span class="single-herbs-guide__roster-name"><?php echo s($guidelineherb['name']); ?></span>
+                                <?php if ($guidelineherb['latin'] !== ''): ?><span class="single-herbs-guide__roster-latin"><?php echo s($guidelineherb['latin']); ?></span><?php endif; ?>
+                            </span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </section>
+    </div>
 
     <?php if ($requestedherbcard !== null && empty($requestedherbcard['guideNumber'])): ?>
         <section class="single-herbs-guide__requested-card" id="requested-herb-card" aria-labelledby="requested-herb-card-title">
@@ -1500,6 +1560,101 @@ ob_start();
 </main>
 <script>
 (function() {
+    const rosterTrigger = document.querySelector('[data-guideline-roster-open]');
+    const rosterModal = document.querySelector('[data-guideline-roster-modal]');
+    const rosterDialog = rosterModal ? rosterModal.querySelector('[role="dialog"]') : null;
+    const rosterClose = rosterModal ? rosterModal.querySelector('[data-guideline-roster-close]') : null;
+    const rosterSearch = rosterModal ? rosterModal.querySelector('[data-guideline-roster-search]') : null;
+    const rosterCount = rosterModal ? rosterModal.querySelector('[data-guideline-roster-count]') : null;
+    const rosterItems = rosterModal ? Array.from(rosterModal.querySelectorAll('[data-guideline-roster-item]')) : [];
+    let rosterPreviousFocus = null;
+    let previousBodyOverflow = '';
+    const normalizeRosterSearch = function(value) {
+        return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    };
+    const updateRoster = function() {
+        const query = normalizeRosterSearch(rosterSearch ? rosterSearch.value : '');
+        let visible = 0;
+        rosterItems.forEach(function(item) {
+            const matches = !query || normalizeRosterSearch(item.dataset.guidelineRosterSearchValue).includes(query);
+            item.hidden = !matches;
+            if (matches) {
+                visible += 1;
+            }
+        });
+        if (rosterCount && rosterModal) {
+            rosterCount.textContent = visible + ' ' + rosterModal.dataset.countLabel;
+        }
+    };
+    const openRoster = function() {
+        if (!rosterModal || !rosterTrigger) {
+            return;
+        }
+        rosterPreviousFocus = document.activeElement;
+        previousBodyOverflow = document.body.style.overflow;
+        rosterModal.hidden = false;
+        rosterTrigger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        updateRoster();
+        window.requestAnimationFrame(function() {
+            (rosterSearch || rosterDialog).focus();
+        });
+    };
+    const closeRoster = function() {
+        if (!rosterModal || rosterModal.hidden) {
+            return;
+        }
+        rosterModal.hidden = true;
+        if (rosterTrigger) {
+            rosterTrigger.setAttribute('aria-expanded', 'false');
+        }
+        document.body.style.overflow = previousBodyOverflow;
+        if (rosterPreviousFocus && typeof rosterPreviousFocus.focus === 'function') {
+            rosterPreviousFocus.focus();
+        }
+    };
+    if (rosterTrigger && rosterModal) {
+        rosterTrigger.addEventListener('click', function() {
+            if (rosterModal.hidden) {
+                openRoster();
+            } else {
+                closeRoster();
+            }
+        });
+        rosterClose.addEventListener('click', closeRoster);
+        rosterModal.addEventListener('click', function(event) {
+            if (event.target === rosterModal) {
+                closeRoster();
+            }
+        });
+        rosterSearch.addEventListener('input', updateRoster);
+        rosterModal.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeRoster();
+                return;
+            }
+            if (event.key !== 'Tab') {
+                return;
+            }
+            const focusable = Array.from(rosterModal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(function(element) {
+                return !element.closest('[hidden]');
+            });
+            if (!focusable.length) {
+                return;
+            }
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        });
+    }
+
     const requestedHerb = <?php echo json_encode($requestedherbcard['name'] ?? '', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
     const guidelineHerbs = new Set(<?php echo json_encode(array_keys($guidelineherbkeys), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>);
     const normalizeHerb = function(value) {

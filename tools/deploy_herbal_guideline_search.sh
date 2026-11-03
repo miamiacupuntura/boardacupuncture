@@ -155,8 +155,10 @@ done
 "$PHP_BIN" -l "$TEMP_DIR/single-herbs-study-guide-es.php" >/dev/null
 "$PHP_BIN" -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
-    if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) {
-        fwrite(STDERR, "ERROR: el índice de tarjetas no contiene las 304 hierbas.\n");
+    $herbs = $data["herbs"] ?? [];
+    $ids = array_column($herbs, "id");
+    if (($data["version"] ?? 0) !== 2 || ($data["total"] ?? 0) !== 304 || count($herbs) !== 304 || $ids !== range(1, 304)) {
+        fwrite(STDERR, "ERROR: el índice no contiene las 304 hierbas con IDs consecutivos.\n");
         exit(1);
     }
 ' "$TEMP_DIR/single-herb-card-index.json"
@@ -184,6 +186,9 @@ grep -q "Included in the current Board guideline" "$TEMP_DIR/guideline-search.js
 grep -q "calm-shen-chapter-10" "$TEMP_DIR/guideline-search.js"
 grep -q "single-herb-card-index.json" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "data-guideline-roster-open" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "data-guideline-roster-modal" "$TEMP_DIR/single-herbs-study-guide.php"
+grep -q "data-guideline-roster-item" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "focus' => 'properties" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "single-herbs-properties-table.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -q "Master herb properties table" "$TEMP_DIR/single-herbs-properties-table.php"
@@ -354,6 +359,8 @@ grep -q "guideline-return.js?v=20261101-2" "$TARGET_DIR/chinese-herbal-medicine.
 grep -q "guideline-return.js?v=20261101-2" "$TARGET_DIR/chinese-herbal-medicine-es.html"
 grep -q "single-herb-card-index.json" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "guidelineHerbs" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "data-guideline-roster-open" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
+grep -q "data-guideline-roster-modal" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q '"total": 304' "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json"
 grep -q "single-herbs-properties-table.php" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -q "Master herb properties table" "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php"
