@@ -17,6 +17,7 @@ FILES=(
     "blocks/myprogress/single-herb-card-index.json"
     "blocks/myprogress/single-herb-properties.json"
     "blocks/myprogress/single-herbs-properties-table.php"
+    "blocks/myprogress/single-herbs-safety-dispensing.php"
 )
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -57,6 +58,7 @@ for relative_path in "${FILES[@]}"; do
         && "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-seventeen.php" \
         && "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-eighteen.php" \
         && "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" \
+        && "$relative_path" != "blocks/myprogress/single-herbs-safety-dispensing.php" \
         && ! -f "$target" ]]; then
         echo "ERROR: no se encontró el archivo activo $target"
         exit 1
@@ -71,6 +73,7 @@ done
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-eighteen.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-properties.json" >/dev/null
 
@@ -81,6 +84,7 @@ CHAPTER_NINETEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-n
 INDEX_FILE="$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
 PROPERTIES_FILE="$TEMP_DIR/blocks/myprogress/single-herb-properties.json"
 PROPERTIES_TABLE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-properties-table.php"
+SAFETY_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php"
 GUIDE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php"
 
 grep -Fq "Board guideline atlas: 21 official herbs" "$CHAPTER_FILE"
@@ -90,6 +94,10 @@ grep -Fq "focus' => 'bensky4'" "$GUIDE_FILE"
 grep -Fq "single-herbs-properties__sort-button" "$GUIDE_FILE"
 grep -Fq "data-properties-sort" "$PROPERTIES_TABLE_FILE"
 grep -Fq "data-properties-category-filter" "$PROPERTIES_TABLE_FILE"
+grep -Fq "focus === 'safety_dispensing'" "$GUIDE_FILE"
+grep -Fq "single-herbs-safety-dispensing.php" "$GUIDE_FILE"
+grep -Fq "data-safety-category-filter" "$SAFETY_FILE"
+grep -Fq "data-safety-topic-filter" "$SAFETY_FILE"
 grep -Fq "single-herbs-bensky-chapter-seventeen.php" "$GUIDE_FILE"
 grep -Fq "focus' => 'bensky17'" "$GUIDE_FILE"
 grep -Fq "single-herbs-bensky-chapter-eighteen.php" "$GUIDE_FILE"
@@ -190,6 +198,9 @@ if not gu_ya or gu_ya.get('latin') != 'Setariae (Oryzae) Fructus germinatus':
     raise SystemExit('ERROR: Gu Ya no coincide con Appendix A')
 if len({row['benskyCategory']['code'] for row in index_rows}) != 33:
     raise SystemExit('ERROR: se esperaban 33 categorías Bensky')
+safety_rows = [row for row in property_rows if all((row.get('safetyNote') or {}).get(key) for key in ('en', 'es'))]
+if len(safety_rows) < 180:
+    raise SystemExit(f'ERROR: solo se detectaron {len(safety_rows)} notas de seguridad bilingües estructuradas')
 PY
 
 mkdir -p "$BACKUP_DIR"
@@ -213,6 +224,7 @@ done
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-eighteen.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-nineteen.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-properties-table.php" >/dev/null
+"$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-safety-dispensing.php" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json" >/dev/null
 
@@ -228,5 +240,6 @@ echo "Capítulo 19: 0 perfiles oficiales · 12 sustancias por toxicidad · 5 de 
 echo "Preguntas: formato unificado Yang + Bensky y controles abrir/cerrar en las 34 tarjetas"
 echo "Pop-up por tarjeta: listado oficial filtrado, buscador, enlaces directos y estado vacío verificados"
 echo "Tabla maestra: 304 hierbas oficiales · 33 categorías Bensky · orden y filtro por categoría verificados"
+echo "Seguridad y dispensación: categoría, dosis, preparación, toxicidad, embarazo, interacciones y sustitutos verificados"
 echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT · capítulo 18=$CHAPTER_EIGHTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"

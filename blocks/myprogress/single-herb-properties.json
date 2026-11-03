@@ -32,6 +32,10 @@
                 "es": "Hígado, Bazo, Riñón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Inappropriate for bleeding from Heat without Cold. Moxa smoke and direct application require safety precautions.",
+                "es": "Inapropiada para sangrado por Calor sin Frío. Humo de moxa y aplicación directa requieren precauciones."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -55,6 +59,10 @@
                 "es": "Estómago, Intestino Grueso, Pulmón"
             },
             "dose": "0.1–0.3 g/day; correctly defatted preparation only",
+            "safetyNote": {
+                "en": "Very toxic, specialist-only and never for self-treatment. Contraindicated in pregnancy and weakness; do not combine with Qian Niu Zi. Raw seeds, oil and vapors are hazardous.",
+                "es": "Muy tóxica, solo para especialistas y nunca para automedicación. Contraindicada en embarazo y debilidad; no combinar con Qian Niu Zi. Las semillas crudas, el aceite y los vapores son peligrosos."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -78,6 +86,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Avoid with Yin-deficiency Heat or Damp-Heat; remove the woody core according to preparation standards.",
+                "es": "Evitar con Calor por deficiencia de Yin o Humedad-Calor; retirar núcleo leñoso según normas de preparación."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -101,6 +113,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -124,6 +140,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Prepared Stemona is preferred internally. Avoid with loose stool from Spleen deficiency; stop if chest burning, mucosal dryness, dizziness, rapid breathing, nausea or abdominal pain occurs. Overdose may inhibit the respiratory center.",
+                "es": "Para uso interno se prefiere Stemona preparada. Evitar con heces sueltas por deficiencia de Bazo; suspender ante ardor torácico, sequedad de mucosas, mareo, respiración rápida, náusea o dolor abdominal. La sobredosis puede inhibir el centro respiratorio."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -147,6 +167,10 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Crush and add near the end of decoction; warm aromatics can injure Yin and fluids if overused.",
+                "es": "Triturar y añadir casi al final de la decocción; las aromáticas tibias pueden lesionar Yin y líquidos si se abusa."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -170,6 +194,10 @@
                 "es": "Riñón, Pulmón"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -193,6 +221,10 @@
                 "es": "Corazón, Pulmón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -216,6 +248,10 @@
                 "es": "Hígado"
             },
             "dose": "3–9 g in decoction; 1–1.5 g as powder",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -239,6 +275,10 @@
                 "es": "Hígado, Estómago, Intestino Grueso, Intestino Delgado"
             },
             "dose": "15–60 g",
+            "safetyNote": {
+                "en": "Cold and clearing; use cautiously with Spleen/Stomach deficiency-Cold or chronic loose stools.",
+                "es": "Fría y depurativa; usar con precaución ante deficiencia-Frío de Bazo/Estómago o heces sueltas crónicas."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -262,6 +302,10 @@
                 "es": "Pulmón, Estómago, Hígado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Traditionally incompatible with Wu Tou/Fu Zi-type aconites. Do not trap pathogens in an un-drained abscess.",
+                "es": "Tradicionalmente incompatible con aconitos tipo Wu Tou/Fu Zi. No encerrar patógenos en un absceso sin drenar."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -285,6 +329,10 @@
                 "es": "Hígado, Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -308,6 +356,10 @@
                 "es": "Intestino Grueso, Hígado, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously in pregnancy or in patients with marked Spleen/Stomach deficiency and chronic diarrhea.",
+                "es": "Usar con precaución en embarazo o en pacientes con deficiencia marcada de Bazo/Estómago y diarrea crónica."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -331,6 +383,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Acrid and irritating; decoct only briefly (about five minutes). Avoid with chronic Lung-deficiency cough, Yin Fire, Stomach Fire, gastrointestinal sensitivity or skin allergy; topical excess can blister.",
+                "es": "Acre e irritante; decoctar solo brevemente (unos cinco minutos). Evitar en tos crónica por deficiencia de Pulmón, Fuego de Yin, Fuego de Estómago, sensibilidad gastrointestinal o alergia cutánea; el exceso tópico puede ampollar."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -354,6 +410,10 @@
                 "es": "Pulmón, Estómago, Vejiga"
             },
             "dose": "9–30 g; larger fresh-herb doses are traditional",
+            "safetyNote": {
+                "en": "Cold; caution in Spleen-Stomach deficiency Cold or frequent clear urination.",
+                "es": "Fría; cautela en Frío por deficiencia de Bazo-Estómago u orina clara frecuente."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -377,6 +437,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "The formal header is acrid, sweet and slightly warm; some commentary also describes bitterness. It can irritate the gastric mucosa: avoid with gastric disorders or bleeding tendency; dry-fried and honey-prepared forms moderate it.",
+                "es": "El encabezado formal es acre, dulce y ligeramente tibia; algunos comentarios también describen amargor. Puede irritar la mucosa gástrica: evitar en trastornos gástricos o tendencia hemorrágica; las preparaciones tostada y con miel la moderan."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -400,6 +464,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Its sour/cold restraint may be unsuitable with severe Cold, diarrhea or an unresolved pathogen; assess bleeding and pregnancy carefully.",
+                "es": "Su contención ácida/fría puede ser inadecuada con Frío grave, diarrea o patógeno no resuelto; evaluar sangrado y embarazo cuidadosamente."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -423,6 +491,10 @@
                 "es": "Hígado, Estómago, Intestino Grueso"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 12 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -446,6 +518,10 @@
                 "es": "Pulmón, Estómago, Riñón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach deficiency, poor appetite or diarrhea from Cold.",
+                "es": "Usar con precaución ante deficiencia de Bazo/Estómago, poco apetito o diarrea por Frío."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -469,6 +545,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach deficiency-Cold or chronic weakness without Damp-Heat.",
+                "es": "Usar con precaución ante deficiencia-Frío de Bazo/Estómago o debilidad crónica sin Humedad-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -492,6 +572,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -515,6 +599,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Warm and drying; use cautiously with Yin/fluid deficiency, dry thirst or constipation without Dampness.",
+                "es": "Tibia y secante; cautela con deficiencia de Yin/líquidos, sed seca o estreñimiento sin Humedad."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -538,6 +626,10 @@
                 "es": "Corazón, Riñón, Intestino Grueso"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -561,6 +653,10 @@
                 "es": "Corazón, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Cold and clearing; use cautiously with Spleen/Stomach deficiency-Cold or chronic diarrhea.",
+                "es": "Fría y depurativa; usar con precaución ante deficiencia-Frío de Bazo/Estómago o diarrea crónica."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -584,6 +680,10 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Internal use requires properly processed Ban Xia. Raw herb is toxic; avoid with bleeding or Yin-deficiency dry cough. Sedative effects may be intensified with barbiturates.",
+                "es": "El uso interno requiere Ban Xia correctamente procesada. La cruda es tóxica; evitar en sangrado o tos seca por deficiencia de Yin. Los barbitúricos pueden intensificar la sedación."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -607,6 +707,10 @@
                 "es": "Hígado, Pulmón, Estómago"
             },
             "dose": "15–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -630,6 +734,10 @@
                 "es": "Estómago, Intestino Grueso"
             },
             "dose": "1.5–3 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -653,6 +761,10 @@
                 "es": "Vejiga, Hígado, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -676,6 +788,10 @@
                 "es": "Vejiga"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -699,6 +815,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "9–24 g; pre-decoct",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -722,6 +842,10 @@
                 "es": "Intestino Grueso, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -745,6 +869,10 @@
                 "es": "Corazón, Bazo"
             },
             "dose": "0.03–0.1 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Less than 0.1 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -768,6 +896,10 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Add near the end of the decoction. Use cautiously with Yin deficiency, spontaneous sweating or depleted fluids.",
+                "es": "Añadir al final de la decocción. Usar con precaución ante deficiencia de Yin, sudoración espontánea o líquidos agotados."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -791,6 +923,10 @@
                 "es": "Riñón, Bazo"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -814,6 +950,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Toxic; correct processing and dose matter. Avoid prolonged use and use caution with liver disease.",
+                "es": "Tóxica; importan el procesamiento y la dosis. Evitar uso prolongado y tener cautela en enfermedad hepática."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -837,6 +977,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Warm and drying; avoid or combine carefully with Yin deficiency, fluid injury or excessive sweating.",
+                "es": "Tibia y secante; evitar o combinar con cuidado en deficiencia de Yin, lesión de líquidos o sudoración excesiva."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -860,6 +1004,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Warm and drying; avoid in Heat, Yin deficiency or fluid injury. Crush before use and protect volatile oils.",
+                "es": "Tibia y secante; evitar en Calor, deficiencia de Yin o lesión de líquidos. Triturar y proteger aceites volátiles."
+            },
             "doseSource": null,
             "appendixDose": "Up to 3 g",
             "benskyReference": null
@@ -883,6 +1031,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Strongly warm and drying; avoid when Heat or fluid deficiency predominates.",
+                "es": "Fuertemente tibia y secante; evitar cuando predominan Calor o deficiencia de líquidos."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -906,6 +1058,10 @@
                 "es": "Corazón, Hígado, Riñón, Bazo"
             },
             "dose": "1.5–3 g study range; prolonged pre-decoction",
+            "safetyNote": {
+                "en": "Only properly processed product under expert supervision. Never self-dose; avoid pregnancy. Cardiac and neurologic toxicity can be fatal.",
+                "es": "Solo producto debidamente procesado bajo supervisión experta. Nunca automedicarse; evitar en embarazo. La toxicidad cardíaca y neurológica puede ser mortal."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -929,6 +1085,10 @@
                 "es": "Pulmón, Hígado, Intestino Grueso"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Cold/astringent; caution with deficiency-Cold bleeding or Blood stasis without Heat.",
+                "es": "Fría/astringente; cautela en sangrado por deficiencia-Frío o estasis sin Calor."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -952,6 +1112,10 @@
                 "es": "Hígado, Vesícula Biliar"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with Liver-Yang rising, Yin deficiency, bleeding or excessive upward movement.",
+                "es": "Usar con precaución ante ascenso de Yang de Hígado, deficiencia de Yin, sangrado o movimiento ascendente excesivo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -975,6 +1139,10 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Use cautiously during pregnancy and in patients without a Wind-Heat presentation.",
+                "es": "Usar con precaución durante el embarazo y en pacientes sin una presentación de Viento-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -998,6 +1166,10 @@
                 "es": "Vejiga, Riñón, Hígado, Pulmón"
             },
             "dose": "9–15 g; decoct in a bag",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1021,6 +1193,10 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Warm and drying; use cautiously with Yin or fluid deficiency, dry cough or Heat.",
+                "es": "Tibia y secante; usar con cautela en deficiencia de Yin o líquidos, tos seca o Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1044,6 +1220,10 @@
                 "es": "Bazo, Estómago, Riñón"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": "Use cautiously with Qi deficiency sinking or Yin-deficiency Heat; add near the end because it is aromatic.",
+                "es": "Usar con cautela en hundimiento por deficiencia de Qi o Calor por deficiencia de Yin; añadir al final por ser aromática."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -1067,6 +1247,10 @@
                 "es": "Hígado"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously in pregnancy, heavy menstrual bleeding or bleeding without stasis.",
+                "es": "Usar con precaución en embarazo, sangrado menstrual abundante o sangrado sin estasis."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1090,6 +1274,10 @@
                 "es": "Intestino Grueso, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1113,6 +1301,10 @@
                 "es": "Corazón, Intestino Delgado"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1136,6 +1328,10 @@
                 "es": "Pulmón, Corazón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Sweet and moistening; use cautiously with Cold-Damp Phlegm or weak digestion.",
+                "es": "Dulce y humectante; usar con cautela en Flema-Humedad fría o digestión débil."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1159,6 +1355,10 @@
                 "es": "Hígado, Estómago, Intestino Delgado, Vejiga"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Toxic and irritating to the Stomach; avoid prolonged or high-dose use, pregnancy, and weak/cold digestion.",
+                "es": "Tóxica e irritante para Estómago; evitar uso prolongado o dosis altas, embarazo y digestión débil/fría."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1182,6 +1382,10 @@
                 "es": "Vejiga, Corazón, Intestino Delgado"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1205,6 +1409,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1228,6 +1436,10 @@
                 "es": "Corazón, Hígado, Riñón, Bazo"
             },
             "dose": "1.5–3 g; prepared form only",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1251,6 +1463,10 @@
                 "es": "Intestino Grueso, Pulmón, Intestino Delgado, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1274,6 +1490,10 @@
                 "es": "Hígado, Vesícula Biliar, Pericardio"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1297,6 +1517,10 @@
                 "es": "Intestino Grueso, Estómago, Hígado"
             },
             "dose": "6–9 g",
+            "safetyNote": {
+                "en": "Cold and strongly astringent; avoid with Spleen deficiency Cold or pregnancy unless specifically supervised. Excess or prolonged use may be toxic.",
+                "es": "Fría y muy astringente; evitar con Frío por deficiencia de Bazo o embarazo salvo supervisión. Uso excesivo/prolongado puede ser tóxico."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1320,6 +1544,10 @@
                 "es": "Hígado"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1343,6 +1571,10 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "9–30 g; crush and predecoct",
+            "safetyNote": {
+                "en": "“Ci Zhi” in the supplied list is treated as the Ci Shi spelling variant. Only authenticated, heavy-metal-tested material is acceptable; avoid prolonged unsupervised use.",
+                "es": "“Ci Zhi” en la lista se trata como variante de Ci Shi. Solo material autenticado y analizado para metales pesados; evitar uso prolongado sin supervisión."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -1366,6 +1598,10 @@
                 "es": "Corazón, Riñón, Bazo"
             },
             "dose": "9–27 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1389,6 +1625,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-chapter-1",
             "appendixDose": null,
             "benskyReference": "p. 34"
@@ -1412,6 +1652,10 @@
                 "es": "Bazo, Estómago, Intestino Grueso, Intestino Delgado"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with Qi deficiency or frequent urination; persistent ascites requires medical evaluation.",
+                "es": "Usar con cautela en deficiencia de Qi u orina frecuente; ascitis persistente requiere evaluación médica."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1435,6 +1679,10 @@
                 "es": "Corazón, Intestino Grueso, Hígado, Estómago"
             },
             "dose": "3–12 g",
+            "safetyNote": {
+                "en": "Raw Da Huang is added late for a stronger purgative effect; prolonged cooking weakens it. Wine-processing directs upward, while charred Da Huang emphasizes bleeding and stasis. Short-term professional use only.",
+                "es": "Da Huang cruda se añade al final para una purga más fuerte; la cocción prolongada la debilita. Procesada con vino dirige arriba, mientras carbonizada enfatiza sangrado y estasis. Solo uso profesional de corta duración."
+            },
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -1458,6 +1706,10 @@
                 "es": "Hígado, Bazo, Corazón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1481,6 +1733,10 @@
                 "es": "Corazón, Pulmón, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Very cold; use cautiously with Spleen/Stomach deficiency-Cold or chronic loose stools.",
+                "es": "Muy fría; usar con precaución ante deficiencia-Frío de Bazo/Estómago o heces sueltas crónicas."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1504,6 +1760,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–12 fruits",
+            "safetyNote": {
+                "en": "Sweet and cloying; avoid large amounts with Dampness, food stagnation, Phlegm, abdominal distension or dental/metabolic concerns.",
+                "es": "Dulce y empalagosa; evitar grandes cantidades con Humedad, estancamiento alimentario, Flema, distensión o problemas dentales/metabólicos."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1527,6 +1787,10 @@
                 "es": "Hígado, Corazón"
             },
             "dose": "9–30 g; crush and predecoct",
+            "safetyNote": {
+                "en": "Very heavy, bitter and cold; may injure the Stomach and may contain trace arsenic. Avoid large doses, prolonged use and pregnancy; require verified quality.",
+                "es": "Muy pesada, amarga y fría; puede lesionar Estómago y contener trazas de arsénico. Evitar dosis grandes, uso prolongado y embarazo; exigir calidad verificada."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -1550,6 +1814,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Use cautiously with spontaneous sweating or a deficiency presentation without exterior or Heat constraint.",
+                "es": "Usar con precaución ante sudoración espontánea o una presentación de deficiencia sin constricción exterior ni de Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": "pp. 63–65"
@@ -1573,6 +1841,10 @@
                 "es": "Corazón, Pericardio, Hígado"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with anticoagulant therapy, bleeding disorders or pregnancy; traditionally incompatible with Li Lu.",
+                "es": "Usar con precaución con terapia anticoagulante, trastornos hemorrágicos o embarazo; tradicionalmente incompatible con Li Lu."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1596,6 +1868,10 @@
                 "es": "Corazón, Estómago, Intestino Delgado"
             },
             "dose": "6–9 g",
+            "safetyNote": {
+                "en": "Use cautiously in significant fluid depletion or without a Heat presentation.",
+                "es": "Usar con precaución ante agotamiento importante de líquidos o cuando no existe un cuadro de Calor."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1619,6 +1895,10 @@
                 "es": "Hígado, Corazón, Bazo"
             },
             "dose": "4.5–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with heavy bleeding, pregnancy, diarrhea or marked Dampness; its moving warmth may aggravate Heat or active hemorrhage.",
+                "es": "Cautela con sangrado abundante, embarazo, diarrea o Humedad marcada; su calor móvil puede agravar Calor o hemorragia activa."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1642,6 +1922,10 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Still sweet and tonifying; use cautiously with unresolved Exterior disease, strong Excess or marked food/Damp accumulation.",
+                "es": "Aun es dulce y tónica; cautela con enfermedad Exterior no resuelta, Exceso fuerte o acumulación marcada de alimento/Humedad."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1665,6 +1949,10 @@
                 "es": "Corazón, Pulmón, Intestino Delgado"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1688,6 +1976,10 @@
                 "es": "Vejiga, Riñón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1711,6 +2003,10 @@
                 "es": "Pulmón, Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach deficiency, chronic loose stools or Exterior Wind-Cold.",
+                "es": "Usar con precaución ante deficiencia de Bazo/Estómago, heces sueltas crónicas o Viento-Frío exterior."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1734,6 +2030,10 @@
                 "es": "Hígado, Pulmón, Bazo, Vejiga"
             },
             "dose": "4.5–12 g",
+            "safetyNote": {
+                "en": "Animal-derived; verify identity and quality. Its cold, strongly channel-opening action requires caution with pregnancy, deficiency Cold or active bleeding.",
+                "es": "De origen animal; verificar identidad/calidad. Su acción fría y fuerte sobre canales exige cautela con embarazo, Frío deficiente o sangrado activo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1757,6 +2057,10 @@
                 "es": "Hígado, Intestino Grueso"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Cold and astringent; caution in Spleen deficiency with Cold. Extensive burns require emergency care.",
+                "es": "Fría y astringente; cautela en deficiencia de Bazo con Frío. Quemaduras extensas requieren urgencias."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1780,6 +2084,10 @@
                 "es": "Riñón, Bazo, Estómago"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -1803,6 +2111,10 @@
                 "es": "Pulmón, Riñón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Avoid during unresolved Exterior disease; authenticate carefully because quality, adulteration and sustainability vary greatly.",
+                "es": "Evitar durante enfermedad Exterior no resuelta; autenticar cuidadosamente porque calidad, adulteración y sostenibilidad varían mucho."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1826,6 +2138,10 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1849,6 +2165,10 @@
                 "es": "Vejiga, Intestino Grueso, Intestino Delgado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -1872,6 +2192,10 @@
                 "es": "Riñón, Vejiga"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Warm and drying; use cautiously with Yin or Blood deficiency.",
+                "es": "Tibia y secante; usar con cautela en deficiencia de Yin o Sangre."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1895,6 +2219,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Generally gentle; use cautiously with Yin-deficiency Heat. Pregnancy bleeding or pain requires immediate obstetric assessment.",
+                "es": "Generalmente suave; cautela con Calor por deficiencia de Yin. Sangrado o dolor en embarazo requiere evaluación obstétrica inmediata."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -1918,6 +2246,10 @@
                 "es": "Pulmón, Hígado, Riñón"
             },
             "dose": "5–15 g; dissolve separately",
+            "safetyNote": {
+                "en": "Animal-derived and very cloying; avoid with weak digestion, nausea, diarrhea, Phlegm-Dampness or unresolved Exterior disease.",
+                "es": "De origen animal y muy empalagosa; evitar con digestión débil, náusea, diarrea, Flema-Humedad o enfermedad Exterior no resuelta."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1941,6 +2273,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Strongly dispersing; avoid in pregnancy, heavy bleeding and severe deficiency without accumulation.",
+                "es": "Fuertemente dispersante; evitar en embarazo, sangrado abundante y deficiencia grave sin acumulación."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -1964,6 +2300,10 @@
                 "es": "Intestino Grueso"
             },
             "dose": "1.5–3 g",
+            "safetyNote": {
+                "en": "Infuse separately and use briefly. Excess can cause cramping and watery diarrhea; do not use as a habitual laxative.",
+                "es": "Infusionar por separado y usar brevemente. El exceso puede causar cólico y diarrea acuosa; no usar como laxante habitual."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -1987,6 +2327,10 @@
                 "es": "Vejiga, Hígado, Bazo"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2010,6 +2354,10 @@
                 "es": "Intestino Grueso, Pulmón, Bazo"
             },
             "dose": "15–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2033,6 +2381,10 @@
                 "es": "Hígado, Pulmón, Estómago, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2056,6 +2408,10 @@
                 "es": "Corazón, Bazo, Pulmón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2079,6 +2435,10 @@
                 "es": "Riñón, Hígado"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2102,6 +2462,10 @@
                 "es": "Corazón, Bazo"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2125,6 +2489,10 @@
                 "es": "Corazón"
             },
             "dose": "15–30 g",
+            "safetyNote": {
+                "en": "Do not suppress sweating from active Heat, Exterior disease or other excess causes without treating the cause.",
+                "es": "No suprimir sudor por Calor activo, Exterior u otras causas de exceso sin tratar la raíz."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -2148,6 +2516,10 @@
                 "es": "Corazón, Riñón, Bazo"
             },
             "dose": "3–15 g study range; prolonged pre-decoction",
+            "safetyNote": {
+                "en": "Only authenticated, properly processed Fu Zi under qualified supervision. Prolonged decoction is essential; numbness, weakness, dizziness, nausea or arrhythmia requires emergency care.",
+                "es": "Solo Fu Zi autenticada y debidamente procesada bajo supervisión profesional. La cocción prolongada es esencial; entumecimiento, debilidad, mareo, náusea o arritmia requiere urgencias."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2171,6 +2543,10 @@
                 "es": "Corazón, Pulmón, Bazo, Estómago; todos los canales"
             },
             "dose": "2–10 g",
+            "safetyNote": {
+                "en": "Excess or prolonged intake can cause sodium/water retention, hypertension, low potassium and arrhythmia; major medication interactions are possible.",
+                "es": "Exceso o uso prolongado puede causar retención de sodio/agua, hipertensión, potasio bajo y arritmia; puede tener interacciones medicamentosas importantes."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2194,6 +2570,10 @@
                 "es": "Corazón, Pulmón, Bazo, Estómago"
             },
             "dose": "3–12 g",
+            "safetyNote": {
+                "en": "Avoid with Yin deficiency, Blood Heat, dry cough or pregnancy Heat. It is hot and drying.",
+                "es": "Evitar con deficiencia de Yin, Calor en Sangre, tos seca o Calor en embarazo. Es caliente y secante."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2217,6 +2597,10 @@
                 "es": "Riñón, Intestino Grueso, Pulmón"
             },
             "dose": "0.5–1.5 g",
+            "safetyNote": {
+                "en": "Toxic and specialist-only. Traditionally incompatible with Gan Cao; avoid in pregnancy and weakness. Study range only.",
+                "es": "Tóxica y solo para especialistas. Tradicionalmente incompatible con Gan Cao; evitar en embarazo y debilidad. Rango solo para estudio."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2240,6 +2624,10 @@
                 "es": "Vejiga, Vaso Gobernador"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-chapter-1",
             "appendixDose": null,
             "benskyReference": "p. 22"
@@ -2263,6 +2651,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Use only for true Cold; avoid with Stomach Fire, Yin deficiency or Heat vomiting.",
+                "es": "Usar solo para Frío verdadero; evitar con Fuego de Estómago, deficiencia de Yin o vómito por Calor."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -2286,6 +2678,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with excessive sweating or a Cold Stomach with vomiting.",
+                "es": "Usar con precaución ante sudoración excesiva o Estómago frío con vómitos."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2309,6 +2705,10 @@
                 "es": "Pulmón, Riñón"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2332,6 +2732,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2355,6 +2759,10 @@
                 "es": "Hígado, Pulmón, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2378,6 +2786,10 @@
                 "es": "Hígado, Pericardio"
             },
             "dose": "6–15 g; add near the end",
+            "safetyNote": {
+                "en": "Prolonged boiling weakens its active constituents, so add late. Use cautiously with pronounced Cold or significant deficiency without Heat.",
+                "es": "La cocción prolongada debilita sus componentes; añadir tarde. Cautela con Frío marcado o deficiencia importante sin Calor."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -2401,6 +2813,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Trauma, suspected fracture or neurologic compromise needs imaging and medical care; avoid indiscriminate use with Heat or active bleeding.",
+                "es": "Trauma, sospecha de fractura o compromiso neurológico requiere imágenes y atención médica; evitar uso indiscriminado con Calor o sangrado activo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2424,6 +2840,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Do not mistake gentleness for an indication to treat persistent obstruction without evaluation.",
+                "es": "No confundir suavidad con indicación para tratar obstrucción persistente sin evaluación."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2447,6 +2867,10 @@
                 "es": "Pulmón, Estómago, Intestino Grueso"
             },
             "dose": "9–21 g",
+            "safetyNote": {
+                "en": "Cold and moistening; avoid with Spleen deficiency, loose stool or Cold-Phlegm.",
+                "es": "Fría y humectante; evitar en deficiencia de Bazo, heces sueltas o Flema-Fría."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -2470,6 +2894,10 @@
                 "es": "Pulmón, Estómago, Intestino Grueso"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Cold and moistening; use cautiously with loose stool or Cold-Phlegm.",
+                "es": "Fría y humectante; usar con cautela en heces sueltas o Flema-Fría."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2493,6 +2921,10 @@
                 "es": "Pulmón, Estómago, Intestino Grueso"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Avoid with diarrhea or marked Spleen deficiency.",
+                "es": "Evitar con diarrea o deficiencia marcada de Bazo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2516,6 +2948,10 @@
                 "es": "Corazón, Riñón, Hígado"
             },
             "dose": "9–24 g; pre-decoct",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2539,6 +2975,10 @@
                 "es": "Corazón, Pulmón, Vejiga"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2562,6 +3002,10 @@
                 "es": "Vejiga, Intestino Delgado"
             },
             "dose": "6–15 g; decoct in a bag",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2585,6 +3029,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2608,6 +3056,10 @@
                 "es": "Hígado"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Use cautiously in deficient patients; verify botanical identity.",
+                "es": "Usar con cautela en pacientes deficientes; verificar identidad botánica."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2631,6 +3083,10 @@
                 "es": "Riñón, Hígado, Pulmón, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2654,6 +3110,10 @@
                 "es": "Vejiga, Bazo, Riñón"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2677,6 +3137,10 @@
                 "es": "Riñón, Hígado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2700,6 +3164,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "“He Huang Pi” in the supplied list is treated as the He Huan Pi spelling variant. Because it invigorates Blood, use cautiously in pregnancy or active bleeding.",
+                "es": "“He Huang Pi” en la lista se trata como variante de He Huan Pi. Por vigorizar Sangre, usar con cautela en embarazo o sangrado activo."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -2723,6 +3191,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2746,6 +3218,10 @@
                 "es": "Riñón, Pulmón, Intestino Grueso"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2769,6 +3245,10 @@
                 "es": "Hígado, Bazo, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Distinguish the ordinary leaf from charred leaf and other lotus parts; they are not interchangeable.",
+                "es": "Diferencia la hoja común de la carbonizada y de otras partes del loto; no son intercambiables."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2792,6 +3272,10 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Avoid early in cough with Exterior pathogen or Phlegm and in acute Damp-Heat diarrhea.",
+                "es": "Evitar temprano en tos con Exterior/Flema y en diarrea aguda por Humedad-Calor."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -2815,6 +3299,10 @@
                 "es": "Hígado, Riñón, Intestino Grueso"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Avoid or reduce with chronic loose stool or Dampness; food allergy and product quality still matter.",
+                "es": "Evitar o reducir con heces sueltas crónicas o Humedad; también importan alergia alimentaria y calidad del producto."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -2838,6 +3326,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2861,6 +3353,10 @@
                 "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Qi-moving and descending; use cautiously in pregnancy or marked Qi deficiency without stagnation.",
+                "es": "Mueve y desciende Qi; usar con cautela en embarazo o deficiencia marcada de Qi sin estancamiento."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2884,6 +3380,10 @@
                 "es": "Estómago, Intestino Grueso"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2907,6 +3407,10 @@
                 "es": "Riñón, Bazo, Estómago"
             },
             "dose": "1.5–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2930,6 +3434,10 @@
                 "es": "Estómago, Vejiga"
             },
             "dose": "9–15 g; decoct in a bag",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -2953,6 +3461,10 @@
                 "es": "Hígado, Intestino Grueso"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Cold; caution in deficiency-Cold bleeding and weak digestion. Persistent rectal bleeding requires evaluation.",
+                "es": "Fría; cautela en sangrado por deficiencia-Frío y digestión débil. Sangrado rectal persistente requiere evaluación."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -2976,6 +3488,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -2999,6 +3515,10 @@
                 "es": "Riñón, Vejiga, Intestino Grueso"
             },
             "dose": "3–12 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen deficiency, poor appetite, loose stools or Lower-Jiao Cold.",
+                "es": "Usar con precaución ante deficiencia de Bazo, poco apetito, heces sueltas o Frío del Jiao Inferior."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3022,6 +3542,10 @@
                 "es": "Riñón, Pulmón, Bazo"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3045,6 +3569,10 @@
                 "es": "Corazón, Hígado, Estómago, Intestino Grueso"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": "Very bitter, cold and drying; prolonged or excessive use can injure Stomach Qi, Yin and Yang.",
+                "es": "Muy amarga, fría y secante; el uso prolongado o excesivo puede lesionar Qi, Yin y Yang de Estómago."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -3068,6 +3596,10 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Do not trap an active Exterior pathogen or unresolved toxic swelling. Use carefully with Yin deficiency Heat or strong Qi stagnation.",
+                "es": "No encerrar patógeno Exterior activo ni hinchazón tóxica no resuelta. Cautela con Calor por deficiencia de Yin o estancamiento fuerte de Qi."
+            },
             "doseSource": null,
             "appendixDose": "Up to 20 g",
             "benskyReference": null
@@ -3091,6 +3623,10 @@
                 "es": "Pulmón, Vesícula Biliar, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach Cold or pregnancy without a Heat presentation.",
+                "es": "Usar con precaución ante Frío de Bazo/Estómago o embarazo sin cuadro de Calor."
+            },
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -3114,6 +3650,10 @@
                 "es": "Intestino Grueso, Bazo, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen deficiency, chronic loose stools or marked Dampness. This is a seed medicine, not recreational cannabis.",
+                "es": "Usar con precaución ante deficiencia de Bazo, heces sueltas crónicas o Humedad marcada. Es una semilla medicinal, no cannabis recreativo."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -3137,6 +3677,10 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Its volatile oils favor shorter cooking or late addition; use cautiously with Yin deficiency or pronounced dryness.",
+                "es": "Sus aceites volátiles favorecen cocción corta o adición tardía; usar con cautela en deficiencia de Yin o sequedad marcada."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3160,6 +3704,10 @@
                 "es": "Bazo, Estómago, Intestino Delgado, Vejiga"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Strongly disperses accumulation; use carefully when there is marked Spleen-Stomach deficiency without retained food.",
+                "es": "Dispersa acumulación con fuerza; usar con cuidado en deficiencia marcada de Bazo-Estómago sin alimento retenido."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3183,6 +3731,10 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3206,6 +3758,10 @@
                 "es": "Bazo, Hígado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Caution in pregnancy, bleeding disorders and Yin-deficiency Heat.",
+                "es": "Cautela en embarazo, trastornos hemorrágicos y Calor por deficiencia de Yin."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3229,6 +3785,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Its ascending, dispersing action is inappropriate when pathogenic Qi is already rushing upward, lower-burner Yin is deficient and floating, or a lower-burner pathogen must descend. Overdose may cause nausea and vomiting.",
+                "es": "Su acción ascendente y dispersante es inapropiada cuando Qi patógeno ya asciende en rebelión, Yin del Jiao Inferior es deficiente y flotante, o un patógeno inferior debe descender. La sobredosis puede causar náusea y vómito."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3252,6 +3812,10 @@
                 "es": "Vejiga, Vesícula Biliar, Riñón, Hígado"
             },
             "dose": "15–60 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 60 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3275,6 +3839,10 @@
                 "es": "Pulmón, Corazón, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach deficiency and chronic loose stools.",
+                "es": "Usar con precaución ante deficiencia de Bazo/Estómago y heces sueltas crónicas."
+            },
             "doseSource": null,
             "appendixDose": "Up to 60 g",
             "benskyReference": null
@@ -3298,6 +3866,10 @@
                 "es": "Riñón, Vejiga, Intestino Grueso"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -3321,6 +3893,10 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "3–10 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3344,6 +3920,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -3367,6 +3947,10 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Avoid or combine carefully in dry cough, Yin deficiency or Phlegm-Heat.",
+                "es": "Evitar o combinar con cuidado en tos seca, deficiencia de Yin o Flema-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3390,6 +3974,10 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen or Stomach deficiency and poor appetite.",
+                "es": "Usar con precaución ante deficiencia de Bazo o Estómago y poco apetito."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3413,6 +4001,10 @@
                 "es": "Hígado, Riñón, Intestino Grueso"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Its laxative effect may worsen diarrhea, dehydration or low blood pressure.",
+                "es": "Su efecto laxante puede agravar diarrea, deshidratación o presión baja."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3436,6 +4028,10 @@
                 "es": "Corazón, Hígado, Estómago, Intestino Grueso, Vejiga"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Bitter, cold and drying; use cautiously with Spleen/Stomach deficiency-Cold or without a Damp-Heat presentation.",
+                "es": "Amarga, fría y secante; usar con precaución ante deficiencia-Frío de Bazo/Estómago o sin un cuadro de Humedad-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3459,6 +4055,10 @@
                 "es": "Pulmón"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Warm in the formal header; commentary also describes a moistening or cooling tendency. Pyrrolizidine alkaloids make product quality and duration critical: avoid prolonged or high-dose unsupervised use.",
+                "es": "Tibia en el encabezado formal; el comentario también describe tendencia humectante o refrescante. Los alcaloides pirrolizidínicos hacen críticas la calidad y duración: evitar uso prolongado o dosis altas sin supervisión."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3482,6 +4082,10 @@
                 "es": "Riñón, Hígado, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3505,6 +4109,10 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Traditionally said to reduce the tonic effect of Ren Shen; use cautiously in Qi deficiency without stagnation.",
+                "es": "Tradicionalmente se considera que reduce el efecto tónico de Ren Shen; usar con cautela en deficiencia de Qi sin estancamiento."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -3528,6 +4136,10 @@
                 "es": "Corazón, Pulmón, Vesícula Biliar"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach deficiency, diarrhea or sores that have already ruptured from deficiency.",
+                "es": "Usar con precaución ante deficiencia de Bazo/Estómago, diarrea o lesiones ya rotas por deficiencia."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -3551,6 +4163,10 @@
                 "es": "Corazón, Riñón"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Avoid when leakage is caused by Damp-Heat, active infection or another unresolved excess pattern.",
+                "es": "Evitar cuando la pérdida se debe a Humedad-Calor, infección activa u otro exceso no resuelto."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3574,6 +4190,10 @@
                 "es": "Corazón, Riñón, Bazo"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Avoid with constipation, food stagnation or unresolved Damp-Heat diarrhea.",
+                "es": "Evitar con estreñimiento, estancamiento de alimentos o diarrea por Humedad-Calor no resuelta."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -3597,6 +4217,10 @@
                 "es": "Corazón, Riñón"
             },
             "dose": "1.5–3 g",
+            "safetyNote": {
+                "en": "Do not confuse Lian Zi Xin with Lian Zi seed, Lian Xu stamen or He Ye leaf; the lotus parts are not interchangeable.",
+                "es": "No confundas Lian Zi Xin con la semilla Lian Zi, el estambre Lian Xu o la hoja He Ye; las partes del loto no son intercambiables."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3620,6 +4244,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "1.5–3 g in decoction; 0.3–0.6 g as powder",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3643,6 +4271,10 @@
                 "es": "Corazón, Hígado, Pulmón"
             },
             "dose": "3–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -3666,6 +4298,10 @@
                 "es": "Riñón, Intestino Grueso, Pericardio"
             },
             "dose": "1.5–3 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -3689,6 +4325,10 @@
                 "es": "Hígado, Vesícula Biliar, Vejiga"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Strongly bitter and cold; short, appropriate use is essential in patients with weak Spleen/Stomach.",
+                "es": "Intensamente amarga y fría; es esencial un uso breve y apropiado en pacientes con Bazo/Estómago débiles."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3712,6 +4352,10 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "15–30 g; crush and predecoct",
+            "safetyNote": {
+                "en": "Use authenticated, contaminant-tested material. Heavy astringency can burden digestion and must not trap unresolved excess.",
+                "es": "Usar material autenticado y analizado. Su astringencia pesada puede afectar digestión y no debe encerrar exceso no resuelto."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -3735,6 +4379,10 @@
                 "es": "Corazón, Bazo"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 60 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3758,6 +4406,10 @@
                 "es": "Corazón, Estómago"
             },
             "dose": "15–60 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3781,6 +4433,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "15–30 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen or Stomach Cold and marked deficiency.",
+                "es": "Usar con precaución ante Frío de Bazo o Estómago y deficiencia marcada."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -3804,6 +4460,10 @@
                 "es": "Hígado, Intestino Grueso"
             },
             "dose": "0.6–1.5 g",
+            "safetyNote": {
+                "en": "Its unpleasant odor and concentrated nature favor pills or powder rather than decoction. Avoid prolonged or excessive use.",
+                "es": "Su olor desagradable y naturaleza concentrada favorecen píldoras o polvo en vez de decocción. Evitar uso prolongado o excesivo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3827,6 +4487,10 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -3850,6 +4514,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "1–3 g powder or separately prepared",
+            "safetyNote": {
+                "en": "Potent, warming animal product; avoid with Heat, Yin deficiency, bleeding from Heat or hypertension patterns. Verify legal, ethical and authenticated sourcing.",
+                "es": "Producto animal potente y tibio; evitar con Calor, deficiencia de Yin, sangrado por Calor o patrones hipertensivos. Verificar procedencia legal, ética y auténtica."
+            },
             "doseSource": null,
             "appendixDose": "Up to 3 g",
             "benskyReference": null
@@ -3873,6 +4541,10 @@
                 "es": "Pulmón"
             },
             "dose": "1.5–6 g; decoct in a bag",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -3896,6 +4568,10 @@
                 "es": "Pulmón, Vejiga"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -3919,6 +4595,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -3942,6 +4622,10 @@
                 "es": "Corazón, Pulmón, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen deficiency, loose stool, Dampness or Phlegm-Damp; unresolved Exterior disease can be retained by rich tonics.",
+                "es": "Cautela con deficiencia de Bazo, heces sueltas, Humedad o Flema-Humedad; las tónicas ricas pueden retener un Exterior no resuelto."
+            },
             "doseSource": null,
             "appendixDose": "Up to 20 g",
             "benskyReference": null
@@ -3965,6 +4649,10 @@
                 "es": "Bazo, Estómago, Hígado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Avoid when continued breastfeeding is desired; large doses are traditionally used to suppress lactation.",
+                "es": "Evitar cuando se desea continuar amamantando; dosis altas se usan tradicionalmente para suprimir lactancia."
+            },
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -3988,6 +4676,10 @@
                 "es": "Vejiga, Hígado, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Use cautiously with headache or eye problems from Blood or Yin deficiency without Wind-Heat.",
+                "es": "Usar con precaución en cefalea o trastornos oculares por deficiencia de Sangre o Yin sin Viento-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4011,6 +4703,10 @@
                 "es": "Estómago, Intestino Grueso"
             },
             "dose": "6–18 g",
+            "safetyNote": {
+                "en": "Dissolve into the strained decoction rather than boiling as an ordinary herb. Avoid with pregnancy, weakness or non-excess constipation.",
+                "es": "Disolver en la decocción colada en vez de hervir como una hierba común. Evitar en embarazo, debilidad o estreñimiento que no sea de exceso."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -4034,6 +4730,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -4057,6 +4757,10 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Caution in pregnancy, heavy bleeding and Spleen-Stomach weakness.",
+                "es": "Cautela en embarazo, sangrado abundante y debilidad de Bazo-Estómago."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4080,6 +4784,10 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Use cautiously in pregnancy, heavy menstruation or bleeding without stasis. It moves Blood as well as cooling it.",
+                "es": "Usar con precaución en embarazo, menstruación abundante o sangrado sin estasis. Moviliza Sangre además de enfriarla."
+            },
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -4103,6 +4811,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Avoid excessive use with hyperacidity; sourness can constrain.",
+                "es": "Evitar exceso con hiperacidez; lo ácido puede constreñir."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4126,6 +4838,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g; crush and predecoct",
+            "safetyNote": {
+                "en": "Use authenticated, contaminant-tested shell. Its heavy, cooling nature may burden weak digestion or worsen constipation.",
+                "es": "Usar concha autenticada y analizada. Su naturaleza pesada/fresca puede sobrecargar digestión débil o empeorar estreñimiento."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -4149,6 +4865,10 @@
                 "es": "Vejiga, Corazón, Intestino Delgado"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -4172,6 +4892,10 @@
                 "es": "Bazo, Estómago, Intestino Grueso, Vesícula Biliar"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Warm, pungent and drying; control dose in Yin deficiency or depleted fluids. Add late when preserving aromatic Qi movement.",
+                "es": "Tibia, acre y secante; controlar dosis en deficiencia de Yin o líquidos agotados. Añadir tarde para conservar movimiento aromático de Qi."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4195,6 +4919,10 @@
                 "es": "Hígado, Pulmón, Vesícula Biliar"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously when eye symptoms arise from Liver-Kidney Yin or Blood deficiency without Wind-Heat.",
+                "es": "Usar con precaución cuando los síntomas oculares provienen de deficiencia de Yin de Hígado-Riñón o de Sangre sin Viento-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": "p. 69"
@@ -4218,6 +4946,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–12 g, crushed",
+            "safetyNote": {
+                "en": "Its slippery nature may aggravate loose stools or Spleen deficiency diarrhea.",
+                "es": "Su naturaleza deslizante puede agravar heces sueltas o diarrea por deficiencia de Bazo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4241,6 +4973,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "0.15–0.35 g as powder; not a routine decoction herb",
+            "safetyNote": {
+                "en": "Animal-derived and restricted/specialized material; synthetic substitutes may be used. Not for Cold closure, pregnancy, collapse or unsupervised self-treatment.",
+                "es": "Material animal restringido/especializado; pueden usarse sustitutos sintéticos. No usar para cierre frío, embarazo, colapso ni autotratamiento."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4264,6 +5000,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with diarrhea, Spleen deficiency Cold or marked Dampness.",
+                "es": "Cautela con diarrea, Frío por deficiencia de Bazo o Humedad marcada."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -4287,6 +5027,10 @@
                 "es": "Pulmón, Estómago, Hígado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -4310,6 +5054,10 @@
                 "es": "Intestino Grueso, Pulmón"
             },
             "dose": "2–3 pieces",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -4333,6 +5081,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Bensky notes pyrrolizidine alkaloids and restrictions in some countries; avoid prolonged or high-dose use and verify product quality and local rules. Double the study dose when used fresh.",
+                "es": "Bensky señala alcaloides pirrolizidínicos y restricciones en algunos países; evitar uso prolongado o en dosis altas y verificar calidad del producto y normas locales. Duplicar la dosis de estudio cuando se usa fresca."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4356,6 +5108,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "The formal header is neutral although commentary emphasizes cooling and moistening. Remove the irritating fuzz or bag-decoct. Raw/fresh, honey-prepared and ginger-prepared forms shift the Heat/Cold emphasis.",
+                "es": "El encabezado formal es neutro aunque el comentario enfatiza enfriamiento y humectación. Retirar la pelusa irritante o decoctar en bolsa. Las formas cruda/fresca, con miel y con jengibre cambian el énfasis Calor/Frío."
+            },
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -4379,6 +5135,10 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Use cautiously with Yang deficiency, weak digestion or chronic loose stools.",
+                "es": "Usar con precaución ante deficiencia de Yang, digestión débil o heces sueltas crónicas."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -4402,6 +5162,10 @@
                 "es": "Hígado, Pericardio"
             },
             "dose": "3–9 g, decoct in a bag",
+            "safetyNote": {
+                "en": "Raw form moves Blood; avoid in pregnancy. Pollen must be bagged and product allergy considered.",
+                "es": "La forma cruda mueve Sangre; evitar en embarazo. El polen debe embolsarse y considerar alergia al producto."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4425,6 +5189,10 @@
                 "es": "Hígado"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -4448,6 +5216,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Bitter and descending; use cautiously with deficiency cough or Yin-fluid depletion.",
+                "es": "Amarga y descendente; usar con cautela en tos por deficiencia o agotamiento de Yin-líquidos."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4471,6 +5243,10 @@
                 "es": "Bazo, Riñón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -4494,6 +5270,10 @@
                 "es": "Vejiga, Riñón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4517,6 +5297,10 @@
                 "es": "Estómago, Hígado, Vesícula Biliar"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Its bitter-cold nature can weaken the Spleen in prolonged use.",
+                "es": "Su naturaleza amarga-fría puede debilitar el Bazo con uso prolongado."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4540,6 +5324,10 @@
                 "es": "Hígado, Vesícula Biliar, Intestino Grueso, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Use cautiously for chronic diarrhea from deficiency-Cold or when no Damp-Heat is present.",
+                "es": "Usar con precaución en diarrea crónica por deficiencia-Frío o cuando no exista Humedad-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4563,6 +5351,10 @@
                 "es": "Hígado, Pulmón, Estómago"
             },
             "dose": "1.5–3 g in powder or pill; current guideline maximum 6 g",
+            "safetyNote": {
+                "en": "Do not decoct as an ordinary root. Use cautiously with Spleen-Stomach Cold or chronic digestive weakness.",
+                "es": "No decocer como una raíz ordinaria. Usar con precaución ante Frío de Bazo-Estómago o debilidad digestiva crónica."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -4586,6 +5378,10 @@
                 "es": "Hígado, Vesícula Biliar, Riñón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Its aromatic constituents are protected by adding it late and avoiding prolonged decoction; use cautiously with weak digestion and diarrhea.",
+                "es": "Sus componentes aromáticos se protegen añadiéndola al final y evitando cocción prolongada; usar con precaución ante digestión débil y diarrea."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4609,6 +5405,10 @@
                 "es": "Hígado, Vesícula Biliar, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Strong and dispersing; short-term Excess-pattern use. Caution in Qi/Yin deficiency and pregnancy.",
+                "es": "Fuerte y dispersante; uso breve en patrones de Exceso. Cuidado en deficiencia de Qi/Yin y embarazo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4632,6 +5432,10 @@
                 "es": "Vejiga, Corazón, Intestino Delgado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -4655,6 +5459,10 @@
                 "es": "Hígado"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -4678,6 +5486,10 @@
                 "es": "Pulmón, Bazo, Corazón"
             },
             "dose": "1.5–9 g",
+            "safetyNote": {
+                "en": "Strong and somewhat cloying; avoid indiscriminate use with Excess, acute pathogen, food stagnation or severe Dampness. May interact with medications.",
+                "es": "Fuerte y algo empalagosa; evitar uso indiscriminado con Exceso, patógeno agudo, estancamiento alimentario o Humedad grave. Puede interactuar con medicamentos."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4701,6 +5513,10 @@
                 "es": "Riñón, Intestino Grueso"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Avoid with loose stool, Spleen deficiency with Dampness, Yin-deficiency Heat or constipation from true Excess Heat.",
+                "es": "Evitar con heces sueltas, deficiencia de Bazo con Humedad, Calor por deficiencia de Yin o estreñimiento por Calor de Exceso."
+            },
             "doseSource": null,
             "appendixDose": "Up to 20 g",
             "benskyReference": null
@@ -4724,6 +5540,10 @@
                 "es": "Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g; roasted and crushed late",
+            "safetyNote": {
+                "en": "Do not use for acute infectious or Damp-Heat diarrhea. Excess nutmeg can cause serious neurologic toxicity.",
+                "es": "No usar para diarrea infecciosa aguda o Humedad-Calor. El exceso de nuez moscada puede causar toxicidad neurológica grave."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4747,6 +5567,10 @@
                 "es": "Corazón, Riñón, Hígado, Bazo"
             },
             "dose": "1.5–4.5 g; add late",
+            "safetyNote": {
+                "en": "Avoid in blazing Fire, Yin deficiency with Heat, pregnancy or bleeding from Heat. Add late to preserve volatile oils.",
+                "es": "Evitar en Fuego intenso, deficiencia de Yin con Calor, embarazo o sangrado por Calor. Añadir tarde para conservar aceites volátiles."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -4770,6 +5594,10 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Caution in pregnancy, heavy bleeding and weak digestion; resin can irritate the Stomach.",
+                "es": "Cautela en embarazo, sangrado abundante y digestión débil; la resina puede irritar Estómago."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4793,6 +5621,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -4816,6 +5648,10 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "3–9 g decoction; 1–3 g powder",
+            "safetyNote": {
+                "en": "Use cautiously in pregnancy or bleeding disorders treated with anticoagulant/antiplatelet medicines; major bleeding is an emergency.",
+                "es": "Usar con cautela en embarazo o trastornos tratados con anticoagulantes/antiagregantes; sangrado mayor es una emergencia."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4839,6 +5675,10 @@
                 "es": "Pulmón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Cold and draining; avoid in Lung-Cold cough, Lung deficiency with excessive urination or watery sputum. Honey preparation moderates its cold-draining quality.",
+                "es": "Fría y drenante; evitar en tos por Frío de Pulmón, deficiencia de Pulmón con orina excesiva o esputo acuoso. La preparación con miel modera su cualidad fría y drenante."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4862,6 +5702,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Generally gentle; distinguish deficiency Bi from an acute excess pattern.",
+                "es": "Generalmente suave; distinguir Bi por deficiencia de un patrón agudo de exceso."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -4885,6 +5729,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -4908,6 +5756,10 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -4931,6 +5783,10 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with cough caused primarily by Cold or marked Yang deficiency.",
+                "es": "Usar con precaución cuando la tos se deba principalmente a Frío o exista deficiencia marcada de Yang."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4954,6 +5810,10 @@
                 "es": "Hígado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Generally gentle; use according to pattern rather than as a generic diuretic.",
+                "es": "Generalmente suave; usar según el patrón y no como diurético genérico."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4977,6 +5837,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Crush and add late to preserve aroma; use cautiously when Heat or Yin deficiency predominates.",
+                "es": "Triturar y añadir tarde para conservar aroma; usar con cautela cuando predominan Calor o deficiencia de Yin."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -5000,6 +5864,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5023,6 +5891,10 @@
                 "es": "Riñón, Hígado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5046,6 +5918,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Potentially toxic in excessive doses; use only within appropriate professional dosing and avoid prolonged use.",
+                "es": "Potencialmente tóxica en dosis excesivas; usar solo dentro de dosificación profesional apropiada y evitar uso prolongado."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5069,6 +5945,10 @@
                 "es": "Bazo, Pulmón, Riñón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Its astringency may retain an active pathogen, food stagnation or substantial Dampness; differentiate before binding.",
+                "es": "Su astringencia puede retener patógeno activo, estancamiento alimentario o Humedad importante; diferenciar antes de contener."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -5092,6 +5972,10 @@
                 "es": "Bazo, Estómago, Hígado"
             },
             "dose": "9–12 g",
+            "safetyNote": {
+                "en": "Sour and dispersing; use cautiously with gastric hyperacidity, active ulceration or pregnancy when Blood-moving is inappropriate.",
+                "es": "Ácida y dispersante; usar con cautela en hiperacidez, ulceración activa o embarazo cuando mover Sangre sea inapropiado."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -5115,6 +5999,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Avoid with Damp-Heat, painful urination or unresolved pathogen; its warm astringency can retain excess.",
+                "es": "Evitar con Humedad-Calor, micción dolorosa o patógeno no resuelto; su astringencia tibia puede retener exceso."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -5138,6 +6026,10 @@
                 "es": "Riñón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5161,6 +6053,10 @@
                 "es": "Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously in pregnancy or with Spleen deficiency and loose stools.",
+                "es": "Usar con precaución en embarazo o con deficiencia de Bazo y heces sueltas."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5184,6 +6080,10 @@
                 "es": "Corazón, Bazo, Hígado"
             },
             "dose": "0.03–0.1 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Less than 0.1 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -5207,6 +6107,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Contains fermented grain material; verify product composition when grain sensitivity matters.",
+                "es": "Contiene material de granos fermentados; verificar composición del producto cuando importe la sensibilidad a granos."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -5230,6 +6134,10 @@
                 "es": "Corazón, Hígado, Riñón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Its rich, cloying nature can aggravate Dampness, poor appetite or loose stools from Spleen deficiency.",
+                "es": "Su naturaleza rica y empalagosa puede agravar Humedad, poco apetito o heces sueltas por deficiencia de Bazo."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -5253,6 +6161,10 @@
                 "es": "Pulmón, Bazo, Estómago"
             },
             "dose": "3–10 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5276,6 +6188,10 @@
                 "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with Yin deficiency, rising Yang, wheezing or rebellious Qi.",
+                "es": "Usar con precaución ante deficiencia de Yin, ascenso de Yang, sibilancias o Qi rebelde."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -5299,6 +6215,10 @@
                 "es": "Corazón, Estómago"
             },
             "dose": "3–9 g; preserve its aromatic oils",
+            "safetyNote": {
+                "en": "Its aromatic warmth can consume Qi/Yin with excessive or prolonged use. Use cautiously with Yin deficiency, Heat signs or significant gastric irritation.",
+                "es": "Su calor aromático puede consumir Qi/Yin con uso excesivo o prolongado. Cautela con deficiencia de Yin, signos de Calor o irritación gástrica."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5322,6 +6242,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "15–60 g",
+            "safetyNote": {
+                "en": "Decoct before other ingredients. Avoid in Cold or deficiency presentations. Raw and calcined forms are not interchangeable.",
+                "es": "Decocer antes que los demás ingredientes. Evitar en cuadros de Frío o deficiencia. Las formas cruda y calcinada no son intercambiables."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5345,6 +6269,10 @@
                 "es": "Estómago, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Cold and potentially cloying; avoid with Spleen-Stomach deficiency Cold or Dampness. Use authenticated, legally sourced species.",
+                "es": "Fría y potencialmente empalagosa; evitar con Frío por deficiencia de Bazo-Estómago o Humedad. Usar especie autenticada y de origen legal."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5368,6 +6296,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g; crush and predecoct",
+            "safetyNote": {
+                "en": "Use authenticated, contaminant-tested shell and predecoct. Heavy cold material may burden weak digestion or worsen Cold/constipation.",
+                "es": "Usar concha autenticada/analizada y predecoctar. El material pesado/frío puede afectar digestión débil o empeorar Frío/estreñimiento."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -5391,6 +6323,10 @@
                 "es": "Vejiga, Pulmón"
             },
             "dose": "6–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 60 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -5414,6 +6350,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Very rich and cloying; can worsen poor appetite, abdominal distension, loose stool, Phlegm or Dampness.",
+                "es": "Muy rica y empalagosa; puede empeorar poco apetito, distensión abdominal, heces sueltas, Flema o Humedad."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -5437,6 +6377,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "15–30 g, decoct first",
+            "safetyNote": {
+                "en": "Animal-derived medicinal. Decoct first and avoid use in Cold or deficiency presentations without intense Heat.",
+                "es": "Medicinal de origen animal. Decocer primero y evitar en presentaciones de Frío o deficiencia sin Calor intenso."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5460,6 +6404,10 @@
                 "es": "Pulmón, Estómago, Hígado"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5483,6 +6431,10 @@
                 "es": "Corazón, Hígado, Vesícula Biliar, Bazo"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with marked diarrhea or an unresolved excess pattern. Sedative effects can be additive with medicines or other calming substances.",
+                "es": "Cautela con diarrea marcada o exceso no resuelto. Los efectos sedantes pueden sumarse a medicamentos u otras sustancias calmantes."
+            },
             "doseSource": null,
             "appendixDose": "Up to 20 g",
             "benskyReference": null
@@ -5506,6 +6458,10 @@
                 "es": "Hígado, Riñón, Intestino Grueso"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Avoid with loose stool, Dampness or Yin-deficiency Heat; constipation with acute pain or obstruction needs medical assessment.",
+                "es": "Evitar con heces sueltas, Humedad o Calor por deficiencia de Yin; estreñimiento con dolor agudo u obstrucción requiere evaluación."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5529,6 +6485,10 @@
                 "es": "Bazo, Pulmón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -5552,6 +6512,10 @@
                 "es": "Bazo, Estómago, Pulmón"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": "Warm and aromatic; caution with Yin-deficiency Heat. Add late to preserve volatile components.",
+                "es": "Tibia y aromática; cuidado en Calor por deficiencia de Yin. Añadir tarde para conservar componentes volátiles."
+            },
             "doseSource": null,
             "appendixDose": "Less than 0.1 g / Up to 6 g (source lists both)",
             "benskyReference": null
@@ -5575,6 +6539,10 @@
                 "es": "Corazón, Hígado, Intestino Grueso, Pulmón"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Contraindicated in pregnancy; caution with heavy bleeding, anticoagulants and peach-kernel allergy.",
+                "es": "Contraindicada en embarazo; cautela en sangrado abundante, anticoagulantes y alergia a semilla de durazno."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5598,6 +6566,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Traditionally contraindicated in pregnancy and incompatible with Wu Tou/Aconitum substances.",
+                "es": "Tradicionalmente contraindicada en embarazo e incompatible con sustancias Wu Tou/Aconitum."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -5621,6 +6593,10 @@
                 "es": "Hígado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use authenticated, sustainably sourced material. Dizziness, tremor or headache requires diagnosis; new severe neurologic symptoms are emergencies.",
+                "es": "Usar material autenticado y sostenible. Mareo, temblor o cefalea requiere diagnóstico; síntomas neurológicos nuevos/graves son emergencias."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5644,6 +6620,10 @@
                 "es": "Pulmón, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Very cold and rich; avoid with Spleen deficiency Cold, loose stool, Dampness or an unresolved Exterior pathogen.",
+                "es": "Muy fría y rica; evitar con Frío por deficiencia de Bazo, heces sueltas, Humedad o patógeno Exterior no resuelto."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -5667,6 +6647,10 @@
                 "es": "Pulmón, Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Internal use requires processed Zhi Tian Nan Xing. Avoid in pregnancy, dry Yin-deficiency cough, Heat patterns and Blood-deficiency Wind; barbiturates may intensify sedation.",
+                "es": "El uso interno requiere Zhi Tian Nan Xing procesada. Evitar en embarazo, tos seca por deficiencia de Yin, patrones de Calor y Viento por deficiencia de Sangre; los barbitúricos pueden intensificar la sedación."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5690,6 +6674,10 @@
                 "es": "Pulmón, Vejiga"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5713,6 +6701,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5736,6 +6728,10 @@
                 "es": "Hígado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5759,6 +6755,10 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "15–60 g",
+            "safetyNote": {
+                "en": "Use cautiously with significant Yin or fluid deficiency; traditionally avoid tea during administration.",
+                "es": "Usar con precaución ante deficiencia importante de Yin o líquidos; tradicionalmente se evita el té durante su administración."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5782,6 +6782,10 @@
                 "es": "Hígado, Riñón, Bazo"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Its tonifying/astringent action can retain an active pathogen, Damp-Heat or urinary obstruction.",
+                "es": "Su acción tónica/astringente puede retener patógeno activo, Humedad-Calor u obstrucción urinaria."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -5805,6 +6809,10 @@
                 "es": "Hígado, Estómago"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5828,6 +6836,10 @@
                 "es": "Vejiga"
             },
             "dose": "6–9 g",
+            "safetyNote": {
+                "en": "Use cautiously in weakness or pregnancy; avoid overuse because it is strongly dispersing.",
+                "es": "Usar con cautela en debilidad o embarazo; evitar exceso por su fuerte acción dispersante."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5851,6 +6863,10 @@
                 "es": "Hígado"
             },
             "dose": "1–3 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 3 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -5874,6 +6890,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Verify the Acanthopanacis Cortex identity; similarly named commercial bark products are not interchangeable.",
+                "es": "Verificar la identidad de Acanthopanacis Cortex; los productos comerciales de corteza con nombres semejantes no son intercambiables."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5897,6 +6917,10 @@
                 "es": "Hígado"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5920,6 +6944,10 @@
                 "es": "Hígado, Bazo, Pulmón, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Do not use early in unresolved Exterior disease, acute cough with Phlegm, food stagnation or Damp-Heat diarrhea.",
+                "es": "No usar temprano en Exterior no resuelto, tos aguda con Flema, estancamiento de alimentos o diarrea por Humedad-Calor."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5943,6 +6971,10 @@
                 "es": "Corazón, Riñón, Pulmón"
             },
             "dose": "2–6 g",
+            "safetyNote": {
+                "en": "May trap an Exterior pathogen, internal Heat or Phlegm; review medicine interactions and hepatic monitoring when clinically relevant.",
+                "es": "Puede encerrar Exterior, Calor interno o Flema; revisar interacciones y control hepático cuando corresponda."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -5966,6 +6998,10 @@
                 "es": "Vejiga, Riñón, Pulmón, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -5989,6 +7025,10 @@
                 "es": "Hígado, Bazo, Estómago, Riñón"
             },
             "dose": "1.5–4.5 g",
+            "safetyNote": {
+                "en": "Hot, drying and slightly toxic; avoid in Heat, Yin deficiency or vomiting from Stomach Fire. Use briefly and carefully.",
+                "es": "Caliente, secante y ligeramente tóxica; evitar en Calor, deficiencia de Yin o vómito por Fuego de Estómago. Uso breve y cuidadoso."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -6012,6 +7052,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "9–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6035,6 +7079,10 @@
                 "es": "Pulmón, Corazón, Riñón"
             },
             "dose": "1–3 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-chapter-1",
             "appendixDose": "Up to 3 g",
             "benskyReference": "pp. 27–29"
@@ -6058,6 +7106,10 @@
                 "es": "Corazón, Riñón, Pulmón"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 6 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -6081,6 +7133,10 @@
                 "es": "Hígado, Vesícula Biliar"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen or Stomach weakness and chronic loose stools.",
+                "es": "Usar con precaución ante debilidad de Bazo o Estómago y heces sueltas crónicas."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6104,6 +7160,10 @@
                 "es": "Pulmón, Hígado, Bazo"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Astringency can retain pathogens or stasis; use according to cause and duration.",
+                "es": "La astringencia puede retener patógenos o estasis; usar según causa y duración."
+            },
             "doseSource": null,
             "appendixDose": "Up to 60 g",
             "benskyReference": null
@@ -6127,6 +7187,10 @@
                 "es": "Riñón, Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Toxic and very hot: short-term expert use only. Avoid in pregnancy, Yin deficiency, Heat, bleeding or liver/kidney vulnerability.",
+                "es": "Tóxica y muy caliente: solo uso experto breve. Evitar en embarazo, deficiencia de Yin, Calor, sangrado o vulnerabilidad hepatorrenal."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6150,6 +7214,10 @@
                 "es": "Hígado, San Jiao"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Use cautiously when Qi movement is already weak from severe deficiency and no stagnation is present.",
+                "es": "Usar con cautela cuando el movimiento de Qi ya está débil por deficiencia grave sin estancamiento."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6173,6 +7241,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-chapter-1",
             "appendixDose": null,
             "benskyReference": "p. 37"
@@ -6196,6 +7268,10 @@
                 "es": "Hígado, Riñón, Bazo, Estómago"
             },
             "dose": "3–6 g",
+            "safetyNote": {
+                "en": "Avoid with Yin deficiency or Excess Heat; use cautiously in pregnancy unless professionally indicated.",
+                "es": "Evitar con deficiencia de Yin o Calor de Exceso; precaución en embarazo salvo indicación profesional."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6219,6 +7295,10 @@
                 "es": "Hígado, Corazón"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -6242,6 +7322,10 @@
                 "es": "Intestino Grueso, Pulmón, Estómago"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6265,6 +7349,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "3–9 g, wrapped",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6288,6 +7376,10 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Cyanogenic glycosides make it slightly toxic. Use properly prepared kernels within dose; overdose is especially dangerous in children and can cause respiratory failure.",
+                "es": "Los glucósidos cianogénicos la hacen ligeramente tóxica. Usar semillas bien preparadas dentro de dosis; la sobredosis es especialmente peligrosa en niños y puede causar insuficiencia respiratoria."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6311,6 +7403,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 20 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -6334,6 +7430,10 @@
                 "es": "Hígado, Pulmón, Estómago, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Fine hairs irritate the throat: bag-decoct. Use cautiously with Yin deficiency or debilitated patients with loose stool; honey-prepared flower moderates its dispersing quality.",
+                "es": "Los pelos finos irritan la garganta: decoctar en bolsa. Usar con cautela en deficiencia de Yin o debilidad con heces sueltas; la preparación con miel modera su dispersión."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6357,6 +7457,10 @@
                 "es": "Pulmón, Estómago, Riñón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen deficiency and loose stools. Traditionally incompatible with Li Lu.",
+                "es": "Usar con precaución ante deficiencia de Bazo y heces sueltas. Tradicionalmente incompatible con Li Lu."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -6380,6 +7484,10 @@
                 "es": "Corazón, Hígado, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6403,6 +7511,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": "Use authenticated material and review additive sedative effects. Persistent numbness, weakness or severe itching requires evaluation of the cause.",
+                "es": "Usar material autenticado y revisar sedación aditiva. Entumecimiento, debilidad o prurito grave persistente requiere evaluar la causa."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -6426,6 +7538,10 @@
                 "es": "Pulmón, Hígado"
             },
             "dose": "9–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6449,6 +7565,10 @@
                 "es": "Corazón, Hígado, Vejiga"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -6472,6 +7592,10 @@
                 "es": "Bazo, Estómago, Pulmón"
             },
             "dose": "30–60 g; dissolve in strained decoction",
+            "safetyNote": {
+                "en": "Avoid with Damp-Heat, Phlegm, vomiting, marked abdominal fullness or when concentrated sugars are inappropriate.",
+                "es": "Evitar con Humedad-Calor, Flema, vómito, plenitud abdominal marcada o cuando azúcares concentrados no sean apropiados."
+            },
             "doseSource": null,
             "appendixDose": "Up to 60 g",
             "benskyReference": null
@@ -6495,6 +7619,10 @@
                 "es": "Pulmón, Bazo, Estómago, Riñón"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 30 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -6518,6 +7646,10 @@
                 "es": "Riñón, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Warm and astringent; avoid with Damp-Heat, painful urinary difficulty, constipation or Yin-deficiency Heat.",
+                "es": "Tibia y astringente; evitar con Humedad-Calor, dificultad urinaria dolorosa, estreñimiento o Calor por deficiencia de Yin."
+            },
             "doseSource": null,
             "appendixDose": "Up to 6 g",
             "benskyReference": null
@@ -6541,6 +7673,10 @@
                 "es": "Hígado, Bazo, Vesícula Biliar, Estómago"
             },
             "dose": "9–30 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6564,6 +7700,10 @@
                 "es": "Hígado, Riñón"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": "Avoid with Yin-deficiency Heat, excessive Fire or uncontrolled hypertension patterns; may interact with cardiovascular medicines.",
+                "es": "Evitar con Calor por deficiencia de Yin, Fuego excesivo o patrones hipertensivos no controlados; puede interactuar con medicación cardiovascular."
+            },
             "doseSource": null,
             "appendixDose": "Up to 15 g",
             "benskyReference": null
@@ -6587,6 +7727,10 @@
                 "es": "Corazón, Hígado, Vesícula Biliar, Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Avoid in pregnancy; caution with bleeding and Cold deficiency. Traditionally incompatible with Ding Xiang.",
+                "es": "Evitar en embarazo; cautela en sangrado y deficiencia-Frío. Tradicionalmente incompatible con Ding Xiang."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6610,6 +7754,10 @@
                 "es": "Pulmón, Intestino Grueso"
             },
             "dose": "15–30 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen/Stomach deficiency-Cold; very large or prolonged doses may impair digestion.",
+                "es": "Usar con precaución ante deficiencia-Frío de Bazo/Estómago; dosis muy altas o prolongadas pueden perjudicar la digestión."
+            },
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -6633,6 +7781,10 @@
                 "es": "Pulmón, Estómago"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": "Up to 15 g",
             "benskyReference": "Bensky materia-medica monograph"
@@ -6656,6 +7808,10 @@
                 "es": "Corazón, Riñón, Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Can irritate the gastric mucosa and increase respiratory secretions; use cautiously with gastritis, ulcer disease or significant nausea.",
+                "es": "Puede irritar mucosa gástrica y aumentar secreciones respiratorias; cautela con gastritis, úlcera o náusea importante."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6679,6 +7835,10 @@
                 "es": "Hígado, Estómago, Pulmón"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6702,6 +7862,10 @@
                 "es": "Hígado, Bazo"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Avoid in pregnancy and use cautiously with heavy bleeding or no stasis.",
+                "es": "Evitar en embarazo y usar con cautela en sangrado abundante o ausencia de estasis."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6725,6 +7889,10 @@
                 "es": "Riñón, Vejiga"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6748,6 +7916,10 @@
                 "es": "Pulmón, Corazón"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Cold and bitter; avoid indiscriminate use in Cold-Phlegm or Spleen deficiency.",
+                "es": "Fría y amarga; evitar uso indiscriminado en Flema-Fría o deficiencia de Bazo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6771,6 +7943,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "0.3–1 g as finely ground powder; do not decoct like a shell",
+            "safetyNote": {
+                "en": "Use authenticated pharmaceutical-grade pearl powder. Confirm identity, purity and appropriate route; do not substitute cosmetic material.",
+                "es": "Usar polvo de perla farmacéutico autenticado. Confirmar identidad, pureza y vía; no sustituir material cosmético."
+            },
             "doseSource": null,
             "appendixDose": "Up to 1 g",
             "benskyReference": null
@@ -6794,6 +7970,10 @@
                 "es": "Bazo, Estómago"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Still moves Qi downward; use cautiously in pregnancy and marked Spleen-Stomach deficiency.",
+                "es": "Aun mueve Qi hacia abajo; usar con cautela en embarazo y deficiencia marcada de Bazo-Estómago."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6817,6 +7997,10 @@
                 "es": "Pulmón, Estómago, Riñón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": "Its cold, moistening nature may aggravate loose stools from Spleen deficiency.",
+                "es": "Su naturaleza fría y humectante puede agravar heces sueltas por deficiencia de Bazo."
+            },
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -6840,6 +8024,10 @@
                 "es": "Bazo, Estómago, Intestino Grueso"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Forceful and descending; avoid in pregnancy and use cautiously with weak upright Qi or Spleen-Stomach deficiency.",
+                "es": "Fuerte y descendente; evitar en embarazo y usar con cautela con Qi correcto débil o deficiencia de Bazo-Estómago."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6863,6 +8051,10 @@
                 "es": "Corazón, Pulmón, San Jiao"
             },
             "dose": "6–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with loose stools from Spleen deficiency. Raw Zhi Zi clears Heat more strongly; charred Zhi Zi is selected for bleeding.",
+                "es": "Usar con precaución ante heces sueltas por deficiencia de Bazo. Zhi Zi cruda aclara Calor con más fuerza; carbonizada se selecciona para sangrado."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6886,6 +8078,10 @@
                 "es": "Bazo, Riñón, Vejiga"
             },
             "dose": "6–15 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -6909,6 +8105,10 @@
                 "es": "Pulmón, Estómago, Vesícula Biliar"
             },
             "dose": "4.5–9 g",
+            "safetyNote": {
+                "en": "Cold; use cautiously with Cold-type vomiting or Spleen-Stomach deficiency.",
+                "es": "Fría; usar con cautela en vómito por Frío o deficiencia de Bazo-Estómago."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6932,6 +8132,10 @@
                 "es": "Corazón, Hígado"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": "Use cautiously with Spleen deficiency, chronic loose stools or pregnancy.",
+                "es": "Usar con precaución ante deficiencia de Bazo, heces sueltas crónicas o embarazo."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6955,6 +8159,10 @@
                 "es": "Pulmón, Bazo"
             },
             "dose": "3–9 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6978,6 +8186,10 @@
                 "es": "Intestino Grueso, Pulmón"
             },
             "dose": "6–12 g",
+            "safetyNote": {
+                "en": null,
+                "es": null
+            },
             "doseSource": "bensky-supplied-monographs",
             "appendixDose": null,
             "benskyReference": "Bensky materia-medica monograph"
@@ -7001,6 +8213,10 @@
                 "es": "Pulmón"
             },
             "dose": "5–9 g",
+            "safetyNote": {
+                "en": "Use the warm, acrid root temporarily when Heat or Yin deficiency dominates; honey preparation strengthens its Lung-moistening action for chronic dry cough.",
+                "es": "Usar temporalmente la raíz tibia y acre cuando dominan Calor o deficiencia de Yin; la preparación con miel refuerza su acción humectante de Pulmón para tos seca crónica."
+            },
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
