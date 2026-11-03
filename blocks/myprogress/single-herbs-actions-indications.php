@@ -9,14 +9,19 @@ $aitext = static function(string $english, string $spanish) use ($ises): string 
 $ailang = $ises ? 'es' : 'en';
 $aipropertiespath = __DIR__ . '/single-herb-properties.json';
 $aiindexpath = __DIR__ . '/single-herb-card-index.json';
+$aisupplementpath = __DIR__ . '/single-herb-actions-indications-supplement.json';
 $aiproperties = is_readable($aipropertiespath)
     ? json_decode((string)file_get_contents($aipropertiespath), true)
     : null;
 $aiindex = is_readable($aiindexpath)
     ? json_decode((string)file_get_contents($aiindexpath), true)
     : null;
+$aisupplement = is_readable($aisupplementpath)
+    ? json_decode((string)file_get_contents($aisupplementpath), true)
+    : null;
 $aipropertyrows = is_array($aiproperties) ? ($aiproperties['herbs'] ?? []) : [];
 $aiindexrows = is_array($aiindex) ? ($aiindex['herbs'] ?? []) : [];
+$aisupplementrows = is_array($aisupplement) ? ($aisupplement['herbs'] ?? []) : [];
 
 $ainormalize = static function(string $value): string {
     $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value) ?: $value;
@@ -168,13 +173,15 @@ $aipropertiesbyname = [];
 foreach ($aipropertyrows as $aipropertyrow) {
     $aipropertiesbyname[$ainormalize((string)($aipropertyrow['name'] ?? ''))] = $aipropertyrow;
 }
+$aisupplementbyname = [];
+foreach ($aisupplementrows as $aisupplementname => $aisupplementrow) {
+    $aisupplementbyname[$ainormalize((string)$aisupplementname)] = $aisupplementrow;
+}
 
 $aicategoryoptions = [];
 $aipreparedrows = [];
-$aiscanherbs = 0;
-$aiscanrowcount = 0;
-$aisummaryherbs = 0;
 $aimissingherbs = 0;
+$aipaircount = 0;
 foreach ($aiindexrows as $aiposition => $aiindexrow) {
     $ainame = (string)($aiindexrow['name'] ?? '');
     $aikey = $ainormalize($ainame);
@@ -184,26 +191,35 @@ foreach ($aiindexrows as $aiposition => $aiindexrow) {
     }
     $aipropertyrow = $aipropertiesbyname[$aikey] ?? [];
     $aipairs = [];
-    $aisource = 'missing';
     if (!empty($aiscanpairsbynormalized[$aikey])) {
         foreach ($aiscanpairsbynormalized[$aikey] as $aiscanpair) {
             $aipairs[] = ['action' => (string)$aiscanpair[0], 'indication' => (string)$aiscanpair[1]];
         }
-        $aisource = 'scan';
-        $aiscanherbs++;
-        $aiscanrowcount += count($aipairs);
     } else {
         $aiaction = trim((string)($aipropertyrow['actionSummary'][$ailang] ?? ''));
         $aiindication = trim((string)($aipropertyrow['indicationSummary'][$ailang] ?? ''));
         if ($aiaction !== '' && $aiindication !== '') {
             $aipairs[] = ['action' => $aiaction, 'indication' => $aiindication];
-            $aisource = 'profile';
-            $aisummaryherbs++;
+        } else if (!empty($aisupplementbyname[$aikey][$ailang])) {
+            foreach ($aisupplementbyname[$aikey][$ailang] as $aisupplementpair) {
+                if (!is_array($aisupplementpair) || count($aisupplementpair) < 2) {
+                    continue;
+                }
+                $aipairs[] = [
+                    'action' => trim((string)$aisupplementpair[0]),
+                    'indication' => trim((string)$aisupplementpair[1]),
+                ];
+            }
+            if (!$aipairs) {
+                $aipairs[] = ['action' => '', 'indication' => ''];
+                $aimissingherbs++;
+            }
         } else {
             $aipairs[] = ['action' => '', 'indication' => ''];
             $aimissingherbs++;
         }
     }
+    $aipaircount += count($aipairs);
     $aipreparedrows[] = [
         'position' => $aiposition,
         'name' => $ainame,
@@ -211,7 +227,6 @@ foreach ($aiindexrows as $aiposition => $aiindexrow) {
         'categorycode' => (string)($aicategory['code'] ?? ''),
         'category' => (string)($aicategory[$ailang] ?? $aicategory['en'] ?? ''),
         'pairs' => $aipairs,
-        'source' => $aisource,
     ];
 }
 uasort($aicategoryoptions, static function(array $left, array $right) use ($ailang): int {
@@ -227,25 +242,16 @@ uasort($aicategoryoptions, static function(array $left, array $right) use ($aila
             <div>
                 <h4 id="single-herbs-ai-heading"><?php echo s($aitext('Actions and indications master table', 'Tabla maestra de acciones e indicaciones')); ?></h4>
                 <p><?php echo s($aitext(
-                    'Cross-checked against the 304-herb official roster. Every source action remains paired with its own indication and is displayed on a separate row.',
-                    'Cotejada con el roster oficial de 304 hierbas. Cada acción de la fuente permanece unida a su propia indicación y se muestra en una fila separada.'
+                    'Restricted to the 304 herbs in the official guideline and completed with the Bensky actions-and-indications summary. Each action remains paired with its indication.',
+                    'Limitada a las 304 hierbas del guideline oficial y completada con el resumen de acciones e indicaciones de Bensky. Cada acción permanece unida a su indicación.'
                 )); ?></p>
             </div>
             <div class="single-herbs-properties__stats" aria-label="<?php echo s($aitext('Table summary', 'Resumen de la tabla')); ?>">
                 <span><strong><?php echo count($aipreparedrows); ?></strong><?php echo s($aitext(' official', ' oficiales')); ?></span>
-                <span><strong><?php echo $aiscanrowcount; ?></strong><?php echo s($aitext(' literal pairs', ' parejas literales')); ?></span>
-                <span><strong><?php echo $aiscanherbs + $aisummaryherbs; ?></strong><?php echo s($aitext(' with structured text', ' con texto estructurado')); ?></span>
-                <span><strong><?php echo $aimissingherbs; ?></strong><?php echo s($aitext(' pending transcription', ' pendientes de transcripción')); ?></span>
+                <span><strong><?php echo $aipaircount; ?></strong><?php echo s($aitext(' action-indication pairs', ' pares acción-indicación')); ?></span>
+                <span><strong><?php echo $aimissingherbs; ?></strong><?php echo s($aitext(' missing', ' faltantes')); ?></span>
                 <span><strong><?php echo count($aicategoryoptions); ?></strong><?php echo s($aitext(' categories', ' categorías')); ?></span>
             </div>
-        </div>
-
-        <div class="single-herbs-properties__source-note">
-            <strong><?php echo s($aitext('Source boundary:', 'Límite de la fuente:')); ?></strong>
-            <?php echo s($aitext(
-                '“Source wording” marks literal rows transcribed from the supplied scans. “Study profile” marks the already verified bilingual summary when a literal scan row has not yet been encoded. A dash means no structured action-indication text is available; nothing has been inferred.',
-                '“Texto de la fuente” marca filas literales transcritas de las imágenes suministradas. “Perfil de estudio” marca el resumen bilingüe ya verificado cuando todavía no se ha codificado una fila literal. Un guion significa que no hay texto estructurado disponible; no se ha inferido nada.'
-            )); ?>
         </div>
 
         <div class="single-herbs-properties__controls single-herbs-ai__controls">
@@ -282,7 +288,6 @@ uasort($aicategoryoptions, static function(array $left, array $right) use ($aila
                     <th scope="col"><?php echo s($aitext('Category', 'Categoría')); ?></th>
                     <th scope="col"><?php echo s($aitext('Action', 'Acción')); ?></th>
                     <th scope="col"><?php echo s($aitext('Indication', 'Indicación')); ?></th>
-                    <th scope="col"><?php echo s($aitext('Text', 'Texto')); ?></th>
                 </tr></thead>
                 <?php foreach ($aipreparedrows as $airow):
                     $aisearchparts = [$airow['name'], $airow['latin'], $airow['category']];
@@ -291,9 +296,6 @@ uasort($aicategoryoptions, static function(array $left, array $right) use ($aila
                         $aisearchparts[] = $aipair['indication'];
                     }
                     $aisearchvalue = strtolower(implode(' ', $aisearchparts));
-                    $aisourcelabel = $airow['source'] === 'scan'
-                        ? $aitext('Source wording', 'Texto de la fuente')
-                        : ($airow['source'] === 'profile' ? $aitext('Study profile', 'Perfil de estudio') : $aitext('Not structured', 'No estructurado'));
                 ?>
                     <tbody class="single-herbs-ai__group" data-ai-row data-position="<?php echo (int)$airow['position']; ?>" data-name="<?php echo s(strtolower($airow['name'])); ?>" data-category="<?php echo s($airow['categorycode']); ?>" data-category-label="<?php echo s(strtolower($airow['category'])); ?>" data-search="<?php echo s($aisearchvalue); ?>">
                     <?php foreach ($airow['pairs'] as $aipairindex => $aipair): ?>
@@ -304,7 +306,6 @@ uasort($aicategoryoptions, static function(array $left, array $right) use ($aila
                             <?php endif; ?>
                             <td><?php echo s($aipair['action'] !== '' ? $aipair['action'] : '—'); ?></td>
                             <td><?php echo s($aipair['indication'] !== '' ? $aipair['indication'] : '—'); ?></td>
-                            <?php if ($aipairindex === 0): ?><td rowspan="<?php echo count($airow['pairs']); ?>"><span class="single-herbs-ai__source single-herbs-ai__source--<?php echo s($airow['source']); ?>"><?php echo s($aisourcelabel); ?></span></td><?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
