@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 ROSTER = ROOT / "tools" / "data" / "ncbahm_2026_appendix_a_herbs.txt"
 OUTPUT = ROOT / "blocks" / "myprogress" / "single-herb-card-index.json"
+BENSKY_CHAPTER_FOUR = ROOT / "blocks" / "myprogress" / "single-herbs-bensky-chapter-four.php"
 
 CATEGORY_FILES = {
     1: ROOT / "blocks" / "myprogress" / "single-herbs-study-guide.php",
@@ -90,6 +91,13 @@ def category_routes() -> dict[str, int]:
 
 def main() -> None:
     routes = category_routes()
+    chapter_four_names = {
+        normalized(name)
+        for name in re.findall(
+            r"'name'\s*=>\s*'([^']+)'",
+            BENSKY_CHAPTER_FOUR.read_text(encoding="utf-8"),
+        )
+    }
     entries = roster_entries()
     entries.sort(key=lambda entry: normalized(str(entry["name"])))
     routed = 0
@@ -98,7 +106,9 @@ def main() -> None:
         key = normalized(str(entry["name"]))
         guide_number = ROUTE_OVERRIDES.get(key, routes.get(key))
         entry["guideNumber"] = guide_number
-        if guide_number is not None:
+        if key in chapter_four_names:
+            entry["specialFocus"] = "bensky4"
+        if guide_number is not None or key in chapter_four_names:
             routed += 1
     payload = {
         "version": 2,

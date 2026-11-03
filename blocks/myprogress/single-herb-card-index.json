@@ -2,7 +2,7 @@
   "version": 2,
   "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
   "total": 304,
-  "routedToDetailedStudy": 204,
+  "routedToDetailedStudy": 225,
   "herbs": [
     {
       "name": "Ai Ye",
@@ -306,6 +306,7 @@
       "latin": "Dioscoreae hypoglaucae Rhizoma",
       "id": 28,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -317,6 +318,7 @@
       "latin": "Polygoni avicularis Herba",
       "id": 29,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -471,6 +473,7 @@
       "latin": "Plantaginis Semen",
       "id": 43,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -526,6 +529,7 @@
       "latin": "Phaseoli Semen",
       "id": 48,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -559,6 +563,7 @@
       "latin": "Clematidis armandii Caulis",
       "id": 51,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -790,6 +795,7 @@
       "latin": "Junci Medulla",
       "id": 72,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -801,6 +807,7 @@
       "latin": "Kochiae Fructus",
       "id": 73,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -867,6 +874,7 @@
       "latin": "Benincasae Semen",
       "id": 79,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "clear-heat-resolve-toxicity",
         "en": "Herbs that Clear Heat and Resolve Toxicity",
@@ -878,6 +886,7 @@
       "latin": "Malvae Fructus",
       "id": 80,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -977,6 +986,7 @@
       "latin": "Poria",
       "id": 89,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -1219,6 +1229,7 @@
       "latin": "Lygodii Spora",
       "id": 111,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -1263,6 +1274,7 @@
       "latin": "Stephaniae tetrandrae Radix",
       "id": 115,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -1395,6 +1407,7 @@
       "latin": "Talcum",
       "id": 127,
       "guideNumber": 8,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -1549,6 +1562,7 @@
       "latin": "Lysimachiae Herba",
       "id": 141,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -1978,6 +1992,7 @@
       "latin": "Akebiae Caulis",
       "id": 180,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -2209,6 +2224,7 @@
       "latin": "Dianthi Herba",
       "id": 201,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -2572,6 +2588,7 @@
       "latin": "Pyrrosiae Folium",
       "id": 234,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -2726,6 +2743,7 @@
       "latin": "Tetrapanacis Medulla",
       "id": 248,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -3100,6 +3118,7 @@
       "latin": "Coicis Semen",
       "id": 282,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -3122,6 +3141,7 @@
       "latin": "Artemisiae scopariae Herba",
       "id": 284,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -3210,6 +3230,7 @@
       "latin": "Alismatis Rhizoma",
       "id": 292,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",
@@ -3287,6 +3308,7 @@
       "latin": "Polyporus",
       "id": 299,
       "guideNumber": null,
+      "specialFocus": "bensky4",
       "benskyCategory": {
         "code": "drain-dampness",
         "en": "Herbs that Drain Dampness",

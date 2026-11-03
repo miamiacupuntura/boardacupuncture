@@ -146,11 +146,15 @@ if ($requestedherbcard !== null && !empty($requestedherbcard['guideNumber'])) {
         }
     }
 }
+if ($requestedherbcard !== null && !empty($requestedherbcard['specialFocus'])) {
+    $focus = (string)$requestedherbcard['specialFocus'];
+}
 
 $selected = null;
 $ismixed = $focus === 'mixed';
 $isproperties = $focus === 'properties';
 $isintroduction = $focus === 'introduction';
+$isbenskychapterfour = $focus === 'bensky4';
 if (!$ismixed && !$isproperties && !$isintroduction && $focus !== '' && ctype_digit($focus)) {
     $number = (int) $focus;
     if (isset($categories[$number])) {
@@ -396,7 +400,11 @@ $istopicthirtyone = $selected !== null
         || stripos($selectedname, 'Extinguish Wind and Stop Tremors') !== false
     );
 
-if ($isintroduction) {
+if ($isbenskychapterfour) {
+    $workspaceintro = $ises
+        ? 'Aprende a seleccionar hierbas que drenan Humedad según edema, micción dolorosa, cálculos, ictericia, lactancia, prurito y deficiencia del Bazo.'
+        : 'Learn to select Dampness-draining herbs by edema, painful urination, stones, jaundice, lactation, itching and Spleen deficiency.';
+} else if ($isintroduction) {
     $workspaceintro = $ises
         ? 'Construye una base para estudiar hierbas individuales: historia, identidad, propiedades, meridianos, dirección, combinaciones, dosis, procesamiento y seguridad.'
         : 'Build a foundation for single-herb study: history, identity, properties, channels, direction, combinations, dosage, processing and safety.';
@@ -1151,7 +1159,7 @@ ob_start();
         </section>
     </div>
 
-    <?php if ($requestedherbcard !== null && empty($requestedherbcard['guideNumber'])): ?>
+    <?php if ($requestedherbcard !== null && empty($requestedherbcard['guideNumber']) && empty($requestedherbcard['specialFocus'])): ?>
         <section class="single-herbs-guide__requested-card" id="requested-herb-card" aria-labelledby="requested-herb-card-title">
             <p class="single-herbs-guide__eyebrow"><?php echo s($ises ? 'Ficha oficial · Appendix A' : 'Official card · Appendix A'); ?></p>
             <h3 id="requested-herb-card-title"><?php echo s($requestedherbcard['name']); ?></h3>
@@ -1166,10 +1174,12 @@ ob_start();
         </section>
     <?php endif; ?>
 
-    <?php if ($selected !== null || $ismixed || $isproperties || $isintroduction): ?>
+    <?php if ($selected !== null || $ismixed || $isproperties || $isintroduction || $isbenskychapterfour): ?>
         <?php
         $selectedbenskychapter = $benskychapterlabel($selectedguidenumber);
-        $focuslabel = $isintroduction
+        $focuslabel = $isbenskychapterfour
+            ? ($ises ? 'Capítulo fuente completo' : 'Complete source chapter')
+            : ($isintroduction
             ? ($ises ? 'Fundamentos' : 'Foundations')
             : ($isproperties
             ? ($ises ? 'Referencia Board' : 'Board Reference')
@@ -1178,8 +1188,10 @@ ob_start();
             : ($selectedguidenumber !== null
                 ? (($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $selectedguidenumber
                     . ($selectedbenskychapter !== '' ? ' · ' . $selectedbenskychapter : ''))
-                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']))));
-        $focustitle = $isintroduction
+                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number'])))));
+        $focustitle = $isbenskychapterfour
+            ? ($ises ? 'Bensky, capítulo 4 · Hierbas que drenan Humedad' : 'Bensky, Chapter 4 · Herbs that Drain Dampness')
+            : ($isintroduction
             ? ($ises ? 'Introducción a las hierbas individuales' : 'Introduction to Single Herbs')
             : ($isproperties
             ? ($ises ? 'Tabla de propiedades de hierbas' : 'Herb Properties Table')
@@ -1187,7 +1199,7 @@ ob_start();
             ? ($ises ? 'Repaso final' : 'Final Review')
             : ($selectedguidenumber !== null
                 ? $stripstudyguidenumber((string) $selected['name'])
-                : $selected['name'])));
+                : $selected['name']))));
         if ($istopiceleven) {
             $focustitle = $ises
                 ? 'Expulsores drásticos descendentes (Catárticos) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
@@ -1215,7 +1227,9 @@ ob_start();
                     <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
                 </nav>
             <?php endif; ?>
-            <?php if ($isintroduction): ?>
+            <?php if ($isbenskychapterfour): ?>
+                <?php require(__DIR__ . '/single-herbs-bensky-chapter-four.php'); ?>
+            <?php elseif ($isintroduction): ?>
                 <?php require(__DIR__ . '/single-herbs-introduction.php'); ?>
             <?php elseif ($isproperties): ?>
                 <?php require(__DIR__ . '/single-herbs-properties-table.php'); ?>
@@ -1615,14 +1629,21 @@ ob_start();
                     $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $categoryparams);
                     ?>
                     <?php if ($categoryguidenumber === 12): ?>
-                        <article id="bensky-chapter-four-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" aria-label="<?php echo s($ises ? 'Bensky, capítulo 4: Hierbas que drenan Humedad' : 'Bensky Chapter 4: Herbs that Drain Dampness'); ?>">
+                        <?php
+                        $benskyfourparams = ['focus' => 'bensky4'];
+                        if ($ises) {
+                            $benskyfourparams['lang'] = 'es';
+                        }
+                        $benskyfoururl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $benskyfourparams);
+                        ?>
+                        <a id="bensky-chapter-four-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskyfoururl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 4: Hierbas que drenan Humedad' : 'Bensky Chapter 4: Herbs that Drain Dampness'); ?>">
                             <span class="single-herbs-guide__category-reference">
                                 <span class="single-herbs-guide__category-number">B4</span>
                                 <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'); ?></span>
                             </span>
                             <strong><?php echo s($ises ? 'Hierbas que drenan Humedad' : 'Herbs that Drain Dampness'); ?></strong>
-                            <small><?php echo s($ises ? 'Capítulo fuente recibido · 21 hierbas del guideline identificadas · tarjeta detallada pendiente' : 'Source chapter received · 21 guideline herbs identified · detailed card pending'); ?></small>
-                        </article>
+                            <small><?php echo s($ises ? '21 hierbas oficiales · atlas de 30 monografías · seguridad y comparaciones →' : '21 official herbs · 30-monograph atlas · safety and comparisons →'); ?></small>
+                        </a>
                     <?php endif; ?>
                     <a class="single-herbs-guide__category" href="<?php echo $categoryurl->out(false); ?>">
                         <span class="single-herbs-guide__category-reference">

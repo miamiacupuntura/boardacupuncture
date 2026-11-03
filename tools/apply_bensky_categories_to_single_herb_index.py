@@ -241,7 +241,8 @@ def main() -> None:
             herb["guideNumber"] = GUIDE_NUMBER_OVERRIDES[herb["name"]]
 
     catalog["routedToDetailedStudy"] = sum(
-        herb.get("guideNumber") is not None for herb in herbs
+        herb.get("guideNumber") is not None or bool(herb.get("specialFocus"))
+        for herb in herbs
     )
 
     catalog["benskySource"] = (
