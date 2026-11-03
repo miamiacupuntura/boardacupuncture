@@ -140,6 +140,17 @@ grep -Fq 'Safety and dispensing recall questions' "$TEMP_DIR/safety-dispensing-e
 grep -Fq 'Preguntas de repaso de seguridad y dispensación' "$TEMP_DIR/safety-dispensing-es.html"
 grep -Fq 'data-safety-open-all' "$SAFETY_FILE"
 grep -Fq 'data-safety-close-all' "$SAFETY_FILE"
+python3 - "$TEMP_DIR/safety-dispensing-en.html" "$TEMP_DIR/safety-dispensing-es.html" <<'PY'
+import sys
+
+for rendered_path in sys.argv[1:]:
+    rendered = open(rendered_path, encoding='utf-8').read()
+    questions_at = rendered.index('id="single-herbs-safety-questions"')
+    topics_at = rendered.index('class="single-herbs-safety__topics"')
+    table_at = rendered.index('class="single-herbs-properties__table-wrap"')
+    if not questions_at < topics_at < table_at:
+        raise SystemExit('ERROR: las preguntas de seguridad deben aparecer antes de los temas y la tabla')
+PY
 grep -Fq "focus === 'actions_indications'" "$GUIDE_FILE"
 grep -Fq "single-herbs-actions-indications.php" "$GUIDE_FILE"
 grep -Fq "data-ai-category-filter" "$ACTIONS_INDICATIONS_FILE"
@@ -334,7 +345,7 @@ echo "Capítulo 19: 0 perfiles oficiales · 12 sustancias por toxicidad · 5 de 
 echo "Preguntas: formato unificado Yang + Bensky y controles abrir/cerrar en las 34 tarjetas"
 echo "Pop-up por tarjeta: listado oficial filtrado, buscador, enlaces directos y estado vacío verificados"
 echo "Tabla maestra: 304 hierbas oficiales · 33 categorías Bensky · orden y filtro por categoría verificados"
-echo "Seguridad y dispensación: 304 filas completas · 0 guiones · 20 preguntas y respuestas bilingües verificadas"
+echo "Seguridad y dispensación: 20 preguntas bilingües arriba · 304 filas completas · 0 guiones"
 echo "Acciones e indicaciones: 304 hierbas del guideline · 0 faltantes · columna editorial eliminada"
 echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT · capítulo 18=$CHAPTER_EIGHTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"

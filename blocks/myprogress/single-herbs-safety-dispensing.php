@@ -253,6 +253,29 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             )); ?>
         </div>
 
+        <section class="single-herbs-guide__section single-herbs-safety__review" aria-labelledby="single-herbs-safety-questions">
+            <h4 id="single-herbs-safety-questions"><?php echo s($safetytext('Safety and dispensing recall questions', 'Preguntas de repaso de seguridad y dispensación')); ?></h4>
+            <p class="single-herbs-guide__section-lead"><?php echo s($safetytext(
+                'Answer before opening each panel. These questions test the same hierarchy used by the table: exact herb, preparation, category risk, pregnancy, interactions, identity and legal sourcing.',
+                'Responde antes de abrir cada panel. Estas preguntas evalúan la misma jerarquía de la tabla: hierba exacta, preparación, riesgo de categoría, embarazo, interacciones, identidad y origen legal.'
+            )); ?></p>
+            <div class="single-herbs-guide__final-controls" aria-label="<?php echo s($safetytext('Safety answer controls', 'Controles de respuestas de seguridad')); ?>">
+                <button type="button" data-safety-open-all><?php echo s($safetytext('Open all answers', 'Abrir todas las respuestas')); ?></button>
+                <button type="button" data-safety-close-all><?php echo s($safetytext('Close all answers', 'Cerrar todas las respuestas')); ?></button>
+            </div>
+            <div class="single-herbs-guide__recall single-herbs-safety__questions" data-safety-questions>
+                <?php foreach ($safetyquestions as $questionindex => $safetyquestion): ?>
+                    <details class="single-herbs-guide__final-question" data-safety-question>
+                        <summary>
+                            <span class="single-herbs-guide__final-number"><?php echo s($safetytext('Question', 'Pregunta') . ' ' . ($questionindex + 1)); ?></span>
+                            <span><?php echo s($safetyquestion[0]); ?></span>
+                        </summary>
+                        <div class="single-herbs-guide__final-answer"><p><?php echo s($safetyquestion[1]); ?></p></div>
+                    </details>
+                <?php endforeach; ?>
+            </div>
+        </section>
+
         <div class="single-herbs-safety__topics" aria-label="<?php echo s($safetytext('Safety and dispensing topics', 'Temas de seguridad y dispensación')); ?>">
             <article><strong><?php echo s($safetytext('Dosage', 'Dosis')); ?></strong><span><?php echo s($safetytext('Study range plus exceptional Appendix limit when supplied.', 'Rango de estudio más límite excepcional del Appendix cuando se suministra.')); ?></span></article>
             <article><strong><?php echo s($safetytext('Preparation', 'Preparación')); ?></strong><span><?php echo s($safetytext('Special decoction, wrapping, processing, raw/calcined and powder instructions.', 'Instrucciones especiales de decocción, envoltura, procesamiento, forma cruda/calcinada y polvo.')); ?></span></article>
@@ -335,29 +358,6 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
             </table>
         </div>
         <p class="single-herbs-properties__empty-results" data-safety-empty hidden><?php echo s($safetytext('No herbs match these filters.', 'Ninguna hierba coincide con estos filtros.')); ?></p>
-
-        <section class="single-herbs-guide__section single-herbs-safety__review" aria-labelledby="single-herbs-safety-questions">
-            <h4 id="single-herbs-safety-questions"><?php echo s($safetytext('Safety and dispensing recall questions', 'Preguntas de repaso de seguridad y dispensación')); ?></h4>
-            <p class="single-herbs-guide__section-lead"><?php echo s($safetytext(
-                'Answer before opening each panel. These questions test the same hierarchy used by the table: exact herb, preparation, category risk, pregnancy, interactions, identity and legal sourcing.',
-                'Responde antes de abrir cada panel. Estas preguntas evalúan la misma jerarquía de la tabla: hierba exacta, preparación, riesgo de categoría, embarazo, interacciones, identidad y origen legal.'
-            )); ?></p>
-            <div class="single-herbs-guide__final-controls" aria-label="<?php echo s($safetytext('Safety answer controls', 'Controles de respuestas de seguridad')); ?>">
-                <button type="button" data-safety-open-all><?php echo s($safetytext('Open all answers', 'Abrir todas las respuestas')); ?></button>
-                <button type="button" data-safety-close-all><?php echo s($safetytext('Close all answers', 'Cerrar todas las respuestas')); ?></button>
-            </div>
-            <div class="single-herbs-guide__recall single-herbs-safety__questions" data-safety-questions>
-                <?php foreach ($safetyquestions as $questionindex => $safetyquestion): ?>
-                    <details class="single-herbs-guide__final-question" data-safety-question>
-                        <summary>
-                            <span class="single-herbs-guide__final-number"><?php echo s($safetytext('Question', 'Pregunta') . ' ' . ($questionindex + 1)); ?></span>
-                            <span><?php echo s($safetyquestion[0]); ?></span>
-                        </summary>
-                        <div class="single-herbs-guide__final-answer"><p><?php echo s($safetyquestion[1]); ?></p></div>
-                    </details>
-                <?php endforeach; ?>
-            </div>
-        </section>
     </section>
     <script>
     (function() {
