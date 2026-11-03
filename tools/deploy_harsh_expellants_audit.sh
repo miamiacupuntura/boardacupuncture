@@ -80,6 +80,41 @@ done
 python3 -m json.tool "$TEMP_DIR/$PROPERTIES_PATH" >/dev/null
 python3 -m json.tool "$TEMP_DIR/$DUI_DATA_PATH" >/dev/null
 
+python3 - "$TEMP_DIR/$PROPERTIES_PATH" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding='utf-8') as source:
+    catalog = json.load(source)
+
+expected_counts = {
+    'verified': 180,
+    'propertiesOnly': 61,
+    'doseOnly': 21,
+    'pending': 42,
+}
+for key, expected in expected_counts.items():
+    if catalog.get(key) != expected:
+        raise SystemExit(f'ERROR: {key}={catalog.get(key)!r}; se esperaba {expected}')
+
+herbs = {item['name']: item for item in catalog['herbs']}
+expected = {
+    'Hai Zao': ('verified', '6–15 g', 'Kidney, Liver, Lung, Stomach'),
+    'Zao Jiao Ci': ('verified', '3–9 g', 'Liver, Stomach, Lung'),
+    'Ting Li Zi': ('verified', '3–9 g', 'Lung, Bladder'),
+    'Zi Su Zi': ('verified', '3–9 g', 'Large Intestine, Lung'),
+    'Qian Hu': ('verified', '3–9 g', 'Lung'),
+    'Gua Lou': ('verified', '9–21 g', 'Lung, Stomach, Large Intestine'),
+    'Pi Pa Ye': ('verified', '6–15 g', 'Lung, Stomach'),
+    'Zi Wan': ('verified', '5–9 g', 'Lung'),
+}
+for name, values in expected.items():
+    item = herbs[name]
+    actual = (item['status'], item['dose'], item['channels']['en'])
+    if actual != values:
+        raise SystemExit(f'ERROR: {name}: {actual!r}; se esperaba {values!r}')
+PY
+
 EXPECTED_TITLE='Downward Draining Harsh Expellants (Cathartics) (Gan Sui*, Hong Da Ji, Yuan Hua, Qian Niu Zi, Ba Dou*)'
 grep -Fq "$EXPECTED_TITLE" "$TEMP_DIR/$GUIDE_PATH"
 grep -Fq "Only Gan Sui and Ba Dou are in the current Board guideline" "$TEMP_DIR/$CATEGORY_PATH"
@@ -106,6 +141,11 @@ grep -Fq "Huo Ma Ren has no Duì Yào pair in the current 51-pair roster" "$TEMP
 grep -Fq "The pairs shown below do not belong to the moist-laxative category" "$TEMP_DIR/$REFERENCE_PATH"
 grep -Fq '"en": "Bitter"' "$TEMP_DIR/$PROPERTIES_PATH"
 grep -Fq '"dose": "0.1–0.3 g/day; defatted only"' "$TEMP_DIR/$PROPERTIES_PATH"
+grep -Fq "Chapter 6 recognition annex" "$TEMP_DIR/blocks/myprogress/single-herbs-category-cool-transform-phlegm.php"
+grep -Fq "Chapter 6 recognition annex" "$TEMP_DIR/blocks/myprogress/single-herbs-category-warm-transform-phlegm.php"
+grep -Fq "Chapter 6 final selection map" "$TEMP_DIR/blocks/myprogress/single-herbs-category-relieve-cough-wheezing.php"
+grep -Fq "37/51 · Ban Xia + Chen Pi" "$TEMP_DIR/blocks/myprogress/single-herbs-category-warm-transform-phlegm.php"
+grep -Fq "41/51 · Ting Li Zi + Da Zao" "$TEMP_DIR/blocks/myprogress/single-herbs-category-relieve-cough-wheezing.php"
 
 for label_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}"; do
     if grep -Fq "current Appendix A" "$TEMP_DIR/$label_path"; then
@@ -162,7 +202,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "REFERENCIAS DUÌ YÀO INSTALADAS EN TODAS LAS CATEGORÍAS"
+echo "AUDITORÍA DEL CAPÍTULO 6 Y REFERENCIAS DUÌ YÀO INSTALADAS"
 echo "Las coincidencias se calculan desde las 51 parejas vigentes"
 echo "Las categorías sin pareja muestran una nota breve con enlace al índice"
 echo "Categoría 10: seis referencias cruzadas ampliadas con su categoría principal"
@@ -171,4 +211,6 @@ echo "Con asterisco: Gan Sui y Ba Dou"
 echo "Sin asterisco: Hong Da Ji, Yuan Hua y Qian Niu Zi"
 echo "Duì Yào: ninguna de estas cinco hierbas pertenece a las 51 parejas vigentes"
 echo "Propiedades, identidad botánica, dosis y advertencias auditadas"
+echo "Categorías 13–15: monografías formales, anexos y mapa comparativo actualizados"
+echo "Hai Zao, Zao Jiao Ci, Ting Li Zi y Zi Su Zi: perfiles verificados y completos"
 echo "Respaldo: $BACKUP_DIR"

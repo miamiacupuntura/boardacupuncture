@@ -7,10 +7,10 @@
     "benskyChapterOneSource": "Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1 (user-provided excerpts)",
     "benskyMergeRule": "Bensky fills empty fields only; existing Yang-based profiles are never replaced",
     "total": 304,
-    "verified": 176,
-    "propertiesOnly": 63,
-    "doseOnly": 22,
-    "pending": 43,
+    "verified": 180,
+    "propertiesOnly": 61,
+    "doseOnly": 21,
+    "pending": 42,
     "herbs": [
         {
             "name": "Ai Ye",
@@ -329,7 +329,7 @@
                 "en": "Lung",
                 "es": "Pulmón"
             },
-            "dose": "3–6 g",
+            "dose": "3–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -364,12 +364,12 @@
             "status": "verified",
             "propertySource": "detailed-profile",
             "flavor": {
-                "en": "Acrid, bitter",
-                "es": "Acre, amarga"
+                "en": "Acrid, sweet",
+                "es": "Acre, dulce"
             },
             "temperature": {
-                "en": "warm",
-                "es": "tibia"
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
                 "en": "Lung",
@@ -2434,8 +2434,8 @@
             "status": "verified",
             "propertySource": "detailed-profile",
             "flavor": {
-                "en": "Sweet, slightly bitter",
-                "es": "Dulce, ligeramente amarga"
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
                 "en": "cold",
@@ -2445,7 +2445,7 @@
                 "en": "Lung, Stomach, Large Intestine",
                 "es": "Pulmón, Estómago, Intestino Grueso"
             },
-            "dose": "9–15 g",
+            "dose": "9–21 g",
             "doseSource": null,
             "appendixDose": "Up to 30 g",
             "benskyReference": null
@@ -2465,8 +2465,8 @@
                 "es": "fría"
             },
             "channels": {
-                "en": "Lung, Stomach",
-                "es": "Pulmón, Estómago"
+                "en": "Lung, Stomach, Large Intestine",
+                "es": "Pulmón, Estómago, Intestino Grueso"
             },
             "dose": "6–12 g",
             "doseSource": null,
@@ -2480,8 +2480,8 @@
             "status": "verified",
             "propertySource": "detailed-profile",
             "flavor": {
-                "en": "Sweet, bitter",
-                "es": "Dulce, amarga"
+                "en": "Sweet",
+                "es": "Dulce"
             },
             "temperature": {
                 "en": "cold",
@@ -2615,22 +2615,22 @@
             "name": "Hai Zao",
             "latin": "Sargassum",
             "guideNumber": null,
-            "status": "dose-only",
-            "propertySource": null,
+            "status": "verified",
+            "propertySource": "chapter-6-formal-header",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Bitter, salty",
+                "es": "Amarga, salada"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "cold",
+                "es": "fría"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Kidney, Liver, Lung, Stomach",
+                "es": "Riñón, Hígado, Pulmón, Estómago"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "6–15 g",
+            "doseSource": "chapter-6-formal-header",
             "appendixDose": "Up to 15 g",
             "benskyReference": null
         },
@@ -3446,8 +3446,8 @@
             "status": "verified",
             "propertySource": "detailed-profile",
             "flavor": {
-                "en": "Acrid, slightly bitter",
-                "es": "Acre, ligeramente amarga"
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
                 "en": "warm",
@@ -3457,7 +3457,7 @@
                 "en": "Lung",
                 "es": "Pulmón"
             },
-            "dose": "3–9 g",
+            "dose": "4.5–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4347,14 +4347,14 @@
                 "es": "Amarga"
             },
             "temperature": {
-                "en": "slightly cold",
-                "es": "ligeramente fría"
+                "en": "neutral",
+                "es": "neutra"
             },
             "channels": {
                 "en": "Lung, Stomach",
                 "es": "Pulmón, Estómago"
             },
-            "dose": "6–12 g",
+            "dose": "6–15 g",
             "doseSource": null,
             "appendixDose": "Up to 12 g",
             "benskyReference": null
@@ -4446,7 +4446,7 @@
                 "en": "Lung",
                 "es": "Pulmón"
             },
-            "dose": "6–12 g",
+            "dose": "3–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -4837,7 +4837,7 @@
                 "en": "Lung",
                 "es": "Pulmón"
             },
-            "dose": "6–12 g",
+            "dose": "6–15 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -5649,7 +5649,7 @@
         },
         {
             "name": "Tian Nan Xing",
-            "latin": "Arisaematis Rhizoma",
+            "latin": "Arisaematis Rhizoma preparatum",
             "guideNumber": 14,
             "status": "verified",
             "propertySource": "detailed-profile",
@@ -5674,8 +5674,8 @@
             "name": "Ting Li Zi",
             "latin": "Lepidii/Descurainiae Semen",
             "guideNumber": null,
-            "status": "properties-only",
-            "propertySource": "actions-indications-table",
+            "status": "verified",
+            "propertySource": "chapter-6-formal-header",
             "flavor": {
                 "en": "Acrid, bitter",
                 "es": "Acre, amarga"
@@ -5688,8 +5688,8 @@
                 "en": "Lung, Bladder",
                 "es": "Pulmón, Vejiga"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "chapter-6-formal-header",
             "appendixDose": null,
             "benskyReference": null
         },
@@ -6329,8 +6329,8 @@
                 "es": "ligeramente tibia"
             },
             "channels": {
-                "en": "Lung, Spleen, Stomach, Large Intestine",
-                "es": "Pulmón, Bazo, Estómago, Intestino Grueso"
+                "en": "Liver, Lung, Stomach, Spleen",
+                "es": "Hígado, Pulmón, Estómago, Bazo"
             },
             "dose": "3–9 g",
             "doseSource": null,
@@ -6663,22 +6663,22 @@
             "name": "Zao Jiao Ci",
             "latin": "Gleditsiae Spina",
             "guideNumber": null,
-            "status": "pending",
-            "propertySource": null,
+            "status": "verified",
+            "propertySource": "chapter-6-formal-header",
             "flavor": {
-                "en": null,
-                "es": null
+                "en": "Acrid",
+                "es": "Acre"
             },
             "temperature": {
-                "en": null,
-                "es": null
+                "en": "warm",
+                "es": "tibia"
             },
             "channels": {
-                "en": null,
-                "es": null
+                "en": "Liver, Stomach, Lung",
+                "es": "Hígado, Estómago, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "chapter-6-formal-header",
             "appendixDose": null,
             "benskyReference": null
         },
@@ -6746,7 +6746,7 @@
                 "en": "Lung, Heart",
                 "es": "Pulmón, Corazón"
             },
-            "dose": "3–9 g",
+            "dose": "4.5–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6907,7 +6907,7 @@
                 "en": "Lung, Stomach, Gallbladder",
                 "es": "Pulmón, Estómago, Vesícula Biliar"
             },
-            "dose": "6–12 g",
+            "dose": "4.5–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
@@ -6962,8 +6962,8 @@
             "name": "Zi Su Zi",
             "latin": "Perillae Fructus",
             "guideNumber": null,
-            "status": "properties-only",
-            "propertySource": "king-herbs-chart",
+            "status": "verified",
+            "propertySource": "chapter-6-formal-header",
             "flavor": {
                 "en": "Acrid",
                 "es": "Acre"
@@ -6976,8 +6976,8 @@
                 "en": "Large Intestine, Lung",
                 "es": "Intestino Grueso, Pulmón"
             },
-            "dose": null,
-            "doseSource": null,
+            "dose": "3–9 g",
+            "doseSource": "chapter-6-formal-header",
             "appendixDose": null,
             "benskyReference": null
         },
@@ -6992,14 +6992,14 @@
                 "es": "Acre, amarga"
             },
             "temperature": {
-                "en": "warm",
-                "es": "tibia"
+                "en": "slightly warm",
+                "es": "ligeramente tibia"
             },
             "channels": {
                 "en": "Lung",
                 "es": "Pulmón"
             },
-            "dose": "3–9 g",
+            "dose": "5–9 g",
             "doseSource": null,
             "appendixDose": null,
             "benskyReference": null
