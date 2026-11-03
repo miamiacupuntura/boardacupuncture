@@ -6,6 +6,7 @@ trap 'status=$?; echo "ERROR: despliegue detenido en la línea $LINENO: $BASH_CO
 REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
+GUIDELINE_DIR="${GUIDELINE_DIR:-}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups}"
 PHP_BIN="${PHP_BIN:-}"
 CATEGORY_PATH="blocks/myprogress/single-herbs-category-harsh-expellants.php"
@@ -48,7 +49,39 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
     exit 1
 fi
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH"; do
+if [[ -z "$GUIDELINE_DIR" ]]; then
+    GUIDELINE_CANDIDATES=(
+        "/var/www/acupuncturetests-study-guide/current/guidelines"
+        "$MOODLE_ROOT/study-guide/guidelines"
+        "$(dirname "$MOODLE_ROOT")/study-guide/guidelines"
+        "/var/www/html/study-guide/guidelines"
+    )
+    for candidate in "${GUIDELINE_CANDIDATES[@]}"; do
+        if [[ -f "$candidate/chinese-herbal-medicine.html" \
+                && -f "$candidate/chinese-herbal-medicine-es.html" \
+                && -f "$candidate/guidelines.css" ]]; then
+            GUIDELINE_DIR="$candidate"
+            break
+        fi
+    done
+fi
+
+if [[ -z "$GUIDELINE_DIR" ]]; then
+    ACTIVE_GUIDELINE="$(find /var/www -type f -path '*/study-guide/guidelines/chinese-herbal-medicine.html' -print -quit 2>/dev/null || true)"
+    if [[ -n "$ACTIVE_GUIDELINE" ]]; then
+        GUIDELINE_DIR="$(dirname "$ACTIVE_GUIDELINE")"
+    fi
+fi
+
+if [[ -z "$GUIDELINE_DIR" \
+        || ! -f "$GUIDELINE_DIR/chinese-herbal-medicine.html" \
+        || ! -f "$GUIDELINE_DIR/chinese-herbal-medicine-es.html" \
+        || ! -f "$GUIDELINE_DIR/guidelines.css" ]]; then
+    echo "ERROR: no se encontró la guía pública activa. Indica su ruta con GUIDELINE_DIR=/ruta/study-guide/guidelines"
+    exit 1
+fi
+
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH"; do
     if [[ ! -f "$MOODLE_ROOT/$relative_path" ]]; then
         echo "ERROR: no se encontró el archivo activo $MOODLE_ROOT/$relative_path"
         exit 1
@@ -79,6 +112,7 @@ BACKUP_DIR="$BACKUP_ROOT/single-herbs-dui-yao-$(date +%Y%m%d-%H%M%S)"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 echo "Moodle detectado: $MOODLE_ROOT"
+echo "Guía pública detectada: $GUIDELINE_DIR"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
@@ -435,16 +469,28 @@ fi
 
 mkdir -p "$BACKUP_DIR"
 for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$FORMULA_PREVIEW_PATH"; do
-    target="$MOODLE_ROOT/$relative_path"
+    case "$relative_path" in
+        study-guide/guidelines/*)
+            target="$GUIDELINE_DIR/$(basename "$relative_path")"
+            backup_target="$BACKUP_DIR/public-guidelines/$(basename "$relative_path")"
+            ;;
+        *)
+            target="$MOODLE_ROOT/$relative_path"
+            backup_target="$BACKUP_DIR/$relative_path"
+            ;;
+    esac
     temporary="$TEMP_DIR/$relative_path"
-    backup_target="$BACKUP_DIR/$relative_path"
     if [[ -f "$target" ]]; then
         mkdir -p "$(dirname "$backup_target")"
         cp -a "$target" "$backup_target"
         owner_group="$(stat -c '%u:%g' "$target")"
         file_mode="$(stat -c '%a' "$target")"
     else
-        owner_group="$(stat -c '%u:%g' "$MOODLE_ROOT/$GUIDE_PATH")"
+        if [[ "$relative_path" == study-guide/guidelines/* ]]; then
+            owner_group="$(stat -c '%u:%g' "$GUIDELINE_DIR/guidelines.css")"
+        else
+            owner_group="$(stat -c '%u:%g' "$MOODLE_ROOT/$GUIDE_PATH")"
+        fi
         file_mode="644"
     fi
     mkdir -p "$(dirname "$target")"
@@ -459,6 +505,18 @@ python3 -m json.tool "$MOODLE_ROOT/$CARD_INDEX_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$DUI_DATA_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$FORMULA_DATA_PATH" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/$FORMULA_ROSTER_PATH" >/dev/null
+
+for guideline_page in chinese-herbal-medicine.html chinese-herbal-medicine-es.html; do
+    if [[ "$(grep -o 'data-official-formula-id=' "$GUIDELINE_DIR/$guideline_page" | wc -l)" -ne 181 ]]; then
+        echo "ERROR: $GUIDELINE_DIR/$guideline_page no contiene las 181 fórmulas oficiales"
+        exit 1
+    fi
+    grep -Fq 'href="#guide-formula-roster-title"' "$GUIDELINE_DIR/$guideline_page"
+done
+if [[ "$(grep -o 'data-search=' "$GUIDELINE_DIR/$(basename "$FORMULA_PREVIEW_PATH")" | wc -l)" -ne 181 ]]; then
+    echo "ERROR: el índice público con buscador no contiene las 181 fórmulas"
+    exit 1
+fi
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -489,4 +547,5 @@ echo "Categoría 1: 13 hierbas oficiales; solo 3 entradas externas permanecen en
 echo "Hai Zao, Zao Jiao Ci, Ting Li Zi y Zi Su Zi: perfiles verificados y completos"
 echo "Appendix C 2026: 181 fórmulas oficiales con ID, pinyin y nombre inglés"
 echo "Las 63 fichas anteriores quedan identificadas únicamente como perfiles detallados internos"
+echo "Guía pública actualizada: $GUIDELINE_DIR"
 echo "Respaldo: $BACKUP_DIR"
