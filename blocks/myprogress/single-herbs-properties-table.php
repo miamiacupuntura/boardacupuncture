@@ -13,6 +13,7 @@ $categorydata = is_readable($categorypath)
     : null;
 $categorybyname = [];
 $categorycodes = [];
+$categoryoptions = [];
 foreach (is_array($categorydata) ? ($categorydata['herbs'] ?? []) : [] as $categoryrow) {
     $category = $categoryrow['benskyCategory'] ?? null;
     if (!is_array($category) || empty($categoryrow['name'])) {
@@ -21,9 +22,13 @@ foreach (is_array($categorydata) ? ($categorydata['herbs'] ?? []) : [] as $categ
     $categorybyname[(string)$categoryrow['name']] = $category;
     if (!empty($category['code'])) {
         $categorycodes[(string)$category['code']] = true;
+        $categoryoptions[(string)$category['code']] = $category;
     }
 }
 $propertylang = $ises ? 'es' : 'en';
+uasort($categoryoptions, static function(array $left, array $right) use ($propertylang): int {
+    return strcasecmp((string)($left[$propertylang] ?? ''), (string)($right[$propertylang] ?? ''));
+});
 ?>
 <?php if (!$propertyrows): ?>
     <div class="single-herbs-guide__empty"><?php echo s($ises
@@ -53,8 +58,19 @@ $propertylang = $ises ? 'es' : 'en';
         </div>
 
         <div class="single-herbs-properties__controls">
-            <label for="single-herbs-properties-search"><?php echo s($ises ? 'Buscar hierba o propiedad' : 'Search herb or property'); ?></label>
-            <input id="single-herbs-properties-search" type="search" placeholder="<?php echo s($ises ? 'Nombre, categoría, sabor, temperatura, meridiano…' : 'Name, category, flavor, temperature, channel…'); ?>" autocomplete="off">
+            <div class="single-herbs-properties__control-field">
+                <label for="single-herbs-properties-search"><?php echo s($ises ? 'Buscar hierba o propiedad' : 'Search herb or property'); ?></label>
+                <input id="single-herbs-properties-search" type="search" placeholder="<?php echo s($ises ? 'Nombre, categoría, sabor, temperatura, meridiano…' : 'Name, category, flavor, temperature, channel…'); ?>" autocomplete="off">
+            </div>
+            <div class="single-herbs-properties__control-field">
+                <label for="single-herbs-properties-category"><?php echo s($ises ? 'Filtrar por categoría' : 'Filter by category'); ?></label>
+                <select id="single-herbs-properties-category" data-properties-category-filter>
+                    <option value=""><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?> (<?php echo count($categoryoptions); ?>)</option>
+                    <?php foreach ($categoryoptions as $categorycode => $categoryoption): ?>
+                        <option value="<?php echo s($categorycode); ?>"><?php echo s((string)$categoryoption[$propertylang]); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <p class="single-herbs-properties__results" aria-live="polite"><span data-properties-count><?php echo count($propertyrows); ?></span> <?php echo s($ises ? 'hierbas visibles' : 'visible herbs'); ?></p>
         </div>
 
@@ -99,6 +115,7 @@ $propertylang = $ises ? 'es' : 'en';
                     <tr data-properties-row
                         data-original-index="<?php echo (int)$propertyindex; ?>"
                         data-category="<?php echo s((string)$categorylabel); ?>"
+                        data-category-code="<?php echo s((string)$categorycode); ?>"
                         data-herb="<?php echo s((string)$propertyrow['name']); ?>"
                         data-search="<?php echo s(strtolower($searchtext)); ?>">
                         <th scope="row"><a href="<?php echo $herburl->out(false); ?>"><?php echo s($propertyrow['name']); ?></a><small><?php echo s($propertyrow['latin']); ?></small></th>
@@ -125,6 +142,7 @@ $propertylang = $ises ? 'es' : 'en';
         const root = document.querySelector('.single-herbs-properties');
         if (!root) return;
         const input = root.querySelector('#single-herbs-properties-search');
+        const categoryFilter = root.querySelector('[data-properties-category-filter]');
         const rows = Array.from(root.querySelectorAll('[data-properties-row]'));
         const count = root.querySelector('[data-properties-count]');
         const empty = root.querySelector('[data-properties-empty]');
@@ -141,16 +159,19 @@ $propertylang = $ises ? 'es' : 'en';
         const normalize = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
         const refresh = function() {
             const query = normalize(input.value);
+            const selectedCategory = categoryFilter.value;
             let visible = 0;
             rows.forEach(function(row) {
                 const matchesQuery = !query || normalize(row.dataset.search).includes(query);
-                row.hidden = !matchesQuery;
+                const matchesCategory = !selectedCategory || row.dataset.categoryCode === selectedCategory;
+                row.hidden = !(matchesQuery && matchesCategory);
                 if (!row.hidden) visible++;
             });
             count.textContent = String(visible);
             empty.hidden = visible !== 0;
         };
         input.addEventListener('input', refresh);
+        categoryFilter.addEventListener('change', refresh);
         sortButton.addEventListener('click', function() {
             const current = sortButton.dataset.direction || 'none';
             const next = current === 'none' ? 'ascending' : (current === 'ascending' ? 'descending' : 'none');
