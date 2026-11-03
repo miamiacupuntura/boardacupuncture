@@ -386,6 +386,15 @@ if len({item.get('name') for item in formulas}) != 181:
     raise SystemExit('ERROR: el listado oficial contiene nombres de fórmulas duplicados')
 if any(not item.get('englishName') for item in formulas):
     raise SystemExit('ERROR: falta al menos un nombre inglés oficial de fórmula')
+for item in formulas:
+    category = item.get('benskyCategory')
+    if not isinstance(category, dict):
+        raise SystemExit(f"ERROR: {item.get('name')}: falta la categoría primaria de Bensky")
+    if category.get('chapter') not in range(1, 22):
+        raise SystemExit(f"ERROR: {item.get('name')}: capítulo Bensky inválido")
+    for key in ('code', 'en', 'es'):
+        if not isinstance(category.get(key), str) or not category[key].strip():
+            raise SystemExit(f"ERROR: {item.get('name')}: benskyCategory.{key} está vacío")
 if len(profiles.get('formulas', [])) != 63 or len(profiles.get('categories', [])) != 14:
     raise SystemExit('ERROR: se esperaban 63 fichas detalladas en 14 categorías internas')
 
@@ -417,6 +426,10 @@ grep -Fq "all 181 official formulas" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
 grep -Fq "\$isofficialformula" "$TEMP_DIR/$FORMULA_GUIDE_PATH"
 if [[ "$(grep -o 'data-search=' "$TEMP_DIR/$FORMULA_PREVIEW_PATH" | wc -l)" -ne 181 ]]; then
     echo "ERROR: la vista previa independiente no contiene 181 fórmulas"
+    exit 1
+fi
+if [[ "$(grep -o 'Chapter [0-9][0-9]* · Formulas' "$TEMP_DIR/$FORMULA_PREVIEW_PATH" | wc -l)" -ne 181 ]]; then
+    echo "ERROR: la vista previa independiente no muestra 181 categorías de Bensky"
     exit 1
 fi
 

@@ -160,6 +160,7 @@ a { color: inherit; }
 .guide-official-formula-roster a:hover strong { color: #075fc8; text-decoration: underline; }
 .guide-official-formula-roster a:focus-visible { border-radius: 4px; outline: 3px solid #185cca; outline-offset: 3px; }
 .guide-official-formula-roster span { color: var(--muted); }
+.guide-official-formula-category { display: block; margin-top: 7px; color: #8a4512; font-size: .68rem; font-weight: 850; line-height: 1.35; }
 .guide-formula-category { min-width: 0; overflow: hidden; border: 1px solid #d9e4eb; border-radius: 10px; background: #f8fbfc; }
 .guide-formula-category__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 15px; border-bottom: 1px solid #d9e4eb; background: #edf7f5; }
 .guide-formula-category__heading h4 { margin: 0; font-size: .96rem; line-height: 1.35; }

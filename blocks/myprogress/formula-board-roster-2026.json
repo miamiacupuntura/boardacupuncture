@@ -8,907 +8,1998 @@
     {
       "id": 1,
       "name": "Ba Zhen Tang",
-      "englishName": "Eight-Treasure Decoction"
+      "englishName": "Eight-Treasure Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 2,
       "name": "Ba Zheng San",
-      "englishName": "Eight-Herb Powder for Rectification"
+      "englishName": "Eight-Herb Powder for Rectification",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 3,
       "name": "Bai He Gu Jin Tang",
-      "englishName": "Lily Bulb Decoction to Preserve the Metal"
+      "englishName": "Lily Bulb Decoction to Preserve the Metal",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 4,
       "name": "Bai Hu Tang",
-      "englishName": "White Tiger Decoction"
+      "englishName": "White Tiger Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 5,
       "name": "Bai Tou Weng Tang",
-      "englishName": "Pulsatilla Decoction"
+      "englishName": "Pulsatilla Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 6,
       "name": "Ban Xia Bai Zhu Tian Ma Tang",
-      "englishName": "Pinellia, White Atractylodes, and Gastrodia Decoction"
+      "englishName": "Pinellia, White Atractylodes, and Gastrodia Decoction",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 7,
       "name": "Ban Xia Hou Po Tang",
-      "englishName": "Pinellia and Magnolia Bark Decoction"
+      "englishName": "Pinellia and Magnolia Bark Decoction",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 8,
       "name": "Ban Xia Xie Xin Tang",
-      "englishName": "Pinellia Decoction to Drain the Epigastrium"
+      "englishName": "Pinellia Decoction to Drain the Epigastrium",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 9,
       "name": "Bao He Wan",
-      "englishName": "Preserve Harmony Pill"
+      "englishName": "Preserve Harmony Pill",
+      "benskyCategory": {
+        "chapter": 18,
+        "code": "reduce-food-stagnation",
+        "en": "Formulas that Reduce Food Stagnation",
+        "es": "Fórmulas que reducen el estancamiento de alimentos"
+      }
     },
     {
       "id": 10,
       "name": "Bei Mu Gua Lou San",
-      "englishName": "Fritillaria and Trichosanthes Fruit Powder"
+      "englishName": "Fritillaria and Trichosanthes Fruit Powder",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 11,
       "name": "Bu Fei Tang",
-      "englishName": "Tonify the Lungs Decoction"
+      "englishName": "Tonify the Lungs Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 12,
       "name": "Bu Yang Huan Wu Tang",
-      "englishName": "Tonify the Yang to Restore Five (-Tenths) Decoction"
+      "englishName": "Tonify the Yang to Restore Five (-Tenths) Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 13,
       "name": "Bu Zhong Yi Qi Tang",
-      "englishName": "Tonify the Middle to Augment the Qi Decoction"
+      "englishName": "Tonify the Middle to Augment the Qi Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 14,
       "name": "Cang Er Zi San",
-      "englishName": "Xanthium Powder"
+      "englishName": "Xanthium Powder",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 15,
       "name": "Chai Ge Jie Ji Tang",
-      "englishName": "Bupleurum and Kudzu Decoction to Release the Muscle Layer"
+      "englishName": "Bupleurum and Kudzu Decoction to Release the Muscle Layer",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 16,
       "name": "Chai Hu Gui Zhi Tang",
-      "englishName": "Bupleurum and Cinnamon Twig Decoction"
+      "englishName": "Bupleurum and Cinnamon Twig Decoction",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 17,
       "name": "Chai Hu Jia Long Gu Mu Li Tang",
-      "englishName": "Bupleurum plus Dragon Bone and Oyster Shell Decoction"
+      "englishName": "Bupleurum plus Dragon Bone and Oyster Shell Decoction",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 18,
       "name": "Chai Hu Shu Gan San",
-      "englishName": "Bupleurum Powder to Dredge the Liver"
+      "englishName": "Bupleurum Powder to Dredge the Liver",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 19,
       "name": "Chuan Xiong Cha Tiao San",
-      "englishName": "Chuanxiong Powder to be Taken with Green Tea"
+      "englishName": "Chuanxiong Powder to be Taken with Green Tea",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 20,
       "name": "Da Bu Yin Wan",
-      "englishName": "Great Tonify the Yin Pill"
+      "englishName": "Great Tonify the Yin Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 21,
       "name": "Da Chai Hu Tang",
-      "englishName": "Major Bupleurum Decoction"
+      "englishName": "Major Bupleurum Decoction",
+      "benskyCategory": {
+        "chapter": 7,
+        "code": "treat-exterior-interior-excess",
+        "en": "Formulas that Treat Exterior and Interior Excess",
+        "es": "Fórmulas que tratan exceso exterior e interior"
+      }
     },
     {
       "id": 22,
       "name": "Da Cheng Qi Tang",
-      "englishName": "Major Order the Qi Decoction"
+      "englishName": "Major Order the Qi Decoction",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 23,
       "name": "Da Jian Zhong Tang",
-      "englishName": "Major Construct the Middle Decoction"
+      "englishName": "Major Construct the Middle Decoction",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 24,
       "name": "Da Huang Mu Dan Tang",
-      "englishName": "Rhubarb and Moutan Decoction"
+      "englishName": "Rhubarb and Moutan Decoction",
+      "benskyCategory": {
+        "chapter": 20,
+        "code": "treat-abscesses-sores",
+        "en": "Formulas that Treat Abscesses and Sores",
+        "es": "Fórmulas que tratan abscesos y llagas"
+      }
     },
     {
       "id": 25,
       "name": "Da Qing Long Tang",
-      "englishName": "Major Bluegreen Dragon Decoction"
+      "englishName": "Major Bluegreen Dragon Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 26,
       "name": "Dan Shen Yin",
-      "englishName": "Salvia Drink"
+      "englishName": "Salvia Drink",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 27,
       "name": "Dang Gui Bu Xue Tang",
-      "englishName": "Tangkuei Decoction to Tonify the Blood"
+      "englishName": "Tangkuei Decoction to Tonify the Blood",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 28,
       "name": "Dang Gui Liu Huang Tang",
-      "englishName": "Tangkuei and Six-Yellow Decoction"
+      "englishName": "Tangkuei and Six-Yellow Decoction",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 29,
       "name": "Dang Gui Shao Yao San",
-      "englishName": "Tangkuei and Peony Powder"
+      "englishName": "Tangkuei and Peony Powder",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 30,
       "name": "Dang Gui Si Ni Tang",
-      "englishName": "Tangkuei Decoction for Frigid Extremities"
+      "englishName": "Tangkuei Decoction for Frigid Extremities",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 31,
       "name": "Dang Gui Yin Zi",
-      "englishName": "Tangkuei Drink"
+      "englishName": "Tangkuei Drink",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 32,
       "name": "Dao Chi San",
-      "englishName": "Guide Out the Red Powder"
+      "englishName": "Guide Out the Red Powder",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 33,
       "name": "Ding Chuan Tang",
-      "englishName": "Arrest Wheezing Decoction"
+      "englishName": "Arrest Wheezing Decoction",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 34,
       "name": "Ding Zhi Wan",
-      "englishName": "Settle the Emotions Pill"
+      "englishName": "Settle the Emotions Pill",
+      "benskyCategory": {
+        "chapter": 10,
+        "code": "calm-spirit",
+        "en": "Formulas that Calm the Spirit",
+        "es": "Fórmulas que calman el Espíritu"
+      }
     },
     {
       "id": 35,
       "name": "Du Huo Ji Sheng Tang",
-      "englishName": "Pubescent Angelica and Taxillus Decoction"
+      "englishName": "Pubescent Angelica and Taxillus Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 36,
       "name": "Du Qi Wan",
-      "englishName": "Capital Qi Pill"
+      "englishName": "Capital Qi Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 37,
       "name": "Er Chen Tang",
-      "englishName": "Two-Aged (Herb) Decoction"
+      "englishName": "Two-Aged (Herb) Decoction",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 38,
       "name": "Er Miao San",
-      "englishName": "Two-Marvel Powder"
+      "englishName": "Two-Marvel Powder",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 39,
       "name": "Er Xian Tang",
-      "englishName": "Two-Immortal Decoction"
+      "englishName": "Two-Immortal Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 40,
       "name": "Er Zhi Wan",
-      "englishName": "Two-Solstice Pill"
+      "englishName": "Two-Solstice Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 41,
       "name": "Fang Feng Tong Sheng San",
-      "englishName": "Saposhnikovia Powder That Sagely Unblocks"
+      "englishName": "Saposhnikovia Powder That Sagely Unblocks",
+      "benskyCategory": {
+        "chapter": 7,
+        "code": "treat-exterior-interior-excess",
+        "en": "Formulas that Treat Exterior and Interior Excess",
+        "es": "Fórmulas que tratan exceso exterior e interior"
+      }
     },
     {
       "id": 42,
       "name": "Fang Ji Huang Qi Tang",
-      "englishName": "Stephania and Astragalus Decoction"
+      "englishName": "Stephania and Astragalus Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 43,
       "name": "Fu Yuan Huo Xue Tang",
-      "englishName": "Revive Health by Invigorating the Blood Decoction"
+      "englishName": "Revive Health by Invigorating the Blood Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 44,
       "name": "Fu Zi Li Zhong Wan",
-      "englishName": "Aconite Accessory Root Pill to Regulate the Middle"
+      "englishName": "Aconite Accessory Root Pill to Regulate the Middle",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 45,
       "name": "Gan Mai Da Zao Tang",
-      "englishName": "Licorice, Wheat, and Jujube Decoction"
+      "englishName": "Licorice, Wheat, and Jujube Decoction",
+      "benskyCategory": {
+        "chapter": 10,
+        "code": "calm-spirit",
+        "en": "Formulas that Calm the Spirit",
+        "es": "Fórmulas que calman el Espíritu"
+      }
     },
     {
       "id": 46,
       "name": "Ge Gen Huang Qin Huang Lian Tang",
-      "englishName": "Kudzu, Scutellaria, and Coptis Decoction"
+      "englishName": "Kudzu, Scutellaria, and Coptis Decoction",
+      "benskyCategory": {
+        "chapter": 7,
+        "code": "treat-exterior-interior-excess",
+        "en": "Formulas that Treat Exterior and Interior Excess",
+        "es": "Fórmulas que tratan exceso exterior e interior"
+      }
     },
     {
       "id": 47,
       "name": "Ge Gen Tang",
-      "englishName": "Kudzu Decoction"
+      "englishName": "Kudzu Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 48,
       "name": "Ge Xia Zhu Yu Tang",
-      "englishName": "Drive Out Stasis Below the Diaphragm Decoction"
+      "englishName": "Drive Out Stasis Below the Diaphragm Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 49,
       "name": "Gu Jing Wan",
-      "englishName": "Stabilize the Menses Pill"
+      "englishName": "Stabilize the Menses Pill",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 50,
       "name": "Gua Lou Xie Bai Ban Xia Tang",
-      "englishName": "Trichosanthes Fruit, Chinese Garlic, and Pinellia Decoction"
+      "englishName": "Trichosanthes Fruit, Chinese Garlic, and Pinellia Decoction",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 51,
       "name": "Gui Pi Tang",
-      "englishName": "Restore the Spleen Decoction"
+      "englishName": "Restore the Spleen Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 52,
       "name": "Gui Zhi Fu Ling Wan",
-      "englishName": "Cinnamon Twig and Poria Pill"
+      "englishName": "Cinnamon Twig and Poria Pill",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 53,
       "name": "Gui Zhi Jia Long Gu Mu Li Tang",
-      "englishName": "Cinnamon Twig Decoction plus Dragon Bone and Oyster Shell"
+      "englishName": "Cinnamon Twig Decoction plus Dragon Bone and Oyster Shell",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 54,
       "name": "Gui Zhi Shao Yao Zhi Mu Tang",
-      "englishName": "Cinnamon Twig, Peony, and Anemarrhena Decoction"
+      "englishName": "Cinnamon Twig, Peony, and Anemarrhena Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 55,
       "name": "Gui Zhi Tang",
-      "englishName": "Cinnamon Twig Decoction"
+      "englishName": "Cinnamon Twig Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 56,
       "name": "Huai Hua San",
-      "englishName": "Sophora Japonica Flower Powder"
+      "englishName": "Sophora Japonica Flower Powder",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 57,
       "name": "Huang Lian E Jiao Tang",
-      "englishName": "Coptis and Ass-Hide Gelatin Decoction"
+      "englishName": "Coptis and Ass-Hide Gelatin Decoction",
+      "benskyCategory": {
+        "chapter": 10,
+        "code": "calm-spirit",
+        "en": "Formulas that Calm the Spirit",
+        "es": "Fórmulas que calman el Espíritu"
+      }
     },
     {
       "id": 58,
       "name": "Huang Lian Jie Du Tang",
-      "englishName": "Coptis Decoction to Resolve Toxicity"
+      "englishName": "Coptis Decoction to Resolve Toxicity",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 59,
       "name": "Huang Qi Jian Zhong Tang",
-      "englishName": "Astragalus Decoction to Construct the Middle"
+      "englishName": "Astragalus Decoction to Construct the Middle",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 60,
       "name": "Huo Xiang Zheng Qi San",
-      "englishName": "Patchouli/Agastache Powder to Rectify the Qi"
+      "englishName": "Patchouli/Agastache Powder to Rectify the Qi",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 61,
       "name": "Ji Chuan Jian",
-      "englishName": "Benefit the River (Flow) Decoction"
+      "englishName": "Benefit the River (Flow) Decoction",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 62,
       "name": "Jia Jian Wei Rui Tang",
-      "englishName": "Modified Solomon's Seal Decoction"
+      "englishName": "Modified Solomon's Seal Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 63,
       "name": "Jia Wei Xiao Yao San",
-      "englishName": "Augmented Rambling Powder"
+      "englishName": "Augmented Rambling Powder",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 64,
       "name": "Jiao Ai Tang",
-      "englishName": "Ass-Hide Gelatin and Mugwort Decoction"
+      "englishName": "Ass-Hide Gelatin and Mugwort Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 65,
       "name": "Jin Ling Zi San",
-      "englishName": "Melia Toosendan Powder"
+      "englishName": "Melia Toosendan Powder",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 66,
       "name": "Jin Suo Gu Jing Wan",
-      "englishName": "Metal Lock Pill to Stabilize the Essence"
+      "englishName": "Metal Lock Pill to Stabilize the Essence",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 67,
       "name": "Jing Fang Bai Du San",
-      "englishName": "Schizonepeta and Saposhnikovia Powder to Overcome Pathogenic Influences"
+      "englishName": "Schizonepeta and Saposhnikovia Powder to Overcome Pathogenic Influences",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 68,
       "name": "Ju Pi Zhu Ru Tang",
-      "englishName": "Tangerine Peel and Bamboo Shavings Decoction"
+      "englishName": "Tangerine Peel and Bamboo Shavings Decoction",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 69,
       "name": "Juan Bi Tang",
-      "englishName": "Remove Painful Obstructions from Awakening of the Mind in Medical Studies"
+      "englishName": "Remove Painful Obstructions from Awakening of the Mind in Medical Studies",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 70,
       "name": "Li Zhong Wan",
-      "englishName": "Regulate the Middle Pill"
+      "englishName": "Regulate the Middle Pill",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 71,
       "name": "Liang Fu Wan",
-      "englishName": "Galangal and Cyperus Pill"
+      "englishName": "Galangal and Cyperus Pill",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 72,
       "name": "Liang Ge San",
-      "englishName": "Cool the Diaphragm Powder"
+      "englishName": "Cool the Diaphragm Powder",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 73,
       "name": "Ling Gui Zhu Gan Tang",
-      "englishName": "Poria, Cinnamon Twig, Atractylodes, and Licorice Decoction"
+      "englishName": "Poria, Cinnamon Twig, Atractylodes, and Licorice Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 74,
       "name": "Ling Jiao Gou Teng Yin",
-      "englishName": "Antelope Horn and Uncaria Decoction"
+      "englishName": "Antelope Horn and Uncaria Decoction",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 75,
       "name": "Liu Jun Zi Tang",
-      "englishName": "Six-Gentlemen Decoction"
+      "englishName": "Six-Gentlemen Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 76,
       "name": "Liu Wei Di Huang Wan",
-      "englishName": "Six-Ingredient Pill with Rehmannia"
+      "englishName": "Six-Ingredient Pill with Rehmannia",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 77,
       "name": "Liu Yi San",
-      "englishName": "Six-to-One Powder"
+      "englishName": "Six-to-One Powder",
+      "benskyCategory": {
+        "chapter": 5,
+        "code": "dispel-summerheat",
+        "en": "Formulas that Dispel Summerheat",
+        "es": "Fórmulas que dispersan el Calor de Verano"
+      }
     },
     {
       "id": 78,
       "name": "Long Dan Xie Gan Tang",
-      "englishName": "Gentian Decoction to Drain the Liver"
+      "englishName": "Gentian Decoction to Drain the Liver",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 79,
       "name": "Ma Huang Tang",
-      "englishName": "Ephedra Decoction"
+      "englishName": "Ephedra Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 80,
       "name": "Ma Xing Shi Gan Tang",
-      "englishName": "Ephedra, Apricot Kernel, Gypsum and Licorice Decoction"
+      "englishName": "Ephedra, Apricot Kernel, Gypsum and Licorice Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 81,
       "name": "Ma Zi Ren Wan",
-      "englishName": "Hemp Seed Pill"
+      "englishName": "Hemp Seed Pill",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 82,
       "name": "Mai Men Dong Tang",
-      "englishName": "Ophiopogonis Decoction"
+      "englishName": "Ophiopogonis Decoction",
+      "benskyCategory": {
+        "chapter": 15,
+        "code": "treat-dryness",
+        "en": "Formulas that Treat Dryness",
+        "es": "Fórmulas que tratan la Sequedad"
+      }
     },
     {
       "id": 83,
       "name": "Mu Li San",
-      "englishName": "Oyster Shell Powder"
+      "englishName": "Oyster Shell Powder",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 84,
       "name": "Nuan Gan Jian",
-      "englishName": "Warm the Liver Decoction"
+      "englishName": "Warm the Liver Decoction",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 85,
       "name": "Ping Wei San",
-      "englishName": "Calm the Stomach Powder"
+      "englishName": "Calm the Stomach Powder",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 86,
       "name": "Pu Ji Xiao Du Yin",
-      "englishName": "Universal Benefit Drink to Eliminate Toxin"
+      "englishName": "Universal Benefit Drink to Eliminate Toxin",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 87,
       "name": "Qi Ju Di Huang Wan",
-      "englishName": "Lycium Fruit, Chrysanthemum, and Rehmannia Pill"
+      "englishName": "Lycium Fruit, Chrysanthemum, and Rehmannia Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 88,
       "name": "Qian Zheng San",
-      "englishName": "Lead to Symmetry Powder"
+      "englishName": "Lead to Symmetry Powder",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 89,
       "name": "Qiang Huo Sheng Shi Tang",
-      "englishName": "Notopterygium Decoction to Overcome Dampness"
+      "englishName": "Notopterygium Decoction to Overcome Dampness",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 90,
       "name": "Qing Gu San",
-      "englishName": "Cool the Bones Powder"
+      "englishName": "Cool the Bones Powder",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 91,
       "name": "Qing Hao Bie Jia Tang",
-      "englishName": "Sweet Wormwood and Soft-shelled Turtle Shell Decoction"
+      "englishName": "Sweet Wormwood and Soft-shelled Turtle Shell Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 92,
       "name": "Qing Qi Hua Tan Wan",
-      "englishName": "Clear the Qi and Transform Phlegm Pill"
+      "englishName": "Clear the Qi and Transform Phlegm Pill",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 93,
       "name": "Qing Wei San",
-      "englishName": "Clear the Stomach Powder"
+      "englishName": "Clear the Stomach Powder",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 94,
       "name": "Qing Wen Bai Du Yin",
-      "englishName": "Clear Epidemics and Overcome Toxicity Drink"
+      "englishName": "Clear Epidemics and Overcome Toxicity Drink",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 95,
       "name": "Qing Ying Tang",
-      "englishName": "Clear the Nutritive Level Decoction"
+      "englishName": "Clear the Nutritive Level Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 96,
       "name": "Qing Zao Jiu Fei Tang",
-      "englishName": "Clear Dryness and Rescue the Lungs Decoction"
+      "englishName": "Clear Dryness and Rescue the Lungs Decoction",
+      "benskyCategory": {
+        "chapter": 15,
+        "code": "treat-dryness",
+        "en": "Formulas that Treat Dryness",
+        "es": "Fórmulas que tratan la Sequedad"
+      }
     },
     {
       "id": 97,
       "name": "Ren Shen Bai Du San",
-      "englishName": "Ginseng Powder to Overcome Pathogenic Influences"
+      "englishName": "Ginseng Powder to Overcome Pathogenic Influences",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 98,
       "name": "Run Chang Wan",
-      "englishName": "Moisten the Intestines Pill from Master Shen's Book"
+      "englishName": "Moisten the Intestines Pill from Master Shen's Book",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 99,
       "name": "San Ren Tang",
-      "englishName": "Three-Seed Decoction"
+      "englishName": "Three-Seed Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 100,
       "name": "San Zi Yang Qin Tang",
-      "englishName": "Three-Seed Decoction to Nourish One's Parents"
+      "englishName": "Three-Seed Decoction to Nourish One's Parents",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 101,
       "name": "Sang Ju Yin",
-      "englishName": "Mulberry Leaf and Chrysanthemum Drink"
+      "englishName": "Mulberry Leaf and Chrysanthemum Drink",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 102,
       "name": "Sang Piao Xiao San",
-      "englishName": "Mantis Egg-Case Powder"
+      "englishName": "Mantis Egg-Case Powder",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 103,
       "name": "Sang Xing Tang",
-      "englishName": "Mulberry Leaf and Apricot Kernel Decoction"
+      "englishName": "Mulberry Leaf and Apricot Kernel Decoction",
+      "benskyCategory": {
+        "chapter": 15,
+        "code": "treat-dryness",
+        "en": "Formulas that Treat Dryness",
+        "es": "Fórmulas que tratan la Sequedad"
+      }
     },
     {
       "id": 104,
       "name": "Sha Shen Mai Men Dong Tang",
-      "englishName": "Glehnia and Ophiopogonis Decoction"
+      "englishName": "Glehnia and Ophiopogonis Decoction",
+      "benskyCategory": {
+        "chapter": 15,
+        "code": "treat-dryness",
+        "en": "Formulas that Treat Dryness",
+        "es": "Fórmulas que tratan la Sequedad"
+      }
     },
     {
       "id": 105,
       "name": "Shao Fu Zhu Yu Tang",
-      "englishName": "Drive Out Stasis from the Lower Abdomen Decoction"
+      "englishName": "Drive Out Stasis from the Lower Abdomen Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 106,
       "name": "Shao Yao Gan Cao Tang",
-      "englishName": "Peony and Licorice Decoction"
+      "englishName": "Peony and Licorice Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 107,
       "name": "Shao Yao Tang",
-      "englishName": "Peony Decoction"
+      "englishName": "Peony Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 108,
       "name": "Shen Fu Tang",
-      "englishName": "Ginseng and Aconite Accessory Root Decoction"
+      "englishName": "Ginseng and Aconite Accessory Root Decoction",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 109,
       "name": "Shen Ling Bai Zhu San",
-      "englishName": "Ginseng, Poria, and White Atractylodes Powder"
+      "englishName": "Ginseng, Poria, and White Atractylodes Powder",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 110,
       "name": "Shen Qi Wan",
-      "englishName": "Kidney Qi Pill"
+      "englishName": "Kidney Qi Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 111,
       "name": "Shen Tong Zhu Yu Tang",
-      "englishName": "Drive Out Stasis from a Painful Body Decoction"
+      "englishName": "Drive Out Stasis from a Painful Body Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 112,
       "name": "Sheng Hua Tang",
-      "englishName": "Generating and Transforming Decoction"
+      "englishName": "Generating and Transforming Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 113,
       "name": "Sheng Mai San",
-      "englishName": "Generate the Pulse Powder"
+      "englishName": "Generate the Pulse Powder",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 114,
       "name": "Sheng Ma Ge Gen Tang",
-      "englishName": "Cimicifuga and Kudzu Decoction"
+      "englishName": "Cimicifuga and Kudzu Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 115,
       "name": "Shi Hui San",
-      "englishName": "Ten Partially-charred Substances Powder"
+      "englishName": "Ten Partially-charred Substances Powder",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 116,
       "name": "Shi Pi Yin",
-      "englishName": "Bolster the Spleen Drink"
+      "englishName": "Bolster the Spleen Drink",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 117,
       "name": "Shi Quan Da Bu Tang",
-      "englishName": "All-Inclusive Great Tonifying Decoction"
+      "englishName": "All-Inclusive Great Tonifying Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 118,
       "name": "Shi Xiao San",
-      "englishName": "Sudden Smile Powder"
+      "englishName": "Sudden Smile Powder",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 119,
       "name": "Shou Tai Wan",
-      "englishName": "Fetus Longevity Pill"
+      "englishName": "Fetus Longevity Pill",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 120,
       "name": "Si Jun Zi Tang",
-      "englishName": "Four-Gentlemen Decoction"
+      "englishName": "Four-Gentlemen Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 121,
       "name": "Si Miao Wan",
-      "englishName": "Four-Marvel Pill"
+      "englishName": "Four-Marvel Pill",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 122,
       "name": "Si Ni San",
-      "englishName": "Frigid Extremities Powder"
+      "englishName": "Frigid Extremities Powder",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 123,
       "name": "Si Ni Tang",
-      "englishName": "Frigid Extremities Decoction"
+      "englishName": "Frigid Extremities Decoction",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 124,
       "name": "Si Shen Wan",
-      "englishName": "Four-Miracle Pill"
+      "englishName": "Four-Miracle Pill",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 125,
       "name": "Si Wu Tang",
-      "englishName": "Four-Substance Decoction"
+      "englishName": "Four-Substance Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 126,
       "name": "Su Zi Jiang Qi Tang",
-      "englishName": "Perilla Fruit Decoction for Directing Qi Downward"
+      "englishName": "Perilla Fruit Decoction for Directing Qi Downward",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 127,
       "name": "Suan Zao Ren Tang",
-      "englishName": "Sour Jujube Decoction"
+      "englishName": "Sour Jujube Decoction",
+      "benskyCategory": {
+        "chapter": 10,
+        "code": "calm-spirit",
+        "en": "Formulas that Calm the Spirit",
+        "es": "Fórmulas que calman el Espíritu"
+      }
     },
     {
       "id": 128,
       "name": "Taishan Pan Shi San",
-      "englishName": "Taishan Bedrock Powder"
+      "englishName": "Taishan Bedrock Powder",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 129,
       "name": "Tao He Cheng Qi Tang",
-      "englishName": "Peach Pit Decoction to Order the Qi"
+      "englishName": "Peach Pit Decoction to Order the Qi",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 130,
       "name": "Tao Hong Si Wu Tang",
-      "englishName": "Four-Substance Decoction with Safflower and Peach Pit"
+      "englishName": "Four-Substance Decoction with Safflower and Peach Pit",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 131,
       "name": "Tian Ma Gou Teng Yin",
-      "englishName": "Gastrodia and Uncaria Drink"
+      "englishName": "Gastrodia and Uncaria Drink",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 132,
       "name": "Tian Tai Wu Yao San",
-      "englishName": "Top-Quality Lindera Powder"
+      "englishName": "Top-Quality Lindera Powder",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 133,
       "name": "Tian Wang Bu Xin Dan",
-      "englishName": "Emperor of Heaven's Special Pill to Tonify the Heart"
+      "englishName": "Emperor of Heaven's Special Pill to Tonify the Heart",
+      "benskyCategory": {
+        "chapter": 10,
+        "code": "calm-spirit",
+        "en": "Formulas that Calm the Spirit",
+        "es": "Fórmulas que calman el Espíritu"
+      }
     },
     {
       "id": 134,
       "name": "Tiao Wei Cheng Qi Tang",
-      "englishName": "Regulate the Stomach and Order the Qi Decoction"
+      "englishName": "Regulate the Stomach and Order the Qi Decoction",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 135,
       "name": "Tong Xie Yao Fang",
-      "englishName": "Important Formula for Painful Diarrhea"
+      "englishName": "Important Formula for Painful Diarrhea",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 136,
       "name": "Wan Dai Tang",
-      "englishName": "End Discharge Decoction"
+      "englishName": "End Discharge Decoction",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 137,
       "name": "Wen Dan Tang",
-      "englishName": "Warm Gallbladder Decoction"
+      "englishName": "Warm Gallbladder Decoction",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 138,
       "name": "Wen Jing Tang",
-      "englishName": "Flow-Warming Decoction"
+      "englishName": "Flow-Warming Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 139,
       "name": "Wu Ling San",
-      "englishName": "Five-Ingredient Powder with Poria"
+      "englishName": "Five-Ingredient Powder with Poria",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 140,
       "name": "Wu Pi San",
-      "englishName": "Five-Peel Powder"
+      "englishName": "Five-Peel Powder",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 141,
       "name": "Wu Wei Xiao Du Yin",
-      "englishName": "Five-Ingredient Drink to Eliminate Toxin"
+      "englishName": "Five-Ingredient Drink to Eliminate Toxin",
+      "benskyCategory": {
+        "chapter": 20,
+        "code": "treat-abscesses-sores",
+        "en": "Formulas that Treat Abscesses and Sores",
+        "es": "Fórmulas que tratan abscesos y llagas"
+      }
     },
     {
       "id": 142,
       "name": "Wu Zhu Yu Tang",
-      "englishName": "Evodia Decoction"
+      "englishName": "Evodia Decoction",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 143,
       "name": "Xi Jiao Di Huang Wan",
-      "englishName": "Rhinoceros Horn and Rehmannia Decoction"
+      "englishName": "Rhinoceros Horn and Rehmannia Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 144,
       "name": "Xiang Sha Liu Jun Zi Tang",
-      "englishName": "Six-Gentlemen Decoction with Aucklandia and Amomum"
+      "englishName": "Six-Gentlemen Decoction with Aucklandia and Amomum",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 145,
       "name": "Xiang Su San",
-      "englishName": "Cyperus and Perilla Leaf Powder"
+      "englishName": "Cyperus and Perilla Leaf Powder",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 146,
       "name": "Xiao Chai Hu Tang",
-      "englishName": "Minor Bupleurum Decoction"
+      "englishName": "Minor Bupleurum Decoction",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 147,
       "name": "Xiao Cheng Qi Tang",
-      "englishName": "Minor Order the Qi Decoction"
+      "englishName": "Minor Order the Qi Decoction",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 148,
       "name": "Xiao Feng San",
-      "englishName": "Eliminate Wind Powder from Orthodox Lineage"
+      "englishName": "Eliminate Wind Powder from Orthodox Lineage",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 149,
       "name": "Xiao Huo Luo Dan",
-      "englishName": "Minor Invigorate the Collaterals Special Pill"
+      "englishName": "Minor Invigorate the Collaterals Special Pill",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 150,
       "name": "Xiao Ji Yin Zi",
-      "englishName": "Small Thistle Drink"
+      "englishName": "Small Thistle Drink",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 151,
       "name": "Xiao Jian Zhong Tang",
-      "englishName": "Minor Construct the Middle Decoction"
+      "englishName": "Minor Construct the Middle Decoction",
+      "benskyCategory": {
+        "chapter": 6,
+        "code": "warm-interior-cold",
+        "en": "Formulas that Warm Interior Cold",
+        "es": "Fórmulas que calientan el Frío interno"
+      }
     },
     {
       "id": 152,
       "name": "Xiao Qing Long Tang",
-      "englishName": "Minor Bluegreen Dragon Decoction"
+      "englishName": "Minor Bluegreen Dragon Decoction",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 153,
       "name": "Xiao Yao San",
-      "englishName": "Rambling Powder"
+      "englishName": "Rambling Powder",
+      "benskyCategory": {
+        "chapter": 4,
+        "code": "harmonize",
+        "en": "Formulas that Harmonize",
+        "es": "Fórmulas que armonizan"
+      }
     },
     {
       "id": 154,
       "name": "Xie Bai San",
-      "englishName": "Drain the White Powder"
+      "englishName": "Drain the White Powder",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 155,
       "name": "Xie Huang San",
-      "englishName": "Drain the Yellow Powder"
+      "englishName": "Drain the Yellow Powder",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 156,
       "name": "Xie Xin Tang",
-      "englishName": "Drain the Epigastrium Decoction"
+      "englishName": "Drain the Epigastrium Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 157,
       "name": "Xing Su San",
-      "englishName": "Apricot Kernel and Perilla Leaf Powder"
+      "englishName": "Apricot Kernel and Perilla Leaf Powder",
+      "benskyCategory": {
+        "chapter": 15,
+        "code": "treat-dryness",
+        "en": "Formulas that Treat Dryness",
+        "es": "Fórmulas que tratan la Sequedad"
+      }
     },
     {
       "id": 158,
       "name": "Xuan Fu Dai Zhe Tang",
-      "englishName": "Inula and Hematite Decoction"
+      "englishName": "Inula and Hematite Decoction",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 159,
       "name": "Xue Fu Zhu Yu Tang",
-      "englishName": "Drive Out Stasis from the Mansion of Blood Decoction"
+      "englishName": "Drive Out Stasis from the Mansion of Blood Decoction",
+      "benskyCategory": {
+        "chapter": 13,
+        "code": "regulate-blood",
+        "en": "Formulas that Regulate the Blood",
+        "es": "Fórmulas que regulan la Sangre"
+      }
     },
     {
       "id": 160,
       "name": "Yang He Tang",
-      "englishName": "Balmy Yang Decoction"
+      "englishName": "Balmy Yang Decoction",
+      "benskyCategory": {
+        "chapter": 20,
+        "code": "treat-abscesses-sores",
+        "en": "Formulas that Treat Abscesses and Sores",
+        "es": "Fórmulas que tratan abscesos y llagas"
+      }
     },
     {
       "id": 161,
       "name": "Yi Guan Jian",
-      "englishName": "Linking Decoction"
+      "englishName": "Linking Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 162,
       "name": "Yin Chen Hao Tang",
-      "englishName": "Virgate Wormwood Decoction"
+      "englishName": "Virgate Wormwood Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 163,
       "name": "Yin Qiao San",
-      "englishName": "Honeysuckle and Forsythia Powder"
+      "englishName": "Honeysuckle and Forsythia Powder",
+      "benskyCategory": {
+        "chapter": 1,
+        "code": "release-exterior",
+        "en": "Formulas that Release the Exterior",
+        "es": "Fórmulas que liberan el Exterior"
+      }
     },
     {
       "id": 164,
       "name": "You Gui Wan",
-      "englishName": "Restore the Right (Kidney) Pill"
+      "englishName": "Restore the Right (Kidney) Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 165,
       "name": "You Gui Yin",
-      "englishName": "Restore the Right (Kidney) Drink"
+      "englishName": "Restore the Right (Kidney) Drink",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 166,
       "name": "Yu Nu Jian",
-      "englishName": "Jade Woman Decoction"
+      "englishName": "Jade Woman Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 167,
       "name": "Yu Ping Feng San",
-      "englishName": "Jade Windscreen Powder"
+      "englishName": "Jade Windscreen Powder",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 168,
       "name": "Yue Ju Wan",
-      "englishName": "Escape Restraint Pill"
+      "englishName": "Escape Restraint Pill",
+      "benskyCategory": {
+        "chapter": 12,
+        "code": "regulate-qi",
+        "en": "Formulas that Regulate the Qi",
+        "es": "Fórmulas que regulan el Qi"
+      }
     },
     {
       "id": 169,
       "name": "Zeng Ye Cheng Qi Tang",
-      "englishName": "Increase the Fluids and Order the Qi Decoction"
+      "englishName": "Increase the Fluids and Order the Qi Decoction",
+      "benskyCategory": {
+        "chapter": 3,
+        "code": "drain-downward",
+        "en": "Formulas that Drain Downward",
+        "es": "Fórmulas que drenan hacia abajo"
+      }
     },
     {
       "id": 170,
       "name": "Zeng Ye Tang",
-      "englishName": "Increase the Fluids Decoction"
+      "englishName": "Increase the Fluids Decoction",
+      "benskyCategory": {
+        "chapter": 15,
+        "code": "treat-dryness",
+        "en": "Formulas that Treat Dryness",
+        "es": "Fórmulas que tratan la Sequedad"
+      }
     },
     {
       "id": 171,
       "name": "Zhen Gan Xi Feng Tang",
-      "englishName": "Sedate the Liver and Extinguish Wind Decoction"
+      "englishName": "Sedate the Liver and Extinguish Wind Decoction",
+      "benskyCategory": {
+        "chapter": 14,
+        "code": "expel-wind",
+        "en": "Formulas that Expel Wind",
+        "es": "Fórmulas que expulsan el Viento"
+      }
     },
     {
       "id": 172,
       "name": "Zhen Ren Yang Zang Tang",
-      "englishName": "True Man's Decoction to Nourish the Organs"
+      "englishName": "True Man's Decoction to Nourish the Organs",
+      "benskyCategory": {
+        "chapter": 9,
+        "code": "stabilize-bind",
+        "en": "Formulas that Stabilize and Bind",
+        "es": "Fórmulas que estabilizan y contienen"
+      }
     },
     {
       "id": 173,
       "name": "Zhen Wu Tang",
-      "englishName": "True Warrior Decoction"
+      "englishName": "True Warrior Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 174,
       "name": "Zhi Bai Di Huang Wan",
-      "englishName": "Anemarrhena, Phellodendron, and Rehmannia Pill"
+      "englishName": "Anemarrhena, Phellodendron, and Rehmannia Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 175,
       "name": "Zhi Gan Cao Tang",
-      "englishName": "Prepared Licorice Decoction"
+      "englishName": "Prepared Licorice Decoction",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 176,
       "name": "Zhi Sou San",
-      "englishName": "Stop Coughing Powder"
+      "englishName": "Stop Coughing Powder",
+      "benskyCategory": {
+        "chapter": 17,
+        "code": "dispel-phlegm",
+        "en": "Formulas that Dispel Phlegm",
+        "es": "Fórmulas que disipan la Flema"
+      }
     },
     {
       "id": 177,
       "name": "Zhu Ling Tang",
-      "englishName": "Polyporus Decoction"
+      "englishName": "Polyporus Decoction",
+      "benskyCategory": {
+        "chapter": 16,
+        "code": "expel-dampness",
+        "en": "Formulas that Expel Dampness",
+        "es": "Fórmulas que expulsan la Humedad"
+      }
     },
     {
       "id": 178,
       "name": "Zhu Ye Shi Gao Tang",
-      "englishName": "Lophatherum and Gypsum Decoction"
+      "englishName": "Lophatherum and Gypsum Decoction",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     },
     {
       "id": 179,
       "name": "Zuo Gui Wan",
-      "englishName": "Restore the Left (Kidney) Pill"
+      "englishName": "Restore the Left (Kidney) Pill",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 180,
       "name": "Zuo Gui Yin",
-      "englishName": "Restore the Left (Kidney) Drink"
+      "englishName": "Restore the Left (Kidney) Drink",
+      "benskyCategory": {
+        "chapter": 8,
+        "code": "tonify",
+        "en": "Formulas that Tonify",
+        "es": "Fórmulas que tonifican"
+      }
     },
     {
       "id": 181,
       "name": "Zuo Jin Wan",
-      "englishName": "Left Metal Pill"
+      "englishName": "Left Metal Pill",
+      "benskyCategory": {
+        "chapter": 2,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      }
     }
-  ]
+  ],
+  "categorySystem": {
+    "author": "Bensky et al.",
+    "source": "Chinese Herbal Medicine: Formulas & Strategies",
+    "level": "primary chapter"
+  }
 }
