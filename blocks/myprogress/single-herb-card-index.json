@@ -2,7 +2,7 @@
   "version": 2,
   "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
   "total": 304,
-  "routedToDetailedStudy": 301,
+  "routedToDetailedStudy": 302,
   "herbs": [
     {
       "name": "Ai Ye",
@@ -341,6 +341,7 @@
       "latin": "Arecae Semen",
       "id": 31,
       "guideNumber": null,
+      "specialFocus": "bensky17",
       "benskyCategory": {
         "code": "expel-parasites",
         "en": "Herbs that Expel Parasites",

@@ -11,6 +11,7 @@ PHP_BIN="${PHP_BIN:-}"
 FILES=(
     "blocks/myprogress/single-herbs-study-guide.php"
     "blocks/myprogress/single-herbs-bensky-chapter-four.php"
+    "blocks/myprogress/single-herbs-bensky-chapter-seventeen.php"
     "blocks/myprogress/single-herb-card-index.json"
 )
 
@@ -44,11 +45,13 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 
 echo "Moodle detectado: $MOODLE_ROOT"
 echo "PHP CLI detectado: $PHP_BIN"
-echo "Descargando capítulo 4 de Bensky desde $REVISION..."
+echo "Descargando atlas de Bensky (capítulos 4 y 17) desde $REVISION..."
 
 for relative_path in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative_path"
-    if [[ "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-four.php" && ! -f "$target" ]]; then
+    if [[ "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-four.php" \
+        && "$relative_path" != "blocks/myprogress/single-herbs-bensky-chapter-seventeen.php" \
+        && ! -f "$target" ]]; then
         echo "ERROR: no se encontró el archivo activo $target"
         exit 1
     fi
@@ -58,9 +61,11 @@ done
 
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php" >/dev/null
 "$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-four.php" >/dev/null
+"$PHP_BIN" -l "$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php" >/dev/null
 python3 -m json.tool "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json" >/dev/null
 
 CHAPTER_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-four.php"
+CHAPTER_SEVENTEEN_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php"
 INDEX_FILE="$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
 GUIDE_FILE="$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php"
 
@@ -68,11 +73,17 @@ grep -Fq "Board guideline atlas: 21 official herbs" "$CHAPTER_FILE"
 grep -Fq "Aristolochia warning" "$CHAPTER_FILE"
 grep -Fq "single-herbs-bensky-chapter-four.php" "$GUIDE_FILE"
 grep -Fq "focus' => 'bensky4'" "$GUIDE_FILE"
+grep -Fq "single-herbs-bensky-chapter-seventeen.php" "$GUIDE_FILE"
+grep -Fq "focus' => 'bensky17'" "$GUIDE_FILE"
+grep -Fq "Source-chapter atlas: 13 monographs" "$CHAPTER_SEVENTEEN_FILE"
 
 CORE_COUNT="$(sed -n '/^\$b4groups = \[/,/^\$b4annex = \[/p' "$CHAPTER_FILE" | grep -c "\['name' =>")"
 ANNEX_COUNT="$(sed -n '/^\$b4annex = \[/,/^\$b4comparisons = \[/p' "$CHAPTER_FILE" | grep -c "\['name' =>")"
 QUESTION_COUNT="$(sed -n '/^\$b4questions = \[/,/^\];/p' "$CHAPTER_FILE" | grep -c '^    \[')"
 SPECIAL_ROUTE_COUNT="$(grep -c '"specialFocus": "bensky4"' "$INDEX_FILE")"
+CHAPTER_SEVENTEEN_MONOGRAPH_COUNT="$(sed -n '/^\$b17herbs = \[/,/^\$b17questions = \[/p' "$CHAPTER_SEVENTEEN_FILE" | grep -c "\['name' =>")"
+CHAPTER_SEVENTEEN_QUESTION_COUNT="$(sed -n '/^\$b17questions = \[/,/^\];/p' "$CHAPTER_SEVENTEEN_FILE" | grep -c '^    \[')"
+CHAPTER_SEVENTEEN_ROUTE_COUNT="$(grep -c '"specialFocus": "bensky17"' "$INDEX_FILE")"
 
 if [[ "$CORE_COUNT" -ne 21 || "$ANNEX_COUNT" -ne 9 || "$QUESTION_COUNT" -ne 14 ]]; then
     echo "ERROR: conteos inesperados: core=$CORE_COUNT anexo=$ANNEX_COUNT preguntas=$QUESTION_COUNT"
@@ -80,6 +91,14 @@ if [[ "$CORE_COUNT" -ne 21 || "$ANNEX_COUNT" -ne 9 || "$QUESTION_COUNT" -ne 14 ]
 fi
 if [[ "$SPECIAL_ROUTE_COUNT" -lt 21 ]]; then
     echo "ERROR: se esperaban al menos 21 rutas directas y se detectaron $SPECIAL_ROUTE_COUNT"
+    exit 1
+fi
+if [[ "$CHAPTER_SEVENTEEN_MONOGRAPH_COUNT" -ne 13 || "$CHAPTER_SEVENTEEN_QUESTION_COUNT" -ne 12 ]]; then
+    echo "ERROR: conteos inesperados del capítulo 17: monografías=$CHAPTER_SEVENTEEN_MONOGRAPH_COUNT preguntas=$CHAPTER_SEVENTEEN_QUESTION_COUNT"
+    exit 1
+fi
+if [[ "$CHAPTER_SEVENTEEN_ROUTE_COUNT" -ne 1 ]]; then
+    echo "ERROR: se esperaba 1 ruta directa al capítulo 17 y se detectaron $CHAPTER_SEVENTEEN_ROUTE_COUNT"
     exit 1
 fi
 
@@ -100,13 +119,15 @@ done
 
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php" >/dev/null
 "$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-four.php" >/dev/null
+"$PHP_BIN" -l "$MOODLE_ROOT/blocks/myprogress/single-herbs-bensky-chapter-seventeen.php" >/dev/null
 python3 -m json.tool "$MOODLE_ROOT/blocks/myprogress/single-herb-card-index.json" >/dev/null
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "CAPÍTULO 4 DE BENSKY INSTALADO CORRECTAMENTE"
-echo "21 perfiles oficiales · 9 entradas de anexo · 14 preguntas"
-echo "Rutas directas verificadas: $SPECIAL_ROUTE_COUNT"
+echo "ATLAS DE BENSKY INSTALADO CORRECTAMENTE"
+echo "Capítulo 4: 21 perfiles oficiales · 9 entradas de anexo · 14 preguntas"
+echo "Capítulo 17: 1 perfil oficial · 13 monografías · 12 preguntas"
+echo "Rutas directas verificadas: capítulo 4=$SPECIAL_ROUTE_COUNT · capítulo 17=$CHAPTER_SEVENTEEN_ROUTE_COUNT"
 echo "Respaldo: $BACKUP_DIR"

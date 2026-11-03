@@ -222,6 +222,7 @@ $ismixed = $focus === 'mixed';
 $isproperties = $focus === 'properties';
 $isintroduction = $focus === 'introduction';
 $isbenskychapterfour = $focus === 'bensky4';
+$isbenskychapterseventeen = $focus === 'bensky17';
 if (!$ismixed && !$isproperties && !$isintroduction && $focus !== '' && ctype_digit($focus)) {
     $number = (int) $focus;
     if (isset($categories[$number])) {
@@ -507,6 +508,10 @@ if ($isbenskychapterfour) {
     $workspaceintro = $ises
         ? 'Aprende a seleccionar hierbas que drenan Humedad según edema, micción dolorosa, cálculos, ictericia, lactancia, prurito y deficiencia del Bazo.'
         : 'Learn to select Dampness-draining herbs by edema, painful urination, stones, jaundice, lactation, itching and Spleen deficiency.';
+} else if ($isbenskychapterseventeen) {
+    $workspaceintro = $ises
+        ? 'Aprende a distinguir sustancias antiparasitarias según organismo, patrón acompañante, constitución, preparación, identidad botánica y margen de seguridad.'
+        : 'Learn to distinguish antiparasitic substances by organism, accompanying pattern, constitution, preparation, botanical identity and safety margin.';
 } else if ($isintroduction) {
     $workspaceintro = $ises
         ? 'Construye una base para estudiar hierbas individuales: historia, identidad, propiedades, meridianos, dirección, combinaciones, dosis, procesamiento y seguridad.'
@@ -1028,10 +1033,23 @@ if ($ises) {
     $benskyfourparams['lang'] = 'es';
 }
 $benskyfoururl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $benskyfourparams);
+$benskyseventeenparams = ['focus' => 'bensky17'];
+if ($ises) {
+    $benskyseventeenparams['lang'] = 'es';
+}
+$benskyseventeenurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $benskyseventeenparams);
 $benskyfourpreviousurl = null;
 $benskyfournexturl = null;
+$benskyseventeenpreviousurl = null;
 foreach ($studyguidecategories as $benskyfourneighbor) {
     $neighborinternalnumber = (int)$benskyfourneighbor['guide_number'];
+    if ($neighborinternalnumber === 31) {
+        $neighborparams = ['focus' => (string)$benskyfourneighbor['number']];
+        if ($ises) {
+            $neighborparams['lang'] = 'es';
+        }
+        $benskyseventeenpreviousurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $neighborparams);
+    }
     if ($neighborinternalnumber !== 11 && $neighborinternalnumber !== 12) {
         continue;
     }
@@ -1062,6 +1080,7 @@ $laststudyguidenumber = $studyguidecategories
     ? max(array_column($studyguidecategories, 'guide_number'))
     : 0;
 $lastdisplaystudyguidenumber = $displaystudyguidenumber($laststudyguidenumber) ?? 0;
+$lastdisplaystudyguidenumber = max($lastdisplaystudyguidenumber, 32);
 $previousdisplayguidenumber = null;
 $nextdisplayguidenumber = null;
 if ($selected !== null && $selectedguidenumber !== null) {
@@ -1092,6 +1111,10 @@ if ($selected !== null && $selectedguidenumber !== null) {
         $previouscategoryurl = $benskyfoururl;
         $previousdisplayguidenumber = 12;
     }
+    if ($selectedguidenumber === 31) {
+        $nextcategoryurl = $benskyseventeenurl;
+        $nextdisplayguidenumber = 32;
+    }
 }
 if ($ismixed && $studyguidecategories) {
     $mixedprevioussection = array_key_last($studyguidecategories);
@@ -1101,7 +1124,8 @@ if ($ismixed && $studyguidecategories) {
     if ($ises) {
         $mixedpreviousparams['lang'] = 'es';
     }
-    $mixedpreviouscategoryurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $mixedpreviousparams);
+    $mixedpreviouscategoryurl = $benskyseventeenurl;
+    $mixedpreviousdisplayguidenumber = 32;
 }
 $languageparams = [];
 if ($focus !== '') {
@@ -1314,11 +1338,13 @@ ob_start();
         </section>
     <?php endif; ?>
 
-    <?php if ($selected !== null || $ismixed || $isproperties || $isintroduction || $isbenskychapterfour): ?>
+    <?php if ($selected !== null || $ismixed || $isproperties || $isintroduction || $isbenskychapterfour || $isbenskychapterseventeen): ?>
         <?php
         $selectedbenskychapter = $benskychapterlabel($selectedguidenumber);
         $focuslabel = $isbenskychapterfour
             ? (($ises ? 'Tarjeta de la guía 12' : 'Study-guide card 12') . ' · ' . ($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4'))
+            : ($isbenskychapterseventeen
+            ? (($ises ? 'Tarjeta de la guía 32' : 'Study-guide card 32') . ' · ' . ($ises ? 'Bensky · Capítulo 17' : 'Bensky · Chapter 17'))
             : ($isintroduction
             ? ($ises ? 'Fundamentos' : 'Foundations')
             : ($isproperties
@@ -1328,9 +1354,11 @@ ob_start();
             : ($selectedguidenumber !== null
                 ? (($ises ? 'Tarjeta de la guía ' : 'Study-guide card ') . $selecteddisplayguidenumber
                     . ($selectedbenskychapter !== '' ? ' · ' . $selectedbenskychapter : ''))
-                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number'])))));
+                : ($selected['number'] === 0 ? 'General' : 'Category ' . $selected['number']))))));
         $focustitle = $isbenskychapterfour
             ? ($ises ? 'Bensky, capítulo 4 · Hierbas que drenan Humedad' : 'Bensky, Chapter 4 · Herbs that Drain Dampness')
+            : ($isbenskychapterseventeen
+            ? ($ises ? 'Bensky, capítulo 17 · Hierbas que expulsan parásitos' : 'Bensky, Chapter 17 · Herbs that Expel Parasites')
             : ($isintroduction
             ? ($ises ? 'Introducción a las hierbas individuales' : 'Introduction to Single Herbs')
             : ($isproperties
@@ -1339,7 +1367,7 @@ ob_start();
             ? ($ises ? 'Repaso final' : 'Final Review')
             : ($selectedguidenumber !== null
                 ? ($canonicalcategorytitle($selectedguidenumber) ?: $stripstudyguidenumber((string) $selected['name']))
-                : $selected['name']))));
+                : $selected['name'])))));
         ?>
         <section class="single-herbs-guide__workspace" aria-labelledby="single-herbs-focus-title">
             <div class="single-herbs-guide__workspace-header">
@@ -1361,6 +1389,12 @@ ob_start();
                     <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 12 / ' : 'Card 12 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4')); ?></strong>
                     <a class="single-herbs-guide__back" href="<?php echo $benskyfournexturl !== null ? $benskyfournexturl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 13 →' : 'Next Category · 13 →'); ?></a>
                 </nav>
+            <?php elseif ($isbenskychapterseventeen): ?>
+                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
+                    <a class="single-herbs-guide__back" href="<?php echo $benskyseventeenpreviousurl !== null ? $benskyseventeenpreviousurl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 31' : '← Previous Category · 31'); ?></a>
+                    <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 32 / ' : 'Card 32 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 17' : 'Bensky · Chapter 17')); ?></strong>
+                    <a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a>
+                </nav>
             <?php elseif ($ismixed): ?>
                 <nav aria-label="<?php echo s($ises ? 'Navegación del repaso final' : 'Final Review navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
                     <span><?php if ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
@@ -1370,6 +1404,8 @@ ob_start();
             <?php endif; ?>
             <?php if ($isbenskychapterfour): ?>
                 <?php require(__DIR__ . '/single-herbs-bensky-chapter-four.php'); ?>
+            <?php elseif ($isbenskychapterseventeen): ?>
+                <?php require(__DIR__ . '/single-herbs-bensky-chapter-seventeen.php'); ?>
             <?php elseif ($isintroduction): ?>
                 <?php require(__DIR__ . '/single-herbs-introduction.php'); ?>
             <?php elseif ($isproperties): ?>
@@ -1723,9 +1759,9 @@ ob_start();
             <?php endif; ?>
         </section>
         <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
-            <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previousdisplayguidenumber); ?></a><?php elseif ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
+            <span><?php if ($isbenskychapterseventeen && $benskyseventeenpreviousurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $benskyseventeenpreviousurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 31' : '← Previous Category · 31'); ?></a><?php elseif ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previousdisplayguidenumber); ?></a><?php elseif ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
             <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
-            <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextdisplayguidenumber . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
+            <span><?php if ($isbenskychapterseventeen): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php elseif ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextdisplayguidenumber . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
         </nav>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
@@ -1734,7 +1770,7 @@ ob_start();
                 <p><?php echo s($ises ? 'Comienza con la introducción, continúa por las categorías del Board Level y termina con la tabla maestra y el repaso final.' : 'Start with the introduction, continue through Board Level categories, and finish with the master table and Final Review.'); ?></p>
             </div>
             <div class="single-herbs-guide__count" aria-label="Category count">
-                <strong><?php echo count($studyguidecategories) + 4; ?></strong>
+                <strong><?php echo count($studyguidecategories) + 5; ?></strong>
                 <span><?php echo s($ises ? 'áreas de estudio' : 'study areas'); ?></span>
             </div>
         </section>
@@ -1804,6 +1840,14 @@ ob_start();
                         <small><?php echo s($categoryfooter); ?></small>
                     </a>
                 <?php endforeach; ?>
+                <a id="bensky-chapter-seventeen-reference" class="single-herbs-guide__category single-herbs-guide__category--bensky-reference" href="<?php echo $benskyseventeenurl->out(false); ?>" aria-label="<?php echo s($ises ? 'Bensky, capítulo 17: Hierbas que expulsan parásitos' : 'Bensky Chapter 17: Herbs that Expel Parasites'); ?>">
+                    <span class="single-herbs-guide__category-reference">
+                        <span class="single-herbs-guide__category-number" aria-label="<?php echo s($ises ? 'Tarjeta de la guía 32' : 'Study-guide card 32'); ?>">32</span>
+                        <span class="single-herbs-guide__bensky-chapter"><?php echo s($ises ? 'Bensky · Capítulo 17' : 'Bensky · Chapter 17'); ?></span>
+                    </span>
+                    <strong><?php echo s($ises ? 'Hierbas que expulsan parásitos' : 'Herbs that Expel Parasites'); ?></strong>
+                    <small><?php echo s($ises ? '1 hierba oficial · atlas de 13 monografías · seguridad y comparaciones →' : '1 official herb · 13-monograph atlas · safety and comparisons →'); ?></small>
+                </a>
                 <?php
                 $propertiesparams = ['focus' => 'properties'];
                 if ($ises) {
