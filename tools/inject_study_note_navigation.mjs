@@ -8,7 +8,7 @@ const write = args.has('--write');
 const check = args.has('--check');
 const rootArgument = process.argv.find(argument => argument.startsWith('--root='));
 const root = path.resolve(rootArgument ? rootArgument.slice('--root='.length) : 'study-guide/comparisons');
-const source = '/study-guide/comparisons/study-note-navigation.js?v=20261104-2';
+const source = '/study-guide/comparisons/study-note-navigation.js?v=20261104-3';
 const tag = `<script src="${source}" defer></script>`;
 const marker = '/study-guide/comparisons/study-note-navigation.js';
 

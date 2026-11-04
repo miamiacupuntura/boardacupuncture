@@ -31,6 +31,59 @@
   const currentTitle = (note.querySelector('.study-note__title,h1')?.textContent || document.title)
     .replace(/\s+/g, ' ')
     .trim();
+  const duiYaoPath = [
+    [1, 'ma-huang-gui-zhi-dui-yao', 'Má Huáng + Guì Zhī'],
+    [2, 'ma-huang-xing-ren-dui-yao', 'Má Huáng + Xìng Rén'],
+    [3, 'ma-huang-shi-gao-dui-yao', 'Má Huáng + Shí Gāo'],
+    [4, 'gui-zhi-bai-shao-dui-yao', 'Guì Zhī + Bái Sháo'],
+    [5, 'jing-jie-fang-feng-dui-yao', 'Jīng Jiè + Fáng Fēng'],
+    [6, 'cang-er-zi-xin-yi-hua-dui-yao', 'Cāng Ěr Zǐ + Xīn Yí Huā'],
+    [7, 'sang-ye-ju-hua-dui-yao', 'Sāng Yè + Jú Huā'],
+    [8, 'ge-gen-sheng-ma-dui-yao', 'Gé Gēn + Shēng Má'],
+    [9, 'chai-hu-sheng-ma-dui-yao', 'Chái Hú + Shēng Má'],
+    [10, 'zhi-zi-dan-dou-chi-dui-yao', 'Zhī Zǐ + Dàn Dòu Chǐ'],
+    [11, 'shi-gao-zhi-mu-dui-yao', 'Shí Gāo + Zhī Mǔ'],
+    [12, 'zhi-mu-huang-bai-dui-yao', 'Zhī Mǔ + Huáng Bǎi'],
+    [13, 'sang-bai-pi-di-gu-pi-dui-yao', 'Sāng Bái Pí + Dì Gǔ Pí'],
+    [14, 'huang-lian-rou-gui-dui-yao', 'Huáng Lián + Ròu Guì'],
+    [15, 'jin-yin-hua-lian-qiao-dui-yao', 'Jīn Yín Huā + Lián Qiào'],
+    [16, 'niu-bang-zi-lian-qiao-dui-yao', 'Niú Bàng Zǐ + Lián Qiào'],
+    [17, 'qing-hao-bie-jia-dui-yao', 'Qīng Hāo + Biē Jiǎ'],
+    [18, 'ren-shen-huang-qi-dui-yao', 'Rén Shēn + Huáng Qí'],
+    [19, 'bai-zhu-fu-ling-dui-yao', 'Bái Zhú + Fú Líng'],
+    [20, 'bai-shao-gan-cao-dui-yao', 'Bái Sháo + Gān Cǎo'],
+    [21, 'jie-geng-gan-cao-dui-yao', 'Jié Gěng + Gān Cǎo'],
+    [22, 'sheng-jiang-da-zao-dui-yao', 'Shēng Jiāng + Dà Zǎo'],
+    [23, 'dang-gui-huang-qi-dui-yao', 'Dāng Guī + Huáng Qí'],
+    [24, 'dang-gui-chuan-xiong-dui-yao', 'Dāng Guī + Chuān Xiōng'],
+    [25, 'dang-gui-xiang-fu-dui-yao', 'Dāng Guī + Xiāng Fù'],
+    [26, 'ai-ye-e-jiao-dui-yao', 'Ài Yè + Ē Jiāo'],
+    [27, 'mai-men-dong-sha-shen-dui-yao', 'Mài Mén Dōng + Shā Shēn'],
+    [28, 'gou-qi-zi-ju-hua-dui-yao', 'Gǒu Qǐ Zǐ + Jú Huā'],
+    [29, 'han-lian-cao-nu-zhen-zi-dui-yao', 'Hàn Lián Cǎo + Nǚ Zhēn Zǐ'],
+    [30, 'gui-ban-bie-jia-dui-yao', 'Guī Bǎn + Biē Jiǎ'],
+    [31, 'du-zhong-xu-duan-dui-yao', 'Dù Zhòng + Xù Duàn'],
+    [32, 'dang-gui-rou-cong-rong-dui-yao', 'Dāng Guī + Ròu Cōng Róng'],
+    [33, 'di-yu-huai-mi-dui-yao', 'Dì Yú + Huái Mǐ'],
+    [34, 'tao-ren-hong-hua-dui-yao', 'Táo Rén + Hóng Huā'],
+    [35, 'ru-xiang-mo-yao-dui-yao', 'Rǔ Xiāng + Mò Yào'],
+    [36, 'san-leng-e-zhu-dui-yao', 'Sān Léng + É Zhú'],
+    [37, 'ban-xia-chen-pi-dui-yao', 'Bàn Xià + Chén Pí'],
+    [38, 'ban-xia-sheng-jiang-dui-yao', 'Bàn Xià + Shēng Jiāng'],
+    [39, 'gua-lou-xie-bai-dui-yao', 'Guā Lóu + Xiè Bái'],
+    [40, 'zi-wan-kuan-dong-hua-dui-yao', 'Zǐ Wǎn + Kuǎn Dōng Huā'],
+    [41, 'ting-li-zi-da-zao-dui-yao', 'Tíng Lì Zǐ + Dà Zǎo'],
+    [42, 'fu-zi-gan-jiang-dui-yao', 'Fù Zǐ + Gān Jiāng'],
+    [43, 'fu-zi-rou-gui-dui-yao', 'Fù Zǐ + Ròu Guì'],
+    [44, 'gan-jiang-bai-zhu-dui-yao', 'Gān Jiāng + Bái Zhú'],
+    [45, 'chai-hu-huang-qin-dui-yao', 'Chái Hú + Huáng Qín'],
+    [46, 'chai-hu-bai-shao-dui-yao', 'Chái Hú + Bái Sháo'],
+    [47, 'huo-xiang-pei-lan-dui-yao', 'Huò Xiāng + Pèi Lán'],
+    [48, 'jin-qian-cao-hai-jin-sha-dui-yao', 'Jīn Qián Cǎo + Hǎi Jīn Shā'],
+    [49, 'da-huang-mang-xiao-dui-yao', 'Dà Huáng + Máng Xiāo'],
+    [50, 'long-gu-mu-li-dui-yao', 'Lóng Gǔ + Mǔ Lì'],
+    [51, 'tian-ma-gou-teng-dui-yao', 'Tiān Má + Gōu Téng']
+  ];
 
   const style = document.createElement('style');
   style.dataset.studyNoteNavigationStyles = '';
@@ -164,6 +217,16 @@
     return items;
   };
 
+  const discoverDuiYaoItems = function() {
+    const suffix = spanish ? '-es.html' : '.html';
+    return Promise.resolve(duiYaoPath.map(function(item) {
+      return {
+        url: new URL(item[1] + suffix, currentUrl),
+        title: item[2]
+      };
+    }));
+  };
+
   const finish = function(items) {
     let currentIndex = items.findIndex(function(item) {
       return item.url.pathname === currentUrl.pathname;
@@ -181,8 +244,16 @@
       jump.appendChild(option);
     });
     jump.disabled = items.length < 2;
-    jump.addEventListener('change', function() {
-      window.location.assign(contextualUrl(new URL(jump.value)));
+    jump.onchange = function() {
+      const destination = new URL(jump.options[jump.selectedIndex].value, currentUrl);
+      window.location.href = contextualUrl(destination);
+    };
+    jump.addEventListener('keydown', function(event) {
+      if (event.key !== 'Enter' || jump.disabled) {
+        return;
+      }
+      event.preventDefault();
+      jump.onchange();
     });
     setLink(previous, items[currentIndex - 1] || null);
     setLink(next, items[currentIndex + 1] || null);
@@ -194,7 +265,10 @@
     return;
   }
 
-  fetch(collectionUrl.href, {credentials: 'same-origin'})
+  const collectionFile = collectionUrl.pathname.split('/').pop() || '';
+  const itemRequest = /^dui-yao(?:-es)?\.html$/i.test(collectionFile)
+    ? discoverDuiYaoItems()
+    : fetch(collectionUrl.href, {credentials: 'same-origin', cache: 'no-store'})
     .then(function(response) {
       if (!response.ok) {
         throw new Error('Collection index unavailable');
@@ -202,7 +276,15 @@
       return response.text();
     })
     .then(function(html) {
-      finish(discoverItems(html, collectionUrl));
+      return discoverItems(html, collectionUrl);
+    });
+
+  itemRequest
+    .then(function(items) {
+      if (!items.length) {
+        throw new Error('Collection is empty');
+      }
+      finish(items);
     })
     .catch(function() {
       finish([{url: currentUrl, title: currentTitle}]);
