@@ -115,4 +115,21 @@ assert(!php.includes('$nextcategorycardnumber'),
 assert(!php.includes('foreach ($officialexpansionindexcategories as $category)'),
     'the removed additional category card is still rendered.');
 
+const chapterIndexMatch = php.match(/\$benskychapters = \[([\s\S]*?)\n\];\n\$benskychapterbykey/);
+assert(chapterIndexMatch, 'the 21-chapter Bensky index is missing.');
+const chapterIndexRows = [...chapterIndexMatch[1].matchAll(/\['number' => (\d+), 'key' => '([^']+)', 'name' => '([^']+)', 'nameEs' => '[^']+', 'complete' => (true|false)/g)];
+assert(chapterIndexRows.length === 21, `the Bensky index contains ${chapterIndexRows.length} chapters, expected 21.`);
+assert(chapterIndexRows.every((row, index) => Number(row[1]) === index + 1),
+    'the Bensky chapter cards are not numbered consecutively from 1 through 21.');
+assert(chapterIndexRows.filter(row => row[4] === 'true').length === 17,
+    'the index must identify complete coverage for Bensky Chapters 5 through 21.');
+assert(chapterIndexRows[19][2] === 'treat-abscesses-chapter-20'
+    && chapterIndexRows[19][3] === 'Formulas That Treat Abscesses and Sores',
+    'Bensky Chapter 20 is missing or mislabeled in the visible index.');
+assert(chapterIndexRows[20][2] === 'external-application-chapter-21'
+    && chapterIndexRows[20][3] === 'Formulas for External Application',
+    'Bensky Chapter 21 is missing or mislabeled in the visible index.');
+assert(php.includes('foreach ($benskychapters as $chapter)'),
+    'the main guide does not render the 21-chapter Bensky index.');
+
 console.log('Bensky formula chapter audit passed: 21 chapters, 181 official formulas, and principal/associated roles verified.');

@@ -1512,6 +1512,34 @@ unset($supplementalcategories['expel-parasites-ch19']);
 unset($supplementalcategories['treat-abscesses-ch20']);
 unset($supplementalcategories['external-application-ch21']);
 
+$benskychapters = [
+    ['number' => 1, 'key' => 'release-exterior', 'name' => 'Formulas That Release the Exterior', 'nameEs' => 'Fórmulas que liberan el Exterior', 'complete' => false, 'formulas' => $categories['release-exterior']['formulas']],
+    ['number' => 2, 'key' => 'purge', 'name' => 'Formulas That Drain Downward', 'nameEs' => 'Fórmulas que drenan hacia abajo', 'complete' => false, 'formulas' => $categories['purge']['formulas']],
+    ['number' => 3, 'key' => 'harmonize', 'name' => 'Formulas That Harmonize', 'nameEs' => 'Fórmulas que armonizan', 'complete' => false, 'formulas' => $categories['harmonize']['formulas']],
+    ['number' => 4, 'key' => 'clear-heat', 'name' => 'Formulas That Clear Heat', 'nameEs' => 'Fórmulas que aclaran el Calor', 'complete' => false, 'formulas' => $categories['clear-heat']['formulas']],
+    ['number' => 5, 'key' => 'dispel-summerheat', 'name' => 'Formulas That Dispel Summerheat', 'nameEs' => 'Fórmulas que eliminan el Calor de Verano', 'complete' => true, 'formulas' => $supplementalcategories['dispel-summerheat']['formulas']],
+    ['number' => 6, 'key' => 'warm-interior-cold', 'name' => 'Formulas That Warm Interior Cold', 'nameEs' => 'Fórmulas que calientan el Frío Interior', 'complete' => true, 'formulas' => $supplementalcategories['warm-interior-cold']['formulas']],
+    ['number' => 7, 'key' => 'exterior-interior-excess', 'name' => 'Formulas That Release Exterior-Interior Excess', 'nameEs' => 'Fórmulas que liberan el exceso Exterior-Interior', 'complete' => true, 'formulas' => $supplementalcategories['exterior-interior-excess']['formulas']],
+    ['number' => 8, 'key' => 'tonify-chapter-8', 'name' => 'Formulas That Tonify', 'nameEs' => 'Fórmulas que tonifican', 'complete' => true, 'formulas' => $tonifychapteroverview['formulas']],
+    ['number' => 9, 'key' => 'stabilize-bind-chapter-9', 'name' => 'Formulas That Stabilize and Bind', 'nameEs' => 'Fórmulas que estabilizan y contienen', 'complete' => true, 'formulas' => $stabilizechapteroverview['formulas']],
+    ['number' => 10, 'key' => 'calm-shen-chapter-10', 'name' => 'Formulas That Calm the Spirit', 'nameEs' => 'Fórmulas que calman el Espíritu', 'complete' => true, 'formulas' => $calmshenchapteroverview['formulas']],
+    ['number' => 11, 'key' => 'open-orifices-chapter-11', 'name' => 'Formulas That Open the Sensory Orifices', 'nameEs' => 'Fórmulas que abren los orificios sensoriales', 'complete' => true, 'formulas' => $openorificeschapteroverview['formulas']],
+    ['number' => 12, 'key' => 'regulate-qi-chapter-12', 'name' => 'Formulas That Regulate the Qi', 'nameEs' => 'Fórmulas que regulan el Qi', 'complete' => true, 'formulas' => $regulateqichapteroverview['formulas']],
+    ['number' => 13, 'key' => 'regulate-blood-chapter-13', 'name' => 'Formulas That Regulate the Blood', 'nameEs' => 'Fórmulas que regulan la Sangre', 'complete' => true, 'formulas' => $regulatebloodchapteroverview['formulas']],
+    ['number' => 14, 'key' => 'expel-wind-chapter-14', 'name' => 'Formulas That Expel Wind', 'nameEs' => 'Fórmulas que expulsan el Viento', 'complete' => true, 'formulas' => $expelwindchapteroverview['formulas']],
+    ['number' => 15, 'key' => 'treat-dryness-ch15', 'name' => 'Formulas That Treat Dryness', 'nameEs' => 'Fórmulas que tratan la Sequedad', 'complete' => true, 'formulas' => $supplementalcategories['treat-dryness-ch15']['formulas']],
+    ['number' => 16, 'key' => 'expel-damp-chapter-16', 'name' => 'Formulas That Expel Dampness', 'nameEs' => 'Fórmulas que expulsan la Humedad', 'complete' => true, 'formulas' => $expeldampchapteroverview['formulas']],
+    ['number' => 17, 'key' => 'transform-phlegm-chapter-17', 'name' => 'Formulas That Dispel Phlegm', 'nameEs' => 'Fórmulas que eliminan la Flema', 'complete' => true, 'formulas' => $transformphlegmchapteroverview['formulas']],
+    ['number' => 18, 'key' => 'digestive-chapter-18', 'name' => 'Formulas That Reduce Food Stagnation', 'nameEs' => 'Fórmulas que reducen el estancamiento de alimentos', 'complete' => true, 'formulas' => $digestivechapteroverview['formulas']],
+    ['number' => 19, 'key' => 'expel-parasites-chapter-19', 'name' => 'Formulas That Expel Parasites', 'nameEs' => 'Fórmulas que expulsan parásitos', 'complete' => true, 'formulas' => $expelparasiteschapteroverview['formulas']],
+    ['number' => 20, 'key' => 'treat-abscesses-chapter-20', 'name' => 'Formulas That Treat Abscesses and Sores', 'nameEs' => 'Fórmulas que tratan abscesos y llagas', 'complete' => true, 'formulas' => $treatabscesseschapteroverview['formulas']],
+    ['number' => 21, 'key' => 'external-application-chapter-21', 'name' => 'Formulas for External Application', 'nameEs' => 'Fórmulas para aplicación externa', 'complete' => true, 'formulas' => $externalapplicationchapteroverview['formulas']],
+];
+$benskychapterbykey = [];
+foreach ($benskychapters as $benskychapter) {
+    $benskychapterbykey[$benskychapter['key']] = $benskychapter;
+}
+
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
 $issupplemental = $selected !== null && isset($supplementalcategories[$selected['key']]);
@@ -1591,8 +1619,9 @@ if ($selected !== null && $selected['key'] === 'transform-phlegm-chapter-17') {
 }
 $selectedprincipalformulacount = count($selectedprincipalformulas);
 $selectedboardstatus = $selected === null ? null : $getboardstatus($selectedstatusformulas, $ises);
-$categorykeys = array_keys($allcategories);
+$categorykeys = array_column($benskychapters, 'key');
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
+$selectedbenskychapter = $selected === null ? null : ($benskychapterbykey[$selected['key']] ?? null);
 
 $params = [];
 if ($selected !== null) {
@@ -1770,8 +1799,8 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Guía de estudio · Fórmulas' : 'Study Guide · Formulas'); ?></p>
             <h2><?php echo s($pagetitle); ?></h2>
             <p class="formula-study-guide__lead"><?php echo s($ises
-                ? 'Estudia 64 fichas detalladas en 14 categorías y comprueba su alcance contra las 181 fórmulas oficiales. Cada ficha conecta patrón, acción, pista decisiva, arquitectura y seguridad.'
-                : 'Study 64 detailed profiles in 14 categories and verify their scope against all 181 official formulas. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
+                ? 'Recorre los 21 capítulos de Bensky en el orden de la fuente y comprueba por separado cuáles de sus fórmulas pertenecen al Appendix C oficial de 2026.'
+                : 'Work through all 21 Bensky chapters in source order and verify separately which formulas belong to the official 2026 Appendix C.'); ?></p>
             <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el Appendix C oficial de NCBAHM 2026' : '* Included in the official 2026 NCBAHM Appendix C'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
@@ -1792,143 +1821,102 @@ echo $OUTPUT->header();
     <?php if ($selected === null): ?>
         <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title">
             <div>
-                <h3 id="formula-categories-title"><?php echo s($ises ? '64 fichas detalladas con referencia Bensky' : '64 detailed profiles with Bensky references'); ?></h3>
+                <h3 id="formula-categories-title"><?php echo s($ises ? '21 capítulos de Bensky' : '21 Bensky chapters'); ?></h3>
                 <p><?php echo s($ises
-                    ? 'Las 63 fichas originales más Run Chang Wan forman 64 perfiles organizados en las mismas 14 categorías. No sustituyen el listado oficial completo de 181 fórmulas del Appendix C.'
-                    : 'The original 63 profiles plus Run Chang Wan form 64 profiles organized in the same 14 categories. They do not replace the complete official Appendix C roster of 181 formulas.'); ?></p>
+                    ? 'Este índice reproduce los capítulos 1–21 que entregaste. Los capítulos 5–21 abren la cobertura completa ya incorporada; los capítulos 1–4 muestran las fichas detalladas actualmente integradas sin confundirlas con el alcance total del libro.'
+                    : 'This index follows the supplied Chapters 1–21. Chapters 5–21 open the complete coverage already incorporated; Chapters 1–4 show the detailed profiles currently integrated without confusing them with the book’s full scope.'); ?></p>
             </div>
             <div class="formula-study-guide__stats" aria-label="<?php echo s($ises ? 'Totales de la guía' : 'Guide totals'); ?>">
-                <div class="formula-study-guide__stat"><strong>14</strong><span><?php echo $ises ? 'categorías' : 'categories'; ?></span></div>
-                <div class="formula-study-guide__stat"><strong>64</strong><span><?php echo $ises ? 'fichas detalladas' : 'detailed profiles'; ?></span></div>
+                <div class="formula-study-guide__stat"><strong>21</strong><span><?php echo $ises ? 'capítulos' : 'chapters'; ?></span></div>
+                <div class="formula-study-guide__stat"><strong>17</strong><span><?php echo $ises ? 'capítulos completos' : 'complete chapters'; ?></span></div>
                 <div class="formula-study-guide__stat"><strong>181</strong><span><?php echo $ises ? 'fórmulas oficiales' : 'official formulas'; ?></span></div>
             </div>
         </section>
-        <section class="formula-study-guide__grid" aria-label="<?php echo s($ises ? 'Fichas detalladas con referencia Bensky' : 'Detailed profiles with Bensky references'); ?>">
-            <?php foreach ($categories as $category): ?>
+        <section class="formula-study-guide__grid" aria-label="<?php echo s($ises ? 'Capítulos de Bensky' : 'Bensky chapters'); ?>">
+            <?php foreach ($benskychapters as $chapter): ?>
                 <?php
-                $categoryparams = ['focus' => $category['key']];
+                $categoryparams = ['focus' => $chapter['key']];
                 if ($ises) {
                     $categoryparams['lang'] = 'es';
                 }
                 $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
-                $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
-                $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
-                $istonifyindexcard = $category['key'] === 'tonify';
-                $iswarminteriorindexcard = $category['key'] === 'warm-interior';
-                $iscalmshenindexcard = $category['key'] === 'calm-shen';
-                $isstabilizeindexcard = $category['key'] === 'stabilize-bind';
-                $isregulateqiindexcard = $category['key'] === 'regulate-qi';
-                $isinvigoratebloodindexcard = $category['key'] === 'invigorate-blood';
-                $isexpelwindindexcard = $category['key'] === 'expel-wind';
-                $isexpeldampindexcard = $category['key'] === 'expel-damp';
-                $istransformphlegmindexcard = $category['key'] === 'transform-phlegm';
-                $isdigestiveindexcard = $category['key'] === 'digestive';
-                $iscombinedindexcard = $istonifyindexcard || $iswarminteriorindexcard || $iscalmshenindexcard || $isstabilizeindexcard || $isregulateqiindexcard || $isinvigoratebloodindexcard || $isexpelwindindexcard || $isexpeldampindexcard || $istransformphlegmindexcard || $isdigestiveindexcard;
-                $benskychapternumber = $boardcategorybenskychapters[$category['key']];
-                $categoryname = $iscalmshenindexcard
-                    ? ($ises ? 'Calmar el Shen / Calmar el Espíritu' : 'Calm Shen / Calm the Spirit')
-                    : ($ises ? $category['nameEs'] : $category['name']);
-                if ($istonifyindexcard) {
-                    $categorymeta = $ises
-                        ? 'Núcleo detallado · 8 fichas · Capítulo Bensky 8'
-                        : 'Detailed core · 8 profiles · Bensky Chapter 8';
-                    $copy = $ises
-                        ? 'Empieza con las 8 fichas detalladas de Tonify; después amplía el estudio a las 45 fórmulas principales del capítulo 8.'
-                        : 'Start with the 8 detailed Tonify profiles; then expand to all 45 principal formulas in Chapter 8.';
-                    $reference = null;
-                } elseif ($iswarminteriorindexcard) {
-                    $categorymeta = $ises
-                        ? '4 fichas detalladas · Capítulo 6 de Bensky: 11'
-                        : '4 detailed core profiles · Bensky Chapter 6: 11';
-                } elseif ($iscalmshenindexcard) {
-                    $categorymeta = $ises
-                        ? '3 fichas detalladas · Capítulo 10 de Bensky: 9'
-                        : '3 detailed core profiles · Bensky Chapter 10: 9';
-                } elseif ($isstabilizeindexcard) {
-                    $categorymeta = $ises
-                        ? '3 fichas detalladas · Capítulo 9 de Bensky: 17'
-                        : '3 detailed core profiles · Bensky Chapter 9: 17';
-                } elseif ($isregulateqiindexcard) {
-                    $categorymeta = $ises
-                        ? '5 fichas detalladas · Capítulo 12 de Bensky: 20'
-                        : '5 detailed core profiles · Bensky Chapter 12: 20';
-                } elseif ($isinvigoratebloodindexcard) {
-                    $categorymeta = $ises
-                        ? '4 fichas detalladas · Capítulo 13 de Bensky: 23'
-                        : '4 detailed core profiles · Bensky Chapter 13: 23';
-                } elseif ($isexpelwindindexcard) {
-                    $categorymeta = $ises
-                        ? '3 fichas detalladas · Capítulo 14 de Bensky: 17'
-                        : '3 detailed core profiles · Bensky Chapter 14: 17';
-                } elseif ($isexpeldampindexcard) {
-                    $categorymeta = $ises
-                        ? '8 fichas detalladas · Capítulo 16 de Bensky: 33'
-                        : '8 detailed core profiles · Bensky Chapter 16: 33';
-                } elseif ($istransformphlegmindexcard) {
-                    $categorymeta = $ises
-                        ? '5 fichas detalladas · Capítulo 17 de Bensky: 17 principales'
-                        : '5 detailed core profiles · Bensky Chapter 17: 17 principal formulas';
-                } elseif ($isdigestiveindexcard) {
-                    $categorymeta = $ises
-                        ? '1 ficha detallada · Capítulo 18 de Bensky: 8'
-                        : '1 detailed core profile · Bensky Chapter 18: 8';
+                $copy = $categorycopy[$chapter['key']][$ises ? 1 : 0];
+                $principalformulas = array_values(array_filter(
+                    $chapter['formulas'],
+                    static fn(array $formula): bool => ($formula['chapterRole'] ?? 'principal') !== 'associated'
+                ));
+                $associatedcount = count($chapter['formulas']) - count($principalformulas);
+                $categoryboardstatus = $getboardstatus($principalformulas, $ises);
+                if ($chapter['complete']) {
+                    $categorymeta = count($principalformulas)
+                        . ($ises ? ' fórmulas principales · capítulo completo' : ' principal formulas · complete chapter');
+                    if ($associatedcount > 0) {
+                        $categorymeta .= ' + ' . $associatedcount . ($ises ? ' asociada' : ' associated');
+                    }
+                    $categorymeta .= ($ises ? ' · págs. ' : ' · pp. ')
+                        . $allcategories[$chapter['key']]['sourcePages'];
+                    $statuslabel = $categoryboardstatus['label'];
                 } else {
-                    $categorymeta = count($category['formulas'])
-                        . ($ises ? ' fichas detalladas · Capítulo Bensky ' : ' detailed core profiles · Bensky Chapter ')
-                        . $benskychapternumber;
+                    $categorymeta = count($principalformulas)
+                        . ($ises ? ' fichas detalladas actualmente integradas' : ' detailed profiles currently integrated');
+                    $statuslabel = ($ises ? 'Cobertura detallada: ' : 'Detailed coverage: ')
+                        . $categoryboardstatus['included'] . ($ises ? ' oficiales' : ' official');
                 }
-                $categorystatusformulas = $istonifyindexcard
-                    ? $category['formulas']
-                    : ($unifiedfamilystatusformulas[$category['key']] ?? $category['formulas']);
-                $categoryboardstatus = $getboardstatus($categorystatusformulas, $ises);
                 ?>
-                <a class="formula-study-guide__category<?php echo $istonifyindexcard ? ' formula-study-guide__category--board-priority' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>">
-                    <span class="formula-study-guide__category-number"><?php echo (int) $category['number']; ?></span>
-                    <strong><?php echo s($categoryname); ?></strong>
+                <a class="formula-study-guide__category<?php echo $chapter['complete'] ? ' formula-study-guide__category--board-priority' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>">
+                    <span class="formula-study-guide__category-number"><?php echo (int) $chapter['number']; ?></span>
+                    <strong><?php echo s($ises ? $chapter['nameEs'] : $chapter['name']); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
-                    <span class="formula-study-guide__board-status<?php echo $iscombinedindexcard ? ' formula-study-guide__board-status--' . s($categoryboardstatus['state']) : ''; ?>"><?php echo s($categoryboardstatus['label']); ?></span>
+                    <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($statuslabel); ?></span>
                     <p><?php echo s($copy); ?></p>
-                    <?php if ($istonifyindexcard): ?>
-                        <span class="formula-study-guide__chapter-merge">
-                            <b><?php echo s($ises ? 'Capítulo 8 completo' : 'Complete Chapter 8'); ?></b>
-                            <span><?php echo s($ises
-                                ? '45 fórmulas principales · 9 coincidencias con las 63 fichas originales'
-                                : '45 principal formulas · 9 Original 63-profile overlaps'); ?></span>
-                        </span>
-                    <?php endif; ?>
-                    <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
-                    <small><?php echo s($iscombinedindexcard
-                        ? ($istonifyindexcard
-                            ? ($ises ? 'Abrir familia unificada · fichas detalladas primero →' : 'Open unified family · detailed profiles first →')
-                            : ($ises ? 'Abrir familia unificada →' : 'Open unified family →'))
-                        : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
+                    <small><?php echo s($ises ? 'Abrir capítulo de Bensky →' : 'Open Bensky chapter →'); ?></small>
                 </a>
             <?php endforeach; ?>
         </section>
     <?php else: ?>
         <?php $selectedcopy = $categorycopy[$selected['key']][$ises ? 1 : 0]; ?>
         <?php $selectedreference = $categoryreferences[$selected['key']][$ises ? 1 : 0] ?? null; ?>
-        <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>">
-            <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior' : '← Previous category'); ?></a><?php endif; ?></span>
+        <?php
+        if ($selectedbenskychapter !== null) {
+            $selectedeyebrow = ($ises ? 'Capítulo de Bensky ' : 'Bensky Chapter ')
+                . $selectedbenskychapter['number'] . ($ises ? ' de ' : ' of ') . '21';
+            $selectedtitle = $ises ? $selectedbenskychapter['nameEs'] : $selectedbenskychapter['name'];
+            $selectedvisiblecount = count(array_filter(
+                $selected['formulas'],
+                static fn(array $formula): bool => ($formula['chapterRole'] ?? 'principal') !== 'associated'
+            ));
+            $selectedcountlabel = $selectedbenskychapter['complete']
+                ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.')
+                : ($ises ? 'fichas detalladas actualmente integradas.' : 'detailed profiles currently integrated.');
+        } else {
+            $selectedeyebrow = $issupplemental
+                ? ($isofficialexpansionpage
+                    ? (($ises ? 'Ampliación oficial · Capítulo ' : 'Official expansion · Chapter ')
+                        . $selected['sourceChapter'] . ' · ' . $selected['sourcePages'])
+                    : (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ')
+                        . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages']))
+                : (($ises ? 'Categoría ' : 'Category ') . $selected['number']);
+            $selectedtitle = $ises ? $selected['nameEs'] : $selected['name'];
+            $selectedvisiblecount = count($selected['formulas']);
+            $selectedcountlabel = $isofficialexpansionpage
+                ? ($ises ? 'ficha oficial adicional en esta sección.' : 'additional official profile in this section.')
+                : ($issupplemental
+                    ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.')
+                    : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'));
+        }
+        ?>
+        <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre capítulos de Bensky' : 'Bensky chapter navigation'); ?>">
+            <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Capítulo anterior' : '← Previous chapter'); ?></a><?php endif; ?></span>
             <div class="formula-study-guide__category-nav-center">
-                <?php if ($istonifychapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $tonifyparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Tonificar' : '← Tonify main category'); ?></a><?php endif; ?>
-                <?php if ($iswarmchapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $warmparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Calentar el Interior' : '← Warm the Interior main category'); ?></a><?php endif; ?>
-                <?php if ($isstabilizechapterpage): ?><a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $stabilizeparenturl->out(false); ?>"><?php echo s($ises ? '← Categoría principal Estabilizar y contener' : '← Stabilize and Bind main category'); ?></a><?php endif; ?>
-                <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
+                <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Los 21 capítulos' : 'All 21 chapters'); ?></a>
             </div>
-            <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
+            <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente capítulo →' : 'Next chapter →'); ?></a><?php endif; ?></span>
         </nav>
         <section class="formula-study-guide__category-header<?php echo $issupplemental ? ' formula-study-guide__category-header--supplemental' : ''; ?>" aria-labelledby="selected-category-title">
-            <p class="formula-study-guide__eyebrow"><?php echo s($issupplemental
-                ? ($isofficialexpansionpage
-                    ? (($ises ? 'Ampliación oficial · Capítulo ' : 'Official expansion · Chapter ') . $selected['sourceChapter'] . ' · ' . $selected['sourcePages'])
-                    : (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages']))
-                : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
-            <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
-            <?php if ($issupplemental || isset($unifiedfamilystatusformulas[$selected['key']])): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
-            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $isofficialexpansionpage
-                ? ($ises ? 'ficha oficial adicional en esta sección.' : 'additional official profile in this section.')
-                : ($issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.')); ?></strong></p>
+            <p class="formula-study-guide__eyebrow"><?php echo s($selectedeyebrow); ?></p>
+            <h3 id="selected-category-title"><?php echo s($selectedtitle); ?></h3>
+            <?php if ($selectedbenskychapter !== null || $issupplemental || isset($unifiedfamilystatusformulas[$selected['key']])): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
+            <p><?php echo s($selectedcopy); ?> <strong><?php echo $selectedvisiblecount; ?> <?php echo s($selectedcountlabel); ?></strong></p>
             <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
         <?php if (!$issupplemental && $selected['key'] !== 'tonify'): ?>
@@ -1936,8 +1924,8 @@ echo $OUTPUT->header();
                 <div>
                     <h4 id="board-verification-title"><?php echo s($ises ? 'Comprueba el listado oficial del Board' : 'Verify the official Board list'); ?></h4>
                     <p><?php echo s($ises
-                        ? 'Abre el listado oficial completo del Appendix C —181 fórmulas— para comprobar directamente cuáles pertenecen al guideline. Las 14 categorías organizan las 63 fichas originales y la ficha integrada de Run Chang Wan.'
-                        : 'Open the complete official Appendix C roster—181 formulas—to verify directly which formulas belong to the guideline. The 14 categories organize the original 63 profiles and the integrated Run Chang Wan profile.'); ?></p>
+                        ? 'Abre el listado oficial completo del Appendix C —181 fórmulas— para comprobar directamente cuáles pertenecen al guideline. Este capítulo forma parte del índice completo de 21 capítulos de Bensky.'
+                        : 'Open the complete official Appendix C roster—181 formulas—to verify directly which formulas belong to the guideline. This chapter is part of the complete 21-chapter Bensky index.'); ?></p>
                 </div>
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir listado oficial →' : 'Open official roster →'); ?></a>
             </section>
@@ -3111,10 +3099,10 @@ echo $OUTPUT->header();
         <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises
             ? 'Esta guía organiza contenido histórico normalizado para repaso académico. No sustituye diagnóstico, evaluación de seguridad ni prescripción profesional.'
             : 'This guide organizes normalized historical content for academic review. It does not replace diagnosis, safety assessment or professional prescribing.'); ?></p>
-        <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>">
-            <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior' : '← Previous category'); ?></a><?php endif; ?></span>
-            <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
-            <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría →' : 'Next category →'); ?></a><?php endif; ?></span>
+        <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre capítulos de Bensky' : 'Bensky chapter navigation'); ?>">
+            <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Capítulo anterior' : '← Previous chapter'); ?></a><?php endif; ?></span>
+            <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Los 21 capítulos' : 'All 21 chapters'); ?></a>
+            <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente capítulo →' : 'Next chapter →'); ?></a><?php endif; ?></span>
         </nav>
     <?php endif; ?>
 </main>

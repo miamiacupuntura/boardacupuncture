@@ -97,6 +97,10 @@ grep -Fq "\$runchangwanprofile['integratedOfficialProfile'] = true;" "$GUIDE"
 grep -Fq "'formulaNames' => ['Run Chang Wan']" "$GUIDE"
 ! grep -Fq '$nextcategorycardnumber' "$GUIDE"
 ! grep -Fq 'foreach ($officialexpansionindexcategories as $category)' "$GUIDE"
+grep -Fq "['number' => 20, 'key' => 'treat-abscesses-chapter-20', 'name' => 'Formulas That Treat Abscesses and Sores'" "$GUIDE"
+grep -Fq "['number' => 21, 'key' => 'external-application-chapter-21', 'name' => 'Formulas for External Application'" "$GUIDE"
+grep -Fq 'foreach ($benskychapters as $chapter)' "$GUIDE"
+grep -Fq "'21 capítulos de Bensky'" "$GUIDE"
 grep -Fq "Chapters 4 and 8 · Formulas that Clear Heat / Formulas that Tonify" \
     "$TEMP_DIR/study-guide/guidelines/formulas-appendix-c-2026-preview.html"
 
