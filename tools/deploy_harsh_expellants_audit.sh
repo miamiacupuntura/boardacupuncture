@@ -508,6 +508,8 @@ if [[ "$(grep -o 'Chapter [0-9][0-9]* · Formulas' "$TEMP_DIR/$FORMULA_PREVIEW_P
     echo "ERROR: la vista previa independiente no muestra 181 categorías de Bensky"
     exit 1
 fi
+grep -Fq 'href="/my/">← Dashboard</a>' "$TEMP_DIR/$FORMULA_PREVIEW_PATH"
+grep -Fq 'href="/blocks/myprogress/formulas-study-guide.php?lang=es">Guía de estudio de fórmulas →</a>' "$TEMP_DIR/$FORMULA_PREVIEW_PATH"
 
 mkdir -p "$BACKUP_DIR"
 for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$FORMULA_PREVIEW_PATH"; do
@@ -559,6 +561,8 @@ if [[ "$(grep -o 'data-search=' "$GUIDELINE_DIR/$(basename "$FORMULA_PREVIEW_PAT
     echo "ERROR: el índice público con buscador no contiene las 181 fórmulas"
     exit 1
 fi
+grep -Fq 'href="/my/">← Dashboard</a>' "$GUIDELINE_DIR/$(basename "$FORMULA_PREVIEW_PATH")"
+grep -Fq 'href="/blocks/myprogress/formulas-study-guide.php?lang=es">Guía de estudio de fórmulas →</a>' "$GUIDELINE_DIR/$(basename "$FORMULA_PREVIEW_PATH")"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     "$PHP_BIN" "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -593,6 +597,7 @@ echo "Anexo Viento-Frío: plegado y movido al final de la categoría"
 echo "Categoría 1: 13 hierbas oficiales; solo 3 entradas externas permanecen en el anexo"
 echo "Hai Zao, Zao Jiao Ci, Ting Li Zi y Zi Su Zi: perfiles verificados y completos"
 echo "Appendix C 2026: 181 fórmulas oficiales con ID, pinyin y nombre inglés"
+echo "Appendix C 2026: navegación directa al Dashboard y a la Guía de estudio de fórmulas"
 echo "Las 63 fichas anteriores quedan identificadas únicamente como perfiles detallados internos"
 echo "Guía pública actualizada: $GUIDELINE_DIR"
 echo "Respaldo: $BACKUP_DIR"
