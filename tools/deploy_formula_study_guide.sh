@@ -94,9 +94,9 @@ php -r '
         $data["supplementalFormulas"] ?? [],
         static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "external-application-ch21"
     );
-    $historical = array_filter(
+    $officialExpansion = array_filter(
         $data["supplementalFormulas"] ?? [],
-        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "historical-nccaom-formulas"
+        static fn(array $formula): bool => ($formula["categoryKey"] ?? "") === "official-formulas-ch3"
     );
     $dampnessSections = $data["categoryGuides"]["expel-damp-chapter-16"]["formulaSections"] ?? [];
     $dampnessSectionNames = [];
@@ -231,8 +231,8 @@ php -r '
             || count($chapter19) !== 3
             || count($chapter20) !== 14
             || count($chapter21) !== 11
-            || count($historical) !== 1
-            || array_column($historical, "name") !== ["Run Chang Wan"]
+            || count($officialExpansion) !== 1
+            || array_column($officialExpansion, "name") !== ["Run Chang Wan"]
             || array_column($dampnessSections, "key") !== [
                 "transform-harmonize-middle", "clear-damp-heat", "promote-urination",
                 "warm-transform-water", "dispel-wind-damp"
@@ -410,8 +410,8 @@ grep -q '"key": "attack-and-tonify"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"key": "harsh-water-expellants"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"Ji Chuan Jian"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"Run Chang Wan"' "$TEMP_DIR/formulas-study-guide-data.json"
-grep -q '"key": "historical-nccaom-formulas"' "$TEMP_DIR/formulas-study-guide-data.json"
-grep -q "NCCAOM 2020 · retirada del listado vigente" "$TEMP_DIR/formulas-study-guide.php"
+grep -q '"key": "official-formulas-ch3"' "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "Ampliación oficial" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "el uso clínico frecuente no garantiza inclusión en el Board" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "therapeuticClasses" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "boardScopeTitle" "$TEMP_DIR/formulas-study-guide.php"
@@ -420,7 +420,7 @@ grep -q "Prioridad Board · 8 fórmulas oficiales" "$TEMP_DIR/formulas-study-gui
 grep -q "45 fórmulas principales · 9 coincidencias con el Board" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Abrir familia unificada · Board primero" "$TEMP_DIR/formulas-study-guide.php"
 ! grep -Fq '$supplementalindexcategories' "$TEMP_DIR/formulas-study-guide.php"
-grep -Fq '$historicalindexcategories' "$TEMP_DIR/formulas-study-guide.php"
+grep -Fq '$officialexpansionindexcategories' "$TEMP_DIR/formulas-study-guide.php"
 grep -Fq '$boardcategorybenskychapters = [' "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'release-exterior' => 1" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'expel-damp' => 16" "$TEMP_DIR/formulas-study-guide.php"
@@ -513,7 +513,7 @@ grep -q "Coincidencia con los Board Domains · 8 de 33" "$TEMP_DIR/formulas-stud
 grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TEMP_DIR/formulas-study-guide.php"
 grep -q "Dato interesante: ocho fórmulas del Board" "$TEMP_DIR/formulas-study-guide.php"
-grep -q "Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM" "$TEMP_DIR/formulas-study-guide-data.json"
+grep -q "La localización superior con deficiencia de Qi-Sangre separa Juan Bi Tang" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"bai-zhu-fu-ling-dui-yao"' "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Drenar o transformar Humedad" "$TEMP_DIR/formulas-study-guide-data.json"
 grep -q "comparisonchapternumber" "$TEMP_DIR/formulas-study-guide.php"
@@ -646,8 +646,8 @@ grep -q '"key": "attack-and-tonify"' "$TARGET_DIR/formulas-study-guide-data.json
 grep -q '"key": "harsh-water-expellants"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"Ji Chuan Jian"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"Run Chang Wan"' "$TARGET_DIR/formulas-study-guide-data.json"
-grep -q '"key": "historical-nccaom-formulas"' "$TARGET_DIR/formulas-study-guide-data.json"
-grep -q "NCCAOM 2020 · retirada del listado vigente" "$TARGET_DIR/formulas-study-guide.php"
+grep -q '"key": "official-formulas-ch3"' "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "Ampliación oficial" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "el uso clínico frecuente no garantiza inclusión en el Board" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "therapeuticClasses" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "boardScopeTitle" "$TARGET_DIR/formulas-study-guide.php"
@@ -655,7 +655,7 @@ grep -q "Prioridad Board · 8 fórmulas oficiales" "$TARGET_DIR/formulas-study-g
 grep -q "45 fórmulas principales · 9 coincidencias con el Board" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Abrir familia unificada · Board primero" "$TARGET_DIR/formulas-study-guide.php"
 ! grep -Fq '$supplementalindexcategories' "$TARGET_DIR/formulas-study-guide.php"
-grep -Fq '$historicalindexcategories' "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq '$officialexpansionindexcategories' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq '$boardcategorybenskychapters = [' "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'release-exterior' => 1" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'expel-damp' => 16" "$TARGET_DIR/formulas-study-guide.php"
@@ -729,7 +729,7 @@ grep -q "Coincidencia con los Board Domains · 8 de 33" "$TARGET_DIR/formulas-st
 grep -q "8 fórmulas Board · Capítulo 16 de Bensky: 33" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "'expel-damp' => 'expel-damp-chapter-16'" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Dato interesante: ocho fórmulas del Board" "$TARGET_DIR/formulas-study-guide.php"
-grep -q "Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM" "$TARGET_DIR/formulas-study-guide-data.json"
+grep -q "La localización superior con deficiencia de Qi-Sangre separa Juan Bi Tang" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"slug":"bai-zhu-fu-ling-dui-yao"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "Duì Yào relacionados · Drenar o transformar Humedad" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q "comparisonchapternumber" "$TARGET_DIR/formulas-study-guide.php"
@@ -806,7 +806,7 @@ echo "CATEGORÍA 1 REORGANIZADA: VIENTO-FRÍO, VIENTO-CALOR Y TRANSFORMACIÓN A 
 echo "CATEGORÍA 2 REORGANIZADA: NIVEL QI, FUEGO-TOXINA, CALOR DE ÓRGANOS Y CALOR OCULTO"
 echo "CATEGORÍA 3 REORGANIZADA: AGLOMERACIÓN CHENG QI GRAVE, MODERADA Y SECA"
 echo "CLASIFICACIÓN PURGE INSTALADA: PURGANTES FRÍOS/CALIENTES, LAXANTES, ATAQUE-TONIFICACIÓN Y EXPELENTES"
-echo "RUN CHANG WAN INSTALADA: LAXANTE HUMECTANTE SECUNDARIO, SIN ASTERISCO BOARD"
+echo "RUN CHANG WAN INSTALADA: FÓRMULA OFICIAL DEL APPENDIX C 2026"
 echo "45 fórmulas en 6 secciones: Qi, Sangre, Qi-Sangre, Yin, Yang y Yin-Yang"
 echo "CAPÍTULO 9 INSTALADO: 17 fórmulas en 5 secciones (15 perfiles nuevos + 2 Board)"
 echo "REFERENCIA CRUZADA INSTALADA: BOARD STABILIZE AND BIND (3) VS. BENSKY CAPÍTULO 9 (17; COINCIDEN 2)"

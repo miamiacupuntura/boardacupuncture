@@ -713,12 +713,6 @@
       "classificationTextEs": "Purgantes, laxantes humectantes y expelentes drásticos de agua se agrupan porque todos dirigen hacia abajo un patógeno o una acumulación, pero no tratan el mismo problema. Antes de comparar fórmulas, identifica qué debe eliminarse: aglomeración de Calor, acumulación de Frío, heces secas, exceso complicado por deficiencia o agua retenida.",
       "classificationCaveat": "Critical distinction: moistening laxatives gently lubricate dry stool; purgatives forcefully attack material clumping; harsh expellants violently drive retained water through the stool or urine and are not constipation remedies. Several historical expellant formulas contain toxic, prohibited, or obsolete substances. These are study distinctions, not instructions for self-treatment.",
       "classificationCaveatEs": "Distinción crítica: los laxantes humectantes lubrican suavemente heces secas; los purgantes atacan con fuerza una aglomeración material; los expelentes drásticos fuerzan la salida de agua retenida por heces u orina y no son remedios para estreñimiento. Varias fórmulas expelentes históricas contienen sustancias tóxicas, prohibidas u obsoletas. Estas son distinciones de estudio, no instrucciones para autotratamiento.",
-      "boardScopeTitle": "Interesting point: common clinical use does not guarantee Board inclusion",
-      "boardScopeTitleEs": "Dato interesante: el uso clínico frecuente no garantiza inclusión en el Board",
-      "boardScopeText": "Run Chang Wan is widely taught and used in clinical practice for dry constipation from Blood and fluid deficiency, yet the current Appendix C does not include it. The Purge category selects only the three Cheng Qi formulas, creating a tightly graded comparison of Yangming organ Heat clumping and ingredient architecture. A reasonable curricular interpretation is that the blueprint prioritized this high-contrast family and omitted chronic deficiency-constipation variants to keep the required list compact.",
-      "boardScopeTextEs": "Run Chang Wan es una fórmula muy enseñada y utilizada en la práctica para estreñimiento seco por deficiencia de Sangre y líquidos, pero el Appendix C vigente no la incluye. La categoría Purge selecciona únicamente las tres fórmulas Cheng Qi, creando una comparación gradual muy definida de aglomeración de Calor en el órgano Yangming y arquitectura de ingredientes. Una interpretación curricular razonable es que el temario priorizó esta familia de alto contraste y omitió variantes de estreñimiento crónico por deficiencia para mantener compacta la lista obligatoria.",
-      "boardScopeCaveat": "The Board does not publish a formula-by-formula explanation for omissions. This is therefore a documented curricular hypothesis—not an official reason and not a judgment that Run Chang Wan is unimportant or ineffective.",
-      "boardScopeCaveatEs": "El Board no publica una explicación fórmula por fórmula de las omisiones. Por tanto, esta es una hipótesis curricular documentada, no una razón oficial ni un juicio de que Run Chang Wan sea poco importante o ineficaz.",
       "therapeuticClasses": [
         {
           "key": "cold-purgatives",
@@ -5289,13 +5283,13 @@
       "sourcePages": "893–906"
     },
     {
-      "number": "H1",
-      "key": "historical-nccaom-formulas",
-      "name": "Historical NCCAOM Formula Profiles",
-      "nameEs": "Fichas históricas de fórmulas NCCAOM",
-      "sourceType": "historical-roster",
-      "sourceChapter": "NCCAOM 2020",
-      "sourcePages": "Appendix B"
+      "number": "E1",
+      "key": "official-formulas-ch3",
+      "name": "Additional Official Formula Profiles · Chapter 3",
+      "nameEs": "Fichas oficiales adicionales · Capítulo 3",
+      "sourceType": "official-expansion",
+      "sourceChapter": 3,
+      "sourcePages": "NCBAHM Appendix C 2026"
     }
   ],
   "supplementalFormulas": [
@@ -9191,7 +9185,7 @@
       "clue":"General heaviness, stiffness in neck, shoulders and upper back, extremity numbness, difficult movement, white coat and moderate pulse.","clueEs":"Pesadez general, rigidez de nuca, hombros y espalda alta, entumecimiento de extremidades, movimiento difícil, saburra blanca y pulso moderado.",
       "ingredients":"Qiang Huo, Jiang Huang, Dang Gui, Huang Qi, Bai Shao, Fang Feng, Zhi Gan Cao, Sheng Jiang and Da Zao.","ingredientsEs":"Qiang Huo, Jiang Huang, Dang Gui, Huang Qi, Bai Shao, Fang Feng, Zhi Gan Cao, Sheng Jiang y Da Zao.",
       "safety":"Not for Wind-Damp-Heat painful obstruction. New weakness, progressive numbness, severe neck pain or neurologic deficits require evaluation.","safetyEs":"No corresponde a obstrucción dolorosa por Viento-Humedad-Calor. Debilidad nueva, entumecimiento progresivo, dolor cervical intenso o déficits neurológicos requieren valoración.","safetyTier":"high",
-      "examFocus":"Juan Bi Tang is not included in the current official 2026 NCBAHM Appendix C roster. Study it as a Bensky Chapter 16 comparison: upper-body location plus Qi-Blood deficiency separates it from the Board formula Du Huo Ji Sheng Tang and its chronic lower-body Liver-Kidney deficiency.","examFocusEs":"Juan Bi Tang no figura en el listado oficial vigente del Appendix C 2026 de NCBAHM. Estúdiala como comparación del capítulo 16 de Bensky: la localización superior con deficiencia de Qi-Sangre la separa de Du Huo Ji Sheng Tang, fórmula del Board para obstrucción crónica inferior con deficiencia de Hígado-Riñón."
+      "examFocus":"Upper-body location plus Qi-Blood deficiency separates Juan Bi Tang from Du Huo Ji Sheng Tang and its chronic lower-body Liver-Kidney deficiency.","examFocusEs":"La localización superior con deficiencia de Qi-Sangre separa Juan Bi Tang de Du Huo Ji Sheng Tang y su obstrucción crónica inferior con deficiencia de Hígado-Riñón."
     },
     {
       "number":"C16-31","sequence":31,"name":"Gui Zhi Shao Yao Zhi Mu Tang","englishName":"Cinnamon Twig, Peony, and Anemarrhena Decoction","categoryKey":"expel-damp-ch16","group":"Dispel Wind-Dampness","groupEs":"Dispersar Viento-Humedad","sourcePages":"760–762","kings":"Gui Zhi",
@@ -9691,14 +9685,14 @@
       "comparison":"The beeswax substitution removes the lead compound but does not establish efficacy or make unsupervised pregnancy treatment appropriate.","comparisonEs":"Sustituir con cera elimina el compuesto de plomo, pero no establece eficacia ni vuelve apropiado el tratamiento no supervisado durante embarazo."
     },
     {
-      "number": "H2020-01",
+      "number": "C03-01",
       "sequence": 1,
       "name": "Run Chang Wan",
       "englishName": "Moisten the Intestines Pill",
-      "categoryKey": "historical-nccaom-formulas",
+      "categoryKey": "official-formulas-ch3",
       "group": "Nourish Blood and Moisten the Intestines",
       "groupEs": "Nutrir Sangre y humedecer los Intestinos",
-      "sourcePages": "Appendix B",
+      "sourcePages": "NCBAHM Appendix C 2026",
       "kings": "Dang Gui, Sheng Di Huang",
       "pattern": "Blood and fluid deficiency causing dry, desiccated Intestines.",
       "patternEs": "Deficiencia de Sangre y líquidos que causa Intestinos secos y desecados.",
@@ -9711,8 +9705,8 @@
       "safety": "New severe constipation, vomiting, marked abdominal distention, bleeding, or inability to pass gas requires urgent medical evaluation. Professional assessment is required before prescribing during pregnancy or postpartum.",
       "safetyEs": "Estreñimiento nuevo intenso, vómito, distensión abdominal marcada, sangrado o incapacidad para expulsar gases requiere evaluación médica urgente. Se necesita valoración profesional antes de prescribir durante embarazo o posparto.",
       "safetyTier": "high",
-      "examFocus": "Run Chang Wan was listed in NCCAOM 2020 Appendix B, but it is not in the current NCBAHM 2026 Appendix C. Study it as a historical comparison: Blood-fluid deficiency and dryness separate it from the Heat-Dryness excess of Ma Zi Ren Wan and the Kidney-Yang deficiency-Cold of Ji Chuan Jian.",
-      "examFocusEs": "Run Chang Wan figuraba en Appendix B de NCCAOM 2020, pero no está en el Appendix C vigente de NCBAHM 2026. Estúdiala como comparación histórica: deficiencia de Sangre-líquidos y sequedad la separan del exceso de Calor-Sequedad de Ma Zi Ren Wan y del Frío por deficiencia de Yang de Riñón de Ji Chuan Jian.",
+      "examFocus": "Blood-fluid deficiency and dryness separate Run Chang Wan from the Heat-Dryness excess of Ma Zi Ren Wan and the Kidney-Yang deficiency-Cold of Ji Chuan Jian.",
+      "examFocusEs": "La deficiencia de Sangre-líquidos y la sequedad separan Run Chang Wan del exceso de Calor-Sequedad de Ma Zi Ren Wan y del Frío por deficiencia de Yang de Riñón de Ji Chuan Jian.",
       "ingredientRoles": "Dang Gui and Sheng Di Huang restore the deficient Blood-fluid substrate; Huo Ma Ren and Tao Ren moisten and lubricate; Zhi Ke moves Qi so the enriched Intestines can conduct stool.",
       "ingredientRolesEs": "Dang Gui y Sheng Di Huang restauran el sustrato deficiente de Sangre-líquidos; Huo Ma Ren y Tao Ren humedecen y lubrican; Zhi Ke mueve Qi para que los Intestinos enriquecidos conduzcan las heces.",
       "comparison": "Ma Zi Ren Wan is more excess-oriented and treats Heat-Dryness with focal distention; Ji Chuan Jian warms Kidney Yang for constipation with Cold and clear copious urine.",

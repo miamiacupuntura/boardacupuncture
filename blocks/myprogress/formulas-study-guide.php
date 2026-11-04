@@ -181,9 +181,9 @@ $categorycopy = [
         'Compare eight principal formulas in Bensky Chapter 15 by external versus internal dryness, cool versus warm dryness, organ location, fluid damage, rebellious Qi, thirst, and constipation.',
         'Compara las ocho fórmulas principales del capítulo 15 de Bensky por Sequedad externa o interna, fresca o cálida, localización orgánica, lesión de líquidos, Qi rebelde, sed y estreñimiento.',
     ],
-    'historical-nccaom-formulas' => [
-        'Historical reference profiles document formulas that appeared in the former NCCAOM roster but are outside the current NCBAHM Appendix C.',
-        'Las fichas de referencia histórica documentan fórmulas del listado anterior de NCCAOM que están fuera del Appendix C vigente de NCBAHM.',
+    'official-formulas-ch3' => [
+        'Additional detailed profiles extend the platform coverage without changing the official Appendix C roster.',
+        'Las fichas detalladas adicionales amplían la cobertura de la plataforma sin cambiar el listado oficial del Appendix C.',
     ],
     'tonify-qi-ch8' => [
         'Differentiate Qi deficiency by organ, sinking, unstable exterior, fluid loss, Dampness, and failure to grasp Qi.',
@@ -288,9 +288,9 @@ $categoryreferences = [
         'Complete Bensky source: 17 principal formulas in two sections. Original 63-profile overlap: 3—Xiao Feng San, Xiao Huo Luo Dan, and Tian Ma Gou Teng Yin.',
         'Fuente Bensky completa: 17 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 3—Xiao Feng San, Xiao Huo Luo Dan y Tian Ma Gou Teng Yin.',
     ],
-    'historical-nccaom-formulas' => [
-        'Official 2026 status: Run Chang Wan appears in NCBAHM Appendix C. This profile is stored outside the original 63-profile internal sequence, but it remains official.',
-        'Estatus oficial 2026: Run Chang Wan aparece en Appendix C de NCBAHM. Esta ficha está fuera de la secuencia interna original de 63 perfiles, pero sigue siendo oficial.',
+    'official-formulas-ch3' => [
+        'Chapter 3 expansion: a detailed profile for an official formula beyond the original 63-profile internal sequence.',
+        'Ampliación del capítulo 3: una ficha detallada de una fórmula oficial adicional a la secuencia interna original de 63 perfiles.',
     ],
 ];
 
@@ -1461,10 +1461,10 @@ $chapterinterestinginsights = [
     ],
 ];
 
-$historicalindexcategories = [];
+$officialexpansionindexcategories = [];
 foreach ($supplementalcategories as $categorykey => $category) {
-    if (($category['sourceType'] ?? '') === 'historical-roster') {
-        $historicalindexcategories[$categorykey] = $category;
+    if (($category['sourceType'] ?? '') === 'official-expansion') {
+        $officialexpansionindexcategories[$categorykey] = $category;
     }
 }
 $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
@@ -1496,7 +1496,7 @@ unset($supplementalcategories['external-application-ch21']);
 $allcategories = $categories + $supplementalcategories;
 $selected = $allcategories[$focus] ?? null;
 $issupplemental = $selected !== null && isset($supplementalcategories[$selected['key']]);
-$ishistoricalrosterpage = $selected !== null && ($selected['sourceType'] ?? '') === 'historical-roster';
+$isofficialexpansionpage = $selected !== null && ($selected['sourceType'] ?? '') === 'official-expansion';
 $istonifychapterpage = $selected !== null
     && ($selected['key'] === 'tonify-chapter-8' || in_array($selected['key'], $tonifychapterkeys, true));
 $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-cold';
@@ -1857,7 +1857,7 @@ echo $OUTPUT->header();
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
             <?php endforeach; ?>
-            <?php foreach ($historicalindexcategories as $category): ?>
+            <?php foreach ($officialexpansionindexcategories as $category): ?>
                 <?php
                 $categoryparams = ['focus' => $category['key']];
                 if ($ises) {
@@ -1869,13 +1869,13 @@ echo $OUTPUT->header();
                 $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
                 ?>
                 <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
-                    <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Listado histórico' : 'Historical roster'); ?></span>
+                    <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Ampliación oficial' : 'Official expansion'); ?></span>
                     <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
-                    <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ises ? 'ficha histórica' : 'historical profile'); ?> · <?php echo s($category['sourcePages']); ?></span>
+                    <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ises ? 'ficha detallada adicional' : 'additional detailed profile'); ?> · <?php echo s($category['sourcePages']); ?></span>
                     <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
                     <p><?php echo s($copy); ?></p>
                     <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
-                    <small><?php echo s($ises ? 'Abrir ficha histórica →' : 'Open historical profile →'); ?></small>
+                    <small><?php echo s($ises ? 'Abrir ficha oficial →' : 'Open official profile →'); ?></small>
                 </a>
             <?php endforeach; ?>
         </section>
@@ -1894,14 +1894,14 @@ echo $OUTPUT->header();
         </nav>
         <section class="formula-study-guide__category-header<?php echo $issupplemental ? ' formula-study-guide__category-header--supplemental' : ''; ?>" aria-labelledby="selected-category-title">
             <p class="formula-study-guide__eyebrow"><?php echo s($issupplemental
-                ? ($ishistoricalrosterpage
-                    ? (($ises ? 'Listado histórico · ' : 'Historical roster · ') . $selected['sourceChapter'] . ' · ' . $selected['sourcePages'])
+                ? ($isofficialexpansionpage
+                    ? (($ises ? 'Ampliación oficial · Capítulo ' : 'Official expansion · Chapter ') . $selected['sourceChapter'] . ' · ' . $selected['sourcePages'])
                     : (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ') . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages']))
                 : (($ises ? 'Categoría ' : 'Category ') . $selected['number'] . ' ' . ($ises ? 'de' : 'of') . ' 14')); ?></p>
             <h3 id="selected-category-title"><?php echo s($ises ? $selected['nameEs'] : $selected['name']); ?></h3>
             <?php if ($issupplemental || isset($unifiedfamilystatusformulas[$selected['key']])): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
-            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $ishistoricalrosterpage
-                ? ($ises ? 'ficha histórica en esta sección.' : 'historical profile in this section.')
+            <p><?php echo s($selectedcopy); ?> <strong><?php echo count($selected['formulas']); ?> <?php echo $isofficialexpansionpage
+                ? ($ises ? 'ficha oficial adicional en esta sección.' : 'additional official profile in this section.')
                 : ($issupplemental ? ($ises ? 'fórmulas principales en este capítulo.' : 'principal formulas in this chapter.') : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.')); ?></strong></p>
             <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
@@ -2829,8 +2829,8 @@ echo $OUTPUT->header();
                         . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
                         . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
                 } elseif ($issupplemental) {
-                    $formulalabel = $ishistoricalrosterpage
-                        ? (($ises ? 'Ficha histórica ' : 'Historical profile ') . $formula['sequence']
+                    $formulalabel = $isofficialexpansionpage
+                        ? (($ises ? 'Ficha oficial adicional ' : 'Additional official profile ') . $formula['sequence']
                             . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']) . ' · ' . $formula['sourcePages'])
                         : (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence']
                             . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
@@ -2909,7 +2909,7 @@ echo $OUTPUT->header();
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Ficha detallada del núcleo' : 'Detailed core profile'); ?></span><?php endif; ?>
-                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($ishistoricalrosterpage
+                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($isofficialexpansionpage
                                 ? ($ises ? 'Appendix C 2026 · oficial' : 'Appendix C 2026 · official')
                                 : (is_numeric($formula['number'])
                                     ? (($ises ? 'Ficha del núcleo · Fórmula #' : 'Core profile · Formula #') . $formula['number'])
