@@ -2,24 +2,37 @@
 set -euo pipefail
 
 REVISION="${1:-bensky-chapter-four}"
-MOODLE_ROOT="${2:-/var/www/html}"
+TARGET_DIR="${2:-${STUDY_NOTE_DIR:-}}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
-STUDY_ROOT="$MOODLE_ROOT/study-guide/comparisons"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 SCRIPT_RELATIVE="study-guide/comparisons/study-note-navigation.js"
-LOADER='/study-guide/comparisons/study-note-navigation.js?v=20261104-1'
+LOADER='/study-guide/comparisons/study-note-navigation.js?v=20261104-2'
 
 for command in curl php tar find install; do
     command -v "$command" >/dev/null 2>&1 || { echo "Missing required command: $command" >&2; exit 1; }
 done
-if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
-    echo "Moodle config.php was not found at $MOODLE_ROOT" >&2
+if [[ -z "$TARGET_DIR" ]]; then
+    CANDIDATE_DIRS=(
+        "/var/www/acupuncturetests-study-guide/current/comparisons"
+        "/var/www/html/moodle/study-guide/comparisons"
+        "/var/www/html/study-guide/comparisons"
+    )
+    for candidate in "${CANDIDATE_DIRS[@]}"; do
+        if [[ -f "$candidate/dui-yao.html" && -f "$candidate/comparisons.css" ]]; then
+            TARGET_DIR="$candidate"
+            break
+        fi
+    done
+fi
+if [[ -z "$TARGET_DIR" ]]; then
+    ACTIVE_NOTE="$(find /var/www -type f -path '*/study-guide/comparisons/dui-yao.html' -print -quit 2>/dev/null || true)"
+    [[ -n "$ACTIVE_NOTE" ]] && TARGET_DIR="$(dirname "$ACTIVE_NOTE")"
+fi
+if [[ -z "$TARGET_DIR" || ! -f "$TARGET_DIR/dui-yao.html" || ! -f "$TARGET_DIR/comparisons.css" ]]; then
+    echo "Active Study Note directory was not found. Pass it as the second argument or set STUDY_NOTE_DIR." >&2
     exit 1
 fi
-if [[ ! -d "$STUDY_ROOT" ]]; then
-    echo "Study Note directory was not found at $STUDY_ROOT" >&2
-    exit 1
-fi
+echo "Active Study Note directory: $TARGET_DIR"
 
 TEMP_DIR="$(mktemp -d)"
 BACKUP_DIR="$BACKUP_ROOT/study-note-navigation-$(date +%Y%m%d-%H%M%S)"
@@ -31,17 +44,17 @@ grep -Fq 'data-study-note-navigation' "$TEMP_DIR/$SCRIPT_RELATIVE"
 grep -Fq 'study-note-activity-nav' "$TEMP_DIR/$SCRIPT_RELATIVE"
 
 (
-    cd "$MOODLE_ROOT"
-    find study-guide/comparisons -type f -name '*.html' -print0 \
+    cd "$TARGET_DIR"
+    find . -type f -name '*.html' -print0 \
         | tar --null -czf "$BACKUP_DIR/study-note-html-before-navigation.tar.gz" --files-from=-
 )
-if [[ -f "$STUDY_ROOT/study-note-navigation.js" ]]; then
-    cp -a "$STUDY_ROOT/study-note-navigation.js" "$BACKUP_DIR/study-note-navigation.js.previous"
+if [[ -f "$TARGET_DIR/study-note-navigation.js" ]]; then
+    cp -a "$TARGET_DIR/study-note-navigation.js" "$BACKUP_DIR/study-note-navigation.js.previous"
 fi
 
-install -m 0644 "$TEMP_DIR/$SCRIPT_RELATIVE" "$STUDY_ROOT/study-note-navigation.js"
-if [[ -f "$STUDY_ROOT/comparisons.css" ]]; then
-    chown --reference="$STUDY_ROOT/comparisons.css" "$STUDY_ROOT/study-note-navigation.js"
+install -m 0644 "$TEMP_DIR/$SCRIPT_RELATIVE" "$TARGET_DIR/study-note-navigation.js"
+if [[ -f "$TARGET_DIR/comparisons.css" ]]; then
+    chown --reference="$TARGET_DIR/comparisons.css" "$TARGET_DIR/study-note-navigation.js"
 fi
 
 php -r '
@@ -77,8 +90,14 @@ if ($notes < 1 || $installed !== $notes) {
     throw new RuntimeException("Incomplete Study Note coverage: notes={$notes}, installed={$installed}");
 }
 echo "Study Note navigation installed: notes={$notes}, changed={$changed}\n";
-' "$STUDY_ROOT" "$LOADER"
+' "$TARGET_DIR" "$LOADER"
 
-php "$MOODLE_ROOT/admin/cli/purge_caches.php" >/dev/null
+for moodle_root in /var/www/html/moodle /var/www/html; do
+    if [[ -f "$moodle_root/config.php" && -f "$moodle_root/admin/cli/purge_caches.php" ]]; then
+        php "$moodle_root/admin/cli/purge_caches.php" >/dev/null
+        break
+    fi
+done
 echo "Backup: $BACKUP_DIR/study-note-html-before-navigation.tar.gz"
 echo "Global Study Note navigation deployed from revision: $REVISION"
+echo "Test: https://www.acupuncturetests.com/study-guide/comparisons/du-zhong-xu-duan-dui-yao.html?nav=20261104-2"

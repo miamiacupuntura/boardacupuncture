@@ -73,8 +73,24 @@ fi
 
 mkdir -p "${OUTPUT_DIR}"
 ARTIFACT="${OUTPUT_DIR}/study-guide-${RELEASE_ID}.tar.gz"
+STAGING_DIR="$(mktemp -d)"
+trap 'rm -rf "${STAGING_DIR}"' EXIT
 
-tar -czf "${ARTIFACT}" -C "${SOURCE_DIR}" .
+# Keep the repository readable while ensuring every published Study Note loads
+# the shared Previous / Jump / Next navigation component.
+cp -a "${SOURCE_DIR}/." "${STAGING_DIR}/"
+node "${REPO_ROOT}/tools/inject_study_note_navigation.mjs" \
+    --write \
+    --root="${STAGING_DIR}/comparisons"
+node "${REPO_ROOT}/tools/inject_study_note_navigation.mjs" \
+    --check \
+    --root="${STAGING_DIR}/comparisons"
+if [[ ! -f "${STAGING_DIR}/comparisons/study-note-navigation.js" ]]; then
+    echo "Shared Study Note navigation asset is missing." >&2
+    exit 1
+fi
+
+tar -czf "${ARTIFACT}" -C "${STAGING_DIR}" .
 sha256sum "${ARTIFACT}" > "${ARTIFACT}.sha256"
 
 echo "Built ${ARTIFACT}"
