@@ -165,6 +165,10 @@ assert(categoryMapPhp.includes('1 => [1, 5]')
     && categoryMapPhp.includes('7 => [12, 17]')
     && categoryMapPhp.includes('31 => [51]'),
     'the Exterior, Clear Heat, deficiency-Heat, or internal-Wind Duì Yào bridge is missing.');
+assert(categoryMapPhp.indexOf('LEVEL 1 · HERBS') < categoryMapPhp.indexOf('LEVEL 2 · DUÌ YÀO')
+    && categoryMapPhp.indexOf('LEVEL 2 · DUÌ YÀO') < categoryMapPhp.indexOf('LEVEL 3 · FORMULAS')
+    && categoryMapPhp.includes('colspan="3"'),
+    'the crosswalk columns are not ordered Herbs, Duì Yào, Formulas with a full-width explanation row.');
 assert(mappedHerbCards.filter(item => item.card >= 3 && item.card <= 7).every(item => item.chapter === 2),
     'the five Clear Heat herb categories are not preserved under Bensky herb Chapter 2.');
 assert(categoryMapPhp.includes("[4, 20], 'direct'")
