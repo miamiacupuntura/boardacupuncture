@@ -113,6 +113,9 @@ grep -Fq 'HOW THEY RELATE' "$TEMP_DIR/blocks/myprogress/herb-formula-category-ma
 grep -Fq 'Clinical explanation' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Examples inside formulas:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Ma Huang Tang → Ma Huang + Gui Zhi' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'Representative Duì Yào' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'Official pair ' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'Formula bridge:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq "[3, 2, 'Herbs that Clear Heat and Drain Fire'" "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq "Chapters 4 and 8 · Formulas that Clear Heat / Formulas that Tonify" \
     "$TEMP_DIR/study-guide/guidelines/formulas-appendix-c-2026-preview.html"

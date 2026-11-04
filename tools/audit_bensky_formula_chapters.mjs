@@ -9,6 +9,7 @@ const guideData = JSON.parse(read('blocks/myprogress/formulas-study-guide-data.j
 const php = read('blocks/myprogress/formulas-study-guide.php');
 const categoryMapPhp = read('blocks/myprogress/herb-formula-category-map.php');
 const studyGuideHubPhp = read('blocks/myprogress/study-guide.php');
+const officialDuiYao = JSON.parse(read('study-guide/comparisons/dui-yao-data.json'));
 
 const fail = message => {
     throw new Error(`Bensky formula chapter audit failed: ${message}`);
@@ -155,6 +156,15 @@ const compositionExampleCards = compositionExamplesMatch
     : [];
 assert(JSON.stringify(compositionExampleCards) === JSON.stringify(Array.from({length: 34}, (_, index) => index + 1)),
     'the combined map does not include formula-composition examples for all 34 herb categories.');
+const officialDuiYaoSlugs = new Set(officialDuiYao.map(pair => pair.slug));
+const mappedDuiYaoSlugs = [...categoryMapPhp.matchAll(/=> \['([^']+-dui-yao)',/g)].map(item => item[1]);
+assert(mappedDuiYaoSlugs.length >= 25 && mappedDuiYaoSlugs.every(slug => officialDuiYaoSlugs.has(slug)),
+    'the combined map contains too few representative Duì Yào or a non-official pair.');
+assert(categoryMapPhp.includes('1 => [1, 5]')
+    && categoryMapPhp.includes('3 => [11]')
+    && categoryMapPhp.includes('7 => [12, 17]')
+    && categoryMapPhp.includes('31 => [51]'),
+    'the Exterior, Clear Heat, deficiency-Heat, or internal-Wind Duì Yào bridge is missing.');
 assert(mappedHerbCards.filter(item => item.card >= 3 && item.card <= 7).every(item => item.chapter === 2),
     'the five Clear Heat herb categories are not preserved under Bensky herb Chapter 2.');
 assert(categoryMapPhp.includes("[4, 20], 'direct'")

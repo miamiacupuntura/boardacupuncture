@@ -164,9 +164,59 @@ $compositionexamples = [
     34 => ['No modern formula example: these obsolete substances are shown for historical safety recognition only.', 'Sin ejemplo de fórmula moderna: estas sustancias obsoletas aparecen solo para reconocimiento histórico y seguridad.'],
 ];
 
+// Selected official Appendix B pairs. Only categories with a clear teaching bridge receive Duì Yào.
+$duiyaopairs = [
+    1 => ['ma-huang-gui-zhi-dui-yao', 'Má Huáng + Guì Zhī', '麻黄 + 桂枝', 'Má Huáng Tāng'],
+    2 => ['ma-huang-xing-ren-dui-yao', 'Má Huáng + Xìng Rén', '麻黄 + 杏仁', 'Má Huáng Tāng; Má Xìng Shí Gān Tāng'],
+    5 => ['jing-jie-fang-feng-dui-yao', 'Jīng Jiè + Fáng Fēng', '荆芥 + 防风', 'Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn'],
+    7 => ['sang-ye-ju-hua-dui-yao', 'Sāng Yè + Jú Huā', '桑叶 + 菊花', 'Sāng Jú Yǐn'],
+    11 => ['shi-gao-zhi-mu-dui-yao', 'Shí Gāo + Zhī Mǔ', '石膏 + 知母', 'Bái Hǔ Tāng'],
+    12 => ['zhi-mu-huang-bai-dui-yao', 'Zhī Mǔ + Huáng Bǎi', '知母 + 黄柏', 'Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán'],
+    15 => ['jin-yin-hua-lian-qiao-dui-yao', 'Jīn Yín Huā + Lián Qiào', '金银花 + 连翘', 'Yín Qiáo Sǎn'],
+    16 => ['niu-bang-zi-lian-qiao-dui-yao', 'Niú Bàng Zǐ + Lián Qiào', '牛蒡子 + 连翘', 'Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn'],
+    17 => ['qing-hao-bie-jia-dui-yao', 'Qīng Hāo + Biē Jiǎ', '青蒿 + 鳖甲', 'Qīng Hāo Biē Jiǎ Tāng'],
+    18 => ['ren-shen-huang-qi-dui-yao', 'Rén Shēn + Huáng Qí', '人参 + 黄芪', 'Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng'],
+    19 => ['bai-zhu-fu-ling-dui-yao', 'Bái Zhú + Fú Líng', '白术 + 茯苓', 'Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn'],
+    24 => ['dang-gui-chuan-xiong-dui-yao', 'Dāng Guī + Chuān Xiōng', '当归 + 川芎', 'Sì Wù Tāng'],
+    25 => ['dang-gui-xiang-fu-dui-yao', 'Dāng Guī + Xiāng Fù', '当归 + 香附', 'Xiāng Fù Sì Wù Tāng'],
+    26 => ['ai-ye-e-jiao-dui-yao', 'Ài Yè + Ē Jiāo', '艾叶 + 阿胶', 'Jiāo Ài Tāng'],
+    27 => ['mai-men-dong-sha-shen-dui-yao', 'Mài Mén Dōng + Shā Shēn', '麦门冬 + 沙参', 'Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān'],
+    29 => ['han-lian-cao-nu-zhen-zi-dui-yao', 'Hàn Lián Cǎo + Nǚ Zhēn Zǐ', '旱莲草 + 女贞子', 'Èr Zhì Wán'],
+    31 => ['du-zhong-xu-duan-dui-yao', 'Dù Zhòng + Xù Duàn', '杜仲 + 续断', 'Dú Huó Jì Shēng Tāng'],
+    32 => ['dang-gui-rou-cong-rong-dui-yao', 'Dāng Guī + Ròu Cōng Róng', '当归 + 肉苁蓉', 'Jì Chuān Jiān'],
+    33 => ['di-yu-huai-mi-dui-yao', 'Dì Yú + Huái Mǐ', '地榆 + 槐米', 'Huái Huā Sǎn'],
+    34 => ['tao-ren-hong-hua-dui-yao', 'Táo Rén + Hóng Huā', '桃仁 + 红花', 'Xuè Fǔ Zhú Yū Tāng'],
+    35 => ['ru-xiang-mo-yao-dui-yao', 'Rǔ Xiāng + Mò Yào', '乳香 + 没药', 'Xiǎo Huó Luò Dān'],
+    37 => ['ban-xia-chen-pi-dui-yao', 'Bàn Xià + Chén Pí', '半夏 + 陈皮', 'Èr Chén Tāng; Bǎo Hé Wán'],
+    38 => ['ban-xia-sheng-jiang-dui-yao', 'Bàn Xià + Shēng Jiāng', '半夏 + 生姜', 'Xiǎo Bàn Xià Tāng; Xiǎo Chái Hú Tāng'],
+    39 => ['gua-lou-xie-bai-dui-yao', 'Guā Lóu + Xiè Bái', '瓜蒌 + 薤白', 'Guā Lóu Xiè Bái Bàn Xià Tāng'],
+    40 => ['zi-wan-kuan-dong-hua-dui-yao', 'Zǐ Wǎn + Kuǎn Dōng Huā', '紫菀 + 款冬花', 'Shè Gān Má Huáng Tāng'],
+    42 => ['fu-zi-gan-jiang-dui-yao', 'Fù Zǐ + Gān Jiāng', '附子 + 干姜', 'Sì Nì Tāng'],
+    43 => ['fu-zi-rou-gui-dui-yao', 'Fù Zǐ + Ròu Guì', '附子 + 肉桂', 'Yòu Guī Wán'],
+    46 => ['chai-hu-bai-shao-dui-yao', 'Chái Hú + Bái Sháo', '柴胡 + 白芍', 'Sì Nì Sǎn; Xiāo Yáo Sǎn'],
+    47 => ['huo-xiang-pei-lan-dui-yao', 'Huò Xiāng + Pèi Lán', '藿香 + 佩兰', 'Huò Xiāng Zhèng Qì Sǎn (modified)'],
+    48 => ['jin-qian-cao-hai-jin-sha-dui-yao', 'Jīn Qián Cǎo + Hǎi Jīn Shā', '金钱草 + 海金沙', 'Sān Jīn Tāng'],
+    49 => ['da-huang-mang-xiao-dui-yao', 'Dà Huáng + Máng Xiāo', '大黄 + 芒硝', 'Dà Chéng Qì Tāng'],
+    50 => ['long-gu-mu-li-dui-yao', 'Lóng Gǔ + Mǔ Lì', '龙骨 + 牡蛎', 'Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng'],
+    51 => ['tian-ma-gou-teng-dui-yao', 'Tiān Má + Gōu Téng', '天麻 + 钩藤', 'Tiān Má Gōu Téng Yǐn'],
+];
+
+$categoryduiyao = [
+    1 => [1, 5], 2 => [7, 16], 3 => [11], 6 => [15], 7 => [12, 17],
+    9 => [49], 10 => [32], 12 => [19, 48], 13 => [31], 14 => [39],
+    15 => [37, 38], 16 => [2, 40], 17 => [47], 18 => [37], 19 => [25, 46],
+    20 => [34, 35], 21 => [26, 33], 22 => [42], 23 => [18, 19], 24 => [24],
+    25 => [31, 43], 26 => [27, 29], 27 => [50], 28 => [50], 31 => [51],
+];
+
 if (array_keys($relationshipnotes) !== range(1, 34)
         || array_keys($compositionexamples) !== range(1, 34)) {
     throw new moodle_exception('Every herb category must include a relationship explanation and composition example.');
+}
+foreach ($categoryduiyao as $cardnumber => $pairnumbers) {
+    if ($cardnumber < 1 || $cardnumber > 34 || array_diff($pairnumbers, array_keys($duiyaopairs)) !== []) {
+        throw new moodle_exception('The representative Dui Yao category map is invalid.');
+    }
 }
 
 $langparams = $ises ? ['lang' => 'es'] : [];
@@ -194,6 +244,15 @@ echo $OUTPUT->header();
 .herb-formula-map__table th:nth-child(3){width:32%}
 .herb-formula-map__cell--relation{border-top-color:#315fa5;background:#f3f7fd}
 .herb-formula-map__explanation{margin:0;color:#435d7a;font-size:13px;line-height:1.55}
+.herb-formula-map__duiyao{margin-top:12px;padding:10px 11px;border:1px solid #ddd6f3;border-radius:8px;background:#faf8ff}
+.herb-formula-map__duiyao-title{display:block;margin-bottom:7px;color:#5a37ac;font-size:11px;font-weight:900;text-transform:uppercase}
+.herb-formula-map__duiyao-list{display:grid;gap:7px}
+.herb-formula-map__duiyao-pair{display:block;padding:8px 9px;border:1px solid #e3def2;border-radius:7px;background:#fff;color:#334155;text-decoration:none}
+.herb-formula-map__duiyao-pair:hover{border-color:#8b6bd1;color:#334155;text-decoration:none}
+.herb-formula-map__duiyao-pair span{display:block;color:#6d4bc3;font-size:9px;font-weight:900;text-transform:uppercase}
+.herb-formula-map__duiyao-pair strong{display:inline-block;margin-top:3px;color:#2f2350;font-size:13px}
+.herb-formula-map__duiyao-pair em{margin-left:6px;color:#7a6b8d;font-size:12px;font-style:normal}
+.herb-formula-map__duiyao-pair small{display:block;margin-top:3px;color:#52677a;font-size:11px;line-height:1.4}
 .herb-formula-map__composition{margin:12px 0 0;padding:10px 11px;border-radius:8px;background:#fff;color:#435d7a;font-size:12px;line-height:1.5}
 .herb-formula-map__composition strong{display:block;margin-bottom:3px;color:#17344a}
 </style>
@@ -226,7 +285,7 @@ echo $OUTPUT->header();
                 <?php foreach ($category[5] as $chapternumber): $formulachapter = $formulachapters[$chapternumber]; ?><section class="herb-formula-map__match"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $chapternumber); ?></span></div><h4><?php echo s($formulachapter[$ises ? 1 : 0]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Fórmulas principales:' : 'Representative formulas:'; ?></strong> <?php echo s($formulachapter[2]); ?></p></section><?php endforeach; ?>
                 <p class="herb-formula-map__relation"><?php echo s($relationshiplabels[$category[6]][$ises ? 1 : 0]); ?></p>
             </article></td>
-            <td><article class="herb-formula-map__cell herb-formula-map__cell--relation"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Explicación clínica' : 'Clinical explanation'); ?></span></div><p class="herb-formula-map__explanation"><?php echo s($relationshipnotes[$category[0]][$ises ? 1 : 0]); ?></p><p class="herb-formula-map__composition"><strong><?php echo $ises ? 'Ejemplos dentro de fórmulas:' : 'Examples inside formulas:'; ?></strong><?php echo s($compositionexamples[$category[0]][$ises ? 1 : 0]); ?></p></article></td>
+            <td><article class="herb-formula-map__cell herb-formula-map__cell--relation"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Explicación clínica' : 'Clinical explanation'); ?></span></div><p class="herb-formula-map__explanation"><?php echo s($relationshipnotes[$category[0]][$ises ? 1 : 0]); ?></p><?php if (isset($categoryduiyao[$category[0]])): ?><div class="herb-formula-map__duiyao"><strong class="herb-formula-map__duiyao-title"><?php echo $ises ? 'Duì Yào representativos' : 'Representative Duì Yào'; ?></strong><div class="herb-formula-map__duiyao-list"><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; $pairurl = new moodle_url('/study-guide/comparisons/' . $pair[0] . ($ises ? '-es' : '') . '.html', ['from' => 'bensky-crosswalk']); ?><a class="herb-formula-map__duiyao-pair" href="<?php echo $pairurl->out(false); ?>"><span><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $pairnumber . '/51'); ?></span><strong><?php echo s($pair[1]); ?></strong><em><?php echo s($pair[2]); ?></em><small><b><?php echo $ises ? 'Puente con fórmula:' : 'Formula bridge:'; ?></b> <?php echo s($pair[3]); ?></small></a><?php endforeach; ?></div></div><?php endif; ?><p class="herb-formula-map__composition"><strong><?php echo $ises ? 'Ejemplos dentro de fórmulas:' : 'Examples inside formulas:'; ?></strong><?php echo s($compositionexamples[$category[0]][$ises ? 1 : 0]); ?></p></article></td>
         </tr><?php endforeach; ?></tbody>
     </table></div>
     <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises ? 'La semejanza del nombre no sustituye patrón, arquitectura de la fórmula, dosis ni seguridad. Esta tabla organiza el estudio; no constituye guía de prescripción.' : 'Name similarity does not replace pattern, formula architecture, dosage, or safety. This table organizes study and is not prescribing guidance.'); ?></p>
