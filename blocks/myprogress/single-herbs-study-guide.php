@@ -1106,6 +1106,79 @@ if ($ises) {
     $mixedreviewparams['lang'] = 'es';
 }
 $mixedreviewurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $mixedreviewparams);
+$singleherbcategorypath = [];
+foreach ($studyguidecategories as $pathcategory) {
+    $pathguidenumber = (int)$pathcategory['guide_number'];
+    $pathdisplaynumber = $displaystudyguidenumber($pathguidenumber);
+    if ($pathdisplaynumber === null) {
+        continue;
+    }
+    $pathparams = ['focus' => (string)$pathcategory['number']];
+    if ($ises) {
+        $pathparams['lang'] = 'es';
+    }
+    $singleherbcategorypath[] = [
+        'number' => $pathdisplaynumber,
+        'focus' => (string)$pathcategory['number'],
+        'title' => $canonicalcategorytitle($pathguidenumber)
+            ?: $stripstudyguidenumber((string)$pathcategory['name']),
+        'url' => new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $pathparams),
+    ];
+}
+$singleherbcategorypath[] = [
+    'number' => 12,
+    'focus' => 'bensky4',
+    'title' => $ises ? 'Hierbas que drenan Humedad' : 'Herbs that Drain Dampness',
+    'url' => $benskyfoururl,
+];
+$singleherbcategorypath[] = [
+    'number' => 32,
+    'focus' => 'bensky17',
+    'title' => $ises ? 'Hierbas que expulsan parásitos' : 'Herbs that Expel Parasites',
+    'url' => $benskyseventeenurl,
+];
+$singleherbcategorypath[] = [
+    'number' => 33,
+    'focus' => 'bensky18',
+    'title' => $ises ? 'Sustancias para aplicación externa' : 'Substances for Topical Application',
+    'url' => $benskyeighteenurl,
+];
+$singleherbcategorypath[] = [
+    'number' => 34,
+    'focus' => 'bensky19',
+    'title' => $ises ? 'Sustancias obsoletas' : 'Obsolete Substances',
+    'url' => $benskynineteenurl,
+];
+usort($singleherbcategorypath, static fn(array $first, array $second): int => $first['number'] <=> $second['number']);
+if (count($singleherbcategorypath) !== 34
+        || array_column($singleherbcategorypath, 'number') !== range(1, 34)) {
+    throw new coding_exception('The Single Herbs category path must contain cards 1 through 34 exactly once.');
+}
+$singleherbcurrentfocus = null;
+if ($selected !== null && $selectedguidenumber !== null) {
+    $singleherbcurrentfocus = (string)$selected['number'];
+} else if ($isbenskychapterfour) {
+    $singleherbcurrentfocus = 'bensky4';
+} else if ($isbenskychapterseventeen) {
+    $singleherbcurrentfocus = 'bensky17';
+} else if ($isbenskychaptereighteen) {
+    $singleherbcurrentfocus = 'bensky18';
+} else if ($isbenskychapternineteen) {
+    $singleherbcurrentfocus = 'bensky19';
+} else if ($ismixed) {
+    $singleherbcurrentfocus = 'mixed';
+}
+$singleherbcurrentindex = null;
+if ($singleherbcurrentfocus === 'mixed') {
+    $singleherbcurrentindex = 34;
+} else if ($singleherbcurrentfocus !== null) {
+    foreach ($singleherbcategorypath as $pathindex => $pathitem) {
+        if ($pathitem['focus'] === $singleherbcurrentfocus) {
+            $singleherbcurrentindex = $pathindex;
+            break;
+        }
+    }
+}
 $previouscategoryurl = null;
 $nextcategoryurl = null;
 $previouscategory = null;
@@ -1189,6 +1262,87 @@ $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
     : '/study-guide/guidelines/chinese-herbal-medicine.html';
 $guidelineurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)]);
+$rendersingleherbcategorynavigation = static function(string $instance) use (
+    $singleherbcategorypath,
+    $singleherbcurrentindex,
+    $mixedreviewurl,
+    $categoryindexurl,
+    $ises
+): string {
+    $currentisreview = $singleherbcurrentindex === 34;
+    $currentcategory = $singleherbcurrentindex !== null && !$currentisreview
+        ? $singleherbcategorypath[$singleherbcurrentindex]
+        : null;
+    $previousitem = null;
+    $nextitem = null;
+    if ($currentisreview) {
+        $previousitem = $singleherbcategorypath[33];
+    } else if ($singleherbcurrentindex !== null) {
+        $previousitem = $singleherbcurrentindex > 0
+            ? $singleherbcategorypath[$singleherbcurrentindex - 1]
+            : null;
+        $nextitem = $singleherbcurrentindex < 33
+            ? $singleherbcategorypath[$singleherbcurrentindex + 1]
+            : [
+                'number' => null,
+                'focus' => 'mixed',
+                'title' => $ises ? 'Repaso final' : 'Final Review',
+                'url' => $mixedreviewurl,
+            ];
+    }
+    $selectid = 'single-herbs-category-jump-' . $instance;
+    ob_start();
+    ?>
+    <nav class="single-herbs-guide__category-path<?php echo $singleherbcurrentindex === null ? ' single-herbs-guide__category-path--index' : ''; ?>" aria-label="<?php echo s($ises ? 'Recorrido de las 34 categorías de hierbas' : '34-category Single Herbs path'); ?>">
+        <?php if ($singleherbcurrentindex !== null): ?>
+            <?php if ($previousitem !== null): ?>
+                <a class="single-herbs-guide__category-path-link" href="<?php echo $previousitem['url']->out(false); ?>">
+                    <span><?php echo s(($ises ? '← Anterior · Tarjeta ' : '← Previous · Card ') . $previousitem['number']); ?></span>
+                    <strong><?php echo s($previousitem['title']); ?></strong>
+                </a>
+            <?php else: ?>
+                <span class="single-herbs-guide__category-path-link single-herbs-guide__category-path-link--disabled">
+                    <span><?php echo s($ises ? 'Inicio del recorrido' : 'Start of path'); ?></span>
+                    <strong><?php echo s($ises ? 'Esta es la primera categoría' : 'This is the first category'); ?></strong>
+                </span>
+            <?php endif; ?>
+        <?php endif; ?>
+        <div class="single-herbs-guide__category-jump">
+            <form method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-study-guide.php'))->out(false); ?>" data-single-herbs-category-jump>
+                <label for="<?php echo s($selectid); ?>"><?php echo s($ises ? 'Ir a la categoría…' : 'Jump to category…'); ?></label>
+                <div>
+                    <select id="<?php echo s($selectid); ?>" name="focus">
+                        <?php if ($singleherbcurrentindex === null): ?><option value="" selected disabled><?php echo s($ises ? 'Selecciona una de las 34 categorías' : 'Select one of the 34 categories'); ?></option><?php endif; ?>
+                        <?php foreach ($singleherbcategorypath as $pathitem): ?>
+                            <option value="<?php echo s($pathitem['focus']); ?>"<?php echo $currentcategory !== null && $pathitem['focus'] === $currentcategory['focus'] ? ' selected' : ''; ?>><?php echo s($pathitem['number'] . ' · ' . $pathitem['title']); ?></option>
+                        <?php endforeach; ?>
+                        <option value="mixed"<?php echo $currentisreview ? ' selected' : ''; ?>><?php echo s($ises ? 'M · Repaso final' : 'M · Final Review'); ?></option>
+                    </select>
+                    <?php if ($ises): ?><input type="hidden" name="lang" value="es"><?php endif; ?>
+                    <button class="single-herbs-guide__back" type="submit"><?php echo s($ises ? 'Abrir' : 'Open'); ?></button>
+                </div>
+            </form>
+            <?php if ($singleherbcurrentindex !== null): ?><a href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Ver todas las categorías' : 'View all categories'); ?></a><?php endif; ?>
+        </div>
+        <?php if ($singleherbcurrentindex !== null): ?>
+            <?php if ($nextitem !== null): ?>
+                <a class="single-herbs-guide__category-path-link single-herbs-guide__category-path-link--next" href="<?php echo $nextitem['url']->out(false); ?>">
+                    <span><?php echo s($nextitem['number'] === null
+                        ? ($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →')
+                        : (($ises ? 'Siguiente · Tarjeta ' : 'Next · Card ') . $nextitem['number'] . ' →')); ?></span>
+                    <strong><?php echo s($nextitem['title']); ?></strong>
+                </a>
+            <?php else: ?>
+                <span class="single-herbs-guide__category-path-link single-herbs-guide__category-path-link--next single-herbs-guide__category-path-link--disabled">
+                    <span><?php echo s($ises ? 'Fin del recorrido' : 'End of path'); ?></span>
+                    <strong><?php echo s($ises ? 'Repaso completado' : 'Review completed'); ?></strong>
+                </span>
+            <?php endif; ?>
+        <?php endif; ?>
+    </nav>
+    <?php
+    return (string) ob_get_clean();
+};
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -1196,6 +1350,15 @@ $PAGE->set_pagelayout('standard');
 $pagetitle = $ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide';
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
+$PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('[data-single-herbs-category-jump] select').forEach(function(select) {
+    select.addEventListener('change', function() {
+        if (select.value) {
+            select.form.submit();
+        }
+    });
+});
+JS);
 
 echo $OUTPUT->header();
 $spanishtranslations = $ises ? require(__DIR__ . '/single-herbs-study-guide-es.php') : [];
@@ -1222,6 +1385,9 @@ ob_start();
 .single-herbs-guide__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}
 .single-herbs-guide__back:hover{background:#f1f5f9;text-decoration:none}
 .single-herbs-guide__back--active{border-color:#0b817d;background:#0b817d;color:#fff}.single-herbs-guide__back--active:hover{background:#0b817d;color:#fff}
+.single-herbs-guide__category-path{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:0 0 20px;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+.single-herbs-guide__category-path--index{grid-template-columns:minmax(300px,640px);justify-content:center}.single-herbs-guide__category-path-link{display:flex;min-height:68px;flex-direction:column;justify-content:center;padding:10px 13px;border:1px solid #dbe4e9;border-radius:9px;background:#fff;color:#17344a;text-decoration:none}.single-herbs-guide__category-path-link:hover{border-color:#f77e25;color:#17344a;text-decoration:none}.single-herbs-guide__category-path-link span{color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.single-herbs-guide__category-path-link strong{margin-top:4px;color:#e66716;font-size:13px;line-height:1.35}.single-herbs-guide__category-path-link--next{text-align:right}.single-herbs-guide__category-path-link--disabled{background:#f8fafb;opacity:.72}.single-herbs-guide__category-path-link--disabled strong{color:#64748b}
+.single-herbs-guide__category-jump{display:flex;flex-direction:column;justify-content:center;gap:5px}.single-herbs-guide__category-jump form>label{display:block;margin:0 0 4px;color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.single-herbs-guide__category-jump form>div{display:flex;gap:7px}.single-herbs-guide__category-jump select{width:100%;min-width:0;min-height:42px;padding:8px 34px 8px 10px;border:1px solid #aebdc7;border-radius:8px;background:#fff;color:#17232a;font-weight:750}.single-herbs-guide__category-jump>a{color:#075e54;font-size:12px;font-weight:800;text-align:center;text-decoration:none}.single-herbs-guide__category-jump>a:hover{text-decoration:underline}
 .single-herbs-guide__overview{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin-bottom:24px;padding:23px 26px;border-left:5px solid #0b817d;border-radius:12px;background:#eef8f6;box-shadow:0 3px 12px rgba(15,23,42,.05)}
 .single-herbs-guide__overview h3{margin:0 0 7px;font-size:21px}.single-herbs-guide__overview p{margin:0;color:#52677a;line-height:1.55}
 .single-herbs-guide__count{display:flex;min-width:116px;flex-direction:column;align-items:center;padding:13px 18px;border-radius:10px;background:#fff;color:#0f5f58}
@@ -1287,10 +1453,11 @@ ob_start();
 .single-herbs-guide__bensky-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.single-herbs-guide__bensky-card{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #2563eb;border-radius:11px;background:#fff}.single-herbs-guide__bensky-card h5{margin:0;padding:15px 17px;background:#eff6ff;color:#174ea6}.single-herbs-guide__bensky-card table{width:100%;border-collapse:collapse;font-size:13px}.single-herbs-guide__bensky-card th,.single-herbs-guide__bensky-card td{padding:10px 12px;border-top:1px solid #e4eaee;text-align:left;vertical-align:top;line-height:1.45}.single-herbs-guide__bensky-card th{width:31%;color:#0d665e}.single-herbs-guide__bensky-source{margin-top:14px;padding:12px 15px;border-left:4px solid #2563eb;border-radius:7px;background:#eff6ff;color:#36536f;font-size:13px;line-height:1.5}
 @media(max-width:850px){.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts{grid-template-columns:1fr 1fr}}
 @media(max-width:900px){.single-herbs-safety .single-herbs-properties__table-wrap{max-height:calc(100vh - 88px);overflow:auto;overscroll-behavior:contain}.single-herbs-safety__table{min-width:1080px}}
-@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{align-items:flex-start;margin-top:16px}.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{justify-content:flex-start}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-guide__functional-summary,.single-herbs-properties__controls,.single-herbs-safety__topics,.single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs{grid-template-columns:1fr}.single-herbs-safety__obsolete{display:block}.single-herbs-safety__obsolete .single-herbs-guide__back{margin-top:12px;white-space:normal}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
+@media(max-width:720px){.single-herbs-guide__top,.single-herbs-guide__workspace-header,.single-herbs-properties__summary{display:block}.single-herbs-guide__actions{align-items:flex-start;margin-top:16px}.single-herbs-guide__module-switcher,.single-herbs-guide__utility-actions{justify-content:flex-start}.single-herbs-guide__category-path{grid-template-columns:1fr 1fr}.single-herbs-guide__category-path--index{grid-template-columns:1fr}.single-herbs-guide__category-jump{grid-column:1/-1;grid-row:1}.single-herbs-guide__overview{grid-template-columns:1fr}.single-herbs-guide__count{align-items:flex-start}.single-herbs-guide__plan,.single-herbs-guide__pattern,.single-herbs-guide__decision,.single-herbs-guide__comparisons,.single-herbs-guide__profiles,.single-herbs-guide__house,.single-herbs-guide__formula-leads,.single-herbs-guide__category-herbs,.single-herbs-guide__yang-charts,.single-herbs-guide__bensky-grid,.single-herbs-guide__functional-summary,.single-herbs-properties__controls,.single-herbs-safety__topics,.single-herbs-guide__chapter-atlas .single-herbs-guide__profile-body .single-herbs-guide__category-herbs{grid-template-columns:1fr}.single-herbs-safety__obsolete{display:block}.single-herbs-safety__obsolete .single-herbs-guide__back{margin-top:12px;white-space:normal}.single-herbs-properties__stats{justify-content:flex-start;margin-top:14px}.single-herbs-properties__results{white-space:normal}.single-herbs-guide__yang-controls{grid-template-columns:1fr 1fr}.single-herbs-guide__yang-control--flip{grid-column:1/-1;grid-row:1}.single-herbs-guide__yang-control--next{justify-self:stretch}.single-herbs-guide__yang-face{padding:21px 19px}.single-herbs-guide__final-question summary{grid-template-columns:1fr;gap:6px}}
 @media(max-width:720px){.single-herbs-guide__unified-questions .single-herbs-guide__final-question summary{grid-template-columns:1fr}}
 @media(max-width:720px){.single-herbs-guide__roster-modal{padding:10px}.single-herbs-guide__roster-dialog{max-height:94vh}.single-herbs-guide__roster-header{padding:18px 17px 14px}.single-herbs-guide__roster-header h3{font-size:20px}.single-herbs-guide__roster-tools{padding:13px 17px 10px}.single-herbs-guide__roster-list{grid-template-columns:1fr;padding:0 17px 18px}}
 @media(max-width:520px){.single-herbs-guide__category-herb-context p{grid-template-columns:1fr;gap:2px}}
+@media(max-width:520px){.single-herbs-guide__category-path{grid-template-columns:1fr}.single-herbs-guide__category-jump{grid-column:auto;grid-row:auto}.single-herbs-guide__category-path-link--next{text-align:left}.single-herbs-guide__category-jump form>div{align-items:stretch;flex-direction:column}.single-herbs-guide__back{white-space:normal}}
 @media(max-width:900px){.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid,.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid,.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid,.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid{grid-template-columns:1fr}.single-herbs-intro__nature-scale{grid-template-columns:1fr}.single-herbs-intro__nature-scale span{padding:9px}}
 </style>
@@ -1323,6 +1490,8 @@ ob_start();
             </div>
         </nav>
     </header>
+
+    <?php echo $rendersingleherbcategorynavigation('top'); ?>
 
     <div class="single-herbs-guide__roster-modal" id="single-herbs-guideline-roster" data-guideline-roster-modal data-count-label="<?php echo s($ises ? 'hierbas mostradas' : 'herbs shown'); ?>" hidden>
         <section class="single-herbs-guide__roster-dialog" role="dialog" aria-modal="true" aria-labelledby="single-herbs-guideline-roster-title" aria-describedby="single-herbs-guideline-roster-description" tabindex="-1">
@@ -1433,43 +1602,6 @@ ob_start();
                     <p class="single-herbs-guide__workspace-intro"><?php echo s($workspaceintro); ?></p>
                 </div>
             </div>
-            <?php if ($selected !== null): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <span><?php if ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previousdisplayguidenumber); ?></a><?php endif; ?></span>
-                    <strong style="color:#0d665e"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $selecteddisplayguidenumber . ' / ' . $lastdisplaystudyguidenumber . ($selectedbenskychapter !== '' ? ' · ' . $selectedbenskychapter : '')); ?></strong>
-                    <span><?php if ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextdisplayguidenumber . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
-                </nav>
-            <?php elseif ($isbenskychapterfour): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <a class="single-herbs-guide__back" href="<?php echo $benskyfourpreviousurl !== null ? $benskyfourpreviousurl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 11' : '← Previous Category · 11'); ?></a>
-                    <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 12 / ' : 'Card 12 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 4' : 'Bensky · Chapter 4')); ?></strong>
-                    <a class="single-herbs-guide__back" href="<?php echo $benskyfournexturl !== null ? $benskyfournexturl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 13 →' : 'Next Category · 13 →'); ?></a>
-                </nav>
-            <?php elseif ($isbenskychapterseventeen): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <a class="single-herbs-guide__back" href="<?php echo $benskyseventeenpreviousurl !== null ? $benskyseventeenpreviousurl->out(false) : $categoryindexurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 31' : '← Previous Category · 31'); ?></a>
-                    <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 32 / ' : 'Card 32 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 17' : 'Bensky · Chapter 17')); ?></strong>
-                    <a class="single-herbs-guide__back" href="<?php echo $benskyeighteenurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 33 →' : 'Next Category · 33 →'); ?></a>
-                </nav>
-            <?php elseif ($isbenskychaptereighteen): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <a class="single-herbs-guide__back" href="<?php echo $benskyseventeenurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 32' : '← Previous Category · 32'); ?></a>
-                    <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 33 / ' : 'Card 33 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 18' : 'Bensky · Chapter 18')); ?></strong>
-                    <a class="single-herbs-guide__back" href="<?php echo $benskynineteenurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 34 →' : 'Next Category · 34 →'); ?></a>
-                </nav>
-            <?php elseif ($isbenskychapternineteen): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <a class="single-herbs-guide__back" href="<?php echo $benskyeighteenurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 33' : '← Previous Category · 33'); ?></a>
-                    <strong style="color:#a64f12"><?php echo s(($ises ? 'Tarjeta 34 / ' : 'Card 34 / ') . $lastdisplaystudyguidenumber . ' · ' . ($ises ? 'Bensky · Capítulo 19' : 'Bensky · Chapter 19')); ?></strong>
-                    <a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a>
-                </nav>
-            <?php elseif ($ismixed): ?>
-                <nav aria-label="<?php echo s($ises ? 'Navegación del repaso final' : 'Final Review navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 20px;padding:12px 14px;border:1px solid #d9e2e7;border-radius:10px;background:#f6fafb">
-                    <span><?php if ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
-                    <strong style="color:#0d665e"><?php echo s($ises ? 'Repaso final' : 'Final Review'); ?></strong>
-                    <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All categories'); ?></a>
-                </nav>
-            <?php endif; ?>
             <?php if ($isbenskychapterfour): ?>
                 <?php require(__DIR__ . '/single-herbs-bensky-chapter-four.php'); ?>
             <?php elseif ($isbenskychapterseventeen): ?>
@@ -1834,11 +1966,7 @@ ob_start();
                 <?php require(__DIR__ . '/single-herbs-dui-yao-reference.php'); ?>
             <?php endif; ?>
         </section>
-        <nav aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:18px">
-            <span><?php if ($isbenskychapternineteen): ?><a class="single-herbs-guide__back" href="<?php echo $benskyeighteenurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 33' : '← Previous Category · 33'); ?></a><?php elseif ($isbenskychaptereighteen): ?><a class="single-herbs-guide__back" href="<?php echo $benskyseventeenurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 32' : '← Previous Category · 32'); ?></a><?php elseif ($isbenskychapterseventeen && $benskyseventeenpreviousurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $benskyseventeenpreviousurl->out(false); ?>"><?php echo s($ises ? '← Categoría anterior · 31' : '← Previous Category · 31'); ?></a><?php elseif ($previouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $previousdisplayguidenumber); ?></a><?php elseif ($mixedpreviouscategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $mixedpreviouscategoryurl->out(false); ?>"><?php echo s(($ises ? '← Categoría anterior · ' : '← Previous Category · ') . $mixedpreviousdisplayguidenumber); ?></a><?php endif; ?></span>
-            <a class="single-herbs-guide__back" href="<?php echo $categoryindexurl->out(false); ?>"><?php echo s($ises ? 'Todas las categorías' : 'All Single Herbs categories'); ?></a>
-            <span><?php if ($isbenskychapternineteen): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php elseif ($isbenskychaptereighteen): ?><a class="single-herbs-guide__back" href="<?php echo $benskynineteenurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 34 →' : 'Next Category · 34 →'); ?></a><?php elseif ($isbenskychapterseventeen): ?><a class="single-herbs-guide__back" href="<?php echo $benskyeighteenurl->out(false); ?>"><?php echo s($ises ? 'Siguiente categoría · 33 →' : 'Next Category · 33 →'); ?></a><?php elseif ($nextcategoryurl !== null): ?><a class="single-herbs-guide__back" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(($ises ? 'Siguiente categoría · ' : 'Next Category · ') . $nextdisplayguidenumber . ' →'); ?></a><?php elseif ($selectedguidenumber === $laststudyguidenumber): ?><a class="single-herbs-guide__back" href="<?php echo $mixedreviewurl->out(false); ?>"><?php echo s($ises ? 'Siguiente · Repaso final →' : 'Next · Final Review →'); ?></a><?php endif; ?></span>
-        </nav>
+        <?php echo $rendersingleherbcategorynavigation('bottom'); ?>
     <?php else: ?>
         <section class="single-herbs-guide__overview" aria-labelledby="single-herbs-categories-title">
             <div>
