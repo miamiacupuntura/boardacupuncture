@@ -9,6 +9,7 @@ $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
 $chapterfocusaliases = [
+    'official-formulas-ch3' => 'purge',
     'calm-shen' => 'calm-shen-chapter-10',
     'regulate-qi' => 'regulate-qi-chapter-12',
     'invigorate-blood' => 'regulate-blood-chapter-13',
@@ -66,8 +67,8 @@ $categorycopy = [
         'Distingue Calor del nivel Qi, Fuego-Toxicidad, Calor de Pulmón, Humedad-Calor y Calor por deficiencia.',
     ],
     'purge' => [
-        'Compare the three Cheng Qi formulas by severity, dryness, fullness and focal distention.',
-        'Compara las tres fórmulas Cheng Qi según gravedad, sequedad, plenitud y distensión focal.',
+        'Compare the three Cheng Qi formulas by severity, dryness, fullness and focal distention; then separate Run Chang Wan as a moistening laxative for Blood-fluid deficiency.',
+        'Compara las tres fórmulas Cheng Qi según gravedad, sequedad, plenitud y distensión focal; después distingue Run Chang Wan como laxante humectante para deficiencia de Sangre-líquidos.',
     ],
     'harmonize' => [
         'Recognize Shaoyang, Liver-Spleen and mixed Cold-Heat disharmony.',
@@ -1473,12 +1474,18 @@ $chapterinterestinginsights = [
     ],
 ];
 
-$officialexpansionindexcategories = [];
-foreach ($supplementalcategories as $categorykey => $category) {
-    if (($category['sourceType'] ?? '') === 'official-expansion') {
-        $officialexpansionindexcategories[$categorykey] = $category;
-    }
+$runchangwanlegacycategory = $supplementalcategories['official-formulas-ch3'] ?? null;
+if ($runchangwanlegacycategory === null || count($runchangwanlegacycategory['formulas']) !== 1
+        || $runchangwanlegacycategory['formulas'][0]['name'] !== 'Run Chang Wan') {
+    throw new moodle_exception('Run Chang Wan official profile is missing or ambiguous.');
 }
+$runchangwanprofile = $runchangwanlegacycategory['formulas'][0];
+$runchangwanprofile['categoryKey'] = 'purge';
+$runchangwanprofile['category'] = 'Purge';
+$runchangwanprofile['categoryEs'] = 'Purgar';
+$runchangwanprofile['sourceChapter'] = 2;
+$runchangwanprofile['integratedOfficialProfile'] = true;
+$categories['purge']['formulas'][] = $runchangwanprofile;
 $supplementalcategories[$tonifychapteroverview['key']] = $tonifychapteroverview;
 $supplementalcategories[$stabilizechapteroverview['key']] = $stabilizechapteroverview;
 $supplementalcategories[$calmshenchapteroverview['key']] = $calmshenchapteroverview;
@@ -1515,6 +1522,23 @@ $iswarmchapterpage = $selected !== null && $selected['key'] === 'warm-interior-c
 $isstabilizechapterpage = $selected !== null && $selected['key'] === 'stabilize-bind-chapter-9';
 $isopenorificeschapterpage = $selected !== null && $selected['key'] === 'open-orifices-chapter-11';
 $selectedguide = $selected === null ? null : ($data['categoryGuides'][$selected['key']] ?? null);
+if ($selected !== null && $selected['key'] === 'purge') {
+    $selectedguide['formulaSections'][] = [
+        'key' => 'moisten-blood-fluid-deficiency',
+        'name' => 'Moisten dry Intestines from Blood-fluid deficiency',
+        'nameEs' => 'Humedecer Intestinos secos por deficiencia de Sangre-líquidos',
+        'formulaNames' => ['Run Chang Wan'],
+        'copy' => 'Run Chang Wan nourishes Blood and fluids and gently moistens the Intestines. It does not attack Yangming Heat clumping like the three Cheng Qi formulas.',
+        'copyEs' => 'Run Chang Wan nutre Sangre y líquidos y humedece suavemente los Intestinos. No ataca la aglomeración de Calor Yangming como las tres fórmulas Cheng Qi.',
+    ];
+    $selectedguide['quickCompare'][] = [
+        'Run Chang Wan',
+        'Blood-fluid deficiency with dry Intestines',
+        'Chronic dry stool after illness, childbirth, or blood loss; pallor and dizziness; nourish and moisten rather than purge forcefully',
+        'Deficiencia de Sangre-líquidos con Intestinos secos',
+        'Heces secas crónicas tras enfermedad, parto o pérdida de Sangre; palidez y mareo; nutrir y humedecer en vez de purgar con fuerza',
+    ];
+}
 $selectedformulasections = $selectedguide['formulaSections'] ?? [];
 $selectedformulasectionbyname = [];
 if ($selected !== null && $selectedformulasections !== []) {
@@ -1746,8 +1770,8 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Guía de estudio · Fórmulas' : 'Study Guide · Formulas'); ?></p>
             <h2><?php echo s($pagetitle); ?></h2>
             <p class="formula-study-guide__lead"><?php echo s($ises
-                ? 'Estudia las 63 fichas detalladas en 14 categorías internas y comprueba su alcance contra las 181 fórmulas oficiales. Cada ficha conecta patrón, acción, pista decisiva, arquitectura y seguridad.'
-                : 'Study 63 detailed profiles in 14 internal categories and verify their scope against all 181 official formulas. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
+                ? 'Estudia 64 fichas detalladas en 14 categorías y comprueba su alcance contra las 181 fórmulas oficiales. Cada ficha conecta patrón, acción, pista decisiva, arquitectura y seguridad.'
+                : 'Study 64 detailed profiles in 14 categories and verify their scope against all 181 official formulas. Every card connects pattern, action, decisive clue, architecture and safety.'); ?></p>
             <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el Appendix C oficial de NCBAHM 2026' : '* Included in the official 2026 NCBAHM Appendix C'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
@@ -1768,14 +1792,14 @@ echo $OUTPUT->header();
     <?php if ($selected === null): ?>
         <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title">
             <div>
-                <h3 id="formula-categories-title"><?php echo s($ises ? '63 fichas detalladas con referencia Bensky' : '63 detailed profiles with Bensky references'); ?></h3>
+                <h3 id="formula-categories-title"><?php echo s($ises ? '64 fichas detalladas con referencia Bensky' : '64 detailed profiles with Bensky references'); ?></h3>
                 <p><?php echo s($ises
-                    ? 'El número 63 proviene del archivo interno de fichas detalladas de la plataforma; no es un total publicado por NCBAHM. Estas fichas no sustituyen el listado oficial completo de 181 fórmulas del Appendix C. Cada tarjeta conserva su categoría de estudio y el capítulo correspondiente de Bensky.'
-                    : 'The number 63 comes from the platform’s internal detailed-profile data file; it is not an NCBAHM-published total. These profiles do not replace the complete official Appendix C roster of 181 formulas. Each card preserves its study category and corresponding Bensky chapter.'); ?></p>
+                    ? 'Las 63 fichas originales más Run Chang Wan forman 64 perfiles organizados en las mismas 14 categorías. No sustituyen el listado oficial completo de 181 fórmulas del Appendix C.'
+                    : 'The original 63 profiles plus Run Chang Wan form 64 profiles organized in the same 14 categories. They do not replace the complete official Appendix C roster of 181 formulas.'); ?></p>
             </div>
             <div class="formula-study-guide__stats" aria-label="<?php echo s($ises ? 'Totales de la guía' : 'Guide totals'); ?>">
                 <div class="formula-study-guide__stat"><strong>14</strong><span><?php echo $ises ? 'categorías' : 'categories'; ?></span></div>
-                <div class="formula-study-guide__stat"><strong>63</strong><span><?php echo $ises ? 'fichas detalladas' : 'detailed profiles'; ?></span></div>
+                <div class="formula-study-guide__stat"><strong>64</strong><span><?php echo $ises ? 'fichas detalladas' : 'detailed profiles'; ?></span></div>
                 <div class="formula-study-guide__stat"><strong>181</strong><span><?php echo $ises ? 'fórmulas oficiales' : 'official formulas'; ?></span></div>
             </div>
         </section>
@@ -1880,28 +1904,6 @@ echo $OUTPUT->header();
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
             <?php endforeach; ?>
-            <?php $nextcategorycardnumber = count($categories) + 1; ?>
-            <?php foreach ($officialexpansionindexcategories as $category): ?>
-                <?php
-                $categoryparams = ['focus' => $category['key']];
-                if ($ises) {
-                    $categoryparams['lang'] = 'es';
-                }
-                $categoryurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $categoryparams);
-                $copy = $categorycopy[$category['key']][$ises ? 1 : 0];
-                $reference = $categoryreferences[$category['key']][$ises ? 1 : 0] ?? null;
-                $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
-                ?>
-                <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
-                    <span class="formula-study-guide__category-number"><?php echo $nextcategorycardnumber++; ?></span>
-                    <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
-                    <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ises ? 'ficha detallada adicional' : 'additional detailed profile'); ?> · <?php echo s($category['sourcePages']); ?></span>
-                    <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>
-                    <p><?php echo s($copy); ?></p>
-                    <?php if ($reference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($reference); ?></span><?php endif; ?>
-                    <small><?php echo s($ises ? 'Abrir ficha oficial →' : 'Open official profile →'); ?></small>
-                </a>
-            <?php endforeach; ?>
         </section>
     <?php else: ?>
         <?php $selectedcopy = $categorycopy[$selected['key']][$ises ? 1 : 0]; ?>
@@ -1934,8 +1936,8 @@ echo $OUTPUT->header();
                 <div>
                     <h4 id="board-verification-title"><?php echo s($ises ? 'Comprueba el listado oficial del Board' : 'Verify the official Board list'); ?></h4>
                     <p><?php echo s($ises
-                        ? 'Abre el listado oficial completo del Appendix C —181 fórmulas— para comprobar directamente cuáles pertenecen al guideline. Las 14 categorías y 63 fichas son la organización interna de esta plataforma.'
-                        : 'Open the complete official Appendix C roster—181 formulas—to verify directly which formulas belong to the guideline. The 14 categories and 63 profiles are this platform’s internal organization.'); ?></p>
+                        ? 'Abre el listado oficial completo del Appendix C —181 fórmulas— para comprobar directamente cuáles pertenecen al guideline. Las 14 categorías organizan las 63 fichas originales y la ficha integrada de Run Chang Wan.'
+                        : 'Open the complete official Appendix C roster—181 formulas—to verify directly which formulas belong to the guideline. The 14 categories organize the original 63 profiles and the integrated Run Chang Wan profile.'); ?></p>
                 </div>
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelinerosterurl->out(false); ?>"><?php echo s($ises ? 'Abrir listado oficial →' : 'Open official roster →'); ?></a>
             </section>
@@ -2847,12 +2849,13 @@ echo $OUTPUT->header();
                     $lastclinicalsectionkey = $clinicalsection['key'];
                 }
                 $tier = $formula['safetyTier'];
+                $isintegratedofficialprofile = !empty($formula['integratedOfficialProfile']);
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
                     : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : ($ises ? 'Seguridad revisada' : 'Safety reviewed'));
                 $formulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $formula['number']);
                 $practiceurl = null;
-                if (!$issupplemental) {
+                if (!$issupplemental && !$isintegratedofficialprofile) {
                     $practicepath = $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html';
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
@@ -2863,6 +2866,9 @@ echo $OUTPUT->header();
                         : (($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
                             . ' ' . ($ises ? 'de' : 'of') . ' ' . $selectedprincipalformulacount
                             . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages']);
+                } elseif ($isintegratedofficialprofile) {
+                    $formulalabel = ($ises ? 'Ficha oficial integrada · págs. ' : 'Integrated official profile · pp. ')
+                        . $formula['sourcePages'];
                 } elseif ($issupplemental) {
                     $formulalabel = $isofficialexpansionpage
                         ? (($ises ? 'Ficha oficial adicional ' : 'Additional official profile ') . $formula['sequence']
@@ -2945,11 +2951,11 @@ echo $OUTPUT->header();
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
                             <h4><?php echo s($displayformulaname($formula['name'])); ?></h4>
-                            <?php if ($issupplemental): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
+                            <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Ficha detallada del núcleo' : 'Detailed core profile'); ?></span><?php endif; ?>
-                            <?php if ($issupplemental): ?><span class="formula-study-guide__core"><?php echo s($isofficialexpansionpage
+                            <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__core"><?php echo s($isintegratedofficialprofile || $isofficialexpansionpage
                                 ? ($ises ? 'Appendix C 2026 · oficial' : 'Appendix C 2026 · official')
                                 : (is_numeric($formula['number'])
                                     ? (($ises ? 'Ficha del núcleo · Fórmula #' : 'Core profile · Formula #') . $formula['number'])
@@ -3026,6 +3032,10 @@ echo $OUTPUT->header();
                         <p class="formula-study-guide__ingredients"><strong><?php echo $ises ? 'Ingredientes:' : 'Ingredients:'; ?></strong> <?php echo s($ises ? $formula['ingredientsEs'] : $formula['ingredients']); ?></p>
                         <?php if ($practiceurl !== null): ?>
                             <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
+                        <?php elseif ($isintegratedofficialprofile): ?>
+                            <span class="formula-study-guide__source-pages"><?php echo s('Bensky · '
+                                . ($ises ? 'capítulo ' : 'Chapter ') . $formula['sourceChapter']
+                                . ($ises ? ' · págs. ' : ' · pp. ') . $formula['sourcePages']); ?></span>
                         <?php else: ?>
                             <span class="formula-study-guide__source-pages"><?php echo s('Bensky · '
                                 . ($ises ? 'capítulo ' : 'Chapter ') . $selected['sourceChapter']

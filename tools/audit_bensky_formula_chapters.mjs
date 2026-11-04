@@ -102,9 +102,17 @@ assert(!/18 principal formulas in (?:complete )?Bensky Chapter 17/.test(php),
     'stale English Chapter 17 total remains in the PHP guide.');
 assert(!/18 fórmulas principales del capítulo 17/.test(php),
     'stale Spanish Chapter 17 total remains in the PHP guide.');
-assert(php.includes('$nextcategorycardnumber = count($categories) + 1;'),
-    'additional category cards are not numbered independently from Bensky chapters.');
-assert(php.includes('<span class="formula-study-guide__category-number"><?php echo $nextcategorycardnumber++; ?></span>'),
-    'the independent card number is not rendered on official expansion cards.');
+assert(php.includes("$categories['purge']['formulas'][] = $runchangwanprofile;"),
+    'Run Chang Wan is not integrated into the Purge category.');
+assert(php.includes("'official-formulas-ch3' => 'purge'"),
+    'the legacy Run Chang Wan route does not resolve to Purge.');
+assert(php.includes("$runchangwanprofile['integratedOfficialProfile'] = true;"),
+    'Run Chang Wan is not marked as an integrated official profile.');
+assert(php.includes("'formulaNames' => ['Run Chang Wan']"),
+    'Run Chang Wan has no dedicated clinical section under Purge.');
+assert(!php.includes('$nextcategorycardnumber'),
+    'the removed additional category card is still being numbered.');
+assert(!php.includes('foreach ($officialexpansionindexcategories as $category)'),
+    'the removed additional category card is still rendered.');
 
 console.log('Bensky formula chapter audit passed: 21 chapters, 181 official formulas, and principal/associated roles verified.');
