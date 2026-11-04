@@ -136,6 +136,7 @@ assert(php.includes('foreach ($benskychapters as $chapter)'),
 
 const formulaMapMatch = categoryMapPhp.match(/\$formulachapters = \[([\s\S]*?)\n\];/);
 const herbMapMatch = categoryMapPhp.match(/\$herbcategories = \[([\s\S]*?)\n\];/);
+const relationshipNotesMatch = categoryMapPhp.match(/\$relationshipnotes = \[([\s\S]*?)\n\];/);
 assert(formulaMapMatch && herbMapMatch, 'the combined herb-formula category arrays are missing.');
 const mappedFormulaChapters = [...formulaMapMatch[1].matchAll(/^\s+(\d+) => \['Formulas/gm)].map(item => Number(item[1]));
 const mappedHerbCards = [...herbMapMatch[1].matchAll(/^\s+\[(\d+),\s*(\d+),/gm)].map(item => ({card: Number(item[1]), chapter: Number(item[2])}));
@@ -143,6 +144,11 @@ assert(JSON.stringify(mappedFormulaChapters) === JSON.stringify(Array.from({leng
     'the combined map does not contain all 21 formula chapters in order.');
 assert(mappedHerbCards.length === 34 && mappedHerbCards.every((item, index) => item.card === index + 1),
     'the combined map does not contain all 34 herb-category cards in order.');
+const relationshipNoteCards = relationshipNotesMatch
+    ? [...relationshipNotesMatch[1].matchAll(/^\s+(\d+) => \[/gm)].map(item => Number(item[1]))
+    : [];
+assert(JSON.stringify(relationshipNoteCards) === JSON.stringify(Array.from({length: 34}, (_, index) => index + 1)),
+    'the combined map does not explain the relationship for all 34 herb categories.');
 assert(mappedHerbCards.filter(item => item.card >= 3 && item.card <= 7).every(item => item.chapter === 2),
     'the five Clear Heat herb categories are not preserved under Bensky herb Chapter 2.');
 assert(categoryMapPhp.includes("[4, 20], 'direct'")
