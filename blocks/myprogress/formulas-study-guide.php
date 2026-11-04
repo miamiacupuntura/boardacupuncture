@@ -1692,6 +1692,12 @@ $singleherbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.ph
 $duiyaomoduleurl = new moodle_url($ises
     ? '/study-guide/comparisons/dui-yao-es.html'
     : '/study-guide/comparisons/dui-yao.html');
+$benskymapurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $ises ? ['lang' => 'es'] : []);
+$formularoutetitle = $selected === null
+    ? ($ises ? 'Todos los capítulos de fórmulas' : 'All formula chapters')
+    : ($selectedbenskychapter !== null
+        ? ($ises ? $selectedbenskychapter['nameEs'] : $selectedbenskychapter['name'])
+        : ($ises ? $selected['nameEs'] : $selected['name']));
 $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
     : '/study-guide/guidelines/chinese-herbal-medicine.html';
@@ -1813,6 +1819,7 @@ echo $OUTPUT->header();
 .formula-study-guide__button:hover{background:#f1f5f9;color:#17232a;text-decoration:none}
 .formula-study-guide__button--primary{border-color:#2563eb;background:#2563eb;color:#fff}.formula-study-guide__button--primary:hover{background:#1d4ed8;color:#fff}
 .formula-study-guide__button--active{border-color:#0b817d;background:#0b817d;color:#fff}.formula-study-guide__button--active:hover{background:#0b817d;color:#fff}
+.formula-study-guide__study-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:11px 14px;border:1px solid #d9e2e7;border-radius:9px;background:#fff;color:#64748b;font-size:12px;font-weight:750}.formula-study-guide__study-route a{color:#315fa5;text-decoration:none}.formula-study-guide__study-route a:hover{text-decoration:underline}.formula-study-guide__study-route-current{color:#17232a}
 .formula-study-guide__chapter-path{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:0 0 20px;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
 .formula-study-guide__chapter-path--index{grid-template-columns:minmax(300px,640px);justify-content:center}.formula-study-guide__chapter-path-link{display:flex;min-height:68px;flex-direction:column;justify-content:center;padding:10px 13px;border:1px solid #dbe4e9;border-radius:9px;background:#fff;color:#17344a;text-decoration:none}.formula-study-guide__chapter-path-link:hover{border-color:#f77e25;color:#17344a;text-decoration:none}.formula-study-guide__chapter-path-link span{color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.formula-study-guide__chapter-path-link strong{margin-top:4px;color:#e66716;font-size:13px;line-height:1.35}.formula-study-guide__chapter-path-link--next{text-align:right}.formula-study-guide__chapter-path-link--disabled{background:#f8fafb;opacity:.72}.formula-study-guide__chapter-path-link--disabled strong{color:#64748b}
 .formula-study-guide__chapter-jump{display:flex;flex-direction:column;justify-content:center;gap:5px}.formula-study-guide__chapter-jump form>label{display:block;margin:0 0 4px;color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.formula-study-guide__chapter-jump form>div{display:flex;gap:7px}.formula-study-guide__chapter-jump select{width:100%;min-width:0;min-height:42px;padding:8px 34px 8px 10px;border:1px solid #aebdc7;border-radius:8px;background:#fff;color:#17232a;font-weight:750}.formula-study-guide__chapter-jump>a{color:#075e54;font-size:12px;font-weight:800;text-align:center;text-decoration:none}.formula-study-guide__chapter-jump>a:hover{text-decoration:underline}
@@ -1895,6 +1902,15 @@ echo $OUTPUT->header();
             </div>
         </nav>
     </header>
+
+    <nav class="formula-study-guide__study-route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
+        <a href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>
+        <a href="<?php echo $benskymapurl->out(false); ?>"><?php echo $ises ? 'Mapa Bensky' : 'Bensky Map'; ?></a><span aria-hidden="true">›</span>
+        <a href="<?php echo $singleherbsurl->out(false); ?>"><?php echo $ises ? 'Hierbas' : 'Herbs'; ?></a><span aria-hidden="true">→</span>
+        <a href="<?php echo $duiyaomoduleurl->out(false); ?>">Duì Yào</a><span aria-hidden="true">→</span>
+        <a href="<?php echo $indexurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a><span aria-hidden="true">›</span>
+        <span class="formula-study-guide__study-route-current" aria-current="page"><?php echo s($formularoutetitle); ?></span>
+    </nav>
 
     <?php echo $renderchapternavigation('top'); ?>
 

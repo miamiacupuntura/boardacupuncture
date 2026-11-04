@@ -7,7 +7,7 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 SCRIPT_RELATIVE="study-guide/comparisons/study-note-navigation.js"
 MANIFEST_RELATIVE="study-guide/comparisons/study-note-navigation-manifest.js"
-LOADER='/study-guide/comparisons/study-note-navigation.js?v=20261104-4'
+LOADER='/study-guide/comparisons/study-note-navigation.js?v=20261104-5'
 
 for command in curl php tar find install; do
     command -v "$command" >/dev/null 2>&1 || { echo "Missing required command: $command" >&2; exit 1; }
@@ -108,4 +108,4 @@ for moodle_root in /var/www/html/moodle /var/www/html; do
 done
 echo "Backup: $BACKUP_DIR/study-note-html-before-navigation.tar.gz"
 echo "Global Study Note navigation deployed from revision: $REVISION"
-echo "Test: https://www.acupuncturetests.com/study-guide/comparisons/du-zhong-xu-duan-dui-yao.html?nav=20261104-4"
+echo "Test: https://www.acupuncturetests.com/study-guide/comparisons/du-zhong-xu-duan-dui-yao.html?nav=20261104-5"

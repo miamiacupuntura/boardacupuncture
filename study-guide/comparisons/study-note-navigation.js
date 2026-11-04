@@ -142,16 +142,28 @@
   }) || candidates[0] || null;
   const collectionUrl = preferredCandidate ? preferredCandidate.url : null;
   const collectionLabel = preferredCandidate?.label || copy.collection;
+  const isDuiYaoNote = /-dui-yao(?:-es)?\.html$/i.test(currentFile);
 
   const route = document.createElement('nav');
   route.className = 'study-note-route';
   route.setAttribute('aria-label', spanish ? 'Ruta de estudio' : 'Study path');
   const studyGuideUrl = '/blocks/myprogress/study-guide.php?area=herbology';
-  route.innerHTML = '<a href="' + studyGuideUrl + '">' + escapeHtml(copy.studyGuide) + '</a><span aria-hidden="true">›</span>'
-    + (collectionUrl
-      ? '<a href="' + escapeHtml(collectionUrl.href) + '">' + escapeHtml(collectionLabel) + '</a><span aria-hidden="true">›</span>'
-      : '')
-    + '<span class="study-note-route__current">' + escapeHtml(currentTitle) + '</span>';
+  if (isDuiYaoNote) {
+    const languageQuery = spanish ? '?lang=es' : '';
+    const studyGuideQuery = spanish ? '&lang=es' : '';
+    route.innerHTML = '<a href="' + studyGuideUrl + studyGuideQuery + '">' + escapeHtml(copy.studyGuide) + '</a><span aria-hidden="true">›</span>'
+      + '<a href="/blocks/myprogress/herb-formula-category-map.php' + languageQuery + '">' + (spanish ? 'Mapa Bensky' : 'Bensky Map') + '</a><span aria-hidden="true">›</span>'
+      + '<a href="/blocks/myprogress/single-herbs-study-guide.php' + languageQuery + '">' + (spanish ? 'Hierbas' : 'Herbs') + '</a><span aria-hidden="true">→</span>'
+      + '<a href="' + (spanish ? 'dui-yao-es.html' : 'dui-yao.html') + '">Duì Yào</a><span aria-hidden="true">→</span>'
+      + '<a href="/blocks/myprogress/formulas-study-guide.php' + languageQuery + '">' + (spanish ? 'Fórmulas' : 'Formulas') + '</a><span aria-hidden="true">›</span>'
+      + '<span class="study-note-route__current" aria-current="page">' + escapeHtml(currentTitle) + '</span>';
+  } else {
+    route.innerHTML = '<a href="' + studyGuideUrl + '">' + escapeHtml(copy.studyGuide) + '</a><span aria-hidden="true">›</span>'
+      + (collectionUrl
+        ? '<a href="' + escapeHtml(collectionUrl.href) + '">' + escapeHtml(collectionLabel) + '</a><span aria-hidden="true">›</span>'
+        : '')
+      + '<span class="study-note-route__current" aria-current="page">' + escapeHtml(currentTitle) + '</span>';
+  }
 
   const panel = document.createElement('nav');
   panel.className = 'study-note-activity-nav';

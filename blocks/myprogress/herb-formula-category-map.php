@@ -501,11 +501,11 @@ echo $OUTPUT->header();
             <a class="herb-formula-map__button" href="<?php echo $herbsurl->out(false); ?>"><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?></a>
             <a class="herb-formula-map__button" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
             <a class="herb-formula-map__button" href="<?php echo $formulasurl->out(false); ?>"><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?></a>
-            <a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Herbología China' : '← Chinese Herbology'); ?></a>
+            <a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
         </nav>
     </header>
     <nav class="herb-formula-map__route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
-        <a href="<?php echo $huburl->out(false); ?>"><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?></a><span aria-hidden="true">›</span>
+        <a href="<?php echo $huburl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>
         <span><?php echo $ises ? 'Mapa Bensky' : 'Bensky Map'; ?></span><span aria-hidden="true">›</span>
         <a href="<?php echo $herbsurl->out(false); ?>"><?php echo $ises ? 'Hierbas' : 'Herbs'; ?></a><span aria-hidden="true">→</span>
         <a href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a><span aria-hidden="true">→</span>
