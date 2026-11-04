@@ -126,8 +126,47 @@ $relationshipnotes = [
     34 => ['These substances remain for historical recognition and safety. Their toxicity or obsolescence means there is no modern therapeutic formula-category match.', 'Estas sustancias permanecen para reconocimiento histórico y seguridad. Su toxicidad u obsolescencia significa que no existe una correspondencia terapéutica moderna con fórmulas.'],
 ];
 
-if (array_keys($relationshipnotes) !== range(1, 34)) {
-    throw new moodle_exception('Every herb category must include a relationship explanation.');
+// Concrete formula-composition examples showing herbs from the category inside related formulas.
+$compositionexamples = [
+    1 => ['Ma Huang Tang → Ma Huang + Gui Zhi; Gui Zhi Tang → Gui Zhi', 'Ma Huang Tang → Ma Huang + Gui Zhi; Gui Zhi Tang → Gui Zhi'],
+    2 => ['Yin Qiao San → Bo He + Niu Bang Zi; Sang Ju Yin → Sang Ye + Ju Hua', 'Yin Qiao San → Bo He + Niu Bang Zi; Sang Ju Yin → Sang Ye + Ju Hua'],
+    3 => ['Bai Hu Tang → Shi Gao + Zhi Mu; Huang Lian Jie Du Tang → Zhi Zi', 'Bai Hu Tang → Shi Gao + Zhi Mu; Huang Lian Jie Du Tang → Zhi Zi'],
+    4 => ['Qing Ying Tang → Sheng Di Huang + Xuan Shen', 'Qing Ying Tang → Sheng Di Huang + Xuan Shen'],
+    5 => ['Huang Lian Jie Du Tang → Huang Lian + Huang Qin + Huang Bai', 'Huang Lian Jie Du Tang → Huang Lian + Huang Qin + Huang Bai'],
+    6 => ['Wu Wei Xiao Du Yin → Jin Yin Hua + Pu Gong Ying; Xian Fang Huo Ming Yin → Jin Yin Hua', 'Wu Wei Xiao Du Yin → Jin Yin Hua + Pu Gong Ying; Xian Fang Huo Ming Yin → Jin Yin Hua'],
+    7 => ['Qing Hao Bie Jia Tang → Qing Hao + Di Gu Pi', 'Qing Hao Bie Jia Tang → Qing Hao + Di Gu Pi'],
+    8 => ['Xiang Ru San → Xiang Ru; Qing Luo Yin → He Ye + Xi Gua Cui Yi', 'Xiang Ru San → Xiang Ru; Qing Luo Yin → He Ye + Xi Gua Cui Yi'],
+    9 => ['Da Cheng Qi Tang → Da Huang + Mang Xiao', 'Da Cheng Qi Tang → Da Huang + Mang Xiao'],
+    10 => ['Run Chang Wan → Huo Ma Ren + Yu Li Ren', 'Run Chang Wan → Huo Ma Ren + Yu Li Ren'],
+    11 => ['Shi Zao Tang → Gan Sui + Da Ji + Yuan Hua', 'Shi Zao Tang → Gan Sui + Da Ji + Yuan Hua'],
+    12 => ['Wu Ling San → Fu Ling + Zhu Ling + Ze Xie', 'Wu Ling San → Fu Ling + Zhu Ling + Ze Xie'],
+    13 => ['Du Huo Ji Sheng Tang → Du Huo + Qin Jiao + Fang Ji + Sang Ji Sheng', 'Du Huo Ji Sheng Tang → Du Huo + Qin Jiao + Fang Ji + Sang Ji Sheng'],
+    14 => ['Bei Mu Gua Lou San → Chuan Bei Mu + Gua Lou; Wen Dan Tang → Zhu Ru', 'Bei Mu Gua Lou San → Chuan Bei Mu + Gua Lou; Wen Dan Tang → Zhu Ru'],
+    15 => ['Er Chen Tang → Ban Xia; Wen Dan Tang → Ban Xia', 'Er Chen Tang → Ban Xia; Wen Dan Tang → Ban Xia'],
+    16 => ['Ding Chuan Tang → Xing Ren + Zi Su Zi + Sang Bai Pi', 'Ding Chuan Tang → Xing Ren + Zi Su Zi + Sang Bai Pi'],
+    17 => ['Huo Xiang Zheng Qi San → Huo Xiang + Hou Po; Ping Wei San → Cang Zhu + Hou Po', 'Huo Xiang Zheng Qi San → Huo Xiang + Hou Po; Ping Wei San → Cang Zhu + Hou Po'],
+    18 => ['Bao He Wan → Shan Zha + Shen Qu + Lai Fu Zi; Jian Pi Wan → Shan Zha + Shen Qu + Mai Ya', 'Bao He Wan → Shan Zha + Shen Qu + Lai Fu Zi; Jian Pi Wan → Shan Zha + Shen Qu + Mai Ya'],
+    19 => ['Yue Ju Wan → Xiang Fu; Ju Pi Zhu Ru Tang → Chen Pi', 'Yue Ju Wan → Xiang Fu; Ju Pi Zhu Ru Tang → Chen Pi'],
+    20 => ['Xue Fu Zhu Yu Tang → Chuan Xiong + Tao Ren + Hong Hua + Niu Xi; Gui Zhi Fu Ling Wan → Tao Ren', 'Xue Fu Zhu Yu Tang → Chuan Xiong + Tao Ren + Hong Hua + Niu Xi; Gui Zhi Fu Ling Wan → Tao Ren'],
+    21 => ['Shi Xiao San → Pu Huang', 'Shi Xiao San → Pu Huang'],
+    22 => ['Li Zhong Wan → Gan Jiang; Si Ni Tang → Fu Zi + Gan Jiang', 'Li Zhong Wan → Gan Jiang; Si Ni Tang → Fu Zi + Gan Jiang'],
+    23 => ['Si Jun Zi Tang → Ren Shen + Bai Zhu + Gan Cao; Yu Ping Feng San → Huang Qi + Bai Zhu', 'Si Jun Zi Tang → Ren Shen + Bai Zhu + Gan Cao; Yu Ping Feng San → Huang Qi + Bai Zhu'],
+    24 => ['Si Wu Tang → Dang Gui + Shu Di Huang + Bai Shao; Ba Zhen Tang → the same Blood-tonifying core', 'Si Wu Tang → Dang Gui + Shu Di Huang + Bai Shao; Ba Zhen Tang → el mismo núcleo que tonifica Sangre'],
+    25 => ['You Gui Wan → Du Zhong + Tu Si Zi; Er Xian Tang → Yin Yang Huo + Ba Ji Tian', 'You Gui Wan → Du Zhong + Tu Si Zi; Er Xian Tang → Yin Yang Huo + Ba Ji Tian'],
+    26 => ['Yi Guan Jian → Bei Sha Shen + Mai Men Dong + Gou Qi Zi; Zeng Ye Tang → Mai Men Dong', 'Yi Guan Jian → Bei Sha Shen + Mai Men Dong + Gou Qi Zi; Zeng Ye Tang → Mai Men Dong'],
+    27 => ['Si Shen Wan → Wu Wei Zi + Rou Dou Kou', 'Si Shen Wan → Wu Wei Zi + Rou Dou Kou'],
+    28 => ['Ci Zhu Wan → Ci Shi', 'Ci Zhu Wan → Ci Shi'],
+    29 => ['Suan Zao Ren Tang → Suan Zao Ren; Tian Wang Bu Xin Dan → Suan Zao Ren + Bai Zi Ren + Yuan Zhi', 'Suan Zao Ren Tang → Suan Zao Ren; Tian Wang Bu Xin Dan → Suan Zao Ren + Bai Zi Ren + Yuan Zhi'],
+    30 => ['An Gong Niu Huang Wan → Bing Pian + She Xiang; Su He Xiang Wan → Su He Xiang + Bing Pian', 'An Gong Niu Huang Wan → Bing Pian + She Xiang; Su He Xiang Wan → Su He Xiang + Bing Pian'],
+    31 => ['Tian Ma Gou Teng Yin → Tian Ma + Gou Teng', 'Tian Ma Gou Teng Yin → Tian Ma + Gou Teng'],
+    32 => ['Hua Chong Wan → Lei Wan + Bing Lang', 'Hua Chong Wan → Lei Wan + Bing Lang'],
+    33 => ['Ku Shen Tang → Ku Shen + She Chuang Zi', 'Ku Shen Tang → Ku Shen + She Chuang Zi'],
+    34 => ['No modern formula example: these obsolete substances are shown for historical safety recognition only.', 'Sin ejemplo de fórmula moderna: estas sustancias obsoletas aparecen solo para reconocimiento histórico y seguridad.'],
+];
+
+if (array_keys($relationshipnotes) !== range(1, 34)
+        || array_keys($compositionexamples) !== range(1, 34)) {
+    throw new moodle_exception('Every herb category must include a relationship explanation and composition example.');
 }
 
 $langparams = $ises ? ['lang' => 'es'] : [];
@@ -155,6 +194,8 @@ echo $OUTPUT->header();
 .herb-formula-map__table th:nth-child(3){width:32%}
 .herb-formula-map__cell--relation{border-top-color:#315fa5;background:#f3f7fd}
 .herb-formula-map__explanation{margin:0;color:#435d7a;font-size:13px;line-height:1.55}
+.herb-formula-map__composition{margin:12px 0 0;padding:10px 11px;border-radius:8px;background:#fff;color:#435d7a;font-size:12px;line-height:1.5}
+.herb-formula-map__composition strong{display:block;margin-bottom:3px;color:#17344a}
 </style>
 <main class="herb-formula-map">
     <header class="herb-formula-map__top">
@@ -185,7 +226,7 @@ echo $OUTPUT->header();
                 <?php foreach ($category[5] as $chapternumber): $formulachapter = $formulachapters[$chapternumber]; ?><section class="herb-formula-map__match"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $chapternumber); ?></span></div><h4><?php echo s($formulachapter[$ises ? 1 : 0]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Fórmulas principales:' : 'Representative formulas:'; ?></strong> <?php echo s($formulachapter[2]); ?></p></section><?php endforeach; ?>
                 <p class="herb-formula-map__relation"><?php echo s($relationshiplabels[$category[6]][$ises ? 1 : 0]); ?></p>
             </article></td>
-            <td><article class="herb-formula-map__cell herb-formula-map__cell--relation"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Explicación clínica' : 'Clinical explanation'); ?></span></div><p class="herb-formula-map__explanation"><?php echo s($relationshipnotes[$category[0]][$ises ? 1 : 0]); ?></p></article></td>
+            <td><article class="herb-formula-map__cell herb-formula-map__cell--relation"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Explicación clínica' : 'Clinical explanation'); ?></span></div><p class="herb-formula-map__explanation"><?php echo s($relationshipnotes[$category[0]][$ises ? 1 : 0]); ?></p><p class="herb-formula-map__composition"><strong><?php echo $ises ? 'Ejemplos dentro de fórmulas:' : 'Examples inside formulas:'; ?></strong><?php echo s($compositionexamples[$category[0]][$ises ? 1 : 0]); ?></p></article></td>
         </tr><?php endforeach; ?></tbody>
     </table></div>
     <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises ? 'La semejanza del nombre no sustituye patrón, arquitectura de la fórmula, dosis ni seguridad. Esta tabla organiza el estudio; no constituye guía de prescripción.' : 'Name similarity does not replace pattern, formula architecture, dosage, or safety. This table organizes study and is not prescribing guidance.'); ?></p>
