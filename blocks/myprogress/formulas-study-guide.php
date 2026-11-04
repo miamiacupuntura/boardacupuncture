@@ -1731,7 +1731,7 @@ echo $OUTPUT->header();
             <div class="formula-study-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
                 <a class="formula-study-guide__button" href="<?php echo $singleherbsurl->out(false); ?>">Single Herbs</a>
                 <a class="formula-study-guide__button" href="<?php echo $duiyaomoduleurl->out(false); ?>">Duì Yào</a>
-                <span class="formula-study-guide__button formula-study-guide__button--active" aria-current="page"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></span>
+                <a class="formula-study-guide__button formula-study-guide__button--active" href="<?php echo $indexurl->out(false); ?>" aria-current="page"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
             </div>
             <div class="formula-study-guide__utility-actions">
                 <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>

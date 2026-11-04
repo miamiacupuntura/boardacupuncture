@@ -38,6 +38,8 @@ for relative in "${FILES[@]}"; do
 done
 
 php -l "$TEMP_DIR/blocks/myprogress/formulas-study-guide.php" >/dev/null
+grep -Fq 'href="<?php echo $indexurl->out(false); ?>" aria-current="page"' \
+    "$TEMP_DIR/blocks/myprogress/formulas-study-guide.php"
 php -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     $roster = json_decode(file_get_contents($argv[2]), true, 512, JSON_THROW_ON_ERROR);
