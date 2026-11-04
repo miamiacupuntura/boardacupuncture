@@ -182,10 +182,13 @@ assert(categoryMapPhp.indexOf('LEVEL 1 · HERBS') < categoryMapPhp.indexOf('LEVE
     'the crosswalk columns are not ordered Herbs, Duì Yào, Formulas with a full-width explanation row.');
 assert(mappedHerbCards.filter(item => item.card >= 3 && item.card <= 7).every(item => item.chapter === 2),
     'the five Clear Heat herb categories are not preserved under Bensky herb Chapter 2.');
-assert(categoryMapPhp.includes("[4, 20], 'direct'")
+assert(categoryMapPhp.includes("[1, 4, 20], 'direct'")
     && categoryMapPhp.includes("[4, 16], 'direct'")
     && categoryMapPhp.includes("[4, 13], 'direct'"),
-    'the Clear Heat map is missing its toxicity, Dampness, or Blood relationships.');
+    'the Clear Heat map is missing its Exterior-toxicity, Dampness, or Blood relationships.');
+assert(categoryMapPhp.includes('Formula bridges from Duì Yào')
+    && categoryMapPhp.includes('Yin Qiao San → Jin Yin Hua + Lian Qiao'),
+    'Duì Yào formula bridges are not rendered in the formula column or Yin Qiao San is missing.');
 assert(studyGuideHubPhp.includes("'title' => 'Bensky Category Crosswalk'")
     && studyGuideHubPhp.includes("'path' => '/blocks/myprogress/herb-formula-category-map.php'"),
     'the fourth combined card is missing from the Chinese Herbology hub.');
