@@ -1880,6 +1880,7 @@ echo $OUTPUT->header();
                         : ($ises ? 'Abrir categoría →' : 'Open category →')); ?></small>
                 </a>
             <?php endforeach; ?>
+            <?php $nextcategorycardnumber = count($categories) + 1; ?>
             <?php foreach ($officialexpansionindexcategories as $category): ?>
                 <?php
                 $categoryparams = ['focus' => $category['key']];
@@ -1892,7 +1893,7 @@ echo $OUTPUT->header();
                 $categoryboardstatus = $getboardstatus($category['formulas'], $ises);
                 ?>
                 <a class="formula-study-guide__category formula-study-guide__category--supplemental" href="<?php echo $categoryurl->out(false); ?>">
-                    <span class="formula-study-guide__category-number"><?php echo s($ises ? 'Ampliación oficial' : 'Official expansion'); ?></span>
+                    <span class="formula-study-guide__category-number"><?php echo $nextcategorycardnumber++; ?></span>
                     <strong><?php echo s($ises ? $category['nameEs'] : $category['name']); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo count($category['formulas']); ?> <?php echo s($ises ? 'ficha detallada adicional' : 'additional detailed profile'); ?> · <?php echo s($category['sourcePages']); ?></span>
                     <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($categoryboardstatus['label']); ?></span>

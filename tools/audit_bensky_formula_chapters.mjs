@@ -102,5 +102,9 @@ assert(!/18 principal formulas in (?:complete )?Bensky Chapter 17/.test(php),
     'stale English Chapter 17 total remains in the PHP guide.');
 assert(!/18 fórmulas principales del capítulo 17/.test(php),
     'stale Spanish Chapter 17 total remains in the PHP guide.');
+assert(php.includes('$nextcategorycardnumber = count($categories) + 1;'),
+    'additional category cards are not numbered independently from Bensky chapters.');
+assert(php.includes('<span class="formula-study-guide__category-number"><?php echo $nextcategorycardnumber++; ?></span>'),
+    'the independent card number is not rendered on official expansion cards.');
 
 console.log('Bensky formula chapter audit passed: 21 chapters, 181 official formulas, and principal/associated roles verified.');
