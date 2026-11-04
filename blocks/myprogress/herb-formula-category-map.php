@@ -258,6 +258,59 @@ if (array_keys($duiyaocategories) !== array_keys($duiyaopairs)) {
     throw new moodle_exception('Every representative Dui Yao must include its official pair category.');
 }
 
+$plainpinyin = static function(string $text): string {
+    return strtr($text, [
+        'ā' => 'a', 'á' => 'a', 'ǎ' => 'a', 'à' => 'a', 'Ā' => 'A', 'Á' => 'A', 'Ǎ' => 'A', 'À' => 'A',
+        'ē' => 'e', 'é' => 'e', 'ě' => 'e', 'è' => 'e', 'Ē' => 'E', 'É' => 'E', 'Ě' => 'E', 'È' => 'E',
+        'ī' => 'i', 'í' => 'i', 'ǐ' => 'i', 'ì' => 'i', 'Ī' => 'I', 'Í' => 'I', 'Ǐ' => 'I', 'Ì' => 'I',
+        'ō' => 'o', 'ó' => 'o', 'ǒ' => 'o', 'ò' => 'o', 'Ō' => 'O', 'Ó' => 'O', 'Ǒ' => 'O', 'Ò' => 'O',
+        'ū' => 'u', 'ú' => 'u', 'ǔ' => 'u', 'ù' => 'u', 'ǖ' => 'u', 'ǘ' => 'u', 'ǚ' => 'u', 'ǜ' => 'u',
+        'Ū' => 'U', 'Ú' => 'U', 'Ǔ' => 'U', 'Ù' => 'U', 'Ǖ' => 'U', 'Ǘ' => 'U', 'Ǚ' => 'U', 'Ǜ' => 'U',
+    ]);
+};
+
+$bridgecolorsbycategory = [];
+foreach ($categoryduiyao as $cardnumber => $pairnumbers) {
+    $nextcolor = 1;
+    foreach ($pairnumbers as $pairnumber) {
+        foreach (explode(' + ', $duiyaopairs[$pairnumber][1]) as $displayherb) {
+            $plainherb = $plainpinyin($displayherb);
+            if (!isset($bridgecolorsbycategory[$cardnumber][$plainherb])) {
+                $bridgecolorsbycategory[$cardnumber][$plainherb] = $nextcolor;
+                $nextcolor = $nextcolor === 8 ? 1 : $nextcolor + 1;
+            }
+        }
+    }
+}
+
+$highlightbridgetext = static function(string $text, array $herbcolors): string {
+    $escaped = s($text);
+    if ($herbcolors === []) {
+        return $escaped;
+    }
+    $herbs = array_keys($herbcolors);
+    usort($herbs, static fn(string $a, string $b): int => strlen($b) <=> strlen($a));
+    $lookup = [];
+    foreach ($herbcolors as $herb => $color) {
+        $lookup[strtolower($herb)] = $color;
+    }
+    $pattern = '/(?<![A-Za-z])(' . implode('|', array_map(static fn(string $herb): string => preg_quote($herb, '/'), $herbs)) . ')(?![A-Za-z])/i';
+    return (string) preg_replace_callback($pattern, static function(array $match) use ($lookup): string {
+        $color = $lookup[strtolower($match[0])] ?? 1;
+        return '<span class="herb-formula-map__bridge-herb herb-formula-map__bridge-herb--' . $color . '">' . $match[0] . '</span>';
+    }, $escaped);
+};
+
+$renderduiyaotitle = static function(array $pair, array $herbcolors) use ($plainpinyin): string {
+    $markup = [];
+    foreach (explode(' + ', $pair[1]) as $displayherb) {
+        $plainherb = $plainpinyin($displayherb);
+        $color = $herbcolors[$plainherb] ?? 1;
+        $markup[] = '<span class="herb-formula-map__bridge-herb herb-formula-map__bridge-herb--' . $color . '">' . s($displayherb) . '</span>';
+    }
+    return implode(' <span aria-hidden="true">+</span> ', $markup);
+};
+
 $langparams = $ises ? ['lang' => 'es'] : [];
 $pageurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $langparams);
 $languageurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $ises ? [] : ['lang' => 'es']);
@@ -301,6 +354,16 @@ echo $OUTPUT->header();
 .herb-formula-map__formula-bridges>strong{display:block;margin-bottom:7px;color:#07665f;font-size:11px;text-transform:uppercase}
 .herb-formula-map__formula-bridge{margin:5px 0 0;color:#52677a;font-size:12px;line-height:1.45}
 .herb-formula-map__formula-bridge b{color:#17344a}
+.herb-formula-map__color-key{margin:12px 0 0;padding:10px 12px;border:1px solid #d9e2ef;border-radius:8px;background:#fff;color:#435d7a;font-size:12px;font-weight:750}
+.herb-formula-map__bridge-herb{display:inline-block;margin:1px 0;padding:1px 5px;border:1px solid transparent;border-radius:999px;font-weight:850;line-height:1.35;white-space:nowrap}
+.herb-formula-map__bridge-herb--1{border-color:#f4a6a6;background:#fee2e2;color:#8f1d1d}
+.herb-formula-map__bridge-herb--2{border-color:#93c5fd;background:#dbeafe;color:#1e4f91}
+.herb-formula-map__bridge-herb--3{border-color:#86d7ad;background:#dcfce7;color:#166534}
+.herb-formula-map__bridge-herb--4{border-color:#f5c56b;background:#fef3c7;color:#854d0e}
+.herb-formula-map__bridge-herb--5{border-color:#c4b5fd;background:#ede9fe;color:#5b21b6}
+.herb-formula-map__bridge-herb--6{border-color:#67d8e5;background:#cffafe;color:#155e75}
+.herb-formula-map__bridge-herb--7{border-color:#f0a7cb;background:#fce7f3;color:#9d174d}
+.herb-formula-map__bridge-herb--8{border-color:#b5d66b;background:#ecfccb;color:#3f6212}
 .herb-formula-map__relationship-row td{padding:0 14px 18px;border-top:0}
 .herb-formula-map__relationship-row td+td{border-left:0}
 .herb-formula-map__relationship-card{padding:15px 17px;border:1px solid #d9e2ef;border-left:5px solid #315fa5;border-radius:10px;background:#f3f7fd}
@@ -321,20 +384,20 @@ echo $OUTPUT->header();
         </nav>
     </header>
     <section class="herb-formula-map__overview" aria-labelledby="map-overview-title">
-        <div><h3 id="map-overview-title"><?php echo s($ises ? 'Cómo leer el mapa' : 'How to read this crosswalk'); ?></h3><p><?php echo s($ises ? 'Nivel 1 clasifica hierbas individuales por sus acciones. Nivel 2, Duì Yào, muestra cómo dos hierbas trabajan juntas. Nivel 3 agrupa fórmulas completas por su estrategia terapéutica. Las flechas indican relación, no equivalencia.' : 'Level 1 classifies individual herbs by their actions. Level 2, Duì Yào, shows how two herbs work together. Level 3 groups complete formulas by therapeutic strategy. Arrows indicate relationship, not equivalence.'); ?></p></div>
+        <div><h3 id="map-overview-title"><?php echo s($ises ? 'Cómo leer el mapa' : 'How to read this crosswalk'); ?></h3><p><?php echo s($ises ? 'Nivel 1 clasifica hierbas individuales por sus acciones. Nivel 2, Duì Yào, muestra cómo dos hierbas trabajan juntas. Nivel 3 agrupa fórmulas completas por su estrategia terapéutica. Las flechas indican relación, no equivalencia.' : 'Level 1 classifies individual herbs by their actions. Level 2, Duì Yào, shows how two herbs work together. Level 3 groups complete formulas by therapeutic strategy. Arrows indicate relationship, not equivalence.'); ?></p><p class="herb-formula-map__color-key"><?php echo s($ises ? 'Clave visual: dentro de cada fila, el mismo color identifica la misma hierba en la categoría, el Duì Yào y los ejemplos de fórmula.' : 'Visual key: within each row, the same color identifies the same herb in the category, Duì Yào, and formula examples.'); ?></p></div>
         <div class="herb-formula-map__stats"><div class="herb-formula-map__stat"><strong>34</strong><span><?php echo $ises ? 'categorías herbales' : 'herb categories'; ?></span></div><div class="herb-formula-map__stat"><strong>21</strong><span><?php echo $ises ? 'capítulos de fórmulas' : 'formula chapters'; ?></span></div></div>
     </section>
     <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Dos relaciones claras:' : 'Two clear relationships:'; ?></strong> <?php echo s($ises ? 'Las hierbas tibias y frescas que liberan el Exterior se relacionan con el capítulo 1 de fórmulas, Release the Exterior. En Clear Heat, Bensky divide las hierbas en cinco acciones —Drain Fire, Cool the Blood, Dry Dampness, Resolve Toxicity y Deficiency Heat— mientras el capítulo 4 agrupa fórmulas completas. Se relacionan, pero no se llaman ni se clasifican de la misma manera.' : 'Warm and cool herbs that release the Exterior relate to Formula Chapter 1, Release the Exterior. For Clear Heat, Bensky divides herbs into five actions—Drain Fire, Cool the Blood, Dry Dampness, Resolve Toxicity, and Deficiency Heat—while Formula Chapter 4 groups complete prescriptions. They relate, but are not named or classified at the same level.'); ?></p>
     <div class="herb-formula-map__table-wrap"><table class="herb-formula-map__table">
         <thead><tr><th><?php echo s($ises ? 'NIVEL 1 · HIERBAS' : 'LEVEL 1 · HERBS'); ?></th><th><?php echo s($ises ? 'NIVEL 2 · DUÌ YÀO' : 'LEVEL 2 · DUÌ YÀO'); ?></th><th><?php echo s($ises ? 'NIVEL 3 · FÓRMULAS' : 'LEVEL 3 · FORMULAS'); ?></th></tr></thead>
-        <tbody><?php foreach ($herbcategories as $category): ?><tr>
-            <td><article class="herb-formula-map__cell"><div class="herb-formula-map__meta"><span class="herb-formula-map__number"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $category[0]); ?></span><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $category[1]); ?></span></div><h4><?php echo s($ises ? $category[3] : $category[2]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Hierbas principales:' : 'Representative herbs:'; ?></strong> <?php echo s($category[4]); ?></p></article></td>
-            <td><article class="herb-formula-map__cell herb-formula-map__cell--duiyao"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Puente de parejas' : 'Pair bridge'); ?></span></div><?php if (isset($categoryduiyao[$category[0]])): ?><strong class="herb-formula-map__duiyao-title"><?php echo $ises ? 'Duì Yào representativos' : 'Representative Duì Yào'; ?></strong><div class="herb-formula-map__duiyao-list"><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; $paircategory = $duiyaocategories[$pairnumber]; $pairurl = new moodle_url('/study-guide/comparisons/' . $pair[0] . ($ises ? '-es' : '') . '.html', ['from' => 'bensky-crosswalk']); ?><a class="herb-formula-map__duiyao-pair" href="<?php echo $pairurl->out(false); ?>"><span><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $pairnumber . '/51'); ?></span><strong><?php echo s($pair[1]); ?></strong><em><?php echo s($pair[2]); ?></em><small><b><?php echo $ises ? 'Categoría de la pareja:' : 'Pair category:'; ?></b> <?php echo s($paircategory[$ises ? 1 : 0]); ?></small></a><?php endforeach; ?></div><?php else: ?><h4><?php echo s($ises ? 'Sin pareja oficial representativa seleccionada' : 'No representative official pair selected'); ?></h4><p class="herb-formula-map__duiyao-empty"><?php echo s($ises ? 'La relación de estudio pasa directamente de la acción herbal a la estrategia de la fórmula; no se fuerza una pareja que no sea clara.' : 'The study relationship moves directly from the herb action to the formula strategy; no unclear pair is forced.'); ?></p><?php endif; ?></article></td>
+        <tbody><?php foreach ($herbcategories as $category): $rowbridgecolors = $bridgecolorsbycategory[$category[0]] ?? []; ?><tr>
+            <td><article class="herb-formula-map__cell"><div class="herb-formula-map__meta"><span class="herb-formula-map__number"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $category[0]); ?></span><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $category[1]); ?></span></div><h4><?php echo s($ises ? $category[3] : $category[2]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Hierbas principales:' : 'Representative herbs:'; ?></strong> <?php echo $highlightbridgetext($category[4], $rowbridgecolors); ?></p></article></td>
+            <td><article class="herb-formula-map__cell herb-formula-map__cell--duiyao"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Puente de parejas' : 'Pair bridge'); ?></span></div><?php if (isset($categoryduiyao[$category[0]])): ?><strong class="herb-formula-map__duiyao-title"><?php echo $ises ? 'Duì Yào representativos' : 'Representative Duì Yào'; ?></strong><div class="herb-formula-map__duiyao-list"><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; $paircategory = $duiyaocategories[$pairnumber]; $pairurl = new moodle_url('/study-guide/comparisons/' . $pair[0] . ($ises ? '-es' : '') . '.html', ['from' => 'bensky-crosswalk']); ?><a class="herb-formula-map__duiyao-pair" href="<?php echo $pairurl->out(false); ?>"><span><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $pairnumber . '/51'); ?></span><strong><?php echo $renderduiyaotitle($pair, $rowbridgecolors); ?></strong><em><?php echo s($pair[2]); ?></em><small><b><?php echo $ises ? 'Categoría de la pareja:' : 'Pair category:'; ?></b> <?php echo s($paircategory[$ises ? 1 : 0]); ?></small></a><?php endforeach; ?></div><?php else: ?><h4><?php echo s($ises ? 'Sin pareja oficial representativa seleccionada' : 'No representative official pair selected'); ?></h4><p class="herb-formula-map__duiyao-empty"><?php echo s($ises ? 'La relación de estudio pasa directamente de la acción herbal a la estrategia de la fórmula; no se fuerza una pareja que no sea clara.' : 'The study relationship moves directly from the herb action to the formula strategy; no unclear pair is forced.'); ?></p><?php endif; ?></article></td>
             <td><article class="herb-formula-map__cell herb-formula-map__cell--formula<?php echo $category[5] === [] ? ' herb-formula-map__cell--none' : ''; ?>">
                 <?php if ($category[5] === []): ?><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Sin categoría directa' : 'No direct category'); ?></span></div><h4><?php echo s($ises ? 'Referencia histórica de seguridad' : 'Historical safety cross-reference'); ?></h4><?php endif; ?>
-                <?php foreach ($category[5] as $chapternumber): $formulachapter = $formulachapters[$chapternumber]; ?><section class="herb-formula-map__match"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $chapternumber); ?></span></div><h4><?php echo s($formulachapter[$ises ? 1 : 0]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Fórmulas principales:' : 'Representative formulas:'; ?></strong> <?php echo s($formulachapter[2]); ?></p></section><?php endforeach; ?><?php if (isset($categoryduiyao[$category[0]])): ?><section class="herb-formula-map__formula-bridges"><strong><?php echo $ises ? 'Fórmulas puente desde Duì Yào' : 'Formula bridges from Duì Yào'; ?></strong><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; ?><p class="herb-formula-map__formula-bridge"><b><?php echo s($pair[1]); ?>:</b> <?php echo s($pair[3]); ?></p><?php endforeach; ?></section><?php endif; ?>
+                <?php foreach ($category[5] as $chapternumber): $formulachapter = $formulachapters[$chapternumber]; ?><section class="herb-formula-map__match"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $chapternumber); ?></span></div><h4><?php echo s($formulachapter[$ises ? 1 : 0]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Fórmulas principales:' : 'Representative formulas:'; ?></strong> <?php echo s($formulachapter[2]); ?></p></section><?php endforeach; ?><?php if (isset($categoryduiyao[$category[0]])): ?><section class="herb-formula-map__formula-bridges"><strong><?php echo $ises ? 'Fórmulas puente desde Duì Yào' : 'Formula bridges from Duì Yào'; ?></strong><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; ?><p class="herb-formula-map__formula-bridge"><b><?php echo $renderduiyaotitle($pair, $rowbridgecolors); ?>:</b> <?php echo s($pair[3]); ?></p><?php endforeach; ?></section><?php endif; ?>
             </article></td>
-        </tr><tr class="herb-formula-map__relationship-row"><td colspan="3"><article class="herb-formula-map__relationship-card"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'CÓMO SE RELACIONAN · EXPLICACIÓN CLÍNICA' : 'HOW THEY RELATE · CLINICAL EXPLANATION'); ?></span></div><p class="herb-formula-map__explanation"><?php echo s($relationshipnotes[$category[0]][$ises ? 1 : 0]); ?></p><p class="herb-formula-map__relation"><?php echo s($relationshiplabels[$category[6]][$ises ? 1 : 0]); ?></p><p class="herb-formula-map__composition"><strong><?php echo $ises ? 'Ejemplos dentro de fórmulas:' : 'Examples inside formulas:'; ?></strong><?php echo s($compositionexamples[$category[0]][$ises ? 1 : 0]); ?></p></article></td></tr><?php endforeach; ?></tbody>
+        </tr><tr class="herb-formula-map__relationship-row"><td colspan="3"><article class="herb-formula-map__relationship-card"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'CÓMO SE RELACIONAN · EXPLICACIÓN CLÍNICA' : 'HOW THEY RELATE · CLINICAL EXPLANATION'); ?></span></div><p class="herb-formula-map__explanation"><?php echo s($relationshipnotes[$category[0]][$ises ? 1 : 0]); ?></p><p class="herb-formula-map__relation"><?php echo s($relationshiplabels[$category[6]][$ises ? 1 : 0]); ?></p><p class="herb-formula-map__composition"><strong><?php echo $ises ? 'Ejemplos dentro de fórmulas:' : 'Examples inside formulas:'; ?></strong><?php echo $highlightbridgetext($compositionexamples[$category[0]][$ises ? 1 : 0], $rowbridgecolors); ?></p></article></td></tr><?php endforeach; ?></tbody>
     </table></div>
     <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises ? 'La semejanza del nombre no sustituye patrón, arquitectura de la fórmula, dosis ni seguridad. Esta tabla organiza el estudio; no constituye guía de prescripción.' : 'Name similarity does not replace pattern, formula architecture, dosage, or safety. This table organizes study and is not prescribing guidance.'); ?></p>
 </main>

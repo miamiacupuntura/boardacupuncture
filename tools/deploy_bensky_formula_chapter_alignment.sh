@@ -119,6 +119,8 @@ grep -Fq 'Official pair ' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map
 grep -Fq 'Formula bridges from Duì Yào' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Yin Qiao San → Jin Yin Hua + Lian Qiao' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq "[1, 4, 20], 'direct'" "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'Visual key: within each row, the same color identifies the same herb' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'herb-formula-map__bridge-herb--8' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Pair category:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Categoría de la pareja:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq "[3, 2, 'Herbs that Clear Heat and Drain Fire'" "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"

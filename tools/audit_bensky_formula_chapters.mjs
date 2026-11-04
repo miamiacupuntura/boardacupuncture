@@ -189,6 +189,11 @@ assert(categoryMapPhp.includes("[1, 4, 20], 'direct'")
 assert(categoryMapPhp.includes('Formula bridges from Duì Yào')
     && categoryMapPhp.includes('Yin Qiao San → Jin Yin Hua + Lian Qiao'),
     'Duì Yào formula bridges are not rendered in the formula column or Yin Qiao San is missing.');
+assert(categoryMapPhp.includes('herb-formula-map__bridge-herb--8')
+    && categoryMapPhp.includes('$highlightbridgetext($category[4], $rowbridgecolors)')
+    && categoryMapPhp.includes('$renderduiyaotitle($pair, $rowbridgecolors)')
+    && categoryMapPhp.includes('$highlightbridgetext($compositionexamples['),
+    'the same-color herb trail is not rendered across herbs, Duì Yào, formula bridges, and composition examples.');
 assert(studyGuideHubPhp.includes("'title' => 'Bensky Category Crosswalk'")
     && studyGuideHubPhp.includes("'path' => '/blocks/myprogress/herb-formula-category-map.php'"),
     'the fourth combined card is missing from the Chinese Herbology hub.');
