@@ -227,6 +227,33 @@
     }));
   };
 
+  const loadManifest = function() {
+    if (window.studyNoteNavigationManifest?.collections) {
+      return Promise.resolve(window.studyNoteNavigationManifest);
+    }
+    return new Promise(function(resolve) {
+      const script = document.createElement('script');
+      script.src = new URL('study-note-navigation-manifest.js?v=20261104-1', currentUrl).href;
+      script.onload = function() { resolve(window.studyNoteNavigationManifest || null); };
+      script.onerror = function() { resolve(null); };
+      document.head.appendChild(script);
+    });
+  };
+
+  const discoverManifestItems = function(manifest, collectionFile) {
+    const entries = manifest?.collections?.[collectionFile];
+    if (!Array.isArray(entries)) {
+      return [];
+    }
+    return entries
+      .filter(function(item) {
+        return spanish ? /-es\.html$/i.test(item[0]) : !/-es\.html$/i.test(item[0]);
+      })
+      .map(function(item) {
+        return {url: new URL(item[0], currentUrl), title: item[1]};
+      });
+  };
+
   const finish = function(items) {
     let currentIndex = items.findIndex(function(item) {
       return item.url.pathname === currentUrl.pathname;
@@ -268,15 +295,21 @@
   const collectionFile = collectionUrl.pathname.split('/').pop() || '';
   const itemRequest = /^dui-yao(?:-es)?\.html$/i.test(collectionFile)
     ? discoverDuiYaoItems()
-    : fetch(collectionUrl.href, {credentials: 'same-origin', cache: 'no-store'})
-    .then(function(response) {
-      if (!response.ok) {
-        throw new Error('Collection index unavailable');
+    : loadManifest().then(function(manifest) {
+      const items = discoverManifestItems(manifest, collectionFile);
+      if (items.length) {
+        return items;
       }
-      return response.text();
-    })
-    .then(function(html) {
-      return discoverItems(html, collectionUrl);
+      return fetch(collectionUrl.href, {credentials: 'same-origin', cache: 'no-store'})
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error('Collection index unavailable');
+          }
+          return response.text();
+        })
+        .then(function(html) {
+          return discoverItems(html, collectionUrl);
+        });
     });
 
   itemRequest

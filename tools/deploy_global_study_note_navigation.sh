@@ -6,7 +6,8 @@ TARGET_DIR="${2:-${STUDY_NOTE_DIR:-}}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 SCRIPT_RELATIVE="study-guide/comparisons/study-note-navigation.js"
-LOADER='/study-guide/comparisons/study-note-navigation.js?v=20261104-3'
+MANIFEST_RELATIVE="study-guide/comparisons/study-note-navigation-manifest.js"
+LOADER='/study-guide/comparisons/study-note-navigation.js?v=20261104-4'
 
 for command in curl php tar find install; do
     command -v "$command" >/dev/null 2>&1 || { echo "Missing required command: $command" >&2; exit 1; }
@@ -40,8 +41,10 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/$(dirname "$SCRIPT_RELATIVE")" "$BACKUP_DIR"
 
 curl -fsSL "$REPOSITORY/$REVISION/$SCRIPT_RELATIVE" -o "$TEMP_DIR/$SCRIPT_RELATIVE"
+curl -fsSL "$REPOSITORY/$REVISION/$MANIFEST_RELATIVE" -o "$TEMP_DIR/$MANIFEST_RELATIVE"
 grep -Fq 'data-study-note-navigation' "$TEMP_DIR/$SCRIPT_RELATIVE"
 grep -Fq 'study-note-activity-nav' "$TEMP_DIR/$SCRIPT_RELATIVE"
+grep -Fq 'window.studyNoteNavigationManifest=' "$TEMP_DIR/$MANIFEST_RELATIVE"
 
 (
     cd "$TARGET_DIR"
@@ -51,10 +54,15 @@ grep -Fq 'study-note-activity-nav' "$TEMP_DIR/$SCRIPT_RELATIVE"
 if [[ -f "$TARGET_DIR/study-note-navigation.js" ]]; then
     cp -a "$TARGET_DIR/study-note-navigation.js" "$BACKUP_DIR/study-note-navigation.js.previous"
 fi
+if [[ -f "$TARGET_DIR/study-note-navigation-manifest.js" ]]; then
+    cp -a "$TARGET_DIR/study-note-navigation-manifest.js" "$BACKUP_DIR/study-note-navigation-manifest.js.previous"
+fi
 
 install -m 0644 "$TEMP_DIR/$SCRIPT_RELATIVE" "$TARGET_DIR/study-note-navigation.js"
+install -m 0644 "$TEMP_DIR/$MANIFEST_RELATIVE" "$TARGET_DIR/study-note-navigation-manifest.js"
 if [[ -f "$TARGET_DIR/comparisons.css" ]]; then
     chown --reference="$TARGET_DIR/comparisons.css" "$TARGET_DIR/study-note-navigation.js"
+    chown --reference="$TARGET_DIR/comparisons.css" "$TARGET_DIR/study-note-navigation-manifest.js"
 fi
 
 php -r '
@@ -100,4 +108,4 @@ for moodle_root in /var/www/html/moodle /var/www/html; do
 done
 echo "Backup: $BACKUP_DIR/study-note-html-before-navigation.tar.gz"
 echo "Global Study Note navigation deployed from revision: $REVISION"
-echo "Test: https://www.acupuncturetests.com/study-guide/comparisons/du-zhong-xu-duan-dui-yao.html?nav=20261104-3"
+echo "Test: https://www.acupuncturetests.com/study-guide/comparisons/du-zhong-xu-duan-dui-yao.html?nav=20261104-4"

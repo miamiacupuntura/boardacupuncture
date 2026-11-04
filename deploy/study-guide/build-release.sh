@@ -79,6 +79,9 @@ trap 'rm -rf "${STAGING_DIR}"' EXIT
 # Keep the repository readable while ensuring every published Study Note loads
 # the shared Previous / Jump / Next navigation component.
 cp -a "${SOURCE_DIR}/." "${STAGING_DIR}/"
+node "${REPO_ROOT}/tools/build_study_note_navigation_manifest.mjs" \
+    --root="${STAGING_DIR}/comparisons" \
+    --output="${STAGING_DIR}/comparisons/study-note-navigation-manifest.js"
 node "${REPO_ROOT}/tools/inject_study_note_navigation.mjs" \
     --write \
     --root="${STAGING_DIR}/comparisons"
@@ -87,6 +90,10 @@ node "${REPO_ROOT}/tools/inject_study_note_navigation.mjs" \
     --root="${STAGING_DIR}/comparisons"
 if [[ ! -f "${STAGING_DIR}/comparisons/study-note-navigation.js" ]]; then
     echo "Shared Study Note navigation asset is missing." >&2
+    exit 1
+fi
+if [[ ! -f "${STAGING_DIR}/comparisons/study-note-navigation-manifest.js" ]]; then
+    echo "Shared Study Note navigation manifest is missing." >&2
     exit 1
 fi
 
