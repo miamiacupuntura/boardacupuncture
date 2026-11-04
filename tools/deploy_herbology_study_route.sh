@@ -68,7 +68,7 @@ for relative in "${PHP_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/$relative" -o "$TEMP_DIR/$relative"
     php -l "$TEMP_DIR/$relative" >/dev/null
 done
-for file in dui-yao.html dui-yao-es.html study-note-navigation.js; do
+for file in dui-yao.html dui-yao-es.html study-note-navigation.js bensky-crosswalk-navigation.js; do
     relative="study-guide/comparisons/$file"
     curl -fsSL "$REPOSITORY/$REVISION/$relative" -o "$TEMP_DIR/$relative"
 done
@@ -79,6 +79,9 @@ grep -Fq 'formula-study-guide__study-route' "$TEMP_DIR/blocks/myprogress/formula
 grep -Fq 'All 51 pairs' "$TEMP_DIR/study-guide/comparisons/dui-yao.html"
 grep -Fq 'Las 51 parejas' "$TEMP_DIR/study-guide/comparisons/dui-yao-es.html"
 grep -Fq 'isDuiYaoNote' "$TEMP_DIR/study-guide/comparisons/study-note-navigation.js"
+grep -Fq 'routeCurrent.textContent = rowLabel(activeRow)' "$TEMP_DIR/study-guide/comparisons/bensky-crosswalk-navigation.js"
+! grep -Fq 'data-map-navigation' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+! grep -Fq 'scrollIntoView' "$TEMP_DIR/study-guide/comparisons/bensky-crosswalk-navigation.js"
 
 for relative in "${PHP_FILES[@]}"; do
     cp -a "$MOODLE_ROOT/$relative" "$BACKUP_DIR/moodle/$(basename "$relative")"
@@ -87,6 +90,8 @@ cp -a "$STUDY_NOTE_DIR/dui-yao.html" "$BACKUP_DIR/static/"
 cp -a "$STUDY_NOTE_DIR/dui-yao-es.html" "$BACKUP_DIR/static/"
 [[ -f "$STUDY_NOTE_DIR/study-note-navigation.js" ]] \
     && cp -a "$STUDY_NOTE_DIR/study-note-navigation.js" "$BACKUP_DIR/static/"
+[[ -f "$STUDY_NOTE_DIR/bensky-crosswalk-navigation.js" ]] \
+    && cp -a "$STUDY_NOTE_DIR/bensky-crosswalk-navigation.js" "$BACKUP_DIR/static/"
 (
     cd "$STUDY_NOTE_DIR"
     find . -type f -name '*.html' -print0 \
@@ -115,6 +120,8 @@ NAV_OWNER_GROUP="$(stat -c '%u:%g' "$NAV_SOURCE")"
 NAV_MODE="$(stat -c '%a' "$NAV_SOURCE")"
 install -o "${NAV_OWNER_GROUP%:*}" -g "${NAV_OWNER_GROUP#*:}" -m "$NAV_MODE" \
     "$TEMP_DIR/study-guide/comparisons/study-note-navigation.js" "$STUDY_NOTE_DIR/study-note-navigation.js"
+install -o "${NAV_OWNER_GROUP%:*}" -g "${NAV_OWNER_GROUP#*:}" -m "$NAV_MODE" \
+    "$TEMP_DIR/study-guide/comparisons/bensky-crosswalk-navigation.js" "$STUDY_NOTE_DIR/bensky-crosswalk-navigation.js"
 
 php -r '
 $root = $argv[1];
@@ -150,6 +157,7 @@ grep -Fq 'single-herbs-guide__study-route' "$MOODLE_ROOT/blocks/myprogress/singl
 grep -Fq 'formula-study-guide__study-route' "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide.php"
 grep -Fq 'All 51 pairs' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'isDuiYaoNote' "$STUDY_NOTE_DIR/study-note-navigation.js"
+grep -Fq 'routeCurrent.textContent = rowLabel(activeRow)' "$STUDY_NOTE_DIR/bensky-crosswalk-navigation.js"
 
 if [[ "${SKIP_CACHE_PURGE:-0}" != "1" && -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
