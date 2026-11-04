@@ -150,6 +150,35 @@ a { color: inherit; }
 .guide-formula-roster { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--line); }
 .guide-quick-access { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 22px; padding: 15px 17px; border: 1px solid #b9ddd5; border-radius: 12px; background: #fff; }
 .guide-quick-access > strong { margin-right: 3px; color: var(--navy); }
+.guide-content-map { margin: 22px 0; padding: 26px; border: 1px solid #b9ddd5; border-top: 5px solid var(--teal); border-radius: 14px; background: linear-gradient(145deg, #f7fcfb, #fff); box-shadow: 0 8px 18px rgba(25, 54, 76, .05); }
+.guide-content-map h2 { margin: 0 0 6px; }
+.guide-content-map__intro { max-width: 850px; margin: 0; color: var(--muted); }
+.guide-content-map__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+.guide-content-map__grid article { min-width: 0; padding: 18px; border: 1px solid #d5e4e2; border-radius: 11px; background: #fff; }
+.guide-content-map__grid h3 { margin: 10px 0 6px; font-size: 1.02rem; }
+.guide-content-map__grid p { margin: 0 0 12px; color: var(--muted); font-size: .9rem; }
+.guide-content-map__grid a { display: block; margin-top: 7px; color: var(--teal); font-size: .86rem; font-weight: 900; text-decoration: none; }
+.guide-content-map__grid a:hover,
+.guide-content-map__grid a:focus { text-decoration: underline; }
+.guide-content-map__controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.guide-content-map__controls button { min-height: 38px; padding: 7px 12px; border: 1px solid #a9c8c2; border-radius: 8px; background: #fff; color: var(--navy); font: inherit; font-size: .82rem; font-weight: 850; cursor: pointer; }
+.guide-content-map__controls button:hover,
+.guide-content-map__controls button:focus-visible { border-color: var(--teal); background: #edf9f6; outline: none; }
+.guide-organized-panel { scroll-margin-top: 18px; }
+.guide-organized-panel > .guide-panel-summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: -8px; padding: 14px 16px; border-radius: 9px; color: var(--navy); cursor: pointer; list-style: none; }
+.guide-organized-panel > .guide-panel-summary::-webkit-details-marker { display: none; }
+.guide-organized-panel > .guide-panel-summary::after { content: '+'; display: grid; flex: 0 0 auto; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: #dff2ed; color: var(--teal); font-size: 1.35rem; font-weight: 900; line-height: 1; }
+.guide-organized-panel[open] > .guide-panel-summary::after { content: '−'; }
+.guide-organized-panel > .guide-panel-summary:hover,
+.guide-organized-panel > .guide-panel-summary:focus-visible { background: #f1f8f7; outline: 3px solid rgba(6, 114, 103, .18); }
+.guide-organized-panel > .guide-panel-summary span { min-width: 0; }
+.guide-organized-panel > .guide-panel-summary strong,
+.guide-organized-panel > .guide-panel-summary small { display: block; }
+.guide-organized-panel > .guide-panel-summary strong { font-size: 1.03rem; }
+.guide-organized-panel > .guide-panel-summary small { margin-top: 3px; color: var(--muted); font-size: .82rem; font-weight: 600; line-height: 1.4; }
+.guide-organized-panel[open] > .guide-panel-summary { margin-bottom: 18px; border-bottom: 1px solid var(--line); border-radius: 9px 9px 0 0; }
+.guide-organized-panel--nested { margin-top: 18px; padding: 16px; border: 1px solid #c8ddd8; border-radius: 11px; background: #f8fbfc; }
+.guide-organized-panel--nested > .guide-formula-roster { margin-top: 0; padding-top: 0; border-top: 0; }
 .guide-formula-roster > h3 { margin: 0 0 6px; font-size: 1.25rem; }
 .guide-formula-roster > p { margin: 0 0 16px; }
 .guide-formula-roster__status { padding: 13px 15px; border-radius: 8px; background: #edf4f7; color: var(--muted); }
@@ -209,6 +238,7 @@ a { color: inherit; }
   .guide-herb-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .guide-official-formula-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .guide-audit-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .guide-content-map__grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px) {
@@ -238,4 +268,8 @@ a { color: inherit; }
   .guide-smart-search__shortcut { display: inline-block; margin-top: 10px; }
   .guide-smart-search__result { align-items: flex-start; flex-direction: column; gap: 6px; }
   .guide-smart-search__result-action { align-self: flex-end; }
+  .guide-content-map { padding: 20px 16px; }
+  .guide-content-map__controls { display: grid; grid-template-columns: 1fr; }
+  .guide-content-map__controls button { width: 100%; }
+  .guide-organized-panel > .guide-panel-summary { align-items: flex-start; }
 }

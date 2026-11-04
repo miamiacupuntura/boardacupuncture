@@ -38,6 +38,8 @@ FORMULA_ROSTER_PATH="blocks/myprogress/formula-board-roster-2026.json"
 BOARD_GUIDELINE_EN_PATH="study-guide/guidelines/chinese-herbal-medicine.html"
 BOARD_GUIDELINE_ES_PATH="study-guide/guidelines/chinese-herbal-medicine-es.html"
 BOARD_GUIDELINE_CSS_PATH="study-guide/guidelines/guidelines.css"
+BOARD_GUIDELINE_RETURN_PATH="study-guide/guidelines/guideline-return.js"
+BOARD_GUIDELINE_ORGANIZATION_PATH="study-guide/guidelines/guideline-organization.js"
 FORMULA_PREVIEW_PATH="study-guide/guidelines/formulas-appendix-c-2026-preview.html"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -117,7 +119,7 @@ echo "Guía pública detectada: $GUIDELINE_DIR"
 echo "PHP CLI detectado: $PHP_BIN"
 echo "Descargando referencias Duì Yào para todas las categorías desde $REVISION..."
 
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$FORMULA_PREVIEW_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$BOARD_GUIDELINE_RETURN_PATH" "$BOARD_GUIDELINE_ORGANIZATION_PATH" "$FORMULA_PREVIEW_PATH"; do
     mkdir -p "$TEMP_DIR/$(dirname "$relative_path")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative_path" -o "$TEMP_DIR/$relative_path"
 done
@@ -512,7 +514,7 @@ grep -Fq 'href="/my/">← Dashboard</a>' "$TEMP_DIR/$FORMULA_PREVIEW_PATH"
 grep -Fq 'href="/blocks/myprogress/formulas-study-guide.php?lang=es">Guía de estudio de fórmulas →</a>' "$TEMP_DIR/$FORMULA_PREVIEW_PATH"
 
 mkdir -p "$BACKUP_DIR"
-for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$FORMULA_PREVIEW_PATH"; do
+for relative_path in "$CATEGORY_PATH" "$MOIST_PATH" "${LABEL_CATEGORY_PATHS[@]}" "$GUIDE_PATH" "$GUIDE_TRANSLATION_PATH" "$CARD_INDEX_PATH" "$PROPERTIES_PATH" "$REFERENCE_PATH" "$DUI_DATA_PATH" "$FORMULA_GUIDE_PATH" "$FORMULA_DATA_PATH" "$FORMULA_ROSTER_PATH" "$BOARD_GUIDELINE_EN_PATH" "$BOARD_GUIDELINE_ES_PATH" "$BOARD_GUIDELINE_CSS_PATH" "$BOARD_GUIDELINE_RETURN_PATH" "$BOARD_GUIDELINE_ORGANIZATION_PATH" "$FORMULA_PREVIEW_PATH"; do
     case "$relative_path" in
         study-guide/guidelines/*)
             target="$GUIDELINE_DIR/$(basename "$relative_path")"

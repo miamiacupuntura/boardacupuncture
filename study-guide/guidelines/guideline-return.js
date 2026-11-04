@@ -3,7 +3,7 @@
     if (!document.querySelector('link[data-guide-search-styles]')) {
         const searchStyles = document.createElement('link');
         searchStyles.rel = 'stylesheet';
-        searchStyles.href = new URL('guidelines.css?v=20261101-3', assetBase).href;
+        searchStyles.href = new URL('guidelines.css?v=20261103-1', assetBase).href;
         searchStyles.dataset.guideSearchStyles = 'true';
         document.head.appendChild(searchStyles);
     }
