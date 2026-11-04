@@ -198,6 +198,10 @@ assert(categoryMapPhp.includes('herb-formula-map__bridge-formula')
     && categoryMapPhp.includes('$highlightbridgeformulas($formulachapter[2], $rowformulacolors)')
     && categoryMapPhp.includes('$renderbridgeformulas($pair[3], $paircolorsbycategory['),
     'formula names do not reuse the colors of their Duì Yào herbs.');
+assert(categoryMapPhp.includes('$renderduiyaomembers($pair, $rowbridgecolors)')
+    && categoryMapPhp.includes("'Herb category:'")
+    && !categoryMapPhp.includes('s($pair[2])'),
+    'Duì Yào cards do not show individual herb categories or still render Chinese names.');
 assert(studyGuideHubPhp.includes("'title' => 'Bensky Category Crosswalk'")
     && studyGuideHubPhp.includes("'path' => '/blocks/myprogress/herb-formula-category-map.php'"),
     'the fourth combined card is missing from the Chinese Herbology hub.');
