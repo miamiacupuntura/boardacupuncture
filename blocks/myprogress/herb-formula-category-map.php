@@ -425,6 +425,7 @@ $huburl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbo
 $herbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $langparams);
 $duiyaourl = new moodle_url($ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html');
 $formulasurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $langparams);
+$mapnavscripturl = new moodle_url('/study-guide/comparisons/bensky-crosswalk-navigation.js');
 $pagetitle = $ises ? 'Mapa comparativo Bensky' : 'Bensky Category Crosswalk';
 
 $PAGE->set_url($pageurl);
@@ -478,6 +479,12 @@ echo $OUTPUT->header();
 .herb-formula-map__bridge-herb--7{border-color:#f0a7cb;background:#fce7f3;color:#9d174d}
 .herb-formula-map__bridge-herb--8{border-color:#b5d66b;background:#ecfccb;color:#3f6212}
 .herb-formula-map__bridge-formula{display:inline-block;margin:1px 0;padding:2px 7px;border:1px solid #94a3b8;border-radius:7px;color:#17232a;font-weight:850;line-height:1.4;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.herb-formula-map__route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:11px 14px;border:1px solid #d9e2e7;border-radius:9px;background:#fff;color:#64748b;font-size:12px;font-weight:750}
+.herb-formula-map__route a{color:#315fa5;text-decoration:none}.herb-formula-map__route a:hover{text-decoration:underline}.herb-formula-map__route-current{color:#17232a}
+.herb-formula-map__journey{position:sticky;top:76px;z-index:12;display:grid;grid-template-columns:minmax(190px,1fr) minmax(260px,1.15fr) minmax(190px,1fr);gap:12px;align-items:stretch;margin:18px 0;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:rgba(255,255,255,.97);box-shadow:0 7px 22px rgba(15,23,42,.1);backdrop-filter:blur(8px)}
+.herb-formula-map__journey-link{display:flex;min-height:58px;flex-direction:column;justify-content:center;padding:9px 12px;border:1px solid #dbe4e9;border-radius:9px;background:#fff;color:#17344a;text-decoration:none}.herb-formula-map__journey-link:hover{border-color:#f77e25;color:#17344a;text-decoration:none}.herb-formula-map__journey-link--next{text-align:right}.herb-formula-map__journey-link[aria-disabled="true"]{visibility:hidden;pointer-events:none}.herb-formula-map__journey-label{color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.herb-formula-map__journey-name{margin-top:3px;color:#e66716;font-size:12px;font-weight:850;line-height:1.35}
+.herb-formula-map__journey-jump{display:flex;flex-direction:column;justify-content:center}.herb-formula-map__journey-jump label{margin:0 0 4px;color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.herb-formula-map__journey-jump select{width:100%;min-height:40px;padding:7px 34px 7px 10px;border:1px solid #aebdc7;border-radius:8px;background:#fff;color:#17232a;font-weight:750}.herb-formula-map tr[id^="map-card-"]{scroll-margin-top:108px}
+@media(max-width:800px){.herb-formula-map__journey{position:static;grid-template-columns:1fr 1fr}.herb-formula-map__journey-jump{grid-column:1/-1;grid-row:1}.herb-formula-map__journey-link--next{text-align:right}}
 .herb-formula-map__relationship-row td{padding:0 14px 18px;border-top:0}
 .herb-formula-map__relationship-row td+td{border-left:0}
 .herb-formula-map__relationship-card{padding:15px 17px;border:1px solid #d9e2ef;border-left:5px solid #315fa5;border-radius:10px;background:#f3f7fd}
@@ -497,11 +504,24 @@ echo $OUTPUT->header();
             <a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Herbología China' : '← Chinese Herbology'); ?></a>
         </nav>
     </header>
+    <nav class="herb-formula-map__route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
+        <a href="<?php echo $huburl->out(false); ?>"><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?></a><span aria-hidden="true">›</span>
+        <span><?php echo $ises ? 'Mapa Bensky' : 'Bensky Map'; ?></span><span aria-hidden="true">›</span>
+        <a href="<?php echo $herbsurl->out(false); ?>"><?php echo $ises ? 'Hierbas' : 'Herbs'; ?></a><span aria-hidden="true">→</span>
+        <a href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a><span aria-hidden="true">→</span>
+        <a href="<?php echo $formulasurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a><span aria-hidden="true">›</span>
+        <span class="herb-formula-map__route-current" data-map-route-current><?php echo s($ises ? $herbcategories[0][3] : $herbcategories[0][2]); ?></span>
+    </nav>
     <section class="herb-formula-map__overview" aria-labelledby="map-overview-title">
         <div><h3 id="map-overview-title"><?php echo s($ises ? 'Cómo leer el mapa' : 'How to read this crosswalk'); ?></h3><p><?php echo s($ises ? 'Nivel 1 clasifica hierbas individuales por sus acciones. Nivel 2, Duì Yào, muestra cómo dos hierbas trabajan juntas. Nivel 3 agrupa fórmulas completas por su estrategia terapéutica. Las flechas indican relación, no equivalencia.' : 'Level 1 classifies individual herbs by their actions. Level 2, Duì Yào, shows how two herbs work together. Level 3 groups complete formulas by therapeutic strategy. Arrows indicate relationship, not equivalence.'); ?></p><p class="herb-formula-map__color-key"><?php echo s($ises ? 'Clave visual: dentro de cada fila, el mismo color identifica la misma hierba en la categoría, el Duì Yào y los ejemplos de fórmula.' : 'Visual key: within each row, the same color identifies the same herb in the category, Duì Yào, and formula examples.'); ?></p></div>
         <div class="herb-formula-map__stats"><div class="herb-formula-map__stat"><strong>34</strong><span><?php echo $ises ? 'categorías herbales' : 'herb categories'; ?></span></div><div class="herb-formula-map__stat"><strong>21</strong><span><?php echo $ises ? 'capítulos de fórmulas' : 'formula chapters'; ?></span></div></div>
     </section>
     <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Dos relaciones claras:' : 'Two clear relationships:'; ?></strong> <?php echo s($ises ? 'Las hierbas tibias y frescas que liberan el Exterior se relacionan con el capítulo 1 de fórmulas, Release the Exterior. En Clear Heat, Bensky divide las hierbas en cinco acciones —Drain Fire, Cool the Blood, Dry Dampness, Resolve Toxicity y Deficiency Heat— mientras el capítulo 4 agrupa fórmulas completas. Se relacionan, pero no se llaman ni se clasifican de la misma manera.' : 'Warm and cool herbs that release the Exterior relate to Formula Chapter 1, Release the Exterior. For Clear Heat, Bensky divides herbs into five actions—Drain Fire, Cool the Blood, Dry Dampness, Resolve Toxicity, and Deficiency Heat—while Formula Chapter 4 groups complete prescriptions. They relate, but are not named or classified at the same level.'); ?></p>
+    <nav class="herb-formula-map__journey" data-map-navigation aria-label="<?php echo s($ises ? 'Navegación entre categorías' : 'Category navigation'); ?>">
+        <a class="herb-formula-map__journey-link" href="#map-card-1" data-map-previous aria-disabled="true"><span class="herb-formula-map__journey-label"><?php echo $ises ? '← Categoría anterior' : '← Previous category'; ?></span><span class="herb-formula-map__journey-name" data-map-previous-name></span></a>
+        <div class="herb-formula-map__journey-jump"><label for="bensky-map-jump"><?php echo $ises ? 'Ir a…' : 'Jump to…'; ?></label><select id="bensky-map-jump" data-map-jump><?php foreach ($herbcategories as $jumpcategory): ?><option value="<?php echo (int) $jumpcategory[0]; ?>"><?php echo s($jumpcategory[0] . ' · ' . ($ises ? $jumpcategory[3] : $jumpcategory[2])); ?></option><?php endforeach; ?></select></div>
+        <a class="herb-formula-map__journey-link herb-formula-map__journey-link--next" href="#map-card-2" data-map-next><span class="herb-formula-map__journey-label"><?php echo $ises ? 'Categoría siguiente →' : 'Next category →'; ?></span><span class="herb-formula-map__journey-name" data-map-next-name><?php echo s($ises ? $herbcategories[1][3] : $herbcategories[1][2]); ?></span></a>
+    </nav>
     <div class="herb-formula-map__table-wrap"><table class="herb-formula-map__table">
         <thead><tr><th><?php echo s($ises ? 'NIVEL 1 · HIERBAS' : 'LEVEL 1 · HERBS'); ?></th><th><?php echo s($ises ? 'NIVEL 2 · DUÌ YÀO' : 'LEVEL 2 · DUÌ YÀO'); ?></th><th><?php echo s($ises ? 'NIVEL 3 · FÓRMULAS' : 'LEVEL 3 · FORMULAS'); ?></th></tr></thead>
         <tbody><?php foreach ($herbcategories as $category): $rowbridgecolors = $bridgecolorsbycategory[$category[0]] ?? []; $rowformulacolors = $formulacolorsbycategory[$category[0]] ?? []; ?><tr id="map-card-<?php echo (int) $category[0]; ?>">
@@ -515,5 +535,6 @@ echo $OUTPUT->header();
     </table></div>
     <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises ? 'La semejanza del nombre no sustituye patrón, arquitectura de la fórmula, dosis ni seguridad. Esta tabla organiza el estudio; no constituye guía de prescripción.' : 'Name similarity does not replace pattern, formula architecture, dosage, or safety. This table organizes study and is not prescribing guidance.'); ?></p>
 </main>
+<script src="<?php echo $mapnavscripturl->out(false); ?>" defer></script>
 <?php
 echo $OUTPUT->footer();

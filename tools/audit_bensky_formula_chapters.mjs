@@ -11,6 +11,7 @@ const categoryMapPhp = read('blocks/myprogress/herb-formula-category-map.php');
 const studyGuideHubPhp = read('blocks/myprogress/study-guide.php');
 const officialDuiYao = JSON.parse(read('study-guide/comparisons/dui-yao-data.json'));
 const comparisonReturnJs = read('study-guide/comparisons/comparison-return.js');
+const crosswalkNavigationJs = read('study-guide/comparisons/bensky-crosswalk-navigation.js');
 
 const fail = message => {
     throw new Error(`Bensky formula chapter audit failed: ${message}`);
@@ -212,6 +213,14 @@ assert(comparisonReturnJs.includes("params.get('from') === 'bensky-crosswalk'")
     && comparisonReturnJs.includes('← Regresar al mapa Bensky')
     && comparisonReturnJs.includes("guideUrl.hash = 'map-card-' + focus"),
     'Duì Yào profiles do not provide a bilingual return button to the originating Bensky row.');
+assert(categoryMapPhp.includes('data-map-navigation')
+    && categoryMapPhp.includes('data-map-jump')
+    && categoryMapPhp.includes('bensky-crosswalk-navigation.js'),
+    'the Bensky crosswalk is missing its breadcrumb or previous/jump/next navigation panel.');
+assert(crosswalkNavigationJs.includes("row.scrollIntoView({behavior: 'smooth', block: 'start'})")
+    && crosswalkNavigationJs.includes('IntersectionObserver')
+    && crosswalkNavigationJs.includes("'#map-card-' + number"),
+    'the Bensky crosswalk navigation does not follow the active row or preserve its anchor.');
 assert(studyGuideHubPhp.includes("'title' => 'Bensky Category Crosswalk'")
     && studyGuideHubPhp.includes("'path' => '/blocks/myprogress/herb-formula-category-map.php'"),
     'the fourth combined card is missing from the Chinese Herbology hub.');
