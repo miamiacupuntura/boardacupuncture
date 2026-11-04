@@ -1700,7 +1700,10 @@ $guidelinerosterurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(
 
 $previousurl = null;
 $nexturl = null;
+$previouschapter = null;
+$nextchapter = null;
 if ($selectedindex !== null && $selectedindex > 0) {
+    $previouschapter = $benskychapters[$selectedindex - 1];
     $previousparams = ['focus' => $categorykeys[$selectedindex - 1]];
     if ($ises) {
         $previousparams['lang'] = 'es';
@@ -1708,6 +1711,7 @@ if ($selectedindex !== null && $selectedindex > 0) {
     $previousurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $previousparams);
 }
 if ($selectedindex !== null && $selectedindex < count($categorykeys) - 1) {
+    $nextchapter = $benskychapters[$selectedindex + 1];
     $nextparams = ['focus' => $categorykeys[$selectedindex + 1]];
     if ($ises) {
         $nextparams['lang'] = 'es';
@@ -1715,12 +1719,83 @@ if ($selectedindex !== null && $selectedindex < count($categorykeys) - 1) {
     $nexturl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $nextparams);
 }
 
+$renderchapternavigation = static function(string $instance) use (
+    $benskychapters,
+    $selectedbenskychapter,
+    $previouschapter,
+    $previousurl,
+    $nextchapter,
+    $nexturl,
+    $indexurl,
+    $ises
+): string {
+    $selectedkey = $selectedbenskychapter['key'] ?? '';
+    $selectid = 'formula-chapter-jump-' . $instance;
+    ob_start();
+    ?>
+    <nav class="formula-study-guide__chapter-path<?php echo $selectedbenskychapter === null ? ' formula-study-guide__chapter-path--index' : ''; ?>" aria-label="<?php echo s($ises ? 'Recorrido de los 21 capítulos de Bensky' : '21-chapter Bensky path'); ?>">
+        <?php if ($selectedbenskychapter !== null): ?>
+            <?php if ($previousurl !== null && $previouschapter !== null): ?>
+                <a class="formula-study-guide__chapter-path-link" href="<?php echo $previousurl->out(false); ?>">
+                    <span><?php echo s(($ises ? '← Anterior · Capítulo ' : '← Previous · Chapter ') . $previouschapter['number']); ?></span>
+                    <strong><?php echo s($ises ? $previouschapter['nameEs'] : $previouschapter['name']); ?></strong>
+                </a>
+            <?php else: ?>
+                <span class="formula-study-guide__chapter-path-link formula-study-guide__chapter-path-link--disabled">
+                    <span><?php echo s($ises ? 'Inicio del recorrido' : 'Start of path'); ?></span>
+                    <strong><?php echo s($ises ? 'Este es el primer capítulo' : 'This is the first chapter'); ?></strong>
+                </span>
+            <?php endif; ?>
+        <?php endif; ?>
+        <div class="formula-study-guide__chapter-jump">
+            <form method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formulas-study-guide.php'))->out(false); ?>" data-formula-chapter-jump>
+                <label for="<?php echo s($selectid); ?>"><?php echo s($ises ? 'Ir al capítulo…' : 'Jump to chapter…'); ?></label>
+                <div>
+                    <select id="<?php echo s($selectid); ?>" name="focus">
+                        <?php if ($selectedkey === ''): ?><option value="" selected disabled><?php echo s($ises ? 'Selecciona uno de los 21 capítulos' : 'Select one of the 21 chapters'); ?></option><?php endif; ?>
+                        <?php foreach ($benskychapters as $chapter): ?>
+                            <option value="<?php echo s($chapter['key']); ?>"<?php echo $chapter['key'] === $selectedkey ? ' selected' : ''; ?>><?php echo s($chapter['number'] . ' · ' . ($ises ? $chapter['nameEs'] : $chapter['name'])); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if ($ises): ?><input type="hidden" name="lang" value="es"><?php endif; ?>
+                    <button class="formula-study-guide__button" type="submit"><?php echo s($ises ? 'Abrir' : 'Open'); ?></button>
+                </div>
+            </form>
+            <?php if ($selectedbenskychapter !== null): ?><a href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Ver los 21 capítulos' : 'View all 21 chapters'); ?></a><?php endif; ?>
+        </div>
+        <?php if ($selectedbenskychapter !== null): ?>
+            <?php if ($nexturl !== null && $nextchapter !== null): ?>
+                <a class="formula-study-guide__chapter-path-link formula-study-guide__chapter-path-link--next" href="<?php echo $nexturl->out(false); ?>">
+                    <span><?php echo s(($ises ? 'Siguiente · Capítulo ' : 'Next · Chapter ') . $nextchapter['number'] . ' →'); ?></span>
+                    <strong><?php echo s($ises ? $nextchapter['nameEs'] : $nextchapter['name']); ?></strong>
+                </a>
+            <?php else: ?>
+                <span class="formula-study-guide__chapter-path-link formula-study-guide__chapter-path-link--next formula-study-guide__chapter-path-link--disabled">
+                    <span><?php echo s($ises ? 'Fin del recorrido' : 'End of path'); ?></span>
+                    <strong><?php echo s($ises ? 'Este es el último capítulo' : 'This is the final chapter'); ?></strong>
+                </span>
+            <?php endif; ?>
+        <?php endif; ?>
+    </nav>
+    <?php
+    return (string) ob_get_clean();
+};
+
 $pagetitle = $ises ? 'Guía de estudio de fórmulas' : 'Formula Study Guide';
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
+$PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function(select) {
+    select.addEventListener('change', function() {
+        if (select.value) {
+            select.form.submit();
+        }
+    });
+});
+JS);
 
 echo $OUTPUT->header();
 ?>
@@ -1738,6 +1813,9 @@ echo $OUTPUT->header();
 .formula-study-guide__button:hover{background:#f1f5f9;color:#17232a;text-decoration:none}
 .formula-study-guide__button--primary{border-color:#2563eb;background:#2563eb;color:#fff}.formula-study-guide__button--primary:hover{background:#1d4ed8;color:#fff}
 .formula-study-guide__button--active{border-color:#0b817d;background:#0b817d;color:#fff}.formula-study-guide__button--active:hover{background:#0b817d;color:#fff}
+.formula-study-guide__chapter-path{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:0 0 20px;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+.formula-study-guide__chapter-path--index{grid-template-columns:minmax(300px,640px);justify-content:center}.formula-study-guide__chapter-path-link{display:flex;min-height:68px;flex-direction:column;justify-content:center;padding:10px 13px;border:1px solid #dbe4e9;border-radius:9px;background:#fff;color:#17344a;text-decoration:none}.formula-study-guide__chapter-path-link:hover{border-color:#f77e25;color:#17344a;text-decoration:none}.formula-study-guide__chapter-path-link span{color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.formula-study-guide__chapter-path-link strong{margin-top:4px;color:#e66716;font-size:13px;line-height:1.35}.formula-study-guide__chapter-path-link--next{text-align:right}.formula-study-guide__chapter-path-link--disabled{background:#f8fafb;opacity:.72}.formula-study-guide__chapter-path-link--disabled strong{color:#64748b}
+.formula-study-guide__chapter-jump{display:flex;flex-direction:column;justify-content:center;gap:5px}.formula-study-guide__chapter-jump form>label{display:block;margin:0 0 4px;color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.formula-study-guide__chapter-jump form>div{display:flex;gap:7px}.formula-study-guide__chapter-jump select{width:100%;min-width:0;min-height:42px;padding:8px 34px 8px 10px;border:1px solid #aebdc7;border-radius:8px;background:#fff;color:#17232a;font-weight:750}.formula-study-guide__chapter-jump>a{color:#075e54;font-size:12px;font-weight:800;text-align:center;text-decoration:none}.formula-study-guide__chapter-jump>a:hover{text-decoration:underline}
 .formula-study-guide__overview{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin-bottom:24px;padding:23px 26px;border-left:5px solid #0b817d;border-radius:12px;background:#eef8f6;box-shadow:0 3px 12px rgba(15,23,42,.05)}
 .formula-study-guide__overview h3{margin:0 0 7px;font-size:22px}.formula-study-guide__overview p{margin:0;color:#52677a;line-height:1.55}
 .formula-study-guide__stats{display:flex;gap:10px}.formula-study-guide__stat{min-width:92px;padding:13px 15px;border-radius:10px;background:#fff;color:#0f5f58;text-align:center}.formula-study-guide__stat strong{display:block;font-size:28px;line-height:1}.formula-study-guide__stat span{display:block;margin-top:5px;font-size:11px;font-weight:800;text-transform:uppercase}
@@ -1789,8 +1867,8 @@ echo $OUTPUT->header();
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:1050px){.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-guide__chapter-path{grid-template-columns:1fr 1fr}.formula-study-guide__chapter-path--index{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:1/-1;grid-row:1}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__chapter-path{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:auto;grid-row:auto}.formula-study-guide__chapter-path-link--next{text-align:left}.formula-study-guide__chapter-jump form>div{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
 <main class="formula-study-guide">
@@ -1817,6 +1895,8 @@ echo $OUTPUT->header();
             </div>
         </nav>
     </header>
+
+    <?php echo $renderchapternavigation('top'); ?>
 
     <?php if ($selected === null): ?>
         <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title">
@@ -1905,13 +1985,6 @@ echo $OUTPUT->header();
                     : ($ises ? 'fórmulas en esta categoría.' : 'formulas in this category.'));
         }
         ?>
-        <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre capítulos de Bensky' : 'Bensky chapter navigation'); ?>">
-            <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Capítulo anterior' : '← Previous chapter'); ?></a><?php endif; ?></span>
-            <div class="formula-study-guide__category-nav-center">
-                <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Los 21 capítulos' : 'All 21 chapters'); ?></a>
-            </div>
-            <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente capítulo →' : 'Next chapter →'); ?></a><?php endif; ?></span>
-        </nav>
         <section class="formula-study-guide__category-header<?php echo $issupplemental ? ' formula-study-guide__category-header--supplemental' : ''; ?>" aria-labelledby="selected-category-title">
             <p class="formula-study-guide__eyebrow"><?php echo s($selectedeyebrow); ?></p>
             <h3 id="selected-category-title"><?php echo s($selectedtitle); ?></h3>
@@ -3099,11 +3172,7 @@ echo $OUTPUT->header();
         <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises
             ? 'Esta guía organiza contenido histórico normalizado para repaso académico. No sustituye diagnóstico, evaluación de seguridad ni prescripción profesional.'
             : 'This guide organizes normalized historical content for academic review. It does not replace diagnosis, safety assessment or professional prescribing.'); ?></p>
-        <nav class="formula-study-guide__category-nav" aria-label="<?php echo s($ises ? 'Navegación entre capítulos de Bensky' : 'Bensky chapter navigation'); ?>">
-            <span><?php if ($previousurl !== null): ?><a class="formula-study-guide__button" href="<?php echo $previousurl->out(false); ?>"><?php echo s($ises ? '← Capítulo anterior' : '← Previous chapter'); ?></a><?php endif; ?></span>
-            <a class="formula-study-guide__button" href="<?php echo $indexurl->out(false); ?>"><?php echo s($ises ? 'Los 21 capítulos' : 'All 21 chapters'); ?></a>
-            <span><?php if ($nexturl !== null): ?><a class="formula-study-guide__button" href="<?php echo $nexturl->out(false); ?>"><?php echo s($ises ? 'Siguiente capítulo →' : 'Next chapter →'); ?></a><?php endif; ?></span>
-        </nav>
+        <?php echo $renderchapternavigation('bottom'); ?>
     <?php endif; ?>
 </main>
 <?php

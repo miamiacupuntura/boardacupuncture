@@ -36,6 +36,9 @@ curl -fsSL \
 
 php -l "$TEMP_DIR/formulas-study-guide.php" >/dev/null
 php -l "$TEMP_DIR/study-guide.php" >/dev/null
+grep -Fq '$renderchapternavigation = static function' "$TEMP_DIR/formulas-study-guide.php"
+grep -Fq 'data-formula-chapter-jump' "$TEMP_DIR/formulas-study-guide.php"
+grep -Fq 'formula-study-guide__chapter-path' "$TEMP_DIR/formulas-study-guide.php"
 php -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
     $chapter8 = array_filter(
@@ -625,6 +628,9 @@ fi
 grep -q "tonify-chapter-8" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "selectedformulasections" "$TARGET_DIR/formulas-study-guide.php"
 grep -q "clinical-section-" "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq '$renderchapternavigation = static function' "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq 'data-formula-chapter-jump' "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq 'formula-study-guide__chapter-path' "$TARGET_DIR/formulas-study-guide.php"
 grep -q "Por qué Viento-Frío y Viento-Calor deben estudiarse por separado" "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "wind-cold"' "$TARGET_DIR/formulas-study-guide-data.json"
 grep -q '"key": "wind-heat"' "$TARGET_DIR/formulas-study-guide-data.json"
