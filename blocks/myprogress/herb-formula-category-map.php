@@ -201,6 +201,42 @@ $duiyaopairs = [
     51 => ['tian-ma-gou-teng-dui-yao', 'Tiān Má + Gōu Téng', '天麻 + 钩藤', 'Tiān Má Gōu Téng Yǐn'],
 ];
 
+$duiyaocategories = [
+    1 => ['Exterior-Resolving · Pungent-Warm', 'Liberar Exterior · Acre-Tibio'],
+    2 => ['Exterior-Resolving · Regulate Lung Qi', 'Liberar Exterior · Regular Qi de Pulmón'],
+    5 => ['Dispel Wind from the Exterior', 'Expulsar Viento del Exterior'],
+    7 => ['Disperse Wind-Heat · Brighten the Eyes', 'Dispersar Viento-Calor · Aclarar Ojos'],
+    11 => ['Clear Qi-Level Heat', 'Aclarar Calor de Nivel Qi'],
+    12 => ['Drain Deficiency Fire', 'Drenar Fuego por Deficiencia'],
+    15 => ['Clear Heat and Resolve Toxicity', 'Aclarar Calor y Resolver Toxicidad'],
+    16 => ['Benefit the Throat · Reduce Swelling', 'Beneficiar Garganta · Reducir Hinchazón'],
+    17 => ['Vent Heat Lurking in Yin', 'Ventilar Calor Oculto en Yin'],
+    18 => ['Strongly Supplement Qi', 'Suplementar Qi con Fuerza'],
+    19 => ['Strengthen the Spleen · Drain Dampness', 'Fortalecer Bazo · Drenar Humedad'],
+    24 => ['Nourish and Invigorate Blood', 'Nutrir y Movilizar Sangre'],
+    25 => ['Regulate Qi, Blood and Menses', 'Regular Qi, Sangre y Menstruación'],
+    26 => ['Warm the Womb · Stop Bleeding', 'Calentar Útero · Detener Sangrado'],
+    27 => ['Nourish Lung–Stomach Yin', 'Nutrir Yin de Pulmón–Estómago'],
+    29 => ['Gently Enrich Liver–Kidney Yin', 'Enriquecer Suavemente Yin Hígado–Riñón'],
+    31 => ['Strengthen the Back · Calm the Fetus', 'Fortalecer Espalda · Calmar Feto'],
+    32 => ['Warm and Moisten the Intestines', 'Calentar y Humedecer Intestinos'],
+    33 => ['Cool Blood · Stop Lower Bleeding', 'Enfriar Sangre · Detener Sangrado Inferior'],
+    34 => ['Invigorate Blood · Dispel Stasis', 'Movilizar Sangre · Disipar Estasis'],
+    35 => ['Move Qi and Blood · Stop Pain', 'Mover Qi y Sangre · Detener Dolor'],
+    37 => ['Dry Dampness · Transform Phlegm', 'Secar Humedad · Transformar Flema'],
+    38 => ['Stop Vomiting · Transform Phlegm', 'Detener Vómito · Transformar Flema'],
+    39 => ['Unblock Chest Yang · Dissipate Binding', 'Desbloquear Yang Torácico · Disipar Opresión'],
+    40 => ['Descend Lung Qi · Stop Cough', 'Descender Qi de Pulmón · Detener Tos'],
+    42 => ['Restore Devastated Yang', 'Restaurar Yang Devastado'],
+    43 => ['Warm and Supplement Kidney Yang', 'Calentar y Suplementar Yang de Riñón'],
+    46 => ['Course the Liver · Nourish Blood', 'Mover Hígado · Nutrir Sangre'],
+    47 => ['Aromatically Transform Dampness', 'Transformar Humedad Aromáticamente'],
+    48 => ['Unblock Lin · Expel Stones', 'Desbloquear Lin · Expulsar Cálculos'],
+    49 => ['Purge Heat · Soften Hardness', 'Purgar Calor · Ablandar Dureza'],
+    50 => ['Anchor Yang · Calm Spirit · Secure Leakage', 'Anclar Yang · Calmar Shen · Asegurar Pérdidas'],
+    51 => ['Calm the Liver · Extinguish Wind', 'Calmar Hígado · Extinguir Viento'],
+];
+
 $categoryduiyao = [
     1 => [1, 5], 2 => [7, 16], 3 => [11], 6 => [15], 7 => [12, 17],
     9 => [49], 10 => [32], 12 => [19, 48], 13 => [31], 14 => [39],
@@ -217,6 +253,9 @@ foreach ($categoryduiyao as $cardnumber => $pairnumbers) {
     if ($cardnumber < 1 || $cardnumber > 34 || array_diff($pairnumbers, array_keys($duiyaopairs)) !== []) {
         throw new moodle_exception('The representative Dui Yao category map is invalid.');
     }
+}
+if (array_keys($duiyaocategories) !== array_keys($duiyaopairs)) {
+    throw new moodle_exception('Every representative Dui Yao must include its official pair category.');
 }
 
 $langparams = $ises ? ['lang' => 'es'] : [];
@@ -254,6 +293,7 @@ echo $OUTPUT->header();
 .herb-formula-map__duiyao-pair strong{display:inline-block;margin-top:3px;color:#2f2350;font-size:13px}
 .herb-formula-map__duiyao-pair em{margin-left:6px;color:#7a6b8d;font-size:12px;font-style:normal}
 .herb-formula-map__duiyao-pair small{display:block;margin-top:3px;color:#52677a;font-size:11px;line-height:1.4}
+.herb-formula-map__duiyao-pair small+small{margin-top:4px;padding-top:4px;border-top:1px dashed #e3def2}
 .herb-formula-map__duiyao-empty{margin:0;color:#6b7280;font-size:13px;line-height:1.5}
 .herb-formula-map__composition{margin:12px 0 0;padding:10px 11px;border-radius:8px;background:#fff;color:#435d7a;font-size:12px;line-height:1.5}
 .herb-formula-map__composition strong{display:block;margin-bottom:3px;color:#17344a}
@@ -285,7 +325,7 @@ echo $OUTPUT->header();
         <thead><tr><th><?php echo s($ises ? 'NIVEL 1 · HIERBAS' : 'LEVEL 1 · HERBS'); ?></th><th><?php echo s($ises ? 'NIVEL 2 · DUÌ YÀO' : 'LEVEL 2 · DUÌ YÀO'); ?></th><th><?php echo s($ises ? 'NIVEL 3 · FÓRMULAS' : 'LEVEL 3 · FORMULAS'); ?></th></tr></thead>
         <tbody><?php foreach ($herbcategories as $category): ?><tr>
             <td><article class="herb-formula-map__cell"><div class="herb-formula-map__meta"><span class="herb-formula-map__number"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $category[0]); ?></span><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $category[1]); ?></span></div><h4><?php echo s($ises ? $category[3] : $category[2]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Hierbas principales:' : 'Representative herbs:'; ?></strong> <?php echo s($category[4]); ?></p></article></td>
-            <td><article class="herb-formula-map__cell herb-formula-map__cell--duiyao"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Puente de parejas' : 'Pair bridge'); ?></span></div><?php if (isset($categoryduiyao[$category[0]])): ?><strong class="herb-formula-map__duiyao-title"><?php echo $ises ? 'Duì Yào representativos' : 'Representative Duì Yào'; ?></strong><div class="herb-formula-map__duiyao-list"><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; $pairurl = new moodle_url('/study-guide/comparisons/' . $pair[0] . ($ises ? '-es' : '') . '.html', ['from' => 'bensky-crosswalk']); ?><a class="herb-formula-map__duiyao-pair" href="<?php echo $pairurl->out(false); ?>"><span><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $pairnumber . '/51'); ?></span><strong><?php echo s($pair[1]); ?></strong><em><?php echo s($pair[2]); ?></em><small><b><?php echo $ises ? 'Puente con fórmula:' : 'Formula bridge:'; ?></b> <?php echo s($pair[3]); ?></small></a><?php endforeach; ?></div><?php else: ?><h4><?php echo s($ises ? 'Sin pareja oficial representativa seleccionada' : 'No representative official pair selected'); ?></h4><p class="herb-formula-map__duiyao-empty"><?php echo s($ises ? 'La relación de estudio pasa directamente de la acción herbal a la estrategia de la fórmula; no se fuerza una pareja que no sea clara.' : 'The study relationship moves directly from the herb action to the formula strategy; no unclear pair is forced.'); ?></p><?php endif; ?></article></td>
+            <td><article class="herb-formula-map__cell herb-formula-map__cell--duiyao"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Puente de parejas' : 'Pair bridge'); ?></span></div><?php if (isset($categoryduiyao[$category[0]])): ?><strong class="herb-formula-map__duiyao-title"><?php echo $ises ? 'Duì Yào representativos' : 'Representative Duì Yào'; ?></strong><div class="herb-formula-map__duiyao-list"><?php foreach ($categoryduiyao[$category[0]] as $pairnumber): $pair = $duiyaopairs[$pairnumber]; $paircategory = $duiyaocategories[$pairnumber]; $pairurl = new moodle_url('/study-guide/comparisons/' . $pair[0] . ($ises ? '-es' : '') . '.html', ['from' => 'bensky-crosswalk']); ?><a class="herb-formula-map__duiyao-pair" href="<?php echo $pairurl->out(false); ?>"><span><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $pairnumber . '/51'); ?></span><strong><?php echo s($pair[1]); ?></strong><em><?php echo s($pair[2]); ?></em><small><b><?php echo $ises ? 'Categoría de la pareja:' : 'Pair category:'; ?></b> <?php echo s($paircategory[$ises ? 1 : 0]); ?></small><small><b><?php echo $ises ? 'Puente con fórmula:' : 'Formula bridge:'; ?></b> <?php echo s($pair[3]); ?></small></a><?php endforeach; ?></div><?php else: ?><h4><?php echo s($ises ? 'Sin pareja oficial representativa seleccionada' : 'No representative official pair selected'); ?></h4><p class="herb-formula-map__duiyao-empty"><?php echo s($ises ? 'La relación de estudio pasa directamente de la acción herbal a la estrategia de la fórmula; no se fuerza una pareja que no sea clara.' : 'The study relationship moves directly from the herb action to the formula strategy; no unclear pair is forced.'); ?></p><?php endif; ?></article></td>
             <td><article class="herb-formula-map__cell herb-formula-map__cell--formula<?php echo $category[5] === [] ? ' herb-formula-map__cell--none' : ''; ?>">
                 <?php if ($category[5] === []): ?><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Sin categoría directa' : 'No direct category'); ?></span></div><h4><?php echo s($ises ? 'Referencia histórica de seguridad' : 'Historical safety cross-reference'); ?></h4><?php endif; ?>
                 <?php foreach ($category[5] as $chapternumber): $formulachapter = $formulachapters[$chapternumber]; ?><section class="herb-formula-map__match"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $chapternumber); ?></span></div><h4><?php echo s($formulachapter[$ises ? 1 : 0]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Fórmulas principales:' : 'Representative formulas:'; ?></strong> <?php echo s($formulachapter[2]); ?></p></section><?php endforeach; ?>

@@ -160,6 +160,17 @@ const officialDuiYaoSlugs = new Set(officialDuiYao.map(pair => pair.slug));
 const mappedDuiYaoSlugs = [...categoryMapPhp.matchAll(/=> \['([^']+-dui-yao)',/g)].map(item => item[1]);
 assert(mappedDuiYaoSlugs.length >= 25 && mappedDuiYaoSlugs.every(slug => officialDuiYaoSlugs.has(slug)),
     'the combined map contains too few representative Duì Yào or a non-official pair.');
+const duiYaoCategoriesMatch = categoryMapPhp.match(/\$duiyaocategories = \[([\s\S]*?)\n\];/);
+const mappedDuiYaoCategories = duiYaoCategoriesMatch
+    ? [...duiYaoCategoriesMatch[1].matchAll(/^\s+(\d+) => \['([^']+)', '([^']+)'\]/gm)]
+        .map(item => ({number: Number(item[1]), en: item[2], es: item[3]}))
+    : [];
+const officialDuiYaoByNumber = new Map(officialDuiYao.map(pair => [pair.number, pair]));
+assert(mappedDuiYaoCategories.length === mappedDuiYaoSlugs.length
+    && mappedDuiYaoCategories.every(item => {
+        const official = officialDuiYaoByNumber.get(item.number);
+        return official && item.en === official.category.en && item.es === official.category.es;
+    }), 'a representative Duì Yào is missing its official English or Spanish pair category.');
 assert(categoryMapPhp.includes('1 => [1, 5]')
     && categoryMapPhp.includes('3 => [11]')
     && categoryMapPhp.includes('7 => [12, 17]')
