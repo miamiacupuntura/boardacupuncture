@@ -59,7 +59,7 @@ $areas = [
     ],
     'herbology' => [
         'title' => 'Chinese Herbology',
-        'description' => 'Study Guide chapters for Single Herbs, Duì Yào and Formulas.',
+        'description' => 'Study Single Herbs, Duì Yào and Formulas, then compare their related—but distinct—Bensky classification levels.',
         'chapters' => [
             [
                 'title' => 'Single Herbs',
@@ -77,10 +77,18 @@ $areas = [
             ],
             [
                 'title' => 'Formulas',
-                'description' => 'Study 63 core formulas through 14 treatment categories with patterns, actions, decisive clues, essential ingredients and safety review.',
+                'description' => 'Study all 21 Bensky formula chapters while distinguishing detailed platform profiles from the 181 official Appendix C formulas.',
                 'path' => '/blocks/myprogress/formulas-study-guide.php',
                 'anchor' => '',
-                'status' => 'AVAILABLE · 63 FORMULAS',
+                'status' => 'AVAILABLE · 21 CHAPTERS',
+            ],
+            [
+                'title' => 'Bensky Category Crosswalk',
+                'description' => 'Compare 34 action categories for individual herbs with 21 strategy chapters for complete formulas. Similar names show a study relationship, not the same classification.',
+                'path' => '/blocks/myprogress/herb-formula-category-map.php',
+                'anchor' => '',
+                'status' => 'NEW · REFERENCE MAP',
+                'priority' => true,
             ],
             [
                 'title' => 'Herbal Comparisons Question Bank',
@@ -279,13 +287,15 @@ $areas = [
 
 $spanishcopy = [
     'Chinese Herbology' => 'Herbología China',
-    'Study Guide chapters for Single Herbs, Duì Yào and Formulas.' => 'Capítulos de la guía para Hierbas individuales, Duì Yào y Fórmulas.',
+    'Study Single Herbs, Duì Yào and Formulas, then compare their related—but distinct—Bensky classification levels.' => 'Estudia Hierbas individuales, Duì Yào y Fórmulas; después compara sus niveles de clasificación Bensky, relacionados pero distintos.',
     'Single Herbs' => 'Hierbas individuales',
     'Study single herbs through the same General, Topics 1–34 and Mixed Review categories used in the Chinese Herbology Board Level workspace.' => 'Estudia las hierbas individuales con las mismas categorías General, Temas 1–34 y Repaso mixto del espacio Board Level de Herbología China.',
     'Duì Yào Pairs' => 'Parejas Duì Yào',
     'Master 51 official herb pairs through 15 clinical blocks. This Domain I resource emphasizes combined actions, individual roles, decisive clues, formulas and safety.' => 'Domina las 51 parejas oficiales en 15 bloques clínicos. Este recurso del Dominio I destaca acciones combinadas, funciones individuales, pistas decisivas, fórmulas y seguridad.',
     'Formulas' => 'Fórmulas',
-    'Study 63 core formulas through 14 treatment categories with patterns, actions, decisive clues, essential ingredients and safety review.' => 'Estudia 63 fórmulas principales en 14 categorías terapéuticas con patrones, acciones, pistas decisivas, ingredientes esenciales y revisión de seguridad.',
+    'Study all 21 Bensky formula chapters while distinguishing detailed platform profiles from the 181 official Appendix C formulas.' => 'Estudia los 21 capítulos de fórmulas de Bensky diferenciando las fichas detalladas de la plataforma de las 181 fórmulas oficiales del Appendix C.',
+    'Bensky Category Crosswalk' => 'Mapa comparativo Bensky',
+    'Compare 34 action categories for individual herbs with 21 strategy chapters for complete formulas. Similar names show a study relationship, not the same classification.' => 'Compara 34 categorías de acción para hierbas individuales con 21 capítulos de estrategias para fórmulas completas. Los nombres parecidos muestran una relación de estudio, no la misma clasificación.',
     'Herbal Comparisons Question Bank' => 'Banco de preguntas de comparación de hierbas',
     'Practice 249 comparative herb questions in book order with recall flashcards and 117 strength-and-temperature charts.' => 'Practica 249 preguntas comparativas en el orden del libro con tarjetas de memoria y 117 tablas de potencia y temperatura.',
     'Formulas Practice Exams' => 'Exámenes de práctica de fórmulas',
@@ -362,8 +372,11 @@ $tr = static function(string $text) use ($ises, $spanishcopy): string {
     }
     return strtr($text, [
         'AVAILABLE' => 'DISPONIBLE',
+        'NEW' => 'NUEVO',
         'HIGH PRIORITY' => 'PRIORIDAD ALTA',
         'FORMULAS' => 'FÓRMULAS',
+        'CHAPTERS' => 'CAPÍTULOS',
+        'REFERENCE MAP' => 'MAPA DE REFERENCIA',
         'QUESTIONS' => 'PREGUNTAS',
         'COMPARISONS' => 'COMPARACIONES',
         'MODIFICATIONS' => 'MODIFICACIONES',

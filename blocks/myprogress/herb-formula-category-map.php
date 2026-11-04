@@ -1,0 +1,145 @@
+<?php
+// Bensky category bridge between single herbs and formulas.
+
+require_once(__DIR__ . '/../../config.php');
+
+require_login();
+
+$ises = optional_param('lang', 'en', PARAM_ALPHA) === 'es';
+
+$formulachapters = [
+    1 => ['Formulas That Release the Exterior', 'Fórmulas que liberan el Exterior', 'Ma Huang Tang, Gui Zhi Tang, Yin Qiao San, Sang Ju Yin'],
+    2 => ['Formulas That Drain Downward', 'Fórmulas que drenan hacia abajo', 'Da Cheng Qi Tang, Xiao Cheng Qi Tang, Tiao Wei Cheng Qi Tang, Run Chang Wan'],
+    3 => ['Formulas That Harmonize', 'Fórmulas que armonizan', 'Xiao Chai Hu Tang, Si Ni San, Ban Xia Xie Xin Tang, Xiao Yao San'],
+    4 => ['Formulas That Clear Heat', 'Fórmulas que aclaran el Calor', 'Bai Hu Tang, Huang Lian Jie Du Tang, Qing Ying Tang, Qing Hao Bie Jia Tang'],
+    5 => ['Formulas That Dispel Summerheat', 'Fórmulas que eliminan el Calor de Verano', 'Qing Luo Yin, Xiang Ru San, Liu Yi San, Qing Shu Yi Qi Tang'],
+    6 => ['Formulas That Warm Interior Cold', 'Fórmulas que calientan el Frío Interior', 'Li Zhong Wan, Xiao Jian Zhong Tang, Si Ni Tang, Dang Gui Si Ni Tang'],
+    7 => ['Formulas That Release Exterior-Interior Excess', 'Fórmulas que liberan exceso Exterior-Interior', 'Da Chai Hu Tang, Ge Gen Huang Qin Huang Lian Tang, Gui Zhi Ren Shen Tang'],
+    8 => ['Formulas That Tonify', 'Fórmulas que tonifican', 'Si Jun Zi Tang, Si Wu Tang, Ba Zhen Tang, Liu Wei Di Huang Wan'],
+    9 => ['Formulas That Stabilize and Bind', 'Fórmulas que estabilizan y contienen', 'Yu Ping Feng San, Mu Li San, Si Shen Wan, Gu Jing Wan'],
+    10 => ['Formulas That Calm the Spirit', 'Fórmulas que calman el Espíritu', 'Tian Wang Bu Xin Dan, Suan Zao Ren Tang, Gan Mai Da Zao Tang, Ci Zhu Wan'],
+    11 => ['Formulas That Open the Sensory Orifices', 'Fórmulas que abren los orificios sensoriales', 'An Gong Niu Huang Wan, Zi Xue Dan, Su He Xiang Wan'],
+    12 => ['Formulas That Regulate the Qi', 'Fórmulas que regulan el Qi', 'Yue Ju Wan, Ban Xia Hou Po Tang, Ding Chuan Tang, Ju Pi Zhu Ru Tang'],
+    13 => ['Formulas That Regulate the Blood', 'Fórmulas que regulan la Sangre', 'Xue Fu Zhu Yu Tang, Tao He Cheng Qi Tang, Gui Zhi Fu Ling Wan, Shi Xiao San'],
+    14 => ['Formulas That Expel Wind', 'Fórmulas que expulsan el Viento', 'Xiao Feng San, Tian Ma Gou Teng Yin, Zhen Gan Xi Feng Tang, Xiao Huo Luo Dan'],
+    15 => ['Formulas That Treat Dryness', 'Fórmulas que tratan la Sequedad', 'Xing Su San, Sang Xing Tang, Qing Zao Jiu Fei Tang, Zeng Ye Tang'],
+    16 => ['Formulas That Expel Dampness', 'Fórmulas que expulsan la Humedad', 'Ping Wei San, Huo Xiang Zheng Qi San, Wu Ling San, Du Huo Ji Sheng Tang'],
+    17 => ['Formulas That Dispel Phlegm', 'Fórmulas que eliminan la Flema', 'Er Chen Tang, Wen Dan Tang, Qing Qi Hua Tan Wan, Bei Mu Gua Lou San'],
+    18 => ['Formulas That Reduce Food Stagnation', 'Fórmulas que reducen el estancamiento de alimentos', 'Bao He Wan, Zhi Shi Dao Zhi Wan, Jian Pi Wan'],
+    19 => ['Formulas That Expel Parasites', 'Fórmulas que expulsan parásitos', 'Wu Mei Wan, Hua Chong Wan, Bu Dai Wan'],
+    20 => ['Formulas That Treat Abscesses and Sores', 'Fórmulas que tratan abscesos y llagas', 'Xian Fang Huo Ming Yin, Wu Wei Xiao Du Yin, Yang He Tang, Wei Jing Tang'],
+    21 => ['Formulas for External Application', 'Fórmulas para aplicación externa', 'Jin Huang San / Gao, Zi Dang Gao, Ku Shen Tang, Hai Tong Pi Tang'],
+];
+
+// Card, Bensky chapter, English name, Spanish name, representative herbs, related formula chapters, relationship type.
+$herbcategories = [
+    [1, 1, 'Warm, Acrid Herbs that Release the Exterior', 'Hierbas tibias y acres que liberan el Exterior', 'Ma Huang, Gui Zhi, Zi Su Ye, Jing Jie, Fang Feng', [1, 7], 'direct'],
+    [2, 1, 'Cool, Acrid Herbs that Release the Exterior', 'Hierbas frescas y acres que liberan el Exterior', 'Bo He, Niu Bang Zi, Sang Ye, Ju Hua, Chai Hu, Ge Gen', [1, 7], 'direct'],
+    [3, 2, 'Herbs that Clear Heat and Drain Fire', 'Hierbas que aclaran Calor y drenan Fuego', 'Shi Gao, Zhi Mu, Zhi Zi, Xia Ku Cao', [4, 7], 'direct'],
+    [4, 2, 'Herbs that Cool the Blood', 'Hierbas que enfrían la Sangre', 'Sheng Di Huang, Xuan Shen, Mu Dan Pi, Chi Shao', [4, 13], 'direct'],
+    [5, 2, 'Herbs that Clear Heat and Dry Dampness', 'Hierbas que aclaran Calor y secan Humedad', 'Huang Qin, Huang Lian, Huang Bai, Long Dan Cao, Ku Shen', [4, 16], 'direct'],
+    [6, 2, 'Herbs that Clear Heat and Resolve Toxicity', 'Hierbas que aclaran Calor y resuelven toxicidad', 'Jin Yin Hua, Lian Qiao, Pu Gong Ying, Ban Lan Gen, Da Qing Ye', [4, 20], 'direct'],
+    [7, 2, 'Herbs that Clear Heat from Deficiency', 'Hierbas que aclaran Calor por deficiencia', 'Qing Hao, Di Gu Pi, Bai Wei, Yin Chai Hu, Hu Huang Lian', [4, 8], 'direct'],
+    [8, 2, 'Herbs that Clear Summerheat', 'Hierbas que aclaran Calor de Verano', 'Xiang Ru, He Ye, Lu Dou, Xi Gua', [5], 'exact'],
+    [9, 3, 'Downward-Draining Purgatives', 'Purgantes que drenan hacia abajo', 'Da Huang, Mang Xiao, Lu Hui, Fan Xie', [2], 'exact'],
+    [10, 3, 'Moist Laxatives', 'Laxantes humectantes', 'Huo Ma Ren, Yu Li Ren', [2, 15], 'direct'],
+    [11, 3, 'Harsh Expellants', 'Expulsores drásticos', 'Gan Sui, Da Ji, Yuan Hua, Shang Lu, Ba Dou', [2], 'direct'],
+    [12, 4, 'Herbs that Drain Dampness', 'Hierbas que drenan Humedad', 'Fu Ling, Zhu Ling, Ze Xie, Yi Yi Ren, Che Qian Zi, Mu Tong', [16], 'exact'],
+    [13, 5, 'Herbs that Dispel Wind-Dampness', 'Hierbas que expulsan Viento-Humedad', 'Du Huo, Wei Ling Xian, Qin Jiao, Fang Ji, Mu Gua, Sang Ji Sheng', [14, 16], 'direct'],
+    [14, 6, 'Herbs that Cool and Transform Phlegm-Heat', 'Hierbas que enfrían y transforman Flema-Calor', 'Chuan Bei Mu, Zhe Bei Mu, Gua Lou, Zhu Ru, Tian Zhu Huang', [17, 4], 'direct'],
+    [15, 6, 'Herbs that Warm and Transform Cold-Phlegm', 'Hierbas que calientan y transforman Flema-Frío', 'Ban Xia, Tian Nan Xing, Bai Jie Zi, Bai Fu Zi, Zao Jia', [17], 'direct'],
+    [16, 6, 'Herbs that Stop Coughing and Calm Wheezing', 'Hierbas que detienen la tos y calman las sibilancias', 'Xing Ren, Zi Su Zi, Bai Bu, Zi Wan, Kuan Dong Hua, Sang Bai Pi', [17, 12], 'partial'],
+    [17, 7, 'Aromatic Herbs that Transform Dampness', 'Hierbas aromáticas que transforman Humedad', 'Huo Xiang, Pei Lan, Cang Zhu, Hou Po, Sha Ren, Bai Dou Kou', [16], 'direct'],
+    [18, 8, 'Herbs that Relieve Food Stagnation', 'Hierbas que alivian el estancamiento de alimentos', 'Shan Zha, Shen Qu, Mai Ya, Lai Fu Zi, Ji Nei Jin', [18], 'exact'],
+    [19, 9, 'Herbs that Regulate the Qi', 'Hierbas que regulan el Qi', 'Chen Pi, Qing Pi, Zhi Shi, Mu Xiang, Xiang Fu, Chuan Lian Zi', [12, 3], 'exact'],
+    [20, 10, 'Herbs that Invigorate the Blood', 'Hierbas que vigorizan la Sangre', 'Chuan Xiong, Dan Shen, Tao Ren, Hong Hua, Yi Mu Cao, Niu Xi', [13], 'direct'],
+    [21, 10, 'Herbs that Stop Bleeding', 'Hierbas que detienen el sangrado', 'San Qi, Bai Ji, Pu Huang, Xian He Cao, Ai Ye', [13], 'direct'],
+    [22, 11, 'Herbs that Warm the Interior and Expel Cold', 'Hierbas que calientan el Interior y expulsan Frío', 'Fu Zi, Gan Jiang, Rou Gui, Wu Zhu Yu, Gao Liang Jiang, Ding Xiang', [6, 7], 'exact'],
+    [23, 12, 'Herbs that Tonify Qi', 'Hierbas que tonifican Qi', 'Ren Shen, Huang Qi, Bai Zhu, Shan Yao, Gan Cao', [8, 9], 'exact'],
+    [24, 12, 'Herbs that Tonify Blood', 'Hierbas que tonifican Sangre', 'Dang Gui, Shu Di Huang, Bai Shao, He Shou Wu, E Jiao', [8, 13], 'exact'],
+    [25, 12, 'Herbs that Tonify Yang', 'Hierbas que tonifican Yang', 'Lu Rong, Yin Yang Huo, Ba Ji Tian, Du Zhong, Xu Duan, Tu Si Zi', [8, 6], 'exact'],
+    [26, 12, 'Herbs that Tonify Yin', 'Hierbas que tonifican Yin', 'Bei Sha Shen, Mai Men Dong, Tian Men Dong, Shi Hu, Yu Zhu, Gou Qi Zi', [8, 15], 'exact'],
+    [27, 13, 'Herbs that Stabilize and Bind', 'Hierbas que estabilizan y contienen', 'Wu Wei Zi, Wu Mei, He Zi, Rou Dou Kou, Fu Pen Zi, Jin Ying Zi', [9], 'exact'],
+    [28, 14, 'Substances that Anchor, Settle, and Calm the Spirit', 'Sustancias que anclan, asientan y calman el Espíritu', 'Long Gu, Mu Li, Ci Shi, Zhen Zhu Mu, Hu Po', [10], 'direct'],
+    [29, 14, 'Herbs that Nourish the Heart and Calm the Spirit', 'Hierbas que nutren el Corazón y calman el Espíritu', 'Suan Zao Ren, Bai Zi Ren, Yuan Zhi, He Huan Pi, Ye Jiao Teng', [10], 'direct'],
+    [30, 15, 'Aromatic Substances that Open the Orifices', 'Sustancias aromáticas que abren los orificios', 'Shi Chang Pu, Bing Pian, Su He Xiang, She Xiang', [11], 'exact'],
+    [31, 16, 'Substances that Extinguish Wind and Stop Tremors', 'Sustancias que extinguen Viento y detienen temblores', 'Gou Teng, Tian Ma, Di Long, Jiang Can, Quan Xie', [14], 'direct'],
+    [32, 17, 'Herbs that Expel Parasites', 'Hierbas que expulsan parásitos', 'Bing Lang, Shi Jun Zi, Ku Lian Pi, Lei Wan', [19], 'exact'],
+    [33, 18, 'Substances for Topical Application', 'Sustancias para aplicación externa', 'Liu Huang, She Chuang Zi, Ming Fan, Lu Feng Fang', [21, 20], 'direct'],
+    [34, 19, 'Obsolete Substances', 'Sustancias obsoletas', 'Zhu Sha, Xiong Huang, Qing Fen, Mi Tuo Seng', [], 'none'],
+];
+
+$covered = [];
+foreach ($herbcategories as $category) {
+    foreach ($category[5] as $chapter) {
+        $covered[$chapter] = true;
+    }
+}
+ksort($covered);
+if (count($herbcategories) !== 34 || array_keys($formulachapters) !== range(1, 21)
+        || array_keys($covered) !== range(1, 21)) {
+    throw new moodle_exception('The herb-formula Bensky category map is incomplete.');
+}
+
+$relationshiplabels = [
+    'exact' => ['Exact or nearly exact category-name match', 'Coincidencia exacta o casi exacta del nombre'],
+    'direct' => ['Direct therapeutic relationship; scope still differs', 'Relación terapéutica directa; el alcance sigue siendo diferente'],
+    'partial' => ['Partial mechanism relationship, not a category equivalent', 'Relación parcial de mecanismo; no son categorías equivalentes'],
+    'none' => ['No direct formula category; historical safety reference only', 'Sin categoría directa de fórmulas; solo referencia histórica de seguridad'],
+];
+
+$langparams = $ises ? ['lang' => 'es'] : [];
+$pageurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $langparams);
+$languageurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $ises ? [] : ['lang' => 'es']);
+$huburl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology'] + $langparams);
+$herbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $langparams);
+$duiyaourl = new moodle_url($ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html');
+$formulasurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $langparams);
+$pagetitle = $ises ? 'Mapa comparativo Bensky' : 'Bensky Category Crosswalk';
+
+$PAGE->set_url($pageurl);
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('standard');
+$PAGE->set_title($pagetitle);
+$PAGE->set_heading($pagetitle);
+
+echo $OUTPUT->header();
+?>
+<style>
+.herb-formula-map{max-width:1220px;margin:24px auto 60px;padding:0 16px;color:#17232a}.herb-formula-map__top{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:22px}.herb-formula-map__eyebrow{margin:0 0 6px;color:#08746f;font-size:13px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.herb-formula-map h2{margin:0 0 9px;font-size:clamp(29px,4vw,42px);line-height:1.12}.herb-formula-map__lead{max-width:790px;margin:0;color:#52677a;font-size:16px;line-height:1.6}.herb-formula-map__actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap}.herb-formula-map__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 14px;border:1px solid #cbd5dc;border-radius:8px;background:#fff;color:#334155;font-weight:800;text-decoration:none;white-space:nowrap}.herb-formula-map__button:hover{background:#f1f5f9;color:#17232a;text-decoration:none}.herb-formula-map__overview{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;margin-bottom:22px;padding:22px 25px;border-left:5px solid #0b817d;border-radius:12px;background:#eef8f6}.herb-formula-map__overview h3{margin:0 0 7px;font-size:22px}.herb-formula-map__overview p{max-width:820px;margin:0;color:#52677a;line-height:1.55}.herb-formula-map__stats{display:flex;gap:9px}.herb-formula-map__stat{min-width:96px;padding:12px;border-radius:9px;background:#fff;text-align:center}.herb-formula-map__stat strong{display:block;color:#075e54;font-size:26px}.herb-formula-map__stat span{font-size:10px;font-weight:900;text-transform:uppercase}.herb-formula-map__table-wrap{overflow-x:auto;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(15,23,42,.06)}.herb-formula-map__table{width:100%;min-width:860px;border-collapse:collapse;table-layout:fixed}.herb-formula-map__table th{padding:16px 18px;background:#17344a;color:#fff;text-align:left;font-size:14px}.herb-formula-map__table th+th,.herb-formula-map__table td+td{border-left:1px solid #dfe7eb}.herb-formula-map__table td{padding:14px;border-top:1px solid #dfe7eb;vertical-align:top}.herb-formula-map__cell{height:100%;padding:15px;border:1px solid #dce5e9;border-top:4px solid #f77e25;border-radius:10px;background:#fffaf6}.herb-formula-map__cell--formula{border-top-color:#0b817d;background:#f4fbf9}.herb-formula-map__cell--none{border-top-color:#94a3b8;background:#f8fafc}.herb-formula-map__meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.herb-formula-map__number,.herb-formula-map__chapter{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eaf4f1;color:#07665f;font-size:10px;font-weight:900;text-transform:uppercase}.herb-formula-map__number{background:#fff0e5;color:#a54d13}.herb-formula-map__cell h4{margin:0 0 9px;font-size:17px;line-height:1.35}.herb-formula-map__examples{margin:0;color:#52677a;font-size:13px;line-height:1.5}.herb-formula-map__examples strong{color:#17232a}.herb-formula-map__match+.herb-formula-map__match{margin-top:11px;padding-top:11px;border-top:1px dashed #bed5cf}.herb-formula-map__relation{margin:10px 0 0;padding:8px 9px;border-radius:7px;background:#e7f4f1;color:#245b55;font-size:12px;font-weight:750;line-height:1.45}.herb-formula-map__note{margin:18px 0 0;padding:15px 17px;border-left:4px solid #315fa5;border-radius:8px;background:#f3f7fd;color:#435d7a;line-height:1.55}.herb-formula-map__note+.herb-formula-map__table-wrap{margin-top:18px}.herb-formula-map a:focus-visible{outline:3px solid #185cca;outline-offset:3px}@media(max-width:760px){.herb-formula-map__top{display:block}.herb-formula-map__actions{justify-content:flex-start;margin-top:16px}.herb-formula-map__overview{display:block}.herb-formula-map__stats{margin-top:16px}.herb-formula-map__stat{flex:1;min-width:0}}
+</style>
+<main class="herb-formula-map">
+    <header class="herb-formula-map__top">
+        <div>
+            <p class="herb-formula-map__eyebrow"><?php echo s($ises ? 'Guía combinada · Bensky' : 'Combined study guide · Bensky'); ?></p>
+            <h2><?php echo s($pagetitle); ?></h2>
+            <p class="herb-formula-map__lead"><?php echo s($ises ? 'Relaciona dos niveles distintos de Bensky: acciones de sustancias individuales y estrategias de prescripciones completas. Los nombres parecidos facilitan el estudio, pero no representan la misma categoría.' : 'Connect two distinct Bensky levels: actions of individual substances and strategies of complete prescriptions. Similar names aid study but do not represent the same category.'); ?></p>
+        </div>
+        <nav class="herb-formula-map__actions" aria-label="<?php echo s($ises ? 'Navegación del mapa' : 'Map navigation'); ?>">
+            <a class="herb-formula-map__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+            <a class="herb-formula-map__button" href="<?php echo $herbsurl->out(false); ?>"><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?></a>
+            <a class="herb-formula-map__button" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
+            <a class="herb-formula-map__button" href="<?php echo $formulasurl->out(false); ?>"><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?></a>
+            <a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Herbología China' : '← Chinese Herbology'); ?></a>
+        </nav>
+    </header>
+    <section class="herb-formula-map__overview" aria-labelledby="map-overview-title">
+        <div><h3 id="map-overview-title"><?php echo s($ises ? 'Cómo leer el mapa' : 'How to read this crosswalk'); ?></h3><p><?php echo s($ises ? 'Nivel 1 clasifica hierbas individuales por sus acciones. Nivel 2, Duì Yào, muestra cómo dos hierbas trabajan juntas. Nivel 3 agrupa fórmulas completas por su estrategia terapéutica. Las flechas indican relación, no equivalencia.' : 'Level 1 classifies individual herbs by their actions. Level 2, Duì Yào, shows how two herbs work together. Level 3 groups complete formulas by therapeutic strategy. Arrows indicate relationship, not equivalence.'); ?></p></div>
+        <div class="herb-formula-map__stats"><div class="herb-formula-map__stat"><strong>34</strong><span><?php echo $ises ? 'categorías herbales' : 'herb categories'; ?></span></div><div class="herb-formula-map__stat"><strong>21</strong><span><?php echo $ises ? 'capítulos de fórmulas' : 'formula chapters'; ?></span></div></div>
+    </section>
+    <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Dos relaciones claras:' : 'Two clear relationships:'; ?></strong> <?php echo s($ises ? 'Las hierbas tibias y frescas que liberan el Exterior se relacionan con el capítulo 1 de fórmulas, Release the Exterior. En Clear Heat, Bensky divide las hierbas en cinco acciones —Drain Fire, Cool the Blood, Dry Dampness, Resolve Toxicity y Deficiency Heat— mientras el capítulo 4 agrupa fórmulas completas. Se relacionan, pero no se llaman ni se clasifican de la misma manera.' : 'Warm and cool herbs that release the Exterior relate to Formula Chapter 1, Release the Exterior. For Clear Heat, Bensky divides herbs into five actions—Drain Fire, Cool the Blood, Dry Dampness, Resolve Toxicity, and Deficiency Heat—while Formula Chapter 4 groups complete prescriptions. They relate, but are not named or classified at the same level.'); ?></p>
+    <div class="herb-formula-map__table-wrap"><table class="herb-formula-map__table">
+        <thead><tr><th><?php echo s($ises ? 'NIVEL 1 · Acciones de hierbas individuales' : 'LEVEL 1 · Individual-herb action categories'); ?></th><th><?php echo s($ises ? 'NIVEL 3 · Estrategias de fórmulas completas relacionadas' : 'LEVEL 3 · Related complete-formula strategies'); ?></th></tr></thead>
+        <tbody><?php foreach ($herbcategories as $category): ?><tr>
+            <td><article class="herb-formula-map__cell"><div class="herb-formula-map__meta"><span class="herb-formula-map__number"><?php echo s(($ises ? 'Tarjeta ' : 'Card ') . $category[0]); ?></span><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $category[1]); ?></span></div><h4><?php echo s($ises ? $category[3] : $category[2]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Hierbas principales:' : 'Representative herbs:'; ?></strong> <?php echo s($category[4]); ?></p></article></td>
+            <td><article class="herb-formula-map__cell herb-formula-map__cell--formula<?php echo $category[5] === [] ? ' herb-formula-map__cell--none' : ''; ?>">
+                <?php if ($category[5] === []): ?><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter"><?php echo s($ises ? 'Sin categoría directa' : 'No direct category'); ?></span></div><h4><?php echo s($ises ? 'Referencia histórica de seguridad' : 'Historical safety cross-reference'); ?></h4><?php endif; ?>
+                <?php foreach ($category[5] as $chapternumber): $formulachapter = $formulachapters[$chapternumber]; ?><section class="herb-formula-map__match"><div class="herb-formula-map__meta"><span class="herb-formula-map__chapter">Bensky · <?php echo s(($ises ? 'Capítulo ' : 'Chapter ') . $chapternumber); ?></span></div><h4><?php echo s($formulachapter[$ises ? 1 : 0]); ?></h4><p class="herb-formula-map__examples"><strong><?php echo $ises ? 'Fórmulas principales:' : 'Representative formulas:'; ?></strong> <?php echo s($formulachapter[2]); ?></p></section><?php endforeach; ?>
+                <p class="herb-formula-map__relation"><?php echo s($relationshiplabels[$category[6]][$ises ? 1 : 0]); ?></p>
+            </article></td>
+        </tr><?php endforeach; ?></tbody>
+    </table></div>
+    <p class="herb-formula-map__note"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises ? 'La semejanza del nombre no sustituye patrón, arquitectura de la fórmula, dosis ni seguridad. Esta tabla organiza el estudio; no constituye guía de prescripción.' : 'Name similarity does not replace pattern, formula architecture, dosage, or safety. This table organizes study and is not prescribing guidance.'); ?></p>
+</main>
+<?php
+echo $OUTPUT->footer();

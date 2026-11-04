@@ -19,6 +19,8 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
 fi
 
 FILES=(
+    "blocks/myprogress/study-guide.php"
+    "blocks/myprogress/herb-formula-category-map.php"
     "blocks/myprogress/formulas-study-guide.php"
     "blocks/myprogress/formulas-study-guide-data.json"
     "blocks/myprogress/formula-board-roster-2026.json"
@@ -36,6 +38,8 @@ for relative in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/$relative" -o "$TEMP_DIR/$relative"
 done
 
+php -l "$TEMP_DIR/blocks/myprogress/study-guide.php" >/dev/null
+php -l "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php" >/dev/null
 php -l "$TEMP_DIR/blocks/myprogress/formulas-study-guide.php" >/dev/null
 php -r '
     $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
@@ -101,6 +105,11 @@ grep -Fq "['number' => 20, 'key' => 'treat-abscesses-chapter-20', 'name' => 'For
 grep -Fq "['number' => 21, 'key' => 'external-application-chapter-21', 'name' => 'Formulas for External Application'" "$GUIDE"
 grep -Fq 'foreach ($benskychapters as $chapter)' "$GUIDE"
 grep -Fq "'21 capítulos de Bensky'" "$GUIDE"
+grep -Fq "'title' => 'Bensky Category Crosswalk'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "'path' => '/blocks/myprogress/herb-formula-category-map.php'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq 'LEVEL 1 · Individual-herb action categories' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'LEVEL 3 · Related complete-formula strategies' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq "[3, 2, 'Herbs that Clear Heat and Drain Fire'" "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq "Chapters 4 and 8 · Formulas that Clear Heat / Formulas that Tonify" \
     "$TEMP_DIR/study-guide/guidelines/formulas-appendix-c-2026-preview.html"
 

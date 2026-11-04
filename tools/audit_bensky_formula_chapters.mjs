@@ -7,6 +7,8 @@ const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 const roster = JSON.parse(read('blocks/myprogress/formula-board-roster-2026.json'));
 const guideData = JSON.parse(read('blocks/myprogress/formulas-study-guide-data.json'));
 const php = read('blocks/myprogress/formulas-study-guide.php');
+const categoryMapPhp = read('blocks/myprogress/herb-formula-category-map.php');
+const studyGuideHubPhp = read('blocks/myprogress/study-guide.php');
 
 const fail = message => {
     throw new Error(`Bensky formula chapter audit failed: ${message}`);
@@ -131,5 +133,24 @@ assert(chapterIndexRows[20][2] === 'external-application-chapter-21'
     'Bensky Chapter 21 is missing or mislabeled in the visible index.');
 assert(php.includes('foreach ($benskychapters as $chapter)'),
     'the main guide does not render the 21-chapter Bensky index.');
+
+const formulaMapMatch = categoryMapPhp.match(/\$formulachapters = \[([\s\S]*?)\n\];/);
+const herbMapMatch = categoryMapPhp.match(/\$herbcategories = \[([\s\S]*?)\n\];/);
+assert(formulaMapMatch && herbMapMatch, 'the combined herb-formula category arrays are missing.');
+const mappedFormulaChapters = [...formulaMapMatch[1].matchAll(/^\s+(\d+) => \['Formulas/gm)].map(item => Number(item[1]));
+const mappedHerbCards = [...herbMapMatch[1].matchAll(/^\s+\[(\d+),\s*(\d+),/gm)].map(item => ({card: Number(item[1]), chapter: Number(item[2])}));
+assert(JSON.stringify(mappedFormulaChapters) === JSON.stringify(Array.from({length: 21}, (_, index) => index + 1)),
+    'the combined map does not contain all 21 formula chapters in order.');
+assert(mappedHerbCards.length === 34 && mappedHerbCards.every((item, index) => item.card === index + 1),
+    'the combined map does not contain all 34 herb-category cards in order.');
+assert(mappedHerbCards.filter(item => item.card >= 3 && item.card <= 7).every(item => item.chapter === 2),
+    'the five Clear Heat herb categories are not preserved under Bensky herb Chapter 2.');
+assert(categoryMapPhp.includes("[4, 20], 'direct'")
+    && categoryMapPhp.includes("[4, 16], 'direct'")
+    && categoryMapPhp.includes("[4, 13], 'direct'"),
+    'the Clear Heat map is missing its toxicity, Dampness, or Blood relationships.');
+assert(studyGuideHubPhp.includes("'title' => 'Bensky Category Crosswalk'")
+    && studyGuideHubPhp.includes("'path' => '/blocks/myprogress/herb-formula-category-map.php'"),
+    'the fourth combined card is missing from the Chinese Herbology hub.');
 
 console.log('Bensky formula chapter audit passed: 21 chapters, 181 official formulas, and principal/associated roles verified.');
