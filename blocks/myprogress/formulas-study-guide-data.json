@@ -2892,8 +2892,8 @@
     "transform-phlegm-chapter-17": {
       "priorityTitle": "Chapter 17: identify the texture, temperature, location and movement of Phlegm",
       "priorityTitleEs": "Capítulo 17: identifica textura, temperatura, localización y movimiento de la Flema",
-      "priorityText": "The 18 principal formulas follow seven routes: dry Dampness, clear Phlegm-Heat, disperse nodules, moisten Phlegm-Dryness, warm Phlegm-Cold, extinguish Wind-Phlegm, or—historically—induce vomiting. Five formulas overlap the current Board roster and remain the first study priority.",
-      "priorityTextEs": "Las 18 fórmulas principales siguen siete rutas: secar Humedad, aclarar Flema-Calor, dispersar nódulos, humedecer Flema-Sequedad, calentar Flema-Frío, extinguir Viento-Flema o, históricamente, inducir vómito. Cinco coinciden con el Board vigente y conservan la primera prioridad de estudio.",
+      "priorityText": "The 17 principal formulas follow seven routes: dry Dampness, clear Phlegm-Heat, disperse nodules, moisten Phlegm-Dryness, warm Phlegm-Cold, extinguish Wind-Phlegm, or—historically—induce vomiting. Xiao Xian Xiong Tang is retained as an associated formula under Qing Qi Hua Tan Wan. Five principal formulas overlap the current Board roster and remain the first study priority.",
+      "priorityTextEs": "Las 17 fórmulas principales siguen siete rutas: secar Humedad, aclarar Flema-Calor, dispersar nódulos, humedecer Flema-Sequedad, calentar Flema-Frío, extinguir Viento-Flema o, históricamente, inducir vómito. Xiao Xian Xiong Tang se conserva como fórmula asociada bajo Qing Qi Hua Tan Wan. Cinco fórmulas principales coinciden con el Board vigente y conservan la primera prioridad de estudio.",
       "clinicalFrameTitle": "Phlegm is selected by its companion mechanism—not by sputum alone",
       "clinicalFrameTitleEs": "La fórmula para Flema se elige por el mecanismo acompañante, no solo por el esputo",
       "clinicalFrameText": "A greasy coat and slippery pulse support Phlegm, but the decisive fork is what accompanies it: white copious sputum and nausea, yellow sticky sputum and Heat, dryness and difficult expectoration, cold watery fluids, firm nodules, vertigo from internal Wind, or residual exterior cough.",
@@ -5285,11 +5285,11 @@
     {
       "number": "E1",
       "key": "official-formulas-ch3",
-      "name": "Additional Official Formula Profiles · Chapter 3",
-      "nameEs": "Fichas oficiales adicionales · Capítulo 3",
+      "name": "Additional Official Formula Profiles · Bensky Chapter 2",
+      "nameEs": "Fichas oficiales adicionales · Capítulo 2 de Bensky",
       "sourceType": "official-expansion",
-      "sourceChapter": 3,
-      "sourcePages": "NCBAHM Appendix C 2026"
+      "sourceChapter": 2,
+      "sourcePages": "Bensky pp. 80–81 · NCBAHM Appendix C 2026"
     }
   ],
   "supplementalFormulas": [
@@ -8976,7 +8976,7 @@
       "comparison": "Zeng Ye Cheng Qi Tang adds Da Huang and Mang Xiao when acute Heat clumping and abdominal rebound tenderness require purgation; Zeng Ye Tang is for fluid exhaustion without primary clumping.", "comparisonEs": "Zeng Ye Cheng Qi Tang añade Da Huang y Mang Xiao cuando acumulación aguda de Calor y rebote abdominal requieren purgación; Zeng Ye Tang es para agotamiento de líquidos sin acumulación primaria."
     },
     {
-      "number":"C16-03","sequence":3,"name":"Bu Huan Jin Zheng Qi San","englishName":"Rectify the Qi Powder Worth More than Gold","categoryKey":"expel-damp-ch16","group":"Transform Dampness and Harmonize the Stomach","groupEs":"Transformar Humedad y armonizar el Estómago","sourcePages":"689–691","kings":"Cang Zhu, Hou Po",
+      "number":"C16-03","sequence":2,"name":"Bu Huan Jin Zheng Qi San","englishName":"Rectify the Qi Powder Worth More than Gold","categoryKey":"expel-damp-ch16","group":"Transform Dampness and Harmonize the Stomach","groupEs":"Transformar Humedad y armonizar el Estómago","sourcePages":"689–691","kings":"Cang Zhu, Hou Po",
       "pattern":"Damp turbidity obstructing the Middle Burner with externally contracted Wind-Cold.","patternEs":"Turbidez-Humedad que obstruye el Jiao Medio con Viento-Frío contraído externamente.",
       "action":"Dries Dampness, regulates Qi, harmonizes the Middle, and releases the exterior.","actionEs":"Seca Humedad, regula Qi, armoniza el Medio y libera el Exterior.",
       "clue":"Vomiting, abdominal fullness, fever and chills, or sudden simultaneous vomiting and diarrhea with a thick white greasy coating.","clueEs":"Vómito, plenitud abdominal, fiebre y escalofríos o vómito y diarrea súbitos simultáneos con saburra blanca grasosa espesa.",
@@ -9263,7 +9263,7 @@
       "examFocus":"The representative excess Phlegm-Heat cough formula: yellow sticky sputum plus a yellow greasy coat.","examFocusEs":"Fórmula representativa para tos de exceso por Flema-Calor: esputo amarillo pegajoso más saburra amarilla grasosa."
     },
     {
-      "number":"C17-08","sequence":8,"name":"Xiao Xian Xiong Tang","englishName":"Minor Decoction for Pathogens Stuck in the Chest","categoryKey":"transform-phlegm-ch17","group":"Clear Heat and Transform Phlegm","groupEs":"Aclarar Calor y transformar Flema","sourcePages":"793–794","kings":"Gua Lou",
+      "number":"C17-A01","sequence":null,"name":"Xiao Xian Xiong Tang","englishName":"Minor Decoction for Pathogens Stuck in the Chest","categoryKey":"transform-phlegm-ch17","chapterRole":"associated","associatedWith":"Qing Qi Hua Tan Wan","group":"Clear Heat and Transform Phlegm","groupEs":"Aclarar Calor y transformar Flema","sourcePages":"793–794","kings":"Gua Lou",
       "pattern":"Phlegm-Heat clumping in the chest and epigastrium.","patternEs":"Flema-Calor aglomerada en pecho y epigastrio.",
       "action":"Clears Heat, transforms Phlegm, expands the chest and dissipates clumps.","actionEs":"Aclara Calor, transforma Flema, expande pecho y disipa aglomeraciones.",
       "clue":"Tender focal chest or epigastric distention, yellow viscous sputum, constipation, bitter taste, yellow greasy coat and floating- or rapid-slippery pulse.","clueEs":"Distensión focal dolorosa a la presión en pecho o epigastrio, esputo amarillo viscoso, estreñimiento, sabor amargo, saburra amarilla grasosa y pulso resbaladizo flotante o rápido.",
@@ -9685,14 +9685,14 @@
       "comparison":"The beeswax substitution removes the lead compound but does not establish efficacy or make unsupervised pregnancy treatment appropriate.","comparisonEs":"Sustituir con cera elimina el compuesto de plomo, pero no establece eficacia ni vuelve apropiado el tratamiento no supervisado durante embarazo."
     },
     {
-      "number": "C03-01",
+      "number": "C02-01",
       "sequence": 1,
       "name": "Run Chang Wan",
-      "englishName": "Moisten the Intestines Pill",
+      "englishName": "Moisten the Intestines Pill from Master Shen's Book",
       "categoryKey": "official-formulas-ch3",
       "group": "Nourish Blood and Moisten the Intestines",
       "groupEs": "Nutrir Sangre y humedecer los Intestinos",
-      "sourcePages": "NCBAHM Appendix C 2026",
+      "sourcePages": "80–81",
       "kings": "Dang Gui, Sheng Di Huang",
       "pattern": "Blood and fluid deficiency causing dry, desiccated Intestines.",
       "patternEs": "Deficiencia de Sangre y líquidos que causa Intestinos secos y desecados.",

@@ -212,7 +212,7 @@ def historical_roster_annex(es=False):
     added_label = "entraron" if es else "added"
     language_query = "&amp;lang=es" if es else ""
     historical_formula_links = {
-        "Run Chang Wan": f'/blocks/myprogress/formulas-study-guide.php?focus=official-formulas-ch3{language_query}#formula-C03-01',
+        "Run Chang Wan": f'/blocks/myprogress/formulas-study-guide.php?focus=official-formulas-ch3{language_query}#formula-C02-01',
         "Juan Bi Tang": f'/blocks/myprogress/formulas-study-guide.php?focus=expel-damp-chapter-16{language_query}#formula-C16-29',
     }
     summary_rows = [

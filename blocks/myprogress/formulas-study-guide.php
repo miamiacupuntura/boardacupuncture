@@ -20,9 +20,9 @@ $chapterfocusaliases = [
 $focus = $chapterfocusaliases[$focus] ?? $focus;
 $boardcategorybenskychapters = [
     'release-exterior' => 1,
-    'clear-heat' => 2,
-    'purge' => 3,
-    'harmonize' => 4,
+    'clear-heat' => 4,
+    'purge' => 2,
+    'harmonize' => 3,
     'expel-damp' => 16,
     'warm-interior' => 6,
     'tonify' => 8,
@@ -174,8 +174,8 @@ $categorycopy = [
         'Compara las 33 fórmulas principales del capítulo 16 de Bensky en cinco rutas: transformar el Centro, aclarar Humedad-Calor, promover la orina, calentar el metabolismo del agua y dispersar Viento-Humedad.',
     ],
     'transform-phlegm-chapter-17' => [
-        'Compare all 18 principal formulas in Bensky Chapter 17 across seven routes: dry Dampness, clear Phlegm-Heat, disperse clumping, moisten dryness, warm Phlegm-Cold, extinguish Wind-Phlegm, and recognize the historical emetic method.',
-        'Compara las 18 fórmulas principales del capítulo 17 de Bensky en siete rutas: secar Humedad, aclarar Flema-Calor, dispersar aglomeraciones, humedecer Sequedad, calentar Flema-Frío, extinguir Viento-Flema y reconocer el método emético histórico.',
+        'Compare all 17 principal formulas in Bensky Chapter 17 across seven routes: dry Dampness, clear Phlegm-Heat, disperse clumping, moisten dryness, warm Phlegm-Cold, extinguish Wind-Phlegm, and recognize the historical emetic method. Xiao Xian Xiong Tang remains an associated formula under Qing Qi Hua Tan Wan rather than a separate principal entry.',
+        'Compara las 17 fórmulas principales del capítulo 17 de Bensky en siete rutas: secar Humedad, aclarar Flema-Calor, dispersar aglomeraciones, humedecer Sequedad, calentar Flema-Frío, extinguir Viento-Flema y reconocer el método emético histórico. Xiao Xian Xiong Tang permanece como fórmula asociada bajo Qing Qi Hua Tan Wan, no como entrada principal separada.',
     ],
     'treat-dryness-ch15' => [
         'Compare eight principal formulas in Bensky Chapter 15 by external versus internal dryness, cool versus warm dryness, organ location, fluid damage, rebellious Qi, thirst, and constipation.',
@@ -221,12 +221,12 @@ $categoryreferences = [
         'Fuente Bensky completa: 33 fórmulas principales en cinco secciones. Coincidencia con las 63 fichas originales: 8—Ping Wei San, Huo Xiang Zheng Qi San, Ba Zheng San, Wu Ling San, Zhu Ling Tang, Wu Pi San, Zhen Wu Tang y Du Huo Ji Sheng Tang.',
     ],
     'transform-phlegm' => [
-        'Original detailed-profile group: 5 formulas. All five also appear among the 18 principal formulas in complete Bensky Chapter 17.',
-        'Grupo original de fichas detalladas: 5 fórmulas. Las cinco también aparecen entre las 18 fórmulas principales del capítulo 17 completo de Bensky.',
+        'Original detailed-profile group: 5 formulas. All five also appear among the 17 principal formulas in complete Bensky Chapter 17.',
+        'Grupo original de fichas detalladas: 5 fórmulas. Las cinco también aparecen entre las 17 fórmulas principales del capítulo 17 completo de Bensky.',
     ],
     'transform-phlegm-chapter-17' => [
-        'Complete Bensky source: 18 principal formulas in seven sections. Original 63-profile overlap: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San, and Ban Xia Bai Zhu Tian Ma Tang.',
-        'Fuente Bensky completa: 18 fórmulas principales en siete secciones. Coincidencia con las 63 fichas originales: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San y Ban Xia Bai Zhu Tian Ma Tang.',
+        'Complete Bensky source: 17 principal formulas in seven sections, plus Xiao Xian Xiong Tang as an associated formula under Qing Qi Hua Tan Wan. Original 63-profile overlap: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San, and Ban Xia Bai Zhu Tian Ma Tang.',
+        'Fuente Bensky completa: 17 fórmulas principales en siete secciones, más Xiao Xian Xiong Tang como fórmula asociada bajo Qing Qi Hua Tan Wan. Coincidencia con las 63 fichas originales: 5—Er Chen Tang, Wen Dan Tang, Bei Mu Gua Lou San, Zhi Sou San y Ban Xia Bai Zhu Tian Ma Tang.',
     ],
     'digestive' => [
         'Original detailed-profile group: 1 formula—Bao He Wan. It also appears among the eight principal formulas in complete Bensky Chapter 18.',
@@ -289,8 +289,8 @@ $categoryreferences = [
         'Fuente Bensky completa: 17 fórmulas principales en dos secciones. Coincidencia con las 63 fichas originales: 3—Xiao Feng San, Xiao Huo Luo Dan y Tian Ma Gou Teng Yin.',
     ],
     'official-formulas-ch3' => [
-        'Chapter 3 expansion: a detailed profile for an official formula beyond the original 63-profile internal sequence.',
-        'Ampliación del capítulo 3: una ficha detallada de una fórmula oficial adicional a la secuencia interna original de 63 perfiles.',
+        'Bensky Chapter 2 expansion: a detailed profile for an official formula beyond the original 63-profile internal sequence.',
+        'Ampliación del capítulo 2 de Bensky: una ficha detallada de una fórmula oficial adicional a la secuencia interna original de 63 perfiles.',
     ],
 ];
 
@@ -839,8 +839,8 @@ $expeldampchaptersections = [
 ];
 $expeldampchapterplan = [
     ['Ping Wei San', 1, 'transform-harmonize-middle', 'Calm the Stomach Powder', '685–689'],
-    ['Huo Xiang Zheng Qi San', 2, 'transform-harmonize-middle', 'Patchouli/Agastache Powder to Rectify the Qi', '691–695'],
-    ['Bu Huan Jin Zheng Qi San', 3, 'transform-harmonize-middle', 'Rectify the Qi Powder Worth More than Gold', '689–691'],
+    ['Bu Huan Jin Zheng Qi San', 2, 'transform-harmonize-middle', 'Rectify the Qi Powder Worth More than Gold', '689–691'],
+    ['Huo Xiang Zheng Qi San', 3, 'transform-harmonize-middle', 'Patchouli/Agastache Powder to Rectify the Qi', '691–695'],
     ['Liu He Tang', 4, 'transform-harmonize-middle', 'Harmonize the Six Decoction', '695–697'],
     ['Ba Wei Dai Xia Fang', 5, 'transform-harmonize-middle', 'Eight-Ingredient Formula for Vaginal Discharge', '697–699'],
     ['San Ren Tang', 6, 'clear-damp-heat', 'Three-Seed Decoction', '699–702'],
@@ -953,17 +953,16 @@ $transformphlegmchapterplan = [
     ['Wen Dan Tang', 5, 'dry-damp-transform', 'Warm Gallbladder Decoction', '786–789'],
     ['Xiang Fu Xuan Fu Hua Tang', 6, 'dry-damp-transform', 'Cyperus and Inula Decoction', '789–790'],
     ['Qing Qi Hua Tan Wan', 7, 'clear-heat-transform', 'Clear the Qi and Transform Phlegm Pill', '790–792'],
-    ['Xiao Xian Xiong Tang', 8, 'clear-heat-transform', 'Minor Decoction for Pathogens Stuck in the Chest', '793–794'],
-    ['Gun Tan Wan', 9, 'clear-heat-transform', 'Flushing Away Roiling Phlegm Pill', '795–798'],
-    ['Xiao Luo Wan', 10, 'disperse-clumping', 'Reduce Scrofula Pill', '798–800'],
-    ['Hai Zao Yu Hu Tang', 11, 'disperse-clumping', 'Sargassum Decoction for the Jade Flask', '800–801'],
-    ['Bei Mu Gua Lou San', 12, 'moisten-dryness', 'Fritillaria and Trichosanthes Fruit Powder', '802–804'],
-    ['Ling Gan Wu Wei Jiang Xin Tang', 13, 'warm-phlegm-cold', 'Poria, Licorice, Schisandra, Ginger, and Asarum Decoction', '806–808'],
-    ['San Zi Yang Qin Tang', 14, 'warm-phlegm-cold', "Three-Seed Decoction to Nourish One's Parents", '808–810'],
-    ['Ban Xia Bai Zhu Tian Ma Tang', 15, 'transform-extinguish-wind', 'Pinellia, White Atractylodes, and Gastrodia Decoction', '811–813'],
-    ['Ding Xian Wan', 16, 'transform-extinguish-wind', 'Arrest Seizures Pill', '813–815'],
-    ['Zhi Sou San', 17, 'transform-extinguish-wind', 'Stop Coughing Powder', '815–817'],
-    ['Gua Di San', 18, 'induce-vomiting', 'Melon Pedicle Powder', '817–818'],
+    ['Gun Tan Wan', 8, 'clear-heat-transform', 'Flushing Away Roiling Phlegm Pill', '795–798'],
+    ['Xiao Luo Wan', 9, 'disperse-clumping', 'Reduce Scrofula Pill', '798–800'],
+    ['Hai Zao Yu Hu Tang', 10, 'disperse-clumping', 'Sargassum Decoction for the Jade Flask', '800–801'],
+    ['Bei Mu Gua Lou San', 11, 'moisten-dryness', 'Fritillaria and Trichosanthes Fruit Powder', '802–804'],
+    ['Ling Gan Wu Wei Jiang Xin Tang', 12, 'warm-phlegm-cold', 'Poria, Licorice, Schisandra, Ginger, and Asarum Decoction', '806–808'],
+    ['San Zi Yang Qin Tang', 13, 'warm-phlegm-cold', "Three-Seed Decoction to Nourish One's Parents", '808–810'],
+    ['Ban Xia Bai Zhu Tian Ma Tang', 14, 'transform-extinguish-wind', 'Pinellia, White Atractylodes, and Gastrodia Decoction', '811–813'],
+    ['Ding Xian Wan', 15, 'transform-extinguish-wind', 'Arrest Seizures Pill', '813–815'],
+    ['Zhi Sou San', 16, 'transform-extinguish-wind', 'Stop Coughing Powder', '815–817'],
+    ['Gua Di San', 17, 'induce-vomiting', 'Melon Pedicle Powder', '817–818'],
 ];
 $transformphlegmsupplementbyname = [];
 foreach ($transformphlegmchaptersourcecategory['formulas'] as $formula) {
@@ -984,6 +983,19 @@ foreach ($transformphlegmchapterplan as [$name, $sequence, $sectionkey, $english
     $formula['sourcePages'] = $sourcepages;
     $transformphlegmchapterformulas[] = $formula;
 }
+$transformphlegmassociatedformula = $transformphlegmsupplementbyname['Xiao Xian Xiong Tang'] ?? null;
+if ($transformphlegmassociatedformula === null) {
+    throw new moodle_exception('Missing Chapter 17 associated formula profile: Xiao Xian Xiong Tang');
+}
+$transformphlegmassociatedformula['chapterRole'] = 'associated';
+$transformphlegmassociatedformula['associatedWith'] = 'Qing Qi Hua Tan Wan';
+$transformphlegmassociatedformula['chapterSectionKey'] = 'clear-heat-transform';
+$transformphlegmassociatedformula['chapterSourceSectionKey'] = 'clear-heat-transform';
+$transformphlegmassociatedformula['group'] = $transformphlegmchaptersections['clear-heat-transform']['name'];
+$transformphlegmassociatedformula['groupEs'] = $transformphlegmchaptersections['clear-heat-transform']['nameEs'];
+// Keep the complete associated profile visible directly after its parent formula,
+// without counting it among the 17 principal contents entries.
+array_splice($transformphlegmchapterformulas, 7, 0, [$transformphlegmassociatedformula]);
 $transformphlegmchapteroverview = [
     'number' => 'S13',
     'key' => 'transform-phlegm-chapter-17',
@@ -1537,12 +1549,23 @@ $unifiedfamilystatusformulas = [
     'invigorate-blood' => $regulatebloodchapteroverview['formulas'],
     'expel-wind' => $expelwindchapteroverview['formulas'],
     'expel-damp' => $expeldampchapteroverview['formulas'],
-    'transform-phlegm' => $transformphlegmchapteroverview['formulas'],
+    'transform-phlegm' => array_values(array_filter(
+        $transformphlegmchapteroverview['formulas'],
+        static fn(array $formula): bool => ($formula['chapterRole'] ?? 'principal') !== 'associated'
+    )),
     'digestive' => $digestivechapteroverview['formulas'],
 ];
 $selectedstatusformulas = $selected === null
     ? []
     : ($unifiedfamilystatusformulas[$selected['key']] ?? $selected['formulas']);
+$selectedprincipalformulas = $selected === null ? [] : array_values(array_filter(
+    $selected['formulas'],
+    static fn(array $formula): bool => ($formula['chapterRole'] ?? 'principal') !== 'associated'
+));
+if ($selected !== null && $selected['key'] === 'transform-phlegm-chapter-17') {
+    $selectedstatusformulas = $selectedprincipalformulas;
+}
+$selectedprincipalformulacount = count($selectedprincipalformulas);
 $selectedboardstatus = $selected === null ? null : $getboardstatus($selectedstatusformulas, $ises);
 $categorykeys = array_keys($allcategories);
 $selectedindex = $selected === null ? null : array_search($selected['key'], $categorykeys, true);
@@ -1819,8 +1842,8 @@ echo $OUTPUT->header();
                         : '8 detailed core profiles · Bensky Chapter 16: 33';
                 } elseif ($istransformphlegmindexcard) {
                     $categorymeta = $ises
-                        ? '5 fichas detalladas · Capítulo 17 de Bensky: 18'
-                        : '5 detailed core profiles · Bensky Chapter 17: 18';
+                        ? '5 fichas detalladas · Capítulo 17 de Bensky: 17 principales'
+                        : '5 detailed core profiles · Bensky Chapter 17: 17 principal formulas';
                 } elseif ($isdigestiveindexcard) {
                     $categorymeta = $ises
                         ? '1 ficha detallada · Capítulo 18 de Bensky: 8'
@@ -2724,7 +2747,10 @@ echo $OUTPUT->header();
             <?php $chapterformulaindex = 0; $lastformulacategory = null; $lastclinicalsectionkey = null; ?>
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
-                $chapterformulaindex++;
+                $isassociatedformula = ($formula['chapterRole'] ?? 'principal') === 'associated';
+                if (!$isassociatedformula) {
+                    $chapterformulaindex++;
+                }
                 $clinicalsection = $selectedformulasectionbyname[$formula['name']] ?? null;
                 $newclinicalsection = $clinicalsection !== null
                     && $lastclinicalsectionkey !== $clinicalsection['key']
@@ -2781,6 +2807,11 @@ echo $OUTPUT->header();
                         $selected['formulas'],
                         static fn(array $item): bool => $item['chapterSectionKey'] === $currentsectionkey
                     ));
+                    $formulacategory['principalCount'] = count(array_filter(
+                        $formulacategory['formulas'],
+                        static fn(array $item): bool => ($item['chapterRole'] ?? 'principal') !== 'associated'
+                    ));
+                    $formulacategory['associatedCount'] = count($formulacategory['formulas']) - $formulacategory['principalCount'];
                 } elseif ($newchaptersection && $selected['key'] === 'digestive-chapter-18') {
                     $formulacategory = $digestivechaptersections[$currentsectionkey];
                     $formulacategory['formulas'] = array_values(array_filter(
@@ -2825,9 +2856,12 @@ echo $OUTPUT->header();
                     $practiceurl = new moodle_url($practicepath, ['formula' => (int) $formula['number']]);
                 }
                 if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)) {
-                    $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
-                        . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
-                        . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'];
+                    $formulalabel = $isassociatedformula
+                        ? (($ises ? 'Fórmula asociada bajo ' : 'Associated formula under ')
+                            . ($formula['associatedWith'] ?? '') . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'])
+                        : (($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
+                            . ' ' . ($ises ? 'de' : 'of') . ' ' . $selectedprincipalformulacount
+                            . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages']);
                 } elseif ($issupplemental) {
                     $formulalabel = $isofficialexpansionpage
                         ? (($ises ? 'Ficha oficial adicional ' : 'Additional official profile ') . $formula['sequence']
@@ -2849,7 +2883,12 @@ echo $OUTPUT->header();
                         <p><?php echo s(in_array($selected['key'], ['stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)
                             ? ($ises ? $formulacategory['copyEs'] : $formulacategory['copy'])
                             : $categorycopy[$formulacategory['key']][$ises ? 1 : 0]); ?></p>
-                        <span class="formula-study-guide__chapter-section-meta"><?php echo count($formulacategory['formulas']); ?> <?php echo $ises ? 'fórmulas' : 'formulas'; ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
+                        <span class="formula-study-guide__chapter-section-meta"><?php echo isset($formulacategory['principalCount'])
+                            ? s($formulacategory['principalCount'] . ($ises ? ' principales' : ' principal')
+                                . (($formulacategory['associatedCount'] ?? 0) > 0
+                                    ? (' + ' . $formulacategory['associatedCount'] . ($ises ? ' asociada' : ' associated'))
+                                    : ''))
+                            : s(count($formulacategory['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas')); ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
                     </section>
                     <?php if ($formulacategoryguide !== null): ?>
                         <section class="formula-study-guide__priority" aria-label="<?php echo s($ises ? 'Diferenciación de la sección' : 'Section differentiation'); ?>">

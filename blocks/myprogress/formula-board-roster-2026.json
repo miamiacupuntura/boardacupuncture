@@ -14,7 +14,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 2,
@@ -25,7 +33,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 3,
@@ -36,29 +52,59 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        },
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 4,
       "name": "Bai Hu Tang",
       "englishName": "White Tiger Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 5,
       "name": "Bai Tou Weng Tang",
       "englishName": "Pulsatilla Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 6,
@@ -69,7 +115,15 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 7,
@@ -80,18 +134,34 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 8,
       "name": "Ban Xia Xie Xin Tang",
       "englishName": "Pinellia Decoction to Drain the Epigastrium",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 9,
@@ -102,7 +172,15 @@
         "code": "reduce-food-stagnation",
         "en": "Formulas that Reduce Food Stagnation",
         "es": "Fórmulas que reducen el estancamiento de alimentos"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 18,
+          "code": "reduce-food-stagnation",
+          "en": "Formulas that Reduce Food Stagnation",
+          "es": "Fórmulas que reducen el estancamiento de alimentos"
+        }
+      ]
     },
     {
       "id": 10,
@@ -113,7 +191,15 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 11,
@@ -124,7 +210,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 12,
@@ -135,7 +229,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 13,
@@ -146,7 +248,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 14,
@@ -157,7 +267,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 15,
@@ -168,29 +286,53 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 16,
       "name": "Chai Hu Gui Zhi Tang",
       "englishName": "Bupleurum and Cinnamon Twig Decoction",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 17,
       "name": "Chai Hu Jia Long Gu Mu Li Tang",
       "englishName": "Bupleurum plus Dragon Bone and Oyster Shell Decoction",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 18,
@@ -201,7 +343,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 19,
@@ -212,7 +362,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 20,
@@ -223,7 +381,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 21,
@@ -234,18 +400,34 @@
         "code": "treat-exterior-interior-excess",
         "en": "Formulas that Treat Exterior and Interior Excess",
         "es": "Fórmulas que tratan exceso exterior e interior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 7,
+          "code": "treat-exterior-interior-excess",
+          "en": "Formulas that Treat Exterior and Interior Excess",
+          "es": "Fórmulas que tratan exceso exterior e interior"
+        }
+      ]
     },
     {
       "id": 22,
       "name": "Da Cheng Qi Tang",
       "englishName": "Major Order the Qi Decoction",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 23,
@@ -256,7 +438,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 24,
@@ -267,7 +457,15 @@
         "code": "treat-abscesses-sores",
         "en": "Formulas that Treat Abscesses and Sores",
         "es": "Fórmulas que tratan abscesos y llagas"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 20,
+          "code": "treat-abscesses-sores",
+          "en": "Formulas that Treat Abscesses and Sores",
+          "es": "Fórmulas que tratan abscesos y llagas"
+        }
+      ]
     },
     {
       "id": 25,
@@ -278,7 +476,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 26,
@@ -289,7 +495,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 27,
@@ -300,18 +514,34 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 28,
       "name": "Dang Gui Liu Huang Tang",
       "englishName": "Tangkuei and Six-Yellow Decoction",
       "benskyCategory": {
-        "chapter": 9,
-        "code": "stabilize-bind",
-        "en": "Formulas that Stabilize and Bind",
-        "es": "Fórmulas que estabilizan y contienen"
-      }
+        "chapter": 4,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 29,
@@ -322,7 +552,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 30,
@@ -333,7 +571,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 31,
@@ -344,18 +590,34 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 32,
       "name": "Dao Chi San",
       "englishName": "Guide Out the Red Powder",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 33,
@@ -366,7 +628,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 34,
@@ -377,7 +647,15 @@
         "code": "calm-spirit",
         "en": "Formulas that Calm the Spirit",
         "es": "Fórmulas que calman el Espíritu"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 10,
+          "code": "calm-spirit",
+          "en": "Formulas that Calm the Spirit",
+          "es": "Fórmulas que calman el Espíritu"
+        }
+      ]
     },
     {
       "id": 35,
@@ -388,7 +666,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 36,
@@ -399,7 +685,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 37,
@@ -410,7 +704,15 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 38,
@@ -421,7 +723,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 39,
@@ -432,7 +742,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 40,
@@ -443,7 +761,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 41,
@@ -454,7 +780,15 @@
         "code": "treat-exterior-interior-excess",
         "en": "Formulas that Treat Exterior and Interior Excess",
         "es": "Fórmulas que tratan exceso exterior e interior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 7,
+          "code": "treat-exterior-interior-excess",
+          "en": "Formulas that Treat Exterior and Interior Excess",
+          "es": "Fórmulas que tratan exceso exterior e interior"
+        }
+      ]
     },
     {
       "id": 42,
@@ -465,7 +799,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 43,
@@ -476,7 +818,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 44,
@@ -487,7 +837,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 45,
@@ -498,7 +856,15 @@
         "code": "calm-spirit",
         "en": "Formulas that Calm the Spirit",
         "es": "Fórmulas que calman el Espíritu"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 10,
+          "code": "calm-spirit",
+          "en": "Formulas that Calm the Spirit",
+          "es": "Fórmulas que calman el Espíritu"
+        }
+      ]
     },
     {
       "id": 46,
@@ -509,7 +875,15 @@
         "code": "treat-exterior-interior-excess",
         "en": "Formulas that Treat Exterior and Interior Excess",
         "es": "Fórmulas que tratan exceso exterior e interior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 7,
+          "code": "treat-exterior-interior-excess",
+          "en": "Formulas that Treat Exterior and Interior Excess",
+          "es": "Fórmulas que tratan exceso exterior e interior"
+        }
+      ]
     },
     {
       "id": 47,
@@ -520,7 +894,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 48,
@@ -531,7 +913,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 49,
@@ -542,7 +932,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 50,
@@ -553,7 +951,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 51,
@@ -564,7 +970,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 52,
@@ -575,7 +989,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 53,
@@ -586,7 +1008,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 54,
@@ -597,7 +1027,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 55,
@@ -608,7 +1046,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 56,
@@ -619,7 +1065,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 57,
@@ -630,18 +1084,34 @@
         "code": "calm-spirit",
         "en": "Formulas that Calm the Spirit",
         "es": "Fórmulas que calman el Espíritu"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 10,
+          "code": "calm-spirit",
+          "en": "Formulas that Calm the Spirit",
+          "es": "Fórmulas que calman el Espíritu"
+        }
+      ]
     },
     {
       "id": 58,
       "name": "Huang Lian Jie Du Tang",
       "englishName": "Coptis Decoction to Resolve Toxicity",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 59,
@@ -652,7 +1122,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 60,
@@ -663,18 +1141,34 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 61,
       "name": "Ji Chuan Jian",
       "englishName": "Benefit the River (Flow) Decoction",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 62,
@@ -685,18 +1179,34 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 63,
       "name": "Jia Wei Xiao Yao San",
       "englishName": "Augmented Rambling Powder",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 64,
@@ -707,7 +1217,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 65,
@@ -718,7 +1236,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 66,
@@ -729,7 +1255,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 67,
@@ -740,7 +1274,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 68,
@@ -751,7 +1293,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 69,
@@ -762,7 +1312,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 70,
@@ -773,7 +1331,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 71,
@@ -784,18 +1350,34 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 72,
       "name": "Liang Ge San",
       "englishName": "Cool the Diaphragm Powder",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 73,
@@ -806,7 +1388,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 74,
@@ -817,7 +1407,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 75,
@@ -828,7 +1426,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 76,
@@ -839,7 +1445,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 77,
@@ -850,18 +1464,34 @@
         "code": "dispel-summerheat",
         "en": "Formulas that Dispel Summerheat",
         "es": "Fórmulas que dispersan el Calor de Verano"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 5,
+          "code": "dispel-summerheat",
+          "en": "Formulas that Dispel Summerheat",
+          "es": "Fórmulas que dispersan el Calor de Verano"
+        }
+      ]
     },
     {
       "id": 78,
       "name": "Long Dan Xie Gan Tang",
       "englishName": "Gentian Decoction to Drain the Liver",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 79,
@@ -872,29 +1502,53 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 80,
       "name": "Ma Xing Shi Gan Tang",
       "englishName": "Ephedra, Apricot Kernel, Gypsum and Licorice Decoction",
       "benskyCategory": {
-        "chapter": 1,
-        "code": "release-exterior",
-        "en": "Formulas that Release the Exterior",
-        "es": "Fórmulas que liberan el Exterior"
-      }
+        "chapter": 4,
+        "code": "clear-heat",
+        "en": "Formulas that Clear Heat",
+        "es": "Fórmulas que aclaran el Calor"
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 81,
       "name": "Ma Zi Ren Wan",
       "englishName": "Hemp Seed Pill",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 82,
@@ -905,7 +1559,15 @@
         "code": "treat-dryness",
         "en": "Formulas that Treat Dryness",
         "es": "Fórmulas que tratan la Sequedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 15,
+          "code": "treat-dryness",
+          "en": "Formulas that Treat Dryness",
+          "es": "Fórmulas que tratan la Sequedad"
+        }
+      ]
     },
     {
       "id": 83,
@@ -916,7 +1578,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 84,
@@ -927,7 +1597,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 85,
@@ -938,18 +1616,34 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 86,
       "name": "Pu Ji Xiao Du Yin",
       "englishName": "Universal Benefit Drink to Eliminate Toxin",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 87,
@@ -960,7 +1654,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 88,
@@ -971,7 +1673,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 89,
@@ -982,29 +1692,53 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 90,
       "name": "Qing Gu San",
       "englishName": "Cool the Bones Powder",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 91,
       "name": "Qing Hao Bie Jia Tang",
       "englishName": "Sweet Wormwood and Soft-shelled Turtle Shell Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 92,
@@ -1015,40 +1749,72 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 93,
       "name": "Qing Wei San",
       "englishName": "Clear the Stomach Powder",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 94,
       "name": "Qing Wen Bai Du Yin",
       "englishName": "Clear Epidemics and Overcome Toxicity Drink",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 95,
       "name": "Qing Ying Tang",
       "englishName": "Clear the Nutritive Level Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 96,
@@ -1059,7 +1825,15 @@
         "code": "treat-dryness",
         "en": "Formulas that Treat Dryness",
         "es": "Fórmulas que tratan la Sequedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 15,
+          "code": "treat-dryness",
+          "en": "Formulas that Treat Dryness",
+          "es": "Fórmulas que tratan la Sequedad"
+        }
+      ]
     },
     {
       "id": 97,
@@ -1070,18 +1844,34 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 98,
       "name": "Run Chang Wan",
       "englishName": "Moisten the Intestines Pill from Master Shen's Book",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 99,
@@ -1092,7 +1882,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 100,
@@ -1103,7 +1901,15 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 101,
@@ -1114,7 +1920,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 102,
@@ -1125,7 +1939,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 103,
@@ -1136,7 +1958,15 @@
         "code": "treat-dryness",
         "en": "Formulas that Treat Dryness",
         "es": "Fórmulas que tratan la Sequedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 15,
+          "code": "treat-dryness",
+          "en": "Formulas that Treat Dryness",
+          "es": "Fórmulas que tratan la Sequedad"
+        }
+      ]
     },
     {
       "id": 104,
@@ -1147,7 +1977,15 @@
         "code": "treat-dryness",
         "en": "Formulas that Treat Dryness",
         "es": "Fórmulas que tratan la Sequedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 15,
+          "code": "treat-dryness",
+          "en": "Formulas that Treat Dryness",
+          "es": "Fórmulas que tratan la Sequedad"
+        }
+      ]
     },
     {
       "id": 105,
@@ -1158,7 +1996,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 106,
@@ -1169,18 +2015,34 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 107,
       "name": "Shao Yao Tang",
       "englishName": "Peony Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 108,
@@ -1191,7 +2053,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 109,
@@ -1202,7 +2072,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 110,
@@ -1213,7 +2091,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 111,
@@ -1224,7 +2110,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 112,
@@ -1235,7 +2129,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 113,
@@ -1246,7 +2148,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 114,
@@ -1257,7 +2167,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 115,
@@ -1268,7 +2186,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 116,
@@ -1279,7 +2205,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 117,
@@ -1290,7 +2224,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 118,
@@ -1301,7 +2243,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 119,
@@ -1312,7 +2262,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 120,
@@ -1323,7 +2281,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 121,
@@ -1334,18 +2300,34 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 122,
       "name": "Si Ni San",
       "englishName": "Frigid Extremities Powder",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 123,
@@ -1356,7 +2338,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 124,
@@ -1367,7 +2357,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 125,
@@ -1378,7 +2376,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 126,
@@ -1389,7 +2395,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 127,
@@ -1400,7 +2414,15 @@
         "code": "calm-spirit",
         "en": "Formulas that Calm the Spirit",
         "es": "Fórmulas que calman el Espíritu"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 10,
+          "code": "calm-spirit",
+          "en": "Formulas that Calm the Spirit",
+          "es": "Fórmulas que calman el Espíritu"
+        }
+      ]
     },
     {
       "id": 128,
@@ -1411,7 +2433,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 129,
@@ -1422,7 +2452,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 130,
@@ -1433,7 +2471,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 131,
@@ -1444,7 +2490,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 132,
@@ -1455,7 +2509,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 133,
@@ -1466,29 +2528,53 @@
         "code": "calm-spirit",
         "en": "Formulas that Calm the Spirit",
         "es": "Fórmulas que calman el Espíritu"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 10,
+          "code": "calm-spirit",
+          "en": "Formulas that Calm the Spirit",
+          "es": "Fórmulas que calman el Espíritu"
+        }
+      ]
     },
     {
       "id": 134,
       "name": "Tiao Wei Cheng Qi Tang",
       "englishName": "Regulate the Stomach and Order the Qi Decoction",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 135,
       "name": "Tong Xie Yao Fang",
       "englishName": "Important Formula for Painful Diarrhea",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 136,
@@ -1499,7 +2585,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 137,
@@ -1510,7 +2604,15 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 138,
@@ -1521,7 +2623,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 139,
@@ -1532,7 +2642,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 140,
@@ -1543,7 +2661,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 141,
@@ -1554,7 +2680,15 @@
         "code": "treat-abscesses-sores",
         "en": "Formulas that Treat Abscesses and Sores",
         "es": "Fórmulas que tratan abscesos y llagas"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 20,
+          "code": "treat-abscesses-sores",
+          "en": "Formulas that Treat Abscesses and Sores",
+          "es": "Fórmulas que tratan abscesos y llagas"
+        }
+      ]
     },
     {
       "id": 142,
@@ -1565,18 +2699,34 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 143,
       "name": "Xi Jiao Di Huang Wan",
       "englishName": "Rhinoceros Horn and Rehmannia Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 144,
@@ -1587,7 +2737,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 145,
@@ -1598,29 +2756,53 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 146,
       "name": "Xiao Chai Hu Tang",
       "englishName": "Minor Bupleurum Decoction",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 147,
       "name": "Xiao Cheng Qi Tang",
       "englishName": "Minor Order the Qi Decoction",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 148,
@@ -1631,7 +2813,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 149,
@@ -1642,7 +2832,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 150,
@@ -1653,7 +2851,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 151,
@@ -1664,7 +2870,15 @@
         "code": "warm-interior-cold",
         "en": "Formulas that Warm Interior Cold",
         "es": "Fórmulas que calientan el Frío interno"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 6,
+          "code": "warm-interior-cold",
+          "en": "Formulas that Warm Interior Cold",
+          "es": "Fórmulas que calientan el Frío interno"
+        }
+      ]
     },
     {
       "id": 152,
@@ -1675,51 +2889,91 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 153,
       "name": "Xiao Yao San",
       "englishName": "Rambling Powder",
       "benskyCategory": {
-        "chapter": 4,
+        "chapter": 3,
         "code": "harmonize",
         "en": "Formulas that Harmonize",
         "es": "Fórmulas que armonizan"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 3,
+          "code": "harmonize",
+          "en": "Formulas that Harmonize",
+          "es": "Fórmulas que armonizan"
+        }
+      ]
     },
     {
       "id": 154,
       "name": "Xie Bai San",
       "englishName": "Drain the White Powder",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 155,
       "name": "Xie Huang San",
       "englishName": "Drain the Yellow Powder",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 156,
       "name": "Xie Xin Tang",
       "englishName": "Drain the Epigastrium Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 157,
@@ -1730,7 +2984,15 @@
         "code": "treat-dryness",
         "en": "Formulas that Treat Dryness",
         "es": "Fórmulas que tratan la Sequedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 15,
+          "code": "treat-dryness",
+          "en": "Formulas that Treat Dryness",
+          "es": "Fórmulas que tratan la Sequedad"
+        }
+      ]
     },
     {
       "id": 158,
@@ -1741,7 +3003,15 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 159,
@@ -1752,7 +3022,15 @@
         "code": "regulate-blood",
         "en": "Formulas that Regulate the Blood",
         "es": "Fórmulas que regulan la Sangre"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 13,
+          "code": "regulate-blood",
+          "en": "Formulas that Regulate the Blood",
+          "es": "Fórmulas que regulan la Sangre"
+        }
+      ]
     },
     {
       "id": 160,
@@ -1763,7 +3041,15 @@
         "code": "treat-abscesses-sores",
         "en": "Formulas that Treat Abscesses and Sores",
         "es": "Fórmulas que tratan abscesos y llagas"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 20,
+          "code": "treat-abscesses-sores",
+          "en": "Formulas that Treat Abscesses and Sores",
+          "es": "Fórmulas que tratan abscesos y llagas"
+        }
+      ]
     },
     {
       "id": 161,
@@ -1774,7 +3060,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 162,
@@ -1785,7 +3079,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 163,
@@ -1796,7 +3098,15 @@
         "code": "release-exterior",
         "en": "Formulas that Release the Exterior",
         "es": "Fórmulas que liberan el Exterior"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 1,
+          "code": "release-exterior",
+          "en": "Formulas that Release the Exterior",
+          "es": "Fórmulas que liberan el Exterior"
+        }
+      ]
     },
     {
       "id": 164,
@@ -1807,7 +3117,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 165,
@@ -1818,18 +3136,34 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 166,
       "name": "Yu Nu Jian",
       "englishName": "Jade Woman Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 167,
@@ -1840,7 +3174,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 168,
@@ -1851,18 +3193,34 @@
         "code": "regulate-qi",
         "en": "Formulas that Regulate the Qi",
         "es": "Fórmulas que regulan el Qi"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 12,
+          "code": "regulate-qi",
+          "en": "Formulas that Regulate the Qi",
+          "es": "Fórmulas que regulan el Qi"
+        }
+      ]
     },
     {
       "id": 169,
       "name": "Zeng Ye Cheng Qi Tang",
       "englishName": "Increase the Fluids and Order the Qi Decoction",
       "benskyCategory": {
-        "chapter": 3,
+        "chapter": 2,
         "code": "drain-downward",
         "en": "Formulas that Drain Downward",
         "es": "Fórmulas que drenan hacia abajo"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 2,
+          "code": "drain-downward",
+          "en": "Formulas that Drain Downward",
+          "es": "Fórmulas que drenan hacia abajo"
+        }
+      ]
     },
     {
       "id": 170,
@@ -1873,7 +3231,15 @@
         "code": "treat-dryness",
         "en": "Formulas that Treat Dryness",
         "es": "Fórmulas que tratan la Sequedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 15,
+          "code": "treat-dryness",
+          "en": "Formulas that Treat Dryness",
+          "es": "Fórmulas que tratan la Sequedad"
+        }
+      ]
     },
     {
       "id": 171,
@@ -1884,7 +3250,15 @@
         "code": "expel-wind",
         "en": "Formulas that Expel Wind",
         "es": "Fórmulas que expulsan el Viento"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 14,
+          "code": "expel-wind",
+          "en": "Formulas that Expel Wind",
+          "es": "Fórmulas que expulsan el Viento"
+        }
+      ]
     },
     {
       "id": 172,
@@ -1895,7 +3269,15 @@
         "code": "stabilize-bind",
         "en": "Formulas that Stabilize and Bind",
         "es": "Fórmulas que estabilizan y contienen"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 9,
+          "code": "stabilize-bind",
+          "en": "Formulas that Stabilize and Bind",
+          "es": "Fórmulas que estabilizan y contienen"
+        }
+      ]
     },
     {
       "id": 173,
@@ -1906,7 +3288,15 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 174,
@@ -1917,7 +3307,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 175,
@@ -1928,7 +3326,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 176,
@@ -1939,7 +3345,15 @@
         "code": "dispel-phlegm",
         "en": "Formulas that Dispel Phlegm",
         "es": "Fórmulas que disipan la Flema"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 17,
+          "code": "dispel-phlegm",
+          "en": "Formulas that Dispel Phlegm",
+          "es": "Fórmulas que disipan la Flema"
+        }
+      ]
     },
     {
       "id": 177,
@@ -1950,18 +3364,34 @@
         "code": "expel-dampness",
         "en": "Formulas that Expel Dampness",
         "es": "Fórmulas que expulsan la Humedad"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 16,
+          "code": "expel-dampness",
+          "en": "Formulas that Expel Dampness",
+          "es": "Fórmulas que expulsan la Humedad"
+        }
+      ]
     },
     {
       "id": 178,
       "name": "Zhu Ye Shi Gao Tang",
       "englishName": "Lophatherum and Gypsum Decoction",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     },
     {
       "id": 179,
@@ -1972,7 +3402,15 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 180,
@@ -1983,23 +3421,63 @@
         "code": "tonify",
         "en": "Formulas that Tonify",
         "es": "Fórmulas que tonifican"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 8,
+          "code": "tonify",
+          "en": "Formulas that Tonify",
+          "es": "Fórmulas que tonifican"
+        }
+      ]
     },
     {
       "id": 181,
       "name": "Zuo Jin Wan",
       "englishName": "Left Metal Pill",
       "benskyCategory": {
-        "chapter": 2,
+        "chapter": 4,
         "code": "clear-heat",
         "en": "Formulas that Clear Heat",
         "es": "Fórmulas que aclaran el Calor"
-      }
+      },
+      "benskyCategories": [
+        {
+          "chapter": 4,
+          "code": "clear-heat",
+          "en": "Formulas that Clear Heat",
+          "es": "Fórmulas que aclaran el Calor"
+        }
+      ]
     }
   ],
   "categorySystem": {
     "author": "Bensky et al.",
     "source": "Chinese Herbal Medicine: Formulas & Strategies",
-    "level": "primary chapter"
+    "level": "primary chapter",
+    "principalFormulaCountsByChapter": {
+      "1": 21,
+      "2": 17,
+      "3": 12,
+      "4": 32,
+      "5": 7,
+      "6": 11,
+      "7": 6,
+      "8": 45,
+      "9": 17,
+      "10": 9,
+      "11": 7,
+      "12": 20,
+      "13": 23,
+      "14": 17,
+      "15": 8,
+      "16": 33,
+      "17": 17,
+      "18": 8,
+      "19": 3,
+      "20": 14,
+      "21": 11
+    },
+    "countingRule": "Principal contents entries only; smaller associated formulas remain references and are not counted as separate principal formulas."
   }
 }
