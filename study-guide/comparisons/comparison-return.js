@@ -6,6 +6,9 @@
   const isSingleHerbsReturn = params.get('from') === 'single-herbs'
     && focus
     && /^\d+$/.test(focus);
+  const isBenskyCrosswalkReturn = params.get('from') === 'bensky-crosswalk'
+    && focus
+    && /^([1-9]|[12]\d|3[0-4])$/.test(focus);
   const formulaGuideLabels = {
     'release-exterior': {
       en: '← Back to Release the Exterior',
@@ -77,23 +80,27 @@
   const isRelatedFormulaPair = relatedPairSlugs.includes(currentDuiYaoSlug);
   const isFormulaGuideReturn = hasFormulaGuideContext
     && (isDuiYaoIndex || isRelatedFormulaPair);
-  if (!isSingleHerbsReturn && !isFormulaGuideReturn) {
+  if (!isSingleHerbsReturn && !isFormulaGuideReturn && !isBenskyCrosswalkReturn) {
     return;
   }
 
   const isSpanish = document.documentElement.lang.toLowerCase().startsWith('es');
-  const guideUrl = new URL(
-    isFormulaGuideReturn
+  const guidePath = isBenskyCrosswalkReturn
+    ? '/blocks/myprogress/herb-formula-category-map.php'
+    : (isFormulaGuideReturn
       ? '/blocks/myprogress/formulas-study-guide.php'
-      : '/blocks/myprogress/single-herbs-study-guide.php',
-    window.location.origin
-  );
-  guideUrl.searchParams.set('focus', focus);
+      : '/blocks/myprogress/single-herbs-study-guide.php');
+  const guideUrl = new URL(guidePath, window.location.origin);
+  if (!isBenskyCrosswalkReturn) {
+    guideUrl.searchParams.set('focus', focus);
+  }
   if (isSpanish) {
     guideUrl.searchParams.set('lang', 'es');
   }
   if (isFormulaGuideReturn) {
     guideUrl.hash = 'related-dui-yao-title';
+  } else if (isBenskyCrosswalkReturn) {
+    guideUrl.hash = 'map-card-' + focus;
   }
 
   const topbar = document.querySelector('.comparison-topbar__inner');
@@ -101,9 +108,11 @@
     return;
   }
 
-  const returnClass = isFormulaGuideReturn
-    ? 'comparison-back--formula-study-guide'
-    : 'comparison-back--single-herbs';
+  const returnClass = isBenskyCrosswalkReturn
+    ? 'comparison-back--bensky-crosswalk'
+    : (isFormulaGuideReturn
+      ? 'comparison-back--formula-study-guide'
+      : 'comparison-back--single-herbs');
   const existingReturnLink = topbar.querySelector('.' + returnClass);
   const backLinks = topbar.querySelectorAll('.comparison-back');
   if (!backLinks.length) {
@@ -111,7 +120,7 @@
   }
 
   let returnLink = existingReturnLink;
-  if (!returnLink && isFormulaGuideReturn) {
+  if (!returnLink && (isFormulaGuideReturn || isBenskyCrosswalkReturn)) {
     returnLink = document.createElement('a');
     returnLink.className = 'comparison-back ' + returnClass;
     const actionGroup = backLinks[0].parentElement;
@@ -121,9 +130,11 @@
     returnLink.classList.add(returnClass);
   }
   returnLink.href = guideUrl.toString();
-  returnLink.textContent = isFormulaGuideReturn
-    ? formulaGuideLabels[focus][isSpanish ? 'es' : 'en']
-    : (isSpanish ? '← Volver a la guía de Single Herbs' : '← Back to Single Herbs Study Guide');
+  returnLink.textContent = isBenskyCrosswalkReturn
+    ? (isSpanish ? '← Regresar al mapa Bensky' : '← Back to Bensky Map')
+    : (isFormulaGuideReturn
+      ? formulaGuideLabels[focus][isSpanish ? 'es' : 'en']
+      : (isSpanish ? '← Volver a la guía de Single Herbs' : '← Back to Single Herbs Study Guide'));
 
   if (isFormulaGuideReturn) {
     document.querySelectorAll('a[href]').forEach(function(link) {
@@ -157,6 +168,21 @@
         destination.searchParams.delete('focus');
         destination.searchParams.delete('related-pairs');
       }
+      link.href = destination.toString();
+    });
+  } else if (isBenskyCrosswalkReturn) {
+    document.querySelectorAll('a[href]').forEach(function(link) {
+      if (link === returnLink) {
+        return;
+      }
+      const destination = new URL(link.href, window.location.href);
+      const isInternalDuiYaoPage = destination.origin === window.location.origin
+        && /\/(?:dui-yao(?:-es)?|[^/]+-dui-yao(?:-es)?)\.html$/.test(destination.pathname);
+      if (!isInternalDuiYaoPage) {
+        return;
+      }
+      destination.searchParams.set('from', 'bensky-crosswalk');
+      destination.searchParams.set('focus', focus);
       link.href = destination.toString();
     });
   } else {

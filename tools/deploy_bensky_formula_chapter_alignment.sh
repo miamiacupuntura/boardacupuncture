@@ -21,6 +21,7 @@ fi
 FILES=(
     "blocks/myprogress/study-guide.php"
     "blocks/myprogress/herb-formula-category-map.php"
+    "study-guide/comparisons/comparison-return.js"
     "blocks/myprogress/formulas-study-guide.php"
     "blocks/myprogress/formulas-study-guide-data.json"
     "blocks/myprogress/formula-board-roster-2026.json"
@@ -125,6 +126,9 @@ grep -Fq 'herb-formula-map__bridge-formula' "$TEMP_DIR/blocks/myprogress/herb-fo
 grep -Fq 'Herb category:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Categoría herbal:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 ! grep -Fq 's($pair[2])' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq 'Open Duì Yào profile →' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
+grep -Fq "params.get('from') === 'bensky-crosswalk'" "$TEMP_DIR/study-guide/comparisons/comparison-return.js"
+grep -Fq '← Back to Bensky Map' "$TEMP_DIR/study-guide/comparisons/comparison-return.js"
 grep -Fq 'Pair category:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq 'Categoría de la pareja:' "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"
 grep -Fq "[3, 2, 'Herbs that Clear Heat and Drain Fire'" "$TEMP_DIR/blocks/myprogress/herb-formula-category-map.php"

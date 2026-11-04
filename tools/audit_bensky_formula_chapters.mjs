@@ -10,6 +10,7 @@ const php = read('blocks/myprogress/formulas-study-guide.php');
 const categoryMapPhp = read('blocks/myprogress/herb-formula-category-map.php');
 const studyGuideHubPhp = read('blocks/myprogress/study-guide.php');
 const officialDuiYao = JSON.parse(read('study-guide/comparisons/dui-yao-data.json'));
+const comparisonReturnJs = read('study-guide/comparisons/comparison-return.js');
 
 const fail = message => {
     throw new Error(`Bensky formula chapter audit failed: ${message}`);
@@ -202,6 +203,15 @@ assert(categoryMapPhp.includes('$renderduiyaomembers($pair, $rowbridgecolors)')
     && categoryMapPhp.includes("'Herb category:'")
     && !categoryMapPhp.includes('s($pair[2])'),
     'Duì Yào cards do not show individual herb categories or still render Chinese names.');
+assert(categoryMapPhp.includes("['from' => 'bensky-crosswalk', 'focus' => $category[0]]")
+    && categoryMapPhp.includes('Open Duì Yào profile →')
+    && categoryMapPhp.includes('id="map-card-'),
+    'the Bensky map does not provide a forward link with an exact return anchor.');
+assert(comparisonReturnJs.includes("params.get('from') === 'bensky-crosswalk'")
+    && comparisonReturnJs.includes('← Back to Bensky Map')
+    && comparisonReturnJs.includes('← Regresar al mapa Bensky')
+    && comparisonReturnJs.includes("guideUrl.hash = 'map-card-' + focus"),
+    'Duì Yào profiles do not provide a bilingual return button to the originating Bensky row.');
 assert(studyGuideHubPhp.includes("'title' => 'Bensky Category Crosswalk'")
     && studyGuideHubPhp.includes("'path' => '/blocks/myprogress/herb-formula-category-map.php'"),
     'the fourth combined card is missing from the Chinese Herbology hub.');
