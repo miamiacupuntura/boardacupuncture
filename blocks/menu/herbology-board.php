@@ -38,8 +38,8 @@ $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'f
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title('Chinese Herbology Board Level');
-$PAGE->set_heading('Chinese Herbology Board Level');
+$PAGE->set_title('Herbology Practice');
+$PAGE->set_heading('Herbology Practice');
 
 $topics = [];
 $clearheatsections = [
@@ -582,9 +582,9 @@ echo $OUTPUT->header();
     <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>">← Back to Dashboard</a>
     <header class="herb-board__hero">
         <p class="herb-board__eyebrow">CHINESE HERBOLOGY · BOARD LEVEL</p>
-        <h2>Herbs Practice Exams</h2>
+        <h2>Herbology Practice</h2>
         <span>Build focused multiple-choice practice from the Board question pool and review your progress over time.</span>
-        <nav class="herb-board__tabs" aria-label="Chinese Herbology Board Level sections">
+        <nav class="herb-board__tabs" aria-label="Herbology practice sections">
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>>Single Herbs</a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"

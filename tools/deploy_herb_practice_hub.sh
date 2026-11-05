@@ -46,6 +46,7 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/blocks/menu" "$TEMP_DIR/study-guide/comparisons" "$BACKUP_DIR/moodle" "$BACKUP_DIR/static"
 
 MOODLE_FILES=(
+    "blocks/menu/block_menu.php"
     "blocks/menu/herbology-board.php"
     "blocks/menu/version.php"
 )
@@ -70,6 +71,9 @@ for file in "${STATIC_FILES[@]}"; do
 done
 
 grep -Fq 'Choose a Single Herbs practice focus' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '<h2>Herbology Practice</h2>' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "'herbology' => 'Herbology Practice'" "$TEMP_DIR/blocks/menu/block_menu.php"
+! grep -Fq '>Mock Questions<' "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq 'herb-comparison-bank-data.json' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Practice by herb' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "params.get('focus') === 'herb'" "$TEMP_DIR/study-guide/comparisons/herb-comparison-bank.js"

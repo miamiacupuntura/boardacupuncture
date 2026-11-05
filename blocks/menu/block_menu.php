@@ -315,6 +315,13 @@ class block_menu extends block_base {
 
             $boardcards = '';
             $boardlevelcards = '';
+            $boardpracticelabels = [
+                'foundations' => 'Foundations Practice',
+                'pointlocation' => 'Acupuncture Practice',
+                'herbology' => 'Herbology Practice',
+                'biomedicine' => 'Biomedicine Practice',
+                'cleanneedle' => 'CNT Practice',
+            ];
             foreach ($boarddashboard as $subject) {
                 $progress = $this->get_board_progress($subject['progressids']);
                 $grade = min(100, max(0, (float) $progress['grade']));
@@ -378,10 +385,11 @@ class block_menu extends block_base {
                         'track' => 'formulas',
                     ]);
                     $mockquestionsaction = '<a class="board-hub__action board-hub__action--board-mock" href="'
-                        . $mockquestionsurl->out(false) . '">Mock Questions</a>';
+                        . $mockquestionsurl->out(false) . '">' . s($boardpracticelabels[$subject['area']]) . '</a>';
                 } else {
                     $mockquestionsaction = '<span class="board-hub__action board-hub__action--pending '
-                        . 'board-hub__action--board-mock" aria-disabled="true">Mock Questions</span>';
+                        . 'board-hub__action--board-mock" aria-disabled="true">'
+                        . s($boardpracticelabels[$subject['area']]) . '</span>';
                 }
                 $simulationaction = '<span class="board-hub__action board-hub__action--pending '
                     . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
@@ -431,7 +439,7 @@ class block_menu extends block_base {
   <header class="board-hub__heading">
     <p>BOARD PREPARATION</p>
     <h2 id="board-hub-title">Your NCBAHM Board Preparation</h2>
-    <span>Continue School Level resources or open the separate Board Level Mock Questions and Simulation workspaces.</span>
+    <span>Continue School Level resources or open the separate Board Level Practice and Simulation workspaces.</span>
   </header>
   <aside class="board-guidelines-dashboard-panel" aria-label="NCBAHM Board Guidelines">
     <div>
