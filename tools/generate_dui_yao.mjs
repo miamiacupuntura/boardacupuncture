@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261027-5';
-const mobileCssVersion = '20261105-1';
+const mobileCssVersion = '20261105-2';
 
 const pairs = [
   {

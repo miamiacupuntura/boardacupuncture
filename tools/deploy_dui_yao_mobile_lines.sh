@@ -57,8 +57,8 @@ for file in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/$file"
 done
 
-grep -Fq 'dui-yao-mobile.css?v=20261105-1' "$TEMP_DIR/dui-yao.html"
-grep -Fq 'dui-yao-mobile.css?v=20261105-1' "$TEMP_DIR/dui-yao-es.html"
+grep -Fq 'dui-yao-mobile.css?v=20261105-2' "$TEMP_DIR/dui-yao.html"
+grep -Fq 'dui-yao-mobile.css?v=20261105-2' "$TEMP_DIR/dui-yao-es.html"
 grep -Fq '[data-student-onboarding] .comparison-card' "$TEMP_DIR/dui-yao-mobile.css"
 
 for file in "${FILES[@]}"; do
@@ -70,7 +70,7 @@ for file in "${FILES[@]}"; do
     install -o "${OWNER_GROUP%:*}" -g "${OWNER_GROUP#*:}" -m 0644 "$TEMP_DIR/$file" "$TARGET_DIR/$file"
 done
 
-grep -Fq 'dui-yao-mobile.css?v=20261105-1' "$TARGET_DIR/dui-yao.html"
+grep -Fq 'dui-yao-mobile.css?v=20261105-2' "$TARGET_DIR/dui-yao.html"
 grep -Fq '[data-student-onboarding] .comparison-card' "$TARGET_DIR/dui-yao-mobile.css"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
