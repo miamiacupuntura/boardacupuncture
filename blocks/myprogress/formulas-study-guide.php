@@ -1684,10 +1684,7 @@ if (!$ises) {
 }
 $languageurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $languageparams);
 $herbologyurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
-$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
-    'area' => 'herbology',
-    'view' => 'library',
-]);
+$dashboardurl = new moodle_url('/my/');
 $singleherbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $ises ? ['lang' => 'es'] : []);
 $duiyaomoduleurl = new moodle_url($ises
     ? '/study-guide/comparisons/dui-yao-es.html'
@@ -1701,7 +1698,6 @@ $formularoutetitle = $selected === null
 $guidelinepath = $ises
     ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
     : '/study-guide/guidelines/chinese-herbal-medicine.html';
-$guidelineurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)], 'appendix-c-study');
 $guidelinerosterurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)], 'guide-formula-roster-title');
 
 $previousurl = null;
@@ -1889,16 +1885,9 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el Appendix C oficial de NCBAHM 2026' : '* Included in the official 2026 NCBAHM Appendix C'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
-            <div class="formula-study-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
-                <a class="formula-study-guide__button" href="<?php echo $singleherbsurl->out(false); ?>">Single Herbs</a>
-                <a class="formula-study-guide__button" href="<?php echo $duiyaomoduleurl->out(false); ?>">Duì Yào</a>
-                <a class="formula-study-guide__button formula-study-guide__button--active" href="<?php echo $indexurl->out(false); ?>" aria-current="page"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
-            </div>
             <div class="formula-study-guide__utility-actions">
-                <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
                 <a class="formula-study-guide__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                <a class="formula-study-guide__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Biblioteca' : '← Library'); ?></a>
-                <a class="formula-study-guide__button" href="<?php echo $herbologyurl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
+                <a class="formula-study-guide__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo s($ises ? '← Dashboard' : '← Back to Dashboard'); ?></a>
             </div>
         </nav>
     </header>
