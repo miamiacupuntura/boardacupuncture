@@ -56,6 +56,7 @@ STATIC_FILES=(
     "herb-comparison-bank.js"
     "herb-comparison-bank-data.json"
     "herb-comparison-bank-translations-es.json"
+    "practice-hub-navigation.js"
     "study-return-navigation.js"
 )
 
@@ -72,6 +73,7 @@ grep -Fq 'Choose a Single Herbs practice focus' "$TEMP_DIR/blocks/menu/herbology
 grep -Fq 'herb-comparison-bank-data.json' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Practice by herb' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "params.get('focus') === 'herb'" "$TEMP_DIR/study-guide/comparisons/herb-comparison-bank.js"
+grep -Fq 'herbology-board.php?track=' "$TEMP_DIR/study-guide/comparisons/practice-hub-navigation.js"
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 if (($data["totals"]["questions"] ?? 0) < 1 || count($data["chapters"] ?? []) < 1) {
@@ -96,6 +98,38 @@ for file in "${STATIC_FILES[@]}"; do
     [[ -f "$target" ]] && cp -a "$target" "$BACKUP_DIR/static/$file"
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" \
         "$TEMP_DIR/study-guide/comparisons/$file" "$target"
+done
+
+for page in formula-practice.html formula-practice-es.html; do
+    target="$STUDY_NOTE_DIR/$page"
+    [[ -f "$target" ]] || { echo "ERROR: no existe $target"; exit 1; }
+    cp -a "$target" "$BACKUP_DIR/static/$page"
+done
+
+php -r '
+$root = $argv[1];
+$tag = "<script src=\"practice-hub-navigation.js?v=20261105-1\" defer></script>";
+foreach (["formula-practice.html", "formula-practice-es.html", "herb-comparison-bank.html", "herb-comparison-bank-es.html"] as $page) {
+    $path = $root . "/" . $page;
+    $html = file_get_contents($path);
+    if (strpos($html, "practice-hub-navigation.js") !== false) {
+        $updated = preg_replace(
+            "#<script\\s+src=[\"\x27](?:/study-guide/comparisons/)?practice-hub-navigation\\.js(?:\\?[^\"\x27]*)?[\"\x27]\\s+defer></script>#i",
+            $tag,
+            $html,
+            1
+        );
+    } else {
+        $updated = preg_replace("#</body>#i", $tag . "</body>", $html, 1, $count);
+        if ($count !== 1) { throw new RuntimeException("Missing </body> in " . $path); }
+    }
+    if ($updated === null) { throw new RuntimeException("Navigation injection failed in " . $path); }
+    file_put_contents($path, $updated, LOCK_EX);
+}
+' "$STUDY_NOTE_DIR"
+
+for page in formula-practice.html formula-practice-es.html herb-comparison-bank.html herb-comparison-bank-es.html; do
+    grep -Fq 'practice-hub-navigation.js?v=20261105-1' "$STUDY_NOTE_DIR/$page"
 done
 
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
