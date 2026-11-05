@@ -387,13 +387,11 @@
 
     addStudyGuideLinks();
     addBoardGuidelinesPortal();
-    addTipsTricksPortal();
     addContinuingEducationPortal();
     addModuleSchoolPortal();
     document.addEventListener('DOMContentLoaded', () => {
         addStudyGuideLinks();
         addBoardGuidelinesPortal();
-        addTipsTricksPortal();
         addContinuingEducationPortal();
         addModuleSchoolPortal();
     }, {once: true});
@@ -404,7 +402,6 @@
         refreshTimer = window.setTimeout(() => {
             addStudyGuideLinks();
             addBoardGuidelinesPortal();
-            addTipsTricksPortal();
             addContinuingEducationPortal();
             addModuleSchoolPortal();
         }, 80);

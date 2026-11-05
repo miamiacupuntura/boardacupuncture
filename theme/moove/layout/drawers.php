@@ -29,10 +29,7 @@ require_once($CFG->dirroot . '/course/lib.php');
 
 if ($PAGE->pagelayout === 'mydashboard') {
     $PAGE->requires->js(new moodle_url('/theme/moove/javascript/study-guide-dashboard.js', [
-        'v' => '20261101-1',
-    ]), true);
-    $PAGE->requires->js(new moodle_url('/theme/moove/javascript/tips-tricks-dashboard.js', [
-        'v' => '20261101-2',
+        'v' => '20261105-1',
     ]), true);
 }
 

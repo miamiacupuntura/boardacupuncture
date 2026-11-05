@@ -562,12 +562,13 @@ echo $OUTPUT->header();
 .subject-study-library__group--other{border-top:4px solid #94a3b8}
 .subject-study-library__group--practice .subject-study-library__button{border-color:#8bc8bd;background:#f4fbf9}
 .subject-study-library__group--comparisons .subject-study-library__button{border-color:#f4b27e;background:#fffaf6}
+.subject-study-library__tips{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 18px;border:1px solid #efc7a8;border-left:5px solid #f37424;border-radius:11px;background:#fff8f2;text-align:left}.subject-study-library__tips strong,.subject-study-library__tips span{display:block}.subject-study-library__tips span{margin-top:3px;color:#755844;font-size:.9rem}.subject-study-library__tips a{display:inline-flex;min-height:44px;flex:0 0 auto;align-items:center;justify-content:center;padding:10px 15px;border-radius:8px;background:#c9570c;color:#fff!important;font-weight:800;text-decoration:none!important}.subject-study-library__tips a:hover,.subject-study-library__tips a:focus{background:#a74408}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
 .subject-study-guide__construction-mark{margin-bottom:15px;font-size:48px}
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
 .subject-study-guide__construction p{max-width:570px;margin:0 auto 26px;color:#64748b;line-height:1.65}
 .subject-study-guide a:focus-visible{outline:3px solid #185cca;outline-offset:3px}
-@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}.subject-study-library__intro{padding:24px 20px}.subject-study-library__group-header{align-items:flex-start;flex-direction:column}.subject-study-library__buttons{grid-template-columns:1fr}}
+@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}.subject-study-library__intro{padding:24px 20px}.subject-study-library__tips{align-items:stretch;flex-direction:column}.subject-study-library__tips a{width:100%;box-sizing:border-box}.subject-study-library__group-header{align-items:flex-start;flex-direction:column}.subject-study-library__buttons{grid-template-columns:1fr}}
 </style>
 <main class="subject-study-guide">
 <?php if ($showconstruction): ?>
@@ -597,6 +598,16 @@ echo $OUTPUT->header();
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
         </nav>
     </header>
+
+    <?php if ($showlibrary && $areaid === 'herbology'): ?>
+        <aside class="subject-study-library__tips" aria-label="<?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips and Tricks'); ?>">
+            <div>
+                <strong><?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips & Tricks'); ?></strong>
+                <span><?php echo s($ises ? 'Pistas rápidas, ayudas de memoria, comparaciones que no debes confundir y recordatorios de seguridad de la Guía de estudio.' : 'Fast clues, memory aids, do-not-confuse comparisons and safety reminders from the Study Guide.'); ?></span>
+            </div>
+            <a href="<?php echo $ises ? '/study-guide/tips-and-tricks-es.html' : '/study-guide/tips-and-tricks.html'; ?>"><?php echo s($ises ? 'Abrir consejos y trucos' : 'Open Tips & Tricks'); ?></a>
+        </aside>
+    <?php endif; ?>
 
     <?php if ($showlibrary): ?>
         <section class="subject-study-library" aria-labelledby="study-library-title">
