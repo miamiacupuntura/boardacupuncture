@@ -1,0 +1,30 @@
+@media (max-width: 720px) {
+  [data-student-onboarding] .comparison-grid {
+    display: block;
+    margin: 16px 0 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  [data-student-onboarding] .comparison-card {
+    display: block;
+    min-height: 0;
+    padding: 12px 2px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  [data-student-onboarding] .comparison-card h3 {
+    margin: 0 0 3px;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  [data-student-onboarding] .comparison-card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}
