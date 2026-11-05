@@ -1,62 +1,102 @@
 (() => {
   'use strict';
 
-  const topbar = document.querySelector('.comparison-topbar__inner');
-  if (!topbar) return;
-
   const path = window.location.pathname;
-  const isFormula = /\/formula-(?:practice|navigator)(?:-es)?\.html$/.test(path);
+  const isFormulaNavigator = /\/formula-navigator(?:-es)?\.html$/.test(path);
+  const isFormulaPractice = /\/formula-practice(?:-es)?\.html$/.test(path);
   const isHerb = /\/herb-comparison-bank(?:-es)?\.html$/.test(path);
-  if (!isFormula && !isHerb) return;
+  if (!isFormulaNavigator && !isFormulaPractice && !isHerb) return;
+
+  const main = document.querySelector('main.comparison-shell');
+  const hero = main && main.querySelector(':scope > .comparison-hero');
+  if (!main || !hero || main.querySelector('.practice-linear-nav')) return;
 
   const spanish = document.documentElement.lang === 'es';
-  const brand = topbar.querySelector('.comparison-brand');
-  if (!brand) return;
+  const isFormula = isFormulaNavigator || isFormulaPractice;
+  const track = isFormula ? 'formulas' : 'herbs';
+  const hubUrl = `/blocks/menu/herbology-board.php?track=${track}`;
 
-  brand.href = `/blocks/menu/herbology-board.php?track=${isFormula ? 'formulas' : 'herbs'}`;
-  const brandLabel = brand.querySelector('span:last-child');
-  if (brandLabel) {
-    brandLabel.textContent = isFormula
-      ? (spanish ? 'Práctica de fórmulas' : 'Formulas Practice')
-      : (spanish ? 'Práctica de hierbas individuales' : 'Single Herbs Practice');
+  function returnUrl() {
+    const requested = new URLSearchParams(window.location.search).get('return');
+    if (requested) {
+      try {
+        const target = new URL(requested, window.location.origin);
+        if (target.origin === window.location.origin && target.href !== window.location.href) return target.href;
+      } catch (_) {}
+    }
+    if (document.referrer) {
+      try {
+        const previous = new URL(document.referrer);
+        if (previous.href !== window.location.href) return previous.href;
+      } catch (_) {}
+    }
+    return hubUrl;
   }
 
-  if (!document.getElementById('practice-area-panel-styles')) {
+  if (!document.getElementById('practice-linear-nav-styles')) {
     const styles = document.createElement('style');
-    styles.id = 'practice-area-panel-styles';
+    styles.id = 'practice-linear-nav-styles';
     styles.textContent = `
-      .practice-area-panel{display:flex;align-items:center;gap:9px;margin:-9px 0 18px;padding:12px 14px;border:1px solid #cbdce7;border-radius:11px;background:#fff;box-shadow:0 3px 10px rgba(15,23,42,.05)}
-      .practice-area-panel__label{margin-right:auto;color:#52677a;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
-      .practice-area-panel a{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 15px;border:1px solid #b9ccda;border-radius:8px;background:#fff;color:#17324d;font-weight:850;text-decoration:none}
-      .practice-area-panel a[aria-current="page"]{border-color:#08756a;background:#08756a;color:#fff}
-      .practice-area-panel a:hover{border-color:#08756a;text-decoration:none}
-      @media(max-width:600px){.practice-area-panel{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:-5px;padding:10px}.practice-area-panel__label{grid-column:1/-1;margin:0;font-size:10px}.practice-area-panel a{width:100%;min-height:38px;padding:7px 8px;font-size:13px}}
+      .practice-linear-nav{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;margin:18px 0 12px;padding:10px 13px;border:1px solid #d5e0e5;border-radius:9px;background:#fff;color:#64748b;font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+      .practice-linear-nav__back{display:inline-flex;min-height:34px;align-items:center;padding:6px 11px;border:1px solid #cbd5dc;border-radius:7px;background:#f8fafc;color:#17324d;text-decoration:none;white-space:nowrap}
+      .practice-linear-nav__back:hover{border-color:#08756a;color:#075e54;text-decoration:none}
+      .practice-linear-nav__trail{display:flex;min-width:0;align-items:center;gap:8px;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
+      .practice-linear-nav__trail a{color:#315fa5;text-decoration:none}.practice-linear-nav__trail a:hover{text-decoration:underline}
+      .practice-linear-nav__trail a.is-active{color:#075e54;font-weight:900}
+      .practice-linear-nav__trail strong{color:#17232a}.practice-linear-nav__separator{color:#94a3b8}
+      @media(max-width:600px){.practice-linear-nav{gap:8px;margin:10px 0;padding:8px}.practice-linear-nav__back{min-height:32px;padding:5px 8px;font-size:11px}.practice-linear-nav__trail{gap:6px;font-size:11px}}
     `;
     document.head.appendChild(styles);
   }
 
-  const main = document.querySelector('main.comparison-shell');
-  const hero = main && main.querySelector(':scope > .comparison-hero');
-  if (hero && !main.querySelector('.practice-area-panel')) {
-    const panel = document.createElement('nav');
-    panel.className = 'practice-area-panel';
-    panel.setAttribute('aria-label', spanish ? 'Navegación de práctica de herbolaria' : 'Herbology practice navigation');
+  const nav = document.createElement('nav');
+  nav.className = 'practice-linear-nav';
+  nav.setAttribute('aria-label', spanish ? 'Ruta de navegación de práctica' : 'Practice navigation path');
 
-    const label = document.createElement('span');
-    label.className = 'practice-area-panel__label';
-    label.textContent = spanish ? 'Área de práctica' : 'Practice area';
+  const back = document.createElement('a');
+  back.className = 'practice-linear-nav__back';
+  back.href = returnUrl();
+  back.textContent = spanish ? '← Regresar' : '← Back';
 
-    const herbs = document.createElement('a');
-    herbs.href = '/blocks/menu/herbology-board.php?track=herbs';
-    herbs.textContent = spanish ? 'Hierbas individuales' : 'Single Herbs';
-    if (isHerb) herbs.setAttribute('aria-current', 'page');
+  const trail = document.createElement('div');
+  trail.className = 'practice-linear-nav__trail';
 
-    const formulas = document.createElement('a');
-    formulas.href = '/blocks/menu/herbology-board.php?track=formulas';
-    formulas.textContent = spanish ? 'Fórmulas' : 'Formulas';
-    if (isFormula) formulas.setAttribute('aria-current', 'page');
+  const practiceHome = document.createElement('a');
+  practiceHome.href = hubUrl;
+  practiceHome.textContent = spanish ? 'Exámenes de práctica' : 'Practice Exams';
 
-    panel.append(label, herbs, formulas);
-    hero.insertAdjacentElement('afterend', panel);
-  }
+  const herbsLink = document.createElement('a');
+  herbsLink.href = '/blocks/menu/herbology-board.php?track=herbs';
+  herbsLink.textContent = spanish ? 'Hierbas individuales' : 'Single Herbs';
+  if (isHerb) herbsLink.className = 'is-active';
+
+  const formulasLink = document.createElement('a');
+  formulasLink.href = '/blocks/menu/herbology-board.php?track=formulas';
+  formulasLink.textContent = spanish ? 'Fórmulas' : 'Formulas';
+  if (isFormula) formulasLink.className = 'is-active';
+
+  const siblingSeparator = document.createElement('span');
+  siblingSeparator.className = 'practice-linear-nav__separator';
+  siblingSeparator.setAttribute('aria-hidden', 'true');
+  siblingSeparator.textContent = '|';
+
+  const current = document.createElement('strong');
+  current.setAttribute('aria-current', 'page');
+  current.textContent = isFormulaNavigator
+    ? (spanish ? 'Buscar una fórmula' : 'Find a formula')
+    : isFormulaPractice
+      ? (spanish ? 'Preguntas de práctica' : 'Practice questions')
+      : (spanish ? 'Banco comparativo' : 'Comparison bank');
+
+  const separator = () => {
+    const item = document.createElement('span');
+    item.className = 'practice-linear-nav__separator';
+    item.setAttribute('aria-hidden', 'true');
+    item.textContent = '›';
+    return item;
+  };
+
+  trail.append(practiceHome, separator(), herbsLink, siblingSeparator, formulasLink, separator(), current);
+  nav.append(back, trail);
+  main.insertBefore(nav, hero);
 })();

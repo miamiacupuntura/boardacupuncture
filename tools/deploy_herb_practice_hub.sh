@@ -74,7 +74,7 @@ grep -Fq 'herb-comparison-bank-data.json' "$TEMP_DIR/blocks/menu/herbology-board
 grep -Fq 'Practice by herb' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "params.get('focus') === 'herb'" "$TEMP_DIR/study-guide/comparisons/herb-comparison-bank.js"
 grep -Fq 'herbology-board.php?track=' "$TEMP_DIR/study-guide/comparisons/practice-hub-navigation.js"
-grep -Fq 'practice-area-panel' "$TEMP_DIR/study-guide/comparisons/practice-hub-navigation.js"
+grep -Fq 'practice-linear-nav' "$TEMP_DIR/study-guide/comparisons/practice-hub-navigation.js"
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 if (($data["totals"]["questions"] ?? 0) < 1 || count($data["chapters"] ?? []) < 1) {
@@ -109,7 +109,7 @@ done
 
 php -r '
 $root = $argv[1];
-$tag = "<script src=\"practice-hub-navigation.js?v=20261105-2\" defer></script>";
+$tag = "<script src=\"practice-hub-navigation.js?v=20261105-3\" defer></script>";
 foreach (["formula-practice.html", "formula-practice-es.html", "formula-navigator.html", "formula-navigator-es.html", "herb-comparison-bank.html", "herb-comparison-bank-es.html"] as $page) {
     $path = $root . "/" . $page;
     $html = file_get_contents($path);
@@ -130,7 +130,7 @@ foreach (["formula-practice.html", "formula-practice-es.html", "formula-navigato
 ' "$STUDY_NOTE_DIR"
 
 for page in formula-practice.html formula-practice-es.html formula-navigator.html formula-navigator-es.html herb-comparison-bank.html herb-comparison-bank-es.html; do
-    grep -Fq 'practice-hub-navigation.js?v=20261105-2' "$STUDY_NOTE_DIR/$page"
+    grep -Fq 'practice-hub-navigation.js?v=20261105-3' "$STUDY_NOTE_DIR/$page"
 done
 
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
