@@ -101,7 +101,7 @@ foreach ($files as $path) {
     } else {
         $updated = preg_replace(
             "#(<link rel=\"stylesheet\" href=\"comparisons\\.css\\?v=[^\"]+\">)#",
-            "$1" . $tag,
+            "\${1}" . $tag,
             $html,
             1,
             $count
