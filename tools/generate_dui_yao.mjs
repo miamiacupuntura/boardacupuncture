@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../study-guide/comparisons');
 const cssVersion = '20261027-5';
-const mobileCssVersion = '20261105-2';
+const mobileCssVersion = '20261105-3';
 
 const pairs = [
   {
@@ -1551,7 +1551,7 @@ function detailPage(pair, language) {
   const index = `dui-yao${es ? '-es' : ''}.html`;
   const alternate = `${pair.slug}${es ? '' : '-es'}.html`;
   const roles = data.roles.map(role => `<tr><th scope="row">${esc(role[0])}</th><td>${esc(role[1])}</td></tr>`).join('');
-  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(data.job)}"><title>${esc(pair.title)} | Duì Yào | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"></head><body>
+  return `<!doctype html><html lang="${es ? 'es' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(data.job)}"><title>${esc(pair.title)} | Duì Yào | AcupunctureTests</title><link rel="alternate" hreflang="${es ? 'en' : 'es'}" href="${alternate}"><link rel="stylesheet" href="comparisons.css?v=${cssVersion}"><link rel="stylesheet" href="dui-yao-mobile.css?v=${mobileCssVersion}"></head><body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner" style="flex-wrap:wrap;padding:10px 0"><a class="comparison-brand" href="${index}"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>${es ? 'Parejas Duì Yào' : 'Duì Yào Pairs'}</span></a><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="comparison-back" href="${alternate}">${es ? 'English' : 'Español'}</a><a class="comparison-back" href="${index}">${es ? '← Volver a Duì Yào' : '← Back to Duì Yào'}</a></span></div></header>
 <main class="comparison-shell"><article class="study-note"><p class="comparison-eyebrow">${es ? `Pareja Appendix B · ${pair.number} de 51` : `Appendix B pair · ${pair.number} of 51`}</p><h1 class="study-note__title">${esc(pair.title)}</h1><p style="font-size:1.35rem;margin-top:-8px">${esc(pair.characters)}</p>
 <section class="study-note__block"><h2 class="study-note__heading">${es ? 'Una imagen, un trabajo' : 'One picture, one job'}</h2><table class="study-note__focus"><tbody><tr><th>${es ? 'Imagen' : 'Picture'}</th><td>${esc(data.mnemonic)}</td></tr><tr><th>${es ? 'Trabajo conjunto' : 'Combined job'}</th><td>${esc(data.job)}</td></tr><tr><th>${es ? 'Categoría' : 'Category'}</th><td>${esc(pair.category[language])}</td></tr></tbody></table></section>

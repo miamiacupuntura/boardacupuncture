@@ -4,6 +4,42 @@
     line-height: 1.12;
   }
 
+  .study-note table {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .study-note thead {
+    display: table-header-group;
+    width: auto;
+  }
+
+  .study-note tbody {
+    display: table-row-group;
+    width: auto;
+  }
+
+  .study-note tr {
+    display: table-row;
+    width: auto;
+  }
+
+  .study-note th,
+  .study-note td {
+    display: table-cell;
+    width: auto;
+    padding: 7px 8px;
+    border: 1px solid #cbd9e0;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .study-note tr > :first-child,
+  .study-note__focus th {
+    width: 32%;
+  }
+
   [data-student-onboarding] .comparison-grid {
     display: block;
     margin: 16px 0 28px;

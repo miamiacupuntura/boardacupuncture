@@ -14,7 +14,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     exit 1
 fi
 
-for command in curl install grep stat mktemp; do
+for command in curl install grep stat mktemp find tar php; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command." >&2
         exit 1
@@ -57,21 +57,67 @@ for file in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/$file"
 done
 
-grep -Fq 'dui-yao-mobile.css?v=20261105-2' "$TEMP_DIR/dui-yao.html"
-grep -Fq 'dui-yao-mobile.css?v=20261105-2' "$TEMP_DIR/dui-yao-es.html"
+grep -Fq 'dui-yao-mobile.css?v=20261105-3' "$TEMP_DIR/dui-yao.html"
+grep -Fq 'dui-yao-mobile.css?v=20261105-3' "$TEMP_DIR/dui-yao-es.html"
 grep -Fq '[data-student-onboarding] .comparison-card' "$TEMP_DIR/dui-yao-mobile.css"
+grep -Fq '.study-note tr > :first-child' "$TEMP_DIR/dui-yao-mobile.css"
 
 for file in "${FILES[@]}"; do
     [[ -f "$TARGET_DIR/$file" ]] && cp -a "$TARGET_DIR/$file" "$BACKUP_DIR/"
 done
+(
+    cd "$TARGET_DIR"
+    find . -maxdepth 1 -type f \( -name '*-dui-yao.html' -o -name '*-dui-yao-es.html' \) -print0 \
+        | tar --null -czf "$BACKUP_DIR/dui-yao-detail-pages.tar.gz" --files-from=-
+)
 
 OWNER_GROUP="$(stat -c '%u:%g' "$TARGET_DIR/dui-yao.html")"
 for file in "${FILES[@]}"; do
     install -o "${OWNER_GROUP%:*}" -g "${OWNER_GROUP#*:}" -m 0644 "$TEMP_DIR/$file" "$TARGET_DIR/$file"
 done
 
-grep -Fq 'dui-yao-mobile.css?v=20261105-2' "$TARGET_DIR/dui-yao.html"
+php -r '
+$root = $argv[1];
+$version = $argv[2];
+$files = array_merge(
+    glob($root . "/*-dui-yao.html") ?: [],
+    glob($root . "/*-dui-yao-es.html") ?: []
+);
+$files = array_values(array_unique($files));
+if (count($files) < 100) {
+    throw new RuntimeException("Solo se encontraron " . count($files) . " fichas Duì Yào.");
+}
+$tag = "<link rel=\"stylesheet\" href=\"dui-yao-mobile.css?v={$version}\">";
+foreach ($files as $path) {
+    $html = file_get_contents($path);
+    if (strpos($html, "dui-yao-mobile.css") !== false) {
+        $updated = preg_replace(
+            "#<link rel=\"stylesheet\" href=\"dui-yao-mobile\\.css\\?v=[^\"]+\">#",
+            $tag,
+            $html,
+            1,
+            $count
+        );
+    } else {
+        $updated = preg_replace(
+            "#(<link rel=\"stylesheet\" href=\"comparisons\\.css\\?v=[^\"]+\">)#",
+            "$1" . $tag,
+            $html,
+            1,
+            $count
+        );
+    }
+    if ($count !== 1 || $updated === null) {
+        throw new RuntimeException("No se pudo actualizar " . basename($path));
+    }
+    file_put_contents($path, $updated, LOCK_EX);
+}
+echo "Fichas Duì Yào actualizadas: " . count($files) . PHP_EOL;
+' "$TARGET_DIR" '20261105-3'
+
+grep -Fq 'dui-yao-mobile.css?v=20261105-3' "$TARGET_DIR/dui-yao.html"
 grep -Fq '[data-student-onboarding] .comparison-card' "$TARGET_DIR/dui-yao-mobile.css"
+grep -Fq 'dui-yao-mobile.css?v=20261105-3' "$TARGET_DIR/ma-huang-gui-zhi-dui-yao.html"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
@@ -83,5 +129,6 @@ fi
 
 echo "DISEÑO MÓVIL DUÌ YÀO INSTALADO"
 echo "Los cuatro bloques de orientación ahora son filas compactas en pantallas de hasta 720 px."
+echo "Las 102 fichas conservan tablas compactas de dos columnas en teléfono."
 echo "Respaldo: $BACKUP_DIR"
 echo "Prueba: https://www.acupuncturetests.com/study-guide/comparisons/dui-yao.html?mobile=$REVISION"
