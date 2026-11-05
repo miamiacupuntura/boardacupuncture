@@ -1249,19 +1249,11 @@ if (!$ises) {
 }
 $languageurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $languageparams);
 $herbologyurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
-$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
-    'area' => 'herbology',
-    'view' => 'library',
-]);
 $formulasurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $ises ? ['lang' => 'es'] : []);
 $duiyaourl = new moodle_url($ises
     ? '/study-guide/comparisons/dui-yao-es.html'
     : '/study-guide/comparisons/dui-yao.html');
 $dashboardurl = new moodle_url('/my/');
-$guidelinepath = $ises
-    ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
-    : '/study-guide/guidelines/chinese-herbal-medicine.html';
-$guidelineurl = new moodle_url($guidelinepath, ['return' => $pageurl->out(false)]);
 $benskymapurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $ises ? ['lang' => 'es'] : []);
 $singleherbroutetitle = $ises ? 'Todas las categorías de hierbas' : 'All herb categories';
 if ($singleherbcurrentindex === 34) {
@@ -1492,17 +1484,9 @@ ob_start();
             </button>
         </div>
         <nav class="single-herbs-guide__actions" aria-label="Single Herbs Study Guide navigation">
-            <div class="single-herbs-guide__module-switcher" aria-label="<?php echo s($ises ? 'Cambiar módulo de Herbología China' : 'Switch Chinese Herbology module'); ?>">
-                <a class="single-herbs-guide__back single-herbs-guide__back--active" aria-current="page" href="<?php echo $categoryindexurl->out(false); ?>">Single Herbs</a>
-                <a class="single-herbs-guide__back" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
-                <a class="single-herbs-guide__back" href="<?php echo $formulasurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
-            </div>
             <div class="single-herbs-guide__utility-actions">
-                <a class="single-herbs-guide__back" href="<?php echo $guidelineurl->out(false); ?>"><?php echo s($ises ? '← Guía de Board · Medicina Herbal China' : '← Board Guideline · Chinese Herbal Medicine'); ?></a>
                 <a class="single-herbs-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                <a class="single-herbs-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Biblioteca' : '← Library'; ?></a>
-                <a class="single-herbs-guide__back" href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
-                <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
+                <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo s($ises ? '← Dashboard' : '← Back to Dashboard'); ?></a>
             </div>
         </nav>
     </header>
