@@ -388,12 +388,10 @@
     addStudyGuideLinks();
     addBoardGuidelinesPortal();
     addContinuingEducationPortal();
-    addModuleSchoolPortal();
     document.addEventListener('DOMContentLoaded', () => {
         addStudyGuideLinks();
         addBoardGuidelinesPortal();
         addContinuingEducationPortal();
-        addModuleSchoolPortal();
     }, {once: true});
 
     let refreshTimer;
@@ -403,7 +401,6 @@
             addStudyGuideLinks();
             addBoardGuidelinesPortal();
             addContinuingEducationPortal();
-            addModuleSchoolPortal();
         }, 80);
     });
     observer.observe(document.documentElement, {childList: true, subtree: true});
