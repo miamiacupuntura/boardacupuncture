@@ -96,7 +96,7 @@ foreach ($files as $path) {
             $tag,
             $html,
             1,
-            $count
+            $styleCount
         );
     } else {
         $updated = preg_replace(
@@ -104,20 +104,44 @@ foreach ($files as $path) {
             "\${1}" . $tag,
             $html,
             1,
-            $count
+            $styleCount
         );
     }
-    if ($count !== 1 || $updated === null) {
-        throw new RuntimeException("No se pudo actualizar " . basename($path));
+    if ($styleCount !== 1 || $updated === null) {
+        throw new RuntimeException("No se pudo actualizar el CSS en " . basename($path));
+    }
+
+    $basename = basename($path);
+    $isSpanish = substr($basename, -8) === "-es.html";
+    $alternate = $isSpanish
+        ? preg_replace("/-es\\.html$/", ".html", $basename)
+        : preg_replace("/\\.html$/", "-es.html", $basename);
+    $languageLabel = $isSpanish ? "English" : "Español";
+    $dashboardLabel = $isSpanish ? "← Dashboard" : "← Back to Dashboard";
+    $actions = "<span style=\"display:flex;gap:8px;flex-wrap:wrap\">"
+        . "<a class=\"comparison-back\" href=\"{$alternate}\">{$languageLabel}</a>"
+        . "<a class=\"comparison-back\" href=\"/my/\">{$dashboardLabel}</a></span>";
+    $updated = preg_replace(
+        "#(<header class=\"comparison-topbar\"><div class=\"comparison-shell comparison-topbar__inner\"[^>]*>.*?</a>)<span style=\"display:flex;gap:8px;flex-wrap:wrap\">.*?</span></div></header>#s",
+        "\${1}" . $actions . "</div></header>",
+        $updated,
+        1,
+        $headerCount
+    );
+    if ($headerCount !== 1 || $updated === null) {
+        throw new RuntimeException("No se pudo actualizar la cabecera en " . $basename);
     }
     file_put_contents($path, $updated, LOCK_EX);
 }
-echo "Fichas Duì Yào actualizadas: " . count($files) . PHP_EOL;
+echo "Fichas Duì Yào actualizadas: " . count($files) . " (CSS y botones)" . PHP_EOL;
 ' "$TARGET_DIR" '20261105-3'
 
 grep -Fq 'dui-yao-mobile.css?v=20261105-3' "$TARGET_DIR/dui-yao.html"
 grep -Fq '[data-student-onboarding] .comparison-card' "$TARGET_DIR/dui-yao-mobile.css"
 grep -Fq 'dui-yao-mobile.css?v=20261105-3' "$TARGET_DIR/ma-huang-gui-zhi-dui-yao.html"
+grep -Fq '← Back to Dashboard' "$TARGET_DIR/ma-huang-gui-zhi-dui-yao.html"
+! grep -Fq '← Back to Duì Yào' "$TARGET_DIR/ma-huang-gui-zhi-dui-yao.html"
+! grep -Fq '← Study Guide' "$TARGET_DIR/dui-yao.html"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
@@ -130,5 +154,6 @@ fi
 echo "DISEÑO MÓVIL DUÌ YÀO INSTALADO"
 echo "Los cuatro bloques de orientación ahora son filas compactas en pantallas de hasta 720 px."
 echo "Las 102 fichas conservan tablas compactas de dos columnas en teléfono."
+echo "Los únicos botones de acción son idioma y Dashboard."
 echo "Respaldo: $BACKUP_DIR"
 echo "Prueba: https://www.acupuncturetests.com/study-guide/comparisons/dui-yao.html?mobile=$REVISION"
