@@ -394,6 +394,12 @@
       restoreReadingPosition(params);
       updateLanguageLink();
       els.status.hidden = true;
+      if (params.get('focus') === 'herb') {
+        requestAnimationFrame(() => {
+          els.search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          els.search.focus({ preventScroll: true });
+        });
+      }
     } catch (error) {
       console.error(error);
       els.status.textContent = copy.loadingError;

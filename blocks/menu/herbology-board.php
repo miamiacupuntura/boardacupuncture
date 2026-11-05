@@ -32,7 +32,7 @@ if ($sectionkey !== '') {
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $dashboardurl = new moodle_url('/my/');
-$singleherbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php');
+$singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs']);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas']);
 
 $PAGE->set_url($pageurl);
@@ -427,13 +427,59 @@ if ($track === 'herbs' && $sectionkey !== '' && isset($clearheatsections[$sectio
 } else if ($sectionkey !== '') {
     $sectionkey = '';
 }
+$comparisonfile = static function(string $filename) use ($CFG): string {
+    $filename = basename($filename);
+    $directories = [
+        $CFG->dirroot . '/study-guide/comparisons',
+        '/var/www/acupuncturetests-study-guide/current/comparisons',
+        dirname($CFG->dirroot) . '/study-guide/comparisons',
+        '/var/www/html/study-guide/comparisons',
+    ];
+    foreach (array_unique($directories) as $directory) {
+        $path = rtrim($directory, '/') . '/' . $filename;
+        if (is_readable($path)) {
+            return $path;
+        }
+    }
+    return '';
+};
+
 $formulacategories = [];
 $formulatotals = [
     'questions' => 0,
     'formulas' => 0,
     'categories' => 0,
 ];
+$herbcategories = [];
+$herbtotals = [
+    'questions' => 0,
+    'chapters' => 0,
+    'charts' => 0,
+];
 if ($track === 'herbs') {
+    $herbbankpath = $comparisonfile('herb-comparison-bank-data.json');
+    if ($herbbankpath !== '') {
+        $herbbank = json_decode(file_get_contents($herbbankpath), true);
+        if (is_array($herbbank)) {
+            $herbtotals['questions'] = (int)($herbbank['totals']['questions'] ?? 0);
+            $herbtotals['chapters'] = (int)($herbbank['totals']['chapters'] ?? 0);
+            $herbtotals['charts'] = (int)($herbbank['totals']['charts'] ?? 0);
+            foreach ($herbbank['chapters'] ?? [] as $chapter) {
+                $number = (int)($chapter['number'] ?? 0);
+                $name = trim((string)($chapter['title'] ?? ''));
+                if ($number < 1 || $name === '') {
+                    continue;
+                }
+                $herbcategories[] = [
+                    'number' => $number,
+                    'name' => $name,
+                    'questions' => (int)($chapter['questionCount'] ?? 0),
+                    'charts' => (int)($chapter['chartCount'] ?? 0),
+                ];
+            }
+        }
+    }
+
     $sections = $DB->get_records_select(
         'course_sections',
         'course = :courseid AND section BETWEEN :firstsection AND :lastsection',
@@ -460,11 +506,12 @@ if ($track === 'herbs') {
         ];
     }
 } else {
-    $formulabankpath = $CFG->dirroot . '/study-guide/comparisons/formula-practice-data.json';
-    if (is_readable($formulabankpath)) {
+    $formulabankpath = $comparisonfile('formula-practice-data.json');
+    if ($formulabankpath !== '') {
         $formulabank = json_decode(file_get_contents($formulabankpath), true);
         if (is_array($formulabank)) {
-            $manifestpath = $CFG->dirroot . '/study-guide/comparisons/formula-modifications-manifest.json';
+            $formulabankdir = dirname($formulabankpath);
+            $manifestpath = $formulabankdir . '/formula-modifications-manifest.json';
             if (is_readable($manifestpath)) {
                 $manifest = json_decode(file_get_contents($manifestpath), true);
                 $knowncategories = array_column($formulabank['categories'] ?? [], null, 'key');
@@ -474,7 +521,7 @@ if ($track === 'herbs') {
                 ), true);
                 foreach ($manifest['files'] ?? [] as $filename) {
                     $safe = basename((string)$filename);
-                    $supplementpath = $CFG->dirroot . '/study-guide/comparisons/' . $safe;
+                    $supplementpath = $formulabankdir . '/' . $safe;
                     if (!is_readable($supplementpath)) {
                         continue;
                     }
@@ -527,6 +574,7 @@ if ($track === 'herbs') {
 }
 
 $formulapracticeurl = new moodle_url('/study-guide/comparisons/formula-practice.html');
+$herbpracticeurl = new moodle_url('/study-guide/comparisons/herb-comparison-bank.html');
 
 echo $OUTPUT->header();
 ?>
@@ -543,14 +591,65 @@ echo $OUTPUT->header();
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>>Formulas</a>
         </nav>
         <div class="herb-board__summary" aria-label="Practice features">
-            <span>Multiple choice</span>
-            <span>Mock-style feedback</span>
-            <span>Flexible session size</span>
-            <span>Exam history</span>
+            <?php if ($track === 'herbs') { ?>
+                <span>Questions and explanations</span>
+                <span>Recall flashcards</span>
+                <span>Comparison charts</span>
+                <span>Saved browser progress</span>
+            <?php } else { ?>
+                <span>Multiple choice</span>
+                <span>Mock-style feedback</span>
+                <span>Flexible session size</span>
+                <span>Exam history</span>
+            <?php } ?>
         </div>
     </header>
 
     <?php if ($track === 'herbs') { ?>
+        <section class="herb-board__panel" aria-labelledby="herb-board-practice-title">
+            <div class="herb-board__panel-heading">
+                <div>
+                    <h3 id="herb-board-practice-title">Choose a Single Herbs practice focus</h3>
+                    <p>Open the complete comparison bank, switch to flashcards or begin with a study chapter.</p>
+                </div>
+            </div>
+            <div class="herb-board__summary herb-board__summary--panel" aria-label="Single Herbs bank totals">
+                <span><strong><?php echo $herbtotals['questions']; ?></strong> verified questions</span>
+                <span><strong><?php echo $herbtotals['chapters']; ?></strong> study chapters</span>
+                <span><strong><?php echo $herbtotals['charts']; ?></strong> comparison charts</span>
+            </div>
+            <div class="herb-board__launches">
+                <a class="herb-board__launch" href="<?php echo $herbpracticeurl->out(false); ?>?chapter=0&amp;mode=questions">
+                    <strong>Full question bank</strong>
+                    <span>Study every verified comparison question with its complete explanation.</span>
+                </a>
+                <a class="herb-board__launch" href="<?php echo $herbpracticeurl->out(false); ?>?chapter=0&amp;mode=questions&amp;focus=herb">
+                    <strong>Practice by herb</strong>
+                    <span>Search for one herb, review its comparisons and move selected questions into flashcards.</span>
+                </a>
+            </div>
+            <h4 class="herb-board__subheading">Practice by chapter</h4>
+            <div class="herb-board__topics">
+                <?php foreach ($herbcategories as $category) {
+                    $categoryurl = new moodle_url('/study-guide/comparisons/herb-comparison-bank.html', [
+                        'chapter' => $category['number'],
+                        'mode' => 'questions',
+                    ]);
+                ?>
+                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                        <strong><?php echo $category['questions']; ?></strong>
+                        <span><?php echo s($category['name']); ?></span>
+                    </a>
+                <?php } ?>
+            </div>
+            <?php if (!$herbcategories) { ?>
+                <div class="herb-board__notice">
+                    The Single Herbs comparison bank is not installed on this server yet. Deploy the bank data to enable chapter practice.
+                </div>
+            <?php } ?>
+        </section>
+
+        <?php if ($selectedbensky) { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-topics-title">
             <div class="herb-board__panel-heading">
                 <div>
@@ -680,6 +779,7 @@ echo $OUTPUT->header();
                 </div>
             </div>
         </section>
+        <?php } ?>
 
         <?php if ($selectedbensky) { ?>
             <section class="herb-board__panel herb-board__clear-heat<?php echo $selectedbenskygroup === 'downward-draining'
@@ -823,7 +923,7 @@ echo $OUTPUT->header();
         </section>
     <?php } ?>
 
-    <?php if ($track === 'herbs') { ?>
+    <?php if ($track === 'herbs' && !$herbcategories) { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-session-title">
             <div class="herb-board__panel-heading">
                 <div>
