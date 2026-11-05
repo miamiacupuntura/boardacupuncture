@@ -344,7 +344,6 @@ $spanishcopy = [
     'Study Guide' => 'Guía de estudio',
     'Study Library' => 'Biblioteca de estudio',
     'Library →' => 'Biblioteca →',
-    '← Board Guideline · Chinese Herbal Medicine' => '← Guía de Board · Medicina Herbal China',
     '← Back to Dashboard' => '← Volver al Dashboard',
     'Open Study Guide →' => 'Abrir guía de estudio →',
     'Main Study Guides' => 'Guías principales',
@@ -463,14 +462,6 @@ if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
     $pageurl->param('view', 'library');
-}
-$currentguidelineurl = null;
-if ($areaid === 'herbology') {
-    $currentguidelineurl = new moodle_url($ises
-        ? '/study-guide/guidelines/chinese-herbal-medicine-es.html'
-        : '/study-guide/guidelines/chinese-herbal-medicine.html', [
-        'return' => $pageurl->out(false),
-    ]);
 }
 $languageparams = ['area' => $areaid];
 if ($showlibrary) {
@@ -602,9 +593,6 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__back" href="<?php echo $chapterlisturl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
             <?php elseif ($areaid === 'herbology'): ?>
                 <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($tr('Library →')); ?></a>
-            <?php endif; ?>
-            <?php if ($currentguidelineurl !== null): ?>
-                <a class="subject-study-guide__back" href="<?php echo $currentguidelineurl->out(false); ?>"><?php echo s($tr('← Board Guideline · Chinese Herbal Medicine')); ?></a>
             <?php endif; ?>
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
         </nav>
