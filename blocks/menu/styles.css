@@ -1611,92 +1611,6 @@ a.herb-board__domain:focus {
     font-size: .76rem;
 }
 
-.herb-board__author {
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #b9ddd5;
-    border-top: 4px solid #087c69;
-    border-radius: 10px;
-    background: #f3faf8;
-}
-
-.herb-board__author-heading {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 17px;
-}
-
-.herb-board__author-heading span {
-    color: #087c69;
-    font-size: .72rem;
-    font-weight: 900;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-}
-
-.herb-board__author-heading h4 {
-    margin: 3px 0 0;
-    font-size: 1.1rem;
-}
-
-.herb-board__author-heading small {
-    max-width: 360px;
-    color: #52677a;
-    line-height: 1.4;
-}
-
-.herb-board__author-form {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 13px;
-}
-
-.herb-board__field {
-    display: block;
-    margin: 0;
-}
-
-.herb-board__field--wide {
-    grid-column: 1 / -1;
-}
-
-.herb-board__field > span {
-    display: block;
-    margin-bottom: 5px;
-    color: #17324d;
-    font-size: .78rem;
-    font-weight: 800;
-}
-
-.herb-board__field input,
-.herb-board__field select,
-.herb-board__field textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 9px 10px;
-    border: 1px solid #aebfc9;
-    border-radius: 7px;
-    background: #fff;
-    color: #17232a;
-}
-
-.herb-board__field textarea {
-    resize: vertical;
-}
-
-.herb-board__author-actions button {
-    min-height: 44px;
-    padding: 10px 16px;
-    border: 0;
-    border-radius: 7px;
-    background: #087c69;
-    color: #fff;
-    font-weight: 850;
-    cursor: pointer;
-}
-
 @media (max-width: 900px) {
     .herb-board__topics,
     .herb-board__setup,
@@ -1724,14 +1638,12 @@ a.herb-board__domain:focus {
     .herb-board__setup,
     .herb-board__domains,
     .herb-board__shortages,
-    .herb-board__author-form,
     .herb-board__launches,
     .herb-board__subcategories-grid {
         grid-template-columns: 1fr;
     }
 
-    .herb-board__domain-tools,
-    .herb-board__author-heading {
+    .herb-board__domain-tools {
         align-items: stretch;
         flex-direction: column;
     }
