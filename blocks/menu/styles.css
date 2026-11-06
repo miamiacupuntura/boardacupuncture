@@ -549,6 +549,12 @@
     width: 100%;
 }
 
+.board-hub__card--board-level .board-hub__action {
+    min-height: 48px;
+    padding: 10px 9px;
+    font-size: .82rem;
+}
+
 .board-hub__card--board-level .study-guide-dashboard-link {
     width: auto;
     flex: 1 1 calc(50% - 8px);
@@ -568,13 +574,13 @@
 .board-hub__card--board-level .board-hub__action--board-domains {
     border: 0;
     background: #6d4bc3;
+    flex-basis: 100%;
     order: 3;
 }
 
 .board-hub__card--board-level.board-hub__card--herbology .board-hub__action--board-mock,
-.board-hub__card--board-level.board-hub__card--herbology .study-guide-dashboard-link,
-.board-hub__card--board-level.board-hub__card--herbology .board-hub__action--board-domains {
-    flex-basis: calc(33.333% - 8px);
+.board-hub__card--board-level.board-hub__card--herbology .study-guide-dashboard-link {
+    flex-basis: calc(50% - 8px);
     min-width: 0;
 }
 

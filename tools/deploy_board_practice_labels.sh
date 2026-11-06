@@ -97,7 +97,7 @@ if (count($data["domains"] ?? []) !== 6) {
     throw new RuntimeException("The Herbology Domain bank must contain six Domain buckets.");
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-bank.json"
-grep -Fq "'v' => '20261106-6'" "$TEMP_DIR/theme/moove/layout/drawers.php"
+grep -Fq "'v' => '20261106-7'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
