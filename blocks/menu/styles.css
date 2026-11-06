@@ -1728,11 +1728,23 @@ a.herb-board__domain:focus {
     background: #fbfaff;
 }
 
-.herb-board__exam-progress > strong {
-    display: block;
+.herb-board__exam-progress-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     margin-bottom: 8px;
+}
+
+.herb-board__exam-progress-summary strong {
     color: #5633ad;
     font-size: .82rem;
+}
+
+.herb-board__exam-progress-summary .herb-board__exam-score {
+    color: #087c69;
+    text-align: right;
 }
 
 .herb-board__exam-progress-bar {

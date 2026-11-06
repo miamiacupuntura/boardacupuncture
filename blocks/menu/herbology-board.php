@@ -344,6 +344,7 @@ if (exam) {
     const navigation = exam.querySelector('.herb-board__exam-navigation');
     const result = document.getElementById('herbology-domain-exam-result');
     const progressText = exam.querySelector('.herb-board__exam-progress-text');
+    const scoreText = exam.querySelector('.herb-board__exam-score');
     const progressBar = exam.querySelector('.herb-board__exam-progress-bar span');
     const sourceViewer = document.querySelector('[data-exam-source-viewer]');
     const sourceFrame = sourceViewer?.querySelector('[data-exam-source-frame]');
@@ -463,6 +464,11 @@ if (exam) {
         }
     };
 
+    const updateScore = () => {
+        const percentage = answered > 0 ? Math.round((score / answered) * 100) : 0;
+        scoreText.textContent = `${exam.dataset.scoreWord}: ${percentage}% (${score}/${answered})`;
+    };
+
     const showQuestion = (question, shouldScroll = true) => {
         questions.forEach(item => item.hidden = item !== question);
         currentQuestion = question;
@@ -507,15 +513,17 @@ if (exam) {
         const verdict = feedback.querySelector('.herb-board__exam-verdict');
         verdict.textContent = lastCorrect ? exam.dataset.correctFeedback : exam.dataset.incorrectFeedback;
         feedback.hidden = false;
+        updateScore();
         updateNavigation();
     };
 
     const finishExam = () => {
         const connector = exam.dataset.scoreConnector || 'of';
         const correctWord = exam.dataset.correctWord || 'correct';
+        const percentage = Math.round((score / questions.length) * 100);
         progressText.textContent = exam.dataset.completedWord;
         progressBar.style.width = '100%';
-        result.textContent = `${score} ${connector} ${questions.length} ${correctWord}`;
+        result.textContent = `${score} ${connector} ${questions.length} ${correctWord} · ${percentage}%`;
         result.hidden = false;
         navigation.hidden = true;
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
@@ -554,6 +562,7 @@ if (exam) {
         showFollowingQuestion();
     });
 
+    updateScore();
     addNextQuestion();
 }
 JS);
@@ -1524,6 +1533,7 @@ echo $OUTPUT->header();
                     data-exam-mode="<?php echo s($exammode); ?>"
                     data-score-connector="<?php echo $ises ? 'de' : 'of'; ?>"
                     data-correct-word="<?php echo $ises ? 'correctas' : 'correct'; ?>"
+                    data-score-word="<?php echo $ises ? 'Aciertos' : 'Accuracy'; ?>"
                     data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
                     data-correct-feedback="<?php echo $ises ? 'Correcto' : 'Correct'; ?>"
                     data-incorrect-feedback="<?php echo $ises ? 'Incorrecto' : 'Incorrect'; ?>"
@@ -1544,7 +1554,10 @@ echo $OUTPUT->header();
                             : 'Answer or skip one question at a time. Mock-style feedback appears after every answer.'; ?></p>
                     </div>
                     <div class="herb-board__exam-progress" aria-live="polite">
-                        <strong class="herb-board__exam-progress-text"></strong>
+                        <div class="herb-board__exam-progress-summary">
+                            <strong class="herb-board__exam-progress-text"></strong>
+                            <strong class="herb-board__exam-score"></strong>
+                        </div>
                         <div class="herb-board__exam-progress-bar"><span></span></div>
                     </div>
                     <?php foreach ($mixedquestions as $questionnumber => $question) { ?>
