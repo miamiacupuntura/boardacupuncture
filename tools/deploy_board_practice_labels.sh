@@ -104,6 +104,8 @@ grep -Fq 'Examen adaptativo' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-previous' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-next' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'data-next-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'reviewingPending' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-score' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Math.round((score / answered) * 100)' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'firstUnanswered' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -238,7 +240,7 @@ grep -Fq "\$normalizeherbname((string)(\$herbcard['latin'] ?? ''))" "$TEMP_DIR/b
 grep -Fq 'Board nomenclature' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Nomenclatura Board' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__exam-nomenclature' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110626;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110627;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do

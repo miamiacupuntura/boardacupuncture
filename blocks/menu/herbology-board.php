@@ -356,6 +356,7 @@ if (exam) {
     const history = [];
     let historyIndex = -1;
     let currentQuestion = null;
+    let reviewingPending = false;
     let answered = 0;
     let score = 0;
     let activeSourceLink = null;
@@ -450,14 +451,25 @@ if (exam) {
         return remaining.splice(nextIndex, 1)[0];
     };
 
+    const getPendingQuestions = () => questions
+        .filter(question => question.dataset.answered !== '1')
+        .sort((left, right) => Number(left.dataset.displayNumber) - Number(right.dataset.displayNumber));
+
     const updateNavigation = () => {
+        const pendingQuestions = getPendingQuestions();
+        if (reviewingPending) {
+            previousButton.disabled = pendingQuestions.length < 2;
+            nextButton.textContent = pendingQuestions.length > 0
+                ? exam.dataset.nextPendingWord
+                : exam.dataset.resultsWord;
+            return;
+        }
         previousButton.disabled = historyIndex <= 0;
         const hasForwardHistory = historyIndex < history.length - 1;
         const hasNewQuestion = remaining.length > 0;
-        const hasUnanswered = questions.some(question => question.dataset.answered !== '1');
         if (hasForwardHistory || hasNewQuestion) {
             nextButton.textContent = exam.dataset.nextWord;
-        } else if (hasUnanswered) {
+        } else if (pendingQuestions.length > 0) {
             nextButton.textContent = exam.dataset.pendingWord;
         } else {
             nextButton.textContent = exam.dataset.resultsWord;
@@ -474,8 +486,16 @@ if (exam) {
         currentQuestion = question;
         const number = Number(question.dataset.displayNumber);
         question.querySelector('.herb-board__exam-question-number').textContent = `${exam.dataset.questionWord} ${number}`;
-        progressText.textContent = `${exam.dataset.questionWord} ${number} ${exam.dataset.scoreConnector} ${questions.length}`;
-        progressBar.style.width = `${(number / questions.length) * 100}%`;
+        if (reviewingPending) {
+            const pendingQuestions = getPendingQuestions();
+            const pendingPosition = pendingQuestions.indexOf(question) + 1;
+            progressText.textContent = `${exam.dataset.pendingLabel} ${pendingPosition} ${exam.dataset.scoreConnector} ${pendingQuestions.length}`
+                + ` · ${exam.dataset.questionWord} ${number} ${exam.dataset.scoreConnector} ${questions.length}`;
+            progressBar.style.width = `${(answered / questions.length) * 100}%`;
+        } else {
+            progressText.textContent = `${exam.dataset.questionWord} ${number} ${exam.dataset.scoreConnector} ${questions.length}`;
+            progressBar.style.width = `${(number / questions.length) * 100}%`;
+        }
         updateNavigation();
         if (shouldScroll) {
             question.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -513,6 +533,9 @@ if (exam) {
         const verdict = feedback.querySelector('.herb-board__exam-verdict');
         verdict.textContent = lastCorrect ? exam.dataset.correctFeedback : exam.dataset.incorrectFeedback;
         feedback.hidden = false;
+        if (reviewingPending) {
+            progressBar.style.width = `${(answered / questions.length) * 100}%`;
+        }
         updateScore();
         updateNavigation();
     };
@@ -530,6 +553,19 @@ if (exam) {
     };
 
     const showPreviousQuestion = () => {
+        if (reviewingPending) {
+            const pendingQuestions = getPendingQuestions();
+            const currentNumber = Number(currentQuestion?.dataset.displayNumber || 0);
+            const previousPending = [...pendingQuestions]
+                .reverse()
+                .find(question => Number(question.dataset.displayNumber) < currentNumber)
+                || pendingQuestions[pendingQuestions.length - 1];
+            if (previousPending && previousPending !== currentQuestion) {
+                historyIndex = history.indexOf(previousPending);
+                showQuestion(previousPending);
+            }
+            return;
+        }
         if (historyIndex <= 0) {
             return;
         }
@@ -538,6 +574,20 @@ if (exam) {
     };
 
     const showFollowingQuestion = () => {
+        if (reviewingPending) {
+            const pendingQuestions = getPendingQuestions();
+            if (pendingQuestions.length === 0) {
+                finishExam();
+                return;
+            }
+            const currentNumber = Number(currentQuestion?.dataset.displayNumber || 0);
+            const nextPending = pendingQuestions
+                .find(question => Number(question.dataset.displayNumber) > currentNumber)
+                || pendingQuestions[0];
+            historyIndex = history.indexOf(nextPending);
+            showQuestion(nextPending);
+            return;
+        }
         if (historyIndex < history.length - 1) {
             historyIndex++;
             showQuestion(history[historyIndex]);
@@ -548,6 +598,7 @@ if (exam) {
         }
         const firstUnanswered = history.findIndex(question => question.dataset.answered !== '1');
         if (firstUnanswered >= 0) {
+            reviewingPending = true;
             historyIndex = firstUnanswered;
             showQuestion(history[historyIndex]);
         } else {
@@ -1540,6 +1591,8 @@ echo $OUTPUT->header();
                     data-previous-word="<?php echo $ises ? '← Anterior' : '← Previous'; ?>"
                     data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
                     data-pending-word="<?php echo $ises ? 'Ir a pendiente →' : 'Review unanswered →'; ?>"
+                    data-next-pending-word="<?php echo $ises ? 'Siguiente pendiente →' : 'Next unanswered →'; ?>"
+                    data-pending-label="<?php echo $ises ? 'Pendiente' : 'Unanswered'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
                     data-completed-word="<?php echo $ises ? 'Examen completado' : 'Exam completed'; ?>">
                     <div class="herb-board__exam-heading">
