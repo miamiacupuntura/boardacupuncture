@@ -100,6 +100,7 @@ grep -Fq 'herb-board__exam-next' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-exam-source-link' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-exam-source-viewer' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Volver a la pregunta' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "'/^RA-\\d{3}$/'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__source-window' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq "data-exam-mode" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__domain-paging--top' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -122,10 +123,10 @@ if (count($data["domains"] ?? []) !== 6) {
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 $total = array_sum(array_map("count", $data["domains"] ?? []));
-if ($total !== 1479
-        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 682
+if ($total !== 1313
+        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 516
         || ($data["status"] ?? "") !== "practice-ready"
-        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v4-source-cards") {
+        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v5-board-scope") {
     throw new RuntimeException("The classified Herbology candidate inventory is incomplete.");
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
@@ -157,6 +158,9 @@ foreach ($data["domains"] ?? [] as $domain => $questions) {
     }
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq 'RA-SAFE-001' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+! grep -Fiq 'which pinyin name corresponds' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq '$plugin->version   = 2026110620;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do

@@ -165,6 +165,17 @@ if ($track === 'domains' && is_readable($domaincandidatepath)) {
         $candidateversion = (string)($domaincandidates['classificationVersion'] ?? '');
         $importedversion = (string)($domainbank['imports']['classifiedContentVersion'] ?? '');
         if ($candidateversion !== '' && $candidateversion !== $importedversion) {
+            // Remove the earlier English-name-to-pinyin roster items. They tested
+            // translation recall rather than a Board-level clinical or safety decision.
+            if (isset($domainbank['domains']['scope_aliases'])) {
+                $domainbank['domains']['scope_aliases'] = array_values(array_filter(
+                    $domainbank['domains']['scope_aliases'],
+                    static fn(array $question): bool => preg_match(
+                        '/^RA-\d{3}$/',
+                        (string)($question['questionId'] ?? '')
+                    ) !== 1
+                ));
+            }
             $existinglocations = [];
             foreach ($domainbank['domains'] as $existingdomainid => $existingquestions) {
                 foreach ($existingquestions as $existingindex => $existingquestion) {
