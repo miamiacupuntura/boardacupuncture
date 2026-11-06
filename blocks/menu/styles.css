@@ -2004,6 +2004,10 @@ a.herb-board__domain:focus {
     color: #5633ad;
 }
 
+.herb-board__exam-submit .herb-board__exam-restart {
+    margin-left: auto;
+}
+
 .herb-board__exam-submit button:disabled {
     border-color: #cbd3da;
     background: #eef1f4;

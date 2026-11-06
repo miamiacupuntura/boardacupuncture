@@ -341,6 +341,7 @@ if (exam) {
     const questions = [...exam.querySelectorAll('.herb-board__exam-question')];
     const previousButton = exam.querySelector('.herb-board__exam-previous');
     const nextButton = exam.querySelector('.herb-board__exam-next');
+    const restartButton = exam.querySelector('.herb-board__exam-restart');
     const navigation = exam.querySelector('.herb-board__exam-navigation');
     const result = document.getElementById('herbology-domain-exam-result');
     const progressText = exam.querySelector('.herb-board__exam-progress-text');
@@ -549,7 +550,36 @@ if (exam) {
         result.textContent = `${score} ${connector} ${questions.length} ${correctWord} · ${percentage}%`;
         result.hidden = false;
         navigation.hidden = true;
+        restartButton.hidden = false;
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
+    };
+
+    const restartExam = () => {
+        questions.forEach(question => {
+            question.hidden = true;
+            question.classList.remove('is-correct', 'is-incorrect');
+            delete question.dataset.answered;
+            delete question.dataset.wasCorrect;
+            delete question.dataset.displayNumber;
+            question.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+                input.disabled = false;
+            });
+            question.querySelector('.herb-board__exam-feedback').hidden = true;
+        });
+        remaining = [...questions];
+        history.length = 0;
+        historyIndex = -1;
+        currentQuestion = null;
+        reviewingPending = false;
+        answered = 0;
+        score = 0;
+        result.textContent = '';
+        result.hidden = true;
+        restartButton.hidden = true;
+        navigation.hidden = false;
+        updateScore();
+        addNextQuestion();
     };
 
     const showPreviousQuestion = () => {
@@ -608,6 +638,7 @@ if (exam) {
 
     previousButton.addEventListener('click', showPreviousQuestion);
     nextButton.addEventListener('click', showFollowingQuestion);
+    restartButton.addEventListener('click', restartExam);
     exam.addEventListener('submit', event => {
         event.preventDefault();
         showFollowingQuestion();
@@ -1695,6 +1726,9 @@ echo $OUTPUT->header();
                             </button>
                         </div>
                         <output id="herbology-domain-exam-result" hidden></output>
+                        <button class="herb-board__exam-restart" type="button" hidden>
+                            <?php echo $ises ? 'Reiniciar examen' : 'Restart exam'; ?>
+                        </button>
                     </div>
                 </form>
                 <div class="herb-board__source-viewer" data-exam-source-viewer hidden
