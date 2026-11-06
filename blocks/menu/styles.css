@@ -1418,6 +1418,14 @@ a.herb-board__domain:focus {
     line-height: 1.45;
 }
 
+.herb-board__domain-source {
+    display: block;
+    margin-top: 9px;
+    color: #6b5c83;
+    font-size: .74rem;
+    font-weight: 750;
+}
+
 .herb-board__domain-status {
     display: block;
     margin-top: 13px;
@@ -1473,6 +1481,32 @@ a.herb-board__domain:focus {
 .herb-board__domain-question h4 {
     margin: 6px 0;
     font-size: .95rem;
+}
+
+.herb-board__approve-form {
+    margin-top: 12px;
+}
+
+.herb-board__approve-form button {
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 7px;
+    background: #6d4bc3;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.herb-board__approval-blocked {
+    margin-top: 12px;
+    padding: 9px 11px;
+    border-left: 3px solid #d97706;
+    border-radius: 6px;
+    background: #fff7ed;
+    color: #8a4b10;
+    font-size: .78rem;
+    font-weight: 750;
 }
 
 .herb-board__domain-question details {

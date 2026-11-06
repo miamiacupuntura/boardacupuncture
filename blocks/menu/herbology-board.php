@@ -12,6 +12,7 @@ if (!in_array($track, ['herbs', 'formulas', 'domains'], true)) {
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 $mixdomains = optional_param('mix', 0, PARAM_BOOL);
+$domainpage = max(0, optional_param('page', 0, PARAM_INT));
 
 $membershipcourseid = 116;
 $membershipcourse = $DB->get_record('course', ['id' => $membershipcourseid], '*', MUST_EXIST);
@@ -37,6 +38,9 @@ if ($domainkey !== '') {
 }
 if ($mixdomains) {
     $pageparams['mix'] = 1;
+}
+if ($domainpage > 0) {
+    $pageparams['page'] = $domainpage;
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $dashboardurl = new moodle_url('/my/');
@@ -84,25 +88,137 @@ $domainblueprint = [
 ];
 $domainseedpath = __DIR__ . '/herbology-domain-bank.json';
 $domainbankdirectory = $CFG->dataroot . '/board-domain-banks';
-make_writable_directory($domainbankdirectory);
+if ($track === 'domains') {
+    make_writable_directory($domainbankdirectory);
+}
 $domainbankpath = $domainbankdirectory . '/herbology-domain-bank.json';
-if (!is_readable($domainbankpath) && is_readable($domainseedpath)) {
+if ($track === 'domains' && !is_readable($domainbankpath) && is_readable($domainseedpath)) {
     $seeddata = file_get_contents($domainseedpath);
     if ($seeddata === false || file_put_contents($domainbankpath, $seeddata, LOCK_EX) === false) {
         throw new RuntimeException('Unable to initialize the Herbology Domain question bank.');
     }
 }
 $domainbank = ['domains' => []];
-if (is_readable($domainbankpath)) {
+if ($track === 'domains' && is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
     if (is_array($decodedbank) && isset($decodedbank['domains']) && is_array($decodedbank['domains'])) {
         $domainbank = $decodedbank;
     }
 }
+$savedomainbank = static function(array $bank) use ($domainbankpath): void {
+    $encodedbank = json_encode(
+        $bank,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+    );
+    if (file_put_contents($domainbankpath, $encodedbank . PHP_EOL, LOCK_EX) === false) {
+        throw new RuntimeException('Unable to save the Herbology Domain question bank.');
+    }
+};
+$domaincandidatepath = __DIR__ . '/herbology-domain-candidates.json';
+$domaincandidateinventory = [];
+if ($track === 'domains' && is_readable($domaincandidatepath)) {
+    $domaincandidates = json_decode(file_get_contents($domaincandidatepath), true);
+    if (is_array($domaincandidates) && isset($domaincandidates['domains'])) {
+        $domaincandidateinventory = $domaincandidates['sourceInventory'] ?? [];
+        $candidateversion = (string)($domaincandidates['classificationVersion'] ?? '');
+        $importedversion = (string)($domainbank['imports']['classifiedContentVersion'] ?? '');
+        if ($candidateversion !== '' && $candidateversion !== $importedversion) {
+            $existingids = [];
+            foreach ($domainbank['domains'] as $existingquestions) {
+                foreach ($existingquestions as $existingquestion) {
+                    if (!empty($existingquestion['questionId'])) {
+                        $existingids[$existingquestion['questionId']] = true;
+                    }
+                }
+            }
+            foreach ($domaincandidates['domains'] as $candidateid => $candidatequestions) {
+                if (!isset($domainbank['domains'][$candidateid]) || !is_array($domainbank['domains'][$candidateid])) {
+                    $domainbank['domains'][$candidateid] = [];
+                }
+                foreach ($candidatequestions as $candidatequestion) {
+                    $candidatequestionid = $candidatequestion['questionId'] ?? '';
+                    if ($candidatequestionid !== '' && !isset($existingids[$candidatequestionid])) {
+                        $domainbank['domains'][$candidateid][] = $candidatequestion;
+                        $existingids[$candidatequestionid] = true;
+                    }
+                }
+            }
+            $domainbank['imports']['classifiedContentVersion'] = $candidateversion;
+            $domainbank['imports']['classifiedContentImportedAt'] = gmdate(DATE_ATOM);
+            $domainbank['classificationSummary'] = $domaincandidates['summary'] ?? [];
+            $domainbank['sourceInventory'] = $domaincandidateinventory;
+            $savedomainbank($domainbank);
+        }
+    }
+}
+$domaincandidateinventory = $domainbank['sourceInventory'] ?? $domaincandidateinventory;
 $canmanagedomains = is_siteadmin($USER)
     || has_capability('moodle/course:manageactivities', $membershipcontext, $USER->id);
 $domainids = array_column($domainblueprint, 'id');
 $domainaction = optional_param('domainaction', '', PARAM_ALPHA);
+if ($domainaction !== '' && $track !== 'domains') {
+    redirect($domainsurl, 'Domain question actions must be completed inside the Domain workspace.');
+}
+if ($domainaction === 'approvequestion') {
+    require_sesskey();
+    if (!$canmanagedomains) {
+        throw new required_capability_exception(
+            $membershipcontext,
+            'moodle/course:manageactivities',
+            'nopermissions',
+            ''
+        );
+    }
+    $submittedid = required_param('domainid', PARAM_ALPHANUMEXT);
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $domainreturnurl = new moodle_url('/blocks/menu/herbology-board.php', [
+        'track' => 'domains',
+        'domain' => $submittedid,
+    ]);
+    if (!in_array($submittedid, $domainids, true)) {
+        redirect($domainsurl, 'The selected Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+    }
+    $questionfound = false;
+    foreach ($domainbank['domains'][$submittedid] as &$bankquestion) {
+        if (($bankquestion['questionId'] ?? '') !== $questionid) {
+            continue;
+        }
+        $questionfound = true;
+        $questioncomplete = !empty($bankquestion['prompt'])
+            && count($bankquestion['options'] ?? []) >= 2
+            && !empty($bankquestion['correctLabel'])
+            && !empty($bankquestion['explanation'])
+            && !empty($bankquestion['source']['title'])
+            && !empty($bankquestion['source']['locator']);
+        if (!$questioncomplete) {
+            unset($bankquestion);
+            redirect(
+                $domainreturnurl,
+                'This question cannot be approved until its key, explanation and source are complete.',
+                null,
+                \core\output\notification::NOTIFY_ERROR
+            );
+        }
+        $bankquestion['feedbackStatus'] = 'verified';
+        $bankquestion['review'] = [
+            'status' => 'content-approved',
+            'reviewer' => fullname($USER),
+            'reviewedAt' => gmdate(DATE_ATOM),
+        ];
+        break;
+    }
+    unset($bankquestion);
+    if (!$questionfound) {
+        redirect($domainreturnurl, 'The selected question was not found.', null, \core\output\notification::NOTIFY_ERROR);
+    }
+    $savedomainbank($domainbank);
+    redirect(
+        $domainreturnurl,
+        'Question approved for future mixed exams.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 if ($domainaction === 'addquestion') {
     require_sesskey();
     if (!$canmanagedomains) {
@@ -193,13 +309,7 @@ if ($domainaction === 'addquestion') {
         'createdAt' => gmdate(DATE_ATOM),
         'createdBy' => (int)$USER->id,
     ];
-    $encodedbank = json_encode(
-        $domainbank,
-        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
-    );
-    if (file_put_contents($domainbankpath, $encodedbank . PHP_EOL, LOCK_EX) === false) {
-        throw new RuntimeException('Unable to save the Herbology Domain question bank.');
-    }
+    $savedomainbank($domainbank);
     redirect(
         $domainreturnurl,
         'Question saved in the selected Domain bank.',
@@ -215,6 +325,16 @@ foreach ($domainblueprint as &$domain) {
     $domain['approvedCount'] = count(array_filter($domain['questions'], static function(array $question): bool {
         return ($question['review']['status'] ?? '') === 'content-approved';
     }));
+    $domain['approvalReadyCount'] = count(array_filter($domain['questions'], static function(array $question): bool {
+        return ($question['review']['status'] ?? '') !== 'content-approved'
+            && !empty($question['prompt'])
+            && count($question['options'] ?? []) >= 2
+            && !empty($question['correctLabel'])
+            && !empty($question['explanation'])
+            && !empty($question['source']['title'])
+            && !empty($question['source']['locator']);
+    }));
+    $domain['sourceLabel'] = (string)($domaincandidateinventory[$domain['id']]['authoringSourceLabel'] ?? '');
     if ($domainkey !== '' && $domain['id'] === $domainkey) {
         $selecteddomain = $domain;
     }
@@ -222,6 +342,15 @@ foreach ($domainblueprint as &$domain) {
 unset($domain);
 if ($track === 'domains' && $domainkey !== '' && $selecteddomain === null) {
     redirect($domainsurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+}
+$domainperpage = 25;
+$selecteddomainpagequestions = [];
+if ($selecteddomain !== null) {
+    $selecteddomainpagequestions = array_slice(
+        $selecteddomain['questions'],
+        $domainpage * $domainperpage,
+        $domainperpage
+    );
 }
 $mixedquestions = [];
 $domainshortages = [];
@@ -1153,6 +1282,8 @@ echo $OUTPUT->header();
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
                 <span><strong>6</strong> domain blocks</span>
+                <span><strong><?php echo (int)array_sum(array_column($domainblueprint, 'questionCount')); ?></strong>
+                    classified candidates</span>
                 <span><strong>100</strong> questions in the final blueprint</span>
                 <span><strong>100%</strong> total allocation</span>
             </div>
@@ -1184,9 +1315,13 @@ echo $OUTPUT->header();
                         </div>
                         <h4><?php echo s($domain['name']); ?></h4>
                         <p><?php echo s($domain['focus']); ?></p>
+                        <?php if ($domain['sourceLabel'] !== '') { ?>
+                            <small class="herb-board__domain-source"><?php echo s($domain['sourceLabel']); ?></small>
+                        <?php } ?>
                         <span class="herb-board__domain-status">
                             <?php echo (int)$domain['approvedCount']; ?> approved ·
-                            <?php echo (int)$domain['questionCount']; ?> total questions →
+                            <?php echo (int)$domain['approvalReadyCount']; ?> review-ready ·
+                            <?php echo (int)$domain['questionCount']; ?> total →
                         </span>
                     </a>
                 <?php } ?>
@@ -1213,7 +1348,9 @@ echo $OUTPUT->header();
                 </section>
             <?php } ?>
             <div class="herb-board__notice">
-                <strong>Blueprint control:</strong> these percentages are the current AcupunctureTests working model,
+                <strong>Classification control:</strong> imported questions are first-pass classified drafts, not approved
+                Board items. Human review must confirm the Domain, answer, explanation and source. These percentages are
+                the current AcupunctureTests working model,
                 not a published NCBAHM allocation. Before releasing a scored 100-question exam, the selected official
                 outline, effective date and Domain percentages must be recorded and approved. Every question will count
                 toward one primary Domain only.
@@ -1236,6 +1373,7 @@ echo $OUTPUT->header();
             <div class="herb-board__domain-summary" aria-label="Selected Domain bank totals">
                 <span><strong><?php echo (int)$selecteddomain['questionCount']; ?></strong> total questions</span>
                 <span><strong><?php echo (int)$selecteddomain['approvedCount']; ?></strong> approved questions</span>
+                <span><strong><?php echo (int)$selecteddomain['approvalReadyCount']; ?></strong> ready for human review</span>
                 <span><strong><?php echo (int)$selecteddomain['weight']; ?></strong> required in a 100-question form</span>
             </div>
             <?php if ($canmanagedomains) { ?>
@@ -1330,7 +1468,7 @@ echo $OUTPUT->header();
                 </div>
             <?php } else { ?>
                 <div class="herb-board__domain-questions">
-                    <?php foreach ($selecteddomain['questions'] as $question) { ?>
+                    <?php foreach ($selecteddomainpagequestions as $question) { ?>
                         <article class="herb-board__domain-question">
                             <span><?php echo s($question['questionId'] ?? 'Unnumbered item'); ?></span>
                             <h4><?php echo s($question['prompt'] ?? 'Question awaiting prompt'); ?></h4>
@@ -1347,11 +1485,46 @@ echo $OUTPUT->header();
                                     <p><strong>Explanation:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
                                     <p><strong>Source:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
                                         <?php echo s($question['source']['locator'] ?? ''); ?></p>
+                                    <?php
+                                    $questioniscomplete = !empty($question['prompt'])
+                                        && count($question['options'] ?? []) >= 2
+                                        && !empty($question['correctLabel'])
+                                        && !empty($question['explanation'])
+                                        && !empty($question['source']['title'])
+                                        && !empty($question['source']['locator']);
+                                    if (($question['review']['status'] ?? '') !== 'content-approved'
+                                            && $questioniscomplete) { ?>
+                                        <form method="post" action="<?php echo $pageurl->out(false); ?>"
+                                            class="herb-board__approve-form">
+                                            <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                                            <input type="hidden" name="domainaction" value="approvequestion">
+                                            <input type="hidden" name="domainid" value="<?php echo s($selecteddomain['id']); ?>">
+                                            <input type="hidden" name="questionid"
+                                                value="<?php echo s($question['questionId'] ?? ''); ?>">
+                                            <button type="submit">Approve for mixed exams</button>
+                                        </form>
+                                    <?php } else if (($question['review']['status'] ?? '') !== 'content-approved') { ?>
+                                        <div class="herb-board__approval-blocked">
+                                            Needs a verified explanation and complete source before approval.
+                                        </div>
+                                    <?php } ?>
                                 </details>
                             <?php } ?>
                         </article>
                     <?php } ?>
                 </div>
+                <?php if ($selecteddomain['questionCount'] > $domainperpage) {
+                    $pagingurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'domains',
+                        'domain' => $selecteddomain['id'],
+                    ]);
+                    echo $OUTPUT->paging_bar(
+                        $selecteddomain['questionCount'],
+                        $domainpage,
+                        $domainperpage,
+                        $pagingurl
+                    );
+                } ?>
             <?php } ?>
         </section>
     <?php } ?>
