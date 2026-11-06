@@ -750,8 +750,11 @@ JS);
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title($ises ? 'Práctica de Herbología' : 'Herbology Practice');
-$PAGE->set_heading($ises ? 'Práctica de Herbología' : 'Herbology Practice');
+$pagetitle = $track === 'exams'
+    ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
+    : ($ises ? 'Práctica de Herbología' : 'Herbology Practice');
+$PAGE->set_title($pagetitle);
+$PAGE->set_heading($pagetitle);
 
 $topics = [];
 $clearheatsections = [
@@ -1294,10 +1297,25 @@ echo $OUTPUT->header();
     <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? '← Volver al Dashboard' : '← Back to Dashboard'; ?></a>
     <header class="herb-board__hero">
         <p class="herb-board__eyebrow"><?php echo $ises ? 'HERBOLOGÍA CHINA · NIVEL BOARD' : 'CHINESE HERBOLOGY · BOARD LEVEL'; ?></p>
-        <h2><?php echo $ises ? 'Práctica de Herbología' : 'Herbology Practice'; ?></h2>
-        <span><?php echo $ises
-            ? 'Practica preguntas de selección múltiple del banco del Board y revisa tu progreso.'
-            : 'Build focused multiple-choice practice from the Board question pool and review your progress over time.'; ?></span>
+        <h2><?php echo $track === 'exams'
+            ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
+            : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'); ?></h2>
+        <span><?php echo $track === 'exams'
+            ? ($ises
+                ? 'Completa exámenes de 100 preguntas y revisa tus resultados anteriores.'
+                : 'Complete 100-question exams and review your previous results.')
+            : ($ises
+                ? 'Practica preguntas de selección múltiple del banco del Board y revisa tu progreso.'
+                : 'Build focused multiple-choice practice from the Board question pool and review your progress over time.'); ?></span>
+        <?php if ($track === 'exams') { ?>
+        <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de exámenes' : 'Exam navigation'; ?>">
+            <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>">
+                <?php echo $ises ? '← Práctica de Herbología' : '← Herbology Practice'; ?>
+            </a>
+            <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+        </nav>
+        <?php } else { ?>
         <nav class="herb-board__tabs" aria-label="Herbology practice sections">
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
@@ -1305,11 +1323,10 @@ echo $OUTPUT->header();
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
             <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
                 <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Dominios' : 'Domains'; ?></a>
-            <a class="herb-board__tab" href="<?php echo $examsurl->out(false); ?>"
-                <?php echo $track === 'exams' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Exámenes' : 'Exams'; ?></a>
             <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                 href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>
+        <?php } ?>
         <?php if (!in_array($track, ['domains', 'exams'], true)) { ?>
             <div class="herb-board__summary" aria-label="Practice features">
             <?php if ($track === 'herbs') { ?>
@@ -1644,11 +1661,15 @@ echo $OUTPUT->header();
             </div>
         </section>
     <?php } else if ($selecteddomain === null) { ?>
-        <section class="herb-board__panel" aria-labelledby="herb-board-workspace-title">
+        <section class="herb-board__panel"
+            <?php echo $track === 'exams' && $mixdomains
+                ? 'aria-label="' . ($ises ? 'Examen de Herbología' : 'Herbology exam') . '"'
+                : 'aria-labelledby="herb-board-workspace-title"'; ?>>
+            <?php if ($track === 'domains' || !$mixdomains) { ?>
             <div class="herb-board__panel-heading">
                 <div>
                     <h3 id="herb-board-workspace-title"><?php echo $track === 'exams'
-                        ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
+                        ? ($ises ? 'Elige una modalidad' : 'Choose an exam mode')
                         : ($ises ? 'Práctica por dominio' : 'Practice by Domain'); ?></h3>
                     <p><?php echo $track === 'exams'
                         ? ($ises
@@ -1667,6 +1688,7 @@ echo $OUTPUT->header();
                     <span><strong>6</strong> <?php echo $ises ? 'dominios de estudio' : 'study Domains'; ?></span>
                 <?php } ?>
             </div>
+            <?php } ?>
             <?php
             $linearurl = new moodle_url('/blocks/menu/herbology-board.php', [
                 'track' => 'exams',
