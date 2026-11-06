@@ -123,13 +123,15 @@ if (count($data["domains"] ?? []) !== 6) {
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 $total = array_sum(array_map("count", $data["domains"] ?? []));
-if ($total !== 1313
-        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 516
+if ($total !== 1087
+        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 451
         || ($data["status"] ?? "") !== "practice-ready"
-        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v6-board-nomenclature"
-        || ($data["summary"]["nomenclature"]["questionsWithNomenclature"] ?? 0) !== 1268
-        || ($data["summary"]["nomenclature"]["herbReferences"] ?? 0) !== 5154
-        || ($data["summary"]["nomenclature"]["formulaReferences"] ?? 0) !== 3059) {
+        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v7-guideline-template"
+        || ($data["summary"]["nomenclature"]["questionsWithNomenclature"] ?? 0) !== 1042
+        || ($data["summary"]["nomenclature"]["herbReferences"] ?? 0) !== 3557
+        || ($data["summary"]["nomenclature"]["formulaReferences"] ?? 0) !== 2266
+        || ($data["summary"]["guideline2026ScopeAudit"]["legacyIdentificationQuestions"] ?? 0) !== 164
+        || ($data["summary"]["guideline2026ScopeAudit"]["herbsOutsideAppendicesAAndD"] ?? -1) !== 0) {
     throw new RuntimeException("The classified Herbology candidate inventory is incomplete.");
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
@@ -161,8 +163,57 @@ foreach ($data["domains"] ?? [] as $domain => $questions) {
     }
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+php -r '
+$data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+$expectedWeights = [
+    "formula_differentiation" => 28,
+    "single_herb" => 24,
+    "dui_yao" => 18,
+    "safety_dispensing" => 15,
+    "formula_composition" => 10,
+    "scope_aliases" => 5,
+];
+$template = $data["examTemplate"] ?? [];
+if (($template["version"] ?? "") !== "herbology-guideline-2026-template-v1"
+        || ($template["totalQuestions"] ?? 0) !== 100
+        || ($template["weights"] ?? []) !== $expectedWeights
+        || count($template["sequence"] ?? []) !== 100
+        || count(array_unique($template["sequence"] ?? [])) !== 100) {
+    throw new RuntimeException("The fixed 100-question Guideline 2026 template is invalid.");
+}
+$selected = [];
+$domainCounts = array_fill_keys(array_keys($expectedWeights), 0);
+foreach ($data["domains"] ?? [] as $domain => $questions) {
+    foreach ($questions as $question) {
+        if (preg_match("/^\\s*IDENTIFICATION(?:\\s+ACCORDING\\s+TO)?\\b/i", $question["prompt"] ?? "")) {
+            throw new RuntimeException("Legacy IDENTIFICATION wording remains in the retained bank.");
+        }
+        $position = $question["examTemplate"]["globalPosition"] ?? 0;
+        if ($position > 0) {
+            if (($question["examTemplate"]["version"] ?? "") !== $template["version"]
+                    || isset($selected[$position])) {
+                throw new RuntimeException("The fixed template contains a duplicate or mismatched position.");
+            }
+            $selected[$position] = $question["questionId"] ?? "";
+            $domainCounts[$domain]++;
+        }
+    }
+}
+ksort($selected);
+if (count($selected) !== 100
+        || array_values($selected) !== $template["sequence"]
+        || $domainCounts !== $expectedWeights) {
+    throw new RuntimeException("The fixed template selection does not match its declared sequence and weights.");
+}
+' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 grep -Fq 'RA-SAFE-001' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 ! grep -Fiq 'which pinyin name corresponds' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+! grep -Fiq 'IDENTIFICATION ACCORDING TO' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq '"questionId": "FD-001"' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq '"version": "herbology-guideline-2026-template-v1"' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+for unsafe_id in FM-MOD-004-02 FM-MOD-009-05 FM-MOD-026-13 FM-MOD-027-03 FM-MOD-056-01; do
+    ! grep -Fq "\"questionId\": \"$unsafe_id\"" "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+done
 grep -Fq 'Ma Huang Tang (Ephedra Decoction)' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 grep -Fq 'Ma Huang (Ephedrae Herba)' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 grep -Fq 'Guan Mu Tong (Aristolochiae manshuriensis Caulis)' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
@@ -170,7 +221,7 @@ grep -Fq 'Guan Mu Tong (Aristolochiae manshuriensis Caulis)' "$TEMP_DIR/blocks/m
 grep -Fq 'Board nomenclature' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Nomenclatura Board' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__exam-nomenclature' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110621;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110622;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do

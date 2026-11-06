@@ -449,6 +449,58 @@ const englishSafetyPages = fs.readdirSync(resolveFromRoot('study-guide/compariso
 const usableHerbProfiles = (herbProfiles.herbs || []).filter(herb => herb.name
     && herb.actionSummary?.en
     && herb.indicationSummary?.en);
+
+const formulaRosterByName = new Map((formulaRoster.formulas || [])
+    .map(formula => [normalizeEntityText(formula.name), formula]));
+const coreFormulaProfiles = (formulasStudyGuide.formulas || []).filter(formula => formula.name
+    && formula.pattern
+    && formula.action
+    && formula.clue
+    && formula.patternEs
+    && formula.actionEs
+    && formula.clueEs
+    && formulaRosterByName.has(normalizeEntityText(formula.name)));
+const coreFormulaNames = coreFormulaProfiles.map(formula => formula.name);
+const relatedFormulaCategories = {
+    purge: ['digestive'],
+    'stabilize-bind': ['tonify'],
+    'calm-shen': ['tonify'],
+    'expel-wind': ['transform-phlegm'],
+    digestive: ['expel-damp', 'regulate-qi'],
+};
+for (const formula of coreFormulaProfiles) {
+    const categoryNames = coreFormulaProfiles
+        .filter(candidate => candidate.categoryKey === formula.categoryKey)
+        .map(candidate => candidate.name);
+    const relatedNames = coreFormulaProfiles
+        .filter(candidate => (relatedFormulaCategories[formula.categoryKey] || [])
+            .includes(candidate.categoryKey))
+        .map(candidate => candidate.name);
+    const answerPool = categoryNames.length >= 4
+        ? categoryNames
+        : [...new Set([...categoryNames, ...relatedNames, ...coreFormulaNames])];
+    const options = buildOptions(formula.name, answerPool, `formula-profile-${formula.number}`);
+    const correctOption = options.find(option => option.text === formula.name);
+    const rosterEntry = formulaRosterByName.get(normalizeEntityText(formula.name));
+    domains.formula_differentiation.push(createCandidate({
+        questionId: `FD-${String(formula.number).padStart(3, '0')}`,
+        domainId: 'formula_differentiation',
+        prompt: `A patient has the following presentation: ${formula.clue} Which formula best matches this presentation?`,
+        options,
+        correctLabel: correctOption.label,
+        explanation: `${formula.name} treats ${formula.pattern} Action: ${formula.action} Decisive clue: ${formula.examFocus || formula.clue} Safety: ${formula.safety}`,
+        sourceTitle: '2026 Appendix C core formula study profiles',
+        sourceLocator: `Formula ${formula.number}: ${formula.name} (${rosterEntry.englishName})`,
+        sourceCard: formulaSourceCard(formula.number),
+        reason: 'Board-style clinical selection generated from an official Appendix C formula profile',
+        translationEs: {
+            prompt: `Un paciente presenta el siguiente cuadro: ${formula.clueEs} ¿Qué fórmula corresponde mejor a esta presentación?`,
+            options,
+            explanation: `${formula.name} trata ${formula.patternEs} Acción: ${formula.actionEs} Pista decisiva: ${formula.examFocusEs || formula.clueEs} Seguridad: ${formula.safetyEs}`,
+        },
+    }));
+}
+
 const herbNames = usableHerbProfiles.map(herb => herb.name);
 for (const herb of usableHerbProfiles) {
     const options = buildOptions(herb.name, herbNames, `herb-${herb.guideNumber || herb.name}`);
@@ -483,7 +535,7 @@ for (const pair of usablePairs) {
         prompt: `Which Duì Yào pair has this combined action? ${pair.action.en}`,
         options,
         correctLabel: correctOption.label,
-        explanation: `${pair.title} performs this combined action. Representative formula: ${pair.formulas?.en || 'see the pair profile'}.`,
+        explanation: `${pair.title} performs this combined action. It is official Appendix B pair ${pair.number} of 51.`,
         sourceTitle: 'Official Duì Yào pair profiles',
         sourceLocator: `Pair ${pair.number || pair.slug}`,
         sourceCard: {
@@ -496,7 +548,7 @@ for (const pair of usablePairs) {
         translationEs: {
             prompt: `¿Qué par Duì Yào tiene esta acción combinada? ${pair.action.es || pair.action.en}`,
             options,
-            explanation: `${pair.title} realiza esta acción combinada. Fórmula representativa: ${pair.formulas?.es || 'consulta el perfil del par'}.`,
+            explanation: `${pair.title} realiza esta acción combinada. Es el par oficial ${pair.number} de 51 del Appendix B.`,
         },
     }));
 }
@@ -734,6 +786,8 @@ const historicalSafetyHerbIdentities = [
     ['Xiong Dan', 'Ursi Fel'],
     ['Zhu Sha', 'Cinnabaris'],
     ['Xiong Huang', 'Realgar'],
+    ['Ma Dou Ling', 'Aristolochiae Fructus'],
+    ['Ying Su Ke', 'Papaveris Pericarpium'],
 ];
 const supplementalFormulaIdentities = [
     ['Zhi Zi Chi Tang', 'Gardenia and Prepared Soybean Decoction'],
@@ -795,10 +849,205 @@ const entityRegistry = [
         || (left.kind === 'formula' ? -1 : 1)
         || left.name.localeCompare(right.name));
 
+// Normalize legacy modification shorthand used by the selected master template to
+// the exact Appendix A pinyin names before pharmaceutical labels are attached.
+const templateTermReplacements = {
+    'FM-MOD-481-1': [[/\bSu Zi\b/g, 'Zi Su Zi']],
+    'FM-MOD-481-3': [[/\bSu Zi\b/g, 'Zi Su Zi']],
+    'FM-MOD-049-01': [[/\bXin Yi Hua\b/g, 'Xin Yi']],
+    'FM-MOD-049-03': [[/\bXin Yi Hua\b/g, 'Xin Yi']],
+    'FM-MOD-055-02': [[/\bDan Pi\b/g, 'Mu Dan Pi'], [/\bFu Ping\b/g, 'Jing Jie']],
+    'FM-MOD-061-05': [[/\bBei Mu\b/g, 'Chuan Bei Mu']],
+    'FM-MOD-047-01': [[/\bPao Jiang\b/g, 'Gan Jiang']],
+};
+const replaceTemplateTerms = (value, replacements) => replacements.reduce(
+    (text, [pattern, replacement]) => String(text || '').replace(pattern, replacement),
+    value,
+);
+for (const question of Object.values(domains).flat()) {
+    const replacements = templateTermReplacements[question.questionId];
+    if (!replacements) {
+        continue;
+    }
+    question.prompt = replaceTemplateTerms(question.prompt, replacements);
+    question.options = question.options.map(option => ({
+        ...option,
+        text: replaceTemplateTerms(option.text, replacements),
+    }));
+    question.explanation = replaceTemplateTerms(question.explanation, replacements);
+    if (question.translations?.es) {
+        question.translations.es.prompt = replaceTemplateTerms(question.translations.es.prompt, replacements);
+        question.translations.es.options = question.translations.es.options.map(option => ({
+            ...option,
+            text: replaceTemplateTerms(option.text, replacements),
+        }));
+        question.translations.es.explanation = replaceTemplateTerms(
+            question.translations.es.explanation,
+            replacements,
+        );
+    }
+}
+
 for (const domainId of domainIds) {
     for (const question of domains[domainId]) {
         enrichQuestionNomenclature(question, entityRegistry);
     }
+}
+
+const officialHerbNames = new Set((herbProfiles.herbs || []).map(herb => normalizeEntityText(herb.name)));
+const officialFormulaNames = new Set((formulaRoster.formulas || []).map(formula => normalizeEntityText(formula.name)));
+const appendixDNames = new Set([
+    'Xi Jiao',
+    'Hu Gu',
+    'Xiong Dan',
+    'Chuan Shan Jia',
+    'Guan Mu Tong',
+    'Guang Fang Ji',
+    'Ma Dou Ling',
+    'Zhu Sha',
+    'Ying Su Ke',
+].map(normalizeEntityText));
+const clinicalDomainIds = new Set([
+    'formula_differentiation',
+    'single_herb',
+    'dui_yao',
+    'formula_composition',
+]);
+const scopeAudit = {
+    removedQuestions: 0,
+    offRosterFormulaQuestions: 0,
+    herbsOutsideAppendicesAAndD: 0,
+    appendixDInClinicalQuestions: 0,
+    legacyIdentificationQuestions: 0,
+    removedByDomain: Object.fromEntries(domainIds.map(domainId => [domainId, 0])),
+};
+for (const domainId of domainIds) {
+    domains[domainId] = domains[domainId].filter(question => {
+        const formulasOutsideAppendixC = (question.nomenclature?.formulas || [])
+            .filter(formula => !officialFormulaNames.has(normalizeEntityText(formula.pinyin)));
+        const herbsOutsideGuideline = (question.nomenclature?.herbs || [])
+            .filter(herb => {
+                const normalizedName = normalizeEntityText(herb.pinyin);
+                return !officialHerbNames.has(normalizedName) && !appendixDNames.has(normalizedName);
+            });
+        const appendixDInClinicalQuestion = clinicalDomainIds.has(domainId)
+            && (question.nomenclature?.herbs || [])
+                .some(herb => appendixDNames.has(normalizeEntityText(herb.pinyin)));
+        const legacyIdentificationQuestion = domainId === 'formula_differentiation'
+            && /^\s*IDENTIFICATION\b/i.test(question.prompt || '');
+        if (formulasOutsideAppendixC.length === 0
+                && herbsOutsideGuideline.length === 0
+                && !appendixDInClinicalQuestion
+                && !legacyIdentificationQuestion) {
+            return true;
+        }
+        scopeAudit.removedQuestions++;
+        scopeAudit.removedByDomain[domainId]++;
+        if (formulasOutsideAppendixC.length > 0) {
+            scopeAudit.offRosterFormulaQuestions++;
+        }
+        if (herbsOutsideGuideline.length > 0) {
+            scopeAudit.herbsOutsideAppendicesAAndD++;
+        }
+        if (appendixDInClinicalQuestion) {
+            scopeAudit.appendixDInClinicalQuestions++;
+        }
+        if (legacyIdentificationQuestion) {
+            scopeAudit.legacyIdentificationQuestions++;
+        }
+        return false;
+    });
+}
+
+const examTemplateVersion = 'herbology-guideline-2026-template-v1';
+const examTemplateQuestionIds = {
+    formula_differentiation: [
+        'FD-001', 'FD-002', 'FD-008', 'FD-010', 'FD-013', 'FD-015', 'FD-016',
+        'FD-019', 'FD-020', 'FD-023', 'FD-028', 'FD-031', 'FD-032', 'FD-033',
+        'FD-038', 'FD-040', 'FD-041', 'FD-046', 'FD-048', 'FD-049', 'FD-051',
+        'FD-052', 'FD-054', 'FD-055', 'FD-057', 'FD-058', 'FD-059', 'FD-063',
+    ],
+    single_herb: [
+        'SH-0020', 'SH-0025', 'SH-0015', 'SH-0016', 'SH-0006', 'SH-0014',
+        'SH-0024', 'SH-0007', 'SH-0005', 'SH-0023', 'SH-0002', 'SH-0001',
+        'SH-0018', 'SH-0004', 'SH-0013', 'SH-0009', 'SH-0019', 'SH-0003',
+        'SH-0021', 'SH-0017', 'SH-0029', 'SH-0008', 'SH-0026', 'SH-0010',
+    ],
+    dui_yao: [
+        'DY-001', 'DY-004', 'DY-011', 'DY-015', 'DY-018', 'DY-020',
+        'DY-023', 'DY-026', 'DY-027', 'DY-028', 'DY-034', 'DY-037',
+        'DY-039', 'DY-042', 'DY-045', 'DY-046', 'DY-049', 'DY-051',
+    ],
+    safety_dispensing: [
+        'SD-001', 'SD-005', 'SD-006', 'SD-007', 'SD-008',
+        'SD-009', 'SD-012', 'SD-013', 'SD-014', 'SD-016',
+        'SD-017', 'SD-019', 'SD-021', 'SD-024', 'SD-025',
+    ],
+    formula_composition: [
+        'FM-MOD-481-1', 'FM-MOD-481-3', 'FM-MOD-049-01', 'FM-MOD-049-03',
+        'FM-MOD-052-02', 'FM-MOD-055-02', 'FM-MOD-058-05', 'FM-MOD-061-05',
+        'FM-MOD-063-01', 'FM-MOD-047-01',
+    ],
+    scope_aliases: [
+        'RA-SAFE-001', 'RA-SAFE-002', 'RA-SAFE-003', 'RA-SAFE-006', 'RA-SAFE-014',
+    ],
+};
+const expectedTemplateWeights = {
+    formula_differentiation: 28,
+    single_herb: 24,
+    dui_yao: 18,
+    safety_dispensing: 15,
+    formula_composition: 10,
+    scope_aliases: 5,
+};
+const templateQuestionById = new Map(Object.values(domains).flat()
+    .map(question => [question.questionId, question]));
+const templateDomainQueues = {};
+for (const domainId of domainIds) {
+    const questionIds = examTemplateQuestionIds[domainId] || [];
+    if (questionIds.length !== expectedTemplateWeights[domainId]) {
+        throw new Error(`Template ${domainId} must contain ${expectedTemplateWeights[domainId]} questions.`);
+    }
+    templateDomainQueues[domainId] = questionIds.map((questionId, domainIndex) => {
+        const question = templateQuestionById.get(questionId);
+        if (!question || question.domainId !== domainId) {
+            throw new Error(`Template question ${questionId} is missing from ${domainId}.`);
+        }
+        if (!question.prompt
+                || question.options?.length !== 4
+                || !question.correctLabel
+                || !question.explanation
+                || !question.sourceCard?.url
+                || !question.sourceCard?.urlEs
+                || !question.translations?.es?.prompt
+                || question.translations?.es?.options?.length !== 4
+                || !question.translations?.es?.explanation) {
+            throw new Error(`Template question ${questionId} is not source-linked and bilingual.`);
+        }
+        question.examTemplate = {
+            version: examTemplateVersion,
+            domainPosition: domainIndex + 1,
+            globalPosition: 0,
+        };
+        return question;
+    });
+}
+const templateSequence = [];
+const schedulingScores = Object.fromEntries(domainIds.map(domainId => [domainId, 0]));
+for (let position = 1; position <= 100; position++) {
+    for (const domainId of domainIds) {
+        if (templateDomainQueues[domainId].length > 0) {
+            schedulingScores[domainId] += expectedTemplateWeights[domainId];
+        }
+    }
+    const selectedDomainId = domainIds
+        .filter(domainId => templateDomainQueues[domainId].length > 0)
+        .sort((left, right) => schedulingScores[right] - schedulingScores[left]
+            || domainIds.indexOf(left) - domainIds.indexOf(right))[0];
+    const question = templateDomainQueues[selectedDomainId].shift();
+    schedulingScores[selectedDomainId] -= 100;
+    question.examTemplate.globalPosition = position;
+    templateSequence.push(question.questionId);
 }
 
 const nomenclatureSummary = Object.values(domains).flat().reduce((summary, question) => {
@@ -830,7 +1079,7 @@ const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v6-board-nomenclature',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v7-guideline-template',
     status: 'practice-ready',
     policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Herb pinyin is paired with its pharmaceutical name and formula pinyin with its English name in prompts, options and feedback.',
     generatedFrom: {
@@ -857,6 +1106,13 @@ const output = {
         practiceReadyByDomain: practiceReadyCounts,
         practiceReadyTotal: Object.values(practiceReadyCounts).reduce((sum, count) => sum + count, 0),
         nomenclature: nomenclatureSummary,
+        guideline2026ScopeAudit: scopeAudit,
+    },
+    examTemplate: {
+        version: examTemplateVersion,
+        totalQuestions: templateSequence.length,
+        weights: expectedTemplateWeights,
+        sequence: templateSequence,
     },
     sourceInventory: {
         formula_differentiation: {

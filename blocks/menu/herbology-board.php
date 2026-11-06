@@ -176,6 +176,25 @@ if ($track === 'domains' && is_readable($domaincandidatepath)) {
                     ) !== 1
                 ));
             }
+            $currentcandidateids = [];
+            foreach ($domaincandidates['domains'] as $candidatequestions) {
+                foreach ($candidatequestions as $candidatequestion) {
+                    if (!empty($candidatequestion['questionId'])) {
+                        $currentcandidateids[(string)$candidatequestion['questionId']] = true;
+                    }
+                }
+            }
+            foreach ($domainbank['domains'] as &$existingquestions) {
+                $existingquestions = array_values(array_filter(
+                    $existingquestions,
+                    static function(array $question) use ($currentcandidateids): bool {
+                        $questionid = (string)($question['questionId'] ?? '');
+                        $isgenerated = preg_match('/^(?:CF|FD|SH|DY|SD|FM|RA-SAFE)-/', $questionid) === 1;
+                        return !$isgenerated || isset($currentcandidateids[$questionid]);
+                    }
+                ));
+            }
+            unset($existingquestions);
             $existinglocations = [];
             foreach ($domainbank['domains'] as $existingdomainid => $existingquestions) {
                 foreach ($existingquestions as $existingindex => $existingquestion) {
@@ -292,21 +311,26 @@ $mixedquestions = [];
 $domainshortages = [];
 if ($track === 'domains' && $domainkey === '' && $mixdomains) {
     foreach ($domainblueprint as $domain) {
-        $availablequestions = $domain['questions'];
-        if (count($availablequestions) < $domain['weight']) {
+        $templatequestions = array_values(array_filter(
+            $domain['questions'],
+            static fn(array $question): bool => !empty($question['examTemplate']['globalPosition'])
+        ));
+        if (count($templatequestions) !== $domain['weight']) {
             $domainshortages[] = [
                 'name' => $domain['name'],
                 'required' => $domain['weight'],
-                'available' => count($availablequestions),
-                'missing' => $domain['weight'] - count($availablequestions),
+                'available' => count($templatequestions),
+                'missing' => max(0, $domain['weight'] - count($templatequestions)),
             ];
             continue;
         }
-        shuffle($availablequestions);
-        $mixedquestions = array_merge($mixedquestions, array_slice($availablequestions, 0, $domain['weight']));
+        $mixedquestions = array_merge($mixedquestions, $templatequestions);
     }
     if (!$domainshortages) {
-        shuffle($mixedquestions);
+        usort($mixedquestions, static fn(array $left, array $right): int =>
+            ((int)($left['examTemplate']['globalPosition'] ?? PHP_INT_MAX))
+            <=> ((int)($right['examTemplate']['globalPosition'] ?? PHP_INT_MAX))
+        );
     }
 }
 
