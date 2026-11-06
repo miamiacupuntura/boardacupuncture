@@ -97,6 +97,10 @@ grep -Fq 'Comenzar examen de 100 preguntas' "$TEMP_DIR/blocks/menu/herbology-boa
 grep -Fq 'Examen lineal' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Examen adaptativo' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-next' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'data-exam-source-link' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'data-exam-source-viewer' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Volver a la pregunta' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '.herb-board__source-window' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq "data-exam-mode" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__domain-paging--top' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__domain-page-link--direction' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -119,13 +123,41 @@ php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 $total = array_sum(array_map("count", $data["domains"] ?? []));
 if ($total !== 1479
-        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 757
+        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 682
         || ($data["status"] ?? "") !== "practice-ready"
-        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v3-es") {
+        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v4-source-cards") {
     throw new RuntimeException("The classified Herbology candidate inventory is incomplete.");
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
-grep -Fq "'v' => '20261106-8'" "$TEMP_DIR/theme/moove/layout/drawers.php"
+php -r '
+$data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+$weights = [
+    "formula_differentiation" => 28,
+    "single_herb" => 24,
+    "dui_yao" => 18,
+    "safety_dispensing" => 15,
+    "formula_composition" => 10,
+    "scope_aliases" => 5,
+];
+foreach ($data["domains"] ?? [] as $domain => $questions) {
+    $ready = array_values(array_filter($questions, static fn(array $question): bool =>
+        !empty($question["prompt"])
+        && count($question["options"] ?? []) === 4
+        && !empty($question["correctLabel"])
+        && !empty($question["explanation"])
+        && !empty($question["sourceCard"]["url"])
+        && !empty($question["sourceCard"]["urlEs"])));
+    $spanish = array_values(array_filter($ready, static fn(array $question): bool =>
+        !empty($question["translations"]["es"]["prompt"])
+        && count($question["translations"]["es"]["options"] ?? []) === 4
+        && !empty($question["translations"]["es"]["explanation"])));
+    if (count($ready) < ($weights[$domain] ?? PHP_INT_MAX)
+            || count($spanish) < ($weights[$domain] ?? PHP_INT_MAX)) {
+        throw new RuntimeException("Domain $domain cannot supply its source-linked bilingual exam weight.");
+    }
+}
+' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"

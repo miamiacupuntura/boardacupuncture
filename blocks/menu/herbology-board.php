@@ -211,7 +211,9 @@ $questionisready = static function(array $question): bool {
         && !empty($question['correctLabel'])
         && !empty($question['explanation'])
         && !empty($question['source']['title'])
-        && !empty($question['source']['locator']);
+        && !empty($question['source']['locator'])
+        && !empty($question['sourceCard']['url'])
+        && !empty($question['sourceCard']['urlEs']);
 };
 $selecteddomain = null;
 foreach ($domainblueprint as &$domain) {
@@ -306,6 +308,10 @@ if (exam) {
     const result = document.getElementById('herbology-domain-exam-result');
     const progressText = exam.querySelector('.herb-board__exam-progress-text');
     const progressBar = exam.querySelector('.herb-board__exam-progress-bar span');
+    const sourceViewer = document.querySelector('[data-exam-source-viewer]');
+    const sourceFrame = sourceViewer?.querySelector('[data-exam-source-frame]');
+    const sourceTitle = sourceViewer?.querySelector('[data-exam-source-title]');
+    const sourceReturn = sourceViewer?.querySelector('[data-exam-source-return]');
     const mode = exam.dataset.examMode || 'linear';
     const difficultyRank = {foundation: 0, application: 1, analysis: 2};
     let remaining = [...questions];
@@ -313,6 +319,62 @@ if (exam) {
     let lastCorrect = null;
     let answered = 0;
     let score = 0;
+    let activeSourceLink = null;
+
+    const closeSourceViewer = () => {
+        if (!sourceViewer || sourceViewer.hidden) {
+            return;
+        }
+        sourceViewer.hidden = true;
+        document.body.classList.remove('herb-board-source-open');
+        if (sourceFrame) {
+            sourceFrame.src = 'about:blank';
+        }
+        activeSourceLink?.focus();
+        activeSourceLink = null;
+    };
+
+    if (sourceViewer && sourceFrame && sourceTitle && sourceReturn) {
+        sourceViewer.querySelectorAll('[data-exam-source-close]').forEach(control => {
+            control.addEventListener('click', closeSourceViewer);
+        });
+        sourceFrame.addEventListener('load', () => {
+            const query = activeSourceLink?.dataset.sourceQuery || '';
+            if (!query || sourceFrame.src === 'about:blank') {
+                return;
+            }
+            try {
+                const sourceDocument = sourceFrame.contentDocument;
+                const search = sourceDocument?.querySelector('#q');
+                if (search) {
+                    search.value = query;
+                    search.dispatchEvent(new Event('input', {bubbles: true}));
+                    const visibleCard = [...sourceDocument.querySelectorAll('#roster li')]
+                        .find(card => !card.hidden);
+                    visibleCard?.scrollIntoView({block: 'center'});
+                }
+            } catch (error) {
+                // Same-origin cards are enhanced when available; the source remains usable without it.
+            }
+        });
+        exam.querySelectorAll('[data-exam-source-link]').forEach(link => {
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                activeSourceLink = link;
+                sourceTitle.textContent = link.dataset.sourceTitle || link.textContent.trim();
+                sourceReturn.textContent = `${sourceViewer.dataset.returnLabel} ${link.dataset.questionLabel}`;
+                sourceFrame.src = link.href;
+                sourceViewer.hidden = false;
+                document.body.classList.add('herb-board-source-open');
+                sourceReturn.focus();
+            });
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !sourceViewer.hidden) {
+                closeSourceViewer();
+            }
+        });
+    }
 
     questions.forEach(question => {
         question.hidden = true;
@@ -1408,8 +1470,14 @@ echo $OUTPUT->header();
                                 break;
                             }
                         }
+                        $sourcecard = $question['sourceCard'] ?? [];
+                        $sourcecardurl = (string)($sourcecard[$ises ? 'urlEs' : 'url'] ?? '');
+                        $sourcecardlabel = (string)($sourcecard[$ises ? 'labelEs' : 'label']
+                            ?? ($ises ? 'Abrir tarjeta fuente' : 'Open source card'));
+                        $sourcecardquery = (string)($sourcecard['query'] ?? '');
+                        $questionlabel = ($ises ? 'Pregunta ' : 'Question ') . ($questionnumber + 1);
                         ?>
-                        <fieldset class="herb-board__exam-question"
+                        <fieldset class="herb-board__exam-question" id="herbology-exam-question-<?php echo $questionnumber + 1; ?>"
                             data-correct="<?php echo s($question['correctLabel']); ?>"
                             data-domain="<?php echo s($question['domainId'] ?? ''); ?>"
                             data-difficulty="<?php echo s($question['difficultyBand'] ?? 'application'); ?>">
@@ -1432,6 +1500,13 @@ echo $OUTPUT->header();
                                 <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
                                     <?php echo s($question['correctLabel']); ?>. <?php echo s($correctoptiontext); ?></strong>
                                 <p><?php echo s($question['explanation']); ?></p>
+                                <a class="herb-board__exam-source-link" href="<?php echo s($sourcecardurl); ?>"
+                                    data-exam-source-link
+                                    data-source-title="<?php echo s($sourcecardlabel); ?>"
+                                    data-source-query="<?php echo s($sourcecardquery); ?>"
+                                    data-question-label="<?php echo s($questionlabel); ?>">
+                                    <?php echo s($sourcecardlabel); ?> →
+                                </a>
                             </div>
                         </fieldset>
                     <?php } ?>
@@ -1440,6 +1515,25 @@ echo $OUTPUT->header();
                         <output id="herbology-domain-exam-result" hidden></output>
                     </div>
                 </form>
+                <div class="herb-board__source-viewer" data-exam-source-viewer hidden
+                    data-return-label="<?php echo $ises ? '← Volver a la' : '← Back to'; ?>">
+                    <button class="herb-board__source-backdrop" type="button" data-exam-source-close
+                        aria-label="<?php echo $ises ? 'Volver al examen' : 'Return to exam'; ?>"></button>
+                    <section class="herb-board__source-window" role="dialog" aria-modal="true"
+                        aria-labelledby="herb-board-source-title">
+                        <header>
+                            <div>
+                                <span><?php echo $ises ? 'Fuente del feedback' : 'Feedback source'; ?></span>
+                                <h4 id="herb-board-source-title" data-exam-source-title></h4>
+                            </div>
+                            <button type="button" data-exam-source-return data-exam-source-close>
+                                <?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?>
+                            </button>
+                        </header>
+                        <iframe title="<?php echo $ises ? 'Tarjeta fuente de la respuesta' : 'Answer source card'; ?>"
+                            data-exam-source-frame src="about:blank"></iframe>
+                    </section>
+                </div>
             <?php } ?>
         </section>
     <?php } else { ?>

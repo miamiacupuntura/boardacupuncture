@@ -1843,6 +1843,109 @@ a.herb-board__domain:focus {
     margin: 4px 0 0;
 }
 
+.herb-board__exam-source-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    margin-top: 11px;
+    padding: 8px 12px;
+    border: 1px solid #087c69;
+    border-radius: 7px;
+    background: #fff;
+    color: #07665b !important;
+    font-size: .84rem;
+    font-weight: 850;
+    text-decoration: none !important;
+}
+
+.herb-board__exam-source-link:hover,
+.herb-board__exam-source-link:focus {
+    background: #e4f5f0;
+}
+
+.herb-board-source-open {
+    overflow: hidden;
+}
+
+.herb-board__source-viewer {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+}
+
+.herb-board__source-viewer[hidden] {
+    display: none;
+}
+
+.herb-board__source-backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: rgba(15, 35, 50, .72);
+    cursor: pointer;
+}
+
+.herb-board__source-window {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    width: min(1180px, 96vw);
+    height: min(860px, 92vh);
+    overflow: hidden;
+    border: 1px solid #bed2d9;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(7, 29, 43, .38);
+}
+
+.herb-board__source-window > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 15px;
+    border-bottom: 1px solid #d6e2e6;
+    background: #f2faf8;
+}
+
+.herb-board__source-window > header span {
+    color: #087c69;
+    font-size: .68rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.herb-board__source-window > header h4 {
+    margin: 2px 0 0;
+    color: #17324d;
+    font-size: 1rem;
+}
+
+.herb-board__source-window > header button {
+    flex: 0 0 auto;
+    min-height: 42px;
+    padding: 9px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #6d4bc3;
+    color: #fff;
+    font-weight: 850;
+    cursor: pointer;
+}
+
+.herb-board__source-window iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+}
+
 .herb-board__exam-submit {
     position: sticky;
     bottom: 10px;
@@ -1956,6 +2059,27 @@ a.herb-board__domain:focus {
     }
 
     .herb-board__exam-submit button {
+        width: 100%;
+    }
+
+    .herb-board__source-viewer {
+        padding: 0;
+    }
+
+    .herb-board__source-window {
+        width: 100vw;
+        height: 100vh;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .herb-board__source-window > header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .herb-board__source-window > header button {
         width: 100%;
     }
 

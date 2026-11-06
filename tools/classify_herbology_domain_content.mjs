@@ -18,6 +18,7 @@ const sha256 = relative => crypto.createHash('sha256')
     .digest('hex');
 
 const legacySource = 'output/complete-final-import/keyed-questions.jsonl';
+const formulaPracticeSource = 'study-guide/comparisons/formula-practice-data.json';
 const formulaSpanishSource = 'study-guide/comparisons/formula-practice-translations-es.json';
 const modificationSources = [
     'study-guide/comparisons/formula-modifications-generated.json',
@@ -86,6 +87,7 @@ function createCandidate({
     explanation,
     sourceTitle,
     sourceLocator,
+    sourceCard = null,
     reason,
     translationEs = null,
 }) {
@@ -122,6 +124,9 @@ function createCandidate({
             reason,
         },
     };
+    if (sourceCard?.url && sourceCard?.urlEs) {
+        candidate.sourceCard = sourceCard;
+    }
     if (translationEs?.prompt && translationEs?.options?.length === 4) {
         candidate.translations = {es: translationEs};
     }
@@ -150,11 +155,64 @@ function buildOptions(correctAnswer, answerPool, seed) {
 }
 
 const legacyQuestions = readJsonLines(legacySource);
+const formulaPracticeData = readJson(formulaPracticeSource);
+const formulaProfileByNumber = new Map((formulaPracticeData.formulas || [])
+    .map(formula => [Number(formula.number), formula]));
+const formulaPracticeBySource = new Map((formulaPracticeData.questions || [])
+    .map(question => [String(question.sourceNumber), question]));
+const formulaSourceCard = formulaNumber => {
+    const formula = formulaProfileByNumber.get(Number(formulaNumber));
+    if (!formula?.slug) {
+        return null;
+    }
+    return {
+        url: `/study-guide/comparisons/${formula.slug}.html`,
+        urlEs: `/study-guide/comparisons/${formula.slug}-es.html`,
+        label: `Source card: ${formula.name}`,
+        labelEs: `Tarjeta fuente: ${formula.name}`,
+    };
+};
+const formulaModificationSourceCard = formulaNumber => {
+    const formula = formulaProfileByNumber.get(Number(formulaNumber));
+    if (!formula?.name) {
+        return null;
+    }
+    const query = encodeURIComponent(formula.name);
+    return {
+        url: `/study-guide/comparisons/formula-modifications.html?q=${query}`,
+        urlEs: `/study-guide/comparisons/formula-modifications-es.html?q=${query}`,
+        label: `Modification source card: ${formula.name}`,
+        labelEs: `Tarjeta fuente de modificación: ${formula.name}`,
+    };
+};
+const normalizeMatchText = value => String(value || '').toLowerCase().normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+const formulaQuestionSourceCard = (sourceNumber, correctOptionText) => {
+    const formulaQuestion = formulaPracticeBySource.get(String(sourceNumber));
+    const formulaNumbers = formulaQuestion?.formulaNumbers || [];
+    const normalizedCorrectOption = ` ${normalizeMatchText(correctOptionText)} `;
+    const matchedFormulaNumber = formulaNumbers.find(formulaNumber => {
+        const formulaName = formulaProfileByNumber.get(Number(formulaNumber))?.name;
+        return formulaName
+            && normalizedCorrectOption.includes(` ${normalizeMatchText(formulaName)} `);
+    });
+    return formulaSourceCard(matchedFormulaNumber || formulaNumbers[0]);
+};
+const singleHerbSourceCard = herbName => ({
+    url: `/blocks/myprogress/single-herbs-study-guide.php?herb=${encodeURIComponent(herbName)}`,
+    urlEs: `/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=${encodeURIComponent(herbName)}`,
+    label: `Source card: ${herbName}`,
+    labelEs: `Tarjeta fuente: ${herbName}`,
+});
 const formulaSpanishQuestions = readJson(formulaSpanishSource).questions || [];
 const formulaSpanishBySource = new Map(formulaSpanishQuestions.map(question => [String(question.sourceNumber), question]));
 for (const question of legacyQuestions) {
     const [domainId, reason] = classifyLegacyQuestion(question);
     const spanish = formulaSpanishBySource.get(String(question.source_number));
+    const correctOptionText = question.options
+        .find(option => option.label === question.correct_labels[0])?.text || '';
     const candidate = createCandidate({
         questionId: `CF-${String(question.source_number).padStart(4, '0')}`,
         domainId,
@@ -164,6 +222,7 @@ for (const question of legacyQuestions) {
         explanation: (question.feedback || []).join('\n\n'),
         sourceTitle: 'Complete Final.docx',
         sourceLocator: `Question ${question.source_number}`,
+        sourceCard: formulaQuestionSourceCard(question.source_number, correctOptionText),
         reason,
         translationEs: spanish ? {
             prompt: spanish.prompt,
@@ -188,6 +247,7 @@ for (const relative of modificationSources) {
             explanation: (question.feedback || []).join('\n\n'),
             sourceTitle: question.provenance?.sourceTitle || 'Formula modification study content',
             sourceLocator: question.sourceId || String(question.sourceNumber),
+            sourceCard: formulaModificationSourceCard(question.formulaNumbers?.[0]),
             reason: 'Question was authored specifically for formula modification practice',
             translationEs: question.translationEs ? {
                 prompt: question.translationEs.prompt,
@@ -236,6 +296,7 @@ for (const herb of usableHerbProfiles) {
         explanation: `${herb.name} (${herb.latin || 'pharmaceutical name not supplied'}) is ${herb.temperature?.en || 'of the recorded temperature'} and ${herb.flavor?.en || 'has the recorded flavor profile'}. ${herb.actionSummary.en}`,
         sourceTitle: 'Single Herb verified study profiles',
         sourceLocator: `Study Guide herb ${herb.guideNumber || herb.name}`,
+        sourceCard: singleHerbSourceCard(herb.name),
         reason: 'Source-grounded question generated from a verified individual-herb profile',
         translationEs: {
             prompt: `¿Qué hierba corresponde mejor a este perfil? ${herb.actionSummary.es || herb.actionSummary.en} Indicaciones principales: ${herb.indicationSummary.es || herb.indicationSummary.en}`,
@@ -259,6 +320,12 @@ for (const pair of usablePairs) {
         explanation: `${pair.title} performs this combined action. Representative formula: ${pair.formulas?.en || 'see the pair profile'}.`,
         sourceTitle: 'Official Duì Yào pair profiles',
         sourceLocator: `Pair ${pair.number || pair.slug}`,
+        sourceCard: {
+            url: `/study-guide/comparisons/${pair.slug}.html`,
+            urlEs: `/study-guide/comparisons/${pair.slug}-es.html`,
+            label: `Source card: ${pair.title}`,
+            labelEs: `Tarjeta fuente: ${pair.title}`,
+        },
         reason: 'Source-grounded question generated from an official pair profile',
         translationEs: {
             prompt: `¿Qué par Duì Yào tiene esta acción combinada? ${pair.action.es || pair.action.en}`,
@@ -284,6 +351,7 @@ for (const [index, [herbName, safety]] of safetyEntries.entries()) {
         explanation: `${herbName}: ${safety.caution.en}${preparation}`,
         sourceTitle: 'Single Herb safety supplement',
         sourceLocator: `Safety record: ${herbName}`,
+        sourceCard: singleHerbSourceCard(herbName),
         reason: 'Source-grounded question generated from a named herb safety record',
         translationEs: {
             prompt: `¿Qué hierba se asocia con esta orientación de seguridad? ${safety.caution.es || safety.caution.en}${preparationEs}`,
@@ -307,6 +375,13 @@ for (const formula of usableFormulaRoster) {
         explanation: `${formula.englishName} is listed as ${formula.name} in the current formula roster.`,
         sourceTitle: '2026 Formula Board roster',
         sourceLocator: `Roster entry ${formula.id || formula.name}`,
+        sourceCard: {
+            url: '/study-guide/guidelines/formulas-appendix-c-2026-preview.html',
+            urlEs: '/study-guide/guidelines/formulas-appendix-c-2026-preview.html',
+            query: formula.name,
+            label: `Official roster card: ${formula.name}`,
+            labelEs: `Tarjeta del listado oficial: ${formula.name}`,
+        },
         reason: 'Source-grounded nomenclature question generated from the current formula roster',
         translationEs: {
             prompt: `Dentro del listado actual de fórmulas, ¿qué nombre pinyin corresponde a “${formula.englishName}”?`,
@@ -335,11 +410,13 @@ const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
         && question.correctLabel
         && question.explanation
         && question.source.title
-        && question.source.locator).length,
+        && question.source.locator
+        && question.sourceCard?.url
+        && question.sourceCard?.urlEs).length,
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v3-es',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v4-source-cards',
     status: 'practice-ready',
     policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Complete questions may be used directly in practice exams.',
     generatedFrom: {
@@ -347,6 +424,11 @@ const output = {
             path: legacySource,
             sha256: sha256(legacySource),
             count: legacyQuestions.length,
+        },
+        formulaPracticeQuestions: {
+            path: formulaPracticeSource,
+            sha256: sha256(formulaPracticeSource),
+            count: formulaPracticeData.questions?.length || 0,
         },
         formulaModificationQuestions: modificationSources.map(relative => ({
             path: relative,
