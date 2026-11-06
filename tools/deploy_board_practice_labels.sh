@@ -37,6 +37,9 @@ FILES=(
     "blocks/menu/version.php"
     "blocks/menu_course/block_menu_course.php"
     "blocks/menu_course/version.php"
+    "blocks/myprogress/single-herbs-safety-dispensing.php"
+    "blocks/myprogress/single-herb-card-index.json"
+    "blocks/myprogress/single-herbs-study-guide.php"
     "theme/moove/javascript/study-guide-dashboard.js"
     "theme/moove/layout/drawers.php"
 )
@@ -62,6 +65,8 @@ php -l "$TEMP_DIR/blocks/menu/herbology-board.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu_course/block_menu_course.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu_course/version.php" >/dev/null
+php -l "$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php" >/dev/null
+php -l "$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php" >/dev/null
 php -l "$TEMP_DIR/theme/moove/layout/drawers.php" >/dev/null
 
 for label in \
@@ -126,7 +131,7 @@ $total = array_sum(array_map("count", $data["domains"] ?? []));
 if ($total !== 1087
         || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 451
         || ($data["status"] ?? "") !== "practice-ready"
-        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v7-guideline-template"
+        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v8-safety-source-links"
         || ($data["summary"]["nomenclature"]["questionsWithNomenclature"] ?? 0) !== 1042
         || ($data["summary"]["nomenclature"]["herbReferences"] ?? 0) !== 3557
         || ($data["summary"]["nomenclature"]["formulaReferences"] ?? 0) !== 2266
@@ -218,10 +223,17 @@ grep -Fq 'Ma Huang Tang (Ephedra Decoction)' "$TEMP_DIR/blocks/menu/herbology-do
 grep -Fq 'Ma Huang (Ephedrae Herba)' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 grep -Fq 'Guan Mu Tong (Aristolochiae manshuriensis Caulis)' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 ! grep -Fq 'Guan Mu Tong (Akebiae Caulis)' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq 'focus=safety_dispensing&herb=Bai%20Guo#safety-herb-bai-guo' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
+grep -Fq "\$focus === '' && \$requestedherbcard !== null" "$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php"
+grep -Fq 'single-herbs-safety__row--requested' "$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php"
+grep -Fq 'requestedRow.scrollIntoView' "$TEMP_DIR/blocks/myprogress/single-herbs-safety-dispensing.php"
+grep -Fq '"Yin Xing"' "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
+grep -Fq 'Yin Xing Ye is Ginkgo Folium, a different medicinal part' "$TEMP_DIR/blocks/myprogress/single-herb-card-index.json"
+grep -Fq "\$normalizeherbname((string)(\$herbcard['latin'] ?? ''))" "$TEMP_DIR/blocks/myprogress/single-herbs-study-guide.php"
 grep -Fq 'Board nomenclature' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Nomenclatura Board' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__exam-nomenclature' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110622;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110624;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do

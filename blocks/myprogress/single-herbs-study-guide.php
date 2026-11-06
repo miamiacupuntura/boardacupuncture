@@ -184,6 +184,8 @@ if (is_readable($cardindexpath)) {
                     'id' => (int)($herbcard['id'] ?? ($herbposition + 1)),
                     'name' => $herbname,
                     'latin' => (string)($herbcard['latin'] ?? ''),
+                    'aliases' => array_values(array_filter(array_map('strval', $herbcard['aliases'] ?? []))),
+                    'identity_note' => (string)($herbcard['identityNote'][$ises ? 'es' : 'en'] ?? ''),
                     'bensky_category' => (string)($herbcard['benskyCategory'][$ises ? 'es' : 'en'] ?? ''),
                     'guide_number' => (int)($herbcard['guideNumber'] ?? 0),
                     // Chapter 4 contains one current herb in its source annex
@@ -205,14 +207,21 @@ $requestedherbcard = null;
 if ($requestedherb !== '' && is_array($cardindex)) {
     $requestedkey = $normalizeherbname($requestedherb);
     foreach ($cardindex['herbs'] ?? [] as $herbcard) {
-        if ($normalizeherbname((string)($herbcard['name'] ?? '')) === $requestedkey) {
+        $identitykeys = [
+            $normalizeherbname((string)($herbcard['name'] ?? '')),
+            $normalizeherbname((string)($herbcard['latin'] ?? '')),
+        ];
+        foreach ($herbcard['aliases'] ?? [] as $alias) {
+            $identitykeys[] = $normalizeherbname((string)$alias);
+        }
+        if (in_array($requestedkey, $identitykeys, true)) {
             $requestedherbcard = $herbcard;
             $requestedherb = (string)$herbcard['name'];
             break;
         }
     }
 }
-if ($requestedherbcard !== null && !empty($requestedherbcard['guideNumber'])) {
+if ($focus === '' && $requestedherbcard !== null && !empty($requestedherbcard['guideNumber'])) {
     foreach ($studyguidecategories as $sectionnumber => $category) {
         if ((int)$category['guide_number'] === (int)$requestedherbcard['guideNumber']) {
             $focus = (string)$sectionnumber;
@@ -220,7 +229,7 @@ if ($requestedherbcard !== null && !empty($requestedherbcard['guideNumber'])) {
         }
     }
 }
-if ($requestedherbcard !== null && !empty($requestedherbcard['specialFocus'])) {
+if ($focus === '' && $requestedherbcard !== null && !empty($requestedherbcard['specialFocus'])) {
     $focus = (string)$requestedherbcard['specialFocus'];
 }
 
@@ -1467,6 +1476,7 @@ ob_start();
 .single-herbs-guide__category--bensky-reference{border-top-color:#f77e25;background:#fff7f0}.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-number{background:#fff0e5;color:#a64f12}.single-herbs-guide__category--bensky-reference small,.single-herbs-guide__category--bensky-reference .single-herbs-guide__category-roster-trigger{color:#19706a}
 .single-herbs-guide__empty{padding:34px;border:1px dashed #aeb8c0;border-radius:12px;background:#fff;text-align:center;color:#64748b}
 .single-herbs-guide__requested-card{margin:0 0 22px;padding:20px 22px;border:1px solid #c9ded9;border-left:5px solid #0b817d;border-radius:11px;background:#f2faf8}.single-herbs-guide__requested-card h3{margin:2px 0 5px;font-size:23px}.single-herbs-guide__requested-card p{margin:0;color:#52677a;line-height:1.5}.single-herbs-guide__requested-card .single-herbs-guide__eyebrow{margin-bottom:4px}.single-herbs-guide__requested-card-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.single-herbs-guide__card-target{scroll-margin-top:24px;animation:single-herb-card-highlight 2.2s ease}.single-herbs-guide__card-target>summary,.single-herbs-guide__card-target.single-herbs-guide__category-herb{box-shadow:0 0 0 4px rgba(11,129,125,.2)}@keyframes single-herb-card-highlight{0%,55%{transform:translateY(-2px)}100%{transform:none}}
+.single-herbs-safety__row--requested{scroll-margin-top:120px;outline:3px solid #0b817d;outline-offset:-3px;background:#eaf8f4;animation:single-herb-card-highlight 2.2s ease}.single-herbs-safety__row--requested th,.single-herbs-safety__row--requested td{background:#eaf8f4}
 .single-herbs-guide__workspace{padding:28px;border:1px solid #d9e2e7;border-top:5px solid #0b817d;border-radius:13px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06)}
 .single-herbs-guide__workspace-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #e2e8ec}
 .single-herbs-guide__workspace h3{margin:0 0 8px;font-size:clamp(18px,1.9vw,22px);line-height:1.25}
@@ -1586,7 +1596,8 @@ ob_start();
                     }
                     $rosterurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $rosterparams);
                     $rosterid = str_pad((string)$guidelineherb['id'], 3, '0', STR_PAD_LEFT);
-                    $rostersearch = $rosterid . ' ' . $guidelineherb['name'] . ' ' . $guidelineherb['latin'] . ' ' . $guidelineherb['bensky_category'];
+                    $rostersearch = $rosterid . ' ' . $guidelineherb['name'] . ' ' . $guidelineherb['latin'] . ' '
+                        . implode(' ', $guidelineherb['aliases']) . ' ' . $guidelineherb['bensky_category'];
                     ?>
                     <li class="single-herbs-guide__roster-item" id="guideline-herb-<?php echo s($rosterid); ?>" data-guideline-roster-item data-guideline-roster-search-value="<?php echo s($rostersearch); ?>" data-guideline-roster-guide="<?php echo (int)$guidelineherb['guide_number']; ?>" data-guideline-roster-special="<?php echo s($guidelineherb['special_focus']); ?>">
                         <a href="<?php echo $rosterurl->out(false); ?>">
@@ -1594,6 +1605,7 @@ ob_start();
                             <span>
                                 <span class="single-herbs-guide__roster-name"><?php echo s($guidelineherb['name']); ?></span>
                                 <?php if ($guidelineherb['latin'] !== ''): ?><span class="single-herbs-guide__roster-latin"> (<em><?php echo s($guidelineherb['latin']); ?></em>)</span><?php endif; ?>
+                                <?php if ($guidelineherb['aliases']): ?><span class="single-herbs-guide__roster-category"><?php echo s(($ises ? 'Alias: ' : 'Alias: ') . implode(', ', $guidelineherb['aliases'])); ?></span><?php endif; ?>
                                 <span class="single-herbs-guide__roster-category"><b>Bensky</b> · <?php echo s($guidelineherb['bensky_category']); ?></span>
                             </span>
                         </a>

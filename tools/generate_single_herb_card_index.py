@@ -60,6 +60,16 @@ ROUTE_OVERRIDES = {
     "di gu pi": 7,
 }
 
+SEARCH_IDENTITIES = {
+    "bai guo": {
+        "aliases": ["Yin Xing"],
+        "identityNote": {
+            "en": "Yin Xing is a general name for the ginkgo tree. The medicinal seed is Bai Guo (Ginkgo Semen); Yin Xing Ye is Ginkgo Folium, a different medicinal part.",
+            "es": "Yin Xing es un nombre general del árbol ginkgo. La semilla medicinal es Bai Guo (Ginkgo Semen); Yin Xing Ye es Ginkgo Folium, una parte medicinal diferente.",
+        },
+    },
+}
+
 
 def normalized(value: str) -> str:
     value = re.sub(r"\s*\*$", "", value).strip().lower()
@@ -122,6 +132,8 @@ def main() -> None:
     for herb_id, entry in enumerate(entries, start=1):
         entry["id"] = herb_id
         key = normalized(str(entry["name"]))
+        if key in SEARCH_IDENTITIES:
+            entry.update(SEARCH_IDENTITIES[key])
         guide_number = ROUTE_OVERRIDES.get(key, routes.get(key))
         entry["guideNumber"] = guide_number
         if key in chapter_four_names:

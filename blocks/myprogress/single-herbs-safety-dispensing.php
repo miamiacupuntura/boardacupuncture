@@ -26,13 +26,21 @@ $safetycategorypregnancy = is_array($safetysupplement) ? ($safetysupplement['cat
 $safetycategoryinteractions = is_array($safetysupplement) ? ($safetysupplement['categoryInteractions'] ?? []) : [];
 $safetyherbsupplements = is_array($safetysupplement) ? ($safetysupplement['herbs'] ?? []) : [];
 $safetycategorybyname = [];
+$safetyidentitybyname = [];
 $safetycategoryoptions = [];
+$safetyrowid = static function(string $name): string {
+    return 'safety-herb-' . trim(strtolower((string)preg_replace('/[^a-z0-9]+/i', '-', $name)), '-');
+};
 foreach (is_array($safetyindex) ? ($safetyindex['herbs'] ?? []) : [] as $safetyindexrow) {
     $safetycategory = $safetyindexrow['benskyCategory'] ?? null;
     if (!is_array($safetycategory) || empty($safetyindexrow['name']) || empty($safetycategory['code'])) {
         continue;
     }
     $safetycategorybyname[(string)$safetyindexrow['name']] = $safetycategory;
+    $safetyidentitybyname[(string)$safetyindexrow['name']] = [
+        'aliases' => array_values(array_filter(array_map('strval', $safetyindexrow['aliases'] ?? []))),
+        'note' => (string)($safetyindexrow['identityNote'][$safetylang] ?? ''),
+    ];
     $safetycategoryoptions[(string)$safetycategory['code']] = $safetycategory;
 }
 uasort($safetycategoryoptions, static function(array $left, array $right) use ($safetylang): int {
@@ -69,6 +77,7 @@ foreach ($safetyrows as $safetyposition => $safetyrow) {
         (string)($safetyrow['safetyNote']['es'] ?? ''),
     ])));
     $category = $safetycategorybyname[(string)($safetyrow['name'] ?? '')] ?? [];
+    $identity = $safetyidentitybyname[(string)($safetyrow['name'] ?? '')] ?? ['aliases' => [], 'note' => ''];
     $categorycode = (string)($category['code'] ?? '');
     $herbsupplement = $safetyherbsupplements[(string)($safetyrow['name'] ?? '')] ?? [];
 
@@ -123,6 +132,8 @@ foreach ($safetyrows as $safetyposition => $safetyrow) {
         'toxicity' => $toxicitynote,
         'pregnancy' => $pregnancynote,
         'interactions' => $interactionnote,
+        'aliases' => $identity['aliases'],
+        'identitynote' => $identity['note'],
         'haspreparation' => $specificpreparation !== '',
         'hastoxicity' => $specificcaution !== '' || $safetynote !== '',
         'haspregnancy' => $specificpregnancy !== '',
@@ -342,10 +353,13 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
                         $herbparams['lang'] = 'es';
                     }
                     $herburl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $herbparams);
-                    $searchvalue = implode(' ', array_filter([$preparedrow['name'], $preparedrow['latin'], $preparedrow['category'], $preparedrow['dose'], $preparedrow['preparation'], $preparedrow['toxicity'], $preparedrow['pregnancy'], $preparedrow['interactions']]));
+                    $searchvalue = implode(' ', array_filter([$preparedrow['name'], $preparedrow['latin'], implode(' ', $preparedrow['aliases']), $preparedrow['identitynote'], $preparedrow['category'], $preparedrow['dose'], $preparedrow['preparation'], $preparedrow['toxicity'], $preparedrow['pregnancy'], $preparedrow['interactions']]));
                     ?>
-                    <tr data-safety-row data-original-index="<?php echo (int)$preparedrow['position']; ?>" data-category="<?php echo s($preparedrow['category']); ?>" data-category-code="<?php echo s($preparedrow['categorycode']); ?>" data-herb="<?php echo s($preparedrow['name']); ?>" data-has-preparation="<?php echo $preparedrow['haspreparation'] ? '1' : '0'; ?>" data-has-toxicity="<?php echo $preparedrow['hastoxicity'] ? '1' : '0'; ?>" data-has-pregnancy="<?php echo $preparedrow['haspregnancy'] ? '1' : '0'; ?>" data-has-interactions="<?php echo $preparedrow['hasinteractions'] ? '1' : '0'; ?>" data-search="<?php echo s(strtolower($searchvalue)); ?>">
-                        <th scope="row"><a href="<?php echo $herburl->out(false); ?>"><?php echo s($preparedrow['name']); ?></a><small><?php echo s($preparedrow['latin']); ?></small></th>
+                    <?php $isrequestedrow = strcasecmp((string)($requestedherb ?? ''), $preparedrow['name']) === 0; ?>
+                    <tr id="<?php echo s($safetyrowid($preparedrow['name'])); ?>"
+                        class="<?php echo $isrequestedrow ? 'single-herbs-safety__row--requested' : ''; ?>"
+                        data-safety-row data-original-index="<?php echo (int)$preparedrow['position']; ?>" data-category="<?php echo s($preparedrow['category']); ?>" data-category-code="<?php echo s($preparedrow['categorycode']); ?>" data-herb="<?php echo s($preparedrow['name']); ?>" data-has-preparation="<?php echo $preparedrow['haspreparation'] ? '1' : '0'; ?>" data-has-toxicity="<?php echo $preparedrow['hastoxicity'] ? '1' : '0'; ?>" data-has-pregnancy="<?php echo $preparedrow['haspregnancy'] ? '1' : '0'; ?>" data-has-interactions="<?php echo $preparedrow['hasinteractions'] ? '1' : '0'; ?>" data-search="<?php echo s(strtolower($searchvalue)); ?>">
+                        <th scope="row"><a href="<?php echo $herburl->out(false); ?>"><?php echo s($preparedrow['name']); ?></a><small><?php echo s($preparedrow['latin']); ?></small><?php if ($preparedrow['aliases']): ?><small><?php echo s('Alias: ' . implode(', ', $preparedrow['aliases'])); ?></small><?php endif; ?><?php if ($preparedrow['identitynote'] !== ''): ?><small><?php echo s($preparedrow['identitynote']); ?></small><?php endif; ?></th>
                         <td><span class="single-herbs-properties__category"><?php echo s($preparedrow['category']); ?></span></td>
                         <td><?php echo s($preparedrow['dose']); ?></td>
                         <td><?php echo s($preparedrow['preparation']); ?></td>
@@ -445,6 +459,7 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
         };
         const collator = new Intl.Collator(<?php echo json_encode($ises ? 'es' : 'en'); ?>, {sensitivity: 'base', numeric: true});
         const normalize = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        const requestedHerb = <?php echo json_encode((string)($requestedherb ?? ''), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
         const refresh = function() {
             const query = normalize(input.value);
             const category = categoryFilter.value;
@@ -495,6 +510,19 @@ $obsoleteurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php',
         if (tableWrap) tableWrap.addEventListener('scroll', scheduleFloatingHead, {passive: true});
         if ('ResizeObserver' in window && table) {
             new ResizeObserver(scheduleFloatingHead).observe(table);
+        }
+        if (requestedHerb) {
+            input.value = requestedHerb;
+            categoryFilter.value = '';
+            topicFilter.value = '';
+            refresh();
+            const requestedRow = rows.find(row => normalize(row.dataset.herb) === normalize(requestedHerb));
+            if (requestedRow) {
+                requestedRow.classList.add('single-herbs-safety__row--requested');
+                window.requestAnimationFrame(function() {
+                    requestedRow.scrollIntoView({behavior: 'smooth', block: 'center'});
+                });
+            }
         }
         scheduleFloatingHead();
     })();

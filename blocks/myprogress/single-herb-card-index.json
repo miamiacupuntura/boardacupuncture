@@ -73,6 +73,13 @@
     {
       "name": "Bai Guo",
       "latin": "Ginkgo Semen",
+      "aliases": [
+        "Yin Xing"
+      ],
+      "identityNote": {
+        "en": "Yin Xing is a general name for the ginkgo tree. The medicinal seed is Bai Guo (Ginkgo Semen); Yin Xing Ye is Ginkgo Folium, a different medicinal part.",
+        "es": "Yin Xing es un nombre general del árbol ginkgo. La semilla medicinal es Bai Guo (Ginkgo Semen); Yin Xing Ye es Ginkgo Folium, una parte medicinal diferente."
+      },
       "id": 7,
       "guideNumber": 15,
       "benskyCategory": {

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "classificationVersion": "herbology-domain-source-grounded-2026-11-06-v7-guideline-template",
+  "classificationVersion": "herbology-domain-source-grounded-2026-11-06-v8-safety-source-links",
   "status": "practice-ready",
   "policy": "Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Herb pinyin is paired with its pharmaceutical name and formula pinyin with its English name in prompts, options and feedback.",
   "generatedFrom": {
@@ -72901,10 +72901,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Guo",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bai%20Guo",
-          "label": "Source card: Bai Guo",
-          "labelEs": "Tarjeta fuente: Bai Guo"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bai%20Guo#safety-herb-bai-guo",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bai%20Guo#safety-herb-bai-guo",
+          "label": "Safety source: Bai Guo",
+          "labelEs": "Fuente de seguridad: Bai Guo"
         },
         "translations": {
           "es": {
@@ -73015,10 +73015,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Hua%20She",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bai%20Hua%20She",
-          "label": "Source card: Bai Hua She",
-          "labelEs": "Tarjeta fuente: Bai Hua She"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bai%20Hua%20She#safety-herb-bai-hua-she",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bai%20Hua%20She#safety-herb-bai-hua-she",
+          "label": "Safety source: Bai Hua She",
+          "labelEs": "Fuente de seguridad: Bai Hua She"
         },
         "translations": {
           "es": {
@@ -73124,10 +73124,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Jiang%20Can",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bai%20Jiang%20Can",
-          "label": "Source card: Bai Jiang Can",
-          "labelEs": "Tarjeta fuente: Bai Jiang Can"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bai%20Jiang%20Can#safety-herb-bai-jiang-can",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bai%20Jiang%20Can#safety-herb-bai-jiang-can",
+          "label": "Safety source: Bai Jiang Can",
+          "labelEs": "Fuente de seguridad: Bai Jiang Can"
         },
         "translations": {
           "es": {
@@ -73233,10 +73233,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bie%20Jia",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bie%20Jia",
-          "label": "Source card: Bie Jia",
-          "labelEs": "Tarjeta fuente: Bie Jia"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bie%20Jia#safety-herb-bie-jia",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bie%20Jia#safety-herb-bie-jia",
+          "label": "Safety source: Bie Jia",
+          "labelEs": "Fuente de seguridad: Bie Jia"
         },
         "translations": {
           "es": {
@@ -73342,10 +73342,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bing%20Lang",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bing%20Lang",
-          "label": "Source card: Bing Lang",
-          "labelEs": "Tarjeta fuente: Bing Lang"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bing%20Lang#safety-herb-bing-lang",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bing%20Lang#safety-herb-bing-lang",
+          "label": "Safety source: Bing Lang",
+          "labelEs": "Fuente de seguridad: Bing Lang"
         },
         "translations": {
           "es": {
@@ -73456,10 +73456,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bing%20Pian",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bing%20Pian",
-          "label": "Source card: Bing Pian",
-          "labelEs": "Tarjeta fuente: Bing Pian"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bing%20Pian#safety-herb-bing-pian",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bing%20Pian#safety-herb-bing-pian",
+          "label": "Safety source: Bing Pian",
+          "labelEs": "Fuente de seguridad: Bing Pian"
         },
         "translations": {
           "es": {
@@ -73570,10 +73570,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bu%20Gu%20Zhi",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Bu%20Gu%20Zhi",
-          "label": "Source card: Bu Gu Zhi",
-          "labelEs": "Tarjeta fuente: Bu Gu Zhi"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Bu%20Gu%20Zhi#safety-herb-bu-gu-zhi",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Bu%20Gu%20Zhi#safety-herb-bu-gu-zhi",
+          "label": "Safety source: Bu Gu Zhi",
+          "labelEs": "Fuente de seguridad: Bu Gu Zhi"
         },
         "translations": {
           "es": {
@@ -73684,10 +73684,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chuan%20Mu%20Tong",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Chuan%20Mu%20Tong",
-          "label": "Source card: Chuan Mu Tong",
-          "labelEs": "Tarjeta fuente: Chuan Mu Tong"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Chuan%20Mu%20Tong#safety-herb-chuan-mu-tong",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Chuan%20Mu%20Tong#safety-herb-chuan-mu-tong",
+          "label": "Safety source: Chuan Mu Tong",
+          "labelEs": "Fuente de seguridad: Chuan Mu Tong"
         },
         "translations": {
           "es": {
@@ -73806,10 +73806,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chuan%20Wu",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Chuan%20Wu",
-          "label": "Source card: Chuan Wu",
-          "labelEs": "Tarjeta fuente: Chuan Wu"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Chuan%20Wu#safety-herb-chuan-wu",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Chuan%20Wu#safety-herb-chuan-wu",
+          "label": "Safety source: Chuan Wu",
+          "labelEs": "Fuente de seguridad: Chuan Wu"
         },
         "translations": {
           "es": {
@@ -73920,10 +73920,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chuan%20Xin%20Lian",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Chuan%20Xin%20Lian",
-          "label": "Source card: Chuan Xin Lian",
-          "labelEs": "Tarjeta fuente: Chuan Xin Lian"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Chuan%20Xin%20Lian#safety-herb-chuan-xin-lian",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Chuan%20Xin%20Lian#safety-herb-chuan-xin-lian",
+          "label": "Safety source: Chuan Xin Lian",
+          "labelEs": "Fuente de seguridad: Chuan Xin Lian"
         },
         "translations": {
           "es": {
@@ -74029,10 +74029,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Gui%20Ban",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Gui%20Ban",
-          "label": "Source card: Gui Ban",
-          "labelEs": "Tarjeta fuente: Gui Ban"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Gui%20Ban#safety-herb-gui-ban",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Gui%20Ban#safety-herb-gui-ban",
+          "label": "Safety source: Gui Ban",
+          "labelEs": "Fuente de seguridad: Gui Ban"
         },
         "translations": {
           "es": {
@@ -74138,10 +74138,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Han%20Fang%20Ji",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Han%20Fang%20Ji",
-          "label": "Source card: Han Fang Ji",
-          "labelEs": "Tarjeta fuente: Han Fang Ji"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Han%20Fang%20Ji#safety-herb-han-fang-ji",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Han%20Fang%20Ji#safety-herb-han-fang-ji",
+          "label": "Safety source: Han Fang Ji",
+          "labelEs": "Fuente de seguridad: Han Fang Ji"
         },
         "translations": {
           "es": {
@@ -74260,10 +74260,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=He%20Shou%20Wu",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=He%20Shou%20Wu",
-          "label": "Source card: He Shou Wu",
-          "labelEs": "Tarjeta fuente: He Shou Wu"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=He%20Shou%20Wu#safety-herb-he-shou-wu",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=He%20Shou%20Wu#safety-herb-he-shou-wu",
+          "label": "Safety source: He Shou Wu",
+          "labelEs": "Fuente de seguridad: He Shou Wu"
         },
         "translations": {
           "es": {
@@ -74374,10 +74374,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ling%20Yang%20Jiao",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Ling%20Yang%20Jiao",
-          "label": "Source card: Ling Yang Jiao",
-          "labelEs": "Tarjeta fuente: Ling Yang Jiao"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Ling%20Yang%20Jiao#safety-herb-ling-yang-jiao",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Ling%20Yang%20Jiao#safety-herb-ling-yang-jiao",
+          "label": "Safety source: Ling Yang Jiao",
+          "labelEs": "Fuente de seguridad: Ling Yang Jiao"
         },
         "translations": {
           "es": {
@@ -74488,10 +74488,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Liu%20Huang",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Liu%20Huang",
-          "label": "Source card: Liu Huang",
-          "labelEs": "Tarjeta fuente: Liu Huang"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Liu%20Huang#safety-herb-liu-huang",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Liu%20Huang#safety-herb-liu-huang",
+          "label": "Safety source: Liu Huang",
+          "labelEs": "Fuente de seguridad: Liu Huang"
         },
         "translations": {
           "es": {
@@ -74597,10 +74597,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ma%20Huang",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Ma%20Huang",
-          "label": "Source card: Ma Huang",
-          "labelEs": "Tarjeta fuente: Ma Huang"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Ma%20Huang#safety-herb-ma-huang",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Ma%20Huang#safety-herb-ma-huang",
+          "label": "Safety source: Ma Huang",
+          "labelEs": "Fuente de seguridad: Ma Huang"
         },
         "translations": {
           "es": {
@@ -74711,10 +74711,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Mu%20Tong",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Mu%20Tong",
-          "label": "Source card: Mu Tong",
-          "labelEs": "Tarjeta fuente: Mu Tong"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Mu%20Tong#safety-herb-mu-tong",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Mu%20Tong#safety-herb-mu-tong",
+          "label": "Safety source: Mu Tong",
+          "labelEs": "Fuente de seguridad: Mu Tong"
         },
         "translations": {
           "es": {
@@ -74833,10 +74833,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Pang%20Da%20Hai",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Pang%20Da%20Hai",
-          "label": "Source card: Pang Da Hai",
-          "labelEs": "Tarjeta fuente: Pang Da Hai"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Pang%20Da%20Hai#safety-herb-pang-da-hai",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Pang%20Da%20Hai#safety-herb-pang-da-hai",
+          "label": "Safety source: Pang Da Hai",
+          "labelEs": "Fuente de seguridad: Pang Da Hai"
         },
         "translations": {
           "es": {
@@ -74942,10 +74942,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Quan%20Xie",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Quan%20Xie",
-          "label": "Source card: Quan Xie",
-          "labelEs": "Tarjeta fuente: Quan Xie"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Quan%20Xie#safety-herb-quan-xie",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Quan%20Xie#safety-herb-quan-xie",
+          "label": "Safety source: Quan Xie",
+          "labelEs": "Fuente de seguridad: Quan Xie"
         },
         "translations": {
           "es": {
@@ -75056,10 +75056,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=She%20Chuang%20Zi",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=She%20Chuang%20Zi",
-          "label": "Source card: She Chuang Zi",
-          "labelEs": "Tarjeta fuente: She Chuang Zi"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=She%20Chuang%20Zi#safety-herb-she-chuang-zi",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=She%20Chuang%20Zi#safety-herb-she-chuang-zi",
+          "label": "Safety source: She Chuang Zi",
+          "labelEs": "Fuente de seguridad: She Chuang Zi"
         },
         "translations": {
           "es": {
@@ -75165,10 +75165,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=She%20Xiang",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=She%20Xiang",
-          "label": "Source card: She Xiang",
-          "labelEs": "Tarjeta fuente: She Xiang"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=She%20Xiang#safety-herb-she-xiang",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=She%20Xiang#safety-herb-she-xiang",
+          "label": "Safety source: She Xiang",
+          "labelEs": "Fuente de seguridad: She Xiang"
         },
         "translations": {
           "es": {
@@ -75279,10 +75279,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ting%20Li%20Zi",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Ting%20Li%20Zi",
-          "label": "Source card: Ting Li Zi",
-          "labelEs": "Tarjeta fuente: Ting Li Zi"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Ting%20Li%20Zi#safety-herb-ting-li-zi",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Ting%20Li%20Zi#safety-herb-ting-li-zi",
+          "label": "Safety source: Ting Li Zi",
+          "labelEs": "Fuente de seguridad: Ting Li Zi"
         },
         "translations": {
           "es": {
@@ -75388,10 +75388,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Tu%20Bie%20Chong",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Tu%20Bie%20Chong",
-          "label": "Source card: Tu Bie Chong",
-          "labelEs": "Tarjeta fuente: Tu Bie Chong"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Tu%20Bie%20Chong#safety-herb-tu-bie-chong",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Tu%20Bie%20Chong#safety-herb-tu-bie-chong",
+          "label": "Safety source: Tu Bie Chong",
+          "labelEs": "Fuente de seguridad: Tu Bie Chong"
         },
         "translations": {
           "es": {
@@ -75497,10 +75497,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Wu%20Gong",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Wu%20Gong",
-          "label": "Source card: Wu Gong",
-          "labelEs": "Tarjeta fuente: Wu Gong"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Wu%20Gong#safety-herb-wu-gong",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Wu%20Gong#safety-herb-wu-gong",
+          "label": "Safety source: Wu Gong",
+          "labelEs": "Fuente de seguridad: Wu Gong"
         },
         "translations": {
           "es": {
@@ -75611,10 +75611,10 @@
           "reason": "Source-grounded question generated from a named herb safety record"
         },
         "sourceCard": {
-          "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Xi%20Xin",
-          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?lang=es&herb=Xi%20Xin",
-          "label": "Source card: Xi Xin",
-          "labelEs": "Tarjeta fuente: Xi Xin"
+          "url": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=Xi%20Xin#safety-herb-xi-xin",
+          "urlEs": "/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=Xi%20Xin#safety-herb-xi-xin",
+          "label": "Safety source: Xi Xin",
+          "labelEs": "Fuente de seguridad: Xi Xin"
         },
         "translations": {
           "es": {

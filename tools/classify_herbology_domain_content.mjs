@@ -371,6 +371,15 @@ const singleHerbSourceCard = herbName => ({
     label: `Source card: ${herbName}`,
     labelEs: `Tarjeta fuente: ${herbName}`,
 });
+const singleHerbSafetySourceCard = herbName => {
+    const anchor = normalizeMatchText(herbName).replace(/\s+/g, '-');
+    return {
+        url: `/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&herb=${encodeURIComponent(herbName)}#safety-herb-${anchor}`,
+        urlEs: `/blocks/myprogress/single-herbs-study-guide.php?focus=safety_dispensing&lang=es&herb=${encodeURIComponent(herbName)}#safety-herb-${anchor}`,
+        label: `Safety source: ${herbName}`,
+        labelEs: `Fuente de seguridad: ${herbName}`,
+    };
+};
 const formulaSpanishQuestions = readJson(formulaSpanishSource).questions || [];
 const formulaSpanishBySource = new Map(formulaSpanishQuestions.map(question => [String(question.sourceNumber), question]));
 for (const question of legacyQuestions) {
@@ -569,7 +578,7 @@ for (const [index, [herbName, safety]] of safetyEntries.entries()) {
         explanation: `${herbName}: ${safety.caution.en}${preparation}`,
         sourceTitle: 'Single Herb safety supplement',
         sourceLocator: `Safety record: ${herbName}`,
-        sourceCard: singleHerbSourceCard(herbName),
+        sourceCard: singleHerbSafetySourceCard(herbName),
         reason: 'Source-grounded question generated from a named herb safety record',
         translationEs: {
             prompt: `¿Qué hierba se asocia con esta orientación de seguridad? ${safety.caution.es || safety.caution.en}${preparationEs}`,
@@ -1079,7 +1088,7 @@ const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v7-guideline-template',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v8-safety-source-links',
     status: 'practice-ready',
     policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Herb pinyin is paired with its pharmaceutical name and formula pinyin with its English name in prompts, options and feedback.',
     generatedFrom: {
