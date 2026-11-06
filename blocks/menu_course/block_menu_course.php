@@ -37,7 +37,7 @@ private function get_course_action($course) {
     if (in_array($courseid, $knownresources['games'], true)
             || strpos($name, 'playing') !== false
             || strpos($name, 'games') !== false) {
-        return ['Games', 'games'];
+        return ['Tricky Questions', 'games'];
     }
     if (in_array($courseid, $knownresources['formulas'], true) || strpos($name, 'formula') !== false) {
         return ['Formulas', 'formulas'];

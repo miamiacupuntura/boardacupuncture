@@ -155,10 +155,10 @@ $resources = [
         'action' => block_menu_board_course_action($simulation, 'Open Simulation'),
     ],
     [
-        'type' => 'Games',
-        'title' => 'Games',
+        'type' => 'Tricky Questions',
+        'title' => 'Tricky Questions',
         'description' => 'Reinforce recall through the available interactive activities.',
-        'action' => block_menu_board_course_action($games, 'Open Games'),
+        'action' => block_menu_board_course_action($games, 'Open Tricky Questions'),
     ],
     [
         'type' => 'Notes',

@@ -44,7 +44,7 @@ echo $OUTPUT->header();
             <h3>Exam Key Library in Development</h3>
             <p>
                 The Clean Needle Techniques answer keys and review material are currently being organized.
-                Please return to the Dashboard to continue with Questions, Simulation, Games and the available Study Guide.
+                Please return to the Dashboard to continue with Questions, Simulation, Tricky Questions and the available Study Guide.
             </p>
             <div class="board-workspace__actions">
                 <a class="board-workspace__button" href="<?php echo $dashboardurl->out(false); ?>">Back to Dashboard</a>

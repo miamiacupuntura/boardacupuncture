@@ -9,7 +9,7 @@
         ['Clean Needle Techniques', 'cleanneedle'],
     ]);
 
-    const actionLabels = new Set(['Modules', 'Simulation', 'Notes', 'Exam Key', 'Games']);
+    const actionLabels = new Set(['Modules', 'Simulation', 'Notes', 'Exam Key', 'Tricky Questions']);
 
     const boardPracticeLabels = new Map([
         ['Foundations Board Level', 'Foundations Practice'],

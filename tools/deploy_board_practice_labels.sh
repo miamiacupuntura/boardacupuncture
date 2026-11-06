@@ -28,8 +28,12 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 
 FILES=(
     "blocks/menu/block_menu.php"
+    "blocks/menu/board.php"
+    "blocks/menu/clean-needle-exam-key.php"
     "blocks/menu/styles.css"
     "blocks/menu/version.php"
+    "blocks/menu_course/block_menu_course.php"
+    "blocks/menu_course/version.php"
     "theme/moove/javascript/study-guide-dashboard.js"
     "theme/moove/layout/drawers.php"
 )
@@ -45,7 +49,11 @@ for relative in "${FILES[@]}"; do
 done
 
 php -l "$TEMP_DIR/blocks/menu/block_menu.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu/board.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu/clean-needle-exam-key.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu_course/block_menu_course.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu_course/version.php" >/dev/null
 php -l "$TEMP_DIR/theme/moove/layout/drawers.php" >/dev/null
 
 for label in \
@@ -62,7 +70,10 @@ grep -Fq '$boardlevelactions = $mockquestionsaction . $simulationaction . $study
     "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq '.board-hub__card--board-level .study-guide-dashboard-link' \
     "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq "'v' => '20261106-2'" "$TEMP_DIR/theme/moove/layout/drawers.php"
+grep -Fq "[48, 'Tricky Questions', 'games']" "$TEMP_DIR/blocks/menu/block_menu.php"
+grep -Fq "'title' => 'Tricky Questions'" "$TEMP_DIR/blocks/menu/board.php"
+grep -Fq "return ['Tricky Questions', 'games'];" "$TEMP_DIR/blocks/menu_course/block_menu_course.php"
+grep -Fq "'v' => '20261106-3'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"

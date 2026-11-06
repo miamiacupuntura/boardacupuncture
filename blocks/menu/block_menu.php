@@ -258,7 +258,7 @@ class block_menu extends block_base {
                         [30, 'Questions', 'questions'],
                         [43, 'Simulation', 'simulation'],
                         [93, 'Exam Key', 'notes', null, 'Book Notes'],
-                        [48, 'Games', 'games'],
+                        [48, 'Tricky Questions', 'games'],
                     ],
                 ],
                 [
@@ -270,7 +270,7 @@ class block_menu extends block_base {
                         [34, 'Questions', 'questions'],
                         [40, 'Simulation', 'simulation'],
                         [94, 'Exam Key', 'notes', null, null, 'Point Indication. Miscelaneous'],
-                        [83, 'Games', 'games'],
+                        [83, 'Tricky Questions', 'games'],
                     ],
                 ],
                 [
@@ -284,7 +284,7 @@ class block_menu extends block_base {
                         [44, 'Formulas', 'questions'],
                         [41, 'Simulation', 'simulation'],
                         [92, 'Exam Key', 'notes', 2020],
-                        [82, 'Games', 'games'],
+                        [82, 'Tricky Questions', 'games'],
                     ],
                 ],
                 [
@@ -296,7 +296,7 @@ class block_menu extends block_base {
                         [36, 'Questions', 'questions'],
                         [42, 'Simulation', 'simulation'],
                         [91, 'Exam Key', 'notes'],
-                        [84, 'Games', 'games'],
+                        [84, 'Tricky Questions', 'games'],
                     ],
                 ],
                 [
@@ -308,7 +308,7 @@ class block_menu extends block_base {
                         [113, 'Questions', 'questions'],
                         [118, 'Simulation', 'simulation'],
                         [120, 'Exam Key', 'notes', null, null, null, '/blocks/menu/clean-needle-exam-key.php'],
-                        [119, 'Games', 'games'],
+                        [119, 'Tricky Questions', 'games'],
                     ],
                 ],
             ];
@@ -334,7 +334,7 @@ class block_menu extends block_base {
                         && has_capability('moodle/course:manageactivities', $subjectcontext, $USER->id));
                 $actions = '';
                 foreach ($subject['resources'] as $resource) {
-                    if (!$showstaffresources && in_array($resource[1], ['Exam Key', 'Games'], true)) {
+                    if (!$showstaffresources && in_array($resource[1], ['Exam Key', 'Tricky Questions'], true)) {
                         continue;
                     }
                     $actions .= $this->board_resource_button(
