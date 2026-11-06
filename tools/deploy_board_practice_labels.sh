@@ -99,12 +99,13 @@ grep -Fq 'herb-board__domain-paging--top' "$TEMP_DIR/blocks/menu/herbology-board
 grep -Fq 'herb-board__domain-page-link--direction' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__domain-number' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__tab--language' "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq '>Español</a>' "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq 'Preguntas <strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "\$ises ? 'English' : 'Español'" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "['translations']['es']" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "\$ises ? 'Preguntas' : 'Questions'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '6 domain blocks' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq 'Approve for mixed exams' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$CFG->dataroot . '/board-domain-banks'" "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq '>Domains</a>' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "\$ises ? 'Dominios' : 'Domains'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 if (count($data["domains"] ?? []) !== 6) {
@@ -116,7 +117,8 @@ $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR)
 $total = array_sum(array_map("count", $data["domains"] ?? []));
 if ($total !== 1479
         || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 757
-        || ($data["status"] ?? "") !== "practice-ready") {
+        || ($data["status"] ?? "") !== "practice-ready"
+        || ($data["classificationVersion"] ?? "") !== "herbology-domain-source-grounded-2026-11-06-v3-es") {
     throw new RuntimeException("The classified Herbology candidate inventory is incomplete.");
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"

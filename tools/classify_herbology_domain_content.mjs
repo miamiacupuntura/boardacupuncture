@@ -18,6 +18,7 @@ const sha256 = relative => crypto.createHash('sha256')
     .digest('hex');
 
 const legacySource = 'output/complete-final-import/keyed-questions.jsonl';
+const formulaSpanishSource = 'study-guide/comparisons/formula-practice-translations-es.json';
 const modificationSources = [
     'study-guide/comparisons/formula-modifications-generated.json',
     'study-guide/comparisons/formula-modifications-supplement.json',
@@ -86,9 +87,10 @@ function createCandidate({
     sourceTitle,
     sourceLocator,
     reason,
+    translationEs = null,
 }) {
     const [difficultyBand, cognitiveLevel, contentType] = classifyCognitiveMetadata(prompt, domainId);
-    return {
+    const candidate = {
         questionId,
         questionTrack: 'board',
         criteriaVersion: '1.0-draft',
@@ -120,6 +122,10 @@ function createCandidate({
             reason,
         },
     };
+    if (translationEs?.prompt && translationEs?.options?.length === 4) {
+        candidate.translations = {es: translationEs};
+    }
+    return candidate;
 }
 
 function stableNumber(value) {
@@ -144,8 +150,11 @@ function buildOptions(correctAnswer, answerPool, seed) {
 }
 
 const legacyQuestions = readJsonLines(legacySource);
+const formulaSpanishQuestions = readJson(formulaSpanishSource).questions || [];
+const formulaSpanishBySource = new Map(formulaSpanishQuestions.map(question => [String(question.sourceNumber), question]));
 for (const question of legacyQuestions) {
     const [domainId, reason] = classifyLegacyQuestion(question);
+    const spanish = formulaSpanishBySource.get(String(question.source_number));
     const candidate = createCandidate({
         questionId: `CF-${String(question.source_number).padStart(4, '0')}`,
         domainId,
@@ -156,6 +165,11 @@ for (const question of legacyQuestions) {
         sourceTitle: 'Complete Final.docx',
         sourceLocator: `Question ${question.source_number}`,
         reason,
+        translationEs: spanish ? {
+            prompt: spanish.prompt,
+            options: spanish.options,
+            explanation: (spanish.feedback || []).join('\n\n') || (question.feedback || []).join('\n\n'),
+        } : null,
     });
     domains[domainId].push(candidate);
 }
@@ -175,6 +189,11 @@ for (const relative of modificationSources) {
             sourceTitle: question.provenance?.sourceTitle || 'Formula modification study content',
             sourceLocator: question.sourceId || String(question.sourceNumber),
             reason: 'Question was authored specifically for formula modification practice',
+            translationEs: question.translationEs ? {
+                prompt: question.translationEs.prompt,
+                options: question.translationEs.options,
+                explanation: (question.translationEs.feedback || []).join('\n\n'),
+            } : null,
         }));
         modificationCount++;
     }
@@ -218,6 +237,11 @@ for (const herb of usableHerbProfiles) {
         sourceTitle: 'Single Herb verified study profiles',
         sourceLocator: `Study Guide herb ${herb.guideNumber || herb.name}`,
         reason: 'Source-grounded question generated from a verified individual-herb profile',
+        translationEs: {
+            prompt: `¿Qué hierba corresponde mejor a este perfil? ${herb.actionSummary.es || herb.actionSummary.en} Indicaciones principales: ${herb.indicationSummary.es || herb.indicationSummary.en}`,
+            options,
+            explanation: `${herb.name} (${herb.latin || 'nombre farmacéutico no disponible'}) es ${herb.temperature?.es || 'de la temperatura registrada'} y ${herb.flavor?.es || 'presenta el perfil de sabor registrado'}. ${herb.actionSummary.es}`,
+        },
     }));
 }
 
@@ -236,6 +260,11 @@ for (const pair of usablePairs) {
         sourceTitle: 'Official Duì Yào pair profiles',
         sourceLocator: `Pair ${pair.number || pair.slug}`,
         reason: 'Source-grounded question generated from an official pair profile',
+        translationEs: {
+            prompt: `¿Qué par Duì Yào tiene esta acción combinada? ${pair.action.es || pair.action.en}`,
+            options,
+            explanation: `${pair.title} realiza esta acción combinada. Fórmula representativa: ${pair.formulas?.es || 'consulta el perfil del par'}.`,
+        },
     }));
 }
 
@@ -245,6 +274,7 @@ for (const [index, [herbName, safety]] of safetyEntries.entries()) {
     const options = buildOptions(herbName, safetyHerbNames, `safety-${herbName}`);
     const correctOption = options.find(option => option.text === herbName);
     const preparation = safety.preparation?.en ? ` Preparation: ${safety.preparation.en}` : '';
+    const preparationEs = safety.preparation?.es ? ` Preparación: ${safety.preparation.es}` : '';
     domains.safety_dispensing.push(createCandidate({
         questionId: `SD-${String(index + 1).padStart(3, '0')}`,
         domainId: 'safety_dispensing',
@@ -255,6 +285,11 @@ for (const [index, [herbName, safety]] of safetyEntries.entries()) {
         sourceTitle: 'Single Herb safety supplement',
         sourceLocator: `Safety record: ${herbName}`,
         reason: 'Source-grounded question generated from a named herb safety record',
+        translationEs: {
+            prompt: `¿Qué hierba se asocia con esta orientación de seguridad? ${safety.caution.es || safety.caution.en}${preparationEs}`,
+            options,
+            explanation: `${herbName}: ${safety.caution.es || safety.caution.en}${preparationEs}`,
+        },
     }));
 }
 
@@ -273,6 +308,11 @@ for (const formula of usableFormulaRoster) {
         sourceTitle: '2026 Formula Board roster',
         sourceLocator: `Roster entry ${formula.id || formula.name}`,
         reason: 'Source-grounded nomenclature question generated from the current formula roster',
+        translationEs: {
+            prompt: `Dentro del listado actual de fórmulas, ¿qué nombre pinyin corresponde a “${formula.englishName}”?`,
+            options,
+            explanation: `${formula.englishName} aparece como ${formula.name} en el listado actual de fórmulas.`,
+        },
     }));
 }
 
@@ -299,7 +339,7 @@ const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v2',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v3-es',
     status: 'practice-ready',
     policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Complete questions may be used directly in practice exams.',
     generatedFrom: {

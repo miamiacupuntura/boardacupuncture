@@ -5,6 +5,8 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 
+$lang = optional_param('lang', '', PARAM_ALPHA);
+$ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
 if (!in_array($track, ['herbs', 'formulas', 'domains'], true)) {
     $track = 'herbs';
@@ -30,6 +32,9 @@ if (!$hasaccess) {
 }
 
 $pageparams = ['track' => $track];
+if ($ises) {
+    $pageparams['lang'] = 'es';
+}
 if ($sectionkey !== '') {
     $pageparams['section'] = $sectionkey;
 }
@@ -44,57 +49,81 @@ if ($domainpage > 0) {
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $languageparams = $pageparams;
-$languageparams['lang'] = 'es';
-$spanishurl = new moodle_url('/blocks/menu/herbology-board.php', $languageparams);
+if ($ises) {
+    unset($languageparams['lang']);
+} else {
+    $languageparams['lang'] = 'es';
+}
+$languageurl = new moodle_url('/blocks/menu/herbology-board.php', $languageparams);
 $dashboardurl = new moodle_url('/my/');
-$singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs']);
-$formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas']);
-$domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains']);
+$languagecontext = $ises ? ['lang' => 'es'] : [];
+$singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
+$formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
+$domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
 
 $domainblueprint = [
     [
         'number' => 1,
         'id' => 'formula_differentiation',
         'name' => 'Formula selection and differentiation',
+        'name_es' => 'Selección y diferenciación de fórmulas',
         'weight' => 28,
         'focus' => 'Pattern-to-formula selection, close comparisons and the decisive clinical clue.',
+        'focus_es' => 'Selección de la fórmula según el patrón, comparaciones cercanas y la pista clínica decisiva.',
     ],
     [
         'number' => 2,
         'id' => 'single_herb',
         'name' => 'Individual herbs',
+        'name_es' => 'Hierbas individuales',
         'weight' => 24,
         'focus' => 'Category, actions, indications, nature, channels and clinical distinctions.',
+        'focus_es' => 'Categoría, acciones, indicaciones, naturaleza, canales y diferencias clínicas.',
     ],
     [
         'number' => 3,
         'id' => 'dui_yao',
         'name' => 'Duì Yào and compatibility',
+        'name_es' => 'Duì Yào y compatibilidad',
         'weight' => 18,
         'focus' => 'Combined action, each herb’s contribution and the pair’s traditional relationship.',
+        'focus_es' => 'Acción combinada, contribución de cada hierba y relación tradicional del par.',
     ],
     [
         'number' => 4,
         'id' => 'safety_dispensing',
         'name' => 'Safety and dispensing',
+        'name_es' => 'Seguridad y dispensación',
         'weight' => 15,
         'focus' => 'Dosage, preparation, toxicity, pregnancy, interactions and substitutions.',
+        'focus_es' => 'Dosis, preparación, toxicidad, embarazo, interacciones y sustituciones.',
     ],
     [
         'number' => 5,
         'id' => 'formula_composition',
         'name' => 'Formula composition and modification',
+        'name_es' => 'Composición y modificación de fórmulas',
         'weight' => 10,
         'focus' => 'Jun–Chen–Zuo–Shi, strategic ingredients and presentation-based modifications.',
+        'focus_es' => 'Jun–Chen–Zuo–Shi, ingredientes estratégicos y modificaciones según la presentación.',
     ],
     [
         'number' => 6,
         'id' => 'scope_aliases',
         'name' => 'Roster boundaries, aliases and substitutions',
+        'name_es' => 'Límites del listado, alias y sustituciones',
         'weight' => 5,
         'focus' => 'Name variants, official-list boundaries and obsolete or historical alternatives.',
+        'focus_es' => 'Variantes de nombres, límites del listado oficial y alternativas obsoletas o históricas.',
     ],
 ];
+if ($ises) {
+    foreach ($domainblueprint as &$domaintranslation) {
+        $domaintranslation['name'] = $domaintranslation['name_es'];
+        $domaintranslation['focus'] = $domaintranslation['focus_es'];
+    }
+    unset($domaintranslation);
+}
 $domainseedpath = __DIR__ . '/herbology-domain-bank.json';
 $domainbankdirectory = $CFG->dataroot . '/board-domain-banks';
 if ($track === 'domains') {
@@ -132,11 +161,11 @@ if ($track === 'domains' && is_readable($domaincandidatepath)) {
         $candidateversion = (string)($domaincandidates['classificationVersion'] ?? '');
         $importedversion = (string)($domainbank['imports']['classifiedContentVersion'] ?? '');
         if ($candidateversion !== '' && $candidateversion !== $importedversion) {
-            $existingids = [];
-            foreach ($domainbank['domains'] as $existingquestions) {
-                foreach ($existingquestions as $existingquestion) {
+            $existinglocations = [];
+            foreach ($domainbank['domains'] as $existingdomainid => $existingquestions) {
+                foreach ($existingquestions as $existingindex => $existingquestion) {
                     if (!empty($existingquestion['questionId'])) {
-                        $existingids[$existingquestion['questionId']] = true;
+                        $existinglocations[$existingquestion['questionId']] = [$existingdomainid, $existingindex];
                     }
                 }
             }
@@ -146,9 +175,18 @@ if ($track === 'domains' && is_readable($domaincandidatepath)) {
                 }
                 foreach ($candidatequestions as $candidatequestion) {
                     $candidatequestionid = $candidatequestion['questionId'] ?? '';
-                    if ($candidatequestionid !== '' && !isset($existingids[$candidatequestionid])) {
+                    if ($candidatequestionid === '') {
+                        continue;
+                    }
+                    if (isset($existinglocations[$candidatequestionid])) {
+                        [$existingdomainid, $existingindex] = $existinglocations[$candidatequestionid];
+                        $domainbank['domains'][$existingdomainid][$existingindex] = $candidatequestion;
+                    } else {
                         $domainbank['domains'][$candidateid][] = $candidatequestion;
-                        $existingids[$candidatequestionid] = true;
+                        $existinglocations[$candidatequestionid] = [
+                            $candidateid,
+                            count($domainbank['domains'][$candidateid]) - 1,
+                        ];
                     }
                 }
             }
@@ -174,6 +212,28 @@ $questionisready = static function(array $question): bool {
 $selecteddomain = null;
 foreach ($domainblueprint as &$domain) {
     $domain['questions'] = $domainbank['domains'][$domain['id']] ?? [];
+    if ($ises) {
+        $domain['questions'] = array_values(array_filter(
+            $domain['questions'],
+            static function(array $question): bool {
+                $translation = $question['translations']['es'] ?? null;
+                return is_array($translation)
+                    && !empty($translation['prompt'])
+                    && count($translation['options'] ?? []) === 4
+                    && !empty($translation['explanation']);
+            }
+        ));
+        foreach ($domain['questions'] as &$translatedquestion) {
+            $translation = $translatedquestion['translations']['es'] ?? null;
+            if (!is_array($translation)) {
+                continue;
+            }
+            $translatedquestion['prompt'] = $translation['prompt'] ?? $translatedquestion['prompt'];
+            $translatedquestion['options'] = $translation['options'] ?? $translatedquestion['options'];
+            $translatedquestion['explanation'] = $translation['explanation'] ?? $translatedquestion['explanation'];
+        }
+        unset($translatedquestion);
+    }
     $domain['questions'] = array_values(array_filter($domain['questions'], $questionisready));
     $domain['questionCount'] = count($domain['questions']);
     $domain['sourceLabel'] = (string)($domaincandidateinventory[$domain['id']]['authoringSourceLabel'] ?? '');
@@ -208,7 +268,7 @@ if ($selecteddomain !== null) {
             'track' => 'domains',
             'domain' => $selecteddomain['id'],
             'page' => $pageindex,
-        ]);
+        ] + $languagecontext);
     }
 }
 $mixedquestions = [];
@@ -258,7 +318,10 @@ if (exam) {
             feedback.hidden = false;
         });
         const result = document.getElementById('herbology-domain-exam-result');
-        result.textContent = `${score} of ${questions.length} correct${unanswered ? ` · ${unanswered} unanswered` : ''}`;
+        const connector = exam.dataset.scoreConnector || 'of';
+        const correctWord = exam.dataset.correctWord || 'correct';
+        const unansweredWord = exam.dataset.unansweredWord || 'unanswered';
+        result.textContent = `${score} ${connector} ${questions.length} ${correctWord}${unanswered ? ` · ${unanswered} ${unansweredWord}` : ''}`;
         result.hidden = false;
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
     });
@@ -269,8 +332,8 @@ JS);
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title('Herbology Practice');
-$PAGE->set_heading('Herbology Practice');
+$PAGE->set_title($ises ? 'Práctica de Herbología' : 'Herbology Practice');
+$PAGE->set_heading($ises ? 'Práctica de Herbología' : 'Herbology Practice');
 
 $topics = [];
 $clearheatsections = [
@@ -810,20 +873,22 @@ $herbpracticeurl = new moodle_url('/study-guide/comparisons/herb-comparison-bank
 echo $OUTPUT->header();
 ?>
 <main class="herb-board">
-    <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>">← Back to Dashboard</a>
+    <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? '← Volver al Dashboard' : '← Back to Dashboard'; ?></a>
     <header class="herb-board__hero">
-        <p class="herb-board__eyebrow">CHINESE HERBOLOGY · BOARD LEVEL</p>
-        <h2>Herbology Practice</h2>
-        <span>Build focused multiple-choice practice from the Board question pool and review your progress over time.</span>
+        <p class="herb-board__eyebrow"><?php echo $ises ? 'HERBOLOGÍA CHINA · NIVEL BOARD' : 'CHINESE HERBOLOGY · BOARD LEVEL'; ?></p>
+        <h2><?php echo $ises ? 'Práctica de Herbología' : 'Herbology Practice'; ?></h2>
+        <span><?php echo $ises
+            ? 'Practica preguntas de selección múltiple del banco del Board y revisa tu progreso.'
+            : 'Build focused multiple-choice practice from the Board question pool and review your progress over time.'; ?></span>
         <nav class="herb-board__tabs" aria-label="Herbology practice sections">
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
-                <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>>Single Herbs</a>
+                <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
-                <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>>Formulas</a>
+                <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
             <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
-                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>>Domains</a>
-            <a class="herb-board__tab herb-board__tab--language" hreflang="es"
-                href="<?php echo $spanishurl->out(false); ?>">Español</a>
+                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Dominios' : 'Domains'; ?></a>
+            <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>
         <?php if ($track !== 'domains') { ?>
             <div class="herb-board__summary" aria-label="Practice features">
@@ -1162,26 +1227,30 @@ echo $OUTPUT->header();
         <section class="herb-board__panel" aria-labelledby="herb-board-domains-title">
             <div class="herb-board__panel-heading">
                 <div>
-                    <h3 id="herb-board-domains-title">Practice by Domain</h3>
-                    <p>Choose one subject for focused practice or start the complete 100-question exam.</p>
+                    <h3 id="herb-board-domains-title"><?php echo $ises ? 'Práctica por dominio' : 'Practice by Domain'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'Elige un tema para practicarlo o comienza el examen completo de 100 preguntas.'
+                        : 'Choose one subject for focused practice or start the complete 100-question exam.'; ?></p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
-                <span><strong>6</strong> study subjects</span>
-                <span><strong>100</strong> questions in the complete practice exam</span>
+                <span><strong>6</strong> <?php echo $ises ? 'temas de estudio' : 'study subjects'; ?></span>
+                <span><strong>100</strong> <?php echo $ises ? 'preguntas en el examen completo' : 'questions in the complete practice exam'; ?></span>
             </div>
             <?php
             $mixurl = new moodle_url('/blocks/menu/herbology-board.php', [
                 'track' => 'domains',
                 'mix' => 1,
-            ]);
+            ] + $languagecontext);
             ?>
             <?php if (!$mixdomains) { ?>
                 <div class="herb-board__domain-tools">
                     <a class="herb-board__domain-builder" href="<?php echo $mixurl->out(false); ?>">
-                        Comenzar examen de 100 preguntas
+                        <?php echo $ises ? 'Comenzar examen de 100 preguntas' : 'Start 100-question practice exam'; ?>
                     </a>
-                    <span>Questions are mixed from all six study subjects.</span>
+                    <span><?php echo $ises
+                        ? 'Las preguntas se mezclan a partir de los seis temas.'
+                        : 'Questions are mixed from all six study subjects.'; ?></span>
                 </div>
             <?php } ?>
             <div class="herb-board__domains">
@@ -1189,15 +1258,15 @@ echo $OUTPUT->header();
                     $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
                         'track' => 'domains',
                         'domain' => $domain['id'],
-                    ]);
+                    ] + $languagecontext);
                 ?>
                     <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
                         href="<?php echo $domainurl->out(false); ?>">
-                        <span class="herb-board__domain-number">Domain <?php echo (int)$domain['number']; ?></span>
+                        <span class="herb-board__domain-number"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$domain['number']; ?></span>
                         <h4><?php echo s($domain['name']); ?></h4>
                         <p><?php echo s($domain['focus']); ?></p>
                         <span class="herb-board__domain-status">
-                            <?php echo (int)$domain['questionCount']; ?> practice questions →
+                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de práctica' : 'practice questions'; ?> →
                         </span>
                     </a>
                 <?php } ?>
@@ -1208,19 +1277,24 @@ echo $OUTPUT->header();
                     <p>Please return shortly while the remaining questions are connected.</p>
                 </section>
             <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
-                <form id="herbology-domain-exam" class="herb-board__exam">
+                <form id="herbology-domain-exam" class="herb-board__exam"
+                    data-score-connector="<?php echo $ises ? 'de' : 'of'; ?>"
+                    data-correct-word="<?php echo $ises ? 'correctas' : 'correct'; ?>"
+                    data-unanswered-word="<?php echo $ises ? 'sin responder' : 'unanswered'; ?>">
                     <div class="herb-board__exam-heading">
                         <div>
-                            <span>Complete practice exam</span>
-                            <h4>Chinese Herbology · 100 Questions</h4>
+                            <span><?php echo $ises ? 'Examen completo de práctica' : 'Complete practice exam'; ?></span>
+                            <h4><?php echo $ises ? 'Herbología China · 100 preguntas' : 'Chinese Herbology · 100 Questions'; ?></h4>
                         </div>
-                        <p>Select one answer for each question. Submit at the end to see your score and explanations.</p>
+                        <p><?php echo $ises
+                            ? 'Selecciona una respuesta por pregunta. Al final podrás ver tu puntuación y las explicaciones.'
+                            : 'Select one answer for each question. Submit at the end to see your score and explanations.'; ?></p>
                     </div>
                     <?php foreach ($mixedquestions as $questionnumber => $question) { ?>
                         <fieldset class="herb-board__exam-question"
                             data-correct="<?php echo s($question['correctLabel']); ?>">
                             <legend>
-                                <span>Question <?php echo $questionnumber + 1; ?></span>
+                                <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $questionnumber + 1; ?></span>
                                 <?php echo s($question['prompt']); ?>
                             </legend>
                             <div class="herb-board__exam-options">
@@ -1234,13 +1308,13 @@ echo $OUTPUT->header();
                                 <?php } ?>
                             </div>
                             <div class="herb-board__exam-feedback" hidden>
-                                <strong>Correct answer: <?php echo s($question['correctLabel']); ?></strong>
+                                <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>: <?php echo s($question['correctLabel']); ?></strong>
                                 <p><?php echo s($question['explanation']); ?></p>
                             </div>
                         </fieldset>
                     <?php } ?>
                     <div class="herb-board__exam-submit">
-                        <button type="submit">Check my score</button>
+                        <button type="submit"><?php echo $ises ? 'Comprobar mi puntuación' : 'Check my score'; ?></button>
                         <output id="herbology-domain-exam-result" hidden></output>
                     </div>
                 </form>
@@ -1248,30 +1322,32 @@ echo $OUTPUT->header();
         </section>
     <?php } else { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-domain-bank-title">
-            <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>">← All Domains</a>
+            <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>"><?php echo $ises ? '← Todos los dominios' : '← All Domains'; ?></a>
             <div class="herb-board__panel-heading herb-board__panel-heading--domain-bank">
                 <div>
-                    <span class="herb-board__domain-kicker">Domain <?php echo (int)$selecteddomain['number']; ?> · Focused practice</span>
+                    <span class="herb-board__domain-kicker"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$selecteddomain['number']; ?> · <?php echo $ises ? 'Práctica enfocada' : 'Focused practice'; ?></span>
                     <h3 id="herb-board-domain-bank-title"><?php echo s($selecteddomain['name']); ?></h3>
                     <p><?php echo s($selecteddomain['focus']); ?></p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Selected Domain bank totals">
-                <span>Preguntas <strong><?php echo (int)$selecteddomainstart; ?>–<?php echo (int)$selecteddomainend; ?></strong>
-                    de <strong><?php echo (int)$selecteddomain['questionCount']; ?></strong></span>
+                <span><?php echo $ises ? 'Preguntas' : 'Questions'; ?> <strong><?php echo (int)$selecteddomainstart; ?>–<?php echo (int)$selecteddomainend; ?></strong>
+                    <?php echo $ises ? 'de' : 'of'; ?> <strong><?php echo (int)$selecteddomain['questionCount']; ?></strong></span>
             </div>
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
-                    Practice questions for this subject are being prepared.
+                    <?php echo $ises
+                        ? 'Las preguntas de práctica para este tema están en preparación.'
+                        : 'Practice questions for this subject are being prepared.'; ?>
                 </div>
             <?php } else { ?>
                 <?php if ($selecteddomaintotalpages > 1) { ?>
                     <div class="herb-board__domain-paging herb-board__domain-paging--top">
-                        <strong>Página <?php echo $domainpage + 1; ?> de <?php echo $selecteddomaintotalpages; ?></strong>
-                        <nav class="herb-board__domain-page-links" aria-label="Páginas de preguntas">
+                        <strong><?php echo $ises ? 'Página' : 'Page'; ?> <?php echo $domainpage + 1; ?> <?php echo $ises ? 'de' : 'of'; ?> <?php echo $selecteddomaintotalpages; ?></strong>
+                        <nav class="herb-board__domain-page-links" aria-label="<?php echo $ises ? 'Páginas de preguntas' : 'Question pages'; ?>">
                             <?php if ($domainpage > 0) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Anterior</a>
+                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← <?php echo $ises ? 'Anterior' : 'Previous'; ?></a>
                             <?php } ?>
                             <?php foreach ($domainpageurls as $pageindex => $domainpageurl) { ?>
                                 <a class="herb-board__domain-page-link<?php echo $pageindex === $domainpage ? ' is-current' : ''; ?>"
@@ -1282,7 +1358,7 @@ echo $OUTPUT->header();
                             <?php } ?>
                             <?php if ($domainpage + 1 < $selecteddomaintotalpages) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Siguiente →</a>
+                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>"><?php echo $ises ? 'Siguiente' : 'Next'; ?> →</a>
                             <?php } ?>
                         </nav>
                     </div>
@@ -1294,15 +1370,15 @@ echo $OUTPUT->header();
                             <h4><?php echo s($question['prompt'] ?? 'Question awaiting prompt'); ?></h4>
                             <?php if ($canmanagedomains) { ?>
                                 <details>
-                                    <summary>Question details</summary>
+                                    <summary><?php echo $ises ? 'Detalles de la pregunta' : 'Question details'; ?></summary>
                                     <ol type="A">
                                         <?php foreach ($question['options'] ?? [] as $option) { ?>
                                             <li><?php echo s($option['text'] ?? ''); ?></li>
                                         <?php } ?>
                                     </ol>
-                                    <p><strong>Correct:</strong> <?php echo s($question['correctLabel'] ?? ''); ?></p>
-                                    <p><strong>Explanation:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
-                                    <p><strong>Source:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
+                                    <p><strong><?php echo $ises ? 'Correcta' : 'Correct'; ?>:</strong> <?php echo s($question['correctLabel'] ?? ''); ?></p>
+                                    <p><strong><?php echo $ises ? 'Explicación' : 'Explanation'; ?>:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
+                                    <p><strong><?php echo $ises ? 'Fuente' : 'Source'; ?>:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
                                         <?php echo s($question['source']['locator'] ?? ''); ?></p>
                                 </details>
                             <?php } ?>
@@ -1311,11 +1387,11 @@ echo $OUTPUT->header();
                 </div>
                 <?php if ($selecteddomaintotalpages > 1) { ?>
                     <div class="herb-board__domain-paging herb-board__domain-paging--bottom">
-                        <strong>Página <?php echo $domainpage + 1; ?> de <?php echo $selecteddomaintotalpages; ?></strong>
-                        <nav class="herb-board__domain-page-links" aria-label="Páginas de preguntas">
+                        <strong><?php echo $ises ? 'Página' : 'Page'; ?> <?php echo $domainpage + 1; ?> <?php echo $ises ? 'de' : 'of'; ?> <?php echo $selecteddomaintotalpages; ?></strong>
+                        <nav class="herb-board__domain-page-links" aria-label="<?php echo $ises ? 'Páginas de preguntas' : 'Question pages'; ?>">
                             <?php if ($domainpage > 0) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Anterior</a>
+                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← <?php echo $ises ? 'Anterior' : 'Previous'; ?></a>
                             <?php } ?>
                             <?php foreach ($domainpageurls as $pageindex => $domainpageurl) { ?>
                                 <a class="herb-board__domain-page-link<?php echo $pageindex === $domainpage ? ' is-current' : ''; ?>"
@@ -1326,7 +1402,7 @@ echo $OUTPUT->header();
                             <?php } ?>
                             <?php if ($domainpage + 1 < $selecteddomaintotalpages) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Siguiente →</a>
+                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>"><?php echo $ises ? 'Siguiente' : 'Next'; ?> →</a>
                             <?php } ?>
                         </nav>
                     </div>
