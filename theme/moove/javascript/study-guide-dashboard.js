@@ -240,9 +240,24 @@
             outline-offset: 2px;
         }
         .board-hub__card--board-level .study-guide-dashboard-link {
-            width: 100%;
-            flex: 1 1 100%;
+            width: auto;
+            flex: 1 1 calc(50% - 8px);
             margin: 0 !important;
+            order: 2;
+        }
+        .board-hub__card--board-level .board-hub__action--board-mock {
+            order: 1;
+        }
+        .board-hub__card--board-level .board-hub__action--board-simulation {
+            flex-basis: 100%;
+            order: 3;
+        }
+        .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--simulation {
+            flex-basis: 100%;
+        }
+        .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--games {
+            flex: 0 0 auto;
+            min-width: 118px;
         }
         .comparisons-dashboard-link {
             display: inline-flex !important;

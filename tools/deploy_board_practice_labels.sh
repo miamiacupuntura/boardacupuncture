@@ -70,10 +70,14 @@ grep -Fq '$boardlevelactions = $mockquestionsaction . $simulationaction . $study
     "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq '.board-hub__card--board-level .study-guide-dashboard-link' \
     "$TEMP_DIR/blocks/menu/styles.css"
+grep -Fq '.board-hub__card--board-level .board-hub__action--board-simulation' \
+    "$TEMP_DIR/blocks/menu/styles.css"
+grep -Fq '.board-hub__card:not(.board-hub__card--board-level) .board-hub__action--games' \
+    "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq "[48, 'Tricky Questions', 'games']" "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq "'title' => 'Tricky Questions'" "$TEMP_DIR/blocks/menu/board.php"
 grep -Fq "return ['Tricky Questions', 'games'];" "$TEMP_DIR/blocks/menu_course/block_menu_course.php"
-grep -Fq "'v' => '20261106-3'" "$TEMP_DIR/theme/moove/layout/drawers.php"
+grep -Fq "'v' => '20261106-4'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
