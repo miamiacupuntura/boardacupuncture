@@ -88,13 +88,14 @@ grep -Fq '.board-hub__card:not(.board-hub__card--board-level) .board-hub__action
 grep -Fq "[48, 'Tricky Questions', 'games']" "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq "'title' => 'Tricky Questions'" "$TEMP_DIR/blocks/menu/board.php"
 grep -Fq "return ['Tricky Questions', 'games'];" "$TEMP_DIR/blocks/menu_course/block_menu_course.php"
-grep -Fq 'Question blocks by Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Practice by Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "'formula_differentiation'" "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq 'Domain question bank' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Focused practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq 'Save question in this Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq "domainaction === 'addquestion'" "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq 'Build 100-question mixed draft' "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq 'Approve for mixed exams' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Start 100-question practice exam' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Check my score' "$TEMP_DIR/blocks/menu/herbology-board.php"
+! grep -Fq 'Approve for mixed exams' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$CFG->dataroot . '/board-domain-banks'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '>Domains</a>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 php -r '
@@ -106,9 +107,9 @@ if (count($data["domains"] ?? []) !== 6) {
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 $total = array_sum(array_map("count", $data["domains"] ?? []));
-if ($total !== 1192
-        || ($data["summary"]["approvalReadyTotal"] ?? 0) !== 472
-        || ($data["status"] ?? "") !== "classified-not-approved") {
+if ($total !== 1479
+        || ($data["summary"]["practiceReadyTotal"] ?? 0) !== 757
+        || ($data["status"] ?? "") !== "practice-ready") {
     throw new RuntimeException("The classified Herbology candidate inventory is incomplete.");
 }
 ' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"

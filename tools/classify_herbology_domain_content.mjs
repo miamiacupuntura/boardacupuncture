@@ -93,7 +93,7 @@ function createCandidate({
         questionTrack: 'board',
         criteriaVersion: '1.0-draft',
         itemFormat: 'multiple-choice',
-        feedbackStatus: 'needs-review',
+        feedbackStatus: 'practice-ready',
         examId: 'chinese-herbal-medicine',
         outlineVersion: 'pending-official-confirmation',
         domainId,
@@ -107,8 +107,8 @@ function createCandidate({
             locator: sourceLocator,
         },
         review: {
-            status: 'classified',
-            notes: `Automated first-pass classification: ${reason}. Requires human review before approval.`,
+            status: 'practice-ready',
+            notes: `Source-grounded practice preparation: ${reason}.`,
         },
         prompt,
         options,
@@ -120,6 +120,27 @@ function createCandidate({
             reason,
         },
     };
+}
+
+function stableNumber(value) {
+    return [...String(value)].reduce((total, character) => ((total * 31) + character.charCodeAt(0)) >>> 0, 17);
+}
+
+function buildOptions(correctAnswer, answerPool, seed) {
+    const alternatives = [...new Set(answerPool)].filter(answer => answer && answer !== correctAnswer);
+    const selected = [];
+    let cursor = stableNumber(seed) % alternatives.length;
+    while (selected.length < 3 && selected.length < alternatives.length) {
+        const candidate = alternatives[cursor % alternatives.length];
+        if (!selected.includes(candidate)) {
+            selected.push(candidate);
+        }
+        cursor += 17;
+    }
+    const correctPosition = stableNumber(`${seed}-correct`) % 4;
+    const answers = [...selected];
+    answers.splice(correctPosition, 0, correctAnswer);
+    return answers.map((text, index) => ({label: String.fromCharCode(65 + index), text}));
 }
 
 const legacyQuestions = readJsonLines(legacySource);
@@ -180,11 +201,97 @@ const englishFormulaTheoryPages = fs.readdirSync(resolveFromRoot('study-guide/co
 const englishSafetyPages = fs.readdirSync(resolveFromRoot('study-guide/comparisons'))
     .filter(filename => /^safety-.*\.html$/.test(filename) && !filename.endsWith('-es.html')).length;
 
+const usableHerbProfiles = (herbProfiles.herbs || []).filter(herb => herb.name
+    && herb.actionSummary?.en
+    && herb.indicationSummary?.en);
+const herbNames = usableHerbProfiles.map(herb => herb.name);
+for (const herb of usableHerbProfiles) {
+    const options = buildOptions(herb.name, herbNames, `herb-${herb.guideNumber || herb.name}`);
+    const correctOption = options.find(option => option.text === herb.name);
+    domains.single_herb.push(createCandidate({
+        questionId: `SH-${String(herb.guideNumber || stableNumber(herb.name)).padStart(4, '0')}`,
+        domainId: 'single_herb',
+        prompt: `Which herb best matches this profile? ${herb.actionSummary.en} Principal indications: ${herb.indicationSummary.en}`,
+        options,
+        correctLabel: correctOption.label,
+        explanation: `${herb.name} (${herb.latin || 'pharmaceutical name not supplied'}) is ${herb.temperature?.en || 'of the recorded temperature'} and ${herb.flavor?.en || 'has the recorded flavor profile'}. ${herb.actionSummary.en}`,
+        sourceTitle: 'Single Herb verified study profiles',
+        sourceLocator: `Study Guide herb ${herb.guideNumber || herb.name}`,
+        reason: 'Source-grounded question generated from a verified individual-herb profile',
+    }));
+}
+
+const usablePairs = (Array.isArray(duiYaoPairs) ? duiYaoPairs : []).filter(pair => pair.title && pair.action?.en);
+const pairTitles = usablePairs.map(pair => pair.title);
+for (const pair of usablePairs) {
+    const options = buildOptions(pair.title, pairTitles, `duiyao-${pair.number || pair.slug}`);
+    const correctOption = options.find(option => option.text === pair.title);
+    domains.dui_yao.push(createCandidate({
+        questionId: `DY-${String(pair.number || stableNumber(pair.slug)).padStart(3, '0')}`,
+        domainId: 'dui_yao',
+        prompt: `Which Duì Yào pair has this combined action? ${pair.action.en}`,
+        options,
+        correctLabel: correctOption.label,
+        explanation: `${pair.title} performs this combined action. Representative formula: ${pair.formulas?.en || 'see the pair profile'}.`,
+        sourceTitle: 'Official Duì Yào pair profiles',
+        sourceLocator: `Pair ${pair.number || pair.slug}`,
+        reason: 'Source-grounded question generated from an official pair profile',
+    }));
+}
+
+const safetyEntries = Object.entries(herbSafety.herbs || {}).filter(([, safety]) => safety.caution?.en);
+const safetyHerbNames = safetyEntries.map(([name]) => name);
+for (const [index, [herbName, safety]] of safetyEntries.entries()) {
+    const options = buildOptions(herbName, safetyHerbNames, `safety-${herbName}`);
+    const correctOption = options.find(option => option.text === herbName);
+    const preparation = safety.preparation?.en ? ` Preparation: ${safety.preparation.en}` : '';
+    domains.safety_dispensing.push(createCandidate({
+        questionId: `SD-${String(index + 1).padStart(3, '0')}`,
+        domainId: 'safety_dispensing',
+        prompt: `Which herb is associated with this safety guidance? ${safety.caution.en}${preparation}`,
+        options,
+        correctLabel: correctOption.label,
+        explanation: `${herbName}: ${safety.caution.en}${preparation}`,
+        sourceTitle: 'Single Herb safety supplement',
+        sourceLocator: `Safety record: ${herbName}`,
+        reason: 'Source-grounded question generated from a named herb safety record',
+    }));
+}
+
+const usableFormulaRoster = (formulaRoster.formulas || []).filter(formula => formula.name && formula.englishName);
+const formulaNames = usableFormulaRoster.map(formula => formula.name);
+for (const formula of usableFormulaRoster) {
+    const options = buildOptions(formula.name, formulaNames, `roster-${formula.id || formula.name}`);
+    const correctOption = options.find(option => option.text === formula.name);
+    domains.scope_aliases.push(createCandidate({
+        questionId: `RA-${String(formula.id || stableNumber(formula.name)).padStart(3, '0')}`,
+        domainId: 'scope_aliases',
+        prompt: `Within the current formula roster, which pinyin name corresponds to “${formula.englishName}”?`,
+        options,
+        correctLabel: correctOption.label,
+        explanation: `${formula.englishName} is listed as ${formula.name} in the current formula roster.`,
+        sourceTitle: '2026 Formula Board roster',
+        sourceLocator: `Roster entry ${formula.id || formula.name}`,
+        reason: 'Source-grounded nomenclature question generated from the current formula roster',
+    }));
+}
+
+for (const domainId of domainIds) {
+    const ids = new Set();
+    domains[domainId] = domains[domainId].filter(question => {
+        if (ids.has(question.questionId)) {
+            return false;
+        }
+        ids.add(question.questionId);
+        return true;
+    });
+}
+
 const classifiedCounts = Object.fromEntries(domainIds.map(domainId => [domainId, domains[domainId].length]));
-const approvalReadyCounts = Object.fromEntries(domainIds.map(domainId => [
+const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
     domainId,
     domains[domainId].filter(question => question.prompt
-        && question.options.length >= 2
+        && question.options.length === 4
         && question.correctLabel
         && question.explanation
         && question.source.title
@@ -192,9 +299,9 @@ const approvalReadyCounts = Object.fromEntries(domainIds.map(domainId => [
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-first-pass-2026-11-06',
-    status: 'classified-not-approved',
-    policy: 'Existing keyed multiple-choice items are assigned to one primary working Domain. Automated assignments remain classified drafts until human review. Q&A references and content cards are inventoried as authoring sources but are not converted into multiple-choice questions automatically.',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v2',
+    status: 'practice-ready',
+    policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Complete questions may be used directly in practice exams.',
     generatedFrom: {
         legacyKeyedQuestions: {
             path: legacySource,
@@ -211,8 +318,8 @@ const output = {
         legacyKeyedQuestions: legacyQuestions.length,
         generatedModificationQuestions: modificationCount,
         byDomain: classifiedCounts,
-        approvalReadyByDomain: approvalReadyCounts,
-        approvalReadyTotal: Object.values(approvalReadyCounts).reduce((sum, count) => sum + count, 0),
+        practiceReadyByDomain: practiceReadyCounts,
+        practiceReadyTotal: Object.values(practiceReadyCounts).reduce((sum, count) => sum + count, 0),
     },
     sourceInventory: {
         formula_differentiation: {

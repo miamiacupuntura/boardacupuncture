@@ -1483,32 +1483,6 @@ a.herb-board__domain:focus {
     font-size: .95rem;
 }
 
-.herb-board__approve-form {
-    margin-top: 12px;
-}
-
-.herb-board__approve-form button {
-    min-height: 38px;
-    padding: 8px 12px;
-    border: 0;
-    border-radius: 7px;
-    background: #6d4bc3;
-    color: #fff;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-.herb-board__approval-blocked {
-    margin-top: 12px;
-    padding: 9px 11px;
-    border-left: 3px solid #d97706;
-    border-radius: 6px;
-    background: #fff7ed;
-    color: #8a4b10;
-    font-size: .78rem;
-    font-weight: 750;
-}
-
 .herb-board__domain-question details {
     margin-top: 10px;
     padding-top: 10px;
@@ -1587,6 +1561,146 @@ a.herb-board__domain:focus {
     color: #175b4b;
 }
 
+.herb-board__exam {
+    margin-top: 24px;
+}
+
+.herb-board__exam-heading {
+    margin-bottom: 16px;
+    padding: 18px 20px;
+    border-left: 5px solid #6d4bc3;
+    border-radius: 9px;
+    background: #f7f4ff;
+}
+
+.herb-board__exam-heading span {
+    color: #6d4bc3;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.herb-board__exam-heading h4 {
+    margin: 4px 0 5px;
+    font-size: 1.35rem;
+}
+
+.herb-board__exam-heading p {
+    margin: 0;
+    color: #52677a;
+}
+
+.herb-board__exam-question {
+    min-width: 0;
+    margin: 0 0 12px;
+    padding: 18px;
+    border: 1px solid #d8d4f0;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.herb-board__exam-question.is-correct {
+    border-color: #3da383;
+    background: #f3fbf8;
+}
+
+.herb-board__exam-question.is-incorrect {
+    border-color: #e09a55;
+    background: #fffaf5;
+}
+
+.herb-board__exam-question legend {
+    float: none;
+    width: 100%;
+    margin: 0 0 13px;
+    color: #17324d;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+.herb-board__exam-question legend span {
+    display: block;
+    margin-bottom: 3px;
+    color: #6d4bc3;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.herb-board__exam-options {
+    display: grid;
+    gap: 8px;
+}
+
+.herb-board__exam-options label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid #dbe2e8;
+    border-radius: 7px;
+    background: #f9fbfc;
+    cursor: pointer;
+}
+
+.herb-board__exam-options label:has(input:checked) {
+    border-color: #6d4bc3;
+    background: #f4f0ff;
+}
+
+.herb-board__exam-options input {
+    flex: 0 0 auto;
+    margin-top: 4px;
+}
+
+.herb-board__exam-feedback {
+    margin-top: 13px;
+    padding: 11px 13px;
+    border-left: 4px solid #087c69;
+    border-radius: 7px;
+    background: #eef9f6;
+    color: #204f47;
+}
+
+.herb-board__exam-feedback p {
+    margin: 4px 0 0;
+}
+
+.herb-board__exam-submit {
+    position: sticky;
+    bottom: 10px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid #cfc3ef;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 8px 24px rgba(21, 39, 62, .14);
+}
+
+.herb-board__exam-submit button {
+    min-height: 46px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #6d4bc3;
+    color: #fff;
+    font-weight: 850;
+    cursor: pointer;
+}
+
+.herb-board__exam-submit output {
+    color: #17324d;
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
 .herb-board__shortages {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1651,6 +1765,20 @@ a.herb-board__domain:focus {
     .herb-board__domain-builder {
         width: 100%;
         box-sizing: border-box;
+    }
+
+    .herb-board__exam-heading,
+    .herb-board__exam-question {
+        padding: 14px;
+    }
+
+    .herb-board__exam-submit {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .herb-board__exam-submit button {
+        width: 100%;
     }
 
     .herb-board__subcategories {

@@ -154,87 +154,19 @@ if ($track === 'domains' && is_readable($domaincandidatepath)) {
 $domaincandidateinventory = $domainbank['sourceInventory'] ?? $domaincandidateinventory;
 $canmanagedomains = is_siteadmin($USER)
     || has_capability('moodle/course:manageactivities', $membershipcontext, $USER->id);
-$domainids = array_column($domainblueprint, 'id');
-$domainaction = optional_param('domainaction', '', PARAM_ALPHA);
-if ($domainaction !== '' && $track !== 'domains') {
-    redirect($domainsurl, 'Domain question actions must be completed inside the Domain workspace.');
-}
-if ($domainaction === 'approvequestion') {
-    require_sesskey();
-    if (!$canmanagedomains) {
-        throw new required_capability_exception(
-            $membershipcontext,
-            'moodle/course:manageactivities',
-            'nopermissions',
-            ''
-        );
-    }
-    $submittedid = required_param('domainid', PARAM_ALPHANUMEXT);
-    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
-    $domainreturnurl = new moodle_url('/blocks/menu/herbology-board.php', [
-        'track' => 'domains',
-        'domain' => $submittedid,
-    ]);
-    if (!in_array($submittedid, $domainids, true)) {
-        redirect($domainsurl, 'The selected Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
-    }
-    $questionfound = false;
-    foreach ($domainbank['domains'][$submittedid] as &$bankquestion) {
-        if (($bankquestion['questionId'] ?? '') !== $questionid) {
-            continue;
-        }
-        $questionfound = true;
-        $questioncomplete = !empty($bankquestion['prompt'])
-            && count($bankquestion['options'] ?? []) >= 2
-            && !empty($bankquestion['correctLabel'])
-            && !empty($bankquestion['explanation'])
-            && !empty($bankquestion['source']['title'])
-            && !empty($bankquestion['source']['locator']);
-        if (!$questioncomplete) {
-            unset($bankquestion);
-            redirect(
-                $domainreturnurl,
-                'This question cannot be approved until its key, explanation and source are complete.',
-                null,
-                \core\output\notification::NOTIFY_ERROR
-            );
-        }
-        $bankquestion['feedbackStatus'] = 'verified';
-        $bankquestion['review'] = [
-            'status' => 'content-approved',
-            'reviewer' => fullname($USER),
-            'reviewedAt' => gmdate(DATE_ATOM),
-        ];
-        break;
-    }
-    unset($bankquestion);
-    if (!$questionfound) {
-        redirect($domainreturnurl, 'The selected question was not found.', null, \core\output\notification::NOTIFY_ERROR);
-    }
-    $savedomainbank($domainbank);
-    redirect(
-        $domainreturnurl,
-        'Question approved for future mixed exams.',
-        null,
-        \core\output\notification::NOTIFY_SUCCESS
-    );
-}
+$questionisready = static function(array $question): bool {
+    return !empty($question['prompt'])
+        && count($question['options'] ?? []) === 4
+        && !empty($question['correctLabel'])
+        && !empty($question['explanation'])
+        && !empty($question['source']['title'])
+        && !empty($question['source']['locator']);
+};
 $selecteddomain = null;
 foreach ($domainblueprint as &$domain) {
     $domain['questions'] = $domainbank['domains'][$domain['id']] ?? [];
+    $domain['questions'] = array_values(array_filter($domain['questions'], $questionisready));
     $domain['questionCount'] = count($domain['questions']);
-    $domain['approvedCount'] = count(array_filter($domain['questions'], static function(array $question): bool {
-        return ($question['review']['status'] ?? '') === 'content-approved';
-    }));
-    $domain['approvalReadyCount'] = count(array_filter($domain['questions'], static function(array $question): bool {
-        return ($question['review']['status'] ?? '') !== 'content-approved'
-            && !empty($question['prompt'])
-            && count($question['options'] ?? []) >= 2
-            && !empty($question['correctLabel'])
-            && !empty($question['explanation'])
-            && !empty($question['source']['title'])
-            && !empty($question['source']['locator']);
-    }));
     $domain['sourceLabel'] = (string)($domaincandidateinventory[$domain['id']]['authoringSourceLabel'] ?? '');
     if ($domainkey !== '' && $domain['id'] === $domainkey) {
         $selecteddomain = $domain;
@@ -257,27 +189,55 @@ $mixedquestions = [];
 $domainshortages = [];
 if ($track === 'domains' && $domainkey === '' && $mixdomains) {
     foreach ($domainblueprint as $domain) {
-        $approvedquestions = array_values(array_filter(
-            $domain['questions'],
-            static function(array $question): bool {
-                return ($question['review']['status'] ?? '') === 'content-approved';
-            }
-        ));
-        if (count($approvedquestions) < $domain['weight']) {
+        $availablequestions = $domain['questions'];
+        if (count($availablequestions) < $domain['weight']) {
             $domainshortages[] = [
                 'name' => $domain['name'],
                 'required' => $domain['weight'],
-                'available' => count($approvedquestions),
-                'missing' => $domain['weight'] - count($approvedquestions),
+                'available' => count($availablequestions),
+                'missing' => $domain['weight'] - count($availablequestions),
             ];
             continue;
         }
-        shuffle($approvedquestions);
-        $mixedquestions = array_merge($mixedquestions, array_slice($approvedquestions, 0, $domain['weight']));
+        shuffle($availablequestions);
+        $mixedquestions = array_merge($mixedquestions, array_slice($availablequestions, 0, $domain['weight']));
     }
     if (!$domainshortages) {
         shuffle($mixedquestions);
     }
+}
+
+if ($track === 'domains' && $mixdomains && count($mixedquestions) === 100) {
+    $PAGE->requires->js_init_code(<<<'JS'
+const exam = document.getElementById('herbology-domain-exam');
+if (exam) {
+    exam.addEventListener('submit', event => {
+        event.preventDefault();
+        const questions = exam.querySelectorAll('.herb-board__exam-question');
+        let score = 0;
+        let unanswered = 0;
+        questions.forEach(question => {
+            question.classList.remove('is-correct', 'is-incorrect');
+            const selected = question.querySelector('input[type="radio"]:checked');
+            const feedback = question.querySelector('.herb-board__exam-feedback');
+            if (!selected) {
+                unanswered++;
+                question.classList.add('is-incorrect');
+            } else if (selected.value === question.dataset.correct) {
+                score++;
+                question.classList.add('is-correct');
+            } else {
+                question.classList.add('is-incorrect');
+            }
+            feedback.hidden = false;
+        });
+        const result = document.getElementById('herbology-domain-exam-result');
+        result.textContent = `${score} of ${questions.length} correct${unanswered ? ` · ${unanswered} unanswered` : ''}`;
+        result.hidden = false;
+        result.scrollIntoView({behavior: 'smooth', block: 'center'});
+    });
+}
+JS);
 }
 
 $PAGE->set_url($pageurl);
@@ -1177,28 +1137,26 @@ echo $OUTPUT->header();
         <section class="herb-board__panel" aria-labelledby="herb-board-domains-title">
             <div class="herb-board__panel-heading">
                 <div>
-                    <h3 id="herb-board-domains-title">Question blocks by Domain</h3>
-                    <p>Classify and review each question inside one primary Domain before building mixed exams.</p>
+                    <h3 id="herb-board-domains-title">Practice by Domain</h3>
+                    <p>Choose one subject for focused practice or start the complete 100-question exam.</p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
-                <span><strong>6</strong> domain blocks</span>
-                <span><strong><?php echo (int)array_sum(array_column($domainblueprint, 'questionCount')); ?></strong>
-                    classified candidates</span>
-                <span><strong>100</strong> questions in the final blueprint</span>
-                <span><strong>100%</strong> total allocation</span>
+                <span><strong>6</strong> study subjects</span>
+                <span><strong>100</strong> questions in the complete practice exam</span>
             </div>
-            <?php if ($canmanagedomains) {
-                $mixurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                    'track' => 'domains',
-                    'mix' => 1,
-                ]);
+            <?php
+            $mixurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                'track' => 'domains',
+                'mix' => 1,
+            ]);
             ?>
+            <?php if (!$mixdomains) { ?>
                 <div class="herb-board__domain-tools">
                     <a class="herb-board__domain-builder" href="<?php echo $mixurl->out(false); ?>">
-                        Build 100-question mixed draft
+                        Start 100-question practice exam
                     </a>
-                    <span>Uses approved questions only and preserves the Domain allocation.</span>
+                    <span>Questions are mixed from all six study subjects.</span>
                 </div>
             <?php } ?>
             <div class="herb-board__domains">
@@ -1210,77 +1168,74 @@ echo $OUTPUT->header();
                 ?>
                     <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
                         href="<?php echo $domainurl->out(false); ?>">
-                        <div class="herb-board__domain-heading">
-                            <span class="herb-board__domain-weight"><?php echo (int)$domain['weight']; ?>%</span>
-                            <span class="herb-board__domain-target"><?php echo (int)$domain['weight']; ?> of 100</span>
-                        </div>
                         <h4><?php echo s($domain['name']); ?></h4>
                         <p><?php echo s($domain['focus']); ?></p>
-                        <?php if ($domain['sourceLabel'] !== '') { ?>
-                            <small class="herb-board__domain-source"><?php echo s($domain['sourceLabel']); ?></small>
-                        <?php } ?>
                         <span class="herb-board__domain-status">
-                            <?php echo (int)$domain['approvedCount']; ?> approved ·
-                            <?php echo (int)$domain['approvalReadyCount']; ?> review-ready ·
-                            <?php echo (int)$domain['questionCount']; ?> total →
+                            <?php echo (int)$domain['questionCount']; ?> practice questions →
                         </span>
                     </a>
                 <?php } ?>
             </div>
             <?php if ($mixdomains && $domainshortages) { ?>
                 <section class="herb-board__mix-result herb-board__mix-result--shortage" aria-labelledby="domain-shortage-title">
-                    <h4 id="domain-shortage-title">The mixed exam is not ready yet</h4>
-                    <p>Add and approve the missing questions shown below. Questions are never borrowed from another Domain.</p>
-                    <div class="herb-board__shortages">
-                        <?php foreach ($domainshortages as $shortage) { ?>
-                            <div>
-                                <strong><?php echo s($shortage['name']); ?></strong>
-                                <span><?php echo (int)$shortage['available']; ?> available ·
-                                    <?php echo (int)$shortage['required']; ?> required ·
-                                    <?php echo (int)$shortage['missing']; ?> missing</span>
-                            </div>
-                        <?php } ?>
-                    </div>
+                    <h4 id="domain-shortage-title">The practice exam is being prepared</h4>
+                    <p>Please return shortly while the remaining questions are connected.</p>
                 </section>
             <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
-                <section class="herb-board__mix-result herb-board__mix-result--ready" aria-labelledby="domain-ready-title">
-                    <h4 id="domain-ready-title">100-question mixed draft ready</h4>
-                    <p>The draft contains the required number of approved questions from every Domain. Delivery and scoring remain a separate release step.</p>
-                </section>
+                <form id="herbology-domain-exam" class="herb-board__exam">
+                    <div class="herb-board__exam-heading">
+                        <div>
+                            <span>Complete practice exam</span>
+                            <h4>Chinese Herbology · 100 Questions</h4>
+                        </div>
+                        <p>Select one answer for each question. Submit at the end to see your score and explanations.</p>
+                    </div>
+                    <?php foreach ($mixedquestions as $questionnumber => $question) { ?>
+                        <fieldset class="herb-board__exam-question"
+                            data-correct="<?php echo s($question['correctLabel']); ?>">
+                            <legend>
+                                <span>Question <?php echo $questionnumber + 1; ?></span>
+                                <?php echo s($question['prompt']); ?>
+                            </legend>
+                            <div class="herb-board__exam-options">
+                                <?php foreach ($question['options'] as $option) { ?>
+                                    <label>
+                                        <input type="radio" name="question-<?php echo $questionnumber + 1; ?>"
+                                            value="<?php echo s($option['label']); ?>">
+                                        <strong><?php echo s($option['label']); ?>.</strong>
+                                        <span><?php echo s($option['text']); ?></span>
+                                    </label>
+                                <?php } ?>
+                            </div>
+                            <div class="herb-board__exam-feedback" hidden>
+                                <strong>Correct answer: <?php echo s($question['correctLabel']); ?></strong>
+                                <p><?php echo s($question['explanation']); ?></p>
+                            </div>
+                        </fieldset>
+                    <?php } ?>
+                    <div class="herb-board__exam-submit">
+                        <button type="submit">Check my score</button>
+                        <output id="herbology-domain-exam-result" hidden></output>
+                    </div>
+                </form>
             <?php } ?>
-            <div class="herb-board__notice">
-                <strong>Classification control:</strong> imported questions are first-pass classified drafts, not approved
-                Board items. Human review must confirm the Domain, answer, explanation and source. These percentages are
-                the current AcupunctureTests working model,
-                not a published NCBAHM allocation. Before releasing a scored 100-question exam, the selected official
-                outline, effective date and Domain percentages must be recorded and approved. Every question will count
-                toward one primary Domain only.
-            </div>
-            <p class="herb-board__educational-note">
-                The largest-remainder rule will preserve exactly 100 questions when a future official blueprint uses
-                percentages that do not convert directly to whole numbers.
-            </p>
         </section>
     <?php } else { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-domain-bank-title">
             <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>">← All Domains</a>
             <div class="herb-board__panel-heading herb-board__panel-heading--domain-bank">
                 <div>
-                    <span class="herb-board__domain-kicker">Domain question bank · <?php echo (int)$selecteddomain['weight']; ?>%</span>
+                    <span class="herb-board__domain-kicker">Focused practice</span>
                     <h3 id="herb-board-domain-bank-title"><?php echo s($selecteddomain['name']); ?></h3>
                     <p><?php echo s($selecteddomain['focus']); ?></p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Selected Domain bank totals">
-                <span><strong><?php echo (int)$selecteddomain['questionCount']; ?></strong> total questions</span>
-                <span><strong><?php echo (int)$selecteddomain['approvedCount']; ?></strong> approved questions</span>
-                <span><strong><?php echo (int)$selecteddomain['approvalReadyCount']; ?></strong> ready for human review</span>
-                <span><strong><?php echo (int)$selecteddomain['weight']; ?></strong> required in a 100-question form</span>
+                <span><strong><?php echo (int)$selecteddomain['questionCount']; ?></strong> practice questions</span>
             </div>
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
-                    <strong>Bank created:</strong> this Domain is ready to receive questions. Each new item must include
-                    one primary Domain, one objective, a difficulty band, a source, verified feedback and review status.
+                    Practice questions for this subject are being prepared.
                 </div>
             <?php } else { ?>
                 <div class="herb-board__domain-questions">
@@ -1288,10 +1243,9 @@ echo $OUTPUT->header();
                         <article class="herb-board__domain-question">
                             <span><?php echo s($question['questionId'] ?? 'Unnumbered item'); ?></span>
                             <h4><?php echo s($question['prompt'] ?? 'Question awaiting prompt'); ?></h4>
-                            <small><?php echo s($question['review']['status'] ?? 'unclassified'); ?></small>
                             <?php if ($canmanagedomains) { ?>
                                 <details>
-                                    <summary>Review question details</summary>
+                                    <summary>Question details</summary>
                                     <ol type="A">
                                         <?php foreach ($question['options'] ?? [] as $option) { ?>
                                             <li><?php echo s($option['text'] ?? ''); ?></li>
@@ -1301,29 +1255,6 @@ echo $OUTPUT->header();
                                     <p><strong>Explanation:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
                                     <p><strong>Source:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
                                         <?php echo s($question['source']['locator'] ?? ''); ?></p>
-                                    <?php
-                                    $questioniscomplete = !empty($question['prompt'])
-                                        && count($question['options'] ?? []) >= 2
-                                        && !empty($question['correctLabel'])
-                                        && !empty($question['explanation'])
-                                        && !empty($question['source']['title'])
-                                        && !empty($question['source']['locator']);
-                                    if (($question['review']['status'] ?? '') !== 'content-approved'
-                                            && $questioniscomplete) { ?>
-                                        <form method="post" action="<?php echo $pageurl->out(false); ?>"
-                                            class="herb-board__approve-form">
-                                            <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-                                            <input type="hidden" name="domainaction" value="approvequestion">
-                                            <input type="hidden" name="domainid" value="<?php echo s($selecteddomain['id']); ?>">
-                                            <input type="hidden" name="questionid"
-                                                value="<?php echo s($question['questionId'] ?? ''); ?>">
-                                            <button type="submit">Approve for mixed exams</button>
-                                        </form>
-                                    <?php } else if (($question['review']['status'] ?? '') !== 'content-approved') { ?>
-                                        <div class="herb-board__approval-blocked">
-                                            Needs a verified explanation and complete source before approval.
-                                        </div>
-                                    <?php } ?>
                                 </details>
                             <?php } ?>
                         </article>
