@@ -154,6 +154,171 @@ function buildOptions(correctAnswer, answerPool, seed) {
     return answers.map((text, index) => ({label: String.fromCharCode(65 + index), text}));
 }
 
+function normalizeEntityText(value) {
+    return String(value || '').toLowerCase().normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function normalizedTextWithSourceMap(value) {
+    const source = String(value || '');
+    let normalized = '';
+    const sourceMap = [];
+    let pendingSpaceIndex = -1;
+    for (let index = 0; index < source.length; index++) {
+        const characters = source[index].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        for (const character of characters) {
+            if (/[a-z0-9]/.test(character)) {
+                if (pendingSpaceIndex >= 0 && normalized !== '' && !normalized.endsWith(' ')) {
+                    normalized += ' ';
+                    sourceMap.push(pendingSpaceIndex);
+                }
+                pendingSpaceIndex = -1;
+                normalized += character;
+                sourceMap.push(index);
+            } else if (normalized !== '' && !normalized.endsWith(' ')) {
+                pendingSpaceIndex = index;
+            }
+        }
+    }
+    return {normalized, sourceMap};
+}
+
+function findEntityMatches(value, entityRegistry) {
+    const source = String(value || '');
+    const {normalized, sourceMap} = normalizedTextWithSourceMap(source);
+    if (!normalized || sourceMap.length === 0) {
+        return [];
+    }
+    const occupied = new Uint8Array(normalized.length);
+    const matches = [];
+    for (const entity of entityRegistry) {
+        let offset = 0;
+        while (offset < normalized.length) {
+            const matchStart = normalized.indexOf(entity.normalizedName, offset);
+            if (matchStart < 0) {
+                break;
+            }
+            const matchEnd = matchStart + entity.normalizedName.length;
+            const hasLeftBoundary = matchStart === 0 || normalized[matchStart - 1] === ' ';
+            const hasRightBoundary = matchEnd === normalized.length || normalized[matchEnd] === ' ';
+            const overlaps = occupied.slice(matchStart, matchEnd).some(Boolean);
+            if (hasLeftBoundary && hasRightBoundary && !overlaps) {
+                const rawStart = sourceMap[matchStart];
+                const rawEnd = sourceMap[matchEnd - 1] + 1;
+                if (Number.isInteger(rawStart) && Number.isInteger(rawEnd) && rawEnd > rawStart) {
+                    occupied.fill(1, matchStart, matchEnd);
+                    matches.push({...entity, rawStart, rawEnd});
+                }
+            }
+            offset = matchStart + 1;
+        }
+    }
+    return matches.sort((left, right) => left.rawStart - right.rawStart || right.rawEnd - left.rawEnd);
+}
+
+function enrichEntityNamesInText(value, entityRegistry) {
+    const source = String(value || '');
+    const matches = findEntityMatches(source, entityRegistry);
+    const replacements = matches.filter(match => {
+        const tail = source.slice(match.rawEnd, match.rawEnd + 220);
+        const normalizedTail = normalizeEntityText(tail);
+        if (normalizedTail.startsWith(match.normalizedDescriptor)) {
+            return false;
+        }
+        const parenthetical = tail.match(/^\s*\(([^)]{1,200})\)/)?.[1] || '';
+        if (match.kind === 'formula' && parenthetical && !/source text|texto de la fuente/i.test(parenthetical)) {
+            return false;
+        }
+        if (match.kind === 'herb' && /\b(?:Rx|Rz|Hb|Fr|Rm|Sm|Cx|Fl|Fm|Blb|Pc|Sp|Os|Radix|Rhizoma|Rhizome|Herba|Flos|Fructus|Semen|Cortex|Ramulus|Caulis|Folium|Bulbus|Tuber|Concha|Cornu|Calculus|Plastrum|Carapax|Pericarpium|Sclerotium|Spica|Arillus|Colla|Gelatinum|Medulla|Squama|Poria|Polyporus|Moschus|Cinnabaris|Realgar|Mirabilitum|Gypsum)\b/i.test(parenthetical)) {
+            return false;
+        }
+        return true;
+    });
+    let enriched = source;
+    for (const match of replacements.sort((left, right) => right.rawEnd - left.rawEnd)) {
+        enriched = `${enriched.slice(0, match.rawEnd)} (${match.descriptor})${enriched.slice(match.rawEnd)}`;
+    }
+    return enriched;
+}
+
+function enrichQuestionNomenclature(question, entityRegistry) {
+    const englishFields = [
+        question.prompt,
+        ...(question.options || []).map(option => option.text),
+        question.explanation,
+    ];
+    const spanishTranslation = question.translations?.es;
+    const spanishFields = spanishTranslation ? [
+        spanishTranslation.prompt,
+        ...(spanishTranslation.options || []).map(option => option.text),
+        spanishTranslation.explanation,
+    ] : [];
+    const referencedEntities = new Map();
+    for (const field of [...englishFields, ...spanishFields]) {
+        for (const match of findEntityMatches(field, entityRegistry)) {
+            referencedEntities.set(`${match.kind}:${match.name}`, match);
+        }
+    }
+    const correctOptionText = (question.options || [])
+        .find(option => option.label === question.correctLabel)?.text || '';
+    const correctOptionTextEs = (spanishTranslation?.options || [])
+        .find(option => option.label === question.correctLabel)?.text || '';
+    const feedbackEntities = new Map();
+    for (const field of [correctOptionText, question.explanation, correctOptionTextEs, spanishTranslation?.explanation]) {
+        for (const match of findEntityMatches(field, entityRegistry)) {
+            feedbackEntities.set(`${match.kind}:${match.name}`, match);
+        }
+    }
+    if (feedbackEntities.size === 0) {
+        for (const field of [question.prompt, spanishTranslation?.prompt]) {
+            for (const match of findEntityMatches(field, entityRegistry)) {
+                feedbackEntities.set(`${match.kind}:${match.name}`, match);
+            }
+        }
+    }
+    const references = [...referencedEntities.values()];
+    const feedbackReferences = [...feedbackEntities.values()];
+    question.nomenclature = {
+        herbs: references.filter(reference => reference.kind === 'herb').map(reference => ({
+            pinyin: reference.name,
+            pharmaceuticalName: reference.descriptor,
+        })),
+        formulas: references.filter(reference => reference.kind === 'formula').map(reference => ({
+            pinyin: reference.name,
+            englishName: reference.descriptor,
+        })),
+        feedback: {
+            herbs: feedbackReferences.filter(reference => reference.kind === 'herb').map(reference => ({
+                pinyin: reference.name,
+                pharmaceuticalName: reference.descriptor,
+            })),
+            formulas: feedbackReferences.filter(reference => reference.kind === 'formula').map(reference => ({
+                pinyin: reference.name,
+                englishName: reference.descriptor,
+            })),
+        },
+    };
+    question.prompt = enrichEntityNamesInText(question.prompt, entityRegistry);
+    question.options = (question.options || []).map(option => ({
+        ...option,
+        text: enrichEntityNamesInText(option.text, entityRegistry),
+    }));
+    question.explanation = enrichEntityNamesInText(question.explanation, entityRegistry);
+    if (spanishTranslation) {
+        question.translations.es = {
+            ...spanishTranslation,
+            prompt: enrichEntityNamesInText(spanishTranslation.prompt, entityRegistry),
+            options: (spanishTranslation.options || []).map(option => ({
+                ...option,
+                text: enrichEntityNamesInText(option.text, entityRegistry),
+            })),
+            explanation: enrichEntityNamesInText(spanishTranslation.explanation, entityRegistry),
+        };
+    }
+}
+
 const legacyQuestions = readJsonLines(legacySource);
 const formulaPracticeData = readJson(formulaPracticeSource);
 const formulaProfileByNumber = new Map((formulaPracticeData.formulas || [])
@@ -275,6 +440,7 @@ const duiYaoPairs = readJson('study-guide/comparisons/dui-yao-data.json');
 const herbProfiles = readJson('blocks/myprogress/single-herb-properties.json');
 const herbSafety = readJson('blocks/myprogress/single-herb-safety-supplement.json');
 const formulaRoster = readJson('blocks/myprogress/formula-board-roster-2026.json');
+const formulasStudyGuide = readJson('blocks/myprogress/formulas-study-guide-data.json');
 const englishFormulaTheoryPages = fs.readdirSync(resolveFromRoot('study-guide/comparisons'))
     .filter(filename => /^formula-theory-.*\.html$/.test(filename) && !filename.endsWith('-es.html')).length;
 const englishSafetyPages = fs.readdirSync(resolveFromRoot('study-guide/comparisons'))
@@ -558,6 +724,98 @@ for (const domainId of domainIds) {
     });
 }
 
+const historicalSafetyHerbIdentities = [
+    ['Guan Mu Tong', 'Aristolochiae manshuriensis Caulis'],
+    ['Guang Fang Ji', 'Aristolochiae Fangchi Radix'],
+    ['Qing Mu Xiang', 'Aristolochiae Radix'],
+    ['Chuan Shan Jia', 'Manitis Squama'],
+    ['Xi Jiao', 'Rhinocerotis Cornu'],
+    ['Hu Gu', 'Tigris Os'],
+    ['Xiong Dan', 'Ursi Fel'],
+    ['Zhu Sha', 'Cinnabaris'],
+    ['Xiong Huang', 'Realgar'],
+];
+const supplementalFormulaIdentities = [
+    ['Zhi Zi Chi Tang', 'Gardenia and Prepared Soybean Decoction'],
+    ['Jiao Tai Wan', 'Pill to Restore Proper Communication'],
+    ['Jie Geng Tang', 'Platycodon Decoction'],
+    ['Fo Shou San', "Buddha's Hand Powder"],
+    ['Xiang Fu Si Wu Tang', 'Cyperus Four-Substance Decoction'],
+    ['Xiang Leng Wan', 'Aucklandia and Sparganium Pill'],
+    ['Xiao Ban Xia Tang', 'Minor Pinellia Decoction'],
+    ['She Gan Ma Huang Tang', 'Belamcanda and Ephedra Decoction'],
+    ['Ting Li Da Zao Xie Fei Tang', 'Descurainia and Jujube Decoction to Drain the Lungs'],
+    ['Shen Qi Wan', 'Kidney Qi Pill'],
+    ['San Jin Tang', 'Three-Gold Decoction'],
+];
+const entityRegistry = [
+    ...(formulaRoster.formulas || [])
+        .filter(formula => formula.name && formula.englishName)
+        .map(formula => ({
+            kind: 'formula',
+            name: formula.name,
+            descriptor: formula.englishName,
+            normalizedName: normalizeEntityText(formula.name),
+            normalizedDescriptor: normalizeEntityText(formula.englishName),
+        })),
+    ...(formulasStudyGuide.supplementalFormulas || [])
+        .filter(formula => formula.name && formula.englishName)
+        .map(formula => ({
+            kind: 'formula',
+            name: formula.name,
+            descriptor: formula.englishName,
+            normalizedName: normalizeEntityText(formula.name),
+            normalizedDescriptor: normalizeEntityText(formula.englishName),
+        })),
+    ...supplementalFormulaIdentities.map(([name, englishName]) => ({
+        kind: 'formula',
+        name,
+        descriptor: englishName,
+        normalizedName: normalizeEntityText(name),
+        normalizedDescriptor: normalizeEntityText(englishName),
+    })),
+    ...(herbProfiles.herbs || [])
+        .filter(herb => herb.name && herb.latin)
+        .map(herb => ({
+            kind: 'herb',
+            name: herb.name,
+            descriptor: herb.latin,
+            normalizedName: normalizeEntityText(herb.name),
+            normalizedDescriptor: normalizeEntityText(herb.latin),
+        })),
+    ...historicalSafetyHerbIdentities.map(([name, pharmaceuticalName]) => ({
+        kind: 'herb',
+        name,
+        descriptor: pharmaceuticalName,
+        normalizedName: normalizeEntityText(name),
+        normalizedDescriptor: normalizeEntityText(pharmaceuticalName),
+    })),
+].filter(entity => entity.normalizedName && entity.normalizedDescriptor)
+    .sort((left, right) => right.normalizedName.length - left.normalizedName.length
+        || (left.kind === 'formula' ? -1 : 1)
+        || left.name.localeCompare(right.name));
+
+for (const domainId of domainIds) {
+    for (const question of domains[domainId]) {
+        enrichQuestionNomenclature(question, entityRegistry);
+    }
+}
+
+const nomenclatureSummary = Object.values(domains).flat().reduce((summary, question) => {
+    const herbCount = question.nomenclature?.herbs?.length || 0;
+    const formulaCount = question.nomenclature?.formulas?.length || 0;
+    if (herbCount + formulaCount > 0) {
+        summary.questionsWithNomenclature++;
+    }
+    summary.herbReferences += herbCount;
+    summary.formulaReferences += formulaCount;
+    return summary;
+}, {
+    questionsWithNomenclature: 0,
+    herbReferences: 0,
+    formulaReferences: 0,
+});
+
 const classifiedCounts = Object.fromEntries(domainIds.map(domainId => [domainId, domains[domainId].length]));
 const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
     domainId,
@@ -572,9 +830,9 @@ const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v5-board-scope',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v6-board-nomenclature',
     status: 'practice-ready',
-    policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Complete questions may be used directly in practice exams.',
+    policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Herb pinyin is paired with its pharmaceutical name and formula pinyin with its English name in prompts, options and feedback.',
     generatedFrom: {
         legacyKeyedQuestions: {
             path: legacySource,
@@ -598,6 +856,7 @@ const output = {
         byDomain: classifiedCounts,
         practiceReadyByDomain: practiceReadyCounts,
         practiceReadyTotal: Object.values(practiceReadyCounts).reduce((sum, count) => sum + count, 0),
+        nomenclature: nomenclatureSummary,
     },
     sourceInventory: {
         formula_differentiation: {

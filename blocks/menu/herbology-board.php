@@ -1487,6 +1487,22 @@ echo $OUTPUT->header();
                             ?? ($ises ? 'Abrir tarjeta fuente' : 'Open source card'));
                         $sourcecardquery = (string)($sourcecard['query'] ?? '');
                         $questionlabel = ($ises ? 'Pregunta ' : 'Question ') . ($questionnumber + 1);
+                        $feedbacknomenclature = [];
+                        foreach ($question['nomenclature']['feedback']['herbs'] ?? [] as $herbidentity) {
+                            $pinyin = trim((string)($herbidentity['pinyin'] ?? ''));
+                            $pharmaceutical = trim((string)($herbidentity['pharmaceuticalName'] ?? ''));
+                            if ($pinyin !== '' && $pharmaceutical !== '') {
+                                $feedbacknomenclature[] = $pinyin . ' — ' . $pharmaceutical;
+                            }
+                        }
+                        foreach ($question['nomenclature']['feedback']['formulas'] ?? [] as $formulaidentity) {
+                            $pinyin = trim((string)($formulaidentity['pinyin'] ?? ''));
+                            $englishname = trim((string)($formulaidentity['englishName'] ?? ''));
+                            if ($pinyin !== '' && $englishname !== '') {
+                                $feedbacknomenclature[] = $pinyin . ' — ' . $englishname;
+                            }
+                        }
+                        $feedbacknomenclature = array_values(array_unique($feedbacknomenclature));
                         ?>
                         <fieldset class="herb-board__exam-question" id="herbology-exam-question-<?php echo $questionnumber + 1; ?>"
                             data-correct="<?php echo s($question['correctLabel']); ?>"
@@ -1511,6 +1527,12 @@ echo $OUTPUT->header();
                                 <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
                                     <?php echo s($question['correctLabel']); ?>. <?php echo s($correctoptiontext); ?></strong>
                                 <p><?php echo s($question['explanation']); ?></p>
+                                <?php if ($feedbacknomenclature) { ?>
+                                    <p class="herb-board__exam-nomenclature">
+                                        <strong><?php echo $ises ? 'Nomenclatura Board' : 'Board nomenclature'; ?>:</strong>
+                                        <?php echo s(implode(' · ', $feedbacknomenclature)); ?>
+                                    </p>
+                                <?php } ?>
                                 <a class="herb-board__exam-source-link" href="<?php echo s($sourcecardurl); ?>"
                                     data-exam-source-link
                                     data-source-title="<?php echo s($sourcecardlabel); ?>"

@@ -1843,6 +1843,14 @@ a.herb-board__domain:focus {
     margin: 4px 0 0;
 }
 
+.herb-board__exam-feedback .herb-board__exam-nomenclature {
+    margin-top: 9px;
+    padding-top: 8px;
+    border-top: 1px solid currentColor;
+    font-size: .82rem;
+    line-height: 1.45;
+}
+
 .herb-board__exam-source-link {
     display: inline-flex;
     align-items: center;
