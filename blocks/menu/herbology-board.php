@@ -11,6 +11,7 @@ if (!in_array($track, ['herbs', 'formulas', 'domains'], true)) {
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
+$mixdomains = optional_param('mix', 0, PARAM_BOOL);
 
 $membershipcourseid = 116;
 $membershipcourse = $DB->get_record('course', ['id' => $membershipcourseid], '*', MUST_EXIST);
@@ -33,6 +34,9 @@ if ($sectionkey !== '') {
 }
 if ($domainkey !== '') {
     $pageparams['domain'] = $domainkey;
+}
+if ($mixdomains) {
+    $pageparams['mix'] = 1;
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $dashboardurl = new moodle_url('/my/');
@@ -78,7 +82,16 @@ $domainblueprint = [
         'focus' => 'Name variants, official-list boundaries and obsolete or historical alternatives.',
     ],
 ];
-$domainbankpath = __DIR__ . '/herbology-domain-bank.json';
+$domainseedpath = __DIR__ . '/herbology-domain-bank.json';
+$domainbankdirectory = $CFG->dataroot . '/board-domain-banks';
+make_writable_directory($domainbankdirectory);
+$domainbankpath = $domainbankdirectory . '/herbology-domain-bank.json';
+if (!is_readable($domainbankpath) && is_readable($domainseedpath)) {
+    $seeddata = file_get_contents($domainseedpath);
+    if ($seeddata === false || file_put_contents($domainbankpath, $seeddata, LOCK_EX) === false) {
+        throw new RuntimeException('Unable to initialize the Herbology Domain question bank.');
+    }
+}
 $domainbank = ['domains' => []];
 if (is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
@@ -86,12 +99,121 @@ if (is_readable($domainbankpath)) {
         $domainbank = $decodedbank;
     }
 }
+$canmanagedomains = is_siteadmin($USER)
+    || has_capability('moodle/course:manageactivities', $membershipcontext, $USER->id);
+$domainids = array_column($domainblueprint, 'id');
+$domainaction = optional_param('domainaction', '', PARAM_ALPHA);
+if ($domainaction === 'addquestion') {
+    require_sesskey();
+    if (!$canmanagedomains) {
+        throw new required_capability_exception(
+            $membershipcontext,
+            'moodle/course:manageactivities',
+            'nopermissions',
+            ''
+        );
+    }
+
+    $submittedid = required_param('domainid', PARAM_ALPHANUMEXT);
+    $domainreturnurl = new moodle_url('/blocks/menu/herbology-board.php', [
+        'track' => 'domains',
+        'domain' => $submittedid,
+    ]);
+    if (!in_array($submittedid, $domainids, true)) {
+        redirect($domainsurl, 'The selected Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+    }
+
+    $prompt = trim(required_param('prompt', PARAM_TEXT));
+    $objective = trim(required_param('objective', PARAM_TEXT));
+    $explanation = trim(required_param('explanation', PARAM_TEXT));
+    $sourcetitle = trim(required_param('sourcetitle', PARAM_TEXT));
+    $sourcelocator = trim(required_param('sourcelocator', PARAM_TEXT));
+    $correctlabel = required_param('correctlabel', PARAM_ALPHA);
+    $difficulty = required_param('difficulty', PARAM_ALPHA);
+    $cognitivelevel = required_param('cognitivelevel', PARAM_ALPHA);
+    $contenttype = required_param('contenttype', PARAM_ALPHA);
+    $reviewstatus = required_param('reviewstatus', PARAM_ALPHANUMEXT);
+    $options = [];
+    foreach (['A', 'B', 'C', 'D'] as $label) {
+        $optiontext = trim(required_param('option' . core_text::strtolower($label), PARAM_TEXT));
+        $options[] = ['label' => $label, 'text' => $optiontext];
+    }
+
+    $valid = $prompt !== ''
+        && $objective !== ''
+        && $explanation !== ''
+        && $sourcetitle !== ''
+        && $sourcelocator !== ''
+        && !array_filter($options, static function(array $option): bool {
+            return $option['text'] === '';
+        })
+        && in_array($correctlabel, ['A', 'B', 'C', 'D'], true)
+        && in_array($difficulty, ['foundation', 'application', 'analysis'], true)
+        && in_array($cognitivelevel, ['understand', 'apply', 'analyze'], true)
+        && in_array($contenttype, ['recall', 'comparison', 'case', 'safety'], true)
+        && in_array($reviewstatus, ['classified', 'content-approved'], true);
+    if (!$valid) {
+        redirect(
+            $domainreturnurl,
+            'Complete every required field using one of the available classifications.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+
+    $questionid = 'CHM-' . core_text::strtoupper(str_replace('_', '-', $submittedid))
+        . '-' . gmdate('YmdHis') . '-' . random_int(100, 999);
+    $domainbank['domains'][$submittedid][] = [
+        'questionId' => $questionid,
+        'questionTrack' => 'board',
+        'criteriaVersion' => '1.0-draft',
+        'itemFormat' => 'multiple-choice',
+        'feedbackStatus' => $reviewstatus === 'content-approved' ? 'verified' : 'needs-review',
+        'examId' => 'chinese-herbal-medicine',
+        'outlineVersion' => $domainbank['outlineVersion'] ?? 'pending-official-confirmation',
+        'domainId' => $submittedid,
+        'objectiveId' => $objective,
+        'difficultyBand' => $difficulty,
+        'cognitiveLevel' => $cognitivelevel,
+        'contentType' => $contenttype,
+        'language' => 'en',
+        'source' => [
+            'title' => $sourcetitle,
+            'locator' => $sourcelocator,
+        ],
+        'review' => [
+            'status' => $reviewstatus,
+            'reviewer' => fullname($USER),
+            'reviewedAt' => $reviewstatus === 'content-approved' ? gmdate(DATE_ATOM) : '',
+        ],
+        'prompt' => $prompt,
+        'options' => $options,
+        'correctLabel' => $correctlabel,
+        'explanation' => $explanation,
+        'createdAt' => gmdate(DATE_ATOM),
+        'createdBy' => (int)$USER->id,
+    ];
+    $encodedbank = json_encode(
+        $domainbank,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+    );
+    if (file_put_contents($domainbankpath, $encodedbank . PHP_EOL, LOCK_EX) === false) {
+        throw new RuntimeException('Unable to save the Herbology Domain question bank.');
+    }
+    redirect(
+        $domainreturnurl,
+        'Question saved in the selected Domain bank.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 $selecteddomain = null;
 foreach ($domainblueprint as &$domain) {
     $domain['questions'] = $domainbank['domains'][$domain['id']] ?? [];
     $domain['questionCount'] = count($domain['questions']);
     $domain['approvedCount'] = count(array_filter($domain['questions'], static function(array $question): bool {
-        return ($question['reviewStatus'] ?? '') === 'approved';
+        return ($question['review']['status'] ?? '') === 'content-approved';
     }));
     if ($domainkey !== '' && $domain['id'] === $domainkey) {
         $selecteddomain = $domain;
@@ -100,6 +222,32 @@ foreach ($domainblueprint as &$domain) {
 unset($domain);
 if ($track === 'domains' && $domainkey !== '' && $selecteddomain === null) {
     redirect($domainsurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+}
+$mixedquestions = [];
+$domainshortages = [];
+if ($track === 'domains' && $domainkey === '' && $mixdomains) {
+    foreach ($domainblueprint as $domain) {
+        $approvedquestions = array_values(array_filter(
+            $domain['questions'],
+            static function(array $question): bool {
+                return ($question['review']['status'] ?? '') === 'content-approved';
+            }
+        ));
+        if (count($approvedquestions) < $domain['weight']) {
+            $domainshortages[] = [
+                'name' => $domain['name'],
+                'required' => $domain['weight'],
+                'available' => count($approvedquestions),
+                'missing' => $domain['weight'] - count($approvedquestions),
+            ];
+            continue;
+        }
+        shuffle($approvedquestions);
+        $mixedquestions = array_merge($mixedquestions, array_slice($approvedquestions, 0, $domain['weight']));
+    }
+    if (!$domainshortages) {
+        shuffle($mixedquestions);
+    }
 }
 
 $PAGE->set_url($pageurl);
@@ -1008,6 +1156,19 @@ echo $OUTPUT->header();
                 <span><strong>100</strong> questions in the final blueprint</span>
                 <span><strong>100%</strong> total allocation</span>
             </div>
+            <?php if ($canmanagedomains) {
+                $mixurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'domains',
+                    'mix' => 1,
+                ]);
+            ?>
+                <div class="herb-board__domain-tools">
+                    <a class="herb-board__domain-builder" href="<?php echo $mixurl->out(false); ?>">
+                        Build 100-question mixed draft
+                    </a>
+                    <span>Uses approved questions only and preserves the Domain allocation.</span>
+                </div>
+            <?php } ?>
             <div class="herb-board__domains">
                 <?php foreach ($domainblueprint as $domain) {
                     $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
@@ -1030,6 +1191,27 @@ echo $OUTPUT->header();
                     </a>
                 <?php } ?>
             </div>
+            <?php if ($mixdomains && $domainshortages) { ?>
+                <section class="herb-board__mix-result herb-board__mix-result--shortage" aria-labelledby="domain-shortage-title">
+                    <h4 id="domain-shortage-title">The mixed exam is not ready yet</h4>
+                    <p>Add and approve the missing questions shown below. Questions are never borrowed from another Domain.</p>
+                    <div class="herb-board__shortages">
+                        <?php foreach ($domainshortages as $shortage) { ?>
+                            <div>
+                                <strong><?php echo s($shortage['name']); ?></strong>
+                                <span><?php echo (int)$shortage['available']; ?> available ·
+                                    <?php echo (int)$shortage['required']; ?> required ·
+                                    <?php echo (int)$shortage['missing']; ?> missing</span>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </section>
+            <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
+                <section class="herb-board__mix-result herb-board__mix-result--ready" aria-labelledby="domain-ready-title">
+                    <h4 id="domain-ready-title">100-question mixed draft ready</h4>
+                    <p>The draft contains the required number of approved questions from every Domain. Delivery and scoring remain a separate release step.</p>
+                </section>
+            <?php } ?>
             <div class="herb-board__notice">
                 <strong>Blueprint control:</strong> these percentages are the current AcupunctureTests working model,
                 not a published NCBAHM allocation. Before releasing a scored 100-question exam, the selected official
@@ -1056,6 +1238,91 @@ echo $OUTPUT->header();
                 <span><strong><?php echo (int)$selecteddomain['approvedCount']; ?></strong> approved questions</span>
                 <span><strong><?php echo (int)$selecteddomain['weight']; ?></strong> required in a 100-question form</span>
             </div>
+            <?php if ($canmanagedomains) { ?>
+                <section class="herb-board__author" aria-labelledby="domain-author-title">
+                    <div class="herb-board__author-heading">
+                        <div>
+                            <span>Question authoring</span>
+                            <h4 id="domain-author-title">Add a question to this Domain</h4>
+                        </div>
+                        <small>Every item remains isolated in this bank until a mixed blueprint selects it.</small>
+                    </div>
+                    <form method="post" action="<?php echo $pageurl->out(false); ?>" class="herb-board__author-form">
+                        <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                        <input type="hidden" name="domainaction" value="addquestion">
+                        <input type="hidden" name="domainid" value="<?php echo s($selecteddomain['id']); ?>">
+                        <label class="herb-board__field herb-board__field--wide">
+                            <span>Question prompt</span>
+                            <textarea name="prompt" rows="3" required></textarea>
+                        </label>
+                        <?php foreach (['A', 'B', 'C', 'D'] as $label) { ?>
+                            <label class="herb-board__field">
+                                <span>Option <?php echo $label; ?></span>
+                                <input type="text" name="option<?php echo core_text::strtolower($label); ?>" required>
+                            </label>
+                        <?php } ?>
+                        <label class="herb-board__field">
+                            <span>Correct answer</span>
+                            <select name="correctlabel" required>
+                                <?php foreach (['A', 'B', 'C', 'D'] as $label) { ?>
+                                    <option value="<?php echo $label; ?>"><?php echo $label; ?></option>
+                                <?php } ?>
+                            </select>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Objective ID or task statement</span>
+                            <input type="text" name="objective" required>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Difficulty</span>
+                            <select name="difficulty" required>
+                                <option value="foundation">Foundation</option>
+                                <option value="application" selected>Application</option>
+                                <option value="analysis">Analysis</option>
+                            </select>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Cognitive level</span>
+                            <select name="cognitivelevel" required>
+                                <option value="understand">Understand</option>
+                                <option value="apply" selected>Apply</option>
+                                <option value="analyze">Analyze</option>
+                            </select>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Content type</span>
+                            <select name="contenttype" required>
+                                <option value="recall">Recall</option>
+                                <option value="comparison">Comparison</option>
+                                <option value="case" selected>Clinical case</option>
+                                <option value="safety">Safety</option>
+                            </select>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Review status</span>
+                            <select name="reviewstatus" required>
+                                <option value="classified">Draft / classified</option>
+                                <option value="content-approved">Content approved</option>
+                            </select>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Source title</span>
+                            <input type="text" name="sourcetitle" required>
+                        </label>
+                        <label class="herb-board__field">
+                            <span>Source locator</span>
+                            <input type="text" name="sourcelocator" placeholder="Chapter, page or section" required>
+                        </label>
+                        <label class="herb-board__field herb-board__field--wide">
+                            <span>Verified explanation</span>
+                            <textarea name="explanation" rows="4" required></textarea>
+                        </label>
+                        <div class="herb-board__author-actions herb-board__field--wide">
+                            <button type="submit">Save question in this Domain</button>
+                        </div>
+                    </form>
+                </section>
+            <?php } ?>
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
                     <strong>Bank created:</strong> this Domain is ready to receive questions. Each new item must include
@@ -1065,9 +1332,23 @@ echo $OUTPUT->header();
                 <div class="herb-board__domain-questions">
                     <?php foreach ($selecteddomain['questions'] as $question) { ?>
                         <article class="herb-board__domain-question">
-                            <span><?php echo s($question['id'] ?? 'Unnumbered item'); ?></span>
+                            <span><?php echo s($question['questionId'] ?? 'Unnumbered item'); ?></span>
                             <h4><?php echo s($question['prompt'] ?? 'Question awaiting prompt'); ?></h4>
-                            <small><?php echo s($question['reviewStatus'] ?? 'draft'); ?></small>
+                            <small><?php echo s($question['review']['status'] ?? 'unclassified'); ?></small>
+                            <?php if ($canmanagedomains) { ?>
+                                <details>
+                                    <summary>Review question details</summary>
+                                    <ol type="A">
+                                        <?php foreach ($question['options'] ?? [] as $option) { ?>
+                                            <li><?php echo s($option['text'] ?? ''); ?></li>
+                                        <?php } ?>
+                                    </ol>
+                                    <p><strong>Correct:</strong> <?php echo s($question['correctLabel'] ?? ''); ?></p>
+                                    <p><strong>Explanation:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
+                                    <p><strong>Source:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
+                                        <?php echo s($question['source']['locator'] ?? ''); ?></p>
+                                </details>
+                            <?php } ?>
                         </article>
                     <?php } ?>
                 </div>

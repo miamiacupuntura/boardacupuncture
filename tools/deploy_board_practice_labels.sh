@@ -90,6 +90,9 @@ grep -Fq "return ['Tricky Questions', 'games'];" "$TEMP_DIR/blocks/menu_course/b
 grep -Fq 'Question blocks by Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "'formula_differentiation'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Domain question bank' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Save question in this Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Build 100-question mixed draft' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "\$CFG->dataroot . '/board-domain-banks'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '>Domains</a>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
