@@ -386,22 +386,16 @@ class block_menu extends block_base {
                     $mockquestionsurl = new moodle_url('/blocks/menu/herbology-board.php', [
                         'track' => 'formulas',
                     ]);
-                    $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                        'track' => 'domains',
-                    ]);
                     $mockquestionsaction = '<a class="board-hub__action board-hub__action--board-mock" href="'
                         . $mockquestionsurl->out(false) . '">' . s($boardpracticelabels[$subject['area']]) . '</a>';
-                    $domainsaction = '<a class="board-hub__action board-hub__action--board-domains" href="'
-                        . $domainsurl->out(false) . '">Domains</a>';
                 } else {
                     $mockquestionsaction = '<span class="board-hub__action board-hub__action--pending '
                         . 'board-hub__action--board-mock" aria-disabled="true">'
                         . s($boardpracticelabels[$subject['area']]) . '</span>';
-                    $domainsaction = '';
                 }
                 $simulationaction = '<span class="board-hub__action board-hub__action--pending '
                     . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
-                $boardlevelactions = $mockquestionsaction . $domainsaction . $simulationaction . $studyguideaction;
+                $boardlevelactions = $mockquestionsaction . $simulationaction . $studyguideaction;
 
                 $boardlevelcards .= '<article class="board-hub__card board-hub__card--board-level board-hub__card--'
                     . s($subject['area']) . '">'

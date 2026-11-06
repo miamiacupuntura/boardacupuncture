@@ -656,6 +656,8 @@ echo $OUTPUT->header();
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>>Single Herbs</a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>>Formulas</a>
+            <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
+                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>>Domains</a>
         </nav>
         <div class="herb-board__summary" aria-label="Practice features">
             <?php if ($track === 'herbs') { ?>
