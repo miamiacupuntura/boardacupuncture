@@ -43,6 +43,9 @@ if ($domainpage > 0) {
     $pageparams['page'] = $domainpage;
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
+$languageparams = $pageparams;
+$languageparams['lang'] = 'es';
+$spanishurl = new moodle_url('/blocks/menu/herbology-board.php', $languageparams);
 $dashboardurl = new moodle_url('/my/');
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs']);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas']);
@@ -819,6 +822,8 @@ echo $OUTPUT->header();
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>>Formulas</a>
             <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
                 <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>>Domains</a>
+            <a class="herb-board__tab herb-board__tab--language" hreflang="es"
+                href="<?php echo $spanishurl->out(false); ?>">Español</a>
         </nav>
         <?php if ($track !== 'domains') { ?>
             <div class="herb-board__summary" aria-label="Practice features">

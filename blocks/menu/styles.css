@@ -775,6 +775,17 @@
     color: #fff !important;
 }
 
+.herb-board__tab--language {
+    margin-left: auto;
+    border-color: #f47e2c;
+    color: #a4420e !important;
+}
+
+.herb-board__tab--language:hover,
+.herb-board__tab--language:focus {
+    background: #fff2e8;
+}
+
 .herb-board__summary {
     display: flex;
     flex-wrap: wrap;
@@ -1812,6 +1823,10 @@ a.herb-board__domain:focus {
     .herb-board__hero,
     .herb-board__panel {
         padding: 18px;
+    }
+
+    .herb-board__tab--language {
+        margin-left: 0;
     }
 
     .herb-board__topics,
