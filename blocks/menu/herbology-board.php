@@ -820,24 +820,21 @@ echo $OUTPUT->header();
             <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
                 <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>>Domains</a>
         </nav>
-        <div class="herb-board__summary" aria-label="Practice features">
+        <?php if ($track !== 'domains') { ?>
+            <div class="herb-board__summary" aria-label="Practice features">
             <?php if ($track === 'herbs') { ?>
                 <span>Questions and explanations</span>
                 <span>Recall flashcards</span>
                 <span>Comparison charts</span>
                 <span>Saved browser progress</span>
-            <?php } else if ($track === 'formulas') { ?>
+            <?php } else { ?>
                 <span>Multiple choice</span>
                 <span>Mock-style feedback</span>
                 <span>Flexible session size</span>
                 <span>Exam history</span>
-            <?php } else { ?>
-                <span>6 domain blocks</span>
-                <span>100-question blueprint</span>
-                <span>Single primary domain per item</span>
-                <span>Versioned review</span>
             <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
     </header>
 
     <?php if ($track === 'herbs') { ?>
@@ -1177,7 +1174,7 @@ echo $OUTPUT->header();
             <?php if (!$mixdomains) { ?>
                 <div class="herb-board__domain-tools">
                     <a class="herb-board__domain-builder" href="<?php echo $mixurl->out(false); ?>">
-                        Start 100-question practice exam
+                        Comenzar examen de 100 preguntas
                     </a>
                     <span>Questions are mixed from all six study subjects.</span>
                 </div>
@@ -1255,8 +1252,8 @@ echo $OUTPUT->header();
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Selected Domain bank totals">
-                <span>Questions <strong><?php echo (int)$selecteddomainstart; ?>–<?php echo (int)$selecteddomainend; ?></strong>
-                    of <strong><?php echo (int)$selecteddomain['questionCount']; ?></strong></span>
+                <span>Preguntas <strong><?php echo (int)$selecteddomainstart; ?>–<?php echo (int)$selecteddomainend; ?></strong>
+                    de <strong><?php echo (int)$selecteddomain['questionCount']; ?></strong></span>
             </div>
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
@@ -1265,11 +1262,11 @@ echo $OUTPUT->header();
             <?php } else { ?>
                 <?php if ($selecteddomaintotalpages > 1) { ?>
                     <div class="herb-board__domain-paging herb-board__domain-paging--top">
-                        <strong>Page <?php echo $domainpage + 1; ?> of <?php echo $selecteddomaintotalpages; ?></strong>
-                        <nav class="herb-board__domain-page-links" aria-label="Question pages">
+                        <strong>Página <?php echo $domainpage + 1; ?> de <?php echo $selecteddomaintotalpages; ?></strong>
+                        <nav class="herb-board__domain-page-links" aria-label="Páginas de preguntas">
                             <?php if ($domainpage > 0) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Previous</a>
+                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Anterior</a>
                             <?php } ?>
                             <?php foreach ($domainpageurls as $pageindex => $domainpageurl) { ?>
                                 <a class="herb-board__domain-page-link<?php echo $pageindex === $domainpage ? ' is-current' : ''; ?>"
@@ -1280,7 +1277,7 @@ echo $OUTPUT->header();
                             <?php } ?>
                             <?php if ($domainpage + 1 < $selecteddomaintotalpages) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Next →</a>
+                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Siguiente →</a>
                             <?php } ?>
                         </nav>
                     </div>
@@ -1309,11 +1306,11 @@ echo $OUTPUT->header();
                 </div>
                 <?php if ($selecteddomaintotalpages > 1) { ?>
                     <div class="herb-board__domain-paging herb-board__domain-paging--bottom">
-                        <strong>Page <?php echo $domainpage + 1; ?> of <?php echo $selecteddomaintotalpages; ?></strong>
-                        <nav class="herb-board__domain-page-links" aria-label="Question pages">
+                        <strong>Página <?php echo $domainpage + 1; ?> de <?php echo $selecteddomaintotalpages; ?></strong>
+                        <nav class="herb-board__domain-page-links" aria-label="Páginas de preguntas">
                             <?php if ($domainpage > 0) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Previous</a>
+                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Anterior</a>
                             <?php } ?>
                             <?php foreach ($domainpageurls as $pageindex => $domainpageurl) { ?>
                                 <a class="herb-board__domain-page-link<?php echo $pageindex === $domainpage ? ' is-current' : ''; ?>"
@@ -1324,7 +1321,7 @@ echo $OUTPUT->header();
                             <?php } ?>
                             <?php if ($domainpage + 1 < $selecteddomaintotalpages) { ?>
                                 <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
-                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Next →</a>
+                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Siguiente →</a>
                             <?php } ?>
                         </nav>
                     </div>
