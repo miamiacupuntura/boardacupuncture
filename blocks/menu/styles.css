@@ -1610,6 +1610,58 @@ a.herb-board__domain:focus {
     font-size: .82rem;
 }
 
+.herb-board__exam-models {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.herb-board__exam-model {
+    display: block;
+    padding: 16px 18px;
+    border: 1px solid #b8d8cf;
+    border-left: 5px solid #087c69;
+    border-radius: 10px;
+    background: #f1faf7;
+    color: #17324d !important;
+    text-decoration: none !important;
+}
+
+.herb-board__exam-model--adaptive {
+    border-color: #cfc3ef;
+    border-left-color: #6d4bc3;
+    background: #f7f4ff;
+}
+
+.herb-board__exam-model:hover,
+.herb-board__exam-model:focus {
+    box-shadow: 0 6px 16px rgba(40, 45, 75, .12);
+    transform: translateY(-1px);
+}
+
+.herb-board__exam-model strong,
+.herb-board__exam-model span {
+    display: block;
+}
+
+.herb-board__exam-model strong {
+    font-size: 1rem;
+}
+
+.herb-board__exam-model span {
+    margin-top: 5px;
+    color: #52677a;
+    font-size: .82rem;
+    line-height: 1.45;
+}
+
+.herb-board__exam-minimum {
+    margin: 0 0 18px;
+    color: #52677a;
+    font-size: .8rem;
+}
+
 .herb-board__mix-result {
     margin: 18px 0 0;
     padding: 17px 18px;
@@ -1666,6 +1718,37 @@ a.herb-board__domain:focus {
 .herb-board__exam-heading p {
     margin: 0;
     color: #52677a;
+}
+
+.herb-board__exam-progress {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border: 1px solid #d8d4f0;
+    border-radius: 9px;
+    background: #fbfaff;
+}
+
+.herb-board__exam-progress > strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #5633ad;
+    font-size: .82rem;
+}
+
+.herb-board__exam-progress-bar {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e6e0f3;
+}
+
+.herb-board__exam-progress-bar span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: #6d4bc3;
+    transition: width .2s ease;
 }
 
 .herb-board__exam-question {
@@ -1741,6 +1824,19 @@ a.herb-board__domain:focus {
     border-radius: 7px;
     background: #eef9f6;
     color: #204f47;
+}
+
+.herb-board__exam-verdict {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9rem;
+    font-weight: 900;
+}
+
+.herb-board__exam-question.is-incorrect .herb-board__exam-feedback {
+    border-left-color: #d97706;
+    background: #fff7ed;
+    color: #7a4210;
 }
 
 .herb-board__exam-feedback p {
@@ -1832,6 +1928,7 @@ a.herb-board__domain:focus {
     .herb-board__topics,
     .herb-board__setup,
     .herb-board__domains,
+    .herb-board__exam-models,
     .herb-board__shortages,
     .herb-board__launches,
     .herb-board__subcategories-grid {

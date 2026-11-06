@@ -13,7 +13,11 @@ if (!in_array($track, ['herbs', 'formulas', 'domains'], true)) {
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
-$mixdomains = optional_param('mix', 0, PARAM_BOOL);
+$exammode = optional_param('exam', '', PARAM_ALPHA);
+if (!in_array($exammode, ['linear', 'adaptive'], true)) {
+    $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
+}
+$mixdomains = $exammode !== '';
 $domainpage = max(0, optional_param('page', 0, PARAM_INT));
 
 $membershipcourseid = 116;
@@ -42,7 +46,7 @@ if ($domainkey !== '') {
     $pageparams['domain'] = $domainkey;
 }
 if ($mixdomains) {
-    $pageparams['mix'] = 1;
+    $pageparams['exam'] = $exammode;
 }
 if ($domainpage > 0) {
     $pageparams['page'] = $domainpage;
@@ -297,34 +301,114 @@ if ($track === 'domains' && $mixdomains && count($mixedquestions) === 100) {
     $PAGE->requires->js_init_code(<<<'JS'
 const exam = document.getElementById('herbology-domain-exam');
 if (exam) {
-    exam.addEventListener('submit', event => {
-        event.preventDefault();
-        const questions = exam.querySelectorAll('.herb-board__exam-question');
-        let score = 0;
-        let unanswered = 0;
-        questions.forEach(question => {
-            question.classList.remove('is-correct', 'is-incorrect');
-            const selected = question.querySelector('input[type="radio"]:checked');
-            const feedback = question.querySelector('.herb-board__exam-feedback');
-            if (!selected) {
-                unanswered++;
-                question.classList.add('is-incorrect');
-            } else if (selected.value === question.dataset.correct) {
-                score++;
-                question.classList.add('is-correct');
-            } else {
-                question.classList.add('is-incorrect');
-            }
-            feedback.hidden = false;
+    const questions = [...exam.querySelectorAll('.herb-board__exam-question')];
+    const nextButton = exam.querySelector('.herb-board__exam-next');
+    const result = document.getElementById('herbology-domain-exam-result');
+    const progressText = exam.querySelector('.herb-board__exam-progress-text');
+    const progressBar = exam.querySelector('.herb-board__exam-progress-bar span');
+    const mode = exam.dataset.examMode || 'linear';
+    const difficultyRank = {foundation: 0, application: 1, analysis: 2};
+    let remaining = [...questions];
+    let currentQuestion = null;
+    let lastCorrect = null;
+    let answered = 0;
+    let score = 0;
+
+    questions.forEach(question => {
+        question.hidden = true;
+        question.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', () => answerQuestion(question, input));
         });
-        const result = document.getElementById('herbology-domain-exam-result');
+    });
+
+    const takeNextQuestion = () => {
+        if (mode !== 'adaptive' || currentQuestion === null) {
+            return remaining.shift();
+        }
+        const currentRank = difficultyRank[currentQuestion.dataset.difficulty] ?? 1;
+        const targetRank = lastCorrect ? Math.min(2, currentRank + 1) : Math.max(0, currentRank - 1);
+        let nextIndex = remaining.findIndex(question =>
+            !lastCorrect
+            && question.dataset.domain === currentQuestion.dataset.domain
+            && (difficultyRank[question.dataset.difficulty] ?? 1) === targetRank
+        );
+        if (nextIndex < 0) {
+            nextIndex = remaining.findIndex(question =>
+                (difficultyRank[question.dataset.difficulty] ?? 1) === targetRank
+            );
+        }
+        if (nextIndex < 0 && !lastCorrect) {
+            nextIndex = remaining.findIndex(question => question.dataset.domain === currentQuestion.dataset.domain);
+        }
+        if (nextIndex < 0) {
+            nextIndex = 0;
+        }
+        return remaining.splice(nextIndex, 1)[0];
+    };
+
+    const showNextQuestion = () => {
+        currentQuestion = takeNextQuestion();
+        if (!currentQuestion) {
+            finishExam();
+            return;
+        }
+        currentQuestion.hidden = false;
+        const number = answered + 1;
+        currentQuestion.querySelector('.herb-board__exam-question-number').textContent = `${exam.dataset.questionWord} ${number}`;
+        progressText.textContent = `${exam.dataset.questionWord} ${number} ${exam.dataset.scoreConnector} ${questions.length}`;
+        progressBar.style.width = `${(answered / questions.length) * 100}%`;
+        nextButton.hidden = true;
+        currentQuestion.scrollIntoView({behavior: 'smooth', block: 'start'});
+    };
+
+    const answerQuestion = (question, selected) => {
+        if (question.dataset.answered === '1') {
+            return;
+        }
+        question.dataset.answered = '1';
+        lastCorrect = selected.value === question.dataset.correct;
+        if (lastCorrect) {
+            score++;
+            question.classList.add('is-correct');
+        } else {
+            question.classList.add('is-incorrect');
+        }
+        answered++;
+        question.querySelectorAll('input[type="radio"]').forEach(input => input.disabled = true);
+        const feedback = question.querySelector('.herb-board__exam-feedback');
+        const verdict = feedback.querySelector('.herb-board__exam-verdict');
+        verdict.textContent = lastCorrect ? exam.dataset.correctFeedback : exam.dataset.incorrectFeedback;
+        feedback.hidden = false;
+        progressBar.style.width = `${(answered / questions.length) * 100}%`;
+        nextButton.textContent = answered === questions.length ? exam.dataset.resultsWord : exam.dataset.nextWord;
+        nextButton.hidden = false;
+    };
+
+    const finishExam = () => {
         const connector = exam.dataset.scoreConnector || 'of';
         const correctWord = exam.dataset.correctWord || 'correct';
-        const unansweredWord = exam.dataset.unansweredWord || 'unanswered';
-        result.textContent = `${score} ${connector} ${questions.length} ${correctWord}${unanswered ? ` · ${unanswered} ${unansweredWord}` : ''}`;
+        progressText.textContent = exam.dataset.completedWord;
+        progressBar.style.width = '100%';
+        result.textContent = `${score} ${connector} ${questions.length} ${correctWord}`;
         result.hidden = false;
+        nextButton.hidden = true;
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
+    };
+
+    exam.addEventListener('submit', event => {
+        event.preventDefault();
+        if (!currentQuestion || currentQuestion.dataset.answered !== '1') {
+            return;
+        }
+        currentQuestion.hidden = true;
+        if (answered === questions.length) {
+            finishExam();
+        } else {
+            showNextQuestion();
+        }
     });
+
+    showNextQuestion();
 }
 JS);
 }
@@ -1238,20 +1322,33 @@ echo $OUTPUT->header();
                 <span><strong>100</strong> <?php echo $ises ? 'preguntas en el examen completo' : 'questions in the complete practice exam'; ?></span>
             </div>
             <?php
-            $mixurl = new moodle_url('/blocks/menu/herbology-board.php', [
+            $linearurl = new moodle_url('/blocks/menu/herbology-board.php', [
                 'track' => 'domains',
-                'mix' => 1,
+                'exam' => 'linear',
+            ] + $languagecontext);
+            $adaptiveurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                'track' => 'domains',
+                'exam' => 'adaptive',
             ] + $languagecontext);
             ?>
             <?php if (!$mixdomains) { ?>
-                <div class="herb-board__domain-tools">
-                    <a class="herb-board__domain-builder" href="<?php echo $mixurl->out(false); ?>">
-                        <?php echo $ises ? 'Comenzar examen de 100 preguntas' : 'Start 100-question practice exam'; ?>
+                <div class="herb-board__exam-models" aria-label="<?php echo $ises ? 'Modalidades de examen' : 'Exam modes'; ?>">
+                    <a class="herb-board__exam-model" href="<?php echo $linearurl->out(false); ?>">
+                        <strong><?php echo $ises ? 'Examen lineal' : 'Linear exam'; ?></strong>
+                        <span><?php echo $ises
+                            ? '100 preguntas en una secuencia fija con feedback tipo mock después de cada respuesta.'
+                            : '100 questions in a fixed sequence with mock-style feedback after every answer.'; ?></span>
                     </a>
-                    <span><?php echo $ises
-                        ? 'Las preguntas se mezclan a partir de los seis temas.'
-                        : 'Questions are mixed from all six study subjects.'; ?></span>
+                    <a class="herb-board__exam-model herb-board__exam-model--adaptive" href="<?php echo $adaptiveurl->out(false); ?>">
+                        <strong><?php echo $ises ? 'Examen adaptativo' : 'Adaptive exam'; ?></strong>
+                        <span><?php echo $ises
+                            ? 'Ajusta el orden y la dificultad según cada respuesta, sin cambiar la composición final.'
+                            : 'Adjusts order and difficulty after each answer without changing the final composition.'; ?></span>
+                    </a>
                 </div>
+                <p class="herb-board__exam-minimum"><?php echo $ises
+                    ? '100 preguntas es el formato más corto que conserva exactamente la distribución establecida.'
+                    : '100 questions is the shortest form that preserves the current distribution exactly.'; ?></p>
             <?php } ?>
             <div class="herb-board__domains">
                 <?php foreach ($domainblueprint as $domain) {
@@ -1278,23 +1375,46 @@ echo $OUTPUT->header();
                 </section>
             <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
                 <form id="herbology-domain-exam" class="herb-board__exam"
+                    data-exam-mode="<?php echo s($exammode); ?>"
                     data-score-connector="<?php echo $ises ? 'de' : 'of'; ?>"
                     data-correct-word="<?php echo $ises ? 'correctas' : 'correct'; ?>"
-                    data-unanswered-word="<?php echo $ises ? 'sin responder' : 'unanswered'; ?>">
+                    data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
+                    data-correct-feedback="<?php echo $ises ? 'Correcto' : 'Correct'; ?>"
+                    data-incorrect-feedback="<?php echo $ises ? 'Incorrecto' : 'Incorrect'; ?>"
+                    data-next-word="<?php echo $ises ? 'Siguiente pregunta' : 'Next question'; ?>"
+                    data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
+                    data-completed-word="<?php echo $ises ? 'Examen completado' : 'Exam completed'; ?>">
                     <div class="herb-board__exam-heading">
                         <div>
-                            <span><?php echo $ises ? 'Examen completo de práctica' : 'Complete practice exam'; ?></span>
+                            <span><?php echo $exammode === 'adaptive'
+                                ? ($ises ? 'Examen adaptativo' : 'Adaptive exam')
+                                : ($ises ? 'Examen lineal' : 'Linear exam'); ?></span>
                             <h4><?php echo $ises ? 'Herbología China · 100 preguntas' : 'Chinese Herbology · 100 Questions'; ?></h4>
                         </div>
                         <p><?php echo $ises
-                            ? 'Selecciona una respuesta por pregunta. Al final podrás ver tu puntuación y las explicaciones.'
-                            : 'Select one answer for each question. Submit at the end to see your score and explanations.'; ?></p>
+                            ? 'Responde una pregunta a la vez. Después de cada respuesta recibirás feedback tipo mock.'
+                            : 'Answer one question at a time. Mock-style feedback appears after every answer.'; ?></p>
+                    </div>
+                    <div class="herb-board__exam-progress" aria-live="polite">
+                        <strong class="herb-board__exam-progress-text"></strong>
+                        <div class="herb-board__exam-progress-bar"><span></span></div>
                     </div>
                     <?php foreach ($mixedquestions as $questionnumber => $question) { ?>
+                        <?php
+                        $correctoptiontext = '';
+                        foreach ($question['options'] as $questionoption) {
+                            if (($questionoption['label'] ?? '') === ($question['correctLabel'] ?? '')) {
+                                $correctoptiontext = (string)($questionoption['text'] ?? '');
+                                break;
+                            }
+                        }
+                        ?>
                         <fieldset class="herb-board__exam-question"
-                            data-correct="<?php echo s($question['correctLabel']); ?>">
+                            data-correct="<?php echo s($question['correctLabel']); ?>"
+                            data-domain="<?php echo s($question['domainId'] ?? ''); ?>"
+                            data-difficulty="<?php echo s($question['difficultyBand'] ?? 'application'); ?>">
                             <legend>
-                                <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $questionnumber + 1; ?></span>
+                                <span class="herb-board__exam-question-number"><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $questionnumber + 1; ?></span>
                                 <?php echo s($question['prompt']); ?>
                             </legend>
                             <div class="herb-board__exam-options">
@@ -1308,13 +1428,15 @@ echo $OUTPUT->header();
                                 <?php } ?>
                             </div>
                             <div class="herb-board__exam-feedback" hidden>
-                                <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>: <?php echo s($question['correctLabel']); ?></strong>
+                                <span class="herb-board__exam-verdict"></span>
+                                <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
+                                    <?php echo s($question['correctLabel']); ?>. <?php echo s($correctoptiontext); ?></strong>
                                 <p><?php echo s($question['explanation']); ?></p>
                             </div>
                         </fieldset>
                     <?php } ?>
                     <div class="herb-board__exam-submit">
-                        <button type="submit"><?php echo $ises ? 'Comprobar mi puntuación' : 'Check my score'; ?></button>
+                        <button class="herb-board__exam-next" type="submit" hidden></button>
                         <output id="herbology-domain-exam-result" hidden></output>
                     </div>
                 </form>
