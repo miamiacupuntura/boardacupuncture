@@ -370,7 +370,8 @@ class block_menu extends block_base {
                         . userdate($progress['lasttime'], '%b %d, %Y · %I:%M %p') . '</small>';
                 }
 
-                $boardcards .= '<article class="board-hub__card">'
+                $boardcards .= '<article class="board-hub__card board-hub__card--school-level board-hub__card--'
+                    . s($subject['area']) . '">'
                     . '<h3>' . s($subject['name'] . ' School Level') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__progress"><strong>' . format_float($progress['grade'], 2, true)

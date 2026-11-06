@@ -254,10 +254,14 @@
         }
         .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--simulation {
             flex-basis: 100%;
+            order: 100;
         }
         .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--games {
-            flex: 0 0 auto;
-            min-width: 118px;
+            flex: 1 1 calc(50% - 8px);
+            min-width: 0;
+        }
+        .board-hub__card--school-level:not(.board-hub__card--herbology) .board-hub__action--questions {
+            flex-basis: 100%;
         }
         .comparisons-dashboard-link {
             display: inline-flex !important;
