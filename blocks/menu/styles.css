@@ -1463,6 +1463,38 @@ a.herb-board__domain:focus {
     gap: 10px;
 }
 
+.herb-board__domain-paging {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 16px 0;
+    padding: 12px 14px;
+    border: 1px solid #cfc3ef;
+    border-radius: 9px;
+    background: #f7f4ff;
+    color: #5633ad;
+}
+
+.herb-board__domain-paging > strong {
+    flex: 0 0 auto;
+    font-size: .82rem;
+}
+
+.herb-board__domain-paging .pagination {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.herb-board__domain-paging .page-link {
+    min-width: 38px;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .herb-board__domain-question {
     padding: 14px 16px;
     border: 1px solid #d8d4f0;
@@ -1779,6 +1811,15 @@ a.herb-board__domain:focus {
 
     .herb-board__exam-submit button {
         width: 100%;
+    }
+
+    .herb-board__domain-paging {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .herb-board__domain-paging .pagination {
+        justify-content: flex-start;
     }
 
     .herb-board__subcategories {

@@ -178,12 +178,26 @@ if ($track === 'domains' && $domainkey !== '' && $selecteddomain === null) {
 }
 $domainperpage = 25;
 $selecteddomainpagequestions = [];
+$selecteddomainstart = 0;
+$selecteddomainend = 0;
+$selecteddomaintotalpages = 0;
+$domainpagingurl = null;
 if ($selecteddomain !== null) {
+    $selecteddomaintotalpages = max(1, (int)ceil($selecteddomain['questionCount'] / $domainperpage));
+    $domainpage = min($domainpage, $selecteddomaintotalpages - 1);
     $selecteddomainpagequestions = array_slice(
         $selecteddomain['questions'],
         $domainpage * $domainperpage,
         $domainperpage
     );
+    if ($selecteddomain['questionCount'] > 0) {
+        $selecteddomainstart = ($domainpage * $domainperpage) + 1;
+        $selecteddomainend = min($selecteddomainstart + $domainperpage - 1, $selecteddomain['questionCount']);
+    }
+    $domainpagingurl = new moodle_url('/blocks/menu/herbology-board.php', [
+        'track' => 'domains',
+        'domain' => $selecteddomain['id'],
+    ]);
 }
 $mixedquestions = [];
 $domainshortages = [];
@@ -1231,13 +1245,25 @@ echo $OUTPUT->header();
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Selected Domain bank totals">
-                <span><strong><?php echo (int)$selecteddomain['questionCount']; ?></strong> practice questions</span>
+                <span>Questions <strong><?php echo (int)$selecteddomainstart; ?>–<?php echo (int)$selecteddomainend; ?></strong>
+                    of <strong><?php echo (int)$selecteddomain['questionCount']; ?></strong></span>
             </div>
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
                     Practice questions for this subject are being prepared.
                 </div>
             <?php } else { ?>
+                <?php if ($selecteddomaintotalpages > 1) { ?>
+                    <div class="herb-board__domain-paging herb-board__domain-paging--top">
+                        <strong>Page <?php echo $domainpage + 1; ?> of <?php echo $selecteddomaintotalpages; ?></strong>
+                        <?php echo $OUTPUT->paging_bar(
+                            $selecteddomain['questionCount'],
+                            $domainpage,
+                            $domainperpage,
+                            $domainpagingurl
+                        ); ?>
+                    </div>
+                <?php } ?>
                 <div class="herb-board__domain-questions">
                     <?php foreach ($selecteddomainpagequestions as $question) { ?>
                         <article class="herb-board__domain-question">
@@ -1260,18 +1286,17 @@ echo $OUTPUT->header();
                         </article>
                     <?php } ?>
                 </div>
-                <?php if ($selecteddomain['questionCount'] > $domainperpage) {
-                    $pagingurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                        'track' => 'domains',
-                        'domain' => $selecteddomain['id'],
-                    ]);
-                    echo $OUTPUT->paging_bar(
-                        $selecteddomain['questionCount'],
-                        $domainpage,
-                        $domainperpage,
-                        $pagingurl
-                    );
-                } ?>
+                <?php if ($selecteddomaintotalpages > 1) { ?>
+                    <div class="herb-board__domain-paging herb-board__domain-paging--bottom">
+                        <strong>Page <?php echo $domainpage + 1; ?> of <?php echo $selecteddomaintotalpages; ?></strong>
+                        <?php echo $OUTPUT->paging_bar(
+                            $selecteddomain['questionCount'],
+                            $domainpage,
+                            $domainperpage,
+                            $domainpagingurl
+                        ); ?>
+                    </div>
+                <?php } ?>
             <?php } ?>
         </section>
     <?php } ?>
