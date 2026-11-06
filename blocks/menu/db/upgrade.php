@@ -1,0 +1,44 @@
+<?php
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Upgrade the menu block database schema.
+ *
+ * @param int $oldversion
+ * @param object|null $block
+ * @return bool
+ */
+function xmldb_block_menu_upgrade($oldversion, $block = null) {
+    global $DB;
+
+    if ($oldversion < 2026110629) {
+        $dbman = $DB->get_manager();
+        $table = new xmldb_table('block_menu_exam_attempts');
+
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+        $table->add_field('attemptuid', XMLDB_TYPE_CHAR, '64', null, XMLDB_NOTNULL);
+        $table->add_field('examtype', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL);
+        $table->add_field('score', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('total', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '100');
+        $table->add_field('duration', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('language', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, 'en');
+        $table->add_field('timecompleted', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL);
+
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
+        $table->add_index('attemptuid', XMLDB_INDEX_UNIQUE, ['attemptuid']);
+        $table->add_index('usercoursecompleted', XMLDB_INDEX_NOTUNIQUE, ['userid', 'courseid', 'timecompleted']);
+
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_block_savepoint(true, 2026110629, 'menu');
+    }
+
+    return true;
+}

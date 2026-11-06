@@ -1,0 +1,73 @@
+<?php
+// Saves one completed Chinese Herbology practice exam attempt.
+
+define('AJAX_SCRIPT', true);
+
+require_once(__DIR__ . '/../../config.php');
+
+require_login();
+require_sesskey();
+
+header('Content-Type: application/json; charset=utf-8');
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    throw new invalid_parameter_exception('POST is required.');
+}
+
+$membershipcourseid = 116;
+$membershipcontext = context_course::instance($membershipcourseid);
+$hasaccess = is_enrolled($membershipcontext, $USER->id, '', true)
+    || has_capability('moodle/course:view', $membershipcontext, $USER->id);
+
+if (!$hasaccess) {
+    throw new required_capability_exception($membershipcontext, 'moodle/course:view', 'nopermissions', '');
+}
+
+$attemptuid = required_param('attemptuid', PARAM_ALPHANUMEXT);
+$examtype = required_param('examtype', PARAM_ALPHA);
+$score = required_param('score', PARAM_INT);
+$total = required_param('total', PARAM_INT);
+$duration = required_param('duration', PARAM_INT);
+$language = optional_param('language', 'en', PARAM_ALPHA);
+
+if (!in_array($examtype, ['linear', 'adaptive'], true)
+        || $total !== 100
+        || $score < 0
+        || $score > $total
+        || core_text::strlen($attemptuid) < 12
+        || core_text::strlen($attemptuid) > 64) {
+    throw new invalid_parameter_exception('Invalid Herbology exam attempt.');
+}
+
+$language = in_array($language, ['en', 'es'], true) ? $language : 'en';
+$duration = min(max(0, $duration), 604800);
+$table = new xmldb_table('block_menu_exam_attempts');
+
+if (!$DB->get_manager()->table_exists($table)) {
+    throw new moodle_exception('The exam history database is not installed.');
+}
+
+$existingattempt = $DB->get_record('block_menu_exam_attempts', ['attemptuid' => $attemptuid], 'id, userid');
+if ($existingattempt && (int) $existingattempt->userid !== (int) $USER->id) {
+    throw new invalid_parameter_exception('Invalid attempt identifier.');
+}
+$attemptid = $existingattempt ? (int) $existingattempt->id : 0;
+if ($attemptid === 0) {
+    $record = (object) [
+        'userid' => $USER->id,
+        'courseid' => $membershipcourseid,
+        'attemptuid' => $attemptuid,
+        'examtype' => $examtype,
+        'score' => $score,
+        'total' => $total,
+        'duration' => $duration,
+        'language' => $language,
+        'timecompleted' => time(),
+    ];
+    $attemptid = (int) $DB->insert_record('block_menu_exam_attempts', $record);
+}
+
+echo json_encode([
+    'success' => true,
+    'attemptid' => (int) $attemptid,
+]);

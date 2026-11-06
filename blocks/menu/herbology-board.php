@@ -64,6 +64,21 @@ $languagecontext = $ises ? ['lang' => 'es'] : [];
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
+$examhistoryurl = $domainsurl->out(false) . '#herb-board-exam-history';
+$examhistory = [];
+if ($track === 'domains' && !$mixdomains && $domainkey === '') {
+    $examhistorytable = new xmldb_table('block_menu_exam_attempts');
+    if ($DB->get_manager()->table_exists($examhistorytable)) {
+        $examhistory = array_values($DB->get_records(
+            'block_menu_exam_attempts',
+            ['userid' => $USER->id, 'courseid' => $membershipcourseid],
+            'timecompleted DESC, id DESC',
+            '*',
+            0,
+            10
+        ));
+    }
+}
 
 $domainblueprint = [
     [
@@ -344,6 +359,8 @@ if (exam) {
     const restartButton = exam.querySelector('.herb-board__exam-restart');
     const navigation = exam.querySelector('.herb-board__exam-navigation');
     const result = document.getElementById('herbology-domain-exam-result');
+    const saveStatus = exam.querySelector('.herb-board__exam-save-status');
+    const historyLink = exam.querySelector('.herb-board__exam-history-link');
     const progressText = exam.querySelector('.herb-board__exam-progress-text');
     const scoreText = exam.querySelector('.herb-board__exam-score');
     const progressBar = exam.querySelector('.herb-board__exam-progress-bar span');
@@ -361,8 +378,20 @@ if (exam) {
     let answered = 0;
     let score = 0;
     let activeSourceLink = null;
+    let attemptUid = '';
+    let attemptStartedAt = Date.now();
+    let attemptSaving = false;
+    let attemptSaved = false;
 
     previousButton.textContent = exam.dataset.previousWord;
+
+    const createAttemptUid = () => {
+        if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
+            return globalThis.crypto.randomUUID();
+        }
+        return `attempt-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    };
+    attemptUid = createAttemptUid();
 
     const closeSourceViewer = () => {
         if (!sourceViewer || sourceViewer.hidden) {
@@ -482,6 +511,54 @@ if (exam) {
         scoreText.textContent = `${exam.dataset.scoreWord}: ${percentage}% (${score}/${answered})`;
     };
 
+    const saveAttempt = async () => {
+        if (attemptSaving || attemptSaved) {
+            return;
+        }
+        attemptSaving = true;
+        const savingUid = attemptUid;
+        saveStatus.textContent = exam.dataset.historySaving;
+        saveStatus.classList.remove('is-saved', 'is-error');
+        saveStatus.hidden = false;
+        const body = new URLSearchParams({
+            sesskey: exam.dataset.sesskey,
+            attemptuid: savingUid,
+            examtype: mode,
+            score: String(score),
+            total: String(questions.length),
+            duration: String(Math.max(0, Math.round((Date.now() - attemptStartedAt) / 1000))),
+            language: exam.dataset.examLanguage,
+        });
+        try {
+            const response = await fetch(exam.dataset.historyUrl, {
+                method: 'POST',
+                credentials: 'same-origin',
+                keepalive: true,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                body,
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.success) {
+                throw new Error('Exam history save failed.');
+            }
+            if (savingUid === attemptUid) {
+                attemptSaved = true;
+                saveStatus.textContent = exam.dataset.historySaved;
+                saveStatus.classList.add('is-saved');
+                historyLink.hidden = false;
+            }
+        } catch (error) {
+            if (savingUid === attemptUid) {
+                saveStatus.textContent = exam.dataset.historyError;
+                saveStatus.classList.add('is-error');
+            }
+        } finally {
+            if (savingUid === attemptUid) {
+                attemptSaving = false;
+            }
+        }
+    };
+
     const showQuestion = (question, shouldScroll = true) => {
         questions.forEach(item => item.hidden = item !== question);
         currentQuestion = question;
@@ -551,6 +628,7 @@ if (exam) {
         result.hidden = false;
         navigation.hidden = true;
         restartButton.hidden = false;
+        void saveAttempt();
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
     };
 
@@ -574,8 +652,16 @@ if (exam) {
         reviewingPending = false;
         answered = 0;
         score = 0;
+        attemptUid = createAttemptUid();
+        attemptStartedAt = Date.now();
+        attemptSaving = false;
+        attemptSaved = false;
         result.textContent = '';
         result.hidden = true;
+        saveStatus.textContent = '';
+        saveStatus.classList.remove('is-saved', 'is-error');
+        saveStatus.hidden = true;
+        historyLink.hidden = true;
         restartButton.hidden = true;
         navigation.hidden = false;
         updateScore();
@@ -1605,6 +1691,62 @@ echo $OUTPUT->header();
                     </a>
                 <?php } ?>
             </div>
+            <?php if (!$mixdomains) { ?>
+                <section class="herb-board__exam-history" id="herb-board-exam-history"
+                    aria-labelledby="herb-board-exam-history-title">
+                    <header>
+                        <div>
+                            <span><?php echo $ises ? 'PROGRESO PERSONAL' : 'PERSONAL PROGRESS'; ?></span>
+                            <h4 id="herb-board-exam-history-title">
+                                <?php echo $ises ? 'Historial de exámenes' : 'Exam history'; ?>
+                            </h4>
+                        </div>
+                        <small><?php echo $ises ? 'Últimos 10 intentos completados' : 'Last 10 completed attempts'; ?></small>
+                    </header>
+                    <?php if (!$examhistory) { ?>
+                        <p class="herb-board__exam-history-empty">
+                            <?php echo $ises
+                                ? 'Todavía no has completado un examen de 100 preguntas.'
+                                : 'You have not completed a 100-question exam yet.'; ?>
+                        </p>
+                    <?php } else { ?>
+                        <div class="herb-board__exam-history-list" role="list">
+                            <?php foreach ($examhistory as $attempt) {
+                                $attemptpercentage = $attempt->total > 0
+                                    ? (int) round(($attempt->score / $attempt->total) * 100)
+                                    : 0;
+                                $attemptminutes = intdiv((int) $attempt->duration, 60);
+                                $attemptseconds = (int) $attempt->duration % 60;
+                                $attemptduration = $attemptminutes > 0
+                                    ? $attemptminutes . ' min ' . $attemptseconds . ' s'
+                                    : $attemptseconds . ' s';
+                                $attempttype = $attempt->examtype === 'adaptive'
+                                    ? ($ises ? 'Adaptativo' : 'Adaptive')
+                                    : ($ises ? 'Lineal' : 'Linear');
+                            ?>
+                                <article role="listitem">
+                                    <div>
+                                        <span><?php echo $ises ? 'Fecha' : 'Date'; ?></span>
+                                        <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Modalidad' : 'Mode'; ?></span>
+                                        <strong><?php echo s($attempttype); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
+                                        <strong><?php echo (int) $attempt->score; ?>/<?php echo (int) $attempt->total; ?> · <?php echo $attemptpercentage; ?>%</strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
+                                        <strong><?php echo s($attemptduration); ?></strong>
+                                    </div>
+                                </article>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                </section>
+            <?php } ?>
             <?php if ($mixdomains && $domainshortages) { ?>
                 <section class="herb-board__mix-result herb-board__mix-result--shortage" aria-labelledby="domain-shortage-title">
                     <h4 id="domain-shortage-title">The practice exam is being prepared</h4>
@@ -1613,6 +1755,12 @@ echo $OUTPUT->header();
             <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
                 <form id="herbology-domain-exam" class="herb-board__exam"
                     data-exam-mode="<?php echo s($exammode); ?>"
+                    data-exam-language="<?php echo $ises ? 'es' : 'en'; ?>"
+                    data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
+                    data-sesskey="<?php echo s(sesskey()); ?>"
+                    data-history-saving="<?php echo $ises ? 'Guardando en el historial…' : 'Saving to exam history…'; ?>"
+                    data-history-saved="<?php echo $ises ? 'Resultado guardado en el historial.' : 'Result saved to exam history.'; ?>"
+                    data-history-error="<?php echo $ises ? 'No se pudo guardar el resultado.' : 'The result could not be saved.'; ?>"
                     data-score-connector="<?php echo $ises ? 'de' : 'of'; ?>"
                     data-correct-word="<?php echo $ises ? 'correctas' : 'correct'; ?>"
                     data-score-word="<?php echo $ises ? 'Aciertos' : 'Accuracy'; ?>"
@@ -1726,6 +1874,10 @@ echo $OUTPUT->header();
                             </button>
                         </div>
                         <output id="herbology-domain-exam-result" hidden></output>
+                        <span class="herb-board__exam-save-status" role="status" hidden></span>
+                        <a class="herb-board__exam-history-link" href="<?php echo s($examhistoryurl); ?>" hidden>
+                            <?php echo $ises ? 'Ver historial' : 'View history'; ?>
+                        </a>
                         <button class="herb-board__exam-restart" type="button" hidden>
                             <?php echo $ises ? 'Reiniciar examen' : 'Restart exam'; ?>
                         </button>

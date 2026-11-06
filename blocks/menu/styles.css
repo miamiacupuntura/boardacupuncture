@@ -1662,6 +1662,77 @@ a.herb-board__domain:focus {
     font-size: .8rem;
 }
 
+.herb-board__exam-history {
+    margin-top: 24px;
+    padding: 18px;
+    border: 1px solid #b8d8cf;
+    border-top: 4px solid #087c69;
+    border-radius: 10px;
+    background: #f8fcfb;
+}
+
+.herb-board__exam-history > header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.herb-board__exam-history > header span,
+.herb-board__exam-history-list span {
+    display: block;
+    color: #087c69;
+    font-size: .68rem;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+.herb-board__exam-history > header h4 {
+    margin: 3px 0 0;
+    color: #17324d;
+    font-size: 1.15rem;
+}
+
+.herb-board__exam-history > header small,
+.herb-board__exam-history-empty {
+    color: #52677a;
+}
+
+.herb-board__exam-history-empty {
+    margin: 0;
+    padding: 14px;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.herb-board__exam-history-list {
+    display: grid;
+    gap: 8px;
+}
+
+.herb-board__exam-history-list article {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid #d3e3df;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.herb-board__exam-history-list strong {
+    display: block;
+    margin-top: 3px;
+    color: #17324d;
+    font-size: .84rem;
+}
+
+.herb-board__exam-history-list article div:nth-child(3) strong {
+    color: #087c69;
+}
+
 .herb-board__mix-result {
     margin: 18px 0 0;
     padding: 17px 18px;
@@ -1971,6 +2042,7 @@ a.herb-board__domain:focus {
     bottom: 10px;
     z-index: 2;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 14px;
     padding: 14px;
@@ -2006,6 +2078,39 @@ a.herb-board__domain:focus {
 
 .herb-board__exam-submit .herb-board__exam-restart {
     margin-left: auto;
+}
+
+.herb-board__exam-save-status {
+    color: #52677a;
+    font-size: .8rem;
+    font-weight: 750;
+}
+
+.herb-board__exam-save-status.is-saved {
+    color: #087c69;
+}
+
+.herb-board__exam-save-status.is-error {
+    color: #a34816;
+}
+
+.herb-board__exam-history-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 10px 16px;
+    border: 1px solid #6d4bc3;
+    border-radius: 8px;
+    background: #fff;
+    color: #5633ad !important;
+    font-weight: 850;
+    text-decoration: none !important;
+}
+
+.herb-board__exam-history-link[hidden],
+.herb-board__exam-save-status[hidden] {
+    display: none;
 }
 
 .herb-board__exam-submit button:disabled {
@@ -2103,8 +2208,18 @@ a.herb-board__domain:focus {
     }
 
     .herb-board__exam-navigation,
-    .herb-board__exam-submit button {
+    .herb-board__exam-submit button,
+    .herb-board__exam-history-link {
         width: 100%;
+    }
+
+    .herb-board__exam-history > header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .herb-board__exam-history-list article {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .herb-board__source-viewer {

@@ -30,7 +30,10 @@ FILES=(
     "blocks/menu/block_menu.php"
     "blocks/menu/board.php"
     "blocks/menu/clean-needle-exam-key.php"
+    "blocks/menu/db/install.xml"
+    "blocks/menu/db/upgrade.php"
     "blocks/menu/herbology-board.php"
+    "blocks/menu/herbology-exam-history.php"
     "blocks/menu/herbology-domain-candidates.json"
     "blocks/menu/herbology-domain-bank.json"
     "blocks/menu/styles.css"
@@ -52,16 +55,15 @@ for relative in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/$relative" -o "$sourcefile"
     if [[ -f "$target" ]]; then
         cp -a "$target" "$BACKUP_DIR/$relative"
-    elif [[ ! -d "$(dirname "$target")" ]]; then
-        echo "ERROR: no existe el directorio $(dirname "$target")"
-        exit 1
     fi
 done
 
 php -l "$TEMP_DIR/blocks/menu/block_menu.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/board.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/clean-needle-exam-key.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu/db/upgrade.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/herbology-board.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu/herbology-exam-history.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu_course/block_menu_course.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu_course/version.php" >/dev/null
@@ -105,6 +107,11 @@ grep -Fq 'herb-board__exam-previous' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-next' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-restart' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'restartExam' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Historial de exámenes' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'saveAttempt' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'block_menu_exam_attempts' "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
+grep -Fq 'TABLE NAME="block_menu_exam_attempts"' "$TEMP_DIR/blocks/menu/db/install.xml"
+grep -Fq "upgrade_block_savepoint(true, 2026110629, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq 'data-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-next-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'reviewingPending' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -242,11 +249,18 @@ grep -Fq "\$normalizeherbname((string)(\$herbcard['latin'] ?? ''))" "$TEMP_DIR/b
 grep -Fq 'Board nomenclature' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Nomenclatura Board' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__exam-nomenclature' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110628;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110629;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
+    targetdir="$(dirname "$target")"
+    if [[ ! -d "$targetdir" ]]; then
+        parentdir="$(dirname "$targetdir")"
+        owner_group="$(stat -c '%u:%g' "$parentdir")"
+        dirmode="$(stat -c '%a' "$parentdir")"
+        install -d -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$dirmode" "$targetdir"
+    fi
     if [[ -f "$target" ]]; then
         owner_group="$(stat -c '%u:%g' "$target")"
         mode="$(stat -c '%a' "$target")"
@@ -283,6 +297,6 @@ for label in \
     grep -Fq "$label" "$MOODLE_ROOT/blocks/menu/block_menu.php"
 done
 
-echo "NOMENCLATURA DEL BANCO DE HERBOLOGÍA ACTUALIZADA"
+echo "PRÁCTICA E HISTORIAL DE HERBOLOGÍA ACTUALIZADOS"
 echo "Respaldo: $BACKUP_DIR"
 echo "Página: https://www.acupuncturetests.com/my/?labels=$REVISION"
