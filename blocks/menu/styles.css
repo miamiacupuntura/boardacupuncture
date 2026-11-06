@@ -549,6 +549,12 @@
     width: 100%;
 }
 
+.board-hub__card--board-level .study-guide-dashboard-link {
+    width: 100%;
+    flex-basis: 100%;
+    margin: 0;
+}
+
 .board-hub__description {
     min-height: 58px;
     margin: 0 0 15px;

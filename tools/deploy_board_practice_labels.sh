@@ -28,6 +28,7 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 
 FILES=(
     "blocks/menu/block_menu.php"
+    "blocks/menu/styles.css"
     "blocks/menu/version.php"
     "theme/moove/javascript/study-guide-dashboard.js"
     "theme/moove/layout/drawers.php"
@@ -57,7 +58,11 @@ for label in \
     grep -Fq "$label" "$TEMP_DIR/theme/moove/javascript/study-guide-dashboard.js"
 done
 ! grep -Fq '>Mock Questions<' "$TEMP_DIR/blocks/menu/block_menu.php"
-grep -Fq "'v' => '20261106-1'" "$TEMP_DIR/theme/moove/layout/drawers.php"
+grep -Fq '$boardlevelactions = $mockquestionsaction . $simulationaction . $studyguideaction;' \
+    "$TEMP_DIR/blocks/menu/block_menu.php"
+grep -Fq '.board-hub__card--board-level .study-guide-dashboard-link' \
+    "$TEMP_DIR/blocks/menu/styles.css"
+grep -Fq "'v' => '20261106-2'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"

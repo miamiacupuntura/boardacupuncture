@@ -61,16 +61,25 @@
             }
 
             const example = result.actions[0];
-            let link = result.card.querySelector(':scope .study-guide-dashboard-link');
+            const boardHeading = `${subject} Board Level`;
+            const boardCard = [...document.querySelectorAll('.board-hub__card--board-level')]
+                .find(card => {
+                    const cardHeading = card.querySelector('h1, h2, h3, h4, h5, strong');
+                    return cardHeading && normalise(cardHeading.textContent) === boardHeading;
+                });
+            const linkTarget = boardCard || result.card;
+            const linkActions = linkTarget.querySelector(':scope .board-hub__actions') || linkTarget;
+            let link = linkTarget.querySelector(':scope .study-guide-dashboard-link')
+                || result.card.querySelector(':scope .study-guide-dashboard-link');
             if (!link) {
                 link = document.createElement('a');
-                link.className = `${example.className || ''} study-guide-dashboard-link`.trim();
+                link.className = `${example.className || ''} board-hub__action--guide study-guide-dashboard-link`.trim();
                 link.href = `/blocks/myprogress/study-guide.php?area=${encodeURIComponent(area)}`;
                 link.textContent = 'Study Guide';
                 link.setAttribute('aria-label', `Open ${subject} Study Guide chapters`);
-
-                const lastAction = result.actions[result.actions.length - 1];
-                lastAction.insertAdjacentElement('afterend', link);
+            }
+            if (link.parentElement !== linkActions || link !== linkActions.lastElementChild) {
+                linkActions.append(link);
             }
 
             if (area === 'herbology' && !result.card.querySelector(':scope .comparisons-dashboard-link')) {
@@ -79,7 +88,8 @@
                 comparisons.href = '/study-guide/comparisons/index.html';
                 comparisons.textContent = 'Comparisons';
                 comparisons.setAttribute('aria-label', 'Open Comparative Study Notes');
-                link.insertAdjacentElement('beforebegin', comparisons);
+                const schoolActions = result.card.querySelector(':scope .board-hub__actions') || result.card;
+                schoolActions.append(comparisons);
             }
         });
     }
@@ -228,6 +238,11 @@
         .study-guide-dashboard-link:focus-visible {
             outline: 3px solid #185cca;
             outline-offset: 2px;
+        }
+        .board-hub__card--board-level .study-guide-dashboard-link {
+            width: 100%;
+            flex: 1 1 100%;
+            margin: 0 !important;
         }
         .comparisons-dashboard-link {
             display: inline-flex !important;
