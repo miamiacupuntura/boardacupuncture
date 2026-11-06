@@ -8,7 +8,7 @@ require_login();
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['herbs', 'formulas', 'domains'], true)) {
+if (!in_array($track, ['herbs', 'formulas', 'domains', 'exams'], true)) {
     $track = 'herbs';
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
@@ -16,6 +16,15 @@ $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 $exammode = optional_param('exam', '', PARAM_ALPHA);
 if (!in_array($exammode, ['linear', 'adaptive'], true)) {
     $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
+}
+if ($track === 'domains' && $exammode !== '') {
+    // Keep previously shared exam URLs working while moving exams to their own section.
+    $track = 'exams';
+} else if ($track !== 'exams') {
+    $exammode = '';
+}
+if ($track !== 'domains') {
+    $domainkey = '';
 }
 $mixdomains = $exammode !== '';
 $domainpage = max(0, optional_param('page', 0, PARAM_INT));
@@ -64,9 +73,10 @@ $languagecontext = $ises ? ['lang' => 'es'] : [];
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
-$examhistoryurl = $domainsurl->out(false) . '#herb-board-exam-history';
+$examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
+$examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
-if ($track === 'domains' && !$mixdomains && $domainkey === '') {
+if ($track === 'exams' && !$mixdomains) {
     $examhistorytable = new xmldb_table('block_menu_exam_attempts');
     if ($DB->get_manager()->table_exists($examhistorytable)) {
         $examhistory = array_values($DB->get_records(
@@ -145,18 +155,19 @@ if ($ises) {
 }
 $domainseedpath = __DIR__ . '/herbology-domain-bank.json';
 $domainbankdirectory = $CFG->dataroot . '/board-domain-banks';
-if ($track === 'domains') {
+$usesdomainbank = in_array($track, ['domains', 'exams'], true);
+if ($usesdomainbank) {
     make_writable_directory($domainbankdirectory);
 }
 $domainbankpath = $domainbankdirectory . '/herbology-domain-bank.json';
-if ($track === 'domains' && !is_readable($domainbankpath) && is_readable($domainseedpath)) {
+if ($usesdomainbank && !is_readable($domainbankpath) && is_readable($domainseedpath)) {
     $seeddata = file_get_contents($domainseedpath);
     if ($seeddata === false || file_put_contents($domainbankpath, $seeddata, LOCK_EX) === false) {
         throw new RuntimeException('Unable to initialize the Herbology Domain question bank.');
     }
 }
 $domainbank = ['domains' => []];
-if ($track === 'domains' && is_readable($domainbankpath)) {
+if ($usesdomainbank && is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
     if (is_array($decodedbank) && isset($decodedbank['domains']) && is_array($decodedbank['domains'])) {
         $domainbank = $decodedbank;
@@ -173,7 +184,7 @@ $savedomainbank = static function(array $bank) use ($domainbankpath): void {
 };
 $domaincandidatepath = __DIR__ . '/herbology-domain-candidates.json';
 $domaincandidateinventory = [];
-if ($track === 'domains' && is_readable($domaincandidatepath)) {
+if ($usesdomainbank && is_readable($domaincandidatepath)) {
     $domaincandidates = json_decode(file_get_contents($domaincandidatepath), true);
     if (is_array($domaincandidates) && isset($domaincandidates['domains'])) {
         $domaincandidateinventory = $domaincandidates['sourceInventory'] ?? [];
@@ -324,7 +335,7 @@ if ($selecteddomain !== null) {
 }
 $mixedquestions = [];
 $domainshortages = [];
-if ($track === 'domains' && $domainkey === '' && $mixdomains) {
+if ($track === 'exams' && $mixdomains) {
     foreach ($domainblueprint as $domain) {
         $templatequestions = array_values(array_filter(
             $domain['questions'],
@@ -349,7 +360,7 @@ if ($track === 'domains' && $domainkey === '' && $mixdomains) {
     }
 }
 
-if ($track === 'domains' && $mixdomains && count($mixedquestions) === 100) {
+if ($track === 'exams' && $mixdomains && count($mixedquestions) === 100) {
     $PAGE->requires->js_init_code(<<<'JS'
 const exam = document.getElementById('herbology-domain-exam');
 if (exam) {
@@ -1294,10 +1305,12 @@ echo $OUTPUT->header();
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
             <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
                 <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Dominios' : 'Domains'; ?></a>
+            <a class="herb-board__tab" href="<?php echo $examsurl->out(false); ?>"
+                <?php echo $track === 'exams' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Exámenes' : 'Exams'; ?></a>
             <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                 href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>
-        <?php if ($track !== 'domains') { ?>
+        <?php if (!in_array($track, ['domains', 'exams'], true)) { ?>
             <div class="herb-board__summary" aria-label="Practice features">
             <?php if ($track === 'herbs') { ?>
                 <span>Questions and explanations</span>
@@ -1631,30 +1644,40 @@ echo $OUTPUT->header();
             </div>
         </section>
     <?php } else if ($selecteddomain === null) { ?>
-        <section class="herb-board__panel" aria-labelledby="herb-board-domains-title">
+        <section class="herb-board__panel" aria-labelledby="herb-board-workspace-title">
             <div class="herb-board__panel-heading">
                 <div>
-                    <h3 id="herb-board-domains-title"><?php echo $ises ? 'Práctica por dominio' : 'Practice by Domain'; ?></h3>
-                    <p><?php echo $ises
-                        ? 'Elige un tema para practicarlo o comienza el examen completo de 100 preguntas.'
-                        : 'Choose one subject for focused practice or start the complete 100-question exam.'; ?></p>
+                    <h3 id="herb-board-workspace-title"><?php echo $track === 'exams'
+                        ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
+                        : ($ises ? 'Práctica por dominio' : 'Practice by Domain'); ?></h3>
+                    <p><?php echo $track === 'exams'
+                        ? ($ises
+                            ? 'Elige el examen lineal o adaptativo de 100 preguntas y revisa tu historial.'
+                            : 'Choose the 100-question linear or adaptive exam and review your history.')
+                        : ($ises
+                            ? 'Elige un dominio para practicar sus preguntas.'
+                            : 'Choose one Domain for focused question practice.'); ?></p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
-                <span><strong>6</strong> <?php echo $ises ? 'temas de estudio' : 'study subjects'; ?></span>
-                <span><strong>100</strong> <?php echo $ises ? 'preguntas en el examen completo' : 'questions in the complete practice exam'; ?></span>
+                <?php if ($track === 'exams') { ?>
+                    <span><strong>2</strong> <?php echo $ises ? 'modalidades de examen' : 'exam modes'; ?></span>
+                    <span><strong>100</strong> <?php echo $ises ? 'preguntas por examen' : 'questions per exam'; ?></span>
+                <?php } else { ?>
+                    <span><strong>6</strong> <?php echo $ises ? 'dominios de estudio' : 'study Domains'; ?></span>
+                <?php } ?>
             </div>
             <?php
             $linearurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                'track' => 'domains',
+                'track' => 'exams',
                 'exam' => 'linear',
             ] + $languagecontext);
             $adaptiveurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                'track' => 'domains',
+                'track' => 'exams',
                 'exam' => 'adaptive',
             ] + $languagecontext);
             ?>
-            <?php if (!$mixdomains) { ?>
+            <?php if ($track === 'exams' && !$mixdomains) { ?>
                 <div class="herb-board__exam-models" aria-label="<?php echo $ises ? 'Modalidades de examen' : 'Exam modes'; ?>">
                     <a class="herb-board__exam-model" href="<?php echo $linearurl->out(false); ?>">
                         <strong><?php echo $ises ? 'Examen lineal' : 'Linear exam'; ?></strong>
@@ -1673,6 +1696,7 @@ echo $OUTPUT->header();
                     ? '100 preguntas es el formato más corto que conserva exactamente la distribución establecida.'
                     : '100 questions is the shortest form that preserves the current distribution exactly.'; ?></p>
             <?php } ?>
+            <?php if ($track === 'domains') { ?>
             <div class="herb-board__domains">
                 <?php foreach ($domainblueprint as $domain) {
                     $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
@@ -1691,7 +1715,8 @@ echo $OUTPUT->header();
                     </a>
                 <?php } ?>
             </div>
-            <?php if (!$mixdomains) { ?>
+            <?php } ?>
+            <?php if ($track === 'exams' && !$mixdomains) { ?>
                 <section class="herb-board__exam-history" id="herb-board-exam-history"
                     aria-labelledby="herb-board-exam-history-title">
                     <header>

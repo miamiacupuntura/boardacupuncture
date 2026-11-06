@@ -81,14 +81,17 @@ for label in \
     grep -Fq "$label" "$TEMP_DIR/theme/moove/javascript/study-guide-dashboard.js"
 done
 ! grep -Fq '>Mock Questions<' "$TEMP_DIR/blocks/menu/block_menu.php"
-grep -Fq '$boardlevelactions = $mockquestionsaction . $simulationaction . $studyguideaction;' \
+grep -Fq '$boardlevelactions = $mockquestionsaction . $examsaction . $simulationaction . $studyguideaction;' \
     "$TEMP_DIR/blocks/menu/block_menu.php"
+grep -Fq 'board-hub__action--board-exams' "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq 'board-hub__card--school-level board-hub__card--' \
     "$TEMP_DIR/blocks/menu/block_menu.php"
 ! grep -Fq 'board-hub__action--board-domains' "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq '.board-hub__card--board-level .study-guide-dashboard-link' \
     "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq '.board-hub__card--board-level .board-hub__action--board-simulation' \
+    "$TEMP_DIR/blocks/menu/styles.css"
+grep -Fq '.board-hub__card--board-level .board-hub__action--board-exams' \
     "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq '.board-hub__card:not(.board-hub__card--board-level) .board-hub__action--games' \
     "$TEMP_DIR/blocks/menu/styles.css"
@@ -100,9 +103,12 @@ grep -Fq "'formula_differentiation'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Focused practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq 'Save question in this Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq "domainaction === 'addquestion'" "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq 'comienza el examen completo de 100 preguntas' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Elige un dominio para practicar sus preguntas.' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Examen lineal' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Examen adaptativo' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "\$track === 'exams'" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "'track' => 'exams'" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "\$ises ? 'Exámenes' : 'Exams'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-previous' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-next' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-restart' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -112,6 +118,7 @@ grep -Fq 'saveAttempt' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'block_menu_exam_attempts' "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
 grep -Fq 'TABLE NAME="block_menu_exam_attempts"' "$TEMP_DIR/blocks/menu/db/install.xml"
 grep -Fq "upgrade_block_savepoint(true, 2026110629, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
+grep -Fq "upgrade_block_savepoint(true, 2026110630, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq 'data-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-next-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'reviewingPending' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -249,7 +256,7 @@ grep -Fq "\$normalizeherbname((string)(\$herbcard['latin'] ?? ''))" "$TEMP_DIR/b
 grep -Fq 'Board nomenclature' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Nomenclatura Board' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__exam-nomenclature' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110629;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110630;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
