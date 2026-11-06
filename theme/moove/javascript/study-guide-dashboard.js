@@ -11,6 +11,14 @@
 
     const actionLabels = new Set(['Modules', 'Simulation', 'Notes', 'Exam Key', 'Games']);
 
+    const boardPracticeLabels = new Map([
+        ['Foundations Board Level', 'Foundations Practice'],
+        ['Acupuncture & Point Location Board Level', 'Acupuncture Practice'],
+        ['Chinese Herbology Board Level', 'Herbology Practice'],
+        ['Biomedicine Board Level', 'Biomedicine Practice'],
+        ['Clean Needle Techniques Board Level', 'CNT Practice'],
+    ]);
+
     function normalise(value) {
         return String(value || '').replace(/\s+/g, ' ').trim();
     }
@@ -72,6 +80,18 @@
                 comparisons.textContent = 'Comparisons';
                 comparisons.setAttribute('aria-label', 'Open Comparative Study Notes');
                 link.insertAdjacentElement('beforebegin', comparisons);
+            }
+        });
+    }
+
+    function renameBoardPracticeButtons() {
+        document.querySelectorAll('.board-hub__card--board-level').forEach(card => {
+            const heading = card.querySelector('h1, h2, h3, h4, h5, strong');
+            const label = heading ? boardPracticeLabels.get(normalise(heading.textContent)) : null;
+            const action = card.querySelector('.board-hub__action--board-mock');
+            if (label && action) {
+                action.textContent = label;
+                action.setAttribute('aria-label', `Open ${label}`);
             }
         });
     }
@@ -386,10 +406,12 @@
     document.head.append(style);
 
     addStudyGuideLinks();
+    renameBoardPracticeButtons();
     addBoardGuidelinesPortal();
     addContinuingEducationPortal();
     document.addEventListener('DOMContentLoaded', () => {
         addStudyGuideLinks();
+        renameBoardPracticeButtons();
         addBoardGuidelinesPortal();
         addContinuingEducationPortal();
     }, {once: true});
@@ -399,6 +421,7 @@
         window.clearTimeout(refreshTimer);
         refreshTimer = window.setTimeout(() => {
             addStudyGuideLinks();
+            renameBoardPracticeButtons();
             addBoardGuidelinesPortal();
             addContinuingEducationPortal();
         }, 80);
