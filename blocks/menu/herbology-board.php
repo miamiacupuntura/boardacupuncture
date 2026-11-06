@@ -6,10 +6,11 @@ require_once(__DIR__ . '/../../config.php');
 require_login();
 
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['herbs', 'formulas'], true)) {
+if (!in_array($track, ['herbs', 'formulas', 'domains'], true)) {
     $track = 'herbs';
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
+$domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 
 $membershipcourseid = 116;
 $membershipcourse = $DB->get_record('course', ['id' => $membershipcourseid], '*', MUST_EXIST);
@@ -30,10 +31,76 @@ $pageparams = ['track' => $track];
 if ($sectionkey !== '') {
     $pageparams['section'] = $sectionkey;
 }
+if ($domainkey !== '') {
+    $pageparams['domain'] = $domainkey;
+}
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $dashboardurl = new moodle_url('/my/');
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs']);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas']);
+$domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains']);
+
+$domainblueprint = [
+    [
+        'id' => 'formula_differentiation',
+        'name' => 'Formula selection and differentiation',
+        'weight' => 28,
+        'focus' => 'Pattern-to-formula selection, close comparisons and the decisive clinical clue.',
+    ],
+    [
+        'id' => 'single_herb',
+        'name' => 'Individual herbs',
+        'weight' => 24,
+        'focus' => 'Category, actions, indications, nature, channels and clinical distinctions.',
+    ],
+    [
+        'id' => 'dui_yao',
+        'name' => 'Duì Yào and compatibility',
+        'weight' => 18,
+        'focus' => 'Combined action, each herb’s contribution and the pair’s traditional relationship.',
+    ],
+    [
+        'id' => 'safety_dispensing',
+        'name' => 'Safety and dispensing',
+        'weight' => 15,
+        'focus' => 'Dosage, preparation, toxicity, pregnancy, interactions and substitutions.',
+    ],
+    [
+        'id' => 'formula_composition',
+        'name' => 'Formula composition and modification',
+        'weight' => 10,
+        'focus' => 'Jun–Chen–Zuo–Shi, strategic ingredients and presentation-based modifications.',
+    ],
+    [
+        'id' => 'scope_aliases',
+        'name' => 'Roster boundaries, aliases and substitutions',
+        'weight' => 5,
+        'focus' => 'Name variants, official-list boundaries and obsolete or historical alternatives.',
+    ],
+];
+$domainbankpath = __DIR__ . '/herbology-domain-bank.json';
+$domainbank = ['domains' => []];
+if (is_readable($domainbankpath)) {
+    $decodedbank = json_decode(file_get_contents($domainbankpath), true);
+    if (is_array($decodedbank) && isset($decodedbank['domains']) && is_array($decodedbank['domains'])) {
+        $domainbank = $decodedbank;
+    }
+}
+$selecteddomain = null;
+foreach ($domainblueprint as &$domain) {
+    $domain['questions'] = $domainbank['domains'][$domain['id']] ?? [];
+    $domain['questionCount'] = count($domain['questions']);
+    $domain['approvedCount'] = count(array_filter($domain['questions'], static function(array $question): bool {
+        return ($question['reviewStatus'] ?? '') === 'approved';
+    }));
+    if ($domainkey !== '' && $domain['id'] === $domainkey) {
+        $selecteddomain = $domain;
+    }
+}
+unset($domain);
+if ($track === 'domains' && $domainkey !== '' && $selecteddomain === null) {
+    redirect($domainsurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+}
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
@@ -589,6 +656,8 @@ echo $OUTPUT->header();
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>>Single Herbs</a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>>Formulas</a>
+            <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
+                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>>Domains</a>
         </nav>
         <div class="herb-board__summary" aria-label="Practice features">
             <?php if ($track === 'herbs') { ?>
@@ -596,11 +665,16 @@ echo $OUTPUT->header();
                 <span>Recall flashcards</span>
                 <span>Comparison charts</span>
                 <span>Saved browser progress</span>
-            <?php } else { ?>
+            <?php } else if ($track === 'formulas') { ?>
                 <span>Multiple choice</span>
                 <span>Mock-style feedback</span>
                 <span>Flexible session size</span>
                 <span>Exam history</span>
+            <?php } else { ?>
+                <span>6 domain blocks</span>
+                <span>100-question blueprint</span>
+                <span>Single primary domain per item</span>
+                <span>Versioned review</span>
             <?php } ?>
         </div>
     </header>
@@ -878,7 +952,7 @@ echo $OUTPUT->header();
                     describe pattern-based materia medica and do not constitute diagnosis, prescribing or emergency care.</p>
             </section>
         <?php } ?>
-    <?php } else { ?>
+    <?php } else if ($track === 'formulas') { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-formulas-title">
             <div class="herb-board__panel-heading">
                 <div>
@@ -920,6 +994,84 @@ echo $OUTPUT->header();
                 available within their clinical categories. A dedicated Modifications filter will be added when the
                 expanded question set is received.
             </div>
+        </section>
+    <?php } else if ($selecteddomain === null) { ?>
+        <section class="herb-board__panel" aria-labelledby="herb-board-domains-title">
+            <div class="herb-board__panel-heading">
+                <div>
+                    <h3 id="herb-board-domains-title">Question blocks by Domain</h3>
+                    <p>Classify and review each question inside one primary Domain before building mixed exams.</p>
+                </div>
+            </div>
+            <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
+                <span><strong>6</strong> domain blocks</span>
+                <span><strong>100</strong> questions in the final blueprint</span>
+                <span><strong>100%</strong> total allocation</span>
+            </div>
+            <div class="herb-board__domains">
+                <?php foreach ($domainblueprint as $domain) {
+                    $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'domains',
+                        'domain' => $domain['id'],
+                    ]);
+                ?>
+                    <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
+                        href="<?php echo $domainurl->out(false); ?>">
+                        <div class="herb-board__domain-heading">
+                            <span class="herb-board__domain-weight"><?php echo (int)$domain['weight']; ?>%</span>
+                            <span class="herb-board__domain-target"><?php echo (int)$domain['weight']; ?> of 100</span>
+                        </div>
+                        <h4><?php echo s($domain['name']); ?></h4>
+                        <p><?php echo s($domain['focus']); ?></p>
+                        <span class="herb-board__domain-status">
+                            <?php echo (int)$domain['approvedCount']; ?> approved ·
+                            <?php echo (int)$domain['questionCount']; ?> total questions →
+                        </span>
+                    </a>
+                <?php } ?>
+            </div>
+            <div class="herb-board__notice">
+                <strong>Blueprint control:</strong> these percentages are the current AcupunctureTests working model,
+                not a published NCBAHM allocation. Before releasing a scored 100-question exam, the selected official
+                outline, effective date and Domain percentages must be recorded and approved. Every question will count
+                toward one primary Domain only.
+            </div>
+            <p class="herb-board__educational-note">
+                The largest-remainder rule will preserve exactly 100 questions when a future official blueprint uses
+                percentages that do not convert directly to whole numbers.
+            </p>
+        </section>
+    <?php } else { ?>
+        <section class="herb-board__panel" aria-labelledby="herb-board-domain-bank-title">
+            <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>">← All Domains</a>
+            <div class="herb-board__panel-heading herb-board__panel-heading--domain-bank">
+                <div>
+                    <span class="herb-board__domain-kicker">Domain question bank · <?php echo (int)$selecteddomain['weight']; ?>%</span>
+                    <h3 id="herb-board-domain-bank-title"><?php echo s($selecteddomain['name']); ?></h3>
+                    <p><?php echo s($selecteddomain['focus']); ?></p>
+                </div>
+            </div>
+            <div class="herb-board__domain-summary" aria-label="Selected Domain bank totals">
+                <span><strong><?php echo (int)$selecteddomain['questionCount']; ?></strong> total questions</span>
+                <span><strong><?php echo (int)$selecteddomain['approvedCount']; ?></strong> approved questions</span>
+                <span><strong><?php echo (int)$selecteddomain['weight']; ?></strong> required in a 100-question form</span>
+            </div>
+            <?php if (!$selecteddomain['questions']) { ?>
+                <div class="herb-board__notice">
+                    <strong>Bank created:</strong> this Domain is ready to receive questions. Each new item must include
+                    one primary Domain, one objective, a difficulty band, a source, verified feedback and review status.
+                </div>
+            <?php } else { ?>
+                <div class="herb-board__domain-questions">
+                    <?php foreach ($selecteddomain['questions'] as $question) { ?>
+                        <article class="herb-board__domain-question">
+                            <span><?php echo s($question['id'] ?? 'Unnumbered item'); ?></span>
+                            <h4><?php echo s($question['prompt'] ?? 'Question awaiting prompt'); ?></h4>
+                            <small><?php echo s($question['reviewStatus'] ?? 'draft'); ?></small>
+                        </article>
+                    <?php } ?>
+                </div>
+            <?php } ?>
         </section>
     <?php } ?>
 

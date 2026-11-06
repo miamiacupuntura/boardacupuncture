@@ -30,6 +30,8 @@ FILES=(
     "blocks/menu/block_menu.php"
     "blocks/menu/board.php"
     "blocks/menu/clean-needle-exam-key.php"
+    "blocks/menu/herbology-board.php"
+    "blocks/menu/herbology-domain-bank.json"
     "blocks/menu/styles.css"
     "blocks/menu/version.php"
     "blocks/menu_course/block_menu_course.php"
@@ -44,13 +46,18 @@ for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
     mkdir -p "$(dirname "$sourcefile")" "$BACKUP_DIR/$(dirname "$relative")"
     curl -fsSL "$REPOSITORY/$REVISION/$relative" -o "$sourcefile"
-    [[ -f "$target" ]] || { echo "ERROR: no existe $target"; exit 1; }
-    cp -a "$target" "$BACKUP_DIR/$relative"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP_DIR/$relative"
+    elif [[ ! -d "$(dirname "$target")" ]]; then
+        echo "ERROR: no existe el directorio $(dirname "$target")"
+        exit 1
+    fi
 done
 
 php -l "$TEMP_DIR/blocks/menu/block_menu.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/board.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/clean-needle-exam-key.php" >/dev/null
+php -l "$TEMP_DIR/blocks/menu/herbology-board.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu_course/block_menu_course.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu_course/version.php" >/dev/null
@@ -66,10 +73,12 @@ for label in \
     grep -Fq "$label" "$TEMP_DIR/theme/moove/javascript/study-guide-dashboard.js"
 done
 ! grep -Fq '>Mock Questions<' "$TEMP_DIR/blocks/menu/block_menu.php"
-grep -Fq '$boardlevelactions = $mockquestionsaction . $simulationaction . $studyguideaction;' \
+grep -Fq '$boardlevelactions = $mockquestionsaction . $domainsaction . $simulationaction . $studyguideaction;' \
     "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq 'board-hub__card--school-level board-hub__card--' \
     "$TEMP_DIR/blocks/menu/block_menu.php"
+grep -Fq 'board-hub__action--board-domains' "$TEMP_DIR/blocks/menu/block_menu.php"
+grep -Fq "'track' => 'domains'" "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq '.board-hub__card--board-level .study-guide-dashboard-link' \
     "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq '.board-hub__card--board-level .board-hub__action--board-simulation' \
@@ -79,12 +88,26 @@ grep -Fq '.board-hub__card:not(.board-hub__card--board-level) .board-hub__action
 grep -Fq "[48, 'Tricky Questions', 'games']" "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq "'title' => 'Tricky Questions'" "$TEMP_DIR/blocks/menu/board.php"
 grep -Fq "return ['Tricky Questions', 'games'];" "$TEMP_DIR/blocks/menu_course/block_menu_course.php"
-grep -Fq "'v' => '20261106-5'" "$TEMP_DIR/theme/moove/layout/drawers.php"
+grep -Fq 'Question blocks by Domain' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "'formula_differentiation'" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Domain question bank' "$TEMP_DIR/blocks/menu/herbology-board.php"
+php -r '
+$data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+if (count($data["domains"] ?? []) !== 6) {
+    throw new RuntimeException("The Herbology Domain bank must contain six Domain buckets.");
+}
+' "$TEMP_DIR/blocks/menu/herbology-domain-bank.json"
+grep -Fq "'v' => '20261106-6'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
-    owner_group="$(stat -c '%u:%g' "$target")"
-    mode="$(stat -c '%a' "$target")"
+    if [[ -f "$target" ]]; then
+        owner_group="$(stat -c '%u:%g' "$target")"
+        mode="$(stat -c '%a' "$target")"
+    else
+        owner_group="$(stat -c '%u:%g' "$(dirname "$target")")"
+        mode="644"
+    fi
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" \
         "$TEMP_DIR/$relative" "$target"
 done

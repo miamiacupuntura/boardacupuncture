@@ -562,7 +562,20 @@
 
 .board-hub__card--board-level .board-hub__action--board-simulation {
     flex-basis: 100%;
+    order: 4;
+}
+
+.board-hub__card--board-level .board-hub__action--board-domains {
+    border: 0;
+    background: #6d4bc3;
     order: 3;
+}
+
+.board-hub__card--board-level.board-hub__card--herbology .board-hub__action--board-mock,
+.board-hub__card--board-level.board-hub__card--herbology .study-guide-dashboard-link,
+.board-hub__card--board-level.board-hub__card--herbology .board-hub__action--board-domains {
+    flex-basis: calc(33.333% - 8px);
+    min-width: 0;
 }
 
 .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--simulation {
@@ -1324,6 +1337,145 @@ a.herb-board__topic:focus {
     font-size: .86rem;
 }
 
+.herb-board__domain-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 18px;
+}
+
+.herb-board__domain-summary span {
+    padding: 9px 12px;
+    border: 1px solid #cbdce7;
+    border-radius: 999px;
+    background: #f8fbfd;
+    color: #52677a;
+    font-size: .78rem;
+}
+
+.herb-board__domain-summary strong {
+    color: #17324d;
+}
+
+.herb-board__domains {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.herb-board__domain {
+    display: block;
+    padding: 17px 18px;
+    border: 1px solid #d8d4f0;
+    border-top: 4px solid #6d4bc3;
+    border-radius: 10px;
+    background: #fbfaff;
+    color: #17324d;
+    text-decoration: none !important;
+}
+
+a.herb-board__domain:hover,
+a.herb-board__domain:focus {
+    border-color: #8b6bd1;
+    background: #f6f2ff;
+    color: #17324d;
+    box-shadow: 0 5px 14px rgba(71, 50, 122, .12);
+}
+
+.herb-board__domain-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.herb-board__domain-weight {
+    display: inline-flex;
+    min-width: 43px;
+    min-height: 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #6d4bc3;
+    color: #fff;
+    font-weight: 900;
+}
+
+.herb-board__domain-target {
+    color: #6b5c83;
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.herb-board__domain h4 {
+    margin: 13px 0 6px;
+    font-size: 1.03rem;
+}
+
+.herb-board__domain p {
+    margin: 0;
+    color: #52677a;
+    font-size: .86rem;
+    line-height: 1.45;
+}
+
+.herb-board__domain-status {
+    display: block;
+    margin-top: 13px;
+    padding-top: 10px;
+    border-top: 1px solid #e4e0f2;
+    color: #6d4bc3;
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.herb-board__domain-back {
+    display: inline-flex;
+    margin-bottom: 17px;
+    color: #6d4bc3;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.herb-board__panel-heading--domain-bank {
+    align-items: flex-start;
+}
+
+.herb-board__domain-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: #6d4bc3;
+    font-size: .73rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.herb-board__domain-questions {
+    display: grid;
+    gap: 10px;
+}
+
+.herb-board__domain-question {
+    padding: 14px 16px;
+    border: 1px solid #d8d4f0;
+    border-radius: 9px;
+    background: #fbfaff;
+}
+
+.herb-board__domain-question span,
+.herb-board__domain-question small {
+    color: #6d4bc3;
+    font-size: .73rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.herb-board__domain-question h4 {
+    margin: 6px 0;
+    font-size: .95rem;
+}
+
 @media (max-width: 900px) {
     .herb-board__topics,
     .herb-board__setup,
@@ -1349,6 +1501,7 @@ a.herb-board__topic:focus {
 
     .herb-board__topics,
     .herb-board__setup,
+    .herb-board__domains,
     .herb-board__launches,
     .herb-board__subcategories-grid {
         grid-template-columns: 1fr;
