@@ -1968,6 +1968,13 @@ a.herb-board__domain:focus {
     box-shadow: 0 8px 24px rgba(21, 39, 62, .14);
 }
 
+.herb-board__exam-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: min(430px, 100%);
+}
+
 .herb-board__exam-submit button {
     min-height: 46px;
     padding: 10px 18px;
@@ -1977,6 +1984,19 @@ a.herb-board__domain:focus {
     color: #fff;
     font-weight: 850;
     cursor: pointer;
+}
+
+.herb-board__exam-submit .herb-board__exam-previous {
+    border: 1px solid #6d4bc3;
+    background: #fff;
+    color: #5633ad;
+}
+
+.herb-board__exam-submit button:disabled {
+    border-color: #cbd3da;
+    background: #eef1f4;
+    color: #788793;
+    cursor: not-allowed;
 }
 
 .herb-board__exam-submit output {
@@ -2066,6 +2086,7 @@ a.herb-board__domain:focus {
         flex-direction: column;
     }
 
+    .herb-board__exam-navigation,
     .herb-board__exam-submit button {
         width: 100%;
     }

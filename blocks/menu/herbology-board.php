@@ -339,7 +339,9 @@ if ($track === 'domains' && $mixdomains && count($mixedquestions) === 100) {
 const exam = document.getElementById('herbology-domain-exam');
 if (exam) {
     const questions = [...exam.querySelectorAll('.herb-board__exam-question')];
+    const previousButton = exam.querySelector('.herb-board__exam-previous');
     const nextButton = exam.querySelector('.herb-board__exam-next');
+    const navigation = exam.querySelector('.herb-board__exam-navigation');
     const result = document.getElementById('herbology-domain-exam-result');
     const progressText = exam.querySelector('.herb-board__exam-progress-text');
     const progressBar = exam.querySelector('.herb-board__exam-progress-bar span');
@@ -350,11 +352,14 @@ if (exam) {
     const mode = exam.dataset.examMode || 'linear';
     const difficultyRank = {foundation: 0, application: 1, analysis: 2};
     let remaining = [...questions];
+    const history = [];
+    let historyIndex = -1;
     let currentQuestion = null;
-    let lastCorrect = null;
     let answered = 0;
     let score = 0;
     let activeSourceLink = null;
+
+    previousButton.textContent = exam.dataset.previousWord;
 
     const closeSourceViewer = () => {
         if (!sourceViewer || sourceViewer.hidden) {
@@ -419,9 +424,10 @@ if (exam) {
     });
 
     const takeNextQuestion = () => {
-        if (mode !== 'adaptive' || currentQuestion === null) {
+        if (mode !== 'adaptive' || currentQuestion === null || currentQuestion.dataset.answered !== '1') {
             return remaining.shift();
         }
+        const lastCorrect = currentQuestion.dataset.wasCorrect === '1';
         const currentRank = difficultyRank[currentQuestion.dataset.difficulty] ?? 1;
         const targetRank = lastCorrect ? Math.min(2, currentRank + 1) : Math.max(0, currentRank - 1);
         let nextIndex = remaining.findIndex(question =>
@@ -443,19 +449,43 @@ if (exam) {
         return remaining.splice(nextIndex, 1)[0];
     };
 
-    const showNextQuestion = () => {
-        currentQuestion = takeNextQuestion();
-        if (!currentQuestion) {
-            finishExam();
-            return;
+    const updateNavigation = () => {
+        previousButton.disabled = historyIndex <= 0;
+        const hasForwardHistory = historyIndex < history.length - 1;
+        const hasNewQuestion = remaining.length > 0;
+        const hasUnanswered = questions.some(question => question.dataset.answered !== '1');
+        if (hasForwardHistory || hasNewQuestion) {
+            nextButton.textContent = exam.dataset.nextWord;
+        } else if (hasUnanswered) {
+            nextButton.textContent = exam.dataset.pendingWord;
+        } else {
+            nextButton.textContent = exam.dataset.resultsWord;
         }
-        currentQuestion.hidden = false;
-        const number = answered + 1;
-        currentQuestion.querySelector('.herb-board__exam-question-number').textContent = `${exam.dataset.questionWord} ${number}`;
+    };
+
+    const showQuestion = (question, shouldScroll = true) => {
+        questions.forEach(item => item.hidden = item !== question);
+        currentQuestion = question;
+        const number = Number(question.dataset.displayNumber);
+        question.querySelector('.herb-board__exam-question-number').textContent = `${exam.dataset.questionWord} ${number}`;
         progressText.textContent = `${exam.dataset.questionWord} ${number} ${exam.dataset.scoreConnector} ${questions.length}`;
-        progressBar.style.width = `${(answered / questions.length) * 100}%`;
-        nextButton.hidden = true;
-        currentQuestion.scrollIntoView({behavior: 'smooth', block: 'start'});
+        progressBar.style.width = `${(number / questions.length) * 100}%`;
+        updateNavigation();
+        if (shouldScroll) {
+            question.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+    };
+
+    const addNextQuestion = () => {
+        const question = takeNextQuestion();
+        if (!question) {
+            return false;
+        }
+        history.push(question);
+        historyIndex = history.length - 1;
+        question.dataset.displayNumber = String(history.length);
+        showQuestion(question);
+        return true;
     };
 
     const answerQuestion = (question, selected) => {
@@ -463,7 +493,8 @@ if (exam) {
             return;
         }
         question.dataset.answered = '1';
-        lastCorrect = selected.value === question.dataset.correct;
+        const lastCorrect = selected.value === question.dataset.correct;
+        question.dataset.wasCorrect = lastCorrect ? '1' : '0';
         if (lastCorrect) {
             score++;
             question.classList.add('is-correct');
@@ -476,9 +507,7 @@ if (exam) {
         const verdict = feedback.querySelector('.herb-board__exam-verdict');
         verdict.textContent = lastCorrect ? exam.dataset.correctFeedback : exam.dataset.incorrectFeedback;
         feedback.hidden = false;
-        progressBar.style.width = `${(answered / questions.length) * 100}%`;
-        nextButton.textContent = answered === questions.length ? exam.dataset.resultsWord : exam.dataset.nextWord;
-        nextButton.hidden = false;
+        updateNavigation();
     };
 
     const finishExam = () => {
@@ -488,24 +517,44 @@ if (exam) {
         progressBar.style.width = '100%';
         result.textContent = `${score} ${connector} ${questions.length} ${correctWord}`;
         result.hidden = false;
-        nextButton.hidden = true;
+        navigation.hidden = true;
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
     };
 
-    exam.addEventListener('submit', event => {
-        event.preventDefault();
-        if (!currentQuestion || currentQuestion.dataset.answered !== '1') {
+    const showPreviousQuestion = () => {
+        if (historyIndex <= 0) {
             return;
         }
-        currentQuestion.hidden = true;
-        if (answered === questions.length) {
-            finishExam();
-        } else {
-            showNextQuestion();
+        historyIndex--;
+        showQuestion(history[historyIndex]);
+    };
+
+    const showFollowingQuestion = () => {
+        if (historyIndex < history.length - 1) {
+            historyIndex++;
+            showQuestion(history[historyIndex]);
+            return;
         }
+        if (addNextQuestion()) {
+            return;
+        }
+        const firstUnanswered = history.findIndex(question => question.dataset.answered !== '1');
+        if (firstUnanswered >= 0) {
+            historyIndex = firstUnanswered;
+            showQuestion(history[historyIndex]);
+        } else {
+            finishExam();
+        }
+    };
+
+    previousButton.addEventListener('click', showPreviousQuestion);
+    nextButton.addEventListener('click', showFollowingQuestion);
+    exam.addEventListener('submit', event => {
+        event.preventDefault();
+        showFollowingQuestion();
     });
 
-    showNextQuestion();
+    addNextQuestion();
 }
 JS);
 }
@@ -1478,7 +1527,9 @@ echo $OUTPUT->header();
                     data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
                     data-correct-feedback="<?php echo $ises ? 'Correcto' : 'Correct'; ?>"
                     data-incorrect-feedback="<?php echo $ises ? 'Incorrecto' : 'Incorrect'; ?>"
-                    data-next-word="<?php echo $ises ? 'Siguiente pregunta' : 'Next question'; ?>"
+                    data-previous-word="<?php echo $ises ? '← Anterior' : '← Previous'; ?>"
+                    data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
+                    data-pending-word="<?php echo $ises ? 'Ir a pendiente →' : 'Review unanswered →'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
                     data-completed-word="<?php echo $ises ? 'Examen completado' : 'Exam completed'; ?>">
                     <div class="herb-board__exam-heading">
@@ -1489,8 +1540,8 @@ echo $OUTPUT->header();
                             <h4><?php echo $ises ? 'Herbología China · 100 preguntas' : 'Chinese Herbology · 100 Questions'; ?></h4>
                         </div>
                         <p><?php echo $ises
-                            ? 'Responde una pregunta a la vez. Después de cada respuesta recibirás feedback tipo mock.'
-                            : 'Answer one question at a time. Mock-style feedback appears after every answer.'; ?></p>
+                            ? 'Responde o salta una pregunta a la vez. Después de cada respuesta recibirás feedback tipo mock.'
+                            : 'Answer or skip one question at a time. Mock-style feedback appears after every answer.'; ?></p>
                     </div>
                     <div class="herb-board__exam-progress" aria-live="polite">
                         <strong class="herb-board__exam-progress-text"></strong>
@@ -1568,7 +1619,15 @@ echo $OUTPUT->header();
                         </fieldset>
                     <?php } ?>
                     <div class="herb-board__exam-submit">
-                        <button class="herb-board__exam-next" type="submit" hidden></button>
+                        <div class="herb-board__exam-navigation" role="group"
+                            aria-label="<?php echo $ises ? 'Navegación entre preguntas' : 'Question navigation'; ?>">
+                            <button class="herb-board__exam-previous" type="button">
+                                <?php echo $ises ? '← Anterior' : '← Previous'; ?>
+                            </button>
+                            <button class="herb-board__exam-next" type="button">
+                                <?php echo $ises ? 'Siguiente →' : 'Next →'; ?>
+                            </button>
+                        </div>
                         <output id="herbology-domain-exam-result" hidden></output>
                     </div>
                 </form>
