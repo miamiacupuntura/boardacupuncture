@@ -50,36 +50,42 @@ $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'do
 
 $domainblueprint = [
     [
+        'number' => 1,
         'id' => 'formula_differentiation',
         'name' => 'Formula selection and differentiation',
         'weight' => 28,
         'focus' => 'Pattern-to-formula selection, close comparisons and the decisive clinical clue.',
     ],
     [
+        'number' => 2,
         'id' => 'single_herb',
         'name' => 'Individual herbs',
         'weight' => 24,
         'focus' => 'Category, actions, indications, nature, channels and clinical distinctions.',
     ],
     [
+        'number' => 3,
         'id' => 'dui_yao',
         'name' => 'Duì Yào and compatibility',
         'weight' => 18,
         'focus' => 'Combined action, each herb’s contribution and the pair’s traditional relationship.',
     ],
     [
+        'number' => 4,
         'id' => 'safety_dispensing',
         'name' => 'Safety and dispensing',
         'weight' => 15,
         'focus' => 'Dosage, preparation, toxicity, pregnancy, interactions and substitutions.',
     ],
     [
+        'number' => 5,
         'id' => 'formula_composition',
         'name' => 'Formula composition and modification',
         'weight' => 10,
         'focus' => 'Jun–Chen–Zuo–Shi, strategic ingredients and presentation-based modifications.',
     ],
     [
+        'number' => 6,
         'id' => 'scope_aliases',
         'name' => 'Roster boundaries, aliases and substitutions',
         'weight' => 5,
@@ -181,7 +187,7 @@ $selecteddomainpagequestions = [];
 $selecteddomainstart = 0;
 $selecteddomainend = 0;
 $selecteddomaintotalpages = 0;
-$domainpagingurl = null;
+$domainpageurls = [];
 if ($selecteddomain !== null) {
     $selecteddomaintotalpages = max(1, (int)ceil($selecteddomain['questionCount'] / $domainperpage));
     $domainpage = min($domainpage, $selecteddomaintotalpages - 1);
@@ -194,10 +200,13 @@ if ($selecteddomain !== null) {
         $selecteddomainstart = ($domainpage * $domainperpage) + 1;
         $selecteddomainend = min($selecteddomainstart + $domainperpage - 1, $selecteddomain['questionCount']);
     }
-    $domainpagingurl = new moodle_url('/blocks/menu/herbology-board.php', [
-        'track' => 'domains',
-        'domain' => $selecteddomain['id'],
-    ]);
+    for ($pageindex = 0; $pageindex < $selecteddomaintotalpages; $pageindex++) {
+        $domainpageurls[$pageindex] = new moodle_url('/blocks/menu/herbology-board.php', [
+            'track' => 'domains',
+            'domain' => $selecteddomain['id'],
+            'page' => $pageindex,
+        ]);
+    }
 }
 $mixedquestions = [];
 $domainshortages = [];
@@ -1182,6 +1191,7 @@ echo $OUTPUT->header();
                 ?>
                     <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
                         href="<?php echo $domainurl->out(false); ?>">
+                        <span class="herb-board__domain-number">Domain <?php echo (int)$domain['number']; ?></span>
                         <h4><?php echo s($domain['name']); ?></h4>
                         <p><?php echo s($domain['focus']); ?></p>
                         <span class="herb-board__domain-status">
@@ -1239,7 +1249,7 @@ echo $OUTPUT->header();
             <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>">← All Domains</a>
             <div class="herb-board__panel-heading herb-board__panel-heading--domain-bank">
                 <div>
-                    <span class="herb-board__domain-kicker">Focused practice</span>
+                    <span class="herb-board__domain-kicker">Domain <?php echo (int)$selecteddomain['number']; ?> · Focused practice</span>
                     <h3 id="herb-board-domain-bank-title"><?php echo s($selecteddomain['name']); ?></h3>
                     <p><?php echo s($selecteddomain['focus']); ?></p>
                 </div>
@@ -1256,12 +1266,23 @@ echo $OUTPUT->header();
                 <?php if ($selecteddomaintotalpages > 1) { ?>
                     <div class="herb-board__domain-paging herb-board__domain-paging--top">
                         <strong>Page <?php echo $domainpage + 1; ?> of <?php echo $selecteddomaintotalpages; ?></strong>
-                        <?php echo $OUTPUT->paging_bar(
-                            $selecteddomain['questionCount'],
-                            $domainpage,
-                            $domainperpage,
-                            $domainpagingurl
-                        ); ?>
+                        <nav class="herb-board__domain-page-links" aria-label="Question pages">
+                            <?php if ($domainpage > 0) { ?>
+                                <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
+                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Previous</a>
+                            <?php } ?>
+                            <?php foreach ($domainpageurls as $pageindex => $domainpageurl) { ?>
+                                <a class="herb-board__domain-page-link<?php echo $pageindex === $domainpage ? ' is-current' : ''; ?>"
+                                    href="<?php echo $domainpageurl->out(false); ?>"
+                                    <?php echo $pageindex === $domainpage ? 'aria-current="page"' : ''; ?>>
+                                    <?php echo $pageindex + 1; ?>
+                                </a>
+                            <?php } ?>
+                            <?php if ($domainpage + 1 < $selecteddomaintotalpages) { ?>
+                                <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
+                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Next →</a>
+                            <?php } ?>
+                        </nav>
                     </div>
                 <?php } ?>
                 <div class="herb-board__domain-questions">
@@ -1289,12 +1310,23 @@ echo $OUTPUT->header();
                 <?php if ($selecteddomaintotalpages > 1) { ?>
                     <div class="herb-board__domain-paging herb-board__domain-paging--bottom">
                         <strong>Page <?php echo $domainpage + 1; ?> of <?php echo $selecteddomaintotalpages; ?></strong>
-                        <?php echo $OUTPUT->paging_bar(
-                            $selecteddomain['questionCount'],
-                            $domainpage,
-                            $domainperpage,
-                            $domainpagingurl
-                        ); ?>
+                        <nav class="herb-board__domain-page-links" aria-label="Question pages">
+                            <?php if ($domainpage > 0) { ?>
+                                <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
+                                    href="<?php echo $domainpageurls[$domainpage - 1]->out(false); ?>">← Previous</a>
+                            <?php } ?>
+                            <?php foreach ($domainpageurls as $pageindex => $domainpageurl) { ?>
+                                <a class="herb-board__domain-page-link<?php echo $pageindex === $domainpage ? ' is-current' : ''; ?>"
+                                    href="<?php echo $domainpageurl->out(false); ?>"
+                                    <?php echo $pageindex === $domainpage ? 'aria-current="page"' : ''; ?>>
+                                    <?php echo $pageindex + 1; ?>
+                                </a>
+                            <?php } ?>
+                            <?php if ($domainpage + 1 < $selecteddomaintotalpages) { ?>
+                                <a class="herb-board__domain-page-link herb-board__domain-page-link--direction"
+                                    href="<?php echo $domainpageurls[$domainpage + 1]->out(false); ?>">Next →</a>
+                            <?php } ?>
+                        </nav>
                     </div>
                 <?php } ?>
             <?php } ?>

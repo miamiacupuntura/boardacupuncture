@@ -1411,6 +1411,18 @@ a.herb-board__domain:focus {
     font-size: 1.03rem;
 }
 
+.herb-board__domain-number {
+    display: inline-flex;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: #ede7fb;
+    color: #5b3daf;
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
 .herb-board__domain p {
     margin: 0;
     color: #52677a;
@@ -1481,18 +1493,40 @@ a.herb-board__domain:focus {
     font-size: .82rem;
 }
 
-.herb-board__domain-paging .pagination {
+.herb-board__domain-page-links {
+    display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 7px;
     margin: 0;
 }
 
-.herb-board__domain-paging .page-link {
+.herb-board__domain-page-link {
     min-width: 38px;
     min-height: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+    padding: 7px 11px;
+    border: 1px solid #b9a8e5;
+    border-radius: 7px;
+    background: #fff;
+    color: #5633ad;
+    font-weight: 850;
+    text-decoration: none !important;
+}
+
+.herb-board__domain-page-link:hover,
+.herb-board__domain-page-link:focus,
+.herb-board__domain-page-link.is-current {
+    border-color: #6d4bc3;
+    background: #6d4bc3;
+    color: #fff;
+}
+
+.herb-board__domain-page-link--direction {
+    min-width: 92px;
 }
 
 .herb-board__domain-question {
@@ -1818,7 +1852,7 @@ a.herb-board__domain:focus {
         flex-direction: column;
     }
 
-    .herb-board__domain-paging .pagination {
+    .herb-board__domain-page-links {
         justify-content: flex-start;
     }
 
