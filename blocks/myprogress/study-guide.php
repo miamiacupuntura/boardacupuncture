@@ -687,13 +687,6 @@ echo $OUTPUT->header();
                             <span class="subject-study-library__journey-copy"><strong>Simulation</strong><small><?php echo s($ises ? 'Próximamente' : 'Coming soon'); ?></small></span>
                         </span>
                     </nav>
-                    <nav class="subject-study-library__section-links" aria-label="<?php echo s($ises ? 'Secciones de la biblioteca' : 'Library sections'); ?>">
-                        <?php foreach ($librarygroups as $mapgroup): ?>
-                            <?php if (!empty($mapgroup['chapters'])): ?>
-                                <a href="#library-group-<?php echo s($mapgroup['id']); ?>"><?php echo s($tr($mapgroup['title'])); ?> · <?php echo count($mapgroup['chapters']); ?></a>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </nav>
                 </section>
                 <div class="subject-study-library__search" role="search">
                     <label for="herbology-library-search">

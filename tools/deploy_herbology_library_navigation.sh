@@ -110,6 +110,10 @@ grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-footer' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'subject-study-library__map-actions' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
+if grep -Fq 'class="subject-study-library__section-links"' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"; then
+    echo "ERROR: los botones de conteo continúan en el mapa principal de Library." >&2
+    exit 1
+fi
 if grep -Fq 'subject-study-library__top' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"; then
     echo "ERROR: el encabezado genérico Chinese Herbology Library continúa en la portada." >&2
     exit 1
@@ -223,6 +227,10 @@ grep -Fq 'herbology-step-back-scroll' "$MOODLE_ROOT/blocks/myprogress/study-guid
 grep -Fq 'data-library-footer' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'subject-study-library__map-actions' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
+if grep -Fq 'class="subject-study-library__section-links"' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"; then
+    echo "ERROR: los botones de conteo continúan instalados en el mapa principal de Library." >&2
+    exit 1
+fi
 if grep -Fq 'subject-study-library__top' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"; then
     echo "ERROR: el encabezado genérico Chinese Herbology Library continúa instalado." >&2
     exit 1
