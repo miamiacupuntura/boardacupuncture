@@ -21,7 +21,7 @@ if (!is_dir($root)) {
     exit(1);
 }
 
-$source = '/study-guide/comparisons/library-navigation.js?v=20261107-10';
+$source = '/study-guide/comparisons/library-navigation.js?v=20261107-11';
 $marker = '/study-guide/comparisons/library-navigation.js';
 $tag = '<script src="' . $source . '" defer></script>';
 $files = glob($root . DIRECTORY_SEPARATOR . '*.html') ?: [];

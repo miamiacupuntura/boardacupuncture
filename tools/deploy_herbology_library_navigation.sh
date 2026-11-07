@@ -123,6 +123,7 @@ grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
+grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$TEMP_DIR/static/library-navigation.js"
 if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
         || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
@@ -187,9 +188,10 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-10' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-11' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
+grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$STUDY_NOTE_DIR/library-navigation.js"
 if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
         || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2

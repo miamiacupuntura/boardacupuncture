@@ -146,6 +146,9 @@
   document.querySelectorAll('nav[aria-label="Study path"],nav[aria-label="Ruta de estudio"],.study-note-route').forEach(function(route) {
     route.remove();
   });
+  document.querySelectorAll('.comparison-collection-links').forEach(function(linkStrip) {
+    linkStrip.remove();
+  });
   document.querySelectorAll('.comparison-topbar .comparison-back').forEach(function(link) {
     let path = '';
     try {
@@ -166,6 +169,7 @@
   const style = document.createElement('style');
   style.dataset.libraryContextNavigationStyles = '';
   style.textContent = `
+    .comparison-collection-links{display:none!important}
     .library-context-nav{margin:14px 0 12px;padding:10px 12px;border:1px solid #b8d5d2;border-radius:10px;background:#f7fcfb;box-shadow:0 2px 8px rgba(15,23,42,.04)}
     .library-context-nav__top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 8px}.library-context-nav__trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:800}.library-context-nav__trail a{color:#245fa7;text-decoration:none}.library-context-nav__trail a:hover{text-decoration:underline}.library-context-nav__step-back{padding-right:8px;border-right:1px solid #bfd0da}.library-context-nav__trail-current{color:#17232a}.library-context-nav__toggle{display:none;min-height:38px;align-items:center;justify-content:center;padding:6px 10px;border:1px solid #0b817d;border-radius:8px;background:#fff;color:#075f5b;font-size:12px;font-weight:850;cursor:pointer}
     .library-context-nav__routes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.library-context-nav__route{display:flex;min-height:38px;align-items:center;justify-content:center;padding:6px 9px;border:1px solid #bfd0da;border-radius:7px;background:#fff;color:#17344a;font-size:12px;font-weight:850;text-align:center;text-decoration:none}.library-context-nav__route:hover,.library-context-nav__route:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b;text-decoration:none}.library-context-nav__route--library{border-color:#0b817d;background:#0b817d;color:#fff}.library-context-nav__route--library:hover,.library-context-nav__route--library:focus{background:#076b67;color:#fff}
