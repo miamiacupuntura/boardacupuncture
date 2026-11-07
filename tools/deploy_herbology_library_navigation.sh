@@ -97,7 +97,7 @@ for relative in "${MOODLE_FILES[@]}"; do
     fi
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
-grep -Fq '$plugin->version   = 2026110656;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110657;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq '.herb-board__page-navigation' "$TEMP_DIR/moodle/blocks/menu/styles.css"
 grep -Fq '.herb-board__back:hover' "$TEMP_DIR/moodle/blocks/menu/styles.css"
 grep -Fq '.herb-board__subheading.herb-board__subheading--spaced' "$TEMP_DIR/moodle/blocks/menu/styles.css"
