@@ -6,9 +6,9 @@
   <meta name="description" content="Answer focused multiple-choice questions from the verified Single Herbs profiles.">
   <title>Single Herbs Quiz | AcupunctureTests</title>
   <link rel="alternate" hreflang="es" href="single-herb-practice-es.html">
-  <link rel="stylesheet" href="comparisons.css?v=20261107-3">
+  <link rel="stylesheet" href="comparisons.css?v=20261107-4">
   <link rel="stylesheet" href="question-study-bank.css?v=20261107-1">
-  <script defer src="single-herb-practice.js?v=20261107-2"></script>
+  <script defer src="single-herb-practice.js?v=20261107-3"></script>
 </head>
 <body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/blocks/menu/herbology-board.php?track=quiz"><span class="comparison-brand__mark" aria-hidden="true">☿</span><span>Herbology Quiz</span></a><span class="question-bank-toplinks"><a class="comparison-back" data-herb-language href="single-herb-practice-es.html">Español</a><a class="comparison-back" href="/my/">← Back to Dashboard</a></span></div></header>
@@ -20,6 +20,13 @@
   <section class="formula-practice-history" data-herb-history hidden aria-labelledby="herb-history-title"><div><p class="comparison-eyebrow">Progress on this device</p><h2 id="herb-history-title">Cumulative history</h2></div><div class="formula-practice-history-stats" data-herb-history-stats></div><button type="button" class="formula-practice-reset" data-herb-reset>Clear local history</button></section>
   <section class="formula-practice-workspace" data-herb-workspace hidden><div class="formula-practice-session-actions"><button type="button" data-herb-return>← Back to setup</button></div><div class="formula-practice-progress" aria-live="polite"><div><strong><span data-herb-position>0</span> / <span data-herb-session-total>25</span></strong> answered</div><strong><span data-herb-score>0</span> correct</strong></div><div class="formula-practice-progress-track" aria-hidden="true"><span data-herb-progress-bar></span></div><div class="formula-practice-question-list" data-herb-question-list></div><button type="button" class="formula-practice-finish" data-herb-finish>Finish Quiz</button></section>
   <section class="formula-practice-results" data-herb-results hidden aria-labelledby="herb-results-title"><p class="comparison-eyebrow">Session complete</p><h2 id="herb-results-title">Result</h2><p class="formula-practice-final-score" data-herb-final-score></p><div class="formula-hero-actions"><button type="button" data-herb-repeat>Repeat session</button><button type="button" data-herb-configure>Change setup</button></div></section>
+  <div class="formula-practice-source-viewer" data-herb-source-viewer hidden>
+    <button class="formula-practice-source-backdrop" type="button" data-herb-source-close aria-label="Return to question"></button>
+    <section class="formula-practice-source-window" role="dialog" aria-modal="true" aria-labelledby="herb-source-title">
+      <header><div><span>Feedback source</span><h2 id="herb-source-title" data-herb-source-title></h2></div><button type="button" data-herb-source-return data-herb-source-close>← Back to question</button></header>
+      <iframe title="Answer source card" data-herb-source-frame src="about:blank"></iframe>
+    </section>
+  </div>
 </main>
 <footer class="comparison-footer"><div class="comparison-shell">Educational Board review · Verified Single Herbs profiles</div></footer>
 </body>

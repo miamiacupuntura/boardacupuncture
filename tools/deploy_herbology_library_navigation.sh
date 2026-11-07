@@ -54,6 +54,7 @@ MOODLE_FILES=(
     "blocks/myprogress/common-herbal-combinations.php"
 )
 STATIC_FILES=(
+    "comparisons.css"
     "library-navigation.js"
     "study-note-navigation.js"
     "index.html"
@@ -151,10 +152,16 @@ grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'data-herb-mode="category"' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'comparisons.css?v=20261107-4' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'single-herb-practice.js?v=20261107-3' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'data-herb-source-viewer' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'data-herb-source-return' "$TEMP_DIR/static/single-herb-practice-es.html"
 grep -Fq 'data-herb-size-max' "$TEMP_DIR/static/single-herb-practice-es.html"
 grep -Fq 'guideNumbersByYangChapter' "$TEMP_DIR/static/single-herb-practice.js"
 grep -Fq "url.searchParams.set('category'" "$TEMP_DIR/static/single-herb-practice.js"
 grep -Fq 'data.herbs || []' "$TEMP_DIR/static/single-herb-practice.js"
+grep -Fq 'openSourceViewer' "$TEMP_DIR/static/single-herb-practice.js"
+grep -Fq '.formula-practice-source-viewer' "$TEMP_DIR/static/comparisons.css"
 if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
         || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
@@ -224,9 +231,15 @@ grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'data-herb-mode="category"' "$STUDY_NOTE_DIR/single-herb-practice.html"
+grep -Fq 'comparisons.css?v=20261107-4' "$STUDY_NOTE_DIR/single-herb-practice.html"
+grep -Fq 'single-herb-practice.js?v=20261107-3' "$STUDY_NOTE_DIR/single-herb-practice.html"
+grep -Fq 'data-herb-source-viewer' "$STUDY_NOTE_DIR/single-herb-practice.html"
+grep -Fq 'data-herb-source-return' "$STUDY_NOTE_DIR/single-herb-practice-es.html"
 grep -Fq 'data-herb-size-max' "$STUDY_NOTE_DIR/single-herb-practice-es.html"
 grep -Fq 'guideNumbersByYangChapter' "$STUDY_NOTE_DIR/single-herb-practice.js"
 grep -Fq "url.searchParams.set('category'" "$STUDY_NOTE_DIR/single-herb-practice.js"
+grep -Fq 'openSourceViewer' "$STUDY_NOTE_DIR/single-herb-practice.js"
+grep -Fq '.formula-practice-source-viewer' "$STUDY_NOTE_DIR/comparisons.css"
 if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
         || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2

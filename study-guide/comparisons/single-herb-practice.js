@@ -28,6 +28,7 @@
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
     safety: spanish ? 'Seguridad:' : 'Safety:',
     source: spanish ? 'Abrir tarjeta fuente →' : 'Open source card →',
+    backToQuestion: position => spanish ? `← Volver a la pregunta ${position}` : `← Back to question ${position}`,
     finish: (answered, total) => spanish
       ? `Finalizar Quiz (${answered}/${total} respondidas)`
       : `Finish Quiz (${answered}/${total} answered)`,
@@ -91,7 +92,11 @@
     finalScore: document.querySelector('[data-herb-final-score]'),
     repeat: document.querySelector('[data-herb-repeat]'),
     configure: document.querySelector('[data-herb-configure]'),
-    language: document.querySelector('[data-herb-language]')
+    language: document.querySelector('[data-herb-language]'),
+    sourceViewer: document.querySelector('[data-herb-source-viewer]'),
+    sourceFrame: document.querySelector('[data-herb-source-frame]'),
+    sourceTitle: document.querySelector('[data-herb-source-title]'),
+    sourceReturn: document.querySelector('[data-herb-source-return]')
   };
   const state = {
     allQuestions: [],
@@ -103,6 +108,7 @@
     answers: new Map(),
     score: 0
   };
+  let activeSourceLink = null;
 
   function value(field, language = spanish ? 'es' : 'en') {
     if (!field) return '';
@@ -180,6 +186,29 @@
       elements.historyStats.append(card);
     });
     elements.history.hidden = false;
+  }
+
+  function closeSourceViewer() {
+    if (!elements.sourceViewer || elements.sourceViewer.hidden) return;
+    const questionCard = activeSourceLink?.closest('.formula-practice-question');
+    elements.sourceViewer.hidden = true;
+    document.body.classList.remove('formula-practice-source-open');
+    if (elements.sourceFrame) elements.sourceFrame.src = 'about:blank';
+    questionCard?.scrollIntoView({ block: 'center' });
+    activeSourceLink?.focus();
+    activeSourceLink = null;
+  }
+
+  function openSourceViewer(event, link, question, position) {
+    if (!elements.sourceViewer || !elements.sourceFrame || !elements.sourceTitle || !elements.sourceReturn) return;
+    event.preventDefault();
+    activeSourceLink = link;
+    elements.sourceTitle.textContent = `${question.profile.name} (${question.profile.latin})`;
+    elements.sourceReturn.textContent = copy.backToQuestion(position);
+    elements.sourceFrame.src = link.href;
+    elements.sourceViewer.hidden = false;
+    document.body.classList.add('formula-practice-source-open');
+    elements.sourceReturn.focus();
   }
 
   function profileText(profile) {
@@ -366,6 +395,8 @@
         if (spanish) params.set('lang', 'es');
         source.href = `/blocks/myprogress/single-herbs-study-guide.php?${params}`;
         source.textContent = copy.source;
+        source.dataset.herbSourceLink = '';
+        source.addEventListener('click', event => openSourceViewer(event, source, question, index + 1));
         feedback.classList.add(correct ? 'is-correct' : 'is-incorrect');
         feedback.append(verdict, answerLine, explanation, indication, safety, source);
         feedback.hidden = false;
@@ -444,6 +475,14 @@
     try { localStorage.removeItem(storageKey); } catch (_) { /* Optional. */ }
     renderHistory();
   });
+  if (elements.sourceViewer) {
+    elements.sourceViewer.querySelectorAll('[data-herb-source-close]').forEach(control => {
+      control.addEventListener('click', closeSourceViewer);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !elements.sourceViewer.hidden) closeSourceViewer();
+    });
+  }
 
   Promise.all([
     fetch('/blocks/myprogress/single-herb-properties.json', { credentials: 'same-origin' }),

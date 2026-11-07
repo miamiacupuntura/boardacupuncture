@@ -6,9 +6,9 @@
   <meta name="description" content="Responde preguntas de selección múltiple de los perfiles verificados de hierbas individuales.">
   <title>Quiz de Hierbas Individuales | AcupunctureTests</title>
   <link rel="alternate" hreflang="en" href="single-herb-practice.html">
-  <link rel="stylesheet" href="comparisons.css?v=20261107-3">
+  <link rel="stylesheet" href="comparisons.css?v=20261107-4">
   <link rel="stylesheet" href="question-study-bank.css?v=20261107-1">
-  <script defer src="single-herb-practice.js?v=20261107-2"></script>
+  <script defer src="single-herb-practice.js?v=20261107-3"></script>
 </head>
 <body>
 <header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="/blocks/menu/herbology-board.php?track=quiz&amp;lang=es"><span class="comparison-brand__mark" aria-hidden="true">☿</span><span>Quiz de Herbología</span></a><span class="question-bank-toplinks"><a class="comparison-back" data-herb-language href="single-herb-practice.html">English</a><a class="comparison-back" href="/my/">← Panel principal</a></span></div></header>
@@ -20,6 +20,13 @@
   <section class="formula-practice-history" data-herb-history hidden aria-labelledby="herb-history-title"><div><p class="comparison-eyebrow">Progreso en este dispositivo</p><h2 id="herb-history-title">Historial acumulado</h2></div><div class="formula-practice-history-stats" data-herb-history-stats></div><button type="button" class="formula-practice-reset" data-herb-reset>Borrar historial local</button></section>
   <section class="formula-practice-workspace" data-herb-workspace hidden><div class="formula-practice-session-actions"><button type="button" data-herb-return>← Volver a configuración</button></div><div class="formula-practice-progress" aria-live="polite"><div><strong><span data-herb-position>0</span> / <span data-herb-session-total>25</span></strong> respondidas</div><strong><span data-herb-score>0</span> correctas</strong></div><div class="formula-practice-progress-track" aria-hidden="true"><span data-herb-progress-bar></span></div><div class="formula-practice-question-list" data-herb-question-list></div><button type="button" class="formula-practice-finish" data-herb-finish>Finalizar Quiz</button></section>
   <section class="formula-practice-results" data-herb-results hidden aria-labelledby="herb-results-title"><p class="comparison-eyebrow">Sesión completada</p><h2 id="herb-results-title">Resultado</h2><p class="formula-practice-final-score" data-herb-final-score></p><div class="formula-hero-actions"><button type="button" data-herb-repeat>Repetir sesión</button><button type="button" data-herb-configure>Cambiar configuración</button></div></section>
+  <div class="formula-practice-source-viewer" data-herb-source-viewer hidden>
+    <button class="formula-practice-source-backdrop" type="button" data-herb-source-close aria-label="Volver a la pregunta"></button>
+    <section class="formula-practice-source-window" role="dialog" aria-modal="true" aria-labelledby="herb-source-title">
+      <header><div><span>Fuente del feedback</span><h2 id="herb-source-title" data-herb-source-title></h2></div><button type="button" data-herb-source-return data-herb-source-close>← Volver a la pregunta</button></header>
+      <iframe title="Tarjeta fuente de la respuesta" data-herb-source-frame src="about:blank"></iframe>
+    </section>
+  </div>
 </main>
 <footer class="comparison-footer"><div class="comparison-shell">Repaso educativo Board · Perfiles verificados de hierbas individuales</div></footer>
 </body>
