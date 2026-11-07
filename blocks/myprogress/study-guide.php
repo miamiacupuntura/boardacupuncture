@@ -91,21 +91,23 @@ $areas = [
                 'priority' => true,
             ],
             [
-                'title' => 'Herbal Comparisons Question Bank',
-                'description' => 'Practice 249 comparative herb questions in book order with recall flashcards and 117 strength-and-temperature charts.',
+                'title' => 'Herbal Comparison Study Bank',
+                'description' => 'Study 249 comparative herb questions in book order with visible explanations, recall flashcards and 117 strength-and-temperature charts.',
                 'path' => '/study-guide/comparisons/herb-comparison-bank.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · 249 QUESTIONS',
                 'button_label' => 'Open question bank →',
                 'practice_exam' => true,
+                'study_bank' => true,
             ],
             [
-                'title' => 'Formulas Practice Exams',
-                'description' => 'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.',
+                'title' => 'Formula Study Center',
+                'description' => 'Find and study 63 core formulas, their patterns, actions, ingredients, safety notes and connected study questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · CONNECTED STUDY',
                 'practice_exam' => true,
+                'study_bank' => true,
             ],
             [
                 'title' => 'Formula Families / Variations',
@@ -252,8 +254,8 @@ $areas = [
                 'secondary' => true,
             ],
             [
-                'title' => 'Formula Modification Practice Exams',
-                'description' => 'Test the 305 formula modifications in focused question sessions after reviewing the reference cards.',
+                'title' => 'Formula Modifications Quiz',
+                'description' => 'Choose answers and test the 305 formula modifications in focused Quiz sessions after reviewing the reference cards.',
                 'path' => '/study-guide/comparisons/formula-practice.html',
                 'params' => [
                     'category' => 'modifications',
@@ -262,6 +264,7 @@ $areas = [
                 'anchor' => '',
                 'status' => 'AVAILABLE · 305 QUESTIONS',
                 'practice_exam' => true,
+                'quiz' => true,
             ],
             [
                 'title' => 'Commonly Used Herbal Combinations',
@@ -296,10 +299,10 @@ $spanishcopy = [
     'Study all 21 Bensky formula chapters while distinguishing detailed platform profiles from the 181 official Appendix C formulas.' => 'Estudia los 21 capítulos de fórmulas de Bensky diferenciando las fichas detalladas de la plataforma de las 181 fórmulas oficiales del Appendix C.',
     'Bensky Category Crosswalk' => 'Mapa comparativo Bensky',
     'Compare 34 action categories for individual herbs with 21 strategy chapters for complete formulas. Similar names show a study relationship, not the same classification.' => 'Compara 34 categorías de acción para hierbas individuales con 21 capítulos de estrategias para fórmulas completas. Los nombres parecidos muestran una relación de estudio, no la misma clasificación.',
-    'Herbal Comparisons Question Bank' => 'Banco de preguntas de comparación de hierbas',
-    'Practice 249 comparative herb questions in book order with recall flashcards and 117 strength-and-temperature charts.' => 'Practica 249 preguntas comparativas en el orden del libro con tarjetas de memoria y 117 tablas de potencia y temperatura.',
-    'Formulas Practice Exams' => 'Exámenes de práctica de fórmulas',
-    'Find and study 63 core formulas, then build focused sessions from 572 connected practice questions.' => 'Busca y estudia las 63 fórmulas principales y crea sesiones enfocadas con 572 preguntas conectadas.',
+    'Herbal Comparison Study Bank' => 'Banco de estudio comparativo de hierbas',
+    'Study 249 comparative herb questions in book order with visible explanations, recall flashcards and 117 strength-and-temperature charts.' => 'Estudia 249 preguntas comparativas en el orden del libro con explicaciones visibles, flashcards y 117 tablas de potencia y temperatura.',
+    'Formula Study Center' => 'Centro de estudio de fórmulas',
+    'Find and study 63 core formulas, their patterns, actions, ingredients, safety notes and connected study questions.' => 'Busca y estudia 63 fórmulas principales, sus patrones, acciones, ingredientes, notas de seguridad y preguntas de estudio conectadas.',
     'Formula Families / Variations' => 'Familias y variaciones de fórmulas',
     'Study 22 formula families and their named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing each branch.' => 'Estudia 22 familias de fórmulas y sus variaciones. Cada ficha muestra la fórmula raíz, el cambio estructural, el patrón resultante y la pista decisiva.',
     'Name Traps' => 'Trampas de nombres',
@@ -336,8 +339,8 @@ $spanishcopy = [
     'Review 50 pattern comparisons that separate similar Chinese medicine presentations by mechanism, signs, tongue and pulse.' => 'Repasa 50 comparaciones que distinguen cuadros similares por mecanismo, signos, lengua y pulso.',
     'Formula Modifications' => 'Modificaciones de fórmulas',
     'Review 305 clinical modifications as reference cards organized by formula, presentation and the corresponding ingredient change.' => 'Repasa 305 modificaciones clínicas organizadas por fórmula, presentación y cambio correspondiente de ingredientes.',
-    'Formula Modification Practice Exams' => 'Exámenes de modificaciones de fórmulas',
-    'Test the 305 formula modifications in focused question sessions after reviewing the reference cards.' => 'Evalúa las 305 modificaciones en sesiones enfocadas después de repasar las fichas de referencia.',
+    'Formula Modifications Quiz' => 'Quiz de modificaciones de fórmulas',
+    'Choose answers and test the 305 formula modifications in focused Quiz sessions after reviewing the reference cards.' => 'Elige respuestas y evalúa las 305 modificaciones de fórmulas en sesiones de Quiz después de repasar las fichas de referencia.',
     'Commonly Used Herbal Combinations' => 'Combinaciones herbales de uso común',
     'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.' => 'Estudia 70 combinaciones del Apéndice 2 por relación, aplicación clínica y función de cada hierba. Este capítulo permanece separado de las 51 parejas Duì Yào oficiales.',
     'Open question bank →' => 'Abrir banco de preguntas →',
@@ -348,8 +351,13 @@ $spanishcopy = [
     'Open Study Guide →' => 'Abrir guía de estudio →',
     'Main Study Guides' => 'Guías principales',
     'Open the principal learning resources.' => 'Abre los recursos principales de aprendizaje.',
+    'Questions & Flashcards' => 'Preguntas y flashcards',
+    'Review questions with answers and explanations, or use recall flashcards.' => 'Repasa preguntas con respuestas y explicaciones, o utiliza flashcards de memoria.',
+    'Quiz' => 'Quiz',
+    'Choose answers and receive immediate feedback.' => 'Elige respuestas y recibe feedback inmediato.',
     'Open question banks and focused practice sessions.' => 'Abre bancos de preguntas y sesiones de práctica enfocadas.',
     'Open the comparative study collections.' => 'Abre las colecciones de estudio comparativo.',
+    'Reference Library' => 'Biblioteca de referencia',
     'Open families, safety, theory and supplemental study resources.' => 'Abre familias, seguridad, teoría y recursos suplementarios.',
     'PRACTICE' => 'PRÁCTICA',
     'Practice Exams' => 'Exámenes de práctica',
@@ -415,6 +423,12 @@ $primarychapters = array_values(array_filter($area['chapters'], static function(
 $practicechapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['practice_exam']);
 }));
+$studybankchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
+    return !empty($chapter['study_bank']);
+}));
+$quizchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
+    return !empty($chapter['quiz']);
+}));
 $comparisonchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['comparison']);
 }));
@@ -425,27 +439,38 @@ $showconstruction = optional_param('view', '', PARAM_ALPHA) === 'construction';
 $showlibrary = optional_param('view', '', PARAM_ALPHA) === 'library';
 $librarygroups = [
     [
+        'id' => 'core-guides',
         'title' => 'Main Study Guides',
         'description' => 'Open the principal learning resources.',
         'modifier' => 'primary',
         'chapters' => $primarychapters,
     ],
     [
-        'title' => 'Practice Exams',
-        'description' => 'Open question banks and focused practice sessions.',
-        'modifier' => 'practice',
-        'chapters' => $practicechapters,
+        'id' => 'questions-flashcards',
+        'title' => 'Questions & Flashcards',
+        'description' => 'Review questions with answers and explanations, or use recall flashcards.',
+        'modifier' => 'study',
+        'chapters' => $studybankchapters,
     ],
     [
+        'id' => 'quiz-resources',
+        'title' => 'Quiz',
+        'description' => 'Choose answers and receive immediate feedback.',
+        'modifier' => 'quiz',
+        'chapters' => $quizchapters,
+    ],
+    [
+        'id' => 'comparisons',
         'title' => 'Comparisons',
         'description' => 'Open the comparative study collections.',
         'modifier' => 'comparisons',
         'chapters' => $comparisonchapters,
     ],
     [
-        'title' => 'Other chapters',
+        'id' => 'reference-library',
+        'title' => 'Reference Library',
         'description' => 'Open families, safety, theory and supplemental study resources.',
-        'modifier' => 'other',
+        'modifier' => 'reference',
         'chapters' => $otherchapters,
     ],
 ];
@@ -458,6 +483,10 @@ $pageurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $libraryparams = $baseparams + ['view' => 'library'];
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
+$boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
+$boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
+$boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
+$boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
@@ -548,19 +577,34 @@ echo $OUTPUT->header();
 .subject-study-library__intro .subject-study-guide__eyebrow{color:#08746f}
 .subject-study-library__intro h3{margin:0 0 8px;color:#123246;font-size:clamp(27px,4vw,40px)}
 .subject-study-library__intro p:last-child{max-width:760px;margin:0;color:#52677a;line-height:1.55}
+.subject-study-library__map{padding:22px;border:1px solid #b8d5d2;border-radius:12px;background:#f7fcfb}
+.subject-study-library__map-header{margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}
+.subject-study-library__journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.subject-study-library__journey-link{display:flex;min-height:86px;align-items:center;gap:12px;padding:13px;border:1px solid #b9cbd6;border-radius:10px;background:#fff;color:#123246;text-decoration:none!important}
+.subject-study-library__journey-link:hover,.subject-study-library__journey-link:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
+.subject-study-library__journey-link--disabled{border-color:#d5dde3;background:#eef2f4;color:#6b7a86;cursor:not-allowed}.subject-study-library__journey-link--disabled .subject-study-library__journey-step{background:#94a3af}
+.subject-study-library__journey-step{display:inline-flex;width:30px;height:30px;flex:0 0 30px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-weight:900}
+.subject-study-library__journey-copy{display:block;min-width:0}.subject-study-library__journey-copy strong,.subject-study-library__journey-copy small{display:block}.subject-study-library__journey-copy strong{font-size:15px;line-height:1.25}.subject-study-library__journey-copy small{margin-top:4px;color:#64748b;font-size:12px;line-height:1.3}
+.subject-study-library__section-links{display:flex;gap:8px;flex-wrap:wrap}.subject-study-library__section-links a{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border:1px solid #bfd0da;border-radius:999px;background:#fff;color:#24465b;font-size:13px;font-weight:800;text-decoration:none!important}.subject-study-library__section-links a:hover,.subject-study-library__section-links a:focus{border-color:#2563eb;background:#eff6ff;color:#1746a2}
+.subject-study-library__search{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px;padding:18px;border:1px solid #d4dde4;border-radius:11px;background:#fff}.subject-study-library__search label{display:grid;gap:6px;color:#213e51;font-weight:800}.subject-study-library__search input{width:100%;min-height:48px;box-sizing:border-box;padding:10px 13px;border:1px solid #9fb3c1;border-radius:8px;background:#fff;color:#17232a;font-size:16px}.subject-study-library__search input:focus{border-color:#2563eb;outline:3px solid rgba(37,99,235,.16)}.subject-study-library__search-count{padding-bottom:12px;color:#52677a;font-size:13px;font-weight:800;white-space:nowrap}
+.subject-study-library__empty{margin:0;padding:18px;border:1px dashed #9fb3c1;border-radius:10px;background:#f8fafc;color:#52677a;text-align:center}
 .subject-study-library__group{padding:22px;border:1px solid #d8e1e7;border-radius:12px;background:#fff}
+.subject-study-library__group[hidden]{display:none}
 .subject-study-library__group-header{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:15px}
 .subject-study-library__group-header h3{margin:0 0 4px;color:#17232a;font-size:21px}
 .subject-study-library__group-header p{margin:0;color:#64748b}
 .subject-study-library__count{flex:0 0 auto;color:#52677a;font-size:13px;font-weight:800}
 .subject-study-library__buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
-.subject-study-library__button{display:flex;min-height:48px;align-items:center;justify-content:center;padding:10px 14px;border:1px solid #b8c8d5;border-radius:9px;background:#fff;color:#123246;font-weight:800;text-align:center;text-decoration:none}
+.subject-study-library__button{display:grid;min-height:104px;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px;border:1px solid #b8c8d5;border-radius:10px;background:#fff;color:#123246;text-align:left;text-decoration:none!important}
+.subject-study-library__button[hidden]{display:none}.subject-study-library__button-copy{display:block;min-width:0}.subject-study-library__button-title,.subject-study-library__button-description,.subject-study-library__button-status{display:block}.subject-study-library__button-title{font-weight:900;line-height:1.3}.subject-study-library__button-description{display:-webkit-box;overflow:hidden;margin-top:5px;color:#607487;font-size:12px;font-weight:500;line-height:1.4;-webkit-box-orient:vertical;-webkit-line-clamp:2}.subject-study-library__button-status{margin-top:7px;color:#08746f;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.subject-study-library__button-arrow{font-size:20px;font-weight:900}
 .subject-study-library__button:hover{border-color:#2563eb;background:#eff6ff;color:#1746a2;text-decoration:none}
 .subject-study-library__group--primary{border-top:4px solid #2563eb}
-.subject-study-library__group--practice{border-top:4px solid #0b817d}
+.subject-study-library__group--study{border-top:4px solid #0b817d}
+.subject-study-library__group--quiz{border-top:4px solid #6d4bc3}
 .subject-study-library__group--comparisons{border-top:4px solid #f77e25}
-.subject-study-library__group--other{border-top:4px solid #94a3b8}
-.subject-study-library__group--practice .subject-study-library__button{border-color:#8bc8bd;background:#f4fbf9}
+.subject-study-library__group--reference{border-top:4px solid #64748b}
+.subject-study-library__group--study .subject-study-library__button{border-color:#8bc8bd;background:#f4fbf9}
+.subject-study-library__group--quiz .subject-study-library__button{border-color:#c6b5ef;background:#f8f5ff}
 .subject-study-library__group--comparisons .subject-study-library__button{border-color:#f4b27e;background:#fffaf6}
 .subject-study-library__tips{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 18px;border:1px solid #efc7a8;border-left:5px solid #f37424;border-radius:11px;background:#fff8f2;text-align:left}.subject-study-library__tips strong,.subject-study-library__tips span{display:block}.subject-study-library__tips span{margin-top:3px;color:#755844;font-size:.9rem}.subject-study-library__tips a{display:inline-flex;min-height:44px;flex:0 0 auto;align-items:center;justify-content:center;padding:10px 15px;border-radius:8px;background:#c9570c;color:#fff!important;font-weight:800;text-decoration:none!important}.subject-study-library__tips a:hover,.subject-study-library__tips a:focus{background:#a74408}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
@@ -568,7 +612,7 @@ echo $OUTPUT->header();
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
 .subject-study-guide__construction p{max-width:570px;margin:0 auto 26px;color:#64748b;line-height:1.65}
 .subject-study-guide a:focus-visible{outline:3px solid #185cca;outline-offset:3px}
-@media(max-width:700px){.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}.subject-study-library__intro{padding:24px 20px}.subject-study-library__tips{align-items:stretch;flex-direction:column}.subject-study-library__tips a{width:100%;box-sizing:border-box}.subject-study-library__group-header{align-items:flex-start;flex-direction:column}.subject-study-library__buttons{grid-template-columns:1fr}}
+@media(max-width:700px){.subject-study-guide{padding:0 10px}.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}.subject-study-library__intro{padding:22px 18px}.subject-study-library__map,.subject-study-library__group{padding:17px}.subject-study-library__journey{grid-template-columns:repeat(2,minmax(0,1fr))}.subject-study-library__journey-link{min-height:94px;align-items:flex-start;flex-direction:column;gap:8px}.subject-study-library__section-links{display:grid;grid-template-columns:1fr 1fr}.subject-study-library__section-links a{justify-content:center;border-radius:8px;text-align:center}.subject-study-library__search{grid-template-columns:1fr}.subject-study-library__search-count{padding:0}.subject-study-library__tips{align-items:stretch;flex-direction:column}.subject-study-library__tips a{width:100%;box-sizing:border-box}.subject-study-library__group-header{align-items:flex-start;flex-direction:column}.subject-study-library__buttons{grid-template-columns:1fr}.subject-study-library__button{min-height:96px;padding:13px}}
 </style>
 <main class="subject-study-guide">
 <?php if ($showconstruction): ?>
@@ -614,30 +658,145 @@ echo $OUTPUT->header();
             <header class="subject-study-library__intro">
                 <p class="subject-study-guide__eyebrow"><?php echo s($ises ? 'Acceso rápido' : 'Quick access'); ?></p>
                 <h3 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h3>
-                <p><?php echo s($ises ? 'Todo lo disponible en la guía aparece abajo como botón directo. Los nuevos recursos clasificados aparecerán automáticamente.' : 'Everything available in the Study Guide is listed below as a direct button. New classified resources will appear here automatically.'); ?></p>
+                <p><?php echo s($ises ? 'Usa el mapa para seguir el recorrido Board Level o busca directamente entre todos los recursos disponibles.' : 'Use the map to follow the Board Level study path or search directly across every available resource.'); ?></p>
             </header>
+            <?php if ($areaid === 'herbology'): ?>
+                <section class="subject-study-library__map" aria-labelledby="library-navigation-map-title">
+                    <header class="subject-study-library__map-header">
+                        <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Mapa de navegación Board Level' : 'Board Level Navigation Map'); ?></h3>
+                        <p><?php echo s($ises ? 'Avanza desde el estudio guiado hasta la evaluación o abre directamente la colección que necesitas.' : 'Move from guided study to assessment, or open the exact collection you need.'); ?></p>
+                    </header>
+                    <nav class="subject-study-library__journey" aria-label="<?php echo s($ises ? 'Recorrido principal Board Level' : 'Main Board Level path'); ?>">
+                        <a class="subject-study-library__journey-link" href="#library-group-core-guides">
+                            <span class="subject-study-library__journey-step">1</span>
+                            <span class="subject-study-library__journey-copy"><strong><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></strong><small><?php echo s($ises ? 'Hierbas, Duì Yào y fórmulas' : 'Herbs, Duì Yào and formulas'); ?></small></span>
+                        </a>
+                        <a class="subject-study-library__journey-link" href="<?php echo $boardpracticeurl->out(false); ?>">
+                            <span class="subject-study-library__journey-step">2</span>
+                            <span class="subject-study-library__journey-copy"><strong>Herbology Practice</strong><small><?php echo s($ises ? 'Respuestas y explicaciones visibles' : 'Visible answers and explanations'); ?></small></span>
+                        </a>
+                        <a class="subject-study-library__journey-link" href="<?php echo $boardquizurl->out(false); ?>">
+                            <span class="subject-study-library__journey-step">3</span>
+                            <span class="subject-study-library__journey-copy"><strong>Quiz</strong><small><?php echo s($ises ? 'Elige respuestas y recibe feedback' : 'Choose answers and receive feedback'); ?></small></span>
+                        </a>
+                        <a class="subject-study-library__journey-link" href="<?php echo $boardexamsurl->out(false); ?>">
+                            <span class="subject-study-library__journey-step">4</span>
+                            <span class="subject-study-library__journey-copy"><strong><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></strong><small><?php echo s($ises ? 'Evaluación lineal o adaptativa' : 'Linear or adaptive assessment'); ?></small></span>
+                        </a>
+                        <span class="subject-study-library__journey-link subject-study-library__journey-link--disabled" aria-disabled="true">
+                            <span class="subject-study-library__journey-step">5</span>
+                            <span class="subject-study-library__journey-copy"><strong>Simulation</strong><small><?php echo s($ises ? 'Próximamente' : 'Coming soon'); ?></small></span>
+                        </span>
+                    </nav>
+                    <nav class="subject-study-library__section-links" aria-label="<?php echo s($ises ? 'Secciones de la biblioteca' : 'Library sections'); ?>">
+                        <?php foreach ($librarygroups as $mapgroup): ?>
+                            <?php if (!empty($mapgroup['chapters'])): ?>
+                                <a href="#library-group-<?php echo s($mapgroup['id']); ?>"><?php echo s($tr($mapgroup['title'])); ?> · <?php echo count($mapgroup['chapters']); ?></a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </nav>
+                </section>
+                <div class="subject-study-library__search" role="search">
+                    <label for="herbology-library-search">
+                        <span><?php echo s($ises ? 'Buscar un recurso' : 'Find a resource'); ?></span>
+                        <input id="herbology-library-search" type="search" inputmode="search"
+                            placeholder="<?php echo s($ises ? 'Ej.: seguridad, fórmulas, comparaciones…' : 'E.g. safety, formulas, comparisons…'); ?>"
+                            autocomplete="off" data-library-search>
+                    </label>
+                    <span class="subject-study-library__search-count" data-library-search-count aria-live="polite"><?php echo count($area['chapters']); ?> <?php echo $ises ? 'recursos' : 'resources'; ?></span>
+                </div>
+                <p class="subject-study-library__empty" data-library-empty hidden><?php echo s($ises ? 'No encontramos recursos con ese término.' : 'No resources match that search.'); ?></p>
+            <?php endif; ?>
             <?php foreach ($librarygroups as $group): ?>
                 <?php if (!empty($group['chapters'])): ?>
-                    <section class="subject-study-library__group subject-study-library__group--<?php echo s($group['modifier']); ?>">
+                    <section id="library-group-<?php echo s($group['id']); ?>"
+                        class="subject-study-library__group subject-study-library__group--<?php echo s($group['modifier']); ?>"
+                        data-library-group>
                         <header class="subject-study-library__group-header">
                             <div>
                                 <h3><?php echo s($tr($group['title'])); ?></h3>
                                 <p><?php echo s($tr($group['description'])); ?></p>
                             </div>
-                            <span class="subject-study-library__count"><?php echo count($group['chapters']); ?> <?php echo $ises ? 'recursos' : 'resources'; ?></span>
+                            <?php $groupcount = count($group['chapters']); ?>
+                            <span class="subject-study-library__count"><span data-library-group-count><?php echo $groupcount; ?></span> <span data-library-group-unit><?php echo $ises ? ($groupcount === 1 ? 'recurso' : 'recursos') : ($groupcount === 1 ? 'resource' : 'resources'); ?></span></span>
                         </header>
                         <nav class="subject-study-library__buttons" aria-label="<?php echo s($group['title']); ?>">
                             <?php foreach ($group['chapters'] as $chapter): ?>
                                 <?php
                                 $chapterurl = $makechapterurl($chapter);
+                                $searchtext = implode(' ', [
+                                    $chapter['title'],
+                                    $chapter['description'],
+                                    $chapter['status'] ?? '',
+                                    $group['title'],
+                                ]);
                                 ?>
-                                <a class="subject-study-library__button" href="<?php echo $chapterurl->out(false); ?>" title="<?php echo s($chapter['description']); ?>"><?php echo s($chapter['title']); ?></a>
+                                <a class="subject-study-library__button" href="<?php echo $chapterurl->out(false); ?>"
+                                    title="<?php echo s($chapter['description']); ?>" data-library-resource
+                                    data-library-search-text="<?php echo s($searchtext); ?>">
+                                    <span class="subject-study-library__button-copy">
+                                        <strong class="subject-study-library__button-title"><?php echo s($chapter['title']); ?></strong>
+                                        <span class="subject-study-library__button-description"><?php echo s($chapter['description']); ?></span>
+                                        <?php if (!empty($chapter['status'])): ?>
+                                            <small class="subject-study-library__button-status"><?php echo s($chapter['status']); ?></small>
+                                        <?php endif; ?>
+                                    </span>
+                                    <span class="subject-study-library__button-arrow" aria-hidden="true">›</span>
+                                </a>
                             <?php endforeach; ?>
                         </nav>
                     </section>
                 <?php endif; ?>
             <?php endforeach; ?>
         </section>
+        <?php if ($areaid === 'herbology'): ?>
+        <script>
+        (() => {
+            const input = document.querySelector('[data-library-search]');
+            const resources = [...document.querySelectorAll('[data-library-resource]')];
+            const groups = [...document.querySelectorAll('[data-library-group]')];
+            const total = document.querySelector('[data-library-search-count]');
+            const empty = document.querySelector('[data-library-empty]');
+            if (!input || !resources.length) {
+                return;
+            }
+            const normalize = value => String(value || '')
+                .toLocaleLowerCase('<?php echo $ises ? 'es' : 'en'; ?>')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+            const resourceWords = {
+                singular: '<?php echo $ises ? 'recurso' : 'resource'; ?>',
+                plural: '<?php echo $ises ? 'recursos' : 'resources'; ?>'
+            };
+            const update = () => {
+                const query = normalize(input.value.trim());
+                let visibleTotal = 0;
+                resources.forEach(resource => {
+                    const visible = query === '' || normalize(resource.dataset.librarySearchText).includes(query);
+                    resource.hidden = !visible;
+                    if (visible) {
+                        visibleTotal++;
+                    }
+                });
+                groups.forEach(group => {
+                    const visible = group.querySelectorAll('[data-library-resource]:not([hidden])').length;
+                    group.hidden = visible === 0;
+                    const count = group.querySelector('[data-library-group-count]');
+                    const unit = group.querySelector('[data-library-group-unit]');
+                    if (count) {
+                        count.textContent = String(visible);
+                    }
+                    if (unit) {
+                        unit.textContent = visible === 1 ? resourceWords.singular : resourceWords.plural;
+                    }
+                });
+                total.textContent = `${visibleTotal} ${visibleTotal === 1 ? resourceWords.singular : resourceWords.plural}`;
+                empty.hidden = visibleTotal !== 0;
+            };
+            input.addEventListener('input', update);
+        })();
+        </script>
+        <?php endif; ?>
     <?php else: ?>
     <?php if ($areaid === 'pointlocation'): ?>
         <section class="subject-study-guide__board-overview" aria-labelledby="board-preparation-title">
