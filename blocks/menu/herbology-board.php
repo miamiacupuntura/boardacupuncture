@@ -7,7 +7,7 @@ require_login();
 
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
-$fromlibrary = optional_param('from', '', PARAM_ALPHA) === 'library';
+$fromlibrary = optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard';
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
 if (!in_array($track, ['herbs', 'formulas', 'quiz', 'domains', 'exams'], true)) {
     $track = 'herbs';
@@ -1345,7 +1345,10 @@ $singleherbpracticepath = '/study-guide/comparisons/'
 $singleherbpracticeurl = new moodle_url($singleherbpracticepath, $fromlibrary ? ['from' => 'library'] : []);
 $herbquestionbankpath = '/study-guide/comparisons/'
     . ($ises ? 'herb-comparison-bank-es.html' : 'herb-comparison-bank.html');
-$herbquestionbankurl = new moodle_url($herbquestionbankpath, $fromlibrary ? ['from' => 'library'] : []);
+$herbquestionbankurl = new moodle_url($herbquestionbankpath, [
+    'chapter' => 0,
+    'mode' => 'questions',
+] + ($fromlibrary ? ['from' => 'library'] : []));
 $formulapracticepath = '/study-guide/comparisons/'
     . ($ises ? 'formula-practice-es.html' : 'formula-practice.html');
 $formulapracticeurl = new moodle_url($formulapracticepath, $fromlibrary ? ['from' => 'library'] : []);
@@ -1449,7 +1452,7 @@ echo $OUTPUT->header();
                         . $herbtotals['chapters'] . ' study chapters, with ' . $herbtotals['charts'] . ' comparison charts.'; ?>
             </p>
             <div class="herb-board__launches herb-board__launches--single">
-                <a class="herb-board__launch" href="<?php echo $herbquestionbankurl->out(false); ?>?chapter=0&amp;mode=questions">
+                <a class="herb-board__launch" href="<?php echo $herbquestionbankurl->out(false); ?>">
                     <strong><?php echo $ises
                         ? 'Preguntas de estudio y flashcards'
                         : 'Study Questions &amp; Flashcards'; ?></strong>

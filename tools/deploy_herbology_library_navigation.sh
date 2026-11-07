@@ -73,9 +73,10 @@ for relative in "${MOODLE_FILES[@]}"; do
     fi
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
-grep -Fq '$plugin->version   = 2026110649;' "$TEMP_DIR/moodle/blocks/menu/version.php"
-grep -Fq "optional_param('from', '', PARAM_ALPHA) === 'library'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq '$plugin->version   = 2026110650;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq "optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq '← Back to Library' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'Library is the permanent navigation hub' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq "param('from', 'library')" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'dataset.libraryContextNavigation' "$TEMP_DIR/static/library-navigation.js"
@@ -123,8 +124,12 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-3' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-4' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
+if grep -Fq "currentUrl.searchParams.get('from') !== 'library'" "$STUDY_NOTE_DIR/library-navigation.js"; then
+    echo "ERROR: la navegación estática todavía depende de from=library." >&2
+    exit 1
+fi
 grep -Fq 'data-herbology-library-context' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq '← Back to Library' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 

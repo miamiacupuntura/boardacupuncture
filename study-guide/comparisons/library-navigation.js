@@ -2,10 +2,6 @@
   'use strict';
 
   const currentUrl = new URL(window.location.href);
-  if (currentUrl.searchParams.get('from') !== 'library') {
-    return;
-  }
-
   const spanish = document.documentElement.lang.toLowerCase().startsWith('es')
     || /-es\.html$/i.test(currentUrl.pathname);
   const copy = spanish ? {

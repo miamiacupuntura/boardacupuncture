@@ -4,7 +4,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 function block_myprogress_from_herbology_library(): bool {
-    return optional_param('from', '', PARAM_ALPHA) === 'library';
+    // Library is the permanent navigation hub for the Board Level herbology resources.
+    return true;
 }
 
 function block_myprogress_render_herbology_library_navigation(bool $ises, string $currentlabel): string {
