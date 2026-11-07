@@ -85,7 +85,7 @@
   current.textContent = isFormulaNavigator
     ? (spanish ? 'Buscar una fórmula' : 'Find a formula')
     : isFormulaPractice
-      ? (spanish ? 'Preguntas de práctica' : 'Practice questions')
+      ? 'Quiz'
       : (spanish ? 'Banco comparativo' : 'Comparison bank');
 
   const separator = () => {

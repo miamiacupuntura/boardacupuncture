@@ -1384,8 +1384,8 @@ echo $OUTPUT->header();
                     : 'Study with explanations, recall flashcards, comparison charts, and progress saved in this browser.'; ?>
             <?php } else { ?>
                 <?php echo $ises
-                    ? 'Practica selección múltiple con feedback tipo mock, sesiones flexibles e historial de exámenes.'
-                    : 'Practice multiple-choice questions with mock-style feedback, flexible sessions, and exam history.'; ?>
+                    ? 'Completa Quizzes de selección múltiple con feedback tipo mock, sesiones flexibles e historial de exámenes.'
+                    : 'Complete multiple-choice Quizzes with mock-style feedback, flexible sessions, and exam history.'; ?>
             <?php } ?>
             </p>
         <?php } ?>
@@ -1412,11 +1412,11 @@ echo $OUTPUT->header();
             <div class="herb-board__panel-heading">
                 <div>
                     <h3 id="herb-board-practice-title"><?php echo $ises
-                        ? 'Elige cómo practicar hierbas individuales'
-                        : 'Choose how to practice Single Herbs'; ?></h3>
+                        ? 'Elige cómo estudiar hierbas individuales'
+                        : 'Choose how to study Single Herbs'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Responde preguntas con feedback o estudia las preguntas con sus respuestas y flashcards.'
-                        : 'Answer questions with feedback or study the questions with answers and flashcards.'; ?></p>
+                        ? 'Completa un Quiz razonado o estudia preguntas con sus respuestas y flashcards.'
+                        : 'Complete a reasoning Quiz or study questions with answers and flashcards.'; ?></p>
                 </div>
             </div>
             <p class="herb-board__feature-copy herb-board__feature-copy--panel">
@@ -1428,13 +1428,15 @@ echo $OUTPUT->header();
             </p>
             <div class="herb-board__launches">
                 <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Responder preguntas' : 'Practice Questions'; ?></strong>
+                    <strong>Quiz</strong>
                     <span><?php echo $ises
                         ? 'Crea sesiones de 10, 25, 50 o 100 preguntas de selección múltiple.'
                         : 'Build 10, 25, 50, or 100-question multiple-choice sessions.'; ?></span>
                 </a>
                 <a class="herb-board__launch" href="<?php echo $herbquestionbankurl->out(false); ?>?chapter=0&amp;mode=questions">
-                    <strong><?php echo $ises ? 'Preguntas y flashcards' : 'Questions &amp; Flashcards'; ?></strong>
+                    <strong><?php echo $ises
+                        ? 'Preguntas de estudio y flashcards'
+                        : 'Study Questions &amp; Flashcards'; ?></strong>
                     <span><?php echo $ises
                         ? 'Estudia 249 preguntas con sus respuestas, explicaciones y flashcards.'
                         : 'Study 249 questions with answers, explanations, and flashcards.'; ?></span>
@@ -1697,36 +1699,38 @@ echo $OUTPUT->header();
             <div class="herb-board__panel-heading">
                 <div>
                     <h3 id="herb-board-formulas-title"><?php echo $ises
-                        ? 'Elige cómo practicar fórmulas'
-                        : 'Choose how to practice Formulas'; ?></h3>
+                        ? 'Elige cómo estudiar fórmulas'
+                        : 'Choose how to study Formulas'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Responde preguntas con feedback o estudia las preguntas con sus respuestas y flashcards.'
-                        : 'Answer questions with feedback or study the questions with answers and flashcards.'; ?></p>
+                        ? 'Completa un Quiz razonado o estudia preguntas con sus respuestas y flashcards.'
+                        : 'Complete a reasoning Quiz or study questions with answers and flashcards.'; ?></p>
                 </div>
             </div>
             <div class="herb-board__summary herb-board__summary--panel" aria-label="Formula bank totals">
                 <span><strong><?php echo $formulatotals['questions']; ?></strong> <?php echo $ises
                     ? 'preguntas verificadas' : 'verified questions'; ?></span>
                 <span><strong><?php echo $formulatotals['formulas']; ?></strong> <?php echo $ises
-                    ? 'fórmulas con práctica' : 'formulas with practice'; ?></span>
+                    ? 'fórmulas con Quiz' : 'formulas with Quiz questions'; ?></span>
                 <span><strong><?php echo $formulatotals['categories']; ?></strong> <?php echo $ises
                     ? 'categorías oficiales' : 'official categories'; ?></span>
             </div>
             <div class="herb-board__launches">
                 <a class="herb-board__launch" href="<?php echo $formulapracticeurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Responder preguntas' : 'Practice Questions'; ?></strong>
+                    <strong>Quiz</strong>
                     <span><?php echo $ises
                         ? 'Configura una sesión de 10, 25, 50 o 100 preguntas.'
                         : 'Configure a 10, 25, 50, or 100-question session.'; ?></span>
                 </a>
                 <a class="herb-board__launch" href="<?php echo $formulaquestionbankurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Preguntas y flashcards' : 'Questions &amp; Flashcards'; ?></strong>
+                    <strong><?php echo $ises
+                        ? 'Preguntas de estudio y flashcards'
+                        : 'Study Questions &amp; Flashcards'; ?></strong>
                     <span><?php echo $ises
                         ? 'Repasa las preguntas con la respuesta correcta y el feedback siempre visibles.'
                         : 'Review questions with the correct answer and feedback always visible.'; ?></span>
                 </a>
             </div>
-            <h4 class="herb-board__subheading"><?php echo $ises ? 'Responder por categoría' : 'Practice by category'; ?></h4>
+            <h4 class="herb-board__subheading"><?php echo $ises ? 'Quiz por categoría' : 'Quiz by category'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($formulacategories as $category) {
                     $categoryurl = new moodle_url($formulapracticepath, [
@@ -1763,14 +1767,14 @@ echo $OUTPUT->header();
                 <div>
                     <h3 id="herb-board-workspace-title"><?php echo $track === 'exams'
                         ? ($ises ? 'Elige una modalidad' : 'Choose an exam mode')
-                        : ($ises ? 'Práctica por dominio' : 'Practice by Domain'); ?></h3>
+                        : ($ises ? 'Quiz por dominio' : 'Quiz by Domain'); ?></h3>
                     <p><?php echo $track === 'exams'
                         ? ($ises
                             ? 'Elige el examen lineal o adaptativo de 100 preguntas y revisa tu historial.'
                             : 'Choose the 100-question linear or adaptive exam and review your history.')
                         : ($ises
-                            ? 'Elige un dominio para practicar sus preguntas.'
-                            : 'Choose one Domain for focused question practice.'); ?></p>
+                            ? 'Elige un dominio para completar un Quiz enfocado.'
+                            : 'Choose one Domain for a focused Quiz.'); ?></p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
@@ -1825,7 +1829,7 @@ echo $OUTPUT->header();
                         <h4><?php echo s($domain['name']); ?></h4>
                         <p><?php echo s($domain['focus']); ?></p>
                         <span class="herb-board__domain-status">
-                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de práctica' : 'practice questions'; ?> →
+                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de Quiz' : 'Quiz questions'; ?> →
                         </span>
                     </a>
                 <?php } ?>
@@ -2061,8 +2065,8 @@ echo $OUTPUT->header();
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
                     <?php echo $ises
-                        ? 'Las preguntas de práctica para este tema están en preparación.'
-                        : 'Practice questions for this subject are being prepared.'; ?>
+                        ? 'Las preguntas del Quiz para este tema están en preparación.'
+                        : 'Quiz questions for this subject are being prepared.'; ?>
                 </div>
             <?php } else { ?>
                 <?php if ($selecteddomaintotalpages > 1) { ?>

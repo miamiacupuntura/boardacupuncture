@@ -79,6 +79,7 @@ STATIC_FILES=(
     "formula-question-bank.html"
     "formula-question-bank-es.html"
     "formula-question-bank.js"
+    "formula-modifications-es.html"
     "formula-modifications-manifest.json"
     "formula-modifications-supplement.json"
     "formula-modifications-gui-zhi-tang.json"
@@ -86,6 +87,7 @@ STATIC_FILES=(
     "formula-modifications-generated.json"
     "formula-category-expansion.json"
     "study-return-navigation.js"
+    "practice-hub-navigation.js"
 )
 
 for relative in "${MOODLE_FILES[@]}"; do
@@ -104,7 +106,7 @@ php -l "$TEMP_DIR/moodle/blocks/myprogress/single-herbs-study-guide.php" >/dev/n
 php -l "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php" >/dev/null
 php -r '
 $xml = simplexml_load_file($argv[1]);
-if (!$xml || (string)$xml["VERSION"] !== "2026110640") {
+if (!$xml || (string)$xml["VERSION"] !== "2026110641") {
     throw new RuntimeException("Versión install.xml incorrecta.");
 }
 ' "$TEMP_DIR/moodle/blocks/menu/db/install.xml"
@@ -160,9 +162,9 @@ grep -Fq "'title' => 'Single Herbs'" "$TEMP_DIR/moodle/blocks/myprogress/study-g
 grep -Fq "'path' => '/blocks/myprogress/single-herbs-study-guide.php'" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'single-herb-practice-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'formula-question-bank-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq 'Practice Questions' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq 'Questions &amp; Flashcards' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '$plugin->version   = 2026110640;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '<strong>Quiz</strong>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'Study Questions &amp; Flashcards' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq '$plugin->version   = 2026110641;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq "Study by Yang Chapter's" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
@@ -177,21 +179,23 @@ grep -Fq 'id="board-level-' "$TEMP_DIR/moodle/blocks/menu/block_menu.php"
 ! grep -Fq "href=\"<?php echo \$singleherbsurl->out(false); ?>\"><?php echo \$ises" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'official categories' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Additional practice filter' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq 'Single Herbs Practice' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'Single Herbs Quiz' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq 'Herbology Practice</a><span aria-hidden="true">›</span><a href="/blocks/menu/herbology-board.php?track=herbs">Single Herbs' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/single-herb-practice.html"
-grep -Fq 'Formula Questions &amp; Flashcards' "$TEMP_DIR/static/formula-question-bank.html"
+grep -Fq 'Formula Study Questions &amp; Flashcards' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/formula-navigator.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/formula-practice.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq 'Herbology Practice</a><span aria-hidden="true">›</span><a href="/blocks/menu/herbology-board.php?track=formulas">Formulas' "$TEMP_DIR/static/formula-practice.html"
-grep -Fq 'formula-question-bank.html">Questions &amp; flashcards' "$TEMP_DIR/static/formula-navigator.html"
+grep -Fq 'formula-question-bank.html">Study Questions &amp; Flashcards' "$TEMP_DIR/static/formula-navigator.html"
 grep -Fq 'formula-navigator.html">Find a formula' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/formula-practice.html"
 ! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/formula-practice.js"
 ! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/formula-navigator.js"
 grep -Fq "dashboardUrl = '/my/'" "$TEMP_DIR/static/study-return-navigation.js"
+grep -Fq "? 'Quiz'" "$TEMP_DIR/static/practice-hub-navigation.js"
+grep -Fq 'Quiz de modificaciones' "$TEMP_DIR/static/formula-modifications-es.html"
 grep -Fq "hero.insertAdjacentElement('afterend', nav)" "$TEMP_DIR/static/study-return-navigation.js"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/herb-comparison-bank.html"
 grep -Fq 'Herbology Practice</a><span aria-hidden="true">›</span><a href="/blocks/menu/herbology-board.php?track=herbs">Single Herbs' "$TEMP_DIR/static/herb-comparison-bank.html"

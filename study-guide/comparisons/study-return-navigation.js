@@ -52,9 +52,9 @@
   const page = window.location.pathname.split('/').pop().replace('-es.html', '.html');
   const routes = {
     'formula-navigator.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', spanish ? 'Buscar una fórmula' : 'Find a Formula'],
-    'formula-practice.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', spanish ? 'Practicar preguntas' : 'Practice Questions'],
-    'formula-question-bank.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', spanish ? 'Preguntas y flashcards' : 'Questions & Flashcards'],
-    'single-herb-practice.html': ['herbs', spanish ? 'Hierbas individuales' : 'Single Herbs', spanish ? 'Practicar preguntas' : 'Practice Questions']
+    'formula-practice.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', 'Quiz'],
+    'formula-question-bank.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', spanish ? 'Preguntas de estudio y flashcards' : 'Study Questions & Flashcards'],
+    'single-herb-practice.html': ['herbs', spanish ? 'Hierbas individuales' : 'Single Herbs', 'Quiz']
   };
   const route = routes[page];
   const hero = document.querySelector('.comparison-hero');

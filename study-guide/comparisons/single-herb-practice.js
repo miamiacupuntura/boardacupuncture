@@ -5,7 +5,7 @@
   const copy = {
     loadError: spanish ? 'No se pudo cargar el banco de hierbas.' : 'The Single Herbs bank could not be loaded.',
     ready: spanish ? 'Banco de preguntas listo.' : 'Question bank ready.',
-    start: count => spanish ? `Comenzar práctica (${count}) →` : `Start practice (${count}) →`,
+    start: count => spanish ? `Comenzar Quiz (${count}) →` : `Start Quiz (${count}) →`,
     position: (position, total) => spanish ? `Pregunta ${position} de ${total}` : `Question ${position} of ${total}`,
     correct: spanish ? 'Correcto' : 'Correct',
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
@@ -13,8 +13,8 @@
     safety: spanish ? 'Seguridad:' : 'Safety:',
     source: spanish ? 'Abrir tarjeta fuente →' : 'Open source card →',
     finish: (answered, total) => spanish
-      ? `Finalizar práctica (${answered}/${total} respondidas)`
-      : `Finish practice (${answered}/${total} answered)`,
+      ? `Finalizar Quiz (${answered}/${total} respondidas)`
+      : `Finish Quiz (${answered}/${total} answered)`,
     result: (correct, answered, percent, skipped) => spanish
       ? `${correct} correctas de ${answered} respondidas — ${percent}%. ${skipped} sin responder.`
       : `${correct} correct out of ${answered} answered — ${percent}%. ${skipped} unanswered.`,

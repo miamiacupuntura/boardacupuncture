@@ -6,7 +6,7 @@
     loadingError: spanish ? 'No se pudo cargar el banco de preguntas.' : 'The question bank could not be loaded.',
     available: spanish ? 'Banco listo.' : 'Question bank ready.',
     noQuestions: spanish ? 'No hay preguntas con esta combinación de filtros.' : 'No questions match these filters.',
-    startPractice: count => spanish ? `Comenzar práctica (${count}) →` : `Start practice (${count}) →`,
+    startPractice: count => spanish ? `Comenzar Quiz (${count}) →` : `Start Quiz (${count}) →`,
     source: number => spanish ? `Pregunta de fuente ${number}` : `Source question ${number}`,
     questionPosition: (position, total, source) => spanish
       ? `Pregunta ${position} de ${total} · Fuente ${source}`
@@ -24,8 +24,8 @@
       : `Maximum available for this selection: ${count} questions.`,
     sessionMaximum: spanish ? 'Máximo por sesión en el banco completo: 100 preguntas.' : 'Maximum per full-bank session: 100 questions.',
     finishProgress: (answered, total) => spanish
-      ? `Finalizar práctica (${answered}/${total} respondidas)`
-      : `Finish practice (${answered}/${total} answered)`,
+      ? `Finalizar Quiz (${answered}/${total} respondidas)`
+      : `Finish Quiz (${answered}/${total} answered)`,
     skipForNow: spanish ? 'Saltar por ahora ↓' : 'Skip for now ↓',
     historyEmpty: spanish ? 'Completa una sesión para comenzar tu historial.' : 'Complete a session to start your history.',
     attempts: spanish ? 'respuestas' : 'answers',
@@ -35,8 +35,8 @@
     questionWord: spanish ? 'preguntas' : 'questions',
     modeHelp: {
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
-      formula: spanish ? 'Practica todas las preguntas relacionadas con una fórmula específica.' : 'Practice every question related to one specific formula.',
-      category: spanish ? 'Practica preguntas de las fórmulas que pertenecen a una categoría.' : 'Practice questions from formulas in one category.'
+      formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
+      category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.'
     }
   };
   const storageKey = 'formula-practice-progress-v1';
