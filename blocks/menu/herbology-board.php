@@ -1720,7 +1720,7 @@ echo $OUTPUT->header();
                 <?php } ?>
             </div>
 
-            <h4 class="herb-board__subheading" id="quiz-formula-categories"><?php echo $ises ? 'Quiz de fórmulas por categoría' : 'Formula Quiz by category'; ?></h4>
+            <h4 class="herb-board__subheading herb-board__subheading--spaced" id="quiz-formula-categories"><?php echo $ises ? 'Quiz de fórmulas por categoría' : 'Formula Quiz by category'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($formulacategories as $category) {
                     $categoryurl = new moodle_url($formulapracticepath, [

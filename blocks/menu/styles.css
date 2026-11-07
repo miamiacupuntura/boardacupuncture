@@ -1315,7 +1315,7 @@ a.herb-board__topic:focus {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.herb-board__subheading--spaced {
+.herb-board__subheading.herb-board__subheading--spaced {
     margin-top: 28px;
 }
 

@@ -88,6 +88,7 @@ done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
 grep -Fq '$plugin->version   = 2026110655;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq '.herb-board__page-navigation' "$TEMP_DIR/moodle/blocks/menu/styles.css"
+grep -Fq '.herb-board__subheading.herb-board__subheading--spaced' "$TEMP_DIR/moodle/blocks/menu/styles.css"
 if grep -Fq 'class="herb-board__hero"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
     echo "ERROR: el encabezado grande de Herbology continúa en las hojas." >&2
     exit 1
@@ -101,6 +102,7 @@ grep -Fq 'data-herbology-step-back' "$TEMP_DIR/moodle/blocks/menu/herbology-boar
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'id="quiz-herb-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'class="herb-board__subheading herb-board__subheading--spaced" id="quiz-formula-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq "'category' => \$category['number']" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'herbs' || \$track === 'quiz')" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'herbs')" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
@@ -268,7 +270,9 @@ grep -Fq "set_heading(\$showlibrary && \$areaid === 'herbology' ? ''" "$MOODLE_R
 grep -Fq "if (\$areaid !== 'herbology')" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__page-navigation' "$MOODLE_ROOT/blocks/menu/styles.css"
+grep -Fq '.herb-board__subheading.herb-board__subheading--spaced' "$MOODLE_ROOT/blocks/menu/styles.css"
 grep -Fq 'id="quiz-herb-categories"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'class="herb-board__subheading herb-board__subheading--spaced" id="quiz-formula-categories"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq "'category' => \$category['number']" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'herbs' || \$track === 'quiz')" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'herbs')" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
