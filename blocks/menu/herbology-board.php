@@ -1428,7 +1428,6 @@ echo $OUTPUT->header();
                     ] + ($fromlibrary ? ['from' => 'library'] : []));
                 ?>
                     <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
-                        <strong><?php echo $category['questions']; ?></strong>
                         <span><?php echo s($category['name']); ?></span>
                     </a>
                 <?php } ?>
@@ -1711,7 +1710,6 @@ echo $OUTPUT->header();
                     ] + ($fromlibrary ? ['from' => 'library'] : []));
                 ?>
                     <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
-                        <strong><?php echo $category['count']; ?></strong>
                         <span><?php echo s($category['name']); ?></span>
                     </a>
                 <?php } ?>
@@ -1720,7 +1718,6 @@ echo $OUTPUT->header();
                     'size' => 25,
                 ] + ($fromlibrary ? ['from' => 'library'] : [])); ?>
                 <a class="herb-board__topic" href="<?php echo $modificationsurl->out(false); ?>">
-                    <strong><?php echo $formulamodificationcount; ?></strong>
                     <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
                 </a>
             </div>

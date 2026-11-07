@@ -96,6 +96,12 @@ fi
 grep -Fq 'data-herbology-step-back' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+if grep -Fq "<strong><?php echo \$category['questions']; ?></strong>" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" \
+        || grep -Fq "<strong><?php echo \$category['count']; ?></strong>" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" \
+        || grep -Fq '<strong><?php echo $formulamodificationcount; ?></strong>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
+    echo "ERROR: los contadores de preguntas continúan en la navegación de temas." >&2
+    exit 1
+fi
 grep -Fq 'Library is the permanent navigation hub' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'data-library-step-back' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
@@ -239,6 +245,12 @@ grep -Fq "set_heading(\$showlibrary && \$areaid === 'herbology' ? ''" "$MOODLE_R
 grep -Fq "if (\$areaid !== 'herbology')" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__page-navigation' "$MOODLE_ROOT/blocks/menu/styles.css"
+if grep -Fq "<strong><?php echo \$category['questions']; ?></strong>" "$MOODLE_ROOT/blocks/menu/herbology-board.php" \
+        || grep -Fq "<strong><?php echo \$category['count']; ?></strong>" "$MOODLE_ROOT/blocks/menu/herbology-board.php" \
+        || grep -Fq '<strong><?php echo $formulamodificationcount; ?></strong>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
+    echo "ERROR: los contadores de preguntas continúan instalados en la navegación de temas." >&2
+    exit 1
+fi
 if grep -Fq 'class="herb-board__hero"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
     echo "ERROR: el encabezado grande de Herbology continúa instalado." >&2
     exit 1
