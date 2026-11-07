@@ -7,6 +7,7 @@ require_login();
 
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
+$fromlibrary = optional_param('from', '', PARAM_ALPHA) === 'library';
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
 if (!in_array($track, ['herbs', 'formulas', 'quiz', 'domains', 'exams'], true)) {
     $track = 'herbs';
@@ -45,6 +46,9 @@ if (!$hasaccess) {
 }
 
 $pageparams = ['track' => $track];
+if ($fromlibrary) {
+    $pageparams['from'] = 'library';
+}
 if ($ises) {
     $pageparams['lang'] = 'es';
 }
@@ -68,13 +72,17 @@ if ($ises) {
     $languageparams['lang'] = 'es';
 }
 $languageurl = new moodle_url('/blocks/menu/herbology-board.php', $languageparams);
-$dashboardurl = new moodle_url('/my/');
-$languagecontext = $ises ? ['lang' => 'es'] : [];
+$libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
+    'area' => 'herbology',
+    'view' => 'library',
+] + ($ises ? ['lang' => 'es'] : []));
+$dashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/');
+$languagecontext = ($fromlibrary ? ['from' => 'library'] : []) + ($ises ? ['lang' => 'es'] : []);
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
-$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');
+$examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
 if ($track === 'exams' && !$mixdomains) {
@@ -1334,21 +1342,23 @@ if ($track === 'herbs') {
 
 $singleherbpracticepath = '/study-guide/comparisons/'
     . ($ises ? 'single-herb-practice-es.html' : 'single-herb-practice.html');
-$singleherbpracticeurl = new moodle_url($singleherbpracticepath);
+$singleherbpracticeurl = new moodle_url($singleherbpracticepath, $fromlibrary ? ['from' => 'library'] : []);
 $herbquestionbankpath = '/study-guide/comparisons/'
     . ($ises ? 'herb-comparison-bank-es.html' : 'herb-comparison-bank.html');
-$herbquestionbankurl = new moodle_url($herbquestionbankpath);
+$herbquestionbankurl = new moodle_url($herbquestionbankpath, $fromlibrary ? ['from' => 'library'] : []);
 $formulapracticepath = '/study-guide/comparisons/'
     . ($ises ? 'formula-practice-es.html' : 'formula-practice.html');
-$formulapracticeurl = new moodle_url($formulapracticepath);
+$formulapracticeurl = new moodle_url($formulapracticepath, $fromlibrary ? ['from' => 'library'] : []);
 $formulaquestionbankpath = '/study-guide/comparisons/'
     . ($ises ? 'formula-question-bank-es.html' : 'formula-question-bank.html');
-$formulaquestionbankurl = new moodle_url($formulaquestionbankpath);
+$formulaquestionbankurl = new moodle_url($formulaquestionbankpath, $fromlibrary ? ['from' => 'library'] : []);
 
 echo $OUTPUT->header();
 ?>
 <main class="herb-board">
-    <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? '← Volver al Dashboard' : '← Back to Dashboard'; ?></a>
+    <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $fromlibrary
+        ? ($ises ? '← Volver a Library' : '← Back to Library')
+        : ($ises ? '← Volver al Dashboard' : '← Back to Dashboard'); ?></a>
     <header class="herb-board__hero">
         <p class="herb-board__eyebrow"><?php echo $ises ? 'HERBOLOGÍA CHINA · NIVEL BOARD' : 'CHINESE HERBOLOGY · BOARD LEVEL'; ?></p>
         <h2><?php echo $track === 'exams'
@@ -1456,7 +1466,7 @@ echo $OUTPUT->header();
                     $categoryurl = new moodle_url($herbquestionbankpath, [
                         'chapter' => $category['number'],
                         'mode' => 'questions',
-                    ]);
+                    ] + ($fromlibrary ? ['from' => 'library'] : []));
                 ?>
                     <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
                         <strong><?php echo $category['questions']; ?></strong>
@@ -1515,7 +1525,7 @@ echo $OUTPUT->header();
                                     $subcategoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
                                         'track' => 'herbs',
                                         'section' => $subcategorykey,
-                                    ], 'bensky-section');
+                                    ] + $languagecontext, 'bensky-section');
                                     $isselected = $sectionkey === $subcategorykey;
                                 ?>
                                     <a class="herb-board__topic herb-board__topic--subcategory<?php echo $isselected ? ' herb-board__topic--selected' : ''; ?>"
@@ -1545,7 +1555,7 @@ echo $OUTPUT->header();
                                     $subcategoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
                                         'track' => 'herbs',
                                         'section' => $subcategorykey,
-                                    ], 'bensky-section');
+                                    ] + $languagecontext, 'bensky-section');
                                     $isselected = $sectionkey === $subcategorykey;
                                 ?>
                                     <a class="herb-board__topic herb-board__topic--subcategory<?php echo $isselected ? ' herb-board__topic--selected' : ''; ?>"
@@ -1575,7 +1585,7 @@ echo $OUTPUT->header();
                                     $subcategoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
                                         'track' => 'herbs',
                                         'section' => $subcategorykey,
-                                    ], 'bensky-section');
+                                    ] + $languagecontext, 'bensky-section');
                                     $isselected = $sectionkey === $subcategorykey;
                                 ?>
                                     <a class="herb-board__topic herb-board__topic--subcategory<?php echo $isselected ? ' herb-board__topic--selected' : ''; ?>"
@@ -1739,7 +1749,7 @@ echo $OUTPUT->header();
                     $categoryurl = new moodle_url($formulapracticepath, [
                         'category' => $category['key'],
                         'size' => 25,
-                    ]);
+                    ] + ($fromlibrary ? ['from' => 'library'] : []));
                 ?>
                     <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
                         <strong><?php echo $category['count']; ?></strong>
@@ -1749,7 +1759,7 @@ echo $OUTPUT->header();
                 <?php $modificationsurl = new moodle_url($formulapracticepath, [
                     'category' => 'modifications',
                     'size' => 25,
-                ]); ?>
+                ] + ($fromlibrary ? ['from' => 'library'] : [])); ?>
                 <a class="herb-board__topic" href="<?php echo $modificationsurl->out(false); ?>">
                     <strong><?php echo $formulamodificationcount; ?></strong>
                     <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>

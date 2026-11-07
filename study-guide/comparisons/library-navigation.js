@@ -38,9 +38,9 @@
   const routes = [
     [copy.allResources, libraryUrl],
     [copy.studyGuides, libraryUrl + '#library-group-core-guides'],
-    [copy.practice, '/blocks/menu/herbology-board.php?track=herbs' + languageParams],
-    [copy.quiz, '/blocks/menu/herbology-board.php?track=quiz' + languageParams],
-    [copy.exams, '/blocks/menu/herbology-board.php?track=exams' + languageParams]
+    [copy.practice, '/blocks/menu/herbology-board.php?track=herbs&from=library' + languageParams],
+    [copy.quiz, '/blocks/menu/herbology-board.php?track=quiz&from=library' + languageParams],
+    [copy.exams, '/blocks/menu/herbology-board.php?track=exams&from=library' + languageParams]
   ];
   const currentFile = currentUrl.pathname.split('/').pop() || '';
   const baseFile = currentFile.replace(/-es\.html$/i, '.html');
@@ -136,7 +136,10 @@
     } catch (error) {
       path = '';
     }
-    if (/\/(?:single-herbs-study-guide|formulas-study-guide|herb-formula-category-map)\.php$/i.test(path)) {
+    if (/^\/my\/?$/i.test(path)) {
+      link.href = libraryUrl;
+      link.textContent = spanish ? '← Volver a Library' : '← Back to Library';
+    } else if (/\/(?:single-herbs-study-guide|formulas-study-guide|herb-formula-category-map)\.php$/i.test(path)) {
       link.remove();
     }
   });

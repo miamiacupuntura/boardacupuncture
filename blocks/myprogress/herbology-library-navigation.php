@@ -15,9 +15,10 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
     ] + $langparams);
     $guidesurl = clone $libraryurl;
     $guidesurl->set_anchor('library-group-core-guides');
-    $practiceurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $langparams);
-    $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $langparams);
-    $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $langparams);
+    $librarycontext = ['from' => 'library'] + $langparams;
+    $practiceurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $librarycontext);
+    $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $librarycontext);
+    $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $librarycontext);
     $routes = [
         [$ises ? 'Inicio de Library' : 'Library home', $libraryurl, true],
         [$ises ? 'Guías de estudio' : 'Study Guides', $guidesurl, false],
@@ -57,6 +58,11 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
                 if (destination.origin === window.location.origin && allowed.test(destination.pathname)) {
                     destination.searchParams.set('from', 'library');
                     link.href = destination.toString();
+                } else if (destination.origin === window.location.origin
+                        && /^\/my\/?$/.test(destination.pathname)
+                        && /dashboard/i.test(link.textContent)) {
+                    link.href = '<?php echo $libraryurl->out(false); ?>';
+                    link.textContent = '<?php echo $ises ? '← Volver a Library' : '← Back to Library'; ?>';
                 }
             });
             document.querySelectorAll('form[action]').forEach(form => {
