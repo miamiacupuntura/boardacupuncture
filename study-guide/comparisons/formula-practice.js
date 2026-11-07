@@ -332,6 +332,22 @@
     activeSourceLink = null;
   }
 
+  function simplifySourceFrame() {
+    if (!elements.sourceFrame) return;
+    try {
+      const sourceDocument = elements.sourceFrame.contentDocument;
+      if (!sourceDocument) return;
+      sourceDocument.querySelectorAll('.comparison-topbar .comparison-back').forEach(link => {
+        const destination = new URL(link.href, elements.sourceFrame.contentWindow.location.href);
+        if (/\/formula-navigator(?:-es)?\.html$/i.test(destination.pathname)) link.remove();
+      });
+      sourceDocument.querySelector('[data-library-step-back]')?.remove();
+      sourceDocument.querySelector('.formula-related-link--practice')?.remove();
+    } catch (_) {
+      // Formula profiles are same-origin; leave the source readable if access is unavailable.
+    }
+  }
+
   function openSourceViewer(event, link, formula, position) {
     if (!elements.sourceViewer || !elements.sourceFrame || !elements.sourceTitle || !elements.sourceReturn) return;
     event.preventDefault();
@@ -600,6 +616,7 @@
     renderHistory();
   });
   if (elements.sourceViewer) {
+    elements.sourceFrame?.addEventListener('load', simplifySourceFrame);
     elements.sourceViewer.querySelectorAll('[data-practice-source-close]').forEach(control => {
       control.addEventListener('click', closeSourceViewer);
     });
