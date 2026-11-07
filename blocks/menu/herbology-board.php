@@ -1386,7 +1386,6 @@ echo $OUTPUT->header();
         </nav>
         <?php } else if (in_array($track, ['quiz', 'domains'], true)) { ?>
         <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de Quiz' : 'Quiz navigation'; ?>">
-            <a class="herb-board__tab" href="<?php echo $quizurl->out(false); ?>" aria-current="page">Quiz</a>
             <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                 href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>

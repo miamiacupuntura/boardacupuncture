@@ -73,8 +73,12 @@ for relative in "${MOODLE_FILES[@]}"; do
     fi
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
-grep -Fq '$plugin->version   = 2026110653;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110654;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq "optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+if grep -Fq 'aria-current="page">Quiz</a>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
+    echo "ERROR: el encabezado de Herbology Quiz todavía contiene el botón Quiz redundante." >&2
+    exit 1
+fi
 grep -Fq 'data-herbology-step-back' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
@@ -148,6 +152,10 @@ grep -Fq 'data-herbology-library-context' "$MOODLE_ROOT/blocks/myprogress/herbol
 grep -Fq 'data-library-step-back' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'herbology-step-back-scroll' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+if grep -Fq 'aria-current="page">Quiz</a>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
+    echo "ERROR: el botón Quiz redundante continúa instalado." >&2
+    exit 1
+fi
 
 if [[ -f "$MOODLE_ROOT/admin/cli/upgrade.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then
