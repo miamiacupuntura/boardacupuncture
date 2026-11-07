@@ -1393,11 +1393,16 @@ echo $OUTPUT->header();
     <?php if ($track === 'exams') { ?>
         <nav class="herb-board__practice-route" aria-label="<?php echo $ises
             ? 'Ruta de navegación de exámenes' : 'Exam navigation path'; ?>">
-            <a href="<?php echo $singleherbsurl->out(false); ?>"><?php echo $ises
-                ? 'Práctica de Herbología' : 'Herbology Practice'; ?></a>
+            <a href="<?php echo $examsurl->out(false); ?>"><?php echo $ises
+                ? 'Exámenes' : 'Exams'; ?></a>
             <span aria-hidden="true">›</span>
             <span aria-current="page"><?php echo $ises
-                ? 'Exámenes de Herbología' : 'Herbology Exams'; ?></span>
+                ? ($mixdomains
+                    ? ($exammode === 'adaptive' ? 'Examen adaptativo' : 'Examen lineal')
+                    : 'Exámenes de Herbología')
+                : ($mixdomains
+                    ? ($exammode === 'adaptive' ? 'Adaptive exam' : 'Linear exam')
+                    : 'Herbology Exams'); ?></span>
         </nav>
     <?php } ?>
 

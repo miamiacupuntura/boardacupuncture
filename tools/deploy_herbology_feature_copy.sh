@@ -43,7 +43,9 @@ grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-boar
 grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'class="herb-board__practice-route"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__practice-route {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110637;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110638;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq "href=\"<?php echo \$examsurl->out(false); ?>\"" "$TEMP_DIR/blocks/menu/herbology-board.php"
+! grep -Fq "href=\"<?php echo \$singleherbsurl->out(false); ?>\"><?php echo \$ises" "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Recall flashcards</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -62,6 +64,7 @@ php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__practice-route"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq "href=\"<?php echo \$examsurl->out(false); ?>\"" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
@@ -82,4 +85,4 @@ fi
 
 echo "TEXTO EXPLICATIVO DE HERBOLOGY PRACTICE INSTALADO"
 echo "Respaldo: $BACKUP_DIR"
-echo "Prueba: https://www.acupuncturetests.com/blocks/menu/herbology-board.php?track=herbs&copy=$REVISION"
+echo "Prueba: https://www.acupuncturetests.com/blocks/menu/herbology-board.php?track=exams&copy=$REVISION"
