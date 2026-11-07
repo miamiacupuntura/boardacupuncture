@@ -108,6 +108,25 @@
   };
 
   const brand = document.querySelector('.comparison-topbar .comparison-brand');
+  let activeRouteIndex = 0;
+  if (brand) {
+    try {
+      const brandUrl = new URL(brand.href, currentUrl);
+      if (/\/blocks\/menu\/herbology-board\.php$/i.test(brandUrl.pathname)) {
+        activeRouteIndex = { herbs: 2, quiz: 3, exams: 4 }[brandUrl.searchParams.get('track')] || 0;
+      }
+    } catch (error) {
+      activeRouteIndex = 0;
+    }
+  }
+  const activeRouteFiles = new Map([
+    [1, new Set(['dui-yao.html'])],
+    [2, new Set(['herb-comparison-bank.html', 'formula-navigator.html', 'formula-question-bank.html'])],
+    [3, new Set(['single-herb-practice.html', 'formula-practice.html'])]
+  ]);
+  for (const [routeIndex, files] of activeRouteFiles) {
+    if (files.has(baseFile)) activeRouteIndex = routeIndex;
+  }
   const originalBrandUrl = brand ? localComparisonUrl(brand) : null;
   const originalBrandLabel = brand?.textContent.replace(/\s+/g, ' ').trim().replace(/^☯\s*/, '') || '';
   let collection = collectionHubs[baseFile] || null;
@@ -172,7 +191,7 @@
     .comparison-collection-links{display:none!important}
     .library-context-nav{margin:14px 0 12px;padding:10px 12px;border:1px solid #b8d5d2;border-radius:10px;background:#f7fcfb;box-shadow:0 2px 8px rgba(15,23,42,.04)}
     .library-context-nav__top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 8px}.library-context-nav__trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:800}.library-context-nav__trail a{color:#245fa7;text-decoration:none}.library-context-nav__trail a:hover{text-decoration:underline}.library-context-nav__step-back{padding-right:8px;border-right:1px solid #bfd0da}.library-context-nav__trail-current{color:#17232a}.library-context-nav__toggle{display:none;min-height:38px;align-items:center;justify-content:center;padding:6px 10px;border:1px solid #0b817d;border-radius:8px;background:#fff;color:#075f5b;font-size:12px;font-weight:850;cursor:pointer}
-    .library-context-nav__routes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.library-context-nav__route{display:flex;min-height:38px;align-items:center;justify-content:center;padding:6px 9px;border:1px solid #bfd0da;border-radius:7px;background:#fff;color:#17344a;font-size:12px;font-weight:850;text-align:center;text-decoration:none}.library-context-nav__route:hover,.library-context-nav__route:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b;text-decoration:none}.library-context-nav__route--library{border-color:#0b817d;background:#0b817d;color:#fff}.library-context-nav__route--library:hover,.library-context-nav__route--library:focus{background:#076b67;color:#fff}
+    .library-context-nav__routes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.library-context-nav__route{display:flex;min-height:38px;align-items:center;justify-content:center;padding:6px 9px;border:1px solid #bfd0da;border-radius:7px;background:#fff;color:#17344a;font-size:12px;font-weight:850;text-align:center;text-decoration:none}.library-context-nav__route:hover,.library-context-nav__route:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b;text-decoration:none}.library-context-nav__route--active{border-color:#0b817d;background:#0b817d;color:#fff}.library-context-nav__route--active:hover,.library-context-nav__route--active:focus{background:#076b67;color:#fff}
     body.library-standard-header .comparison-topbar__inner{min-height:64px}
     body.library-standard-header main.comparison-shell>.comparison-hero.library-sheet-heading{display:block;min-height:0;margin:0 0 18px;padding:18px 22px;border-top:5px solid #f47e2c;border-radius:12px;background:linear-gradient(135deg,#f8fcfb 0%,#fff9f4 55%,#faf7fd 100%);box-shadow:0 4px 14px rgba(23,50,77,.06)}
     body.library-standard-header main.comparison-shell>.comparison-hero.library-sheet-heading>:not(h1):not(.comparison-hero__actions){display:none!important}
@@ -205,7 +224,9 @@
     + '<button class="library-context-nav__toggle" type="button" aria-expanded="false" aria-controls="library-context-routes">' + htmlEscape(copy.openNavigation) + '</button></div>'
     + '<div class="library-context-nav__routes" id="library-context-routes">'
     + routes.map(function(route, index) {
-      return '<a class="library-context-nav__route' + (index === 0 ? ' library-context-nav__route--library' : '') + '" href="' + htmlEscape(route[1]) + '">' + htmlEscape(route[0]) + '</a>';
+      const active = index === activeRouteIndex;
+      return '<a class="library-context-nav__route' + (active ? ' library-context-nav__route--active' : '') + '"'
+        + (active ? ' aria-current="page"' : '') + ' href="' + htmlEscape(route[1]) + '">' + htmlEscape(route[0]) + '</a>';
     }).join('')
     + '</div>';
 

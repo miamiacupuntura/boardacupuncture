@@ -1895,7 +1895,7 @@ echo $OUTPUT->header();
     </header>
 
     <?php if ($fromlibrary): ?>
-        <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Fórmulas' : 'Formulas'); ?>
+        <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Fórmulas' : 'Formulas', 'guides'); ?>
     <?php else: ?>
     <nav class="formula-study-guide__study-route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
         <a href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>

@@ -500,7 +500,7 @@ echo $OUTPUT->header();
         </nav>
     </header>
     <?php if ($fromlibrary): ?>
-        <?php echo block_myprogress_render_herbology_library_navigation($ises, $pagetitle); ?>
+        <?php echo block_myprogress_render_herbology_library_navigation($ises, $pagetitle, 'guides'); ?>
     <?php else: ?>
     <nav class="herb-formula-map__route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
         <a href="<?php echo $huburl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>

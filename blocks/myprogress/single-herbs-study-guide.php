@@ -1561,7 +1561,7 @@ ob_start();
     </header>
 
     <?php if ($fromlibrary): ?>
-        <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Hierbas individuales' : 'Single Herbs'); ?>
+        <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Hierbas individuales' : 'Single Herbs', 'guides'); ?>
     <?php else: ?>
     <nav class="single-herbs-guide__study-route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
         <a href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>
