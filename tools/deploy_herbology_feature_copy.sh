@@ -41,7 +41,9 @@ grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/blocks/menu/herbology-boa
 grep -Fq '.herb-board__feature-copy {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110636;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq 'class="herb-board__practice-route"' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '.herb-board__practice-route {' "$TEMP_DIR/blocks/menu/styles.css"
+grep -Fq '$plugin->version   = 2026110637;' "$TEMP_DIR/blocks/menu/version.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Recall flashcards</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -59,6 +61,7 @@ done
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'class="herb-board__practice-route"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 

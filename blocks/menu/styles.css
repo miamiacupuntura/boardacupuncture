@@ -831,6 +831,36 @@
     margin: 0 0 18px;
 }
 
+.herb-board__practice-route {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 0;
+    padding: 11px 14px;
+    border: 1px solid #d7e2e8;
+    border-radius: 9px;
+    background: #fff;
+    color: #64748b;
+    font-size: .78rem;
+    font-weight: 750;
+}
+
+.herb-board__practice-route a {
+    color: #185a9d;
+    text-decoration: none;
+}
+
+.herb-board__practice-route a:hover,
+.herb-board__practice-route a:focus {
+    color: #08756a;
+    text-decoration: underline;
+}
+
+.herb-board__practice-route [aria-current="page"] {
+    color: #17324d;
+}
+
 .herb-board__panel {
     margin-top: 20px;
     padding: 24px;

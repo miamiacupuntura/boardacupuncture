@@ -1360,9 +1360,6 @@ echo $OUTPUT->header();
                 : 'Build focused multiple-choice practice from the Board question pool and review your progress over time.'); ?></span>
         <?php if ($track === 'exams') { ?>
         <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de exámenes' : 'Exam navigation'; ?>">
-            <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>">
-                <?php echo $ises ? '← Práctica de Herbología' : '← Herbology Practice'; ?>
-            </a>
             <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                 href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>
@@ -1392,6 +1389,17 @@ echo $OUTPUT->header();
             </p>
         <?php } ?>
     </header>
+
+    <?php if ($track === 'exams') { ?>
+        <nav class="herb-board__practice-route" aria-label="<?php echo $ises
+            ? 'Ruta de navegación de exámenes' : 'Exam navigation path'; ?>">
+            <a href="<?php echo $singleherbsurl->out(false); ?>"><?php echo $ises
+                ? 'Práctica de Herbología' : 'Herbology Practice'; ?></a>
+            <span aria-hidden="true">›</span>
+            <span aria-current="page"><?php echo $ises
+                ? 'Exámenes de Herbología' : 'Herbology Exams'; ?></span>
+        </nav>
+    <?php } ?>
 
     <?php if ($track === 'herbs') { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-practice-title">
