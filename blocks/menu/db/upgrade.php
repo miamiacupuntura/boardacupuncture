@@ -80,5 +80,9 @@ function xmldb_block_menu_upgrade($oldversion, $block = null) {
         upgrade_block_savepoint(true, 2026110639, 'menu');
     }
 
+    if ($oldversion < 2026110640) {
+        upgrade_block_savepoint(true, 2026110640, 'menu');
+    }
+
     return true;
 }

@@ -104,7 +104,7 @@ php -l "$TEMP_DIR/moodle/blocks/myprogress/single-herbs-study-guide.php" >/dev/n
 php -l "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php" >/dev/null
 php -r '
 $xml = simplexml_load_file($argv[1]);
-if (!$xml || (string)$xml["VERSION"] !== "2026110639") {
+if (!$xml || (string)$xml["VERSION"] !== "2026110640") {
     throw new RuntimeException("Versión install.xml incorrecta.");
 }
 ' "$TEMP_DIR/moodle/blocks/menu/db/install.xml"
@@ -162,7 +162,8 @@ grep -Fq 'single-herb-practice-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-
 grep -Fq 'formula-question-bank-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Practice Questions' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Questions &amp; Flashcards' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '$plugin->version   = 2026110639;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110640;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq "Study by Yang Chapter's" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__feature-copy {' "$TEMP_DIR/moodle/blocks/menu/styles.css"

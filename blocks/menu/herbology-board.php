@@ -1440,7 +1440,9 @@ echo $OUTPUT->header();
                         : 'Study 249 questions with answers, explanations, and flashcards.'; ?></span>
                 </a>
             </div>
-            <h4 class="herb-board__subheading"><?php echo $ises ? 'Estudiar por capítulo' : 'Study by chapter'; ?></h4>
+            <h4 class="herb-board__subheading"><?php echo $ises
+                ? 'Estudiar por capítulos de Yang'
+                : "Study by Yang Chapter's"; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($herbcategories as $category) {
                     $categoryurl = new moodle_url($herbquestionbankpath, [
