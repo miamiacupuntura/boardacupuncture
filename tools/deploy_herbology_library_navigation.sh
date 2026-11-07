@@ -75,7 +75,11 @@ for relative in "${MOODLE_FILES[@]}"; do
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
 grep -Fq '$plugin->version   = 2026110655;' "$TEMP_DIR/moodle/blocks/menu/version.php"
-grep -Fq '.herb-board__hero > .herb-board__eyebrow' "$TEMP_DIR/moodle/blocks/menu/styles.css"
+grep -Fq '.herb-board__page-navigation' "$TEMP_DIR/moodle/blocks/menu/styles.css"
+if grep -Fq 'class="herb-board__hero"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
+    echo "ERROR: el encabezado grande de Herbology continúa en las hojas." >&2
+    exit 1
+fi
 grep -Fq "optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 if grep -Fq 'aria-current="page">Quiz</a>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
     echo "ERROR: el encabezado de Herbology Quiz todavía contiene el botón Quiz redundante." >&2
@@ -194,7 +198,11 @@ fi
 grep -Fq "set_heading(\$showlibrary && \$areaid === 'herbology' ? ''" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq "if (\$areaid !== 'herbology')" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
-grep -Fq '.herb-board__hero > .herb-board__eyebrow' "$MOODLE_ROOT/blocks/menu/styles.css"
+grep -Fq '.herb-board__page-navigation' "$MOODLE_ROOT/blocks/menu/styles.css"
+if grep -Fq 'class="herb-board__hero"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
+    echo "ERROR: el encabezado grande de Herbology continúa instalado." >&2
+    exit 1
+fi
 if grep -Fq 'aria-current="page">Quiz</a>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
     echo "ERROR: el botón Quiz redundante continúa instalado." >&2
     exit 1

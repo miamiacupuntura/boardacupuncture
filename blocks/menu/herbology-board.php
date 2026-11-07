@@ -1359,60 +1359,18 @@ $formulaquestionbankurl = new moodle_url($formulaquestionbankpath, $fromlibrary 
 echo $OUTPUT->header();
 ?>
 <main class="herb-board">
-    <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
-        ? '← Atrás' : '← Back'; ?></a>
-    <header class="herb-board__hero">
-        <p class="herb-board__eyebrow"><?php echo $ises ? 'HERBOLOGÍA CHINA · NIVEL BOARD' : 'CHINESE HERBOLOGY · BOARD LEVEL'; ?></p>
-        <h2><?php echo $track === 'exams'
-            ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
-            : (in_array($track, ['quiz', 'domains'], true)
-                ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
-                : ($ises ? 'Práctica de Herbología' : 'Herbology Practice')); ?></h2>
-        <span><?php echo $track === 'exams'
-            ? ($ises
-                ? 'Completa exámenes de 100 preguntas y revisa tus resultados anteriores.'
-                : 'Complete 100-question exams and review your previous results.')
-            : (in_array($track, ['quiz', 'domains'], true)
-                ? ($ises
-                    ? 'Elige respuestas, aplica razonamiento clínico y recibe feedback inmediato.'
-                    : 'Choose answers, apply clinical reasoning, and receive immediate feedback.')
-                : ($ises
-                    ? 'Estudia preguntas, respuestas, explicaciones y flashcards del banco de Herbología.'
-                    : 'Study questions, answers, explanations, and flashcards from the Herbology bank.')); ?></span>
-        <?php if ($track === 'exams') { ?>
-        <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de exámenes' : 'Exam navigation'; ?>">
-            <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
-                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-        </nav>
-        <?php } else if (in_array($track, ['quiz', 'domains'], true)) { ?>
-        <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de Quiz' : 'Quiz navigation'; ?>">
-            <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
-                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-        </nav>
-        <?php } else { ?>
-        <nav class="herb-board__tabs" aria-label="Herbology practice sections">
+    <nav class="herb-board__page-navigation" aria-label="<?php echo $ises ? 'Navegación de Herbología' : 'Herbology navigation'; ?>">
+        <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
+            ? '← Atrás' : '← Back'; ?></a>
+        <?php if (!in_array($track, ['exams', 'quiz', 'domains'], true)) { ?>
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
-            <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
-                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-        </nav>
         <?php } ?>
-        <?php if (in_array($track, ['herbs', 'formulas'], true)) { ?>
-            <p class="herb-board__feature-copy">
-            <?php if ($track === 'herbs') { ?>
-                <?php echo $ises
-                    ? 'Estudia con explicaciones, flashcards de memoria, gráficos comparativos y progreso guardado en este navegador.'
-                    : 'Study with explanations, recall flashcards, comparison charts, and progress saved in this browser.'; ?>
-            <?php } else { ?>
-                <?php echo $ises
-                    ? 'Estudia fórmulas mediante preguntas con respuestas visibles, explicaciones y flashcards.'
-                    : 'Study formulas through questions with visible answers, explanations, and flashcards.'; ?>
-            <?php } ?>
-            </p>
-        <?php } ?>
-    </header>
+        <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+            href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+    </nav>
 
     <?php if ($track === 'exams') { ?>
         <nav class="herb-board__practice-route" aria-label="<?php echo $ises
