@@ -16,6 +16,7 @@
     correct: spanish ? 'Correcto' : 'Correct',
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
+    backToQuestion: position => spanish ? `← Volver a la pregunta ${position}` : `← Back to question ${position}`,
     showEnglish: 'Ver inglés original',
     showSpanish: 'Ver traducción al español',
     allAvailable: count => spanish ? `Todas (${count})` : `All (${count})`,
@@ -81,7 +82,11 @@
     language: document.querySelector('[data-practice-language]'),
     questionTotals: [...document.querySelectorAll('[data-practice-question-total]')],
     formulaTotals: [...document.querySelectorAll('[data-practice-formula-total]')],
-    categoryTotals: [...document.querySelectorAll('[data-practice-category-total]')]
+    categoryTotals: [...document.querySelectorAll('[data-practice-category-total]')],
+    sourceViewer: document.querySelector('[data-practice-source-viewer]'),
+    sourceFrame: document.querySelector('[data-practice-source-frame]'),
+    sourceTitle: document.querySelector('[data-practice-source-title]'),
+    sourceReturn: document.querySelector('[data-practice-source-return]')
   };
   const state = {
     data: null,
@@ -96,6 +101,7 @@
     answers: [],
     answeredBySource: new Map()
   };
+  let activeSourceLink = null;
 
   function readHistory() {
     try {
@@ -315,10 +321,34 @@
     });
   }
 
-  function associationLink(formula) {
+  function closeSourceViewer() {
+    if (!elements.sourceViewer || elements.sourceViewer.hidden) return;
+    const questionCard = activeSourceLink?.closest('.formula-practice-question');
+    elements.sourceViewer.hidden = true;
+    document.body.classList.remove('formula-practice-source-open');
+    if (elements.sourceFrame) elements.sourceFrame.src = 'about:blank';
+    questionCard?.scrollIntoView({ block: 'center' });
+    activeSourceLink?.focus();
+    activeSourceLink = null;
+  }
+
+  function openSourceViewer(event, link, formula, position) {
+    if (!elements.sourceViewer || !elements.sourceFrame || !elements.sourceTitle || !elements.sourceReturn) return;
+    event.preventDefault();
+    activeSourceLink = link;
+    elements.sourceTitle.textContent = formula.name;
+    elements.sourceReturn.textContent = text.backToQuestion(position);
+    elements.sourceFrame.src = link.href;
+    elements.sourceViewer.hidden = false;
+    document.body.classList.add('formula-practice-source-open');
+    elements.sourceReturn.focus();
+  }
+
+  function associationLink(formula, position) {
     const link = document.createElement('a');
     link.href = formulaProfileUrl(formula);
     link.textContent = formula.name;
+    link.addEventListener('click', event => openSourceViewer(event, link, formula, position));
     return link;
   }
 
@@ -409,7 +439,7 @@
       associations.append(label);
       question.formulaNumbers.forEach(number => {
         const formula = state.formulaByNumber.get(number);
-        if (formula) associations.append(associationLink(formula));
+        if (formula) associations.append(associationLink(formula, index + 1));
       });
     } else {
       label.textContent = text.general;
@@ -569,6 +599,14 @@
     try { localStorage.removeItem(storageKey); } catch (_) { /* Optional persistence. */ }
     renderHistory();
   });
+  if (elements.sourceViewer) {
+    elements.sourceViewer.querySelectorAll('[data-practice-source-close]').forEach(control => {
+      control.addEventListener('click', closeSourceViewer);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !elements.sourceViewer.hidden) closeSourceViewer();
+    });
+  }
 
   const bankRequest = fetch('formula-practice-data.json', { credentials: 'same-origin' })
     .then(response => {

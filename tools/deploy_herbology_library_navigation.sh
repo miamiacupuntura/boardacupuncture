@@ -68,6 +68,9 @@ STATIC_FILES=(
     "single-herb-practice.html"
     "single-herb-practice-es.html"
     "single-herb-practice.js"
+    "formula-practice.html"
+    "formula-practice-es.html"
+    "formula-practice.js"
     "herb-comparison-bank-data.json"
 )
 
@@ -171,6 +174,12 @@ grep -Fq 'guideNumbersByYangChapter' "$TEMP_DIR/static/single-herb-practice.js"
 grep -Fq "url.searchParams.set('category'" "$TEMP_DIR/static/single-herb-practice.js"
 grep -Fq 'data.herbs || []' "$TEMP_DIR/static/single-herb-practice.js"
 grep -Fq 'openSourceViewer' "$TEMP_DIR/static/single-herb-practice.js"
+grep -Fq 'formula-practice.js?v=20261107-4' "$TEMP_DIR/static/formula-practice.html"
+grep -Fq 'formula-practice.js?v=20261107-4' "$TEMP_DIR/static/formula-practice-es.html"
+grep -Fq 'data-practice-source-viewer' "$TEMP_DIR/static/formula-practice.html"
+grep -Fq 'data-practice-source-return' "$TEMP_DIR/static/formula-practice-es.html"
+grep -Fq 'backToQuestion' "$TEMP_DIR/static/formula-practice.js"
+grep -Fq 'openSourceViewer' "$TEMP_DIR/static/formula-practice.js"
 grep -Fq '.formula-practice-source-viewer' "$TEMP_DIR/static/comparisons.css"
 if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
         || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
@@ -252,6 +261,12 @@ grep -Fq 'data-herb-size-max' "$STUDY_NOTE_DIR/single-herb-practice-es.html"
 grep -Fq 'guideNumbersByYangChapter' "$STUDY_NOTE_DIR/single-herb-practice.js"
 grep -Fq "url.searchParams.set('category'" "$STUDY_NOTE_DIR/single-herb-practice.js"
 grep -Fq 'openSourceViewer' "$STUDY_NOTE_DIR/single-herb-practice.js"
+grep -Fq 'formula-practice.js?v=20261107-4' "$STUDY_NOTE_DIR/formula-practice.html"
+grep -Fq 'formula-practice.js?v=20261107-4' "$STUDY_NOTE_DIR/formula-practice-es.html"
+grep -Fq 'data-practice-source-viewer' "$STUDY_NOTE_DIR/formula-practice.html"
+grep -Fq 'data-practice-source-return' "$STUDY_NOTE_DIR/formula-practice-es.html"
+grep -Fq 'backToQuestion' "$STUDY_NOTE_DIR/formula-practice.js"
+grep -Fq 'openSourceViewer' "$STUDY_NOTE_DIR/formula-practice.js"
 grep -Fq '.formula-practice-source-viewer' "$STUDY_NOTE_DIR/comparisons.css"
 if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
         || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
