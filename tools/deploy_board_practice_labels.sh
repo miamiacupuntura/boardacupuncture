@@ -121,6 +121,14 @@ grep -Fq 'TABLE NAME="block_menu_exam_attempts"' "$TEMP_DIR/blocks/menu/db/insta
 grep -Fq "upgrade_block_savepoint(true, 2026110629, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq "upgrade_block_savepoint(true, 2026110630, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq "upgrade_block_savepoint(true, 2026110631, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
+grep -Fq "upgrade_block_savepoint(true, 2026110632, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
+grep -Fq 'Herb Study Library' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Comparison Question Bank' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Formula Study Library' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'Formula Question Practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'single-herbs-study-guide.php' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'formula-navigator-es.html' "$TEMP_DIR/blocks/menu/herbology-board.php"
+! grep -Fq 'focus=herb' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-next-pending-word' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'reviewingPending' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -258,7 +266,7 @@ grep -Fq "\$normalizeherbname((string)(\$herbcard['latin'] ?? ''))" "$TEMP_DIR/b
 grep -Fq 'Board nomenclature' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Nomenclatura Board' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__exam-nomenclature' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110631;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110632;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq "'v' => '20261106-9'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 
 for relative in "${FILES[@]}"; do
