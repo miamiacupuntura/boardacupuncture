@@ -1288,16 +1288,18 @@ if ($track === 'herbs') {
     }
 }
 
-$singleherbstudyurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $languagecontext);
-$herbcomparisonpath = '/study-guide/comparisons/'
+$singleherbpracticepath = '/study-guide/comparisons/'
+    . ($ises ? 'single-herb-practice-es.html' : 'single-herb-practice.html');
+$singleherbpracticeurl = new moodle_url($singleherbpracticepath);
+$herbquestionbankpath = '/study-guide/comparisons/'
     . ($ises ? 'herb-comparison-bank-es.html' : 'herb-comparison-bank.html');
-$herbcomparisonurl = new moodle_url($herbcomparisonpath);
-$formulanavigatorpath = '/study-guide/comparisons/'
-    . ($ises ? 'formula-navigator-es.html' : 'formula-navigator.html');
-$formulanavigatorurl = new moodle_url($formulanavigatorpath);
+$herbquestionbankurl = new moodle_url($herbquestionbankpath);
 $formulapracticepath = '/study-guide/comparisons/'
     . ($ises ? 'formula-practice-es.html' : 'formula-practice.html');
 $formulapracticeurl = new moodle_url($formulapracticepath);
+$formulaquestionbankpath = '/study-guide/comparisons/'
+    . ($ises ? 'formula-question-bank-es.html' : 'formula-question-bank.html');
+$formulaquestionbankurl = new moodle_url($formulaquestionbankpath);
 
 echo $OUTPUT->header();
 ?>
@@ -1357,11 +1359,11 @@ echo $OUTPUT->header();
             <div class="herb-board__panel-heading">
                 <div>
                     <h3 id="herb-board-practice-title"><?php echo $ises
-                        ? 'Elige un recurso de hierbas'
-                        : 'Choose a Single Herbs resource'; ?></h3>
+                        ? 'Elige cómo practicar hierbas individuales'
+                        : 'Choose how to practice Single Herbs'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Estudia las tarjetas individuales o practica con el banco de comparaciones.'
-                        : 'Study the individual herb cards or practice with the comparison question bank.'; ?></p>
+                        ? 'Responde preguntas con feedback o estudia las preguntas con sus respuestas y flashcards.'
+                        : 'Answer questions with feedback or study the questions with answers and flashcards.'; ?></p>
                 </div>
             </div>
             <div class="herb-board__summary herb-board__summary--panel" aria-label="Single Herbs bank totals">
@@ -1370,23 +1372,23 @@ echo $OUTPUT->header();
                 <span><strong><?php echo $herbtotals['charts']; ?></strong> comparison charts</span>
             </div>
             <div class="herb-board__launches">
-                <a class="herb-board__launch" href="<?php echo $singleherbstudyurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Biblioteca de hierbas' : 'Herb Study Library'; ?></strong>
+                <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
+                    <strong><?php echo $ises ? 'Responder preguntas' : 'Practice Questions'; ?></strong>
                     <span><?php echo $ises
-                        ? 'Busca y abre las tarjetas de estudio de cada hierba individual.'
-                        : 'Search and open the study cards for each individual herb.'; ?></span>
+                        ? 'Crea sesiones de 10, 25, 50 o 100 preguntas de selección múltiple.'
+                        : 'Build 10, 25, 50, or 100-question multiple-choice sessions.'; ?></span>
                 </a>
-                <a class="herb-board__launch" href="<?php echo $herbcomparisonurl->out(false); ?>?chapter=0&amp;mode=questions">
-                    <strong><?php echo $ises ? 'Banco de comparaciones' : 'Comparison Question Bank'; ?></strong>
+                <a class="herb-board__launch" href="<?php echo $herbquestionbankurl->out(false); ?>?chapter=0&amp;mode=questions">
+                    <strong><?php echo $ises ? 'Preguntas y flashcards' : 'Questions &amp; Flashcards'; ?></strong>
                     <span><?php echo $ises
-                        ? 'Practica las 249 comparaciones con explicaciones, flashcards y gráficas.'
-                        : 'Practice all 249 comparisons with explanations, flashcards and charts.'; ?></span>
+                        ? 'Estudia 249 preguntas con sus respuestas, explicaciones y flashcards.'
+                        : 'Study 249 questions with answers, explanations, and flashcards.'; ?></span>
                 </a>
             </div>
-            <h4 class="herb-board__subheading"><?php echo $ises ? 'Práctica por capítulo' : 'Practice by chapter'; ?></h4>
+            <h4 class="herb-board__subheading"><?php echo $ises ? 'Estudiar por capítulo' : 'Study by chapter'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($herbcategories as $category) {
-                    $categoryurl = new moodle_url($herbcomparisonpath, [
+                    $categoryurl = new moodle_url($herbquestionbankpath, [
                         'chapter' => $category['number'],
                         'mode' => 'questions',
                     ]);
@@ -1638,11 +1640,11 @@ echo $OUTPUT->header();
             <div class="herb-board__panel-heading">
                 <div>
                     <h3 id="herb-board-formulas-title"><?php echo $ises
-                        ? 'Elige un recurso de fórmulas'
-                        : 'Choose a Formula resource'; ?></h3>
+                        ? 'Elige cómo practicar fórmulas'
+                        : 'Choose how to practice Formulas'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Estudia los perfiles de las fórmulas o crea una sesión de preguntas.'
-                        : 'Study the formula profiles or build a question-practice session.'; ?></p>
+                        ? 'Responde preguntas con feedback o estudia las preguntas con sus respuestas y flashcards.'
+                        : 'Answer questions with feedback or study the questions with answers and flashcards.'; ?></p>
                 </div>
             </div>
             <div class="herb-board__summary herb-board__summary--panel" aria-label="Formula bank totals">
@@ -1651,20 +1653,20 @@ echo $OUTPUT->header();
                 <span><strong><?php echo $formulatotals['categories']; ?></strong> clinical categories</span>
             </div>
             <div class="herb-board__launches">
-                <a class="herb-board__launch" href="<?php echo $formulanavigatorurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Biblioteca de fórmulas' : 'Formula Study Library'; ?></strong>
-                    <span><?php echo $ises
-                        ? 'Busca y estudia los perfiles de las 63 fórmulas principales.'
-                        : 'Search and study the profiles of all 63 core formulas.'; ?></span>
-                </a>
                 <a class="herb-board__launch" href="<?php echo $formulapracticeurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Práctica de preguntas de fórmulas' : 'Formula Question Practice'; ?></strong>
+                    <strong><?php echo $ises ? 'Responder preguntas' : 'Practice Questions'; ?></strong>
                     <span><?php echo $ises
                         ? 'Configura una sesión de 10, 25, 50 o 100 preguntas.'
-                        : 'Configure a 10, 25, 50 or 100-question session.'; ?></span>
+                        : 'Configure a 10, 25, 50, or 100-question session.'; ?></span>
+                </a>
+                <a class="herb-board__launch" href="<?php echo $formulaquestionbankurl->out(false); ?>">
+                    <strong><?php echo $ises ? 'Preguntas y flashcards' : 'Questions &amp; Flashcards'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Repasa las preguntas con la respuesta correcta y el feedback siempre visibles.'
+                        : 'Review questions with the correct answer and feedback always visible.'; ?></span>
                 </a>
             </div>
-            <h4 class="herb-board__subheading"><?php echo $ises ? 'Práctica por categoría' : 'Practice by category'; ?></h4>
+            <h4 class="herb-board__subheading"><?php echo $ises ? 'Responder por categoría' : 'Practice by category'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($formulacategories as $category) {
                     $categoryurl = new moodle_url($formulapracticepath, [
