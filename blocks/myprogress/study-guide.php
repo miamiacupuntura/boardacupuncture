@@ -607,7 +607,7 @@ echo $OUTPUT->header();
 .subject-study-library__group--quiz .subject-study-library__button{border-color:#c6b5ef;background:#f8f5ff}
 .subject-study-library__group--comparisons .subject-study-library__button{border-color:#f4b27e;background:#fffaf6}
 .subject-study-library__tips{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 18px;border:1px solid #efc7a8;border-left:5px solid #f37424;border-radius:11px;background:#fff8f2;text-align:left}.subject-study-library__tips strong,.subject-study-library__tips span{display:block}.subject-study-library__tips span{margin-top:3px;color:#755844;font-size:.9rem}.subject-study-library__tips a{display:inline-flex;min-height:44px;flex:0 0 auto;align-items:center;justify-content:center;padding:10px 15px;border-radius:8px;background:#c9570c;color:#fff!important;font-weight:800;text-decoration:none!important}.subject-study-library__tips a:hover,.subject-study-library__tips a:focus{background:#a74408}
-.subject-study-library__footer{margin-top:6px;padding-top:8px;border-top:1px solid #d8e2e7}.subject-study-library__footer .subject-study-library__tips{margin-bottom:0}.subject-study-library__footer .subject-study-guide__top{margin-bottom:20px}
+.subject-study-library__top{margin-bottom:0}.subject-study-library__footer{margin-top:6px;padding-top:8px;border-top:1px solid #d8e2e7}.subject-study-library__footer .subject-study-library__tips{margin-bottom:0}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
 .subject-study-guide__construction-mark{margin-bottom:15px;font-size:48px}
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
@@ -646,6 +646,21 @@ echo $OUTPUT->header();
 
     <?php if ($showlibrary): ?>
         <section class="subject-study-library" aria-labelledby="study-library-title">
+            <?php if ($areaid === 'herbology'): ?>
+                <header class="subject-study-guide__top subject-study-library__top">
+                    <div>
+                        <p class="subject-study-guide__eyebrow"><?php echo s($tr('Study Library')); ?></p>
+                        <h2><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h2>
+                        <p class="subject-study-guide__intro"><?php echo s($ises
+                            ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.'
+                            : 'Open every Board Level resource from one quick-access library.'); ?></p>
+                    </div>
+                    <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($ises ? 'Controles de la biblioteca' : 'Library controls'); ?>">
+                        <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                        <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
+                    </nav>
+                </header>
+            <?php endif; ?>
             <header class="subject-study-library__intro">
                 <p class="subject-study-guide__eyebrow"><?php echo s($ises ? 'Acceso rápido' : 'Quick access'); ?></p>
                 <h3 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h3>
@@ -744,19 +759,6 @@ echo $OUTPUT->header();
             <?php endforeach; ?>
             <?php if ($areaid === 'herbology'): ?>
                 <footer class="subject-study-library__footer" data-library-footer>
-                    <header class="subject-study-guide__top">
-                        <div>
-                            <p class="subject-study-guide__eyebrow"><?php echo s($tr('Study Library')); ?></p>
-                            <h2><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h2>
-                            <p class="subject-study-guide__intro"><?php echo s($ises
-                                ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.'
-                                : 'Open every Board Level resource from one quick-access library.'); ?></p>
-                        </div>
-                        <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($ises ? 'Controles de la biblioteca' : 'Library controls'); ?>">
-                            <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                            <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
-                        </nav>
-                    </header>
                     <aside class="subject-study-library__tips" aria-label="<?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips and Tricks'); ?>">
                         <div>
                             <strong><?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips & Tricks'); ?></strong>
