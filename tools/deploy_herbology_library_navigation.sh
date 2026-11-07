@@ -102,6 +102,8 @@ grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/menu/herbology-bo
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'id="quiz-herb-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq "'category' => \$category['number']" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq "if (\$track === 'herbs' || \$track === 'quiz')" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq "if (\$track === 'herbs')" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 herb_category_line="$(grep -n -m1 'id="quiz-herb-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" | cut -d: -f1)"
 formula_category_line="$(grep -n -m1 'id="quiz-formula-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" | cut -d: -f1)"
 if (( herb_category_line >= formula_category_line )); then
@@ -268,6 +270,8 @@ grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.ph
 grep -Fq '.herb-board__page-navigation' "$MOODLE_ROOT/blocks/menu/styles.css"
 grep -Fq 'id="quiz-herb-categories"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq "'category' => \$category['number']" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq "if (\$track === 'herbs' || \$track === 'quiz')" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq "if (\$track === 'herbs')" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 if grep -Fq "<strong><?php echo \$category['questions']; ?></strong>" "$MOODLE_ROOT/blocks/menu/herbology-board.php" \
         || grep -Fq "<strong><?php echo \$category['count']; ?></strong>" "$MOODLE_ROOT/blocks/menu/herbology-board.php" \
         || grep -Fq '<strong><?php echo $formulamodificationcount; ?></strong>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then

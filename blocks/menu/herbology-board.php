@@ -1206,7 +1206,9 @@ if ($track === 'herbs' || $track === 'quiz') {
             }
         }
     }
+}
 
+if ($track === 'herbs') {
     $sections = $DB->get_records_select(
         'course_sections',
         'course = :courseid AND section BETWEEN :firstsection AND :lastsection',
