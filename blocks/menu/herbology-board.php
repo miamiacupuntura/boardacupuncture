@@ -74,6 +74,7 @@ $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' =>
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
+$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
 if ($track === 'exams' && !$mixdomains) {
@@ -1393,7 +1394,7 @@ echo $OUTPUT->header();
     <?php if ($track === 'exams') { ?>
         <nav class="herb-board__practice-route" aria-label="<?php echo $ises
             ? 'Ruta de navegación de exámenes' : 'Exam navigation path'; ?>">
-            <a href="<?php echo $examsurl->out(false); ?>"><?php echo $ises
+            <a href="<?php echo ($mixdomains ? $examsurl : $examsdashboardurl)->out(false); ?>"><?php echo $ises
                 ? 'Exámenes' : 'Exams'; ?></a>
             <span aria-hidden="true">›</span>
             <span aria-current="page"><?php echo $ises

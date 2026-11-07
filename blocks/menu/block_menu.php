@@ -403,7 +403,8 @@ class block_menu extends block_base {
                     . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
                 $boardlevelactions = $mockquestionsaction . $examsaction . $simulationaction . $studyguideaction;
 
-                $boardlevelcards .= '<article class="board-hub__card board-hub__card--board-level board-hub__card--'
+                $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
+                    . '" class="board-hub__card board-hub__card--board-level board-hub__card--'
                     . s($subject['area']) . '">'
                     . '<h3>' . s($subject['name'] . ' Board Level') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'

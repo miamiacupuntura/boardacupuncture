@@ -21,6 +21,7 @@ if [[ ! -f "$MOODLE_ROOT/config.php" ]]; then
 fi
 
 FILES=(
+    "blocks/menu/block_menu.php"
     "blocks/menu/herbology-board.php"
     "blocks/menu/styles.css"
     "blocks/menu/version.php"
@@ -34,6 +35,7 @@ for relative in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/$relative" -o "$TEMP_DIR/$relative"
 done
 
+php -l "$TEMP_DIR/blocks/menu/block_menu.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/herbology-board.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/db/upgrade.php" >/dev/null
@@ -43,8 +45,9 @@ grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-boar
 grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'class="herb-board__practice-route"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__practice-route {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110638;' "$TEMP_DIR/blocks/menu/version.php"
-grep -Fq "href=\"<?php echo \$examsurl->out(false); ?>\"" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '$plugin->version   = 2026110639;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq "\$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'id="board-level-' "$TEMP_DIR/blocks/menu/block_menu.php"
 ! grep -Fq "href=\"<?php echo \$singleherbsurl->out(false); ?>\"><?php echo \$ises" "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Recall flashcards</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -60,11 +63,13 @@ for relative in "${FILES[@]}"; do
         "$TEMP_DIR/$relative" "$target"
 done
 
+php -l "$MOODLE_ROOT/blocks/menu/block_menu.php" >/dev/null
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__practice-route"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
-grep -Fq "href=\"<?php echo \$examsurl->out(false); ?>\"" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq "\$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'id="board-level-' "$MOODLE_ROOT/blocks/menu/block_menu.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
