@@ -45,8 +45,9 @@ grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-boar
 grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'class="herb-board__practice-route"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__practice-route {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110641;' "$TEMP_DIR/blocks/menu/version.php"
-grep -Fq '<strong>Quiz</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '$plugin->version   = 2026110642;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq 'Choose a Quiz type' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'board-hub__action--board-quiz' "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "Study by Yang Chapter's" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');" "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -74,7 +75,8 @@ grep -Fq 'class="herb-board__practice-route"' "$MOODLE_ROOT/blocks/menu/herbolog
 grep -Fq "\$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'id="board-level-' "$MOODLE_ROOT/blocks/menu/block_menu.php"
 grep -Fq "Study by Yang Chapter's" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
-grep -Fq '<strong>Quiz</strong>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'Choose a Quiz type' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'board-hub__action--board-quiz' "$MOODLE_ROOT/blocks/menu/block_menu.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
@@ -94,6 +96,6 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "TEXTO EXPLICATIVO DE HERBOLOGY PRACTICE INSTALADO"
+echo "BOTÓN Y PANEL DE HERBOLOGY QUIZ INSTALADOS"
 echo "Respaldo: $BACKUP_DIR"
-echo "Prueba: https://www.acupuncturetests.com/blocks/menu/herbology-board.php?track=exams&copy=$REVISION"
+echo "Prueba: https://www.acupuncturetests.com/blocks/menu/herbology-board.php?track=quiz&revision=$REVISION"

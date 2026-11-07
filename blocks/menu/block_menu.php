@@ -384,10 +384,15 @@ class block_menu extends block_base {
 
                 if ($subject['area'] === 'herbology') {
                     $mockquestionsurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                        'track' => 'formulas',
+                        'track' => 'herbs',
                     ]);
                     $mockquestionsaction = '<a class="board-hub__action board-hub__action--board-mock" href="'
                         . $mockquestionsurl->out(false) . '">' . s($boardpracticelabels[$subject['area']]) . '</a>';
+                    $quizurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'quiz',
+                    ]);
+                    $quizaction = '<a class="board-hub__action board-hub__action--board-quiz" href="'
+                        . $quizurl->out(false) . '">Quiz</a>';
                     $examsurl = new moodle_url('/blocks/menu/herbology-board.php', [
                         'track' => 'exams',
                     ]);
@@ -397,11 +402,13 @@ class block_menu extends block_base {
                     $mockquestionsaction = '<span class="board-hub__action board-hub__action--pending '
                         . 'board-hub__action--board-mock" aria-disabled="true">'
                         . s($boardpracticelabels[$subject['area']]) . '</span>';
+                    $quizaction = '';
                     $examsaction = '';
                 }
                 $simulationaction = '<span class="board-hub__action board-hub__action--pending '
                     . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
-                $boardlevelactions = $mockquestionsaction . $examsaction . $simulationaction . $studyguideaction;
+                $boardlevelactions = $mockquestionsaction . $quizaction . $examsaction
+                    . $simulationaction . $studyguideaction;
 
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'

@@ -8,7 +8,7 @@ require_login();
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['herbs', 'formulas', 'domains', 'exams'], true)) {
+if (!in_array($track, ['herbs', 'formulas', 'quiz', 'domains', 'exams'], true)) {
     $track = 'herbs';
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
@@ -72,7 +72,7 @@ $dashboardurl = new moodle_url('/my/');
 $languagecontext = $ises ? ['lang' => 'es'] : [];
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
-$domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
+$quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
 $examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
@@ -306,7 +306,7 @@ foreach ($domainblueprint as &$domain) {
 }
 unset($domain);
 if ($track === 'domains' && $domainkey !== '' && $selecteddomain === null) {
-    redirect($domainsurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+    redirect($quizurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
 }
 $domainperpage = 25;
 $selecteddomainpagequestions = [];
@@ -753,7 +753,9 @@ $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
 $pagetitle = $track === 'exams'
     ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
-    : ($ises ? 'Práctica de Herbología' : 'Herbology Practice');
+    : (in_array($track, ['quiz', 'domains'], true)
+        ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
+        : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
 
@@ -1351,16 +1353,28 @@ echo $OUTPUT->header();
         <p class="herb-board__eyebrow"><?php echo $ises ? 'HERBOLOGÍA CHINA · NIVEL BOARD' : 'CHINESE HERBOLOGY · BOARD LEVEL'; ?></p>
         <h2><?php echo $track === 'exams'
             ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
-            : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'); ?></h2>
+            : (in_array($track, ['quiz', 'domains'], true)
+                ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
+                : ($ises ? 'Práctica de Herbología' : 'Herbology Practice')); ?></h2>
         <span><?php echo $track === 'exams'
             ? ($ises
                 ? 'Completa exámenes de 100 preguntas y revisa tus resultados anteriores.'
                 : 'Complete 100-question exams and review your previous results.')
-            : ($ises
-                ? 'Practica preguntas de selección múltiple del banco del Board y revisa tu progreso.'
-                : 'Build focused multiple-choice practice from the Board question pool and review your progress over time.'); ?></span>
+            : (in_array($track, ['quiz', 'domains'], true)
+                ? ($ises
+                    ? 'Elige respuestas, aplica razonamiento clínico y recibe feedback inmediato.'
+                    : 'Choose answers, apply clinical reasoning, and receive immediate feedback.')
+                : ($ises
+                    ? 'Estudia preguntas, respuestas, explicaciones y flashcards del banco de Herbología.'
+                    : 'Study questions, answers, explanations, and flashcards from the Herbology bank.')); ?></span>
         <?php if ($track === 'exams') { ?>
         <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de exámenes' : 'Exam navigation'; ?>">
+            <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+        </nav>
+        <?php } else if (in_array($track, ['quiz', 'domains'], true)) { ?>
+        <nav class="herb-board__tabs" aria-label="<?php echo $ises ? 'Navegación de Quiz' : 'Quiz navigation'; ?>">
+            <a class="herb-board__tab" href="<?php echo $quizurl->out(false); ?>" aria-current="page">Quiz</a>
             <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                 href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>
@@ -1370,13 +1384,11 @@ echo $OUTPUT->header();
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
-            <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
-                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Dominios' : 'Domains'; ?></a>
             <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                 href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </nav>
         <?php } ?>
-        <?php if (!in_array($track, ['domains', 'exams'], true)) { ?>
+        <?php if (in_array($track, ['herbs', 'formulas'], true)) { ?>
             <p class="herb-board__feature-copy">
             <?php if ($track === 'herbs') { ?>
                 <?php echo $ises
@@ -1384,8 +1396,8 @@ echo $OUTPUT->header();
                     : 'Study with explanations, recall flashcards, comparison charts, and progress saved in this browser.'; ?>
             <?php } else { ?>
                 <?php echo $ises
-                    ? 'Completa Quizzes de selección múltiple con feedback tipo mock, sesiones flexibles e historial de exámenes.'
-                    : 'Complete multiple-choice Quizzes with mock-style feedback, flexible sessions, and exam history.'; ?>
+                    ? 'Estudia fórmulas mediante preguntas con respuestas visibles, explicaciones y flashcards.'
+                    : 'Study formulas through questions with visible answers, explanations, and flashcards.'; ?>
             <?php } ?>
             </p>
         <?php } ?>
@@ -1412,11 +1424,11 @@ echo $OUTPUT->header();
             <div class="herb-board__panel-heading">
                 <div>
                     <h3 id="herb-board-practice-title"><?php echo $ises
-                        ? 'Elige cómo estudiar hierbas individuales'
-                        : 'Choose how to study Single Herbs'; ?></h3>
+                        ? 'Estudia hierbas individuales'
+                        : 'Study Single Herbs'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Completa un Quiz razonado o estudia preguntas con sus respuestas y flashcards.'
-                        : 'Complete a reasoning Quiz or study questions with answers and flashcards.'; ?></p>
+                        ? 'Lee preguntas con sus respuestas y explicaciones, o utiliza flashcards de memoria.'
+                        : 'Read questions with answers and explanations, or use recall flashcards.'; ?></p>
                 </div>
             </div>
             <p class="herb-board__feature-copy herb-board__feature-copy--panel">
@@ -1426,13 +1438,7 @@ echo $OUTPUT->header();
                     : 'This bank includes ' . $herbtotals['questions'] . ' verified questions across '
                         . $herbtotals['chapters'] . ' study chapters, with ' . $herbtotals['charts'] . ' comparison charts.'; ?>
             </p>
-            <div class="herb-board__launches">
-                <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
-                    <strong>Quiz</strong>
-                    <span><?php echo $ises
-                        ? 'Crea sesiones de 10, 25, 50 o 100 preguntas de selección múltiple.'
-                        : 'Build 10, 25, 50, or 100-question multiple-choice sessions.'; ?></span>
-                </a>
+            <div class="herb-board__launches herb-board__launches--single">
                 <a class="herb-board__launch" href="<?php echo $herbquestionbankurl->out(false); ?>?chapter=0&amp;mode=questions">
                     <strong><?php echo $ises
                         ? 'Preguntas de estudio y flashcards'
@@ -1694,43 +1700,40 @@ echo $OUTPUT->header();
                     describe pattern-based materia medica and do not constitute diagnosis, prescribing or emergency care.</p>
             </section>
         <?php } ?>
-    <?php } else if ($track === 'formulas') { ?>
-        <section class="herb-board__panel" aria-labelledby="herb-board-formulas-title">
+    <?php } else if ($track === 'quiz') { ?>
+        <section class="herb-board__panel" aria-labelledby="herb-board-quiz-title">
             <div class="herb-board__panel-heading">
                 <div>
-                    <h3 id="herb-board-formulas-title"><?php echo $ises
-                        ? 'Elige cómo estudiar fórmulas'
-                        : 'Choose how to study Formulas'; ?></h3>
+                    <h3 id="herb-board-quiz-title"><?php echo $ises
+                        ? 'Elige un tipo de Quiz'
+                        : 'Choose a Quiz type'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Completa un Quiz razonado o estudia preguntas con sus respuestas y flashcards.'
-                        : 'Complete a reasoning Quiz or study questions with answers and flashcards.'; ?></p>
+                        ? 'Selecciona la respuesta correcta y recibe feedback inmediato después de razonar cada pregunta.'
+                        : 'Select the correct answer and receive immediate feedback after reasoning through each question.'; ?></p>
                 </div>
             </div>
-            <div class="herb-board__summary herb-board__summary--panel" aria-label="Formula bank totals">
-                <span><strong><?php echo $formulatotals['questions']; ?></strong> <?php echo $ises
-                    ? 'preguntas verificadas' : 'verified questions'; ?></span>
-                <span><strong><?php echo $formulatotals['formulas']; ?></strong> <?php echo $ises
-                    ? 'fórmulas con Quiz' : 'formulas with Quiz questions'; ?></span>
-                <span><strong><?php echo $formulatotals['categories']; ?></strong> <?php echo $ises
-                    ? 'categorías oficiales' : 'official categories'; ?></span>
-            </div>
-            <div class="herb-board__launches">
+            <div class="herb-board__launches herb-board__launches--quiz">
+                <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
+                    <strong><?php echo $ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Crea un Quiz de 10, 25, 50 o 100 preguntas.'
+                        : 'Build a 10, 25, 50, or 100-question Quiz.'; ?></span>
+                </a>
                 <a class="herb-board__launch" href="<?php echo $formulapracticeurl->out(false); ?>">
-                    <strong>Quiz</strong>
+                    <strong><?php echo $ises ? 'Quiz de fórmulas' : 'Formula Quiz'; ?></strong>
                     <span><?php echo $ises
-                        ? 'Configura una sesión de 10, 25, 50 o 100 preguntas.'
-                        : 'Configure a 10, 25, 50, or 100-question session.'; ?></span>
+                        ? 'Configura el Quiz por banco completo, fórmula o categoría.'
+                        : 'Configure the Quiz by full bank, formula, or category.'; ?></span>
                 </a>
-                <a class="herb-board__launch" href="<?php echo $formulaquestionbankurl->out(false); ?>">
-                    <strong><?php echo $ises
-                        ? 'Preguntas de estudio y flashcards'
-                        : 'Study Questions &amp; Flashcards'; ?></strong>
+                <a class="herb-board__launch" href="<?php echo $quizurl->out(false); ?>#quiz-domains">
+                    <strong><?php echo $ises ? 'Quiz por dominio' : 'Quiz by Domain'; ?></strong>
                     <span><?php echo $ises
-                        ? 'Repasa las preguntas con la respuesta correcta y el feedback siempre visibles.'
-                        : 'Review questions with the correct answer and feedback always visible.'; ?></span>
+                        ? 'Trabaja uno de los seis dominios de Herbología.'
+                        : 'Work through one of the six Herbology Domains.'; ?></span>
                 </a>
             </div>
-            <h4 class="herb-board__subheading"><?php echo $ises ? 'Quiz por categoría' : 'Quiz by category'; ?></h4>
+
+            <h4 class="herb-board__subheading" id="quiz-formula-categories"><?php echo $ises ? 'Quiz de fórmulas por categoría' : 'Formula Quiz by category'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($formulacategories as $category) {
                     $categoryurl = new moodle_url($formulapracticepath, [
@@ -1743,10 +1746,6 @@ echo $OUTPUT->header();
                         <span><?php echo s($category['name']); ?></span>
                     </a>
                 <?php } ?>
-            </div>
-            <h4 class="herb-board__subheading"><?php echo $ises
-                ? 'Filtro adicional de práctica' : 'Additional practice filter'; ?></h4>
-            <div class="herb-board__topics">
                 <?php $modificationsurl = new moodle_url($formulapracticepath, [
                     'category' => 'modifications',
                     'size' => 25,
@@ -1754,6 +1753,59 @@ echo $OUTPUT->header();
                 <a class="herb-board__topic" href="<?php echo $modificationsurl->out(false); ?>">
                     <strong><?php echo $formulamodificationcount; ?></strong>
                     <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
+                </a>
+            </div>
+
+            <h4 class="herb-board__subheading herb-board__subheading--spaced" id="quiz-domains">
+                <?php echo $ises ? 'Quiz por dominio' : 'Quiz by Domain'; ?>
+            </h4>
+            <div class="herb-board__domains">
+                <?php foreach ($domainblueprint as $domain) {
+                    $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'domains',
+                        'domain' => $domain['id'],
+                    ] + $languagecontext);
+                ?>
+                    <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
+                        href="<?php echo $domainurl->out(false); ?>">
+                        <span class="herb-board__domain-number"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$domain['number']; ?></span>
+                        <h4><?php echo s($domain['name']); ?></h4>
+                        <p><?php echo s($domain['focus']); ?></p>
+                        <span class="herb-board__domain-status">
+                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de Quiz' : 'Quiz questions'; ?> →
+                        </span>
+                    </a>
+                <?php } ?>
+            </div>
+        </section>
+    <?php } else if ($track === 'formulas') { ?>
+        <section class="herb-board__panel" aria-labelledby="herb-board-formulas-title">
+            <div class="herb-board__panel-heading">
+                <div>
+                    <h3 id="herb-board-formulas-title"><?php echo $ises
+                        ? 'Estudia fórmulas'
+                        : 'Study Formulas'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'Lee preguntas con respuestas y feedback visibles, o utiliza flashcards de memoria.'
+                        : 'Read questions with visible answers and feedback, or use recall flashcards.'; ?></p>
+                </div>
+            </div>
+            <div class="herb-board__summary herb-board__summary--panel" aria-label="Formula bank totals">
+                <span><strong><?php echo $formulatotals['questions']; ?></strong> <?php echo $ises
+                    ? 'preguntas verificadas' : 'verified questions'; ?></span>
+                <span><strong><?php echo $formulatotals['formulas']; ?></strong> <?php echo $ises
+                    ? 'fórmulas para estudiar' : 'formulas to study'; ?></span>
+                <span><strong><?php echo $formulatotals['categories']; ?></strong> <?php echo $ises
+                    ? 'categorías oficiales' : 'official categories'; ?></span>
+            </div>
+            <div class="herb-board__launches herb-board__launches--single">
+                <a class="herb-board__launch" href="<?php echo $formulaquestionbankurl->out(false); ?>">
+                    <strong><?php echo $ises
+                        ? 'Preguntas de estudio y flashcards'
+                        : 'Study Questions &amp; Flashcards'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Repasa las preguntas con la respuesta correcta y el feedback siempre visibles.'
+                        : 'Review questions with the correct answer and feedback always visible.'; ?></span>
                 </a>
             </div>
         </section>
@@ -2050,7 +2102,7 @@ echo $OUTPUT->header();
         </section>
     <?php } else { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-domain-bank-title">
-            <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>"><?php echo $ises ? '← Todos los dominios' : '← All Domains'; ?></a>
+            <a class="herb-board__domain-back" href="<?php echo $quizurl->out(false); ?>#quiz-domains"><?php echo $ises ? '← Volver a Quiz' : '← Back to Quiz'; ?></a>
             <div class="herb-board__panel-heading herb-board__panel-heading--domain-bank">
                 <div>
                     <span class="herb-board__domain-kicker"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$selecteddomain['number']; ?> · <?php echo $ises ? 'Práctica enfocada' : 'Focused practice'; ?></span>

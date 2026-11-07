@@ -568,13 +568,23 @@
 
 .board-hub__card--board-level .board-hub__action--board-simulation {
     flex-basis: 100%;
-    order: 4;
+    order: 5;
 }
 
 .board-hub__card--board-level .board-hub__action--board-exams {
-    flex-basis: 100%;
-    order: 3;
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+    order: 4;
     background: #6d4bc3;
+    color: #fff !important;
+}
+
+.board-hub__card--board-level .board-hub__action--board-quiz {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+    order: 3;
+    border: 0;
+    background: #b45309;
     color: #fff !important;
 }
 
@@ -1313,6 +1323,18 @@ a.herb-board__topic:focus {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 22px;
+}
+
+.herb-board__launches--single {
+    grid-template-columns: 1fr;
+}
+
+.herb-board__launches--quiz {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.herb-board__subheading--spaced {
+    margin-top: 28px;
 }
 
 .herb-board__launch {

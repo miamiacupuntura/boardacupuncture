@@ -14,7 +14,9 @@
   const spanish = document.documentElement.lang === 'es';
   const isFormula = isFormulaNavigator || isFormulaPractice;
   const track = isFormula ? 'formulas' : 'herbs';
-  const hubUrl = `/blocks/menu/herbology-board.php?track=${track}`;
+  const hubUrl = isFormulaPractice
+    ? '/blocks/menu/herbology-board.php?track=quiz'
+    : `/blocks/menu/herbology-board.php?track=${track}`;
 
   function returnUrl() {
     const requested = new URLSearchParams(window.location.search).get('return');
@@ -63,7 +65,9 @@
 
   const practiceHome = document.createElement('a');
   practiceHome.href = hubUrl;
-  practiceHome.textContent = spanish ? 'Exámenes de práctica' : 'Practice Exams';
+  practiceHome.textContent = isFormulaPractice
+    ? (spanish ? 'Quiz de Herbología' : 'Herbology Quiz')
+    : (spanish ? 'Centro de estudio' : 'Study Center');
 
   const herbsLink = document.createElement('a');
   herbsLink.href = '/blocks/menu/herbology-board.php?track=herbs';
@@ -85,7 +89,7 @@
   current.textContent = isFormulaNavigator
     ? (spanish ? 'Buscar una fórmula' : 'Find a formula')
     : isFormulaPractice
-      ? 'Quiz'
+      ? (spanish ? 'Quiz de fórmulas' : 'Formula Quiz')
       : (spanish ? 'Banco comparativo' : 'Comparison bank');
 
   const separator = () => {
@@ -96,7 +100,11 @@
     return item;
   };
 
-  trail.append(practiceHome, separator(), herbsLink, siblingSeparator, formulasLink, separator(), current);
+  if (isFormulaPractice) {
+    trail.append(practiceHome, separator(), current);
+  } else {
+    trail.append(practiceHome, separator(), herbsLink, siblingSeparator, formulasLink, separator(), current);
+  }
   nav.append(back, trail);
   main.insertBefore(nav, hero);
 })();

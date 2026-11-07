@@ -79,6 +79,7 @@ STATIC_FILES=(
     "formula-question-bank.html"
     "formula-question-bank-es.html"
     "formula-question-bank.js"
+    "formula-modifications.html"
     "formula-modifications-es.html"
     "formula-modifications-manifest.json"
     "formula-modifications-supplement.json"
@@ -106,7 +107,7 @@ php -l "$TEMP_DIR/moodle/blocks/myprogress/single-herbs-study-guide.php" >/dev/n
 php -l "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php" >/dev/null
 php -r '
 $xml = simplexml_load_file($argv[1]);
-if (!$xml || (string)$xml["VERSION"] !== "2026110641") {
+if (!$xml || (string)$xml["VERSION"] !== "2026110642") {
     throw new RuntimeException("Versión install.xml incorrecta.");
 }
 ' "$TEMP_DIR/moodle/blocks/menu/db/install.xml"
@@ -162,9 +163,10 @@ grep -Fq "'title' => 'Single Herbs'" "$TEMP_DIR/moodle/blocks/myprogress/study-g
 grep -Fq "'path' => '/blocks/myprogress/single-herbs-study-guide.php'" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'single-herb-practice-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'formula-question-bank-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '<strong>Quiz</strong>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'Choose a Quiz type' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'board-hub__action--board-quiz' "$TEMP_DIR/moodle/blocks/menu/block_menu.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '$plugin->version   = 2026110641;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110642;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq "Study by Yang Chapter's" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
@@ -178,24 +180,27 @@ grep -Fq "\$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbolog
 grep -Fq 'id="board-level-' "$TEMP_DIR/moodle/blocks/menu/block_menu.php"
 ! grep -Fq "href=\"<?php echo \$singleherbsurl->out(false); ?>\"><?php echo \$ises" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'official categories' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq 'Additional practice filter' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'Formula Quiz by category' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Single Herbs Quiz' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/single-herb-practice.html"
-grep -Fq 'Herbology Practice</a><span aria-hidden="true">›</span><a href="/blocks/menu/herbology-board.php?track=herbs">Single Herbs' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'Herbology Quiz</a><span aria-hidden="true">›</span><span aria-current="page">Single Herbs Quiz' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq 'Formula Study Questions &amp; Flashcards' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/formula-navigator.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/formula-practice.html"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/formula-question-bank.html"
-grep -Fq 'Herbology Practice</a><span aria-hidden="true">›</span><a href="/blocks/menu/herbology-board.php?track=formulas">Formulas' "$TEMP_DIR/static/formula-practice.html"
+grep -Fq 'Herbology Quiz</a><span aria-hidden="true">›</span><span aria-current="page">Formula Quiz' "$TEMP_DIR/static/formula-practice.html"
 grep -Fq 'formula-question-bank.html">Study Questions &amp; Flashcards' "$TEMP_DIR/static/formula-navigator.html"
+! grep -Fq 'href="formula-practice.html' "$TEMP_DIR/static/formula-navigator.html"
+! grep -Fq 'href="formula-practice.html">Quiz' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq 'formula-navigator.html">Find a formula' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/formula-practice.html"
 ! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/formula-practice.js"
 ! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/formula-navigator.js"
 grep -Fq "dashboardUrl = '/my/'" "$TEMP_DIR/static/study-return-navigation.js"
-grep -Fq "? 'Quiz'" "$TEMP_DIR/static/practice-hub-navigation.js"
-grep -Fq 'Quiz de modificaciones' "$TEMP_DIR/static/formula-modifications-es.html"
+grep -Fq "spanish ? 'Quiz de fórmulas' : 'Formula Quiz'" "$TEMP_DIR/static/practice-hub-navigation.js"
+grep -Fq 'Abrir Quiz de Herbología' "$TEMP_DIR/static/formula-modifications-es.html"
+grep -Fq 'Open Herbology Quiz' "$TEMP_DIR/static/formula-modifications.html"
 grep -Fq "hero.insertAdjacentElement('afterend', nav)" "$TEMP_DIR/static/study-return-navigation.js"
 grep -Fq 'class="practice-study-route"' "$TEMP_DIR/static/herb-comparison-bank.html"
 grep -Fq 'Herbology Practice</a><span aria-hidden="true">›</span><a href="/blocks/menu/herbology-board.php?track=herbs">Single Herbs' "$TEMP_DIR/static/herb-comparison-bank.html"
@@ -249,7 +254,7 @@ if [[ "${SKIP_CACHE_PURGE:-0}" != "1" && -f "$MOODLE_ROOT/admin/cli/purge_caches
     fi
 fi
 
-echo "FORMATOS PARALELOS DE HIERBAS Y FÓRMULAS INSTALADOS"
-echo "Single Herbs permanece en Study Guide."
+echo "HERBOLOGY PRACTICE Y QUIZ SEPARADOS"
+echo "Los Quizzes de hierbas, fórmulas y dominios están reunidos en Quiz."
 echo "Respaldo: $BACKUP_DIR"
-echo "Prueba: https://www.acupuncturetests.com/blocks/menu/herbology-board.php?track=herbs&practice=$REVISION"
+echo "Prueba: https://www.acupuncturetests.com/blocks/menu/herbology-board.php?track=quiz&revision=$REVISION"

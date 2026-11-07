@@ -52,9 +52,9 @@
   const page = window.location.pathname.split('/').pop().replace('-es.html', '.html');
   const routes = {
     'formula-navigator.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', spanish ? 'Buscar una fórmula' : 'Find a Formula'],
-    'formula-practice.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', 'Quiz'],
+    'formula-practice.html': ['quiz', '', spanish ? 'Quiz de fórmulas' : 'Formula Quiz'],
     'formula-question-bank.html': ['formulas', spanish ? 'Fórmulas' : 'Formulas', spanish ? 'Preguntas de estudio y flashcards' : 'Study Questions & Flashcards'],
-    'single-herb-practice.html': ['herbs', spanish ? 'Hierbas individuales' : 'Single Herbs', 'Quiz']
+    'single-herb-practice.html': ['quiz', '', spanish ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz']
   };
   const route = routes[page];
   const hero = document.querySelector('.comparison-hero');
@@ -66,11 +66,18 @@
   const rootQuery = spanish ? '?lang=es' : '';
   const nav = document.createElement('nav');
   nav.className = 'practice-study-route';
-  nav.setAttribute('aria-label', spanish ? 'Ruta de navegación de práctica' : 'Practice navigation path');
-  nav.innerHTML = `<a href="/blocks/menu/herbology-board.php${rootQuery}">${spanish ? 'Práctica de Herbología' : 'Herbology Practice'}</a>`
-    + '<span aria-hidden="true">›</span>'
-    + `<a href="/blocks/menu/herbology-board.php?track=${route[0]}${languageQuery}">${route[1]}</a>`
-    + '<span aria-hidden="true">›</span>'
-    + `<span aria-current="page">${route[2]}</span>`;
+  if (route[0] === 'quiz') {
+    nav.setAttribute('aria-label', spanish ? 'Ruta de navegación de Quiz' : 'Quiz navigation path');
+    nav.innerHTML = `<a href="/blocks/menu/herbology-board.php?track=quiz${languageQuery}">${spanish ? 'Quiz de Herbología' : 'Herbology Quiz'}</a>`
+      + '<span aria-hidden="true">›</span>'
+      + `<span aria-current="page">${route[2]}</span>`;
+  } else {
+    nav.setAttribute('aria-label', spanish ? 'Ruta de navegación de práctica' : 'Practice navigation path');
+    nav.innerHTML = `<a href="/blocks/menu/herbology-board.php${rootQuery}">${spanish ? 'Práctica de Herbología' : 'Herbology Practice'}</a>`
+      + '<span aria-hidden="true">›</span>'
+      + `<a href="/blocks/menu/herbology-board.php?track=${route[0]}${languageQuery}">${route[1]}</a>`
+      + '<span aria-hidden="true">›</span>'
+      + `<span aria-current="page">${route[2]}</span>`;
+  }
   hero.insertAdjacentElement('afterend', nav);
 })();
