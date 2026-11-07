@@ -62,6 +62,8 @@ STATIC_FILES=(
     "pathologies-es.html"
     "patterns.html"
     "patterns-es.html"
+    "safety.html"
+    "safety-es.html"
 )
 
 for relative in "${MOODLE_FILES[@]}"; do
@@ -126,7 +128,7 @@ if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
     echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
     exit 1
 fi
-for comparison_hub in index.html index-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html; do
+for comparison_hub in index.html index-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html safety.html safety-es.html; do
     if grep -Fq 'comparison-collection-links' "$TEMP_DIR/static/$comparison_hub"; then
         echo "ERROR: la franja duplicada de botones continúa en $comparison_hub." >&2
         exit 1
@@ -193,7 +195,7 @@ if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
     echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2
     exit 1
 fi
-for comparison_hub in index.html index-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html; do
+for comparison_hub in index.html index-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html safety.html safety-es.html; do
     if grep -Fq 'comparison-collection-links' "$STUDY_NOTE_DIR/$comparison_hub"; then
         echo "ERROR: la franja duplicada de botones continúa instalada en $comparison_hub." >&2
         exit 1
