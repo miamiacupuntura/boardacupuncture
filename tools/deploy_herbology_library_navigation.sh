@@ -73,10 +73,11 @@ for relative in "${MOODLE_FILES[@]}"; do
     fi
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
-grep -Fq '$plugin->version   = 2026110650;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110651;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq "optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '← Back to Library' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'data-herbology-step-back' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Library is the permanent navigation hub' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq 'data-library-step-back' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 if [[ "$(grep -Fc 'class="herb-formula-map__button"' "$TEMP_DIR/moodle/blocks/myprogress/herb-formula-category-map.php")" -ne 1 ]]; then
     echo "ERROR: el mapa Bensky debe mostrar solamente el selector de idioma." >&2
     exit 1
@@ -84,6 +85,7 @@ fi
 grep -Fq "param('from', 'library')" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'dataset.libraryContextNavigation' "$TEMP_DIR/static/library-navigation.js"
+grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
 
 (cd "$STUDY_NOTE_DIR" && tar -czf "$BACKUP_DIR/static/comparison-html.tar.gz" -- *.html)
 for file in "${STATIC_FILES[@]}"; do
@@ -128,14 +130,15 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-4' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-5' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 if grep -Fq "currentUrl.searchParams.get('from') !== 'library'" "$STUDY_NOTE_DIR/library-navigation.js"; then
     echo "ERROR: la navegación estática todavía depende de from=library." >&2
     exit 1
 fi
 grep -Fq 'data-herbology-library-context' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
-grep -Fq '← Back to Library' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'data-library-step-back' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/upgrade.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then

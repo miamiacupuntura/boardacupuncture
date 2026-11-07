@@ -31,13 +31,14 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
     ?>
     <style>
     .herbology-library-context{margin:0 0 18px;padding:14px;border:1px solid #b8d5d2;border-radius:11px;background:#f7fcfb;box-shadow:0 3px 12px rgba(15,23,42,.04)}
-    .herbology-library-context__top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 11px}.herbology-library-context__trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:800}.herbology-library-context__trail a{color:#245fa7;text-decoration:none}.herbology-library-context__trail-current{color:#17232a}.herbology-library-context__toggle{display:none;min-height:40px;align-items:center;justify-content:center;padding:7px 11px;border:1px solid #0b817d;border-radius:8px;background:#fff;color:#075f5b;font-size:12px;font-weight:850;cursor:pointer}
+    .herbology-library-context__top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 11px}.herbology-library-context__trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:800}.herbology-library-context__trail a{color:#245fa7;text-decoration:none}.herbology-library-context__step-back{padding-right:8px;border-right:1px solid #bfd0da}.herbology-library-context__trail-current{color:#17232a}.herbology-library-context__toggle{display:none;min-height:40px;align-items:center;justify-content:center;padding:7px 11px;border:1px solid #0b817d;border-radius:8px;background:#fff;color:#075f5b;font-size:12px;font-weight:850;cursor:pointer}
     .herbology-library-context__routes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.herbology-library-context__route{display:flex;min-height:44px;align-items:center;justify-content:center;padding:8px 10px;border:1px solid #bfd0da;border-radius:8px;background:#fff;color:#17344a;font-size:12px;font-weight:850;text-align:center;text-decoration:none}.herbology-library-context__route:hover,.herbology-library-context__route:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b;text-decoration:none}.herbology-library-context__route--library{border-color:#0b817d;background:#0b817d;color:#fff}.herbology-library-context__route--library:hover,.herbology-library-context__route--library:focus{background:#076b67;color:#fff}
     @media(max-width:700px){.herbology-library-context{padding:11px}.herbology-library-context__top{margin:0}.herbology-library-context__trail{min-width:0}.herbology-library-context__toggle{display:inline-flex;flex:0 0 auto}.herbology-library-context__routes{display:none;grid-template-columns:1fr 1fr;margin-top:11px}.herbology-library-context[data-expanded="true"] .herbology-library-context__routes{display:grid}.herbology-library-context__route{min-height:48px}.herbology-library-context__route:last-child{grid-column:1/-1}}
     </style>
     <nav class="herbology-library-context" aria-label="<?php echo s($ises ? 'Navegación de Library' : 'Library navigation'); ?>" data-herbology-library-context>
         <div class="herbology-library-context__top">
             <div class="herbology-library-context__trail">
+                <a class="herbology-library-context__step-back" data-library-step-back href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
                 <a href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? 'Biblioteca' : 'Library'); ?></a>
                 <span aria-hidden="true">›</span>
                 <span class="herbology-library-context__trail-current" aria-current="page"><?php echo s($currentlabel); ?></span>
@@ -112,6 +113,14 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
         }, true);
         const panel = document.querySelector('[data-herbology-library-context]');
         const toggle = panel?.querySelector('.herbology-library-context__toggle');
+        const stepBack = panel?.querySelector('[data-library-step-back]');
+        stepBack?.addEventListener('click', event => {
+            if (window.history.length > 1) {
+                event.preventDefault();
+                window.history.back();
+            }
+            // The Library URL on the link remains the safe fallback without history.
+        });
         toggle?.addEventListener('click', () => {
             const expanded = panel.dataset.expanded !== 'true';
             panel.dataset.expanded = String(expanded);

@@ -1359,9 +1359,8 @@ $formulaquestionbankurl = new moodle_url($formulaquestionbankpath, $fromlibrary 
 echo $OUTPUT->header();
 ?>
 <main class="herb-board">
-    <a class="herb-board__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $fromlibrary
-        ? ($ises ? '← Volver a Library' : '← Back to Library')
-        : ($ises ? '← Volver al Dashboard' : '← Back to Dashboard'); ?></a>
+    <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
+        ? '← Atrás' : '← Back'; ?></a>
     <header class="herb-board__hero">
         <p class="herb-board__eyebrow"><?php echo $ises ? 'HERBOLOGÍA CHINA · NIVEL BOARD' : 'CHINESE HERBOLOGY · BOARD LEVEL'; ?></p>
         <h2><?php echo $track === 'exams'
@@ -2246,5 +2245,17 @@ echo $OUTPUT->header();
         </section>
     <?php } ?>
 </main>
+<script>
+(() => {
+    const stepBack = document.querySelector('[data-herbology-step-back]');
+    stepBack?.addEventListener('click', event => {
+        if (window.history.length > 1) {
+            event.preventDefault();
+            window.history.back();
+        }
+        // The link destination remains the safe fallback without history.
+    });
+})();
+</script>
 <?php
 echo $OUTPUT->footer();
