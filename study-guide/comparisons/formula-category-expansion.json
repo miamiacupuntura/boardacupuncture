@@ -1,0 +1,3502 @@
+{
+  "version": 1,
+  "generatedFrom": "formulas-study-guide-data.json · 2026 official roster category expansion",
+  "policy": "Four source-grounded practice questions per official formula missing from the original 63-formula category set.",
+  "categories": [
+    {
+      "key": "dispel-summerheat",
+      "en": "Dispel Summerheat",
+      "es": "Eliminar Calor de Verano"
+    },
+    {
+      "key": "exterior-interior-excess",
+      "en": "Treat Exterior and Interior Excess",
+      "es": "Tratar exceso Exterior e Interior"
+    },
+    {
+      "key": "treat-dryness",
+      "en": "Treat Dryness",
+      "es": "Tratar la Sequedad"
+    },
+    {
+      "key": "treat-abscesses-sores",
+      "en": "Treat Abscesses and Sores",
+      "es": "Tratar abscesos y llagas"
+    }
+  ],
+  "formulas": [
+    {
+      "number": 64,
+      "name": "Liu Yi San",
+      "englishName": "Six-to-One Powder",
+      "categoryKey": "dispel-summerheat",
+      "categoryEn": "Dispel Summerheat",
+      "categoryEs": "Eliminar Calor de Verano",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=dispel-summerheat#formula-S4",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=dispel-summerheat&lang=es#formula-S4"
+    },
+    {
+      "number": 65,
+      "name": "Da Chai Hu Tang",
+      "englishName": "Major Bupleurum Decoction",
+      "categoryKey": "exterior-interior-excess",
+      "categoryEn": "Treat Exterior and Interior Excess",
+      "categoryEs": "Tratar exceso Exterior e Interior",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=exterior-interior-excess#formula-EI1",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=exterior-interior-excess&lang=es#formula-EI1"
+    },
+    {
+      "number": 66,
+      "name": "Fang Feng Tong Sheng San",
+      "englishName": "Saposhnikovia Powder that Sagely Unblocks",
+      "categoryKey": "exterior-interior-excess",
+      "categoryEn": "Treat Exterior and Interior Excess",
+      "categoryEs": "Tratar exceso Exterior e Interior",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=exterior-interior-excess#formula-EI2",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=exterior-interior-excess&lang=es#formula-EI2"
+    },
+    {
+      "number": 67,
+      "name": "Ge Gen Huang Qin Huang Lian Tang",
+      "englishName": "Kudzu, Scutellaria, and Coptis Decoction",
+      "categoryKey": "exterior-interior-excess",
+      "categoryEn": "Treat Exterior and Interior Excess",
+      "categoryEs": "Tratar exceso Exterior e Interior",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=exterior-interior-excess#formula-EI3",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=exterior-interior-excess&lang=es#formula-EI3"
+    },
+    {
+      "number": 68,
+      "name": "Xing Su San",
+      "englishName": "Apricot Kernel and Perilla Leaf Powder",
+      "categoryKey": "treat-dryness",
+      "categoryEn": "Treat Dryness",
+      "categoryEs": "Tratar la Sequedad",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15#formula-C15-01",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15&lang=es#formula-C15-01"
+    },
+    {
+      "number": 69,
+      "name": "Sang Xing Tang",
+      "englishName": "Mulberry Leaf and Apricot Kernel Decoction",
+      "categoryKey": "treat-dryness",
+      "categoryEn": "Treat Dryness",
+      "categoryEs": "Tratar la Sequedad",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15#formula-C15-02",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15&lang=es#formula-C15-02"
+    },
+    {
+      "number": 70,
+      "name": "Qing Zao Jiu Fei Tang",
+      "englishName": "Clear Dryness and Rescue the Lungs Decoction",
+      "categoryKey": "treat-dryness",
+      "categoryEn": "Treat Dryness",
+      "categoryEs": "Tratar la Sequedad",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15#formula-C15-03",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15&lang=es#formula-C15-03"
+    },
+    {
+      "number": 71,
+      "name": "Sha Shen Mai Men Dong Tang",
+      "englishName": "Glehnia and Ophiopogonis Decoction",
+      "categoryKey": "treat-dryness",
+      "categoryEn": "Treat Dryness",
+      "categoryEs": "Tratar la Sequedad",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15#formula-C15-04",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15&lang=es#formula-C15-04"
+    },
+    {
+      "number": 72,
+      "name": "Mai Men Dong Tang",
+      "englishName": "Ophiopogonis Decoction",
+      "categoryKey": "treat-dryness",
+      "categoryEn": "Treat Dryness",
+      "categoryEs": "Tratar la Sequedad",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15#formula-C15-05",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15&lang=es#formula-C15-05"
+    },
+    {
+      "number": 73,
+      "name": "Zeng Ye Tang",
+      "englishName": "Increase the Fluids Decoction",
+      "categoryKey": "treat-dryness",
+      "categoryEn": "Treat Dryness",
+      "categoryEs": "Tratar la Sequedad",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15#formula-C15-08",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-dryness-ch15&lang=es#formula-C15-08"
+    },
+    {
+      "number": 74,
+      "name": "Wu Wei Xiao Du Yin",
+      "englishName": "Five-Ingredient Drink to Eliminate Toxin",
+      "categoryKey": "treat-abscesses-sores",
+      "categoryEn": "Treat Abscesses and Sores",
+      "categoryEs": "Tratar abscesos y llagas",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-abscesses-chapter-20#formula-C20-02",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-abscesses-chapter-20&lang=es#formula-C20-02"
+    },
+    {
+      "number": 75,
+      "name": "Yang He Tang",
+      "englishName": "Balmy Yang Decoction",
+      "categoryKey": "treat-abscesses-sores",
+      "categoryEn": "Treat Abscesses and Sores",
+      "categoryEs": "Tratar abscesos y llagas",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-abscesses-chapter-20#formula-C20-05",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-abscesses-chapter-20&lang=es#formula-C20-05"
+    },
+    {
+      "number": 76,
+      "name": "Da Huang Mu Dan Tang",
+      "englishName": "Rhubarb and Moutan Decoction",
+      "categoryKey": "treat-abscesses-sores",
+      "categoryEn": "Treat Abscesses and Sores",
+      "categoryEs": "Tratar abscesos y llagas",
+      "questionCount": 4,
+      "profileUrl": "/blocks/myprogress/formulas-study-guide.php?focus=treat-abscesses-chapter-20#formula-C20-10",
+      "profileUrlEs": "/blocks/myprogress/formulas-study-guide.php?focus=treat-abscesses-chapter-20&lang=es#formula-C20-10"
+    }
+  ],
+  "questions": [
+    {
+      "sourceNumber": "FCAT-001",
+      "prompt": "Which formula best matches this pattern? Summerheat with Dampness in the interior obstructing the Triple Burner and water pathways. Decisive clue: Fever, sweating, thirst, irritability, urinary difficulty, diarrhea, nausea or vomiting, thin yellow greasy coat, and a soggy rapid pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Liu Yi San (Six-to-One Powder) treats Summerheat with Dampness in the interior obstructing the Triple Burner and water pathways.",
+        "Action: Clears Summerheat, resolves Dampness, and augments the Qi.",
+        "Decisive clue: The 6:1 name is the architecture: Hua Shi drains Summerheat-Dampness through urination while a small amount of Gan Cao protects the Middle and fluids.",
+        "Safety: May injure Qi and fluids. Use caution in weak, elderly, or Yin-deficient patients. Contraindicated with copious clear urine or Summerheat without Dampness."
+      ],
+      "formulaNumbers": [
+        64
+      ],
+      "categoryKeys": [
+        "dispel-summerheat"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Calor de Verano con Humedad interior que obstruye el Triple Burner y las vías del agua. Pista decisiva: Fiebre, sudor, sed, irritabilidad, dificultad urinaria, diarrea, náuseas o vómitos, saburra amarilla fina y grasosa y pulso empapado y rápido.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Liu Yi San (Six-to-One Powder) trata Calor de Verano con Humedad interior que obstruye el Triple Burner y las vías del agua.",
+          "Acción: Aclara Calor de Verano, resuelve Humedad y fortalece el Qi.",
+          "Pista decisiva: El nombre 6:1 expresa la arquitectura: Hua Shi drena Calor de Verano-Humedad mediante la orina mientras una pequeña cantidad de Gan Cao protege el Centro y los líquidos.",
+          "Seguridad: Puede lesionar Qi y líquidos. Usar con cautela en pacientes débiles, ancianos o con deficiencia de Yin. Contraindicada con orina clara abundante o Calor de Verano sin Humedad."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-002",
+      "prompt": "Which formula has this principal action? Clears Summerheat, resolves Dampness, and augments the Qi.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Liu Yi San (Six-to-One Powder) treats Summerheat with Dampness in the interior obstructing the Triple Burner and water pathways.",
+        "Action: Clears Summerheat, resolves Dampness, and augments the Qi.",
+        "Decisive clue: The 6:1 name is the architecture: Hua Shi drains Summerheat-Dampness through urination while a small amount of Gan Cao protects the Middle and fluids.",
+        "Safety: May injure Qi and fluids. Use caution in weak, elderly, or Yin-deficient patients. Contraindicated with copious clear urine or Summerheat without Dampness."
+      ],
+      "formulaNumbers": [
+        64
+      ],
+      "categoryKeys": [
+        "dispel-summerheat"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Aclara Calor de Verano, resuelve Humedad y fortalece el Qi.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Liu Yi San (Six-to-One Powder) trata Calor de Verano con Humedad interior que obstruye el Triple Burner y las vías del agua.",
+          "Acción: Aclara Calor de Verano, resuelve Humedad y fortalece el Qi.",
+          "Pista decisiva: El nombre 6:1 expresa la arquitectura: Hua Shi drena Calor de Verano-Humedad mediante la orina mientras una pequeña cantidad de Gan Cao protege el Centro y los líquidos.",
+          "Seguridad: Puede lesionar Qi y líquidos. Usar con cautela en pacientes débiles, ancianos o con deficiencia de Yin. Contraindicada con orina clara abundante o Calor de Verano sin Humedad."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-003",
+      "prompt": "Which formula is built around the following chief ingredient? Hua Shi",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "C",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Liu Yi San (Six-to-One Powder) treats Summerheat with Dampness in the interior obstructing the Triple Burner and water pathways.",
+        "Action: Clears Summerheat, resolves Dampness, and augments the Qi.",
+        "Decisive clue: The 6:1 name is the architecture: Hua Shi drains Summerheat-Dampness through urination while a small amount of Gan Cao protects the Middle and fluids.",
+        "Safety: May injure Qi and fluids. Use caution in weak, elderly, or Yin-deficient patients. Contraindicated with copious clear urine or Summerheat without Dampness."
+      ],
+      "formulaNumbers": [
+        64
+      ],
+      "categoryKeys": [
+        "dispel-summerheat"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de el siguiente ingrediente principal? Hua Shi",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "C",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Liu Yi San (Six-to-One Powder) trata Calor de Verano con Humedad interior que obstruye el Triple Burner y las vías del agua.",
+          "Acción: Aclara Calor de Verano, resuelve Humedad y fortalece el Qi.",
+          "Pista decisiva: El nombre 6:1 expresa la arquitectura: Hua Shi drena Calor de Verano-Humedad mediante la orina mientras una pequeña cantidad de Gan Cao protege el Centro y los líquidos.",
+          "Seguridad: Puede lesionar Qi y líquidos. Usar con cautela en pacientes débiles, ancianos o con deficiencia de Yin. Contraindicada con orina clara abundante o Calor de Verano sin Humedad."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-004",
+      "prompt": "Which formula is identified by this Board distinction? The 6:1 name is the architecture: Hua Shi drains Summerheat-Dampness through urination while a small amount of Gan Cao protects the Middle and fluids.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "C",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Liu Yi San (Six-to-One Powder) treats Summerheat with Dampness in the interior obstructing the Triple Burner and water pathways.",
+        "Action: Clears Summerheat, resolves Dampness, and augments the Qi.",
+        "Decisive clue: The 6:1 name is the architecture: Hua Shi drains Summerheat-Dampness through urination while a small amount of Gan Cao protects the Middle and fluids.",
+        "Safety: May injure Qi and fluids. Use caution in weak, elderly, or Yin-deficient patients. Contraindicated with copious clear urine or Summerheat without Dampness."
+      ],
+      "formulaNumbers": [
+        64
+      ],
+      "categoryKeys": [
+        "dispel-summerheat"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? El nombre 6:1 expresa la arquitectura: Hua Shi drena Calor de Verano-Humedad mediante la orina mientras una pequeña cantidad de Gan Cao protege el Centro y los líquidos.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "C",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          }
+        ],
+        "feedback": [
+          "Liu Yi San (Six-to-One Powder) trata Calor de Verano con Humedad interior que obstruye el Triple Burner y las vías del agua.",
+          "Acción: Aclara Calor de Verano, resuelve Humedad y fortalece el Qi.",
+          "Pista decisiva: El nombre 6:1 expresa la arquitectura: Hua Shi drena Calor de Verano-Humedad mediante la orina mientras una pequeña cantidad de Gan Cao protege el Centro y los líquidos.",
+          "Seguridad: Puede lesionar Qi y líquidos. Usar con cautela en pacientes débiles, ancianos o con deficiencia de Yin. Contraindicada con orina clara abundante o Calor de Verano sin Humedad."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-005",
+      "prompt": "Which formula best matches this pattern? Concurrent Shaoyang and Yangming organ-warp excess with Heat clumping in the interior. Decisive clue: Alternating fever and chills with continuous vomiting, bitter taste, chest or hypochondriac fullness, and hard focal epigastric distention or pain; stools may be absent or hot and burning.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Da Chai Hu Tang (Major Bupleurum Decoction) treats Concurrent Shaoyang and Yangming organ-warp excess with Heat clumping in the interior.",
+        "Action: Harmonizes and releases Shaoyang and drains internal clumping due to Heat.",
+        "Decisive clue: It must show both halves: Shaoyang pivot signs plus Yangming organ clumping. Continuous vomiting and a hard, pressure-sensitive epigastrium separate it from Xiao Chai Hu Tang.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        65
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Exceso simultáneo de Shaoyang y del nivel órgano Yangming con Calor acumulado en el Interior. Pista decisiva: Fiebre y escalofríos alternantes con vómito continuo, sabor amargo, plenitud torácica o hipocondríaca y distensión o dolor epigástrico focal duro; puede faltar la evacuación o haber diarrea caliente y ardiente.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Da Chai Hu Tang (Major Bupleurum Decoction) trata Exceso simultáneo de Shaoyang y del nivel órgano Yangming con Calor acumulado en el Interior.",
+          "Acción: Armoniza y libera Shaoyang y drena la acumulación interna debida a Calor.",
+          "Pista decisiva: Debe mostrar ambas mitades: signos del pivote Shaoyang más acumulación de órgano Yangming. El vómito continuo y epigastrio duro y sensible a la presión la separan de Xiao Chai Hu Tang.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-006",
+      "prompt": "Which formula has this principal action? Harmonizes and releases Shaoyang and drains internal clumping due to Heat.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Da Chai Hu Tang (Major Bupleurum Decoction) treats Concurrent Shaoyang and Yangming organ-warp excess with Heat clumping in the interior.",
+        "Action: Harmonizes and releases Shaoyang and drains internal clumping due to Heat.",
+        "Decisive clue: It must show both halves: Shaoyang pivot signs plus Yangming organ clumping. Continuous vomiting and a hard, pressure-sensitive epigastrium separate it from Xiao Chai Hu Tang.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        65
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Armoniza y libera Shaoyang y drena la acumulación interna debida a Calor.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Da Chai Hu Tang (Major Bupleurum Decoction) trata Exceso simultáneo de Shaoyang y del nivel órgano Yangming con Calor acumulado en el Interior.",
+          "Acción: Armoniza y libera Shaoyang y drena la acumulación interna debida a Calor.",
+          "Pista decisiva: Debe mostrar ambas mitades: signos del pivote Shaoyang más acumulación de órgano Yangming. El vómito continuo y epigastrio duro y sensible a la presión la separan de Xiao Chai Hu Tang.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-007",
+      "prompt": "Which formula is built around the following chief ingredients? Chai Hu, Da Huang",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Da Chai Hu Tang (Major Bupleurum Decoction) treats Concurrent Shaoyang and Yangming organ-warp excess with Heat clumping in the interior.",
+        "Action: Harmonizes and releases Shaoyang and drains internal clumping due to Heat.",
+        "Decisive clue: It must show both halves: Shaoyang pivot signs plus Yangming organ clumping. Continuous vomiting and a hard, pressure-sensitive epigastrium separate it from Xiao Chai Hu Tang.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        65
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Chai Hu, Da Huang",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Da Chai Hu Tang (Major Bupleurum Decoction) trata Exceso simultáneo de Shaoyang y del nivel órgano Yangming con Calor acumulado en el Interior.",
+          "Acción: Armoniza y libera Shaoyang y drena la acumulación interna debida a Calor.",
+          "Pista decisiva: Debe mostrar ambas mitades: signos del pivote Shaoyang más acumulación de órgano Yangming. El vómito continuo y epigastrio duro y sensible a la presión la separan de Xiao Chai Hu Tang.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-008",
+      "prompt": "Which formula is identified by this Board distinction? It must show both halves: Shaoyang pivot signs plus Yangming organ clumping. Continuous vomiting and a hard, pressure-sensitive epigastrium separate it from Xiao Chai Hu Tang.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Da Chai Hu Tang (Major Bupleurum Decoction) treats Concurrent Shaoyang and Yangming organ-warp excess with Heat clumping in the interior.",
+        "Action: Harmonizes and releases Shaoyang and drains internal clumping due to Heat.",
+        "Decisive clue: It must show both halves: Shaoyang pivot signs plus Yangming organ clumping. Continuous vomiting and a hard, pressure-sensitive epigastrium separate it from Xiao Chai Hu Tang.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        65
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Debe mostrar ambas mitades: signos del pivote Shaoyang más acumulación de órgano Yangming. El vómito continuo y epigastrio duro y sensible a la presión la separan de Xiao Chai Hu Tang.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Da Chai Hu Tang (Major Bupleurum Decoction) trata Exceso simultáneo de Shaoyang y del nivel órgano Yangming con Calor acumulado en el Interior.",
+          "Acción: Armoniza y libera Shaoyang y drena la acumulación interna debida a Calor.",
+          "Pista decisiva: Debe mostrar ambas mitades: signos del pivote Shaoyang más acumulación de órgano Yangming. El vómito continuo y epigastrio duro y sensible a la presión la separan de Xiao Chai Hu Tang.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-009",
+      "prompt": "Which formula best matches this pattern? Wind-Heat in the exterior with simultaneous excess Heat in the interior—the classic double-releasing pattern. Decisive clue: Strong fever and chills, red sore eyes, thick nasal discharge, bitter dry mouth, chest and diaphragm stiffness, constipation, dark rough urine, greasy yellow coat, and a flooding rapid or wiry slippery pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) treats Wind-Heat in the exterior with simultaneous excess Heat in the interior—the classic double-releasing pattern.",
+        "Action: Disperses Wind, releases the exterior, drains Heat through urine and stool, and unblocks the bowels.",
+        "Decisive clue: Think simultaneous outlets: sweat the exterior, drain Heat through urine, and purge stool. Constipation plus strong exterior Wind-Heat separates it from formulas that only clear the interior.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        66
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Viento-Calor en el Exterior con exceso simultáneo de Calor en el Interior: patrón clásico de doble liberación. Pista decisiva: Fiebre y escalofríos fuertes, ojos rojos dolorosos, secreción nasal espesa, boca amarga y seca, rigidez de pecho y diafragma, estreñimiento, orina oscura y áspera, saburra amarilla grasosa y pulso desbordante-rápido o de cuerda-resbaladizo.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) trata Viento-Calor en el Exterior con exceso simultáneo de Calor en el Interior: patrón clásico de doble liberación.",
+          "Acción: Dispersa Viento, libera el Exterior, drena Calor por orina y heces y desbloquea los Intestinos.",
+          "Pista decisiva: Piensa en salidas simultáneas: sudar el Exterior, drenar Calor por orina y purgar heces. Estreñimiento más Viento-Calor exterior fuerte la separan de fórmulas que solo aclaran el Interior.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-010",
+      "prompt": "Which formula has this principal action? Disperses Wind, releases the exterior, drains Heat through urine and stool, and unblocks the bowels.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) treats Wind-Heat in the exterior with simultaneous excess Heat in the interior—the classic double-releasing pattern.",
+        "Action: Disperses Wind, releases the exterior, drains Heat through urine and stool, and unblocks the bowels.",
+        "Decisive clue: Think simultaneous outlets: sweat the exterior, drain Heat through urine, and purge stool. Constipation plus strong exterior Wind-Heat separates it from formulas that only clear the interior.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        66
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Dispersa Viento, libera el Exterior, drena Calor por orina y heces y desbloquea los Intestinos.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          }
+        ],
+        "feedback": [
+          "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) trata Viento-Calor en el Exterior con exceso simultáneo de Calor en el Interior: patrón clásico de doble liberación.",
+          "Acción: Dispersa Viento, libera el Exterior, drena Calor por orina y heces y desbloquea los Intestinos.",
+          "Pista decisiva: Piensa en salidas simultáneas: sudar el Exterior, drenar Calor por orina y purgar heces. Estreñimiento más Viento-Calor exterior fuerte la separan de fórmulas que solo aclaran el Interior.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-011",
+      "prompt": "Which formula is built around the following chief ingredients? Fang Feng, Ma Huang, Jiu Da Huang, Mang Xiao",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "B",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) treats Wind-Heat in the exterior with simultaneous excess Heat in the interior—the classic double-releasing pattern.",
+        "Action: Disperses Wind, releases the exterior, drains Heat through urine and stool, and unblocks the bowels.",
+        "Decisive clue: Think simultaneous outlets: sweat the exterior, drain Heat through urine, and purge stool. Constipation plus strong exterior Wind-Heat separates it from formulas that only clear the interior.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        66
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Fang Feng, Ma Huang, Jiu Da Huang, Mang Xiao",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "B",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) trata Viento-Calor en el Exterior con exceso simultáneo de Calor en el Interior: patrón clásico de doble liberación.",
+          "Acción: Dispersa Viento, libera el Exterior, drena Calor por orina y heces y desbloquea los Intestinos.",
+          "Pista decisiva: Piensa en salidas simultáneas: sudar el Exterior, drenar Calor por orina y purgar heces. Estreñimiento más Viento-Calor exterior fuerte la separan de fórmulas que solo aclaran el Interior.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-012",
+      "prompt": "Which formula is identified by this Board distinction? Think simultaneous outlets: sweat the exterior, drain Heat through urine, and purge stool. Constipation plus strong exterior Wind-Heat separates it from formulas that only clear the interior.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "C",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) treats Wind-Heat in the exterior with simultaneous excess Heat in the interior—the classic double-releasing pattern.",
+        "Action: Disperses Wind, releases the exterior, drains Heat through urine and stool, and unblocks the bowels.",
+        "Decisive clue: Think simultaneous outlets: sweat the exterior, drain Heat through urine, and purge stool. Constipation plus strong exterior Wind-Heat separates it from formulas that only clear the interior.",
+        "Safety: This is a professional pattern-differentiation reference, not a self-treatment protocol. High fever, delirium, blood in vomit or stool, severe dehydration, persistent vomiting, a rigid or acutely painful abdomen, or neurologic deficits require urgent medical assessment."
+      ],
+      "formulaNumbers": [
+        66
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Piensa en salidas simultáneas: sudar el Exterior, drenar Calor por orina y purgar heces. Estreñimiento más Viento-Calor exterior fuerte la separan de fórmulas que solo aclaran el Interior.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "C",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks) trata Viento-Calor en el Exterior con exceso simultáneo de Calor en el Interior: patrón clásico de doble liberación.",
+          "Acción: Dispersa Viento, libera el Exterior, drena Calor por orina y heces y desbloquea los Intestinos.",
+          "Pista decisiva: Piensa en salidas simultáneas: sudar el Exterior, drenar Calor por orina y purgar heces. Estreñimiento más Viento-Calor exterior fuerte la separan de fórmulas que solo aclaran el Interior.",
+          "Seguridad: Esta es una referencia profesional de diferenciación de patrones, no un protocolo de autotratamiento. Fiebre alta, delirio, sangre en vómito o heces, deshidratación grave, vómito persistente, abdomen rígido o con dolor agudo, o déficits neurológicos requieren evaluación médica urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-013",
+      "prompt": "Which formula best matches this pattern? An incompletely resolved exterior disorder with blazing Damp-Heat in the Stomach and Intestines. Decisive clue: Fever, sweating, thirst, foul-smelling diarrhea with anal burning, irritability and Heat in the chest or epigastrium, red tongue with yellow coat, and a rapid pulse; wheezing may occur.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) treats An incompletely resolved exterior disorder with blazing Damp-Heat in the Stomach and Intestines.",
+        "Action: Releases the exterior, drains Heat, dries Dampness, and stops dysenteric diarrhea.",
+        "Decisive clue: The diarrhea itself is hot: foul odor and anal burning with fever, thirst, a red-yellow tongue, and rapid pulse. Ge Gen both releases the muscle layer and raises clear Yang.",
+        "Safety: Contraindicated for diarrhea without fever and with a submerged slow pulse. Severe, bloody, persistent, or dehydrating diarrhea requires medical evaluation; this card is not a substitute for infectious-disease care."
+      ],
+      "formulaNumbers": [
+        67
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Trastorno exterior no resuelto por completo con Humedad-Calor ardiente en Estómago e Intestinos. Pista decisiva: Fiebre, sudor, sed, diarrea fétida con ardor anal, irritabilidad y Calor en pecho o epigastrio, lengua roja con saburra amarilla y pulso rápido; puede haber sibilancia.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) trata Trastorno exterior no resuelto por completo con Humedad-Calor ardiente en Estómago e Intestinos.",
+          "Acción: Libera el Exterior, drena Calor, seca Humedad y detiene diarrea disentérica.",
+          "Pista decisiva: La diarrea es caliente: olor fétido y ardor anal con fiebre, sed, lengua roja-amarilla y pulso rápido. Ge Gen libera la capa muscular y eleva Yang claro.",
+          "Seguridad: Contraindicada en diarrea sin fiebre y con pulso sumergido-lento. Diarrea grave, sanguinolenta, persistente o deshidratante requiere evaluación médica; esta tarjeta no sustituye la atención de enfermedades infecciosas."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-014",
+      "prompt": "Which formula has this principal action? Releases the exterior, drains Heat, dries Dampness, and stops dysenteric diarrhea.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) treats An incompletely resolved exterior disorder with blazing Damp-Heat in the Stomach and Intestines.",
+        "Action: Releases the exterior, drains Heat, dries Dampness, and stops dysenteric diarrhea.",
+        "Decisive clue: The diarrhea itself is hot: foul odor and anal burning with fever, thirst, a red-yellow tongue, and rapid pulse. Ge Gen both releases the muscle layer and raises clear Yang.",
+        "Safety: Contraindicated for diarrhea without fever and with a submerged slow pulse. Severe, bloody, persistent, or dehydrating diarrhea requires medical evaluation; this card is not a substitute for infectious-disease care."
+      ],
+      "formulaNumbers": [
+        67
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Libera el Exterior, drena Calor, seca Humedad y detiene diarrea disentérica.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          }
+        ],
+        "feedback": [
+          "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) trata Trastorno exterior no resuelto por completo con Humedad-Calor ardiente en Estómago e Intestinos.",
+          "Acción: Libera el Exterior, drena Calor, seca Humedad y detiene diarrea disentérica.",
+          "Pista decisiva: La diarrea es caliente: olor fétido y ardor anal con fiebre, sed, lengua roja-amarilla y pulso rápido. Ge Gen libera la capa muscular y eleva Yang claro.",
+          "Seguridad: Contraindicada en diarrea sin fiebre y con pulso sumergido-lento. Diarrea grave, sanguinolenta, persistente o deshidratante requiere evaluación médica; esta tarjeta no sustituye la atención de enfermedades infecciosas."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-015",
+      "prompt": "Which formula is built around the following chief ingredient? Ge Gen",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) treats An incompletely resolved exterior disorder with blazing Damp-Heat in the Stomach and Intestines.",
+        "Action: Releases the exterior, drains Heat, dries Dampness, and stops dysenteric diarrhea.",
+        "Decisive clue: The diarrhea itself is hot: foul odor and anal burning with fever, thirst, a red-yellow tongue, and rapid pulse. Ge Gen both releases the muscle layer and raises clear Yang.",
+        "Safety: Contraindicated for diarrhea without fever and with a submerged slow pulse. Severe, bloody, persistent, or dehydrating diarrhea requires medical evaluation; this card is not a substitute for infectious-disease care."
+      ],
+      "formulaNumbers": [
+        67
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de el siguiente ingrediente principal? Ge Gen",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          }
+        ],
+        "feedback": [
+          "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) trata Trastorno exterior no resuelto por completo con Humedad-Calor ardiente en Estómago e Intestinos.",
+          "Acción: Libera el Exterior, drena Calor, seca Humedad y detiene diarrea disentérica.",
+          "Pista decisiva: La diarrea es caliente: olor fétido y ardor anal con fiebre, sed, lengua roja-amarilla y pulso rápido. Ge Gen libera la capa muscular y eleva Yang claro.",
+          "Seguridad: Contraindicada en diarrea sin fiebre y con pulso sumergido-lento. Diarrea grave, sanguinolenta, persistente o deshidratante requiere evaluación médica; esta tarjeta no sustituye la atención de enfermedades infecciosas."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-016",
+      "prompt": "Which formula is identified by this Board distinction? The diarrhea itself is hot: foul odor and anal burning with fever, thirst, a red-yellow tongue, and rapid pulse. Ge Gen both releases the muscle layer and raises clear Yang.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) treats An incompletely resolved exterior disorder with blazing Damp-Heat in the Stomach and Intestines.",
+        "Action: Releases the exterior, drains Heat, dries Dampness, and stops dysenteric diarrhea.",
+        "Decisive clue: The diarrhea itself is hot: foul odor and anal burning with fever, thirst, a red-yellow tongue, and rapid pulse. Ge Gen both releases the muscle layer and raises clear Yang.",
+        "Safety: Contraindicated for diarrhea without fever and with a submerged slow pulse. Severe, bloody, persistent, or dehydrating diarrhea requires medical evaluation; this card is not a substitute for infectious-disease care."
+      ],
+      "formulaNumbers": [
+        67
+      ],
+      "categoryKeys": [
+        "exterior-interior-excess"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? La diarrea es caliente: olor fétido y ardor anal con fiebre, sed, lengua roja-amarilla y pulso rápido. Ge Gen libera la capa muscular y eleva Yang claro.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          }
+        ],
+        "feedback": [
+          "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction) trata Trastorno exterior no resuelto por completo con Humedad-Calor ardiente en Estómago e Intestinos.",
+          "Acción: Libera el Exterior, drena Calor, seca Humedad y detiene diarrea disentérica.",
+          "Pista decisiva: La diarrea es caliente: olor fétido y ardor anal con fiebre, sed, lengua roja-amarilla y pulso rápido. Ge Gen libera la capa muscular y eleva Yang claro.",
+          "Seguridad: Contraindicada en diarrea sin fiebre y con pulso sumergido-lento. Diarrea grave, sanguinolenta, persistente o deshidratante requiere evaluación médica; esta tarjeta no sustituye la atención de enfermedades infecciosas."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-017",
+      "prompt": "Which formula best matches this pattern? Externally contracted cool-dryness constraining the Lung with internal thin mucus. Decisive clue: Slight headache, chills without sweating, cough with watery sputum, stuffy nose, dry throat, dry white tongue coating, and a wiry pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "D",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Xing Su San (Apricot Kernel and Perilla Leaf Powder) treats Externally contracted cool-dryness constraining the Lung with internal thin mucus.",
+        "Action: Gently disperses cool-dryness, disseminates Lung Qi, and transforms thin mucus.",
+        "Decisive clue: Chills without sweating plus watery sputum identify the cool side of external dryness.",
+        "Safety: Do not mistake warm-dryness or established Yin-fluid injury for cool-dryness. Persistent fever, breathing difficulty or dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        68
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Sequedad fresca contraída externamente que constriñe Pulmón con mucosidad fina interna. Pista decisiva: Cefalea leve, escalofríos sin sudor, tos con esputo acuoso, nariz tapada, garganta seca, saburra blanca seca y pulso de cuerda.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "D",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          }
+        ],
+        "feedback": [
+          "Xing Su San (Apricot Kernel and Perilla Leaf Powder) trata Sequedad fresca contraída externamente que constriñe Pulmón con mucosidad fina interna.",
+          "Acción: Dispersa suavemente Sequedad fresca, difunde Qi de Pulmón y transforma mucosidad fina.",
+          "Pista decisiva: Escalofríos sin sudor más esputo acuoso identifican el lado fresco de la Sequedad externa.",
+          "Seguridad: No confundir Sequedad cálida ni lesión establecida de Yin-líquidos con Sequedad fresca. Fiebre persistente, dificultad respiratoria o deshidratación requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-018",
+      "prompt": "Which formula has this principal action? Gently disperses cool-dryness, disseminates Lung Qi, and transforms thin mucus.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "D",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Xing Su San (Apricot Kernel and Perilla Leaf Powder) treats Externally contracted cool-dryness constraining the Lung with internal thin mucus.",
+        "Action: Gently disperses cool-dryness, disseminates Lung Qi, and transforms thin mucus.",
+        "Decisive clue: Chills without sweating plus watery sputum identify the cool side of external dryness.",
+        "Safety: Do not mistake warm-dryness or established Yin-fluid injury for cool-dryness. Persistent fever, breathing difficulty or dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        68
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Dispersa suavemente Sequedad fresca, difunde Qi de Pulmón y transforma mucosidad fina.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "D",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          }
+        ],
+        "feedback": [
+          "Xing Su San (Apricot Kernel and Perilla Leaf Powder) trata Sequedad fresca contraída externamente que constriñe Pulmón con mucosidad fina interna.",
+          "Acción: Dispersa suavemente Sequedad fresca, difunde Qi de Pulmón y transforma mucosidad fina.",
+          "Pista decisiva: Escalofríos sin sudor más esputo acuoso identifican el lado fresco de la Sequedad externa.",
+          "Seguridad: No confundir Sequedad cálida ni lesión establecida de Yin-líquidos con Sequedad fresca. Fiebre persistente, dificultad respiratoria o deshidratación requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-019",
+      "prompt": "Which formula is built around the following chief ingredients? Zi Su Ye, Xing Ren",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "C",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Xing Su San (Apricot Kernel and Perilla Leaf Powder) treats Externally contracted cool-dryness constraining the Lung with internal thin mucus.",
+        "Action: Gently disperses cool-dryness, disseminates Lung Qi, and transforms thin mucus.",
+        "Decisive clue: Chills without sweating plus watery sputum identify the cool side of external dryness.",
+        "Safety: Do not mistake warm-dryness or established Yin-fluid injury for cool-dryness. Persistent fever, breathing difficulty or dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        68
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Zi Su Ye, Xing Ren",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "C",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          }
+        ],
+        "feedback": [
+          "Xing Su San (Apricot Kernel and Perilla Leaf Powder) trata Sequedad fresca contraída externamente que constriñe Pulmón con mucosidad fina interna.",
+          "Acción: Dispersa suavemente Sequedad fresca, difunde Qi de Pulmón y transforma mucosidad fina.",
+          "Pista decisiva: Escalofríos sin sudor más esputo acuoso identifican el lado fresco de la Sequedad externa.",
+          "Seguridad: No confundir Sequedad cálida ni lesión establecida de Yin-líquidos con Sequedad fresca. Fiebre persistente, dificultad respiratoria o deshidratación requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-020",
+      "prompt": "Which formula is identified by this Board distinction? Chills without sweating plus watery sputum identify the cool side of external dryness.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "C",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Xing Su San (Apricot Kernel and Perilla Leaf Powder) treats Externally contracted cool-dryness constraining the Lung with internal thin mucus.",
+        "Action: Gently disperses cool-dryness, disseminates Lung Qi, and transforms thin mucus.",
+        "Decisive clue: Chills without sweating plus watery sputum identify the cool side of external dryness.",
+        "Safety: Do not mistake warm-dryness or established Yin-fluid injury for cool-dryness. Persistent fever, breathing difficulty or dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        68
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Escalofríos sin sudor más esputo acuoso identifican el lado fresco de la Sequedad externa.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "C",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          }
+        ],
+        "feedback": [
+          "Xing Su San (Apricot Kernel and Perilla Leaf Powder) trata Sequedad fresca contraída externamente que constriñe Pulmón con mucosidad fina interna.",
+          "Acción: Dispersa suavemente Sequedad fresca, difunde Qi de Pulmón y transforma mucosidad fina.",
+          "Pista decisiva: Escalofríos sin sudor más esputo acuoso identifican el lado fresco de la Sequedad externa.",
+          "Seguridad: No confundir Sequedad cálida ni lesión establecida de Yin-líquidos con Sequedad fresca. Fiebre persistente, dificultad respiratoria o deshidratación requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-021",
+      "prompt": "Which formula best matches this pattern? Externally contracted warm-dryness injuring the Lung at a relatively superficial level. Decisive clue: Moderate fever, headache, thirst, dry hacking cough or scant thick sticky sputum, red tongue with a thin dry white coating, and a floating rapid pulse, especially on the right.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) treats Externally contracted warm-dryness injuring the Lung at a relatively superficial level.",
+        "Action: Clears and disperses warm-dryness while lightly generating fluids and stopping cough.",
+        "Decisive clue: Moderate Heat plus thirst and a dry cough identify warm-dryness; the remaining thin white coat shows the pathogen is still superficial.",
+        "Safety: The source cautions against use after substantial Yin injury and against excessive dosing of this light dispersing formula. Worsening respiratory symptoms or hemoptysis requires prompt evaluation."
+      ],
+      "formulaNumbers": [
+        69
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Sequedad cálida contraída externamente que lesiona Pulmón a nivel relativamente superficial. Pista decisiva: Fiebre moderada, cefalea, sed, tos seca irritativa o esputo escaso espeso y pegajoso, lengua roja con saburra blanca fina y seca y pulso flotante rápido, sobre todo a la derecha.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) trata Sequedad cálida contraída externamente que lesiona Pulmón a nivel relativamente superficial.",
+          "Acción: Aclara y dispersa Sequedad cálida mientras genera líquidos suavemente y detiene tos.",
+          "Pista decisiva: Calor moderado más sed y tos seca identifican Sequedad cálida; la saburra blanca fina restante muestra que el patógeno sigue superficial.",
+          "Seguridad: La fuente desaconseja su uso tras lesión importante de Yin y dosis excesivas de esta fórmula ligera y dispersante. Empeoramiento respiratorio o hemoptisis requiere valoración pronta."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-022",
+      "prompt": "Which formula has this principal action? Clears and disperses warm-dryness while lightly generating fluids and stopping cough.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) treats Externally contracted warm-dryness injuring the Lung at a relatively superficial level.",
+        "Action: Clears and disperses warm-dryness while lightly generating fluids and stopping cough.",
+        "Decisive clue: Moderate Heat plus thirst and a dry cough identify warm-dryness; the remaining thin white coat shows the pathogen is still superficial.",
+        "Safety: The source cautions against use after substantial Yin injury and against excessive dosing of this light dispersing formula. Worsening respiratory symptoms or hemoptysis requires prompt evaluation."
+      ],
+      "formulaNumbers": [
+        69
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Aclara y dispersa Sequedad cálida mientras genera líquidos suavemente y detiene tos.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) trata Sequedad cálida contraída externamente que lesiona Pulmón a nivel relativamente superficial.",
+          "Acción: Aclara y dispersa Sequedad cálida mientras genera líquidos suavemente y detiene tos.",
+          "Pista decisiva: Calor moderado más sed y tos seca identifican Sequedad cálida; la saburra blanca fina restante muestra que el patógeno sigue superficial.",
+          "Seguridad: La fuente desaconseja su uso tras lesión importante de Yin y dosis excesivas de esta fórmula ligera y dispersante. Empeoramiento respiratorio o hemoptisis requiere valoración pronta."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-023",
+      "prompt": "Which formula is built around the following chief ingredients? Sang Ye, Xing Ren",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) treats Externally contracted warm-dryness injuring the Lung at a relatively superficial level.",
+        "Action: Clears and disperses warm-dryness while lightly generating fluids and stopping cough.",
+        "Decisive clue: Moderate Heat plus thirst and a dry cough identify warm-dryness; the remaining thin white coat shows the pathogen is still superficial.",
+        "Safety: The source cautions against use after substantial Yin injury and against excessive dosing of this light dispersing formula. Worsening respiratory symptoms or hemoptysis requires prompt evaluation."
+      ],
+      "formulaNumbers": [
+        69
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Sang Ye, Xing Ren",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) trata Sequedad cálida contraída externamente que lesiona Pulmón a nivel relativamente superficial.",
+          "Acción: Aclara y dispersa Sequedad cálida mientras genera líquidos suavemente y detiene tos.",
+          "Pista decisiva: Calor moderado más sed y tos seca identifican Sequedad cálida; la saburra blanca fina restante muestra que el patógeno sigue superficial.",
+          "Seguridad: La fuente desaconseja su uso tras lesión importante de Yin y dosis excesivas de esta fórmula ligera y dispersante. Empeoramiento respiratorio o hemoptisis requiere valoración pronta."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-024",
+      "prompt": "Which formula is identified by this Board distinction? Moderate Heat plus thirst and a dry cough identify warm-dryness; the remaining thin white coat shows the pathogen is still superficial.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) treats Externally contracted warm-dryness injuring the Lung at a relatively superficial level.",
+        "Action: Clears and disperses warm-dryness while lightly generating fluids and stopping cough.",
+        "Decisive clue: Moderate Heat plus thirst and a dry cough identify warm-dryness; the remaining thin white coat shows the pathogen is still superficial.",
+        "Safety: The source cautions against use after substantial Yin injury and against excessive dosing of this light dispersing formula. Worsening respiratory symptoms or hemoptysis requires prompt evaluation."
+      ],
+      "formulaNumbers": [
+        69
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Calor moderado más sed y tos seca identifican Sequedad cálida; la saburra blanca fina restante muestra que el patógeno sigue superficial.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) trata Sequedad cálida contraída externamente que lesiona Pulmón a nivel relativamente superficial.",
+          "Acción: Aclara y dispersa Sequedad cálida mientras genera líquidos suavemente y detiene tos.",
+          "Pista decisiva: Calor moderado más sed y tos seca identifican Sequedad cálida; la saburra blanca fina restante muestra que el patógeno sigue superficial.",
+          "Seguridad: La fuente desaconseja su uso tras lesión importante de Yin y dosis excesivas de esta fórmula ligera y dispersante. Empeoramiento respiratorio o hemoptisis requiere valoración pronta."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-025",
+      "prompt": "Which formula best matches this pattern? Warm-dryness penetrating the Lung Qi level and damaging both Lung Qi and Yin. Decisive clue: Headache, fever without aversion to Cold, hacking cough, wheezing, dry throat and nasal passages, chest fullness, hypochondriac pain, irritability, thirst, a dry tongue without coating, and a deficient big rapid pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "C",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) treats Warm-dryness penetrating the Lung Qi level and damaging both Lung Qi and Yin.",
+        "Action: Clears Heat and dryness, moistens the Lungs, nourishes fluids, tonifies Qi, and directs Lung Qi downward.",
+        "Decisive clue: The dry coatless tongue, absent chills and deficient big rapid pulse mark deeper warm-dryness with simultaneous Qi-Yin injury.",
+        "Safety: Use cautiously with Spleen-Stomach deficiency because the formula contains rich, cloying substances. It is not for pure deficiency without exterior or pathogenic signs. Wheezing, respiratory distress or acute neurologic symptoms requires urgent care."
+      ],
+      "formulaNumbers": [
+        70
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Sequedad cálida que penetra el nivel Qi de Pulmón y lesiona Qi y Yin de Pulmón. Pista decisiva: Cefalea, fiebre sin aversión al Frío, tos seca irritativa, sibilancia, garganta y fosas nasales secas, plenitud torácica, dolor hipocondríaco, irritabilidad, sed, lengua seca sin saburra y pulso grande, rápido y deficiente.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "C",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) trata Sequedad cálida que penetra el nivel Qi de Pulmón y lesiona Qi y Yin de Pulmón.",
+          "Acción: Aclara Calor y Sequedad, humedece Pulmón, nutre líquidos, tonifica Qi y desciende Qi de Pulmón.",
+          "Pista decisiva: Lengua seca sin saburra, ausencia de escalofríos y pulso grande, rápido y deficiente marcan Sequedad cálida más profunda con lesión simultánea de Qi-Yin.",
+          "Seguridad: Usar con cautela en deficiencia de Bazo-Estómago por contener sustancias ricas y untuosas. No corresponde a deficiencia pura sin signos exteriores o patógenos. Sibilancia, dificultad respiratoria o síntomas neurológicos agudos requieren urgencias."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-026",
+      "prompt": "Which formula has this principal action? Clears Heat and dryness, moistens the Lungs, nourishes fluids, tonifies Qi, and directs Lung Qi downward.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "C",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) treats Warm-dryness penetrating the Lung Qi level and damaging both Lung Qi and Yin.",
+        "Action: Clears Heat and dryness, moistens the Lungs, nourishes fluids, tonifies Qi, and directs Lung Qi downward.",
+        "Decisive clue: The dry coatless tongue, absent chills and deficient big rapid pulse mark deeper warm-dryness with simultaneous Qi-Yin injury.",
+        "Safety: Use cautiously with Spleen-Stomach deficiency because the formula contains rich, cloying substances. It is not for pure deficiency without exterior or pathogenic signs. Wheezing, respiratory distress or acute neurologic symptoms requires urgent care."
+      ],
+      "formulaNumbers": [
+        70
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Aclara Calor y Sequedad, humedece Pulmón, nutre líquidos, tonifica Qi y desciende Qi de Pulmón.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "C",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          }
+        ],
+        "feedback": [
+          "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) trata Sequedad cálida que penetra el nivel Qi de Pulmón y lesiona Qi y Yin de Pulmón.",
+          "Acción: Aclara Calor y Sequedad, humedece Pulmón, nutre líquidos, tonifica Qi y desciende Qi de Pulmón.",
+          "Pista decisiva: Lengua seca sin saburra, ausencia de escalofríos y pulso grande, rápido y deficiente marcan Sequedad cálida más profunda con lesión simultánea de Qi-Yin.",
+          "Seguridad: Usar con cautela en deficiencia de Bazo-Estómago por contener sustancias ricas y untuosas. No corresponde a deficiencia pura sin signos exteriores o patógenos. Sibilancia, dificultad respiratoria o síntomas neurológicos agudos requieren urgencias."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-027",
+      "prompt": "Which formula is built around the following chief ingredient? Sang Ye",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) treats Warm-dryness penetrating the Lung Qi level and damaging both Lung Qi and Yin.",
+        "Action: Clears Heat and dryness, moistens the Lungs, nourishes fluids, tonifies Qi, and directs Lung Qi downward.",
+        "Decisive clue: The dry coatless tongue, absent chills and deficient big rapid pulse mark deeper warm-dryness with simultaneous Qi-Yin injury.",
+        "Safety: Use cautiously with Spleen-Stomach deficiency because the formula contains rich, cloying substances. It is not for pure deficiency without exterior or pathogenic signs. Wheezing, respiratory distress or acute neurologic symptoms requires urgent care."
+      ],
+      "formulaNumbers": [
+        70
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de el siguiente ingrediente principal? Sang Ye",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) trata Sequedad cálida que penetra el nivel Qi de Pulmón y lesiona Qi y Yin de Pulmón.",
+          "Acción: Aclara Calor y Sequedad, humedece Pulmón, nutre líquidos, tonifica Qi y desciende Qi de Pulmón.",
+          "Pista decisiva: Lengua seca sin saburra, ausencia de escalofríos y pulso grande, rápido y deficiente marcan Sequedad cálida más profunda con lesión simultánea de Qi-Yin.",
+          "Seguridad: Usar con cautela en deficiencia de Bazo-Estómago por contener sustancias ricas y untuosas. No corresponde a deficiencia pura sin signos exteriores o patógenos. Sibilancia, dificultad respiratoria o síntomas neurológicos agudos requieren urgencias."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-028",
+      "prompt": "Which formula is identified by this Board distinction? The dry coatless tongue, absent chills and deficient big rapid pulse mark deeper warm-dryness with simultaneous Qi-Yin injury.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "D",
+          "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) treats Warm-dryness penetrating the Lung Qi level and damaging both Lung Qi and Yin.",
+        "Action: Clears Heat and dryness, moistens the Lungs, nourishes fluids, tonifies Qi, and directs Lung Qi downward.",
+        "Decisive clue: The dry coatless tongue, absent chills and deficient big rapid pulse mark deeper warm-dryness with simultaneous Qi-Yin injury.",
+        "Safety: Use cautiously with Spleen-Stomach deficiency because the formula contains rich, cloying substances. It is not for pure deficiency without exterior or pathogenic signs. Wheezing, respiratory distress or acute neurologic symptoms requires urgent care."
+      ],
+      "formulaNumbers": [
+        70
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Lengua seca sin saburra, ausencia de escalofríos y pulso grande, rápido y deficiente marcan Sequedad cálida más profunda con lesión simultánea de Qi-Yin.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "D",
+            "text": "Ge Gen Huang Qin Huang Lian Tang (Kudzu, Scutellaria, and Coptis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) trata Sequedad cálida que penetra el nivel Qi de Pulmón y lesiona Qi y Yin de Pulmón.",
+          "Acción: Aclara Calor y Sequedad, humedece Pulmón, nutre líquidos, tonifica Qi y desciende Qi de Pulmón.",
+          "Pista decisiva: Lengua seca sin saburra, ausencia de escalofríos y pulso grande, rápido y deficiente marcan Sequedad cálida más profunda con lesión simultánea de Qi-Yin.",
+          "Seguridad: Usar con cautela en deficiencia de Bazo-Estómago por contener sustancias ricas y untuosas. No corresponde a deficiencia pura sin signos exteriores o patógenos. Sibilancia, dificultad respiratoria o síntomas neurológicos agudos requieren urgencias."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-029",
+      "prompt": "Which formula best matches this pattern? Dryness injuring the Lungs, Stomach and fluids, often in a constitutionally Yin-deficient patient. Decisive clue: Dry throat, thirst, fever, hacking cough with scant sputum, a red tongue with little coating, and a rapid thin pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) treats Dryness injuring the Lungs, Stomach and fluids, often in a constitutionally Yin-deficient patient.",
+        "Action: Clears and nourishes the Lungs and Stomach, generates fluids, and moistens dryness.",
+        "Decisive clue: Choose it when fluid generation is central and the Heat is milder than in Qing Zao Jiu Fei Tang.",
+        "Safety: Not appropriate when exuberant excess Heat is the main driver of fluid injury. Persistent fever, respiratory distress or significant dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        71
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Sequedad que lesiona Pulmón, Estómago y líquidos, a menudo en paciente constitucionalmente deficiente de Yin. Pista decisiva: Garganta seca, sed, fiebre, tos seca irritativa con esputo escaso, lengua roja con poca saburra y pulso rápido y fino.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) trata Sequedad que lesiona Pulmón, Estómago y líquidos, a menudo en paciente constitucionalmente deficiente de Yin.",
+          "Acción: Aclara y nutre Pulmón y Estómago, genera líquidos y humedece Sequedad.",
+          "Pista decisiva: Elígela cuando generar líquidos es central y el Calor es más leve que en Qing Zao Jiu Fei Tang.",
+          "Seguridad: No corresponde cuando Calor exuberante de exceso es el motor principal de la lesión de líquidos. Fiebre persistente, dificultad respiratoria o deshidratación importante requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-030",
+      "prompt": "Which formula has this principal action? Clears and nourishes the Lungs and Stomach, generates fluids, and moistens dryness.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) treats Dryness injuring the Lungs, Stomach and fluids, often in a constitutionally Yin-deficient patient.",
+        "Action: Clears and nourishes the Lungs and Stomach, generates fluids, and moistens dryness.",
+        "Decisive clue: Choose it when fluid generation is central and the Heat is milder than in Qing Zao Jiu Fei Tang.",
+        "Safety: Not appropriate when exuberant excess Heat is the main driver of fluid injury. Persistent fever, respiratory distress or significant dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        71
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Aclara y nutre Pulmón y Estómago, genera líquidos y humedece Sequedad.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) trata Sequedad que lesiona Pulmón, Estómago y líquidos, a menudo en paciente constitucionalmente deficiente de Yin.",
+          "Acción: Aclara y nutre Pulmón y Estómago, genera líquidos y humedece Sequedad.",
+          "Pista decisiva: Elígela cuando generar líquidos es central y el Calor es más leve que en Qing Zao Jiu Fei Tang.",
+          "Seguridad: No corresponde cuando Calor exuberante de exceso es el motor principal de la lesión de líquidos. Fiebre persistente, dificultad respiratoria o deshidratación importante requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-031",
+      "prompt": "Which formula is built around the following chief ingredients? Sha Shen, Mai Men Dong, Sang Ye",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) treats Dryness injuring the Lungs, Stomach and fluids, often in a constitutionally Yin-deficient patient.",
+        "Action: Clears and nourishes the Lungs and Stomach, generates fluids, and moistens dryness.",
+        "Decisive clue: Choose it when fluid generation is central and the Heat is milder than in Qing Zao Jiu Fei Tang.",
+        "Safety: Not appropriate when exuberant excess Heat is the main driver of fluid injury. Persistent fever, respiratory distress or significant dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        71
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Sha Shen, Mai Men Dong, Sang Ye",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) trata Sequedad que lesiona Pulmón, Estómago y líquidos, a menudo en paciente constitucionalmente deficiente de Yin.",
+          "Acción: Aclara y nutre Pulmón y Estómago, genera líquidos y humedece Sequedad.",
+          "Pista decisiva: Elígela cuando generar líquidos es central y el Calor es más leve que en Qing Zao Jiu Fei Tang.",
+          "Seguridad: No corresponde cuando Calor exuberante de exceso es el motor principal de la lesión de líquidos. Fiebre persistente, dificultad respiratoria o deshidratación importante requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-032",
+      "prompt": "Which formula is identified by this Board distinction? Choose it when fluid generation is central and the Heat is milder than in Qing Zao Jiu Fei Tang.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) treats Dryness injuring the Lungs, Stomach and fluids, often in a constitutionally Yin-deficient patient.",
+        "Action: Clears and nourishes the Lungs and Stomach, generates fluids, and moistens dryness.",
+        "Decisive clue: Choose it when fluid generation is central and the Heat is milder than in Qing Zao Jiu Fei Tang.",
+        "Safety: Not appropriate when exuberant excess Heat is the main driver of fluid injury. Persistent fever, respiratory distress or significant dehydration requires medical evaluation."
+      ],
+      "formulaNumbers": [
+        71
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Elígela cuando generar líquidos es central y el Calor es más leve que en Qing Zao Jiu Fei Tang.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          }
+        ],
+        "feedback": [
+          "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction) trata Sequedad que lesiona Pulmón, Estómago y líquidos, a menudo en paciente constitucionalmente deficiente de Yin.",
+          "Acción: Aclara y nutre Pulmón y Estómago, genera líquidos y humedece Sequedad.",
+          "Pista decisiva: Elígela cuando generar líquidos es central y el Calor es más leve que en Qing Zao Jiu Fei Tang.",
+          "Seguridad: No corresponde cuando Calor exuberante de exceso es el motor principal de la lesión de líquidos. Fiebre persistente, dificultad respiratoria o deshidratación importante requieren valoración médica."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-033",
+      "prompt": "Which formula best matches this pattern? Lung and Stomach Yin deficiency with deficiency Heat and rebellious Qi rising to the throat and Lungs. Decisive clue: Coughing, wheezing, shortness of breath, difficult-to-expectorate phlegm or spitting saliva, dry uncomfortable or obstructed throat, dry mouth, heat in palms and soles, dry red tongue with little coating, and a deficient rapid pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Mai Men Dong Tang (Ophiopogonis Decoction) treats Lung and Stomach Yin deficiency with deficiency Heat and rebellious Qi rising to the throat and Lungs.",
+        "Action: Benefits the Stomach, generates fluids, nourishes Lung Yin, and directs rebellious Qi downward.",
+        "Decisive clue: The key is rebellious Qi against a background of Lung-Stomach Yin deficiency; Ban Xia descends while a large dose of Mai Men Dong moistens.",
+        "Safety: Use cautiously when high fever and irritability show an exterior pathogen with Qi and Yin still intact; contraindicated with Dampness or cold-type Lung atrophy. Respiratory distress, dysphagia or coughing blood requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        72
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Deficiencia de Yin de Pulmón-Estómago con Calor por deficiencia y Qi rebelde que asciende a garganta y Pulmón. Pista decisiva: Tos, sibilancia, disnea, Flema difícil de expectorar o saliva, garganta seca incómoda u obstruida, boca seca, calor en palmas y plantas, lengua roja seca con poca saburra y pulso rápido deficiente.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Mai Men Dong Tang (Ophiopogonis Decoction) trata Deficiencia de Yin de Pulmón-Estómago con Calor por deficiencia y Qi rebelde que asciende a garganta y Pulmón.",
+          "Acción: Beneficia Estómago, genera líquidos, nutre Yin de Pulmón y desciende Qi rebelde.",
+          "Pista decisiva: La clave es Qi rebelde sobre deficiencia de Yin de Pulmón-Estómago; Ban Xia desciende mientras una dosis grande de Mai Men Dong humedece.",
+          "Seguridad: Usar con cautela cuando fiebre alta e irritabilidad muestran patógeno exterior con Qi y Yin aún intactos; contraindicada con Humedad o atrofia pulmonar de tipo frío. Dificultad respiratoria, disfagia o tos con sangre requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-034",
+      "prompt": "Which formula has this principal action? Benefits the Stomach, generates fluids, nourishes Lung Yin, and directs rebellious Qi downward.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Mai Men Dong Tang (Ophiopogonis Decoction) treats Lung and Stomach Yin deficiency with deficiency Heat and rebellious Qi rising to the throat and Lungs.",
+        "Action: Benefits the Stomach, generates fluids, nourishes Lung Yin, and directs rebellious Qi downward.",
+        "Decisive clue: The key is rebellious Qi against a background of Lung-Stomach Yin deficiency; Ban Xia descends while a large dose of Mai Men Dong moistens.",
+        "Safety: Use cautiously when high fever and irritability show an exterior pathogen with Qi and Yin still intact; contraindicated with Dampness or cold-type Lung atrophy. Respiratory distress, dysphagia or coughing blood requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        72
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Beneficia Estómago, genera líquidos, nutre Yin de Pulmón y desciende Qi rebelde.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Mai Men Dong Tang (Ophiopogonis Decoction) trata Deficiencia de Yin de Pulmón-Estómago con Calor por deficiencia y Qi rebelde que asciende a garganta y Pulmón.",
+          "Acción: Beneficia Estómago, genera líquidos, nutre Yin de Pulmón y desciende Qi rebelde.",
+          "Pista decisiva: La clave es Qi rebelde sobre deficiencia de Yin de Pulmón-Estómago; Ban Xia desciende mientras una dosis grande de Mai Men Dong humedece.",
+          "Seguridad: Usar con cautela cuando fiebre alta e irritabilidad muestran patógeno exterior con Qi y Yin aún intactos; contraindicada con Humedad o atrofia pulmonar de tipo frío. Dificultad respiratoria, disfagia o tos con sangre requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-035",
+      "prompt": "Which formula is built around the following chief ingredient? Mai Men Dong",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Mai Men Dong Tang (Ophiopogonis Decoction) treats Lung and Stomach Yin deficiency with deficiency Heat and rebellious Qi rising to the throat and Lungs.",
+        "Action: Benefits the Stomach, generates fluids, nourishes Lung Yin, and directs rebellious Qi downward.",
+        "Decisive clue: The key is rebellious Qi against a background of Lung-Stomach Yin deficiency; Ban Xia descends while a large dose of Mai Men Dong moistens.",
+        "Safety: Use cautiously when high fever and irritability show an exterior pathogen with Qi and Yin still intact; contraindicated with Dampness or cold-type Lung atrophy. Respiratory distress, dysphagia or coughing blood requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        72
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de el siguiente ingrediente principal? Mai Men Dong",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          }
+        ],
+        "feedback": [
+          "Mai Men Dong Tang (Ophiopogonis Decoction) trata Deficiencia de Yin de Pulmón-Estómago con Calor por deficiencia y Qi rebelde que asciende a garganta y Pulmón.",
+          "Acción: Beneficia Estómago, genera líquidos, nutre Yin de Pulmón y desciende Qi rebelde.",
+          "Pista decisiva: La clave es Qi rebelde sobre deficiencia de Yin de Pulmón-Estómago; Ban Xia desciende mientras una dosis grande de Mai Men Dong humedece.",
+          "Seguridad: Usar con cautela cuando fiebre alta e irritabilidad muestran patógeno exterior con Qi y Yin aún intactos; contraindicada con Humedad o atrofia pulmonar de tipo frío. Dificultad respiratoria, disfagia o tos con sangre requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-036",
+      "prompt": "Which formula is identified by this Board distinction? The key is rebellious Qi against a background of Lung-Stomach Yin deficiency; Ban Xia descends while a large dose of Mai Men Dong moistens.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Mai Men Dong Tang (Ophiopogonis Decoction) treats Lung and Stomach Yin deficiency with deficiency Heat and rebellious Qi rising to the throat and Lungs.",
+        "Action: Benefits the Stomach, generates fluids, nourishes Lung Yin, and directs rebellious Qi downward.",
+        "Decisive clue: The key is rebellious Qi against a background of Lung-Stomach Yin deficiency; Ban Xia descends while a large dose of Mai Men Dong moistens.",
+        "Safety: Use cautiously when high fever and irritability show an exterior pathogen with Qi and Yin still intact; contraindicated with Dampness or cold-type Lung atrophy. Respiratory distress, dysphagia or coughing blood requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        72
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? La clave es Qi rebelde sobre deficiencia de Yin de Pulmón-Estómago; Ban Xia desciende mientras una dosis grande de Mai Men Dong humedece.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Mai Men Dong Tang (Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Mai Men Dong Tang (Ophiopogonis Decoction) trata Deficiencia de Yin de Pulmón-Estómago con Calor por deficiencia y Qi rebelde que asciende a garganta y Pulmón.",
+          "Acción: Beneficia Estómago, genera líquidos, nutre Yin de Pulmón y desciende Qi rebelde.",
+          "Pista decisiva: La clave es Qi rebelde sobre deficiencia de Yin de Pulmón-Estómago; Ban Xia desciende mientras una dosis grande de Mai Men Dong humedece.",
+          "Seguridad: Usar con cautela cuando fiebre alta e irritabilidad muestran patógeno exterior con Qi y Yin aún intactos; contraindicada con Humedad o atrofia pulmonar de tipo frío. Dificultad respiratoria, disfagia o tos con sangre requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-037",
+      "prompt": "Which formula best matches this pattern? Dry constipation from exhaustion of Yin fluids, commonly after a prolonged warm-febrile disease. Decisive clue: Constipation, thirst, a dry red tongue, and a thin slightly rapid pulse or a weak forceless pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Zeng Ye Tang (Increase the Fluids Decoction) treats Dry constipation from exhaustion of Yin fluids, commonly after a prolonged warm-febrile disease.",
+        "Action: Generates fluids, moistens dryness, clears residual Heat, and unblocks the bowels.",
+        "Decisive clue: The ‘boat without water’ image: restore fluid volume so dry stool can move rather than attacking it first with purgatives.",
+        "Safety: This is not a purgative and may be insufficient when severe Heat clumping or mechanical obstruction is present. Severe abdominal pain, vomiting, distention, fever or inability to pass stool and gas requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        73
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Estreñimiento seco por agotamiento de líquidos Yin, comúnmente después de enfermedad febril cálida prolongada. Pista decisiva: Estreñimiento, sed, lengua roja seca y pulso fino ligeramente rápido o débil sin fuerza.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          }
+        ],
+        "feedback": [
+          "Zeng Ye Tang (Increase the Fluids Decoction) trata Estreñimiento seco por agotamiento de líquidos Yin, comúnmente después de enfermedad febril cálida prolongada.",
+          "Acción: Genera líquidos, humedece Sequedad, aclara Calor residual y desbloquea Intestinos.",
+          "Pista decisiva: La imagen del «barco sin agua»: restaurar líquidos para que las heces secas se muevan en vez de atacarlas primero con purgantes.",
+          "Seguridad: No es un purgante y puede ser insuficiente cuando hay acumulación grave de Calor u obstrucción mecánica. Dolor abdominal intenso, vómito, distensión, fiebre o incapacidad para expulsar heces y gases requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-038",
+      "prompt": "Which formula has this principal action? Generates fluids, moistens dryness, clears residual Heat, and unblocks the bowels.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Zeng Ye Tang (Increase the Fluids Decoction) treats Dry constipation from exhaustion of Yin fluids, commonly after a prolonged warm-febrile disease.",
+        "Action: Generates fluids, moistens dryness, clears residual Heat, and unblocks the bowels.",
+        "Decisive clue: The ‘boat without water’ image: restore fluid volume so dry stool can move rather than attacking it first with purgatives.",
+        "Safety: This is not a purgative and may be insufficient when severe Heat clumping or mechanical obstruction is present. Severe abdominal pain, vomiting, distention, fever or inability to pass stool and gas requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        73
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Genera líquidos, humedece Sequedad, aclara Calor residual y desbloquea Intestinos.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          }
+        ],
+        "feedback": [
+          "Zeng Ye Tang (Increase the Fluids Decoction) trata Estreñimiento seco por agotamiento de líquidos Yin, comúnmente después de enfermedad febril cálida prolongada.",
+          "Acción: Genera líquidos, humedece Sequedad, aclara Calor residual y desbloquea Intestinos.",
+          "Pista decisiva: La imagen del «barco sin agua»: restaurar líquidos para que las heces secas se muevan en vez de atacarlas primero con purgantes.",
+          "Seguridad: No es un purgante y puede ser insuficiente cuando hay acumulación grave de Calor u obstrucción mecánica. Dolor abdominal intenso, vómito, distensión, fiebre o incapacidad para expulsar heces y gases requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-039",
+      "prompt": "Which formula is built around the following chief ingredient? Xuan Shen",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Zeng Ye Tang (Increase the Fluids Decoction) treats Dry constipation from exhaustion of Yin fluids, commonly after a prolonged warm-febrile disease.",
+        "Action: Generates fluids, moistens dryness, clears residual Heat, and unblocks the bowels.",
+        "Decisive clue: The ‘boat without water’ image: restore fluid volume so dry stool can move rather than attacking it first with purgatives.",
+        "Safety: This is not a purgative and may be insufficient when severe Heat clumping or mechanical obstruction is present. Severe abdominal pain, vomiting, distention, fever or inability to pass stool and gas requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        73
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de el siguiente ingrediente principal? Xuan Shen",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          }
+        ],
+        "feedback": [
+          "Zeng Ye Tang (Increase the Fluids Decoction) trata Estreñimiento seco por agotamiento de líquidos Yin, comúnmente después de enfermedad febril cálida prolongada.",
+          "Acción: Genera líquidos, humedece Sequedad, aclara Calor residual y desbloquea Intestinos.",
+          "Pista decisiva: La imagen del «barco sin agua»: restaurar líquidos para que las heces secas se muevan en vez de atacarlas primero con purgantes.",
+          "Seguridad: No es un purgante y puede ser insuficiente cuando hay acumulación grave de Calor u obstrucción mecánica. Dolor abdominal intenso, vómito, distensión, fiebre o incapacidad para expulsar heces y gases requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-040",
+      "prompt": "Which formula is identified by this Board distinction? The ‘boat without water’ image: restore fluid volume so dry stool can move rather than attacking it first with purgatives.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "C",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Zeng Ye Tang (Increase the Fluids Decoction) treats Dry constipation from exhaustion of Yin fluids, commonly after a prolonged warm-febrile disease.",
+        "Action: Generates fluids, moistens dryness, clears residual Heat, and unblocks the bowels.",
+        "Decisive clue: The ‘boat without water’ image: restore fluid volume so dry stool can move rather than attacking it first with purgatives.",
+        "Safety: This is not a purgative and may be insufficient when severe Heat clumping or mechanical obstruction is present. Severe abdominal pain, vomiting, distention, fever or inability to pass stool and gas requires urgent evaluation."
+      ],
+      "formulaNumbers": [
+        73
+      ],
+      "categoryKeys": [
+        "treat-dryness"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? La imagen del «barco sin agua»: restaurar líquidos para que las heces secas se muevan en vez de atacarlas primero con purgantes.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Zeng Ye Tang (Increase the Fluids Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "C",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          }
+        ],
+        "feedback": [
+          "Zeng Ye Tang (Increase the Fluids Decoction) trata Estreñimiento seco por agotamiento de líquidos Yin, comúnmente después de enfermedad febril cálida prolongada.",
+          "Acción: Genera líquidos, humedece Sequedad, aclara Calor residual y desbloquea Intestinos.",
+          "Pista decisiva: La imagen del «barco sin agua»: restaurar líquidos para que las heces secas se muevan en vez de atacarlas primero con purgantes.",
+          "Seguridad: No es un purgante y puede ser insuficiente cuando hay acumulación grave de Calor u obstrucción mecánica. Dolor abdominal intenso, vómito, distensión, fiebre o incapacidad para expulsar heces y gases requieren valoración urgente."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-041",
+      "prompt": "Which formula best matches this pattern? Fire-toxin accumulation producing boils, carbuncles and localized hot swellings. Decisive clue: Localized erythema, swelling, heat and pain with fever and chills, a red tongue with yellow coat, and a rapid pulse; especially deep-rooted hard lesions.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "D",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) treats Fire-toxin accumulation producing boils, carbuncles and localized hot swellings.",
+        "Action: Clears Heat, resolves toxicity, cools the Blood and reduces swelling.",
+        "Decisive clue: A compact five-herb Heat-toxin formula for red, hot, painful boils before major pus formation; the tongue coat is yellow and the pulse rapid.",
+        "Safety: Not for pale, cold yin-type boils or marked Spleen deficiency. Abscesses and cellulitis may require culture, antibiotics and incision and drainage; fever, spreading redness, red streaks, immunocompromise or systemic illness requires urgent care. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        74
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Acumulación de Fuego-Toxicidad que produce forúnculos, carbuncos e hinchazones calientes localizadas. Pista decisiva: Eritema, hinchazón, calor y dolor localizados con fiebre y escalofríos, lengua roja con saburra amarilla y pulso rápido; especialmente lesiones duras y profundas.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "D",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          }
+        ],
+        "feedback": [
+          "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) trata Acumulación de Fuego-Toxicidad que produce forúnculos, carbuncos e hinchazones calientes localizadas.",
+          "Acción: Aclara Calor, resuelve toxicidad, enfría Sangre y reduce hinchazón.",
+          "Pista decisiva: Fórmula compacta de cinco hierbas para Calor-Toxicidad en forúnculos rojos, calientes y dolorosos antes de gran formación de pus; saburra amarilla y pulso rápido.",
+          "Seguridad: No corresponde a forúnculos pálidos y fríos tipo Yin ni a deficiencia marcada de Bazo. Abscesos y celulitis pueden requerir cultivo, antibióticos e incisión y drenaje; fiebre, eritema que se extiende, líneas rojas, inmunosupresión o enfermedad sistémica exige atención urgente. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-042",
+      "prompt": "Which formula has this principal action? Clears Heat, resolves toxicity, cools the Blood and reduces swelling.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        },
+        {
+          "label": "D",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) treats Fire-toxin accumulation producing boils, carbuncles and localized hot swellings.",
+        "Action: Clears Heat, resolves toxicity, cools the Blood and reduces swelling.",
+        "Decisive clue: A compact five-herb Heat-toxin formula for red, hot, painful boils before major pus formation; the tongue coat is yellow and the pulse rapid.",
+        "Safety: Not for pale, cold yin-type boils or marked Spleen deficiency. Abscesses and cellulitis may require culture, antibiotics and incision and drainage; fever, spreading redness, red streaks, immunocompromise or systemic illness requires urgent care. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        74
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Aclara Calor, resuelve toxicidad, enfría Sangre y reduce hinchazón.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          },
+          {
+            "label": "D",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          }
+        ],
+        "feedback": [
+          "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) trata Acumulación de Fuego-Toxicidad que produce forúnculos, carbuncos e hinchazones calientes localizadas.",
+          "Acción: Aclara Calor, resuelve toxicidad, enfría Sangre y reduce hinchazón.",
+          "Pista decisiva: Fórmula compacta de cinco hierbas para Calor-Toxicidad en forúnculos rojos, calientes y dolorosos antes de gran formación de pus; saburra amarilla y pulso rápido.",
+          "Seguridad: No corresponde a forúnculos pálidos y fríos tipo Yin ni a deficiencia marcada de Bazo. Abscesos y celulitis pueden requerir cultivo, antibióticos e incisión y drenaje; fiebre, eritema que se extiende, líneas rojas, inmunosupresión o enfermedad sistémica exige atención urgente. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-043",
+      "prompt": "Which formula is built around the following chief ingredient? Jin Yin Hua",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "C",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) treats Fire-toxin accumulation producing boils, carbuncles and localized hot swellings.",
+        "Action: Clears Heat, resolves toxicity, cools the Blood and reduces swelling.",
+        "Decisive clue: A compact five-herb Heat-toxin formula for red, hot, painful boils before major pus formation; the tongue coat is yellow and the pulse rapid.",
+        "Safety: Not for pale, cold yin-type boils or marked Spleen deficiency. Abscesses and cellulitis may require culture, antibiotics and incision and drainage; fever, spreading redness, red streaks, immunocompromise or systemic illness requires urgent care. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        74
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de el siguiente ingrediente principal? Jin Yin Hua",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "C",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          }
+        ],
+        "feedback": [
+          "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) trata Acumulación de Fuego-Toxicidad que produce forúnculos, carbuncos e hinchazones calientes localizadas.",
+          "Acción: Aclara Calor, resuelve toxicidad, enfría Sangre y reduce hinchazón.",
+          "Pista decisiva: Fórmula compacta de cinco hierbas para Calor-Toxicidad en forúnculos rojos, calientes y dolorosos antes de gran formación de pus; saburra amarilla y pulso rápido.",
+          "Seguridad: No corresponde a forúnculos pálidos y fríos tipo Yin ni a deficiencia marcada de Bazo. Abscesos y celulitis pueden requerir cultivo, antibióticos e incisión y drenaje; fiebre, eritema que se extiende, líneas rojas, inmunosupresión o enfermedad sistémica exige atención urgente. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-044",
+      "prompt": "Which formula is identified by this Board distinction? A compact five-herb Heat-toxin formula for red, hot, painful boils before major pus formation; the tongue coat is yellow and the pulse rapid.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "B",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "C",
+          "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) treats Fire-toxin accumulation producing boils, carbuncles and localized hot swellings.",
+        "Action: Clears Heat, resolves toxicity, cools the Blood and reduces swelling.",
+        "Decisive clue: A compact five-herb Heat-toxin formula for red, hot, painful boils before major pus formation; the tongue coat is yellow and the pulse rapid.",
+        "Safety: Not for pale, cold yin-type boils or marked Spleen deficiency. Abscesses and cellulitis may require culture, antibiotics and incision and drainage; fever, spreading redness, red streaks, immunocompromise or systemic illness requires urgent care. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        74
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? Fórmula compacta de cinco hierbas para Calor-Toxicidad en forúnculos rojos, calientes y dolorosos antes de gran formación de pus; saburra amarilla y pulso rápido.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "B",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "C",
+            "text": "Da Chai Hu Tang (Major Bupleurum Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Fang Feng Tong Sheng San (Saposhnikovia Powder that Sagely Unblocks)"
+          }
+        ],
+        "feedback": [
+          "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin) trata Acumulación de Fuego-Toxicidad que produce forúnculos, carbuncos e hinchazones calientes localizadas.",
+          "Acción: Aclara Calor, resuelve toxicidad, enfría Sangre y reduce hinchazón.",
+          "Pista decisiva: Fórmula compacta de cinco hierbas para Calor-Toxicidad en forúnculos rojos, calientes y dolorosos antes de gran formación de pus; saburra amarilla y pulso rápido.",
+          "Seguridad: No corresponde a forúnculos pálidos y fríos tipo Yin ni a deficiencia marcada de Bazo. Abscesos y celulitis pueden requerir cultivo, antibióticos e incisión y drenaje; fiebre, eritema que se extiende, líneas rojas, inmunosupresión o enfermedad sistémica exige atención urgente. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-045",
+      "prompt": "Which formula best matches this pattern? Yin-type flat abscess from Yang deficiency, Cold congealing fluids, and stagnation of Qi and Blood. Decisive clue: A localized painful swelling without a head that blends into surrounding tissue, does not change skin color or texture and is not hot, with no thirst, a very pale tongue and a deep thin forceless pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Yang He Tang (Balmy Yang Decoction) treats Yin-type flat abscess from Yang deficiency, Cold congealing fluids, and stagnation of Qi and Blood.",
+        "Action: Warms Yang, tonifies Blood, disperses Cold, transforms Phlegm and unblocks stagnation.",
+        "Decisive clue: The pale, diffuse, nonhot swelling with no thirst and a deep weak pulse is the opposite of a classic red-hot Fire-toxin sore.",
+        "Safety: Not for red, hot yang-type swellings, Yin deficiency Heat or long-ulcerated lesions. Ma Huang requires cardiovascular and medication screening; animal-derived deer antler gelatin raises sourcing concerns. Any unexplained deep mass requires diagnosis before treatment. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        75
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Absceso plano tipo Yin por deficiencia de Yang, Frío que congela líquidos y estancamiento de Qi-Sangre. Pista decisiva: Hinchazón dolorosa localizada sin cabeza que se funde con tejido vecino, no cambia color ni textura y no está caliente, sin sed, lengua muy pálida y pulso profundo fino sin fuerza.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          }
+        ],
+        "feedback": [
+          "Yang He Tang (Balmy Yang Decoction) trata Absceso plano tipo Yin por deficiencia de Yang, Frío que congela líquidos y estancamiento de Qi-Sangre.",
+          "Acción: Calienta Yang, tonifica Sangre, dispersa Frío, transforma Flema y desobstruye estancamiento.",
+          "Pista decisiva: La hinchazón pálida, difusa y no caliente, sin sed y con pulso profundo débil, es lo opuesto a una llaga clásica roja-caliente por Fuego-Toxicidad.",
+          "Seguridad: No corresponde a hinchazón roja y caliente tipo Yang, Calor por deficiencia de Yin ni lesiones ulceradas de larga evolución. Ma Huang exige revisión cardiovascular y de medicamentos; la gelatina de asta de ciervo plantea cuestiones de procedencia. Toda masa profunda inexplicada requiere diagnóstico antes de tratar. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-046",
+      "prompt": "Which formula has this principal action? Warms Yang, tonifies Blood, disperses Cold, transforms Phlegm and unblocks stagnation.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Yang He Tang (Balmy Yang Decoction) treats Yin-type flat abscess from Yang deficiency, Cold congealing fluids, and stagnation of Qi and Blood.",
+        "Action: Warms Yang, tonifies Blood, disperses Cold, transforms Phlegm and unblocks stagnation.",
+        "Decisive clue: The pale, diffuse, nonhot swelling with no thirst and a deep weak pulse is the opposite of a classic red-hot Fire-toxin sore.",
+        "Safety: Not for red, hot yang-type swellings, Yin deficiency Heat or long-ulcerated lesions. Ma Huang requires cardiovascular and medication screening; animal-derived deer antler gelatin raises sourcing concerns. Any unexplained deep mass requires diagnosis before treatment. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        75
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Calienta Yang, tonifica Sangre, dispersa Frío, transforma Flema y desobstruye estancamiento.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Yang He Tang (Balmy Yang Decoction) trata Absceso plano tipo Yin por deficiencia de Yang, Frío que congela líquidos y estancamiento de Qi-Sangre.",
+          "Acción: Calienta Yang, tonifica Sangre, dispersa Frío, transforma Flema y desobstruye estancamiento.",
+          "Pista decisiva: La hinchazón pálida, difusa y no caliente, sin sed y con pulso profundo débil, es lo opuesto a una llaga clásica roja-caliente por Fuego-Toxicidad.",
+          "Seguridad: No corresponde a hinchazón roja y caliente tipo Yang, Calor por deficiencia de Yin ni lesiones ulceradas de larga evolución. Ma Huang exige revisión cardiovascular y de medicamentos; la gelatina de asta de ciervo plantea cuestiones de procedencia. Toda masa profunda inexplicada requiere diagnóstico antes de tratar. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-047",
+      "prompt": "Which formula is built around the following chief ingredients? Shu Di Huang, Lu Jiao Jiao",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Yang He Tang (Balmy Yang Decoction) treats Yin-type flat abscess from Yang deficiency, Cold congealing fluids, and stagnation of Qi and Blood.",
+        "Action: Warms Yang, tonifies Blood, disperses Cold, transforms Phlegm and unblocks stagnation.",
+        "Decisive clue: The pale, diffuse, nonhot swelling with no thirst and a deep weak pulse is the opposite of a classic red-hot Fire-toxin sore.",
+        "Safety: Not for red, hot yang-type swellings, Yin deficiency Heat or long-ulcerated lesions. Ma Huang requires cardiovascular and medication screening; animal-derived deer antler gelatin raises sourcing concerns. Any unexplained deep mass requires diagnosis before treatment. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        75
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Shu Di Huang, Lu Jiao Jiao",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Yang He Tang (Balmy Yang Decoction) trata Absceso plano tipo Yin por deficiencia de Yang, Frío que congela líquidos y estancamiento de Qi-Sangre.",
+          "Acción: Calienta Yang, tonifica Sangre, dispersa Frío, transforma Flema y desobstruye estancamiento.",
+          "Pista decisiva: La hinchazón pálida, difusa y no caliente, sin sed y con pulso profundo débil, es lo opuesto a una llaga clásica roja-caliente por Fuego-Toxicidad.",
+          "Seguridad: No corresponde a hinchazón roja y caliente tipo Yang, Calor por deficiencia de Yin ni lesiones ulceradas de larga evolución. Ma Huang exige revisión cardiovascular y de medicamentos; la gelatina de asta de ciervo plantea cuestiones de procedencia. Toda masa profunda inexplicada requiere diagnóstico antes de tratar. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-048",
+      "prompt": "Which formula is identified by this Board distinction? The pale, diffuse, nonhot swelling with no thirst and a deep weak pulse is the opposite of a classic red-hot Fire-toxin sore.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Yang He Tang (Balmy Yang Decoction) treats Yin-type flat abscess from Yang deficiency, Cold congealing fluids, and stagnation of Qi and Blood.",
+        "Action: Warms Yang, tonifies Blood, disperses Cold, transforms Phlegm and unblocks stagnation.",
+        "Decisive clue: The pale, diffuse, nonhot swelling with no thirst and a deep weak pulse is the opposite of a classic red-hot Fire-toxin sore.",
+        "Safety: Not for red, hot yang-type swellings, Yin deficiency Heat or long-ulcerated lesions. Ma Huang requires cardiovascular and medication screening; animal-derived deer antler gelatin raises sourcing concerns. Any unexplained deep mass requires diagnosis before treatment. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        75
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? La hinchazón pálida, difusa y no caliente, sin sed y con pulso profundo débil, es lo opuesto a una llaga clásica roja-caliente por Fuego-Toxicidad.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Sha Shen Mai Men Dong Tang (Glehnia and Ophiopogonis Decoction)"
+          }
+        ],
+        "feedback": [
+          "Yang He Tang (Balmy Yang Decoction) trata Absceso plano tipo Yin por deficiencia de Yang, Frío que congela líquidos y estancamiento de Qi-Sangre.",
+          "Acción: Calienta Yang, tonifica Sangre, dispersa Frío, transforma Flema y desobstruye estancamiento.",
+          "Pista decisiva: La hinchazón pálida, difusa y no caliente, sin sed y con pulso profundo débil, es lo opuesto a una llaga clásica roja-caliente por Fuego-Toxicidad.",
+          "Seguridad: No corresponde a hinchazón roja y caliente tipo Yang, Calor por deficiencia de Yin ni lesiones ulceradas de larga evolución. Ma Huang exige revisión cardiovascular y de medicamentos; la gelatina de asta de ciervo plantea cuestiones de procedencia. Toda masa profunda inexplicada requiere diagnóstico antes de tratar. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-049",
+      "prompt": "Which formula best matches this pattern? Early-stage intestinal abscess from clumping of Heat and Blood stasis in the lower abdomen. Decisive clue: Usually right-lower abdominal distention and pain worse with pressure, rebound tenderness or guarding, a thin greasy yellow coat, and a slippery rapid pulse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "B",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "C",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        }
+      ],
+      "correctLabel": "A",
+      "feedback": [
+        "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) treats Early-stage intestinal abscess from clumping of Heat and Blood stasis in the lower abdomen.",
+        "Action: Drains Heat, breaks Blood stasis, disperses clumping and reduces swelling.",
+        "Decisive clue: Early excess is decisive: right-lower abdominal pain with rebound or guarding, greasy yellow coat and slippery rapid pulse before formed pus or systemic collapse.",
+        "Safety: Suspected appendicitis or peritonitis is a surgical emergency; do not use this formula to delay imaging, antibiotics or surgery. The historical formula is contraindicated in pregnancy and unsuitable for perforation, diffuse peritonitis, necrotic appendicitis, infants or frail patients. Strong purgatives can worsen dehydration and obstruction. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        76
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula corresponde mejor a este patrón? Absceso intestinal temprano por aglomeración de Calor y estasis de Sangre en abdomen inferior. Pista decisiva: Distensión y dolor abdominal inferior, usualmente derecho, peor con presión, rebote o defensa, saburra fina amarilla grasosa y pulso resbaladizo rápido.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "B",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "C",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          }
+        ],
+        "feedback": [
+          "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) trata Absceso intestinal temprano por aglomeración de Calor y estasis de Sangre en abdomen inferior.",
+          "Acción: Drena Calor, rompe estasis de Sangre, dispersa aglomeración y reduce hinchazón.",
+          "Pista decisiva: El exceso temprano es decisivo: dolor inferior derecho con rebote o defensa, saburra amarilla grasosa y pulso resbaladizo rápido antes de pus formado o colapso sistémico.",
+          "Seguridad: Sospecha de apendicitis o peritonitis es urgencia quirúrgica; no usar esta fórmula para retrasar imagen, antibióticos o cirugía. La fórmula histórica está contraindicada en embarazo y no corresponde a perforación, peritonitis difusa, apendicitis necrótica, lactantes o pacientes frágiles. Purgantes fuertes pueden empeorar deshidratación y obstrucción. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-050",
+      "prompt": "Which formula has this principal action? Drains Heat, breaks Blood stasis, disperses clumping and reduces swelling.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        }
+      ],
+      "correctLabel": "B",
+      "feedback": [
+        "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) treats Early-stage intestinal abscess from clumping of Heat and Blood stasis in the lower abdomen.",
+        "Action: Drains Heat, breaks Blood stasis, disperses clumping and reduces swelling.",
+        "Decisive clue: Early excess is decisive: right-lower abdominal pain with rebound or guarding, greasy yellow coat and slippery rapid pulse before formed pus or systemic collapse.",
+        "Safety: Suspected appendicitis or peritonitis is a surgical emergency; do not use this formula to delay imaging, antibiotics or surgery. The historical formula is contraindicated in pregnancy and unsuitable for perforation, diffuse peritonitis, necrotic appendicitis, infants or frail patients. Strong purgatives can worsen dehydration and obstruction. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        76
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula tiene esta acción principal? Drena Calor, rompe estasis de Sangre, dispersa aglomeración y reduce hinchazón.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          }
+        ],
+        "feedback": [
+          "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) trata Absceso intestinal temprano por aglomeración de Calor y estasis de Sangre en abdomen inferior.",
+          "Acción: Drena Calor, rompe estasis de Sangre, dispersa aglomeración y reduce hinchazón.",
+          "Pista decisiva: El exceso temprano es decisivo: dolor inferior derecho con rebote o defensa, saburra amarilla grasosa y pulso resbaladizo rápido antes de pus formado o colapso sistémico.",
+          "Seguridad: Sospecha de apendicitis o peritonitis es urgencia quirúrgica; no usar esta fórmula para retrasar imagen, antibióticos o cirugía. La fórmula histórica está contraindicada en embarazo y no corresponde a perforación, peritonitis difusa, apendicitis necrótica, lactantes o pacientes frágiles. Purgantes fuertes pueden empeorar deshidratación y obstrucción. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-051",
+      "prompt": "Which formula is built around the following chief ingredients? Da Huang, Mu Dan Pi",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        },
+        {
+          "label": "D",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        }
+      ],
+      "correctLabel": "C",
+      "feedback": [
+        "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) treats Early-stage intestinal abscess from clumping of Heat and Blood stasis in the lower abdomen.",
+        "Action: Drains Heat, breaks Blood stasis, disperses clumping and reduces swelling.",
+        "Decisive clue: Early excess is decisive: right-lower abdominal pain with rebound or guarding, greasy yellow coat and slippery rapid pulse before formed pus or systemic collapse.",
+        "Safety: Suspected appendicitis or peritonitis is a surgical emergency; do not use this formula to delay imaging, antibiotics or surgery. The historical formula is contraindicated in pregnancy and unsuitable for perforation, diffuse peritonitis, necrotic appendicitis, infants or frail patients. Strong purgatives can worsen dehydration and obstruction. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        76
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se construye alrededor de los siguientes ingredientes principales? Da Huang, Mu Dan Pi",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          },
+          {
+            "label": "D",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          }
+        ],
+        "feedback": [
+          "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) trata Absceso intestinal temprano por aglomeración de Calor y estasis de Sangre en abdomen inferior.",
+          "Acción: Drena Calor, rompe estasis de Sangre, dispersa aglomeración y reduce hinchazón.",
+          "Pista decisiva: El exceso temprano es decisivo: dolor inferior derecho con rebote o defensa, saburra amarilla grasosa y pulso resbaladizo rápido antes de pus formado o colapso sistémico.",
+          "Seguridad: Sospecha de apendicitis o peritonitis es urgencia quirúrgica; no usar esta fórmula para retrasar imagen, antibióticos o cirugía. La fórmula histórica está contraindicada en embarazo y no corresponde a perforación, peritonitis difusa, apendicitis necrótica, lactantes o pacientes frágiles. Purgantes fuertes pueden empeorar deshidratación y obstrucción. No es para automedicación."
+        ]
+      }
+    },
+    {
+      "sourceNumber": "FCAT-052",
+      "prompt": "Which formula is identified by this Board distinction? Early excess is decisive: right-lower abdominal pain with rebound or guarding, greasy yellow coat and slippery rapid pulse before formed pus or systemic collapse.",
+      "body": [],
+      "options": [
+        {
+          "label": "A",
+          "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+        },
+        {
+          "label": "B",
+          "text": "Yang He Tang (Balmy Yang Decoction)"
+        },
+        {
+          "label": "C",
+          "text": "Liu Yi San (Six-to-One Powder)"
+        },
+        {
+          "label": "D",
+          "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+        }
+      ],
+      "correctLabel": "D",
+      "feedback": [
+        "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) treats Early-stage intestinal abscess from clumping of Heat and Blood stasis in the lower abdomen.",
+        "Action: Drains Heat, breaks Blood stasis, disperses clumping and reduces swelling.",
+        "Decisive clue: Early excess is decisive: right-lower abdominal pain with rebound or guarding, greasy yellow coat and slippery rapid pulse before formed pus or systemic collapse.",
+        "Safety: Suspected appendicitis or peritonitis is a surgical emergency; do not use this formula to delay imaging, antibiotics or surgery. The historical formula is contraindicated in pregnancy and unsuitable for perforation, diffuse peritonitis, necrotic appendicitis, infants or frail patients. Strong purgatives can worsen dehydration and obstruction. Not for self-treatment."
+      ],
+      "formulaNumbers": [
+        76
+      ],
+      "categoryKeys": [
+        "treat-abscesses-sores"
+      ],
+      "translationEs": {
+        "prompt": "¿Qué fórmula se identifica por esta distinción de Board? El exceso temprano es decisivo: dolor inferior derecho con rebote o defensa, saburra amarilla grasosa y pulso resbaladizo rápido antes de pus formado o colapso sistémico.",
+        "body": [],
+        "options": [
+          {
+            "label": "A",
+            "text": "Wu Wei Xiao Du Yin (Five-Ingredient Drink to Eliminate Toxin)"
+          },
+          {
+            "label": "B",
+            "text": "Yang He Tang (Balmy Yang Decoction)"
+          },
+          {
+            "label": "C",
+            "text": "Liu Yi San (Six-to-One Powder)"
+          },
+          {
+            "label": "D",
+            "text": "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction)"
+          }
+        ],
+        "feedback": [
+          "Da Huang Mu Dan Tang (Rhubarb and Moutan Decoction) trata Absceso intestinal temprano por aglomeración de Calor y estasis de Sangre en abdomen inferior.",
+          "Acción: Drena Calor, rompe estasis de Sangre, dispersa aglomeración y reduce hinchazón.",
+          "Pista decisiva: El exceso temprano es decisivo: dolor inferior derecho con rebote o defensa, saburra amarilla grasosa y pulso resbaladizo rápido antes de pus formado o colapso sistémico.",
+          "Seguridad: Sospecha de apendicitis o peritonitis es urgencia quirúrgica; no usar esta fórmula para retrasar imagen, antibióticos o cirugía. La fórmula histórica está contraindicada en embarazo y no corresponde a perforación, peritonitis difusa, apendicitis necrótica, lactantes o pacientes frágiles. Purgantes fuertes pueden empeorar deshidratación y obstrucción. No es para automedicación."
+        ]
+      }
+    }
+  ]
+}

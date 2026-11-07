@@ -79,6 +79,7 @@ STATIC_FILES=(
     "formula-modifications-gui-zhi-tang.json"
     "formula-modifications-ge-gen-tang.json"
     "formula-modifications-generated.json"
+    "formula-category-expansion.json"
 )
 
 for relative in "${MOODLE_FILES[@]}"; do
@@ -97,7 +98,7 @@ php -l "$TEMP_DIR/moodle/blocks/myprogress/single-herbs-study-guide.php" >/dev/n
 php -l "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php" >/dev/null
 php -r '
 $xml = simplexml_load_file($argv[1]);
-if (!$xml || (string)$xml["VERSION"] !== "2026110633") {
+if (!$xml || (string)$xml["VERSION"] !== "2026110634") {
     throw new RuntimeException("Versión install.xml incorrecta.");
 }
 ' "$TEMP_DIR/moodle/blocks/menu/db/install.xml"
@@ -118,6 +119,36 @@ if (count($data["questions"] ?? []) < 500) {
     throw new RuntimeException("El banco de fórmulas es insuficiente.");
 }
 ' "$TEMP_DIR/static/formula-practice-data.json"
+php -r '
+$data = json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+if (count($data["categories"] ?? []) !== 4
+        || count($data["formulas"] ?? []) !== 13
+        || count($data["questions"] ?? []) !== 52) {
+    throw new RuntimeException("La expansión de categorías de fórmulas está incompleta.");
+}
+' "$TEMP_DIR/static/formula-category-expansion.json"
+php -r '
+$directory = $argv[1];
+$bank = json_decode(file_get_contents($directory . "/formula-practice-data.json"), true, 512, JSON_THROW_ON_ERROR);
+$manifest = json_decode(file_get_contents($directory . "/formula-modifications-manifest.json"), true, 512, JSON_THROW_ON_ERROR);
+$questions = $bank["questions"] ?? [];
+$formulas = array_column($bank["formulas"] ?? [], null, "number");
+$categories = array_column($bank["categories"] ?? [], null, "key");
+foreach ($manifest["files"] ?? [] as $filename) {
+    $supplement = json_decode(file_get_contents($directory . "/" . basename($filename)), true, 512, JSON_THROW_ON_ERROR);
+    $questions = array_merge($questions, $supplement["questions"] ?? []);
+    foreach ($supplement["formulas"] ?? [] as $formula) {
+        $formulas[(int)$formula["number"]] = $formula;
+    }
+    foreach ($supplement["categories"] ?? [] as $category) {
+        $categories[(string)$category["key"]] = $category;
+    }
+}
+unset($categories["modifications"]);
+if (count($questions) !== 929 || count($formulas) !== 76 || count($categories) !== 18) {
+    throw new RuntimeException("Totales ampliados incorrectos: se esperaban 929 preguntas, 76 fórmulas y 18 categorías oficiales.");
+}
+' "$TEMP_DIR/static"
 
 grep -Fq "'title' => 'Single Herbs'" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq "'path' => '/blocks/myprogress/single-herbs-study-guide.php'" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
@@ -125,7 +156,9 @@ grep -Fq 'single-herb-practice-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-
 grep -Fq 'formula-question-bank-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Practice Questions' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Questions &amp; Flashcards' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '$plugin->version   = 2026110633;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110634;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq 'official categories' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'Additional practice filter' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Single Herbs Practice' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq 'Formula Questions &amp; Flashcards' "$TEMP_DIR/static/formula-question-bank.html"
 

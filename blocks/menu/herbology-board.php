@@ -1160,6 +1160,7 @@ $comparisonfile = static function(string $filename) use ($CFG): string {
 };
 
 $formulacategories = [];
+$formulamodificationcount = 0;
 $formulatotals = [
     'questions' => 0,
     'formulas' => 0,
@@ -1230,6 +1231,10 @@ if ($track === 'herbs') {
             if (is_readable($manifestpath)) {
                 $manifest = json_decode(file_get_contents($manifestpath), true);
                 $knowncategories = array_column($formulabank['categories'] ?? [], null, 'key');
+                $knownformulas = array_fill_keys(array_map(
+                    static fn($formula) => (int)($formula['number'] ?? 0),
+                    $formulabank['formulas'] ?? []
+                ), true);
                 $knownquestions = array_fill_keys(array_map(
                     static fn($question) => (string)($question['sourceNumber'] ?? ''),
                     $formulabank['questions'] ?? []
@@ -1251,6 +1256,13 @@ if ($track === 'herbs') {
                             $knowncategories[$key] = $category;
                         }
                     }
+                    foreach ($supplement['formulas'] ?? [] as $formula) {
+                        $number = (int)($formula['number'] ?? 0);
+                        if ($number > 0 && !isset($knownformulas[$number])) {
+                            $formulabank['formulas'][] = $formula;
+                            $knownformulas[$number] = true;
+                        }
+                    }
                     foreach ($supplement['questions'] ?? [] as $question) {
                         $source = (string)($question['sourceNumber'] ?? '');
                         if ($source !== '' && !isset($knownquestions[$source])) {
@@ -1261,6 +1273,7 @@ if ($track === 'herbs') {
                     }
                 }
                 $formulabank['totals']['questions'] = count($formulabank['questions'] ?? []);
+                $formulabank['totals']['formulas'] = count($formulabank['formulas'] ?? []);
                 $formulabank['totals']['categories'] = count($formulabank['categories'] ?? []);
             }
             $formulatotals['questions'] = (int)($formulabank['totals']['questions'] ?? 0);
@@ -1268,7 +1281,7 @@ if ($track === 'herbs') {
             $formulatotals['categories'] = (int)($formulabank['totals']['categories'] ?? 0);
             foreach ($formulabank['categories'] ?? [] as $category) {
                 $key = clean_param($category['key'] ?? '', PARAM_ALPHANUMEXT);
-                $name = trim((string)($category['en'] ?? ''));
+                $name = trim((string)($category[$ises ? 'es' : 'en'] ?? $category['en'] ?? ''));
                 if ($key === '' || $name === '') {
                     continue;
                 }
@@ -1278,12 +1291,40 @@ if ($track === 'herbs') {
                         $count++;
                     }
                 }
+                if ($key === 'modifications') {
+                    $formulamodificationcount = $count;
+                    continue;
+                }
                 $formulacategories[] = [
                     'key' => $key,
                     'name' => $name,
                     'count' => $count,
                 ];
             }
+            $categoryorder = [
+                'release-exterior' => 1,
+                'purge' => 2,
+                'harmonize' => 3,
+                'clear-heat' => 4,
+                'dispel-summerheat' => 5,
+                'warm-interior' => 6,
+                'exterior-interior-excess' => 7,
+                'tonify' => 8,
+                'stabilize-bind' => 9,
+                'calm-shen' => 10,
+                'regulate-qi' => 12,
+                'invigorate-blood' => 13,
+                'expel-wind' => 14,
+                'treat-dryness' => 15,
+                'expel-damp' => 16,
+                'transform-phlegm' => 17,
+                'digestive' => 18,
+                'treat-abscesses-sores' => 20,
+            ];
+            usort($formulacategories, static function(array $left, array $right) use ($categoryorder): int {
+                return ($categoryorder[$left['key']] ?? 999) <=> ($categoryorder[$right['key']] ?? 999);
+            });
+            $formulatotals['categories'] = count($formulacategories);
         }
     }
 }
@@ -1648,9 +1689,12 @@ echo $OUTPUT->header();
                 </div>
             </div>
             <div class="herb-board__summary herb-board__summary--panel" aria-label="Formula bank totals">
-                <span><strong><?php echo $formulatotals['questions']; ?></strong> verified questions</span>
-                <span><strong><?php echo $formulatotals['formulas']; ?></strong> core formulas</span>
-                <span><strong><?php echo $formulatotals['categories']; ?></strong> clinical categories</span>
+                <span><strong><?php echo $formulatotals['questions']; ?></strong> <?php echo $ises
+                    ? 'preguntas verificadas' : 'verified questions'; ?></span>
+                <span><strong><?php echo $formulatotals['formulas']; ?></strong> <?php echo $ises
+                    ? 'fórmulas con práctica' : 'formulas with practice'; ?></span>
+                <span><strong><?php echo $formulatotals['categories']; ?></strong> <?php echo $ises
+                    ? 'categorías oficiales' : 'official categories'; ?></span>
             </div>
             <div class="herb-board__launches">
                 <a class="herb-board__launch" href="<?php echo $formulapracticeurl->out(false); ?>">
@@ -1680,10 +1724,17 @@ echo $OUTPUT->header();
                     </a>
                 <?php } ?>
             </div>
-            <div class="herb-board__notice">
-                <strong>Formula modifications:</strong> the verified modification questions already in the bank remain
-                available within their clinical categories. A dedicated Modifications filter will be added when the
-                expanded question set is received.
+            <h4 class="herb-board__subheading"><?php echo $ises
+                ? 'Filtro adicional de práctica' : 'Additional practice filter'; ?></h4>
+            <div class="herb-board__topics">
+                <?php $modificationsurl = new moodle_url($formulapracticepath, [
+                    'category' => 'modifications',
+                    'size' => 25,
+                ]); ?>
+                <a class="herb-board__topic" href="<?php echo $modificationsurl->out(false); ?>">
+                    <strong><?php echo $formulamodificationcount; ?></strong>
+                    <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
+                </a>
             </div>
         </section>
     <?php } else if ($selecteddomain === null) { ?>

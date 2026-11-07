@@ -44,6 +44,12 @@
     }
   };
   const storageKey = 'formula-practice-progress-v1';
+  const categoryOrder = [
+    'release-exterior', 'purge', 'harmonize', 'clear-heat', 'dispel-summerheat',
+    'warm-interior', 'exterior-interior-excess', 'tonify', 'stabilize-bind',
+    'calm-shen', 'regulate-qi', 'invigorate-blood', 'expel-wind', 'treat-dryness',
+    'expel-damp', 'transform-phlegm', 'digestive', 'treat-abscesses-sores', 'modifications'
+  ];
   const elements = {
     status: document.querySelector('[data-practice-status]'),
     setup: document.querySelector('[data-practice-setup]'),
@@ -78,6 +84,7 @@
     configure: document.querySelector('[data-practice-configure]'),
     language: document.querySelector('[data-practice-language]'),
     questionTotals: [...document.querySelectorAll('[data-practice-question-total]')],
+    formulaTotals: [...document.querySelectorAll('[data-practice-formula-total]')],
     categoryTotals: [...document.querySelectorAll('[data-practice-category-total]')]
   };
   const state = {
@@ -230,7 +237,7 @@
         if (!formula) return;
         const item = document.createElement('li');
         const link = document.createElement('a');
-        link.href = `${formula.slug}${spanish ? '-es' : ''}.html`;
+        link.href = formulaProfileUrl(formula);
         link.textContent = formula.name;
         item.append(link, ` — ${percentage(result.correct, result.total)}% (${result.total} ${text.attempts})`);
         list.append(item);
@@ -264,14 +271,27 @@
     renderHistory();
   }
 
+  function formulaProfileUrl(formula) {
+    if (spanish && formula.profileUrlEs) return formula.profileUrlEs;
+    if (formula.profileUrl) return formula.profileUrl;
+    return `${formula.slug}${spanish ? '-es' : ''}.html`;
+  }
+
   function mergeSupplements(data, translations, supplements) {
     const knownCategories = new Set(data.categories.map(category => category.key));
+    const knownFormulas = new Set(data.formulas.map(formula => Number(formula.number)));
     const knownQuestions = new Set(data.questions.map(question => String(question.sourceNumber)));
     supplements.filter(Boolean).forEach(supplement => {
       (supplement.categories || []).forEach(category => {
         if (!category?.key || knownCategories.has(category.key)) return;
         data.categories.push(category);
         knownCategories.add(category.key);
+      });
+      (supplement.formulas || []).forEach(formula => {
+        const number = Number(formula?.number);
+        if (!number || knownFormulas.has(number)) return;
+        data.formulas.push(formula);
+        knownFormulas.add(number);
       });
       (supplement.questions || []).forEach(entry => {
         if (!entry?.sourceNumber || knownQuestions.has(String(entry.sourceNumber))) return;
@@ -287,7 +307,11 @@
       });
     });
     data.totals.questions = data.questions.length;
-    data.totals.categories = data.categories.length;
+    data.totals.formulas = data.formulas.length;
+    data.totals.categories = data.categories.filter(category => category.key !== 'modifications').length;
+    data.categories.sort((left, right) =>
+      categoryOrder.indexOf(left.key) - categoryOrder.indexOf(right.key)
+    );
     data.formulas.forEach(formula => {
       formula.questionCount = data.questions.filter(question =>
         question.formulaNumbers.includes(formula.number)
@@ -297,7 +321,7 @@
 
   function associationLink(formula) {
     const link = document.createElement('a');
-    link.href = `${formula.slug}${spanish ? '-es' : ''}.html`;
+    link.href = formulaProfileUrl(formula);
     link.textContent = formula.name;
     return link;
   }
@@ -567,9 +591,7 @@
       })
     : Promise.resolve(null);
 
-  const requestedCategory = new URLSearchParams(window.location.search).get('category');
-  const supplementsRequest = requestedCategory === 'modifications'
-    ? fetch('formula-modifications-manifest.json', { credentials: 'same-origin' })
+  const supplementsRequest = fetch('formula-modifications-manifest.json', { credentials: 'same-origin' })
       .then(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
@@ -581,10 +603,9 @@
         })
       )))
       .catch(error => {
-        console.error('Formula modification supplement unavailable', error);
+        console.error('Formula supplements unavailable', error);
         return [];
-      })
-    : Promise.resolve([]);
+      });
 
   Promise.all([bankRequest, translationsRequest, supplementsRequest])
     .then(([data, translations, supplements]) => {
@@ -593,6 +614,7 @@
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
       elements.questionTotals.forEach(element => { element.textContent = String(data.totals.questions); });
+      elements.formulaTotals.forEach(element => { element.textContent = String(data.totals.formulas); });
       elements.categoryTotals.forEach(element => { element.textContent = String(data.totals.categories); });
       if (translations?.questions?.length === data.questions.length) {
         state.translations = new Map(translations.questions.map(question => [question.sourceNumber, question]));

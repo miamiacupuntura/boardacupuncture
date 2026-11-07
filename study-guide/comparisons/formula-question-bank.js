@@ -3,6 +3,12 @@
 
   const spanish = document.documentElement.lang === 'es';
   const pageSize = 20;
+  const categoryOrder = [
+    'release-exterior', 'purge', 'harmonize', 'clear-heat', 'dispel-summerheat',
+    'warm-interior', 'exterior-interior-excess', 'tonify', 'stabilize-bind',
+    'calm-shen', 'regulate-qi', 'invigorate-blood', 'expel-wind', 'treat-dryness',
+    'expel-damp', 'transform-phlegm', 'digestive', 'treat-abscesses-sores', 'modifications'
+  ];
   const copy = {
     loadError: spanish ? 'No se pudo cargar el banco de fórmulas.' : 'The formula bank could not be loaded.',
     ready: spanish ? 'Banco de estudio listo.' : 'Study bank ready.',
@@ -18,6 +24,7 @@
   };
   const elements = {
     total: document.querySelector('[data-formula-study-total]'),
+    formulaTotal: document.querySelector('[data-formula-study-formula-total]'),
     status: document.querySelector('[data-formula-study-status]'),
     controls: document.querySelector('[data-formula-study-controls]'),
     search: document.querySelector('[data-formula-study-search]'),
@@ -72,6 +79,7 @@
   function mergeData(data, translations, supplements) {
     const knownQuestions = new Set(data.questions.map(question => String(question.sourceNumber)));
     const knownCategories = new Set(data.categories.map(category => category.key));
+    const knownFormulas = new Set(data.formulas.map(formula => Number(formula.number)));
     (translations?.questions || []).forEach(question => {
       state.translations.set(String(question.sourceNumber), question);
     });
@@ -80,6 +88,12 @@
         if (!category?.key || knownCategories.has(category.key)) return;
         data.categories.push(category);
         knownCategories.add(category.key);
+      });
+      (supplement.formulas || []).forEach(formula => {
+        const number = Number(formula?.number);
+        if (!number || knownFormulas.has(number)) return;
+        data.formulas.push(formula);
+        knownFormulas.add(number);
       });
       (supplement.questions || []).forEach(entry => {
         if (!entry?.sourceNumber || knownQuestions.has(String(entry.sourceNumber))) return;
@@ -90,8 +104,18 @@
       });
     });
     data.totals.questions = data.questions.length;
-    data.totals.categories = data.categories.length;
+    data.totals.formulas = data.formulas.length;
+    data.totals.categories = data.categories.filter(category => category.key !== 'modifications').length;
+    data.categories.sort((left, right) =>
+      categoryOrder.indexOf(left.key) - categoryOrder.indexOf(right.key)
+    );
     return data;
+  }
+
+  function formulaProfileUrl(formula) {
+    if (spanish && formula.profileUrlEs) return formula.profileUrlEs;
+    if (formula.profileUrl) return formula.profileUrl;
+    return `${formula.slug}${spanish ? '-es' : ''}.html`;
   }
 
   function searchText(question) {
@@ -141,7 +165,7 @@
       const formula = state.formulaByNumber.get(Number(number));
       if (!formula) return;
       const link = document.createElement('a');
-      link.href = `${formula.slug}${spanish ? '-es' : ''}.html`;
+      link.href = formulaProfileUrl(formula);
       link.textContent = formula.name;
       container.append(link);
     });
@@ -345,6 +369,7 @@
       state.data = mergeData(data, translations, supplements);
       state.formulaByNumber = new Map(data.formulas.map(formula => [Number(formula.number), formula]));
       elements.total.textContent = String(data.questions.length);
+      elements.formulaTotal.textContent = String(data.formulas.length);
       populateControls();
       state.filtered = [...data.questions];
       elements.status.textContent = copy.ready;
