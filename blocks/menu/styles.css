@@ -725,10 +725,22 @@
     display: inline-flex;
     min-height: 42px;
     align-items: center;
+    justify-content: center;
     margin: 0;
-    color: #176b9a;
-    font-weight: 750;
+    padding: 9px 16px;
+    border: 1px solid #b9ccda;
+    border-radius: 9px;
+    background: #fff;
+    color: #176b9a !important;
+    font-weight: 800;
     text-decoration: none !important;
+}
+
+.herb-board__back:hover,
+.herb-board__back:focus {
+    border-color: #08756a;
+    background: #edf9f6;
+    color: #075f5b !important;
 }
 
 .herb-board__panel {

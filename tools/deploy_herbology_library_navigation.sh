@@ -73,6 +73,11 @@ STATIC_FILES=(
     "formula-practice.html"
     "formula-practice-es.html"
     "formula-practice.js"
+    "herb-comparison-bank.html"
+    "herb-comparison-bank-es.html"
+    "formula-question-bank.html"
+    "formula-question-bank-es.html"
+    "formula-question-bank.js"
     "herb-comparison-bank-data.json"
 )
 
@@ -92,8 +97,9 @@ for relative in "${MOODLE_FILES[@]}"; do
     fi
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
-grep -Fq '$plugin->version   = 2026110655;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110656;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq '.herb-board__page-navigation' "$TEMP_DIR/moodle/blocks/menu/styles.css"
+grep -Fq '.herb-board__back:hover' "$TEMP_DIR/moodle/blocks/menu/styles.css"
 grep -Fq '.herb-board__subheading.herb-board__subheading--spaced' "$TEMP_DIR/moodle/blocks/menu/styles.css"
 if grep -Fq 'class="herb-board__hero"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
     echo "ERROR: el encabezado grande de Herbology continúa en las hojas." >&2
@@ -112,6 +118,8 @@ grep -Fq 'class="herb-board__subheading herb-board__subheading--spaced" id="quiz
 grep -Fq "'category' => \$category['number']" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'herbs' || \$track === 'quiz')" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'herbs')" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq "'Study by formula category'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq "'Single Herbs bank totals'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 herb_category_line="$(grep -n -m1 'id="quiz-herb-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" | cut -d: -f1)"
 formula_category_line="$(grep -n -m1 'id="quiz-formula-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" | cut -d: -f1)"
 if (( herb_category_line >= formula_category_line )); then
@@ -188,6 +196,10 @@ grep -Fq 'applyGuidelineScope(data, guideline)' "$TEMP_DIR/static/formula-practi
 grep -Fq "querySelector('[data-library-step-back]')?.remove()" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq "querySelector('.formula-related-link--practice')?.remove()" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq '.formula-practice-source-viewer' "$TEMP_DIR/static/comparisons.css"
+grep -Fq '← Back to Single Herbs' "$TEMP_DIR/static/herb-comparison-bank.html"
+grep -Fq '← Back to Formulas' "$TEMP_DIR/static/formula-question-bank.html"
+grep -Fq 'formula-question-bank.js?v=20261107-3' "$TEMP_DIR/static/formula-question-bank.html"
+grep -Fq "params.get('category')" "$TEMP_DIR/static/formula-question-bank.js"
 if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
         || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
@@ -280,6 +292,10 @@ grep -Fq 'applyGuidelineScope(data, guideline)' "$STUDY_NOTE_DIR/formula-practic
 grep -Fq "querySelector('[data-library-step-back]')?.remove()" "$STUDY_NOTE_DIR/formula-practice.js"
 grep -Fq "querySelector('.formula-related-link--practice')?.remove()" "$STUDY_NOTE_DIR/formula-practice.js"
 grep -Fq '.formula-practice-source-viewer' "$STUDY_NOTE_DIR/comparisons.css"
+grep -Fq '← Back to Single Herbs' "$STUDY_NOTE_DIR/herb-comparison-bank.html"
+grep -Fq '← Back to Formulas' "$STUDY_NOTE_DIR/formula-question-bank.html"
+grep -Fq 'formula-question-bank.js?v=20261107-3' "$STUDY_NOTE_DIR/formula-question-bank.html"
+grep -Fq "params.get('category')" "$STUDY_NOTE_DIR/formula-question-bank.js"
 if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
         || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2

@@ -1402,13 +1402,15 @@ echo $OUTPUT->header();
                         : 'Read questions with answers and explanations, or use recall flashcards.'; ?></p>
                 </div>
             </div>
-            <p class="herb-board__feature-copy herb-board__feature-copy--panel">
-                <?php echo $ises
-                    ? 'Este banco incluye ' . $herbtotals['questions'] . ' preguntas verificadas en '
-                        . $herbtotals['chapters'] . ' capítulos, con ' . $herbtotals['charts'] . ' gráficos comparativos.'
-                    : 'This bank includes ' . $herbtotals['questions'] . ' verified questions across '
-                        . $herbtotals['chapters'] . ' study chapters, with ' . $herbtotals['charts'] . ' comparison charts.'; ?>
-            </p>
+            <div class="herb-board__summary herb-board__summary--panel" aria-label="<?php echo $ises
+                ? 'Totales del banco de hierbas' : 'Single Herbs bank totals'; ?>">
+                <span><strong><?php echo $herbtotals['questions']; ?></strong> <?php echo $ises
+                    ? 'preguntas verificadas' : 'verified questions'; ?></span>
+                <span><strong><?php echo $herbtotals['chapters']; ?></strong> <?php echo $ises
+                    ? 'capítulos de estudio' : 'study chapters'; ?></span>
+                <span><strong><?php echo $herbtotals['charts']; ?></strong> <?php echo $ises
+                    ? 'gráficos comparativos' : 'comparison charts'; ?></span>
+            </div>
             <div class="herb-board__launches herb-board__launches--single">
                 <a class="herb-board__launch" href="<?php echo $herbquestionbankurl->out(false); ?>">
                     <strong><?php echo $ises
@@ -1775,7 +1777,8 @@ echo $OUTPUT->header();
                         : 'Read questions with visible answers and feedback, or use recall flashcards.'; ?></p>
                 </div>
             </div>
-            <div class="herb-board__summary herb-board__summary--panel" aria-label="Formula bank totals">
+            <div class="herb-board__summary herb-board__summary--panel" aria-label="<?php echo $ises
+                ? 'Totales del banco de fórmulas' : 'Formula bank totals'; ?>">
                 <span><strong><?php echo $formulatotals['questions']; ?></strong> <?php echo $ises
                     ? 'preguntas verificadas' : 'verified questions'; ?></span>
                 <span><strong><?php echo $formulatotals['formulas']; ?></strong> <?php echo $ises
@@ -1791,6 +1794,26 @@ echo $OUTPUT->header();
                     <span><?php echo $ises
                         ? 'Repasa las preguntas con la respuesta correcta y el feedback siempre visibles.'
                         : 'Review questions with the correct answer and feedback always visible.'; ?></span>
+                </a>
+            </div>
+            <h4 class="herb-board__subheading"><?php echo $ises
+                ? 'Estudiar por categoría de fórmulas'
+                : 'Study by formula category'; ?></h4>
+            <div class="herb-board__topics">
+                <?php foreach ($formulacategories as $category) {
+                    $categoryurl = new moodle_url($formulaquestionbankpath, [
+                        'category' => $category['key'],
+                    ] + ($fromlibrary ? ['from' => 'library'] : []));
+                ?>
+                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                        <span><?php echo s($category['name']); ?></span>
+                    </a>
+                <?php } ?>
+                <?php $modificationstudyurl = new moodle_url($formulaquestionbankpath, [
+                    'category' => 'modifications',
+                ] + ($fromlibrary ? ['from' => 'library'] : [])); ?>
+                <a class="herb-board__topic" href="<?php echo $modificationstudyurl->out(false); ?>">
+                    <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
                 </a>
             </div>
         </section>

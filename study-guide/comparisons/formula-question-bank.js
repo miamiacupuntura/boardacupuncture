@@ -371,11 +371,21 @@
       elements.total.textContent = String(data.questions.length);
       elements.formulaTotal.textContent = String(data.formulas.length);
       populateControls();
+      const params = new URLSearchParams(window.location.search);
+      const requestedFormula = params.get('formula');
+      const requestedCategory = params.get('category');
+      if ([...elements.formula.options].some(option => option.value === requestedFormula)) {
+        elements.formula.value = requestedFormula;
+      }
+      if ([...elements.category.options].some(option => option.value === requestedCategory)) {
+        elements.category.value = requestedCategory;
+      }
+      elements.search.value = params.get('q') || '';
       state.filtered = [...data.questions];
       elements.status.textContent = copy.ready;
       elements.controls.hidden = false;
       elements.modes.hidden = false;
-      render();
+      applyFilters();
     })
     .catch(error => {
       console.error(error);
