@@ -738,7 +738,7 @@
 }
 
 .herb-board__hero {
-    padding: 28px 30px;
+    padding: 18px 22px;
     border-top: 5px solid #f47e2c;
     background: linear-gradient(135deg, #f5fbff, #fffaf5);
 }
@@ -752,19 +752,21 @@
 }
 
 .herb-board__hero h2 {
-    margin: 0 0 8px;
-    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
 }
 
-.herb-board__hero > span {
-    color: #52677a;
+.herb-board__hero > .herb-board__eyebrow,
+.herb-board__hero > span,
+.herb-board__hero > .herb-board__feature-copy {
+    display: none;
 }
 
 .herb-board__tabs {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 22px;
+    margin-top: 12px;
 }
 
 .herb-board__tab {

@@ -1877,7 +1877,7 @@ echo $OUTPUT->header();
 @media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
 <main class="formula-study-guide">
-    <header class="formula-study-guide__top">
+    <header class="formula-study-guide__top herbology-sheet-hero">
         <div>
             <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Guía de estudio · Fórmulas' : 'Study Guide · Formulas'); ?></p>
             <h2><?php echo s($pagetitle); ?></h2>

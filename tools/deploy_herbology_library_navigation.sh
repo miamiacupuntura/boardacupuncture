@@ -42,6 +42,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/static" "$TEMP_DIR/tools" "$BACKUP_DIR/mo
 
 MOODLE_FILES=(
     "blocks/menu/herbology-board.php"
+    "blocks/menu/styles.css"
     "blocks/menu/version.php"
     "blocks/menu/db/install.xml"
     "blocks/menu/db/upgrade.php"
@@ -73,7 +74,8 @@ for relative in "${MOODLE_FILES[@]}"; do
     fi
 done
 php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
-grep -Fq '$plugin->version   = 2026110654;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110655;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '.herb-board__hero > .herb-board__eyebrow' "$TEMP_DIR/moodle/blocks/menu/styles.css"
 grep -Fq "optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 if grep -Fq 'aria-current="page">Quiz</a>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
     echo "ERROR: el encabezado de Herbology Quiz todavía contiene el botón Quiz redundante." >&2
@@ -97,10 +99,12 @@ grep -Fq 'data-library-footer' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.p
 grep -Fq 'data-library-page-back' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'subject-study-library__top' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq 'herbology-sheet-hero' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'dataset.libraryContextNavigation' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
+grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
 
 (cd "$STUDY_NOTE_DIR" && tar -czf "$BACKUP_DIR/static/comparison-html.tar.gz" -- *.html)
 for file in "${STATIC_FILES[@]}"; do
@@ -145,19 +149,22 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-7' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-8' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
+grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
 if grep -Fq "currentUrl.searchParams.get('from') !== 'library'" "$STUDY_NOTE_DIR/library-navigation.js"; then
     echo "ERROR: la navegación estática todavía depende de from=library." >&2
     exit 1
 fi
 grep -Fq 'data-herbology-library-context' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq 'herbology-sheet-hero' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'data-library-step-back' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'herbology-step-back-scroll' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-footer' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'subject-study-library__top' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq '.herb-board__hero > .herb-board__eyebrow' "$MOODLE_ROOT/blocks/menu/styles.css"
 if grep -Fq 'aria-current="page">Quiz</a>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
     echo "ERROR: el botón Quiz redundante continúa instalado." >&2
     exit 1

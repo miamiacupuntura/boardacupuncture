@@ -489,7 +489,7 @@ echo $OUTPUT->header();
 .herb-formula-map__relationship-card{padding:15px 17px;border:1px solid #d9e2ef;border-left:5px solid #315fa5;border-radius:10px;background:#f3f7fd}
 </style>
 <main class="herb-formula-map">
-    <header class="herb-formula-map__top">
+    <header class="herb-formula-map__top herbology-sheet-hero">
         <div>
             <p class="herb-formula-map__eyebrow"><?php echo s($ises ? 'Guía combinada · Bensky' : 'Combined study guide · Bensky'); ?></p>
             <h2><?php echo s($pagetitle); ?></h2>

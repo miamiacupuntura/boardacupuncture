@@ -591,6 +591,7 @@ echo $OUTPUT->header();
 @media(max-width:760px){.herb-combos__top,.herb-combos__group-head{align-items:stretch;flex-direction:column}.herb-combos__back{justify-content:center}.herb-combos__grid{grid-template-columns:1fr}.herb-combos__tools{position:static}.herb-combos__summary{display:block}.herb-combos__summary span{display:block;margin-top:5px}}
 </style>
 <main class="herb-combos">
+    <?php if (!$fromlibrary): ?>
     <nav class="herb-combos__top" aria-label="Study Guide navigation">
         <span class="herb-combos__brand">Chinese Herbology · Other chapters</span>
         <span class="herb-combos__top-actions">
@@ -598,12 +599,13 @@ echo $OUTPUT->header();
             <?php if (!$fromlibrary): ?><a class="herb-combos__back" href="<?php echo $returnurl->out(false); ?>">← Study Guide</a><?php endif; ?>
         </span>
     </nav>
+    <?php endif; ?>
 
     <?php if ($fromlibrary): ?>
         <?php echo block_myprogress_render_herbology_library_navigation(false, 'Commonly Used Herbal Combinations'); ?>
     <?php endif; ?>
 
-    <header class="herb-combos__hero">
+    <header class="herb-combos__hero herbology-sheet-hero">
         <p class="herb-combos__eyebrow">Appendix 2 · Source-based study chapter</p>
         <h1>Commonly Used Herbal Combinations</h1>
         <p>Review <?php echo $total; ?> combinations by relationship, clinical application and the specific role assigned to each herb in the supplied source.</p>

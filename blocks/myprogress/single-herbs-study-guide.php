@@ -1540,7 +1540,7 @@ ob_start();
 </style>
 
 <main class="single-herbs-guide">
-    <header class="single-herbs-guide__top">
+    <header class="single-herbs-guide__top herbology-sheet-hero">
         <div>
             <p class="single-herbs-guide__eyebrow">Chinese Herbology · Study Guide</p>
             <h2>Single Herbs</h2>
