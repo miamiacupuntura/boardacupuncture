@@ -628,15 +628,13 @@ echo $OUTPUT->header();
         <div>
             <p class="subject-study-guide__eyebrow"><?php echo s($tr($showlibrary ? 'Study Library' : 'Study Guide')); ?></p>
             <h2><?php echo s($area['title'] . ($showlibrary ? ($ises ? ' · Biblioteca' : ' Library') : '')); ?></h2>
-            <p class="subject-study-guide__intro"><?php echo $showlibrary ? s($ises ? 'Abre todos los recursos desde una biblioteca de acceso rápido.' : 'Open every Study Guide resource from one quick-access library.') : s($area['description']); ?></p>
+            <p class="subject-study-guide__intro"><?php echo $showlibrary ? s($ises ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.' : 'Open every Board Level resource from one quick-access library.') : s($area['description']); ?></p>
         </div>
-        <nav class="subject-study-guide__top-actions" aria-label="Study Guide course catalogs">
+        <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($showlibrary ? ($ises ? 'Controles de la biblioteca' : 'Library controls') : 'Study Guide course catalogs'); ?>">
             <?php if ($areaid === 'herbology'): ?>
                 <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <?php endif; ?>
-            <?php if ($showlibrary): ?>
-                <a class="subject-study-guide__back" href="<?php echo $chapterlisturl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
-            <?php elseif ($areaid === 'herbology'): ?>
+            <?php if (!$showlibrary && $areaid === 'herbology'): ?>
                 <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($tr('Library →')); ?></a>
             <?php endif; ?>
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
@@ -647,7 +645,7 @@ echo $OUTPUT->header();
         <aside class="subject-study-library__tips" aria-label="<?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips and Tricks'); ?>">
             <div>
                 <strong><?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips & Tricks'); ?></strong>
-                <span><?php echo s($ises ? 'Pistas rápidas, ayudas de memoria, comparaciones que no debes confundir y recordatorios de seguridad de la Guía de estudio.' : 'Fast clues, memory aids, do-not-confuse comparisons and safety reminders from the Study Guide.'); ?></span>
+                <span><?php echo s($ises ? 'Pistas rápidas, ayudas de memoria, comparaciones que no debes confundir y recordatorios de seguridad.' : 'Fast clues, memory aids, do-not-confuse comparisons and safety reminders.'); ?></span>
             </div>
             <a href="<?php echo $ises ? '/study-guide/tips-and-tricks-es.html' : '/study-guide/tips-and-tricks.html'; ?>"><?php echo s($ises ? 'Abrir consejos y trucos' : 'Open Tips & Tricks'); ?></a>
         </aside>
