@@ -497,10 +497,6 @@ echo $OUTPUT->header();
         </div>
         <nav class="herb-formula-map__actions" aria-label="<?php echo s($ises ? 'Navegación del mapa' : 'Map navigation'); ?>">
             <a class="herb-formula-map__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-            <a class="herb-formula-map__button" href="<?php echo $herbsurl->out(false); ?>"><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?></a>
-            <a class="herb-formula-map__button" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
-            <a class="herb-formula-map__button" href="<?php echo $formulasurl->out(false); ?>"><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?></a>
-            <?php if (!$fromlibrary): ?><a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a><?php endif; ?>
         </nav>
     </header>
     <?php if ($fromlibrary): ?>

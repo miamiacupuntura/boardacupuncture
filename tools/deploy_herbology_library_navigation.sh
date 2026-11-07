@@ -77,6 +77,10 @@ grep -Fq '$plugin->version   = 2026110650;' "$TEMP_DIR/moodle/blocks/menu/versio
 grep -Fq "optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard'" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq '← Back to Library' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Library is the permanent navigation hub' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
+if [[ "$(grep -Fc 'class="herb-formula-map__button"' "$TEMP_DIR/moodle/blocks/myprogress/herb-formula-category-map.php")" -ne 1 ]]; then
+    echo "ERROR: el mapa Bensky debe mostrar solamente el selector de idioma." >&2
+    exit 1
+fi
 grep -Fq "param('from', 'library')" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'dataset.libraryContextNavigation' "$TEMP_DIR/static/library-navigation.js"
