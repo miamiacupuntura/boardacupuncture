@@ -550,20 +550,25 @@
 }
 
 .board-hub__card--board-level .board-hub__action {
-    min-height: 48px;
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
+    height: 52px;
+    min-height: 52px;
     padding: 10px 9px;
     font-size: .82rem;
 }
 
 .board-hub__card--board-level .study-guide-dashboard-link {
-    width: auto;
-    flex: 1 1 calc(50% - 8px);
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
     margin: 0;
-    order: 2;
+    order: 1;
 }
 
 .board-hub__card--board-level .board-hub__action--board-mock {
-    order: 1;
+    order: 2;
 }
 
 .board-hub__card--board-level .board-hub__action--board-simulation {
@@ -572,26 +577,16 @@
 }
 
 .board-hub__card--board-level .board-hub__action--board-exams {
-    flex: 1 1 calc(50% - 8px);
-    min-width: 0;
     order: 4;
     background: #6d4bc3;
     color: #fff !important;
 }
 
 .board-hub__card--board-level .board-hub__action--board-quiz {
-    flex: 1 1 calc(50% - 8px);
-    min-width: 0;
     order: 3;
     border: 0;
     background: #b45309;
     color: #fff !important;
-}
-
-.board-hub__card--board-level.board-hub__card--herbology .board-hub__action--board-mock,
-.board-hub__card--board-level.board-hub__card--herbology .study-guide-dashboard-link {
-    flex-basis: calc(50% - 8px);
-    min-width: 0;
 }
 
 .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--simulation {

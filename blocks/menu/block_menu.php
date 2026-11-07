@@ -407,8 +407,8 @@ class block_menu extends block_base {
                 }
                 $simulationaction = '<span class="board-hub__action board-hub__action--pending '
                     . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
-                $boardlevelactions = $mockquestionsaction . $quizaction . $examsaction
-                    . $simulationaction . $studyguideaction;
+                $boardlevelactions = $studyguideaction . $mockquestionsaction . $quizaction
+                    . $examsaction . $simulationaction;
 
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'

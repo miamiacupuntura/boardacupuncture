@@ -45,7 +45,7 @@ grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-boar
 grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'class="herb-board__practice-route"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__practice-route {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110642;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110643;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq 'Choose a Quiz type' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'board-hub__action--board-quiz' "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$TEMP_DIR/blocks/menu/herbology-board.php"
