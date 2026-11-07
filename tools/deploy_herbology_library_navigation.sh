@@ -56,6 +56,8 @@ MOODLE_FILES=(
 STATIC_FILES=(
     "library-navigation.js"
     "study-note-navigation.js"
+    "index.html"
+    "index-es.html"
 )
 
 for relative in "${MOODLE_FILES[@]}"; do
@@ -115,6 +117,11 @@ grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
+if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
+        || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
+    echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
+    exit 1
+fi
 if grep -Fq 'libraryName' "$TEMP_DIR/static/library-navigation.js"; then
     echo "ERROR: la navegación estática todavía reemplaza el nombre propio de las hojas." >&2
     exit 1
@@ -171,6 +178,11 @@ done
 grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-10' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
+if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
+        || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
+    echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2
+    exit 1
+fi
 if grep -Fq 'libraryName' "$STUDY_NOTE_DIR/library-navigation.js"; then
     echo "ERROR: la navegación instalada reemplaza el nombre propio de las hojas." >&2
     exit 1
