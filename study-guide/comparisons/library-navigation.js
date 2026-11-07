@@ -156,8 +156,7 @@
       path = '';
     }
     if (/^\/my\/?$/i.test(path)) {
-      link.href = libraryUrl;
-      link.textContent = spanish ? '← Volver a Library' : '← Back to Library';
+      link.remove();
     } else if (/\/(?:single-herbs-study-guide|formulas-study-guide|herb-formula-category-map)\.php$/i.test(path)) {
       link.remove();
     }

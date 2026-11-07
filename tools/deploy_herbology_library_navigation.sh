@@ -105,6 +105,11 @@ grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
+if grep -Fq 'Back to Library' "$TEMP_DIR/static/library-navigation.js" \
+        || grep -Fq 'Back to Library' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"; then
+    echo "ERROR: la navegación todavía contiene el botón Back to Library." >&2
+    exit 1
+fi
 
 (cd "$STUDY_NOTE_DIR" && tar -czf "$BACKUP_DIR/static/comparison-html.tar.gz" -- *.html)
 for file in "${STATIC_FILES[@]}"; do
@@ -149,9 +154,14 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-8' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-9' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
+if grep -Fq 'Back to Library' "$STUDY_NOTE_DIR/library-navigation.js" \
+        || grep -Fq 'Back to Library' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"; then
+    echo "ERROR: el botón Back to Library continúa instalado." >&2
+    exit 1
+fi
 if grep -Fq "currentUrl.searchParams.get('from') !== 'library'" "$STUDY_NOTE_DIR/library-navigation.js"; then
     echo "ERROR: la navegación estática todavía depende de from=library." >&2
     exit 1

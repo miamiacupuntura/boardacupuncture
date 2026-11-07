@@ -83,8 +83,7 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
                 } else if (destination.origin === window.location.origin
                         && /^\/my\/?$/.test(destination.pathname)
                         && /dashboard/i.test(link.textContent)) {
-                    link.href = '<?php echo $libraryurl->out(false); ?>';
-                    link.textContent = '<?php echo $ises ? '← Volver a Library' : '← Back to Library'; ?>';
+                    link.remove();
                 }
             });
             document.querySelectorAll('form[action]').forEach(form => {
