@@ -3,12 +3,16 @@
 
   const currentUrl = new URL(window.location.href);
   const stepBackScrollKey = 'herbology-step-back-scroll';
-  const revealStepBackDestination = function() {
+  const revealStepBackDestination = function(event) {
     try {
       if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
         return;
       }
       window.sessionStorage.removeItem(stepBackScrollKey);
+      if (event && event.persisted) {
+        window.location.reload();
+        return;
+      }
       window.scrollTo(0, 0);
       window.requestAnimationFrame(function() {
         window.scrollTo(0, 0);

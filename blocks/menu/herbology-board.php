@@ -2248,12 +2248,16 @@ echo $OUTPUT->header();
 <script>
 (() => {
     const stepBackScrollKey = 'herbology-step-back-scroll';
-    const revealStepBackDestination = () => {
+    const revealStepBackDestination = event => {
         try {
             if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
                 return;
             }
             window.sessionStorage.removeItem(stepBackScrollKey);
+            if (event?.persisted) {
+                window.location.reload();
+                return;
+            }
             window.scrollTo(0, 0);
             window.requestAnimationFrame(() => window.scrollTo(0, 0));
         } catch (error) {

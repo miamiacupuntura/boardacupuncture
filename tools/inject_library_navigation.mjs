@@ -7,7 +7,7 @@ const write = process.argv.includes('--write');
 const check = process.argv.includes('--check');
 const rootArgument = process.argv.find(argument => argument.startsWith('--root='));
 const root = path.resolve(rootArgument ? rootArgument.slice('--root='.length) : 'study-guide/comparisons');
-const source = '/study-guide/comparisons/library-navigation.js?v=20261107-6';
+const source = '/study-guide/comparisons/library-navigation.js?v=20261107-7';
 const marker = '/study-guide/comparisons/library-navigation.js';
 const tag = `<script src="${source}" defer></script>`;
 
