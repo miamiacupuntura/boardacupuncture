@@ -64,6 +64,10 @@ STATIC_FILES=(
     "patterns-es.html"
     "safety.html"
     "safety-es.html"
+    "single-herb-practice.html"
+    "single-herb-practice-es.html"
+    "single-herb-practice.js"
+    "herb-comparison-bank-data.json"
 )
 
 for relative in "${MOODLE_FILES[@]}"; do
@@ -96,6 +100,14 @@ fi
 grep -Fq 'data-herbology-step-back' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq 'id="quiz-herb-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+grep -Fq "'category' => \$category['number']" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
+herb_category_line="$(grep -n -m1 'id="quiz-herb-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" | cut -d: -f1)"
+formula_category_line="$(grep -n -m1 'id="quiz-formula-categories"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" | cut -d: -f1)"
+if (( herb_category_line >= formula_category_line )); then
+    echo "ERROR: las categorías de Single Herbs deben aparecer antes de Formula Quiz by category." >&2
+    exit 1
+fi
 if grep -Fq "<strong><?php echo \$category['questions']; ?></strong>" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" \
         || grep -Fq "<strong><?php echo \$category['count']; ?></strong>" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" \
         || grep -Fq '<strong><?php echo $formulamodificationcount; ?></strong>' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"; then
@@ -134,6 +146,11 @@ grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$TEMP_DIR/static/library-navigation.js"
+grep -Fq 'data-herb-mode="category"' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'data-herb-size-max' "$TEMP_DIR/static/single-herb-practice-es.html"
+grep -Fq 'guideNumbersByYangChapter' "$TEMP_DIR/static/single-herb-practice.js"
+grep -Fq "url.searchParams.set('category'" "$TEMP_DIR/static/single-herb-practice.js"
+grep -Fq 'data.herbs || []' "$TEMP_DIR/static/single-herb-practice.js"
 if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
         || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
@@ -202,6 +219,10 @@ grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-11' "$STUDY_
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$STUDY_NOTE_DIR/library-navigation.js"
+grep -Fq 'data-herb-mode="category"' "$STUDY_NOTE_DIR/single-herb-practice.html"
+grep -Fq 'data-herb-size-max' "$STUDY_NOTE_DIR/single-herb-practice-es.html"
+grep -Fq 'guideNumbersByYangChapter' "$STUDY_NOTE_DIR/single-herb-practice.js"
+grep -Fq "url.searchParams.set('category'" "$STUDY_NOTE_DIR/single-herb-practice.js"
 if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
         || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2
@@ -245,6 +266,8 @@ grep -Fq "set_heading(\$showlibrary && \$areaid === 'herbology' ? ''" "$MOODLE_R
 grep -Fq "if (\$areaid !== 'herbology')" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__page-navigation' "$MOODLE_ROOT/blocks/menu/styles.css"
+grep -Fq 'id="quiz-herb-categories"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq "'category' => \$category['number']" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 if grep -Fq "<strong><?php echo \$category['questions']; ?></strong>" "$MOODLE_ROOT/blocks/menu/herbology-board.php" \
         || grep -Fq "<strong><?php echo \$category['count']; ?></strong>" "$MOODLE_ROOT/blocks/menu/herbology-board.php" \
         || grep -Fq '<strong><?php echo $formulamodificationcount; ?></strong>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
@@ -278,4 +301,4 @@ fi
 echo "Despliegue completado: $REVISION"
 echo "HTML actualizados: $STUDY_NOTE_DIR"
 echo "Backup: $BACKUP_DIR"
-echo "Prueba: https://www.acupuncturetests.com/study-guide/comparisons/dui-yao.html?from=library&revision=$REVISION"
+echo "Prueba: https://www.acupuncturetests.com/study-guide/comparisons/single-herb-practice.html?from=library&category=14&size=25&revision=$REVISION"

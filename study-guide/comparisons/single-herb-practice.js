@@ -5,7 +5,23 @@
   const copy = {
     loadError: spanish ? 'No se pudo cargar el banco de hierbas.' : 'The Single Herbs bank could not be loaded.',
     ready: spanish ? 'Banco de preguntas listo.' : 'Question bank ready.',
+    noQuestions: spanish ? 'No hay preguntas para esta categoría.' : 'No questions are available for this category.',
     start: count => spanish ? `Comenzar Quiz (${count}) →` : `Start Quiz (${count}) →`,
+    allAvailable: count => spanish ? `Todas (${count})` : `All (${count})`,
+    maximumAvailable: count => spanish
+      ? `Máximo disponible para esta selección: ${count} preguntas.`
+      : `Maximum available for this selection: ${count} questions.`,
+    sessionMaximum: spanish
+      ? 'Máximo por sesión en el banco completo: 100 preguntas.'
+      : 'Maximum per full-bank session: 100 questions.',
+    modeHelp: {
+      all: spanish
+        ? 'Incluye preguntas de todos los perfiles verificados de hierbas individuales.'
+        : 'Includes questions from every verified Single Herbs profile.',
+      category: spanish
+        ? 'Incluye preguntas de las hierbas que pertenecen a una categoría del libro de Yang.'
+        : "Includes questions from the herbs in one Yang book category."
+    },
     position: (position, total) => spanish ? `Pregunta ${position} de ${total}` : `Question ${position} of ${total}`,
     correct: spanish ? 'Correcto' : 'Correct',
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
@@ -27,11 +43,37 @@
   };
   const storageKey = 'single-herb-practice-progress-v1';
   const letters = ['A', 'B', 'C', 'D'];
+  // The verified profiles use detailed clinical guide numbers. Group those
+  // narrower subjects into the broader chapter sequence used in Yang's book.
+  const guideNumbersByYangChapter = new Map([
+    [2, [1, 2]],
+    [3, [3, 4, 5, 6, 7, 8]],
+    [4, [9, 10, 11]],
+    [5, [12]],
+    [6, [16]],
+    [7, [30]],
+    [8, [13, 14, 15]],
+    [9, [17]],
+    [10, [18]],
+    [11, [19]],
+    [12, [20]],
+    [13, [21]],
+    [14, [23, 24, 25, 26]],
+    [15, [27]],
+    [16, [28, 29]],
+    [17, [31]]
+  ]);
   const elements = {
     total: document.querySelector('[data-herb-total]'),
     status: document.querySelector('[data-herb-status]'),
     setup: document.querySelector('[data-herb-setup]'),
+    modeButtons: [...document.querySelectorAll('[data-herb-mode]')],
+    modeHelp: document.querySelector('[data-herb-mode-help]'),
+    categoryField: document.querySelector('[data-herb-category-field]'),
+    category: document.querySelector('[data-herb-category]'),
     sizes: [...document.querySelectorAll('[data-herb-size]')],
+    maxSize: document.querySelector('[data-herb-size-max]'),
+    maxHelp: document.querySelector('[data-herb-max-help]'),
     available: document.querySelector('[data-herb-available]'),
     start: document.querySelector('[data-herb-start]'),
     history: document.querySelector('[data-herb-history]'),
@@ -48,9 +90,19 @@
     results: document.querySelector('[data-herb-results]'),
     finalScore: document.querySelector('[data-herb-final-score]'),
     repeat: document.querySelector('[data-herb-repeat]'),
-    configure: document.querySelector('[data-herb-configure]')
+    configure: document.querySelector('[data-herb-configure]'),
+    language: document.querySelector('[data-herb-language]')
   };
-  const state = { questions: [], session: [], size: 25, answers: new Map(), score: 0 };
+  const state = {
+    allQuestions: [],
+    categories: [],
+    mode: 'all',
+    session: [],
+    size: 25,
+    useMaximum: false,
+    answers: new Map(),
+    score: 0
+  };
 
   function value(field, language = spanish ? 'es' : 'en') {
     if (!field) return '';
@@ -69,6 +121,40 @@
       [result[index], result[target]] = [result[target], result[index]];
     }
     return result;
+  }
+
+  function option(parent, optionValue, label) {
+    const item = document.createElement('option');
+    item.value = String(optionValue);
+    item.textContent = label;
+    parent.append(item);
+  }
+
+  function filteredQuestions() {
+    if (state.mode !== 'category') return [...state.allQuestions];
+    const guideNumbers = new Set(guideNumbersByYangChapter.get(Number(elements.category.value)) || []);
+    return state.allQuestions.filter(question => guideNumbers.has(Number(question.profile.guideNumber || 0)));
+  }
+
+  function updateUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('category');
+    if (state.mode === 'category') url.searchParams.set('category', elements.category.value);
+    url.searchParams.set('size', String(state.size));
+    history.replaceState(null, '', url);
+    if (elements.language) {
+      elements.language.href = `${elements.language.getAttribute('href').split('?')[0]}${url.search}`;
+    }
+  }
+
+  function setMode(mode, refresh = true) {
+    state.mode = mode === 'category' ? 'category' : 'all';
+    elements.modeButtons.forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.herbMode === state.mode));
+    });
+    elements.categoryField.hidden = state.mode !== 'category';
+    elements.modeHelp.textContent = copy.modeHelp[state.mode];
+    if (refresh) updateSetup();
   }
 
   function readHistory() {
@@ -146,18 +232,67 @@
     });
   }
 
+  function buildCategories(data) {
+    return (data.chapters || [])
+      .filter(chapter => guideNumbersByYangChapter.has(Number(chapter.number)))
+      .map(chapter => ({
+        number: Number(chapter.number),
+        title: spanish ? (chapter.titleEs || chapter.title) : chapter.title
+      }));
+  }
+
+  function populateControls() {
+    state.categories.forEach(category => {
+      const guideNumbers = new Set(guideNumbersByYangChapter.get(category.number) || []);
+      const count = state.allQuestions.filter(question =>
+        guideNumbers.has(Number(question.profile.guideNumber || 0))
+      ).length;
+      option(elements.category, category.number, `${category.title} (${count})`);
+    });
+    const params = new URLSearchParams(window.location.search);
+    const requestedCategory = params.get('category');
+    const requestedSize = Number(params.get('size'));
+    const validCategory = [...elements.category.options].some(item => item.value === requestedCategory);
+    if (validCategory) elements.category.value = requestedCategory;
+    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= state.allQuestions.length) {
+      state.size = requestedSize;
+    }
+    setMode(validCategory ? 'category' : 'all', false);
+    state.useMaximum = state.mode === 'category' && requestedSize === filteredQuestions().length;
+  }
+
   function updateSetup() {
-    const available = state.questions.length;
-    if (state.size > available) state.size = Math.min(available, 25);
+    const available = filteredQuestions().length;
+    const presets = elements.sizes.map(button => Number(button.dataset.herbSize));
+    if (state.mode === 'all' && !presets.includes(state.size)) {
+      state.size = 25;
+      state.useMaximum = false;
+    }
+    if (state.useMaximum && state.mode === 'category') state.size = available;
+    if (state.useMaximum && presets.includes(available)) state.useMaximum = false;
+    if (available > 0 && state.size > available) {
+      state.size = available;
+      state.useMaximum = state.mode === 'category';
+    }
+    if (available > 0 && state.size < 1) state.size = Math.min(25, available);
     elements.available.textContent = String(available);
-    elements.total.textContent = String(available);
+    elements.total.textContent = String(state.allQuestions.length);
     elements.sizes.forEach(button => {
       const size = Number(button.dataset.herbSize);
       button.disabled = size > available;
-      button.setAttribute('aria-pressed', String(size === state.size));
+      button.setAttribute('aria-pressed', String(!state.useMaximum && size === state.size));
     });
+    const showMaximum = state.mode === 'category' && available > 0 && !presets.includes(available);
+    elements.maxSize.hidden = !showMaximum;
+    elements.maxSize.textContent = copy.allAvailable(available);
+    elements.maxSize.setAttribute('aria-pressed', String(showMaximum && state.useMaximum));
+    elements.maxHelp.textContent = state.mode === 'all'
+      ? copy.sessionMaximum
+      : copy.maximumAvailable(available);
     elements.start.textContent = copy.start(Math.min(state.size, available));
     elements.start.disabled = available === 0;
+    elements.status.textContent = available ? copy.ready : copy.noQuestions;
+    updateUrl();
   }
 
   function recordAnswer(correct) {
@@ -179,6 +314,7 @@
   function createQuestion(question, index) {
     const card = document.createElement('article');
     card.className = 'formula-practice-question';
+    card.dataset.herbGuideNumber = String(question.profile.guideNumber || '');
     const label = document.createElement('p');
     label.className = 'comparison-eyebrow';
     label.textContent = copy.position(index + 1, state.session.length);
@@ -248,7 +384,8 @@
   }
 
   function startSession() {
-    state.session = shuffle(state.questions).slice(0, Math.min(state.size, state.questions.length));
+    const pool = filteredQuestions();
+    state.session = shuffle(pool).slice(0, Math.min(state.size, pool.length));
     state.answers = new Map();
     state.score = 0;
     elements.setup.hidden = true;
@@ -281,8 +418,22 @@
 
   elements.sizes.forEach(button => button.addEventListener('click', () => {
     state.size = Number(button.dataset.herbSize);
+    state.useMaximum = false;
     updateSetup();
   }));
+  elements.maxSize.addEventListener('click', () => {
+    state.useMaximum = true;
+    state.size = filteredQuestions().length;
+    updateSetup();
+  });
+  elements.modeButtons.forEach(button => button.addEventListener('click', () => {
+    state.useMaximum = false;
+    setMode(button.dataset.herbMode);
+  }));
+  elements.category.addEventListener('change', () => {
+    state.useMaximum = false;
+    updateSetup();
+  });
   elements.start.addEventListener('click', startSession);
   elements.repeat.addEventListener('click', startSession);
   elements.configure.addEventListener('click', showSetup);
@@ -294,15 +445,21 @@
     renderHistory();
   });
 
-  fetch('/blocks/myprogress/single-herb-properties.json', { credentials: 'same-origin' })
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.json();
+  Promise.all([
+    fetch('/blocks/myprogress/single-herb-properties.json', { credentials: 'same-origin' }),
+    fetch('herb-comparison-bank-data.json', { credentials: 'same-origin' })
+  ])
+    .then(async responses => {
+      responses.forEach(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      });
+      return Promise.all(responses.map(response => response.json()));
     })
-    .then(data => {
-      state.questions = buildQuestions(data);
-      if (!state.questions.length) throw new Error('No verified profiles');
-      elements.status.textContent = copy.ready;
+    .then(([herbData, yangData]) => {
+      state.allQuestions = buildQuestions(herbData);
+      state.categories = buildCategories(yangData);
+      if (!state.allQuestions.length || !state.categories.length) throw new Error('No verified profiles or Yang categories');
+      populateControls();
       elements.setup.hidden = false;
       updateSetup();
       renderHistory();

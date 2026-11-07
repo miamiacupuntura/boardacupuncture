@@ -1183,7 +1183,7 @@ $herbtotals = [
     'chapters' => 0,
     'charts' => 0,
 ];
-if ($track === 'herbs') {
+if ($track === 'herbs' || $track === 'quiz') {
     $herbbankpath = $comparisonfile('herb-comparison-bank-data.json');
     if ($herbbankpath !== '') {
         $herbbank = json_decode(file_get_contents($herbbankpath), true);
@@ -1699,6 +1699,23 @@ echo $OUTPUT->header();
                         ? 'Trabaja uno de los seis dominios de Herbología.'
                         : 'Work through one of the six Herbology Domains.'; ?></span>
                 </a>
+            </div>
+
+            <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises ? 'Quiz de hierbas individuales por categoría de Yang' : 'Single Herbs Quiz by Yang category'; ?></h4>
+            <div class="herb-board__topics">
+                <?php foreach ($herbcategories as $category) {
+                    if ($category['number'] === 1) {
+                        continue;
+                    }
+                    $categoryurl = new moodle_url($singleherbpracticepath, [
+                        'category' => $category['number'],
+                        'size' => 25,
+                    ] + ($fromlibrary ? ['from' => 'library'] : []));
+                ?>
+                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                        <span><?php echo s($category['name']); ?></span>
+                    </a>
+                <?php } ?>
             </div>
 
             <h4 class="herb-board__subheading" id="quiz-formula-categories"><?php echo $ises ? 'Quiz de fórmulas por categoría' : 'Formula Quiz by category'; ?></h4>
