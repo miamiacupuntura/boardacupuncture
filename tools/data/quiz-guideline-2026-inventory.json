@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "guideline": {
+    "herbs": {
+      "source": "NCBAHM Chinese Herbology Content Outline 2026, Appendix A",
+      "total": 304
+    },
+    "formulas": {
+      "source": "NCBAHM Chinese Herbology Exam Content Outline 2026, Appendix C",
+      "total": 181
+    }
+  },
+  "singleHerbsQuiz": {
+    "activeProfiles": 194,
+    "inactiveIncompleteProfiles": 110,
+    "outsideGuideline": 0
+  },
+  "formulaQuiz": {
+    "selectableFormulas": 76,
+    "sourceQuestions": 929,
+    "retainedQuestions": 851,
+    "removedQuestions": 78,
+    "normalizedAliases": {
+      "Jin Gui Shen Qi Wan": "Shen Qi Wan"
+    },
+    "excludedFormulaNames": [
+      "Ba Wei Di Huang Wan",
+      "Bai Tau Weng Tang",
+      "Bai Tong Tang",
+      "Ban Xia Xe Xin Tang",
+      "Bu Zhong Qi Tang",
+      "Bu Zhong Y Q Tang",
+      "Bu Zhong Y Qi Tang",
+      "Bu Zhong Yi Tang",
+      "Chai Ge Je Ji Tang",
+      "Da Cheng Q Tang",
+      "Da Huang Fu Zi Tang",
+      "Da Jan Zhong Tang",
+      "Da Xian Xiong Tang",
+      "Du Shen Tang",
+      "Fang Ji Fu Ling Tang",
+      "Gu Chong Tang",
+      "Gu Zhi Fu Ling Wan",
+      "Gui Zhi Jia Ge Gen Tang",
+      "Gui Zhi Jia Shao Yao Tang",
+      "Hao Qin Qing Dan Tang",
+      "Huang Tu Tang",
+      "Huo Ji Sheng Tang",
+      "Ji Sheng Shen Qi Wan",
+      "Jin Gu Shen Q Wan",
+      "Li Zhong Tang",
+      "Ling Jiao Gou Teng Tang",
+      "Liu Jun Z Tang",
+      "Qing Hao Bie Jiao Tang",
+      "Qing Hao Ble Jia Tang",
+      "San Xia Hou Po Tang",
+      "Shi Zao Tang",
+      "Si Mo Tang",
+      "Si Ni Jia Ren Shen Tang",
+      "Suo Quan Wan",
+      "Tang Mai Si Ni Tang",
+      "Tao Wei Cheng Qi Tang",
+      "Tao Wen Cheng Qi Tang",
+      "Tian Wang Bu Xin Tang",
+      "Tong Mai Si Ni Tang",
+      "Tong Mar Si Ni Tang",
+      "Wu Lin San",
+      "Wu Pi Yin",
+      "Xi Jiao Di Huang Tang",
+      "Xiang Ru San",
+      "Xiao Jan Zhong Tang",
+      "Xiao Ji Yin",
+      "Xiao Yao Wan",
+      "Yi Huang Tang",
+      "Yu Ping San",
+      "Yu Zhen San",
+      "Yue Bi Tang",
+      "Zhi Zi Chi Tang",
+      "Zhu Fu Tang"
+    ]
+  }
+}

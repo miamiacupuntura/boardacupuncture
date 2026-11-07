@@ -219,9 +219,11 @@
       : `Which herb best matches this profile? ${action} Principal indications: ${indication}`;
   }
 
-  function buildQuestions(data) {
+  function buildQuestions(data, guideline) {
+    const officialNames = new Set((guideline.herbs || []).map(herb => herb.name));
     const profiles = (data.herbs || []).filter(profile =>
       profile.status === 'verified'
+      && officialNames.has(profile.name)
       && profile.name
       && profile.latin
       && value(profile.actionSummary, 'en')
@@ -486,7 +488,8 @@
 
   Promise.all([
     fetch('/blocks/myprogress/single-herb-properties.json', { credentials: 'same-origin' }),
-    fetch('herb-comparison-bank-data.json', { credentials: 'same-origin' })
+    fetch('herb-comparison-bank-data.json', { credentials: 'same-origin' }),
+    fetch('/blocks/myprogress/single-herb-card-index.json', { credentials: 'same-origin' })
   ])
     .then(async responses => {
       responses.forEach(response => {
@@ -494,10 +497,15 @@
       });
       return Promise.all(responses.map(response => response.json()));
     })
-    .then(([herbData, yangData]) => {
-      state.allQuestions = buildQuestions(herbData);
+    .then(([herbData, yangData, guideline]) => {
+      if (guideline.total !== 304 || guideline.herbs?.length !== 304) {
+        throw new Error('Unexpected 2026 herb guideline inventory');
+      }
+      state.allQuestions = buildQuestions(herbData, guideline);
       state.categories = buildCategories(yangData);
-      if (!state.allQuestions.length || !state.categories.length) throw new Error('No verified profiles or Yang categories');
+      if (!state.allQuestions.length || state.allQuestions.length > guideline.total || !state.categories.length) {
+        throw new Error('Single Herbs Quiz does not match the 2026 guideline inventory');
+      }
       populateControls();
       elements.setup.hidden = false;
       updateSetup();

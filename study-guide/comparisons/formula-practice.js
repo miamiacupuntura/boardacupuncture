@@ -47,6 +47,14 @@
     'calm-shen', 'regulate-qi', 'invigorate-blood', 'expel-wind', 'treat-dryness',
     'expel-damp', 'transform-phlegm', 'digestive', 'treat-abscesses-sores', 'modifications'
   ];
+  const formulaAliases2026 = new Map([
+    ['Ge Gen Huang Lian Huang Qin Tang', 'Ge Gen Huang Qin Huang Lian Tang'],
+    ['Jin Gui Shen Qi Wan', 'Shen Qi Wan'],
+    ['Qing Wen Bai Du San', 'Qing Wen Bai Du Yin'],
+    ['Tai Shan Pan Shi San', 'Taishan Pan Shi San']
+  ]);
+  const formulaNamePattern = /\b(?:[A-Z][A-Za-zÀ-ÿ¡]*\s+){2,7}(?:Tang|San|Wan|Yin|Dan|Jian|Fang)\b(?!\s+[A-Z][a-z])/g;
+  const formulaInstructionPrefix = /^(?:(?:Add|Combine|Replace|Increase|Decrease|Remove|Both|Bath|To)\s+)+/;
   const elements = {
     status: document.querySelector('[data-practice-status]'),
     setup: document.querySelector('[data-practice-setup]'),
@@ -319,6 +327,53 @@
         question.formulaNumbers.includes(formula.number)
       ).length;
     });
+  }
+
+  function formulaNamesInQuestion(question) {
+    const values = [
+      question.prompt,
+      ...(question.body || []),
+      ...(question.options || []).map(item => item.text),
+      ...(question.feedback || [])
+    ];
+    return values.flatMap(value => String(value || '').match(formulaNamePattern) || [])
+      .map(name => name.replace(formulaInstructionPrefix, '').trim())
+      .filter(name => name.split(/\s+/).length >= 3);
+  }
+
+  function applyGuidelineScope(data, guideline) {
+    if (guideline.total !== 181 || guideline.formulas?.length !== 181) {
+      throw new Error('Unexpected 2026 formula guideline inventory');
+    }
+    const officialNames = new Set(guideline.formulas.map(formula => formula.name));
+    data.formulas = data.formulas.filter(formula => {
+      const officialName = formulaAliases2026.get(formula.name) || formula.name;
+      if (!officialNames.has(officialName)) return false;
+      formula.name = officialName;
+      return true;
+    });
+    const allowedNumbers = new Set(data.formulas.map(formula => Number(formula.number)));
+    data.questions = data.questions.filter(question => {
+      if (!question.formulaNumbers?.length || !question.formulaNumbers.every(number => allowedNumbers.has(Number(number)))) {
+        return false;
+      }
+      return formulaNamesInQuestion(question).every(name =>
+        officialNames.has(formulaAliases2026.get(name) || name)
+      );
+    });
+    const activeCategoryKeys = new Set(data.questions.flatMap(question => question.categoryKeys || []));
+    data.categories = data.categories.filter(category => activeCategoryKeys.has(category.key));
+    data.formulas = data.formulas.filter(formula =>
+      data.questions.some(question => question.formulaNumbers.includes(Number(formula.number)))
+    );
+    data.formulas.forEach(formula => {
+      formula.questionCount = data.questions.filter(question =>
+        question.formulaNumbers.includes(Number(formula.number))
+      ).length;
+    });
+    data.totals.questions = data.questions.length;
+    data.totals.formulas = data.formulas.length;
+    data.totals.categories = data.categories.filter(category => category.key !== 'modifications').length;
   }
 
   function closeSourceViewer() {
@@ -658,17 +713,25 @@
         return [];
       });
 
-  Promise.all([bankRequest, translationsRequest, supplementsRequest])
-    .then(([data, translations, supplements]) => {
+  const guidelineRequest = fetch('/blocks/myprogress/formula-board-roster-2026.json', { credentials: 'same-origin' })
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    });
+
+  Promise.all([bankRequest, translationsRequest, supplementsRequest, guidelineRequest])
+    .then(([data, translations, supplements, guideline]) => {
       if (data.totals?.questions < 572 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
       mergeSupplements(data, translations, supplements);
+      applyGuidelineScope(data, guideline);
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
       elements.questionTotals.forEach(element => { element.textContent = String(data.totals.questions); });
       elements.formulaTotals.forEach(element => { element.textContent = String(data.totals.formulas); });
       elements.categoryTotals.forEach(element => { element.textContent = String(data.totals.categories); });
-      if (translations?.questions?.length === data.questions.length) {
-        state.translations = new Map(translations.questions.map(question => [question.sourceNumber, question]));
+      const translationMap = new Map((translations?.questions || []).map(question => [question.sourceNumber, question]));
+      if (data.questions.every(question => translationMap.has(question.sourceNumber))) {
+        state.translations = translationMap;
       } else if (spanish) {
         state.showOriginal = true;
         if (elements.questionLanguage) elements.questionLanguage.hidden = true;
