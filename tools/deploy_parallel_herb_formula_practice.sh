@@ -55,6 +55,8 @@ MOODLE_FILES=(
     "blocks/myprogress/single-herb-properties.json"
     "blocks/myprogress/single-herbs-study-guide.php"
     "blocks/myprogress/study-guide.php"
+    "theme/moove/javascript/study-guide-dashboard.js"
+    "theme/moove/layout/drawers.php"
 )
 STATIC_FILES=(
     "comparisons.css"
@@ -105,9 +107,10 @@ php -l "$TEMP_DIR/moodle/blocks/menu/herbology-board.php" >/dev/null
 php -l "$TEMP_DIR/moodle/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/moodle/blocks/myprogress/single-herbs-study-guide.php" >/dev/null
 php -l "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php" >/dev/null
+php -l "$TEMP_DIR/moodle/theme/moove/layout/drawers.php" >/dev/null
 php -r '
 $xml = simplexml_load_file($argv[1]);
-if (!$xml || (string)$xml["VERSION"] !== "2026110643") {
+if (!$xml || (string)$xml["VERSION"] !== "2026110644") {
     throw new RuntimeException("Versión install.xml incorrecta.");
 }
 ' "$TEMP_DIR/moodle/blocks/menu/db/install.xml"
@@ -166,7 +169,10 @@ grep -Fq 'formula-question-bank-es.html' "$TEMP_DIR/moodle/blocks/menu/herbology
 grep -Fq 'Choose a Quiz type' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'board-hub__action--board-quiz' "$TEMP_DIR/moodle/blocks/menu/block_menu.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
-grep -Fq '$plugin->version   = 2026110643;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110644;' "$TEMP_DIR/moodle/blocks/menu/version.php"
+grep -Fq 'linkActions.prepend(link)' "$TEMP_DIR/moodle/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq 'height: 52px' "$TEMP_DIR/moodle/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq "'v' => '20261107-1'" "$TEMP_DIR/moodle/theme/moove/layout/drawers.php"
 grep -Fq "Study by Yang Chapter's" "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
@@ -238,6 +244,10 @@ done
 
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
 php -l "$MOODLE_ROOT/blocks/myprogress/study-guide.php" >/dev/null
+php -l "$MOODLE_ROOT/theme/moove/layout/drawers.php" >/dev/null
+grep -Fq 'linkActions.prepend(link)' "$MOODLE_ROOT/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq 'height: 52px' "$MOODLE_ROOT/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq "'v' => '20261107-1'" "$MOODLE_ROOT/theme/moove/layout/drawers.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/upgrade.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then

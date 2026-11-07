@@ -27,6 +27,8 @@ FILES=(
     "blocks/menu/version.php"
     "blocks/menu/db/install.xml"
     "blocks/menu/db/upgrade.php"
+    "theme/moove/javascript/study-guide-dashboard.js"
+    "theme/moove/layout/drawers.php"
 )
 
 mkdir -p "$TEMP_DIR" "$BACKUP_DIR"
@@ -39,15 +41,19 @@ php -l "$TEMP_DIR/blocks/menu/block_menu.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/herbology-board.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/db/upgrade.php" >/dev/null
+php -l "$TEMP_DIR/theme/moove/layout/drawers.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__feature-copy {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'class="herb-board__practice-route"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__practice-route {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110643;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq '$plugin->version   = 2026110644;' "$TEMP_DIR/blocks/menu/version.php"
 grep -Fq 'Choose a Quiz type' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'board-hub__action--board-quiz' "$TEMP_DIR/blocks/menu/block_menu.php"
+grep -Fq 'linkActions.prepend(link)' "$TEMP_DIR/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq 'height: 52px' "$TEMP_DIR/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq "'v' => '20261107-1'" "$TEMP_DIR/theme/moove/layout/drawers.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "Study by Yang Chapter's" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$examsdashboardurl = new moodle_url('/my/', [], 'board-level-herbology');" "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -69,6 +75,7 @@ done
 
 php -l "$MOODLE_ROOT/blocks/menu/block_menu.php" >/dev/null
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
+php -l "$MOODLE_ROOT/theme/moove/layout/drawers.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__feature-copy--panel' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'class="herb-board__practice-route"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
@@ -77,6 +84,9 @@ grep -Fq 'id="board-level-' "$MOODLE_ROOT/blocks/menu/block_menu.php"
 grep -Fq "Study by Yang Chapter's" "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'Choose a Quiz type' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 grep -Fq 'board-hub__action--board-quiz' "$MOODLE_ROOT/blocks/menu/block_menu.php"
+grep -Fq 'linkActions.prepend(link)' "$MOODLE_ROOT/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq 'height: 52px' "$MOODLE_ROOT/theme/moove/javascript/study-guide-dashboard.js"
+grep -Fq "'v' => '20261107-1'" "$MOODLE_ROOT/theme/moove/layout/drawers.php"
 grep -Fq 'Study Questions &amp; Flashcards' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq 'aria-label="Single Herbs bank totals"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"

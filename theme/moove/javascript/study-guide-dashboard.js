@@ -78,7 +78,11 @@
                 link.textContent = 'Study Guide';
                 link.setAttribute('aria-label', `Open ${subject} Study Guide chapters`);
             }
-            if (link.parentElement !== linkActions || link !== linkActions.lastElementChild) {
+            if (boardCard) {
+                if (link.parentElement !== linkActions || link !== linkActions.firstElementChild) {
+                    linkActions.prepend(link);
+                }
+            } else if (link.parentElement !== linkActions || link !== linkActions.lastElementChild) {
                 linkActions.append(link);
             }
 
@@ -240,27 +244,34 @@
             outline-offset: 2px;
         }
         .board-hub__card--board-level .study-guide-dashboard-link {
-            width: auto;
-            flex: 1 1 calc(50% - 8px);
+            width: 100%;
+            height: 52px;
+            min-height: 52px;
+            flex: 1 1 100%;
+            min-width: 0;
             margin: 0 !important;
-            order: 2;
+            order: 1;
         }
         .board-hub__card--board-level .board-hub__action {
-            min-height: 48px;
+            width: 100%;
+            height: 52px;
+            min-height: 52px;
+            flex: 1 1 100%;
+            min-width: 0;
             padding: 10px 9px !important;
             font-size: .82rem;
         }
         .board-hub__card--board-level .board-hub__action--board-mock {
-            order: 1;
+            order: 2;
         }
-        .board-hub__card--board-level .board-hub__action--board-simulation {
-            flex-basis: 100%;
+        .board-hub__card--board-level .board-hub__action--board-quiz {
             order: 3;
         }
-        .board-hub__card--board-level.board-hub__card--herbology .board-hub__action--board-mock,
-        .board-hub__card--board-level.board-hub__card--herbology .study-guide-dashboard-link {
-            flex-basis: calc(50% - 8px);
-            min-width: 0;
+        .board-hub__card--board-level .board-hub__action--board-exams {
+            order: 4;
+        }
+        .board-hub__card--board-level .board-hub__action--board-simulation {
+            order: 5;
         }
         .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--simulation {
             flex-basis: 100%;
