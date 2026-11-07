@@ -39,9 +39,12 @@ php -l "$TEMP_DIR/blocks/menu/version.php" >/dev/null
 php -l "$TEMP_DIR/blocks/menu/db/upgrade.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__feature-copy {' "$TEMP_DIR/blocks/menu/styles.css"
-grep -Fq '$plugin->version   = 2026110635;' "$TEMP_DIR/blocks/menu/version.php"
+grep -Fq 'herb-board__feature-copy--panel' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '.herb-board__feature-copy--panel {' "$TEMP_DIR/blocks/menu/styles.css"
+grep -Fq '$plugin->version   = 2026110636;' "$TEMP_DIR/blocks/menu/version.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Recall flashcards</span>' "$TEMP_DIR/blocks/menu/herbology-board.php"
+! grep -Fq 'aria-label="Single Herbs bank totals"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
@@ -55,7 +58,9 @@ done
 
 php -l "$MOODLE_ROOT/blocks/menu/herbology-board.php" >/dev/null
 grep -Fq 'class="herb-board__feature-copy"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+grep -Fq 'herb-board__feature-copy--panel' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 ! grep -Fq '<span>Questions and explanations</span>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
+! grep -Fq 'aria-label="Single Herbs bank totals"' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/upgrade.php" ]]; then
     if [[ "$(id -u)" -eq 0 ]] && id www-data >/dev/null 2>&1; then

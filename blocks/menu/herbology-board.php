@@ -1405,11 +1405,13 @@ echo $OUTPUT->header();
                         : 'Answer questions with feedback or study the questions with answers and flashcards.'; ?></p>
                 </div>
             </div>
-            <div class="herb-board__summary herb-board__summary--panel" aria-label="Single Herbs bank totals">
-                <span><strong><?php echo $herbtotals['questions']; ?></strong> verified questions</span>
-                <span><strong><?php echo $herbtotals['chapters']; ?></strong> study chapters</span>
-                <span><strong><?php echo $herbtotals['charts']; ?></strong> comparison charts</span>
-            </div>
+            <p class="herb-board__feature-copy herb-board__feature-copy--panel">
+                <?php echo $ises
+                    ? 'Este banco incluye ' . $herbtotals['questions'] . ' preguntas verificadas en '
+                        . $herbtotals['chapters'] . ' capítulos, con ' . $herbtotals['charts'] . ' gráficos comparativos.'
+                    : 'This bank includes ' . $herbtotals['questions'] . ' verified questions across '
+                        . $herbtotals['chapters'] . ' study chapters, with ' . $herbtotals['charts'] . ' comparison charts.'; ?>
+            </p>
             <div class="herb-board__launches">
                 <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
                     <strong><?php echo $ises ? 'Responder preguntas' : 'Practice Questions'; ?></strong>

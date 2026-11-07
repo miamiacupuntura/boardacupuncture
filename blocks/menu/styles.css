@@ -827,6 +827,10 @@
     line-height: 1.55;
 }
 
+.herb-board__feature-copy--panel {
+    margin: 0 0 18px;
+}
+
 .herb-board__panel {
     margin-top: 20px;
     padding: 24px;
