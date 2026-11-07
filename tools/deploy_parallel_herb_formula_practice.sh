@@ -69,6 +69,9 @@ STATIC_FILES=(
     "formula-practice.html"
     "formula-practice-es.html"
     "formula-practice.js"
+    "formula-navigator.html"
+    "formula-navigator-es.html"
+    "formula-navigator.js"
     "formula-practice-data.json"
     "formula-practice-translations-es.json"
     "formula-question-bank.html"
@@ -80,6 +83,7 @@ STATIC_FILES=(
     "formula-modifications-ge-gen-tang.json"
     "formula-modifications-generated.json"
     "formula-category-expansion.json"
+    "study-return-navigation.js"
 )
 
 for relative in "${MOODLE_FILES[@]}"; do
@@ -173,6 +177,8 @@ grep -Fq 'formula-navigator.html">Find a formula' "$TEMP_DIR/static/formula-ques
 grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/formula-practice.html"
 ! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/formula-practice.js"
 ! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/formula-navigator.js"
+grep -Fq "dashboardUrl = '/my/'" "$TEMP_DIR/static/study-return-navigation.js"
+grep -Fq "hero.insertAdjacentElement('afterend', nav)" "$TEMP_DIR/static/study-return-navigation.js"
 grep -Fq 'class="herb-bank-study-route"' "$TEMP_DIR/static/herb-comparison-bank.html"
 grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/herb-comparison-bank.html"
 ! grep -Fq 'Back to herb library' "$TEMP_DIR/static/herb-comparison-bank.html"
