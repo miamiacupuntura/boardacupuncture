@@ -161,6 +161,10 @@ grep -Fq 'official categories' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php
 grep -Fq 'Additional practice filter' "$TEMP_DIR/moodle/blocks/menu/herbology-board.php"
 grep -Fq 'Single Herbs Practice' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq 'Formula Questions &amp; Flashcards' "$TEMP_DIR/static/formula-question-bank.html"
+grep -Fq 'class="herb-bank-study-route"' "$TEMP_DIR/static/herb-comparison-bank.html"
+grep -Fq '← Back to Dashboard' "$TEMP_DIR/static/herb-comparison-bank.html"
+! grep -Fq 'Back to herb library' "$TEMP_DIR/static/herb-comparison-bank.html"
+! grep -Fq 'study-return-navigation.js' "$TEMP_DIR/static/herb-comparison-bank.js"
 
 mkdir -p "$BACKUP_DIR/moodle" "$BACKUP_DIR/static"
 for relative in "${MOODLE_FILES[@]}"; do
