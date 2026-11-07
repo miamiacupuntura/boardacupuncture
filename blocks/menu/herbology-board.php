@@ -1379,19 +1379,17 @@ echo $OUTPUT->header();
         </nav>
         <?php } ?>
         <?php if (!in_array($track, ['domains', 'exams'], true)) { ?>
-            <div class="herb-board__summary" aria-label="Practice features">
+            <p class="herb-board__feature-copy">
             <?php if ($track === 'herbs') { ?>
-                <span>Questions and explanations</span>
-                <span>Recall flashcards</span>
-                <span>Comparison charts</span>
-                <span>Saved browser progress</span>
+                <?php echo $ises
+                    ? 'Estudia con explicaciones, flashcards de memoria, gráficos comparativos y progreso guardado en este navegador.'
+                    : 'Study with explanations, recall flashcards, comparison charts, and progress saved in this browser.'; ?>
             <?php } else { ?>
-                <span>Multiple choice</span>
-                <span>Mock-style feedback</span>
-                <span>Flexible session size</span>
-                <span>Exam history</span>
+                <?php echo $ises
+                    ? 'Practica selección múltiple con feedback tipo mock, sesiones flexibles e historial de exámenes.'
+                    : 'Practice multiple-choice questions with mock-style feedback, flexible sessions, and exam history.'; ?>
             <?php } ?>
-            </div>
+            </p>
         <?php } ?>
     </header>
 
