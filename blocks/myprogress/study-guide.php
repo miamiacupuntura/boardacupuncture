@@ -526,7 +526,7 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
 $pagelabel = $showlibrary ? ($ises ? ' · Biblioteca' : ' Library') : ($ises ? ' · Guía de estudio' : ' Study Guide');
 $PAGE->set_title($area['title'] . $pagelabel);
-$PAGE->set_heading($area['title'] . $pagelabel);
+$PAGE->set_heading($showlibrary && $areaid === 'herbology' ? '' : $area['title'] . $pagelabel);
 
 echo $OUTPUT->header();
 ?>
@@ -650,7 +650,7 @@ echo $OUTPUT->header();
                 <header class="subject-study-guide__top subject-study-library__top">
                     <div>
                         <p class="subject-study-guide__eyebrow"><?php echo s($tr('Study Library')); ?></p>
-                        <h2><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h2>
+                        <h2 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h2>
                         <p class="subject-study-guide__intro"><?php echo s($ises
                             ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.'
                             : 'Open every Board Level resource from one quick-access library.'); ?></p>
@@ -661,11 +661,13 @@ echo $OUTPUT->header();
                     </nav>
                 </header>
             <?php endif; ?>
-            <header class="subject-study-library__intro">
-                <p class="subject-study-guide__eyebrow"><?php echo s($ises ? 'Acceso rápido' : 'Quick access'); ?></p>
-                <h3 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h3>
-                <p><?php echo s($ises ? 'Usa el mapa para seguir el recorrido Board Level o busca directamente entre todos los recursos disponibles.' : 'Use the map to follow the Board Level study path or search directly across every available resource.'); ?></p>
-            </header>
+            <?php if ($areaid !== 'herbology'): ?>
+                <header class="subject-study-library__intro">
+                    <p class="subject-study-guide__eyebrow"><?php echo s($ises ? 'Acceso rápido' : 'Quick access'); ?></p>
+                    <h3 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h3>
+                    <p><?php echo s($ises ? 'Usa el mapa para seguir el recorrido Board Level o busca directamente entre todos los recursos disponibles.' : 'Use the map to follow the Board Level study path or search directly across every available resource.'); ?></p>
+                </header>
+            <?php endif; ?>
             <?php if ($areaid === 'herbology'): ?>
                 <section class="subject-study-library__map" aria-labelledby="library-navigation-map-title">
                     <header class="subject-study-library__map-header">
