@@ -253,6 +253,36 @@ a { color: inherit; }
   margin: -12px 0 24px;
 }
 
+.practice-study-route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: -4px 0 22px;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.practice-study-route a {
+  color: #185a9d;
+  text-decoration: none;
+}
+
+.practice-study-route a:hover,
+.practice-study-route a:focus {
+  color: var(--teal);
+  text-decoration: underline;
+}
+
+.practice-study-route [aria-current="page"] {
+  color: var(--ink);
+}
+
 .comparison-hero__actions {
   display: flex;
   flex-wrap: wrap;
