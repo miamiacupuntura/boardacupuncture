@@ -578,7 +578,7 @@ echo $OUTPUT->header();
 .subject-study-library__intro h3{margin:0 0 8px;color:#123246;font-size:clamp(27px,4vw,40px)}
 .subject-study-library__intro p:last-child{max-width:760px;margin:0;color:#52677a;line-height:1.55}
 .subject-study-library__map{padding:22px;border:1px solid #b8d5d2;border-radius:12px;background:#f7fcfb}
-.subject-study-library__map-header{margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}
+.subject-study-library__map-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}.subject-study-library__map-copy{min-width:0}.subject-study-library__map-actions{display:flex;flex:0 0 auto;align-items:center;gap:9px}.subject-study-library__map-actions a{margin:0}
 .subject-study-library__journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .subject-study-library__journey-link{display:flex;min-height:86px;align-items:center;gap:12px;padding:13px;border:1px solid #b9cbd6;border-radius:10px;background:#fff;color:#123246;text-decoration:none!important}
 .subject-study-library__journey-link:hover,.subject-study-library__journey-link:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
@@ -607,13 +607,13 @@ echo $OUTPUT->header();
 .subject-study-library__group--quiz .subject-study-library__button{border-color:#c6b5ef;background:#f8f5ff}
 .subject-study-library__group--comparisons .subject-study-library__button{border-color:#f4b27e;background:#fffaf6}
 .subject-study-library__tips{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 18px;border:1px solid #efc7a8;border-left:5px solid #f37424;border-radius:11px;background:#fff8f2;text-align:left}.subject-study-library__tips strong,.subject-study-library__tips span{display:block}.subject-study-library__tips span{margin-top:3px;color:#755844;font-size:.9rem}.subject-study-library__tips a{display:inline-flex;min-height:44px;flex:0 0 auto;align-items:center;justify-content:center;padding:10px 15px;border-radius:8px;background:#c9570c;color:#fff!important;font-weight:800;text-decoration:none!important}.subject-study-library__tips a:hover,.subject-study-library__tips a:focus{background:#a74408}
-.subject-study-library__top{margin-bottom:0;padding:18px 22px;border:1px solid #cbdce7;border-top:5px solid #f47e2c;border-radius:12px;background:linear-gradient(135deg,#f8fcfb 0%,#fff9f4 55%,#faf7fd 100%);box-shadow:0 4px 14px rgba(23,50,77,.06)}.subject-study-library__top .subject-study-guide__eyebrow,.subject-study-library__top .subject-study-guide__intro{display:none}.subject-study-library__top h2{margin:0;font-size:clamp(28px,4vw,40px);line-height:1.12}.subject-study-library__footer{margin-top:6px;padding-top:8px;border-top:1px solid #d8e2e7}.subject-study-library__footer .subject-study-library__tips{margin-bottom:0}
+.subject-study-library__footer{margin-top:6px;padding-top:8px;border-top:1px solid #d8e2e7}.subject-study-library__footer .subject-study-library__tips{margin-bottom:0}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
 .subject-study-guide__construction-mark{margin-bottom:15px;font-size:48px}
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
 .subject-study-guide__construction p{max-width:570px;margin:0 auto 26px;color:#64748b;line-height:1.65}
 .subject-study-guide a:focus-visible{outline:3px solid #185cca;outline-offset:3px}
-@media(max-width:700px){.subject-study-guide{padding:0 10px}.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}.subject-study-library__top{padding:15px 17px}.subject-study-library__top h2{font-size:clamp(25px,8vw,32px)}.subject-study-library__intro{padding:22px 18px}.subject-study-library__map,.subject-study-library__group{padding:17px}.subject-study-library__journey{grid-template-columns:repeat(2,minmax(0,1fr))}.subject-study-library__journey-link{min-height:94px;align-items:flex-start;flex-direction:column;gap:8px}.subject-study-library__section-links{display:grid;grid-template-columns:1fr 1fr}.subject-study-library__section-links a{justify-content:center;border-radius:8px;text-align:center}.subject-study-library__search{grid-template-columns:1fr}.subject-study-library__search-count{padding:0}.subject-study-library__tips{align-items:stretch;flex-direction:column}.subject-study-library__tips a{width:100%;box-sizing:border-box}.subject-study-library__group-header{align-items:flex-start;flex-direction:column}.subject-study-library__buttons{grid-template-columns:1fr}.subject-study-library__button{min-height:96px;padding:13px}}
+@media(max-width:700px){.subject-study-guide{padding:0 10px}.subject-study-guide__top{display:block}.subject-study-guide__top-actions{align-items:stretch;flex-direction:column;margin-top:16px}.subject-study-guide__top-actions a{width:100%;box-sizing:border-box}.subject-study-guide__back{margin-top:0}.subject-study-guide__board-overview{padding:26px 22px}.subject-study-guide__benefits{grid-template-columns:1fr}.subject-study-guide__grid,.subject-study-guide__grid--herbology{grid-template-columns:1fr}.subject-study-guide__future{grid-column:auto}.subject-study-library__intro{padding:22px 18px}.subject-study-library__map,.subject-study-library__group{padding:17px}.subject-study-library__map-header{align-items:stretch;flex-direction:column}.subject-study-library__map-actions{display:grid;grid-template-columns:1fr 1fr}.subject-study-library__map-actions a{width:100%;box-sizing:border-box;text-align:center}.subject-study-library__journey{grid-template-columns:repeat(2,minmax(0,1fr))}.subject-study-library__journey-link{min-height:94px;align-items:flex-start;flex-direction:column;gap:8px}.subject-study-library__section-links{display:grid;grid-template-columns:1fr 1fr}.subject-study-library__section-links a{justify-content:center;border-radius:8px;text-align:center}.subject-study-library__search{grid-template-columns:1fr}.subject-study-library__search-count{padding:0}.subject-study-library__tips{align-items:stretch;flex-direction:column}.subject-study-library__tips a{width:100%;box-sizing:border-box}.subject-study-library__group-header{align-items:flex-start;flex-direction:column}.subject-study-library__buttons{grid-template-columns:1fr}.subject-study-library__button{min-height:96px;padding:13px}}
 </style>
 <main class="subject-study-guide">
 <?php if ($showconstruction): ?>
@@ -645,22 +645,7 @@ echo $OUTPUT->header();
     <?php endif; ?>
 
     <?php if ($showlibrary): ?>
-        <section class="subject-study-library" aria-labelledby="study-library-title">
-            <?php if ($areaid === 'herbology'): ?>
-                <header class="subject-study-guide__top subject-study-library__top">
-                    <div>
-                        <p class="subject-study-guide__eyebrow"><?php echo s($tr('Study Library')); ?></p>
-                        <h2 id="study-library-title"><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h2>
-                        <p class="subject-study-guide__intro"><?php echo s($ises
-                            ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.'
-                            : 'Open every Board Level resource from one quick-access library.'); ?></p>
-                    </div>
-                    <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($ises ? 'Controles de la biblioteca' : 'Library controls'); ?>">
-                        <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                        <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
-                    </nav>
-                </header>
-            <?php endif; ?>
+        <section class="subject-study-library" aria-labelledby="<?php echo $areaid === 'herbology' ? 'library-navigation-map-title' : 'study-library-title'; ?>">
             <?php if ($areaid !== 'herbology'): ?>
                 <header class="subject-study-library__intro">
                     <p class="subject-study-guide__eyebrow"><?php echo s($ises ? 'Acceso rápido' : 'Quick access'); ?></p>
@@ -671,8 +656,14 @@ echo $OUTPUT->header();
             <?php if ($areaid === 'herbology'): ?>
                 <section class="subject-study-library__map" aria-labelledby="library-navigation-map-title">
                     <header class="subject-study-library__map-header">
-                        <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Mapa de navegación Board Level' : 'Board Level Navigation Map'); ?></h3>
-                        <p><?php echo s($ises ? 'Avanza desde el estudio guiado hasta la evaluación o abre directamente la colección que necesitas.' : 'Move from guided study to assessment, or open the exact collection you need.'); ?></p>
+                        <div class="subject-study-library__map-copy">
+                            <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Mapa de navegación Board Level' : 'Board Level Navigation Map'); ?></h3>
+                            <p><?php echo s($ises ? 'Avanza desde el estudio guiado hasta la evaluación o abre directamente la colección que necesitas.' : 'Move from guided study to assessment, or open the exact collection you need.'); ?></p>
+                        </div>
+                        <nav class="subject-study-library__map-actions" aria-label="<?php echo s($ises ? 'Controles del mapa' : 'Map controls'); ?>">
+                            <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                            <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
+                        </nav>
                     </header>
                     <nav class="subject-study-library__journey" aria-label="<?php echo s($ises ? 'Recorrido principal Board Level' : 'Main Board Level path'); ?>">
                         <a class="subject-study-library__journey-link" href="#library-group-core-guides">

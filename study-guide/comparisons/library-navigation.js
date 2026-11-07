@@ -27,7 +27,6 @@
     || /-es\.html$/i.test(currentUrl.pathname);
   const copy = spanish ? {
     library: 'Biblioteca',
-    libraryName: 'Biblioteca de Herbología',
     allResources: 'Inicio de Library',
     studyGuides: 'Guías de estudio',
     practice: 'Herbology Practice',
@@ -40,7 +39,6 @@
     closeNavigation: 'Ocultar navegación'
   } : {
     library: 'Library',
-    libraryName: 'Herbology Library',
     allResources: 'Library home',
     studyGuides: 'Study Guides',
     practice: 'Herbology Practice',
@@ -163,12 +161,6 @@
   });
   if (brand) {
     brand.href = libraryUrl;
-    const label = brand.querySelector('span:last-child');
-    if (label) {
-      label.textContent = copy.libraryName;
-    } else {
-      brand.textContent = copy.libraryName;
-    }
   }
 
   const style = document.createElement('style');

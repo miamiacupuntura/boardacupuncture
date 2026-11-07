@@ -97,7 +97,11 @@ grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/myprogress/study-
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-footer' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
-grep -Fq 'subject-study-library__top' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
+grep -Fq 'subject-study-library__map-actions' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
+if grep -Fq 'subject-study-library__top' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"; then
+    echo "ERROR: el encabezado genérico Chinese Herbology Library continúa en la portada." >&2
+    exit 1
+fi
 grep -Fq "set_heading(\$showlibrary && \$areaid === 'herbology' ? ''" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq "if (\$areaid !== 'herbology')" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
@@ -107,6 +111,10 @@ grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
+if grep -Fq 'libraryName' "$TEMP_DIR/static/library-navigation.js"; then
+    echo "ERROR: la navegación estática todavía reemplaza el nombre propio de las hojas." >&2
+    exit 1
+fi
 if grep -Fq 'Back to Library' "$TEMP_DIR/static/library-navigation.js" \
         || grep -Fq 'Back to Library' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"; then
     echo "ERROR: la navegación todavía contiene el botón Back to Library." >&2
@@ -156,9 +164,13 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-9' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-10' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
+if grep -Fq 'libraryName' "$STUDY_NOTE_DIR/library-navigation.js"; then
+    echo "ERROR: la navegación instalada reemplaza el nombre propio de las hojas." >&2
+    exit 1
+fi
 if grep -Fq 'Back to Library' "$STUDY_NOTE_DIR/library-navigation.js" \
         || grep -Fq 'Back to Library' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"; then
     echo "ERROR: el botón Back to Library continúa instalado." >&2
@@ -174,7 +186,11 @@ grep -Fq 'data-library-step-back' "$MOODLE_ROOT/blocks/myprogress/herbology-libr
 grep -Fq 'herbology-step-back-scroll' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-footer' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
-grep -Fq 'subject-study-library__top' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
+grep -Fq 'subject-study-library__map-actions' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
+if grep -Fq 'subject-study-library__top' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"; then
+    echo "ERROR: el encabezado genérico Chinese Herbology Library continúa instalado." >&2
+    exit 1
+fi
 grep -Fq "set_heading(\$showlibrary && \$areaid === 'herbology' ? ''" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq "if (\$areaid !== 'herbology')" "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
