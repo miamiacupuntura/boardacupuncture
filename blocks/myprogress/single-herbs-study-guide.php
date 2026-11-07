@@ -2,9 +2,11 @@
 // Single Herbs Study Guide category catalog.
 
 require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/herbology-library-navigation.php');
 
 require_login();
 
+$fromlibrary = block_myprogress_from_herbology_library();
 $sourcecourseid = 45;
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
 $requestedherb = trim(optional_param('herb', '', PARAM_TEXT));
@@ -1558,6 +1560,9 @@ ob_start();
         </nav>
     </header>
 
+    <?php if ($fromlibrary): ?>
+        <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Hierbas individuales' : 'Single Herbs'); ?>
+    <?php else: ?>
     <nav class="single-herbs-guide__study-route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
         <a href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>
         <a href="<?php echo $benskymapurl->out(false); ?>"><?php echo $ises ? 'Mapa Bensky' : 'Bensky Map'; ?></a><span aria-hidden="true">›</span>
@@ -1566,6 +1571,7 @@ ob_start();
         <a href="<?php echo $formulasurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a><span aria-hidden="true">›</span>
         <span class="single-herbs-guide__study-route-current" aria-current="page"><?php echo s($singleherbroutetitle); ?></span>
     </nav>
+    <?php endif; ?>
 
     <?php echo $rendersingleherbcategorynavigation('top'); ?>
 

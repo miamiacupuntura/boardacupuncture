@@ -2,9 +2,11 @@
 // This file is part of Moodle - http://moodle.org/.
 
 require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/herbology-library-navigation.php');
 
 require_login();
 
+$fromlibrary = block_myprogress_from_herbology_library();
 $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $focus = optional_param('focus', '', PARAM_ALPHANUMEXT);
@@ -1892,6 +1894,9 @@ echo $OUTPUT->header();
         </nav>
     </header>
 
+    <?php if ($fromlibrary): ?>
+        <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Fórmulas' : 'Formulas'); ?>
+    <?php else: ?>
     <nav class="formula-study-guide__study-route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
         <a href="<?php echo $herbologyurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>
         <a href="<?php echo $benskymapurl->out(false); ?>"><?php echo $ises ? 'Mapa Bensky' : 'Bensky Map'; ?></a><span aria-hidden="true">›</span>
@@ -1900,6 +1905,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $indexurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a><span aria-hidden="true">›</span>
         <span class="formula-study-guide__study-route-current" aria-current="page"><?php echo s($formularoutetitle); ?></span>
     </nav>
+    <?php endif; ?>
 
     <?php echo $renderchapternavigation('top'); ?>
 

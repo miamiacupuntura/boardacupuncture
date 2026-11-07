@@ -88,8 +88,18 @@ node "${REPO_ROOT}/tools/inject_study_note_navigation.mjs" \
 node "${REPO_ROOT}/tools/inject_study_note_navigation.mjs" \
     --check \
     --root="${STAGING_DIR}/comparisons"
+node "${REPO_ROOT}/tools/inject_library_navigation.mjs" \
+    --write \
+    --root="${STAGING_DIR}/comparisons"
+node "${REPO_ROOT}/tools/inject_library_navigation.mjs" \
+    --check \
+    --root="${STAGING_DIR}/comparisons"
 if [[ ! -f "${STAGING_DIR}/comparisons/study-note-navigation.js" ]]; then
     echo "Shared Study Note navigation asset is missing." >&2
+    exit 1
+fi
+if [[ ! -f "${STAGING_DIR}/comparisons/library-navigation.js" ]]; then
+    echo "Shared Library navigation asset is missing."
     exit 1
 fi
 if [[ ! -f "${STAGING_DIR}/comparisons/study-note-navigation-manifest.js" ]]; then

@@ -27,6 +27,7 @@
     unavailable: 'Unavailable'
   };
   const currentUrl = new URL(window.location.href);
+  const fromLibrary = currentUrl.searchParams.get('from') === 'library';
   const currentFile = currentUrl.pathname.split('/').pop() || '';
   const currentTitle = (note.querySelector('.study-note__title,h1')?.textContent || document.title)
     .replace(/\s+/g, ' ')
@@ -178,7 +179,9 @@
     <a class="study-note-activity-nav__link study-note-activity-nav__link--next" data-study-note-next aria-disabled="true">
       <span class="study-note-activity-nav__label">${copy.next}</span><span class="study-note-activity-nav__name"></span>
     </a>`;
-  main.insertBefore(route, note);
+  if (!fromLibrary) {
+    main.insertBefore(route, note);
+  }
   main.insertBefore(panel, note);
 
   const previous = panel.querySelector('[data-study-note-previous]');

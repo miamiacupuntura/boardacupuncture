@@ -2,9 +2,11 @@
 // This file is part of Moodle - http://moodle.org/.
 
 require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/herbology-library-navigation.php');
 
 require_login();
 
+$fromlibrary = block_myprogress_from_herbology_library();
 $returnurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
@@ -593,9 +595,13 @@ echo $OUTPUT->header();
         <span class="herb-combos__brand">Chinese Herbology · Other chapters</span>
         <span class="herb-combos__top-actions">
             <a class="herb-combos__back" href="<?php echo $libraryurl->out(false); ?>">← Library</a>
-            <a class="herb-combos__back" href="<?php echo $returnurl->out(false); ?>">← Study Guide</a>
+            <?php if (!$fromlibrary): ?><a class="herb-combos__back" href="<?php echo $returnurl->out(false); ?>">← Study Guide</a><?php endif; ?>
         </span>
     </nav>
+
+    <?php if ($fromlibrary): ?>
+        <?php echo block_myprogress_render_herbology_library_navigation(false, 'Commonly Used Herbal Combinations'); ?>
+    <?php endif; ?>
 
     <header class="herb-combos__hero">
         <p class="herb-combos__eyebrow">Appendix 2 · Source-based study chapter</p>

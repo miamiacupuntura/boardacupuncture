@@ -722,6 +722,9 @@ echo $OUTPUT->header();
                             <?php foreach ($group['chapters'] as $chapter): ?>
                                 <?php
                                 $chapterurl = $makechapterurl($chapter);
+                                if ($areaid === 'herbology') {
+                                    $chapterurl->param('from', 'library');
+                                }
                                 $searchtext = implode(' ', [
                                     $chapter['title'],
                                     $chapter['description'],

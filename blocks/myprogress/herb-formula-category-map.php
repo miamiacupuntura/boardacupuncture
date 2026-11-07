@@ -2,9 +2,11 @@
 // Bensky category bridge between single herbs and formulas.
 
 require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/herbology-library-navigation.php');
 
 require_login();
 
+$fromlibrary = block_myprogress_from_herbology_library();
 $ises = optional_param('lang', 'en', PARAM_ALPHA) === 'es';
 
 $formulachapters = [
@@ -498,9 +500,12 @@ echo $OUTPUT->header();
             <a class="herb-formula-map__button" href="<?php echo $herbsurl->out(false); ?>"><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?></a>
             <a class="herb-formula-map__button" href="<?php echo $duiyaourl->out(false); ?>">Duì Yào</a>
             <a class="herb-formula-map__button" href="<?php echo $formulasurl->out(false); ?>"><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?></a>
-            <a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
+            <?php if (!$fromlibrary): ?><a class="herb-formula-map__button" href="<?php echo $huburl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a><?php endif; ?>
         </nav>
     </header>
+    <?php if ($fromlibrary): ?>
+        <?php echo block_myprogress_render_herbology_library_navigation($ises, $pagetitle); ?>
+    <?php else: ?>
     <nav class="herb-formula-map__route" aria-label="<?php echo s($ises ? 'Ruta de estudio' : 'Study path'); ?>">
         <a href="<?php echo $huburl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a><span aria-hidden="true">›</span>
         <span><?php echo $ises ? 'Mapa Bensky' : 'Bensky Map'; ?></span><span aria-hidden="true">›</span>
@@ -509,6 +514,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $formulasurl->out(false); ?>"><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a><span aria-hidden="true">›</span>
         <span class="herb-formula-map__route-current" data-map-route-current><?php echo s($ises ? $herbcategories[0][3] : $herbcategories[0][2]); ?></span>
     </nav>
+    <?php endif; ?>
     <section class="herb-formula-map__overview" aria-labelledby="map-overview-title">
         <div><h3 id="map-overview-title"><?php echo s($ises ? 'Cómo leer el mapa' : 'How to read this crosswalk'); ?></h3><p><?php echo s($ises ? 'Nivel 1 clasifica hierbas individuales por sus acciones. Nivel 2, Duì Yào, muestra cómo dos hierbas trabajan juntas. Nivel 3 agrupa fórmulas completas por su estrategia terapéutica. Las flechas indican relación, no equivalencia.' : 'Level 1 classifies individual herbs by their actions. Level 2, Duì Yào, shows how two herbs work together. Level 3 groups complete formulas by therapeutic strategy. Arrows indicate relationship, not equivalence.'); ?></p><p class="herb-formula-map__color-key"><?php echo s($ises ? 'Clave visual: dentro de cada fila, el mismo color identifica la misma hierba en la categoría, el Duì Yào y los ejemplos de fórmula.' : 'Visual key: within each row, the same color identifies the same herb in the category, Duì Yào, and formula examples.'); ?></p></div>
         <div class="herb-formula-map__stats"><div class="herb-formula-map__stat"><strong>34</strong><span><?php echo $ises ? 'categorías herbales' : 'herb categories'; ?></span></div><div class="herb-formula-map__stat"><strong>21</strong><span><?php echo $ises ? 'capítulos de fórmulas' : 'formula chapters'; ?></span></div></div>
