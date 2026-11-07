@@ -13,7 +13,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash deploy_herbology_library_navigation.sh COMMIT_DE_40_CARACTERES"
     exit 1
 fi
-for command in curl php node install tar; do
+for command in curl php install tar; do
     command -v "$command" >/dev/null 2>&1 || { echo "ERROR: falta el comando $command"; exit 1; }
 done
 [[ -f "$MOODLE_ROOT/config.php" ]] || { echo "ERROR: no se encontró Moodle en $MOODLE_ROOT"; exit 1; }
@@ -63,17 +63,15 @@ done
 for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
-curl -fsSL "$REPOSITORY/$REVISION/tools/inject_library_navigation.mjs" \
-    -o "$TEMP_DIR/tools/inject_library_navigation.mjs"
+curl -fsSL "$REPOSITORY/$REVISION/tools/inject_library_navigation.php" \
+    -o "$TEMP_DIR/tools/inject_library_navigation.php"
 
 for relative in "${MOODLE_FILES[@]}"; do
     if [[ "$relative" == *.php ]]; then
         php -l "$TEMP_DIR/moodle/$relative" >/dev/null
     fi
 done
-node --check "$TEMP_DIR/static/library-navigation.js"
-node --check "$TEMP_DIR/static/study-note-navigation.js"
-node --check "$TEMP_DIR/tools/inject_library_navigation.mjs"
+php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
 grep -Fq '$plugin->version   = 2026110647;' "$TEMP_DIR/moodle/blocks/menu/version.php"
 grep -Fq "param('from', 'library')" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
@@ -99,8 +97,8 @@ for file in "${STATIC_FILES[@]}"; do
     install -o "${static_owner_group%:*}" -g "${static_owner_group#*:}" -m "$static_mode" \
         "$TEMP_DIR/static/$file" "$STUDY_NOTE_DIR/$file"
 done
-node "$TEMP_DIR/tools/inject_library_navigation.mjs" --write --root="$STUDY_NOTE_DIR"
-node "$TEMP_DIR/tools/inject_library_navigation.mjs" --check --root="$STUDY_NOTE_DIR"
+php "$TEMP_DIR/tools/inject_library_navigation.php" --write --root="$STUDY_NOTE_DIR"
+php "$TEMP_DIR/tools/inject_library_navigation.php" --check --root="$STUDY_NOTE_DIR"
 
 default_owner_group="$(stat -c '%u:%g' "$MOODLE_ROOT/config.php")"
 for relative in "${MOODLE_FILES[@]}"; do
