@@ -607,6 +607,7 @@ echo $OUTPUT->header();
 .subject-study-library__group--quiz .subject-study-library__button{border-color:#c6b5ef;background:#f8f5ff}
 .subject-study-library__group--comparisons .subject-study-library__button{border-color:#f4b27e;background:#fffaf6}
 .subject-study-library__tips{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px;padding:16px 18px;border:1px solid #efc7a8;border-left:5px solid #f37424;border-radius:11px;background:#fff8f2;text-align:left}.subject-study-library__tips strong,.subject-study-library__tips span{display:block}.subject-study-library__tips span{margin-top:3px;color:#755844;font-size:.9rem}.subject-study-library__tips a{display:inline-flex;min-height:44px;flex:0 0 auto;align-items:center;justify-content:center;padding:10px 15px;border-radius:8px;background:#c9570c;color:#fff!important;font-weight:800;text-decoration:none!important}.subject-study-library__tips a:hover,.subject-study-library__tips a:focus{background:#a74408}
+.subject-study-library__footer{margin-top:6px;padding-top:24px;border-top:1px solid #d8e2e7}.subject-study-library__footer .subject-study-library__tips{margin-bottom:0}.subject-study-library__footer .subject-study-guide__top{margin-bottom:20px}
 .subject-study-guide__construction{padding:clamp(36px,8vw,76px) 22px;border:1px dashed #aeb8c0;border-radius:14px;background:#fff;text-align:center}
 .subject-study-guide__construction-mark{margin-bottom:15px;font-size:48px}
 .subject-study-guide__construction h3{margin:0 0 12px;color:#a64f12;font-size:28px}
@@ -624,6 +625,7 @@ echo $OUTPUT->header();
         <a class="subject-study-guide__back" href="<?php echo $chapterlisturl->out(false); ?>">← Back to chapters</a>
     </section>
 <?php else: ?>
+    <?php if (!$showlibrary || $areaid !== 'herbology'): ?>
     <header class="subject-study-guide__top">
         <div>
             <p class="subject-study-guide__eyebrow"><?php echo s($tr($showlibrary ? 'Study Library' : 'Study Guide')); ?></p>
@@ -640,15 +642,6 @@ echo $OUTPUT->header();
             <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
         </nav>
     </header>
-
-    <?php if ($showlibrary && $areaid === 'herbology'): ?>
-        <aside class="subject-study-library__tips" aria-label="<?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips and Tricks'); ?>">
-            <div>
-                <strong><?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips & Tricks'); ?></strong>
-                <span><?php echo s($ises ? 'Pistas rápidas, ayudas de memoria, comparaciones que no debes confundir y recordatorios de seguridad.' : 'Fast clues, memory aids, do-not-confuse comparisons and safety reminders.'); ?></span>
-            </div>
-            <a href="<?php echo $ises ? '/study-guide/tips-and-tricks-es.html' : '/study-guide/tips-and-tricks.html'; ?>"><?php echo s($ises ? 'Abrir consejos y trucos' : 'Open Tips & Tricks'); ?></a>
-        </aside>
     <?php endif; ?>
 
     <?php if ($showlibrary): ?>
@@ -749,6 +742,30 @@ echo $OUTPUT->header();
                     </section>
                 <?php endif; ?>
             <?php endforeach; ?>
+            <?php if ($areaid === 'herbology'): ?>
+                <footer class="subject-study-library__footer" data-library-footer>
+                    <header class="subject-study-guide__top">
+                        <div>
+                            <p class="subject-study-guide__eyebrow"><?php echo s($tr('Study Library')); ?></p>
+                            <h2><?php echo s($area['title'] . ($ises ? ' · Biblioteca' : ' Library')); ?></h2>
+                            <p class="subject-study-guide__intro"><?php echo s($ises
+                                ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.'
+                                : 'Open every Board Level resource from one quick-access library.'); ?></p>
+                        </div>
+                        <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($ises ? 'Controles de la biblioteca' : 'Library controls'); ?>">
+                            <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                            <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
+                        </nav>
+                    </header>
+                    <aside class="subject-study-library__tips" aria-label="<?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips and Tricks'); ?>">
+                        <div>
+                            <strong><?php echo s($ises ? 'Consejos y trucos del Board' : 'Board Tips & Tricks'); ?></strong>
+                            <span><?php echo s($ises ? 'Pistas rápidas, ayudas de memoria, comparaciones que no debes confundir y recordatorios de seguridad.' : 'Fast clues, memory aids, do-not-confuse comparisons and safety reminders.'); ?></span>
+                        </div>
+                        <a href="<?php echo $ises ? '/study-guide/tips-and-tricks-es.html' : '/study-guide/tips-and-tricks.html'; ?>"><?php echo s($ises ? 'Abrir consejos y trucos' : 'Open Tips & Tricks'); ?></a>
+                    </aside>
+                </footer>
+            <?php endif; ?>
         </section>
         <?php if ($areaid === 'herbology'): ?>
         <script>
@@ -946,6 +963,18 @@ echo $OUTPUT->header();
     };
     window.addEventListener('pageshow', revealStepBackDestination);
     revealStepBackDestination();
+    const pageBack = document.querySelector('[data-library-page-back]');
+    pageBack?.addEventListener('click', event => {
+        if (window.history.length > 1) {
+            event.preventDefault();
+            try {
+                window.sessionStorage.setItem(stepBackScrollKey, 'top');
+            } catch (error) {
+                // History navigation still works when session storage is unavailable.
+            }
+            window.history.back();
+        }
+    });
 })();
 </script>
 <?php endif; ?>

@@ -93,6 +93,8 @@ fi
 grep -Fq "param('from', 'library')" "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'herbology-step-back-scroll' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
+grep -Fq 'data-library-footer' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
+grep -Fq 'data-library-page-back' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-library-context' "$TEMP_DIR/moodle/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'dataset.libraryContextNavigation' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'data-library-step-back' "$TEMP_DIR/static/library-navigation.js"
@@ -151,6 +153,8 @@ fi
 grep -Fq 'data-herbology-library-context' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'data-library-step-back' "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq 'herbology-step-back-scroll' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
+grep -Fq 'data-library-footer' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
+grep -Fq 'data-library-page-back' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-herbology-step-back' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 if grep -Fq 'aria-current="page">Quiz</a>' "$MOODLE_ROOT/blocks/menu/herbology-board.php"; then
     echo "ERROR: el botón Quiz redundante continúa instalado." >&2
