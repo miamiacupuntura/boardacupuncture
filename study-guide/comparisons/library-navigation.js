@@ -2,6 +2,23 @@
   'use strict';
 
   const currentUrl = new URL(window.location.href);
+  const stepBackScrollKey = 'herbology-step-back-scroll';
+  const revealStepBackDestination = function() {
+    try {
+      if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
+        return;
+      }
+      window.sessionStorage.removeItem(stepBackScrollKey);
+      window.scrollTo(0, 0);
+      window.requestAnimationFrame(function() {
+        window.scrollTo(0, 0);
+      });
+    } catch (error) {
+      // Navigation still works when session storage is unavailable.
+    }
+  };
+  window.addEventListener('pageshow', revealStepBackDestination);
+  revealStepBackDestination();
   const spanish = document.documentElement.lang.toLowerCase().startsWith('es')
     || /-es\.html$/i.test(currentUrl.pathname);
   const copy = spanish ? {
@@ -195,6 +212,11 @@
   stepBack.addEventListener('click', function(event) {
     if (window.history.length > 1) {
       event.preventDefault();
+      try {
+        window.sessionStorage.setItem(stepBackScrollKey, 'top');
+      } catch (error) {
+        // History navigation still works when session storage is unavailable.
+      }
       window.history.back();
     }
     // The Library URL on the link remains the safe fallback without history.

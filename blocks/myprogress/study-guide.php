@@ -924,5 +924,26 @@ echo $OUTPUT->header();
     <?php endif; ?>
 <?php endif; ?>
 </main>
+<?php if ($showlibrary && $areaid === 'herbology'): ?>
+<script>
+(() => {
+    const stepBackScrollKey = 'herbology-step-back-scroll';
+    const revealStepBackDestination = () => {
+        try {
+            if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
+                return;
+            }
+            window.sessionStorage.removeItem(stepBackScrollKey);
+            window.scrollTo(0, 0);
+            window.requestAnimationFrame(() => window.scrollTo(0, 0));
+        } catch (error) {
+            // Library remains usable when session storage is unavailable.
+        }
+    };
+    window.addEventListener('pageshow', revealStepBackDestination);
+    revealStepBackDestination();
+})();
+</script>
+<?php endif; ?>
 <?php
 echo $OUTPUT->footer();

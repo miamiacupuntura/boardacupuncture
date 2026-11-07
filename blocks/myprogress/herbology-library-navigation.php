@@ -53,6 +53,21 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
     </nav>
     <script>
     (() => {
+        const stepBackScrollKey = 'herbology-step-back-scroll';
+        const revealStepBackDestination = () => {
+            try {
+                if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
+                    return;
+                }
+                window.sessionStorage.removeItem(stepBackScrollKey);
+                window.scrollTo(0, 0);
+                window.requestAnimationFrame(() => window.scrollTo(0, 0));
+            } catch (error) {
+                // Navigation still works when session storage is unavailable.
+            }
+        };
+        window.addEventListener('pageshow', revealStepBackDestination);
+        revealStepBackDestination();
         const allowed = /^(?:\/blocks\/myprogress\/(?:single-herbs-study-guide|formulas-study-guide|herb-formula-category-map|common-herbal-combinations)\.php|\/study-guide\/comparisons\/[^/]+\.html)$/;
         const applyContext = () => {
             document.querySelectorAll('a[href]').forEach(link => {
@@ -117,6 +132,11 @@ function block_myprogress_render_herbology_library_navigation(bool $ises, string
         stepBack?.addEventListener('click', event => {
             if (window.history.length > 1) {
                 event.preventDefault();
+                try {
+                    window.sessionStorage.setItem(stepBackScrollKey, 'top');
+                } catch (error) {
+                    // History navigation still works when session storage is unavailable.
+                }
                 window.history.back();
             }
             // The Library URL on the link remains the safe fallback without history.
