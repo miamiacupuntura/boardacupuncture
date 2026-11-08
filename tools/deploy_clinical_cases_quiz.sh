@@ -43,6 +43,8 @@ FILES=(
     "blocks/myprogress/herbology-library-navigation.php"
     "blocks/myprogress/study-guide.php"
     "blocks/myprogress/version.php"
+    "study-guide/comparisons/dui-yao.html"
+    "study-guide/comparisons/dui-yao-es.html"
     "mod/scorm/studytopic/clinical_cases_extract.py"
     "mod/scorm/studytopic/scorm_word_export.py"
     "mod/scorm/studytopic/scorm_word_inventory.php"
@@ -112,6 +114,16 @@ grep -Fq 'herb-board__tab herb-board__tab--language' "$TEMP_DIR/blocks/menu/herb
 grep -Fq "href=\"<?php echo \$languageurl->out(false); ?>\"" "$TEMP_DIR/blocks/menu/herbology-board.php"
 if grep -Fq 'data-herbology-step-back' "$TEMP_DIR/blocks/menu/herbology-board.php"; then
     echo "ERROR: el regreso todavía usa el historial del navegador." >&2
+    exit 1
+fi
+grep -Fq '← Board Level Activities' "$TEMP_DIR/study-guide/comparisons/dui-yao.html"
+grep -Fq '>Español</a>' "$TEMP_DIR/study-guide/comparisons/dui-yao.html"
+grep -Fq '← Actividades Board Level' "$TEMP_DIR/study-guide/comparisons/dui-yao-es.html"
+grep -Fq '>English</a>' "$TEMP_DIR/study-guide/comparisons/dui-yao-es.html"
+if grep -Eq 'Study path|Ruta de estudio|Library home|Herbology Practice|comparison-return\.js' \
+        "$TEMP_DIR/study-guide/comparisons/dui-yao.html" \
+        "$TEMP_DIR/study-guide/comparisons/dui-yao-es.html"; then
+    echo "ERROR: Duì Yào todavía contiene navegación adicional." >&2
     exit 1
 fi
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
