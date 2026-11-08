@@ -261,6 +261,24 @@ if grep -Fq "herbology-library-context__routes" "$MOODLE_ROOT/blocks/myprogress/
     exit 1
 fi
 
+for relative in "${FILES[@]}"; do
+    if [[ "$relative" == study-guide/comparisons/*.html ]]; then
+        installed_comparison="$MOODLE_ROOT/$relative"
+        grep -Eq '← Board Level Activities|← Actividades Board Level' "$installed_comparison"
+        grep -Eq '>Español</a>|>English</a>' "$installed_comparison"
+        installed_navigation_count="$(grep -o 'class="comparison-back"' "$installed_comparison" | wc -l | tr -d ' ')"
+        if [ "$installed_navigation_count" -ne 2 ]; then
+            echo "ERROR: $relative no quedó instalado con exactamente dos controles globales." >&2
+            exit 1
+        fi
+        if grep -Eq 'Back to Dashboard|← Dashboard|practice-study-route|Library home' "$installed_comparison"; then
+            echo "ERROR: $relative conserva navegación global antigua después de instalarse." >&2
+            exit 1
+        fi
+    fi
+done
+echo "OK: navegación Board Level instalada y comprobada en las páginas comparativas."
+
 run_web_command() {
     if [[ "$(id -u)" -eq 0 ]] && command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
         runuser -u www-data -- "$@"
