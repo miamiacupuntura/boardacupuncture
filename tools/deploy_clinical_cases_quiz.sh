@@ -8,7 +8,7 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 EXPECTED_VERSION="2026110685"
-EXPECTED_MYPROGRESS_VERSION="2026110811"
+EXPECTED_MYPROGRESS_VERSION="2026110812"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -68,6 +68,8 @@ grep -Fq "upgrade_block_savepoint(true, $EXPECTED_VERSION, 'menu')" "$TEMP_DIR/b
 grep -Fq "\$plugin->version = $EXPECTED_MYPROGRESS_VERSION;" "$TEMP_DIR/blocks/myprogress/version.php"
 grep -Fq "'← Board Level Activities'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq "'← Actividades Board Level'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq "\$languageurl = clone \$PAGE->url;" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq "<?php echo \$ises ? 'English' : 'Español'; ?>" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
 if grep -Fq "data-library-step-back" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"; then
     echo "ERROR: el botón todavía usa navegación por historial." >&2
     exit 1
@@ -90,6 +92,8 @@ grep -Fq "100 questions · 150 minutes" "$TEMP_DIR/blocks/myprogress/study-guide
 grep -Fq "'Open all Study Guides'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'← Board Level Activities'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'← Actividades Board Level'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "href=\"<?php echo \$languageurl->out(false); ?>\"" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "<?php echo \$ises ? 'English' : 'Español'; ?>" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "\$libraryurl->out(false)" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "\$chapter['title'] . ' Study Guide'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Guía de estudio: ' . \$chapter['title']" "$TEMP_DIR/blocks/myprogress/study-guide.php"
@@ -104,10 +108,8 @@ grep -Fq 'class="herb-board__page-navigation"' "$TEMP_DIR/blocks/menu/herbology-
 grep -Fq "'← Board Level Activities'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "'← Actividades Board Level'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$libraryurl->out(false)" "$TEMP_DIR/blocks/menu/herbology-board.php"
-if grep -Fq 'class="herb-board__tab' "$TEMP_DIR/blocks/menu/herbology-board.php"; then
-    echo "ERROR: todavía existen botones adicionales de navegación." >&2
-    exit 1
-fi
+grep -Fq 'herb-board__tab herb-board__tab--language' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "href=\"<?php echo \$languageurl->out(false); ?>\"" "$TEMP_DIR/blocks/menu/herbology-board.php"
 if grep -Fq 'data-herbology-step-back' "$TEMP_DIR/blocks/menu/herbology-board.php"; then
     echo "ERROR: el regreso todavía usa el historial del navegador." >&2
     exit 1
