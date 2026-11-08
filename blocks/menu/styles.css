@@ -1677,7 +1677,7 @@ a.herb-board__domain:focus {
 
 .herb-board__exam-models {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 10px;
 }
@@ -1697,6 +1697,12 @@ a.herb-board__domain:focus {
     border-color: #cfc3ef;
     border-left-color: #6d4bc3;
     background: #f7f4ff;
+}
+
+.herb-board__exam-model--clinical {
+    border-color: #efc89c;
+    border-left-color: #d97008;
+    background: #fff8ef;
 }
 
 .herb-board__exam-model:hover,
