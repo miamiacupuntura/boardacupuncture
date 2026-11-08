@@ -651,14 +651,15 @@ echo $OUTPUT->header();
             <h2><?php echo s($area['title'] . ($showlibrary ? ($ises ? ' · Biblioteca' : ' Library') : '')); ?></h2>
             <p class="subject-study-guide__intro"><?php echo $showlibrary ? s($ises ? 'Abre todos los recursos Board Level desde una biblioteca de acceso rápido.' : 'Open every Board Level resource from one quick-access library.') : s($area['description']); ?></p>
         </div>
-        <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($showlibrary ? ($ises ? 'Controles de la biblioteca' : 'Library controls') : 'Study Guide course catalogs'); ?>">
+        <nav class="subject-study-guide__top-actions" aria-label="<?php echo s($areaid === 'herbology'
+            ? ($ises ? 'Regresar a las actividades Board Level' : 'Return to Board Level activities')
+            : 'Study Guide navigation'); ?>">
             <?php if ($areaid === 'herbology'): ?>
-                <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises
+                    ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
+            <?php else: ?>
+                <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
             <?php endif; ?>
-            <?php if (!$showlibrary && $areaid === 'herbology'): ?>
-                <a class="subject-study-guide__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($tr('Library →')); ?></a>
-            <?php endif; ?>
-            <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
         </nav>
     </header>
     <?php endif; ?>
