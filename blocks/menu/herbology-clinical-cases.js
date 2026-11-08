@@ -146,12 +146,13 @@
                 return;
             }
             const article = document.createElement('article');
-            const passed = Boolean(attempt.passed);
+            const completed = Boolean(attempt.completed);
+            const passed = completed && Boolean(attempt.passed);
             const attemptKind = Number(attempt.total) < questions.length
                 ? history.dataset.retryAttemptWord
                 : history.dataset.fullAttemptWord;
             article.setAttribute('role', 'listitem');
-            article.className = passed ? 'is-passed' : 'is-failed';
+            article.className = completed ? (passed ? 'is-passed' : 'is-failed') : 'is-incomplete';
             addHistoryValue(article, history.dataset.dateWord, attempt.completedlabel);
             addHistoryValue(article, history.dataset.attemptWord, attemptKind);
             addHistoryValue(
@@ -163,7 +164,9 @@
             addHistoryValue(
                 article,
                 history.dataset.statusWord,
-                passed ? history.dataset.passedWord : history.dataset.failedWord
+                completed
+                    ? (passed ? history.dataset.passedWord : history.dataset.failedWord)
+                    : history.dataset.incompleteWord
             );
             addHistoryValue(article, history.dataset.durationWord, attempt.duration);
             historyList.prepend(article);
@@ -176,7 +179,7 @@
             }
         };
 
-        const saveAttempt = async total => {
+        const saveAttempt = async (total, examType = 'clinicalcases') => {
             if (attemptSaved || !quiz.dataset.historyUrl) {
                 return;
             }
@@ -187,7 +190,7 @@
             const body = new URLSearchParams({
                 sesskey: quiz.dataset.sesskey,
                 attemptuid: savingUid,
-                examtype: 'clinicalcases',
+                examtype: examType,
                 score: String(score),
                 total: String(total),
                 duration: String(Math.max(0, Math.round((Date.now() - attemptStartedAt) / 1000))),
@@ -285,11 +288,14 @@
             }
         };
 
-        const restartExam = () => {
-            // Restarting abandons the current in-memory attempt. Nothing is sent to history.
-            if (window.confirm(quiz.dataset.restartConfirm)) {
-                startAttempt(questions);
+        const restartExam = async () => {
+            if (!window.confirm(quiz.dataset.restartConfirm)) {
+                return;
             }
+            restartButton.disabled = true;
+            await saveAttempt(activeQuestions.length, 'clinicalincomplete');
+            startAttempt(questions);
+            restartButton.disabled = false;
         };
 
         questions.forEach(question => {
