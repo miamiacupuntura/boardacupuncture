@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110677"
+EXPECTED_VERSION="2026110678"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -68,6 +68,9 @@ grep -Fq 'data-clinical-retry-errors' "$TEMP_DIR/blocks/menu/herbology-board.php
 grep -Fq 'data-clinical-restart' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-finish' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'finishExamEarly' "$TEMP_DIR/blocks/menu/herbology-clinical-cases.js"
+grep -Fq 'data-seconds-per-question="90"' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'data-clinical-timer-value' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'startTimer(activeQuestions.length)' "$TEMP_DIR/blocks/menu/herbology-clinical-cases.js"
 grep -Fq 'data-clinical-analysis' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'renderAnalysis' "$TEMP_DIR/blocks/menu/herbology-clinical-cases.js"
 grep -Fq 'restartExam' "$TEMP_DIR/blocks/menu/herbology-clinical-cases.js"
