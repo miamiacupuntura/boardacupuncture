@@ -1,5 +1,5 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
-$plugin->version = 2026110801;
+$plugin->version = 2026110802;
 $plugin->requires = 2022111800;
 $plugin->component = 'block_myprogress';
