@@ -65,6 +65,7 @@
             progress.textContent = `${quiz.dataset.questionWord} ${Math.min(currentIndex + 1, activeQuestions.length)} `
                 + `${quiz.dataset.ofWord} ${activeQuestions.length}`;
             scoreOutput.textContent = `${score}/${answered}`;
+            finishButton.disabled = answered === 0;
             progressBar.style.width = activeQuestions.length > 0
                 ? `${Math.round((answered / activeQuestions.length) * 100)}%`
                 : '0%';
@@ -442,7 +443,10 @@
         };
 
         const finishExamEarly = () => {
-            if (!complete && window.confirm(quiz.dataset.finishConfirm)) {
+            if (complete || answered === 0) {
+                return;
+            }
+            if (window.confirm(quiz.dataset.finishConfirm)) {
                 finish();
             }
         };
