@@ -461,9 +461,25 @@
             resultPanel.scrollIntoView({block: 'start', behavior: 'smooth'});
         };
 
-        const startAttempt = attemptQuestions => {
+        const shuffledQuestions = (sourceQuestions, previousOrder = []) => {
+            const shuffled = [...sourceQuestions];
+            for (let index = shuffled.length - 1; index > 0; index--) {
+                const randomIndex = Math.floor(Math.random() * (index + 1));
+                [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+            }
+            const comparison = previousOrder.length === shuffled.length ? previousOrder : sourceQuestions;
+            if (shuffled.length > 1 && shuffled.every((question, index) => question === comparison[index])) {
+                shuffled.push(shuffled.shift());
+            }
+            return shuffled;
+        };
+
+        const startAttempt = (attemptQuestions, randomizeOrder = false) => {
             stopTimer();
-            activeQuestions = [...attemptQuestions];
+            const previousOrder = [...activeQuestions];
+            activeQuestions = randomizeOrder
+                ? shuffledQuestions(attemptQuestions, previousOrder)
+                : [...attemptQuestions];
             activeQuestions.forEach(question => {
                 question.dataset.answered = '0';
                 question.dataset.lastCorrect = '0';
@@ -501,7 +517,7 @@
         const retryErrors = () => {
             const retryQuestions = activeQuestions.filter(question => question.dataset.lastCorrect !== '1');
             if (retryQuestions.length > 0) {
-                startAttempt(retryQuestions);
+                startAttempt(retryQuestions, true);
             }
         };
 
@@ -512,7 +528,7 @@
             restartButton.disabled = true;
             stopTimer();
             await saveAttempt(activeQuestions.length, 'clinicalincomplete');
-            startAttempt(questions);
+            startAttempt(questions, true);
             restartButton.disabled = false;
         };
 
