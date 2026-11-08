@@ -2303,6 +2303,14 @@ echo $OUTPUT->header();
                         : 'Finish now? Unanswered questions will count as incorrect and the result will be saved.'; ?>"
                     data-unanswered-word="<?php echo $ises ? 'Sin responder' : 'Unanswered'; ?>"
                     data-answered-word="<?php echo $ises ? 'respondidas' : 'answered'; ?>"
+                    data-seconds-per-question="90"
+                    data-time-remaining-word="<?php echo $ises ? 'Tiempo restante' : 'Time remaining'; ?>"
+                    data-time-expired-message="<?php echo $ises
+                        ? 'Se agotó el tiempo calculado según el ritmo oficial.'
+                        : 'The time calculated from the official exam pace has expired.'; ?>"
+                    data-no-answers-message="<?php echo $ises
+                        ? 'Este intento no se guardó porque no se respondió ninguna pregunta.'
+                        : 'This attempt was not saved because no questions were answered.'; ?>"
                     data-pass-threshold="70"
                     data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
                     data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
@@ -2323,9 +2331,21 @@ echo $OUTPUT->header();
                     <div class="herb-board__exam-progress" aria-live="polite">
                         <div class="herb-board__exam-progress-summary">
                             <strong data-clinical-progress></strong>
+                            <span class="herb-board__exam-timer" data-clinical-timer>
+                                <span><?php echo $ises ? 'Tiempo restante' : 'Time remaining'; ?></span>
+                                <time data-clinical-timer-value datetime="PT1H34M30S">01:34:30</time>
+                            </span>
                             <strong class="herb-board__exam-score" data-clinical-score></strong>
                         </div>
                         <div class="herb-board__exam-progress-bar"><span data-clinical-progress-bar></span></div>
+                        <p class="herb-board__exam-time-source">
+                            <?php echo $ises
+                                ? 'Tiempo proporcional al examen oficial 2026: 90 segundos por pregunta '
+                                : 'Time proportional to the official 2026 exam: 90 seconds per question '; ?>
+                            (<a href="https://www.ncbahm.org/certification/exam-administration/"
+                                target="_blank" rel="noopener noreferrer">NCBAHM</a>:
+                            <?php echo $ises ? '100 preguntas en 2.5 horas' : '100 questions in 2.5 hours'; ?>).
+                        </p>
                     </div>
 
                     <?php
