@@ -2296,8 +2296,8 @@ echo $OUTPUT->header();
                     data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
                     data-restart-confirm="<?php echo $ises
-                        ? '¿Deseas reiniciar el examen? Se borrarán las respuestas actuales y este intento no se guardará.'
-                        : 'Restart the exam? Your current answers will be cleared and this attempt will not be saved.'; ?>"
+                        ? '¿Deseas reiniciar el examen? Se borrarán las respuestas actuales y este intento se registrará como No completado.'
+                        : 'Restart the exam? Your current answers will be cleared and this attempt will be recorded as Not completed.'; ?>"
                     data-pass-threshold="70"
                     data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
                     data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
