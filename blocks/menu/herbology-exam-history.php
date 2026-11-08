@@ -24,14 +24,19 @@ if (!$hasaccess) {
 }
 
 $attemptuid = required_param('attemptuid', PARAM_ALPHANUMEXT);
-$examtype = required_param('examtype', PARAM_ALPHA);
+$examtype = required_param('examtype', PARAM_ALPHANUMEXT);
 $score = required_param('score', PARAM_INT);
 $total = required_param('total', PARAM_INT);
 $duration = required_param('duration', PARAM_INT);
 $language = optional_param('language', 'en', PARAM_ALPHA);
 
-if (!in_array($examtype, ['linear', 'adaptive'], true)
-        || $total !== 100
+$validexamtype = in_array($examtype, ['linear', 'adaptive', 'clinicalcases'], true);
+$validtotal = $examtype === 'clinicalcases'
+    ? $total >= 1 && $total <= 500
+    : $total === 100;
+
+if (!$validexamtype
+        || !$validtotal
         || $score < 0
         || $score > $total
         || core_text::strlen($attemptuid) < 12
