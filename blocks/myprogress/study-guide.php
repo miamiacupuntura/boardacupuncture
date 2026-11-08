@@ -487,6 +487,7 @@ $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
 $boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
 $boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
+$boardsimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $boardlanguagecontext);
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
@@ -683,10 +684,10 @@ echo $OUTPUT->header();
                             <span class="subject-study-library__journey-step">4</span>
                             <span class="subject-study-library__journey-copy"><strong><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></strong><small><?php echo s($ises ? 'Evaluación lineal o adaptativa' : 'Linear or adaptive assessment'); ?></small></span>
                         </a>
-                        <span class="subject-study-library__journey-link subject-study-library__journey-link--disabled" aria-disabled="true">
+                        <a class="subject-study-library__journey-link" href="<?php echo $boardsimulationurl->out(false); ?>">
                             <span class="subject-study-library__journey-step">5</span>
-                            <span class="subject-study-library__journey-copy"><strong>Simulation</strong><small><?php echo s($ises ? 'Próximamente' : 'Coming soon'); ?></small></span>
-                        </span>
+                            <span class="subject-study-library__journey-copy"><strong>Simulation</strong><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span>
+                        </a>
                     </nav>
                 </section>
                 <div class="subject-study-library__search" role="search">

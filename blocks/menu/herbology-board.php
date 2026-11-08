@@ -9,7 +9,7 @@ $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $fromlibrary = optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard';
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['herbs', 'formulas', 'quiz', 'domains', 'exams'], true)) {
+if (!in_array($track, ['herbs', 'formulas', 'quiz', 'domains', 'exams', 'simulation'], true)) {
     $track = 'herbs';
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
@@ -21,7 +21,7 @@ if (!in_array($exammode, ['linear', 'adaptive'], true)) {
 if ($track === 'domains' && $exammode !== '') {
     // Keep previously shared exam URLs working while moving exams to their own section.
     $track = 'exams';
-} else if ($track !== 'exams') {
+} else if (!in_array($track, ['exams', 'simulation'], true)) {
     $exammode = '';
 }
 if ($track !== 'domains') {
@@ -82,6 +82,7 @@ $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' =>
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
+$simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
@@ -164,7 +165,7 @@ if ($ises) {
 }
 $domainseedpath = __DIR__ . '/herbology-domain-bank.json';
 $domainbankdirectory = $CFG->dataroot . '/board-domain-banks';
-$usesdomainbank = in_array($track, ['domains', 'exams'], true);
+$usesdomainbank = in_array($track, ['domains', 'exams', 'simulation'], true);
 if ($usesdomainbank) {
     make_writable_directory($domainbankdirectory);
 }
@@ -344,7 +345,7 @@ if ($selecteddomain !== null) {
 }
 $mixedquestions = [];
 $domainshortages = [];
-if ($track === 'exams' && $mixdomains) {
+if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
     foreach ($domainblueprint as $domain) {
         $templatequestions = array_values(array_filter(
             $domain['questions'],
@@ -756,11 +757,17 @@ if (exam) {
 JS);
 }
 
+if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
+    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026110801']));
+}
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
-$pagetitle = $track === 'exams'
-    ? ($ises ? 'Exámenes de Herbología' : 'Herbology Exams')
+$pagetitle = in_array($track, ['exams', 'simulation'], true)
+    ? ($track === 'simulation'
+        ? ($ises ? 'Simulación de Herbología' : 'Herbology Simulation')
+        : ($ises ? 'Exámenes de Herbología' : 'Herbology Exams'))
     : (in_array($track, ['quiz', 'domains'], true)
         ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
         : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
@@ -1364,7 +1371,7 @@ echo $OUTPUT->header();
     <nav class="herb-board__page-navigation" aria-label="<?php echo $ises ? 'Navegación de Herbología' : 'Herbology navigation'; ?>">
         <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
             ? '← Atrás' : '← Back'; ?></a>
-        <?php if (!in_array($track, ['exams', 'quiz', 'domains'], true)) { ?>
+        <?php if (!in_array($track, ['exams', 'quiz', 'domains', 'simulation'], true)) { ?>
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
@@ -1387,6 +1394,20 @@ echo $OUTPUT->header();
                 : ($mixdomains
                     ? ($exammode === 'adaptive' ? 'Adaptive exam' : 'Linear exam')
                     : 'Herbology Exams'); ?></span>
+        </nav>
+    <?php } ?>
+
+    <?php if ($track === 'simulation') { ?>
+        <nav class="herb-board__practice-route" aria-label="<?php echo $ises
+            ? 'Ruta de navegación de simulación' : 'Simulation navigation path'; ?>">
+            <a href="<?php echo ($mixdomains ? $simulationurl : $examsdashboardurl)->out(false); ?>"><?php echo $ises
+                ? 'Simulación' : 'Simulation'; ?></a>
+            <span aria-hidden="true">›</span>
+            <span aria-current="page"><?php echo $mixdomains
+                ? ($exammode === 'adaptive'
+                    ? ($ises ? 'Simulación adaptativa 1' : 'Adaptive Simulation 1')
+                    : ($ises ? 'Simulación lineal 1' : 'Linear Simulation 1'))
+                : ($ises ? 'Simulación de Herbología' : 'Herbology Simulation'); ?></span>
         </nav>
     <?php } ?>
 
@@ -1672,6 +1693,193 @@ echo $OUTPUT->header();
                     describe pattern-based materia medica and do not constitute diagnosis, prescribing or emergency care.</p>
             </section>
         <?php } ?>
+    <?php } else if ($track === 'simulation') { ?>
+        <section class="herb-board__panel herb-board__simulation" aria-labelledby="herb-board-simulation-title">
+            <?php if (!$mixdomains) { ?>
+                <div class="herb-board__simulation-intro">
+                    <span><?php echo $ises ? 'SIMULACIÓN CRONOMETRADA' : 'TIMED SIMULATION'; ?></span>
+                    <h3 id="herb-board-simulation-title"><?php echo $ises
+                        ? 'Examen de simulación 1'
+                        : 'Simulation Exam 1'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'Reproduce una sesión completa de 100 preguntas en 2 horas y 30 minutos. No verás respuestas, explicaciones ni feedback hasta finalizar.'
+                        : 'Rehearse a complete 100-question session in 2 hours and 30 minutes. Answers, explanations, and feedback stay hidden until you finish.'; ?></p>
+                    <div class="herb-board__simulation-facts" aria-label="<?php echo $ises ? 'Datos de la simulación' : 'Simulation facts'; ?>">
+                        <span><strong>100</strong> <?php echo $ises ? 'preguntas' : 'questions'; ?></span>
+                        <span><strong>150</strong> <?php echo $ises ? 'minutos' : 'minutes'; ?></span>
+                        <span><strong>6</strong> <?php echo $ises ? 'dominios ponderados' : 'weighted domains'; ?></span>
+                        <span><strong>0</strong> <?php echo $ises ? 'feedback durante el intento' : 'feedback during the attempt'; ?></span>
+                    </div>
+                </div>
+
+                <section class="herb-board__simulation-blueprint" aria-labelledby="simulation-blueprint-title">
+                    <header>
+                        <div>
+                            <span><?php echo $ises ? 'COMPOSICIÓN DEL EXAMEN' : 'EXAM BLUEPRINT'; ?></span>
+                            <h4 id="simulation-blueprint-title"><?php echo $ises
+                                ? 'Peso exacto por dominio'
+                                : 'Exact domain weighting'; ?></h4>
+                        </div>
+                        <strong>100%</strong>
+                    </header>
+                    <div class="herb-board__simulation-weights">
+                        <?php foreach ($domainblueprint as $domain) { ?>
+                            <article>
+                                <span><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$domain['number']; ?></span>
+                                <h5><?php echo s($domain['name']); ?></h5>
+                                <div aria-label="<?php echo (int)$domain['weight']; ?>%">
+                                    <i style="width: <?php echo (int)$domain['weight']; ?>%"></i>
+                                </div>
+                                <strong><?php echo (int)$domain['weight']; ?> <?php echo $ises ? 'preguntas' : 'questions'; ?> · <?php echo (int)$domain['weight']; ?>%</strong>
+                            </article>
+                        <?php } ?>
+                    </div>
+                </section>
+
+                <?php
+                $simulationlinearurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'simulation',
+                    'exam' => 'linear',
+                ] + $languagecontext);
+                $simulationadaptiveurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'simulation',
+                    'exam' => 'adaptive',
+                ] + $languagecontext);
+                ?>
+                <div class="herb-board__simulation-modes" aria-label="<?php echo $ises ? 'Modalidades de simulación' : 'Simulation modes'; ?>">
+                    <a href="<?php echo $simulationlinearurl->out(false); ?>">
+                        <span>01</span>
+                        <div>
+                            <strong><?php echo $ises ? 'Simulación lineal' : 'Linear simulation'; ?></strong>
+                            <p><?php echo $ises
+                                ? 'Secuencia fija. Permite regresar, marcar preguntas y usar la pantalla de revisión antes de entregar.'
+                                : 'Fixed sequence. Return, flag questions, and use the review screen before submitting.'; ?></p>
+                        </div>
+                        <b><?php echo $ises ? 'Comenzar →' : 'Begin →'; ?></b>
+                    </a>
+                    <a href="<?php echo $simulationadaptiveurl->out(false); ?>">
+                        <span>02</span>
+                        <div>
+                            <strong><?php echo $ises ? 'Simulación adaptativa' : 'Adaptive simulation'; ?></strong>
+                            <p><?php echo $ises
+                                ? 'La dificultad se ajusta a tus respuestas. Al avanzar, la respuesta queda bloqueada y no se puede regresar.'
+                                : 'Difficulty responds to your answers. Moving forward locks the answer and prevents returning.'; ?></p>
+                        </div>
+                        <b><?php echo $ises ? 'Comenzar →' : 'Begin →'; ?></b>
+                    </a>
+                </div>
+                <p class="herb-board__simulation-note"><?php echo $ises
+                    ? 'El reloj comienza al abrir una modalidad. A los 5 minutos restantes cambia a amarillo y, al llegar a cero, el intento se entrega automáticamente.'
+                    : 'The clock begins when you open a mode. It turns yellow with 5 minutes remaining and submits automatically at zero.'; ?></p>
+            <?php } else if ($domainshortages) { ?>
+                <div class="herb-board__mix-result herb-board__mix-result--shortage">
+                    <h3 id="herb-board-simulation-title"><?php echo $ises ? 'La simulación se está preparando' : 'The simulation is being prepared'; ?></h3>
+                    <p><?php echo $ises ? 'Faltan preguntas para conservar el peso exacto de los dominios.' : 'More questions are needed to preserve the exact domain weighting.'; ?></p>
+                </div>
+            <?php } else { ?>
+                <form id="herbology-simulation-exam" class="herb-board__simulation-player"
+                    data-simulation-exam
+                    data-mode="<?php echo s($exammode); ?>"
+                    data-duration="9000"
+                    data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
+                    data-of-word="<?php echo $ises ? 'de' : 'of'; ?>"
+                    data-unanswered-word="<?php echo $ises ? 'Sin responder' : 'Unanswered'; ?>"
+                    data-answered-word="<?php echo $ises ? 'Respondida' : 'Answered'; ?>"
+                    data-flagged-word="<?php echo $ises ? 'Marcada' : 'Flagged'; ?>"
+                    data-submit-confirm="<?php echo $ises ? '¿Deseas entregar el examen ahora? Las preguntas sin responder se contarán como incorrectas.' : 'Submit the exam now? Unanswered questions will be counted as incorrect.'; ?>"
+                    data-time-expired="<?php echo $ises ? 'El tiempo terminó. El examen se entregó automáticamente.' : 'Time expired. The exam was submitted automatically.'; ?>">
+                    <header class="herb-board__simulation-bar">
+                        <div>
+                            <span><?php echo $ises ? 'EXAMEN DE SIMULACIÓN 1' : 'SIMULATION EXAM 1'; ?></span>
+                            <strong><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?> · <?php echo $exammode === 'adaptive'
+                                ? ($ises ? 'Adaptativo' : 'Adaptive')
+                                : ($ises ? 'Lineal' : 'Linear'); ?></strong>
+                        </div>
+                        <div class="herb-board__simulation-status">
+                            <button type="button" class="herb-board__simulation-clock" data-simulation-clock
+                                aria-label="<?php echo $ises ? 'Ocultar o mostrar el tiempo restante' : 'Hide or show time remaining'; ?>">
+                                <span><?php echo $ises ? 'Tiempo restante' : 'Time Remaining'; ?></span>
+                                <strong data-simulation-time>02:30:00</strong>
+                            </button>
+                            <div>
+                                <span><?php echo $ises ? 'Progreso' : 'Progress'; ?></span>
+                                <strong data-simulation-counter>1 <?php echo $ises ? 'de' : 'of'; ?> 100</strong>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="herb-board__simulation-toolbar">
+                        <button type="button" data-simulation-review <?php echo $exammode === 'adaptive' ? 'hidden' : ''; ?>>
+                            <?php echo $ises ? 'Pantalla de revisión' : 'Review Screen'; ?>
+                        </button>
+                        <button type="button" data-simulation-flag <?php echo $exammode === 'adaptive' ? 'hidden' : ''; ?>>
+                            ⚑ <?php echo $ises ? 'Marcar para revisar' : 'Flag for Review'; ?>
+                        </button>
+                        <?php if ($exammode === 'adaptive') { ?>
+                            <span><?php echo $ises ? 'Las respuestas se bloquean al avanzar.' : 'Answers lock when you move forward.'; ?></span>
+                        <?php } ?>
+                    </div>
+
+                    <div class="herb-board__simulation-questions" data-simulation-questions>
+                        <?php foreach ($mixedquestions as $questionnumber => $question) { ?>
+                            <?php $domainnumber = 0; $domainname = '';
+                            foreach ($domainblueprint as $domain) {
+                                if ($domain['id'] === ($question['domainId'] ?? '')) {
+                                    $domainnumber = (int)$domain['number'];
+                                    $domainname = (string)$domain['name'];
+                                    break;
+                                }
+                            } ?>
+                            <fieldset class="herb-board__simulation-question" hidden
+                                data-question-index="<?php echo $questionnumber; ?>"
+                                data-correct="<?php echo s($question['correctLabel']); ?>"
+                                data-domain="<?php echo s($question['domainId'] ?? ''); ?>"
+                                data-domain-number="<?php echo $domainnumber; ?>"
+                                data-domain-name="<?php echo s($domainname); ?>"
+                                data-difficulty="<?php echo s($question['difficultyBand'] ?? 'application'); ?>">
+                                <legend>
+                                    <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <b data-simulation-number><?php echo $questionnumber + 1; ?></b></span>
+                                    <?php echo s($question['prompt']); ?>
+                                </legend>
+                                <div class="herb-board__simulation-options">
+                                    <?php foreach ($question['options'] as $option) { ?>
+                                        <label>
+                                            <input type="radio" name="simulation-question-<?php echo $questionnumber + 1; ?>"
+                                                value="<?php echo s($option['label']); ?>">
+                                            <strong><?php echo s($option['label']); ?></strong>
+                                            <span><?php echo s($option['text']); ?></span>
+                                        </label>
+                                    <?php } ?>
+                                </div>
+                            </fieldset>
+                        <?php } ?>
+                    </div>
+
+                    <section class="herb-board__simulation-review" data-simulation-review-panel hidden
+                        aria-labelledby="simulation-review-title">
+                        <h3 id="simulation-review-title"><?php echo $ises ? 'Revisión del examen' : 'Exam Review'; ?></h3>
+                        <p data-simulation-review-summary></p>
+                        <div data-simulation-review-grid></div>
+                    </section>
+
+                    <section class="herb-board__simulation-result" data-simulation-result hidden aria-live="polite">
+                        <span><?php echo $ises ? 'SIMULACIÓN FINALIZADA' : 'SIMULATION COMPLETE'; ?></span>
+                        <h3><?php echo $ises ? 'Resultado del intento' : 'Attempt result'; ?></h3>
+                        <strong data-simulation-score></strong>
+                        <p data-simulation-result-message></p>
+                        <div data-simulation-domain-results></div>
+                        <a href="<?php echo $simulationurl->out(false); ?>"><?php echo $ises ? 'Configurar otra simulación' : 'Set up another simulation'; ?></a>
+                    </section>
+
+                    <footer class="herb-board__simulation-controls" data-simulation-controls>
+                        <button type="button" class="herb-board__simulation-end" data-simulation-end><?php echo $ises ? 'Finalizar examen' : 'End Exam'; ?></button>
+                        <div>
+                            <button type="button" data-simulation-previous <?php echo $exammode === 'adaptive' ? 'hidden' : ''; ?>><?php echo $ises ? 'Anterior' : 'Previous'; ?></button>
+                            <button type="button" class="herb-board__simulation-next" data-simulation-next><?php echo $ises ? 'Siguiente' : 'Next'; ?></button>
+                        </div>
+                    </footer>
+                </form>
+            <?php } ?>
+        </section>
     <?php } else if ($track === 'quiz') { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-quiz-title">
             <div class="herb-board__panel-heading">
