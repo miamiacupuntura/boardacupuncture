@@ -2549,13 +2549,23 @@ echo $OUTPUT->header();
                         <output data-clinical-result></output>
                         <p data-clinical-result-message></p>
 
-                        <section class="herb-board__clinical-errors" data-clinical-incorrect-review hidden>
-                            <h5><?php echo $ises ? 'Respuestas incorrectas' : 'Incorrect answers'; ?></h5>
-                            <p><?php echo $ises
-                                ? 'Compara tu selección con la respuesta correcta antes de repetir únicamente estos casos.'
-                                : 'Compare your selection with the correct answer before retrying only these cases.'; ?></p>
-                            <div data-clinical-incorrect-list></div>
-                        </section>
+                        <details class="herb-board__clinical-errors" data-clinical-incorrect-review hidden>
+                            <summary>
+                                <span><?php echo $ises
+                                    ? 'Ver respuestas incorrectas'
+                                    : 'Review incorrect answers'; ?></span>
+                                <strong>
+                                    <span data-clinical-incorrect-count>0</span>
+                                    <?php echo $ises ? 'errores' : 'errors'; ?>
+                                </strong>
+                            </summary>
+                            <div class="herb-board__clinical-errors-content">
+                                <p><?php echo $ises
+                                    ? 'Compara tu selección con la respuesta correcta antes de repetir únicamente estos casos.'
+                                    : 'Compare your selection with the correct answer before retrying only these cases.'; ?></p>
+                                <div data-clinical-incorrect-list></div>
+                            </div>
+                        </details>
 
                         <div class="herb-board__clinical-result-actions">
                             <button type="button" data-clinical-retry-errors hidden>
