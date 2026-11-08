@@ -265,7 +265,10 @@ if ($track === 'clinicalcases' && $clinicalquestions) {
                 continue;
             }
             $existingdiagnosis = is_array($clinicalquestionfallback['diagnosis'] ?? null)
-                ? $clinicalquestionfallback['diagnosis']
+                ? array_filter(
+                    $clinicalquestionfallback['diagnosis'],
+                    static fn($value): bool => $value !== '' && $value !== null && $value !== []
+                )
                 : [];
             $correctclinicaltext = '';
             foreach ($clinicalquestionfallback['options'] as $clinicalfallbackoption) {
