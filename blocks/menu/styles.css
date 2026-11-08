@@ -3060,6 +3060,19 @@ a.herb-board__domain:focus {
     min-width: 112px;
 }
 
+.herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart {
+    margin-right: auto;
+    border: 1px solid #b7acd8;
+    background: #fff;
+    color: #5633ad;
+}
+
+.herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart:hover,
+.herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart:focus {
+    border-color: #6d4bc3;
+    background: #f7f4ff;
+}
+
 .herb-board__shortages {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3144,6 +3157,10 @@ a.herb-board__domain:focus {
     .herb-board__exam-submit button,
     .herb-board__exam-history-link {
         width: 100%;
+    }
+
+    .herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart {
+        margin-right: 0;
     }
 
     .herb-board__clinical-diagnosis dl > div,
