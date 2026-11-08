@@ -2155,6 +2155,14 @@ echo $OUTPUT->header();
                         $clinicaldifferential = $cleanclinicaltext($clinicaldiagnosis[
                             $ises && !empty($clinicaldiagnosis['differentialEs']) ? 'differentialEs' : 'differential'
                         ] ?? '');
+                        $clinicalcasereasoning = $cleanclinicaltext($clinicaldiagnosis[
+                            $ises && !empty($clinicaldiagnosis['caseReasoningEs'])
+                                ? 'caseReasoningEs'
+                                : 'caseReasoning'
+                        ] ?? '');
+                        $clinicalalternatives = is_array($clinicaldiagnosis['alternatives'] ?? null)
+                            ? $clinicaldiagnosis['alternatives']
+                            : [];
                         ?>
                         <fieldset class="herb-board__exam-question herb-board__clinical-question" hidden
                             data-clinical-question
@@ -2183,6 +2191,12 @@ echo $OUTPUT->header();
                                 <?php if ($clinicaldiagnosis) { ?>
                                     <div class="herb-board__clinical-diagnosis">
                                         <span><?php echo $ises ? 'Razonamiento diagnóstico' : 'Diagnostic reasoning'; ?></span>
+                                        <?php if ($clinicalcasereasoning !== '') { ?>
+                                            <p class="herb-board__clinical-case-synthesis">
+                                                <strong><?php echo $ises ? 'Síntesis del caso:' : 'Case synthesis:'; ?></strong>
+                                                <?php echo s($clinicalcasereasoning); ?>
+                                            </p>
+                                        <?php } ?>
                                         <dl>
                                             <?php if ($clinicalpattern !== '') { ?>
                                                 <div>
@@ -2215,6 +2229,38 @@ echo $OUTPUT->header();
                                                 </div>
                                             <?php } ?>
                                         </dl>
+                                        <?php if ($clinicalalternatives) { ?>
+                                            <div class="herb-board__clinical-alternatives">
+                                                <strong><?php echo $ises
+                                                    ? 'Por qué no corresponden las otras opciones'
+                                                    : 'Why the other options do not fit'; ?></strong>
+                                                <ul>
+                                                    <?php foreach ($clinicalalternatives as $clinicalalternative) { ?>
+                                                        <?php
+                                                        $alternativeformula = $cleanclinicaltext(
+                                                            $clinicalalternative['formula'] ?? ''
+                                                        );
+                                                        $alternativepattern = $cleanclinicaltext($clinicalalternative[
+                                                            $ises && !empty($clinicalalternative['patternEs'])
+                                                                ? 'patternEs'
+                                                                : 'pattern'
+                                                        ] ?? '');
+                                                        $alternativeclue = $cleanclinicaltext($clinicalalternative[
+                                                            $ises && !empty($clinicalalternative['clueEs'])
+                                                                ? 'clueEs'
+                                                                : 'clue'
+                                                        ] ?? '');
+                                                        ?>
+                                                        <li>
+                                                            <strong><?php echo s($alternativeformula); ?>:</strong>
+                                                            <?php echo s($ises
+                                                                ? 'trata ' . $alternativepattern . '. Su pista decisiva es ' . $alternativeclue
+                                                                : 'treats ' . $alternativepattern . '. Its decisive clue is ' . $alternativeclue); ?>
+                                                        </li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                 <?php } ?>
                                 <?php if ($clinicalfeedback !== '') { ?>

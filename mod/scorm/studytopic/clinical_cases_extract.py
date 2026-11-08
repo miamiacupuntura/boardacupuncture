@@ -74,14 +74,18 @@ def load_formula_profiles(path: Path) -> dict[str, dict[str, Any]]:
 def diagnostic_feedback(
     correctoption: str,
     profiles: dict[str, dict[str, Any]],
-) -> dict[str, str] | None:
+    prompt: str = "",
+    options: list[str] | None = None,
+) -> dict[str, Any] | None:
     """Match the correct option to its guideline profile and build rationale."""
-    normalizedoption = normalise_name(correctoption)
-    profile = None
-    for name in sorted(profiles, key=len, reverse=True):
-        if normalizedoption == name or normalizedoption.startswith(f"{name} "):
-            profile = profiles[name]
-            break
+    def match_profile(option: str) -> dict[str, Any] | None:
+        normalizedoption = normalise_name(option)
+        for name in sorted(profiles, key=len, reverse=True):
+            if normalizedoption == name or normalizedoption.startswith(f"{name} "):
+                return profiles[name]
+        return None
+
+    profile = match_profile(correctoption)
     if profile is None:
         return None
 
@@ -103,6 +107,142 @@ def diagnostic_feedback(
         for key, value in fields.items()
         if source_text(value)
     }
+
+    normalizedprompt = normalise_name(prompt)
+    profilename = normalise_name(profile.get("name"))
+    if (
+        profilename == "chai ge jie ji tang"
+        and "pain around her eye" in normalizedprompt
+        and "slightly surging" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "The illness began as exterior Wind-Cold, shown by chills, body aches, "
+            "runny nose and cough with white phlegm. It is now transforming into Heat: "
+            "the fever is rising while aversion to cold is only mild, and thirst, a red "
+            "tongue with yellow coat, a floating slightly surging pulse and orbital pain "
+            "have appeared. This progression identifies constrained exterior Cold in the "
+            "muscle layer transforming into Heat, the key Chai Ge Jie Ji Tang pattern."
+        )
+        cleaned["caseReasoningEs"] = (
+            "El cuadro comenzó como Viento-Frío exterior, indicado por escalofríos, dolores "
+            "corporales, rinorrea y tos con flema blanca. Ahora se transforma en Calor: la "
+            "fiebre aumenta mientras la aversión al frío es leve, y aparecen sed, lengua "
+            "roja con capa amarilla, pulso flotante ligeramente desbordante y dolor orbital. "
+            "Esta evolución identifica Frío exterior constreñido en la capa muscular que se "
+            "transforma en Calor, el patrón clave de Chai Ge Jie Ji Tang."
+        )
+    elif (
+        profilename == "da cheng qi tang"
+        and "solid mass" in normalizedprompt
+        and "deep pulse" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is severe Yangming-Fu Heat binding with stool impaction. The hard, "
+            "palpable abdominal mass, guarding and marked pain establish fullness, "
+            "hardness and excess; the dry red tongue with yellow coat and deep, rapid, "
+            "forceful pulse confirm interior Heat excess. The earlier green, foul watery "
+            "stool can represent overflow around an impaction rather than resolution. "
+            "That severe combination calls for Da Cheng Qi Tang rather than the milder "
+            "Xiao Cheng Qi Tang pattern."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de una ligadura grave de Calor en Yangming-Fu con impactación fecal. "
+            "La masa abdominal dura y palpable, la defensa y el dolor marcado establecen "
+            "plenitud, dureza y exceso; la lengua roja seca con capa amarilla y el pulso "
+            "profundo, rápido y fuerte confirman Calor interno de exceso. Las heces acuosas, "
+            "verdes y fétidas previas pueden representar rebosamiento alrededor de una "
+            "impactación, no resolución. Esta combinación grave requiere Da Cheng Qi Tang, "
+            "no el patrón más leve de Xiao Cheng Qi Tang."
+        )
+    elif (
+        profilename == "xiao cheng qi tang"
+        and "rice cake" in normalizedprompt
+        and "rolling and rapid" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "The constipation, abdominal pain, irritability and low fever show Heat and "
+            "stagnation binding in the Yangming bowel. A red tongue with a dry yellow coat "
+            "and a rolling, rapid pulse support interior Heat with accumulation. The case "
+            "does not describe the severe guarding, rock-hard mass, pronounced distention "
+            "or deep forceful pulse required for Da Cheng Qi Tang, so the more moderate "
+            "purgation of Xiao Cheng Qi Tang is the better match."
+        )
+        cleaned["caseReasoningEs"] = (
+            "El estreñimiento, el dolor abdominal, la irritabilidad y la fiebre baja muestran "
+            "Calor y estancamiento ligados en el intestino Yangming. La lengua roja con capa "
+            "amarilla seca y el pulso rodante y rápido apoyan Calor interno con acumulación. "
+            "El caso no presenta la defensa grave, la masa pétrea, la distensión pronunciada "
+            "ni el pulso profundo y fuerte que exigirían Da Cheng Qi Tang; por eso corresponde "
+            "la purgación más moderada de Xiao Cheng Qi Tang."
+        )
+    elif (
+        profilename == "tiao wei cheng qi tang"
+        and "toothache" in normalizedprompt
+        and "foul halitosis" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "The toothache, swollen gums, intense thirst and foul breath locate exuberant "
+            "Heat in the Stomach/Yangming system. Constipation, dark urine, a red tongue "
+            "with yellow coat and a rolling, rapid pulse show that the Heat is consuming "
+            "fluids and creating bowel dryness. Because the case lacks marked abdominal "
+            "fullness, focal distention or a hard painful mass, the mild Heat-purging and "
+            "dryness-softening action of Tiao Wei Cheng Qi Tang fits better than the stronger "
+            "Cheng Qi formulas."
+        )
+        cleaned["caseReasoningEs"] = (
+            "El dolor dental, las encías inflamadas, la sed intensa y la halitosis ubican "
+            "Calor exuberante en Estómago/Yangming. El estreñimiento, la orina oscura, la "
+            "lengua roja con capa amarilla y el pulso rodante y rápido muestran que el Calor "
+            "consume líquidos y produce sequedad intestinal. Como no hay plenitud abdominal "
+            "marcada, distensión focal ni masa dura y dolorosa, la acción suave de Tiao Wei "
+            "Cheng Qi Tang para purgar Calor y ablandar sequedad encaja mejor que las fórmulas "
+            "Cheng Qi más fuertes."
+        )
+
+    if (
+        "caseReasoning" not in cleaned
+        and cleaned.get("pattern")
+        and cleaned.get("clue")
+        and cleaned.get("action")
+    ):
+        cleaned["caseReasoning"] = (
+            f"The case is best identified as {cleaned['pattern']} "
+            f"The decisive pattern markers are {cleaned['clue']} "
+            f"The therapeutic match is {profile.get('name')}: {cleaned['action']}"
+        )
+    if (
+        "caseReasoningEs" not in cleaned
+        and cleaned.get("patternEs")
+        and cleaned.get("clueEs")
+        and cleaned.get("actionEs")
+    ):
+        cleaned["caseReasoningEs"] = (
+            f"El caso se identifica mejor como {cleaned['patternEs']} "
+            f"Los marcadores decisivos son {cleaned['clueEs']} "
+            f"La correspondencia terapéutica es {profile.get('name')}: {cleaned['actionEs']}"
+        )
+
+    alternatives = []
+    for option in options or []:
+        if option == correctoption:
+            continue
+        alternative = match_profile(option)
+        if alternative is None:
+            continue
+        alternativefields = {
+            "formula": alternative.get("name"),
+            "pattern": alternative.get("pattern"),
+            "patternEs": alternative.get("patternEs"),
+            "clue": alternative.get("clue"),
+            "clueEs": alternative.get("clueEs"),
+        }
+        alternatives.append({
+            key: source_text(value)
+            for key, value in alternativefields.items()
+            if source_text(value)
+        })
+    if alternatives:
+        cleaned["alternatives"] = alternatives
     return cleaned or None
 
 
@@ -208,7 +348,12 @@ def extract_question(
         "correctLabel": labels[correctindex],
         "feedback": feedback,
     }
-    diagnosis = diagnostic_feedback(options[correctindex], formulaprofiles or {})
+    diagnosis = diagnostic_feedback(
+        options[correctindex],
+        formulaprofiles or {},
+        prompt,
+        options,
+    )
     if diagnosis is not None:
         extracted["diagnosis"] = diagnosis
     return extracted
