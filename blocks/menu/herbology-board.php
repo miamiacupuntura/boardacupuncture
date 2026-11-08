@@ -2292,6 +2292,9 @@ echo $OUTPUT->header();
                     data-incorrect-word="<?php echo $ises ? 'Incorrecta' : 'Incorrect'; ?>"
                     data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
+                    data-restart-confirm="<?php echo $ises
+                        ? '¿Deseas reiniciar el examen? Se borrarán las respuestas actuales y este intento no se guardará.'
+                        : 'Restart the exam? Your current answers will be cleared and this attempt will not be saved.'; ?>"
                     data-pass-threshold="70"
                     data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
                     data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
@@ -2489,6 +2492,9 @@ echo $OUTPUT->header();
                     <?php } ?>
 
                     <div class="herb-board__exam-submit" data-clinical-navigation>
+                        <button type="button" class="herb-board__clinical-restart" data-clinical-restart>
+                            <?php echo $ises ? '↻ Reiniciar examen' : '↻ Restart exam'; ?>
+                        </button>
                         <button type="button" data-clinical-next><?php echo $ises ? 'Siguiente →' : 'Next →'; ?></button>
                     </div>
 
