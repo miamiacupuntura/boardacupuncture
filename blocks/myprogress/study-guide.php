@@ -581,11 +581,11 @@ echo $OUTPUT->header();
 .subject-study-library__map{padding:22px;border:1px solid #b8d5d2;border-radius:12px;background:#f7fcfb}
 .subject-study-library__map-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}.subject-study-library__map-copy{min-width:0}.subject-study-library__map-actions{display:flex;flex:0 0 auto;align-items:center;gap:9px}.subject-study-library__map-actions a{margin:0}
 .subject-study-library__journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
-.subject-study-library__journey-link{display:flex;min-height:86px;align-items:center;gap:12px;padding:13px;border:1px solid #b9cbd6;border-radius:10px;background:#fff;color:#123246;text-decoration:none!important}
+.subject-study-library__journey-link{display:flex;min-height:112px;align-items:flex-start;gap:12px;padding:14px;border:1px solid #b9cbd6;border-radius:10px;background:#fff;color:#123246;text-decoration:none!important}
 .subject-study-library__journey-link:hover,.subject-study-library__journey-link:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
 .subject-study-library__journey-link--disabled{border-color:#d5dde3;background:#eef2f4;color:#6b7a86;cursor:not-allowed}.subject-study-library__journey-link--disabled .subject-study-library__journey-step{background:#94a3af}
 .subject-study-library__journey-step{display:inline-flex;width:30px;height:30px;flex:0 0 30px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-weight:900}
-.subject-study-library__journey-copy{display:block;min-width:0}.subject-study-library__journey-copy strong,.subject-study-library__journey-copy small{display:block}.subject-study-library__journey-copy strong{font-size:15px;line-height:1.25}.subject-study-library__journey-copy small{margin-top:4px;color:#64748b;font-size:12px;line-height:1.3}
+.subject-study-library__journey-copy{display:block;min-width:0}.subject-study-library__journey-copy strong,.subject-study-library__journey-copy small,.subject-study-library__journey-copy b{display:block}.subject-study-library__journey-copy strong{font-size:15px;line-height:1.25}.subject-study-library__journey-copy b{margin-top:5px;color:#08746f;font-size:10px;letter-spacing:.05em;text-transform:uppercase}.subject-study-library__journey-copy small{margin-top:4px;color:#64748b;font-size:12px;line-height:1.35}
 .subject-study-library__section-links{display:flex;gap:8px;flex-wrap:wrap}.subject-study-library__section-links a{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border:1px solid #bfd0da;border-radius:999px;background:#fff;color:#24465b;font-size:13px;font-weight:800;text-decoration:none!important}.subject-study-library__section-links a:hover,.subject-study-library__section-links a:focus{border-color:#2563eb;background:#eff6ff;color:#1746a2}
 .subject-study-library__search{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px;padding:18px;border:1px solid #d4dde4;border-radius:11px;background:#fff}.subject-study-library__search label{display:grid;gap:6px;color:#213e51;font-weight:800}.subject-study-library__search input{width:100%;min-height:48px;box-sizing:border-box;padding:10px 13px;border:1px solid #9fb3c1;border-radius:8px;background:#fff;color:#17232a;font-size:16px}.subject-study-library__search input:focus{border-color:#2563eb;outline:3px solid rgba(37,99,235,.16)}.subject-study-library__search-count{padding-bottom:12px;color:#52677a;font-size:13px;font-weight:800;white-space:nowrap}
 .subject-study-library__empty{margin:0;padding:18px;border:1px dashed #9fb3c1;border-radius:10px;background:#f8fafc;color:#52677a;text-align:center}
@@ -658,35 +658,57 @@ echo $OUTPUT->header();
                 <section class="subject-study-library__map" aria-labelledby="library-navigation-map-title">
                     <header class="subject-study-library__map-header">
                         <div class="subject-study-library__map-copy">
-                            <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Mapa de navegación Board Level' : 'Board Level Navigation Map'); ?></h3>
-                            <p><?php echo s($ises ? 'Avanza desde el estudio guiado hasta la evaluación o abre directamente la colección que necesitas.' : 'Move from guided study to assessment, or open the exact collection you need.'); ?></p>
+                            <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Elige tu actividad Board Level' : 'Choose your Board Level activity'); ?></h3>
+                            <p><?php echo s($ises
+                                ? 'Empieza donde mejor responda a tu objetivo. Los números muestran una ruta recomendada, pero puedes abrir cualquier sección.'
+                                : 'Start with the activity that matches your goal. The numbers show a recommended path, but you can open any section.'); ?></p>
                         </div>
                         <nav class="subject-study-library__map-actions" aria-label="<?php echo s($ises ? 'Controles del mapa' : 'Map controls'); ?>">
                             <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                            <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
-                            <a class="subject-study-guide__back subject-study-library__dashboard" data-library-dashboard href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Volver al Dashboard' : '← Back to Dashboard'); ?></a>
+                            <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Página anterior' : '← Previous page'); ?></a>
+                            <a class="subject-study-guide__back subject-study-library__dashboard" data-library-dashboard href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? 'Dashboard' : 'Dashboard'); ?></a>
                         </nav>
                     </header>
-                    <nav class="subject-study-library__journey" aria-label="<?php echo s($ises ? 'Recorrido principal Board Level' : 'Main Board Level path'); ?>">
+                    <nav class="subject-study-library__journey" aria-label="<?php echo s($ises ? 'Actividades Board Level' : 'Board Level activities'); ?>">
                         <a class="subject-study-library__journey-link" href="#library-group-core-guides">
                             <span class="subject-study-library__journey-step">1</span>
-                            <span class="subject-study-library__journey-copy"><strong><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></strong><small><?php echo s($ises ? 'Hierbas, Duì Yào y fórmulas' : 'Herbs, Duì Yào and formulas'); ?></small></span>
+                            <span class="subject-study-library__journey-copy">
+                                <strong><?php echo s($ises ? 'Aprender el contenido' : 'Learn the material'); ?></strong>
+                                <b><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></b>
+                                <small><?php echo s($ises ? 'Lee explicaciones y material de referencia.' : 'Read explanations and reference material.'); ?></small>
+                            </span>
                         </a>
                         <a class="subject-study-library__journey-link" href="<?php echo $boardpracticeurl->out(false); ?>">
                             <span class="subject-study-library__journey-step">2</span>
-                            <span class="subject-study-library__journey-copy"><strong>Herbology Practice</strong><small><?php echo s($ises ? 'Respuestas y explicaciones visibles' : 'Visible answers and explanations'); ?></small></span>
+                            <span class="subject-study-library__journey-copy">
+                                <strong><?php echo s($ises ? 'Practicar con respuestas' : 'Practice with answers'); ?></strong>
+                                <b>Herbology Practice</b>
+                                <small><?php echo s($ises ? 'Respuestas siempre visibles; no genera calificación.' : 'Answers stay visible; no score is recorded.'); ?></small>
+                            </span>
                         </a>
                         <a class="subject-study-library__journey-link" href="<?php echo $boardquizurl->out(false); ?>">
                             <span class="subject-study-library__journey-step">3</span>
-                            <span class="subject-study-library__journey-copy"><strong>Quiz</strong><small><?php echo s($ises ? 'Elige respuestas y recibe feedback' : 'Choose answers and receive feedback'); ?></small></span>
+                            <span class="subject-study-library__journey-copy">
+                                <strong><?php echo s($ises ? 'Comprobar lo aprendido' : 'Check your learning'); ?></strong>
+                                <b>Quiz</b>
+                                <small><?php echo s($ises ? 'Elige respuestas y recibe feedback inmediato.' : 'Choose answers and receive immediate feedback.'); ?></small>
+                            </span>
                         </a>
                         <a class="subject-study-library__journey-link" href="<?php echo $boardexamsurl->out(false); ?>">
                             <span class="subject-study-library__journey-step">4</span>
-                            <span class="subject-study-library__journey-copy"><strong><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></strong><small><?php echo s($ises ? 'Evaluación lineal o adaptativa' : 'Linear or adaptive assessment'); ?></small></span>
+                            <span class="subject-study-library__journey-copy">
+                                <strong><?php echo s($ises ? 'Medir tu preparación' : 'Measure your readiness'); ?></strong>
+                                <b><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></b>
+                                <small><?php echo s($ises ? '63–100 preguntas; resultado guardado en el historial.' : '63–100 questions; result saved to your history.'); ?></small>
+                            </span>
                         </a>
                         <a class="subject-study-library__journey-link" href="<?php echo $boardsimulationurl->out(false); ?>">
                             <span class="subject-study-library__journey-step">5</span>
-                            <span class="subject-study-library__journey-copy"><strong>Simulation</strong><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span>
+                            <span class="subject-study-library__journey-copy">
+                                <strong><?php echo s($ises ? 'Ensayar el día del examen' : 'Rehearse test day'); ?></strong>
+                                <b>Simulation</b>
+                                <small><?php echo s($ises ? '100 preguntas, 150 minutos y condiciones de examen.' : '100 questions, 150 minutes, and exam-style conditions.'); ?></small>
+                            </span>
                         </a>
                     </nav>
                 </section>
