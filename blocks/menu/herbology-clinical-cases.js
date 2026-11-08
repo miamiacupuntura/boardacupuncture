@@ -10,6 +10,7 @@
         const questions = [...quiz.querySelectorAll('[data-clinical-question]')];
         const navigation = quiz.querySelector('[data-clinical-navigation]');
         const nextButton = quiz.querySelector('[data-clinical-next]');
+        const restartButton = quiz.querySelector('[data-clinical-restart]');
         const progress = quiz.querySelector('[data-clinical-progress]');
         const scoreOutput = quiz.querySelector('[data-clinical-score]');
         const progressBar = quiz.querySelector('[data-clinical-progress-bar]');
@@ -245,12 +246,8 @@
             resultPanel.scrollIntoView({block: 'start', behavior: 'smooth'});
         };
 
-        const retryErrors = () => {
-            const retryQuestions = activeQuestions.filter(question => question.dataset.lastCorrect !== '1');
-            if (retryQuestions.length === 0) {
-                return;
-            }
-            activeQuestions = retryQuestions;
+        const startAttempt = attemptQuestions => {
+            activeQuestions = [...attemptQuestions];
             activeQuestions.forEach(question => {
                 question.dataset.answered = '0';
                 question.dataset.lastCorrect = '0';
@@ -281,6 +278,20 @@
             quiz.scrollIntoView({block: 'start', behavior: 'smooth'});
         };
 
+        const retryErrors = () => {
+            const retryQuestions = activeQuestions.filter(question => question.dataset.lastCorrect !== '1');
+            if (retryQuestions.length > 0) {
+                startAttempt(retryQuestions);
+            }
+        };
+
+        const restartExam = () => {
+            // Restarting abandons the current in-memory attempt. Nothing is sent to history.
+            if (window.confirm(quiz.dataset.restartConfirm)) {
+                startAttempt(questions);
+            }
+        };
+
         questions.forEach(question => {
             question.dataset.answered = '0';
             question.dataset.lastCorrect = '0';
@@ -296,6 +307,7 @@
             }
         });
         retryButton.addEventListener('click', retryErrors);
+        restartButton.addEventListener('click', restartExam);
         quiz.addEventListener('submit', event => event.preventDefault());
 
         attemptUid = createAttemptUid();
