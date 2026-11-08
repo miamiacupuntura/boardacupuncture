@@ -3183,7 +3183,6 @@ a.herb-board__domain:focus {
 }
 
 .herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart {
-    margin-right: auto;
     border: 1px solid #b7acd8;
     background: #fff;
     color: #5633ad;
@@ -3196,6 +3195,7 @@ a.herb-board__domain:focus {
 }
 
 .herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-finish {
+    margin-right: auto;
     border: 1px solid #d97008;
     background: #fff8ef;
     color: #9a4d08;
@@ -3292,7 +3292,8 @@ a.herb-board__domain:focus {
         width: 100%;
     }
 
-    .herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart {
+    .herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-restart,
+    .herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-finish {
         margin-right: 0;
     }
 
