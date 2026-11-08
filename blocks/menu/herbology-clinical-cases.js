@@ -15,6 +15,8 @@
         const progress = quiz.querySelector('[data-clinical-progress]');
         const scoreOutput = quiz.querySelector('[data-clinical-score]');
         const progressBar = quiz.querySelector('[data-clinical-progress-bar]');
+        const timer = quiz.querySelector('[data-clinical-timer]');
+        const timerValue = quiz.querySelector('[data-clinical-timer-value]');
         const resultPanel = quiz.querySelector('[data-clinical-result-panel]');
         const resultScore = quiz.querySelector('[data-clinical-result]');
         const resultOutcome = quiz.querySelector('[data-clinical-outcome]');
@@ -36,6 +38,7 @@
         const analysisFindings = analysisPanel?.querySelector('[data-clinical-analysis-findings]');
         const analysisConclusion = analysisPanel?.querySelector('[data-clinical-analysis-conclusion]');
         const passThreshold = Number(quiz.dataset.passThreshold || 70);
+        const secondsPerQuestion = Math.max(1, Number(quiz.dataset.secondsPerQuestion || 90));
         let activeQuestions = [...questions];
         let currentIndex = 0;
         let answered = 0;
@@ -44,10 +47,60 @@
         let attemptStartedAt = Date.now();
         let attemptUid = '';
         let attemptSaved = false;
+        let attemptDeadline = 0;
+        let timerInterval = 0;
 
         const createAttemptUid = () => {
             const random = Math.random().toString(36).slice(2, 14);
             return `clinical${Date.now().toString(36)}${random}`;
+        };
+
+        const formatTime = seconds => {
+            const safeSeconds = Math.max(0, Math.floor(seconds));
+            const hours = Math.floor(safeSeconds / 3600);
+            const minutes = Math.floor((safeSeconds % 3600) / 60);
+            const remainder = safeSeconds % 60;
+            return [hours, minutes, remainder]
+                .map(value => String(value).padStart(2, '0'))
+                .join(':');
+        };
+
+        const stopTimer = () => {
+            if (timerInterval) {
+                window.clearInterval(timerInterval);
+                timerInterval = 0;
+            }
+        };
+
+        const updateTimer = () => {
+            if (!timerValue || complete || attemptDeadline === 0) {
+                return;
+            }
+            const remaining = Math.max(0, Math.ceil((attemptDeadline - Date.now()) / 1000));
+            timerValue.textContent = formatTime(remaining);
+            timerValue.setAttribute('datetime', `PT${remaining}S`);
+            timer?.classList.toggle('is-warning', remaining <= 300 && remaining > 60);
+            timer?.classList.toggle('is-critical', remaining <= 60);
+            if (remaining === 0) {
+                stopTimer();
+                finish(true);
+            }
+        };
+
+        const startTimer = questionCount => {
+            stopTimer();
+            const limitSeconds = Math.max(1, questionCount * secondsPerQuestion);
+            attemptDeadline = Date.now() + (limitSeconds * 1000);
+            timer?.classList.remove('is-warning', 'is-critical');
+            if (timer) {
+                timer.hidden = false;
+                timer.setAttribute('aria-label', `${quiz.dataset.timeRemainingWord}: ${formatTime(limitSeconds)}`);
+            }
+            if (timerValue) {
+                timerValue.textContent = formatTime(limitSeconds);
+                timerValue.setAttribute('datetime', `PT${limitSeconds}S`);
+            }
+            timerInterval = window.setInterval(updateTimer, 250);
         };
 
         const optionText = (question, label) => {
@@ -361,7 +414,11 @@
             }
         };
 
-        const finish = () => {
+        const finish = (timeExpired = false) => {
+            if (complete) {
+                return;
+            }
+            stopTimer();
             complete = true;
             questions.forEach(question => {
                 question.hidden = true;
@@ -375,8 +432,10 @@
             resultScore.textContent = `${score}/${total} · ${percentage}%`;
             resultOutcome.textContent = passed ? quiz.dataset.passedWord : quiz.dataset.failedWord;
             const completionMessage = passed ? quiz.dataset.passedMessage : quiz.dataset.failedMessage;
-            resultMessage.textContent = completionMessage + ' ' + String(answered) + '/'
-                + String(total) + ' ' + quiz.dataset.answeredWord + '.';
+            const expirationMessage = timeExpired ? `${quiz.dataset.timeExpiredMessage} ` : '';
+            const noAnswersMessage = answered === 0 ? ` ${quiz.dataset.noAnswersMessage}` : '';
+            resultMessage.textContent = expirationMessage + completionMessage + ' ' + String(answered) + '/'
+                + String(total) + ' ' + quiz.dataset.answeredWord + '.' + noAnswersMessage;
             resultPanel.classList.toggle('is-passed', passed);
             resultPanel.classList.toggle('is-failed', !passed);
             renderIncorrectAnswers(incorrectQuestions);
@@ -386,11 +445,14 @@
             progress.textContent = quiz.dataset.resultsWord;
             scoreOutput.textContent = `${score}/${total}`;
             progressBar.style.width = '100%';
-            saveAttempt(total);
+            if (answered > 0) {
+                saveAttempt(total);
+            }
             resultPanel.scrollIntoView({block: 'start', behavior: 'smooth'});
         };
 
         const startAttempt = attemptQuestions => {
+            stopTimer();
             activeQuestions = [...attemptQuestions];
             activeQuestions.forEach(question => {
                 question.dataset.answered = '0';
@@ -421,6 +483,7 @@
             }
             navigation.hidden = false;
             nextButton.hidden = false;
+            startTimer(activeQuestions.length);
             showQuestion(0);
             quiz.scrollIntoView({block: 'start', behavior: 'smooth'});
         };
@@ -437,6 +500,7 @@
                 return;
             }
             restartButton.disabled = true;
+            stopTimer();
             await saveAttempt(activeQuestions.length, 'clinicalincomplete');
             startAttempt(questions);
             restartButton.disabled = false;
@@ -447,7 +511,7 @@
                 return;
             }
             if (window.confirm(quiz.dataset.finishConfirm)) {
-                finish();
+                finish(false);
             }
         };
 
@@ -462,7 +526,7 @@
             if (currentIndex < activeQuestions.length - 1) {
                 showQuestion(currentIndex + 1);
             } else {
-                finish();
+                finish(false);
             }
         });
         retryButton.addEventListener('click', retryErrors);
@@ -471,6 +535,7 @@
         quiz.addEventListener('submit', event => event.preventDefault());
 
         attemptUid = createAttemptUid();
+        startTimer(activeQuestions.length);
         showQuestion(0);
     };
 
