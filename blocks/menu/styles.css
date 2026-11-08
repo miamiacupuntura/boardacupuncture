@@ -1727,6 +1727,58 @@ a.herb-board__domain:focus {
     font-size: .8rem;
 }
 
+.herb-board__clinical-cases-block {
+    margin-top: 24px;
+    padding: 18px;
+    border: 1px solid #bdd7cf;
+    border-left: 5px solid #087c69;
+    border-radius: 10px;
+    background: #f7fbfa;
+}
+
+.herb-board__clinical-cases-block header h4 {
+    margin-top: 0;
+}
+
+.herb-board__clinical-cases-block header p {
+    margin: 5px 0 15px;
+    color: #52677a;
+    font-size: .84rem;
+}
+
+.herb-board__topics--clinical-cases .herb-board__topic {
+    border-color: #a9d1c5;
+    background: #fff;
+}
+
+.herb-board__topics--clinical-cases .herb-board__topic:hover,
+.herb-board__topics--clinical-cases .herb-board__topic:focus {
+    border-color: #087c69;
+    background: #edf8f5;
+}
+
+.herb-board__clinical-cases-pending {
+    margin: 0;
+    padding: 12px;
+    border-radius: 7px;
+    background: #fff;
+    color: #52677a;
+}
+
+.herb-board__clinical-quiz .herb-board__panel-heading {
+    margin-top: 14px;
+}
+
+.herb-board__clinical-player {
+    margin-top: 20px;
+}
+
+.herb-board__clinical-player .herb-board__exam-submit output {
+    color: #087c69;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
 .herb-board__simulation {
     overflow: hidden;
 }

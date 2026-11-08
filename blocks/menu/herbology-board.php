@@ -9,11 +9,12 @@ $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $fromlibrary = optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard';
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['herbs', 'formulas', 'quiz', 'domains', 'exams', 'simulation'], true)) {
+if (!in_array($track, ['herbs', 'formulas', 'quiz', 'clinicalcases', 'domains', 'exams', 'simulation'], true)) {
     $track = 'herbs';
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
+$clinicalexamkey = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
 $exammode = optional_param('exam', '', PARAM_ALPHA);
 if (!in_array($exammode, ['linear', 'adaptive'], true)) {
     $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
@@ -64,6 +65,9 @@ if ($mixdomains) {
 if ($domainpage > 0) {
     $pageparams['page'] = $domainpage;
 }
+if ($clinicalexamkey !== '') {
+    $pageparams['caseexam'] = $clinicalexamkey;
+}
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $languageparams = $pageparams;
 if ($ises) {
@@ -81,6 +85,7 @@ $languagecontext = ($fromlibrary ? ['from' => 'library'] : []) + ($ises ? ['lang
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
+$clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
@@ -156,6 +161,48 @@ $domainblueprint = [
         'focus_es' => 'Variantes de nombres, límites del listado oficial y alternativas obsoletas o históricas.',
     ],
 ];
+
+$clinicalcasesbankpath = $CFG->dataroot . '/board-domain-banks/herbology-clinical-cases.json';
+$clinicalcasesbank = ['exams' => []];
+if (in_array($track, ['quiz', 'clinicalcases'], true) && is_readable($clinicalcasesbankpath)) {
+    $decodedclinicalcases = json_decode(file_get_contents($clinicalcasesbankpath), true);
+    if (is_array($decodedclinicalcases) && isset($decodedclinicalcases['exams'])
+            && is_array($decodedclinicalcases['exams'])) {
+        $clinicalcasesbank = $decodedclinicalcases;
+    }
+}
+$clinicalcaseexams = array_values(array_filter(
+    $clinicalcasesbank['exams'] ?? [],
+    static fn($exam): bool => is_array($exam)
+        && !empty($exam['key'])
+        && !empty($exam['title'])
+        && !empty($exam['questions'])
+        && is_array($exam['questions'])
+));
+$selectedclinicalexam = null;
+$clinicalquestions = [];
+if ($track === 'clinicalcases') {
+    foreach ($clinicalcaseexams as $clinicalcaseexam) {
+        if ((string)$clinicalcaseexam['key'] === $clinicalexamkey) {
+            $selectedclinicalexam = $clinicalcaseexam;
+            break;
+        }
+    }
+    if ($selectedclinicalexam === null && $clinicalcaseexams) {
+        $selectedclinicalexam = $clinicalcaseexams[0];
+        $clinicalexamkey = (string)$selectedclinicalexam['key'];
+    }
+    if ($selectedclinicalexam !== null) {
+        $clinicalquestions = array_values(array_filter(
+            $selectedclinicalexam['questions'],
+            static fn($question): bool => is_array($question)
+                && !empty($question['prompt'])
+                && !empty($question['correctLabel'])
+                && !empty($question['options'])
+                && is_array($question['options'])
+        ));
+    }
+}
 if ($ises) {
     foreach ($domainblueprint as &$domaintranslation) {
         $domaintranslation['name'] = $domaintranslation['name_es'];
@@ -761,6 +808,10 @@ if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
     $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026110801']));
 }
 
+if ($track === 'clinicalcases' && $selectedclinicalexam !== null) {
+    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-clinical-cases.js', ['v' => '2026110801']));
+}
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
@@ -768,7 +819,7 @@ $pagetitle = in_array($track, ['exams', 'simulation'], true)
     ? ($track === 'simulation'
         ? ($ises ? 'Simulación de Herbología' : 'Herbology Simulation')
         : ($ises ? 'Exámenes de Herbología' : 'Herbology Exams'))
-    : (in_array($track, ['quiz', 'domains'], true)
+    : (in_array($track, ['quiz', 'clinicalcases', 'domains'], true)
         ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
         : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
 $PAGE->set_title($pagetitle);
@@ -1371,7 +1422,7 @@ echo $OUTPUT->header();
     <nav class="herb-board__page-navigation" aria-label="<?php echo $ises ? 'Navegación de Herbología' : 'Herbology navigation'; ?>">
         <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
             ? '← Atrás' : '← Back'; ?></a>
-        <?php if (!in_array($track, ['exams', 'quiz', 'domains', 'simulation'], true)) { ?>
+        <?php if (!in_array($track, ['exams', 'quiz', 'clinicalcases', 'domains', 'simulation'], true)) { ?>
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
@@ -1951,6 +2002,45 @@ echo $OUTPUT->header();
                 </a>
             </div>
 
+            <section class="herb-board__clinical-cases-block" id="quiz-clinical-cases"
+                aria-labelledby="quiz-clinical-cases-title">
+                <header>
+                    <div>
+                        <h4 class="herb-board__subheading herb-board__subheading--spaced"
+                            id="quiz-clinical-cases-title"><?php echo $ises
+                                ? 'Quiz de casos clínicos'
+                                : 'Clinical Cases Quiz'; ?></h4>
+                        <p><?php echo $ises
+                            ? 'Aplica la diferenciación de fórmulas a los casos del Handbook of Oriental Medicine.'
+                            : 'Apply formula differentiation to cases from the Handbook of Oriental Medicine.'; ?></p>
+                    </div>
+                </header>
+                <?php if ($clinicalcaseexams) { ?>
+                    <div class="herb-board__topics herb-board__topics--clinical-cases">
+                        <?php foreach ($clinicalcaseexams as $clinicalcaseexam) {
+                            $clinicalcaselabel = preg_replace(
+                                '/^Handbook(?:-| )of(?:-| )Oriental(?:-| )Medicine[. ]*/i',
+                                '',
+                                (string)$clinicalcaseexam['title']
+                            );
+                            $clinicalcaselabel = preg_replace('/\s*\(\d+\s+Questions?\)\s*$/i', '', $clinicalcaselabel);
+                            $clinicalcaseexamurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                                'track' => 'clinicalcases',
+                                'caseexam' => (string)$clinicalcaseexam['key'],
+                            ] + $languagecontext);
+                        ?>
+                            <a class="herb-board__topic" href="<?php echo $clinicalcaseexamurl->out(false); ?>">
+                                <span><?php echo s($clinicalcaselabel); ?></span>
+                            </a>
+                        <?php } ?>
+                    </div>
+                <?php } else { ?>
+                    <p class="herb-board__clinical-cases-pending"><?php echo $ises
+                        ? 'El banco se habilitará al completar la extracción segura desde Moodle.'
+                        : 'This bank will appear after the safe Moodle extraction completes.'; ?></p>
+                <?php } ?>
+            </section>
+
             <h4 class="herb-board__subheading herb-board__subheading--spaced" id="quiz-domains">
                 <?php echo $ises ? 'Quiz por dominio' : 'Quiz by Domain'; ?>
             </h4>
@@ -1972,6 +2062,102 @@ echo $OUTPUT->header();
                     </a>
                 <?php } ?>
             </div>
+        </section>
+    <?php } else if ($track === 'clinicalcases') { ?>
+        <section class="herb-board__panel herb-board__clinical-quiz" aria-labelledby="clinical-case-quiz-title">
+            <a class="herb-board__domain-back" href="<?php echo $quizurl->out(false); ?>#quiz-clinical-cases">
+                <?php echo $ises ? '← Volver a Quiz' : '← Back to Quiz'; ?>
+            </a>
+            <?php if ($selectedclinicalexam === null || !$clinicalquestions) { ?>
+                <div class="herb-board__notice">
+                    <h3 id="clinical-case-quiz-title"><?php echo $ises
+                        ? 'El Quiz de casos clínicos se está preparando'
+                        : 'The Clinical Cases Quiz is being prepared'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'La extracción todavía no produjo preguntas utilizables.'
+                        : 'The source extraction has not produced usable questions yet.'; ?></p>
+                </div>
+            <?php } else { ?>
+                <?php
+                $clinicaltitle = preg_replace(
+                    '/^Handbook(?:-| )of(?:-| )Oriental(?:-| )Medicine[. ]*/i',
+                    '',
+                    (string)$selectedclinicalexam['title']
+                );
+                ?>
+                <div class="herb-board__panel-heading">
+                    <div>
+                        <span class="herb-board__domain-kicker"><?php echo $ises
+                            ? 'HANDBOOK OF ORIENTAL MEDICINE · CASOS CLÍNICOS'
+                            : 'HANDBOOK OF ORIENTAL MEDICINE · CLINICAL CASES'; ?></span>
+                        <h3 id="clinical-case-quiz-title"><?php echo s($clinicaltitle); ?></h3>
+                        <p><?php echo $ises
+                            ? 'Selecciona una respuesta y recibe feedback antes de continuar.'
+                            : 'Select one answer and receive feedback before continuing.'; ?></p>
+                    </div>
+                </div>
+
+                <form class="herb-board__clinical-player" data-clinical-cases-quiz
+                    data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
+                    data-of-word="<?php echo $ises ? 'de' : 'of'; ?>"
+                    data-correct-word="<?php echo $ises ? 'Correcta' : 'Correct'; ?>"
+                    data-incorrect-word="<?php echo $ises ? 'Incorrecta' : 'Incorrect'; ?>"
+                    data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
+                    data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>">
+                    <div class="herb-board__exam-progress" aria-live="polite">
+                        <div class="herb-board__exam-progress-summary">
+                            <strong data-clinical-progress></strong>
+                            <strong class="herb-board__exam-score" data-clinical-score></strong>
+                        </div>
+                        <div class="herb-board__exam-progress-bar"><span data-clinical-progress-bar></span></div>
+                    </div>
+
+                    <?php foreach ($clinicalquestions as $clinicalindex => $clinicalquestion) { ?>
+                        <?php
+                        $correctclinicaloption = '';
+                        foreach ($clinicalquestion['options'] as $clinicaloption) {
+                            if (($clinicaloption['label'] ?? '') === $clinicalquestion['correctLabel']) {
+                                $correctclinicaloption = (string)($clinicaloption['text'] ?? '');
+                                break;
+                            }
+                        }
+                        ?>
+                        <fieldset class="herb-board__exam-question herb-board__clinical-question" hidden
+                            data-clinical-question
+                            data-correct="<?php echo s($clinicalquestion['correctLabel']); ?>">
+                            <legend>
+                                <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $clinicalindex + 1; ?></span>
+                                <?php echo s($clinicalquestion['prompt']); ?>
+                            </legend>
+                            <div class="herb-board__exam-options">
+                                <?php foreach ($clinicalquestion['options'] as $clinicaloption) { ?>
+                                    <label>
+                                        <input type="radio" name="clinical-question-<?php echo $clinicalindex + 1; ?>"
+                                            value="<?php echo s($clinicaloption['label'] ?? ''); ?>">
+                                        <strong><?php echo s($clinicaloption['label'] ?? ''); ?>.</strong>
+                                        <span><?php echo s($clinicaloption['text'] ?? ''); ?></span>
+                                    </label>
+                                <?php } ?>
+                            </div>
+                            <div class="herb-board__exam-feedback" data-clinical-feedback hidden>
+                                <span class="herb-board__exam-verdict" data-clinical-verdict></span>
+                                <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
+                                    <?php echo s($clinicalquestion['correctLabel']); ?>. <?php echo s($correctclinicaloption); ?></strong>
+                                <?php if (!empty($clinicalquestion['feedback'])) { ?>
+                                    <p><?php echo nl2br(s($clinicalquestion['feedback'])); ?></p>
+                                <?php } ?>
+                            </div>
+                        </fieldset>
+                    <?php } ?>
+
+                    <div class="herb-board__exam-submit">
+                        <button type="button" data-clinical-next><?php echo $ises ? 'Siguiente →' : 'Next →'; ?></button>
+                        <output data-clinical-result hidden></output>
+                        <a class="herb-board__exam-history-link" href="<?php echo $quizurl->out(false); ?>#quiz-clinical-cases" hidden
+                            data-clinical-return><?php echo $ises ? 'Elegir otro examen' : 'Choose another exam'; ?></a>
+                    </div>
+                </form>
+            <?php } ?>
         </section>
     <?php } else if ($track === 'formulas') { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-formulas-title">
