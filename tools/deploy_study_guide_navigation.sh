@@ -5,8 +5,7 @@ trap 'status=$?; echo "ERROR: instalación detenida en la línea $LINENO (códig
 
 REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
-MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
-COMPARISON_ROOT="$MOODLE_ROOT/study-guide/comparisons"
+WEB_ROOT_SEARCH="${WEB_ROOT_SEARCH:-/var/www}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 BACKUP_DIR="$BACKUP_ROOT/study-guide-navigation-$(date +%Y%m%d-%H%M%S)"
 
@@ -14,14 +13,14 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_study_guide_navigation.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl install grep wc tr; do
+for command in curl install grep wc tr find sort stat cp; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
     }
 done
-[[ -d "$COMPARISON_ROOT" ]] || {
-    echo "ERROR: no existe $COMPARISON_ROOT. Ajuste MOODLE_ROOT si el DocumentRoot es diferente." >&2
+[[ -d "$WEB_ROOT_SEARCH" ]] || {
+    echo "ERROR: no existe el directorio de búsqueda $WEB_ROOT_SEARCH." >&2
     exit 1
 }
 
@@ -95,23 +94,44 @@ for file in "${FILES[@]}"; do
     validate_navigation "$staged" "$file"
 done
 
+mapfile -t COMPARISON_ROOTS < <(
+    find -L "$WEB_ROOT_SEARCH" -type f -path '*/study-guide/comparisons/dui-yao.html' -printf '%h\n' 2>/dev/null |
+        sort -u
+)
+
+if [[ "${#COMPARISON_ROOTS[@]}" -eq 0 ]]; then
+    echo "ERROR: no se encontró ninguna copia activa de study-guide/comparisons/dui-yao.html bajo $WEB_ROOT_SEARCH." >&2
+    exit 1
+fi
+
 mkdir -p "$BACKUP_DIR"
-for file in "${FILES[@]}"; do
-    target="$COMPARISON_ROOT/$file"
-    staged="$TEMP_DIR/$file"
+installed_total=0
+root_index=0
+for comparison_root in "${COMPARISON_ROOTS[@]}"; do
+    root_index=$((root_index + 1))
+    root_backup="$BACKUP_DIR/root-$root_index"
+    mkdir -p "$root_backup"
+    root_installed=0
 
-    [[ -f "$target" ]] || {
-        echo "ERROR: no se encontró el archivo activo $target." >&2
-        exit 1
-    }
+    for file in "${FILES[@]}"; do
+        target="$comparison_root/$file"
+        staged="$TEMP_DIR/$file"
+        if [[ ! -f "$target" ]]; then
+            continue
+        fi
 
-    cp -a "$target" "$BACKUP_DIR/$file"
-    owner_group="$(stat -c '%u:%g' "$target")"
-    mode="$(stat -c '%a' "$target")"
-    install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" "$staged" "$target"
-    validate_navigation "$target" "$file"
+        cp -a "$target" "$root_backup/$file"
+        owner_group="$(stat -c '%u:%g' "$target")"
+        mode="$(stat -c '%a' "$target")"
+        install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" "$staged" "$target"
+        validate_navigation "$target" "$file"
+        root_installed=$((root_installed + 1))
+        installed_total=$((installed_total + 1))
+    done
+
+    validate_navigation "$comparison_root/dui-yao.html" "dui-yao.html en $comparison_root"
+    echo "OK: $root_installed páginas actualizadas en $comparison_root"
 done
 
-echo "OK: navegación actualizada en ${#FILES[@]} páginas comparativas."
-echo "Duì Yào instalado en: $COMPARISON_ROOT/dui-yao.html"
+echo "OK: $installed_total archivos instalados en ${#COMPARISON_ROOTS[@]} ubicaciones detectadas."
 echo "Respaldo: $BACKUP_DIR"
