@@ -2602,7 +2602,7 @@ echo $OUTPUT->header();
                             <strong data-clinical-analysis-score></strong>
                         </div>
                         <div>
-                            <span><?php echo $ises ? 'Errores' : 'Errors'; ?></span>
+                            <span><?php echo $ises ? 'Respuestas incorrectas' : 'Incorrect answers'; ?></span>
                             <strong data-clinical-analysis-errors></strong>
                         </div>
                         <div>
