@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110684"
+EXPECTED_VERSION="2026110685"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -67,6 +67,9 @@ grep -Fq 'herb-board__exam-model--clinical' "$TEMP_DIR/blocks/menu/herbology-boa
 grep -Fq '<strong>3</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '<strong>63–100</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-cases-quiz' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "'Study by Domain'" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "'← Back to Domains'" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '<details open>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-retry-errors' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-incorrect-count' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'incorrectReview.open = false' "$TEMP_DIR/blocks/menu/herbology-clinical-cases.js"
@@ -105,9 +108,12 @@ grep -Fq 'PINYIN_I_OCR' "$TEMP_DIR/mod/scorm/studytopic/clinical_cases_extract.p
 
 formula_line="$(grep -n -m1 'id="quiz-formula-categories"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
 clinical_line="$(grep -n -m1 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
-domain_line="$(grep -n -m1 'id="quiz-domains"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
-if (( formula_line >= clinical_line || clinical_line >= domain_line )); then
-    echo "ERROR: el bloque «Clinical Cases» no está entre «Formula Quiz» y «Quiz by Domain»." >&2
+if (( formula_line >= clinical_line )); then
+    echo "ERROR: el bloque «Clinical Cases» debe aparecer después de «Formula Quiz»." >&2
+    exit 1
+fi
+if grep -Fq "'Quiz by Domain'" "$TEMP_DIR/blocks/menu/herbology-board.php"; then
+    echo "ERROR: Domains todavía aparece dentro del módulo Quiz." >&2
     exit 1
 fi
 
