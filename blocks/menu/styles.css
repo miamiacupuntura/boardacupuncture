@@ -3109,6 +3109,15 @@ a.herb-board__domain:focus {
 
 .herb-board__exam-submit .herb-board__exam-restart {
     margin-left: auto;
+    border: 1px solid #b7acd8;
+    background: #fff;
+    color: #5633ad;
+}
+
+.herb-board__exam-submit .herb-board__exam-restart:hover,
+.herb-board__exam-submit .herb-board__exam-restart:focus {
+    border-color: #6d4bc3;
+    background: #f7f4ff;
 }
 
 .herb-board__exam-save-status {
