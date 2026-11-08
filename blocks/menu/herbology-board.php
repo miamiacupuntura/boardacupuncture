@@ -1648,6 +1648,8 @@ echo $OUTPUT->header();
         ? 'Regresar a las actividades Board Level' : 'Return to Board Level activities'; ?>">
         <a class="herb-board__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises
             ? '← Actividades Board Level' : '← Board Level Activities'; ?></a>
+        <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+            href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
     </nav>
 
     <?php if ($track === 'exams') { ?>
