@@ -3195,6 +3195,17 @@ a.herb-board__domain:focus {
     background: #f7f4ff;
 }
 
+.herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-finish {
+    border: 1px solid #d97008;
+    background: #fff8ef;
+    color: #9a4d08;
+}
+
+.herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-finish:hover,
+.herb-board__clinical-player .herb-board__exam-submit .herb-board__clinical-finish:focus {
+    background: #ffecd7;
+}
+
 .herb-board__shortages {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
