@@ -149,6 +149,7 @@ grep -Fq "target.classList.add('single-herbs-guide__card-target')" "$TEMP_DIR/mo
 grep -Fq 'event?.persisted' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-footer' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
+grep -Fq 'data-library-dashboard' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 grep -Fq 'subject-study-library__map-actions' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"
 if grep -Fq 'class="subject-study-library__section-links"' "$TEMP_DIR/moodle/blocks/myprogress/study-guide.php"; then
     echo "ERROR: los botones de conteo continúan en el mapa principal de Library." >&2
@@ -338,6 +339,7 @@ grep -Fq 'single-herb-name-highlight' "$MOODLE_ROOT/blocks/myprogress/single-her
 grep -Fq "target.classList.add('single-herbs-guide__card-target')" "$MOODLE_ROOT/blocks/myprogress/single-herbs-study-guide.php"
 grep -Fq 'data-library-footer' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'data-library-page-back' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
+grep -Fq 'data-library-dashboard' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 grep -Fq 'subject-study-library__map-actions' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 if grep -Fq 'class="subject-study-library__section-links"' "$MOODLE_ROOT/blocks/myprogress/study-guide.php"; then
     echo "ERROR: los botones de conteo continúan instalados en el mapa principal de Library." >&2
