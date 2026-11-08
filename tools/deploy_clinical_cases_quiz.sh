@@ -93,12 +93,15 @@ grep -Fq "'Domains Practice'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Open all Quizzes'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Open all Exams'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Open all Simulations'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq 'herb-board__section-navigation' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'class="herb-board__page-navigation"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$studyguidesurl->out(false)" "$TEMP_DIR/blocks/menu/herbology-board.php"
+if grep -Fq 'herb-board__section-navigation' "$TEMP_DIR/blocks/menu/herbology-board.php"; then
+    echo "ERROR: todavía existe una segunda fila de navegación." >&2
+    exit 1
+fi
 grep -Fq "\$practiceactive = in_array(\$track, ['herbs', 'formulas', 'domains'], true);" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$quizactive = in_array(\$track, ['quiz', 'clinicalcases'], true);" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "\$examsactive = in_array(\$track, ['exams', 'simulation'], true);" "$TEMP_DIR/blocks/menu/herbology-board.php"
-grep -Fq '.herb-board__section-navigation' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-model--clinical' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '<strong>3</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
