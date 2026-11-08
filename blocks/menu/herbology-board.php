@@ -2298,6 +2298,10 @@ echo $OUTPUT->header();
                     data-restart-confirm="<?php echo $ises
                         ? '¿Deseas reiniciar el examen? Se borrarán las respuestas actuales y este intento se registrará como No completado.'
                         : 'Restart the exam? Your current answers will be cleared and this attempt will be recorded as Not completed.'; ?>"
+                    data-finish-confirm="<?php echo $ises
+                        ? '¿Deseas finalizar ahora? Las preguntas sin responder contarán como incorrectas y el resultado se guardará.'
+                        : 'Finish now? Unanswered questions will count as incorrect and the result will be saved.'; ?>"
+                    data-unanswered-word="<?php echo $ises ? 'Sin responder' : 'Unanswered'; ?>"
                     data-pass-threshold="70"
                     data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
                     data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
@@ -2507,6 +2511,9 @@ echo $OUTPUT->header();
                     <div class="herb-board__exam-submit" data-clinical-navigation>
                         <button type="button" class="herb-board__clinical-restart" data-clinical-restart>
                             <?php echo $ises ? '↻ Reiniciar examen' : '↻ Restart exam'; ?>
+                        </button>
+                        <button type="button" class="herb-board__clinical-finish" data-clinical-finish>
+                            <?php echo $ises ? 'Finalizar examen' : 'Finish exam'; ?>
                         </button>
                         <button type="button" data-clinical-next><?php echo $ises ? 'Siguiente →' : 'Next →'; ?></button>
                     </div>
