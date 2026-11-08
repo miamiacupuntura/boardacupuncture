@@ -8,7 +8,7 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 EXPECTED_VERSION="2026110685"
-EXPECTED_MYPROGRESS_VERSION="2026110805"
+EXPECTED_MYPROGRESS_VERSION="2026110806"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -79,10 +79,10 @@ grep -Fq '$boardpracticeurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guid
 grep -Fq '$boardquizurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq '$boardexamsurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq '$boardsimulationurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
-if grep -Eq "Questions with visible answers|Passive review by domain|Clinical Cases exam" "$TEMP_DIR/blocks/myprogress/study-guide.php"; then
-    echo "ERROR: todavía existen botones internos antiguos en los bloques." >&2
-    exit 1
-fi
+grep -Fq "Questions with visible answers" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "Passive review by domain" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "Clinical Cases exam" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "100 questions · 150 minutes" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-model--clinical' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '<strong>3</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
