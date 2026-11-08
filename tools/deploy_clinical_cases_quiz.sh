@@ -74,11 +74,11 @@ if grep -Fq "herbology-library-context__routes" "$TEMP_DIR/blocks/myprogress/her
 fi
 grep -Fq "'Each block contains the actual options that belong to that activity.'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq 'journey-option--primary' "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq '\$chapterlisturl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq '\$boardpracticeurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq '\$boardquizurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq '\$boardexamsurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq '\$boardsimulationurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '$chapterlisturl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '$boardpracticeurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '$boardquizurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '$boardexamsurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '$boardsimulationurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
 if grep -Eq "Questions with visible answers|Passive review by domain|Clinical Cases exam" "$TEMP_DIR/blocks/myprogress/study-guide.php"; then
     echo "ERROR: todavía existen botones internos antiguos en los bloques." >&2
     exit 1
