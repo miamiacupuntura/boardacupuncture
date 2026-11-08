@@ -2132,6 +2132,25 @@ a.herb-board__domain:focus {
     color: #6a5a32;
 }
 
+.herb-board__exam-history--combined .herb-board__exam-history-list article {
+    grid-template-columns: 1.4fr 1fr .8fr .8fr .8fr;
+}
+
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-failed div:nth-child(3) strong,
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-failed div:nth-child(4) strong {
+    color: #a9550d;
+}
+
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-passed div:nth-child(3) strong,
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-passed div:nth-child(4) strong {
+    color: #087c69;
+}
+
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-incomplete div:nth-child(3) strong,
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-incomplete div:nth-child(4) strong {
+    color: #6a5a32;
+}
+
 .herb-board__simulation {
     overflow: hidden;
 }
@@ -3450,7 +3469,8 @@ a.herb-board__domain:focus {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .herb-board__clinical-history .herb-board__exam-history-list article {
+    .herb-board__clinical-history .herb-board__exam-history-list article,
+    .herb-board__exam-history--combined .herb-board__exam-history-list article {
         grid-template-columns: 1fr;
     }
 
