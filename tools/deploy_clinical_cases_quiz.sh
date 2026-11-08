@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110667"
+EXPECTED_VERSION="2026110668"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -68,6 +68,8 @@ grep -Fq 'TARGET_TOPIC = "handbook-of-oriental-medicine. clinical cases"' \
 grep -Fq '"patternEs"' "$TEMP_DIR/blocks/myprogress/formulas-study-guide-data.json"
 grep -Fq 'Diagnostic reasoning' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'clinicalquestionfallback' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'array_replace(' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'PINYIN_I_OCR' "$TEMP_DIR/mod/scorm/studytopic/clinical_cases_extract.py"
 
 formula_line="$(grep -n -m1 'id="quiz-formula-categories"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
 clinical_line="$(grep -n -m1 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
