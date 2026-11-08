@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110669"
+EXPECTED_VERSION="2026110670"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -65,6 +65,7 @@ grep -Fq "upgrade_block_savepoint(true, $EXPECTED_VERSION, 'menu')" "$TEMP_DIR/b
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-cases-quiz' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-retry-errors' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'filemtime($clinicalscriptpath)' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "'clinicalcases'" "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
 grep -Fq 'TARGET_TOPIC = "handbook-of-oriental-medicine. clinical cases"' \
     "$TEMP_DIR/mod/scorm/studytopic/clinical_cases_extract.py"
