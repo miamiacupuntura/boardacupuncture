@@ -115,12 +115,15 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
             $examhistory = array_values($DB->get_records_select(
                 'block_menu_exam_attempts',
                 'userid = :userid AND courseid = :courseid '
-                    . 'AND examtype IN (:linear, :adaptive, :clinical, :clinicalincomplete)',
+                    . 'AND examtype IN (:linear, :adaptive, :linearincomplete, :adaptiveincomplete, '
+                    . ':clinical, :clinicalincomplete)',
                 [
                     'userid' => $USER->id,
                     'courseid' => $membershipcourseid,
                     'linear' => 'linear',
                     'adaptive' => 'adaptive',
+                    'linearincomplete' => 'linearincomplete',
+                    'adaptiveincomplete' => 'adaptiveincomplete',
                     'clinical' => 'clinicalcases',
                     'clinicalincomplete' => 'clinicalincomplete',
                 ],
@@ -632,6 +635,8 @@ if (exam) {
     let attemptStartedAt = Date.now();
     let attemptSaving = false;
     let attemptSaved = false;
+    let examFinished = false;
+    let previousAttemptOrder = [...questions];
 
     previousButton.textContent = exam.dataset.previousWord;
 
@@ -641,6 +646,21 @@ if (exam) {
         }
         return `attempt-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     };
+
+    const shuffledQuestions = (sourceQuestions, previousOrder = []) => {
+        const shuffled = [...sourceQuestions];
+        for (let index = shuffled.length - 1; index > 0; index--) {
+            const randomIndex = Math.floor(Math.random() * (index + 1));
+            [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+        }
+        if (shuffled.length > 1
+                && previousOrder.length === shuffled.length
+                && shuffled.every((question, index) => question === previousOrder[index])) {
+            shuffled.push(shuffled.shift());
+        }
+        return shuffled;
+    };
+
     attemptUid = createAttemptUid();
 
     const closeSourceViewer = () => {
@@ -761,7 +781,7 @@ if (exam) {
         scoreText.textContent = `${exam.dataset.scoreWord}: ${percentage}% (${score}/${answered})`;
     };
 
-    const saveAttempt = async () => {
+    const saveAttempt = async (examType = mode) => {
         if (attemptSaving || attemptSaved) {
             return;
         }
@@ -773,7 +793,7 @@ if (exam) {
         const body = new URLSearchParams({
             sesskey: exam.dataset.sesskey,
             attemptuid: savingUid,
-            examtype: mode,
+            examtype: examType,
             score: String(score),
             total: String(questions.length),
             duration: String(Math.max(0, Math.round((Date.now() - attemptStartedAt) / 1000))),
@@ -869,6 +889,7 @@ if (exam) {
     };
 
     const finishExam = () => {
+        examFinished = true;
         const connector = exam.dataset.scoreConnector || 'of';
         const correctWord = exam.dataset.correctWord || 'correct';
         const percentage = Math.round((score / questions.length) * 100);
@@ -882,7 +903,15 @@ if (exam) {
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
     };
 
-    const restartExam = () => {
+    const restartExam = async () => {
+        if (!window.confirm(exam.dataset.restartConfirm)) {
+            return;
+        }
+        restartButton.disabled = true;
+        if (!examFinished && answered > 0) {
+            await saveAttempt(`${mode}incomplete`);
+        }
+        const priorOrder = [...history, ...remaining];
         questions.forEach(question => {
             question.hidden = true;
             question.classList.remove('is-correct', 'is-incorrect');
@@ -895,7 +924,10 @@ if (exam) {
             });
             question.querySelector('.herb-board__exam-feedback').hidden = true;
         });
-        remaining = [...questions];
+        remaining = shuffledQuestions(questions, priorOrder.length === questions.length
+            ? priorOrder
+            : previousAttemptOrder);
+        previousAttemptOrder = [...remaining];
         history.length = 0;
         historyIndex = -1;
         currentQuestion = null;
@@ -906,13 +938,15 @@ if (exam) {
         attemptStartedAt = Date.now();
         attemptSaving = false;
         attemptSaved = false;
+        examFinished = false;
         result.textContent = '';
         result.hidden = true;
         saveStatus.textContent = '';
         saveStatus.classList.remove('is-saved', 'is-error');
         saveStatus.hidden = true;
         historyLink.hidden = true;
-        restartButton.hidden = true;
+        restartButton.hidden = false;
+        restartButton.disabled = false;
         navigation.hidden = false;
         updateScore();
         addNextQuestion();
@@ -2658,7 +2692,11 @@ echo $OUTPUT->header();
                             $attemptpercentage = $attempt->total > 0
                                 ? (int) round(($attempt->score / $attempt->total) * 100)
                                 : 0;
-                            $attemptcomplete = $attempt->examtype !== 'clinicalincomplete';
+                            $attemptcomplete = !in_array(
+                                    $attempt->examtype,
+                                    ['clinicalincomplete', 'linearincomplete', 'adaptiveincomplete'],
+                                    true
+                                );
                             $attemptpassed = $attemptcomplete && $attemptpercentage >= 70;
                             $attemptstatus = !$attemptcomplete
                                 ? ($ises ? 'No completado' : 'Not completed')
@@ -2875,7 +2913,11 @@ echo $OUTPUT->header();
                                     ['clinicalcases', 'clinicalincomplete'],
                                     true
                                 );
-                                $attemptcomplete = $attempt->examtype !== 'clinicalincomplete';
+                                $attemptcomplete = !in_array(
+                                    $attempt->examtype,
+                                    ['clinicalincomplete', 'linearincomplete', 'adaptiveincomplete'],
+                                    true
+                                );
                                 $attemptpassed = $attemptcomplete && $attemptpercentage >= 70;
                                 $attemptstatus = !$attemptcomplete
                                     ? ($ises ? 'No completado' : 'Not completed')
@@ -2891,7 +2933,11 @@ echo $OUTPUT->header();
                                         : ($ises ? 'Casos clínicos' : 'Clinical Cases');
                                     $attempttype = $attemptkind;
                                 } else {
-                                    $attempttype = $attempt->examtype === 'adaptive'
+                                    $attempttype = in_array(
+                                        $attempt->examtype,
+                                        ['adaptive', 'adaptiveincomplete'],
+                                        true
+                                    )
                                         ? ($ises ? 'Adaptativo' : 'Adaptive')
                                         : ($ises ? 'Lineal' : 'Linear');
                                 }
@@ -2949,7 +2995,10 @@ echo $OUTPUT->header();
                     data-next-pending-word="<?php echo $ises ? 'Siguiente pendiente →' : 'Next unanswered →'; ?>"
                     data-pending-label="<?php echo $ises ? 'Pendiente' : 'Unanswered'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
-                    data-completed-word="<?php echo $ises ? 'Examen completado' : 'Exam completed'; ?>">
+                    data-completed-word="<?php echo $ises ? 'Examen completado' : 'Exam completed'; ?>"
+                    data-restart-confirm="<?php echo $ises
+                        ? '¿Deseas reiniciar y mezclar el examen? Se borrarán las respuestas actuales y, si comenzaste a responder, el intento se guardará como No completado.'
+                        : 'Restart and shuffle the exam? Current answers will be cleared and, if you started answering, the attempt will be saved as Not completed.'; ?>">
                     <div class="herb-board__exam-heading">
                         <div>
                             <span><?php echo $exammode === 'adaptive'
@@ -3054,8 +3103,8 @@ echo $OUTPUT->header();
                         <a class="herb-board__exam-history-link" href="<?php echo s($examhistoryurl); ?>" hidden>
                             <?php echo $ises ? 'Ver historial' : 'View history'; ?>
                         </a>
-                        <button class="herb-board__exam-restart" type="button" hidden>
-                            <?php echo $ises ? 'Reiniciar examen' : 'Restart exam'; ?>
+                        <button class="herb-board__exam-restart" type="button">
+                            <?php echo $ises ? '↻ Reiniciar y mezclar' : '↻ Restart and shuffle'; ?>
                         </button>
                     </div>
                 </form>
