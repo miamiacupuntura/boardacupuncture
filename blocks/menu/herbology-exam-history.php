@@ -30,8 +30,9 @@ $total = required_param('total', PARAM_INT);
 $duration = required_param('duration', PARAM_INT);
 $language = optional_param('language', 'en', PARAM_ALPHA);
 
-$validexamtype = in_array($examtype, ['linear', 'adaptive', 'clinicalcases'], true);
-$validtotal = $examtype === 'clinicalcases'
+$validexamtype = in_array($examtype, ['linear', 'adaptive', 'clinicalcases', 'clinicalincomplete'], true);
+$isclinicalattempt = in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true);
+$validtotal = $isclinicalattempt
     ? $total >= 1 && $total <= 500
     : $total === 100;
 
@@ -88,7 +89,8 @@ echo json_encode([
         'score' => (int) $existingattempt->score,
         'total' => (int) $existingattempt->total,
         'percentage' => $attemptpercentage,
-        'passed' => $attemptpercentage >= 70,
+        'completed' => $existingattempt->examtype !== 'clinicalincomplete',
+        'passed' => $existingattempt->examtype !== 'clinicalincomplete' && $attemptpercentage >= 70,
         'duration' => $attemptduration,
         'timecompleted' => (int) $existingattempt->timecompleted,
         'completedlabel' => userdate(
