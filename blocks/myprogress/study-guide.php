@@ -726,12 +726,12 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="Herbology Practice">
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardpracticeurl->out(false); ?>">
-                                    <span>Herbology Practice</span><span aria-hidden="true">›</span>
-                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardpracticeurl->out(false); ?>"><span><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?><small><?php echo s($ises ? 'Preguntas con respuestas visibles' : 'Questions with visible answers'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulasurl->out(false); ?>"><span><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?><small><?php echo s($ises ? 'Estudio pasivo de fórmulas' : 'Passive formula study'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boarddomainsurl->out(false); ?>"><span><?php echo s($ises ? 'Dominios' : 'Domains'); ?><small><?php echo s($ises ? 'Repaso pasivo por dominio' : 'Passive review by domain'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardpracticeurl->out(false); ?>">
+                                    <span>Open complete Herbology Practice<small><?php echo s($ises ? 'Abre el módulo completo de práctica' : 'Opens the complete practice module'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                             </nav>
                         </section>
 
@@ -744,12 +744,12 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="Quiz">
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardquizurl->out(false); ?>">
-                                    <span>Quiz</span><span aria-hidden="true">›</span>
-                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardherbquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulaquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de fórmulas' : 'Formula Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalquizurl->out(false); ?>"><span><?php echo s($ises ? 'Casos clínicos' : 'Clinical Cases'); ?><small><?php echo s($ises ? 'Elige un caso y recibe feedback' : 'Choose a case and receive feedback'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardquizurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Abrir todos los quizzes' : 'Open all Quizzes'); ?><small><?php echo s($ises ? 'Abre el módulo completo de Quiz' : 'Opens the complete Quiz module'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                             </nav>
                         </section>
 
@@ -762,12 +762,12 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Exámenes' : 'Exams'); ?>">
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardexamsurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></span><span aria-hidden="true">›</span>
-                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardlinearexamurl->out(false); ?>"><span><?php echo s($ises ? 'Examen lineal' : 'Linear exam'); ?><small><?php echo s($ises ? '100 preguntas · historial' : '100 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardadaptiveexamurl->out(false); ?>"><span><?php echo s($ises ? 'Examen adaptativo' : 'Adaptive exam'); ?><small><?php echo s($ises ? '100 preguntas · historial' : '100 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalcasesurl->out(false); ?>"><span><?php echo s($ises ? 'Examen de casos clínicos' : 'Clinical Cases exam'); ?><small><?php echo s($ises ? '63 preguntas · historial' : '63 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardexamsurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Abrir todos los exámenes' : 'Open all Exams'); ?><small><?php echo s($ises ? 'Abre el módulo completo de exámenes' : 'Opens the complete Exams module'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                             </nav>
                         </section>
 
@@ -780,11 +780,11 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Simulación' : 'Simulation'); ?>">
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardsimulationurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Simulación' : 'Simulation'); ?></span><span aria-hidden="true">›</span>
-                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardlinearsimulationurl->out(false); ?>"><span><?php echo s($ises ? 'Simulación lineal' : 'Linear simulation'); ?><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardadaptivesimulationurl->out(false); ?>"><span><?php echo s($ises ? 'Simulación adaptativa' : 'Adaptive simulation'); ?><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardsimulationurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Abrir todas las simulaciones' : 'Open all Simulations'); ?><small><?php echo s($ises ? 'Abre el módulo completo de simulación' : 'Opens the complete Simulation module'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                             </nav>
                         </section>
                     </div>
