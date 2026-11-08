@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110682"
+EXPECTED_VERSION="2026110683"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -63,6 +63,9 @@ grep -Fq "\$plugin->version   = $EXPECTED_VERSION;" "$TEMP_DIR/blocks/menu/versi
 grep -Fq "VERSION=\"$EXPECTED_VERSION\"" "$TEMP_DIR/blocks/menu/db/install.xml"
 grep -Fq "upgrade_block_savepoint(true, $EXPECTED_VERSION, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'herb-board__exam-model--clinical' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '<strong>3</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq '<strong>63–100</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-cases-quiz' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-retry-errors' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'data-clinical-incorrect-count' "$TEMP_DIR/blocks/menu/herbology-board.php"
