@@ -2296,8 +2296,8 @@ echo $OUTPUT->header();
                     data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
                     data-restart-confirm="<?php echo $ises
-                        ? '¿Deseas reiniciar el examen? Se borrarán las respuestas actuales y este intento se registrará como No completado.'
-                        : 'Restart the exam? Your current answers will be cleared and this attempt will be recorded as Not completed.'; ?>"
+                        ? '¿Deseas reiniciar y mezclar el examen? Se borrarán las respuestas actuales, este intento se registrará como No completado y las preguntas aparecerán en un orden nuevo.'
+                        : 'Restart and shuffle the exam? Your current answers will be cleared, this attempt will be recorded as Not completed, and the questions will appear in a new order.'; ?>"
                     data-finish-confirm="<?php echo $ises
                         ? '¿Deseas finalizar ahora? Las preguntas sin responder contarán como incorrectas y el resultado se guardará.'
                         : 'Finish now? Unanswered questions will count as incorrect and the result will be saved.'; ?>"
@@ -2534,7 +2534,7 @@ echo $OUTPUT->header();
 
                     <div class="herb-board__exam-submit" data-clinical-navigation>
                         <button type="button" class="herb-board__clinical-restart" data-clinical-restart>
-                            <?php echo $ises ? '↻ Reiniciar examen' : '↻ Restart exam'; ?>
+                            <?php echo $ises ? '↻ Reiniciar y mezclar' : '↻ Restart and shuffle'; ?>
                         </button>
                         <button type="button" class="herb-board__clinical-finish" data-clinical-finish disabled>
                             <?php echo $ises ? 'Finalizar examen' : 'Finish exam'; ?>
