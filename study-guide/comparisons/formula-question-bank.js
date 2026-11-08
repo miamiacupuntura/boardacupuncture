@@ -155,7 +155,7 @@
     });
   }
 
-  function formulaLinks(question) {
+  function formulaLinks(question, questionPosition) {
     const container = document.createElement('div');
     container.className = 'question-study-associations';
     const label = document.createElement('strong');
@@ -165,14 +165,21 @@
       const formula = state.formulaByNumber.get(Number(number));
       if (!formula) return;
       const link = document.createElement('a');
-      link.href = formulaProfileUrl(formula);
+      const profileUrl = new URL(formulaProfileUrl(formula), window.location.href);
+      const returnUrl = new URL(window.location.href);
+      returnUrl.searchParams.set('page', String(state.page));
+      returnUrl.hash = `formula-question-${questionPosition}`;
+      profileUrl.searchParams.set('return', 'formula-question-bank');
+      profileUrl.searchParams.set('question', String(questionPosition));
+      profileUrl.searchParams.set('return-to', `${returnUrl.pathname}${returnUrl.search}${returnUrl.hash}`);
+      link.href = profileUrl.toString();
       link.textContent = formula.name;
       container.append(link);
     });
     return container;
   }
 
-  function answerBlock(question) {
+  function answerBlock(question, questionPosition) {
     const shown = displayed(question);
     const correct = (shown.options || []).find(answer => answer.label === question.correctLabel);
     const block = document.createElement('div');
@@ -187,7 +194,7 @@
     feedbackLabel.append(feedbackStrong);
     block.append(answer, feedbackLabel);
     appendParagraphs(block, shown.feedback);
-    if ((question.formulaNumbers || []).length) block.append(formulaLinks(question));
+    if ((question.formulaNumbers || []).length) block.append(formulaLinks(question, questionPosition));
     return block;
   }
 
@@ -195,6 +202,7 @@
     const shown = displayed(question);
     const card = document.createElement('article');
     card.className = 'question-study-card';
+    card.id = `formula-question-${absoluteIndex + 1}`;
     const label = document.createElement('p');
     label.className = 'comparison-eyebrow';
     label.textContent = `${copy.question} ${absoluteIndex + 1}`;
@@ -211,7 +219,7 @@
       item.textContent = `${answer.label}. ${answer.text}`;
       options.append(item);
     });
-    card.append(label, prompt, body, options, answerBlock(question));
+    card.append(label, prompt, body, options, answerBlock(question, absoluteIndex + 1));
     return card;
   }
 
@@ -281,7 +289,7 @@
     elements.flashQuestion.textContent = shown.prompt || '';
     elements.flashBody.replaceChildren();
     appendParagraphs(elements.flashBody, shown.body);
-    elements.flashAnswer.replaceChildren(answerBlock(question));
+    elements.flashAnswer.replaceChildren(answerBlock(question, state.flashIndex + 1));
     elements.flashAnswer.hidden = !state.flashRevealed;
     elements.flashReveal.disabled = false;
     elements.flashReveal.textContent = state.flashRevealed ? copy.hide : copy.reveal;
@@ -386,6 +394,16 @@
       elements.controls.hidden = false;
       elements.modes.hidden = false;
       applyFilters();
+      const requestedPage = Number(params.get('page'));
+      if (Number.isInteger(requestedPage) && requestedPage > 1) {
+        state.page = requestedPage;
+        render();
+      }
+      if (/^#formula-question-\d+$/.test(window.location.hash)) {
+        window.requestAnimationFrame(() => {
+          document.querySelector(window.location.hash)?.scrollIntoView({ block: 'center' });
+        });
+      }
     })
     .catch(error => {
       console.error(error);

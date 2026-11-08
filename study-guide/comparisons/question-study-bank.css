@@ -91,6 +91,11 @@
   padding: 1rem 1.1rem;
 }
 
+.question-study-card:target {
+  border-color: #d5a20a;
+  box-shadow: 0 0 0 4px rgba(250, 204, 21, .28);
+}
+
 .question-study-card h3,
 .question-study-flashcard h3 {
   color: #102f4a;

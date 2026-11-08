@@ -61,6 +61,10 @@
   ];
   const currentFile = currentUrl.pathname.split('/').pop() || '';
   const baseFile = currentFile.replace(/-es\.html$/i, '.html');
+  const isFormulaProfile = /^formula-navigator-\d{2}-[a-z0-9-]+\.html$/i.test(baseFile);
+  const returnQuestion = currentUrl.searchParams.get('return') === 'formula-question-bank'
+    ? Number(currentUrl.searchParams.get('question'))
+    : 0;
   const title = (document.querySelector('main h1,h1')?.textContent || document.title)
     .replace(/\s+/g, ' ')
     .trim();
@@ -168,6 +172,61 @@
   document.querySelectorAll('.comparison-collection-links').forEach(function(linkStrip) {
     linkStrip.remove();
   });
+  if (isFormulaProfile) {
+    const topbar = document.querySelector('.comparison-topbar__inner');
+    const genericBackLinks = Array.from(document.querySelectorAll('.comparison-topbar .comparison-back')).filter(function(link) {
+      try {
+        return /\/formula-navigator(?:-es)?\.html$/i.test(new URL(link.href, currentUrl).pathname);
+      } catch (error) {
+        return false;
+      }
+    });
+    if (Number.isInteger(returnQuestion) && returnQuestion > 0 && topbar) {
+      const actionGroup = genericBackLinks[0]?.parentElement || topbar;
+      const returnLink = genericBackLinks.shift() || document.createElement('a');
+      const requestedReturn = currentUrl.searchParams.get('return-to') || '';
+      const defaultReturn = '/study-guide/comparisons/'
+        + (spanish ? 'formula-question-bank-es.html' : 'formula-question-bank.html')
+        + '?from=library#formula-question-' + returnQuestion;
+      let returnUrl = new URL(defaultReturn, currentUrl.origin);
+      try {
+        const candidate = new URL(requestedReturn, currentUrl.origin);
+        if (candidate.origin === currentUrl.origin
+            && /\/study-guide\/comparisons\/formula-question-bank(?:-es)?\.html$/i.test(candidate.pathname)) {
+          returnUrl = candidate;
+        }
+      } catch (error) {
+        // The validated question-bank URL remains the safe fallback.
+      }
+      returnLink.className = 'comparison-back comparison-back--question-return';
+      returnLink.href = returnUrl.toString();
+      returnLink.textContent = spanish
+        ? '← Volver a la pregunta ' + returnQuestion
+        : '← Back to question ' + returnQuestion;
+      if (!returnLink.isConnected) {
+        actionGroup.appendChild(returnLink);
+      }
+      returnLink.addEventListener('click', function(event) {
+        try {
+          const referrer = new URL(document.referrer);
+          if (referrer.origin === currentUrl.origin
+              && /\/study-guide\/comparisons\/formula-question-bank(?:-es)?\.html$/i.test(referrer.pathname)) {
+            event.preventDefault();
+            window.history.back();
+          }
+        } catch (error) {
+          // The explicit question-bank URL remains available as a fallback.
+        }
+      });
+      genericBackLinks.forEach(function(link) {
+        link.remove();
+      });
+    } else {
+      genericBackLinks.forEach(function(link) {
+        link.remove();
+      });
+    }
+  }
   document.querySelectorAll('.comparison-topbar .comparison-back').forEach(function(link) {
     let path = '';
     try {

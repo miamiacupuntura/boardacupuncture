@@ -57,6 +57,7 @@ MOODLE_FILES=(
 )
 STATIC_FILES=(
     "comparisons.css"
+    "question-study-bank.css"
     "library-navigation.js"
     "study-note-navigation.js"
     "index.html"
@@ -198,8 +199,11 @@ grep -Fq "querySelector('.formula-related-link--practice')?.remove()" "$TEMP_DIR
 grep -Fq '.formula-practice-source-viewer' "$TEMP_DIR/static/comparisons.css"
 grep -Fq '← Back to Single Herbs' "$TEMP_DIR/static/herb-comparison-bank.html"
 grep -Fq '← Back to Formulas' "$TEMP_DIR/static/formula-question-bank.html"
-grep -Fq 'formula-question-bank.js?v=20261107-3' "$TEMP_DIR/static/formula-question-bank.html"
+grep -Fq 'formula-question-bank.js?v=20261107-4' "$TEMP_DIR/static/formula-question-bank.html"
+grep -Fq 'question-study-bank.css?v=20261108-3' "$TEMP_DIR/static/formula-question-bank.html"
 grep -Fq "params.get('category')" "$TEMP_DIR/static/formula-question-bank.js"
+grep -Fq "profileUrl.searchParams.set('return', 'formula-question-bank')" "$TEMP_DIR/static/formula-question-bank.js"
+grep -Fq 'comparison-back--question-return' "$TEMP_DIR/static/library-navigation.js"
 if grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index.html" \
         || grep -Fq 'herb-bank-entry' "$TEMP_DIR/static/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa en Single Herbs Comparisons." >&2
@@ -264,7 +268,7 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-12' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-13' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-context-nav__route--active' "$STUDY_NOTE_DIR/library-navigation.js"
@@ -294,8 +298,11 @@ grep -Fq "querySelector('.formula-related-link--practice')?.remove()" "$STUDY_NO
 grep -Fq '.formula-practice-source-viewer' "$STUDY_NOTE_DIR/comparisons.css"
 grep -Fq '← Back to Single Herbs' "$STUDY_NOTE_DIR/herb-comparison-bank.html"
 grep -Fq '← Back to Formulas' "$STUDY_NOTE_DIR/formula-question-bank.html"
-grep -Fq 'formula-question-bank.js?v=20261107-3' "$STUDY_NOTE_DIR/formula-question-bank.html"
+grep -Fq 'formula-question-bank.js?v=20261107-4' "$STUDY_NOTE_DIR/formula-question-bank.html"
+grep -Fq 'question-study-bank.css?v=20261108-3' "$STUDY_NOTE_DIR/formula-question-bank.html"
 grep -Fq "params.get('category')" "$STUDY_NOTE_DIR/formula-question-bank.js"
+grep -Fq "profileUrl.searchParams.set('return', 'formula-question-bank')" "$STUDY_NOTE_DIR/formula-question-bank.js"
+grep -Fq 'comparison-back--question-return' "$STUDY_NOTE_DIR/library-navigation.js"
 if grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index.html" \
         || grep -Fq 'herb-bank-entry' "$STUDY_NOTE_DIR/index-es.html"; then
     echo "ERROR: el bloque promocional del banco de preguntas continúa instalado." >&2
