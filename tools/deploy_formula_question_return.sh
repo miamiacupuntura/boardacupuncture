@@ -64,7 +64,7 @@ grep -Fq "profileUrl.searchParams.set('return', 'formula-question-bank')" "$TEMP
 grep -Fq 'formula-question-' "$TEMP_DIR/static/formula-question-bank.js"
 grep -Fq 'comparison-back--question-return' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'formula-question-bank(?:-es)?' "$TEMP_DIR/static/library-navigation.js"
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-13' \
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261108-14' \
     "$TEMP_DIR/tools/inject_library_navigation.php"
 
 (cd "$STUDY_NOTE_DIR" && tar -czf "$BACKUP_DIR/comparison-html.tar.gz" -- *.html)
@@ -90,7 +90,7 @@ grep -Fq 'question-study-bank.css?v=20261108-3' "$STUDY_NOTE_DIR/formula-questio
 grep -Fq "profileUrl.searchParams.set('return', 'formula-question-bank')" \
     "$STUDY_NOTE_DIR/formula-question-bank.js"
 grep -Fq 'comparison-back--question-return' "$STUDY_NOTE_DIR/library-navigation.js"
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261107-13' \
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261108-14' \
     "$STUDY_NOTE_DIR/formula-navigator-02-gui-zhi-tang.html"
 
 echo "OK: las fichas de fórmulas regresan a la pregunta de origen."
