@@ -45,6 +45,44 @@ FILES=(
     "blocks/myprogress/version.php"
     "study-guide/comparisons/dui-yao.html"
     "study-guide/comparisons/dui-yao-es.html"
+    "study-guide/comparisons/herb-comparison-bank.html"
+    "study-guide/comparisons/herb-comparison-bank-es.html"
+    "study-guide/comparisons/formula-navigator.html"
+    "study-guide/comparisons/formula-navigator-es.html"
+    "study-guide/comparisons/families.html"
+    "study-guide/comparisons/families-es.html"
+    "study-guide/comparisons/name-traps.html"
+    "study-guide/comparisons/name-traps-es.html"
+    "study-guide/comparisons/herb-families.html"
+    "study-guide/comparisons/herb-families-es.html"
+    "study-guide/comparisons/safety.html"
+    "study-guide/comparisons/safety-es.html"
+    "study-guide/comparisons/formula-name-traps.html"
+    "study-guide/comparisons/formula-name-traps-es.html"
+    "study-guide/comparisons/misleading-formula-names.html"
+    "study-guide/comparisons/misleading-formula-names-es.html"
+    "study-guide/comparisons/advanced-name-traps.html"
+    "study-guide/comparisons/advanced-name-traps-es.html"
+    "study-guide/comparisons/supplemental-herb-families.html"
+    "study-guide/comparisons/supplemental-herb-families-es.html"
+    "study-guide/comparisons/patterns-tips-maciocia.html"
+    "study-guide/comparisons/patterns-tips-maciocia-es.html"
+    "study-guide/comparisons/most-important-formulas.html"
+    "study-guide/comparisons/most-important-formulas-es.html"
+    "study-guide/comparisons/formula-theory.html"
+    "study-guide/comparisons/formula-theory-es.html"
+    "study-guide/comparisons/herbal-incompatibilities.html"
+    "study-guide/comparisons/herbal-incompatibilities-es.html"
+    "study-guide/comparisons/secondary-actions.html"
+    "study-guide/comparisons/secondary-actions-es.html"
+    "study-guide/comparisons/formulas.html"
+    "study-guide/comparisons/formulas-es.html"
+    "study-guide/comparisons/pathologies.html"
+    "study-guide/comparisons/pathologies-es.html"
+    "study-guide/comparisons/patterns.html"
+    "study-guide/comparisons/patterns-es.html"
+    "study-guide/comparisons/formula-practice.html"
+    "study-guide/comparisons/formula-practice-es.html"
     "mod/scorm/studytopic/clinical_cases_extract.py"
     "mod/scorm/studytopic/scorm_word_export.py"
     "mod/scorm/studytopic/scorm_word_inventory.php"
@@ -126,6 +164,15 @@ if grep -Eq 'Study path|Ruta de estudio|Library home|Herbology Practice|comparis
     echo "ERROR: Duì Yào todavía contiene navegación adicional." >&2
     exit 1
 fi
+for comparison in "$TEMP_DIR"/study-guide/comparisons/*.html; do
+    if grep -Fq 'comparison-topbar' "$comparison"; then
+        grep -Eq '← Board Level Activities|← Actividades Board Level' "$comparison"
+        if grep -Eq 'Back to Dashboard|← Dashboard|practice-study-route|Library home' "$comparison"; then
+            echo "ERROR: navegación adicional encontrada en ${comparison#"$TEMP_DIR/"}." >&2
+            exit 1
+        fi
+    fi
+done
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-model--clinical' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '<strong>3</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
