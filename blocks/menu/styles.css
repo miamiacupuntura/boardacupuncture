@@ -1961,6 +1961,11 @@ a.herb-board__domain:focus {
     color: #087c69;
 }
 
+.herb-board__clinical-history .herb-board__exam-history-list article.is-incomplete div:nth-child(3) strong,
+.herb-board__clinical-history .herb-board__exam-history-list article.is-incomplete div:nth-child(4) strong {
+    color: #6a5a32;
+}
+
 .herb-board__simulation {
     overflow: hidden;
 }
