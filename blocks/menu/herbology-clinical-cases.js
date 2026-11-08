@@ -248,7 +248,8 @@
                     : (spanish ? 'Refuerzo' : 'Refinement');
 
             analysisScore.textContent = String(attemptScore) + '/' + String(total);
-            analysisErrors.textContent = String(incorrect.length) + ' · ' + String(errorRate) + '%';
+            analysisErrors.textContent = String(incorrect.length) + ' ' + quiz.dataset.ofWord
+                + ' ' + String(total);
             analysisPriority.textContent = incorrect.length === 0
                 ? (spanish ? 'Mantenimiento' : 'Maintenance')
                 : priority;
