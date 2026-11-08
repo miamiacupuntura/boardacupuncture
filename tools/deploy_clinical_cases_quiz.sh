@@ -8,7 +8,7 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 EXPECTED_VERSION="2026110685"
-EXPECTED_MYPROGRESS_VERSION="2026110803"
+EXPECTED_MYPROGRESS_VERSION="2026110804"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -68,6 +68,10 @@ grep -Fq "upgrade_block_savepoint(true, $EXPECTED_VERSION, 'menu')" "$TEMP_DIR/b
 grep -Fq "\$plugin->version = $EXPECTED_MYPROGRESS_VERSION;" "$TEMP_DIR/blocks/myprogress/version.php"
 grep -Fq "'Board Level Activity'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
 grep -Fq "'Actividad Board Level'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
+if grep -Fq "Library home" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"; then
+    echo "ERROR: la etiqueta antigua «Library home» todavía está presente." >&2
+    exit 1
+fi
 grep -Fq "'Each block contains the actual options that belong to that activity.'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Passive review by domain'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Clinical Cases exam'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
@@ -143,6 +147,12 @@ for relative in "${FILES[@]}"; do
     fi
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" "$staged" "$target"
 done
+
+grep -Fq "'Board Level Activity'" "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
+if grep -Fq "Library home" "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"; then
+    echo "ERROR: el servidor conserva la etiqueta antigua «Library home»." >&2
+    exit 1
+fi
 
 run_web_command() {
     if [[ "$(id -u)" -eq 0 ]] && command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
