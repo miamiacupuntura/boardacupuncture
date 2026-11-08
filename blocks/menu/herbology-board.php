@@ -2384,10 +2384,20 @@ echo $OUTPUT->header();
                         $clinicalalternatives = is_array($clinicaldiagnosis['alternatives'] ?? null)
                             ? $clinicaldiagnosis['alternatives']
                             : [];
+                        $clinicalformula = $cleanclinicaltext($clinicaldiagnosis['formula'] ?? '');
+                        if ($clinicalformula === '') {
+                            $clinicalformula = trim((string) preg_replace(
+                                '/\s*\(.*/u',
+                                '',
+                                $correctclinicaloption
+                            ));
+                        }
                         ?>
                         <fieldset class="herb-board__exam-question herb-board__clinical-question" hidden
                             data-clinical-question
-                            data-correct="<?php echo s($clinicalquestion['correctLabel']); ?>">
+                            data-correct="<?php echo s($clinicalquestion['correctLabel']); ?>"
+                            data-clinical-formula="<?php echo s($clinicalformula); ?>"
+                            data-clinical-pattern="<?php echo s($clinicalpattern); ?>">
                             <legend>
                                 <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $clinicalindex + 1; ?></span>
                                 <?php echo s($clinicalprompt); ?>
@@ -2530,6 +2540,47 @@ echo $OUTPUT->header();
                         <span class="herb-board__clinical-save-status" data-clinical-save-status hidden></span>
                     </section>
                 </form>
+
+                <section class="herb-board__clinical-analysis" data-clinical-analysis hidden
+                    aria-labelledby="clinical-analysis-title">
+                    <header>
+                        <div>
+                            <span><?php echo $ises ? 'ANÁLISIS IA DEL APRENDIZAJE' : 'AI LEARNING ANALYSIS'; ?></span>
+                            <h4 id="clinical-analysis-title">
+                                <?php echo $ises ? 'Conclusiones del intento' : 'Attempt insights'; ?>
+                            </h4>
+                        </div>
+                        <small><?php echo $ises
+                            ? 'Análisis privado basado en tus respuestas actuales'
+                            : 'Private analysis based on your current responses'; ?></small>
+                    </header>
+                    <p data-clinical-analysis-headline></p>
+                    <div class="herb-board__clinical-analysis-metrics">
+                        <div>
+                            <span><?php echo $ises ? 'Resultado' : 'Score'; ?></span>
+                            <strong data-clinical-analysis-score></strong>
+                        </div>
+                        <div>
+                            <span><?php echo $ises ? 'Errores' : 'Errors'; ?></span>
+                            <strong data-clinical-analysis-errors></strong>
+                        </div>
+                        <div>
+                            <span><?php echo $ises ? 'Prioridad' : 'Priority'; ?></span>
+                            <strong data-clinical-analysis-priority></strong>
+                        </div>
+                    </div>
+                    <div class="herb-board__clinical-analysis-findings">
+                        <h5><?php echo $ises ? 'Hallazgos relevantes' : 'Key findings'; ?></h5>
+                        <ul data-clinical-analysis-findings></ul>
+                    </div>
+                    <div class="herb-board__clinical-analysis-conclusion">
+                        <strong><?php echo $ises ? 'Conclusión' : 'Conclusion'; ?></strong>
+                        <p data-clinical-analysis-conclusion></p>
+                    </div>
+                    <small class="herb-board__clinical-analysis-note"><?php echo $ises
+                        ? 'Este resumen detecta tendencias educativas; no sustituye la revisión de un instructor.'
+                        : 'This summary detects learning trends; it does not replace instructor review.'; ?></small>
+                </section>
 
                 <section class="herb-board__exam-history herb-board__clinical-history" id="clinical-case-history"
                     aria-labelledby="clinical-case-history-title" data-clinical-history
