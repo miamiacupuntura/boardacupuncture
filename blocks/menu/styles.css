@@ -1843,19 +1843,68 @@ a.herb-board__domain:focus {
     border-top: 1px solid rgba(92, 75, 135, .18);
 }
 
-.herb-board__clinical-errors > h5 {
-    margin: 0;
+.herb-board__clinical-errors > summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid #e4c39f;
+    border-radius: 9px;
+    background: #fff;
     color: #17324d;
-    font-size: 1rem;
+    cursor: pointer;
+    list-style: none;
+    transition: border-color .18s ease, background .18s ease;
 }
 
-.herb-board__clinical-errors > p {
-    margin: 4px 0 12px;
+.herb-board__clinical-errors > summary::-webkit-details-marker {
+    display: none;
+}
+
+.herb-board__clinical-errors > summary:hover,
+.herb-board__clinical-errors > summary:focus {
+    border-color: #d67816;
+    background: #fffaf4;
+}
+
+.herb-board__clinical-errors > summary > span {
+    font-size: .95rem;
+    font-weight: 850;
+}
+
+.herb-board__clinical-errors > summary > strong {
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #fff0df;
+    color: #9a4d08;
+    font-size: .75rem;
+    white-space: nowrap;
+}
+
+.herb-board__clinical-errors > summary::after {
+    margin-left: auto;
+    color: #9a4d08;
+    content: '+';
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.herb-board__clinical-errors[open] > summary::after {
+    content: '−';
+}
+
+.herb-board__clinical-errors-content {
+    margin-top: 10px;
+}
+
+.herb-board__clinical-errors-content > p {
+    margin: 0 0 12px;
     color: #52677a;
     font-size: .85rem;
 }
 
-.herb-board__clinical-errors > div {
+.herb-board__clinical-errors-content > div {
     display: grid;
     gap: 10px;
 }
