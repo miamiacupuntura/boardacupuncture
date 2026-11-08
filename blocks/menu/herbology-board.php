@@ -2343,7 +2343,10 @@ echo $OUTPUT->header();
                                 ? 'Tiempo proporcional al examen oficial 2026: 90 segundos por pregunta '
                                 : 'Time proportional to the official 2026 exam: 90 seconds per question '; ?>
                             (<a href="https://www.ncbahm.org/certification/exam-administration/"
-                                target="_blank" rel="noopener noreferrer">NCBAHM</a>:
+                                target="_blank" rel="noopener noreferrer">NCBAHM</a>,
+                            <?php echo $ises ? 'administrado por' : 'delivered by'; ?>
+                            <a href="https://www.pearsonvue.com/us/en/ncbahm.html"
+                                target="_blank" rel="noopener noreferrer">Pearson VUE</a>:
                             <?php echo $ises ? '100 preguntas en 2.5 horas' : '100 questions in 2.5 hours'; ?>).
                         </p>
                     </div>
