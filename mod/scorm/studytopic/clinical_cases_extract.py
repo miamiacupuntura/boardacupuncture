@@ -198,6 +198,27 @@ def diagnostic_feedback(
             "Cheng Qi Tang para purgar Calor y ablandar sequedad encaja mejor que las fórmulas "
             "Cheng Qi más fuertes."
         )
+    elif (
+        profilename == "huo xiang zheng qi san"
+        and "child-care facility" in normalizedprompt
+        and "diarrhea and vomiting" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "The acute diarrhea, vomiting, nausea, epigastric bloating, flatulence and loss "
+            "of appetite show Dampness obstructing the Middle Burner and disrupting the "
+            "ascending and descending of Spleen-Stomach Qi. Feeling feverish with headache "
+            "adds an exterior component. Huo Xiang Zheng Qi San fits this combined pattern "
+            "because it releases the Exterior while transforming Dampness, regulating Qi "
+            "and harmonizing the Middle."
+        )
+        cleaned["caseReasoningEs"] = (
+            "La diarrea y el vómito agudos, la náusea, la distensión epigástrica, la "
+            "flatulencia y la pérdida de apetito muestran Humedad obstruyendo el Jiao Medio "
+            "y alterando el ascenso y descenso del Qi de Bazo-Estómago. La sensación febril "
+            "con cefalea añade un componente exterior. Huo Xiang Zheng Qi San corresponde "
+            "a este patrón combinado porque libera el Exterior mientras transforma Humedad, "
+            "regula Qi y armoniza el Centro."
+        )
 
     if (
         "caseReasoning" not in cleaned
@@ -332,6 +353,18 @@ def extract_question(
     correctindex = correct_option_index(question, options)
     if correctindex is None or correctindex >= len(options):
         return None
+    normalizedcorrect = normalise_name(options[correctindex])
+    normalizedprompt = normalise_name(prompt)
+    if (
+        normalizedcorrect.startswith("huo xiang zheng qi san ")
+        and "child-care facility" in normalizedprompt
+        and "diarrhea and vomiting" in normalizedprompt
+    ):
+        prompt = (
+            "CASE: Tiffany, a 40-year-old woman, presents with recent diarrhea and vomiting "
+            "after working in a child-care facility. She also feels feverish and reports "
+            "epigastric bloating, nausea, flatulence, loss of appetite and headache."
+        )
     labels = [chr(65 + index) if index < 26 else str(index + 1) for index in range(len(options))]
     fingerprint = hashlib.sha256(
         (prompt + "\n" + "\n".join(options)).encode("utf-8")
