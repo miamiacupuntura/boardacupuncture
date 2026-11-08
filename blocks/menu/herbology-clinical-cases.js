@@ -23,6 +23,9 @@
         const returnLink = quiz.querySelector('[data-clinical-return]');
         const historyLink = quiz.querySelector('[data-clinical-history-link]');
         const saveStatus = quiz.querySelector('[data-clinical-save-status]');
+        const history = document.querySelector('[data-clinical-history]');
+        const historyEmpty = history?.querySelector('[data-clinical-history-empty]');
+        const historyList = history?.querySelector('[data-clinical-history-list]');
         const passThreshold = Number(quiz.dataset.passThreshold || 70);
         let activeQuestions = [...questions];
         let currentIndex = 0;
@@ -127,6 +130,51 @@
             retryButton.hidden = incorrectQuestions.length === 0;
         };
 
+        const addHistoryValue = (article, label, value) => {
+            const item = document.createElement('div');
+            const term = document.createElement('span');
+            const description = document.createElement('strong');
+            term.textContent = label;
+            description.textContent = value;
+            item.append(term, description);
+            article.append(item);
+        };
+
+        const updateHistory = attempt => {
+            if (!history || !historyList || !attempt) {
+                return;
+            }
+            const article = document.createElement('article');
+            const passed = Boolean(attempt.passed);
+            const attemptKind = Number(attempt.total) < questions.length
+                ? history.dataset.retryAttemptWord
+                : history.dataset.fullAttemptWord;
+            article.setAttribute('role', 'listitem');
+            article.className = passed ? 'is-passed' : 'is-failed';
+            addHistoryValue(article, history.dataset.dateWord, attempt.completedlabel);
+            addHistoryValue(article, history.dataset.attemptWord, attemptKind);
+            addHistoryValue(
+                article,
+                history.dataset.resultWord,
+                String(attempt.score) + '/' + String(attempt.total) + ' · '
+                    + String(attempt.percentage) + '%'
+            );
+            addHistoryValue(
+                article,
+                history.dataset.statusWord,
+                passed ? history.dataset.passedWord : history.dataset.failedWord
+            );
+            addHistoryValue(article, history.dataset.durationWord, attempt.duration);
+            historyList.prepend(article);
+            while (historyList.children.length > 10) {
+                historyList.lastElementChild.remove();
+            }
+            historyList.hidden = false;
+            if (historyEmpty) {
+                historyEmpty.hidden = true;
+            }
+        };
+
         const saveAttempt = async total => {
             if (attemptSaved || !quiz.dataset.historyUrl) {
                 return;
@@ -160,6 +208,7 @@
                     attemptSaved = true;
                     saveStatus.textContent = quiz.dataset.historySaved;
                     saveStatus.classList.add('is-saved');
+                    updateHistory(payload.attempt);
                     historyLink.hidden = false;
                 }
             } catch (error) {
