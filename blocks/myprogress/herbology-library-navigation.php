@@ -14,15 +14,22 @@ function block_myprogress_render_herbology_library_navigation(
     string $activesection = 'library'
 ): string {
     $langparams = $ises ? ['lang' => 'es'] : [];
+    global $PAGE;
     $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
         'area' => 'herbology',
         'view' => 'library',
     ] + $langparams);
+    $languageurl = clone $PAGE->url;
+    if ($ises) {
+        $languageurl->remove_params('lang');
+    } else {
+        $languageurl->param('lang', 'es');
+    }
     ob_start();
     ?>
     <style>
     .herbology-library-context{margin:0 0 12px;padding:9px 12px;border:1px solid #b8d5d2;border-radius:10px;background:#f7fcfb;box-shadow:0 2px 8px rgba(15,23,42,.04)}
-    .herbology-library-context__top{display:flex;align-items:center;gap:12px}.herbology-library-context__trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:800}.herbology-library-context__step-back{display:inline-flex;min-height:36px;align-items:center;padding:6px 12px;border:1px solid #bfd0da;border-radius:7px;background:#fff;color:#245fa7;text-decoration:none}.herbology-library-context__step-back:hover,.herbology-library-context__step-back:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b;text-decoration:none}.herbology-library-context__trail-current{color:#17232a}
+    .herbology-library-context__top{display:flex;align-items:center;justify-content:space-between;gap:12px}.herbology-library-context__trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:800}.herbology-library-context__step-back{display:inline-flex;min-height:36px;align-items:center;padding:6px 12px;border:1px solid #bfd0da;border-radius:7px;background:#fff;color:#245fa7;text-decoration:none}.herbology-library-context__step-back:hover,.herbology-library-context__step-back:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b;text-decoration:none}.herbology-library-context__trail-current{color:#17232a}
     .herbology-sheet-hero{min-height:0!important;margin:0 0 18px!important;padding:18px 22px!important;border:1px solid #cbdce7!important;border-top:5px solid #f47e2c!important;border-radius:12px!important;background:linear-gradient(135deg,#f8fcfb 0%,#fff9f4 55%,#faf7fd 100%)!important;box-shadow:0 4px 14px rgba(23,50,77,.06)!important}.herbology-sheet-hero :is(.single-herbs-guide__eyebrow,.single-herbs-guide__lead,.formula-study-guide__eyebrow,.formula-study-guide__lead,.formula-study-guide__marker-note,.herb-formula-map__eyebrow,.herb-formula-map__lead,.herb-combos__eyebrow){display:none!important}.herbology-sheet-hero.herb-combos__hero>p{display:none!important}.herbology-sheet-hero :is(h1,h2){margin:0!important;font-size:clamp(28px,4vw,40px)!important;line-height:1.12!important}
     @media(max-width:700px){.herbology-library-context{padding:8px 9px}.herbology-library-context__trail{min-width:0}.herbology-library-context__step-back{min-height:40px}.herbology-sheet-hero{padding:15px 17px!important}.herbology-sheet-hero :is(h1,h2){font-size:clamp(25px,8vw,32px)!important}}
     </style>
@@ -31,6 +38,8 @@ function block_myprogress_render_herbology_library_navigation(
             <div class="herbology-library-context__trail">
                 <a class="herbology-library-context__step-back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
             </div>
+            <a class="herbology-library-context__step-back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+                href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
     </nav>
     <script>
