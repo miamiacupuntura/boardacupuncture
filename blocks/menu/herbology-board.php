@@ -1644,21 +1644,10 @@ $formulaquestionbankurl = new moodle_url($formulaquestionbankpath, $fromlibrary 
 echo $OUTPUT->header();
 ?>
 <main class="herb-board">
-    <?php
-    $practiceactive = in_array($track, ['herbs', 'formulas', 'domains'], true);
-    $quizactive = in_array($track, ['quiz', 'clinicalcases'], true);
-    $examsactive = in_array($track, ['exams', 'simulation'], true);
-    ?>
     <nav class="herb-board__page-navigation" aria-label="<?php echo $ises
-        ? 'Secciones Board Level de Herbología' : 'Herbology Board Level sections'; ?>">
-        <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
-            ? '← Atrás' : '← Back'; ?></a>
-        <a class="herb-board__tab" href="<?php echo $studyguidesurl->out(false); ?>"><?php echo $ises ? 'Guías de estudio' : 'Study Guides'; ?></a>
-        <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>" <?php echo $practiceactive ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Práctica de herbología' : 'Herbology Practice'; ?></a>
-        <a class="herb-board__tab" href="<?php echo $quizurl->out(false); ?>" <?php echo $quizactive ? 'aria-current="page"' : ''; ?>>Quiz</a>
-        <a class="herb-board__tab" href="<?php echo $examsurl->out(false); ?>" <?php echo $examsactive ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Exámenes' : 'Exams'; ?></a>
-        <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
-            href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+        ? 'Regresar a las actividades Board Level' : 'Return to Board Level activities'; ?>">
+        <a class="herb-board__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises
+            ? '← Actividades Board Level' : '← Board Level Activities'; ?></a>
     </nav>
 
     <?php if ($track === 'exams') { ?>
@@ -3239,41 +3228,6 @@ echo $OUTPUT->header();
         </section>
     <?php } ?>
 </main>
-<script>
-(() => {
-    const stepBackScrollKey = 'herbology-step-back-scroll';
-    const revealStepBackDestination = event => {
-        try {
-            if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
-                return;
-            }
-            window.sessionStorage.removeItem(stepBackScrollKey);
-            if (event?.persisted) {
-                window.location.reload();
-                return;
-            }
-            window.scrollTo(0, 0);
-            window.requestAnimationFrame(() => window.scrollTo(0, 0));
-        } catch (error) {
-            // Navigation still works when session storage is unavailable.
-        }
-    };
-    window.addEventListener('pageshow', revealStepBackDestination);
-    revealStepBackDestination();
-    const stepBack = document.querySelector('[data-herbology-step-back]');
-    stepBack?.addEventListener('click', event => {
-        if (window.history.length > 1) {
-            event.preventDefault();
-            try {
-                window.sessionStorage.setItem(stepBackScrollKey, 'top');
-            } catch (error) {
-                // History navigation still works when session storage is unavailable.
-            }
-            window.history.back();
-        }
-        // The link destination remains the safe fallback without history.
-    });
-})();
-</script>
+
 <?php
 echo $OUTPUT->footer();
