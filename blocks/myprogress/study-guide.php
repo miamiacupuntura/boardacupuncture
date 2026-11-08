@@ -697,9 +697,6 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?>">
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $chapterlisturl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></span><span aria-hidden="true">›</span>
-                                </a>
                                 <?php foreach ($primarychapters as $chapter): ?>
                                     <?php $guideurl = $makechapterurl($chapter); ?>
                                     <a class="subject-study-library__journey-option" href="<?php echo $guideurl->out(false); ?>">
@@ -710,6 +707,13 @@ echo $OUTPUT->header();
                                         <span aria-hidden="true">›</span>
                                     </a>
                                 <?php endforeach; ?>
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $chapterlisturl->out(false); ?>">
+                                    <span>
+                                        <?php echo s($ises ? 'Abrir todas las guías de estudio' : 'Open all Study Guides'); ?>
+                                        <small><?php echo s($ises ? 'Abre el catálogo completo' : 'Opens the complete catalog'); ?></small>
+                                    </span>
+                                    <span aria-hidden="true">›</span>
+                                </a>
                             </nav>
                         </section>
 
