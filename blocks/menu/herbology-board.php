@@ -115,12 +115,14 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
             $examhistory = array_values($DB->get_records_select(
                 'block_menu_exam_attempts',
                 'userid = :userid AND courseid = :courseid '
-                    . 'AND examtype IN (:linear, :adaptive)',
+                    . 'AND examtype IN (:linear, :adaptive, :clinical, :clinicalincomplete)',
                 [
                     'userid' => $USER->id,
                     'courseid' => $membershipcourseid,
                     'linear' => 'linear',
                     'adaptive' => 'adaptive',
+                    'clinical' => 'clinicalcases',
+                    'clinicalincomplete' => 'clinicalincomplete',
                 ],
                 'timecompleted DESC, id DESC',
                 '*',
@@ -2833,8 +2835,8 @@ echo $OUTPUT->header();
             </div>
             <?php } ?>
             <?php if ($track === 'exams' && !$mixdomains) { ?>
-                <section class="herb-board__exam-history" id="herb-board-exam-history"
-                    aria-labelledby="herb-board-exam-history-title">
+                <section class="herb-board__exam-history herb-board__exam-history--combined"
+                    id="herb-board-exam-history" aria-labelledby="herb-board-exam-history-title">
                     <header>
                         <div>
                             <span><?php echo $ises ? 'PROGRESO PERSONAL' : 'PERSONAL PROGRESS'; ?></span>
@@ -2842,13 +2844,13 @@ echo $OUTPUT->header();
                                 <?php echo $ises ? 'Historial de exámenes' : 'Exam history'; ?>
                             </h4>
                         </div>
-                        <small><?php echo $ises ? 'Últimos 10 intentos completados' : 'Last 10 completed attempts'; ?></small>
+                        <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
                     </header>
                     <?php if (!$examhistory) { ?>
                         <p class="herb-board__exam-history-empty">
                             <?php echo $ises
-                                ? 'Todavía no has completado un examen de 100 preguntas.'
-                                : 'You have not completed a 100-question exam yet.'; ?>
+                                ? 'Todavía no hay intentos de exámenes registrados.'
+                                : 'No exam attempts have been recorded yet.'; ?>
                         </p>
                     <?php } else { ?>
                         <div class="herb-board__exam-history-list" role="list">
@@ -2861,22 +2863,48 @@ echo $OUTPUT->header();
                                 $attemptduration = $attemptminutes > 0
                                     ? $attemptminutes . ' min ' . $attemptseconds . ' s'
                                     : $attemptseconds . ' s';
-                                $attempttype = $attempt->examtype === 'adaptive'
-                                    ? ($ises ? 'Adaptativo' : 'Adaptive')
-                                    : ($ises ? 'Lineal' : 'Linear');
+                                $attemptisclinical = in_array(
+                                    $attempt->examtype,
+                                    ['clinicalcases', 'clinicalincomplete'],
+                                    true
+                                );
+                                $attemptcomplete = $attempt->examtype !== 'clinicalincomplete';
+                                $attemptpassed = $attemptcomplete && $attemptpercentage >= 70;
+                                $attemptstatus = !$attemptcomplete
+                                    ? ($ises ? 'No completado' : 'Not completed')
+                                    : ($attemptpassed
+                                        ? ($ises ? 'Aprobado' : 'Passed')
+                                        : ($ises ? 'No aprobado' : 'Not passed'));
+                                $attemptclass = !$attemptcomplete
+                                    ? 'is-incomplete'
+                                    : ($attemptpassed ? 'is-passed' : 'is-failed');
+                                if ($attemptisclinical) {
+                                    $attemptkind = (int) $attempt->total < count($clinicalquestions)
+                                        ? ($ises ? 'Reintento de errores' : 'Error retry')
+                                        : ($ises ? 'Casos clínicos' : 'Clinical Cases');
+                                    $attempttype = $attemptkind;
+                                } else {
+                                    $attempttype = $attempt->examtype === 'adaptive'
+                                        ? ($ises ? 'Adaptativo' : 'Adaptive')
+                                        : ($ises ? 'Lineal' : 'Linear');
+                                }
                             ?>
-                                <article role="listitem">
+                                <article role="listitem" class="<?php echo s($attemptclass); ?>">
                                     <div>
-                                        <span><?php echo $ises ? 'Fecha' : 'Date'; ?></span>
+                                        <span><?php echo $ises ? 'Fecha y hora' : 'Date and time'; ?></span>
                                         <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
                                     </div>
                                     <div>
-                                        <span><?php echo $ises ? 'Modalidad' : 'Mode'; ?></span>
+                                        <span><?php echo $ises ? 'Examen' : 'Exam'; ?></span>
                                         <strong><?php echo s($attempttype); ?></strong>
                                     </div>
                                     <div>
                                         <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
                                         <strong><?php echo (int) $attempt->score; ?>/<?php echo (int) $attempt->total; ?> · <?php echo $attemptpercentage; ?>%</strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Estado' : 'Status'; ?></span>
+                                        <strong><?php echo s($attemptstatus); ?></strong>
                                     </div>
                                     <div>
                                         <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
