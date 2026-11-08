@@ -48,6 +48,7 @@
         let attemptUid = '';
         let attemptSaved = false;
         let attemptDeadline = 0;
+        let attemptTimeLimitSeconds = 0;
         let timerInterval = 0;
 
         const createAttemptUid = () => {
@@ -90,6 +91,7 @@
         const startTimer = questionCount => {
             stopTimer();
             const limitSeconds = Math.max(1, questionCount * secondsPerQuestion);
+            attemptTimeLimitSeconds = limitSeconds;
             attemptDeadline = Date.now() + (limitSeconds * 1000);
             timer?.classList.remove('is-warning', 'is-critical');
             if (timer) {
@@ -370,7 +372,7 @@
             }
         };
 
-        const saveAttempt = async (total, examType = 'clinicalcases') => {
+        const saveAttempt = async (total, examType = 'clinicalcases', durationOverride = null) => {
             if (attemptSaved || !quiz.dataset.historyUrl) {
                 return;
             }
@@ -384,7 +386,9 @@
                 examtype: examType,
                 score: String(score),
                 total: String(total),
-                duration: String(Math.max(0, Math.round((Date.now() - attemptStartedAt) / 1000))),
+                duration: String(Number.isFinite(durationOverride)
+                    ? Math.max(0, Math.round(durationOverride))
+                    : Math.max(0, Math.round((Date.now() - attemptStartedAt) / 1000))),
                 language: quiz.dataset.examLanguage,
             });
             try {
@@ -446,7 +450,7 @@
             scoreOutput.textContent = `${score}/${total}`;
             progressBar.style.width = '100%';
             if (answered > 0) {
-                saveAttempt(total);
+                saveAttempt(total, 'clinicalcases', timeExpired ? attemptTimeLimitSeconds : null);
             }
             resultPanel.scrollIntoView({block: 'start', behavior: 'smooth'});
         };
