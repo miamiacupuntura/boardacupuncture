@@ -1779,6 +1779,182 @@ a.herb-board__domain:focus {
     font-weight: 900;
 }
 
+.herb-board__clinical-result {
+    margin-top: 18px;
+    padding: 20px;
+    border: 1px solid #d7ddea;
+    border-left: 5px solid #6d4bc3;
+    border-radius: 10px;
+    background: #fbfcff;
+}
+
+.herb-board__clinical-result.is-passed {
+    border-color: #8fd1bc;
+    border-left-color: #087c69;
+    background: #f0faf7;
+}
+
+.herb-board__clinical-result.is-failed {
+    border-color: #efbd83;
+    border-left-color: #d97008;
+    background: #fff8ef;
+}
+
+.herb-board__clinical-result > span:first-child {
+    display: block;
+    color: #5633ad;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.herb-board__clinical-result.is-passed > span:first-child {
+    color: #087c69;
+}
+
+.herb-board__clinical-result.is-failed > span:first-child {
+    color: #a9550d;
+}
+
+.herb-board__clinical-result h4 {
+    margin: 4px 0 2px;
+    color: #17324d;
+    font-size: 1.25rem;
+}
+
+.herb-board__clinical-result > output {
+    display: block;
+    color: #17324d;
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
+.herb-board__clinical-result > p {
+    max-width: 860px;
+    margin: 7px 0 0;
+    color: #405a6b;
+    line-height: 1.5;
+}
+
+.herb-board__clinical-errors {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(92, 75, 135, .18);
+}
+
+.herb-board__clinical-errors > h5 {
+    margin: 0;
+    color: #17324d;
+    font-size: 1rem;
+}
+
+.herb-board__clinical-errors > p {
+    margin: 4px 0 12px;
+    color: #52677a;
+    font-size: .85rem;
+}
+
+.herb-board__clinical-errors > div {
+    display: grid;
+    gap: 10px;
+}
+
+.herb-board__clinical-errors article {
+    padding: 14px;
+    border: 1px solid #ead2b7;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.herb-board__clinical-errors article h5 {
+    margin: 0 0 10px;
+    color: #17324d;
+    font-size: .88rem;
+    line-height: 1.45;
+}
+
+.herb-board__clinical-errors dl {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+}
+
+.herb-board__clinical-errors dl > div {
+    display: grid;
+    grid-template-columns: minmax(115px, 150px) minmax(0, 1fr);
+    gap: 10px;
+}
+
+.herb-board__clinical-errors dt,
+.herb-board__clinical-errors dd {
+    margin: 0;
+}
+
+.herb-board__clinical-errors dt {
+    color: #7a4210;
+    font-weight: 850;
+}
+
+.herb-board__clinical-errors dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.herb-board__clinical-errors dl > div:last-child dt,
+.herb-board__clinical-errors dl > div:last-child dd {
+    color: #087c69;
+}
+
+.herb-board__clinical-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.herb-board__clinical-result-actions button {
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid #6d4bc3;
+    border-radius: 7px;
+    background: #6d4bc3;
+    color: #fff;
+    font-weight: 850;
+    cursor: pointer;
+}
+
+.herb-board__clinical-result-actions .herb-board__exam-history-link {
+    min-height: 42px;
+    box-sizing: border-box;
+}
+
+.herb-board__clinical-save-status {
+    margin-top: 10px;
+    color: #52677a;
+    font-size: .8rem;
+}
+
+.herb-board__clinical-save-status.is-saved {
+    color: #087c69;
+}
+
+.herb-board__clinical-save-status.is-error {
+    color: #a9550d;
+}
+
+.herb-board__clinical-history {
+    margin-top: 24px;
+}
+
+.herb-board__clinical-history .herb-board__exam-history-list article.is-failed div:nth-child(3) strong {
+    color: #a9550d;
+}
+
+.herb-board__clinical-history .herb-board__exam-history-list article.is-passed div:nth-child(3) strong {
+    color: #087c69;
+}
+
 .herb-board__simulation {
     overflow: hidden;
 }
@@ -2964,9 +3140,20 @@ a.herb-board__domain:focus {
         width: 100%;
     }
 
-    .herb-board__clinical-diagnosis dl > div {
+    .herb-board__clinical-diagnosis dl > div,
+    .herb-board__clinical-errors dl > div {
         grid-template-columns: 1fr;
         gap: 2px;
+    }
+
+    .herb-board__clinical-result-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .herb-board__clinical-result-actions button,
+    .herb-board__clinical-result-actions .herb-board__exam-history-link {
+        width: 100%;
     }
 
     .herb-board__exam-history > header {
