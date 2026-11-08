@@ -2644,13 +2644,13 @@ echo $OUTPUT->header();
                                 <?php echo $ises ? 'Historial de Clinical Cases' : 'Clinical Cases history'; ?>
                             </h4>
                         </div>
-                        <small><?php echo $ises ? 'Últimos 10 intentos completados' : 'Last 10 completed attempts'; ?></small>
+                        <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
                     </header>
                     <p class="herb-board__exam-history-empty" data-clinical-history-empty
                         <?php echo $clinicalhistory ? 'hidden' : ''; ?>>
                         <?php echo $ises
-                            ? 'Todavía no has completado este examen.'
-                            : 'You have not completed this exam yet.'; ?>
+                            ? 'Todavía no hay intentos registrados para este examen.'
+                            : 'No attempts have been recorded for this exam yet.'; ?>
                     </p>
                     <div class="herb-board__exam-history-list" role="list" data-clinical-history-list
                         <?php echo !$clinicalhistory ? 'hidden' : ''; ?>>
