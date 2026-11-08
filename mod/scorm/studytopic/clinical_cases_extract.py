@@ -42,7 +42,14 @@ def normalise_name(value: Any) -> str:
 
 def source_text(value: Any) -> str:
     """Decode source markup and normalize known OCR substitutions."""
-    return EMBEDDED_ONE.sub("i", html.unescape(normalise_text(value)))
+    decoded = normalise_text(value)
+    for _ in range(3):
+        unescaped = html.unescape(decoded)
+        if unescaped == decoded:
+            break
+        decoded = unescaped
+    decoded = re.sub(r"\s*&\s*", " and ", decoded)
+    return EMBEDDED_ONE.sub("i", decoded)
 
 
 def is_clinical_case(record: dict[str, Any]) -> bool:

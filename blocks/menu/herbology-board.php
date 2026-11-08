@@ -2112,29 +2112,30 @@ echo $OUTPUT->header();
                         <div class="herb-board__exam-progress-bar"><span data-clinical-progress-bar></span></div>
                     </div>
 
+                    <?php
+                    $cleanclinicaltext = static function ($value) {
+                        $decoded = (string)$value;
+                        for ($decodepass = 0; $decodepass < 3; $decodepass++) {
+                            $unescaped = html_entity_decode($decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                            if ($unescaped === $decoded) {
+                                break;
+                            }
+                            $decoded = $unescaped;
+                        }
+                        return preg_replace('/\s*&\s*/u', ' and ', $decoded);
+                    };
+                    ?>
                     <?php foreach ($clinicalquestions as $clinicalindex => $clinicalquestion) { ?>
                         <?php
                         $correctclinicaloption = '';
                         foreach ($clinicalquestion['options'] as $clinicaloption) {
                             if (($clinicaloption['label'] ?? '') === $clinicalquestion['correctLabel']) {
-                                $correctclinicaloption = html_entity_decode(
-                                    (string)($clinicaloption['text'] ?? ''),
-                                    ENT_QUOTES | ENT_HTML5,
-                                    'UTF-8'
-                                );
+                                $correctclinicaloption = $cleanclinicaltext($clinicaloption['text'] ?? '');
                                 break;
                             }
                         }
-                        $clinicalprompt = html_entity_decode(
-                            (string)($clinicalquestion['prompt'] ?? ''),
-                            ENT_QUOTES | ENT_HTML5,
-                            'UTF-8'
-                        );
-                        $clinicalfeedback = html_entity_decode(
-                            (string)($clinicalquestion['feedback'] ?? ''),
-                            ENT_QUOTES | ENT_HTML5,
-                            'UTF-8'
-                        );
+                        $clinicalprompt = $cleanclinicaltext($clinicalquestion['prompt'] ?? '');
+                        $clinicalfeedback = $cleanclinicaltext($clinicalquestion['feedback'] ?? '');
                         $clinicalfeedback = preg_replace('/\s+/u', ' ', trim($clinicalfeedback));
                         ?>
                         <fieldset class="herb-board__exam-question herb-board__clinical-question" hidden
@@ -2147,11 +2148,7 @@ echo $OUTPUT->header();
                             <div class="herb-board__exam-options">
                                 <?php foreach ($clinicalquestion['options'] as $clinicaloption) { ?>
                                     <?php
-                                    $clinicaloptiontext = html_entity_decode(
-                                        (string)($clinicaloption['text'] ?? ''),
-                                        ENT_QUOTES | ENT_HTML5,
-                                        'UTF-8'
-                                    );
+                                    $clinicaloptiontext = $cleanclinicaltext($clinicaloption['text'] ?? '');
                                     ?>
                                     <label>
                                         <input type="radio" name="clinical-question-<?php echo $clinicalindex + 1; ?>"
