@@ -19,7 +19,6 @@ function block_myprogress_render_herbology_library_navigation(
         'view' => 'library',
     ] + $langparams);
     $guidesurl = clone $libraryurl;
-    $guidesurl->set_anchor('library-group-core-guides');
     $librarycontext = ['from' => 'library'] + $langparams;
     $practiceurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $librarycontext);
     $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $librarycontext);
@@ -28,7 +27,7 @@ function block_myprogress_render_herbology_library_navigation(
         ? $activesection
         : 'library';
     $routes = [
-        [$ises ? 'Inicio de Library' : 'Library home', $libraryurl, 'library'],
+        [$ises ? 'Actividad Board Level' : 'Board Level Activity', $libraryurl, 'library'],
         [$ises ? 'Guías de estudio' : 'Study Guides', $guidesurl, 'guides'],
         ['Herbology Practice', $practiceurl, 'practice'],
         ['Quiz', $quizurl, 'quiz'],
