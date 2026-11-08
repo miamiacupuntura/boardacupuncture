@@ -26,35 +26,15 @@ function block_myprogress_render_herbology_library_navigation(
     .herbology-sheet-hero{min-height:0!important;margin:0 0 18px!important;padding:18px 22px!important;border:1px solid #cbdce7!important;border-top:5px solid #f47e2c!important;border-radius:12px!important;background:linear-gradient(135deg,#f8fcfb 0%,#fff9f4 55%,#faf7fd 100%)!important;box-shadow:0 4px 14px rgba(23,50,77,.06)!important}.herbology-sheet-hero :is(.single-herbs-guide__eyebrow,.single-herbs-guide__lead,.formula-study-guide__eyebrow,.formula-study-guide__lead,.formula-study-guide__marker-note,.herb-formula-map__eyebrow,.herb-formula-map__lead,.herb-combos__eyebrow){display:none!important}.herbology-sheet-hero.herb-combos__hero>p{display:none!important}.herbology-sheet-hero :is(h1,h2){margin:0!important;font-size:clamp(28px,4vw,40px)!important;line-height:1.12!important}
     @media(max-width:700px){.herbology-library-context{padding:8px 9px}.herbology-library-context__trail{min-width:0}.herbology-library-context__step-back{min-height:40px}.herbology-sheet-hero{padding:15px 17px!important}.herbology-sheet-hero :is(h1,h2){font-size:clamp(25px,8vw,32px)!important}}
     </style>
-    <nav class="herbology-library-context" aria-label="<?php echo s($ises ? 'Navegación Board Level' : 'Board Level navigation'); ?>" data-herbology-library-context>
+    <nav class="herbology-library-context" aria-label="<?php echo s($ises ? 'Regresar a las actividades Board Level' : 'Return to Board Level activities'); ?>" data-herbology-library-context>
         <div class="herbology-library-context__top">
             <div class="herbology-library-context__trail">
-                <a class="herbology-library-context__step-back" data-library-step-back href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
-                <span class="herbology-library-context__trail-current" aria-current="page"><?php echo s($currentlabel); ?></span>
+                <a class="herbology-library-context__step-back" href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
             </div>
         </div>
     </nav>
     <script>
     (() => {
-        const stepBackScrollKey = 'herbology-step-back-scroll';
-        const revealStepBackDestination = event => {
-            try {
-                if (window.sessionStorage.getItem(stepBackScrollKey) !== 'top') {
-                    return;
-                }
-                window.sessionStorage.removeItem(stepBackScrollKey);
-                if (event?.persisted) {
-                    window.location.reload();
-                    return;
-                }
-                window.scrollTo(0, 0);
-                window.requestAnimationFrame(() => window.scrollTo(0, 0));
-            } catch (error) {
-                // Navigation still works when session storage is unavailable.
-            }
-        };
-        window.addEventListener('pageshow', revealStepBackDestination);
-        revealStepBackDestination();
         const allowed = /^(?:\/blocks\/myprogress\/(?:single-herbs-study-guide|formulas-study-guide|herb-formula-category-map|common-herbal-combinations)\.php|\/study-guide\/comparisons\/[^/]+\.html)$/;
         const applyContext = () => {
             document.querySelectorAll('a[href]').forEach(link => {
@@ -113,23 +93,10 @@ function block_myprogress_render_herbology_library_navigation(
             context.value = 'library';
         }, true);
         const panel = document.querySelector('[data-herbology-library-context]');
-        const stepBack = panel?.querySelector('[data-library-step-back]');
         const sheetHero = panel?.parentElement?.querySelector(':scope > .herbology-sheet-hero');
         if (panel && sheetHero) {
             panel.parentElement.insertBefore(panel, sheetHero);
         }
-        stepBack?.addEventListener('click', event => {
-            if (window.history.length > 1) {
-                event.preventDefault();
-                try {
-                    window.sessionStorage.setItem(stepBackScrollKey, 'top');
-                } catch (error) {
-                    // History navigation still works when session storage is unavailable.
-                }
-                window.history.back();
-            }
-            // The Board Level activity URL remains the safe fallback without history.
-        });
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', applyContext, {once: true});
         } else {
