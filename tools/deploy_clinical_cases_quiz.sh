@@ -86,7 +86,7 @@ grep -Fq 'startAttempt(questions, true)' "$TEMP_DIR/blocks/menu/herbology-clinic
 grep -Fq 'Restart and shuffle' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'linearincomplete' "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
 grep -Fq 'adaptiveincomplete' "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
-grep -Fq 'saveAttempt(`\${mode}incomplete`)' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'saveAttempt(`${mode}incomplete`)' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'filemtime($clinicalscriptpath)' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "'clinicalcases'" "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
 grep -Fq "'clinicalincomplete'" "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
