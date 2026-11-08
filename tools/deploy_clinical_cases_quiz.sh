@@ -167,6 +167,12 @@ fi
 for comparison in "$TEMP_DIR"/study-guide/comparisons/*.html; do
     if grep -Fq 'comparison-topbar' "$comparison"; then
         grep -Eq '← Board Level Activities|← Actividades Board Level' "$comparison"
+        grep -Eq '>Español</a>|>English</a>' "$comparison"
+        comparison_navigation_count="$(grep -o 'class="comparison-back"' "$comparison" | wc -l | tr -d ' ')"
+        if [ "$comparison_navigation_count" -ne 2 ]; then
+            echo "ERROR: ${comparison#"$TEMP_DIR/"} debe mostrar exactamente dos controles globales." >&2
+            exit 1
+        fi
         if grep -Eq 'Back to Dashboard|← Dashboard|practice-study-route|Library home' "$comparison"; then
             echo "ERROR: navegación adicional encontrada en ${comparison#"$TEMP_DIR/"}." >&2
             exit 1
