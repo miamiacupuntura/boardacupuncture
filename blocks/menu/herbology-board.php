@@ -986,7 +986,14 @@ if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
 }
 
 if ($track === 'clinicalcases' && $selectedclinicalexam !== null) {
-    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-clinical-cases.js', ['v' => '2026110801']));
+    $clinicalscriptpath = __DIR__ . '/herbology-clinical-cases.js';
+    $clinicalscriptversion = is_readable($clinicalscriptpath)
+        ? (string) filemtime($clinicalscriptpath)
+        : '2026110670';
+    $PAGE->requires->js(new moodle_url(
+        '/blocks/menu/herbology-clinical-cases.js',
+        ['v' => $clinicalscriptversion]
+    ));
 }
 
 $PAGE->set_url($pageurl);
