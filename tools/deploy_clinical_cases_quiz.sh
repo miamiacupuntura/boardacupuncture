@@ -8,7 +8,7 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 EXPECTED_VERSION="2026110685"
-EXPECTED_MYPROGRESS_VERSION="2026110810"
+EXPECTED_MYPROGRESS_VERSION="2026110811"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -88,6 +88,9 @@ grep -Fq "Passive review by domain" "$TEMP_DIR/blocks/myprogress/study-guide.php
 grep -Fq "Clinical Cases exam" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "100 questions · 150 minutes" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Open all Study Guides'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "'← Board Level Activities'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "'← Actividades Board Level'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "\$libraryurl->out(false)" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "\$chapter['title'] . ' Study Guide'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Guía de estudio: ' . \$chapter['title']" "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq "'Open complete Herbology Practice'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
