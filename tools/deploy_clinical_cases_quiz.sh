@@ -167,7 +167,7 @@ fi
 for comparison in "$TEMP_DIR"/study-guide/comparisons/*.html; do
     if grep -Fq 'comparison-topbar' "$comparison"; then
         grep -Eq '← Board Level Activities|← Actividades Board Level' "$comparison"
-        if grep -Eq 'Back to Dashboard|← Dashboard|practice-study-route|Library home' "$comparison"; then
+        if grep -Eq 'Back to Dashboard|← Dashboard|practice-study-route|formula-practice-session-actions|Library home' "$comparison"; then
             echo "ERROR: navegación adicional encontrada en ${comparison#"$TEMP_DIR/"}." >&2
             exit 1
         fi
