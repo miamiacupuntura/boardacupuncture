@@ -1,5 +1,5 @@
 <?php
-// Shared navigation for resources opened from the Chinese Herbology Library.
+// Shared navigation for resources opened from the Chinese Herbology Board Level activity map.
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -42,11 +42,11 @@ function block_myprogress_render_herbology_library_navigation(
     .herbology-sheet-hero{min-height:0!important;margin:0 0 18px!important;padding:18px 22px!important;border:1px solid #cbdce7!important;border-top:5px solid #f47e2c!important;border-radius:12px!important;background:linear-gradient(135deg,#f8fcfb 0%,#fff9f4 55%,#faf7fd 100%)!important;box-shadow:0 4px 14px rgba(23,50,77,.06)!important}.herbology-sheet-hero :is(.single-herbs-guide__eyebrow,.single-herbs-guide__lead,.formula-study-guide__eyebrow,.formula-study-guide__lead,.formula-study-guide__marker-note,.herb-formula-map__eyebrow,.herb-formula-map__lead,.herb-combos__eyebrow){display:none!important}.herbology-sheet-hero.herb-combos__hero>p{display:none!important}.herbology-sheet-hero :is(h1,h2){margin:0!important;font-size:clamp(28px,4vw,40px)!important;line-height:1.12!important}
     @media(max-width:700px){.herbology-library-context{padding:9px 10px}.herbology-library-context__top{margin:0}.herbology-library-context__trail{min-width:0}.herbology-library-context__toggle{display:inline-flex;flex:0 0 auto}.herbology-library-context__routes{display:none;grid-template-columns:1fr 1fr;margin-top:9px}.herbology-library-context[data-expanded="true"] .herbology-library-context__routes{display:grid}.herbology-library-context__route{min-height:44px}.herbology-library-context__route:last-child{grid-column:1/-1}.herbology-sheet-hero{padding:15px 17px!important}.herbology-sheet-hero :is(h1,h2){font-size:clamp(25px,8vw,32px)!important}}
     </style>
-    <nav class="herbology-library-context" aria-label="<?php echo s($ises ? 'Navegación de Library' : 'Library navigation'); ?>" data-herbology-library-context>
+    <nav class="herbology-library-context" aria-label="<?php echo s($ises ? 'Navegación Board Level' : 'Board Level navigation'); ?>" data-herbology-library-context>
         <div class="herbology-library-context__top">
             <div class="herbology-library-context__trail">
                 <a class="herbology-library-context__step-back" data-library-step-back href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? '← Atrás' : '← Back'); ?></a>
-                <a href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? 'Biblioteca' : 'Library'); ?></a>
+                <a href="<?php echo $libraryurl->out(false); ?>"><?php echo s($ises ? 'Actividad Board Level' : 'Board Level Activity'); ?></a>
                 <span aria-hidden="true">›</span>
                 <span class="herbology-library-context__trail-current" aria-current="page"><?php echo s($currentlabel); ?></span>
             </div>
