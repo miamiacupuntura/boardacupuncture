@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import re
 import subprocess
@@ -31,10 +32,17 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_COURSES = [45, 76, 41, 82]
 TARGET_COURSE = "herbal comp review module exams"
 TARGET_TOPIC = "handbook-of-oriental-medicine. clinical cases"
+EMBEDDED_ONE = re.compile(r"(?<=[A-Za-z])1(?=[A-Za-z])")
+SUSPICIOUS_EMBEDDED_DIGIT = re.compile(r"(?<=[A-Za-z])[0-9](?=[A-Za-z])")
 
 
 def normalise_name(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "").strip()).casefold()
+
+
+def source_text(value: Any) -> str:
+    """Decode source markup and normalize known OCR substitutions."""
+    return EMBEDDED_ONE.sub("i", html.unescape(normalise_text(value)))
 
 
 def is_clinical_case(record: dict[str, Any]) -> bool:
@@ -51,11 +59,11 @@ def is_clinical_case(record: dict[str, Any]) -> bool:
 def feedback_text(question: dict[str, Any]) -> str:
     values: list[str] = []
     for item in question.get("Feedback") or []:
-        value = answer_text(item)
+        value = source_text(answer_text(item))
         if value and value not in values:
             values.append(value)
     if not values:
-        notes = normalise_text(question.get("QuestionNotes"))
+        notes = source_text(question.get("QuestionNotes"))
         if notes:
             values.append(notes)
     return "\n\n".join(values)
@@ -70,7 +78,7 @@ def correct_option_index(question: dict[str, Any], options: list[str]) -> int | 
     rightanswer = question.get("RightAnswer")
     if isinstance(rightanswer, int) and 0 <= rightanswer < len(options):
         return rightanswer
-    righttext = answer_text(rightanswer).casefold()
+    righttext = source_text(answer_text(rightanswer)).casefold()
     if not righttext:
         return None
     if len(righttext) == 1 and "a" <= righttext <= "z":
@@ -97,12 +105,27 @@ def extract_question(
     examkey: str,
     questionnumber: int,
 ) -> dict[str, Any] | None:
-    prompt = normalise_text(question.get("QuestionText"))
+    prompt = source_text(question.get("QuestionText"))
     sourceoptions = question.get("Answers") or []
     if not prompt or not isinstance(sourceoptions, list):
         return None
-    options = [answer_text(item) for item in sourceoptions]
+    options = [source_text(answer_text(item)) for item in sourceoptions]
     if len(options) < 2 or any(not option for option in options):
+        return None
+    feedback = feedback_text(question)
+    # These Handbook packages store later paragraphs of the clinical vignette
+    # in Feedback. They are part of the stem and must be shown before options.
+    if feedback:
+        compactfeedback = re.sub(r"\s+", " ", feedback).lstrip()
+        prompt = f"{prompt.rstrip()} {compactfeedback}"
+        feedback = ""
+    if (
+        SUSPICIOUS_EMBEDDED_DIGIT.search(prompt)
+        or SUSPICIOUS_EMBEDDED_DIGIT.search(feedback)
+        or any(
+            SUSPICIOUS_EMBEDDED_DIGIT.search(option) for option in options
+        )
+    ):
         return None
     correctindex = correct_option_index(question, options)
     if correctindex is None or correctindex >= len(options):
@@ -121,7 +144,7 @@ def extract_question(
             for label, text in zip(labels, options)
         ],
         "correctLabel": labels[correctindex],
-        "feedback": feedback_text(question),
+        "feedback": feedback,
     }
 
 

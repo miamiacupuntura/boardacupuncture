@@ -2727,6 +2727,66 @@ a.herb-board__domain:focus {
     font-weight: 900;
 }
 
+.herb-board__clinical-question .herb-board__exam-options span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.herb-board__clinical-question .herb-board__exam-feedback {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    line-height: 1.5;
+}
+
+.herb-board__clinical-question .herb-board__exam-feedback > strong {
+    display: block;
+}
+
+.herb-board__clinical-explanation {
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(32, 79, 71, .2);
+}
+
+.herb-board__clinical-explanation > span {
+    display: block;
+    color: #087c69;
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.herb-board__clinical-explanation p {
+    margin: 4px 0 0;
+}
+
+.herb-board__exam-question.is-incorrect .herb-board__clinical-explanation {
+    border-top-color: rgba(122, 66, 16, .2);
+}
+
+.herb-board__exam-question.is-incorrect .herb-board__clinical-explanation > span {
+    color: #a9550d;
+}
+
+.herb-board__clinical-player .herb-board__exam-submit {
+    position: static;
+    justify-content: flex-end;
+    min-height: 0;
+    margin-top: 8px;
+    padding: 12px 0 0;
+    border: 0;
+    border-top: 1px solid #ddd7ef;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.herb-board__clinical-player .herb-board__exam-submit button {
+    min-width: 112px;
+}
+
 .herb-board__shortages {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

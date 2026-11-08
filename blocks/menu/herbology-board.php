@@ -2011,7 +2011,7 @@ echo $OUTPUT->header();
                                 ? 'Quiz de casos clínicos'
                                 : 'Clinical Cases Quiz'; ?></h4>
                         <p><?php echo $ises
-                            ? 'Aplica la diferenciación de fórmulas a los casos del Handbook of Oriental Medicine.'
+                            ? 'Aplica la diferenciación de fórmulas a los casos clínicos del Handbook of Oriental Medicine.'
                             : 'Apply formula differentiation to cases from the Handbook of Oriental Medicine.'; ?></p>
                     </div>
                 </header>
@@ -2066,15 +2066,15 @@ echo $OUTPUT->header();
     <?php } else if ($track === 'clinicalcases') { ?>
         <section class="herb-board__panel herb-board__clinical-quiz" aria-labelledby="clinical-case-quiz-title">
             <a class="herb-board__domain-back" href="<?php echo $quizurl->out(false); ?>#quiz-clinical-cases">
-                <?php echo $ises ? '← Volver a Quiz' : '← Back to Quiz'; ?>
+                <?php echo $ises ? '← Volver al Quiz' : '← Back to Quiz'; ?>
             </a>
             <?php if ($selectedclinicalexam === null || !$clinicalquestions) { ?>
                 <div class="herb-board__notice">
                     <h3 id="clinical-case-quiz-title"><?php echo $ises
-                        ? 'El Quiz de casos clínicos se está preparando'
+                        ? 'El cuestionario de casos clínicos se está preparando'
                         : 'The Clinical Cases Quiz is being prepared'; ?></h3>
                     <p><?php echo $ises
-                        ? 'La extracción todavía no produjo preguntas utilizables.'
+                        ? 'La extracción todavía no ha producido preguntas utilizables.'
                         : 'The source extraction has not produced usable questions yet.'; ?></p>
                 </div>
             <?php } else { ?>
@@ -2092,7 +2092,7 @@ echo $OUTPUT->header();
                             : 'HANDBOOK OF ORIENTAL MEDICINE · CLINICAL CASES'; ?></span>
                         <h3 id="clinical-case-quiz-title"><?php echo s($clinicaltitle); ?></h3>
                         <p><?php echo $ises
-                            ? 'Selecciona una respuesta y recibe feedback antes de continuar.'
+                            ? 'Selecciona una respuesta y revisa la corrección antes de continuar.'
                             : 'Select one answer and receive feedback before continuing.'; ?></p>
                     </div>
                 </div>
@@ -2117,25 +2117,47 @@ echo $OUTPUT->header();
                         $correctclinicaloption = '';
                         foreach ($clinicalquestion['options'] as $clinicaloption) {
                             if (($clinicaloption['label'] ?? '') === $clinicalquestion['correctLabel']) {
-                                $correctclinicaloption = (string)($clinicaloption['text'] ?? '');
+                                $correctclinicaloption = html_entity_decode(
+                                    (string)($clinicaloption['text'] ?? ''),
+                                    ENT_QUOTES | ENT_HTML5,
+                                    'UTF-8'
+                                );
                                 break;
                             }
                         }
+                        $clinicalprompt = html_entity_decode(
+                            (string)($clinicalquestion['prompt'] ?? ''),
+                            ENT_QUOTES | ENT_HTML5,
+                            'UTF-8'
+                        );
+                        $clinicalfeedback = html_entity_decode(
+                            (string)($clinicalquestion['feedback'] ?? ''),
+                            ENT_QUOTES | ENT_HTML5,
+                            'UTF-8'
+                        );
+                        $clinicalfeedback = preg_replace('/\s+/u', ' ', trim($clinicalfeedback));
                         ?>
                         <fieldset class="herb-board__exam-question herb-board__clinical-question" hidden
                             data-clinical-question
                             data-correct="<?php echo s($clinicalquestion['correctLabel']); ?>">
                             <legend>
                                 <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $clinicalindex + 1; ?></span>
-                                <?php echo s($clinicalquestion['prompt']); ?>
+                                <?php echo s($clinicalprompt); ?>
                             </legend>
                             <div class="herb-board__exam-options">
                                 <?php foreach ($clinicalquestion['options'] as $clinicaloption) { ?>
+                                    <?php
+                                    $clinicaloptiontext = html_entity_decode(
+                                        (string)($clinicaloption['text'] ?? ''),
+                                        ENT_QUOTES | ENT_HTML5,
+                                        'UTF-8'
+                                    );
+                                    ?>
                                     <label>
                                         <input type="radio" name="clinical-question-<?php echo $clinicalindex + 1; ?>"
                                             value="<?php echo s($clinicaloption['label'] ?? ''); ?>">
                                         <strong><?php echo s($clinicaloption['label'] ?? ''); ?>.</strong>
-                                        <span><?php echo s($clinicaloption['text'] ?? ''); ?></span>
+                                        <span><?php echo s($clinicaloptiontext); ?></span>
                                     </label>
                                 <?php } ?>
                             </div>
@@ -2143,8 +2165,11 @@ echo $OUTPUT->header();
                                 <span class="herb-board__exam-verdict" data-clinical-verdict></span>
                                 <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
                                     <?php echo s($clinicalquestion['correctLabel']); ?>. <?php echo s($correctclinicaloption); ?></strong>
-                                <?php if (!empty($clinicalquestion['feedback'])) { ?>
-                                    <p><?php echo nl2br(s($clinicalquestion['feedback'])); ?></p>
+                                <?php if ($clinicalfeedback !== '') { ?>
+                                    <div class="herb-board__clinical-explanation">
+                                        <span><?php echo $ises ? 'Explicación de la fuente' : 'Source explanation'; ?></span>
+                                        <p><?php echo s($clinicalfeedback); ?></p>
+                                    </div>
                                 <?php } ?>
                             </div>
                         </fieldset>

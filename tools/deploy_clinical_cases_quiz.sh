@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110659"
+EXPECTED_VERSION="2026110660"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -69,7 +69,7 @@ formula_line="$(grep -n -m1 'id="quiz-formula-categories"' "$TEMP_DIR/blocks/men
 clinical_line="$(grep -n -m1 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
 domain_line="$(grep -n -m1 'id="quiz-domains"' "$TEMP_DIR/blocks/menu/herbology-board.php" | cut -d: -f1)"
 if (( formula_line >= clinical_line || clinical_line >= domain_line )); then
-    echo "ERROR: el bloque Clinical Cases no está entre Formula Quiz y Quiz by Domain." >&2
+    echo "ERROR: el bloque «Clinical Cases» no está entre «Formula Quiz» y «Quiz by Domain»." >&2
     exit 1
 fi
 
@@ -123,6 +123,6 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     run_web_command php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Clinical Cases Quiz instalado después de Formula Quiz by category."
+echo "OK: Quiz de casos clínicos instalado después de «Formula Quiz by category»."
 echo "Respaldo: $BACKUP_DIR"
 echo "Prueba: /blocks/menu/herbology-board.php?track=quiz#quiz-clinical-cases"
