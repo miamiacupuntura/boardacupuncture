@@ -2769,8 +2769,8 @@ echo $OUTPUT->header();
                         : ($ises ? 'Quiz por dominio' : 'Quiz by Domain'); ?></h3>
                     <p><?php echo $track === 'exams'
                         ? ($ises
-                            ? 'Elige el examen lineal o adaptativo de 100 preguntas y revisa tu historial.'
-                            : 'Choose the 100-question linear or adaptive exam and review your history.')
+                            ? 'Elige el examen lineal, adaptativo o de casos clínicos y revisa tu historial.'
+                            : 'Choose the linear, adaptive, or Clinical Cases exam and review your history.')
                         : ($ises
                             ? 'Elige un dominio para completar un Quiz enfocado.'
                             : 'Choose one Domain for a focused Quiz.'); ?></p>
@@ -2778,8 +2778,8 @@ echo $OUTPUT->header();
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
                 <?php if ($track === 'exams') { ?>
-                    <span><strong>2</strong> <?php echo $ises ? 'modalidades de examen' : 'exam modes'; ?></span>
-                    <span><strong>100</strong> <?php echo $ises ? 'preguntas por examen' : 'questions per exam'; ?></span>
+                    <span><strong>3</strong> <?php echo $ises ? 'modalidades de examen' : 'exam modes'; ?></span>
+                    <span><strong>63–100</strong> <?php echo $ises ? 'preguntas por examen' : 'questions per exam'; ?></span>
                 <?php } else { ?>
                     <span><strong>6</strong> <?php echo $ises ? 'dominios de estudio' : 'study Domains'; ?></span>
                 <?php } ?>
@@ -2809,10 +2809,17 @@ echo $OUTPUT->header();
                             ? 'Ajusta el orden y la dificultad según cada respuesta, sin cambiar la composición final.'
                             : 'Adjusts order and difficulty after each answer without changing the final composition.'; ?></span>
                     </a>
+                    <a class="herb-board__exam-model herb-board__exam-model--clinical"
+                        href="<?php echo $clinicalcasesurl->out(false); ?>">
+                        <strong><?php echo $ises ? 'Casos clínicos' : 'Clinical Cases'; ?></strong>
+                        <span><?php echo $ises
+                            ? '63 casos centrados en diferenciación de patrones y selección de fórmulas, con feedback inmediato.'
+                            : '63 cases focused on pattern differentiation and formula selection, with immediate feedback.'; ?></span>
+                    </a>
                 </div>
                 <p class="herb-board__exam-minimum"><?php echo $ises
-                    ? '100 preguntas es el formato más corto que conserva exactamente la distribución establecida.'
-                    : '100 questions is the shortest form that preserves the current distribution exactly.'; ?></p>
+                    ? 'Los exámenes lineal y adaptativo tienen 100 preguntas; Clinical Cases contiene 63 casos.'
+                    : 'Linear and adaptive exams have 100 questions; Clinical Cases contains 63 cases.'; ?></p>
             <?php } ?>
             <?php if ($track === 'domains') { ?>
             <div class="herb-board__domains">
