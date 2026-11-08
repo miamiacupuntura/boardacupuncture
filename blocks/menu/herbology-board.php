@@ -91,17 +91,33 @@ $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
-if ($track === 'exams' && !$mixdomains) {
+$clinicalhistory = [];
+if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
     $examhistorytable = new xmldb_table('block_menu_exam_attempts');
     if ($DB->get_manager()->table_exists($examhistorytable)) {
-        $examhistory = array_values($DB->get_records(
-            'block_menu_exam_attempts',
-            ['userid' => $USER->id, 'courseid' => $membershipcourseid],
-            'timecompleted DESC, id DESC',
-            '*',
-            0,
-            10
-        ));
+        if ($track === 'clinicalcases') {
+            $clinicalhistory = array_values($DB->get_records(
+                'block_menu_exam_attempts',
+                [
+                    'userid' => $USER->id,
+                    'courseid' => $membershipcourseid,
+                    'examtype' => 'clinicalcases',
+                ],
+                'timecompleted DESC, id DESC',
+                '*',
+                0,
+                10
+            ));
+        } else {
+            $examhistory = array_values($DB->get_records(
+                'block_menu_exam_attempts',
+                ['userid' => $USER->id, 'courseid' => $membershipcourseid],
+                'timecompleted DESC, id DESC',
+                '*',
+                0,
+                10
+            ));
+        }
     }
 }
 
@@ -2238,6 +2254,10 @@ echo $OUTPUT->header();
                     '',
                     (string)$selectedclinicalexam['title']
                 );
+                $clinicalhistoryurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'clinicalcases',
+                    'caseexam' => $clinicalexamkey,
+                ] + $languagecontext);
                 ?>
                 <div class="herb-board__panel-heading">
                     <div>
@@ -2257,7 +2277,24 @@ echo $OUTPUT->header();
                     data-correct-word="<?php echo $ises ? 'Correcta' : 'Correct'; ?>"
                     data-incorrect-word="<?php echo $ises ? 'Incorrecta' : 'Incorrect'; ?>"
                     data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
-                    data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>">
+                    data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
+                    data-pass-threshold="70"
+                    data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
+                    data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
+                    data-passed-message="<?php echo $ises
+                        ? 'Aprobaste este intento al alcanzar al menos 70%. Revisa cualquier error para reforzar el diagnóstico.'
+                        : 'You passed this attempt by reaching at least 70%. Review any errors to reinforce the diagnosis.'; ?>"
+                    data-failed-message="<?php echo $ises
+                        ? 'Aún no aprobaste. Se requiere 70% o más. Revisa las respuestas incorrectas y vuelve a intentarlas.'
+                        : 'You did not pass yet. A score of 70% or higher is required. Review the incorrect answers and try them again.'; ?>"
+                    data-your-answer-word="<?php echo $ises ? 'Tu respuesta' : 'Your answer'; ?>"
+                    data-correct-answer-word="<?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>"
+                    data-exam-language="<?php echo $ises ? 'es' : 'en'; ?>"
+                    data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
+                    data-sesskey="<?php echo s(sesskey()); ?>"
+                    data-history-saving="<?php echo $ises ? 'Guardando en el historial…' : 'Saving to exam history…'; ?>"
+                    data-history-saved="<?php echo $ises ? 'Resultado guardado en el historial.' : 'Result saved to exam history.'; ?>"
+                    data-history-error="<?php echo $ises ? 'No se pudo guardar el resultado.' : 'The result could not be saved.'; ?>">
                     <div class="herb-board__exam-progress" aria-live="polite">
                         <div class="herb-board__exam-progress-summary">
                             <strong data-clinical-progress></strong>
@@ -2437,13 +2474,94 @@ echo $OUTPUT->header();
                         </fieldset>
                     <?php } ?>
 
-                    <div class="herb-board__exam-submit">
+                    <div class="herb-board__exam-submit" data-clinical-navigation>
                         <button type="button" data-clinical-next><?php echo $ises ? 'Siguiente →' : 'Next →'; ?></button>
-                        <output data-clinical-result hidden></output>
-                        <a class="herb-board__exam-history-link" href="<?php echo $quizurl->out(false); ?>#quiz-clinical-cases" hidden
-                            data-clinical-return><?php echo $ises ? 'Elegir otro examen' : 'Choose another exam'; ?></a>
                     </div>
+
+                    <section class="herb-board__clinical-result" data-clinical-result-panel hidden
+                        aria-live="polite" aria-labelledby="clinical-result-title">
+                        <span data-clinical-outcome></span>
+                        <h4 id="clinical-result-title"><?php echo $ises ? 'Resultado del examen' : 'Exam result'; ?></h4>
+                        <output data-clinical-result></output>
+                        <p data-clinical-result-message></p>
+
+                        <section class="herb-board__clinical-errors" data-clinical-incorrect-review hidden>
+                            <h5><?php echo $ises ? 'Respuestas incorrectas' : 'Incorrect answers'; ?></h5>
+                            <p><?php echo $ises
+                                ? 'Compara tu selección con la respuesta correcta antes de repetir únicamente estos casos.'
+                                : 'Compare your selection with the correct answer before retrying only these cases.'; ?></p>
+                            <div data-clinical-incorrect-list></div>
+                        </section>
+
+                        <div class="herb-board__clinical-result-actions">
+                            <button type="button" data-clinical-retry-errors hidden>
+                                <?php echo $ises ? 'Volver a contestar los errores' : 'Retry incorrect answers'; ?>
+                            </button>
+                            <a class="herb-board__exam-history-link"
+                                href="<?php echo $quizurl->out(false); ?>#quiz-clinical-cases" hidden
+                                data-clinical-return><?php echo $ises ? 'Elegir otro examen' : 'Choose another exam'; ?></a>
+                            <a class="herb-board__exam-history-link"
+                                href="<?php echo s($clinicalhistoryurl->out(false)); ?>#clinical-case-history" hidden
+                                data-clinical-history-link><?php echo $ises ? 'Ver historial' : 'View history'; ?></a>
+                        </div>
+                        <span class="herb-board__clinical-save-status" data-clinical-save-status hidden></span>
+                    </section>
                 </form>
+
+                <section class="herb-board__exam-history herb-board__clinical-history" id="clinical-case-history"
+                    aria-labelledby="clinical-case-history-title">
+                    <header>
+                        <div>
+                            <span><?php echo $ises ? 'PROGRESO PERSONAL' : 'PERSONAL PROGRESS'; ?></span>
+                            <h4 id="clinical-case-history-title">
+                                <?php echo $ises ? 'Historial de Clinical Cases' : 'Clinical Cases history'; ?>
+                            </h4>
+                        </div>
+                        <small><?php echo $ises ? 'Últimos 10 intentos completados' : 'Last 10 completed attempts'; ?></small>
+                    </header>
+                    <?php if (!$clinicalhistory) { ?>
+                        <p class="herb-board__exam-history-empty">
+                            <?php echo $ises
+                                ? 'Todavía no has completado este examen.'
+                                : 'You have not completed this exam yet.'; ?>
+                        </p>
+                    <?php } else { ?>
+                        <div class="herb-board__exam-history-list" role="list">
+                            <?php foreach ($clinicalhistory as $attempt) {
+                                $attemptpercentage = $attempt->total > 0
+                                    ? (int) round(($attempt->score / $attempt->total) * 100)
+                                    : 0;
+                                $attemptpassed = $attemptpercentage >= 70;
+                                $attemptminutes = intdiv((int) $attempt->duration, 60);
+                                $attemptseconds = (int) $attempt->duration % 60;
+                                $attemptduration = $attemptminutes > 0
+                                    ? $attemptminutes . ' min ' . $attemptseconds . ' s'
+                                    : $attemptseconds . ' s';
+                            ?>
+                                <article role="listitem" class="<?php echo $attemptpassed ? 'is-passed' : 'is-failed'; ?>">
+                                    <div>
+                                        <span><?php echo $ises ? 'Fecha' : 'Date'; ?></span>
+                                        <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
+                                        <strong><?php echo (int) $attempt->score; ?>/<?php echo (int) $attempt->total; ?> · <?php echo $attemptpercentage; ?>%</strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Estado' : 'Status'; ?></span>
+                                        <strong><?php echo $attemptpassed
+                                            ? ($ises ? 'Aprobado' : 'Passed')
+                                            : ($ises ? 'No aprobado' : 'Not passed'); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
+                                        <strong><?php echo s($attemptduration); ?></strong>
+                                    </div>
+                                </article>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                </section>
             <?php } ?>
         </section>
     <?php } else if ($track === 'formulas') { ?>
