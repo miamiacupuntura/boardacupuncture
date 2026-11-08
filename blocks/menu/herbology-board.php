@@ -203,6 +203,122 @@ if ($track === 'clinicalcases') {
         ));
     }
 }
+if ($track === 'clinicalcases' && $clinicalquestions) {
+    $clinicalprofilepath = dirname(__DIR__) . '/myprogress/formulas-study-guide-data.json';
+    $clinicalprofiles = [];
+    if (is_readable($clinicalprofilepath)) {
+        $decodedclinicalprofiles = json_decode(file_get_contents($clinicalprofilepath), true);
+        if (is_array($decodedclinicalprofiles)) {
+            foreach (['formulas', 'supplementalFormulas'] as $clinicalprofilecollection) {
+                foreach ($decodedclinicalprofiles[$clinicalprofilecollection] ?? [] as $clinicalprofile) {
+                    if (is_array($clinicalprofile) && !empty($clinicalprofile['name'])) {
+                        $clinicalprofiles[strtolower(trim((string)$clinicalprofile['name']))] = $clinicalprofile;
+                    }
+                }
+            }
+        }
+    }
+    if ($clinicalprofiles) {
+        uksort($clinicalprofiles, static fn($left, $right): int => strlen($right) <=> strlen($left));
+        $matchclinicalprofile = static function ($option) use ($clinicalprofiles) {
+            $normalizedoption = strtolower(trim(preg_replace('/\s+/u', ' ', (string)$option)));
+            foreach ($clinicalprofiles as $profilename => $profile) {
+                if ($normalizedoption === $profilename
+                        || strpos($normalizedoption, $profilename . ' ') === 0) {
+                    return $profile;
+                }
+            }
+            return null;
+        };
+        foreach ($clinicalquestions as &$clinicalquestionfallback) {
+            if (!empty($clinicalquestionfallback['diagnosis'])
+                    || empty($clinicalquestionfallback['options'])
+                    || empty($clinicalquestionfallback['correctLabel'])) {
+                continue;
+            }
+            $correctclinicaltext = '';
+            foreach ($clinicalquestionfallback['options'] as $clinicalfallbackoption) {
+                if (($clinicalfallbackoption['label'] ?? '') === $clinicalquestionfallback['correctLabel']) {
+                    $correctclinicaltext = (string)($clinicalfallbackoption['text'] ?? '');
+                    break;
+                }
+            }
+            $correctclinicalprofile = $matchclinicalprofile($correctclinicaltext);
+            if (!is_array($correctclinicalprofile)) {
+                continue;
+            }
+            $fallbackdiagnosis = [];
+            $fallbackfieldmap = [
+                'formula' => 'name',
+                'pattern' => 'pattern',
+                'patternEs' => 'patternEs',
+                'clue' => 'clue',
+                'clueEs' => 'clueEs',
+                'action' => 'action',
+                'actionEs' => 'actionEs',
+                'reasoning' => 'examFocus',
+                'reasoningEs' => 'examFocusEs',
+                'differential' => 'comparison',
+                'differentialEs' => 'comparisonEs',
+            ];
+            foreach ($fallbackfieldmap as $diagnosisfield => $profilefield) {
+                if (!empty($correctclinicalprofile[$profilefield])) {
+                    $fallbackdiagnosis[$diagnosisfield] = $correctclinicalprofile[$profilefield];
+                }
+            }
+            $normalizedfallbackprompt = strtolower((string)($clinicalquestionfallback['prompt'] ?? ''));
+            if (strtolower((string)$correctclinicalprofile['name']) === 'chai ge jie ji tang'
+                    && strpos($normalizedfallbackprompt, 'pain around her eye') !== false) {
+                $fallbackdiagnosis['caseReasoning'] = 'The case begins as exterior Wind-Cold with chills, '
+                    . 'body aches, runny nose and white phlegm, then transforms toward Heat as fever rises '
+                    . 'and thirst, a red tongue with yellow coat, a slightly surging pulse and orbital pain '
+                    . 'appear. This progression is the decisive Chai Ge Jie Ji Tang pattern.';
+                $fallbackdiagnosis['caseReasoningEs'] = 'El caso comienza como Viento-Frío exterior con '
+                    . 'escalofríos, dolores corporales, rinorrea y flema blanca, y luego se transforma hacia '
+                    . 'Calor cuando aumentan la fiebre y la sed y aparecen lengua roja con capa amarilla, '
+                    . 'pulso ligeramente desbordante y dolor orbital. Esta evolución es el patrón decisivo '
+                    . 'de Chai Ge Jie Ji Tang.';
+            } else if (!empty($fallbackdiagnosis['pattern']) && !empty($fallbackdiagnosis['clue'])
+                    && !empty($fallbackdiagnosis['action'])) {
+                $fallbackdiagnosis['caseReasoning'] = 'The pattern is ' . $fallbackdiagnosis['pattern']
+                    . ' The decisive signs are ' . $fallbackdiagnosis['clue']
+                    . ' The therapeutic match is ' . $correctclinicalprofile['name'] . ': '
+                    . $fallbackdiagnosis['action'];
+                if (!empty($fallbackdiagnosis['patternEs']) && !empty($fallbackdiagnosis['clueEs'])
+                        && !empty($fallbackdiagnosis['actionEs'])) {
+                    $fallbackdiagnosis['caseReasoningEs'] = 'El patrón es '
+                        . $fallbackdiagnosis['patternEs'] . ' Los signos decisivos son '
+                        . $fallbackdiagnosis['clueEs'] . ' La correspondencia terapéutica es '
+                        . $correctclinicalprofile['name'] . ': ' . $fallbackdiagnosis['actionEs'];
+                }
+            }
+            $fallbackalternatives = [];
+            foreach ($clinicalquestionfallback['options'] as $clinicalfallbackoption) {
+                if (($clinicalfallbackoption['label'] ?? '') === $clinicalquestionfallback['correctLabel']) {
+                    continue;
+                }
+                $alternativeprofile = $matchclinicalprofile($clinicalfallbackoption['text'] ?? '');
+                if (!is_array($alternativeprofile)) {
+                    continue;
+                }
+                $fallbackalternatives[] = array_filter([
+                    'formula' => $alternativeprofile['name'] ?? '',
+                    'pattern' => $alternativeprofile['pattern'] ?? '',
+                    'patternEs' => $alternativeprofile['patternEs'] ?? '',
+                    'clue' => $alternativeprofile['clue'] ?? '',
+                    'clueEs' => $alternativeprofile['clueEs'] ?? '',
+                ], static fn($value): bool => $value !== '');
+            }
+            if ($fallbackalternatives) {
+                $fallbackdiagnosis['alternatives'] = $fallbackalternatives;
+            }
+            if ($fallbackdiagnosis) {
+                $clinicalquestionfallback['diagnosis'] = $fallbackdiagnosis;
+            }
+        }
+        unset($clinicalquestionfallback);
+    }
+}
 if ($ises) {
     foreach ($domainblueprint as &$domaintranslation) {
         $domaintranslation['name'] = $domaintranslation['name_es'];
