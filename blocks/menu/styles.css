@@ -797,6 +797,46 @@
     background: #fff2e8;
 }
 
+.herb-board__section-navigation {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 0 16px;
+    padding: 8px;
+    border: 1px solid #c5d9d4;
+    border-radius: 11px;
+    background: #f7fcfb;
+}
+
+.herb-board__section-navigation a {
+    display: flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border: 1px solid #b9ccda;
+    border-radius: 8px;
+    background: #fff;
+    color: #102a43 !important;
+    font-size: .82rem;
+    font-weight: 850;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.herb-board__section-navigation a:hover,
+.herb-board__section-navigation a:focus {
+    border-color: #08756a;
+    background: #edf9f6;
+    color: #075f5b !important;
+}
+
+.herb-board__section-navigation a[aria-current="page"] {
+    border-color: #08756a;
+    background: #08756a;
+    color: #fff !important;
+}
+
 .herb-board__summary {
     display: flex;
     flex-wrap: wrap;
@@ -3387,6 +3427,10 @@ a.herb-board__domain:focus {
 }
 
 @media (max-width: 560px) {
+    .herb-board__section-navigation {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .herb-board {
         width: min(100% - 20px, 1180px);
     }
