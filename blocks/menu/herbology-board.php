@@ -80,6 +80,9 @@ $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
     'view' => 'library',
 ] + ($ises ? ['lang' => 'es'] : []));
+$studyguidesurl = new moodle_url('/blocks/myprogress/study-guide.php', [
+    'area' => 'herbology',
+] + ($ises ? ['lang' => 'es'] : []));
 $dashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/');
 $languagecontext = ($fromlibrary ? ['from' => 'library'] : []) + ($ises ? ['lang' => 'es'] : []);
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
@@ -1655,6 +1658,16 @@ echo $OUTPUT->header();
         <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
             href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
     </nav>
+
+    <?php if ($track === 'quiz') { ?>
+        <nav class="herb-board__section-navigation" aria-label="<?php echo $ises
+            ? 'Secciones Board Level de Herbología' : 'Herbology Board Level sections'; ?>">
+            <a href="<?php echo $studyguidesurl->out(false); ?>"><?php echo $ises ? 'Guías de estudio' : 'Study Guides'; ?></a>
+            <a href="<?php echo $singleherbsurl->out(false); ?>"><?php echo $ises ? 'Práctica de herbología' : 'Herbology Practice'; ?></a>
+            <a href="<?php echo $quizurl->out(false); ?>" aria-current="page">Quiz</a>
+            <a href="<?php echo $examsurl->out(false); ?>"><?php echo $ises ? 'Exámenes' : 'Exams'; ?></a>
+        </nav>
+    <?php } ?>
 
     <?php if ($track === 'exams') { ?>
         <nav class="herb-board__practice-route" aria-label="<?php echo $ises
