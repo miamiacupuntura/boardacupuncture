@@ -11,6 +11,7 @@
         const navigation = quiz.querySelector('[data-clinical-navigation]');
         const nextButton = quiz.querySelector('[data-clinical-next]');
         const restartButton = quiz.querySelector('[data-clinical-restart]');
+        const finishButton = quiz.querySelector('[data-clinical-finish]');
         const progress = quiz.querySelector('[data-clinical-progress]');
         const scoreOutput = quiz.querySelector('[data-clinical-score]');
         const progressBar = quiz.querySelector('[data-clinical-progress-bar]');
@@ -125,7 +126,9 @@
 
                 heading.textContent = questionText(question);
                 selectedTerm.textContent = quiz.dataset.yourAnswerWord;
-                selectedDescription.textContent = optionText(question, question.dataset.selected || '');
+                selectedDescription.textContent = question.dataset.selected
+                    ? optionText(question, question.dataset.selected)
+                    : quiz.dataset.unansweredWord;
                 correctTerm.textContent = quiz.dataset.correctAnswerWord;
                 correctDescription.textContent = optionText(question, question.dataset.correct);
                 selectedRow.append(selectedTerm, selectedDescription);
@@ -370,7 +373,9 @@
 
             resultScore.textContent = `${score}/${total} · ${percentage}%`;
             resultOutcome.textContent = passed ? quiz.dataset.passedWord : quiz.dataset.failedWord;
-            resultMessage.textContent = passed ? quiz.dataset.passedMessage : quiz.dataset.failedMessage;
+            const completionMessage = passed ? quiz.dataset.passedMessage : quiz.dataset.failedMessage;
+            resultMessage.textContent = completionMessage + ' ' + String(answered) + '/'
+                + String(total) + ' ' + quiz.dataset.answeredWord + '.';
             resultPanel.classList.toggle('is-passed', passed);
             resultPanel.classList.toggle('is-failed', !passed);
             renderIncorrectAnswers(incorrectQuestions);
@@ -436,6 +441,12 @@
             restartButton.disabled = false;
         };
 
+        const finishExamEarly = () => {
+            if (!complete && window.confirm(quiz.dataset.finishConfirm)) {
+                finish();
+            }
+        };
+
         questions.forEach(question => {
             question.dataset.answered = '0';
             question.dataset.lastCorrect = '0';
@@ -452,6 +463,7 @@
         });
         retryButton.addEventListener('click', retryErrors);
         restartButton.addEventListener('click', restartExam);
+        finishButton.addEventListener('click', finishExamEarly);
         quiz.addEventListener('submit', event => event.preventDefault());
 
         attemptUid = createAttemptUid();
