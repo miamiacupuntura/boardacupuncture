@@ -52,12 +52,12 @@ if (!$DB->get_manager()->table_exists($table)) {
     throw new moodle_exception('The exam history database is not installed.');
 }
 
-$existingattempt = $DB->get_record('block_menu_exam_attempts', ['attemptuid' => $attemptuid], 'id, userid');
+$existingattempt = $DB->get_record('block_menu_exam_attempts', ['attemptuid' => $attemptuid]);
 if ($existingattempt && (int) $existingattempt->userid !== (int) $USER->id) {
     throw new invalid_parameter_exception('Invalid attempt identifier.');
 }
-$attemptid = $existingattempt ? (int) $existingattempt->id : 0;
-if ($attemptid === 0) {
+if (!$existingattempt) {
+    $completedat = time();
     $record = (object) [
         'userid' => $USER->id,
         'courseid' => $membershipcourseid,
@@ -67,12 +67,33 @@ if ($attemptid === 0) {
         'total' => $total,
         'duration' => $duration,
         'language' => $language,
-        'timecompleted' => time(),
+        'timecompleted' => $completedat,
     ];
-    $attemptid = (int) $DB->insert_record('block_menu_exam_attempts', $record);
+    $record->id = (int) $DB->insert_record('block_menu_exam_attempts', $record);
+    $existingattempt = $record;
 }
+$attemptpercentage = (int) round(
+    ((int) $existingattempt->score / max(1, (int) $existingattempt->total)) * 100
+);
+$attemptminutes = intdiv((int) $existingattempt->duration, 60);
+$attemptseconds = (int) $existingattempt->duration % 60;
+$attemptduration = $attemptminutes > 0
+    ? $attemptminutes . ' min ' . $attemptseconds . ' s'
+    : $attemptseconds . ' s';
 
 echo json_encode([
     'success' => true,
-    'attemptid' => (int) $attemptid,
+    'attemptid' => (int) $existingattempt->id,
+    'attempt' => [
+        'score' => (int) $existingattempt->score,
+        'total' => (int) $existingattempt->total,
+        'percentage' => $attemptpercentage,
+        'passed' => $attemptpercentage >= 70,
+        'duration' => $attemptduration,
+        'timecompleted' => (int) $existingattempt->timecompleted,
+        'completedlabel' => userdate(
+            (int) $existingattempt->timecompleted,
+            get_string('strftimedatetimeshort')
+        ),
+    ],
 ]);
