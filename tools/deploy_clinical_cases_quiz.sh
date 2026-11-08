@@ -8,7 +8,7 @@ REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 EXPECTED_VERSION="2026110685"
-EXPECTED_MYPROGRESS_VERSION="2026110804"
+EXPECTED_MYPROGRESS_VERSION="2026110805"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"
@@ -66,16 +66,23 @@ grep -Fq "\$plugin->version   = $EXPECTED_VERSION;" "$TEMP_DIR/blocks/menu/versi
 grep -Fq "VERSION=\"$EXPECTED_VERSION\"" "$TEMP_DIR/blocks/menu/db/install.xml"
 grep -Fq "upgrade_block_savepoint(true, $EXPECTED_VERSION, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq "\$plugin->version = $EXPECTED_MYPROGRESS_VERSION;" "$TEMP_DIR/blocks/myprogress/version.php"
-grep -Fq "'Board Level Activity'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
-grep -Fq "'Actividad Board Level'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
-if grep -Fq "Library home" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"; then
-    echo "ERROR: la etiqueta antigua «Library home» todavía está presente." >&2
+grep -Fq "data-library-step-back" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
+grep -Fq "'← Back'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
+if grep -Fq "herbology-library-context__routes" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"; then
+    echo "ERROR: la barra antigua de navegación todavía está presente." >&2
     exit 1
 fi
 grep -Fq "'Each block contains the actual options that belong to that activity.'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq "'Passive review by domain'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq "'Clinical Cases exam'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
-grep -Fq "'100 questions · 150 minutes'" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq 'journey-option--primary' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '\$chapterlisturl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '\$boardpracticeurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '\$boardquizurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '\$boardexamsurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq '\$boardsimulationurl->out(false)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+if grep -Eq "Questions with visible answers|Passive review by domain|Clinical Cases exam" "$TEMP_DIR/blocks/myprogress/study-guide.php"; then
+    echo "ERROR: todavía existen botones internos antiguos en los bloques." >&2
+    exit 1
+fi
 grep -Fq 'id="quiz-clinical-cases"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'herb-board__exam-model--clinical' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '<strong>3</strong>' "$TEMP_DIR/blocks/menu/herbology-board.php"
@@ -148,9 +155,9 @@ for relative in "${FILES[@]}"; do
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" "$staged" "$target"
 done
 
-grep -Fq "'Board Level Activity'" "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
-if grep -Fq "Library home" "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"; then
-    echo "ERROR: el servidor conserva la etiqueta antigua «Library home»." >&2
+grep -Fq "data-library-step-back" "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"
+if grep -Fq "herbology-library-context__routes" "$MOODLE_ROOT/blocks/myprogress/herbology-library-navigation.php"; then
+    echo "ERROR: el servidor conserva la barra antigua de navegación." >&2
     exit 1
 fi
 
