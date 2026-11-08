@@ -2523,7 +2523,16 @@ echo $OUTPUT->header();
                 </form>
 
                 <section class="herb-board__exam-history herb-board__clinical-history" id="clinical-case-history"
-                    aria-labelledby="clinical-case-history-title">
+                    aria-labelledby="clinical-case-history-title" data-clinical-history
+                    data-date-word="<?php echo $ises ? 'Fecha y hora' : 'Date and time'; ?>"
+                    data-attempt-word="<?php echo $ises ? 'Intento' : 'Attempt'; ?>"
+                    data-full-attempt-word="<?php echo $ises ? 'Examen completo' : 'Full exam'; ?>"
+                    data-retry-attempt-word="<?php echo $ises ? 'Reintento de errores' : 'Error retry'; ?>"
+                    data-result-word="<?php echo $ises ? 'Resultado' : 'Result'; ?>"
+                    data-status-word="<?php echo $ises ? 'Estado' : 'Status'; ?>"
+                    data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
+                    data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
+                    data-duration-word="<?php echo $ises ? 'Duración' : 'Duration'; ?>">
                     <header>
                         <div>
                             <span><?php echo $ises ? 'PROGRESO PERSONAL' : 'PERSONAL PROGRESS'; ?></span>
@@ -2533,55 +2542,54 @@ echo $OUTPUT->header();
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos completados' : 'Last 10 completed attempts'; ?></small>
                     </header>
-                    <?php if (!$clinicalhistory) { ?>
-                        <p class="herb-board__exam-history-empty">
-                            <?php echo $ises
-                                ? 'Todavía no has completado este examen.'
-                                : 'You have not completed this exam yet.'; ?>
-                        </p>
-                    <?php } else { ?>
-                        <div class="herb-board__exam-history-list" role="list">
-                            <?php foreach ($clinicalhistory as $attempt) {
-                                $attemptpercentage = $attempt->total > 0
-                                    ? (int) round(($attempt->score / $attempt->total) * 100)
-                                    : 0;
-                                $attemptpassed = $attemptpercentage >= 70;
-                                $attemptminutes = intdiv((int) $attempt->duration, 60);
-                                $attemptseconds = (int) $attempt->duration % 60;
-                                $attemptduration = $attemptminutes > 0
-                                    ? $attemptminutes . ' min ' . $attemptseconds . ' s'
-                                    : $attemptseconds . ' s';
-                                $attemptkind = (int) $attempt->total < count($clinicalquestions)
-                                    ? ($ises ? 'Reintento de errores' : 'Error retry')
-                                    : ($ises ? 'Examen completo' : 'Full exam');
-                            ?>
-                                <article role="listitem" class="<?php echo $attemptpassed ? 'is-passed' : 'is-failed'; ?>">
-                                    <div>
-                                        <span><?php echo $ises ? 'Fecha' : 'Date'; ?></span>
-                                        <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
-                                    </div>
-                                    <div>
-                                        <span><?php echo $ises ? 'Intento' : 'Attempt'; ?></span>
-                                        <strong><?php echo s($attemptkind); ?></strong>
-                                    </div>
-                                    <div>
-                                        <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
-                                        <strong><?php echo (int) $attempt->score; ?>/<?php echo (int) $attempt->total; ?> · <?php echo $attemptpercentage; ?>%</strong>
-                                    </div>
-                                    <div>
-                                        <span><?php echo $ises ? 'Estado' : 'Status'; ?></span>
-                                        <strong><?php echo $attemptpassed
-                                            ? ($ises ? 'Aprobado' : 'Passed')
-                                            : ($ises ? 'No aprobado' : 'Not passed'); ?></strong>
-                                    </div>
-                                    <div>
-                                        <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
-                                        <strong><?php echo s($attemptduration); ?></strong>
-                                    </div>
-                                </article>
-                            <?php } ?>
-                        </div>
-                    <?php } ?>
+                    <p class="herb-board__exam-history-empty" data-clinical-history-empty
+                        <?php echo $clinicalhistory ? 'hidden' : ''; ?>>
+                        <?php echo $ises
+                            ? 'Todavía no has completado este examen.'
+                            : 'You have not completed this exam yet.'; ?>
+                    </p>
+                    <div class="herb-board__exam-history-list" role="list" data-clinical-history-list
+                        <?php echo !$clinicalhistory ? 'hidden' : ''; ?>>
+                        <?php foreach ($clinicalhistory as $attempt) {
+                            $attemptpercentage = $attempt->total > 0
+                                ? (int) round(($attempt->score / $attempt->total) * 100)
+                                : 0;
+                            $attemptpassed = $attemptpercentage >= 70;
+                            $attemptminutes = intdiv((int) $attempt->duration, 60);
+                            $attemptseconds = (int) $attempt->duration % 60;
+                            $attemptduration = $attemptminutes > 0
+                                ? $attemptminutes . ' min ' . $attemptseconds . ' s'
+                                : $attemptseconds . ' s';
+                            $attemptkind = (int) $attempt->total < count($clinicalquestions)
+                                ? ($ises ? 'Reintento de errores' : 'Error retry')
+                                : ($ises ? 'Examen completo' : 'Full exam');
+                        ?>
+                            <article role="listitem" class="<?php echo $attemptpassed ? 'is-passed' : 'is-failed'; ?>">
+                                <div>
+                                    <span><?php echo $ises ? 'Fecha y hora' : 'Date and time'; ?></span>
+                                    <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
+                                </div>
+                                <div>
+                                    <span><?php echo $ises ? 'Intento' : 'Attempt'; ?></span>
+                                    <strong><?php echo s($attemptkind); ?></strong>
+                                </div>
+                                <div>
+                                    <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
+                                    <strong><?php echo (int) $attempt->score; ?>/<?php echo (int) $attempt->total; ?> · <?php echo $attemptpercentage; ?>%</strong>
+                                </div>
+                                <div>
+                                    <span><?php echo $ises ? 'Estado' : 'Status'; ?></span>
+                                    <strong><?php echo $attemptpassed
+                                        ? ($ises ? 'Aprobado' : 'Passed')
+                                        : ($ises ? 'No aprobado' : 'Not passed'); ?></strong>
+                                </div>
+                                <div>
+                                    <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
+                                    <strong><?php echo s($attemptduration); ?></strong>
+                                </div>
+                            </article>
+                        <?php } ?>
+                    </div>
                 </section>
             <?php } ?>
         </section>
