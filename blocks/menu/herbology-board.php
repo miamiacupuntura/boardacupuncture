@@ -1644,32 +1644,21 @@ $formulaquestionbankurl = new moodle_url($formulaquestionbankpath, $fromlibrary 
 echo $OUTPUT->header();
 ?>
 <main class="herb-board">
-    <nav class="herb-board__page-navigation" aria-label="<?php echo $ises ? 'Navegación de Herbología' : 'Herbology navigation'; ?>">
-        <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
-            ? '← Atrás' : '← Back'; ?></a>
-        <?php if (!in_array($track, ['exams', 'quiz', 'clinicalcases', 'simulation'], true)) { ?>
-            <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
-                <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
-            <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
-                <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
-            <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
-                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Dominios' : 'Domains'; ?></a>
-        <?php } ?>
-        <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
-            href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-    </nav>
-
     <?php
     $practiceactive = in_array($track, ['herbs', 'formulas', 'domains'], true);
     $quizactive = in_array($track, ['quiz', 'clinicalcases'], true);
     $examsactive = in_array($track, ['exams', 'simulation'], true);
     ?>
-    <nav class="herb-board__section-navigation" aria-label="<?php echo $ises
+    <nav class="herb-board__page-navigation" aria-label="<?php echo $ises
         ? 'Secciones Board Level de Herbología' : 'Herbology Board Level sections'; ?>">
-        <a href="<?php echo $studyguidesurl->out(false); ?>"><?php echo $ises ? 'Guías de estudio' : 'Study Guides'; ?></a>
-        <a href="<?php echo $singleherbsurl->out(false); ?>" <?php echo $practiceactive ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Práctica de herbología' : 'Herbology Practice'; ?></a>
-        <a href="<?php echo $quizurl->out(false); ?>" <?php echo $quizactive ? 'aria-current="page"' : ''; ?>>Quiz</a>
-        <a href="<?php echo $examsurl->out(false); ?>" <?php echo $examsactive ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Exámenes' : 'Exams'; ?></a>
+        <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
+            ? '← Atrás' : '← Back'; ?></a>
+        <a class="herb-board__tab" href="<?php echo $studyguidesurl->out(false); ?>"><?php echo $ises ? 'Guías de estudio' : 'Study Guides'; ?></a>
+        <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>" <?php echo $practiceactive ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Práctica de herbología' : 'Herbology Practice'; ?></a>
+        <a class="herb-board__tab" href="<?php echo $quizurl->out(false); ?>" <?php echo $quizactive ? 'aria-current="page"' : ''; ?>>Quiz</a>
+        <a class="herb-board__tab" href="<?php echo $examsurl->out(false); ?>" <?php echo $examsactive ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Exámenes' : 'Exams'; ?></a>
+        <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
+            href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
     </nav>
 
     <?php if ($track === 'exams') { ?>
