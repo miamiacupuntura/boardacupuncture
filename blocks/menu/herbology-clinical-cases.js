@@ -27,6 +27,13 @@
         const history = document.querySelector('[data-clinical-history]');
         const historyEmpty = history?.querySelector('[data-clinical-history-empty]');
         const historyList = history?.querySelector('[data-clinical-history-list]');
+        const analysisPanel = document.querySelector('[data-clinical-analysis]');
+        const analysisHeadline = analysisPanel?.querySelector('[data-clinical-analysis-headline]');
+        const analysisScore = analysisPanel?.querySelector('[data-clinical-analysis-score]');
+        const analysisErrors = analysisPanel?.querySelector('[data-clinical-analysis-errors]');
+        const analysisPriority = analysisPanel?.querySelector('[data-clinical-analysis-priority]');
+        const analysisFindings = analysisPanel?.querySelector('[data-clinical-analysis-findings]');
+        const analysisConclusion = analysisPanel?.querySelector('[data-clinical-analysis-conclusion]');
         const passThreshold = Number(quiz.dataset.passThreshold || 70);
         let activeQuestions = [...questions];
         let currentIndex = 0;
@@ -129,6 +136,133 @@
             });
             incorrectReview.hidden = incorrectQuestions.length === 0;
             retryButton.hidden = incorrectQuestions.length === 0;
+        };
+
+        const addCount = (counts, value) => {
+            const key = String(value || '').replace(/\s+/g, ' ').trim();
+            if (key) {
+                counts.set(key, (counts.get(key) || 0) + 1);
+            }
+        };
+
+        const topEntry = counts => [...counts.entries()]
+            .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0] || null;
+
+        const shortFormulaName = value => String(value || '').split('(', 1)[0].trim();
+
+        const renderAnalysis = (attemptQuestions, total, attemptScore) => {
+            if (!analysisPanel || !analysisFindings) {
+                return;
+            }
+            const spanish = quiz.dataset.examLanguage === 'es';
+            const incorrect = attemptQuestions.filter(question => question.dataset.lastCorrect !== '1');
+            const correct = attemptQuestions.filter(question => question.dataset.lastCorrect === '1');
+            const patternErrors = new Map();
+            const formulaErrors = new Map();
+            const distractors = new Map();
+            const patternStrengths = new Map();
+
+            incorrect.forEach(question => {
+                addCount(patternErrors, question.dataset.clinicalPattern);
+                addCount(formulaErrors, question.dataset.clinicalFormula);
+                addCount(
+                    distractors,
+                    shortFormulaName(optionText(question, question.dataset.selected || ''))
+                );
+            });
+            correct.forEach(question => addCount(patternStrengths, question.dataset.clinicalPattern));
+
+            const topPattern = topEntry(patternErrors);
+            const topFormula = topEntry(formulaErrors);
+            const topDistractor = topEntry(distractors);
+            const topStrength = topEntry(patternStrengths);
+            const errorRate = total > 0 ? Math.round((incorrect.length / total) * 100) : 0;
+            const priority = errorRate >= 40
+                ? (spanish ? 'Alta' : 'High')
+                : errorRate >= 20
+                    ? (spanish ? 'Enfoque específico' : 'Focused review')
+                    : (spanish ? 'Refuerzo' : 'Refinement');
+
+            analysisScore.textContent = String(attemptScore) + '/' + String(total);
+            analysisErrors.textContent = String(incorrect.length) + ' · ' + String(errorRate) + '%';
+            analysisPriority.textContent = incorrect.length === 0
+                ? (spanish ? 'Mantenimiento' : 'Maintenance')
+                : priority;
+            analysisFindings.replaceChildren();
+
+            const addFinding = text => {
+                const item = document.createElement('li');
+                item.textContent = text;
+                analysisFindings.append(item);
+            };
+
+            if (incorrect.length === 0) {
+                analysisHeadline.textContent = spanish
+                    ? 'No se detectaron dificultades recurrentes: todas las respuestas de este intento fueron correctas.'
+                    : 'No recurring difficulty was detected: every answer in this attempt was correct.';
+                addFinding(spanish
+                    ? 'La selección de patrones y fórmulas fue consistente durante todo el intento.'
+                    : 'Pattern and formula selection remained consistent throughout the attempt.');
+                analysisConclusion.textContent = spanish
+                    ? 'Mantén el dominio con repasos espaciados y casos mezclados de mayor dificultad.'
+                    : 'Maintain mastery with spaced review and more difficult mixed cases.';
+            } else {
+                analysisHeadline.textContent = errorRate >= 40
+                    ? (spanish
+                        ? 'El principal problema es la diferenciación entre patrones y fórmulas con presentaciones similares.'
+                        : 'The main difficulty is differentiating patterns and formulas with similar presentations.')
+                    : (spanish
+                        ? 'Los errores están concentrados y permiten definir una prioridad de estudio específica.'
+                        : 'The errors are concentrated enough to define a focused study priority.');
+
+                if (topPattern) {
+                    addFinding(spanish
+                        ? 'Patrón con más dificultad: “' + topPattern[0] + '” (' + topPattern[1] + ' errores).'
+                        : 'Most difficult pattern: “' + topPattern[0] + '” (' + topPattern[1] + ' errors).');
+                }
+                if (topFormula) {
+                    addFinding(spanish
+                        ? 'Fórmula correcta omitida con mayor frecuencia: ' + topFormula[0]
+                            + ' (' + topFormula[1] + ' veces).'
+                        : 'Most frequently missed correct formula: ' + topFormula[0]
+                            + ' (' + topFormula[1] + ' times).');
+                }
+                if (topDistractor) {
+                    addFinding(spanish
+                        ? 'Distractor elegido con mayor frecuencia: ' + topDistractor[0]
+                            + ' (' + topDistractor[1] + ' veces).'
+                        : 'Most frequently selected distractor: ' + topDistractor[0]
+                            + ' (' + topDistractor[1] + ' times).');
+                }
+                if (topStrength) {
+                    addFinding(spanish
+                        ? 'Área relativamente más sólida: “' + topStrength[0]
+                            + '” (' + topStrength[1] + ' respuestas correctas).'
+                        : 'Relatively strongest area: “' + topStrength[0]
+                            + '” (' + topStrength[1] + ' correct answers).');
+                }
+
+                if (topFormula && topDistractor && topFormula[0] !== topDistractor[0]) {
+                    analysisConclusion.textContent = spanish
+                        ? 'Prioriza la diferenciación entre ' + topFormula[0] + ' y ' + topDistractor[0]
+                            + '. Comienza por los signos decisivos del patrón'
+                            + (topPattern ? ' “' + topPattern[0] + '”.' : '.')
+                        : 'Prioritize differentiating ' + topFormula[0] + ' from ' + topDistractor[0]
+                            + '. Begin with the decisive pattern signs'
+                            + (topPattern ? ' for “' + topPattern[0] + '.”' : '.');
+                } else if (topFormula) {
+                    analysisConclusion.textContent = spanish
+                        ? 'Repasa las indicaciones, signos decisivos y diferenciales de ' + topFormula[0]
+                            + ' antes de repetir únicamente los errores.'
+                        : 'Review the indications, decisive signs, and differentials for ' + topFormula[0]
+                            + ' before retrying only the missed cases.';
+                } else {
+                    analysisConclusion.textContent = spanish
+                        ? 'Repasa primero la identificación del patrón y luego vuelve a relacionarlo con la fórmula.'
+                        : 'Review pattern identification first, then reconnect each pattern to its formula.';
+                }
+            }
+            analysisPanel.hidden = false;
         };
 
         const addHistoryValue = (article, label, value) => {
@@ -240,6 +374,7 @@
             resultPanel.classList.toggle('is-passed', passed);
             resultPanel.classList.toggle('is-failed', !passed);
             renderIncorrectAnswers(incorrectQuestions);
+            renderAnalysis(activeQuestions, total, score);
             resultPanel.hidden = false;
             returnLink.hidden = false;
             progress.textContent = quiz.dataset.resultsWord;
@@ -275,6 +410,9 @@
             saveStatus.hidden = true;
             historyLink.hidden = true;
             resultPanel.hidden = true;
+            if (analysisPanel) {
+                analysisPanel.hidden = true;
+            }
             navigation.hidden = false;
             nextButton.hidden = false;
             showQuestion(0);
