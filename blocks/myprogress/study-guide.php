@@ -485,9 +485,22 @@ $libraryparams = $baseparams + ['view' => 'library'];
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
+$boardformulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $boardlanguagecontext);
+$boarddomainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $boardlanguagecontext);
 $boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
+$boardherbquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
+$boardherbquizurl->set_anchor('quiz-herb-categories');
+$boardformulaquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
+$boardformulaquizurl->set_anchor('quiz-formula-categories');
+$boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
+$boardclinicalquizurl->set_anchor('quiz-clinical-cases');
+$boardclinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $boardlanguagecontext);
 $boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
+$boardlinearexamurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear'] + $boardlanguagecontext);
+$boardadaptiveexamurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'adaptive'] + $boardlanguagecontext);
 $boardsimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $boardlanguagecontext);
+$boardlinearsimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'linear'] + $boardlanguagecontext);
+$boardadaptivesimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'adaptive'] + $boardlanguagecontext);
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
@@ -581,7 +594,7 @@ echo $OUTPUT->header();
 .subject-study-library__map{padding:22px;border:1px solid #b8d5d2;border-radius:12px;background:#f7fcfb}
 .subject-study-library__map-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}.subject-study-library__map-copy{min-width:0}.subject-study-library__map-actions{display:flex;flex:0 0 auto;align-items:center;gap:9px}.subject-study-library__map-actions a{margin:0}
 .subject-study-library__journey{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.subject-study-library__journey-card{display:flex;min-height:155px;grid-column:span 2;flex-direction:column;padding:16px;border:1px solid #b9cbd6;border-top:4px solid #0b817d;border-radius:11px;background:#fff;color:#123246}
+.subject-study-library__journey-card{display:flex;min-height:235px;grid-column:span 2;flex-direction:column;padding:16px;border:1px solid #b9cbd6;border-top:4px solid #0b817d;border-radius:11px;background:#fff;color:#123246}
 .subject-study-library__journey-card:nth-child(3){border-top-color:#6d4bc3}.subject-study-library__journey-card:nth-child(4){grid-column:span 3;border-top-color:#2563eb}.subject-study-library__journey-card:nth-child(5){grid-column:span 3;border-top-color:#f77e25}
 .subject-study-library__journey-heading{display:flex;align-items:flex-start;gap:11px;margin-bottom:13px}
 .subject-study-library__journey-step{display:inline-flex;width:31px;height:31px;flex:0 0 31px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-weight:900}
@@ -591,7 +604,7 @@ echo $OUTPUT->header();
 .subject-study-library__journey-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58;font-weight:850;line-height:1.25;text-decoration:none!important}
 .subject-study-library__journey-option small{display:block;margin-top:3px;color:#64748b;font-size:11px;font-weight:600;line-height:1.3}.subject-study-library__journey-option span:last-child{align-self:center;font-size:18px}
 .subject-study-library__journey-option:hover,.subject-study-library__journey-option:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
-.subject-study-library__journey-option--primary{min-height:46px;align-items:center;background:#f7fcfb;font-size:14px}.subject-study-library__journey-option--primary:hover,.subject-study-library__journey-option--primary:focus{background:#0b817d;color:#fff}
+.subject-study-library__journey-option--primary{min-height:46px;align-items:center;justify-content:center;margin-bottom:3px;background:#f7fcfb;font-size:14px;text-align:center}.subject-study-library__journey-option--primary:hover,.subject-study-library__journey-option--primary:focus{background:#0b817d;color:#fff}
 .subject-study-library__search{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px;padding:18px;border:1px solid #d4dde4;border-radius:11px;background:#fff}.subject-study-library__search label{display:grid;gap:6px;color:#213e51;font-weight:800}.subject-study-library__search input{width:100%;min-height:48px;box-sizing:border-box;padding:10px 13px;border:1px solid #9fb3c1;border-radius:8px;background:#fff;color:#17232a;font-size:16px}.subject-study-library__search input:focus{border-color:#2563eb;outline:3px solid rgba(37,99,235,.16)}.subject-study-library__search-count{padding-bottom:12px;color:#52677a;font-size:13px;font-weight:800;white-space:nowrap}
 .subject-study-library__empty{margin:0;padding:18px;border:1px dashed #9fb3c1;border-radius:10px;background:#f8fafc;color:#52677a;text-align:center}
 .subject-study-library__group{padding:22px;border:1px solid #d8e1e7;border-radius:12px;background:#fff}
@@ -687,6 +700,16 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $chapterlisturl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></span><span aria-hidden="true">›</span>
                                 </a>
+                                <?php foreach ($primarychapters as $chapter): ?>
+                                    <?php $guideurl = $makechapterurl($chapter); ?>
+                                    <a class="subject-study-library__journey-option" href="<?php echo $guideurl->out(false); ?>">
+                                        <span>
+                                            <?php echo s($chapter['title']); ?>
+                                            <?php if (!empty($chapter['status'])): ?><small><?php echo s($chapter['status']); ?></small><?php endif; ?>
+                                        </span>
+                                        <span aria-hidden="true">›</span>
+                                    </a>
+                                <?php endforeach; ?>
                             </nav>
                         </section>
 
@@ -702,6 +725,9 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardpracticeurl->out(false); ?>">
                                     <span>Herbology Practice</span><span aria-hidden="true">›</span>
                                 </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardpracticeurl->out(false); ?>"><span><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?><small><?php echo s($ises ? 'Preguntas con respuestas visibles' : 'Questions with visible answers'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardformulasurl->out(false); ?>"><span><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?><small><?php echo s($ises ? 'Estudio pasivo de fórmulas' : 'Passive formula study'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boarddomainsurl->out(false); ?>"><span><?php echo s($ises ? 'Dominios' : 'Domains'); ?><small><?php echo s($ises ? 'Repaso pasivo por dominio' : 'Passive review by domain'); ?></small></span><span aria-hidden="true">›</span></a>
                             </nav>
                         </section>
 
@@ -717,6 +743,9 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardquizurl->out(false); ?>">
                                     <span>Quiz</span><span aria-hidden="true">›</span>
                                 </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardherbquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardformulaquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de fórmulas' : 'Formula Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalquizurl->out(false); ?>"><span><?php echo s($ises ? 'Casos clínicos' : 'Clinical Cases'); ?><small><?php echo s($ises ? 'Elige un caso y recibe feedback' : 'Choose a case and receive feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                             </nav>
                         </section>
 
@@ -732,6 +761,9 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardexamsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></span><span aria-hidden="true">›</span>
                                 </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardlinearexamurl->out(false); ?>"><span><?php echo s($ises ? 'Examen lineal' : 'Linear exam'); ?><small><?php echo s($ises ? '100 preguntas · historial' : '100 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardadaptiveexamurl->out(false); ?>"><span><?php echo s($ises ? 'Examen adaptativo' : 'Adaptive exam'); ?><small><?php echo s($ises ? '100 preguntas · historial' : '100 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalcasesurl->out(false); ?>"><span><?php echo s($ises ? 'Examen de casos clínicos' : 'Clinical Cases exam'); ?><small><?php echo s($ises ? '63 preguntas · historial' : '63 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
                             </nav>
                         </section>
 
@@ -747,6 +779,8 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardsimulationurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Simulación' : 'Simulation'); ?></span><span aria-hidden="true">›</span>
                                 </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardlinearsimulationurl->out(false); ?>"><span><?php echo s($ises ? 'Simulación lineal' : 'Linear simulation'); ?><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardadaptivesimulationurl->out(false); ?>"><span><?php echo s($ises ? 'Simulación adaptativa' : 'Adaptive simulation'); ?><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></a>
                             </nav>
                         </section>
                     </div>
