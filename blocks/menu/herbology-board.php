@@ -206,13 +206,25 @@ if ($track === 'clinicalcases') {
 if ($track === 'clinicalcases' && $clinicalquestions) {
     $clinicalprofilepath = dirname(__DIR__) . '/myprogress/formulas-study-guide-data.json';
     $clinicalprofiles = [];
+    $normalizeclinicalformula = static function ($value): string {
+        $normalized = strtolower(trim(preg_replace('/\s+/u', ' ', (string)$value)));
+        // SCORM OCR commonly reads an uppercase I as a lowercase l in short pinyin syllables.
+        $normalized = preg_replace_callback(
+            '/\b([bdjlmnpqrstxyz])l\b/u',
+            static fn(array $match): string => $match[1] . 'i',
+            $normalized
+        );
+        $normalized = preg_replace('/\bbu zhong vi qi tang\b/u', 'bu zhong yi qi tang', $normalized);
+        return $normalized;
+    };
     if (is_readable($clinicalprofilepath)) {
         $decodedclinicalprofiles = json_decode(file_get_contents($clinicalprofilepath), true);
         if (is_array($decodedclinicalprofiles)) {
             foreach (['formulas', 'supplementalFormulas'] as $clinicalprofilecollection) {
                 foreach ($decodedclinicalprofiles[$clinicalprofilecollection] ?? [] as $clinicalprofile) {
                     if (is_array($clinicalprofile) && !empty($clinicalprofile['name'])) {
-                        $clinicalprofiles[strtolower(trim((string)$clinicalprofile['name']))] = $clinicalprofile;
+                        $profilekey = $normalizeclinicalformula($clinicalprofile['name']);
+                        $clinicalprofiles[$profilekey] = $clinicalprofile;
                     }
                 }
             }
@@ -220,22 +232,41 @@ if ($track === 'clinicalcases' && $clinicalquestions) {
     }
     if ($clinicalprofiles) {
         uksort($clinicalprofiles, static fn($left, $right): int => strlen($right) <=> strlen($left));
-        $matchclinicalprofile = static function ($option) use ($clinicalprofiles) {
-            $normalizedoption = strtolower(trim(preg_replace('/\s+/u', ' ', (string)$option)));
+        $matchclinicalprofile = static function ($option) use ($clinicalprofiles, $normalizeclinicalformula) {
+            $normalizedoption = $normalizeclinicalformula($option);
             foreach ($clinicalprofiles as $profilename => $profile) {
                 if ($normalizedoption === $profilename
                         || strpos($normalizedoption, $profilename . ' ') === 0) {
                     return $profile;
                 }
             }
-            return null;
+
+            // Compare only the formula name before the translated title. This tolerates one
+            // or two remaining OCR substitutions without confusing the explanatory text.
+            $optionformula = trim((string)preg_replace('/\s*\(.*/u', '', $normalizedoption));
+            $bestprofile = null;
+            $bestdistance = PHP_INT_MAX;
+            foreach ($clinicalprofiles as $profilename => $profile) {
+                $alloweddistance = strlen($profilename) >= 18 ? 2 : 1;
+                if (abs(strlen($optionformula) - strlen($profilename)) > $alloweddistance) {
+                    continue;
+                }
+                $distance = levenshtein($optionformula, $profilename);
+                if ($distance <= $alloweddistance && $distance < $bestdistance) {
+                    $bestprofile = $profile;
+                    $bestdistance = $distance;
+                }
+            }
+            return $bestprofile;
         };
         foreach ($clinicalquestions as &$clinicalquestionfallback) {
-            if (!empty($clinicalquestionfallback['diagnosis'])
-                    || empty($clinicalquestionfallback['options'])
+            if (empty($clinicalquestionfallback['options'])
                     || empty($clinicalquestionfallback['correctLabel'])) {
                 continue;
             }
+            $existingdiagnosis = is_array($clinicalquestionfallback['diagnosis'] ?? null)
+                ? $clinicalquestionfallback['diagnosis']
+                : [];
             $correctclinicaltext = '';
             foreach ($clinicalquestionfallback['options'] as $clinicalfallbackoption) {
                 if (($clinicalfallbackoption['label'] ?? '') === $clinicalquestionfallback['correctLabel']) {
@@ -313,7 +344,11 @@ if ($track === 'clinicalcases' && $clinicalquestions) {
                 $fallbackdiagnosis['alternatives'] = $fallbackalternatives;
             }
             if ($fallbackdiagnosis) {
-                $clinicalquestionfallback['diagnosis'] = $fallbackdiagnosis;
+                // Source-specific explanations win, while the profile fills absent or legacy fields.
+                $clinicalquestionfallback['diagnosis'] = array_replace(
+                    $fallbackdiagnosis,
+                    $existingdiagnosis
+                );
             }
         }
         unset($clinicalquestionfallback);
@@ -2238,7 +2273,17 @@ echo $OUTPUT->header();
                             }
                             $decoded = $unescaped;
                         }
-                        return preg_replace('/\s*&\s*/u', ' and ', $decoded);
+                        $decoded = preg_replace('/\s*&\s*/u', ' and ', $decoded);
+                        $decoded = preg_replace_callback(
+                            '/\b([A-Z])l\b/u',
+                            static fn(array $match): string => $match[1] . 'I',
+                            $decoded
+                        );
+                        return preg_replace(
+                            '/\bBU ZHONG VI QI TANG\b/u',
+                            'BU ZHONG YI QI TANG',
+                            $decoded
+                        );
                     };
                     ?>
                     <?php foreach ($clinicalquestions as $clinicalindex => $clinicalquestion) { ?>
