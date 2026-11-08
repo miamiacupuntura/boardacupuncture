@@ -8,6 +8,7 @@ is created or atomically replaced.
 from __future__ import annotations
 
 import argparse
+import difflib
 import hashlib
 import html
 import json
@@ -37,6 +38,7 @@ TARGET_COURSE = "herbal comp review module exams"
 TARGET_TOPIC = "handbook-of-oriental-medicine. clinical cases"
 EMBEDDED_ONE = re.compile(r"(?<=[A-Za-z])1(?=[A-Za-z])")
 SUSPICIOUS_EMBEDDED_DIGIT = re.compile(r"(?<=[A-Za-z])[0-9](?=[A-Za-z])")
+PINYIN_I_OCR = re.compile(r"\b([BDJLMNPQRSTXYZ])[lL]\b")
 
 
 def normalise_name(value: Any) -> str:
@@ -52,7 +54,15 @@ def source_text(value: Any) -> str:
             break
         decoded = unescaped
     decoded = re.sub(r"\s*&\s*", " and ", decoded)
-    return EMBEDDED_ONE.sub("i", decoded)
+    decoded = EMBEDDED_ONE.sub("i", decoded)
+    decoded = PINYIN_I_OCR.sub(lambda match: f"{match.group(1)}I", decoded)
+    decoded = re.sub(
+        r"\bBU ZHONG VI QI TANG\b",
+        "BU ZHONG YI QI TANG",
+        decoded,
+        flags=re.IGNORECASE,
+    )
+    return decoded
 
 
 def load_formula_profiles(path: Path) -> dict[str, dict[str, Any]]:
@@ -79,11 +89,21 @@ def diagnostic_feedback(
 ) -> dict[str, Any] | None:
     """Match the correct option to its guideline profile and build rationale."""
     def match_profile(option: str) -> dict[str, Any] | None:
-        normalizedoption = normalise_name(option)
+        normalizedoption = normalise_name(source_text(option))
         for name in sorted(profiles, key=len, reverse=True):
             if normalizedoption == name or normalizedoption.startswith(f"{name} "):
                 return profiles[name]
-        return None
+
+        # OCR defects usually affect one pinyin letter. Compare only the formula
+        # name before the translated title so explanatory prose cannot create a match.
+        optionname = normalise_name(normalizedoption.split("(", 1)[0])
+        candidates = [
+            name
+            for name in profiles
+            if abs(len(name) - len(optionname)) <= (2 if len(name) >= 18 else 1)
+        ]
+        closematches = difflib.get_close_matches(optionname, candidates, n=1, cutoff=0.90)
+        return profiles[closematches[0]] if closematches else None
 
     profile = match_profile(correctoption)
     if profile is None:
