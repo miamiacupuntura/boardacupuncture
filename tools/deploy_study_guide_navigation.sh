@@ -14,7 +14,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_study_guide_navigation.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl install grep wc tr sort stat cp readlink; do
+for command in curl install grep wc tr sort stat cp readlink sed; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -96,7 +96,12 @@ for candidate_root in "$MOODLE_COMPARISON_ROOT" "$PUBLISHED_COMPARISON_ROOT"; do
         COMPARISON_ROOTS+=("$(readlink -f "$candidate_root")")
     fi
 done
-mapfile -t COMPARISON_ROOTS < <(printf '%s\n' "${COMPARISON_ROOTS[@]}" | grep -v '^
+mapfile -t COMPARISON_ROOTS < <(printf '%s\n' "${COMPARISON_ROOTS[@]}" | sed '/^$/d' | sort -u)
+
+if [[ "${#COMPARISON_ROOTS[@]}" -eq 0 ]]; then
+    echo "ERROR: no se encontró dui-yao.html en la copia de Moodle ni en el alias publicado." >&2
+    exit 1
+fi
 
 mkdir -p "$BACKUP_DIR"
 installed_total=0
