@@ -2302,6 +2302,7 @@ echo $OUTPUT->header();
                         ? '¿Deseas finalizar ahora? Las preguntas sin responder contarán como incorrectas y el resultado se guardará.'
                         : 'Finish now? Unanswered questions will count as incorrect and the result will be saved.'; ?>"
                     data-unanswered-word="<?php echo $ises ? 'Sin responder' : 'Unanswered'; ?>"
+                    data-answered-word="<?php echo $ises ? 'respondidas' : 'answered'; ?>"
                     data-pass-threshold="70"
                     data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
                     data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
