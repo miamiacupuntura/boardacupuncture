@@ -242,6 +242,288 @@ def diagnostic_feedback(
             "la obstrucción persista. Du Huo Ji Sheng Tang corresponde porque expulsa los "
             "patógenos y fortalece tendones, huesos, Qi y Sangre."
         )
+    elif (
+        profilename == "li zhong wan"
+        and "menstrual flow is heavy" in normalizedprompt
+        and "chronic loose stool" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is Spleen-Stomach deficiency-Cold. Chronic loose stool, poor appetite, "
+            "bloating and abdominal pain relieved by warmth and pressure show that the "
+            "Middle Burner lacks Qi and Yang to transform food and fluids. The deep, weak "
+            "pulse confirms deficiency. Prolonged heavy, light-red bleeding without clots "
+            "adds failure of Spleen Qi to contain Blood. Li Zhong Wan fits because it warms "
+            "the Middle, tonifies Qi and strengthens the Spleen without treating the severe "
+            "Yang collapse or violent Cold pain required by the stronger alternatives."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de Frío por deficiencia de Bazo-Estómago. Las heces sueltas crónicas, "
+            "el poco apetito, la distensión y el dolor abdominal aliviado por calor y presión "
+            "muestran que el Jiao Medio carece de Qi y Yang para transformar alimentos y "
+            "líquidos. El pulso profundo y débil confirma deficiencia. El sangrado prolongado, "
+            "abundante y rojo claro sin coágulos añade incapacidad del Qi de Bazo para contener "
+            "la Sangre. Li Zhong Wan corresponde porque calienta el Centro, tonifica Qi y "
+            "fortalece Bazo, sin el colapso grave de Yang ni el dolor violento por Frío que "
+            "exigirían las alternativas más fuertes."
+        )
+    elif (
+        profilename == "si ni tang"
+        and "knees drawn up" in normalizedprompt
+        and "undigested food in diarrhea" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is Shaoyin Cold transformation with devastated Yang. Persistent cold of "
+            "the hands, feet and knees, a curled posture, profound fatigue and sleepiness "
+            "show that Yang can no longer warm the body. Vomiting, diarrhea with undigested "
+            "food, a cold abdomen and no thirst show failure to transform food and fluids. "
+            "The bland tongue with a white slippery coat and deep, weak pulse confirm severe "
+            "interior Cold and deficiency. Si Ni Tang is required to rescue Yang, warm the "
+            "Middle and restore the pulse; ordinary Qi tonics are not strong enough."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de transformación Fría de Shaoyin con Yang devastado. El frío persistente "
+            "de manos, pies y rodillas, la postura encogida, el agotamiento profundo y la "
+            "somnolencia muestran que el Yang ya no calienta el cuerpo. El vómito, la diarrea "
+            "con alimento no digerido, el abdomen frío y la ausencia de sed indican incapacidad "
+            "para transformar alimentos y líquidos. La lengua insípida con capa blanca "
+            "resbaladiza y el pulso profundo y débil confirman Frío interno grave con deficiencia. "
+            "Si Ni Tang debe rescatar Yang, calentar el Centro y restaurar el pulso; los tónicos "
+            "ordinarios de Qi no son suficientes."
+        )
+    elif (
+        profilename == "si jun zi tang"
+        and "weakness of voice" in normalizedprompt
+        and "weakness of limbs" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is uncomplicated Spleen Qi deficiency. A pale face, weak voice and limb "
+            "weakness show deficient Qi, while poor appetite and loose stool identify the "
+            "Spleen as the affected system. The bland pale tongue with a thin white coat "
+            "and thready, weak pulse confirm deficiency without prominent Cold, Heat, Qi "
+            "sinking or Blood deficiency. Si Jun Zi Tang is the foundational choice to "
+            "tonify Spleen Qi and restore transportation and transformation."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de deficiencia simple de Qi de Bazo. El rostro pálido, la voz débil y "
+            "la debilidad de extremidades muestran Qi deficiente, mientras que el poco apetito "
+            "y las heces sueltas identifican al Bazo como sistema afectado. La lengua pálida e "
+            "insípida con capa blanca fina y el pulso filiforme y débil confirman deficiencia "
+            "sin Frío, Calor, hundimiento de Qi ni deficiencia de Sangre predominantes. Si Jun "
+            "Zi Tang es la elección fundamental para tonificar Qi de Bazo y restaurar transporte "
+            "y transformación."
+        )
+    elif (
+        profilename == "bu zhong yi qi tang"
+        and "over two months" in normalizedprompt
+        and "brought on through exertion" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "The prolonged low-grade fever that appears in the morning and is triggered by "
+            "exertion is deficiency fever from sinking Middle Qi, not an excess Heat pattern. "
+            "Spontaneous sweating and shortness of breath show Qi failing to secure the "
+            "exterior and support respiration; chronic loose stool identifies Spleen Qi "
+            "deficiency. A pale tongue and weak pulse confirm deficiency. Thirst with a "
+            "preference for warm drinks does not indicate Yin deficiency Heat. Bu Zhong Yi "
+            "Qi Tang fits because it tonifies Middle Qi, raises the sunken Yang and treats "
+            "deficiency fever."
+        )
+        cleaned["caseReasoningEs"] = (
+            "La fiebre baja prolongada que aparece por la mañana y se desencadena con esfuerzo "
+            "es fiebre por deficiencia debida al hundimiento del Qi Medio, no un patrón de "
+            "Calor de exceso. El sudor espontáneo y la disnea muestran que el Qi no asegura el "
+            "Exterior ni sostiene la respiración; las heces sueltas crónicas identifican "
+            "deficiencia de Qi de Bazo. La lengua pálida y el pulso débil confirman deficiencia. "
+            "La sed con preferencia por bebidas tibias no indica Calor por deficiencia de Yin. "
+            "Bu Zhong Yi Qi Tang corresponde porque tonifica Qi Medio, eleva Yang hundido y "
+            "trata la fiebre por deficiencia."
+        )
+    elif (
+        profilename == "sheng mai san"
+        and "heart attack" in normalizedprompt
+        and "scanty sputum" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is combined Heart-Lung Qi and Yin deficiency. Chest pain and shortness of "
+            "breath worsened by activity show deficient Qi failing to support circulation and "
+            "respiration. Dry mouth, difficult-to-expectorate scanty sputum, night sweating "
+            "and a thin dry tongue coat show fluid and Yin depletion. The feeble, thready "
+            "pulse confirms deficiency of both Qi and Yin. Sheng Mai San fits because it "
+            "augments Qi, nourishes Yin, generates fluids and restrains leakage of sweat."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de deficiencia combinada de Qi y Yin de Corazón-Pulmón. El dolor torácico "
+            "y la disnea agravados por actividad muestran Qi deficiente incapaz de sostener "
+            "circulación y respiración. La boca seca, el esputo escaso difícil de expulsar, el "
+            "sudor nocturno y la capa lingual fina y seca muestran agotamiento de líquidos y "
+            "Yin. El pulso filiforme y débil confirma deficiencia de Qi y Yin. Sheng Mai San "
+            "corresponde porque aumenta Qi, nutre Yin, genera líquidos y contiene la pérdida "
+            "de sudor."
+        )
+    elif (
+        profilename == "liu wei di huang wan"
+        and "heat sensation on palms soles" in normalizedprompt
+        and "red, no coating" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is Kidney Yin deficiency with deficiency Heat. Low-back soreness and "
+            "weakness, tinnitus, reduced hearing and spermatorrhea identify Kidney deficiency. "
+            "Dizziness and visual weakness reflect inadequate Essence and Yin nourishment. "
+            "Night sweating, heat in the palms and soles, dry throat, a red peeled tongue and "
+            "a thready, rapid pulse establish Yin deficiency rather than Qi, Blood or Yang "
+            "deficiency. Liu Wei Di Huang Wan fits because it enriches Kidney-Liver Yin while "
+            "balancing the associated deficiency Heat and fluid metabolism."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de deficiencia de Yin de Riñón con Calor por deficiencia. El dolor y la "
+            "debilidad lumbar, el tinnitus, la disminución auditiva y la espermatorrea identifican "
+            "deficiencia de Riñón. El mareo y la debilidad visual reflejan nutrición insuficiente "
+            "de Esencia y Yin. El sudor nocturno, el calor en palmas y plantas, la garganta seca, "
+            "la lengua roja pelada y el pulso filiforme y rápido establecen deficiencia de Yin, "
+            "no de Qi, Sangre o Yang. Liu Wei Di Huang Wan corresponde porque enriquece Yin de "
+            "Riñón-Hígado mientras equilibra el Calor por deficiencia y el metabolismo de líquidos."
+        )
+    elif (
+        profilename == "jin gui shen qi wan"
+        and "benign prostate hypertrophy" in normalizedprompt
+        and "dribbling through the day" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is Kidney Yang deficiency impairing Lower-Burner Qi transformation. "
+            "Dysuria, nocturnal frequency and daytime dribbling show that deficient Kidney "
+            "Yang cannot regulate the Bladder and transform fluids. Fatigue, feeling cold, "
+            "low-back aching and reduced libido identify the underlying Yang deficiency. "
+            "A pale tongue with thin white coat and a deep, weak pulse confirm interior Cold "
+            "and deficiency. Jin Gui Shen Qi Wan fits because it warms and tonifies Kidney "
+            "Yang while restoring Qi transformation and urination."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de deficiencia de Yang de Riñón que altera la transformación de Qi del "
+            "Jiao Inferior. La disuria, la frecuencia nocturna y el goteo diurno muestran que "
+            "el Yang de Riñón deficiente no regula Vejiga ni transforma líquidos. La fatiga, "
+            "la sensación de frío, el dolor lumbar y la libido reducida identifican la "
+            "deficiencia de Yang subyacente. La lengua pálida con capa blanca fina y el pulso "
+            "profundo y débil confirman Frío interno y deficiencia. Jin Gui Shen Qi Wan "
+            "corresponde porque calienta y tonifica Yang de Riñón mientras restaura la "
+            "transformación de Qi y la micción."
+        )
+    elif (
+        profilename == "su zi jiang qi tang"
+        and "emphysema" in normalizedprompt
+        and "much watery sputum" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is excess above with deficiency below. Wheezing, chest tightness, cough "
+            "and copious watery sputum show Cold-Phlegm obstructing the Lung and causing Lung "
+            "Qi to rebel upward. Weak legs and swollen ankles in an older patient point to "
+            "Kidney deficiency below failing to grasp Qi and transform fluids. A greasy white "
+            "tongue coat confirms Cold-Phlegm, while the rolling but weak pulse captures both "
+            "Phlegm excess and underlying deficiency. Su Zi Jiang Qi Tang fits because it "
+            "descends Lung Qi, calms wheezing and warm-transforms Cold-Phlegm while addressing "
+            "the lower deficiency."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de exceso arriba con deficiencia abajo. La sibilancia, la opresión "
+            "torácica, la tos y el esputo acuoso abundante muestran Flema-Frío obstruyendo "
+            "Pulmón y haciendo que el Qi de Pulmón ascienda en rebelión. Las piernas débiles "
+            "y los tobillos hinchados en una paciente mayor señalan deficiencia de Riñón abajo "
+            "que no capta Qi ni transforma líquidos. La capa blanca grasosa confirma Flema-Frío, "
+            "mientras el pulso rodante pero débil expresa exceso de Flema con deficiencia "
+            "subyacente. Su Zi Jiang Qi Tang corresponde porque desciende Qi de Pulmón, calma "
+            "sibilancias y calienta-transforma Flema-Frío mientras atiende la deficiencia inferior."
+        )
+    elif (
+        profilename == "tao he cheng qi tang"
+        and "speech became unintelligible" in normalizedprompt
+        and "very tight and tender" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is Blood stasis with Heat accumulation in the Lower Burner. Severe fixed "
+            "lower-abdominal pain, a tight tender abdomen and constipation show binding of "
+            "matter and Blood; rising high fever, irritability, restlessness and delirium show "
+            "Heat disturbing the Shen. A red tongue with yellow coat confirms Heat, while the "
+            "choppy, wiry pulse supports Blood stasis and constraint. Tao He Cheng Qi Tang fits "
+            "because it drains Heat, opens the bowels and breaks Blood stasis. In actual care, "
+            "high fever, delirium and severe abdominal tenderness require emergency evaluation."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de estasis de Sangre con acumulación de Calor en el Jiao Inferior. El "
+            "dolor hipogástrico fijo e intenso, el abdomen tenso y doloroso y el estreñimiento "
+            "muestran ligadura de materia y Sangre; la fiebre alta creciente, irritabilidad, "
+            "inquietud y delirio muestran Calor perturbando Shen. La lengua roja con capa "
+            "amarilla confirma Calor, y el pulso entrecortado y de cuerda apoya estasis y "
+            "constricción. Tao He Cheng Qi Tang corresponde porque drena Calor, abre intestino "
+            "y rompe estasis de Sangre. En atención real, fiebre alta, delirio y dolor abdominal "
+            "intenso requieren evaluación de emergencia."
+        )
+    elif (
+        profilename == "si shen wan"
+        and "every morning around 5am" in normalizedprompt
+        and "cold hands and feet" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is the classic dawn or 'cock-crow' diarrhea pattern from combined Spleen "
+            "and Kidney Yang deficiency. Diarrhea predictably around 5 a.m. is the decisive "
+            "timing clue. Poor appetite and indigestion show weak Spleen transformation, "
+            "while low-back soreness, cold hands and feet, fatigue and weakness identify "
+            "Kidney Yang deficiency. A pale tongue and deep, weak pulse confirm interior "
+            "deficiency-Cold. Si Shen Wan fits because it warms Spleen-Kidney Yang and binds "
+            "the intestines to stop chronic early-morning diarrhea."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Es el patrón clásico de diarrea al amanecer o 'canto del gallo' por deficiencia "
+            "combinada de Yang de Bazo y Riñón. La diarrea predecible alrededor de las 5 a. m. "
+            "es la clave temporal decisiva. El poco apetito y la indigestión muestran "
+            "transformación débil de Bazo, mientras dolor lumbar, manos y pies fríos, fatiga y "
+            "debilidad identifican deficiencia de Yang de Riñón. La lengua pálida y el pulso "
+            "profundo y débil confirman Frío interno por deficiencia. Si Shen Wan corresponde "
+            "porque calienta Yang de Bazo-Riñón y asegura intestinos para detener la diarrea "
+            "crónica de madrugada."
+        )
+    elif (
+        profilename == "gan mai da zao tang"
+        and "disorientation and depression" in normalizedprompt
+        and "cried easily" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This presentation matches Zang Zao, or restless-organ disorder. Emotional "
+            "lability with despondency, unexplained crying, inappropriate laughter, "
+            "disorientation and restless sleep shows the Shen is not being properly nourished "
+            "and contained. The pale tongue and thready pulse support an underlying deficiency, "
+            "while the wiry quality reflects emotional constraint. Gan Mai Da Zao Tang fits "
+            "because it nourishes the Heart, calms the Shen and harmonizes the Middle without "
+            "treating Phlegm-Heat, skin Wind or pronounced Yin-Heat."
+        )
+        cleaned["caseReasoningEs"] = (
+            "La presentación corresponde a Zang Zao o trastorno del órgano inquieto. La "
+            "labilidad emocional con abatimiento, llanto inexplicable, risa inapropiada, "
+            "desorientación y sueño inquieto muestra que Shen no está nutrido ni contenido "
+            "adecuadamente. La lengua pálida y el pulso filiforme apoyan deficiencia subyacente, "
+            "mientras la cualidad de cuerda refleja constricción emocional. Gan Mai Da Zao Tang "
+            "corresponde porque nutre Corazón, calma Shen y armoniza Centro sin tratar "
+            "Flema-Calor, Viento cutáneo ni Calor pronunciado por deficiencia de Yin."
+        )
+    elif (
+        profilename == "bei mu gua lou san"
+        and "weak bronchi" in normalizedprompt
+        and "dry, swollen and painful throat" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "This is Lung Dryness with Phlegm congealed by depleted fluids. Dry cough, "
+            "difficult-to-expectorate Phlegm and a dry, swollen painful throat show that the "
+            "Lung lacks moisture and the remaining fluids have thickened into Phlegm. A red, "
+            "dry tongue with a thready, rapid but forceful pulse confirms Dryness with Heat "
+            "rather than Damp-Phlegm. Bei Mu Gua Lou San fits because it moistens the Lung, "
+            "clears Heat, transforms dry Phlegm and restores the downward movement of Lung Qi."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Se trata de Sequedad de Pulmón con Flema condensada por agotamiento de líquidos. "
+            "La tos seca, la Flema difícil de expulsar y la garganta seca, inflamada y dolorosa "
+            "muestran falta de humedad en Pulmón y espesamiento de los líquidos restantes en "
+            "Flema. La lengua roja y seca con pulso filiforme, rápido pero fuerte confirma "
+            "Sequedad con Calor, no Flema-Humedad. Bei Mu Gua Lou San corresponde porque "
+            "humedece Pulmón, aclara Calor, transforma Flema seca y restaura el descenso del "
+            "Qi de Pulmón."
+        )
 
     if (
         "caseReasoning" not in cleaned
@@ -387,6 +669,50 @@ def extract_question(
             "CASE: Tiffany, a 40-year-old woman, presents with recent diarrhea and vomiting "
             "after working in a child-care facility. She also feels feverish and reports "
             "epigastric bloating, nausea, flatulence, loss of appetite and headache."
+        )
+    elif (
+        normalizedcorrect.startswith("bu zhong yi qi tang ")
+        and "over two months" in normalizedprompt
+        and "brought on through exertion" in normalizedprompt
+    ):
+        prompt = (
+            "CASE: Mary, a 35-year-old woman, has had a low-grade fever of 99.7°F for more "
+            "than two months. It occurs mainly in the morning and is also triggered by "
+            "exertion. Other symptoms include spontaneous sweating, shortness of breath and "
+            "chronic loose stool. She is thirsty but prefers warm drinks. Her tongue is "
+            "somewhat pale and her pulse is weak."
+        )
+    elif (
+        normalizedcorrect.startswith("jin gui shen qi wan ")
+        and "benign prostate hypertrophy" in normalizedprompt
+    ):
+        prompt = re.sub(
+            r"\bSteve also complains\b",
+            "He also reports",
+            prompt,
+            flags=re.IGNORECASE,
+        )
+    elif (
+        normalizedcorrect.startswith("tao he cheng qi tang ")
+        and "speech became unintelligible" in normalizedprompt
+    ):
+        prompt = (
+            "CASE: Carl, a 30-year-old man, was sent to the emergency room yesterday for "
+            "severe lower-abdominal pain and a rising fever. At the same time, his speech "
+            "became unintelligible, and he became markedly irritable, restless and delirious. "
+            "He has been constipated for the past week. His temperature is 102°F, and his "
+            "abdomen is very tight and tender. His tongue is red with a yellow coat, and his "
+            "pulse is choppy and wiry."
+        )
+    elif (
+        normalizedcorrect.startswith("bei mu gua lou san ")
+        and "weak bronchi" in normalizedprompt
+    ):
+        prompt = re.sub(
+            r"^CASE:\s*Jenny,\s*42-year-old male;\s*She",
+            "CASE: Jenny, a 42-year-old woman. She",
+            prompt,
+            flags=re.IGNORECASE,
         )
     labels = [chr(65 + index) if index < 26 else str(index + 1) for index in range(len(options))]
     fingerprint = hashlib.sha256(
