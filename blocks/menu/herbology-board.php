@@ -96,12 +96,15 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
     $examhistorytable = new xmldb_table('block_menu_exam_attempts');
     if ($DB->get_manager()->table_exists($examhistorytable)) {
         if ($track === 'clinicalcases') {
-            $clinicalhistory = array_values($DB->get_records(
+            $clinicalhistory = array_values($DB->get_records_select(
                 'block_menu_exam_attempts',
+                'userid = :userid AND courseid = :courseid '
+                    . 'AND examtype IN (:completed, :incomplete)',
                 [
                     'userid' => $USER->id,
                     'courseid' => $membershipcourseid,
-                    'examtype' => 'clinicalcases',
+                    'completed' => 'clinicalcases',
+                    'incomplete' => 'clinicalincomplete',
                 ],
                 'timecompleted DESC, id DESC',
                 '*',
@@ -2538,6 +2541,7 @@ echo $OUTPUT->header();
                     data-status-word="<?php echo $ises ? 'Estado' : 'Status'; ?>"
                     data-passed-word="<?php echo $ises ? 'Aprobado' : 'Passed'; ?>"
                     data-failed-word="<?php echo $ises ? 'No aprobado' : 'Not passed'; ?>"
+                    data-incomplete-word="<?php echo $ises ? 'No completado' : 'Not completed'; ?>"
                     data-duration-word="<?php echo $ises ? 'Duración' : 'Duration'; ?>">
                     <header>
                         <div>
@@ -2560,7 +2564,16 @@ echo $OUTPUT->header();
                             $attemptpercentage = $attempt->total > 0
                                 ? (int) round(($attempt->score / $attempt->total) * 100)
                                 : 0;
-                            $attemptpassed = $attemptpercentage >= 70;
+                            $attemptcomplete = $attempt->examtype !== 'clinicalincomplete';
+                            $attemptpassed = $attemptcomplete && $attemptpercentage >= 70;
+                            $attemptstatus = !$attemptcomplete
+                                ? ($ises ? 'No completado' : 'Not completed')
+                                : ($attemptpassed
+                                    ? ($ises ? 'Aprobado' : 'Passed')
+                                    : ($ises ? 'No aprobado' : 'Not passed'));
+                            $attemptclass = !$attemptcomplete
+                                ? 'is-incomplete'
+                                : ($attemptpassed ? 'is-passed' : 'is-failed');
                             $attemptminutes = intdiv((int) $attempt->duration, 60);
                             $attemptseconds = (int) $attempt->duration % 60;
                             $attemptduration = $attemptminutes > 0
@@ -2570,7 +2583,7 @@ echo $OUTPUT->header();
                                 ? ($ises ? 'Reintento de errores' : 'Error retry')
                                 : ($ises ? 'Examen completo' : 'Full exam');
                         ?>
-                            <article role="listitem" class="<?php echo $attemptpassed ? 'is-passed' : 'is-failed'; ?>">
+                            <article role="listitem" class="<?php echo s($attemptclass); ?>">
                                 <div>
                                     <span><?php echo $ises ? 'Fecha y hora' : 'Date and time'; ?></span>
                                     <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
@@ -2585,9 +2598,7 @@ echo $OUTPUT->header();
                                 </div>
                                 <div>
                                     <span><?php echo $ises ? 'Estado' : 'Status'; ?></span>
-                                    <strong><?php echo $attemptpassed
-                                        ? ($ises ? 'Aprobado' : 'Passed')
-                                        : ($ises ? 'No aprobado' : 'Not passed'); ?></strong>
+                                    <strong><?php echo s($attemptstatus); ?></strong>
                                 </div>
                                 <div>
                                     <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
