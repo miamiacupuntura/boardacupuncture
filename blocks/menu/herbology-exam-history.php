@@ -1,5 +1,5 @@
 <?php
-// Saves one completed Chinese Herbology practice exam attempt.
+// Saves a completed or interrupted Chinese Herbology practice exam attempt.
 
 define('AJAX_SCRIPT', true);
 
@@ -30,8 +30,17 @@ $total = required_param('total', PARAM_INT);
 $duration = required_param('duration', PARAM_INT);
 $language = optional_param('language', 'en', PARAM_ALPHA);
 
-$validexamtype = in_array($examtype, ['linear', 'adaptive', 'clinicalcases', 'clinicalincomplete'], true);
+$validexamtype = in_array(
+    $examtype,
+    ['linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete', 'clinicalcases', 'clinicalincomplete'],
+    true
+);
 $isclinicalattempt = in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true);
+$isincompleteattempt = in_array(
+    $examtype,
+    ['linearincomplete', 'adaptiveincomplete', 'clinicalincomplete'],
+    true
+);
 $validtotal = $isclinicalattempt
     ? $total >= 1 && $total <= 500
     : $total === 100;
@@ -89,8 +98,8 @@ echo json_encode([
         'score' => (int) $existingattempt->score,
         'total' => (int) $existingattempt->total,
         'percentage' => $attemptpercentage,
-        'completed' => $existingattempt->examtype !== 'clinicalincomplete',
-        'passed' => $existingattempt->examtype !== 'clinicalincomplete' && $attemptpercentage >= 70,
+        'completed' => !$isincompleteattempt,
+        'passed' => !$isincompleteattempt && $attemptpercentage >= 70,
         'duration' => $attemptduration,
         'timecompleted' => (int) $existingattempt->timecompleted,
         'completedlabel' => userdate(
