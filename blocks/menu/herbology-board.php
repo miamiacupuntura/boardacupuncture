@@ -85,6 +85,7 @@ $languagecontext = ($fromlibrary ? ['from' => 'library'] : []) + ($ises ? ['lang
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
+$domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext);
@@ -501,8 +502,6 @@ if ($usesdomainbank && is_readable($domaincandidatepath)) {
     }
 }
 $domaincandidateinventory = $domainbank['sourceInventory'] ?? $domaincandidateinventory;
-$canmanagedomains = is_siteadmin($USER)
-    || has_capability('moodle/course:manageactivities', $membershipcontext, $USER->id);
 $questionisready = static function(array $question): bool {
     return !empty($question['prompt'])
         && count($question['options'] ?? []) === 4
@@ -547,7 +546,7 @@ foreach ($domainblueprint as &$domain) {
 }
 unset($domain);
 if ($track === 'domains' && $domainkey !== '' && $selecteddomain === null) {
-    redirect($quizurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
+    redirect($domainsurl, 'The requested Domain does not exist.', null, \core\output\notification::NOTIFY_ERROR);
 }
 $domainperpage = 25;
 $selecteddomainpagequestions = [];
@@ -1042,7 +1041,7 @@ $pagetitle = in_array($track, ['exams', 'simulation'], true)
     ? ($track === 'simulation'
         ? ($ises ? 'Simulación de Herbología' : 'Herbology Simulation')
         : ($ises ? 'Exámenes de Herbología' : 'Herbology Exams'))
-    : (in_array($track, ['quiz', 'clinicalcases', 'domains'], true)
+    : (in_array($track, ['quiz', 'clinicalcases'], true)
         ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
         : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
 $PAGE->set_title($pagetitle);
@@ -1645,11 +1644,13 @@ echo $OUTPUT->header();
     <nav class="herb-board__page-navigation" aria-label="<?php echo $ises ? 'Navegación de Herbología' : 'Herbology navigation'; ?>">
         <a class="herb-board__back" data-herbology-step-back href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises
             ? '← Atrás' : '← Back'; ?></a>
-        <?php if (!in_array($track, ['exams', 'quiz', 'clinicalcases', 'domains', 'simulation'], true)) { ?>
+        <?php if (!in_array($track, ['exams', 'quiz', 'clinicalcases', 'simulation'], true)) { ?>
             <a class="herb-board__tab" href="<?php echo $singleherbsurl->out(false); ?>"
                 <?php echo $track === 'herbs' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Hierbas individuales' : 'Single Herbs'; ?></a>
             <a class="herb-board__tab" href="<?php echo $formulasurl->out(false); ?>"
                 <?php echo $track === 'formulas' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></a>
+            <a class="herb-board__tab" href="<?php echo $domainsurl->out(false); ?>"
+                <?php echo $track === 'domains' ? 'aria-current="page"' : ''; ?>><?php echo $ises ? 'Dominios' : 'Domains'; ?></a>
         <?php } ?>
         <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
             href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
@@ -2179,12 +2180,6 @@ echo $OUTPUT->header();
                         ? 'Configura el Quiz por banco completo, fórmula o categoría.'
                         : 'Configure the Quiz by full bank, formula, or category.'; ?></span>
                 </a>
-                <a class="herb-board__launch" href="<?php echo $quizurl->out(false); ?>#quiz-domains">
-                    <strong><?php echo $ises ? 'Quiz por dominio' : 'Quiz by Domain'; ?></strong>
-                    <span><?php echo $ises
-                        ? 'Trabaja uno de los seis dominios de Herbología.'
-                        : 'Work through one of the six Herbology Domains.'; ?></span>
-                </a>
             </div>
 
             <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises ? 'Quiz de hierbas individuales por categoría de Yang' : 'Single Herbs Quiz by Yang category'; ?></h4>
@@ -2264,27 +2259,6 @@ echo $OUTPUT->header();
                 <?php } ?>
             </section>
 
-            <h4 class="herb-board__subheading herb-board__subheading--spaced" id="quiz-domains">
-                <?php echo $ises ? 'Quiz por dominio' : 'Quiz by Domain'; ?>
-            </h4>
-            <div class="herb-board__domains">
-                <?php foreach ($domainblueprint as $domain) {
-                    $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                        'track' => 'domains',
-                        'domain' => $domain['id'],
-                    ] + $languagecontext);
-                ?>
-                    <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
-                        href="<?php echo $domainurl->out(false); ?>">
-                        <span class="herb-board__domain-number"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$domain['number']; ?></span>
-                        <h4><?php echo s($domain['name']); ?></h4>
-                        <p><?php echo s($domain['focus']); ?></p>
-                        <span class="herb-board__domain-status">
-                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de Quiz' : 'Quiz questions'; ?> →
-                        </span>
-                    </a>
-                <?php } ?>
-            </div>
         </section>
     <?php } else if ($track === 'clinicalcases') { ?>
         <section class="herb-board__panel herb-board__clinical-quiz" aria-labelledby="clinical-case-quiz-title">
@@ -2804,14 +2778,14 @@ echo $OUTPUT->header();
                 <div>
                     <h3 id="herb-board-workspace-title"><?php echo $track === 'exams'
                         ? ($ises ? 'Elige una modalidad' : 'Choose an exam mode')
-                        : ($ises ? 'Quiz por dominio' : 'Quiz by Domain'); ?></h3>
+                        : ($ises ? 'Estudiar por dominio' : 'Study by Domain'); ?></h3>
                     <p><?php echo $track === 'exams'
                         ? ($ises
                             ? 'Elige el examen lineal, adaptativo o de casos clínicos y revisa tu historial.'
                             : 'Choose the linear, adaptive, or Clinical Cases exam and review your history.')
                         : ($ises
-                            ? 'Elige un dominio para completar un Quiz enfocado.'
-                            : 'Choose one Domain for a focused Quiz.'); ?></p>
+                            ? 'Repasa preguntas, respuestas y explicaciones visibles dentro de cada dominio.'
+                            : 'Review visible questions, answers, and explanations within each Domain.'); ?></p>
                 </div>
             </div>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
@@ -2873,7 +2847,7 @@ echo $OUTPUT->header();
                         <h4><?php echo s($domain['name']); ?></h4>
                         <p><?php echo s($domain['focus']); ?></p>
                         <span class="herb-board__domain-status">
-                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de Quiz' : 'Quiz questions'; ?> →
+                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de estudio' : 'study questions'; ?> →
                         </span>
                     </a>
                 <?php } ?>
@@ -3131,7 +3105,7 @@ echo $OUTPUT->header();
         </section>
     <?php } else { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-domain-bank-title">
-            <a class="herb-board__domain-back" href="<?php echo $quizurl->out(false); ?>#quiz-domains"><?php echo $ises ? '← Volver a Quiz' : '← Back to Quiz'; ?></a>
+            <a class="herb-board__domain-back" href="<?php echo $domainsurl->out(false); ?>"><?php echo $ises ? '← Volver a Dominios' : '← Back to Domains'; ?></a>
             <div class="herb-board__panel-heading herb-board__panel-heading--domain-bank">
                 <div>
                     <span class="herb-board__domain-kicker"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$selecteddomain['number']; ?> · <?php echo $ises ? 'Práctica enfocada' : 'Focused practice'; ?></span>
@@ -3146,8 +3120,8 @@ echo $OUTPUT->header();
             <?php if (!$selecteddomain['questions']) { ?>
                 <div class="herb-board__notice">
                     <?php echo $ises
-                        ? 'Las preguntas del Quiz para este tema están en preparación.'
-                        : 'Quiz questions for this subject are being prepared.'; ?>
+                        ? 'Las preguntas de estudio para este dominio están en preparación.'
+                        : 'Study questions for this Domain are being prepared.'; ?>
                 </div>
             <?php } else { ?>
                 <?php if ($selecteddomaintotalpages > 1) { ?>
@@ -3177,20 +3151,18 @@ echo $OUTPUT->header();
                         <article class="herb-board__domain-question">
                             <span><?php echo s($question['questionId'] ?? 'Unnumbered item'); ?></span>
                             <h4><?php echo s($question['prompt'] ?? 'Question awaiting prompt'); ?></h4>
-                            <?php if ($canmanagedomains) { ?>
-                                <details>
-                                    <summary><?php echo $ises ? 'Detalles de la pregunta' : 'Question details'; ?></summary>
-                                    <ol type="A">
-                                        <?php foreach ($question['options'] ?? [] as $option) { ?>
-                                            <li><?php echo s($option['text'] ?? ''); ?></li>
-                                        <?php } ?>
-                                    </ol>
-                                    <p><strong><?php echo $ises ? 'Correcta' : 'Correct'; ?>:</strong> <?php echo s($question['correctLabel'] ?? ''); ?></p>
-                                    <p><strong><?php echo $ises ? 'Explicación' : 'Explanation'; ?>:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
-                                    <p><strong><?php echo $ises ? 'Fuente' : 'Source'; ?>:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
-                                        <?php echo s($question['source']['locator'] ?? ''); ?></p>
-                                </details>
-                            <?php } ?>
+                            <details open>
+                                <summary><?php echo $ises ? 'Respuesta y explicación' : 'Answer and explanation'; ?></summary>
+                                <ol type="A">
+                                    <?php foreach ($question['options'] ?? [] as $option) { ?>
+                                        <li><?php echo s($option['text'] ?? ''); ?></li>
+                                    <?php } ?>
+                                </ol>
+                                <p><strong><?php echo $ises ? 'Correcta' : 'Correct'; ?>:</strong> <?php echo s($question['correctLabel'] ?? ''); ?></p>
+                                <p><strong><?php echo $ises ? 'Explicación' : 'Explanation'; ?>:</strong> <?php echo s($question['explanation'] ?? ''); ?></p>
+                                <p><strong><?php echo $ises ? 'Fuente' : 'Source'; ?>:</strong> <?php echo s($question['source']['title'] ?? ''); ?> ·
+                                    <?php echo s($question['source']['locator'] ?? ''); ?></p>
+                            </details>
                         </article>
                     <?php } ?>
                 </div>
