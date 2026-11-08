@@ -29,6 +29,9 @@ from scorm_word_export import (
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_FORMULA_DATA = (
+    SCRIPT_DIR.parents[2] / "blocks" / "myprogress" / "formulas-study-guide-data.json"
+)
 DEFAULT_COURSES = [45, 76, 41, 82]
 TARGET_COURSE = "herbal comp review module exams"
 TARGET_TOPIC = "handbook-of-oriental-medicine. clinical cases"
@@ -50,6 +53,57 @@ def source_text(value: Any) -> str:
         decoded = unescaped
     decoded = re.sub(r"\s*&\s*", " and ", decoded)
     return EMBEDDED_ONE.sub("i", decoded)
+
+
+def load_formula_profiles(path: Path) -> dict[str, dict[str, Any]]:
+    """Load source-grounded formula profiles keyed by normalized pinyin name."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    profiles: dict[str, dict[str, Any]] = {}
+    for collection in ("formulas", "supplementalFormulas"):
+        for profile in payload.get(collection) or []:
+            if not isinstance(profile, dict):
+                continue
+            key = normalise_name(profile.get("name"))
+            if key and key not in profiles:
+                profiles[key] = profile
+    if not profiles:
+        raise ValueError(f"No formula profiles found in {path}")
+    return profiles
+
+
+def diagnostic_feedback(
+    correctoption: str,
+    profiles: dict[str, dict[str, Any]],
+) -> dict[str, str] | None:
+    """Match the correct option to its guideline profile and build rationale."""
+    normalizedoption = normalise_name(correctoption)
+    profile = None
+    for name in sorted(profiles, key=len, reverse=True):
+        if normalizedoption == name or normalizedoption.startswith(f"{name} "):
+            profile = profiles[name]
+            break
+    if profile is None:
+        return None
+
+    fields = {
+        "formula": profile.get("name"),
+        "pattern": profile.get("pattern"),
+        "patternEs": profile.get("patternEs"),
+        "clue": profile.get("clue"),
+        "clueEs": profile.get("clueEs"),
+        "action": profile.get("action"),
+        "actionEs": profile.get("actionEs"),
+        "reasoning": profile.get("examFocus"),
+        "reasoningEs": profile.get("examFocusEs"),
+        "differential": profile.get("comparison"),
+        "differentialEs": profile.get("comparisonEs"),
+    }
+    cleaned = {
+        key: source_text(value)
+        for key, value in fields.items()
+        if source_text(value)
+    }
+    return cleaned or None
 
 
 def is_clinical_case(record: dict[str, Any]) -> bool:
@@ -111,6 +165,7 @@ def extract_question(
     question: dict[str, Any],
     examkey: str,
     questionnumber: int,
+    formulaprofiles: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any] | None:
     prompt = source_text(question.get("QuestionText"))
     sourceoptions = question.get("Answers") or []
@@ -141,7 +196,7 @@ def extract_question(
     fingerprint = hashlib.sha256(
         (prompt + "\n" + "\n".join(options)).encode("utf-8")
     ).hexdigest()[:16]
-    return {
+    extracted = {
         "id": f"{examkey}-q{questionnumber}-{fingerprint}",
         "number": questionnumber,
         "type": str(question.get("__type") or "MultipleChoiceQuestion"),
@@ -153,6 +208,10 @@ def extract_question(
         "correctLabel": labels[correctindex],
         "feedback": feedback,
     }
+    diagnosis = diagnostic_feedback(options[correctindex], formulaprofiles or {})
+    if diagnosis is not None:
+        extracted["diagnosis"] = diagnosis
+    return extracted
 
 
 def exam_number(value: str) -> int:
@@ -192,7 +251,11 @@ def unique_key(basekey: str, used: set[str]) -> str:
     return key
 
 
-def build_bank(inventory: dict[str, Any], courses: list[int]) -> dict[str, Any]:
+def build_bank(
+    inventory: dict[str, Any],
+    courses: list[int],
+    formulaprofiles: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
     dataroot = Path(str(inventory["dataroot"])).resolve()
     records = [record for record in inventory.get("records") or [] if is_clinical_case(record)]
     grouped = choose_placements(records, courses)
@@ -219,7 +282,7 @@ def build_bank(inventory: dict[str, Any], courses: list[int]) -> dict[str, Any]:
                 if not isinstance(sourcequestion, dict):
                     skipped += 1
                     continue
-                question = extract_question(sourcequestion, key, number)
+                question = extract_question(sourcequestion, key, number, formulaprofiles)
                 if question is None:
                     skipped += 1
                     continue
@@ -247,6 +310,12 @@ def build_bank(inventory: dict[str, Any], courses: list[int]) -> dict[str, Any]:
         "sourceReadOnly": True,
         "examCount": len(exams),
         "questionCount": sum(int(exam["questionCount"]) for exam in exams),
+        "diagnosticFeedbackCount": sum(
+            1
+            for exam in exams
+            for question in exam["questions"]
+            if question.get("diagnosis")
+        ),
         "errors": errors,
         "exams": exams,
     }
@@ -257,6 +326,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--courses", default=",".join(str(item) for item in DEFAULT_COURSES))
     parser.add_argument("--php-bin", default="php")
     parser.add_argument("--inventory", type=Path)
+    parser.add_argument("--formula-data", type=Path, default=DEFAULT_FORMULA_DATA)
     parser.add_argument("--output", type=Path)
     return parser.parse_args()
 
@@ -270,7 +340,11 @@ def main() -> int:
         inventory = json.loads(args.inventory.read_text(encoding="utf-8"))
     else:
         inventory = load_inventory(args.php_bin, courses)
-    bank = build_bank(inventory, courses)
+    try:
+        formulaprofiles = load_formula_profiles(args.formula_data.resolve())
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        raise SystemExit(f"Unable to load formula diagnostic profiles: {error}") from error
+    bank = build_bank(inventory, courses, formulaprofiles)
     if not bank["exams"] or not bank["questionCount"]:
         raise SystemExit("No usable Handbook clinical-case questions were found.")
     dataroot = Path(str(inventory["dataroot"])).resolve()
@@ -289,6 +363,7 @@ def main() -> int:
         "output": str(output),
         "exams": bank["examCount"],
         "questions": bank["questionCount"],
+        "diagnosticFeedback": bank["diagnosticFeedbackCount"],
         "errors": len(bank["errors"]),
     }, ensure_ascii=False))
     return 0

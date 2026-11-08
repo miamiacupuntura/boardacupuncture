@@ -2137,6 +2137,24 @@ echo $OUTPUT->header();
                         $clinicalprompt = $cleanclinicaltext($clinicalquestion['prompt'] ?? '');
                         $clinicalfeedback = $cleanclinicaltext($clinicalquestion['feedback'] ?? '');
                         $clinicalfeedback = preg_replace('/\s+/u', ' ', trim($clinicalfeedback));
+                        $clinicaldiagnosis = is_array($clinicalquestion['diagnosis'] ?? null)
+                            ? $clinicalquestion['diagnosis']
+                            : [];
+                        $clinicalpattern = $cleanclinicaltext($clinicaldiagnosis[
+                            $ises && !empty($clinicaldiagnosis['patternEs']) ? 'patternEs' : 'pattern'
+                        ] ?? '');
+                        $clinicalclue = $cleanclinicaltext($clinicaldiagnosis[
+                            $ises && !empty($clinicaldiagnosis['clueEs']) ? 'clueEs' : 'clue'
+                        ] ?? '');
+                        $clinicalaction = $cleanclinicaltext($clinicaldiagnosis[
+                            $ises && !empty($clinicaldiagnosis['actionEs']) ? 'actionEs' : 'action'
+                        ] ?? '');
+                        $clinicalreasoning = $cleanclinicaltext($clinicaldiagnosis[
+                            $ises && !empty($clinicaldiagnosis['reasoningEs']) ? 'reasoningEs' : 'reasoning'
+                        ] ?? '');
+                        $clinicaldifferential = $cleanclinicaltext($clinicaldiagnosis[
+                            $ises && !empty($clinicaldiagnosis['differentialEs']) ? 'differentialEs' : 'differential'
+                        ] ?? '');
                         ?>
                         <fieldset class="herb-board__exam-question herb-board__clinical-question" hidden
                             data-clinical-question
@@ -2162,6 +2180,43 @@ echo $OUTPUT->header();
                                 <span class="herb-board__exam-verdict" data-clinical-verdict></span>
                                 <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
                                     <?php echo s($clinicalquestion['correctLabel']); ?>. <?php echo s($correctclinicaloption); ?></strong>
+                                <?php if ($clinicaldiagnosis) { ?>
+                                    <div class="herb-board__clinical-diagnosis">
+                                        <span><?php echo $ises ? 'Razonamiento diagnóstico' : 'Diagnostic reasoning'; ?></span>
+                                        <dl>
+                                            <?php if ($clinicalpattern !== '') { ?>
+                                                <div>
+                                                    <dt><?php echo $ises ? 'Patrón' : 'Pattern'; ?></dt>
+                                                    <dd><?php echo s($clinicalpattern); ?></dd>
+                                                </div>
+                                            <?php } ?>
+                                            <?php if ($clinicalclue !== '') { ?>
+                                                <div>
+                                                    <dt><?php echo $ises ? 'Signos decisivos' : 'Decisive signs'; ?></dt>
+                                                    <dd><?php echo s($clinicalclue); ?></dd>
+                                                </div>
+                                            <?php } ?>
+                                            <?php if ($clinicalreasoning !== '') { ?>
+                                                <div>
+                                                    <dt><?php echo $ises ? 'Interpretación' : 'Interpretation'; ?></dt>
+                                                    <dd><?php echo s($clinicalreasoning); ?></dd>
+                                                </div>
+                                            <?php } ?>
+                                            <?php if ($clinicalaction !== '') { ?>
+                                                <div>
+                                                    <dt><?php echo $ises ? 'Correspondencia terapéutica' : 'Therapeutic match'; ?></dt>
+                                                    <dd><?php echo s($clinicalaction); ?></dd>
+                                                </div>
+                                            <?php } ?>
+                                            <?php if ($clinicaldifferential !== '') { ?>
+                                                <div>
+                                                    <dt><?php echo $ises ? 'Diferencial' : 'Differential'; ?></dt>
+                                                    <dd><?php echo s($clinicaldifferential); ?></dd>
+                                                </div>
+                                            <?php } ?>
+                                        </dl>
+                                    </div>
+                                <?php } ?>
                                 <?php if ($clinicalfeedback !== '') { ?>
                                     <div class="herb-board__clinical-explanation">
                                         <span><?php echo $ises ? 'Explicación de la fuente' : 'Source explanation'; ?></span>

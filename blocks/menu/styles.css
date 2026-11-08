@@ -2743,6 +2743,49 @@ a.herb-board__domain:focus {
     display: block;
 }
 
+.herb-board__clinical-diagnosis {
+    margin-top: 5px;
+    padding-top: 11px;
+    border-top: 1px solid rgba(32, 79, 71, .2);
+}
+
+.herb-board__clinical-diagnosis > span {
+    display: block;
+    margin-bottom: 8px;
+    color: #087c69;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.herb-board__clinical-diagnosis dl {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+}
+
+.herb-board__clinical-diagnosis dl > div {
+    display: grid;
+    grid-template-columns: minmax(105px, 145px) minmax(0, 1fr);
+    gap: 12px;
+    margin: 0;
+}
+
+.herb-board__clinical-diagnosis dt,
+.herb-board__clinical-diagnosis dd {
+    margin: 0;
+}
+
+.herb-board__clinical-diagnosis dt {
+    color: #173f39;
+    font-weight: 850;
+}
+
+.herb-board__clinical-diagnosis dd {
+    min-width: 0;
+}
+
 .herb-board__clinical-explanation {
     margin-top: 4px;
     padding-top: 10px;
@@ -2768,6 +2811,15 @@ a.herb-board__domain:focus {
 
 .herb-board__exam-question.is-incorrect .herb-board__clinical-explanation > span {
     color: #a9550d;
+}
+
+.herb-board__exam-question.is-incorrect .herb-board__clinical-diagnosis {
+    border-top-color: rgba(122, 66, 16, .2);
+}
+
+.herb-board__exam-question.is-incorrect .herb-board__clinical-diagnosis > span,
+.herb-board__exam-question.is-incorrect .herb-board__clinical-diagnosis dt {
+    color: #8d480c;
 }
 
 .herb-board__clinical-player .herb-board__exam-submit {
@@ -2871,6 +2923,11 @@ a.herb-board__domain:focus {
     .herb-board__exam-submit button,
     .herb-board__exam-history-link {
         width: 100%;
+    }
+
+    .herb-board__clinical-diagnosis dl > div {
+        grid-template-columns: 1fr;
+        gap: 2px;
     }
 
     .herb-board__exam-history > header {
