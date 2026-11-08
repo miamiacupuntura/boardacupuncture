@@ -525,6 +525,12 @@ def main() -> int:
     bank = build_bank(inventory, courses, formulaprofiles)
     if not bank["exams"] or not bank["questionCount"]:
         raise SystemExit("No usable Handbook clinical-case questions were found.")
+    if bank["diagnosticFeedbackCount"] != bank["questionCount"]:
+        missing = bank["questionCount"] - bank["diagnosticFeedbackCount"]
+        raise SystemExit(
+            f"Diagnostic feedback is missing for {missing} clinical-case question(s); "
+            "the existing bank was not replaced."
+        )
     dataroot = Path(str(inventory["dataroot"])).resolve()
     output = args.output.resolve() if args.output else (
         dataroot / "board-domain-banks" / "herbology-clinical-cases.json"
