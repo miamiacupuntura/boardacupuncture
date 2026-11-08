@@ -7,7 +7,7 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
-EXPECTED_VERSION="2026110665"
+EXPECTED_VERSION="2026110666"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_clinical_cases_quiz.sh COMMIT_DE_40_CARACTERES"

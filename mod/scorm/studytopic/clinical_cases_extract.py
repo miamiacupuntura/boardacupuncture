@@ -219,6 +219,29 @@ def diagnostic_feedback(
             "a este patrón combinado porque libera el Exterior mientras transforma Humedad, "
             "regula Qi y armoniza el Centro."
         )
+    elif (
+        profilename == "du huo ji sheng tang"
+        and "over five years" in normalizedprompt
+        and "cold or rainy days" in normalizedprompt
+    ):
+        cleaned["caseReasoning"] = (
+            "The five-year history, low-back location and worsening with cold or rainy "
+            "weather identify chronic Wind-Cold-Damp painful obstruction. Relief from a "
+            "heating pad confirms the Cold component. Knee weakness, a pale tongue with "
+            "white coat and a thready, feeble pulse show the underlying Liver-Kidney and "
+            "Qi-Blood deficiency that allows the obstruction to persist. Du Huo Ji Sheng "
+            "Tang is appropriate because it both expels the pathogenic factors and "
+            "strengthens the deficient sinews, bones, Qi and Blood."
+        )
+        cleaned["caseReasoningEs"] = (
+            "Los cinco años de evolución, la localización lumbar y el empeoramiento con "
+            "frío o lluvia identifican obstrucción dolorosa crónica por Viento-Frío-Humedad. "
+            "La mejoría con una almohadilla térmica confirma el componente Frío. La debilidad "
+            "de rodillas, la lengua pálida con capa blanca y el pulso filiforme y débil "
+            "muestran la deficiencia subyacente de Hígado-Riñón y Qi-Sangre que permite que "
+            "la obstrucción persista. Du Huo Ji Sheng Tang corresponde porque expulsa los "
+            "patógenos y fortalece tendones, huesos, Qi y Sangre."
+        )
 
     if (
         "caseReasoning" not in cleaned
