@@ -2513,7 +2513,7 @@ echo $OUTPUT->header();
                         <button type="button" class="herb-board__clinical-restart" data-clinical-restart>
                             <?php echo $ises ? '↻ Reiniciar examen' : '↻ Restart exam'; ?>
                         </button>
-                        <button type="button" class="herb-board__clinical-finish" data-clinical-finish>
+                        <button type="button" class="herb-board__clinical-finish" data-clinical-finish disabled>
                             <?php echo $ises ? 'Finalizar examen' : 'Finish exam'; ?>
                         </button>
                         <button type="button" data-clinical-next><?php echo $ises ? 'Siguiente →' : 'Next →'; ?></button>
