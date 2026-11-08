@@ -701,7 +701,7 @@ echo $OUTPUT->header();
                                     <?php $guideurl = $makechapterurl($chapter); ?>
                                     <a class="subject-study-library__journey-option" href="<?php echo $guideurl->out(false); ?>">
                                         <span>
-                                            <?php echo s($chapter['title']); ?>
+                                            <?php echo s($ises ? 'Guía de estudio: ' . $chapter['title'] : $chapter['title'] . ' Study Guide'); ?>
                                             <?php if (!empty($chapter['status'])): ?><small><?php echo s($chapter['status']); ?></small><?php endif; ?>
                                         </span>
                                         <span aria-hidden="true">›</span>
