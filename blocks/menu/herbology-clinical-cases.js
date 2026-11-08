@@ -22,6 +22,7 @@
         const resultOutcome = quiz.querySelector('[data-clinical-outcome]');
         const resultMessage = quiz.querySelector('[data-clinical-result-message]');
         const incorrectReview = quiz.querySelector('[data-clinical-incorrect-review]');
+        const incorrectCount = quiz.querySelector('[data-clinical-incorrect-count]');
         const incorrectList = quiz.querySelector('[data-clinical-incorrect-list]');
         const retryButton = quiz.querySelector('[data-clinical-retry-errors]');
         const returnLink = quiz.querySelector('[data-clinical-return]');
@@ -193,6 +194,10 @@
                 item.append(heading, answers);
                 incorrectList.append(item);
             });
+            if (incorrectCount) {
+                incorrectCount.textContent = String(incorrectQuestions.length);
+            }
+            incorrectReview.open = false;
             incorrectReview.hidden = incorrectQuestions.length === 0;
             retryButton.hidden = incorrectQuestions.length === 0;
         };
