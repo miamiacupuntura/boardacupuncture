@@ -2723,6 +2723,58 @@ a.herb-board__domain:focus {
     text-align: right;
 }
 
+.herb-board__exam-timer {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 7px;
+    padding: 5px 10px;
+    border: 1px solid #d9d2ef;
+    border-radius: 999px;
+    background: #fff;
+    color: #5633ad;
+    font-size: .76rem;
+    font-weight: 700;
+}
+
+.herb-board__exam-timer time {
+    min-width: 66px;
+    color: #17212b;
+    font-size: .9rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .02em;
+    text-align: right;
+}
+
+.herb-board__exam-timer.is-warning {
+    border-color: #efb46f;
+    background: #fff8ef;
+    color: #9a4d08;
+}
+
+.herb-board__exam-timer.is-critical {
+    border-color: #d45b5b;
+    background: #fff1f1;
+    color: #a32222;
+}
+
+.herb-board__exam-timer.is-critical time {
+    color: #a32222;
+}
+
+.herb-board__exam-time-source {
+    margin: 8px 0 0;
+    color: #617184;
+    font-size: .72rem;
+    line-height: 1.4;
+}
+
+.herb-board__exam-time-source a {
+    color: #5633ad;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
 .herb-board__exam-progress-bar {
     height: 8px;
     overflow: hidden;
@@ -3287,6 +3339,16 @@ a.herb-board__domain:focus {
     .herb-board__exam-heading,
     .herb-board__exam-question {
         padding: 14px;
+    }
+
+    .herb-board__exam-progress-summary {
+        align-items: stretch;
+    }
+
+    .herb-board__exam-timer {
+        order: 3;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .herb-board__exam-submit {
