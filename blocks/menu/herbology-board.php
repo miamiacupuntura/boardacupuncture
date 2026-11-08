@@ -109,9 +109,16 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
                 10
             ));
         } else {
-            $examhistory = array_values($DB->get_records(
+            $examhistory = array_values($DB->get_records_select(
                 'block_menu_exam_attempts',
-                ['userid' => $USER->id, 'courseid' => $membershipcourseid],
+                'userid = :userid AND courseid = :courseid '
+                    . 'AND examtype IN (:linear, :adaptive)',
+                [
+                    'userid' => $USER->id,
+                    'courseid' => $membershipcourseid,
+                    'linear' => 'linear',
+                    'adaptive' => 'adaptive',
+                ],
                 'timecompleted DESC, id DESC',
                 '*',
                 0,
@@ -2537,11 +2544,18 @@ echo $OUTPUT->header();
                                 $attemptduration = $attemptminutes > 0
                                     ? $attemptminutes . ' min ' . $attemptseconds . ' s'
                                     : $attemptseconds . ' s';
+                                $attemptkind = (int) $attempt->total < count($clinicalquestions)
+                                    ? ($ises ? 'Reintento de errores' : 'Error retry')
+                                    : ($ises ? 'Examen completo' : 'Full exam');
                             ?>
                                 <article role="listitem" class="<?php echo $attemptpassed ? 'is-passed' : 'is-failed'; ?>">
                                     <div>
                                         <span><?php echo $ises ? 'Fecha' : 'Date'; ?></span>
                                         <strong><?php echo s(userdate((int) $attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Intento' : 'Attempt'; ?></span>
+                                        <strong><?php echo s($attemptkind); ?></strong>
                                     </div>
                                     <div>
                                         <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
