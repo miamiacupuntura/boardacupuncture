@@ -13,7 +13,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_study_guide_navigation.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl install grep wc tr find sort stat cp; do
+for command in curl install grep wc tr find sort stat cp readlink dirname; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -95,12 +95,15 @@ for file in "${FILES[@]}"; do
 done
 
 mapfile -t COMPARISON_ROOTS < <(
-    find -L "$WEB_ROOT_SEARCH" -type f -path '*/study-guide/comparisons/dui-yao.html' -printf '%h\n' 2>/dev/null |
-        sort -u
+    while IFS= read -r candidate; do
+        dirname "$(readlink -f "$candidate")"
+    done < <(find -L "$WEB_ROOT_SEARCH" -type f -path '*/comparisons/dui-yao.html' -print 2>/dev/null)
 )
 
+mapfile -t COMPARISON_ROOTS < <(printf '%s\n' "${COMPARISON_ROOTS[@]}" | sort -u)
+
 if [[ "${#COMPARISON_ROOTS[@]}" -eq 0 ]]; then
-    echo "ERROR: no se encontró ninguna copia activa de study-guide/comparisons/dui-yao.html bajo $WEB_ROOT_SEARCH." >&2
+    echo "ERROR: no se encontró ninguna copia activa de comparisons/dui-yao.html bajo $WEB_ROOT_SEARCH." >&2
     exit 1
 fi
 
