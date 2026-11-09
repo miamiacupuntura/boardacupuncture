@@ -511,6 +511,16 @@ $singleherbscomparisonsurl = new moodle_url(
 $formulacomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'
 );
+$benskycrosswalkurl = new moodle_url(
+    '/blocks/myprogress/herb-formula-category-map.php',
+    $ises ? ['lang' => 'es'] : []
+);
+$pathologycomparisonsurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/pathologies-es.html' : '/study-guide/comparisons/pathologies.html'
+);
+$patterncomparisonsurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'
+);
 $comparisonsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'comparisons']);
 $otherchaptersurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'other']);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
@@ -758,6 +768,15 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulacomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de fórmulas' : 'Formula Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de fórmulas' : 'Comparative formula study'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $benskycrosswalkurl->out(false); ?>">
+                                    <span><?php echo s($tr('Bensky Category Crosswalk')); ?><small><?php echo s($ises ? 'Compara categorías de hierbas y fórmulas' : 'Compare herb and formula categories'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $pathologycomparisonsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Pathology Comparisons')); ?><small><?php echo s($ises ? '66 comparaciones clínicas' : '66 clinical comparisons'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $patterncomparisonsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Pattern Comparisons')); ?><small><?php echo s($ises ? '50 comparaciones de patrones' : '50 pattern comparisons'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
                                     <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
