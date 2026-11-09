@@ -1167,3 +1167,57 @@ select:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
   }
   .formula-practice-source-window > header button { width: 100%; }
 }
+
+/* Shared study-guide header treatment for Duì Yào, matching Single Herbs and Formulas. */
+.comparison-topbar--study-guide {
+  width: min(100% - 32px, 1160px);
+  margin: 24px auto 12px;
+  border: 1px solid #b8d5d2;
+  border-radius: 10px;
+  background: #f7fcfb;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, .04);
+}
+
+.comparison-topbar--study-guide .comparison-topbar__inner {
+  min-height: 0;
+  padding: 9px 12px;
+}
+
+.comparison-topbar--study-guide .comparison-back:first-child {
+  color: #245fa7;
+}
+
+.comparison-hero--study-guide {
+  margin: 0 0 20px;
+  padding: 22px 26px;
+  border: 1px solid #cbdce7;
+  border-top: 5px solid var(--orange);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(23, 50, 77, .06);
+}
+
+.comparison-hero--study-guide h1 {
+  font-size: clamp(29px, 4vw, 42px);
+  line-height: 1.12;
+}
+
+@media (max-width: 700px) {
+  .comparison-topbar--study-guide {
+    width: min(100% - 20px, 1160px);
+    margin-top: 12px;
+  }
+
+  .comparison-topbar--study-guide .comparison-topbar__inner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .comparison-topbar--study-guide .comparison-back {
+    justify-content: center;
+  }
+
+  .comparison-hero--study-guide {
+    padding: 17px;
+  }
+}
+
