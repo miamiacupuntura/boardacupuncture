@@ -44,6 +44,12 @@ grep -Fq "\$baseparams + ['view' => 'comparisons']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'other']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'practice']" "$LIBRARY_TEMP"
 grep -Fq "empty(\$otherchapters)): ?>" "$LIBRARY_TEMP"
+grep -Fq "'Open' => 'Abrir'" "$LIBRARY_TEMP"
+open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
+[[ "$open_button_count" -eq 4 ]] || {
+    echo "ERROR: no todos los botones del catálogo usan la etiqueta Open/Abrir." >&2
+    exit 1
+}
 grep -Fq "['track' => 'quiz', 'quizsection' => 'herbs']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'formulas']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
