@@ -521,7 +521,6 @@ $pathologycomparisonsurl = new moodle_url(
 $patterncomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'
 );
-$comparisonsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'comparisons']);
 $otherchaptersurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'other']);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
@@ -777,9 +776,6 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $patterncomparisonsurl->out(false); ?>">
                                     <span><?php echo s($tr('Pattern Comparisons')); ?><small><?php echo s($ises ? '50 comparaciones de patrones' : '50 pattern comparisons'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
-                                    <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $otherchaptersurl->out(false); ?>">
                                     <span><?php echo s($tr('Other chapters')); ?><small><?php echo s($ises ? 'Familias, seguridad, teoría y referencias' : 'Families, safety, theory, and references'); ?></small></span><span aria-hidden="true">›</span>
