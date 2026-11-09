@@ -73,17 +73,22 @@ done
 secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+32p" "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
-grep -Fq '$singleherbsstudyurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$formulasstudyurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
 single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$LIBRARY_TEMP")"
 formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
+single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
+formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 comparisons_route_count="$(grep -Fc '$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
 other_chapters_route_count="$(grep -Fc '$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
-[[ "$single_herbs_study_route_count" -eq 2 && "$formulas_study_route_count" -eq 2 \
+[[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
+        && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
         && "$comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
-    echo "ERROR: los cuatro botones de Secondary Study Guides están incompletos o duplicados." >&2
+    echo "ERROR: los botones de Study Guides y Secondary Study Guides están incompletos o duplicados." >&2
     exit 1
 }
 grep -Fq '.subject-study-library__journey-card:nth-child(4){border-top-color:#6d4bc3}' "$LIBRARY_TEMP"
@@ -161,7 +166,7 @@ else
 fi
 
 echo "OK: Secondary Study Guides quedó como módulo 2 con cuatro botones independientes."
-echo "OK: los botones dedicados se llaman Single Herbs Comparisons y Formula Comparisons."
+echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
 echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
