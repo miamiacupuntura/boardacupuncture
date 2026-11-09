@@ -485,6 +485,7 @@ $libraryparams = $baseparams + ['view' => 'library'];
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
+$boardcompletepracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'practice'] + $boardlanguagecontext);
 $boardformulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $boardlanguagecontext);
 $boarddomainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $boardlanguagecontext);
 $boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
@@ -732,7 +733,7 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardpracticeurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de hierbas individuales' : 'Single Herbs Practice'); ?><small><?php echo s($ises ? 'Preguntas con respuestas visibles' : 'Questions with visible answers'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulasurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de fórmulas' : 'Formulas Practice'); ?><small><?php echo s($ises ? 'Estudio pasivo de fórmulas' : 'Passive formula study'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boarddomainsurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica por dominios' : 'Domains Practice'); ?><small><?php echo s($ises ? 'Repaso pasivo por dominio' : 'Passive review by domain'); ?></small></span><span aria-hidden="true">›</span></a>
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardpracticeurl->out(false); ?>">
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardcompletepracticeurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Abrir toda la práctica de herbología' : 'Open complete Herbology Practice'); ?><small><?php echo s($ises ? 'Abre el módulo completo de práctica' : 'Opens the complete practice module'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
