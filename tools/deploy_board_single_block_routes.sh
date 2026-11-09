@@ -46,7 +46,6 @@ fi
 grep -Fq "'/blocks/myprogress/single-herbs-study-guide.php'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/dui-yao.html'" "$LIBRARY_TEMP"
 grep -Fq "'/blocks/myprogress/formulas-study-guide.php'" "$LIBRARY_TEMP"
-grep -Fq "\$baseparams + ['view' => 'comparisons']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'other']" "$LIBRARY_TEMP"
 if grep -Fq '$practiceexamsurl' "$LIBRARY_TEMP"; then
     echo "ERROR: el botón Practice Exams todavía aparece en Board Level Activities." >&2
@@ -81,8 +80,11 @@ grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block
 grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
+if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP"; then
+    echo "ERROR: el botón general Comparisons todavía aparece en Secondary Study Guides." >&2
+    exit 1
+fi
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/pathologies-es.html' : '/study-guide/comparisons/pathologies.html'" "$LIBRARY_TEMP"
@@ -102,13 +104,11 @@ formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)'
 bensky_crosswalk_route_count="$(grep -Fc '$benskycrosswalkurl->out(false)' "$LIBRARY_TEMP")"
 pathology_comparisons_route_count="$(grep -Fc '$pathologycomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 pattern_comparisons_route_count="$(grep -Fc '$patterncomparisonsurl->out(false)' "$LIBRARY_TEMP")"
-comparisons_route_count="$(grep -Fc '$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
 other_chapters_route_count="$(grep -Fc '$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
-        && "$pattern_comparisons_route_count" -eq 1 && "$comparisons_route_count" -eq 1 \
-        && "$other_chapters_route_count" -eq 1 ]] || {
+        && "$pattern_comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
     echo "ERROR: los botones de Study Guides y Secondary Study Guides están incompletos o duplicados." >&2
     exit 1
 }
@@ -186,12 +186,13 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Secondary Study Guides quedó como módulo 2 con cuatro botones independientes."
+echo "OK: Secondary Study Guides quedó como módulo 2 con seis botones independientes."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
+echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
-echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
+echo "OK: se conservaron Study Guides, Other chapters, las colecciones comparativas, Practice Exams y Quiz."
 echo "OK: la vista general interna permanece como respaldo, pero no se muestra como botón."
 echo "Respaldo: $BACKUP_DIR"
