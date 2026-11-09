@@ -9,7 +9,7 @@ $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $fromlibrary = optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard';
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['herbs', 'formulas', 'quiz', 'clinicalcases', 'domains', 'exams', 'simulation'], true)) {
+if (!in_array($track, ['practice', 'herbs', 'formulas', 'quiz', 'clinicalcases', 'domains', 'exams', 'simulation'], true)) {
     $track = 'herbs';
 }
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
@@ -1682,7 +1682,44 @@ echo $OUTPUT->header();
         </nav>
     <?php } ?>
 
-    <?php if ($track === 'herbs') { ?>
+    <?php if ($track === 'practice') { ?>
+        <section class="herb-board__panel herb-board__practice-home" aria-labelledby="herb-board-practice-home-title">
+            <div class="herb-board__panel-heading">
+                <div>
+                    <h3 id="herb-board-practice-home-title"><?php echo $ises
+                        ? 'Elige un módulo de práctica'
+                        : 'Choose a practice module'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'Abre hierbas individuales, fórmulas o dominios desde un solo lugar. Las respuestas y explicaciones permanecen visibles.'
+                        : 'Open Single Herbs, Formulas, or Domains from one place. Answers and explanations remain visible.'; ?></p>
+                </div>
+            </div>
+            <div class="herb-board__summary herb-board__summary--panel" aria-label="<?php echo $ises
+                ? 'Módulos de práctica disponibles' : 'Available practice modules'; ?>">
+                <span><strong>3</strong> <?php echo $ises ? 'módulos de práctica' : 'practice modules'; ?></span>
+            </div>
+            <div class="herb-board__launches herb-board__launches--practice">
+                <a class="herb-board__launch herb-board__launch--herbs" href="<?php echo $singleherbsurl->out(false); ?>">
+                    <strong><?php echo $ises ? 'Práctica de hierbas individuales' : 'Single Herbs Practice'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Preguntas, respuestas, explicaciones y flashcards visibles.'
+                        : 'Visible questions, answers, explanations, and flashcards.'; ?></span>
+                </a>
+                <a class="herb-board__launch herb-board__launch--formulas" href="<?php echo $formulasurl->out(false); ?>">
+                    <strong><?php echo $ises ? 'Práctica de fórmulas' : 'Formulas Practice'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Estudio pasivo de fórmulas con respuestas y feedback visibles.'
+                        : 'Passive formula study with visible answers and feedback.'; ?></span>
+                </a>
+                <a class="herb-board__launch herb-board__launch--domains" href="<?php echo $domainsurl->out(false); ?>">
+                    <strong><?php echo $ises ? 'Práctica por dominios' : 'Domains Practice'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Repaso por dominio con preguntas, respuestas y explicaciones visibles.'
+                        : 'Review by Domain with visible questions, answers, and explanations.'; ?></span>
+                </a>
+            </div>
+        </section>
+    <?php } else if ($track === 'herbs') { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-practice-title">
             <div class="herb-board__panel-heading">
                 <div>
