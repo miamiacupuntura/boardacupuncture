@@ -733,6 +733,12 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardpracticeurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de hierbas individuales' : 'Single Herbs Practice'); ?><small><?php echo s($ises ? 'Preguntas con respuestas visibles' : 'Questions with visible answers'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulasurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de fórmulas' : 'Formulas Practice'); ?><small><?php echo s($ises ? 'Estudio pasivo de fórmulas' : 'Passive formula study'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boarddomainsurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica por dominios' : 'Domains Practice'); ?><small><?php echo s($ises ? 'Repaso pasivo por dominio' : 'Passive review by domain'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <?php foreach ($practicechapters as $practicechapter): ?>
+                                    <?php $practicechapterurl = $makechapterurl($practicechapter); ?>
+                                    <a class="subject-study-library__journey-option" href="<?php echo $practicechapterurl->out(false); ?>">
+                                        <span><?php echo s($practicechapter['title']); ?><small><?php echo s($practicechapter['status'] ?? ($ises ? 'Recurso de práctica' : 'Practice resource')); ?></small></span><span aria-hidden="true">›</span>
+                                    </a>
+                                <?php endforeach; ?>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardcompletepracticeurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Abrir toda la práctica de herbología' : 'Open complete Herbology Practice'); ?><small><?php echo s($ises ? 'Abre el módulo completo de práctica' : 'Opens the complete practice module'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
@@ -886,29 +892,6 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($tr('Open Study Guide →')); ?></a>
             </article>
         <?php endforeach; ?>
-
-        <?php if (!empty($practicechapters)): ?>
-            <section class="subject-study-guide__other subject-study-guide__practice" aria-labelledby="practice-exams-title">
-                <header class="subject-study-guide__other-header">
-                    <span class="subject-study-guide__status"><?php echo s($tr('PRACTICE')); ?></span>
-                    <h3 id="practice-exams-title"><?php echo s($tr('Practice Exams')); ?></h3>
-                    <p><?php echo s($tr('Practice herb comparisons, principal formulas and their clinical modifications.')); ?></p>
-                </header>
-                <div class="subject-study-guide__other-grid">
-                    <?php foreach ($practicechapters as $chapter): ?>
-                        <?php
-                        $chapterurl = $makechapterurl($chapter);
-                        ?>
-                        <article class="subject-study-guide__card">
-                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? $tr('AVAILABLE')); ?></span>
-                            <h3><?php echo s($chapter['title']); ?></h3>
-                            <p><?php echo s($chapter['description']); ?></p>
-                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($chapter['button_label'] ?? $tr('Open Study Guide →')); ?></a>
-                        </article>
-                    <?php endforeach; ?>
-                </div>
-            </section>
-        <?php endif; ?>
 
         <?php if (!empty($comparisonchapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__comparisons" aria-labelledby="comparisons-title">
