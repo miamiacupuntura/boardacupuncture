@@ -42,7 +42,10 @@ grep -Fq "['guides', 'comparisons', 'other', 'practice']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'guides']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'comparisons']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'other']" "$LIBRARY_TEMP"
-grep -Fq "\$baseparams + ['view' => 'practice']" "$LIBRARY_TEMP"
+if grep -Fq '$practiceexamsurl' "$LIBRARY_TEMP"; then
+    echo "ERROR: el botón Practice Exams todavía aparece en Board Level Activities." >&2
+    exit 1
+fi
 grep -Fq "empty(\$otherchapters)): ?>" "$LIBRARY_TEMP"
 grep -Fq "'Open' => 'Abrir'" "$LIBRARY_TEMP"
 open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
