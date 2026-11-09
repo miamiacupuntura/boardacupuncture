@@ -79,6 +79,13 @@ grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
+grep -Fq "\$comparisonoverviewchapters = array_values(array_filter(\$comparisonchapters" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/formulas.html'," "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/index.html'," "$LIBRARY_TEMP"
+if grep -Fq 'foreach ($comparisonchapters as $chapter)' "$LIBRARY_TEMP"; then
+    echo "ERROR: Formula Comparisons y Single Herbs Comparisons todavía aparecen en la vista general Comparisons." >&2
+    exit 1
+fi
 single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$LIBRARY_TEMP")"
 formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
 single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
@@ -130,7 +137,7 @@ grep -Fq "in_array(\$quizsection, ['all', 'formulas'], true)" "$BOARD_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'clinical'], true)" "$BOARD_TEMP"
 
 # Guardas de conservación: las colecciones y sus recorridos deben seguir presentes.
-for required in     '$primarychapters as $chapter'     '$practicechapters as $chapter'     '$comparisonchapters as $chapter'     '$otherchapters as $chapter'; do
+for required in     '$primarychapters as $chapter'     '$practicechapters as $chapter'     '$comparisonoverviewchapters as $chapter'     '$otherchapters as $chapter'; do
     grep -Fq "$required" "$LIBRARY_TEMP"
 done
 for required in     '$herbcategories as $category'     '$formulacategories as $category'     '$clinicalcaseexams as $clinicalcaseexam'; do
@@ -167,6 +174,7 @@ fi
 
 echo "OK: Secondary Study Guides quedó como módulo 2 con cuatro botones independientes."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
+echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
 echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
