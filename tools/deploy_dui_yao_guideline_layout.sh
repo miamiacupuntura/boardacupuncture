@@ -44,29 +44,39 @@ ES_GUIDE="$TEMP_DIR/guidelines/chinese-herbal-medicine-es.html"
 for page in "$EN_DUI" "$ES_DUI"; do
     grep -Fq 'comparison-topbar--study-guide' "$page"
     grep -Fq 'comparison-hero--study-guide' "$page"
-    grep -Fq "new URLSearchParams(window.location.search).get('search')" "$page"
+    grep -Fq 'class="comparison-category-jump"' "$page"
+    grep -Fq 'data-dui-category-select' "$page"
+    grep -Fq 'class="comparison-category-index"' "$page"
     grep -Fq 'id="available-pairs"' "$page"
+    [[ "$(grep -o '<option value="#' "$page" | wc -l)" -eq 15 ]]
     [[ "$(grep -o 'data-dui-category><header' "$page" | wc -l)" -eq 15 ]]
-    if grep -Fq 'comparison-tools--search-only' "$page"; then
-        echo "ERROR: la búsqueda antigua todavía permanece dentro de Duì Yào." >&2
+    [[ "$(grep -o 'data-type="dui-yao"' "$page" | wc -l)" -eq 51 ]]
+    if grep -Fq 'id="how-to-use-dui-yao-module"' "$page" \
+            || grep -Fq 'id="formula-vs-dui-yao"' "$page" \
+            || grep -Fq 'id="formula-modification-bridges"' "$page"; then
+        echo "ERROR: todavía queda contenido general dentro del índice de fichas Duì Yào." >&2
         exit 1
     fi
 done
 
 for page in "$EN_GUIDE" "$ES_GUIDE"; do
     grep -Fq 'id="appendix-b-study"' "$page"
-    grep -Fq 'class="guide-dui-yao-hub"' "$page"
-    grep -Fq 'class="guide-dui-yao-hub__search"' "$page"
+    grep -Fq 'class="guide-dui-yao-general"' "$page"
+    grep -Fq 'id="how-to-use-dui-yao-module"' "$page"
+    grep -Fq 'id="formula-vs-dui-yao"' "$page"
+    grep -Fq 'id="formula-modification-bridges"' "$page"
     page_content="$(<"$page")"
-    before_hub="${page_content%%class=\"guide-dui-yao-hub\"*}"
-    after_hub="${page_content#*class=\"guide-dui-yao-hub\"}"
-    [[ "$before_hub" == *'id="appendix-b-study"'* ]]
-    [[ "$after_hub" == *'guide-reading-step__number">6'* ]]
+    before_general="${page_content%%class=\"guide-dui-yao-general\"*}"
+    after_general="${page_content#*class=\"guide-dui-yao-general\"}"
+    [[ "$before_general" == *'id="appendix-b-study"'* ]]
+    [[ "$after_general" == *'guide-reading-step__number">6'* ]]
+    if grep -Fq 'class="guide-dui-yao-hub"' "$page"; then
+        echo "ERROR: permanece el bloque de navegación anterior dentro del guideline." >&2
+        exit 1
+    fi
 done
-[[ "$(grep -o '<a href="../comparisons/dui-yao.html#' "$EN_GUIDE" | wc -l)" -eq 15 ]]
-[[ "$(grep -o '<a href="../comparisons/dui-yao-es.html#' "$ES_GUIDE" | wc -l)" -eq 15 ]]
-grep -Fq '.comparison-topbar--study-guide' "$TEMP_DIR/comparisons/comparisons.css"
-grep -Fq '.guide-dui-yao-hub {' "$TEMP_DIR/guidelines/guidelines.css"
+grep -Fq '.comparison-category-jump {' "$TEMP_DIR/comparisons/comparisons.css"
+grep -Fq '.guide-dui-yao-general {' "$TEMP_DIR/guidelines/guidelines.css"
 
 roots=()
 declare -A seen_roots=()
@@ -104,6 +114,6 @@ for root in "${roots[@]}"; do
 done
 
 echo "OK: Duì Yào usa la misma estructura superior de Single Herbs y Formulas."
-echo "OK: búsqueda y 15 categorías movidas al bloque Appendix B · Duì Yào del guideline."
-echo "OK: los enlaces abren la categoría correspondiente y la búsqueda abre resultados filtrados."
+echo "OK: todo el contenido general de Duì Yào fue movido al bloque Appendix B del guideline."
+echo "OK: Duì Yào conserva el selector de 15 categorías y las 51 fichas Read chapter."
 echo "Respaldo: $BACKUP_DIR"
