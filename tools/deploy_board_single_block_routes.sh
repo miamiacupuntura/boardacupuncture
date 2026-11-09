@@ -58,7 +58,7 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     echo "ERROR: no todos los botones del catálogo usan la etiqueta Open/Abrir." >&2
     exit 1
 }
-grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio' : 'Study Guides'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio secundarias' : 'Secondary Study Guides'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
 journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
@@ -191,8 +191,9 @@ echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus 
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
 echo "OK: el botón general Comparisons fue eliminado."
+echo "OK: el módulo 1 se llama Main Study Guide."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
-echo "OK: se conservaron Study Guides, Other chapters, las colecciones comparativas, Practice Exams y Quiz."
+echo "OK: se conservaron Main Study Guide, Other chapters, las colecciones comparativas, Practice Exams y Quiz."
 echo "OK: la vista general interna permanece como respaldo, pero no se muestra como botón."
 echo "Respaldo: $BACKUP_DIR"
