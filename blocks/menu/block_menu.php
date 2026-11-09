@@ -385,7 +385,7 @@ class block_menu extends block_base {
 
                 if ($subject['area'] === 'herbology') {
                     $mockquestionsurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                        'track' => 'herbs',
+                        'track' => 'practice',
                     ]);
                     $mockquestionsaction = '<a class="board-hub__action board-hub__action--board-mock" href="'
                         . $mockquestionsurl->out(false) . '">' . s($boardpracticelabels[$subject['area']]) . '</a>';
