@@ -15,7 +15,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl php install grep stat cp mkdir mktemp rm; do
+for command in curl php install grep sed stat cp mkdir mktemp rm; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -50,6 +50,12 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     echo "ERROR: no todos los botones del catálogo usan la etiqueta Open/Abrir." >&2
     exit 1
 }
+formula_study_block="$(sed -n "/'title' => 'Formula Study Center'/,+8p" "$LIBRARY_TEMP")"
+grep -Fq "'secondary' => true" <<< "$formula_study_block"
+if grep -Fq "'practice_exam' => true" <<< "$formula_study_block"; then
+    echo "ERROR: Formula Study Center todavía pertenece a Practice Exams." >&2
+    exit 1
+fi
 grep -Fq "['track' => 'quiz', 'quizsection' => 'herbs']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'formulas']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
