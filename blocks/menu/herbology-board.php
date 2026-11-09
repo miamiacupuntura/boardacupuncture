@@ -95,6 +95,10 @@ $languagecontext = ($fromlibrary ? ['from' => 'library'] : []) + ($ises ? ['lang
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
+$clinicalquizoverviewurl = new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'quiz',
+    'quizsection' => 'clinical',
+] + $languagecontext);
 $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
@@ -2254,110 +2258,139 @@ echo $OUTPUT->header();
         <section class="herb-board__panel" aria-labelledby="herb-board-quiz-title">
             <div class="herb-board__panel-heading">
                 <div>
-                    <h3 id="herb-board-quiz-title"><?php echo $ises
-                        ? 'Elige un tipo de Quiz'
-                        : 'Choose a Quiz type'; ?></h3>
+                    <h3 id="herb-board-quiz-title"><?php echo $quizsection === 'herbs'
+                        ? ($ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz')
+                        : ($quizsection === 'formulas'
+                            ? ($ises ? 'Quiz de fórmulas' : 'Formula Quiz')
+                            : ($quizsection === 'clinical'
+                                ? ($ises ? 'Quiz de casos clínicos' : 'Clinical Cases Quiz')
+                                : ($ises ? 'Elige un tipo de Quiz' : 'Choose a Quiz type'))); ?></h3>
                     <p><?php echo $ises
                         ? 'Selecciona la respuesta correcta y recibe feedback inmediato después de razonar cada pregunta.'
                         : 'Select the correct answer and receive immediate feedback after reasoning through each question.'; ?></p>
                 </div>
             </div>
-            <div class="herb-board__launches herb-board__launches--quiz">
-                <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'; ?></strong>
-                    <span><?php echo $ises
-                        ? 'Crea un Quiz de 10, 25, 50 o 100 preguntas.'
-                        : 'Build a 10, 25, 50, or 100-question Quiz.'; ?></span>
-                </a>
-                <a class="herb-board__launch" href="<?php echo $formulapracticeurl->out(false); ?>">
-                    <strong><?php echo $ises ? 'Quiz de fórmulas' : 'Formula Quiz'; ?></strong>
-                    <span><?php echo $ises
-                        ? 'Configura el Quiz por banco completo, fórmula o categoría.'
-                        : 'Configure the Quiz by full bank, formula, or category.'; ?></span>
-                </a>
-            </div>
 
-            <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises ? 'Quiz de hierbas individuales por categoría de Yang' : 'Single Herbs Quiz by Yang category'; ?></h4>
-            <div class="herb-board__topics">
-                <?php foreach ($herbcategories as $category) {
-                    if ($category['number'] === 1) {
-                        continue;
-                    }
-                    $categoryurl = new moodle_url($singleherbpracticepath, [
-                        'category' => $category['number'],
-                        'size' => 25,
-                    ] + ($fromlibrary ? ['from' => 'library'] : []));
-                ?>
-                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
-                        <span><?php echo s($category['name']); ?></span>
-                    </a>
-                <?php } ?>
-            </div>
+            <?php if (in_array($quizsection, ['all', 'herbs', 'formulas'], true)) { ?>
+                <div class="herb-board__launches <?php echo $quizsection === 'all'
+                    ? 'herb-board__launches--quiz'
+                    : 'herb-board__launches--single'; ?>">
+                    <?php if (in_array($quizsection, ['all', 'herbs'], true)) { ?>
+                        <a class="herb-board__launch" href="<?php echo $singleherbpracticeurl->out(false); ?>">
+                            <strong><?php echo $ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'; ?></strong>
+                            <span><?php echo $ises
+                                ? 'Crea un Quiz de 10, 25, 50 o 100 preguntas.'
+                                : 'Build a 10, 25, 50, or 100-question Quiz.'; ?></span>
+                        </a>
+                    <?php } ?>
+                    <?php if (in_array($quizsection, ['all', 'formulas'], true)) { ?>
+                        <a class="herb-board__launch" href="<?php echo $formulapracticeurl->out(false); ?>">
+                            <strong><?php echo $ises ? 'Quiz de fórmulas' : 'Formula Quiz'; ?></strong>
+                            <span><?php echo $ises
+                                ? 'Configura el Quiz por banco completo, fórmula o categoría.'
+                                : 'Configure the Quiz by full bank, formula, or category.'; ?></span>
+                        </a>
+                    <?php } ?>
+                </div>
+            <?php } ?>
 
-            <h4 class="herb-board__subheading herb-board__subheading--spaced" id="quiz-formula-categories"><?php echo $ises ? 'Quiz de fórmulas por categoría' : 'Formula Quiz by category'; ?></h4>
-            <div class="herb-board__topics">
-                <?php foreach ($formulacategories as $category) {
-                    $categoryurl = new moodle_url($formulapracticepath, [
-                        'category' => $category['key'],
-                        'size' => 25,
-                    ] + ($fromlibrary ? ['from' => 'library'] : []));
-                ?>
-                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
-                        <span><?php echo s($category['name']); ?></span>
-                    </a>
-                <?php } ?>
-                <?php $modificationsurl = new moodle_url($formulapracticepath, [
-                    'category' => 'modifications',
-                    'size' => 25,
-                ] + ($fromlibrary ? ['from' => 'library'] : [])); ?>
-                <a class="herb-board__topic" href="<?php echo $modificationsurl->out(false); ?>">
-                    <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
-                </a>
-            </div>
-
-            <section class="herb-board__clinical-cases-block" id="quiz-clinical-cases"
-                aria-labelledby="quiz-clinical-cases-title">
-                <header>
-                    <div>
-                        <h4 class="herb-board__subheading herb-board__subheading--spaced"
-                            id="quiz-clinical-cases-title"><?php echo $ises
-                                ? 'Quiz de casos clínicos'
-                                : 'Clinical Cases Quiz'; ?></h4>
-                        <p><?php echo $ises
-                            ? 'Aplica la diferenciación de fórmulas a los casos clínicos del Handbook of Oriental Medicine.'
-                            : 'Apply formula differentiation to cases from the Handbook of Oriental Medicine.'; ?></p>
-                    </div>
-                </header>
-                <?php if ($clinicalcaseexams) { ?>
-                    <div class="herb-board__topics herb-board__topics--clinical-cases">
-                        <?php foreach ($clinicalcaseexams as $clinicalcaseexam) {
-                            $clinicalcaselabel = preg_replace(
-                                '/^Handbook(?:-| )of(?:-| )Oriental(?:-| )Medicine[. ]*/i',
-                                '',
-                                (string)$clinicalcaseexam['title']
-                            );
-                            $clinicalcaselabel = preg_replace('/\s*\(\d+\s+Questions?\)\s*$/i', '', $clinicalcaselabel);
-                            $clinicalcaseexamurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                                'track' => 'clinicalcases',
-                                'caseexam' => (string)$clinicalcaseexam['key'],
-                            ] + $languagecontext);
+            <?php if (in_array($quizsection, ['all', 'herbs'], true)) { ?>
+                <section aria-labelledby="quiz-herb-categories">
+                    <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises
+                        ? 'Quiz de hierbas individuales por categoría de Yang'
+                        : 'Single Herbs Quiz by Yang category'; ?></h4>
+                    <div class="herb-board__topics">
+                        <?php foreach ($herbcategories as $category) {
+                            if ($category['number'] === 1) {
+                                continue;
+                            }
+                            $categoryurl = new moodle_url($singleherbpracticepath, [
+                                'category' => $category['number'],
+                                'size' => 25,
+                            ] + ($fromlibrary ? ['from' => 'library'] : []));
                         ?>
-                            <a class="herb-board__topic" href="<?php echo $clinicalcaseexamurl->out(false); ?>">
-                                <span><?php echo s($clinicalcaselabel); ?></span>
+                            <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                                <span><?php echo s($category['name']); ?></span>
                             </a>
                         <?php } ?>
                     </div>
-                <?php } else { ?>
-                    <p class="herb-board__clinical-cases-pending"><?php echo $ises
-                        ? 'El banco se habilitará al completar la extracción segura desde Moodle.'
-                        : 'This bank will appear after the safe Moodle extraction completes.'; ?></p>
-                <?php } ?>
-            </section>
+                </section>
+            <?php } ?>
 
+            <?php if (in_array($quizsection, ['all', 'formulas'], true)) { ?>
+                <section aria-labelledby="quiz-formula-categories">
+                    <h4 class="herb-board__subheading<?php echo $quizsection === 'all'
+                        ? ' herb-board__subheading--spaced'
+                        : ''; ?>" id="quiz-formula-categories"><?php echo $ises
+                        ? 'Quiz de fórmulas por categoría'
+                        : 'Formula Quiz by category'; ?></h4>
+                    <div class="herb-board__topics">
+                        <?php foreach ($formulacategories as $category) {
+                            $categoryurl = new moodle_url($formulapracticepath, [
+                                'category' => $category['key'],
+                                'size' => 25,
+                            ] + ($fromlibrary ? ['from' => 'library'] : []));
+                        ?>
+                            <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                                <span><?php echo s($category['name']); ?></span>
+                            </a>
+                        <?php } ?>
+                        <?php $modificationsurl = new moodle_url($formulapracticepath, [
+                            'category' => 'modifications',
+                            'size' => 25,
+                        ] + ($fromlibrary ? ['from' => 'library'] : [])); ?>
+                        <a class="herb-board__topic" href="<?php echo $modificationsurl->out(false); ?>">
+                            <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
+                        </a>
+                    </div>
+                </section>
+            <?php } ?>
+
+            <?php if (in_array($quizsection, ['all', 'clinical'], true)) { ?>
+                <section class="herb-board__clinical-cases-block" id="quiz-clinical-cases"
+                    aria-labelledby="quiz-clinical-cases-title">
+                    <header>
+                        <div>
+                            <h4 class="herb-board__subheading<?php echo $quizsection === 'all'
+                                ? ' herb-board__subheading--spaced'
+                                : ''; ?>" id="quiz-clinical-cases-title"><?php echo $ises
+                                    ? 'Quiz de casos clínicos'
+                                    : 'Clinical Cases Quiz'; ?></h4>
+                            <p><?php echo $ises
+                                ? 'Aplica la diferenciación de fórmulas a los casos clínicos del Handbook of Oriental Medicine.'
+                                : 'Apply formula differentiation to cases from the Handbook of Oriental Medicine.'; ?></p>
+                        </div>
+                    </header>
+                    <?php if ($clinicalcaseexams) { ?>
+                        <div class="herb-board__topics herb-board__topics--clinical-cases">
+                            <?php foreach ($clinicalcaseexams as $clinicalcaseexam) {
+                                $clinicalcaselabel = preg_replace(
+                                    '/^Handbook(?:-| )of(?:-| )Oriental(?:-| )Medicine[. ]*/i',
+                                    '',
+                                    (string)$clinicalcaseexam['title']
+                                );
+                                $clinicalcaselabel = preg_replace('/\s*\(\d+\s+Questions?\)\s*$/i', '', $clinicalcaselabel);
+                                $clinicalcaseexamurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                                    'track' => 'clinicalcases',
+                                    'caseexam' => (string)$clinicalcaseexam['key'],
+                                ] + $languagecontext);
+                            ?>
+                                <a class="herb-board__topic" href="<?php echo $clinicalcaseexamurl->out(false); ?>">
+                                    <span><?php echo s($clinicalcaselabel); ?></span>
+                                </a>
+                            <?php } ?>
+                        </div>
+                    <?php } else { ?>
+                        <p class="herb-board__clinical-cases-pending"><?php echo $ises
+                            ? 'El banco se habilitará al completar la extracción segura desde Moodle.'
+                            : 'This bank will appear after the safe Moodle extraction completes.'; ?></p>
+                    <?php } ?>
+                </section>
+            <?php } ?>
         </section>
     <?php } else if ($track === 'clinicalcases') { ?>
         <section class="herb-board__panel herb-board__clinical-quiz" aria-labelledby="clinical-case-quiz-title">
-            <a class="herb-board__domain-back" href="<?php echo $quizurl->out(false); ?>#quiz-clinical-cases">
+            <a class="herb-board__domain-back" href="<?php echo $clinicalquizoverviewurl->out(false); ?>">
                 <?php echo $ises ? '← Volver al Quiz' : '← Back to Quiz'; ?>
             </a>
             <?php if ($selectedclinicalexam === null || !$clinicalquestions) { ?>
