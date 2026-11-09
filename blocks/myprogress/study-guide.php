@@ -333,6 +333,7 @@ $spanishcopy = [
     'Formula Comparisons' => 'Comparaciones de fórmulas',
     'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.' => 'Repasa 110 comparaciones por estrategia, patrón, acciones, ingredientes y pistas decisivas que distinguen fórmulas similares.',
     'Single Herbs Comparisons' => 'Comparaciones de hierbas individuales',
+    'Compare Bensky categories, pathologies and Chinese medicine patterns.' => 'Compara categorías Bensky, patologías y patrones de medicina china.',
     'Review 247 comparative study notes that distinguish similar herbs by actions, indications, channels and decisive clinical clues.' => 'Repasa 247 notas comparativas que distinguen hierbas similares por acciones, indicaciones, canales y pistas clínicas decisivas.',
     'Pathology Comparisons' => 'Comparaciones de patologías',
     'Review 66 clinical comparisons organized by pathology, symptom location and the clues that guide herb or formula selection.' => 'Repasa 66 comparaciones clínicas por patología, localización de síntomas y pistas que orientan la selección de hierbas o fórmulas.',
@@ -432,6 +433,12 @@ $quizchapters = array_values(array_filter($area['chapters'], static function(arr
 $comparisonchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['comparison']);
 }));
+$comparisonoverviewchapters = array_values(array_filter($comparisonchapters, static function(array $chapter): bool {
+    return !in_array($chapter['path'] ?? '', [
+        '/study-guide/comparisons/formulas.html',
+        '/study-guide/comparisons/index.html',
+    ], true);
+}));
 $otherchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['secondary']) && empty($chapter['practice_exam']) && empty($chapter['comparison']);
 }));
@@ -468,7 +475,7 @@ $librarygroups = [
         'title' => 'Comparisons',
         'description' => 'Open the comparative study collections.',
         'modifier' => 'comparisons',
-        'chapters' => $comparisonchapters,
+        'chapters' => $comparisonoverviewchapters,
     ],
     [
         'id' => 'reference-library',
@@ -945,15 +952,15 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
 
-        <?php if (($catalogview === '' || $catalogview === 'comparisons') && !empty($comparisonchapters)): ?>
+        <?php if (($catalogview === '' || $catalogview === 'comparisons') && !empty($comparisonoverviewchapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__comparisons" aria-labelledby="comparisons-title">
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status"><?php echo s($tr('COMPARATIVE STUDY')); ?></span>
                     <h3 id="comparisons-title"><?php echo s($tr('Comparisons')); ?></h3>
-                    <p><?php echo s($tr('Compare single herbs, formulas, pathologies and Chinese medicine patterns.')); ?></p>
+                    <p><?php echo s($tr('Compare Bensky categories, pathologies and Chinese medicine patterns.')); ?></p>
                 </header>
                 <div class="subject-study-guide__other-grid">
-                    <?php foreach ($comparisonchapters as $chapter): ?>
+                    <?php foreach ($comparisonoverviewchapters as $chapter): ?>
                         <?php
                         $chapterurl = $makechapterurl($chapter);
                         ?>
