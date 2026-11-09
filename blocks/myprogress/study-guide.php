@@ -791,6 +791,14 @@ echo $OUTPUT->header();
                                     <b><?php echo s($ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>
                                 </span>
                             </header>
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?>">
+                                <?php foreach ($otherchapters as $chapter): ?>
+                                    <?php $secondarychapterurl = $makechapterurl($chapter); ?>
+                                    <a class="subject-study-library__journey-option" href="<?php echo $secondarychapterurl->out(false); ?>">
+                                        <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
+                                    </a>
+                                <?php endforeach; ?>
+                            </nav>
                         </section>
 
                         <section class="subject-study-library__journey-card">
