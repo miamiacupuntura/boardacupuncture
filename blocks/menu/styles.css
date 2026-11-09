@@ -1340,6 +1340,22 @@ a.herb-board__topic:focus {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.herb-board__launches--practice {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.herb-board__launches--practice .herb-board__launch--herbs {
+    background: #0b817d;
+}
+
+.herb-board__launches--practice .herb-board__launch--formulas {
+    background: #176b9a;
+}
+
+.herb-board__launches--practice .herb-board__launch--domains {
+    background: #6d4bc3;
+}
+
 .herb-board__subheading.herb-board__subheading--spaced {
     margin-top: 28px;
 }
