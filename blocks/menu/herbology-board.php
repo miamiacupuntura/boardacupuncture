@@ -12,6 +12,10 @@ $track = optional_param('track', 'herbs', PARAM_ALPHA);
 if (!in_array($track, ['practice', 'herbs', 'formulas', 'quiz', 'clinicalcases', 'domains', 'exams', 'simulation'], true)) {
     $track = 'herbs';
 }
+$quizsection = optional_param('quizsection', 'all', PARAM_ALPHA);
+if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'clinical'], true)) {
+    $quizsection = 'all';
+}
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 $clinicalexamkey = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
@@ -47,6 +51,9 @@ if (!$hasaccess) {
 }
 
 $pageparams = ['track' => $track];
+if ($track === 'quiz' && $quizsection !== 'all') {
+    $pageparams['quizsection'] = $quizsection;
+}
 if ($fromlibrary) {
     $pageparams['from'] = 'library';
 }
