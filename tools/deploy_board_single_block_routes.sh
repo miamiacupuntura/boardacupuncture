@@ -70,13 +70,20 @@ journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-c
 for step in 1 2 3 4 5 6; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
-secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+20p" "$LIBRARY_TEMP")"
+secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+32p" "$LIBRARY_TEMP")"
+grep -Fq "Single Herbs Study Guide Comparison" <<< "$secondary_study_guides_block"
+grep -Fq "Formulas Study Guide Comparison" <<< "$secondary_study_guides_block"
+grep -Fq '$singleherbsstudyurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$formulasstudyurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
+single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$LIBRARY_TEMP")"
+formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
 comparisons_route_count="$(grep -Fc '$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
 other_chapters_route_count="$(grep -Fc '$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
-[[ "$comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
-    echo "ERROR: Comparisons u Other chapters aparece duplicado o fuera del módulo secundario." >&2
+[[ "$single_herbs_study_route_count" -eq 2 && "$formulas_study_route_count" -eq 2 \
+        && "$comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
+    echo "ERROR: los cuatro botones de Secondary Study Guides están incompletos o duplicados." >&2
     exit 1
 }
 grep -Fq '.subject-study-library__journey-card:nth-child(4){border-top-color:#6d4bc3}' "$LIBRARY_TEMP"
@@ -153,7 +160,8 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Secondary Study Guides quedó como módulo 2 con Comparisons y Other chapters."
+echo "OK: Secondary Study Guides quedó como módulo 2 con cuatro botones independientes."
+echo "OK: Single Herbs y Formulas tienen sus botones de comparación dedicados."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
 echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
