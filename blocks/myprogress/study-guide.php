@@ -424,10 +424,10 @@ $practicechapters = array_values(array_filter($area['chapters'], static function
     return !empty($chapter['practice_exam']);
 }));
 $studybankchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return !empty($chapter['study_bank']) && empty($chapter['practice_exam']);
+    return !empty($chapter['study_bank']);
 }));
 $quizchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return !empty($chapter['quiz']) && empty($chapter['practice_exam']);
+    return !empty($chapter['quiz']);
 }));
 $comparisonchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['comparison']);
@@ -483,6 +483,12 @@ $pageurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $libraryparams = $baseparams + ['view' => 'library'];
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
+$comparisonsurl = clone $chapterlisturl;
+$comparisonsurl->set_anchor('comparisons-title');
+$otherchaptersurl = clone $chapterlisturl;
+$otherchaptersurl->set_anchor('other-chapters-title');
+$practiceexamsurl = clone $chapterlisturl;
+$practiceexamsurl->set_anchor('practice-exams-title');
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
 $boardcompletepracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'practice'] + $boardlanguagecontext);
@@ -711,6 +717,12 @@ echo $OUTPUT->header();
                                         <span aria-hidden="true">›</span>
                                     </a>
                                 <?php endforeach; ?>
+                                <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $otherchaptersurl->out(false); ?>">
+                                    <span><?php echo s($tr('Other chapters')); ?><small><?php echo s($ises ? 'Familias, seguridad, teoría y referencias' : 'Families, safety, theory, and references'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $chapterlisturl->out(false); ?>">
                                     <span>
                                         <?php echo s($ises ? 'Abrir todas las guías de estudio' : 'Open all Study Guides'); ?>
@@ -733,12 +745,9 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardpracticeurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de hierbas individuales' : 'Single Herbs Practice'); ?><small><?php echo s($ises ? 'Preguntas con respuestas visibles' : 'Questions with visible answers'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulasurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de fórmulas' : 'Formulas Practice'); ?><small><?php echo s($ises ? 'Estudio pasivo de fórmulas' : 'Passive formula study'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boarddomainsurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica por dominios' : 'Domains Practice'); ?><small><?php echo s($ises ? 'Repaso pasivo por dominio' : 'Passive review by domain'); ?></small></span><span aria-hidden="true">›</span></a>
-                                <?php foreach ($practicechapters as $practicechapter): ?>
-                                    <?php $practicechapterurl = $makechapterurl($practicechapter); ?>
-                                    <a class="subject-study-library__journey-option" href="<?php echo $practicechapterurl->out(false); ?>">
-                                        <span><?php echo s($practicechapter['title']); ?><small><?php echo s($practicechapter['status'] ?? ($ises ? 'Recurso de práctica' : 'Practice resource')); ?></small></span><span aria-hidden="true">›</span>
-                                    </a>
-                                <?php endforeach; ?>
+                                <a class="subject-study-library__journey-option" href="<?php echo $practiceexamsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Practice Exams')); ?><small><?php echo s($ises ? 'Comparaciones, fórmulas y modificaciones' : 'Comparisons, formulas, and modifications'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardcompletepracticeurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Abrir toda la práctica de herbología' : 'Open complete Herbology Practice'); ?><small><?php echo s($ises ? 'Abre el módulo completo de práctica' : 'Opens the complete practice module'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
@@ -892,6 +901,27 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($tr('Open Study Guide →')); ?></a>
             </article>
         <?php endforeach; ?>
+
+        <?php if (!empty($practicechapters)): ?>
+            <section class="subject-study-guide__other subject-study-guide__practice" aria-labelledby="practice-exams-title">
+                <header class="subject-study-guide__other-header">
+                    <span class="subject-study-guide__status"><?php echo s($tr('PRACTICE')); ?></span>
+                    <h3 id="practice-exams-title"><?php echo s($tr('Practice Exams')); ?></h3>
+                    <p><?php echo s($tr('Practice herb comparisons, principal formulas and their clinical modifications.')); ?></p>
+                </header>
+                <div class="subject-study-guide__other-grid">
+                    <?php foreach ($practicechapters as $chapter): ?>
+                        <?php $chapterurl = $makechapterurl($chapter); ?>
+                        <article class="subject-study-guide__card">
+                            <span class="subject-study-guide__status"><?php echo s($chapter['status'] ?? $tr('AVAILABLE')); ?></span>
+                            <h3><?php echo s($chapter['title']); ?></h3>
+                            <p><?php echo s($chapter['description']); ?></p>
+                            <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($chapter['button_label'] ?? $tr('Open Study Guide →')); ?></a>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
 
         <?php if (!empty($comparisonchapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__comparisons" aria-labelledby="comparisons-title">
