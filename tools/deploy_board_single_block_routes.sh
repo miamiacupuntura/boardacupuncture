@@ -39,16 +39,16 @@ php -l "$BOARD_TEMP" >/dev/null
 
 # Cada botón de los tres primeros módulos debe resolver una sola vista.
 grep -Fq "['guides', 'comparisons', 'other', 'practice']" "$LIBRARY_TEMP"
-grep -Fq "$baseparams + ['view' => 'guides']" "$LIBRARY_TEMP"
-grep -Fq "$baseparams + ['view' => 'comparisons']" "$LIBRARY_TEMP"
-grep -Fq "$baseparams + ['view' => 'other']" "$LIBRARY_TEMP"
-grep -Fq "$baseparams + ['view' => 'practice']" "$LIBRARY_TEMP"
+grep -Fq "\$baseparams + ['view' => 'guides']" "$LIBRARY_TEMP"
+grep -Fq "\$baseparams + ['view' => 'comparisons']" "$LIBRARY_TEMP"
+grep -Fq "\$baseparams + ['view' => 'other']" "$LIBRARY_TEMP"
+grep -Fq "\$baseparams + ['view' => 'practice']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'herbs']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'formulas']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
-grep -Fq "in_array($quizsection, ['all', 'herbs'], true)" "$BOARD_TEMP"
-grep -Fq "in_array($quizsection, ['all', 'formulas'], true)" "$BOARD_TEMP"
-grep -Fq "in_array($quizsection, ['all', 'clinical'], true)" "$BOARD_TEMP"
+grep -Fq "in_array(\$quizsection, ['all', 'herbs'], true)" "$BOARD_TEMP"
+grep -Fq "in_array(\$quizsection, ['all', 'formulas'], true)" "$BOARD_TEMP"
+grep -Fq "in_array(\$quizsection, ['all', 'clinical'], true)" "$BOARD_TEMP"
 
 # Guardas de conservación: las colecciones y sus recorridos deben seguir presentes.
 for required in     '$primarychapters as $chapter'     '$practicechapters as $chapter'     '$comparisonchapters as $chapter'     '$otherchapters as $chapter'; do
