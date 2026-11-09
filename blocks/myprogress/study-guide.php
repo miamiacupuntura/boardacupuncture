@@ -420,7 +420,7 @@ $primarychapters = array_values(array_filter($area['chapters'], static function(
     return empty($chapter['secondary']) && empty($chapter['practice_exam']) && empty($chapter['comparison']);
 }));
 $practicechapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return !empty($chapter['practice_exam']);
+    return !empty($chapter['practice_exam']) && empty($chapter['quiz']);
 }));
 $studybankchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['study_bank']);
