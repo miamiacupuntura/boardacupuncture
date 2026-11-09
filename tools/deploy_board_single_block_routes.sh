@@ -71,8 +71,8 @@ for step in 1 2 3 4 5 6; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
 secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+32p" "$LIBRARY_TEMP")"
-grep -Fq "Single Herbs Study Guide Comparison" <<< "$secondary_study_guides_block"
-grep -Fq "Formulas Study Guide Comparison" <<< "$secondary_study_guides_block"
+grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq '$singleherbsstudyurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$formulasstudyurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
@@ -161,7 +161,7 @@ else
 fi
 
 echo "OK: Secondary Study Guides quedó como módulo 2 con cuatro botones independientes."
-echo "OK: Single Herbs y Formulas tienen sus botones de comparación dedicados."
+echo "OK: los botones dedicados se llaman Single Herbs Comparisons y Formula Comparisons."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
 echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
