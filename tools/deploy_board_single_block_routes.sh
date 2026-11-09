@@ -71,10 +71,10 @@ for step in 1 2 3 4 5 6; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
 secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+20p" "$LIBRARY_TEMP")"
-grep -Fq '\$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '\$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
-comparisons_route_count="$(grep -Fc '\$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
-other_chapters_route_count="$(grep -Fc '\$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
+grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
+comparisons_route_count="$(grep -Fc '$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
+other_chapters_route_count="$(grep -Fc '$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
     echo "ERROR: Comparisons u Other chapters aparece duplicado o fuera del módulo secundario." >&2
     exit 1
