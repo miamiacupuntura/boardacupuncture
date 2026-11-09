@@ -489,7 +489,6 @@ $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparam
 $studyguidesblockurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'guides']);
 $comparisonsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'comparisons']);
 $otherchaptersurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'other']);
-$practiceexamsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'practice']);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
 $boardcompletepracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'practice'] + $boardlanguagecontext);
@@ -733,10 +732,6 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardpracticeurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de hierbas individuales' : 'Single Herbs Practice'); ?><small><?php echo s($ises ? 'Preguntas con respuestas visibles' : 'Questions with visible answers'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulasurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica de fórmulas' : 'Formulas Practice'); ?><small><?php echo s($ises ? 'Estudio pasivo de fórmulas' : 'Passive formula study'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boarddomainsurl->out(false); ?>"><span><?php echo s($ises ? 'Práctica por dominios' : 'Domains Practice'); ?><small><?php echo s($ises ? 'Repaso pasivo por dominio' : 'Passive review by domain'); ?></small></span><span aria-hidden="true">›</span></a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $practiceexamsurl->out(false); ?>">
-                                    <span><?php echo s($tr('Practice Exams')); ?><small><?php echo s($ises ? 'Comparaciones, fórmulas y modificaciones' : 'Comparisons, formulas, and modifications'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-
                             </nav>
                         </section>
 
