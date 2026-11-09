@@ -39,7 +39,13 @@ php -l "$BOARD_TEMP" >/dev/null
 
 # Cada botón de los tres primeros módulos debe resolver una sola vista.
 grep -Fq "['guides', 'comparisons', 'other', 'practice']" "$LIBRARY_TEMP"
-grep -Fq "\$baseparams + ['view' => 'guides']" "$LIBRARY_TEMP"
+if grep -Fq '$studyguidesblockurl' "$LIBRARY_TEMP"; then
+    echo "ERROR: Main Study Guides todavía aparece como un solo botón." >&2
+    exit 1
+fi
+grep -Fq "'/blocks/myprogress/single-herbs-study-guide.php'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/dui-yao.html'" "$LIBRARY_TEMP"
+grep -Fq "'/blocks/myprogress/formulas-study-guide.php'" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'comparisons']" "$LIBRARY_TEMP"
 grep -Fq "\$baseparams + ['view' => 'other']" "$LIBRARY_TEMP"
 if grep -Fq '$practiceexamsurl' "$LIBRARY_TEMP"; then
@@ -54,7 +60,9 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     exit 1
 }
 grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio' : 'Study Guides'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "\$ises ? 'Guías de estudio principales' : 'Main Study Guides'" "$LIBRARY_TEMP"
+grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP"
+grep -Fq "\$ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'" "$LIBRARY_TEMP"
+grep -Fq "\$ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "<strong>Herbology Practice</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong>Quiz</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Exámenes' : 'Exams'); ?></strong>" "$LIBRARY_TEMP"
