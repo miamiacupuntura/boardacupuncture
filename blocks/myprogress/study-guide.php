@@ -757,11 +757,11 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">2</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Guías de estudio secundarias' : 'Secondary Study Guides'); ?></strong>
+                                    <strong><?php echo s($ises ? 'Comparación' : 'Comparison'); ?></strong>
                                     <b><?php echo s($ises ? 'Material complementario' : 'Supplemental material'); ?></b>
                                 </span>
                             </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio secundarias' : 'Secondary Study Guides'); ?>">
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Comparación' : 'Comparison'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbscomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de hierbas individuales' : 'Single Herbs Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de hierbas individuales' : 'Comparative single-herb study'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
