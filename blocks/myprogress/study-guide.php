@@ -718,7 +718,7 @@ echo $OUTPUT->header();
                                     </a>
                                 <?php endforeach; ?>
                                 <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
-                                    <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Guía de estudio comparativa de fórmulas' : 'Comparison Formulas Study Guide'); ?><small><?php echo s($ises ? 'Colecciones de comparación de fórmulas' : 'Formula comparison collections'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $otherchaptersurl->out(false); ?>">
                                     <span><?php echo s($tr('Other chapters')); ?><small><?php echo s($ises ? 'Familias, seguridad, teoría y referencias' : 'Families, safety, theory, and references'); ?></small></span><span aria-hidden="true">›</span>
