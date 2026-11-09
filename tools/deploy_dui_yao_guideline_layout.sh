@@ -22,7 +22,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_dui_yao_guideline_layout.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl install grep stat cp mkdir mktemp rm readlink wc; do
+for command in curl install grep stat cp mkdir mktemp rm readlink wc dirname; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -44,7 +44,7 @@ ES_GUIDE="$TEMP_DIR/guidelines/chinese-herbal-medicine-es.html"
 for page in "$EN_DUI" "$ES_DUI"; do
     grep -Fq 'comparison-topbar--study-guide' "$page"
     grep -Fq 'comparison-hero--study-guide' "$page"
-    grep -Fq 'new URLSearchParams(window.location.search).get('''search''')' "$page"
+    grep -Fq "new URLSearchParams(window.location.search).get('search')" "$page"
     grep -Fq 'id="available-pairs"' "$page"
     [[ "$(grep -o 'data-dui-category' "$page" | wc -l)" -eq 15 ]]
     if grep -Fq 'comparison-tools--search-only' "$page"; then
@@ -57,9 +57,7 @@ for page in "$EN_GUIDE" "$ES_GUIDE"; do
     grep -Fq 'id="appendix-b-study"' "$page"
     grep -Fq 'class="guide-dui-yao-hub"' "$page"
     grep -Fq 'class="guide-dui-yao-hub__search"' "$page"
-    before_hub="${page_content%%class=\"guide-dui-yao-hub\"*}"
     page_content="$(<"$page")"
-    before_hub="${page_content%%class=\"guide-dui-yao-hub\"*}"
     after_hub="${page_content#*class=\"guide-dui-yao-hub\"}"
     [[ "$before_hub" == *'id="appendix-b-study"'* ]]
     [[ "$after_hub" == *'guide-reading-step__number">6'* ]]
