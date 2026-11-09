@@ -56,6 +56,7 @@ if grep -Fq "'practice_exam' => true" <<< "$formula_study_block"; then
     echo "ERROR: Formula Study Center todavía pertenece a Practice Exams." >&2
     exit 1
 fi
+grep -Fq "return !empty(\$chapter['practice_exam']) && empty(\$chapter['quiz']);" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'herbs']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'formulas']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
