@@ -106,7 +106,7 @@ $areas = [
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
                 'status' => 'AVAILABLE · CONNECTED STUDY',
-                'practice_exam' => true,
+                'secondary' => true,
                 'study_bank' => true,
             ],
             [
