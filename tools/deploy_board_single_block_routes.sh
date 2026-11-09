@@ -59,7 +59,7 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     exit 1
 }
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio secundarias' : 'Secondary Study Guides'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Comparación' : 'Comparison'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
 journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
 [[ "$journey_card_count" -eq 6 ]] || {
@@ -69,7 +69,7 @@ journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-c
 for step in 1 2 3 4 5 6; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
-secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+50p" "$LIBRARY_TEMP")"
+secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,+50p' "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
@@ -82,7 +82,7 @@ grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_blo
 grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
 if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP"; then
-    echo "ERROR: el botón general Comparisons todavía aparece en Secondary Study Guides." >&2
+    echo "ERROR: el botón general Comparisons todavía aparece en el módulo Comparison." >&2
     exit 1
 fi
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
@@ -109,7 +109,7 @@ other_chapters_route_count="$(grep -Fc '$otherchaptersurl->out(false)' "$LIBRARY
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
         && "$pattern_comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
-    echo "ERROR: los botones de Study Guides y Secondary Study Guides están incompletos o duplicados." >&2
+    echo "ERROR: los botones de Main Study Guide y Comparison están incompletos o duplicados." >&2
     exit 1
 }
 grep -Fq '.subject-study-library__journey-card:nth-child(4){border-top-color:#6d4bc3}' "$LIBRARY_TEMP"
@@ -186,7 +186,7 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Secondary Study Guides quedó como módulo 2 con seis botones independientes."
+echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
