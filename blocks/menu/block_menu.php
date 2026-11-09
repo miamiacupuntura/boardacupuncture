@@ -351,13 +351,14 @@ class block_menu extends block_base {
                     'area' => $subject['area'],
                 ]);
                 $studyguideaction = '';
+                $libraryaction = '';
                 if ($subject['area'] === 'herbology') {
                     $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', [
                         'area' => 'herbology',
                         'view' => 'library',
                     ]);
-                    $actions .= '<a class="board-hub__action comparisons-dashboard-link" href="'
-                        . $libraryurl->out(false) . '">Library</a>';
+                    $libraryaction = '<a class="board-hub__action board-hub__action--board-library '
+                        . 'comparisons-dashboard-link" href="' . $libraryurl->out(false) . '">Library</a>';
                 }
                 if ($showstaffresources) {
                     $studyguideaction = '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
@@ -412,8 +413,8 @@ class block_menu extends block_base {
                     $simulationaction = '<span class="board-hub__action board-hub__action--pending '
                         . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
                 }
-                $boardlevelactions = $studyguideaction . $mockquestionsaction . $quizaction
-                    . $examsaction . $simulationaction;
+                $boardlevelactions = $libraryaction . $studyguideaction . $mockquestionsaction
+                    . $quizaction . $examsaction . $simulationaction;
 
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'
