@@ -553,13 +553,13 @@
     width: 100%;
     flex: 1 1 100%;
     min-width: 0;
-    height: 52px;
-    min-height: 52px;
-    padding: 10px 9px;
-    font-size: .82rem;
+    height: 38px;
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: .78rem;
 }
 
-.board-hub__card--board-level .study-guide-dashboard-link {
+.board-hub__card--board-level .comparisons-dashboard-link {
     width: 100%;
     flex: 1 1 100%;
     min-width: 0;
@@ -567,23 +567,31 @@
     order: 1;
 }
 
-.board-hub__card--board-level .board-hub__action--board-mock {
+.board-hub__card--board-level .study-guide-dashboard-link {
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
+    margin: 0;
     order: 2;
+}
+
+.board-hub__card--board-level .board-hub__action--board-mock {
+    order: 3;
 }
 
 .board-hub__card--board-level .board-hub__action--board-simulation {
     flex-basis: 100%;
-    order: 5;
+    order: 6;
 }
 
 .board-hub__card--board-level .board-hub__action--board-exams {
-    order: 4;
+    order: 5;
     background: #6d4bc3;
     color: #fff !important;
 }
 
 .board-hub__card--board-level .board-hub__action--board-quiz {
-    order: 3;
+    order: 4;
     border: 0;
     background: #b45309;
     color: #fff !important;
@@ -690,6 +698,11 @@
 }
 .board-hub__action--games { background: #f59e0b; }
 .board-hub__action--guide { background: #087c69; }
+.board-hub__action--board-library {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+    color: #1e293b !important;
+}
 .board-hub__action--pending {
     border-color: #d5dce2;
     background: #eef2f4;
