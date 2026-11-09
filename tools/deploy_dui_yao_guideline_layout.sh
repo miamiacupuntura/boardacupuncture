@@ -46,7 +46,7 @@ for page in "$EN_DUI" "$ES_DUI"; do
     grep -Fq 'comparison-hero--study-guide' "$page"
     grep -Fq "new URLSearchParams(window.location.search).get('search')" "$page"
     grep -Fq 'id="available-pairs"' "$page"
-    [[ "$(grep -o 'data-dui-category' "$page" | wc -l)" -eq 15 ]]
+    [[ "$(grep -o 'data-dui-category><header' "$page" | wc -l)" -eq 15 ]]
     if grep -Fq 'comparison-tools--search-only' "$page"; then
         echo "ERROR: la búsqueda antigua todavía permanece dentro de Duì Yào." >&2
         exit 1
@@ -58,6 +58,7 @@ for page in "$EN_GUIDE" "$ES_GUIDE"; do
     grep -Fq 'class="guide-dui-yao-hub"' "$page"
     grep -Fq 'class="guide-dui-yao-hub__search"' "$page"
     page_content="$(<"$page")"
+    before_hub="${page_content%%class=\"guide-dui-yao-hub\"*}"
     after_hub="${page_content#*class=\"guide-dui-yao-hub\"}"
     [[ "$before_hub" == *'id="appendix-b-study"'* ]]
     [[ "$after_hub" == *'guide-reading-step__number">6'* ]]
