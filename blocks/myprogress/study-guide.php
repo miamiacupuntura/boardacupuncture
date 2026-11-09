@@ -498,6 +498,12 @@ $formulasstudyurl = new moodle_url(
     '/blocks/myprogress/formulas-study-guide.php',
     $ises ? ['lang' => 'es'] : []
 );
+$singleherbscomparisonsurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'
+);
+$formulacomparisonsurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'
+);
 $comparisonsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'comparisons']);
 $otherchaptersurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'other']);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
@@ -740,10 +746,10 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio secundarias' : 'Secondary Study Guides'); ?>">
-                                <a class="subject-study-library__journey-option" href="<?php echo $singleherbsstudyurl->out(false); ?>">
+                                <a class="subject-study-library__journey-option" href="<?php echo $singleherbscomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de hierbas individuales' : 'Single Herbs Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de hierbas individuales' : 'Comparative single-herb study'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
+                                <a class="subject-study-library__journey-option" href="<?php echo $formulacomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de fórmulas' : 'Formula Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de fórmulas' : 'Comparative formula study'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
