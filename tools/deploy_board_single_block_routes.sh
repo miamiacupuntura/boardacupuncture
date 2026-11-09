@@ -53,6 +53,11 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     echo "ERROR: no todos los botones del catálogo usan la etiqueta Open/Abrir." >&2
     exit 1
 }
+grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio' : 'Study Guides'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong>Herbology Practice</strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong>Quiz</strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Exámenes' : 'Exams'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Simulación' : 'Simulation'); ?></strong>" "$LIBRARY_TEMP"
 formula_study_block="$(sed -n "/'title' => 'Formula Study Center'/,+8p" "$LIBRARY_TEMP")"
 grep -Fq "'secondary' => true" <<< "$formula_study_block"
 if grep -Fq "'practice_exam' => true" <<< "$formula_study_block"; then
