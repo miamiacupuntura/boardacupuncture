@@ -736,11 +736,11 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">1</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></strong>
+                                    <strong><?php echo s($ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?></strong>
                                     <b><?php echo s($ises ? 'Aprender el contenido' : 'Learn the material'); ?></b>
                                 </span>
                             </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?>">
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbsstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
