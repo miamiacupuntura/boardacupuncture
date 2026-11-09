@@ -63,6 +63,12 @@ grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio' : 'Study Guides'); ?
 grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "\$ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "\$ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'" "$LIBRARY_TEMP"
+categories_label_count="$(grep -Fc "\$ises ? 'Categorías' : 'Categories'" "$LIBRARY_TEMP")"
+[[ "$categories_label_count" -eq 2 ]] || {
+    echo "ERROR: Single Herbs y Formulas no muestran Categories como subtítulo destacado." >&2
+    exit 1
+}
+grep -Fq '.subject-study-library__journey-option-heading{color:inherit;font-size:inherit;font-weight:inherit' "$LIBRARY_TEMP"
 grep -Fq "<strong>Herbology Practice</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong>Quiz</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Exámenes' : 'Exams'); ?></strong>" "$LIBRARY_TEMP"
