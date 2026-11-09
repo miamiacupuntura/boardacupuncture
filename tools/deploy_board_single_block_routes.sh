@@ -87,7 +87,7 @@ if grep -Fq '.subject-study-library__journey-card:nth-child(4){grid-column:span 
         || grep -Fq '.subject-study-library__journey-card:nth-child(6){grid-column:span 3' "$LIBRARY_TEMP"; then
     echo "ERROR: los seis módulos no conservan el diseño uniforme de tres columnas." >&2
     exit 1
-}
+fi
 grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "\$ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "\$ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'" "$LIBRARY_TEMP"
