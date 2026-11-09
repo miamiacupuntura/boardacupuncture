@@ -954,7 +954,7 @@ echo $OUTPUT->header();
                     <?php endforeach; ?>
                 </div>
             </section>
-        <?php else: ?>
+        <?php elseif (($catalogview === '' || $catalogview === 'other') && empty($otherchapters)): ?>
             <article class="subject-study-guide__card subject-study-guide__future">
                 <span class="subject-study-guide__status">COMING SOON</span>
                 <h3><?php echo empty($primarychapters) ? 'Study Guide chapters' : 'More chapters'; ?></h3>
