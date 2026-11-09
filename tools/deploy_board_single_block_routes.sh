@@ -70,15 +70,24 @@ journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-c
 for step in 1 2 3 4 5 6; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
-secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+32p" "$LIBRARY_TEMP")"
+secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+50p" "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
+grep -Fq "Pathology Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Pattern Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/pathologies-es.html' : '/study-guide/comparisons/pathologies.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'" "$LIBRARY_TEMP"
+grep -Fq "'/blocks/myprogress/herb-formula-category-map.php'" "$LIBRARY_TEMP"
 grep -Fq "\$comparisonoverviewchapters = array_values(array_filter(\$comparisonchapters" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas.html'," "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/index.html'," "$LIBRARY_TEMP"
@@ -90,11 +99,16 @@ single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$
 formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
 single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)' "$LIBRARY_TEMP")"
+bensky_crosswalk_route_count="$(grep -Fc '$benskycrosswalkurl->out(false)' "$LIBRARY_TEMP")"
+pathology_comparisons_route_count="$(grep -Fc '$pathologycomparisonsurl->out(false)' "$LIBRARY_TEMP")"
+pattern_comparisons_route_count="$(grep -Fc '$patterncomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 comparisons_route_count="$(grep -Fc '$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
 other_chapters_route_count="$(grep -Fc '$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
-        && "$comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
+        && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
+        && "$pattern_comparisons_route_count" -eq 1 && "$comparisons_route_count" -eq 1 \
+        && "$other_chapters_route_count" -eq 1 ]] || {
     echo "ERROR: los botones de Study Guides y Secondary Study Guides están incompletos o duplicados." >&2
     exit 1
 }
@@ -175,6 +189,7 @@ fi
 echo "OK: Secondary Study Guides quedó como módulo 2 con cuatro botones independientes."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
+echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
 echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
 echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
