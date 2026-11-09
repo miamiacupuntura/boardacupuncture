@@ -52,6 +52,10 @@ grep -Fq "if (\$track === 'practice')" "$TEMP_DIR/blocks/menu/herbology-board.ph
 grep -Fq 'Single Herbs Practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Formulas Practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Domains Practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq "in_array(\$track, ['practice', 'herbs', 'quiz'], true)" "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'id="practice-herb-categories"' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'id="practice-formula-categories"' "$TEMP_DIR/blocks/menu/herbology-board.php"
+grep -Fq 'id="practice-domains"' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '.herb-board__launches--practice {' "$TEMP_DIR/blocks/menu/styles.css"
 
 mkdir -p "$BACKUP_DIR"
