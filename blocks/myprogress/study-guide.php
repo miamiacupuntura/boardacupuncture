@@ -349,7 +349,7 @@ $spanishcopy = [
     'Library →' => 'Biblioteca →',
     '← Back to Dashboard' => '← Volver al Dashboard',
     'Open' => 'Abrir',
-    'Main Study Guides' => 'Guías principales',
+    'Study Guides' => 'Guías de estudio',
     'Open the principal learning resources.' => 'Abre los recursos principales de aprendizaje.',
     'Questions & Flashcards' => 'Preguntas y flashcards',
     'Review questions with answers and explanations, or use recall flashcards.' => 'Repasa preguntas con respuestas y explicaciones, o utiliza flashcards de memoria.',
@@ -444,7 +444,7 @@ $catalogview = in_array($requestedview, ['guides', 'comparisons', 'other', 'prac
 $librarygroups = [
     [
         'id' => 'core-guides',
-        'title' => 'Main Study Guides',
+        'title' => 'Study Guides',
         'description' => 'Open the principal learning resources.',
         'modifier' => 'primary',
         'chapters' => $primarychapters,
@@ -487,7 +487,17 @@ $pageurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $libraryparams = $baseparams + ['view' => 'library'];
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
-$studyguidesblockurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'guides']);
+$singleherbsstudyurl = new moodle_url(
+    '/blocks/myprogress/single-herbs-study-guide.php',
+    $ises ? ['lang' => 'es'] : []
+);
+$duiyaostudyurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html'
+);
+$formulasstudyurl = new moodle_url(
+    '/blocks/myprogress/formulas-study-guide.php',
+    $ises ? ['lang' => 'es'] : []
+);
 $comparisonsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'comparisons']);
 $otherchaptersurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'other']);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
@@ -709,8 +719,14 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?>">
-                                <a class="subject-study-library__journey-option" href="<?php echo $studyguidesblockurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guías de estudio principales' : 'Main Study Guides'); ?><small><?php echo s($ises ? 'Guías principales de hierbas, Duì Yào y fórmulas' : 'Main Single Herbs, Duì Yào, and Formulas guides'); ?></small></span><span aria-hidden="true">›</span>
+                                <a class="subject-study-library__journey-option" href="<?php echo $singleherbsstudyurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'); ?><small><?php echo s($ises ? 'Capítulos y referencias de hierbas individuales' : 'Individual herb chapters and reference material'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $duiyaostudyurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'); ?><small><?php echo s($ises ? '51 pares oficiales en 15 bloques clínicos' : '51 official pairs in 15 clinical blocks'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'); ?><small><?php echo s($ises ? '21 capítulos de fórmulas de Bensky' : '21 Bensky formula chapters'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
                                     <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
