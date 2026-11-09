@@ -47,6 +47,13 @@ php -l "$TEMP_DIR/blocks/myprogress/study-guide.php" >/dev/null
 grep -Fq "'track' => 'practice'" "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq '$boardcompletepracticeurl' "$TEMP_DIR/blocks/myprogress/study-guide.php"
 grep -Fq 'href="<?php echo $boardcompletepracticeurl->out(false); ?>"' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq 'foreach ($practicechapters as $practicechapter)' "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "return !empty(\$chapter['study_bank']) && empty(\$chapter['practice_exam']);" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+grep -Fq "return !empty(\$chapter['quiz']) && empty(\$chapter['practice_exam']);" "$TEMP_DIR/blocks/myprogress/study-guide.php"
+if grep -Fq 'id="practice-exams-title"' "$TEMP_DIR/blocks/myprogress/study-guide.php"; then
+    echo "ERROR: el bloque Practice Exams todavía aparece fuera de Herbology Practice." >&2
+    exit 1
+fi
 grep -Fq "'practice', 'herbs', 'formulas'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "if (\$track === 'practice')" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq 'Single Herbs Practice' "$TEMP_DIR/blocks/menu/herbology-board.php"
