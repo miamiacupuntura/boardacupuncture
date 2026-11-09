@@ -703,8 +703,8 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">1</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Aprender el contenido' : 'Learn the material'); ?></strong>
-                                    <b><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></b>
+                                    <strong><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?></strong>
+                                    <b><?php echo s($ises ? 'Aprender el contenido' : 'Learn the material'); ?></b>
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?>">
@@ -724,8 +724,8 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">2</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Practicar con respuestas' : 'Practice with answers'); ?></strong>
-                                    <b>Herbology Practice</b>
+                                    <strong>Herbology Practice</strong>
+                                    <b><?php echo s($ises ? 'Practicar con respuestas' : 'Practice with answers'); ?></b>
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="Herbology Practice">
@@ -739,8 +739,8 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">3</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Comprobar lo aprendido' : 'Check your learning'); ?></strong>
-                                    <b>Quiz</b>
+                                    <strong>Quiz</strong>
+                                    <b><?php echo s($ises ? 'Comprobar lo aprendido' : 'Check your learning'); ?></b>
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="Quiz">
@@ -755,8 +755,8 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">4</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Medir tu preparación' : 'Measure your readiness'); ?></strong>
-                                    <b><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></b>
+                                    <strong><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></strong>
+                                    <b><?php echo s($ises ? 'Medir tu preparación' : 'Measure your readiness'); ?></b>
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Exámenes' : 'Exams'); ?>">
@@ -773,8 +773,8 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">5</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Ensayar el día del examen' : 'Rehearse test day'); ?></strong>
-                                    <b><?php echo s($ises ? 'Simulación' : 'Simulation'); ?></b>
+                                    <strong><?php echo s($ises ? 'Simulación' : 'Simulation'); ?></strong>
+                                    <b><?php echo s($ises ? 'Ensayar el día del examen' : 'Rehearse test day'); ?></b>
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Simulación' : 'Simulation'); ?>">
