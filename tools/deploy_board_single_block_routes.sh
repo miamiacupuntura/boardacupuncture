@@ -65,12 +65,19 @@ grep -Fq "<b><?php echo s(\$ises ? 'Material de estudio adicional' : 'Additional
 grep -Fq "<strong><?php echo s(\$ises ? 'Misceláneos de fórmulas y hierbas' : 'Formulas and Herbs Miscellaneous'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material adicional de fórmulas y hierbas' : 'Additional formulas and herbs'); ?></b>" "$LIBRARY_TEMP"
 other_chapters_loop_count="$(grep -Fc '$otherchapters as $chapter' "$LIBRARY_TEMP")"
-[[ "$other_chapters_loop_count" -eq 2 ]] || {
-    echo "ERROR: los recursos de Other chapters no aparecen tanto en su catálogo como en Secondary Study Guide." >&2
+secondary_guide_loop_count="$(grep -Fc '$secondaryguidechapters as $chapter' "$LIBRARY_TEMP")"
+herb_formula_misc_loop_count="$(grep -Fc '$herbformulamiscchapters as $chapter' "$LIBRARY_TEMP")"
+[[ "$other_chapters_loop_count" -eq 1 && "$secondary_guide_loop_count" -eq 1 \
+        && "$herb_formula_misc_loop_count" -eq 1 ]] || {
+    echo "ERROR: los recursos de Other chapters no están distribuidos entre los módulos 3 y 4." >&2
     exit 1
 }
+grep -Fq "\$isHerbFormulaChapter = static function(array \$chapter): bool" "$LIBRARY_TEMP"
+grep -Fq "preg_match('/(?:herb|formula|hierba|fórmula)/iu'" "$LIBRARY_TEMP"
 grep -Fq '$secondarychapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
 grep -Fq '$secondarychapterurl->out(false)' "$LIBRARY_TEMP"
+grep -Fq '$miscchapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
+grep -Fq '$miscchapterurl->out(false)' "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
 journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
 [[ "$journey_card_count" -eq 8 ]] || {
@@ -198,8 +205,8 @@ else
 fi
 
 echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
-echo "OK: Secondary Study Guide quedó como módulo 3 con un botón dinámico para cada recurso de Other chapters."
-echo "OK: Formulas and Herbs Miscellaneous quedó como nuevo módulo 4."
+echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
+echo "OK: Formulas and Herbs Miscellaneous contiene los recursos cuyos títulos indican herbs o formulas."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
