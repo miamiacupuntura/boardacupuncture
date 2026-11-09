@@ -424,10 +424,10 @@ $practicechapters = array_values(array_filter($area['chapters'], static function
     return !empty($chapter['practice_exam']);
 }));
 $studybankchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return !empty($chapter['study_bank']);
+    return !empty($chapter['study_bank']) && empty($chapter['practice_exam']);
 }));
 $quizchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
-    return !empty($chapter['quiz']);
+    return !empty($chapter['quiz']) && empty($chapter['practice_exam']);
 }));
 $comparisonchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['comparison']);
