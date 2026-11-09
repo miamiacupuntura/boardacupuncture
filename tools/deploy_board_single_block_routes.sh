@@ -54,7 +54,7 @@ grep -Fq "in_array($quizsection, ['all', 'clinical'], true)" "$BOARD_TEMP"
 for required in     '$primarychapters as $chapter'     '$practicechapters as $chapter'     '$comparisonchapters as $chapter'     '$otherchapters as $chapter'; do
     grep -Fq "$required" "$LIBRARY_TEMP"
 done
-for required in     '$herbsections as $section'     '$formulasections as $section'     '$clinicalcaseexams as $clinicalcaseexam'; do
+for required in     '$herbcategories as $category'     '$formulacategories as $category'     '$clinicalcaseexams as $clinicalcaseexam'; do
     grep -Fq "$required" "$BOARD_TEMP"
 done
 
