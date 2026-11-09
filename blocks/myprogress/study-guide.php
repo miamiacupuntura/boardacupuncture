@@ -709,7 +709,7 @@ echo $OUTPUT->header();
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $studyguidesblockurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?><small><?php echo s($ises ? 'Guías principales de hierbas, Duì Yào y fórmulas' : 'Main Single Herbs, Duì Yào, and Formulas guides'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Guías de estudio principales' : 'Main Study Guides'); ?><small><?php echo s($ises ? 'Guías principales de hierbas, Duì Yào y fórmulas' : 'Main Single Herbs, Duì Yào, and Formulas guides'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
                                     <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
