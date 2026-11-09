@@ -89,6 +89,7 @@ $areas = [
                 'anchor' => '',
                 'status' => 'NEW · REFERENCE MAP',
                 'priority' => true,
+                'comparison' => true,
             ],
             [
                 'title' => 'Herbal Comparison Study Bank',
