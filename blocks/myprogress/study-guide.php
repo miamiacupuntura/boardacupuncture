@@ -723,7 +723,7 @@ echo $OUTPUT->header();
                                     <span><?php echo s($ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $duiyaostudyurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'); ?><small><?php echo s($ises ? '51 pares oficiales en 15 bloques clínicos' : '51 official pairs in 15 clinical blocks'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
