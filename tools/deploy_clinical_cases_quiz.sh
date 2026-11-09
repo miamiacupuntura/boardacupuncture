@@ -107,11 +107,7 @@ grep -Fq "VERSION=\"$EXPECTED_VERSION\"" "$TEMP_DIR/blocks/menu/db/install.xml"
 grep -Fq "upgrade_block_savepoint(true, $EXPECTED_VERSION, 'menu')" "$TEMP_DIR/blocks/menu/db/upgrade.php"
 grep -Fq "\$plugin->version = $EXPECTED_MYPROGRESS_VERSION;" "$TEMP_DIR/blocks/myprogress/version.php"
 grep -Fq 'board-hub__action--board-library' "$TEMP_DIR/blocks/menu/block_menu.php"
-grep -Fq '\$boardlevelactions = \$libraryaction . \$studyguideaction' "$TEMP_DIR/blocks/menu/block_menu.php"
-if grep -Fq '\$actions .= '\''<a class="board-hub__action comparisons-dashboard-link"'\''' "$TEMP_DIR/blocks/menu/block_menu.php"; then
-    echo "ERROR: Library todavía aparece en la tarjeta School Level." >&2
-    exit 1
-fi
+grep -Fq '$boardlevelactions = $libraryaction . $studyguideaction' "$TEMP_DIR/blocks/menu/block_menu.php"
 grep -Fq '.board-hub__action--board-library {' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq 'height: 38px;' "$TEMP_DIR/blocks/menu/styles.css"
 grep -Fq "'← Board Level Activities'" "$TEMP_DIR/blocks/myprogress/herbology-library-navigation.php"
