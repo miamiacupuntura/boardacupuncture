@@ -60,6 +60,34 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     exit 1
 }
 grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio' : 'Study Guides'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Guías de estudio secundarias' : 'Secondary Study Guides'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
+journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
+[[ "$journey_card_count" -eq 6 ]] || {
+    echo "ERROR: el mapa Board Level no contiene exactamente seis módulos." >&2
+    exit 1
+}
+for step in 1 2 3 4 5 6; do
+    grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
+done
+secondary_study_guides_block="$(sed -n "/Secondary Study Guides/,+20p" "$LIBRARY_TEMP")"
+grep -Fq '\$comparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '\$otherchaptersurl->out(false)' <<< "$secondary_study_guides_block"
+comparisons_route_count="$(grep -Fc '\$comparisonsurl->out(false)' "$LIBRARY_TEMP")"
+other_chapters_route_count="$(grep -Fc '\$otherchaptersurl->out(false)' "$LIBRARY_TEMP")"
+[[ "$comparisons_route_count" -eq 1 && "$other_chapters_route_count" -eq 1 ]] || {
+    echo "ERROR: Comparisons u Other chapters aparece duplicado o fuera del módulo secundario." >&2
+    exit 1
+}
+grep -Fq '.subject-study-library__journey-card:nth-child(4){border-top-color:#6d4bc3}' "$LIBRARY_TEMP"
+grep -Fq '.subject-study-library__journey-card:nth-child(5){border-top-color:#2563eb}' "$LIBRARY_TEMP"
+grep -Fq '.subject-study-library__journey-card:nth-child(6){border-top-color:#f77e25}' "$LIBRARY_TEMP"
+if grep -Fq '.subject-study-library__journey-card:nth-child(4){grid-column:span 3' "$LIBRARY_TEMP" \
+        || grep -Fq '.subject-study-library__journey-card:nth-child(5){grid-column:span 3' "$LIBRARY_TEMP" \
+        || grep -Fq '.subject-study-library__journey-card:nth-child(6){grid-column:span 3' "$LIBRARY_TEMP"; then
+    echo "ERROR: los seis módulos no conservan el diseño uniforme de tres columnas." >&2
+    exit 1
+}
 grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "\$ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'" "$LIBRARY_TEMP"
 grep -Fq "\$ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'" "$LIBRARY_TEMP"
@@ -125,6 +153,8 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
+echo "OK: Secondary Study Guides quedó como módulo 2 con Comparisons y Other chapters."
+echo "OK: los seis módulos conservan su contenido, numeración y diseño uniforme."
 echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
 echo "OK: se conservaron Study Guides, Comparisons, Other chapters, Practice Exams y las tres colecciones de Quiz."
 echo "OK: la vista general interna permanece como respaldo, pero no se muestra como botón."
