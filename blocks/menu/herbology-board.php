@@ -1466,7 +1466,7 @@ $herbtotals = [
     'chapters' => 0,
     'charts' => 0,
 ];
-if ($track === 'herbs' || $track === 'quiz') {
+if (in_array($track, ['practice', 'herbs', 'quiz'], true)) {
     $herbbankpath = $comparisonfile('herb-comparison-bank-data.json');
     if ($herbbankpath !== '') {
         $herbbank = json_decode(file_get_contents($herbbankpath), true);
@@ -1690,13 +1690,9 @@ echo $OUTPUT->header();
                         ? 'Elige un módulo de práctica'
                         : 'Choose a practice module'; ?></h3>
                     <p><?php echo $ises
-                        ? 'Abre hierbas individuales, fórmulas o dominios desde un solo lugar. Las respuestas y explicaciones permanecen visibles.'
-                        : 'Open Single Herbs, Formulas, or Domains from one place. Answers and explanations remain visible.'; ?></p>
+                        ? 'Los tres módulos aparecen desplegados para que puedas abrir directamente el banco o una categoría.'
+                        : 'All three modules are expanded so you can open the full bank or go directly to a category.'; ?></p>
                 </div>
-            </div>
-            <div class="herb-board__summary herb-board__summary--panel" aria-label="<?php echo $ises
-                ? 'Módulos de práctica disponibles' : 'Available practice modules'; ?>">
-                <span><strong>3</strong> <?php echo $ises ? 'módulos de práctica' : 'practice modules'; ?></span>
             </div>
             <div class="herb-board__launches herb-board__launches--practice">
                 <a class="herb-board__launch herb-board__launch--herbs" href="<?php echo $singleherbsurl->out(false); ?>">
@@ -1717,6 +1713,65 @@ echo $OUTPUT->header();
                         ? 'Repaso por dominio con preguntas, respuestas y explicaciones visibles.'
                         : 'Review by Domain with visible questions, answers, and explanations.'; ?></span>
                 </a>
+            </div>
+
+            <h4 class="herb-board__subheading" id="practice-herb-categories"><?php echo $ises
+                ? 'Práctica de hierbas individuales por capítulo de Yang'
+                : 'Single Herbs Practice by Yang chapter'; ?></h4>
+            <div class="herb-board__topics">
+                <?php foreach ($herbcategories as $category) {
+                    $categoryurl = new moodle_url($herbquestionbankpath, [
+                        'chapter' => $category['number'],
+                        'mode' => 'questions',
+                    ] + ($fromlibrary ? ['from' => 'library'] : []));
+                ?>
+                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                        <span><?php echo s($category['name']); ?></span>
+                    </a>
+                <?php } ?>
+            </div>
+
+            <h4 class="herb-board__subheading herb-board__subheading--spaced" id="practice-formula-categories"><?php echo $ises
+                ? 'Práctica de fórmulas por categoría'
+                : 'Formulas Practice by category'; ?></h4>
+            <div class="herb-board__topics">
+                <?php foreach ($formulacategories as $category) {
+                    $categoryurl = new moodle_url($formulaquestionbankpath, [
+                        'category' => $category['key'],
+                    ] + ($fromlibrary ? ['from' => 'library'] : []));
+                ?>
+                    <a class="herb-board__topic" href="<?php echo $categoryurl->out(false); ?>">
+                        <span><?php echo s($category['name']); ?></span>
+                    </a>
+                <?php } ?>
+                <?php $practiceModificationUrl = new moodle_url($formulaquestionbankpath, [
+                    'category' => 'modifications',
+                ] + ($fromlibrary ? ['from' => 'library'] : [])); ?>
+                <a class="herb-board__topic" href="<?php echo $practiceModificationUrl->out(false); ?>">
+                    <span><?php echo $ises ? 'Modificaciones de fórmulas' : 'Formula Modifications'; ?></span>
+                </a>
+            </div>
+
+            <h4 class="herb-board__subheading herb-board__subheading--spaced" id="practice-domains"><?php echo $ises
+                ? 'Práctica por dominio'
+                : 'Domains Practice'; ?></h4>
+            <div class="herb-board__domains" aria-labelledby="practice-domains">
+                <?php foreach ($domainblueprint as $domain) {
+                    $domainurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'domains',
+                        'domain' => $domain['id'],
+                    ] + $languagecontext);
+                ?>
+                    <a class="herb-board__domain" data-domain-id="<?php echo s($domain['id']); ?>"
+                        href="<?php echo $domainurl->out(false); ?>">
+                        <span class="herb-board__domain-number"><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$domain['number']; ?></span>
+                        <h4><?php echo s($domain[$ises ? 'name_es' : 'name']); ?></h4>
+                        <p><?php echo s($domain[$ises ? 'focus_es' : 'focus']); ?></p>
+                        <span class="herb-board__domain-status">
+                            <?php echo (int)$domain['questionCount']; ?> <?php echo $ises ? 'preguntas de estudio' : 'study questions'; ?> →
+                        </span>
+                    </a>
+                <?php } ?>
             </div>
         </section>
     <?php } else if ($track === 'herbs') { ?>
