@@ -435,8 +435,12 @@ $comparisonchapters = array_values(array_filter($area['chapters'], static functi
 $otherchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['secondary']) && empty($chapter['practice_exam']) && empty($chapter['comparison']);
 }));
-$showconstruction = optional_param('view', '', PARAM_ALPHA) === 'construction';
-$showlibrary = optional_param('view', '', PARAM_ALPHA) === 'library';
+$requestedview = optional_param('view', '', PARAM_ALPHA);
+$showconstruction = $requestedview === 'construction';
+$showlibrary = $requestedview === 'library';
+$catalogview = in_array($requestedview, ['guides', 'comparisons', 'other', 'practice'], true)
+    ? $requestedview
+    : '';
 $librarygroups = [
     [
         'id' => 'core-guides',
@@ -483,24 +487,19 @@ $pageurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $chapterlisturl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams);
 $libraryparams = $baseparams + ['view' => 'library'];
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
-$comparisonsurl = clone $chapterlisturl;
-$comparisonsurl->set_anchor('comparisons-title');
-$otherchaptersurl = clone $chapterlisturl;
-$otherchaptersurl->set_anchor('other-chapters-title');
-$practiceexamsurl = clone $chapterlisturl;
-$practiceexamsurl->set_anchor('practice-exams-title');
+$studyguidesblockurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'guides']);
+$comparisonsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'comparisons']);
+$otherchaptersurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'other']);
+$practiceexamsurl = new moodle_url('/blocks/myprogress/study-guide.php', $baseparams + ['view' => 'practice']);
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
 $boardcompletepracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'practice'] + $boardlanguagecontext);
 $boardformulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $boardlanguagecontext);
 $boarddomainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $boardlanguagecontext);
 $boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
-$boardherbquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
-$boardherbquizurl->set_anchor('quiz-herb-categories');
-$boardformulaquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
-$boardformulaquizurl->set_anchor('quiz-formula-categories');
-$boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
-$boardclinicalquizurl->set_anchor('quiz-clinical-cases');
+$boardherbquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'herbs'] + $boardlanguagecontext);
+$boardformulaquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'formulas'] + $boardlanguagecontext);
+$boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'clinical'] + $boardlanguagecontext);
 $boardclinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $boardlanguagecontext);
 $boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
 $boardlinearexamurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear'] + $boardlanguagecontext);
@@ -512,10 +511,14 @@ if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
     $pageurl->param('view', 'library');
+} elseif ($catalogview !== '') {
+    $pageurl->param('view', $catalogview);
 }
 $languageparams = ['area' => $areaid];
 if ($showlibrary) {
     $languageparams['view'] = 'library';
+} elseif ($catalogview !== '') {
+    $languageparams['view'] = $catalogview;
 }
 if (!$ises) {
     $languageparams['lang'] = 'es';
@@ -707,28 +710,14 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?>">
-                                <?php foreach ($primarychapters as $chapter): ?>
-                                    <?php $guideurl = $makechapterurl($chapter); ?>
-                                    <a class="subject-study-library__journey-option" href="<?php echo $guideurl->out(false); ?>">
-                                        <span>
-                                            <?php echo s($ises ? 'Guía de estudio: ' . $chapter['title'] : $chapter['title'] . ' Study Guide'); ?>
-                                            <?php if (!empty($chapter['status'])): ?><small><?php echo s($chapter['status']); ?></small><?php endif; ?>
-                                        </span>
-                                        <span aria-hidden="true">›</span>
-                                    </a>
-                                <?php endforeach; ?>
+                                <a class="subject-study-library__journey-option" href="<?php echo $studyguidesblockurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Guías de estudio' : 'Study Guides'); ?><small><?php echo s($ises ? 'Guías principales de hierbas, Duì Yào y fórmulas' : 'Main Single Herbs, Duì Yào, and Formulas guides'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $comparisonsurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guía de estudio comparativa de fórmulas' : 'Comparison Formulas Study Guide'); ?><small><?php echo s($ises ? 'Colecciones de comparación de fórmulas' : 'Formula comparison collections'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($tr('Comparisons')); ?><small><?php echo s($ises ? 'Colecciones de estudio comparativo' : 'Comparative study collections'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $otherchaptersurl->out(false); ?>">
                                     <span><?php echo s($tr('Other chapters')); ?><small><?php echo s($ises ? 'Familias, seguridad, teoría y referencias' : 'Families, safety, theory, and references'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $chapterlisturl->out(false); ?>">
-                                    <span>
-                                        <?php echo s($ises ? 'Abrir todas las guías de estudio' : 'Open all Study Guides'); ?>
-                                        <small><?php echo s($ises ? 'Abre el catálogo completo' : 'Opens the complete catalog'); ?></small>
-                                    </span>
-                                    <span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
@@ -748,9 +737,7 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $practiceexamsurl->out(false); ?>">
                                     <span><?php echo s($tr('Practice Exams')); ?><small><?php echo s($ises ? 'Comparaciones, fórmulas y modificaciones' : 'Comparisons, formulas, and modifications'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardcompletepracticeurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Abrir toda la práctica de herbología' : 'Open complete Herbology Practice'); ?><small><?php echo s($ises ? 'Abre el módulo completo de práctica' : 'Opens the complete practice module'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
+
                             </nav>
                         </section>
 
@@ -766,9 +753,7 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardherbquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulaquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de fórmulas' : 'Formula Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalquizurl->out(false); ?>"><span><?php echo s($ises ? 'Casos clínicos' : 'Clinical Cases'); ?><small><?php echo s($ises ? 'Elige un caso y recibe feedback' : 'Choose a case and receive feedback'); ?></small></span><span aria-hidden="true">›</span></a>
-                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardquizurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Abrir todos los quizzes' : 'Open all Quizzes'); ?><small><?php echo s($ises ? 'Abre el módulo completo de Quiz' : 'Opens the complete Quiz module'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
+
                             </nav>
                         </section>
 
@@ -880,6 +865,7 @@ echo $OUTPUT->header();
     <?php endif; ?>
 
     <section id="study-guide-chapters" class="subject-study-guide__grid<?php echo $areaid === 'herbology' ? ' subject-study-guide__grid--herbology' : ''; ?>" aria-label="<?php echo s($area['title']); ?> Study Guide chapters">
+        <?php if ($catalogview === '' || $catalogview === 'guides'): ?>
         <?php foreach ($primarychapters as $chapter): ?>
             <?php
             $chapterurl = $makechapterurl($chapter);
@@ -901,8 +887,9 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__open" href="<?php echo $chapterurl->out(false); ?>"><?php echo s($tr('Open Study Guide →')); ?></a>
             </article>
         <?php endforeach; ?>
+        <?php endif; ?>
 
-        <?php if (!empty($practicechapters)): ?>
+        <?php if (($catalogview === '' || $catalogview === 'practice') && !empty($practicechapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__practice" aria-labelledby="practice-exams-title">
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status"><?php echo s($tr('PRACTICE')); ?></span>
@@ -923,7 +910,7 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
 
-        <?php if (!empty($comparisonchapters)): ?>
+        <?php if (($catalogview === '' || $catalogview === 'comparisons') && !empty($comparisonchapters)): ?>
             <section class="subject-study-guide__other subject-study-guide__comparisons" aria-labelledby="comparisons-title">
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status"><?php echo s($tr('COMPARATIVE STUDY')); ?></span>
@@ -946,7 +933,7 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
 
-        <?php if (!empty($otherchapters)): ?>
+        <?php if (($catalogview === '' || $catalogview === 'other') && !empty($otherchapters)): ?>
             <section class="subject-study-guide__other" aria-labelledby="other-chapters-title">
                 <header class="subject-study-guide__other-header">
                     <span class="subject-study-guide__status"><?php echo s($tr('ADDITIONAL STUDY')); ?></span>
