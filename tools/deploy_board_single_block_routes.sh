@@ -62,6 +62,13 @@ grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio principal' : 'Main Stu
 grep -Fq "<strong><?php echo s(\$ises ? 'Comparación' : 'Comparison'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>" "$LIBRARY_TEMP"
+other_chapters_loop_count="$(grep -Fc '$otherchapters as $chapter' "$LIBRARY_TEMP")"
+[[ "$other_chapters_loop_count" -eq 2 ]] || {
+    echo "ERROR: los recursos de Other chapters no aparecen tanto en su catálogo como en Secondary Study Guide." >&2
+    exit 1
+}
+grep -Fq '$secondarychapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
+grep -Fq '$secondarychapterurl->out(false)' "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
 journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
 [[ "$journey_card_count" -eq 7 ]] || {
@@ -189,7 +196,7 @@ else
 fi
 
 echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
-echo "OK: Secondary Study Guide quedó como nuevo módulo 3."
+echo "OK: Secondary Study Guide quedó como módulo 3 con un botón dinámico para cada recurso de Other chapters."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
