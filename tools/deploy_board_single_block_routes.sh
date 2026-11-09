@@ -66,6 +66,8 @@ if grep -Fq "'practice_exam' => true" <<< "$formula_study_block"; then
     exit 1
 fi
 grep -Fq "return !empty(\$chapter['practice_exam']) && empty(\$chapter['quiz']);" "$LIBRARY_TEMP"
+bensky_block="$(sed -n "/'title' => 'Bensky Category Crosswalk'/,+8p" "$LIBRARY_TEMP")"
+grep -Fq "'comparison' => true" <<< "$bensky_block"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'herbs']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'formulas']" "$LIBRARY_TEMP"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
