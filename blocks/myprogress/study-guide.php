@@ -526,6 +526,10 @@ $safetylibraryurl = new moodle_url(
 $singleherbscomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'
 );
+$herbscategorycomparisonurl = new moodle_url(
+    '/blocks/myprogress/herbs-category-comparison.php',
+    $ises ? ['lang' => 'es'] : []
+);
 $formulacomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'
 );
@@ -830,6 +834,9 @@ echo $OUTPUT->header();
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Comparación' : 'Comparison'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbscomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de hierbas individuales' : 'Single Herbs Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de hierbas individuales' : 'Comparative single-herb study'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $herbscategorycomparisonurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Comparación de hierbas por categoría' : 'Herbs Category Comparison'); ?><small><?php echo s($ises ? 'Tablas comparativas organizadas por categoría' : 'Comparison tables organized by category'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulacomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de fórmulas' : 'Formula Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de fórmulas' : 'Comparative formula study'); ?></small></span><span aria-hidden="true">›</span>
