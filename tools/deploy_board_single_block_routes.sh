@@ -12,6 +12,7 @@ LIBRARY_TARGET="$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 BOARD_TARGET="$MOODLE_ROOT/blocks/menu/herbology-board.php"
 MENU_TARGET="$MOODLE_ROOT/blocks/menu/block_menu.php"
 STYLES_TARGET="$MOODLE_ROOT/blocks/menu/styles.css"
+CATEGORY_TARGET="$MOODLE_ROOT/blocks/myprogress/herbs-category-comparison.php"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
@@ -34,15 +35,25 @@ LIBRARY_TEMP="$(mktemp)"
 BOARD_TEMP="$(mktemp)"
 MENU_TEMP="$(mktemp)"
 STYLES_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP"' EXIT
+CATEGORY_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/block_menu.php" -o "$MENU_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/styles.css" -o "$STYLES_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/herbs-category-comparison.php" -o "$CATEGORY_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
+php -l "$CATEGORY_TEMP" >/dev/null
+
+grep -Fq "Herbs Category Comparison" "$CATEGORY_TEMP"
+grep -Fq 'id="disperse-wind-cold"' "$CATEGORY_TEMP"
+grep -Fq "Similarities and Clinical Overlaps" "$CATEGORY_TEMP"
+grep -Fq "'Xin Yi'" "$CATEGORY_TEMP"
+grep -Fq "'Cong Bai'" "$CATEGORY_TEMP"
+grep -Fq "'Dan Dou Chi'" "$CATEGORY_TEMP"
 
 grep -Fq "[45, 'Single Herbs', 'questions']" "$MENU_TEMP"
 grep -Fq "[44, 'Formulas', 'questions']" "$MENU_TEMP"
@@ -152,6 +163,8 @@ grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
 grep -Fq '$secondaryguidechapters as $chapter' <<< "$secondary_guide_block"
 grep -Fq '$secondarychapterurl->out(false)' <<< "$secondary_guide_block"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Herbs Category Comparison" <<< "$secondary_study_guides_block"
+grep -Fq '$herbscategorycomparisonurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
 grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
@@ -178,8 +191,8 @@ grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block
 grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"
 main_study_guide_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<< "$main_study_guide_block")"
 comparison_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<< "$secondary_study_guides_block")"
-[[ "$main_study_guide_button_count" -eq 9 && "$comparison_button_count" -eq 7 ]] || {
-    echo "ERROR: Main Study Guide debe tener nueve botones y Comparison debe tener siete." >&2
+[[ "$main_study_guide_button_count" -eq 9 && "$comparison_button_count" -eq 8 ]] || {
+    echo "ERROR: Main Study Guide debe tener nueve botones y Comparison debe tener ocho." >&2
     exit 1
 }
 for comparison_route in \
@@ -231,6 +244,7 @@ most_important_formulas_route_count="$(grep -Fc '$mostimportantformulasurl->out(
 formula_modifications_route_count="$(grep -Fc '$formulamodificationsurl->out(false)' "$LIBRARY_TEMP")"
 common_herbal_combinations_route_count="$(grep -Fc '$commonherbalcombinationsurl->out(false)' "$LIBRARY_TEMP")"
 single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
+herbs_category_comparison_route_count="$(grep -Fc '$herbscategorycomparisonurl->out(false)' "$LIBRARY_TEMP")"
 formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_study_center_route_count="$(grep -Fc '$formulastudycenterurl->out(false)' "$LIBRARY_TEMP")"
 bensky_crosswalk_route_count="$(grep -Fc '$benskycrosswalkurl->out(false)' "$LIBRARY_TEMP")"
@@ -242,7 +256,8 @@ pattern_maciocia_route_count="$(grep -Fc '$patternmaciociacomparisonurl->out(fal
         && "$formula_composition_route_count" -eq 1 && "$herbal_incompatibilities_route_count" -eq 1 \
         && "$most_important_formulas_route_count" -eq 1 && "$formula_modifications_route_count" -eq 1 \
         && "$common_herbal_combinations_route_count" -eq 1 \
-        && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
+        && "$single_herbs_comparisons_route_count" -eq 1 && "$herbs_category_comparison_route_count" -eq 1 \
+        && "$formula_comparisons_route_count" -eq 1 \
         && "$formula_study_center_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
         && "$pattern_comparisons_route_count" -eq 1 && "$pattern_maciocia_route_count" -eq 1 ]] || {
@@ -317,6 +332,9 @@ cp -a "$LIBRARY_TARGET" "$BACKUP_DIR/blocks/myprogress/study-guide.php"
 cp -a "$BOARD_TARGET" "$BACKUP_DIR/blocks/menu/herbology-board.php"
 cp -a "$MENU_TARGET" "$BACKUP_DIR/blocks/menu/block_menu.php"
 cp -a "$STYLES_TARGET" "$BACKUP_DIR/blocks/menu/styles.css"
+if [[ -f "$CATEGORY_TARGET" ]]; then
+    cp -a "$CATEGORY_TARGET" "$BACKUP_DIR/blocks/myprogress/herbs-category-comparison.php"
+fi
 
 install_preserving_metadata() {
     local source_file="$1"
@@ -331,6 +349,14 @@ install_preserving_metadata "$LIBRARY_TEMP" "$LIBRARY_TARGET"
 install_preserving_metadata "$BOARD_TEMP" "$BOARD_TARGET"
 install_preserving_metadata "$MENU_TEMP" "$MENU_TARGET"
 install_preserving_metadata "$STYLES_TEMP" "$STYLES_TARGET"
+if [[ -f "$CATEGORY_TARGET" ]]; then
+    install_preserving_metadata "$CATEGORY_TEMP" "$CATEGORY_TARGET"
+else
+    category_owner_group="$(stat -c '%u:%g' "$LIBRARY_TARGET")"
+    category_mode="$(stat -c '%a' "$LIBRARY_TARGET")"
+    install -o "${category_owner_group%:*}" -g "${category_owner_group#*:}" -m "$category_mode" \
+        "$CATEGORY_TEMP" "$CATEGORY_TARGET"
+fi
 
 if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
     runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -342,7 +368,8 @@ echo "OK: Single Herbs School Level vuelve a abrir el curso 45, igual que Formul
 echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
 echo "OK: Previous page fue eliminado; Español y Dashboard permanecen en la cabecera."
 echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
-echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
+echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
+echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
@@ -356,7 +383,7 @@ echo "OK: Most Important Formulas, Formula Modifications y Commonly Used Herbal 
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
 echo "OK: las validaciones de los módulos 1, 2 y 3 usan límites exactos."
 echo "OK: Herbs Secondary Actions está dentro de Secondary Study Guide."
-echo "OK: los siete botones comparativos están en Comparison."
+echo "OK: los ocho botones comparativos están en Comparison."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Comparison."
 echo "OK: el botón general Comparisons fue eliminado."
