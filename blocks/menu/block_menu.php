@@ -358,9 +358,9 @@ class block_menu extends block_base {
                         'view' => 'library',
                     ]);
                     $libraryaction = '<a class="board-hub__action board-hub__action--board-library '
-                        . 'comparisons-dashboard-link" href="' . $libraryurl->out(false) . '">Library</a>';
+                        . 'comparisons-dashboard-link" href="' . $libraryurl->out(false) . '">Study Guide</a>';
                 }
-                if ($showstaffresources) {
+                if ($showstaffresources && $subject['area'] !== 'herbology') {
                     $studyguideaction = '<a class="board-hub__action board-hub__action--guide study-guide-dashboard-link" href="'
                         . $studyguideurl->out(false) . '">Study Guide</a>';
                 }
