@@ -38,6 +38,8 @@ $categoryids = [
     'yang-tonics',
     'yin-tonics',
     'astringents',
+    'anchor-calm-shen',
+    'nourish-calm-shen',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1259,13 +1261,62 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Bitter, sour, astringent" => "Amarga, ácida, astringente",
         "Sweet, sour, astringent" => "Dulce, ácida, astringente",
         "Sweet, slightly salty" => "Dulce, ligeramente salada",
+        "27. Anchor & Calm Shen" => "27. Anclar y calmar el Shen",
+        "Board Guideline 2026 · 4 substances · Common foundation: settle and calm the Spirit, anchor Liver Yang and control agitation or leakage." => "Guía Board 2026 · 4 sustancias · Fundamento común: asentar y calmar el Shen, anclar Yang de Hígado y controlar agitación o pérdidas.",
+        "Liver Yang rising, Heart agitation, mineral weight, leakage, nodules, hearing or vision, topical healing, digestive weakness and required preparation." => "ascenso de Yang de Hígado, agitación de Corazón, peso mineral, pérdidas, nódulos, audición o visión, cicatrización tópica, debilidad digestiva y preparación necesaria.",
+        "Settles and calms the Spirit, anchors Liver Yang, prevents leakage of fluids and treats chronic non-healing sores topically." => "Asienta y calma el Shen, ancla Yang de Hígado, previene pérdidas de líquidos y trata llagas crónicas que no cicatrizan de forma tópica.",
+        "Avoid in Damp-Heat or externally contracted excess conditions; traditionally counteracted by Shi Gao and should not be mixed with fish." => "Evitar en Humedad-Calor o condiciones de exceso contraídas externamente; tradicionalmente contrarrestada por Shi Gao y no debe mezclarse con pescado.",
+        "Crush and cook 20–30 minutes longer." => "Triturar y cocinar entre 20 y 30 minutos más.",
+        "Settles the Spirit and anchors Liver Yang; softens hardness, dissipates nodules, absorbs Stomach acid and prevents leakage." => "Asienta el Shen y ancla Yang de Hígado; ablanda durezas, disipa nódulos, absorbe ácido de Estómago y previene pérdidas.",
+        "Avoid in high fever from excess without sweating." => "Evitar en fiebre alta por exceso sin sudoración.",
+        "Anchors Liver Yang, tonifies Kidney and Liver, benefits hearing and vision, and helps the Kidney grasp Lung Qi." => "Ancla Yang de Hígado, tonifica Riñón e Hígado, beneficia audición y visión y ayuda al Riñón a captar el Qi de Pulmón.",
+        "Use cautiously with weak Spleen and Stomach; traditionally antagonizes Mu Dan Pi." => "Usar con precaución en debilidad de Bazo y Estómago; tradicionalmente antagoniza Mu Dan Pi.",
+        "Sedates the Heart and calms the Spirit, clears the Liver and superficial visual obstruction, and promotes tissue healing topically." => "Seda el Corazón y calma el Shen, elimina Calor de Hígado y obstrucción visual superficial y promueve cicatrización de tejidos tópicamente.",
+        "Use in pill or powder form." => "Usar en forma de píldora o polvo.",
+        "Settle, anchor and calm the Spirit" => "Asentar, anclar y calmar el Shen",
+        "All four are heavy settling substances, but differ in leakage, nodules, Kidney function, hearing, vision and topical tissue healing." => "Las cuatro son sustancias pesadas que asientan, pero difieren en pérdidas, nódulos, función renal, audición, visión y cicatrización tópica.",
+        "Calm Liver Yang" => "Calmar Yang de Hígado",
+        "Long Gu, Mu Li and Ci Shi anchor rising Liver Yang; Long Gu emphasizes Spirit and leakage, Mu Li nodules, and Ci Shi Kidney, hearing and vision." => "Long Gu, Mu Li y Ci Shi anclan Yang de Hígado ascendente; Long Gu enfatiza Shen y pérdidas, Mu Li nódulos y Ci Shi Riñón, audición y visión.",
+        "Prevent leakage of fluids" => "Prevenir pérdidas de líquidos",
+        "Calcined Long Gu and Mu Li astringe sweating, Essence or other leakage while also calming agitation." => "Long Gu y Mu Li calcinadas astringen sudoración, Esencia u otras pérdidas mientras también calman agitación.",
+        "Soften hardness and dissipate nodules" => "Ablandar durezas y disipar nódulos",
+        "Mu Li is the principal choice for hard nodules and also absorbs Stomach acid; Long Gu is more focused on leakage and Spirit." => "Mu Li es la opción principal para nódulos duros y además absorbe ácido de Estómago; Long Gu se enfoca más en pérdidas y Shen.",
+        "Kidney, hearing and grasping Qi" => "Riñón, audición y captación de Qi",
+        "Ci Shi uniquely tonifies Kidney and Liver, benefits hearing and helps the Kidney grasp Lung Qi." => "Ci Shi se distingue por tonificar Riñón e Hígado, beneficiar audición y ayudar al Riñón a captar el Qi de Pulmón.",
+        "Vision and topical healing" => "Visión y cicatrización tópica",
+        "Ci Shi supports vision through Kidney-Liver tonification; Zhen Zhu clears superficial visual obstruction and promotes flesh generation topically." => "Ci Shi apoya visión mediante tonificación de Riñón-Hígado; Zhen Zhu elimina obstrucción visual superficial y promueve generación de tejido tópicamente.",
+        "Mineral preparation and digestion" => "Preparación mineral y digestión",
+        "Long Gu, Mu Li and Ci Shi require crushing and prolonged cooking; heavy minerals require caution when Spleen and Stomach are weak." => "Long Gu, Mu Li y Ci Shi requieren trituración y cocción prolongada; los minerales pesados exigen precaución cuando Bazo y Estómago están débiles.",
+        "28. Nourish & Calm Shen" => "28. Nutrir y calmar el Shen",
+        "Board Guideline 2026 · 4 herbs · Common foundation: nourish Heart or Liver Blood, calm the Spirit and address deficiency-related insomnia or agitation." => "Guía Board 2026 · 4 hierbas · Fundamento común: nutrir Sangre de Corazón o Hígado, calmar el Shen y tratar insomnio o agitación relacionados con deficiencia.",
+        "Blood or Yin deficiency, insomnia, sweating, bowel dryness, phlegm obstructing the orifices, cough, swelling, channel obstruction and itching." => "deficiencia de Sangre o Yin, insomnio, sudoración, sequedad intestinal, flema que obstruye orificios, tos, hinchazón, obstrucción de canales y picazón.",
+        "Nourishes Liver Blood, calms the Spirit and astringes excessive sweating." => "Nutre Sangre de Hígado, calma el Shen y astringe sudoración excesiva.",
+        "Avoid in severe diarrhea or excess Heat." => "Evitar en diarrea grave o Calor de exceso.",
+        "Nourishes Heart Blood and calms the Spirit, moistens the Intestines and treats Yin-deficiency night sweating." => "Nutre Sangre de Corazón y calma el Shen, humedece los Intestinos y trata sudoración nocturna por deficiencia de Yin.",
+        "Avoid in loose stools or phlegm disorders; traditionally antagonizes Ju Hua." => "Evitar en heces sueltas o trastornos de flema; tradicionalmente antagoniza Ju Hua.",
+        "Calms the Spirit, expels phlegm and opens the Heart orifices, stops cough and reduces abscesses and swelling." => "Calma el Shen, expulsa flema y abre los orificios de Corazón, detiene la tos y reduce abscesos e hinchazón.",
+        "Avoid in Yin deficiency with Heat; use cautiously with ulcers or gastritis; traditionally counteracted by Zhen Zhu and Li Lu." => "Evitar en deficiencia de Yin con Calor; usar con precaución en úlceras o gastritis; tradicionalmente contrarrestada por Zhen Zhu y Li Lu.",
+        "Nourishes Blood, calms the Spirit, unblocks channels and alleviates itching when used as an external wash." => "Nutre la Sangre, calma el Shen, desbloquea canales y alivia picazón cuando se usa como lavado externo.",
+        "Nourish Blood and calm the Spirit" => "Nutrir Sangre y calmar el Shen",
+        "All four calm the Spirit, but differ in sweating, bowel dryness, phlegm, orifices, cough, channels, swelling and itching." => "Las cuatro calman el Shen, pero difieren en sudoración, sequedad intestinal, flema, orificios, tos, canales, hinchazón y picazón.",
+        "Nourish Blood for insomnia" => "Nutrir Sangre para insomnio",
+        "Suan Zao Ren nourishes Liver Blood and astringes sweating; Bai Zi Ren nourishes Heart Blood and moistens the Intestines; Ye Jiao Teng also unblocks channels." => "Suan Zao Ren nutre Sangre de Hígado y astringe sudoración; Bai Zi Ren nutre Sangre de Corazón y humedece los Intestinos; Ye Jiao Teng además desbloquea canales.",
+        "Night sweating" => "Sudoración nocturna",
+        "Suan Zao Ren astringes sweating through Liver Blood nourishment, while Bai Zi Ren is useful when Yin-deficiency night sweats accompany dry stool." => "Suan Zao Ren astringe sudoración al nutrir Sangre de Hígado, mientras Bai Zi Ren es útil cuando sudoración nocturna por deficiencia de Yin acompaña heces secas.",
+        "Bai Zi Ren is the distinctive Shen-calming herb that also lubricates the bowel; avoid it when loose stools predominate." => "Bai Zi Ren es la hierba calmante del Shen distintiva que además lubrica el intestino; evitarla cuando predominan heces sueltas.",
+        "Phlegm and open the orifices" => "Flema y apertura de orificios",
+        "Yuan Zhi uniquely transforms phlegm, opens the Heart orifices, stops cough and reduces abscesses or swelling." => "Yuan Zhi se distingue por transformar flema, abrir los orificios de Corazón, detener tos y reducir abscesos o hinchazón.",
+        "Unblock channels and relieve itching" => "Desbloquear canales y aliviar picazón",
+        "Ye Jiao Teng nourishes Blood while opening channels and may be used externally to relieve itching." => "Ye Jiao Teng nutre la Sangre mientras abre canales y puede usarse externamente para aliviar picazón.",
+        "Deficiency versus excess agitation" => "Agitación por deficiencia frente a exceso",
+        "These nourishing herbs suit deficiency-related insomnia; severe excess Heat, phlegm or unresolved excess patterns require different treatment." => "Estas hierbas nutritivas son apropiadas para insomnio por deficiencia; Calor intenso de exceso, flema o patrones de exceso sin resolver requieren otro tratamiento.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110w';
+$languageversion = '20261110x';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1873,6 +1924,41 @@ $astringentsimilarities = [
     ['Toxicity and unresolved pathogens', 'Bai Guo · General category caution', 'Bai Guo is slightly toxic and must not be overused; astringents generally should not trap unresolved Exterior or excess pathogens.'],
 ];
 
+
+$anchorcalmherbs = [
+    ['Long Gu', 'Fossilia Ossis Mastodi', 'Sweet, astringent', 'Neutral', 'HT, LV, KD', 'Settles and calms the Spirit, anchors Liver Yang, prevents leakage of fluids and treats chronic non-healing sores topically.', 'Avoid in Damp-Heat or externally contracted excess conditions; traditionally counteracted by Shi Gao and should not be mixed with fish.', '15–30 g', 'Crush and cook 20–30 minutes longer.'],
+    ['Mu Li', 'Ostreae Concha', 'Salty, astringent', 'Cool', 'LV, KD', 'Settles the Spirit and anchors Liver Yang; softens hardness, dissipates nodules, absorbs Stomach acid and prevents leakage.', 'Avoid in high fever from excess without sweating.', '9–30 g', 'Crush and cook 20–30 minutes longer.'],
+    ['Ci Shi', 'Magnetitum', 'Acrid, salty', 'Cold', 'KD, LV', 'Anchors Liver Yang, tonifies Kidney and Liver, benefits hearing and vision, and helps the Kidney grasp Lung Qi.', 'Use cautiously with weak Spleen and Stomach; traditionally antagonizes Mu Dan Pi.', '15–30 g', 'Crush and cook 20–30 minutes longer.'],
+    ['Zhen Zhu', 'Margarita', 'Sweet, salty', 'Cold', 'HT, LV', 'Sedates the Heart and calms the Spirit, clears the Liver and superficial visual obstruction, and promotes tissue healing topically.', 'Use cautiously during pregnancy.', '0.3–1 g', 'Use in pill or powder form.'],
+];
+
+$anchorcalmsimilarities = [
+    ['Settle, anchor and calm the Spirit', 'Long Gu · Mu Li · Ci Shi · Zhen Zhu', 'All four are heavy settling substances, but differ in leakage, nodules, Kidney function, hearing, vision and topical tissue healing.'],
+    ['Calm Liver Yang', 'Long Gu · Mu Li · Ci Shi', 'Long Gu, Mu Li and Ci Shi anchor rising Liver Yang; Long Gu emphasizes Spirit and leakage, Mu Li nodules, and Ci Shi Kidney, hearing and vision.'],
+    ['Prevent leakage of fluids', 'Long Gu · Mu Li', 'Calcined Long Gu and Mu Li astringe sweating, Essence or other leakage while also calming agitation.'],
+    ['Soften hardness and dissipate nodules', 'Mu Li', 'Mu Li is the principal choice for hard nodules and also absorbs Stomach acid; Long Gu is more focused on leakage and Spirit.'],
+    ['Kidney, hearing and grasping Qi', 'Ci Shi', 'Ci Shi uniquely tonifies Kidney and Liver, benefits hearing and helps the Kidney grasp Lung Qi.'],
+    ['Vision and topical healing', 'Ci Shi · Zhen Zhu', 'Ci Shi supports vision through Kidney-Liver tonification; Zhen Zhu clears superficial visual obstruction and promotes flesh generation topically.'],
+    ['Mineral preparation and digestion', 'Long Gu · Mu Li · Ci Shi', 'Long Gu, Mu Li and Ci Shi require crushing and prolonged cooking; heavy minerals require caution when Spleen and Stomach are weak.'],
+];
+
+$nourishcalmherbs = [
+    ['Suan Zao Ren', 'Ziziphi Spinosae Semen', 'Sweet, sour', 'Neutral', 'GB, HT, LV, SP', 'Nourishes Liver Blood, calms the Spirit and astringes excessive sweating.', 'Avoid in severe diarrhea or excess Heat.', '9–15 g', 'Crush before use.'],
+    ['Bai Zi Ren', 'Platycladi Semen', 'Sweet', 'Neutral', 'HT, KD, LI', 'Nourishes Heart Blood and calms the Spirit, moistens the Intestines and treats Yin-deficiency night sweating.', 'Avoid in loose stools or phlegm disorders; traditionally antagonizes Ju Hua.', '3–9 g', '—'],
+    ['Yuan Zhi', 'Polygalae Radix', 'Bitter, acrid', 'Slightly warm', 'HT, LU', 'Calms the Spirit, expels phlegm and opens the Heart orifices, stops cough and reduces abscesses and swelling.', 'Avoid in Yin deficiency with Heat; use cautiously with ulcers or gastritis; traditionally counteracted by Zhen Zhu and Li Lu.', '6–15 g', '—'],
+    ['Ye Jiao Teng', 'Polygoni Multiflori Caulis', 'Sweet', 'Neutral', 'HT, LU', 'Nourishes Blood, calms the Spirit, unblocks channels and alleviates itching when used as an external wash.', 'No specific caution noted.', '15–30 g', '—'],
+];
+
+$nourishcalmsimilarities = [
+    ['Nourish Blood and calm the Spirit', 'Suan Zao Ren · Bai Zi Ren · Yuan Zhi · Ye Jiao Teng', 'All four calm the Spirit, but differ in sweating, bowel dryness, phlegm, orifices, cough, channels, swelling and itching.'],
+    ['Nourish Blood for insomnia', 'Suan Zao Ren · Bai Zi Ren · Ye Jiao Teng', 'Suan Zao Ren nourishes Liver Blood and astringes sweating; Bai Zi Ren nourishes Heart Blood and moistens the Intestines; Ye Jiao Teng also unblocks channels.'],
+    ['Night sweating', 'Suan Zao Ren · Bai Zi Ren', 'Suan Zao Ren astringes sweating through Liver Blood nourishment, while Bai Zi Ren is useful when Yin-deficiency night sweats accompany dry stool.'],
+    ['Moisten the Intestines', 'Bai Zi Ren', 'Bai Zi Ren is the distinctive Shen-calming herb that also lubricates the bowel; avoid it when loose stools predominate.'],
+    ['Phlegm and open the orifices', 'Yuan Zhi', 'Yuan Zhi uniquely transforms phlegm, opens the Heart orifices, stops cough and reduces abscesses or swelling.'],
+    ['Unblock channels and relieve itching', 'Ye Jiao Teng', 'Ye Jiao Teng nourishes Blood while opening channels and may be used externally to relieve itching.'],
+    ['Deficiency versus excess agitation', 'General category caution', 'These nourishing herbs suit deficiency-related insomnia; severe excess Heat, phlegm or unresolved excess patterns require different treatment.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1970,6 +2056,8 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['yang-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yang-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['yin-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yin-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('25. Yin Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['astringents']->out(false); ?>"<?php echo $selectedcategory === 'astringents' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('26. Astringents', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['anchor-calm-shen']->out(false); ?>"<?php echo $selectedcategory === 'anchor-calm-shen' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('27. Anchor & Calm Shen', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['nourish-calm-shen']->out(false); ?>"<?php echo $selectedcategory === 'nourish-calm-shen' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('28. Nourish & Calm Shen', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -3167,6 +3255,90 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($astringentherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="anchor-calm-shen"<?php echo $selectedcategory === 'anchor-calm-shen' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('27. Anchor & Calm Shen', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 4 substances · Common foundation: settle and calm the Spirit, anchor Liver Yang and control agitation or leakage.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($anchorcalmsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Liver Yang rising, Heart agitation, mineral weight, leakage, nodules, hearing or vision, topical healing, digestive weakness and required preparation.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($anchorcalmherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="nourish-calm-shen"<?php echo $selectedcategory === 'nourish-calm-shen' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('28. Nourish & Calm Shen', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 4 herbs · Common foundation: nourish Heart or Liver Blood, calm the Spirit and address deficiency-related insomnia or agitation.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($nourishcalmsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Blood or Yin deficiency, insomnia, sweating, bowel dryness, phlegm obstructing the orifices, cough, swelling, channel obstruction and itching.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($nourishcalmherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
