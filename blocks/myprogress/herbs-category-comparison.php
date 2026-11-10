@@ -846,13 +846,14 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Lai Fu Zi is preferred when food stagnation combines with Qi constraint, abdominal distension, phlegm, cough or wheezing." => "Lai Fu Zi se prefiere cuando el estancamiento de alimentos se combina con bloqueo de Qi, distensión abdominal, flema, tos o sibilancias.",
         "Distinctive secondary actions" => "Acciones secundarias distintivas",
         "Shan Zha moves Blood, Mai Ya affects lactation, Ji Nei Jin treats stones and enuresis, and Lai Fu Zi descends Lung Qi." => "Shan Zha mueve Sangre, Mai Ya afecta la lactancia, Ji Nei Jin trata cálculos y enuresis, y Lai Fu Zi hace descender el Qi de Pulmón.",
+        "Sour, sweet" => "Ácido, dulce",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110e';
+$languageversion = '20261110f';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
