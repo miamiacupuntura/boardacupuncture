@@ -768,6 +768,21 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
+                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                            </nav>
+                        </section>
+
+                        <section class="subject-study-library__journey-card">
+                            <header class="subject-study-library__journey-heading">
+                                <span class="subject-study-library__journey-step">2</span>
+                                <span class="subject-study-library__journey-copy">
+                                    <strong><?php echo s($ises ? 'Comparación' : 'Comparison'); ?></strong>
+                                    <b><?php echo s($ises ? 'Material complementario' : 'Supplemental material'); ?></b>
+                                </span>
+                            </header>
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Comparación' : 'Comparison'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbscomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de hierbas individuales' : 'Single Herbs Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de hierbas individuales' : 'Comparative single-herb study'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
@@ -789,21 +804,6 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $patternmaciociacomparisonurl->out(false); ?>">
                                     <span><?php echo s($tr('Pattern Comparison Maciocia')); ?><small><?php echo s($ises ? '100 consejos clínicos de patrones' : '100 clinical pattern tips'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
-                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                            </nav>
-                        </section>
-
-                        <section class="subject-study-library__journey-card">
-                            <header class="subject-study-library__journey-heading">
-                                <span class="subject-study-library__journey-step">2</span>
-                                <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Comparación de fórmulas y hierbas' : 'Comparison Formulas and Herbs'); ?></strong>
-                                    <b><?php echo s($ises ? 'Material complementario' : 'Supplemental material'); ?></b>
-                                </span>
-                            </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Comparación de fórmulas y hierbas' : 'Comparison Formulas and Herbs'); ?>">
                             </nav>
                         </section>
 
