@@ -34,6 +34,7 @@ $categoryids = [
     'activate-blood',
     'warm-interior',
     'qi-tonics',
+    'blood-tonics',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1074,13 +1075,45 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Da Zao, Yi Tang, Feng Mi and Geng Mi nourish gently, but can aggravate Dampness, fullness or food stagnation when used inappropriately." => "Da Zao, Yi Tang, Feng Mi y Geng Mi nutren suavemente, pero pueden agravar Humedad, plenitud o estancamiento de alimentos si se usan de forma inapropiada.",
         "Pure deficiency versus excess" => "Deficiencia pura frente a exceso",
         "Qi tonics are inappropriate when excess pathogens, Dampness, phlegm or food stagnation predominate without true deficiency." => "Los tónicos de Qi no son apropiados cuando predominan patógenos de exceso, Humedad, flema o estancamiento de alimentos sin deficiencia verdadera.",
+        "23. Blood Tonics" => "23. Tónicos de Sangre",
+        "Board Guideline 2026 · 7 herbs · Common foundation: nourish Blood, support menstruation, enrich Yin and restore deficient tissues and fluids." => "Guía Board 2026 · 7 hierbas · Fundamento común: nutrir la Sangre, apoyar la menstruación, enriquecer Yin y restaurar tejidos y líquidos deficientes.",
+        "Blood versus Yin deficiency, menstruation, bleeding, dryness, bowel function, Liver and Kidney involvement, Shen disturbance, Dampness and digestive tolerance." => "deficiencia de Sangre frente a Yin, menstruación, sangrado, sequedad, función intestinal, participación de Hígado y Riñón, alteración del Shen, Humedad y tolerancia digestiva.",
+        "Nourishes Blood and Yin, tonifies Essence and Marrow, and treats wasting and thirsting from deficiency." => "Nutre Sangre y Yin, tonifica Esencia y Médula y trata desgaste y sed por deficiencia.",
+        "Use cautiously in Spleen and Stomach deficiency, Qi or phlegm stagnation; its cloying nature may cause abdominal distension or loose stools." => "Usar con precaución en deficiencia de Bazo y Estómago o estancamiento de Qi o flema; su naturaleza empalagosa puede causar distensión abdominal o heces sueltas.",
+        "Nourishes, invigorates and harmonizes Blood; regulates menstruation, disperses Cold, moistens the Intestines, reduces swelling and promotes tissue healing." => "Nutre, vigoriza y armoniza la Sangre; regula la menstruación, dispersa Frío, humedece los Intestinos, reduce hinchazón y promueve cicatrización de tejidos.",
+        "Avoid in Yin deficiency with Heat; use cautiously in diarrhea or abdominal distension from Dampness." => "Evitar en deficiencia de Yin con Calor; usar con precaución en diarrea o distensión abdominal por Humedad.",
+        "Nourishes Blood, preserves Yin, softens the Liver, calms Liver Yang and relieves pain; harmonizes the nutritive and protective levels." => "Nutre la Sangre, preserva Yin, suaviza el Hígado, calma Yang de Hígado y alivia dolor; armoniza los niveles Nutritivo y Protector.",
+        "Use cautiously in cold-deficiency diarrhea or Yang-deficient Cold; incompatible with Li Lu and traditionally antagonized by Shi Hu and Mang Xiao." => "Usar con precaución en diarrea por Frío de deficiencia o Frío por deficiencia de Yang; incompatible con Li Lu y tradicionalmente antagonizada por Shi Hu y Mang Xiao.",
+        "Nourishes Blood and stops bleeding; nourishes and moistens Yin, especially for dry Lung cough from Yin deficiency or consumption." => "Nutre la Sangre y detiene el sangrado; nutre y humedece Yin, especialmente para tos seca de Pulmón por deficiencia de Yin o consunción.",
+        "Avoid in Exterior conditions; use cautiously in Spleen and Stomach deficiency; traditionally counteracted by Da Huang." => "Evitar en condiciones Exteriores; usar con precaución en deficiencia de Bazo y Estómago; tradicionalmente contrarrestada por Da Huang.",
+        "Tonifies Liver and Kidney, benefits Essence and vision, enriches Yin, moistens the Lung and mildly supports Kidney Yang." => "Tonifica Hígado y Riñón, beneficia Esencia y visión, enriquece Yin, humedece el Pulmón y apoya suavemente Yang de Riñón.",
+        "Avoid in externally contracted excess Heat or Spleen deficiency with Dampness and loose stools." => "Evitar en Calor de exceso contraído externamente o deficiencia de Bazo con Humedad y heces sueltas.",
+        "Nourishes Yin, generates fluids and moistens the Intestines." => "Nutre Yin, genera líquidos y humedece los Intestinos.",
+        "Avoid in diarrhea from Spleen deficiency." => "Evitar en diarrea por deficiencia de Bazo.",
+        "Tonifies Heart and Spleen, nourishes Blood and calms the Spirit." => "Tonifica Corazón y Bazo, nutre la Sangre y calma el Shen.",
+        "Avoid in phlegm-Fire or Dampness in the Middle Jiao." => "Evitar en Flema-Fuego o Humedad en el Jiao Medio.",
+        "Nourish Blood and restore deficiency" => "Nutrir la Sangre y restaurar deficiencia",
+        "All seven nourish Blood or related Yin and fluids, but differ in menstruation, bleeding, dryness, bowel, Liver-Kidney and Shen emphasis." => "Las siete nutren Sangre o Yin y líquidos relacionados, pero difieren en énfasis sobre menstruación, sangrado, sequedad, intestinos, Hígado-Riñón y Shen.",
+        "Regulate menstruation" => "Regular la menstruación",
+        "Dang Gui nourishes and moves Blood while dispersing Cold; Bai Shao nourishes Blood, preserves Yin and softens the Liver." => "Dang Gui nutre y mueve la Sangre mientras dispersa Frío; Bai Shao nutre Sangre, preserva Yin y suaviza el Hígado.",
+        "Nourish Blood and Yin" => "Nutrir Sangre y Yin",
+        "Shu Di Huang, E Jiao, Gou Qi Zi and Sang Shen all nourish deficient Blood or Yin; select according to Essence, bleeding, Lung dryness, fluids and bowel dryness." => "Shu Di Huang, E Jiao, Gou Qi Zi y Sang Shen nutren Sangre o Yin deficientes; seleccionar según Esencia, sangrado, sequedad de Pulmón, líquidos y sequedad intestinal.",
+        "Dang Gui and Sang Shen relieve dry stool through moistening; Dang Gui also regulates Blood, while Sang Shen more directly generates fluids." => "Dang Gui y Sang Shen alivian heces secas mediante humectación; Dang Gui además regula la Sangre, mientras Sang Shen genera líquidos más directamente.",
+        "Tonify Liver and Kidney" => "Tonificar Hígado y Riñón",
+        "Shu Di Huang strongly nourishes Blood, Yin and Essence; Gou Qi Zi is gentler and also benefits the eyes and Lung." => "Shu Di Huang nutre intensamente Sangre, Yin y Esencia; Gou Qi Zi es más suave y además beneficia ojos y Pulmón.",
+        "Stop bleeding while nourishing" => "Detener el sangrado mientras se nutre",
+        "E Jiao is the distinctive Blood tonic that also stops bleeding and moistens Lung Yin." => "E Jiao es el tónico de Sangre distintivo que además detiene sangrado y humedece Yin de Pulmón.",
+        "Calm the Spirit" => "Calmar el Shen",
+        "Long Yan Rou tonifies Heart and Spleen, nourishes Blood and calms the Spirit, especially when deficiency affects sleep or emotional stability." => "Long Yan Rou tonifica Corazón y Bazo, nutre Sangre y calma el Shen, especialmente cuando la deficiencia afecta sueño o estabilidad emocional.",
+        "Cloying tonics and digestive weakness" => "Tónicos empalagosos y debilidad digestiva",
+        "Shu Di Huang and E Jiao are rich and cloying; Long Yan Rou and other sweet tonics can aggravate Dampness or phlegm when digestion is weak." => "Shu Di Huang y E Jiao son densas y empalagosas; Long Yan Rou y otros tónicos dulces pueden agravar Humedad o flema cuando la digestión es débil.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110p';
+$languageversion = '20261110q';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1581,6 +1614,28 @@ $qitonicsimilarities = [
     ['Pure deficiency versus excess', 'General category caution', 'Qi tonics are inappropriate when excess pathogens, Dampness, phlegm or food stagnation predominate without true deficiency.'],
 ];
 
+
+$bloodtonicherbs = [
+    ['Shu Di Huang', 'Rehmanniae Radix Praeparata', 'Sweet', 'Slightly warm', 'HT, KD, LV', 'Nourishes Blood and Yin, tonifies Essence and Marrow, and treats wasting and thirsting from deficiency.', 'Use cautiously in Spleen and Stomach deficiency, Qi or phlegm stagnation; its cloying nature may cause abdominal distension or loose stools.', '9–30 g', '—'],
+    ['Dang Gui', 'Angelicae Sinensis Radix', 'Sweet, acrid', 'Warm', 'HT, LV, SP', 'Nourishes, invigorates and harmonizes Blood; regulates menstruation, disperses Cold, moistens the Intestines, reduces swelling and promotes tissue healing.', 'Avoid in Yin deficiency with Heat; use cautiously in diarrhea or abdominal distension from Dampness.', '4.5–15 g', '—'],
+    ['Bai Shao', 'Paeoniae Radix Alba', 'Bitter, sour', 'Slightly cold', 'LV, SP', 'Nourishes Blood, preserves Yin, softens the Liver, calms Liver Yang and relieves pain; harmonizes the nutritive and protective levels.', 'Use cautiously in cold-deficiency diarrhea or Yang-deficient Cold; incompatible with Li Lu and traditionally antagonized by Shi Hu and Mang Xiao.', '6–15 g', '—'],
+    ['E Jiao', 'Asini Corii Colla', 'Sweet', 'Neutral', 'KD, LV, LU', 'Nourishes Blood and stops bleeding; nourishes and moistens Yin, especially for dry Lung cough from Yin deficiency or consumption.', 'Avoid in Exterior conditions; use cautiously in Spleen and Stomach deficiency; traditionally counteracted by Da Huang.', '3–9 g', 'Dissolve in the strained decoction.'],
+    ['Gou Qi Zi', 'Lycii Fructus', 'Sweet', 'Neutral', 'LV, LU, KD', 'Tonifies Liver and Kidney, benefits Essence and vision, enriches Yin, moistens the Lung and mildly supports Kidney Yang.', 'Avoid in externally contracted excess Heat or Spleen deficiency with Dampness and loose stools.', '6–12 g', '—'],
+    ['Sang Shen', 'Mori Fructus', 'Sweet', 'Cold', 'HT, LV, KD', 'Nourishes Yin, generates fluids and moistens the Intestines.', 'Avoid in diarrhea from Spleen deficiency.', '9–15 g', '—'],
+    ['Long Yan Rou', 'Longan Arillus', 'Sweet', 'Warm', 'HT, SP', 'Tonifies Heart and Spleen, nourishes Blood and calms the Spirit.', 'Avoid in phlegm-Fire or Dampness in the Middle Jiao.', '9–15 g', '—'],
+];
+
+$bloodtonicsimilarities = [
+    ['Nourish Blood and restore deficiency', 'Shu Di Huang · Dang Gui · Bai Shao · E Jiao · Gou Qi Zi · Sang Shen · Long Yan Rou', 'All seven nourish Blood or related Yin and fluids, but differ in menstruation, bleeding, dryness, bowel, Liver-Kidney and Shen emphasis.'],
+    ['Regulate menstruation', 'Dang Gui · Bai Shao', 'Dang Gui nourishes and moves Blood while dispersing Cold; Bai Shao nourishes Blood, preserves Yin and softens the Liver.'],
+    ['Nourish Blood and Yin', 'Shu Di Huang · E Jiao · Gou Qi Zi · Sang Shen', 'Shu Di Huang, E Jiao, Gou Qi Zi and Sang Shen all nourish deficient Blood or Yin; select according to Essence, bleeding, Lung dryness, fluids and bowel dryness.'],
+    ['Moisten the Intestines', 'Dang Gui · Sang Shen', 'Dang Gui and Sang Shen relieve dry stool through moistening; Dang Gui also regulates Blood, while Sang Shen more directly generates fluids.'],
+    ['Tonify Liver and Kidney', 'Shu Di Huang · Gou Qi Zi', 'Shu Di Huang strongly nourishes Blood, Yin and Essence; Gou Qi Zi is gentler and also benefits the eyes and Lung.'],
+    ['Stop bleeding while nourishing', 'E Jiao', 'E Jiao is the distinctive Blood tonic that also stops bleeding and moistens Lung Yin.'],
+    ['Calm the Spirit', 'Long Yan Rou', 'Long Yan Rou tonifies Heart and Spleen, nourishes Blood and calms the Spirit, especially when deficiency affects sleep or emotional stability.'],
+    ['Cloying tonics and digestive weakness', 'Shu Di Huang · E Jiao · Long Yan Rou', 'Shu Di Huang and E Jiao are rich and cloying; Long Yan Rou and other sweet tonics can aggravate Dampness or phlegm when digestion is weak.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1674,6 +1729,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['activate-blood']->out(false); ?>"<?php echo $selectedcategory === 'activate-blood' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></a>
         <a href="<?php echo $categoryurls['warm-interior']->out(false); ?>"<?php echo $selectedcategory === 'warm-interior' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></a>
         <a href="<?php echo $categoryurls['qi-tonics']->out(false); ?>"<?php echo $selectedcategory === 'qi-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['blood-tonics']->out(false); ?>"<?php echo $selectedcategory === 'blood-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2703,6 +2759,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($qitonicherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="blood-tonics"<?php echo $selectedcategory === 'blood-tonics' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 7 herbs · Common foundation: nourish Blood, support menstruation, enrich Yin and restore deficient tissues and fluids.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($bloodtonicsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Blood versus Yin deficiency, menstruation, bleeding, dryness, bowel function, Liver and Kidney involvement, Shen disturbance, Dampness and digestive tolerance.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($bloodtonicherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
