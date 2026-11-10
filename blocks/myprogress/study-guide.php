@@ -451,6 +451,9 @@ $secondaryguidechapters = array_values(array_filter(
             '/study-guide/comparisons/safety.html',
             '/study-guide/comparisons/formula-theory.html',
             '/study-guide/comparisons/herbal-incompatibilities.html',
+            '/study-guide/comparisons/most-important-formulas.html',
+            '/study-guide/comparisons/formula-modifications.html',
+            '/blocks/myprogress/common-herbal-combinations.php',
         ], true);
     }
 ));
@@ -603,6 +606,21 @@ $formulacompositionurl = $makechapterurl([
 ]);
 $herbalincompatibilitiesurl = $makechapterurl([
     'path' => '/study-guide/comparisons/herbal-incompatibilities.html',
+    'params' => [],
+    'anchor' => '',
+]);
+$mostimportantformulasurl = $makechapterurl([
+    'path' => '/study-guide/comparisons/most-important-formulas.html',
+    'params' => [],
+    'anchor' => '',
+]);
+$formulamodificationsurl = $makechapterurl([
+    'path' => '/study-guide/comparisons/formula-modifications.html',
+    'params' => [],
+    'anchor' => '',
+]);
+$commonherbalcombinationsurl = $makechapterurl([
+    'path' => '/blocks/myprogress/common-herbal-combinations.php',
     'params' => [],
     'anchor' => '',
 ]);
@@ -789,6 +807,15 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $herbalincompatibilitiesurl->out(false); ?>">
                                     <span><?php echo s($tr('Herbal Incompatibilities')); ?><small><?php echo s($ises ? '10 capítulos de seguridad' : '10 safety chapters'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $mostimportantformulasurl->out(false); ?>">
+                                    <span><?php echo s($tr('Most Important Formulas')); ?><small><?php echo s($ises ? '85 fórmulas' : '85 formulas'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $formulamodificationsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Formula Modifications')); ?><small><?php echo s($ises ? '305 modificaciones' : '305 modifications'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $commonherbalcombinationsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Commonly Used Herbal Combinations')); ?><small><?php echo s($ises ? 'Apéndice 2' : 'Appendix 2'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
