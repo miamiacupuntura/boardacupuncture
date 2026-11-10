@@ -113,8 +113,8 @@ if grep -Fq '$safetylibraryurl->out(false)' <<< "$secondary_guide_block"; then
 fi
 grep -Fq "Comparison Pathology and Patterns" <<< "$pathology_patterns_block"
 grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
-grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
-grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Single Herbs Comparisons" <<< "$main_study_guide_block"
+grep -Fq "Formula Comparisons" <<< "$main_study_guide_block"
 grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
 grep -Fq "\$ises ? 'Estudio conectado de fórmulas' : 'Connected formula study'" "$LIBRARY_TEMP"
 grep -Fq "'63 Formulas Comparison' => 'Comparación de 63 fórmulas'" "$LIBRARY_TEMP"
@@ -131,8 +131,13 @@ if grep -Fq "'title' => 'Patterns Tips Maciocia'" "$LIBRARY_TEMP"; then
     echo "ERROR: Patterns Tips Maciocia todavía conserva el nombre anterior." >&2
     exit 1
 fi
-grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq '$formulacomparisonsurl->out(false)' <<< "$main_study_guide_block"
+if grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block" \
+        || grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"; then
+    echo "ERROR: Single Herbs Comparisons o Formula Comparisons todavía aparece en el módulo 2." >&2
+    exit 1
+fi
 grep -Fq '$formulastudycenterurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$pathology_patterns_block"
@@ -269,7 +274,7 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Comparison Formulas and Herbs quedó como módulo 2 con cuatro botones independientes."
+echo "OK: Comparison Formulas and Herbs quedó como módulo 2 con dos botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison Formulas and Herbs y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison Pathology and Patterns y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
@@ -278,11 +283,12 @@ echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapter
 echo "OK: Comparison Pathology and Patterns contiene tres botones independientes."
 echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
 echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
+echo "OK: Main Study Guide contiene seis botones independientes."
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
 echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
-echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
+echo "OK: Single Herbs Comparisons y Formula Comparisons están en Main Study Guide."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk conserva su botón directo; Pathology y Pattern están en el módulo 3."
 echo "OK: el botón general Comparisons fue eliminado."
