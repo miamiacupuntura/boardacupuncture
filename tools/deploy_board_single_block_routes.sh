@@ -95,7 +95,13 @@ comparison_table_line="${comparison_table_line%%:*}"
 grep -Fq "Herb / Pharmaceutical name" "$CATEGORY_TEMP"
 grep -Fq 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP"
 grep -Fq "table-layout:fixed" "$CATEGORY_TEMP"
-grep -Fq "nth-child(8){width:12%}" "$CATEGORY_TEMP"
+grep -Fq "nth-child(7){width:8%}" "$CATEGORY_TEMP"
+grep -Fq "nth-child(8){width:14%}" "$CATEGORY_TEMP"
+grep -Fq ".herb-category-library__dosage{white-space:normal;text-align:center;overflow-wrap:anywhere}" "$CATEGORY_TEMP"
+if grep -Fq ".herb-category-library__dosage{white-space:nowrap" "$CATEGORY_TEMP"; then
+    echo "ERROR: Dosage todavía impide el ajuste de texto y se superpone con Preparation." >&2
+    exit 1
+fi
 grep -Fq "'Xin Yi'" "$CATEGORY_TEMP"
 grep -Fq "'Cong Bai'" "$CATEGORY_TEMP"
 grep -Fq "'Dan Dou Chi'" "$CATEGORY_TEMP"
@@ -416,6 +422,7 @@ echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herb y Pharmaceutical name están combinadas; las columnas compactas dejan visible Preparation."
+echo "OK: Dosage permite varias líneas y Preparation usa una columna más ancha."
 echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallada."
 echo "OK: Disperse Wind-Heat quedó como categoría 2 con once hierbas y sus semejanzas clínicas."
 echo "OK: Clear and Purge Heat quedó como categoría 3 con ocho hierbas y sus semejanzas clínicas."
