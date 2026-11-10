@@ -1403,7 +1403,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110search3';
+$languageversion = '20261110search4';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -2143,6 +2143,7 @@ $PAGE->requires->js_init_code(<<<'JS'
             return !section.hidden;
         });
         const initialCategory = initialSection ? initialSection.id : '';
+        const requestedTerm = new URL(window.location.href).searchParams.get('q') || '';
         const initialCategoryIndex = categoryLinks.findIndex(function(link) {
             return (new URL(link.href, window.location.href).searchParams.get('category') || '') === initialCategory;
         });
@@ -2235,6 +2236,33 @@ $PAGE->requires->js_init_code(<<<'JS'
             });
         };
 
+        const urlWithSearch = function(href) {
+            const url = new URL(href, window.location.href);
+            const term = search.value.trim();
+            if (term !== '') {
+                url.searchParams.set('q', term);
+            } else {
+                url.searchParams.delete('q');
+            }
+            return url.toString();
+        };
+
+        const updateAddress = function(category) {
+            const url = new URL(window.location.href);
+            if (category) {
+                url.searchParams.set('category', category);
+            } else {
+                url.searchParams.delete('category');
+            }
+            const term = search.value.trim();
+            if (term !== '') {
+                url.searchParams.set('q', term);
+            } else {
+                url.searchParams.delete('q');
+            }
+            window.history.replaceState({category: category, query: term}, '', url.toString());
+        };
+
         const updateCategoryPager = function(section, categoryIndex) {
             const pager = section ? section.querySelector('.herb-category-library__pager') : null;
             if (!pager || categoryIndex < 0) {
@@ -2244,14 +2272,14 @@ $PAGE->requires->js_init_code(<<<'JS'
             if (categoryIndex > 0) {
                 const previous = document.createElement('a');
                 previous.rel = 'prev';
-                previous.href = categoryLinks[categoryIndex - 1].href;
+                previous.href = urlWithSearch(categoryLinks[categoryIndex - 1].href);
                 previous.textContent = '← ' + searchBox.dataset.previous;
                 pager.appendChild(previous);
             }
             if (categoryIndex < categoryLinks.length - 1) {
                 const next = document.createElement('a');
                 next.rel = 'next';
-                next.href = categoryLinks[categoryIndex + 1].href;
+                next.href = urlWithSearch(categoryLinks[categoryIndex + 1].href);
                 next.textContent = searchBox.dataset.next + ' →';
                 pager.appendChild(next);
             }
@@ -2314,6 +2342,7 @@ $PAGE->requires->js_init_code(<<<'JS'
             const section = current.closest('.herb-category-library__section');
             if (section) {
                 showCategory(section.id);
+                updateAddress(section.id);
             }
             updateStatus();
             if (shouldScroll) {
@@ -2333,6 +2362,7 @@ $PAGE->requires->js_init_code(<<<'JS'
             previousResult.disabled = true;
             nextResult.disabled = true;
             showCategory(initialCategory);
+            updateAddress(initialCategory);
             status.textContent = '';
         };
 
@@ -2392,6 +2422,40 @@ $PAGE->requires->js_init_code(<<<'JS'
             }, 120);
         };
 
+        const activateFirstMatchInCategory = function(category, shouldScroll) {
+            const categoryMatch = matches.findIndex(function(mark) {
+                const section = mark.closest('.herb-category-library__section');
+                return section && section.id === category;
+            });
+            if (categoryMatch < 0) {
+                return false;
+            }
+            activateMatch(categoryMatch, shouldScroll);
+            return true;
+        };
+
+        index.addEventListener('click', function(event) {
+            const link = event.target.closest('a');
+            if (!link || search.value.trim() === '' || matches.length === 0) {
+                return;
+            }
+            const category = new URL(link.href, window.location.href).searchParams.get('category') || '';
+            if (activateFirstMatchInCategory(category, true)) {
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            const link = event.target.closest('.herb-category-library__pager a');
+            if (!link || search.value.trim() === '' || matches.length === 0) {
+                return;
+            }
+            const category = new URL(link.href, window.location.href).searchParams.get('category') || '';
+            if (activateFirstMatchInCategory(category, true)) {
+                event.preventDefault();
+            }
+        });
+
         search.addEventListener('input', scheduleSearch);
         search.addEventListener('keydown', function(event) {
             if (event.key === 'Enter' && matches.length > 0) {
@@ -2414,7 +2478,12 @@ $PAGE->requires->js_init_code(<<<'JS'
             resetSearch();
             search.focus();
         });
-        resetSearch();
+        if (requestedTerm !== '') {
+            search.value = requestedTerm;
+            updateSearch(false);
+        } else {
+            resetSearch();
+        }
     };
 
     if (document.readyState === 'loading') {
