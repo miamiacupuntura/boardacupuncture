@@ -10,6 +10,7 @@ BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 BACKUP_DIR="$BACKUP_ROOT/board-single-block-routes-$(date +%Y%m%d-%H%M%S)"
 LIBRARY_TARGET="$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 BOARD_TARGET="$MOODLE_ROOT/blocks/menu/herbology-board.php"
+MENU_TARGET="$MOODLE_ROOT/blocks/menu/block_menu.php"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
@@ -21,7 +22,7 @@ for command in curl php install grep sed stat cp mkdir mktemp rm; do
         exit 1
     }
 done
-for target in "$LIBRARY_TARGET" "$BOARD_TARGET"; do
+for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET"; do
     [[ -f "$target" ]] || {
         echo "ERROR: no se encontró $target" >&2
         exit 1
@@ -30,12 +31,22 @@ done
 
 LIBRARY_TEMP="$(mktemp)"
 BOARD_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP"' EXIT
+MENU_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/block_menu.php" -o "$MENU_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
+php -l "$MENU_TEMP" >/dev/null
+
+grep -Fq ". 'comparisons-dashboard-link\" href=\"' . \$libraryurl->out(false) . '\">Study Guide</a>';" "$MENU_TEMP"
+grep -Fq "if (\$showstaffresources && \$subject['area'] !== 'herbology')" "$MENU_TEMP"
+if grep -Fq ". 'comparisons-dashboard-link\" href=\"' . \$libraryurl->out(false) . '\">Library</a>';" "$MENU_TEMP"; then
+    echo "ERROR: el botón naranja de Herbology todavía conserva Library." >&2
+    exit 1
+fi
 
 # Cada botón de los tres primeros módulos debe resolver una sola vista.
 grep -Fq "['guides', 'comparisons', 'other', 'practice']" "$LIBRARY_TEMP"
@@ -279,6 +290,7 @@ fi
 mkdir -p "$BACKUP_DIR/blocks/myprogress" "$BACKUP_DIR/blocks/menu"
 cp -a "$LIBRARY_TARGET" "$BACKUP_DIR/blocks/myprogress/study-guide.php"
 cp -a "$BOARD_TARGET" "$BACKUP_DIR/blocks/menu/herbology-board.php"
+cp -a "$MENU_TARGET" "$BACKUP_DIR/blocks/menu/block_menu.php"
 
 install_preserving_metadata() {
     local source_file="$1"
@@ -291,6 +303,7 @@ install_preserving_metadata() {
 
 install_preserving_metadata "$LIBRARY_TEMP" "$LIBRARY_TARGET"
 install_preserving_metadata "$BOARD_TEMP" "$BOARD_TARGET"
+install_preserving_metadata "$MENU_TEMP" "$MENU_TARGET"
 
 if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
     runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -298,6 +311,7 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
+echo "OK: el botón naranja Library ahora se llama Study Guide y el botón verde duplicado fue eliminado en Herbology."
 echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
