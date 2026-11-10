@@ -37,6 +37,7 @@ $categoryids = [
     'blood-tonics',
     'yang-tonics',
     'yin-tonics',
+    'astringents',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1201,13 +1202,62 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Many Yin tonics are cold or rich and can worsen Spleen deficiency, Dampness, phlegm or diarrhea; digestive tolerance guides selection." => "Muchos tónicos de Yin son fríos o densos y pueden empeorar deficiencia de Bazo, Humedad, flema o diarrea; la tolerancia digestiva guía la selección.",
         "Sweet, slightly salty, bland" => "Dulce, ligeramente salada, insípida",
         "Salty, sweet" => "Salada, dulce",
+        "26. Astringents" => "26. Astringentes",
+        "Board Guideline 2026 · 14 substances · Common foundation: stabilize and bind leakage of Essence, urine, stool, sweat, Blood, fluids or Lung Qi." => "Guía Board 2026 · 14 sustancias · Fundamento común: estabilizar y contener pérdidas de Esencia, orina, heces, sudor, Sangre, líquidos o Qi de Pulmón.",
+        "type and location of leakage, deficiency versus excess, Heat or Cold, cough, diarrhea, urination, discharge, bleeding, sweating, toxicity and unresolved pathogens." => "tipo y localización de la pérdida, deficiencia frente a exceso, Calor o Frío, tos, diarrea, micción, descarga, sangrado, sudoración, toxicidad y patógenos sin resolver.",
+        "Stabilizes Kidney and Liver, contains Essence and urine, stops excessive sweating and controls uterine bleeding." => "Estabiliza Riñón e Hígado, contiene Esencia y orina, detiene sudoración excesiva y controla sangrado uterino.",
+        "Avoid in painful or difficult urination from Damp-Heat; traditionally antagonizes Jie Geng, Fang Feng and Fang Ji." => "Evitar en micción dolorosa o difícil por Humedad-Calor; tradicionalmente antagoniza Jie Geng, Fang Feng y Fang Ji.",
+        "Stabilizes Kidney and contains Essence; binds the Intestines and stops diarrhea." => "Estabiliza Riñón y contiene Esencia; astringe los Intestinos y detiene diarrea.",
+        "Avoid when excess pathogens remain, especially Heat; excessive or prolonged use may cause abdominal pain or constipation." => "Evitar cuando persisten patógenos de exceso, especialmente Calor; el uso excesivo o prolongado puede causar dolor abdominal o estreñimiento.",
+        "Stops bleeding and vaginal discharge, neutralizes Stomach acid, resolves Dampness and promotes healing topically." => "Detiene sangrado y descarga vaginal, neutraliza ácido de Estómago, resuelve Humedad y promueve cicatrización tópica.",
+        "Prolonged use may cause constipation; traditionally antagonizes Fu Zi and Bai Ji." => "El uso prolongado puede causar estreñimiento; tradicionalmente antagoniza Fu Zi y Bai Ji.",
+        "Restrains urine for enuresis or frequent urination, assists Kidney Yang and improves vision." => "Retiene orina en enuresis o micción frecuente, ayuda al Yang de Riñón y mejora la visión.",
+        "Avoid in difficult urination or Yin deficiency with Heat signs." => "Evitar en dificultad urinaria o deficiencia de Yin con signos de Calor.",
+        "Strengthens the Spleen, stops diarrhea, dispels Dampness and stops vaginal discharge." => "Fortalece el Bazo, detiene diarrea, dispersa Humedad y detiene descarga vaginal.",
+        "Avoid with difficulty urinating or defecating." => "Evitar con dificultad para orinar o defecar.",
+        "Strengthens the Spleen, stops diarrhea, nourishes the Heart, stabilizes Kidney Essence and calms the Spirit." => "Fortalece el Bazo, detiene diarrea, nutre el Corazón, estabiliza Esencia de Riñón y calma el Shen.",
+        "Avoid in abdominal distension or constipation." => "Evitar en distensión abdominal o estreñimiento.",
+        "Contains Lung Qi and stops cough, stabilizes Essence, stops diarrhea and sweating, and generates fluids." => "Contiene el Qi de Pulmón y detiene la tos, estabiliza Esencia, detiene diarrea y sudoración y genera líquidos.",
+        "Avoid in Exterior conditions, early-stage rashes or internal excess Heat; may cause heartburn." => "Evitar en condiciones Exteriores, erupciones en etapa temprana o Calor interno de exceso; puede causar acidez.",
+        "Contains Lung Qi and stops cough; eliminates Dampness and stops discharge." => "Contiene el Qi de Pulmón y detiene la tos; elimina Humedad y detiene descarga.",
+        "Avoid in excess conditions or when thick sputum is difficult to expectorate; toxic if overused." => "Evitar en condiciones de exceso o cuando el esputo espeso es difícil de expectorar; es tóxica si se usa en exceso.",
+        "Remove the husk and crush the seed." => "Retirar la cáscara y triturar la semilla.",
+        "Contains Lung Qi and stops cough, generates fluids, stops bleeding and expels roundworms with abdominal pain; used topically for corns or warts." => "Contiene el Qi de Pulmón y detiene la tos, genera líquidos, detiene sangrado y expulsa lombrices con dolor abdominal; se usa tópicamente para callos o verrugas.",
+        "Avoid in internal Heat, excess stagnation or unresolved Exterior disorders." => "Evitar en Calor interno, estancamiento de exceso o trastornos Exteriores sin resolver.",
+        "Binds the Intestines and stops diarrhea, contains Lung Qi and improves the throat." => "Astringe los Intestinos y detiene diarrea, contiene el Qi de Pulmón y mejora la garganta.",
+        "Avoid in Exterior patterns or internal Damp-Heat; may inhibit digestion in Spleen deficiency." => "Evitar en patrones Exteriores o Humedad-Calor interna; puede inhibir la digestión en deficiencia de Bazo.",
+        "Binds the Intestines, stops diarrhea and bleeding, and promotes healing of wounds." => "Astringe los Intestinos, detiene diarrea y sangrado y promueve cicatrización de heridas.",
+        "Avoid in Heat-type diarrhea, dysentery or Damp-Heat; use cautiously during pregnancy; traditionally antagonizes Da Huang." => "Evitar en diarrea tipo Calor, disentería o Humedad-Calor; usar con precaución durante el embarazo; tradicionalmente antagoniza Da Huang.",
+        "Warms the Middle Jiao, moves Qi, relieves pain, binds the Intestines and stops diarrhea." => "Calienta el Jiao Medio, mueve el Qi, alivia dolor, astringe los Intestinos y detiene diarrea.",
+        "Avoid in Heat-type diarrhea or dysentery." => "Evitar en diarrea o disentería tipo Calor.",
+        "Clears Heat, dries Dampness, kills parasites and binds the Intestines to stop diarrhea." => "Elimina Calor, seca Humedad, elimina parásitos y astringe los Intestinos para detener diarrea.",
+        "Avoid in Spleen and Stomach deficiency with Cold or Kidney Yin deficiency." => "Evitar en deficiencia de Bazo y Estómago con Frío o deficiencia de Yin de Riñón.",
+        "Stops sweating from Qi or Yin deficiency; Xiao Mai also nourishes the Heart and calms the Spirit." => "Detiene sudoración por deficiencia de Qi o Yin; Xiao Mai además nutre el Corazón y calma el Shen.",
+        "Avoid when sweating is caused by an unresolved Exterior pathogen." => "Evitar cuando la sudoración es causada por un patógeno Exterior sin resolver.",
+        "Stabilize and bind leakage" => "Estabilizar y contener pérdidas",
+        "All fourteen restrain leakage, but selection depends on whether the loss involves Essence, urine, stool, sweat, Blood, fluids, discharge or Lung Qi." => "Las catorce restringen pérdidas, pero la selección depende de si afectan Esencia, orina, heces, sudor, Sangre, líquidos, descarga o Qi de Pulmón.",
+        "Stabilize Kidney and contain Essence" => "Estabilizar Riñón y contener Esencia",
+        "Shan Zhu Yu, Jin Ying Zi, Hai Piao Xiao and Fu Pen Zi address Kidney leakage; they differ in Blood, diarrhea, vaginal discharge, urination and vision emphasis." => "Shan Zhu Yu, Jin Ying Zi, Hai Piao Xiao y Fu Pen Zi tratan pérdidas de Riñón; difieren en énfasis sobre Sangre, diarrea, descarga vaginal, micción y visión.",
+        "Bind the Intestines and stop diarrhea" => "Astringir los Intestinos y detener diarrea",
+        "Jin Ying Zi, Qian Shi, Lian Zi, He Zi, Chi Shi Zhi, Rou Dou Kou and Chun Pi stop diarrhea; choose by deficiency, Cold, Heat, Dampness or bleeding." => "Jin Ying Zi, Qian Shi, Lian Zi, He Zi, Chi Shi Zhi, Rou Dou Kou y Chun Pi detienen diarrea; seleccionar según deficiencia, Frío, Calor, Humedad o sangrado.",
+        "Contain Lung Qi and stop cough" => "Contener Qi de Pulmón y detener tos",
+        "Wu Wei Zi, Bai Guo and Wu Mei astringe Lung Qi; Bai Guo also stops discharge, Wu Mei generates fluids and Wu Wei Zi additionally stops sweating and diarrhea." => "Wu Wei Zi, Bai Guo y Wu Mei astringen el Qi de Pulmón; Bai Guo además detiene descarga, Wu Mei genera líquidos y Wu Wei Zi también detiene sudoración y diarrea.",
+        "Stop excessive sweating" => "Detener sudoración excesiva",
+        "Shan Zhu Yu, Wu Wei Zi and Fu Xiao Mai restrain sweating; Fu Xiao Mai is the most focused and cool, while Wu Wei Zi also generates fluids." => "Shan Zhu Yu, Wu Wei Zi y Fu Xiao Mai restringen sudoración; Fu Xiao Mai es la más específica y fresca, mientras Wu Wei Zi además genera líquidos.",
+        "Generate fluids while astringing" => "Generar líquidos mientras se astringe",
+        "Wu Wei Zi and Wu Mei both generate fluids while containing leakage; Wu Mei also treats roundworms and topical corns or warts." => "Wu Wei Zi y Wu Mei generan líquidos mientras contienen pérdidas; Wu Mei además trata lombrices y callos o verrugas tópicas.",
+        "Vaginal discharge and Dampness" => "Descarga vaginal y Humedad",
+        "Hai Piao Xiao, Qian Shi and Bai Guo stop discharge; Qian Shi strengthens the Spleen, Bai Guo clears Dampness and Hai Piao Xiao also stops bleeding and neutralizes acid." => "Hai Piao Xiao, Qian Shi y Bai Guo detienen descarga; Qian Shi fortalece el Bazo, Bai Guo elimina Humedad y Hai Piao Xiao además detiene sangrado y neutraliza ácido.",
+        "Lian Zi and Fu Xiao Mai support the Heart and calm the Spirit while also treating leakage patterns." => "Lian Zi y Fu Xiao Mai apoyan el Corazón y calman el Shen mientras también tratan patrones de pérdida.",
+        "Toxicity and unresolved pathogens" => "Toxicidad y patógenos sin resolver",
+        "Bai Guo is slightly toxic and must not be overused; astringents generally should not trap unresolved Exterior or excess pathogens." => "Bai Guo es ligeramente tóxica y no debe usarse en exceso; los astringentes generalmente no deben atrapar patógenos Exteriores o de exceso sin resolver.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110u';
+$languageversion = '20261110v';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1785,6 +1835,36 @@ $yintonicsimilarities = [
     ['Cold and cloying herbs with weak digestion', 'General category caution', 'Many Yin tonics are cold or rich and can worsen Spleen deficiency, Dampness, phlegm or diarrhea; digestive tolerance guides selection.'],
 ];
 
+
+$astringentherbs = [
+    ['Shan Zhu Yu', 'Corni Fructus', 'Sour', 'Slightly warm', 'KD, LV', 'Stabilizes Kidney and Liver, contains Essence and urine, stops excessive sweating and controls uterine bleeding.', 'Avoid in painful or difficult urination from Damp-Heat; traditionally antagonizes Jie Geng, Fang Feng and Fang Ji.', '6–12 g', '—'],
+    ['Jin Ying Zi', 'Rosae Fructus', 'Sour, astringent', 'Neutral', 'UB, KD, LI', 'Stabilizes Kidney and contains Essence; binds the Intestines and stops diarrhea.', 'Avoid when excess pathogens remain, especially Heat; excessive or prolonged use may cause abdominal pain or constipation.', '6–12 g; up to 30 g alone', '—'],
+    ['Hai Piao Xiao', 'Sepiae Endoconcha', 'Salty, astringent', 'Slightly warm', 'KD, LV, ST', 'Stops bleeding and vaginal discharge, neutralizes Stomach acid, resolves Dampness and promotes healing topically.', 'Prolonged use may cause constipation; traditionally antagonizes Fu Zi and Bai Ji.', '6–12 g', '—'],
+    ['Fu Pen Zi', 'Rubi Fructus', 'Sweet, astringent', 'Neutral', 'KD, LV', 'Restrains urine for enuresis or frequent urination, assists Kidney Yang and improves vision.', 'Avoid in difficult urination or Yin deficiency with Heat signs.', '6–12 g', '—'],
+    ['Qian Shi', 'Euryales Semen', 'Sweet, astringent', 'Neutral', 'SP, KD', 'Strengthens the Spleen, stops diarrhea, dispels Dampness and stops vaginal discharge.', 'Avoid with difficulty urinating or defecating.', '9–15 g', '—'],
+    ['Lian Zi', 'Nelumbinis Semen', 'Sweet, astringent', 'Neutral', 'HT, KD, SP', 'Strengthens the Spleen, stops diarrhea, nourishes the Heart, stabilizes Kidney Essence and calms the Spirit.', 'Avoid in abdominal distension or constipation.', '6–15 g', '—'],
+    ['Wu Wei Zi', 'Schisandrae Fructus', 'Sour, sweet', 'Warm', 'HT, KD, LU', 'Contains Lung Qi and stops cough, stabilizes Essence, stops diarrhea and sweating, and generates fluids.', 'Avoid in Exterior conditions, early-stage rashes or internal excess Heat; may cause heartburn.', '3–6 g', '—'],
+    ['Bai Guo', 'Ginkgo Semen', 'Sweet, bitter, astringent', 'Neutral, slightly toxic', 'KD, LU', 'Contains Lung Qi and stops cough; eliminates Dampness and stops discharge.', 'Avoid in excess conditions or when thick sputum is difficult to expectorate; toxic if overused.', '4.5–9 g', 'Remove the husk and crush the seed.'],
+    ['Wu Mei', 'Mume Fructus', 'Sour, astringent', 'Warm', 'LV, LU, SP', 'Contains Lung Qi and stops cough, generates fluids, stops bleeding and expels roundworms with abdominal pain; used topically for corns or warts.', 'Avoid in internal Heat, excess stagnation or unresolved Exterior disorders.', '6–12 g', '—'],
+    ['He Zi', 'Chebulae Fructus', 'Bitter, sour, astringent', 'Neutral', 'LU, LI, ST', 'Binds the Intestines and stops diarrhea, contains Lung Qi and improves the throat.', 'Avoid in Exterior patterns or internal Damp-Heat; may inhibit digestion in Spleen deficiency.', '3–9 g', '—'],
+    ['Chi Shi Zhi', 'Halloysitum', 'Sweet, sour, astringent', 'Warm', 'SP, ST, LI', 'Binds the Intestines, stops diarrhea and bleeding, and promotes healing of wounds.', 'Avoid in Heat-type diarrhea, dysentery or Damp-Heat; use cautiously during pregnancy; traditionally antagonizes Da Huang.', '9–18 g', '—'],
+    ['Rou Dou Kou', 'Myristicae Semen', 'Acrid', 'Warm', 'LI, SP, ST', 'Warms the Middle Jiao, moves Qi, relieves pain, binds the Intestines and stops diarrhea.', 'Avoid in Heat-type diarrhea or dysentery.', '3–9 g', '—'],
+    ['Chun Pi', 'Ailanthi Cortex', 'Bitter, astringent', 'Cold', 'LI, ST', 'Clears Heat, dries Dampness, kills parasites and binds the Intestines to stop diarrhea.', 'Avoid in Spleen and Stomach deficiency with Cold or Kidney Yin deficiency.', '6–9 g', '—'],
+    ['Fu Xiao Mai', 'Tritici Fructus', 'Sweet, slightly salty', 'Cool', 'HT', 'Stops sweating from Qi or Yin deficiency; Xiao Mai also nourishes the Heart and calms the Spirit.', 'Avoid when sweating is caused by an unresolved Exterior pathogen.', '15–30 g', '—'],
+];
+
+$astringentsimilarities = [
+    ['Stabilize and bind leakage', 'Shan Zhu Yu · Jin Ying Zi · Hai Piao Xiao · Fu Pen Zi · Qian Shi · Lian Zi · Wu Wei Zi · Bai Guo · Wu Mei · He Zi · Chi Shi Zhi · Rou Dou Kou · Chun Pi · Fu Xiao Mai', 'All fourteen restrain leakage, but selection depends on whether the loss involves Essence, urine, stool, sweat, Blood, fluids, discharge or Lung Qi.'],
+    ['Stabilize Kidney and contain Essence', 'Shan Zhu Yu · Jin Ying Zi · Hai Piao Xiao · Fu Pen Zi', 'Shan Zhu Yu, Jin Ying Zi, Hai Piao Xiao and Fu Pen Zi address Kidney leakage; they differ in Blood, diarrhea, vaginal discharge, urination and vision emphasis.'],
+    ['Bind the Intestines and stop diarrhea', 'Jin Ying Zi · Qian Shi · Lian Zi · He Zi · Chi Shi Zhi · Rou Dou Kou · Chun Pi', 'Jin Ying Zi, Qian Shi, Lian Zi, He Zi, Chi Shi Zhi, Rou Dou Kou and Chun Pi stop diarrhea; choose by deficiency, Cold, Heat, Dampness or bleeding.'],
+    ['Contain Lung Qi and stop cough', 'Wu Wei Zi · Bai Guo · Wu Mei', 'Wu Wei Zi, Bai Guo and Wu Mei astringe Lung Qi; Bai Guo also stops discharge, Wu Mei generates fluids and Wu Wei Zi additionally stops sweating and diarrhea.'],
+    ['Stop excessive sweating', 'Shan Zhu Yu · Wu Wei Zi · Fu Xiao Mai', 'Shan Zhu Yu, Wu Wei Zi and Fu Xiao Mai restrain sweating; Fu Xiao Mai is the most focused and cool, while Wu Wei Zi also generates fluids.'],
+    ['Generate fluids while astringing', 'Wu Wei Zi · Wu Mei', 'Wu Wei Zi and Wu Mei both generate fluids while containing leakage; Wu Mei also treats roundworms and topical corns or warts.'],
+    ['Vaginal discharge and Dampness', 'Hai Piao Xiao · Qian Shi · Bai Guo', 'Hai Piao Xiao, Qian Shi and Bai Guo stop discharge; Qian Shi strengthens the Spleen, Bai Guo clears Dampness and Hai Piao Xiao also stops bleeding and neutralizes acid.'],
+    ['Calm the Spirit', 'Lian Zi · Fu Xiao Mai', 'Lian Zi and Fu Xiao Mai support the Heart and calm the Spirit while also treating leakage patterns.'],
+    ['Toxicity and unresolved pathogens', 'Bai Guo · General category caution', 'Bai Guo is slightly toxic and must not be overused; astringents generally should not trap unresolved Exterior or excess pathogens.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1881,6 +1961,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['blood-tonics']->out(false); ?>"<?php echo $selectedcategory === 'blood-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['yang-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yang-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['yin-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yin-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('25. Yin Tonics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['astringents']->out(false); ?>"<?php echo $selectedcategory === 'astringents' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('26. Astringents', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -3036,6 +3117,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($yintonicherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="astringents"<?php echo $selectedcategory === 'astringents' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('26. Astringents', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 14 substances · Common foundation: stabilize and bind leakage of Essence, urine, stool, sweat, Blood, fluids or Lung Qi.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($astringentsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('type and location of leakage, deficiency versus excess, Heat or Cold, cough, diarrhea, urination, discharge, bleeding, sweating, toxicity and unresolved pathogens.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($astringentherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
