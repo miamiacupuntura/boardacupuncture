@@ -51,6 +51,14 @@ php -l "$CATEGORY_TEMP" >/dev/null
 grep -Fq "Herbs Category Comparison" "$CATEGORY_TEMP"
 grep -Fq 'id="disperse-wind-cold"' "$CATEGORY_TEMP"
 grep -Fq "Similarities and Clinical Overlaps" "$CATEGORY_TEMP"
+similarities_line="$(grep -n -m1 'class="herb-category-library__similarities"' "$CATEGORY_TEMP")"
+similarities_line="${similarities_line%%:*}"
+comparison_table_line="$(grep -n -m1 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP")"
+comparison_table_line="${comparison_table_line%%:*}"
+[[ "$similarities_line" -lt "$comparison_table_line" ]] || {
+    echo "ERROR: Similarities and Clinical Overlaps no aparece encima de la tabla detallada." >&2
+    exit 1
+}
 grep -Fq "Herb / Pharmaceutical name" "$CATEGORY_TEMP"
 grep -Fq 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP"
 grep -Fq "table-layout:fixed" "$CATEGORY_TEMP"
@@ -375,6 +383,7 @@ echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herb y Pharmaceutical name están combinadas; las columnas compactas dejan visible Preparation."
+echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallada."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
