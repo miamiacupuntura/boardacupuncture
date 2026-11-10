@@ -442,14 +442,23 @@ $comparisonoverviewchapters = array_values(array_filter($comparisonchapters, sta
 $otherchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['secondary']) && empty($chapter['practice_exam']) && empty($chapter['comparison']);
 }));
-$isHerbFormulaChapter = static function(array $chapter): bool {
-    return preg_match('/(?:herb|formula|hierba|fórmula)/iu', $chapter['title'] ?? '') === 1;
+$isHerbChapter = static function(array $chapter): bool {
+    return preg_match('/(?:herb|hierba)/iu', $chapter['title'] ?? '') === 1;
 };
-$herbformulamiscchapters = array_values(array_filter($otherchapters, $isHerbFormulaChapter));
+$isFormulaChapter = static function(array $chapter): bool {
+    return preg_match('/(?:formula|fórmula)/iu', $chapter['title'] ?? '') === 1;
+};
+$formulamiscchapters = array_values(array_filter($otherchapters, $isFormulaChapter));
+$herbmiscchapters = array_values(array_filter(
+    $otherchapters,
+    static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
+        return $isHerbChapter($chapter) && !$isFormulaChapter($chapter);
+    }
+));
 $secondaryguidechapters = array_values(array_filter(
     $otherchapters,
-    static function(array $chapter) use ($isHerbFormulaChapter): bool {
-        return !$isHerbFormulaChapter($chapter);
+    static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
+        return !$isHerbChapter($chapter) && !$isFormulaChapter($chapter);
     }
 ));
 $requestedview = optional_param('view', '', PARAM_ALPHA);
@@ -646,10 +655,10 @@ echo $OUTPUT->header();
 .subject-study-library__map-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}.subject-study-library__map-copy{min-width:0}.subject-study-library__map-actions{display:flex;flex:0 0 auto;align-items:center;gap:9px}.subject-study-library__map-actions a{margin:0}
 .subject-study-library__journey{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
 .subject-study-library__journey-card{display:flex;min-height:235px;grid-column:span 2;flex-direction:column;padding:16px;border:1px solid #b9cbd6;border-top:4px solid #0b817d;border-radius:11px;background:#fff;color:#123246}
-.subject-study-library__journey-card:nth-child(6){border-top-color:#6d4bc3}.subject-study-library__journey-card:nth-child(7){border-top-color:#2563eb}.subject-study-library__journey-card:nth-child(8){border-top-color:#f77e25}
+.subject-study-library__journey-card:nth-child(7){border-top-color:#6d4bc3}.subject-study-library__journey-card:nth-child(8){border-top-color:#2563eb}.subject-study-library__journey-card:nth-child(9){border-top-color:#f77e25}
 .subject-study-library__journey-heading{display:flex;align-items:flex-start;gap:11px;margin-bottom:13px}
 .subject-study-library__journey-step{display:inline-flex;width:31px;height:31px;flex:0 0 31px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-weight:900}
-.subject-study-library__journey-card:nth-child(6) .subject-study-library__journey-step{background:#6d4bc3}.subject-study-library__journey-card:nth-child(7) .subject-study-library__journey-step{background:#2563eb}.subject-study-library__journey-card:nth-child(8) .subject-study-library__journey-step{background:#e96512}
+.subject-study-library__journey-card:nth-child(7) .subject-study-library__journey-step{background:#6d4bc3}.subject-study-library__journey-card:nth-child(8) .subject-study-library__journey-step{background:#2563eb}.subject-study-library__journey-card:nth-child(9) .subject-study-library__journey-step{background:#e96512}
 .subject-study-library__journey-copy{display:block;min-width:0}.subject-study-library__journey-copy strong,.subject-study-library__journey-copy b{display:block}.subject-study-library__journey-copy strong{font-size:16px;line-height:1.25}.subject-study-library__journey-copy b{margin-top:5px;color:#08746f;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
 .subject-study-library__journey-options{display:grid;gap:7px;margin-top:auto}
 .subject-study-library__journey-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58;font-weight:850;line-height:1.25;text-decoration:none!important}
@@ -815,14 +824,14 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">4</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Misceláneos de fórmulas y hierbas' : 'Formulas and Herbs Miscellaneous'); ?></strong>
-                                    <b><?php echo s($ises ? 'Material adicional de fórmulas y hierbas' : 'Additional formulas and herbs'); ?></b>
+                                    <strong><?php echo s($ises ? 'Misceláneos de hierbas' : 'Herbs Miscellaneous'); ?></strong>
+                                    <b><?php echo s($ises ? 'Material adicional de hierbas' : 'Additional herbs'); ?></b>
                                 </span>
                             </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Misceláneos de fórmulas y hierbas' : 'Formulas and Herbs Miscellaneous'); ?>">
-                                <?php foreach ($herbformulamiscchapters as $chapter): ?>
-                                    <?php $miscchapterurl = $makechapterurl($chapter); ?>
-                                    <a class="subject-study-library__journey-option" href="<?php echo $miscchapterurl->out(false); ?>">
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Misceláneos de hierbas' : 'Herbs Miscellaneous'); ?>">
+                                <?php foreach ($herbmiscchapters as $chapter): ?>
+                                    <?php $herbchapterurl = $makechapterurl($chapter); ?>
+                                    <a class="subject-study-library__journey-option" href="<?php echo $herbchapterurl->out(false); ?>">
                                         <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
                                     </a>
                                 <?php endforeach; ?>
@@ -832,6 +841,24 @@ echo $OUTPUT->header();
                         <section class="subject-study-library__journey-card">
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">5</span>
+                                <span class="subject-study-library__journey-copy">
+                                    <strong><?php echo s($ises ? 'Misceláneos de fórmulas' : 'Formulas Miscellaneous'); ?></strong>
+                                    <b><?php echo s($ises ? 'Material adicional de fórmulas' : 'Additional formulas'); ?></b>
+                                </span>
+                            </header>
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Misceláneos de fórmulas' : 'Formulas Miscellaneous'); ?>">
+                                <?php foreach ($formulamiscchapters as $chapter): ?>
+                                    <?php $formulachapterurl = $makechapterurl($chapter); ?>
+                                    <a class="subject-study-library__journey-option" href="<?php echo $formulachapterurl->out(false); ?>">
+                                        <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
+                                    </a>
+                                <?php endforeach; ?>
+                            </nav>
+                        </section>
+
+                        <section class="subject-study-library__journey-card">
+                            <header class="subject-study-library__journey-heading">
+                                <span class="subject-study-library__journey-step">6</span>
                                 <span class="subject-study-library__journey-copy">
                                     <strong>Herbology Practice</strong>
                                     <b><?php echo s($ises ? 'Practicar con respuestas' : 'Practice with answers'); ?></b>
@@ -846,7 +873,7 @@ echo $OUTPUT->header();
 
                         <section class="subject-study-library__journey-card">
                             <header class="subject-study-library__journey-heading">
-                                <span class="subject-study-library__journey-step">6</span>
+                                <span class="subject-study-library__journey-step">7</span>
                                 <span class="subject-study-library__journey-copy">
                                     <strong>Quiz</strong>
                                     <b><?php echo s($ises ? 'Comprobar lo aprendido' : 'Check your learning'); ?></b>
@@ -862,7 +889,7 @@ echo $OUTPUT->header();
 
                         <section class="subject-study-library__journey-card">
                             <header class="subject-study-library__journey-heading">
-                                <span class="subject-study-library__journey-step">7</span>
+                                <span class="subject-study-library__journey-step">8</span>
                                 <span class="subject-study-library__journey-copy">
                                     <strong><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></strong>
                                     <b><?php echo s($ises ? 'Medir tu preparación' : 'Measure your readiness'); ?></b>
@@ -880,7 +907,7 @@ echo $OUTPUT->header();
 
                         <section class="subject-study-library__journey-card">
                             <header class="subject-study-library__journey-heading">
-                                <span class="subject-study-library__journey-step">8</span>
+                                <span class="subject-study-library__journey-step">9</span>
                                 <span class="subject-study-library__journey-copy">
                                     <strong><?php echo s($ises ? 'Simulación' : 'Simulation'); ?></strong>
                                     <b><?php echo s($ises ? 'Ensayar el día del examen' : 'Rehearse test day'); ?></b>
