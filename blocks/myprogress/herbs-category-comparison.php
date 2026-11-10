@@ -33,6 +33,7 @@ $categoryids = [
     'stop-bleeding',
     'activate-blood',
     'warm-interior',
+    'qi-tonics',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1028,13 +1029,58 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Hot, toxic" => "Caliente, tóxica",
         "Hot" => "Caliente",
         "Hot, slightly toxic" => "Caliente, ligeramente tóxica",
+        "22. Qi Tonics" => "22. Tónicos de Qi",
+        "Board Guideline 2026 · 11 herbs · Common foundation: tonify the Spleen, augment Qi, generate fluids and support transformation and transportation." => "Guía Board 2026 · 11 sustancias · Fundamento común: tonificar el Bazo, aumentar el Qi, generar líquidos y apoyar la transformación y el transporte.",
+        "degree and location of Qi deficiency, Spleen Dampness, Exterior instability, Lung or Kidney involvement, fluid deficiency, formula harmonization and food stagnation." => "grado y localización de la deficiencia de Qi, Humedad de Bazo, inestabilidad del Exterior, participación de Pulmón o Riñón, deficiencia de líquidos, armonización de fórmulas y estancamiento de alimentos.",
+        "Strongly tonifies Yuan Qi; generates fluids and stops thirst; benefits Heart Qi and calms the Spirit." => "Tonifica intensamente el Yuan Qi; genera líquidos y detiene la sed; beneficia el Qi de Corazón y calma el Shen.",
+        "Avoid in Yin deficiency with Heat, excess Heat without Qi deficiency, Liver Yang rising or hypertension; overuse may cause headache. Incompatible with Li Lu and traditionally antagonized by Wu Ling Zhi." => "Evitar en deficiencia de Yin con Calor, Calor de exceso sin deficiencia de Qi, ascenso de Yang de Hígado o hipertensión; el uso excesivo puede causar cefalea. Incompatible con Li Lu y tradicionalmente antagonizada por Wu Ling Zhi.",
+        "Cook separately." => "Cocinar por separado.",
+        "Tonifies Spleen and Lung Qi for both Exterior and Interior deficiency; a gentler substitute for Ren Shen requiring a larger dose." => "Tonifica el Qi de Bazo y Pulmón para deficiencia tanto Exterior como Interior; es un sustituto más suave de Ren Shen que requiere una dosis mayor.",
+        "Traditionally incompatible with Li Lu." => "Tradicionalmente incompatible con Li Lu.",
+        "Tonifies Qi and Blood, raises Yang, strengthens defensive Qi, stabilizes the Exterior, promotes urination and supports discharge of pus and tissue regeneration." => "Tonifica Qi y Sangre, eleva Yang, fortalece el Qi defensivo, estabiliza el Exterior, promueve la micción y favorece la expulsión de pus y regeneración de tejido.",
+        "Avoid in Yin deficiency with Heat, Exterior excess, Qi or food stagnation, Damp obstruction, or early skin lesions with active Heat." => "Evitar en deficiencia de Yin con Calor, exceso Exterior, estancamiento de Qi o alimentos, obstrucción por Humedad o lesiones cutáneas tempranas con Calor activo.",
+        "Strengthens the Spleen, dries Dampness and calms the fetus in Spleen-deficiency patterns." => "Fortalece el Bazo, seca Humedad y calma el feto en patrones de deficiencia de Bazo.",
+        "Avoid in Yin deficiency with Heat or injured fluids." => "Evitar en deficiencia de Yin con Calor o líquidos lesionados.",
+        "Strengthens the Spleen, transforms Dampness, clears Summer-Heat and treats food poisoning." => "Fortalece el Bazo, transforma Humedad, elimina Calor de Verano y trata intoxicación alimentaria.",
+        "Use cautiously in intermittent fever and chills from Cold disorders." => "Usar con precaución en fiebre y escalofríos intermitentes por trastornos de Frío.",
+        "Tonifies Spleen, Lung and Kidney; nourishes Lung Yin, stabilizes Kidney Essence and generates fluids." => "Tonifica Bazo, Pulmón y Riñón; nutre Yin de Pulmón, estabiliza la Esencia de Riñón y genera líquidos.",
+        "Avoid in excess patterns, especially fullness from Dampness, stagnation or accumulation; traditionally antagonized by Gan Sui." => "Evitar en patrones de exceso, especialmente plenitud por Humedad, estancamiento o acumulación; tradicionalmente antagonizada por Gan Sui.",
+        "Tonifies the Spleen, nourishes Blood, calms the Spirit and moderates or harmonizes the actions of other herbs." => "Tonifica el Bazo, nutre la Sangre, calma el Shen y modera o armoniza las acciones de otras hierbas.",
+        "Avoid in excess Dampness, food stagnation, intestinal parasites or Damp-phlegm disorders." => "Evitar en Humedad de exceso, estancamiento de alimentos, parásitos intestinales o trastornos de Flema-Humedad.",
+        "Tonifies Qi, moderates spasms and pain, clears Fire toxicity and harmonizes other herbs; prepared Zhi Gan Cao is warmer and more tonifying." => "Tonifica el Qi, modera espasmos y dolor, elimina toxicidad de Fuego y armoniza otras hierbas; Zhi Gan Cao preparada es más tibia y tonificante.",
+        "Avoid in excess Dampness, nausea or vomiting; incompatible with Da Ji, Hai Zao, Gan Sui and Yuan Hua; traditionally antagonizes Yuan Zhi." => "Evitar en Humedad de exceso, náuseas o vómitos; incompatible con Da Ji, Hai Zao, Gan Sui y Yuan Hua; tradicionalmente antagoniza Yuan Zhi.",
+        "Tonifies the Middle Jiao and relieves abdominal pain from deficiency Cold; moistens the Lung and stops cough." => "Tonifica el Jiao Medio y alivia dolor abdominal por Frío de deficiencia; humedece el Pulmón y detiene la tos.",
+        "Avoid in internal Damp-Heat, Middle Jiao fullness with vomiting, phlegm-Heat cough or food stagnation." => "Evitar en Humedad-Calor interna, plenitud del Jiao Medio con vómitos, tos por Flema-Calor o estancamiento de alimentos.",
+        "Dissolve in the strained decoction." => "Disolver en la decocción colada.",
+        "Tonifies the Middle Jiao, relieves pain, moistens the Lung and lubricates the Intestines." => "Tonifica el Jiao Medio, alivia dolor, humedece el Pulmón y lubrica los Intestinos.",
+        "Avoid in excess Dampness, phlegm-Heat, Middle Jiao fullness with vomiting or loose stools." => "Evitar en Humedad de exceso, Flema-Calor, plenitud del Jiao Medio con vómitos o heces sueltas.",
+        "Strengthens the Spleen, transforms Dampness, stops thirst, generates fluids and alleviates diarrhea or dysentery." => "Fortalece el Bazo, transforma Humedad, detiene la sed, genera líquidos y alivia diarrea o disentería.",
+        "No specific caution noted." => "No se señala una precaución específica.",
+        "Tonify the Spleen and augment Qi" => "Tonificar el Bazo y aumentar el Qi",
+        "All eleven support Qi or Spleen function, but differ in strength, organ focus, fluids, Dampness, Exterior stability and food-like nourishing qualities." => "Las once apoyan el Qi o la función de Bazo, pero difieren en intensidad, enfoque de órgano, líquidos, Humedad, estabilidad del Exterior y cualidades nutritivas alimentarias.",
+        "Ren Shen and Dang Shen" => "Ren Shen y Dang Shen",
+        "Ren Shen strongly restores Yuan Qi and is appropriate for severe deficiency; Dang Shen more gently tonifies Spleen and Lung Qi and is usually given at a larger dose." => "Ren Shen restaura intensamente el Yuan Qi y es apropiada para deficiencia grave; Dang Shen tonifica más suavemente el Qi de Bazo y Pulmón y suele administrarse en dosis mayor.",
+        "Stabilize the Exterior and stop sweating" => "Estabilizar el Exterior y detener sudoración",
+        "Huang Qi strengthens defensive Qi and raises Yang; Bai Zhu strengthens the Spleen and dries Dampness. Together they support Qi deficiency with spontaneous sweating." => "Huang Qi fortalece el Qi defensivo y eleva Yang; Bai Zhu fortalece el Bazo y seca Humedad. Juntas apoyan deficiencia de Qi con sudoración espontánea.",
+        "Strengthen the Spleen and transform Dampness" => "Fortalecer el Bazo y transformar Humedad",
+        "Bai Zhu is stronger and drying; Bai Bian Dou is gentle and clears Summer-Heat; Geng Mi is food-like and generates fluids." => "Bai Zhu es más fuerte y secante; Bai Bian Dou es suave y elimina Calor de Verano; Geng Mi es alimentaria y genera líquidos.",
+        "Tonify Lung and Kidney while securing fluids" => "Tonificar Pulmón y Riñón mientras se conservan líquidos",
+        "Shan Yao uniquely tonifies Spleen, Lung and Kidney while nourishing Lung Yin and stabilizing Kidney Essence." => "Shan Yao se distingue por tonificar Bazo, Pulmón y Riñón mientras nutre Yin de Pulmón y estabiliza Esencia de Riñón.",
+        "Moderate and harmonize formulas" => "Moderar y armonizar fórmulas",
+        "Da Zao nourishes Blood and calms the Spirit; Gan Cao moderates spasms, toxicity and the actions of other herbs." => "Da Zao nutre la Sangre y calma el Shen; Gan Cao modera espasmos, toxicidad y las acciones de otras hierbas.",
+        "Tonify the Middle Jiao and relieve pain" => "Tonificar el Jiao Medio y aliviar dolor",
+        "Yi Tang, Feng Mi and Gan Cao relieve deficiency-type abdominal pain; Yi Tang is warmer, Feng Mi moistens the Intestines, and Gan Cao moderates spasm." => "Yi Tang, Feng Mi y Gan Cao alivian dolor abdominal por deficiencia; Yi Tang es más tibia, Feng Mi humedece los Intestinos y Gan Cao modera espasmos.",
+        "Food-like Qi tonics" => "Tónicos de Qi de naturaleza alimentaria",
+        "Da Zao, Yi Tang, Feng Mi and Geng Mi nourish gently, but can aggravate Dampness, fullness or food stagnation when used inappropriately." => "Da Zao, Yi Tang, Feng Mi y Geng Mi nutren suavemente, pero pueden agravar Humedad, plenitud o estancamiento de alimentos si se usan de forma inapropiada.",
+        "Pure deficiency versus excess" => "Deficiencia pura frente a exceso",
+        "Qi tonics are inappropriate when excess pathogens, Dampness, phlegm or food stagnation predominate without true deficiency." => "Los tónicos de Qi no son apropiados cuando predominan patógenos de exceso, Humedad, flema o estancamiento de alimentos sin deficiencia verdadera.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110o';
+$languageversion = '20261110p';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1508,6 +1554,33 @@ $warminteriorsimilarities = [
     ['Heat, Yin deficiency and pregnancy', 'General category caution', 'Warm Interior herbs are generally inappropriate for Heat or Yin-deficiency Heat; several strongly warming herbs also require avoidance during pregnancy.'],
 ];
 
+
+$qitonicherbs = [
+    ['Ren Shen', 'Ginseng Radix', 'Sweet, slightly bitter', 'Slightly warm', 'LU, SP', 'Strongly tonifies Yuan Qi; generates fluids and stops thirst; benefits Heart Qi and calms the Spirit.', 'Avoid in Yin deficiency with Heat, excess Heat without Qi deficiency, Liver Yang rising or hypertension; overuse may cause headache. Incompatible with Li Lu and traditionally antagonized by Wu Ling Zhi.', '3–9 g; 0.5–1 g powder; up to 30 g emergency', 'Cook separately.'],
+    ['Dang Shen', 'Codonopsis Radix', 'Sweet', 'Neutral', 'LU, SP', 'Tonifies Spleen and Lung Qi for both Exterior and Interior deficiency; a gentler substitute for Ren Shen requiring a larger dose.', 'Traditionally incompatible with Li Lu.', '6–9 g; up to 30 g', '—'],
+    ['Huang Qi', 'Astragali Radix', 'Sweet', 'Slightly warm', 'LU, SP', 'Tonifies Qi and Blood, raises Yang, strengthens defensive Qi, stabilizes the Exterior, promotes urination and supports discharge of pus and tissue regeneration.', 'Avoid in Yin deficiency with Heat, Exterior excess, Qi or food stagnation, Damp obstruction, or early skin lesions with active Heat.', '9–15 g; up to 30 g', '—'],
+    ['Bai Zhu', 'Atractylodis Macrocephalae Rhizoma', 'Bitter, sweet', 'Warm', 'SP, ST', 'Strengthens the Spleen, dries Dampness and calms the fetus in Spleen-deficiency patterns.', 'Avoid in Yin deficiency with Heat or injured fluids.', '6–15 g', '—'],
+    ['Bai Bian Dou', 'Lablab Semen', 'Sweet', 'Neutral', 'SP, ST', 'Strengthens the Spleen, transforms Dampness, clears Summer-Heat and treats food poisoning.', 'Use cautiously in intermittent fever and chills from Cold disorders.', '9–30 g', '—'],
+    ['Shan Yao', 'Dioscoreae Rhizoma', 'Sweet', 'Neutral', 'KD, LU, SP', 'Tonifies Spleen, Lung and Kidney; nourishes Lung Yin, stabilizes Kidney Essence and generates fluids.', 'Avoid in excess patterns, especially fullness from Dampness, stagnation or accumulation; traditionally antagonized by Gan Sui.', '9–30 g; 60–240 g alone', '—'],
+    ['Da Zao', 'Jujubae Fructus', 'Sweet', 'Warm', 'SP, ST', 'Tonifies the Spleen, nourishes Blood, calms the Spirit and moderates or harmonizes the actions of other herbs.', 'Avoid in excess Dampness, food stagnation, intestinal parasites or Damp-phlegm disorders.', '3–12 dates; 10–30 g', '—'],
+    ['Gan Cao', 'Glycyrrhizae Radix', 'Sweet', 'Neutral', 'HT, LU, SP, ST; all channels', 'Tonifies Qi, moderates spasms and pain, clears Fire toxicity and harmonizes other herbs; prepared Zhi Gan Cao is warmer and more tonifying.', 'Avoid in excess Dampness, nausea or vomiting; incompatible with Da Ji, Hai Zao, Gan Sui and Yuan Hua; traditionally antagonizes Yuan Zhi.', '1.5–9 g; 15–30 g', '—'],
+    ['Yi Tang', 'Maltosum', 'Sweet', 'Slightly warm', 'LU, SP, ST', 'Tonifies the Middle Jiao and relieves abdominal pain from deficiency Cold; moistens the Lung and stops cough.', 'Avoid in internal Damp-Heat, Middle Jiao fullness with vomiting, phlegm-Heat cough or food stagnation.', '15–60 g', 'Dissolve in the strained decoction.'],
+    ['Feng Mi', 'Mel', 'Sweet', 'Neutral', 'LU, SP, LI', 'Tonifies the Middle Jiao, relieves pain, moistens the Lung and lubricates the Intestines.', 'Avoid in excess Dampness, phlegm-Heat, Middle Jiao fullness with vomiting or loose stools.', '15–30 g', '—'],
+    ['Geng Mi', 'Oryzae Semen', 'Sweet', 'Neutral', 'SP, ST', 'Strengthens the Spleen, transforms Dampness, stops thirst, generates fluids and alleviates diarrhea or dysentery.', 'No specific caution noted.', '3–9 g', '—'],
+];
+
+$qitonicsimilarities = [
+    ['Tonify the Spleen and augment Qi', 'Ren Shen · Dang Shen · Huang Qi · Bai Zhu · Bai Bian Dou · Shan Yao · Da Zao · Gan Cao · Yi Tang · Feng Mi · Geng Mi', 'All eleven support Qi or Spleen function, but differ in strength, organ focus, fluids, Dampness, Exterior stability and food-like nourishing qualities.'],
+    ['Ren Shen and Dang Shen', 'Ren Shen · Dang Shen', 'Ren Shen strongly restores Yuan Qi and is appropriate for severe deficiency; Dang Shen more gently tonifies Spleen and Lung Qi and is usually given at a larger dose.'],
+    ['Stabilize the Exterior and stop sweating', 'Huang Qi · Bai Zhu', 'Huang Qi strengthens defensive Qi and raises Yang; Bai Zhu strengthens the Spleen and dries Dampness. Together they support Qi deficiency with spontaneous sweating.'],
+    ['Strengthen the Spleen and transform Dampness', 'Bai Zhu · Bai Bian Dou · Geng Mi', 'Bai Zhu is stronger and drying; Bai Bian Dou is gentle and clears Summer-Heat; Geng Mi is food-like and generates fluids.'],
+    ['Tonify Lung and Kidney while securing fluids', 'Shan Yao', 'Shan Yao uniquely tonifies Spleen, Lung and Kidney while nourishing Lung Yin and stabilizing Kidney Essence.'],
+    ['Moderate and harmonize formulas', 'Da Zao · Gan Cao', 'Da Zao nourishes Blood and calms the Spirit; Gan Cao moderates spasms, toxicity and the actions of other herbs.'],
+    ['Tonify the Middle Jiao and relieve pain', 'Yi Tang · Feng Mi · Gan Cao', 'Yi Tang, Feng Mi and Gan Cao relieve deficiency-type abdominal pain; Yi Tang is warmer, Feng Mi moistens the Intestines, and Gan Cao moderates spasm.'],
+    ['Food-like Qi tonics', 'Da Zao · Yi Tang · Feng Mi · Geng Mi', 'Da Zao, Yi Tang, Feng Mi and Geng Mi nourish gently, but can aggravate Dampness, fullness or food stagnation when used inappropriately.'],
+    ['Pure deficiency versus excess', 'General category caution', 'Qi tonics are inappropriate when excess pathogens, Dampness, phlegm or food stagnation predominate without true deficiency.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1600,6 +1673,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['stop-bleeding']->out(false); ?>"<?php echo $selectedcategory === 'stop-bleeding' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></a>
         <a href="<?php echo $categoryurls['activate-blood']->out(false); ?>"<?php echo $selectedcategory === 'activate-blood' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></a>
         <a href="<?php echo $categoryurls['warm-interior']->out(false); ?>"<?php echo $selectedcategory === 'warm-interior' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['qi-tonics']->out(false); ?>"<?php echo $selectedcategory === 'qi-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2587,6 +2661,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($warminteriorherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="qi-tonics"<?php echo $selectedcategory === 'qi-tonics' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 11 herbs · Common foundation: tonify the Spleen, augment Qi, generate fluids and support transformation and transportation.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($qitonicsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('degree and location of Qi deficiency, Spleen Dampness, Exterior instability, Lung or Kidney involvement, fluid deficiency, formula harmonization and food stagnation.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($qitonicherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
