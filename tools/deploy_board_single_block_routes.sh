@@ -13,6 +13,7 @@ BOARD_TARGET="$MOODLE_ROOT/blocks/menu/herbology-board.php"
 MENU_TARGET="$MOODLE_ROOT/blocks/menu/block_menu.php"
 STYLES_TARGET="$MOODLE_ROOT/blocks/menu/styles.css"
 CATEGORY_TARGET="$MOODLE_ROOT/blocks/myprogress/herbs-category-comparison.php"
+EXAM_HISTORY_TARGET="$MOODLE_ROOT/blocks/menu/exam-history.php"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
@@ -36,18 +37,35 @@ BOARD_TEMP="$(mktemp)"
 MENU_TEMP="$(mktemp)"
 STYLES_TEMP="$(mktemp)"
 CATEGORY_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP"' EXIT
+EXAM_HISTORY_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/block_menu.php" -o "$MENU_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/styles.css" -o "$STYLES_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/herbs-category-comparison.php" -o "$CATEGORY_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/exam-history.php" -o "$EXAM_HISTORY_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
 php -l "$CATEGORY_TEMP" >/dev/null
+php -l "$EXAM_HISTORY_TEMP" >/dev/null
 
+grep -Fq "Exam History" "$EXAM_HISTORY_TEMP"
+grep -Fq "Historial de exámenes" "$EXAM_HISTORY_TEMP"
+grep -Fq "block_menu_exam_attempts" "$EXAM_HISTORY_TEMP"
+grep -Fq "{quiz_attempts}" "$EXAM_HISTORY_TEMP"
+grep -Fq "qa.userid = :userid" "$EXAM_HISTORY_TEMP"
+grep -Fq "a.userid = :userid" "$EXAM_HISTORY_TEMP"
+grep -Fq "Date and time" "$EXAM_HISTORY_TEMP"
+grep -Fq "Exam / Quiz" "$EXAM_HISTORY_TEMP"
+grep -Fq "Result" "$EXAM_HISTORY_TEMP"
+grep -Fq "Status" "$EXAM_HISTORY_TEMP"
+grep -Fq "Duration" "$EXAM_HISTORY_TEMP"
+grep -Fq "Board Exams" "$EXAM_HISTORY_TEMP"
+grep -Fq "Moodle Quizzes" "$EXAM_HISTORY_TEMP"
+grep -Fq "exam-history__pagination" "$EXAM_HISTORY_TEMP"
 grep -Fq "Herbs Category Comparison" "$CATEGORY_TEMP"
 grep -Fq '$languageurl = new moodle_url(' "$CATEGORY_TEMP"
 grep -Fq 'herb-category-library__actions' "$CATEGORY_TEMP"
@@ -672,6 +690,13 @@ if grep -Fq "[45, 'Single Herbs', 'questions', null, null, null," "$MENU_TEMP"; 
     echo "ERROR: Single Herbs School Level todavía usa una ruta personalizada de Board Level." >&2
     exit 1
 fi
+grep -Fq "\$examhistoryurl = new moodle_url('/blocks/menu/exam-history.php');" "$MENU_TEMP"
+grep -Fq 'board-hub__action--exam-history' "$MENU_TEMP"
+grep -Fq '>Exam History</a>' "$MENU_TEMP"
+grep -Fq '. $quizaction . $examsaction . $simulationaction . $examhistoryaction;' "$MENU_TEMP"
+grep -Fq '.board-hub__card--board-level .board-hub__action--exam-history {' "$STYLES_TEMP"
+grep -Fq 'order: 7;' "$STYLES_TEMP"
+grep -Fq 'background: #0f766e;' "$STYLES_TEMP"
 grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--guide '" "$MENU_TEMP"
 grep -Fq ".board-hub__card--board-level .board-hub__action {" "$STYLES_TEMP"
 grep -Fq "height: 38px;" "$STYLES_TEMP"
@@ -959,6 +984,9 @@ cp -a "$STYLES_TARGET" "$BACKUP_DIR/blocks/menu/styles.css"
 if [[ -f "$CATEGORY_TARGET" ]]; then
     cp -a "$CATEGORY_TARGET" "$BACKUP_DIR/blocks/myprogress/herbs-category-comparison.php"
 fi
+if [[ -f "$EXAM_HISTORY_TARGET" ]]; then
+    cp -a "$EXAM_HISTORY_TARGET" "$BACKUP_DIR/blocks/menu/exam-history.php"
+fi
 
 install_preserving_metadata() {
     local source_file="$1"
@@ -982,6 +1010,15 @@ else
         "$CATEGORY_TEMP" "$CATEGORY_TARGET"
 fi
 
+if [[ -f "$EXAM_HISTORY_TARGET" ]]; then
+    install_preserving_metadata "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_TARGET"
+else
+    exam_history_owner_group="$(stat -c '%u:%g' "$MENU_TARGET")"
+    exam_history_mode="$(stat -c '%a' "$MENU_TARGET")"
+    install -o "${exam_history_owner_group%:*}" -g "${exam_history_owner_group#*:}" -m "$exam_history_mode" \
+        "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_TARGET"
+fi
+
 # Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
 cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
     echo "ERROR: study-guide.php instalado no coincide con la revisión descargada." >&2
@@ -991,6 +1028,11 @@ cmp -s "$CATEGORY_TEMP" "$CATEGORY_TARGET" || {
     echo "ERROR: herbs-category-comparison.php instalado no coincide con la revisión descargada." >&2
     exit 1
 }
+cmp -s "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_TARGET" || {
+    echo "ERROR: exam-history.php instalado no coincide con la revisión descargada." >&2
+    exit 1
+}
+php -l "$EXAM_HISTORY_TARGET" >/dev/null
 php -l "$CATEGORY_TARGET" >/dev/null
 grep -Fq 'function board_herb_category_localize' "$CATEGORY_TARGET"
 grep -Fq 'return $translations[$text] ?? $text;' "$CATEGORY_TARGET"
@@ -1061,6 +1103,10 @@ echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
 echo "OK: todos los botones Board Level igualan la altura de 38px de los botones School Level."
 echo "OK: enlaces y botones deshabilitados reciben las mismas dimensiones con prioridad explícita."
 echo "OK: el padding y la tipografía fueron ajustados para conservar centrado y legibilidad."
+echo "OK: Exam History aparece debajo de Simulation en Chinese Herbology Board Level."
+echo "OK: la página unifica intentos Board y quizzes Moodle del usuario conectado."
+echo "OK: el historial muestra fecha, examen o quiz, resultado, estado, duración y curso."
+echo "OK: el historial incluye filtros, paginación, Español/English y respaldo durante el despliegue."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
