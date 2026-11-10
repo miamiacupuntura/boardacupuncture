@@ -553,11 +553,11 @@
     width: 100%;
     flex: 1 1 100%;
     min-width: 0;
-    height: 32px;
-    min-height: 32px;
-    padding: 5px 9px;
-    font-size: .76rem;
-    line-height: 1.1;
+    height: 30px;
+    min-height: 30px;
+    padding: 3px 8px;
+    font-size: .75rem;
+    line-height: 1;
 }
 
 .board-hub__card--board-level .comparisons-dashboard-link {
@@ -4440,4 +4440,14 @@ a.herb-board__domain:focus {
         width: 100%;
         flex-basis: 100%;
     }
+}
+
+/* Keep every Board Level action compact, including disabled span buttons. */
+.board-hub .board-hub__card.board-hub__card--board-level .board-hub__actions > .board-hub__action {
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    padding: 3px 8px !important;
+    font-size: .75rem !important;
+    line-height: 1 !important;
 }
