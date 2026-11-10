@@ -107,6 +107,10 @@ herbs_misc_block="$(sed -n '/subject-study-library__journey-step">5</,/subject-s
 formulas_misc_block="$(sed -n '/subject-study-library__journey-step">6</,/subject-study-library__journey-step">7</p' "$LIBRARY_TEMP")"
 grep -Fq "Safety Library" <<< "$main_study_guide_block"
 grep -Fq '$safetylibraryurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq "Formula Composition" <<< "$main_study_guide_block"
+grep -Fq '$formulacompositionurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq "Herbal Incompatibilities" <<< "$main_study_guide_block"
+grep -Fq '$herbalincompatibilitiesurl->out(false)' <<< "$main_study_guide_block"
 if grep -Fq '$safetylibraryurl->out(false)' <<< "$secondary_guide_block"; then
     echo "ERROR: Safety Library todavía aparece en Secondary Study Guide." >&2
     exit 1
@@ -147,8 +151,8 @@ grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block
 grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"
 main_study_guide_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<< "$main_study_guide_block")"
 comparison_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<< "$secondary_study_guides_block")"
-[[ "$main_study_guide_button_count" -eq 4 && "$comparison_button_count" -eq 7 ]] || {
-    echo "ERROR: Main Study Guide debe tener cuatro botones y Comparison debe tener siete." >&2
+[[ "$main_study_guide_button_count" -eq 6 && "$comparison_button_count" -eq 7 ]] || {
+    echo "ERROR: Main Study Guide debe tener seis botones y Comparison debe tener siete." >&2
     exit 1
 }
 if grep -Fq 'subject-study-library__journey-option"' <<< "$pathology_patterns_block"; then
@@ -174,6 +178,8 @@ if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$
 fi
 grep -Fq "'/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/safety.html'," "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/formula-theory.html'," "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/herbal-incompatibilities.html'," "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formula-navigator-es.html' : '/study-guide/comparisons/formula-navigator.html'" "$LIBRARY_TEMP"
@@ -193,6 +199,8 @@ fi
 single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$LIBRARY_TEMP")"
 formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
 safety_library_route_count="$(grep -Fc '$safetylibraryurl->out(false)' "$LIBRARY_TEMP")"
+formula_composition_route_count="$(grep -Fc '$formulacompositionurl->out(false)' "$LIBRARY_TEMP")"
+herbal_incompatibilities_route_count="$(grep -Fc '$herbalincompatibilitiesurl->out(false)' "$LIBRARY_TEMP")"
 single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_study_center_route_count="$(grep -Fc '$formulastudycenterurl->out(false)' "$LIBRARY_TEMP")"
@@ -202,6 +210,7 @@ pattern_comparisons_route_count="$(grep -Fc '$patterncomparisonsurl->out(false)'
 pattern_maciocia_route_count="$(grep -Fc '$patternmaciociacomparisonurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
         && "$safety_library_route_count" -eq 1 \
+        && "$formula_composition_route_count" -eq 1 && "$herbal_incompatibilities_route_count" -eq 1 \
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
         && "$formula_study_center_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
@@ -302,7 +311,8 @@ echo "OK: Secondary Study Guide contiene todos los recursos secundarios de hierb
 echo "OK: Comparison Pathology and Patterns quedó como módulo 3 sin botones."
 echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
 echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
-echo "OK: Main Study Guide conserva cuatro botones independientes."
+echo "OK: Main Study Guide contiene seis botones independientes."
+echo "OK: Formula Composition y Herbal Incompatibilities están en Main Study Guide y excluidos de Secondary Study Guide."
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
 echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous quedaron vacíos."
