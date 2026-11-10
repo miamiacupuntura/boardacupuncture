@@ -180,6 +180,11 @@ categories_label_count="$(grep -Fc "\$ises ? 'Categorías' : 'Categories'" "$LIB
     exit 1
 }
 grep -Fq '.subject-study-library__journey-option-heading{color:inherit;font-size:inherit;font-weight:inherit' "$LIBRARY_TEMP"
+grep -Fq '.subject-study-library__journey-option small{display:block;margin-top:4px;color:#64748b;font-size:13px' "$LIBRARY_TEMP"
+if grep -Fq '.subject-study-library__journey-option small{display:block;margin-top:3px;color:#64748b;font-size:11px' "$LIBRARY_TEMP"; then
+    echo "ERROR: el segundo renglón de los botones todavía usa 11px." >&2
+    exit 1
+fi
 grep -Fq "<strong>Herbology Practice</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong>Quiz</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Exámenes' : 'Exams'); ?></strong>" "$LIBRARY_TEMP"
@@ -239,6 +244,7 @@ fi
 echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de Secondary Study Guide."
+echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
