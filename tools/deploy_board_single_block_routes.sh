@@ -58,7 +58,7 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     exit 1
 }
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "<strong><?php echo s(\$ises ? 'Comparación' : 'Comparison'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Comparación de fórmulas y hierbas' : 'Comparison Formulas and Herbs'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Misceláneos de hierbas' : 'Herbs Miscellaneous'); ?></strong>" "$LIBRARY_TEMP"
@@ -246,9 +246,9 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
-echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
-echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de Secondary Study Guide."
+echo "OK: Comparison Formulas and Herbs quedó como módulo 2 con siete botones independientes."
+echo "OK: 63 Formulas Comparison está en Comparison Formulas and Herbs y excluido de Formulas Miscellaneous."
+echo "OK: Pattern Comparison Maciocia está en Comparison Formulas and Herbs y excluido de Secondary Study Guide."
 echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
