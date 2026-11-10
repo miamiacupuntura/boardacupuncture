@@ -31,6 +31,7 @@ $categoryids = [
     'digestives',
     'regulate-qi',
     'stop-bleeding',
+    'activate-blood',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -929,13 +930,60 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Ai Ye is the distinctive warm herb for uterine bleeding from Cold and also calms the fetus; it is inappropriate for Blood Heat." => "Ai Ye es la hierba tibia distintiva para sangrado uterino por Frío y además calma el feto; no es apropiada para Calor de Sangre.",
         "Bitter, astringent" => "Amarga, astringente",
         "Bitter, sour" => "Amarga, ácida",
+        "20. Activate Blood" => "20. Activar la Sangre",
+        "Board Guideline 2026 · 16 herbs · Common foundation: invigorate Blood, remove Blood stasis, regulate menstruation and relieve pain." => "Guía Board 2026 · 16 hierbas · Fundamento común: vigorizar la Sangre, eliminar estasis de Sangre, regular la menstruación y aliviar dolor.",
+        "pain location and cause, Heat or Cold, menstrual involvement, trauma, fixed masses, swelling, downward direction, pregnancy and constitutional deficiency." => "localización y causa del dolor, Calor o Frío, participación menstrual, trauma, masas fijas, hinchazón, dirección descendente, embarazo y deficiencia constitucional.",
+        "Invigorates Blood and Qi; expels Wind and relieves many types of headache and pain." => "Vigoriza la Sangre y el Qi; expulsa Viento y alivia muchos tipos de cefalea y dolor.",
+        "Avoid in Yin deficiency with Heat, Liver Yang rising headache, Qi deficiency, excessive menstrual bleeding or hemoptysis; overdose may cause nausea, vomiting or dizziness." => "Evitar en deficiencia de Yin con Calor, cefalea por ascenso de Yang de Hígado, deficiencia de Qi, sangrado menstrual excesivo o hemoptisis; una sobredosis puede causar náuseas, vómitos o mareos.",
+        "Strongly moves Qi and Blood and relieves pain from many causes and locations." => "Mueve intensamente el Qi y la Sangre y alivia dolor de muchas causas y localizaciones.",
+        "Cools Blood, moves Qi and Blood, benefits the Gallbladder for jaundice or stones, clears Heart Heat and opens the orifices." => "Enfría la Sangre, mueve Qi y Sangre, beneficia la Vesícula Biliar en ictericia o cálculos, elimina Calor de Corazón y abre los orificios.",
+        "Avoid in Yin deficiency from Blood loss or during pregnancy; traditionally antagonizes Ding Xiang." => "Evitar en deficiencia de Yin por pérdida de Sangre o durante el embarazo; tradicionalmente antagoniza Ding Xiang.",
+        "Invigorates and nourishes Blood, cools Blood, calms irritability and regulates menstruation." => "Vigoriza y nutre la Sangre, enfría la Sangre, calma irritabilidad y regula la menstruación.",
+        "Avoid when there is no Blood stasis; traditionally incompatible with Li Lu." => "Evitar cuando no existe estasis de Sangre; tradicionalmente incompatible con Li Lu.",
+        "Cools and invigorates Blood; clears Liver Fire and relieves pain from Blood stasis." => "Enfría y vigoriza la Sangre; elimina Fuego de Hígado y alivia dolor por estasis de Sangre.",
+        "Invigorates Blood and regulates menstruation; promotes urination and reduces swelling; clears Heat and resolves toxicity." => "Vigoriza la Sangre y regula la menstruación; promueve la micción y reduce hinchazón; elimina Calor y resuelve toxicidad.",
+        "Invigorates Blood, regulates menstruation and promotes urination; treats trauma internally or topically." => "Vigoriza la Sangre, regula la menstruación y promueve la micción; trata trauma interna o tópicamente.",
+        "Avoid during pregnancy when Blood stasis is absent." => "Evitar durante el embarazo cuando no existe estasis de Sangre.",
+        "Breaks Blood stasis, unblocks menstruation and moistens the Intestines to relieve constipation." => "Rompe estasis de Sangre, desbloquea la menstruación y humedece los Intestinos para aliviar estreñimiento.",
+        "Invigorates Blood, unblocks menstruation and relieves pain; lower doses gently harmonize Blood." => "Vigoriza la Sangre, desbloquea la menstruación y alivia dolor; las dosis menores armonizan suavemente la Sangre.",
+        "Invigorates Blood and relieves pain; reduces swelling and promotes healing when used topically." => "Vigoriza la Sangre y alivia dolor; reduce hinchazón y promueve cicatrización cuando se usa tópicamente.",
+        "Avoid during pregnancy or excessive uterine bleeding." => "Evitar durante el embarazo o sangrado uterino excesivo.",
+        "Invigorates Blood, relaxes sinews and opens channels; reduces swelling and generates flesh topically." => "Vigoriza la Sangre, relaja tendones y abre canales; reduce hinchazón y genera tejido tópicamente.",
+        "Avoid during pregnancy; use cautiously in Spleen deficiency." => "Evitar durante el embarazo; usar con precaución en deficiencia de Bazo.",
+        "Strongly breaks Blood stasis and fixed accumulations, moves Qi and relieves pain; also treats childhood nutritional impairment." => "Rompe intensamente estasis de Sangre y acumulaciones fijas, mueve el Qi y alivia dolor; también trata deterioro nutricional infantil.",
+        "Avoid during pregnancy or in deficient patients." => "Evitar durante el embarazo o en pacientes deficientes.",
+        "Strongly breaks Blood stasis and accumulations; moves Qi more strongly than San Leng." => "Rompe intensamente estasis de Sangre y acumulaciones; mueve el Qi con más fuerza que San Leng.",
+        "Avoid during pregnancy, Qi or Blood deficiency, or excessive menstruation." => "Evitar durante el embarazo, deficiencia de Qi o Sangre o menstruación excesiva.",
+        "Invigorates Blood and directs it downward; tonifies Liver and Kidney, strengthens sinews and bones, and clears Damp-Heat from the Lower Jiao." => "Vigoriza la Sangre y la dirige hacia abajo; tonifica Hígado y Riñón, fortalece tendones y huesos y elimina Humedad-Calor del Jiao Inferior.",
+        "Avoid in diarrhea from Spleen deficiency, excessive menstruation or spermatorrhea; traditionally should not be used with Bai Qian." => "Evitar en diarrea por deficiencia de Bazo, menstruación excesiva o espermatorrea; tradicionalmente no debe usarse con Bai Qian.",
+        "Invigorates Blood and directs it downward; dispels Wind-Damp and unblocks menstruation." => "Vigoriza la Sangre y la dirige hacia abajo; dispersa Viento-Humedad y desbloquea la menstruación.",
+        "Avoid during pregnancy, excessive menstruation or spermatorrhea." => "Evitar durante el embarazo, menstruación excesiva o espermatorrea.",
+        "Invigorates Blood, unblocks menstruation, promotes lactation and reduces swelling of the breasts or testicles." => "Vigoriza la Sangre, desbloquea la menstruación, promueve la lactancia y reduce hinchazón de mamas o testículos.",
+        "Invigorate Blood and remove stasis" => "Vigorizar la Sangre y eliminar estasis",
+        "All sixteen activate Blood, but selection depends on pain, temperature, menstruation, trauma, fixed accumulation, swelling and associated organ patterns." => "Las dieciséis activan la Sangre, pero la selección depende de dolor, temperatura, menstruación, trauma, acumulación fija, hinchazón y patrones orgánicos asociados.",
+        "Pain and headache emphasis" => "Énfasis en dolor y cefalea",
+        "Chuan Xiong treats headache and pain while moving Qi; Yan Hu Suo is among the strongest choices for pain of varied causes; Mo Yao and Ru Xiang emphasize painful stasis and trauma." => "Chuan Xiong trata cefalea y dolor mientras mueve Qi; Yan Hu Suo está entre las opciones más fuertes para dolor de diversas causas; Mo Yao y Ru Xiang enfatizan estasis dolorosa y trauma.",
+        "Cool Blood while moving stasis" => "Enfriar la Sangre mientras se mueve estasis",
+        "Yu Jin, Dan Shen, Chi Shao and Yi Mu Cao are cooling choices; they differ in Gallbladder, Heart, Liver, menstruation and urination emphasis." => "Yu Jin, Dan Shen, Chi Shao y Yi Mu Cao son opciones refrescantes; difieren en énfasis sobre Vesícula Biliar, Corazón, Hígado, menstruación y micción.",
+        "Regulate menstruation and amenorrhea" => "Regular menstruación y amenorrea",
+        "Yi Mu Cao, Ze Lan, Tao Ren, Hong Hua and Wang Bu Liu Xing unblock or regulate menstruation; Wang Bu Liu Xing also promotes lactation." => "Yi Mu Cao, Ze Lan, Tao Ren, Hong Hua y Wang Bu Liu Xing desbloquean o regulan la menstruación; Wang Bu Liu Xing además promueve lactancia.",
+        "Tao Ren and Hong Hua pair" => "Pareja Tao Ren y Hong Hua",
+        "Tao Ren strongly breaks stasis and moistens the Intestines; Hong Hua unblocks menses and relieves pain, with smaller doses gently harmonizing Blood." => "Tao Ren rompe intensamente estasis y humedece los Intestinos; Hong Hua desbloquea la menstruación y alivia dolor, y las dosis menores armonizan suavemente la Sangre.",
+        "Trauma, swelling and topical healing" => "Trauma, hinchazón y cicatrización tópica",
+        "Ze Lan treats trauma internally or topically; Mo Yao and Ru Xiang reduce swelling, relieve pain and promote healing or tissue generation." => "Ze Lan trata trauma interna o tópicamente; Mo Yao y Ru Xiang reducen hinchazón, alivian dolor y promueven cicatrización o generación de tejido.",
+        "Break fixed Blood accumulations" => "Romper acumulaciones fijas de Sangre",
+        "San Leng and E Zhu strongly break stasis and masses; E Zhu moves Qi more strongly, while San Leng also addresses childhood nutritional impairment." => "San Leng y E Zhu rompen intensamente estasis y masas; E Zhu mueve el Qi con más fuerza, mientras San Leng también aborda deterioro nutricional infantil.",
+        "Huai Niu Xi and Chuan Niu Xi" => "Huai Niu Xi y Chuan Niu Xi",
+        "Both direct Blood downward; Huai Niu Xi emphasizes tonifying Liver and Kidney and strengthening sinews and bones, while Chuan Niu Xi emphasizes moving Blood and dispelling Wind-Damp." => "Ambas dirigen la Sangre hacia abajo; Huai Niu Xi enfatiza tonificar Hígado y Riñón y fortalecer tendones y huesos, mientras Chuan Niu Xi enfatiza mover Sangre y dispersar Viento-Humedad.",
+        "Pregnancy and strong Blood movement" => "Embarazo y movimiento intenso de Sangre",
+        "Most herbs in this category require avoidance or strong caution during pregnancy because they invigorate Blood or break stasis." => "La mayoría de las hierbas de esta categoría requieren evitarse o usarse con gran precaución durante el embarazo porque vigorizan la Sangre o rompen estasis.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110k';
+$languageversion = '20261110l';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1349,6 +1397,38 @@ $bleedingsimilarities = [
     ['Warm the womb and stop bleeding', 'Ai Ye', 'Ai Ye is the distinctive warm herb for uterine bleeding from Cold and also calms the fetus; it is inappropriate for Blood Heat.'],
 ];
 
+
+$activatebloodherbs = [
+    ['Chuan Xiong', 'Chuanxiong Rhizoma', 'Acrid', 'Warm', 'LV, GB, PC', 'Invigorates Blood and Qi; expels Wind and relieves many types of headache and pain.', 'Avoid in Yin deficiency with Heat, Liver Yang rising headache, Qi deficiency, excessive menstrual bleeding or hemoptysis; overdose may cause nausea, vomiting or dizziness.', '3–9 g decoction; 1–1.5 g powder', '—'],
+    ['Yan Hu Suo', 'Corydalis Rhizoma', 'Acrid, bitter', 'Warm', 'HT, LV, ST', 'Strongly moves Qi and Blood and relieves pain from many causes and locations.', 'Avoid during pregnancy.', '3–9 g', '—'],
+    ['Yu Jin', 'Curcumae Radix', 'Acrid, bitter', 'Cold', 'HT, LU, LV', 'Cools Blood, moves Qi and Blood, benefits the Gallbladder for jaundice or stones, clears Heart Heat and opens the orifices.', 'Avoid in Yin deficiency from Blood loss or during pregnancy; traditionally antagonizes Ding Xiang.', '6–12 g', '—'],
+    ['Dan Shen', 'Salviae Miltiorrhizae Radix', 'Bitter', 'Slightly cold', 'HT, PC, LV', 'Invigorates and nourishes Blood, cools Blood, calms irritability and regulates menstruation.', 'Avoid when there is no Blood stasis; traditionally incompatible with Li Lu.', '6–15 g; up to 60 g for vasculitis', '—'],
+    ['Chi Shao', 'Paeoniae Radix Rubra', 'Sour, bitter', 'Slightly cold', 'LV, SP', 'Cools and invigorates Blood; clears Liver Fire and relieves pain from Blood stasis.', 'Avoid in Blood deficiency.', '6–15 g', '—'],
+    ['Yi Mu Cao', 'Leonuri Herba', 'Acrid, bitter', 'Slightly cold', 'HT, LV, UB', 'Invigorates Blood and regulates menstruation; promotes urination and reduces swelling; clears Heat and resolves toxicity.', 'Avoid during pregnancy; use cautiously in Blood or Yin deficiency.', '9–15 g; up to 30 g', '—'],
+    ['Ze Lan', 'Lycopi Herba', 'Bitter, acrid', 'Slightly warm', 'LV, SP', 'Invigorates Blood, regulates menstruation and promotes urination; treats trauma internally or topically.', 'Avoid during pregnancy when Blood stasis is absent.', '9–15 g', '—'],
+    ['Tao Ren', 'Persicae Semen', 'Bitter, sweet', 'Neutral', 'HT, LI, LV, LU', 'Breaks Blood stasis, unblocks menstruation and moistens the Intestines to relieve constipation.', 'Avoid during pregnancy.', '4.5–9 g', 'Crush before decocting.'],
+    ['Hong Hua', 'Carthami Flos', 'Acrid', 'Warm', 'HT, LV', 'Invigorates Blood, unblocks menstruation and relieves pain; lower doses gently harmonize Blood.', 'Avoid during pregnancy.', '3–9 g', 'Add near the end of the decoction.'],
+    ['Mo Yao', 'Myrrha', 'Bitter', 'Neutral', 'HT, LV, SP', 'Invigorates Blood and relieves pain; reduces swelling and promotes healing when used topically.', 'Avoid during pregnancy or excessive uterine bleeding.', '3–9 g', '—'],
+    ['Ru Xiang', 'Olibanum', 'Acrid, bitter', 'Warm', 'HT, LV, SP', 'Invigorates Blood, relaxes sinews and opens channels; reduces swelling and generates flesh topically.', 'Avoid during pregnancy; use cautiously in Spleen deficiency.', '3–9 g', '—'],
+    ['San Leng', 'Sparganii Rhizoma', 'Bitter, acrid', 'Neutral', 'LV, SP', 'Strongly breaks Blood stasis and fixed accumulations, moves Qi and relieves pain; also treats childhood nutritional impairment.', 'Avoid during pregnancy or in deficient patients.', '3–9 g', '—'],
+    ['E Zhu', 'Curcumae Rhizoma', 'Bitter, acrid', 'Warm', 'LV, SP', 'Strongly breaks Blood stasis and accumulations; moves Qi more strongly than San Leng.', 'Avoid during pregnancy, Qi or Blood deficiency, or excessive menstruation.', '3–9 g', '—'],
+    ['Huai Niu Xi', 'Achyranthis Bidentatae Radix', 'Bitter, sour', 'Neutral', 'LV, KD', 'Invigorates Blood and directs it downward; tonifies Liver and Kidney, strengthens sinews and bones, and clears Damp-Heat from the Lower Jiao.', 'Avoid in diarrhea from Spleen deficiency, excessive menstruation or spermatorrhea; traditionally should not be used with Bai Qian.', '6–15 g', '—'],
+    ['Chuan Niu Xi', 'Cyathulae Radix', 'Sweet, bitter', 'Neutral', 'LV, KD', 'Invigorates Blood and directs it downward; dispels Wind-Damp and unblocks menstruation.', 'Avoid during pregnancy, excessive menstruation or spermatorrhea.', '4.5–9 g', '—'],
+    ['Wang Bu Liu Xing', 'Vaccariae Semen', 'Bitter', 'Neutral', 'LV, ST', 'Invigorates Blood, unblocks menstruation, promotes lactation and reduces swelling of the breasts or testicles.', 'Avoid during pregnancy.', '4.5–9 g', '—'],
+];
+
+$activatebloodsimilarities = [
+    ['Invigorate Blood and remove stasis', 'Chuan Xiong · Yan Hu Suo · Yu Jin · Dan Shen · Chi Shao · Yi Mu Cao · Ze Lan · Tao Ren · Hong Hua · Mo Yao · Ru Xiang · San Leng · E Zhu · Huai Niu Xi · Chuan Niu Xi · Wang Bu Liu Xing', 'All sixteen activate Blood, but selection depends on pain, temperature, menstruation, trauma, fixed accumulation, swelling and associated organ patterns.'],
+    ['Pain and headache emphasis', 'Chuan Xiong · Yan Hu Suo · Mo Yao · Ru Xiang', 'Chuan Xiong treats headache and pain while moving Qi; Yan Hu Suo is among the strongest choices for pain of varied causes; Mo Yao and Ru Xiang emphasize painful stasis and trauma.'],
+    ['Cool Blood while moving stasis', 'Yu Jin · Dan Shen · Chi Shao · Yi Mu Cao', 'Yu Jin, Dan Shen, Chi Shao and Yi Mu Cao are cooling choices; they differ in Gallbladder, Heart, Liver, menstruation and urination emphasis.'],
+    ['Regulate menstruation and amenorrhea', 'Yi Mu Cao · Ze Lan · Tao Ren · Hong Hua · Wang Bu Liu Xing', 'Yi Mu Cao, Ze Lan, Tao Ren, Hong Hua and Wang Bu Liu Xing unblock or regulate menstruation; Wang Bu Liu Xing also promotes lactation.'],
+    ['Tao Ren and Hong Hua pair', 'Tao Ren · Hong Hua', 'Tao Ren strongly breaks stasis and moistens the Intestines; Hong Hua unblocks menses and relieves pain, with smaller doses gently harmonizing Blood.'],
+    ['Trauma, swelling and topical healing', 'Ze Lan · Mo Yao · Ru Xiang', 'Ze Lan treats trauma internally or topically; Mo Yao and Ru Xiang reduce swelling, relieve pain and promote healing or tissue generation.'],
+    ['Break fixed Blood accumulations', 'San Leng · E Zhu', 'San Leng and E Zhu strongly break stasis and masses; E Zhu moves Qi more strongly, while San Leng also addresses childhood nutritional impairment.'],
+    ['Huai Niu Xi and Chuan Niu Xi', 'Huai Niu Xi · Chuan Niu Xi', 'Both direct Blood downward; Huai Niu Xi emphasizes tonifying Liver and Kidney and strengthening sinews and bones, while Chuan Niu Xi emphasizes moving Blood and dispelling Wind-Damp.'],
+    ['Pregnancy and strong Blood movement', 'Most herbs in this category', 'Most herbs in this category require avoidance or strong caution during pregnancy because they invigorate Blood or break stasis.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1439,6 +1519,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['digestives']->out(false); ?>"<?php echo $selectedcategory === 'digestives' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></a>
         <a href="<?php echo $categoryurls['regulate-qi']->out(false); ?>"<?php echo $selectedcategory === 'regulate-qi' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></a>
         <a href="<?php echo $categoryurls['stop-bleeding']->out(false); ?>"<?php echo $selectedcategory === 'stop-bleeding' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['activate-blood']->out(false); ?>"<?php echo $selectedcategory === 'activate-blood' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2342,6 +2423,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($bleedingherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="activate-blood"<?php echo $selectedcategory === 'activate-blood' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 16 herbs · Common foundation: invigorate Blood, remove Blood stasis, regulate menstruation and relieve pain.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($activatebloodsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('pain location and cause, Heat or Cold, menstrual involvement, trauma, fixed masses, swelling, downward direction, pregnancy and constitutional deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($activatebloodherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
