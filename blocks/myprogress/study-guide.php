@@ -776,7 +776,6 @@ echo $OUTPUT->header();
                         </div>
                         <nav class="subject-study-library__map-actions" aria-label="<?php echo s($ises ? 'Controles de navegación' : 'Navigation controls'); ?>">
                             <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                            <a class="subject-study-guide__back" data-library-page-back href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($ises ? '← Página anterior' : '← Previous page'); ?></a>
                             <a class="subject-study-guide__back subject-study-library__dashboard" data-library-dashboard href="<?php echo (new moodle_url('/my/'))->out(false); ?>">Dashboard</a>
                         </nav>
                     </header>
@@ -1136,18 +1135,6 @@ echo $OUTPUT->header();
     };
     window.addEventListener('pageshow', revealStepBackDestination);
     revealStepBackDestination();
-    const pageBack = document.querySelector('[data-library-page-back]');
-    pageBack?.addEventListener('click', event => {
-        if (window.history.length > 1) {
-            event.preventDefault();
-            try {
-                window.sessionStorage.setItem(stepBackScrollKey, 'top');
-            } catch (error) {
-                // History navigation still works when session storage is unavailable.
-            }
-            window.history.back();
-        }
-    });
 })();
 </script>
 <?php endif; ?>
