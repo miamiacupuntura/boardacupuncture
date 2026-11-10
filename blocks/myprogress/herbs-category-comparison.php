@@ -102,6 +102,23 @@ $bloodheatsimilarities = [
     ['Rashes and skin manifestations', 'Zi Cao · Sheng Di Huang · Mu Dan Pi', 'Cool Blood-level Heat affecting the skin; Zi Cao most directly vents rashes and treats topical Fire toxin.'],
 ];
 
+$dampheatherbs = [
+    ['Huang Qin', 'Scutellariae Radix', 'Bitter', 'Cold', 'LU, ST, GB, LI', 'Clears Heat and dries Dampness, especially in the upper burner; clears Lung Heat; treats Shaoyang disorders; clears Heat and stops bleeding when charred; calms the fetus; subdues ascending Liver Yang.', 'Avoid with deficient Lung Heat, cold diarrhea or middle-burner Cold; use cautiously when restless fetus is due to Cold. Traditionally counteracts Mu Dan Pi and Li Lu.', '3–9 g', 'Charred form emphasizes stopping bleeding.'],
+    ['Huang Lian', 'Coptidis Rhizoma', 'Bitter', 'Cold', 'HT, LI, LV, ST', 'Clears Heat and dries Dampness, especially in the middle burner; treats Damp-Heat diarrhea or dysentery; clears Heart and Stomach Fire; clears Heat and stops bleeding; may be used topically for Heat.', 'Avoid in Yin deficiency, nausea or vomiting from Spleen-deficient Cold, or diarrhea from Spleen/Kidney deficiency; prolonged use may injure the Spleen and Stomach.', '1.5–9 g', '—'],
+    ['Huang Bai', 'Phellodendri Cortex', 'Bitter', 'Cold', 'KD, UB', 'Clears Heat and dries Dampness, especially in the lower burner; drains Kidney deficiency Fire and treats lower-burner Damp-Heat.', 'Avoid in deficient Spleen conditions, particularly with diarrhea.', '3–12 g', '—'],
+    ['Long Dan Cao', 'Gentianae Radix', 'Bitter', 'Cold', 'GB, LV, ST', 'Drains Damp-Heat from the Liver and Gallbladder channels, including the eyes and genital region; treats jaundice; drains and pacifies excessive Liver Fire.', 'Avoid with diarrhea due to Spleen and Stomach deficiency.', '3–9 g', '—'],
+    ['Ku Shen', 'Sophorae Flavescentis Radix', 'Bitter', 'Cold', 'UB, HT, LV, LI, ST, SI', 'Clears Heat and dries Dampness; dispels Wind, kills parasites and stops itching, especially in the lower body; promotes urination.', 'Avoid in Spleen and Stomach deficient Cold; should not be injected; incompatible with Li Lu and traditionally antagonizes Tu Si Zi and Bei Mu.', '3–9 g; up to 30 g topical', 'May be used externally for itching and parasites.'],
+];
+
+$dampheatsimilarities = [
+    ['Bitter-cold Damp-Heat clearing', 'Huang Qin · Huang Lian · Huang Bai · Long Dan Cao · Ku Shen', 'All are bitter and cold herbs that clear Heat and dry Dampness; selection depends mainly on location and associated symptoms.'],
+    ['Three-burner emphasis', 'Huang Qin · Huang Lian · Huang Bai', 'Huang Qin emphasizes the upper burner, Huang Lian the middle burner and Huang Bai the lower burner.'],
+    ['Fire and toxicity', 'Huang Qin · Huang Lian · Long Dan Cao', 'All clear excess Fire; Huang Qin emphasizes Lung and Shaoyang Heat, Huang Lian Heart and Stomach Fire, and Long Dan Cao Liver and Gallbladder Fire.'],
+    ['Lower-burner Damp-Heat', 'Huang Bai · Long Dan Cao · Ku Shen', 'Treat lower-burner Damp-Heat; Long Dan Cao emphasizes Liver/Gallbladder and genital signs, while Ku Shen emphasizes itching and parasites.'],
+    ['Urinary and genital involvement', 'Long Dan Cao · Ku Shen · Huang Bai', 'Address Damp-Heat below; Long Dan Cao is strong for genital and Liver/Gallbladder patterns, while Ku Shen promotes urination and stops itching.'],
+    ['Skin itching and external use', 'Ku Shen · Huang Bai · Huang Lian', 'Clear Damp-Heat affecting the skin; Ku Shen is most specific for parasites and itching, while Huang Lian and Huang Bai emphasize Heat and toxicity.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -165,6 +182,7 @@ echo $OUTPUT->header();
         <a href="#disperse-wind-heat">2. Disperse Wind-Heat</a>
         <a href="#clear-and-purge-heat">3. Clear and Purge Heat</a>
         <a href="#clear-blood-heat">4. Clear Blood-Heat</a>
+        <a href="#clear-damp-heat">5. Clear Damp-Heat</a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
@@ -353,6 +371,57 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($bloodheatherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="clear-damp-heat">
+        <h3>5. Clear Damp-Heat</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 5 herbs · Common foundation: bitter, cold herbs that clear Heat and dry Dampness.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($dampheatsimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> upper, middle or lower burner location; Liver/Gallbladder Fire; diarrhea; jaundice; urinary or genital signs; and itching.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($dampheatherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row">
                             <strong><?php echo s($herb[0]); ?></strong>
