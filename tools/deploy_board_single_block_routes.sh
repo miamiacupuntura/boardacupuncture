@@ -222,14 +222,15 @@ if grep -Fq '.subject-study-library__journey-card:nth-child(5){grid-column:span 
     echo "ERROR: los siete módulos no conservan el diseño uniforme." >&2
     exit 1
 fi
-grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP"
-grep -Fq "\$ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'" "$LIBRARY_TEMP"
-grep -Fq "\$ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'" "$LIBRARY_TEMP"
-categories_label_count="$(grep -Fc "\$ises ? 'Categorías' : 'Categories'" "$LIBRARY_TEMP")"
-[[ "$categories_label_count" -eq 3 ]] || {
-    echo "ERROR: Single Herbs, Duì Yào y Formulas no muestran Categories como subtítulo destacado." >&2
+grep -Fq "\$ises ? 'Categorías de hierbas individuales' : 'Single Herbs Categories'" "$LIBRARY_TEMP"
+grep -Fq "\$ises ? 'Categorías de pares Duì Yào' : 'Duì Yào Pairs Categories'" "$LIBRARY_TEMP"
+grep -Fq "\$ises ? 'Categorías de fórmulas' : 'Formulas Categories'" "$LIBRARY_TEMP"
+if grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP" \
+        || grep -Fq "\$ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'" "$LIBRARY_TEMP" \
+        || grep -Fq "\$ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'" "$LIBRARY_TEMP"; then
+    echo "ERROR: uno de los tres botones principales todavía conserva Study Guide." >&2
     exit 1
-}
+fi
 grep -Fq '.subject-study-library__journey-option-heading{color:inherit;font-size:inherit;font-weight:inherit' "$LIBRARY_TEMP"
 grep -Fq '.subject-study-library__journey-options{display:grid;gap:7px;margin-top:0}' "$LIBRARY_TEMP"
 if grep -Fq '.subject-study-library__journey-options{display:grid;gap:7px;margin-top:auto}' "$LIBRARY_TEMP"; then
@@ -317,6 +318,7 @@ echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Comparison."
 echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
+echo "OK: Single Herbs, Duì Yào Pairs y Formulas usan Categories como nombre del botón."
 echo "OK: los módulos 3, 5 y 6 fueron eliminados; los siete restantes quedaron renumerados y uniformes."
 echo "OK: cada botón visible abre un solo bloque."
 echo "OK: se conservaron Main Study Guide, los recursos secundarios, las colecciones comparativas, Practice Exams y Quiz."
