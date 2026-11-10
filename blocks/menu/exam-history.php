@@ -91,6 +91,7 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'status' => $status,
             'statusclass' => $isincomplete ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration((int) $attempt->duration, $ises),
+            'resumeurl' => '',
         ];
     }
 }
@@ -100,13 +101,19 @@ if (($historytype === 'all' || $historytype === 'quiz') && $DB->get_manager()->t
     $quizattempts = $DB->get_records_sql(
         "SELECT qa.id, qa.attempt, qa.state, qa.timestart, qa.timefinish, qa.timemodified,
                 qa.sumgrades AS attemptscore, q.sumgrades AS quiztotal,
-                q.name AS examname, c.fullname AS coursename
+                q.name AS examname, c.fullname AS coursename, cm.id AS cmid
            FROM {quiz_attempts} qa
            JOIN {quiz} q ON q.id = qa.quiz
            JOIN {course} c ON c.id = q.course
+           JOIN {modules} m ON m.name = :quizmodulename
+           JOIN {course_modules} cm ON cm.module = m.id
+                AND cm.instance = q.id AND cm.course = q.course
           WHERE qa.userid = :userid AND qa.preview = 0
        ORDER BY qa.timemodified DESC, qa.id DESC",
-        ['userid' => $USER->id]
+        [
+            'userid' => $USER->id,
+            'quizmodulename' => 'quiz',
+        ]
     );
     foreach ($quizattempts as $attempt) {
         $isfinished = (string) $attempt->state === 'finished';
@@ -117,6 +124,11 @@ if (($historytype === 'all' || $historytype === 'quiz') && $DB->get_manager()->t
             ? (int) $attempt->timefinish
             : max((int) $attempt->timemodified, (int) $attempt->timestart);
         $duration = max(0, $endtime - (int) $attempt->timestart);
+        $canresume = in_array((string) $attempt->state, ['inprogress', 'overdue'], true);
+        $resumeurl = $canresume ? new moodle_url('/mod/quiz/attempt.php', [
+            'attempt' => (int) $attempt->id,
+            'cmid' => (int) $attempt->cmid,
+        ]) : null;
         $status = !$isfinished
             ? ($ises ? 'No completado' : 'Not completed')
             : ($percentage >= 70
@@ -134,6 +146,7 @@ if (($historytype === 'all' || $historytype === 'quiz') && $DB->get_manager()->t
             'status' => $status,
             'statusclass' => !$isfinished ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration($duration, $ises),
+            'resumeurl' => $resumeurl ? $resumeurl->out(false) : '',
         ];
     }
 }
@@ -181,6 +194,8 @@ echo $OUTPUT->header();
 .exam-history__label{display:block;margin-bottom:5px;color:#087c69;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
 .exam-history__attempt strong{display:block;overflow-wrap:anywhere;font-size:14px}
 .exam-history__attempt small{display:block;margin-top:3px;color:#61758a;overflow-wrap:anywhere}
+.exam-history__resume{display:inline-flex;margin-top:8px;padding:6px 10px;border-radius:7px;background:#2b63e8;color:#fff!important;font-size:12px;font-weight:900;text-decoration:none}
+.exam-history__resume:hover,.exam-history__resume:focus{background:#1749bc;color:#fff!important;text-decoration:none}
 .exam-history__attempt.is-passed .exam-history__status{color:#087c3b}
 .exam-history__attempt.is-failed .exam-history__status{color:#b45309}
 .exam-history__attempt.is-incomplete .exam-history__status{color:#765b20}
@@ -242,6 +257,11 @@ echo $OUTPUT->header();
                             <span class="exam-history__label"><?php echo $ises ? 'Examen / Quiz' : 'Exam / Quiz'; ?></span>
                             <strong><?php echo s($attempt['exam']); ?></strong>
                             <small><?php echo s($attempt['source'] . ($attempt['course'] !== '' ? ' · ' . $attempt['course'] : '')); ?></small>
+                            <?php if ($attempt['resumeurl'] !== '') { ?>
+                                <a class="exam-history__resume" href="<?php echo s($attempt['resumeurl']); ?>">
+                                    <?php echo $ises ? 'Retomar quiz →' : 'Resume Quiz →'; ?>
+                                </a>
+                            <?php } ?>
                         </div>
                         <div>
                             <span class="exam-history__label"><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
