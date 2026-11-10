@@ -567,6 +567,12 @@
     order: 1;
 }
 
+.board-hub__card--board-level .board-hub__action--guide.comparisons-dashboard-link {
+    border-color: #087c69;
+    background: #087c69 !important;
+    color: #fff !important;
+}
+
 .board-hub__card--board-level .study-guide-dashboard-link {
     width: 100%;
     flex: 1 1 100%;
