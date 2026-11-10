@@ -118,6 +118,21 @@ grep -Fq 'Siguiente coincidencia' "$CATEGORY_TEMP"
 grep -Fq 'herb-category-library__search-highlight.is-current' "$CATEGORY_TEMP"
 grep -Fq 'rgba(255,193,7,.48)' "$CATEGORY_TEMP"
 grep -Fq 'data-results=' "$CATEGORY_TEMP"
+grep -Fq 'initialCategoryIndex' "$CATEGORY_TEMP"
+grep -Fq 'stableStartIndex' "$CATEGORY_TEMP"
+grep -Fq 'Math.max(0, Math.min(matchIndex, matches.length - 1))' "$CATEGORY_TEMP"
+grep -Fq 'previousResult.disabled = currentMatch === 0;' "$CATEGORY_TEMP"
+grep -Fq 'nextResult.disabled = currentMatch === matches.length - 1;' "$CATEGORY_TEMP"
+grep -Fq 'position:sticky' "$CATEGORY_TEMP"
+grep -Fq 'Categoría actual: {category}' "$CATEGORY_TEMP"
+if grep -Fq '(matchIndex + matches.length) % matches.length' "$CATEGORY_TEMP"; then
+    echo "ERROR: la búsqueda todavía vuelve silenciosamente del último resultado al primero." >&2
+    exit 1
+fi
+if grep -Fq 'const visibleMatch =' "$CATEGORY_TEMP"; then
+    echo "ERROR: una búsqueda parcial todavía puede cambiar el punto de partida de la búsqueda final." >&2
+    exit 1
+fi
 search_input_count="$(grep -Fo 'id="herb-category-search"' "$CATEGORY_TEMP" | wc -l)"
 search_previous_count="$(grep -Fo 'id="herb-category-search-previous"' "$CATEGORY_TEMP" | wc -l)"
 search_next_count="$(grep -Fo 'id="herb-category-search-next"' "$CATEGORY_TEMP" | wc -l)"
@@ -1011,6 +1026,9 @@ echo "OK: Anterior, Siguiente, Enter y Mayús+Enter recorren coincidencias entre
 echo "OK: la categoría de cada resultado se abre automáticamente y la coincidencia activa recibe resaltado y sombra amarillos."
 echo "OK: la búsqueda ignora acentos e informa posición, total de coincidencias y número de categorías."
 echo "OK: Borrar y Escape eliminan resaltados y restauran los treinta y dos botones de categorías."
+echo "OK: la búsqueda conserva como referencia la categoría originalmente seleccionada mientras se escribe."
+echo "OK: Anterior y Siguiente se desactivan en los extremos; el último resultado ya no salta al primero."
+echo "OK: la barra permanece visible y muestra la categoría actual para mantener la orientación."
 echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
