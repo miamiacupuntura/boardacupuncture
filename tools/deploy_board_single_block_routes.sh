@@ -61,12 +61,6 @@ grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio principal' : 'Main Stu
 grep -Fq "<strong><?php echo s(\$ises ? 'Comparación' : 'Comparison'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>" "$LIBRARY_TEMP"
-grep -Fq "<strong><?php echo s(\$ises ? 'Comparación de patologías y patrones' : 'Comparison Pathology and Patterns'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "<b><?php echo s(\$ises ? 'Comparaciones clínicas' : 'Clinical comparisons'); ?></b>" "$LIBRARY_TEMP"
-grep -Fq "<strong><?php echo s(\$ises ? 'Misceláneos de hierbas' : 'Herbs Miscellaneous'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "<b><?php echo s(\$ises ? 'Material adicional de hierbas' : 'Additional herbs'); ?></b>" "$LIBRARY_TEMP"
-grep -Fq "<strong><?php echo s(\$ises ? 'Misceláneos de fórmulas' : 'Formulas Miscellaneous'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "<b><?php echo s(\$ises ? 'Material adicional de fórmulas' : 'Additional formulas'); ?></b>" "$LIBRARY_TEMP"
 other_chapters_loop_count="$(grep -Fc '$otherchapters as $chapter' "$LIBRARY_TEMP")"
 secondary_guide_loop_count="$(grep -Fc '$secondaryguidechapters as $chapter' "$LIBRARY_TEMP")"
 [[ "$other_chapters_loop_count" -eq 1 && "$secondary_guide_loop_count" -eq 1 ]] || {
@@ -92,19 +86,16 @@ grep -Fq '$secondarychapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
 grep -Fq '$secondarychapterurl->out(false)' "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
 journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
-[[ "$journey_card_count" -eq 10 ]] || {
-    echo "ERROR: el mapa Board Level no contiene exactamente diez módulos." >&2
+[[ "$journey_card_count" -eq 7 ]] || {
+    echo "ERROR: el mapa Board Level no contiene exactamente siete módulos." >&2
     exit 1
 }
-for step in 1 2 3 4 5 6 7 8 9 10; do
+for step in 1 2 3 4 5 6 7; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
 main_study_guide_block="$(sed -n '/subject-study-library__journey-step">1</,/subject-study-library__journey-step">2</p' "$LIBRARY_TEMP")"
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,/subject-study-library__journey-step">3</p' "$LIBRARY_TEMP")"
-pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">3</,/subject-study-library__journey-step">4</p' "$LIBRARY_TEMP")"
-secondary_guide_block="$(sed -n '/subject-study-library__journey-step">4</,/subject-study-library__journey-step">5</p' "$LIBRARY_TEMP")"
-herbs_misc_block="$(sed -n '/subject-study-library__journey-step">5</,/subject-study-library__journey-step">6</p' "$LIBRARY_TEMP")"
-formulas_misc_block="$(sed -n '/subject-study-library__journey-step">6</,/subject-study-library__journey-step">7</p' "$LIBRARY_TEMP")"
+secondary_guide_block="$(sed -n '/subject-study-library__journey-step">3</,/subject-study-library__journey-step">4</p' "$LIBRARY_TEMP")"
 grep -Fq "Safety Library" <<< "$main_study_guide_block"
 grep -Fq '$safetylibraryurl->out(false)' <<< "$main_study_guide_block"
 grep -Fq "Formula Composition" <<< "$main_study_guide_block"
@@ -121,15 +112,9 @@ if grep -Fq '$safetylibraryurl->out(false)' <<< "$secondary_guide_block"; then
     echo "ERROR: Safety Library todavía aparece en Secondary Study Guide." >&2
     exit 1
 fi
-grep -Fq "Comparison Pathology and Patterns" <<< "$pathology_patterns_block"
 grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
 grep -Fq '$secondaryguidechapters as $chapter' <<< "$secondary_guide_block"
 grep -Fq '$secondarychapterurl->out(false)' <<< "$secondary_guide_block"
-if grep -Fq 'subject-study-library__journey-option"' <<< "$herbs_misc_block" \
-        || grep -Fq 'subject-study-library__journey-option"' <<< "$formulas_misc_block"; then
-    echo "ERROR: Herbs Miscellaneous o Formulas Miscellaneous todavía contiene botones." >&2
-    exit 1
-fi
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
@@ -161,10 +146,6 @@ comparison_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<<
     echo "ERROR: Main Study Guide debe tener nueve botones y Comparison debe tener siete." >&2
     exit 1
 }
-if grep -Fq 'subject-study-library__journey-option"' <<< "$pathology_patterns_block"; then
-    echo "ERROR: el módulo 3 todavía contiene botones comparativos." >&2
-    exit 1
-fi
 for comparison_route in \
         '$singleherbscomparisonsurl->out(false)' \
         '$formulacomparisonsurl->out(false)' \
@@ -232,13 +213,13 @@ pattern_maciocia_route_count="$(grep -Fc '$patternmaciociacomparisonurl->out(fal
     echo "ERROR: los botones de Main Study Guide y Comparison están incompletos o duplicados." >&2
     exit 1
 }
-grep -Fq '.subject-study-library__journey-card:nth-child(8){border-top-color:#6d4bc3}' "$LIBRARY_TEMP"
-grep -Fq '.subject-study-library__journey-card:nth-child(9){border-top-color:#2563eb}' "$LIBRARY_TEMP"
-grep -Fq '.subject-study-library__journey-card:nth-child(10){border-top-color:#f77e25}' "$LIBRARY_TEMP"
-if grep -Fq '.subject-study-library__journey-card:nth-child(8){grid-column:span 3' "$LIBRARY_TEMP" \
-        || grep -Fq '.subject-study-library__journey-card:nth-child(9){grid-column:span 3' "$LIBRARY_TEMP" \
-        || grep -Fq '.subject-study-library__journey-card:nth-child(10){grid-column:span 3' "$LIBRARY_TEMP"; then
-    echo "ERROR: los diez módulos no conservan el diseño uniforme." >&2
+grep -Fq '.subject-study-library__journey-card:nth-child(5){border-top-color:#6d4bc3}' "$LIBRARY_TEMP"
+grep -Fq '.subject-study-library__journey-card:nth-child(6){border-top-color:#2563eb}' "$LIBRARY_TEMP"
+grep -Fq '.subject-study-library__journey-card:nth-child(7){border-top-color:#f77e25}' "$LIBRARY_TEMP"
+if grep -Fq '.subject-study-library__journey-card:nth-child(5){grid-column:span 3' "$LIBRARY_TEMP" \
+        || grep -Fq '.subject-study-library__journey-card:nth-child(6){grid-column:span 3' "$LIBRARY_TEMP" \
+        || grep -Fq '.subject-study-library__journey-card:nth-child(7){grid-column:span 3' "$LIBRARY_TEMP"; then
+    echo "ERROR: los siete módulos no conservan el diseño uniforme." >&2
     exit 1
 fi
 grep -Fq "\$ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'" "$LIBRARY_TEMP"
@@ -322,24 +303,21 @@ echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otro
 echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide contiene todos los recursos secundarios de hierbas y fórmulas."
-echo "OK: Comparison Pathology and Patterns quedó como módulo 3 sin botones."
-echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
+echo "OK: Comparison ocupa la posición 2 y Secondary Study Guide ocupa la 3."
 echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
 echo "OK: Main Study Guide contiene nueve botones independientes."
 echo "OK: Formula Composition y Herbal Incompatibilities están en Main Study Guide y excluidos de Secondary Study Guide."
 echo "OK: Most Important Formulas, Formula Modifications y Commonly Used Herbal Combinations están en Main Study Guide."
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
-echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
-echo "OK: Herbs Miscellaneous y Formulas Miscellaneous quedaron vacíos."
+echo "OK: las validaciones de los módulos 1, 2 y 3 usan límites exactos."
 echo "OK: Herbs Secondary Actions está dentro de Secondary Study Guide."
 echo "OK: los siete botones comparativos están en Comparison."
-echo "OK: el módulo 3 permanece vacío y se valida usando la clase exacta de botón."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Comparison."
 echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
-echo "OK: los diez módulos conservan su contenido, numeración y diseño uniforme."
+echo "OK: los módulos 3, 5 y 6 fueron eliminados; los siete restantes quedaron renumerados y uniformes."
 echo "OK: cada botón visible abre un solo bloque."
 echo "OK: se conservaron Main Study Guide, los recursos secundarios, las colecciones comparativas, Practice Exams y Quiz."
 echo "OK: la vista general interna permanece como respaldo, pero no se muestra como botón."
