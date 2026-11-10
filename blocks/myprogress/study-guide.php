@@ -268,7 +268,7 @@ $areas = [
                 'quiz' => true,
             ],
             [
-                'title' => 'Commonly Used Herbal Combinations',
+                'title' => 'Herbal Combination',
                 'description' => 'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.',
                 'path' => '/blocks/myprogress/common-herbal-combinations.php',
                 'anchor' => '',
@@ -343,7 +343,7 @@ $spanishcopy = [
     'Review 305 clinical modifications as reference cards organized by formula, presentation and the corresponding ingredient change.' => 'Repasa 305 modificaciones clínicas organizadas por fórmula, presentación y cambio correspondiente de ingredientes.',
     'Formula Modifications Quiz' => 'Quiz de modificaciones de fórmulas',
     'Choose answers and test the 305 formula modifications in focused Quiz sessions after reviewing the reference cards.' => 'Elige respuestas y evalúa las 305 modificaciones de fórmulas en sesiones de Quiz después de repasar las fichas de referencia.',
-    'Commonly Used Herbal Combinations' => 'Combinaciones herbales de uso común',
+    'Herbal Combination' => 'Combinación herbal',
     'Study 70 Appendix 2 combinations by relationship, clinical application and the role of each herb. This chapter remains separate from the 51 official Duì Yào pairs.' => 'Estudia 70 combinaciones del Apéndice 2 por relación, aplicación clínica y función de cada hierba. Este capítulo permanece separado de las 51 parejas Duì Yào oficiales.',
     'Study Guide' => 'Guía de estudio',
     'Study Library' => 'Biblioteca de estudio',
@@ -818,7 +818,7 @@ echo $OUTPUT->header();
                                     <span><?php echo s($tr('Formula Modifications')); ?><small><?php echo s($ises ? '305 modificaciones' : '305 modifications'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $commonherbalcombinationsurl->out(false); ?>">
-                                    <span><?php echo s($tr('Commonly Used Herbal Combinations')); ?><small><?php echo s($ises ? 'Apéndice 2' : 'Appendix 2'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($tr('Herbal Combination')); ?><small><?php echo s($ises ? 'Apéndice 2' : 'Appendix 2'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
