@@ -102,11 +102,13 @@ done
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,+50p' "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Formula Study Center" <<< "$secondary_study_guides_block"
 grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
 grep -Fq "Pathology Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Pattern Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$formulastudycenterurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
@@ -116,6 +118,8 @@ if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$
 fi
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/formula-navigator-es.html' : '/study-guide/comparisons/formula-navigator.html'" "$LIBRARY_TEMP"
+grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/formula-navigator.html';" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/pathologies-es.html' : '/study-guide/comparisons/pathologies.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'" "$LIBRARY_TEMP"
 grep -Fq "'/blocks/myprogress/herb-formula-category-map.php'" "$LIBRARY_TEMP"
@@ -130,11 +134,13 @@ single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$
 formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
 single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)' "$LIBRARY_TEMP")"
+formula_study_center_route_count="$(grep -Fc '$formulastudycenterurl->out(false)' "$LIBRARY_TEMP")"
 bensky_crosswalk_route_count="$(grep -Fc '$benskycrosswalkurl->out(false)' "$LIBRARY_TEMP")"
 pathology_comparisons_route_count="$(grep -Fc '$pathologycomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 pattern_comparisons_route_count="$(grep -Fc '$patterncomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
+        && "$formula_study_center_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
         && "$pattern_comparisons_route_count" -eq 1 ]] || {
     echo "ERROR: los botones de Main Study Guide y Comparison están incompletos o duplicados." >&2
@@ -215,6 +221,7 @@ else
 fi
 
 echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
+echo "OK: Formula Study Center fue movido a Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
