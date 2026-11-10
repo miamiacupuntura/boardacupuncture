@@ -11,6 +11,7 @@ BACKUP_DIR="$BACKUP_ROOT/board-single-block-routes-$(date +%Y%m%d-%H%M%S)"
 LIBRARY_TARGET="$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 BOARD_TARGET="$MOODLE_ROOT/blocks/menu/herbology-board.php"
 MENU_TARGET="$MOODLE_ROOT/blocks/menu/block_menu.php"
+STYLES_TARGET="$MOODLE_ROOT/blocks/menu/styles.css"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
@@ -22,7 +23,7 @@ for command in curl php install grep sed stat cp mkdir mktemp rm; do
         exit 1
     }
 done
-for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET"; do
+for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET" "$STYLES_TARGET"; do
     [[ -f "$target" ]] || {
         echo "ERROR: no se encontró $target" >&2
         exit 1
@@ -32,16 +33,21 @@ done
 LIBRARY_TEMP="$(mktemp)"
 BOARD_TEMP="$(mktemp)"
 MENU_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP"' EXIT
+STYLES_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/block_menu.php" -o "$MENU_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/styles.css" -o "$STYLES_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
 
 grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--guide '" "$MENU_TEMP"
+grep -Fq ".board-hub__card--board-level .board-hub__action--guide.comparisons-dashboard-link {" "$STYLES_TEMP"
+grep -Fq "background: #087c69 !important;" "$STYLES_TEMP"
+grep -Fq "color: #fff !important;" "$STYLES_TEMP"
 grep -Fq ". 'comparisons-dashboard-link\" href=\"' . \$libraryurl->out(false) . '\">Study Guide</a>';" "$MENU_TEMP"
 if grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--board-library '" "$MENU_TEMP"; then
     echo "ERROR: Study Guide todavía conserva el estilo naranja." >&2
@@ -296,6 +302,7 @@ mkdir -p "$BACKUP_DIR/blocks/myprogress" "$BACKUP_DIR/blocks/menu"
 cp -a "$LIBRARY_TARGET" "$BACKUP_DIR/blocks/myprogress/study-guide.php"
 cp -a "$BOARD_TARGET" "$BACKUP_DIR/blocks/menu/herbology-board.php"
 cp -a "$MENU_TARGET" "$BACKUP_DIR/blocks/menu/block_menu.php"
+cp -a "$STYLES_TARGET" "$BACKUP_DIR/blocks/menu/styles.css"
 
 install_preserving_metadata() {
     local source_file="$1"
@@ -309,6 +316,7 @@ install_preserving_metadata() {
 install_preserving_metadata "$LIBRARY_TEMP" "$LIBRARY_TARGET"
 install_preserving_metadata "$BOARD_TEMP" "$BOARD_TARGET"
 install_preserving_metadata "$MENU_TEMP" "$MENU_TARGET"
+install_preserving_metadata "$STYLES_TEMP" "$STYLES_TARGET"
 
 if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
     runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -317,6 +325,7 @@ else
 fi
 
 echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
+echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
 echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
