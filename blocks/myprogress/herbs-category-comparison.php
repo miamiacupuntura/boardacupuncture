@@ -1319,6 +1319,9 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "30. Extinguish Liver Wind" => "30. Extinguir Viento de Hígado",
         "31. Expel Parasites" => "31. Expulsar parásitos",
         "32. External Use" => "32. Uso externo",
+        "Previous" => "Anterior",
+        "Next" => "Siguiente",
+        "Category navigation" => "Navegación de categorías",
         "Board Guideline 2026 · 1 substance · Common foundation: clear intense Heat, open the orifices, awaken the Spirit, extinguish Wind and relieve toxicity." => "Guía Board 2026 · 1 sustancia · Fundamento común: eliminar Calor intenso, abrir los orificios, despertar el Shen, extinguir Viento y aliviar toxicidad.",
         "Board Guideline 2026 · 6 substances · Common foundation: calm the Liver, extinguish internal Wind, control spasms and address Yang rising or channel obstruction." => "Guía Board 2026 · 6 sustancias · Fundamento común: calmar el Hígado, extinguir Viento interno, controlar espasmos y tratar ascenso de Yang u obstrucción de canales.",
         "Board Guideline 2026 · 1 herb · Common foundation: expel intestinal parasites while moving Qi and relieving accumulation." => "Guía Board 2026 · 1 hierba · Fundamento común: expulsar parásitos intestinales mientras mueve el Qi y alivia acumulación.",
@@ -1400,7 +1403,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110z';
+$languageversion = '20261110nav1';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1420,6 +1423,17 @@ foreach ($categoryids as $categoryid) {
     $categoryparams = $baseparams;
     $categoryparams['category'] = $categoryid;
     $categoryurls[$categoryid] = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $categoryparams);
+}
+$previouscategoryurl = null;
+$nextcategoryurl = null;
+if ($selectedcategory !== '') {
+    $selectedcategoryindex = array_search($selectedcategory, $categoryids, true);
+    if ($selectedcategoryindex !== false && $selectedcategoryindex > 0) {
+        $previouscategoryurl = $categoryurls[$categoryids[$selectedcategoryindex - 1]];
+    }
+    if ($selectedcategoryindex !== false && $selectedcategoryindex < count($categoryids) - 1) {
+        $nextcategoryurl = $categoryurls[$categoryids[$selectedcategoryindex + 1]];
+    }
 }
 $backurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
@@ -2124,7 +2138,12 @@ echo $OUTPUT->header();
 .herb-category-library__index a[aria-current="page"]{background:#064f46;box-shadow:0 0 0 3px rgba(8,124,105,.18)}
 .herb-category-library__empty{margin-top:20px;padding:22px;border:1px dashed #8fb9b1;border-radius:12px;background:#f4fbfa;color:#294c5f;font-weight:700;text-align:center}
 .herb-category-library__section{margin-top:20px;padding:20px;border:1px solid #b9d8d2;border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(15,76,129,.06)}
+.herb-category-library__section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .herb-category-library__section h3{margin:0;font-size:25px}
+.herb-category-library__pager{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto}
+.herb-category-library__pager a{display:inline-flex;min-height:38px;align-items:center;padding:8px 13px;border:1px solid #8fb9b1;border-radius:9px;background:#f4fbfa;color:#075f52;font-weight:800;text-decoration:none;white-space:nowrap}
+.herb-category-library__pager a:hover,.herb-category-library__pager a:focus{background:#087c69;color:#fff;text-decoration:none}
+@media (max-width:640px){.herb-category-library__section-heading{display:block}.herb-category-library__pager{justify-content:space-between;margin:12px 0 0}.herb-category-library__pager a:only-child{margin-left:auto}}
 .herb-category-library__summary{margin:7px 0 16px;color:#526b84}
 .herb-category-library__scroll{overflow-x:auto;border:1px solid #a9bbc8;border-radius:10px}
 .herb-category-library table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.35}
@@ -2212,7 +2231,17 @@ echo $OUTPUT->header();
     <?php endif; ?>
 
     <section class="herb-category-library__section" id="disperse-wind-cold"<?php echo $selectedcategory === 'disperse-wind-cold' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 15 herbs · Common foundation: predominantly acrid herbs that release exterior Wind-Cold.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -2262,7 +2291,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="disperse-wind-heat"<?php echo $selectedcategory === 'disperse-wind-heat' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 11 herbs · Common foundation: predominantly cool and acrid herbs that disperse exterior Wind-Heat.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2314,7 +2353,17 @@ echo $OUTPUT->header();
 
 
     <section class="herb-category-library__section" id="clear-and-purge-heat"<?php echo $selectedcategory === 'clear-and-purge-heat' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 8 herbs · Common foundation: cold herbs that clear internal Heat, drain Fire or protect fluids.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2366,7 +2415,17 @@ echo $OUTPUT->header();
 
 
     <section class="herb-category-library__section" id="clear-blood-heat"<?php echo $selectedcategory === 'clear-blood-heat' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 5 herbs · Common foundation: cool Blood-level Heat and protect against injury from Fire.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2417,7 +2476,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="clear-damp-heat"<?php echo $selectedcategory === 'clear-damp-heat' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 5 herbs · Common foundation: bitter, cold herbs that clear Heat and dry Dampness.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2468,7 +2537,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="clear-toxic-heat"<?php echo $selectedcategory === 'clear-toxic-heat' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 9 herbs · Common foundation: clear Heat and relieve Fire toxicity, with distinct clinical locations and secondary actions.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2519,7 +2598,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="clear-deficient-heat"<?php echo $selectedcategory === 'clear-deficient-heat' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 3 herbs · Common foundation: clear deficient Heat and cool the Blood.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2570,7 +2659,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="purgatives"<?php echo $selectedcategory === 'purgatives' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 3 herbs · Common foundation: drain Heat and move stool to purge accumulation.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2621,7 +2720,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="laxatives"<?php echo $selectedcategory === 'laxatives' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: gently moisten the Intestines and relieve dry constipation.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2672,7 +2781,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="cathartics"<?php echo $selectedcategory === 'cathartics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: strongly drain retained fluids downward.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2723,7 +2842,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="diuretics"<?php echo $selectedcategory === 'diuretics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 17 herbs · Common foundation: promote urination, eliminate Water and Dampness, reduce edema or relieve painful urinary dribbling.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2774,7 +2903,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="dispel-wind-damp"<?php echo $selectedcategory === 'dispel-wind-damp' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: dispel Wind-Damp, relieve pain from Bi syndrome, unblock channels and benefit sinews.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2825,7 +2964,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="dissolve-hot-phlegm"<?php echo $selectedcategory === 'dissolve-hot-phlegm' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 8 herbs · Common foundation: cool and transform Phlegm-Heat, stop cough, open the chest or soften nodules.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
@@ -2871,7 +3020,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="dissolve-cold-phlegm"<?php echo $selectedcategory === 'dissolve-cold-phlegm' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 6 herbs · Common foundation: warm and transform Cold-Phlegm, regulate Lung Qi, stop cough or resolve nodules.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -2913,7 +3072,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="stop-cough-wheezing"<?php echo $selectedcategory === 'stop-cough-wheezing' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 7 herbs · Common foundation: relieve cough, stop wheezing, regulate Lung Qi, transform phlegm or moisten the Lung.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -2955,7 +3124,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="aromatics-for-damp"<?php echo $selectedcategory === 'aromatics-for-damp' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 7 herbs · Common foundation: transform excess and turbid Dampness from the Middle Jiao, regulate Qi and warm the center.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -2997,7 +3176,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="digestives"<?php echo $selectedcategory === 'digestives' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 6 herbs · Common foundation: reduce food stagnation, support digestion and restore the movement of the Middle Jiao.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3039,7 +3228,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="regulate-qi"<?php echo $selectedcategory === 'regulate-qi' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: regulate Qi, remove stagnation, relieve pain and restore movement through the Middle and Lower Jiao.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3081,7 +3280,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="stop-bleeding"<?php echo $selectedcategory === 'stop-bleeding' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: stop bleeding by moving, astringing, cooling or warming the Blood according to the pattern.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3123,7 +3332,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="activate-blood"<?php echo $selectedcategory === 'activate-blood' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 16 herbs · Common foundation: invigorate Blood, remove Blood stasis, regulate menstruation and relieve pain.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3165,7 +3384,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="warm-interior"<?php echo $selectedcategory === 'warm-interior' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 12 herbs · Common foundation: warm the Interior, expel Cold, restore Yang and alleviate pain.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3207,7 +3436,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="qi-tonics"<?php echo $selectedcategory === 'qi-tonics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 11 herbs · Common foundation: tonify the Spleen, augment Qi, generate fluids and support transformation and transportation.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3249,7 +3488,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="blood-tonics"<?php echo $selectedcategory === 'blood-tonics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 7 herbs · Common foundation: nourish Blood, support menstruation, enrich Yin and restore deficient tissues and fluids.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3291,7 +3540,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="yang-tonics"<?php echo $selectedcategory === 'yang-tonics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 14 herbs · Common foundation: tonify Kidney Yang, secure Essence, strengthen sinews and bones, and support reproductive and urinary function.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3333,7 +3592,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="yin-tonics"<?php echo $selectedcategory === 'yin-tonics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('25. Yin Tonics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('25. Yin Tonics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 9 herbs · Common foundation: nourish Yin, generate fluids, moisten dryness, clear deficiency Heat and anchor Yang.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3375,7 +3644,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="astringents"<?php echo $selectedcategory === 'astringents' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('26. Astringents', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('26. Astringents', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 14 substances · Common foundation: stabilize and bind leakage of Essence, urine, stool, sweat, Blood, fluids or Lung Qi.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3417,7 +3696,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="anchor-calm-shen"<?php echo $selectedcategory === 'anchor-calm-shen' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('27. Anchor & Calm Shen', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('27. Anchor & Calm Shen', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 4 substances · Common foundation: settle and calm the Spirit, anchor Liver Yang and control agitation or leakage.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3459,7 +3748,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="nourish-calm-shen"<?php echo $selectedcategory === 'nourish-calm-shen' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('28. Nourish & Calm Shen', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('28. Nourish & Calm Shen', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 4 herbs · Common foundation: nourish Heart or Liver Blood, calm the Spirit and address deficiency-related insomnia or agitation.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3501,7 +3800,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="orifice-opening-aromatics"<?php echo $selectedcategory === 'orifice-opening-aromatics' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('29. Orifice Opening Aromatics', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('29. Orifice Opening Aromatics', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 substance · Common foundation: clear intense Heat, open the orifices, awaken the Spirit, extinguish Wind and relieve toxicity.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3543,7 +3852,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="extinguish-liver-wind"<?php echo $selectedcategory === 'extinguish-liver-wind' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('30. Extinguish Liver Wind', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('30. Extinguish Liver Wind', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 6 substances · Common foundation: calm the Liver, extinguish internal Wind, control spasms and address Yang rising or channel obstruction.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3585,7 +3904,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="expel-parasites"<?php echo $selectedcategory === 'expel-parasites' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('31. Expel Parasites', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('31. Expel Parasites', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: expel intestinal parasites while moving Qi and relieving accumulation.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
@@ -3627,7 +3956,17 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="external-use"<?php echo $selectedcategory === 'external-use' ? '' : ' hidden'; ?>>
-        <h3><?php echo s(board_herb_category_localize('32. External Use', $ises)); ?></h3>
+        <div class="herb-category-library__section-heading">
+            <h3><?php echo s(board_herb_category_localize('32. External Use', $ises)); ?></h3>
+            <nav class="herb-category-library__pager" aria-label="<?php echo s(board_herb_category_localize('Category navigation', $ises)); ?>">
+                <?php if ($previouscategoryurl !== null): ?>
+                    <a rel="prev" href="<?php echo $previouscategoryurl->out(false); ?>"><?php echo s('← ' . board_herb_category_localize('Previous', $ises)); ?></a>
+                <?php endif; ?>
+                <?php if ($nextcategoryurl !== null): ?>
+                    <a rel="next" href="<?php echo $nextcategoryurl->out(false); ?>"><?php echo s(board_herb_category_localize('Next', $ises) . ' →'); ?></a>
+                <?php endif; ?>
+            </nav>
+        </div>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: dry Dampness, kill parasites, stop itching and warm Kidney Yang when appropriately used.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
             <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
