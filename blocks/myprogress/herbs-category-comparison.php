@@ -28,6 +28,7 @@ $categoryids = [
     'dissolve-cold-phlegm',
     'stop-cough-wheezing',
     'aromatics-for-damp',
+    'digestives',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -814,13 +815,44 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Bai Dou Kou, Sha Ren, Cao Dou Kou and Cao Guo address Cold-Damp in the center; Sha Ren is especially useful with diarrhea or pregnancy." => "Bai Dou Kou, Sha Ren, Cao Dou Kou y Cao Guo tratan Frío-Humedad en el centro; Sha Ren es especialmente útil con diarrea o embarazo.",
         "Distinctive special indications" => "Indicaciones especiales distintivas",
         "Cang Zhu improves vision, Sha Ren calms the fetus and Cao Guo is distinguished for malarial disorders." => "Cang Zhu mejora la visión, Sha Ren calma el feto y Cao Guo se distingue para trastornos maláricos.",
+        "17. Digestives" => "17. Digestivas",
+        "Board Guideline 2026 · 6 herbs · Common foundation: reduce food stagnation, support digestion and restore the movement of the Middle Jiao." => "Guía Board 2026 · 6 hierbas · Fundamento común: reducir estancamiento de alimentos, favorecer la digestión y restaurar el movimiento del Jiao Medio.",
+        "food type, degree of retention, Spleen deficiency, Qi or phlegm involvement, lactation, stones and constitutional excess versus deficiency." => "tipo de alimento, grado de retención, deficiencia de Bazo, participación de Qi o flema, lactancia, cálculos y exceso frente a deficiencia constitucional.",
+        "Reduces food stagnation, especially from meat or greasy foods; moves Blood stasis; charred form stops diarrhea; traditionally used in patterns involving hypertension, coronary artery disease or elevated cholesterol." => "Reduce estancamiento de alimentos, especialmente por carne o comidas grasosas; mueve estasis de Sangre; la forma carbonizada detiene diarrea; se usa tradicionalmente en patrones con hipertensión, enfermedad coronaria o colesterol elevado.",
+        "Avoid in Spleen and Stomach deficiency without food stagnation or with acid regurgitation." => "Evitar en deficiencia de Bazo y Estómago sin estancamiento de alimentos o con regurgitación ácida.",
+        "Reduces food stagnation from starchy foods; strengthens digestion; soothes Liver Qi; inhibits lactation at larger doses." => "Reduce estancamiento de alimentos ricos en almidón; fortalece la digestión; suaviza el Qi de Hígado; inhibe la lactancia en dosis mayores.",
+        "Avoid during nursing except at a very low dose; larger doses inhibit lactation." => "Evitar durante la lactancia salvo en dosis muy bajas; las dosis mayores inhiben la lactancia.",
+        "Reduces food stagnation from grains and starchy foods; strengthens the Spleen and Stomach." => "Reduce estancamiento de alimentos por granos y almidones; fortalece el Bazo y el Estómago.",
+        "No specific caution noted; avoid unnecessary use in pure deficiency without food retention." => "No se señala una precaución específica; evitar uso innecesario en deficiencia pura sin retención de alimentos.",
+        "Reduces food stagnation; harmonizes the Stomach; aids digestion and absorption of pills containing heavy minerals." => "Reduce estancamiento de alimentos; armoniza el Estómago; ayuda a digerir y absorber píldoras que contienen minerales pesados.",
+        "Use cautiously with Stomach Fire and during pregnancy." => "Usar con precaución en Fuego de Estómago y durante el embarazo.",
+        "Strongly reduces many types of food retention and improves Spleen transformation and transportation; secures Essence and stops enuresis; transforms urinary or biliary stones." => "Reduce intensamente muchos tipos de retención de alimentos y mejora la transformación y el transporte del Bazo; asegura la Esencia y detiene enuresis; transforma cálculos urinarios o biliares.",
+        "Avoid in Spleen deficiency without food retention." => "Evitar en deficiencia de Bazo sin retención de alimentos.",
+        "More effective when taken as powder." => "Más eficaz cuando se toma en polvo.",
+        "Reduces food accumulation with fullness and distension; descends Lung Qi and transforms phlegm for cough and wheezing." => "Reduce acumulación de alimentos con plenitud y distensión; hace descender el Qi de Pulmón y transforma flema para tos y sibilancias.",
+        "Avoid in Qi deficiency; traditionally antagonizes Ren Shen." => "Evitar en deficiencia de Qi; tradicionalmente antagoniza Ren Shen.",
+        "Crush before use." => "Triturar antes de usar.",
+        "Reduce food stagnation" => "Reducir estancamiento de alimentos",
+        "All six reduce food retention, but differ by food type, strength and accompanying Qi, Blood, phlegm or urinary involvement." => "Las seis reducen retención de alimentos, pero difieren según el tipo de comida, la intensidad y la participación de Qi, Sangre, flema o vías urinarias.",
+        "Meat and greasy foods" => "Carne y comidas grasosas",
+        "Shan Zha is the distinctive choice for meat or greasy food stagnation and also moves Blood stasis." => "Shan Zha es la elección distintiva para estancamiento por carne o comidas grasosas y además mueve estasis de Sangre.",
+        "Grains and starchy foods" => "Granos y alimentos ricos en almidón",
+        "Mai Ya and Gu Ya reduce grain and starch retention; Mai Ya also soothes Liver Qi and can inhibit lactation, while Gu Ya gently strengthens the Spleen and Stomach." => "Mai Ya y Gu Ya reducen retención de granos y almidones; Mai Ya además suaviza el Qi de Hígado y puede inhibir la lactancia, mientras Gu Ya fortalece suavemente el Bazo y el Estómago.",
+        "Minerals and difficult pills" => "Minerales y píldoras difíciles de digerir",
+        "Shen Qu harmonizes the Stomach and is traditionally added to formulas with heavy mineral ingredients to aid digestion and absorption." => "Shen Qu armoniza el Estómago y se añade tradicionalmente a fórmulas con minerales pesados para facilitar digestión y absorción.",
+        "Broad and strong food retention" => "Retención de alimentos amplia e intensa",
+        "Ji Nei Jin strongly addresses varied food retention and additionally treats enuresis and urinary or biliary stones." => "Ji Nei Jin trata intensamente diversos tipos de retención de alimentos y además aborda enuresis y cálculos urinarios o biliares.",
+        "Fullness, distension, phlegm and cough" => "Plenitud, distensión, flema y tos",
+        "Lai Fu Zi is preferred when food stagnation combines with Qi constraint, abdominal distension, phlegm, cough or wheezing." => "Lai Fu Zi se prefiere cuando el estancamiento de alimentos se combina con bloqueo de Qi, distensión abdominal, flema, tos o sibilancias.",
+        "Distinctive secondary actions" => "Acciones secundarias distintivas",
+        "Shan Zha moves Blood, Mai Ya affects lactation, Ji Nei Jin treats stones and enuresis, and Lai Fu Zi descends Lung Qi." => "Shan Zha mueve Sangre, Mai Ya afecta la lactancia, Ji Nei Jin trata cálculos y enuresis, y Lai Fu Zi hace descender el Qi de Pulmón.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110d';
+$languageversion = '20261110e';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1164,6 +1196,26 @@ $aromaticsimilarities = [
     ['Distinctive special indications', 'Cang Zhu · Sha Ren · Cao Guo', 'Cang Zhu improves vision, Sha Ren calms the fetus and Cao Guo is distinguished for malarial disorders.'],
 ];
 
+
+$digestiveherbs = [
+    ['Shan Zha', 'Crataegi Fructus', 'Sour, sweet', 'Slightly warm', 'LV, SP, ST', 'Reduces food stagnation, especially from meat or greasy foods; moves Blood stasis; charred form stops diarrhea; traditionally used in patterns involving hypertension, coronary artery disease or elevated cholesterol.', 'Avoid in Spleen and Stomach deficiency without food stagnation or with acid regurgitation.', '9–12 g', '—'],
+    ['Mai Ya', 'Hordei Fructus Germinatus', 'Sweet', 'Neutral', 'LV, SP, ST', 'Reduces food stagnation from starchy foods; strengthens digestion; soothes Liver Qi; inhibits lactation at larger doses.', 'Avoid during nursing except at a very low dose; larger doses inhibit lactation.', '9–15 g; 30–60 g to inhibit lactation', '—'],
+    ['Gu Ya', 'Setariae Fructus Germinatus', 'Sweet', 'Neutral', 'SP, ST', 'Reduces food stagnation from grains and starchy foods; strengthens the Spleen and Stomach.', 'No specific caution noted; avoid unnecessary use in pure deficiency without food retention.', '9–15 g', '—'],
+    ['Shen Qu', 'Massa Medicata Fermentata', 'Sweet, acrid', 'Warm', 'SP, ST', 'Reduces food stagnation; harmonizes the Stomach; aids digestion and absorption of pills containing heavy minerals.', 'Use cautiously with Stomach Fire and during pregnancy.', '6–15 g', '—'],
+    ['Ji Nei Jin', 'Gigeriae Galli Endothelium', 'Sweet', 'Neutral', 'UB, SI, SP, ST', 'Strongly reduces many types of food retention and improves Spleen transformation and transportation; secures Essence and stops enuresis; transforms urinary or biliary stones.', 'Avoid in Spleen deficiency without food retention.', '3–9 g; 1.5–3 g powder', 'More effective when taken as powder.'],
+    ['Lai Fu Zi', 'Raphani Semen', 'Acrid, sweet', 'Neutral', 'LU, SP, ST', 'Reduces food accumulation with fullness and distension; descends Lung Qi and transforms phlegm for cough and wheezing.', 'Avoid in Qi deficiency; traditionally antagonizes Ren Shen.', '4.5–9 g', 'Crush before use.'],
+];
+
+$digestivesimilarities = [
+    ['Reduce food stagnation', 'Shan Zha · Mai Ya · Gu Ya · Shen Qu · Ji Nei Jin · Lai Fu Zi', 'All six reduce food retention, but differ by food type, strength and accompanying Qi, Blood, phlegm or urinary involvement.'],
+    ['Meat and greasy foods', 'Shan Zha', 'Shan Zha is the distinctive choice for meat or greasy food stagnation and also moves Blood stasis.'],
+    ['Grains and starchy foods', 'Mai Ya · Gu Ya', 'Mai Ya and Gu Ya reduce grain and starch retention; Mai Ya also soothes Liver Qi and can inhibit lactation, while Gu Ya gently strengthens the Spleen and Stomach.'],
+    ['Minerals and difficult pills', 'Shen Qu', 'Shen Qu harmonizes the Stomach and is traditionally added to formulas with heavy mineral ingredients to aid digestion and absorption.'],
+    ['Broad and strong food retention', 'Ji Nei Jin', 'Ji Nei Jin strongly addresses varied food retention and additionally treats enuresis and urinary or biliary stones.'],
+    ['Fullness, distension, phlegm and cough', 'Lai Fu Zi', 'Lai Fu Zi is preferred when food stagnation combines with Qi constraint, abdominal distension, phlegm, cough or wheezing.'],
+    ['Distinctive secondary actions', 'Shan Zha · Mai Ya · Ji Nei Jin · Lai Fu Zi', 'Shan Zha moves Blood, Mai Ya affects lactation, Ji Nei Jin treats stones and enuresis, and Lai Fu Zi descends Lung Qi.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1251,6 +1303,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['dissolve-cold-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-cold-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></a>
         <a href="<?php echo $categoryurls['stop-cough-wheezing']->out(false); ?>"<?php echo $selectedcategory === 'stop-cough-wheezing' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></a>
         <a href="<?php echo $categoryurls['aromatics-for-damp']->out(false); ?>"<?php echo $selectedcategory === 'aromatics-for-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['digestives']->out(false); ?>"<?php echo $selectedcategory === 'digestives' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2028,6 +2081,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($aromaticherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="digestives"<?php echo $selectedcategory === 'digestives' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 6 herbs · Common foundation: reduce food stagnation, support digestion and restore the movement of the Middle Jiao.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($digestivesimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('food type, degree of retention, Spleen deficiency, Qi or phlegm involvement, lactation, stones and constitutional excess versus deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($digestiveherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
