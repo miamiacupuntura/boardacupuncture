@@ -977,13 +977,14 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Both direct Blood downward; Huai Niu Xi emphasizes tonifying Liver and Kidney and strengthening sinews and bones, while Chuan Niu Xi emphasizes moving Blood and dispelling Wind-Damp." => "Ambas dirigen la Sangre hacia abajo; Huai Niu Xi enfatiza tonificar Hígado y Riñón y fortalecer tendones y huesos, mientras Chuan Niu Xi enfatiza mover Sangre y dispersar Viento-Humedad.",
         "Pregnancy and strong Blood movement" => "Embarazo y movimiento intenso de Sangre",
         "Most herbs in this category require avoidance or strong caution during pregnancy because they invigorate Blood or break stasis." => "La mayoría de las hierbas de esta categoría requieren evitarse o usarse con gran precaución durante el embarazo porque vigorizan la Sangre o rompen estasis.",
+        "Sour, bitter" => "Ácida, amarga",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110l';
+$languageversion = '20261110m';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
