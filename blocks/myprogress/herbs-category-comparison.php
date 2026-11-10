@@ -14,6 +14,10 @@ $backurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
     'view' => 'library',
 ] + ($ises ? ['lang' => 'es'] : []));
+$languageurl = new moodle_url(
+    '/blocks/myprogress/herbs-category-comparison.php',
+    $ises ? [] : ['lang' => 'es']
+);
 
 $herbs = [
     ['Ma Huang', 'Ephedrae Herba', 'Acrid, slightly bitter', 'Warm', 'LU, UB', 'Strongly releases an excess exterior pattern; disseminates Lung Qi; relieves wheezing; promotes urination.', 'Avoid in deficiency sweating; use caution with hypertension.', '2–9 g', 'Cook first; remove foam.'],
@@ -238,6 +242,7 @@ echo $OUTPUT->header();
 .herb-category-library__eyebrow{margin:0 0 5px;color:#087c69;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .herb-category-library h2{margin:0 0 8px;font-size:clamp(26px,4vw,40px)}
 .herb-category-library__intro{max-width:820px;margin:0;color:#526b84;line-height:1.55}
+.herb-category-library__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
 .herb-category-library__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 15px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81;font-weight:800;text-decoration:none;white-space:nowrap}
 .herb-category-library__back:hover{background:#eef7f5;text-decoration:none}
 .herb-category-library__index{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
@@ -268,7 +273,7 @@ echo $OUTPUT->header();
 .herb-category-library__similarities table td:nth-child(1){font-weight:800;background:#eef9f7}
 .herb-category-library__similarities table td:nth-child(2){font-weight:700}
 .herb-category-library__foundation{margin:14px 0 0;padding:13px 15px;border-left:5px solid #087c69;background:#e5f6f2}
-@media(max-width:720px){.herb-category-library__top{flex-direction:column}.herb-category-library__back{width:100%;justify-content:center}}
+@media(max-width:720px){.herb-category-library__top{flex-direction:column}.herb-category-library__actions{width:100%;flex-direction:column}.herb-category-library__back{width:100%;justify-content:center}}
 </style>
 <main class="herb-category-library">
     <header class="herb-category-library__top">
@@ -279,7 +284,10 @@ echo $OUTPUT->header();
                 ? 'Compara propiedades, canales, funciones, precauciones y semejanzas clínicas dentro de cada categoría.'
                 : 'Compare properties, channels, functions, cautions and clinical similarities within each herb category.'); ?></p>
         </div>
-        <a class="herb-category-library__back" href="<?php echo $backurl->out(false); ?>"><?php echo s($ises ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
+        <div class="herb-category-library__actions">
+            <a class="herb-category-library__back" href="<?php echo $backurl->out(false); ?>"><?php echo s($ises ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
+            <a class="herb-category-library__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo s($ises ? 'English' : 'Español'); ?></a>
+        </div>
     </header>
 
     <nav class="herb-category-library__index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
