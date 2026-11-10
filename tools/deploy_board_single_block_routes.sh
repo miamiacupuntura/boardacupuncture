@@ -977,6 +977,14 @@ grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'herbs'], true)" "$BOARD_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'formulas'], true)" "$BOARD_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'clinical'], true)" "$BOARD_TEMP"
+grep -Fq "\$unifiedexamhistoryurl = new moodle_url('/blocks/menu/exam-history.php', \$languagecontext);" "$BOARD_TEMP"
+grep -Fq "← Historial de exámenes" "$BOARD_TEMP"
+grep -Fq "← Exam History" "$BOARD_TEMP"
+history_return_button_count="$(grep -Fc 'href="<?php echo s(\$unifiedexamhistoryurl->out(false)); ?>"' "$BOARD_TEMP" || true)"
+[[ "$history_return_button_count" -eq 2 ]] || {
+    echo "ERROR: los historiales internos no tienen sus dos botones de regreso a Exam History." >&2
+    exit 1
+}
 
 # Guardas de conservación: las colecciones y sus recorridos deben seguir presentes.
 for required in     '$primarychapters as $chapter'     '$practicechapters as $chapter'     '$comparisonoverviewchapters as $chapter'     '$otherchapters as $chapter'; do
@@ -1127,6 +1135,8 @@ echo "OK: los quizzes Moodle en progreso o vencidos muestran Retomar quiz / Resu
 echo "OK: cada enlace Moodle usa el attempt y cmid exactos del intento guardado."
 echo "OK: los exámenes Board incompletos muestran Retomar examen / Resume Exam."
 echo "OK: cada enlace Board vuelve al modo adaptativo, lineal o casos clínicos que corresponde."
+echo "OK: los historiales internos de Board y Clinical Cases tienen un botón para volver a Exam History."
+echo "OK: los botones de regreso conservan Español o English."
 echo "OK: los intentos finalizados no muestran enlaces de reanudación."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
