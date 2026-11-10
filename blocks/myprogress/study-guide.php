@@ -806,15 +806,6 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $benskycrosswalkurl->out(false); ?>">
                                     <span><?php echo s($tr('Bensky Category Crosswalk')); ?><small><?php echo s($ises ? 'Compara categorías de hierbas y fórmulas' : 'Compare herb and formula categories'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $pathologycomparisonsurl->out(false); ?>">
-                                    <span><?php echo s($tr('Pathology Comparisons')); ?><small><?php echo s($ises ? '66 comparaciones clínicas' : '66 clinical comparisons'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $patterncomparisonsurl->out(false); ?>">
-                                    <span><?php echo s($tr('Pattern Comparisons')); ?><small><?php echo s($ises ? '50 comparaciones de patrones' : '50 pattern comparisons'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $patternmaciociacomparisonurl->out(false); ?>">
-                                    <span><?php echo s($tr('Pattern Comparison Maciocia')); ?><small><?php echo s($ises ? '100 consejos clínicos de patrones' : '100 clinical pattern tips'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
                             </nav>
                         </section>
 
@@ -844,6 +835,17 @@ echo $OUTPUT->header();
                                     <b><?php echo s($ises ? 'Comparaciones clínicas' : 'Clinical comparisons'); ?></b>
                                 </span>
                             </header>
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Comparación de patologías y patrones' : 'Comparison Pathology and Patterns'); ?>">
+                                <a class="subject-study-library__journey-option" href="<?php echo $pathologycomparisonsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Pathology Comparisons')); ?><small><?php echo s($ises ? '66 comparaciones clínicas' : '66 clinical comparisons'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $patterncomparisonsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Pattern Comparisons')); ?><small><?php echo s($ises ? '50 comparaciones de patrones' : '50 pattern comparisons'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $patternmaciociacomparisonurl->out(false); ?>">
+                                    <span><?php echo s($tr('Pattern Comparison Maciocia')); ?><small><?php echo s($ises ? '100 consejos clínicos de patrones' : '100 clinical pattern tips'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                            </nav>
                         </section>
 
                         <section class="subject-study-library__journey-card">
