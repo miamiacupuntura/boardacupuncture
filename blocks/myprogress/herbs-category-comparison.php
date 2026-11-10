@@ -887,13 +887,15 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Wu Yao is useful for Cold pain and frequent urination; Chen Xiang warms the Kidney while descending rebellious Qi for asthma or wheezing." => "Wu Yao es útil para dolor por Frío y micción frecuente; Chen Xiang calienta el Riñón mientras hace descender Qi rebelde en asma o sibilancias.",
         "Prevent stagnation from tonics" => "Prevenir estancamiento causado por tónicos",
         "Chen Pi and Mu Xiang prevent rich tonic herbs from obstructing digestion; Mu Xiang especially regulates intestinal Qi." => "Chen Pi y Mu Xiang evitan que hierbas tónicas densas obstruyan la digestión; Mu Xiang regula especialmente el Qi intestinal.",
+        "Acrid, slightly bitter, slightly sweet" => "Picante, ligeramente amarga, ligeramente dulce",
+        "Cold, slightly toxic" => "Fría, ligeramente tóxica",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110g';
+$languageversion = '20261110h';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
