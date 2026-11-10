@@ -32,6 +32,7 @@ $categoryids = [
     'regulate-qi',
     'stop-bleeding',
     'activate-blood',
+    'warm-interior',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -978,13 +979,58 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Pregnancy and strong Blood movement" => "Embarazo y movimiento intenso de Sangre",
         "Most herbs in this category require avoidance or strong caution during pregnancy because they invigorate Blood or break stasis." => "La mayoría de las hierbas de esta categoría requieren evitarse o usarse con gran precaución durante el embarazo porque vigorizan la Sangre o rompen estasis.",
         "Sour, bitter" => "Ácida, amarga",
+        "21. Warm Interior" => "21. Calentar el Interior",
+        "Board Guideline 2026 · 12 herbs · Common foundation: warm the Interior, expel Cold, restore Yang and alleviate pain." => "Guía Board 2026 · 12 hierbas · Fundamento común: calentar el Interior, expulsar Frío, restaurar Yang y aliviar dolor.",
+        "Cold location and severity, Yang collapse, Middle Jiao or Kidney involvement, rebellious Qi, pain, phlegm, toxicity, pregnancy and required preparation." => "localización e intensidad del Frío, colapso de Yang, participación del Jiao Medio o Riñón, Qi rebelde, dolor, flema, toxicidad, embarazo y preparación necesaria.",
+        "Expels Wind-Cold-Damp and relieves painful obstruction; reduces swelling and dispels putrefaction; strongly warms the channels." => "Expulsa Viento-Frío-Humedad y alivia obstrucción dolorosa; reduce hinchazón y dispersa putrefacción; calienta intensamente los canales.",
+        "Avoid in Yin deficiency with Heat, true Heat with false Cold, or pregnancy; incompatible with Ban Xia, Bei Mu, Gua Lou, Bai Lian and Bai Ji; traditionally antagonizes Wu Gong." => "Evitar en deficiencia de Yin con Calor, Calor verdadero con Frío falso o embarazo; incompatible con Ban Xia, Bei Mu, Gua Lou, Bai Lian y Bai Ji; tradicionalmente antagoniza Wu Gong.",
+        "Boil 30–60 minutes longer than other herbs." => "Hervir entre 30 y 60 minutos más que las otras hierbas.",
+        "Strongly expels Wind-Cold-Damp and stops pain; more toxic than Chuan Wu and used mainly in carefully prepared or topical applications." => "Expulsa intensamente Viento-Frío-Humedad y detiene dolor; es más tóxica que Chuan Wu y se usa principalmente en preparaciones cuidadosas o aplicaciones tópicas.",
+        "Avoid in Heat patterns, Yin deficiency, pregnancy or without proper preparation; shares major aconite incompatibilities." => "Evitar en patrones de Calor, deficiencia de Yin, embarazo o sin preparación adecuada; comparte las principales incompatibilidades del acónito.",
+        "Restores devastated Yang, warms Fire and assists Yang, disperses Cold through the channels and relieves pain." => "Restaura Yang devastado, calienta el Fuego y ayuda al Yang, dispersa Frío por los canales y alivia dolor.",
+        "Avoid in Yin deficiency with Heat, reckless movement of hot Blood or pregnancy; use only the properly prepared form." => "Evitar en deficiencia de Yin con Calor, movimiento imprudente de Sangre caliente o embarazo; usar únicamente la forma preparada correctamente.",
+        "Warms the Spleen and Stomach and expels Cold; warms the Lung and transforms phlegm; the charred form warms channels and stops bleeding." => "Calienta Bazo y Estómago y expulsa Frío; calienta el Pulmón y transforma flema; la forma carbonizada calienta canales y detiene sangrado.",
+        "Avoid in Yin deficiency with Heat, Interior excess Heat, reckless movement of hot Blood or pregnancy." => "Evitar en deficiencia de Yin con Calor, Calor Interior de exceso, movimiento imprudente de Sangre caliente o embarazo.",
+        "Disperses deep Cold, warms the channels and relieves pain; leads Fire back to its source and encourages generation of Qi and Blood." => "Dispersa Frío profundo, calienta los canales y alivia dolor; conduce el Fuego de regreso a su origen y favorece la generación de Qi y Sangre.",
+        "Avoid in Yin deficiency with Heat, Interior excess Heat, reckless movement of hot Blood or pregnancy." => "Evitar en deficiencia de Yin con Calor, Calor Interior de exceso, movimiento imprudente de Sangre caliente o embarazo.",
+        "Add near the end; powder may be taken separately." => "Agregar cerca del final; el polvo puede tomarse por separado.",
+        "Warms the Middle Jiao and stops pain; kills parasites and alleviates abdominal pain." => "Calienta el Jiao Medio y detiene dolor; elimina parásitos y alivia dolor abdominal.",
+        "Avoid in Yin deficiency with Heat or pregnancy; traditionally antagonizes Gua Lou and counteracts Kuan Dong Hua, Fu Zi and Fang Feng." => "Evitar en deficiencia de Yin con Calor o embarazo; tradicionalmente antagoniza Gua Lou y contrarresta Kuan Dong Hua, Fu Zi y Fang Feng.",
+        "Warms the Middle Jiao, stops vomiting and diarrhea, disperses Cold and relieves vertex headache; soothes Liver Qi and leads Fire downward." => "Calienta el Jiao Medio, detiene vómitos y diarrea, dispersa Frío y alivia cefalea del vértex; suaviza el Qi de Hígado y conduce el Fuego hacia abajo.",
+        "Avoid in Yin deficiency with Heat; prolonged use may injure Yin; traditionally antagonizes Dan Shen and Zi Shi Ying." => "Evitar en deficiencia de Yin con Calor; el uso prolongado puede lesionar Yin; tradicionalmente antagoniza Dan Shen y Zi Shi Ying.",
+        "Warms the Liver and Kidney, regulates Qi and stops Cold pain, especially in the lower abdomen." => "Calienta Hígado y Riñón, regula el Qi y detiene dolor por Frío, especialmente en el abdomen inferior.",
+        "Warms the Middle Jiao and descends rebellious Stomach Qi; warms the Kidney and assists Yang." => "Calienta el Jiao Medio y hace descender el Qi rebelde de Estómago; calienta el Riñón y ayuda al Yang.",
+        "Avoid in febrile disease or Yin deficiency; traditionally antagonizes Yu Jin." => "Evitar en enfermedad febril o deficiencia de Yin; tradicionalmente antagoniza Yu Jin.",
+        "Warms the Middle Jiao, stops pain and directs rebellious Stomach Qi downward." => "Calienta el Jiao Medio, detiene dolor y dirige hacia abajo el Qi rebelde de Estómago.",
+        "Avoid in Yin deficiency with Heat; weak patients should not use it alone and may require supporting tonics." => "Evitar en deficiencia de Yin con Calor; los pacientes débiles no deben usarla sola y pueden requerir tónicos de apoyo.",
+        "Warms the Middle Jiao and stops pain; also used for headache, nasal congestion and toothache in traditional applications." => "Calienta el Jiao Medio y detiene dolor; también se usa para cefalea, congestión nasal y dolor dental en aplicaciones tradicionales.",
+        "Avoid in Heat from excess or deficiency." => "Evitar en Calor por exceso o deficiencia.",
+        "Warms the Middle Jiao and supports digestion; disperses Cold and relieves abdominal discomfort." => "Calienta el Jiao Medio y favorece la digestión; dispersa Frío y alivia malestar abdominal.",
+        "Warm the Interior and expel Cold" => "Calentar el Interior y expulsar Frío",
+        "All twelve warm the Interior, but selection depends on Cold depth, organ location, Yang collapse, pain, rebellious Qi, toxicity and constitutional strength." => "Las doce calientan el Interior, pero la selección depende de la profundidad del Frío, localización orgánica, colapso de Yang, dolor, Qi rebelde, toxicidad y fortaleza constitucional.",
+        "Aconite group: Chuan Wu, Cao Wu and Fu Zi" => "Grupo de acónitos: Chuan Wu, Cao Wu y Fu Zi",
+        "Chuan Wu and Cao Wu emphasize painful Wind-Cold-Damp obstruction; Cao Wu is more toxic. Fu Zi is the principal choice for restoring devastated Yang and warming all channels." => "Chuan Wu y Cao Wu enfatizan obstrucción dolorosa por Viento-Frío-Humedad; Cao Wu es más tóxica. Fu Zi es la opción principal para restaurar Yang devastado y calentar todos los canales.",
+        "Restore Yang and warm the Kidney" => "Restaurar Yang y calentar el Riñón",
+        "Fu Zi restores collapsed Yang; Rou Gui leads Fire back to its source; Xiao Hui Xiang and Ding Xiang warm the Kidney with more focused Qi-regulating actions." => "Fu Zi restaura Yang colapsado; Rou Gui conduce el Fuego a su origen; Xiao Hui Xiang y Ding Xiang calientan el Riñón con acciones más específicas sobre el Qi.",
+        "Warm the Middle Jiao and stop pain" => "Calentar el Jiao Medio y detener dolor",
+        "Gan Jiang, Hua Jiao, Wu Zhu Yu, Ding Xiang, Gao Liang Jiang, Bi Ba and Hu Jiao warm the digestive center, differing in vomiting, diarrhea, parasites, pain and digestive emphasis." => "Gan Jiang, Hua Jiao, Wu Zhu Yu, Ding Xiang, Gao Liang Jiang, Bi Ba y Hu Jiao calientan el centro digestivo y difieren en énfasis sobre vómitos, diarrea, parásitos, dolor y digestión.",
+        "Descend rebellious Stomach Qi" => "Hacer descender el Qi rebelde de Estómago",
+        "Wu Zhu Yu, Ding Xiang and Gao Liang Jiang warm the Middle and direct rebellious Qi downward; Wu Zhu Yu also treats vertex headache and diarrhea." => "Wu Zhu Yu, Ding Xiang y Gao Liang Jiang calientan el Jiao Medio y dirigen Qi rebelde hacia abajo; Wu Zhu Yu además trata cefalea del vértex y diarrea.",
+        "Warm the Lung and transform phlegm" => "Calentar el Pulmón y transformar flema",
+        "Gan Jiang uniquely emphasizes warming the Lung and transforming Cold-phlegm within this category." => "Gan Jiang enfatiza de forma distintiva calentar el Pulmón y transformar Flema-Frío dentro de esta categoría.",
+        "Cold pain and Liver Qi" => "Dolor por Frío y Qi de Hígado",
+        "Wu Zhu Yu and Xiao Hui Xiang warm the Liver and relieve Cold pain; Wu Zhu Yu is more descending and toxic, while Xiao Hui Xiang is gentler." => "Wu Zhu Yu y Xiao Hui Xiang calientan el Hígado y alivian dolor por Frío; Wu Zhu Yu es más descendente y tóxica, mientras Xiao Hui Xiang es más suave.",
+        "Toxicity and prolonged cooking" => "Toxicidad y cocción prolongada",
+        "Chuan Wu, Cao Wu and Fu Zi require correct preparation and prolonged cooking; Hua Jiao and Wu Zhu Yu also require caution because of toxicity or Yin injury." => "Chuan Wu, Cao Wu y Fu Zi requieren preparación correcta y cocción prolongada; Hua Jiao y Wu Zhu Yu también exigen precaución por toxicidad o lesión de Yin.",
+        "Heat, Yin deficiency and pregnancy" => "Calor, deficiencia de Yin y embarazo",
+        "Warm Interior herbs are generally inappropriate for Heat or Yin-deficiency Heat; several strongly warming herbs also require avoidance during pregnancy." => "Las hierbas que calientan el Interior generalmente no son apropiadas para Calor o Calor por deficiencia de Yin; varias hierbas fuertemente calientes también deben evitarse durante el embarazo.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110m';
+$languageversion = '20261110n';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1430,6 +1476,34 @@ $activatebloodsimilarities = [
     ['Pregnancy and strong Blood movement', 'Most herbs in this category', 'Most herbs in this category require avoidance or strong caution during pregnancy because they invigorate Blood or break stasis.'],
 ];
 
+
+$warminteriorherbs = [
+    ['Chuan Wu', 'Aconiti Radix', 'Acrid, bitter', 'Hot, very toxic', 'LV, SP, KD', 'Expels Wind-Cold-Damp and relieves painful obstruction; reduces swelling and dispels putrefaction; strongly warms the channels.', 'Avoid in Yin deficiency with Heat, true Heat with false Cold, or pregnancy; incompatible with Ban Xia, Bei Mu, Gua Lou, Bai Lian and Bai Ji; traditionally antagonizes Wu Gong.', '1.5–4.5 g', 'Boil 30–60 minutes longer than other herbs.'],
+    ['Cao Wu', 'Aconiti Kusnezoffii Radix', 'Acrid, bitter', 'Hot, very toxic', 'LV, SP, KD', 'Strongly expels Wind-Cold-Damp and stops pain; more toxic than Chuan Wu and used mainly in carefully prepared or topical applications.', 'Avoid in Heat patterns, Yin deficiency, pregnancy or without proper preparation; shares major aconite incompatibilities.', '1.5–3 g', 'Boil 30–60 minutes longer than other herbs.'],
+    ['Fu Zi', 'Aconiti Lateralis Radix Praeparata', 'Acrid', 'Hot, toxic', 'HT, KD, SP', 'Restores devastated Yang, warms Fire and assists Yang, disperses Cold through the channels and relieves pain.', 'Avoid in Yin deficiency with Heat, reckless movement of hot Blood or pregnancy; use only the properly prepared form.', '3–15 g', 'Boil 30–60 minutes longer than other herbs.'],
+    ['Gan Jiang', 'Zingiberis Rhizoma', 'Acrid', 'Hot', 'HT, LU, SP, ST', 'Warms the Spleen and Stomach and expels Cold; warms the Lung and transforms phlegm; the charred form warms channels and stops bleeding.', 'Avoid in Yin deficiency with Heat, Interior excess Heat, reckless movement of hot Blood or pregnancy.', '3–9 g', '—'],
+    ['Rou Gui', 'Cinnamomi Cortex', 'Acrid, sweet', 'Hot', 'HT, KD, LV, SP', 'Disperses deep Cold, warms the channels and relieves pain; leads Fire back to its source and encourages generation of Qi and Blood.', 'Avoid in Yin deficiency with Heat, Interior excess Heat, reckless movement of hot Blood or pregnancy.', '1.5–4.5 g decoction; 1–2 g powder', 'Add near the end; powder may be taken separately.'],
+    ['Hua Jiao', 'Zanthoxyli Pericarpium', 'Acrid', 'Hot, slightly toxic', 'KD, SP, ST', 'Warms the Middle Jiao and stops pain; kills parasites and alleviates abdominal pain.', 'Avoid in Yin deficiency with Heat or pregnancy; traditionally antagonizes Gua Lou and counteracts Kuan Dong Hua, Fu Zi and Fang Feng.', '1.5–6 g', '—'],
+    ['Wu Zhu Yu', 'Evodiae Fructus', 'Acrid, bitter', 'Hot, slightly toxic', 'LV, SP, ST', 'Warms the Middle Jiao, stops vomiting and diarrhea, disperses Cold and relieves vertex headache; soothes Liver Qi and leads Fire downward.', 'Avoid in Yin deficiency with Heat; prolonged use may injure Yin; traditionally antagonizes Dan Shen and Zi Shi Ying.', '3–9 g', '—'],
+    ['Xiao Hui Xiang', 'Foeniculi Fructus', 'Acrid', 'Warm', 'LV, KD, SP, ST', 'Warms the Liver and Kidney, regulates Qi and stops Cold pain, especially in the lower abdomen.', 'Use cautiously in Yin deficiency with Heat.', '3–9 g', '—'],
+    ['Ding Xiang', 'Caryophylli Flos', 'Acrid', 'Warm', 'KD, SP, ST', 'Warms the Middle Jiao and descends rebellious Stomach Qi; warms the Kidney and assists Yang.', 'Avoid in febrile disease or Yin deficiency; traditionally antagonizes Yu Jin.', '1–3 g', '—'],
+    ['Gao Liang Jiang', 'Alpiniae Officinarum Rhizoma', 'Acrid', 'Hot', 'SP, ST', 'Warms the Middle Jiao, stops pain and directs rebellious Stomach Qi downward.', 'Avoid in Yin deficiency with Heat; weak patients should not use it alone and may require supporting tonics.', '3–9 g', '—'],
+    ['Bi Ba', 'Piperis Longi Fructus', 'Acrid', 'Hot', 'ST, LI', 'Warms the Middle Jiao and stops pain; also used for headache, nasal congestion and toothache in traditional applications.', 'Avoid in Heat from excess or deficiency.', '1.5–4.5 g', '—'],
+    ['Hu Jiao', 'Piperis Fructus', 'Acrid', 'Hot', 'LI, ST', 'Warms the Middle Jiao and supports digestion; disperses Cold and relieves abdominal discomfort.', 'Avoid in Yin deficiency with Heat.', '1.5–3 g decoction; 0.5–1 g pill', 'Crush before use.'],
+];
+
+$warminteriorsimilarities = [
+    ['Warm the Interior and expel Cold', 'Chuan Wu · Cao Wu · Fu Zi · Gan Jiang · Rou Gui · Hua Jiao · Wu Zhu Yu · Xiao Hui Xiang · Ding Xiang · Gao Liang Jiang · Bi Ba · Hu Jiao', 'All twelve warm the Interior, but selection depends on Cold depth, organ location, Yang collapse, pain, rebellious Qi, toxicity and constitutional strength.'],
+    ['Aconite group: Chuan Wu, Cao Wu and Fu Zi', 'Chuan Wu · Cao Wu · Fu Zi', 'Chuan Wu and Cao Wu emphasize painful Wind-Cold-Damp obstruction; Cao Wu is more toxic. Fu Zi is the principal choice for restoring devastated Yang and warming all channels.'],
+    ['Restore Yang and warm the Kidney', 'Fu Zi · Rou Gui · Xiao Hui Xiang · Ding Xiang', 'Fu Zi restores collapsed Yang; Rou Gui leads Fire back to its source; Xiao Hui Xiang and Ding Xiang warm the Kidney with more focused Qi-regulating actions.'],
+    ['Warm the Middle Jiao and stop pain', 'Gan Jiang · Hua Jiao · Wu Zhu Yu · Ding Xiang · Gao Liang Jiang · Bi Ba · Hu Jiao', 'Gan Jiang, Hua Jiao, Wu Zhu Yu, Ding Xiang, Gao Liang Jiang, Bi Ba and Hu Jiao warm the digestive center, differing in vomiting, diarrhea, parasites, pain and digestive emphasis.'],
+    ['Descend rebellious Stomach Qi', 'Wu Zhu Yu · Ding Xiang · Gao Liang Jiang', 'Wu Zhu Yu, Ding Xiang and Gao Liang Jiang warm the Middle and direct rebellious Qi downward; Wu Zhu Yu also treats vertex headache and diarrhea.'],
+    ['Warm the Lung and transform phlegm', 'Gan Jiang', 'Gan Jiang uniquely emphasizes warming the Lung and transforming Cold-phlegm within this category.'],
+    ['Cold pain and Liver Qi', 'Wu Zhu Yu · Xiao Hui Xiang', 'Wu Zhu Yu and Xiao Hui Xiang warm the Liver and relieve Cold pain; Wu Zhu Yu is more descending and toxic, while Xiao Hui Xiang is gentler.'],
+    ['Toxicity and prolonged cooking', 'Chuan Wu · Cao Wu · Fu Zi · Hua Jiao · Wu Zhu Yu', 'Chuan Wu, Cao Wu and Fu Zi require correct preparation and prolonged cooking; Hua Jiao and Wu Zhu Yu also require caution because of toxicity or Yin injury.'],
+    ['Heat, Yin deficiency and pregnancy', 'General category caution', 'Warm Interior herbs are generally inappropriate for Heat or Yin-deficiency Heat; several strongly warming herbs also require avoidance during pregnancy.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1521,6 +1595,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['regulate-qi']->out(false); ?>"<?php echo $selectedcategory === 'regulate-qi' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></a>
         <a href="<?php echo $categoryurls['stop-bleeding']->out(false); ?>"<?php echo $selectedcategory === 'stop-bleeding' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></a>
         <a href="<?php echo $categoryurls['activate-blood']->out(false); ?>"<?php echo $selectedcategory === 'activate-blood' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('20. Activate Blood', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['warm-interior']->out(false); ?>"<?php echo $selectedcategory === 'warm-interior' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2466,6 +2541,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($activatebloodherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="warm-interior"<?php echo $selectedcategory === 'warm-interior' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 12 herbs · Common foundation: warm the Interior, expel Cold, restore Yang and alleviate pain.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($warminteriorsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Cold location and severity, Yang collapse, Middle Jiao or Kidney involvement, rebellious Qi, pain, phlegm, toxicity, pregnancy and required preparation.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($warminteriorherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
