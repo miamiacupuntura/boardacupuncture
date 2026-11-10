@@ -175,7 +175,7 @@ $areas = [
                 'secondary' => true,
             ],
             [
-                'title' => 'Patterns Tips Maciocia',
+                'title' => 'Pattern Comparison Maciocia',
                 'description' => 'Review signs, tongue, pulse and representative formulas through 100 organ-pattern clinical tips.',
                 'path' => '/study-guide/comparisons/patterns-tips-maciocia.html',
                 'anchor' => '',
@@ -320,7 +320,7 @@ $spanishcopy = [
     'Separate pinyin groups, geographic prefixes and Western common names that hide different species.' => 'Distingue grupos de pinyin, prefijos geográficos y nombres comunes occidentales que ocultan especies diferentes.',
     'Supplemental Herb Families' => 'Familias suplementarias de hierbas',
     'Review six additional plant, medicinal-part and related-herb groups that are commonly confused.' => 'Repasa seis grupos adicionales de plantas, partes medicinales y hierbas relacionadas que suelen confundirse.',
-    'Patterns Tips Maciocia' => 'Consejos de patrones de Maciocia',
+    'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia',
     'Review signs, tongue, pulse and representative formulas through 100 organ-pattern clinical tips.' => 'Repasa signos, lengua, pulso y fórmulas representativas mediante 100 consejos clínicos de patrones de órganos.',
     'Most Important Formulas' => 'Fórmulas más importantes',
     'Review 85 formulas by pattern, action, decisive clue, contrast, memory cue and safety.' => 'Repasa 85 fórmulas por patrón, acción, pista decisiva, contraste, recurso de memoria y seguridad.',
@@ -464,7 +464,9 @@ $herbmiscchapters = array_values(array_filter(
 $secondaryguidechapters = array_values(array_filter(
     $otherchapters,
     static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
-        return !$isHerbChapter($chapter) && !$isFormulaChapter($chapter);
+        return !$isHerbChapter($chapter)
+            && !$isFormulaChapter($chapter)
+            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/patterns-tips-maciocia.html';
     }
 ));
 $requestedview = optional_param('view', '', PARAM_ALPHA);
@@ -548,6 +550,9 @@ $pathologycomparisonsurl = new moodle_url(
 );
 $patterncomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'
+);
+$patternmaciociacomparisonurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/patterns-tips-maciocia-es.html' : '/study-guide/comparisons/patterns-tips-maciocia.html'
 );
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
@@ -806,6 +811,9 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $patterncomparisonsurl->out(false); ?>">
                                     <span><?php echo s($tr('Pattern Comparisons')); ?><small><?php echo s($ises ? '50 comparaciones de patrones' : '50 pattern comparisons'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $patternmaciociacomparisonurl->out(false); ?>">
+                                    <span><?php echo s($tr('Pattern Comparison Maciocia')); ?><small><?php echo s($ises ? '100 consejos clínicos de patrones' : '100 clinical pattern tips'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
