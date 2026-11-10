@@ -357,7 +357,7 @@ class block_menu extends block_base {
                         'area' => 'herbology',
                         'view' => 'library',
                     ]);
-                    $libraryaction = '<a class="board-hub__action board-hub__action--board-library '
+                    $libraryaction = '<a class="board-hub__action board-hub__action--guide '
                         . 'comparisons-dashboard-link" href="' . $libraryurl->out(false) . '">Study Guide</a>';
                 }
                 if ($showstaffresources && $subject['area'] !== 'herbology') {
