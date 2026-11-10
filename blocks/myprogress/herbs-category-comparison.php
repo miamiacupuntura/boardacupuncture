@@ -1310,13 +1310,14 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Ye Jiao Teng nourishes Blood while opening channels and may be used externally to relieve itching." => "Ye Jiao Teng nutre la Sangre mientras abre canales y puede usarse externamente para aliviar picazón.",
         "Deficiency versus excess agitation" => "Agitación por deficiencia frente a exceso",
         "These nourishing herbs suit deficiency-related insomnia; severe excess Heat, phlegm or unresolved excess patterns require different treatment." => "Estas hierbas nutritivas son apropiadas para insomnio por deficiencia; Calor intenso de exceso, flema o patrones de exceso sin resolver requieren otro tratamiento.",
+        "Sweet, sour" => "Dulce, ácida",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110x';
+$languageversion = '20261110y';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
