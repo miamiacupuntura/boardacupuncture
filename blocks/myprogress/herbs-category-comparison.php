@@ -81,7 +81,7 @@ echo $OUTPUT->header();
 .herb-category-library__herb-identity small{display:block;margin-top:4px;color:#526b84;font-size:12px;font-style:italic;font-weight:600}
 .herb-category-library__compact{font-size:12px}
 .herb-category-library__dosage{white-space:nowrap;text-align:center}
-.herb-category-library__similarities{margin-top:18px}
+.herb-category-library__similarities{margin:18px 0}
 .herb-category-library__similarities h4{margin:0;padding:12px 14px;border-radius:10px 10px 0 0;background:#087c69;color:#fff;font-size:20px}
 .herb-category-library__similarities table td:nth-child(1){font-weight:800;background:#eef9f7}
 .herb-category-library__similarities table td:nth-child(2){font-weight:700}
@@ -107,6 +107,21 @@ echo $OUTPUT->header();
     <section class="herb-category-library__section" id="disperse-wind-cold">
         <h3>1. Disperse Wind-Cold</h3>
         <p class="herb-category-library__summary">Board Guideline 2026 · 15 herbs · Common foundation: predominantly acrid herbs that release exterior Wind-Cold.</p>
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($similarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> sweating strength, pain location, nasal involvement, Lung symptoms and Dampness.</p>
+        </div>
+
         <div class="herb-category-library__scroll">
             <table class="herb-category-library__comparison-table">
                 <colgroup>
@@ -136,21 +151,6 @@ echo $OUTPUT->header();
                 <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-
-        <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
-            <div class="herb-category-library__scroll">
-                <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($similarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> sweating strength, pain location, nasal involvement, Lung symptoms and Dampness.</p>
         </div>
     </section>
 </main>
