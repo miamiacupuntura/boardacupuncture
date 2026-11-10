@@ -35,6 +35,7 @@ $categoryids = [
     'warm-interior',
     'qi-tonics',
     'blood-tonics',
+    'yang-tonics',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1107,13 +1108,61 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Long Yan Rou tonifies Heart and Spleen, nourishes Blood and calms the Spirit, especially when deficiency affects sleep or emotional stability." => "Long Yan Rou tonifica Corazón y Bazo, nutre Sangre y calma el Shen, especialmente cuando la deficiencia afecta sueño o estabilidad emocional.",
         "Cloying tonics and digestive weakness" => "Tónicos empalagosos y debilidad digestiva",
         "Shu Di Huang and E Jiao are rich and cloying; Long Yan Rou and other sweet tonics can aggravate Dampness or phlegm when digestion is weak." => "Shu Di Huang y E Jiao son densas y empalagosas; Long Yan Rou y otros tónicos dulces pueden agravar Humedad o flema cuando la digestión es débil.",
+        "24. Yang Tonics" => "24. Tónicos de Yang",
+        "Board Guideline 2026 · 14 herbs · Common foundation: tonify Kidney Yang, secure Essence, strengthen sinews and bones, and support reproductive and urinary function." => "Guía Board 2026 · 14 hierbas · Fundamento común: tonificar Yang de Riñón, asegurar Esencia, fortalecer tendones y huesos y apoyar la función reproductiva y urinaria.",
+        "degree of Yang deficiency, Essence or urine leakage, infertility, bowel dryness, Wind-Damp pain, bone injury, diarrhea, fetal stability, Heat signs and toxicity." => "grado de deficiencia de Yang, pérdida de Esencia u orina, infertilidad, sequedad intestinal, dolor por Viento-Humedad, lesión ósea, diarrea, estabilidad fetal, signos de Calor y toxicidad.",
+        "Strongly tonifies Kidney Yang, Essence and Blood; strengthens the Du, Chong and Ren vessels and fortifies sinews and bones." => "Tonifica intensamente Yang de Riñón, Esencia y Sangre; fortalece los vasos Du, Chong y Ren y robustece tendones y huesos.",
+        "Avoid in Yin deficiency with Heat, Lung phlegm-Heat, blazing Stomach Fire, warm febrile disease or Blood Heat." => "Evitar en deficiencia de Yin con Calor, Flema-Calor de Pulmón, Fuego intenso de Estómago, enfermedad febril tibia o Calor de Sangre.",
+        "Tonifies Kidney Yang and Essence, moistens the Intestines and treats infertility or cold womb from deficiency." => "Tonifica Yang de Riñón y Esencia, humedece los Intestinos y trata infertilidad o útero frío por deficiencia.",
+        "Avoid in Yin deficiency with Heat or diarrhea from Spleen and Stomach deficiency." => "Evitar en deficiencia de Yin con Calor o diarrea por deficiencia de Bazo y Estómago.",
+        "Tonifies Kidney Yang and Essence, moistens the Intestines and benefits weakness or atrophy from Liver and Kidney deficiency." => "Tonifica Yang de Riñón y Esencia, humedece los Intestinos y beneficia debilidad o atrofia por deficiencia de Hígado y Riñón.",
+        "Avoid in Kidney deficiency with Heat, diarrhea from Spleen deficiency or constipation from excess Heat." => "Evitar en deficiencia de Riñón con Calor, diarrea por deficiencia de Bazo o estreñimiento por Calor de exceso.",
+        "Tonifies Kidney Yang, strengthens the low back and knees, warms the Lung and helps the Kidney grasp Qi; moistens the Intestines." => "Tonifica Yang de Riñón, fortalece zona lumbar y rodillas, calienta el Pulmón y ayuda al Riñón a captar el Qi; humedece los Intestinos.",
+        "Avoid in phlegm-Fire cough, Yin deficiency with Heat or watery stools." => "Evitar en tos por Flema-Fuego, deficiencia de Yin con Calor o heces acuosas.",
+        "Tonifies Kidney Yang and libido; expels Wind-Cold-Damp and relieves painful obstruction." => "Tonifica Yang de Riñón y la libido; expulsa Viento-Frío-Humedad y alivia obstrucción dolorosa.",
+        "Avoid in Yin deficiency with Heat; prolonged use may injure Yin and cause dizziness, vomiting, dry mouth, thirst or nosebleed." => "Evitar en deficiencia de Yin con Calor; el uso prolongado puede lesionar Yin y causar mareos, vómitos, boca seca, sed o epistaxis.",
+        "Strongly warms Kidney Yang, treats infertility from Cold and expels Wind-Cold-Damp painful obstruction." => "Calienta intensamente Yang de Riñón, trata infertilidad por Frío y expulsa obstrucción dolorosa por Viento-Frío-Humedad.",
+        "Avoid in Yin deficiency with Heat; prolonged use is not recommended because toxic reactions may occur." => "Evitar en deficiencia de Yin con Calor; no se recomienda uso prolongado porque pueden aparecer reacciones tóxicas.",
+        "Tonifies Kidney Yang, strengthens sinews and bones, expels Wind-Damp and supports Spleen-Kidney Yang diarrhea." => "Tonifica Yang de Riñón, fortalece tendones y huesos, expulsa Viento-Humedad y apoya diarrea por deficiencia de Yang de Bazo y Riñón.",
+        "Avoid in Yin deficiency with Heat or Damp-Heat with difficult urination; traditionally antagonizes Dan Shen." => "Evitar en deficiencia de Yin con Calor o Humedad-Calor con dificultad urinaria; tradicionalmente antagoniza Dan Shen.",
+        "Warms Spleen and Kidney Yang, stops diarrhea, stabilizes Essence and helps the Kidney grasp Qi; used topically for vitiligo." => "Calienta Yang de Bazo y Riñón, detiene diarrea, estabiliza Esencia y ayuda al Riñón a captar el Qi; se usa tópicamente para vitíligo.",
+        "Avoid in Yin deficiency with Heat or constipation; its harshness may injure deficient patients; traditionally antagonizes Gan Cao." => "Evitar en deficiencia de Yin con Calor o estreñimiento; su aspereza puede lesionar pacientes deficientes; tradicionalmente antagoniza Gan Cao.",
+        "Warms and secures Kidney and Spleen, retains urine and Essence, and controls excessive salivation." => "Calienta y asegura Riñón y Bazo, retiene orina y Esencia y controla salivación excesiva.",
+        "Avoid in frequent urination or vaginal discharge caused by Heat." => "Evitar en micción frecuente o flujo vaginal causado por Calor.",
+        "Tonifies Liver and Kidney, strengthens sinews and bones, and expels Wind-Damp painful obstruction." => "Tonifica Hígado y Riñón, fortalece tendones y huesos y expulsa obstrucción dolorosa por Viento-Humedad.",
+        "Avoid in difficult urination or Heat from Yin deficiency; traditionally antagonizes Bai Lian and Gan Cao." => "Evitar en dificultad urinaria o Calor por deficiencia de Yin; tradicionalmente antagoniza Bai Lian y Gan Cao.",
+        "Tonifies Kidney, mends sinews and bones, invigorates Blood after trauma and may stimulate hair growth topically." => "Tonifica Riñón, repara tendones y huesos, vigoriza Sangre después de trauma y puede estimular crecimiento del cabello tópicamente.",
+        "Avoid in Yin deficiency without Blood stasis." => "Evitar en deficiencia de Yin sin estasis de Sangre.",
+        "Tonifies Liver and Kidney, strengthens sinews and bones, invigorates Blood, relieves trauma pain and calms the fetus." => "Tonifica Hígado y Riñón, fortalece tendones y huesos, vigoriza Sangre, alivia dolor traumático y calma el feto.",
+        "Traditionally antagonized by Lei Wan." => "Tradicionalmente antagonizada por Lei Wan.",
+        "Tonifies Liver and Kidney, strengthens sinews and bones, supports smooth Qi and Blood flow, calms the fetus and is traditionally used in hypertension patterns." => "Tonifica Hígado y Riñón, fortalece tendones y huesos, favorece flujo suave de Qi y Sangre, calma el feto y se usa tradicionalmente en patrones de hipertensión.",
+        "Avoid in Yin deficiency with Heat; traditionally antagonizes Xuan Shen." => "Evitar en deficiencia de Yin con Calor; tradicionalmente antagoniza Xuan Shen.",
+        "Tonifies Liver and Kidney, secures Essence and urine, improves vision, stops diarrhea and calms the fetus." => "Tonifica Hígado y Riñón, asegura Esencia y orina, mejora visión, detiene diarrea y calma el feto.",
+        "Avoid in Yin deficiency with Heat, constipation, or scanty dark urine." => "Evitar en deficiencia de Yin con Calor, estreñimiento u orina escasa y oscura.",
+        "Tonify Kidney Yang and secure Essence" => "Tonificar Yang de Riñón y asegurar Esencia",
+        "All fourteen support Kidney Yang or related functions, but differ in potency, Essence, urine, bowel, pain, bone, diarrhea and reproductive emphasis." => "Las catorce apoyan Yang de Riñón o funciones relacionadas, pero difieren en potencia, Esencia, orina, intestinos, dolor, huesos, diarrea y énfasis reproductivo.",
+        "Augment Blood and Essence" => "Aumentar Sangre y Esencia",
+        "Lu Rong is the strongest, animal-derived tonic for Yang, Essence and Blood; Rou Cong Rong is gentler and moistens the Intestines." => "Lu Rong es el tónico de origen animal más fuerte para Yang, Esencia y Sangre; Rou Cong Rong es más suave y humedece los Intestinos.",
+        "Rou Cong Rong, Suo Yang and Hu Tao Ren tonify Yang while relieving dry constipation; Hu Tao Ren also helps the Kidney grasp Lung Qi." => "Rou Cong Rong, Suo Yang y Hu Tao Ren tonifican Yang mientras alivian estreñimiento seco; Hu Tao Ren además ayuda al Riñón a captar el Qi de Pulmón.",
+        "Expel Wind-Damp and relieve pain" => "Expulsar Viento-Humedad y aliviar dolor",
+        "Yin Yang Huo, Xian Mao, Ba Ji Tian and Gou Ji combine Yang or Liver-Kidney tonification with Wind-Damp painful obstruction treatment." => "Yin Yang Huo, Xian Mao, Ba Ji Tian y Gou Ji combinan tonificación de Yang o Hígado-Riñón con tratamiento de obstrucción dolorosa por Viento-Humedad.",
+        "Warm Spleen and Kidney and stop diarrhea" => "Calentar Bazo y Riñón y detener diarrea",
+        "Ba Ji Tian, Bu Gu Zhi and Tu Si Zi support Spleen-Kidney deficiency; Bu Gu Zhi is warmer and Tu Si Zi is neutral and securing." => "Ba Ji Tian, Bu Gu Zhi y Tu Si Zi apoyan deficiencia de Bazo-Riñón; Bu Gu Zhi es más caliente y Tu Si Zi es neutra y astringente.",
+        "Secure Essence and urine" => "Asegurar Esencia y orina",
+        "Bu Gu Zhi, Yi Zhi Ren and Tu Si Zi retain Essence or urine; Yi Zhi Ren also controls salivation and Tu Si Zi improves vision." => "Bu Gu Zhi, Yi Zhi Ren y Tu Si Zi retienen Esencia u orina; Yi Zhi Ren además controla salivación y Tu Si Zi mejora visión.",
+        "Strengthen bones and repair trauma" => "Fortalecer huesos y reparar trauma",
+        "Ba Ji Tian and Gou Ji strengthen sinews and bones; Gu Sui Bu and Xu Duan emphasize traumatic injury and bone or tendon repair; Du Zhong supports chronic weakness." => "Ba Ji Tian y Gou Ji fortalecen tendones y huesos; Gu Sui Bu y Xu Duan enfatizan lesión traumática y reparación ósea o tendinosa; Du Zhong apoya debilidad crónica.",
+        "Calm the fetus" => "Calmar el feto",
+        "Xu Duan, Du Zhong and Tu Si Zi tonify Liver and Kidney while helping stabilize pregnancy." => "Xu Duan, Du Zhong y Tu Si Zi tonifican Hígado y Riñón mientras ayudan a estabilizar el embarazo.",
+        "Strong heat and toxicity" => "Calor intenso y toxicidad",
+        "Lu Rong is very potent; Xian Mao is hot and toxic; Yin Yang Huo and Bu Gu Zhi are warming and may injure Yin when Heat signs are present." => "Lu Rong es muy potente; Xian Mao es caliente y tóxica; Yin Yang Huo y Bu Gu Zhi son tibias y pueden lesionar Yin cuando existen signos de Calor.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110q';
+$languageversion = '20261110r';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1636,6 +1685,36 @@ $bloodtonicsimilarities = [
     ['Cloying tonics and digestive weakness', 'Shu Di Huang · E Jiao · Long Yan Rou', 'Shu Di Huang and E Jiao are rich and cloying; Long Yan Rou and other sweet tonics can aggravate Dampness or phlegm when digestion is weak.'],
 ];
 
+
+$yangtonicherbs = [
+    ['Lu Rong', 'Cervi Cornu', 'Sweet, salty', 'Warm', 'KD, LV', 'Strongly tonifies Kidney Yang, Essence and Blood; strengthens the Du, Chong and Ren vessels and fortifies sinews and bones.', 'Avoid in Yin deficiency with Heat, Lung phlegm-Heat, blazing Stomach Fire, warm febrile disease or Blood Heat.', '1–2 g powder; 3–4.5 g decoction', '—'],
+    ['Rou Cong Rong', 'Cistanches Herba', 'Sweet, salty', 'Warm', 'LI, KD', 'Tonifies Kidney Yang and Essence, moistens the Intestines and treats infertility or cold womb from deficiency.', 'Avoid in Yin deficiency with Heat or diarrhea from Spleen and Stomach deficiency.', '9–21 g', '—'],
+    ['Suo Yang', 'Cynomorii Herba', 'Sweet', 'Warm', 'LI, KD, LV', 'Tonifies Kidney Yang and Essence, moistens the Intestines and benefits weakness or atrophy from Liver and Kidney deficiency.', 'Avoid in Kidney deficiency with Heat, diarrhea from Spleen deficiency or constipation from excess Heat.', '5–15 g', '—'],
+    ['Hu Tao Ren', 'Juglandis Semen', 'Sweet', 'Warm', 'KD, LI, LU', 'Tonifies Kidney Yang, strengthens the low back and knees, warms the Lung and helps the Kidney grasp Qi; moistens the Intestines.', 'Avoid in phlegm-Fire cough, Yin deficiency with Heat or watery stools.', '9–15 g; 9–30 g alone', '—'],
+    ['Yin Yang Huo', 'Epimedii Herba', 'Acrid, sweet', 'Warm', 'KD, LV', 'Tonifies Kidney Yang and libido; expels Wind-Cold-Damp and relieves painful obstruction.', 'Avoid in Yin deficiency with Heat; prolonged use may injure Yin and cause dizziness, vomiting, dry mouth, thirst or nosebleed.', '3–9 g', '—'],
+    ['Xian Mao', 'Curculiginis Rhizoma', 'Acrid', 'Hot, toxic', 'KD', 'Strongly warms Kidney Yang, treats infertility from Cold and expels Wind-Cold-Damp painful obstruction.', 'Avoid in Yin deficiency with Heat; prolonged use is not recommended because toxic reactions may occur.', '3–9 g', '—'],
+    ['Ba Ji Tian', 'Morindae Radix', 'Acrid, sweet', 'Slightly warm', 'KD', 'Tonifies Kidney Yang, strengthens sinews and bones, expels Wind-Damp and supports Spleen-Kidney Yang diarrhea.', 'Avoid in Yin deficiency with Heat or Damp-Heat with difficult urination; traditionally antagonizes Dan Shen.', '6–15 g', '—'],
+    ['Bu Gu Zhi', 'Psoraleae Fructus', 'Acrid, bitter', 'Very warm', 'KD, SP', 'Warms Spleen and Kidney Yang, stops diarrhea, stabilizes Essence and helps the Kidney grasp Qi; used topically for vitiligo.', 'Avoid in Yin deficiency with Heat or constipation; its harshness may injure deficient patients; traditionally antagonizes Gan Cao.', '4.5–9 g', '—'],
+    ['Yi Zhi Ren', 'Alpiniae Oxyphyllae Fructus', 'Acrid', 'Warm', 'KD, SP', 'Warms and secures Kidney and Spleen, retains urine and Essence, and controls excessive salivation.', 'Avoid in frequent urination or vaginal discharge caused by Heat.', '3–9 g', 'Crush before use.'],
+    ['Gou Ji', 'Cibotii Rhizoma', 'Bitter, sweet', 'Warm', 'KD, LV', 'Tonifies Liver and Kidney, strengthens sinews and bones, and expels Wind-Damp painful obstruction.', 'Avoid in difficult urination or Heat from Yin deficiency; traditionally antagonizes Bai Lian and Gan Cao.', '9–15 g', '—'],
+    ['Gu Sui Bu', 'Drynariae Rhizoma', 'Bitter', 'Warm', 'KD, LV', 'Tonifies Kidney, mends sinews and bones, invigorates Blood after trauma and may stimulate hair growth topically.', 'Avoid in Yin deficiency without Blood stasis.', '9–21 g', '—'],
+    ['Xu Duan', 'Dipsaci Radix', 'Bitter, sweet, acrid', 'Slightly warm', 'KD, LV', 'Tonifies Liver and Kidney, strengthens sinews and bones, invigorates Blood, relieves trauma pain and calms the fetus.', 'Traditionally antagonized by Lei Wan.', '9–18 g', '—'],
+    ['Du Zhong', 'Eucommiae Cortex', 'Sweet, slightly acrid', 'Warm', 'KD, LV', 'Tonifies Liver and Kidney, strengthens sinews and bones, supports smooth Qi and Blood flow, calms the fetus and is traditionally used in hypertension patterns.', 'Avoid in Yin deficiency with Heat; traditionally antagonizes Xuan Shen.', '9–15 g', '—'],
+    ['Tu Si Zi', 'Cuscutae Semen', 'Acrid, sweet', 'Neutral', 'KD, LV', 'Tonifies Liver and Kidney, secures Essence and urine, improves vision, stops diarrhea and calms the fetus.', 'Avoid in Yin deficiency with Heat, constipation, or scanty dark urine.', '6–15 g', '—'],
+];
+
+$yangtonicsimilarities = [
+    ['Tonify Kidney Yang and secure Essence', 'Lu Rong · Rou Cong Rong · Suo Yang · Hu Tao Ren · Yin Yang Huo · Xian Mao · Ba Ji Tian · Bu Gu Zhi · Yi Zhi Ren · Gou Ji · Gu Sui Bu · Xu Duan · Du Zhong · Tu Si Zi', 'All fourteen support Kidney Yang or related functions, but differ in potency, Essence, urine, bowel, pain, bone, diarrhea and reproductive emphasis.'],
+    ['Augment Blood and Essence', 'Lu Rong · Rou Cong Rong', 'Lu Rong is the strongest, animal-derived tonic for Yang, Essence and Blood; Rou Cong Rong is gentler and moistens the Intestines.'],
+    ['Moisten the Intestines', 'Rou Cong Rong · Suo Yang · Hu Tao Ren', 'Rou Cong Rong, Suo Yang and Hu Tao Ren tonify Yang while relieving dry constipation; Hu Tao Ren also helps the Kidney grasp Lung Qi.'],
+    ['Expel Wind-Damp and relieve pain', 'Yin Yang Huo · Xian Mao · Ba Ji Tian · Gou Ji', 'Yin Yang Huo, Xian Mao, Ba Ji Tian and Gou Ji combine Yang or Liver-Kidney tonification with Wind-Damp painful obstruction treatment.'],
+    ['Warm Spleen and Kidney and stop diarrhea', 'Ba Ji Tian · Bu Gu Zhi · Tu Si Zi', 'Ba Ji Tian, Bu Gu Zhi and Tu Si Zi support Spleen-Kidney deficiency; Bu Gu Zhi is warmer and Tu Si Zi is neutral and securing.'],
+    ['Secure Essence and urine', 'Bu Gu Zhi · Yi Zhi Ren · Tu Si Zi', 'Bu Gu Zhi, Yi Zhi Ren and Tu Si Zi retain Essence or urine; Yi Zhi Ren also controls salivation and Tu Si Zi improves vision.'],
+    ['Strengthen bones and repair trauma', 'Ba Ji Tian · Gou Ji · Gu Sui Bu · Xu Duan · Du Zhong', 'Ba Ji Tian and Gou Ji strengthen sinews and bones; Gu Sui Bu and Xu Duan emphasize traumatic injury and bone or tendon repair; Du Zhong supports chronic weakness.'],
+    ['Calm the fetus', 'Xu Duan · Du Zhong · Tu Si Zi', 'Xu Duan, Du Zhong and Tu Si Zi tonify Liver and Kidney while helping stabilize pregnancy.'],
+    ['Strong heat and toxicity', 'Lu Rong · Yin Yang Huo · Xian Mao · Bu Gu Zhi', 'Lu Rong is very potent; Xian Mao is hot and toxic; Yin Yang Huo and Bu Gu Zhi are warming and may injure Yin when Heat signs are present.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1730,6 +1809,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['warm-interior']->out(false); ?>"<?php echo $selectedcategory === 'warm-interior' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('21. Warm Interior', $ises)); ?></a>
         <a href="<?php echo $categoryurls['qi-tonics']->out(false); ?>"<?php echo $selectedcategory === 'qi-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['blood-tonics']->out(false); ?>"<?php echo $selectedcategory === 'blood-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['yang-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yang-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2801,6 +2881,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($bloodtonicherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="yang-tonics"<?php echo $selectedcategory === 'yang-tonics' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 14 herbs · Common foundation: tonify Kidney Yang, secure Essence, strengthen sinews and bones, and support reproductive and urinary function.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($yangtonicsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('degree of Yang deficiency, Essence or urine leakage, infertility, bowel dryness, Wind-Damp pain, bone injury, diarrhea, fetal stability, Heat signs and toxicity.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($yangtonicherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
