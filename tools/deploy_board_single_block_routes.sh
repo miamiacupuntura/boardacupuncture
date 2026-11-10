@@ -102,7 +102,12 @@ done
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,+50p' "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
-grep -Fq "Formula Study Center" <<< "$secondary_study_guides_block"
+grep -Fq "Multiple Formula Comparison" <<< "$secondary_study_guides_block"
+grep -Fq "'Multiple Formula Comparison' => 'Comparación de múltiples fórmulas'" "$LIBRARY_TEMP"
+if grep -Fq "'title' => 'Formula Study Center'" "$LIBRARY_TEMP"; then
+    echo "ERROR: el recurso todavía conserva el nombre Formula Study Center." >&2
+    exit 1
+fi
 grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
 grep -Fq "Pathology Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Pattern Comparisons" <<< "$secondary_study_guides_block"
@@ -168,10 +173,10 @@ grep -Fq "<strong>Herbology Practice</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong>Quiz</strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Exámenes' : 'Exams'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Simulación' : 'Simulation'); ?></strong>" "$LIBRARY_TEMP"
-formula_study_block="$(sed -n "/'title' => 'Formula Study Center'/,+8p" "$LIBRARY_TEMP")"
+formula_study_block="$(sed -n "/'title' => 'Multiple Formula Comparison'/,+8p" "$LIBRARY_TEMP")"
 grep -Fq "'secondary' => true" <<< "$formula_study_block"
 if grep -Fq "'practice_exam' => true" <<< "$formula_study_block"; then
-    echo "ERROR: Formula Study Center todavía pertenece a Practice Exams." >&2
+    echo "ERROR: Multiple Formula Comparison todavía pertenece a Practice Exams." >&2
     exit 1
 fi
 grep -Fq "return !empty(\$chapter['practice_exam']) && empty(\$chapter['quiz']);" "$LIBRARY_TEMP"
@@ -221,7 +226,7 @@ else
 fi
 
 echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
-echo "OK: Formula Study Center fue movido a Comparison y excluido de Formulas Miscellaneous."
+echo "OK: Multiple Formula Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
