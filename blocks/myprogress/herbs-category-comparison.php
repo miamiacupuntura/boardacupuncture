@@ -1403,7 +1403,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110search2';
+$languageversion = '20261110search3';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -2143,6 +2143,9 @@ $PAGE->requires->js_init_code(<<<'JS'
             return !section.hidden;
         });
         const initialCategory = initialSection ? initialSection.id : '';
+        const initialCategoryIndex = categoryLinks.findIndex(function(link) {
+            return (new URL(link.href, window.location.href).searchParams.get('category') || '') === initialCategory;
+        });
         let matches = [];
         let currentMatch = -1;
         let searchTimer = null;
@@ -2282,10 +2285,16 @@ $PAGE->requires->js_init_code(<<<'JS'
                 const section = mark.closest('.herb-category-library__section');
                 return section ? section.id : '';
             }));
+            const currentSection = matches[currentMatch] ?
+                matches[currentMatch].closest('.herb-category-library__section') : null;
+            const currentCategoryLink = currentSection ? categoryLinks.find(function(link) {
+                return (new URL(link.href, window.location.href).searchParams.get('category') || '') === currentSection.id;
+            }) : null;
             status.textContent = status.dataset.results
                 .replace('{current}', String(currentMatch + 1))
                 .replace('{total}', String(matches.length))
-                .replace('{categories}', String(matchingCategories.size));
+                .replace('{categories}', String(matchingCategories.size))
+                .replace('{category}', currentCategoryLink ? currentCategoryLink.textContent.trim() : '');
         };
 
         const activateMatch = function(matchIndex, shouldScroll) {
@@ -2294,7 +2303,9 @@ $PAGE->requires->js_init_code(<<<'JS'
                 updateStatus();
                 return;
             }
-            currentMatch = (matchIndex + matches.length) % matches.length;
+            currentMatch = Math.max(0, Math.min(matchIndex, matches.length - 1));
+            previousResult.disabled = currentMatch === 0;
+            nextResult.disabled = currentMatch === matches.length - 1;
             matches.forEach(function(mark) {
                 mark.classList.remove('is-current');
             });
@@ -2319,6 +2330,8 @@ $PAGE->requires->js_init_code(<<<'JS'
             clear.hidden = true;
             previousResult.hidden = true;
             nextResult.hidden = true;
+            previousResult.disabled = true;
+            nextResult.disabled = true;
             showCategory(initialCategory);
             status.textContent = '';
         };
@@ -2349,11 +2362,18 @@ $PAGE->requires->js_init_code(<<<'JS'
             nextResult.hidden = matches.length < 2;
 
             if (matches.length > 0) {
-                const visibleMatch = matches.findIndex(function(mark) {
+                const stableStartIndex = initialCategoryIndex >= 0 ? initialCategoryIndex : 0;
+                const firstForwardMatch = matches.findIndex(function(mark) {
                     const section = mark.closest('.herb-category-library__section');
-                    return section && !section.hidden;
+                    if (!section) {
+                        return false;
+                    }
+                    const categoryIndex = categoryLinks.findIndex(function(link) {
+                        return (new URL(link.href, window.location.href).searchParams.get('category') || '') === section.id;
+                    });
+                    return categoryIndex >= stableStartIndex;
                 });
-                activateMatch(visibleMatch >= 0 ? visibleMatch : 0, shouldScroll);
+                activateMatch(firstForwardMatch >= 0 ? firstForwardMatch : 0, shouldScroll);
             } else {
                 sections.forEach(function(section) {
                     section.hidden = true;
@@ -2418,7 +2438,7 @@ echo $OUTPUT->header();
 .herb-category-library__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
 .herb-category-library__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 15px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81;font-weight:800;text-decoration:none;white-space:nowrap}
 .herb-category-library__back:hover{background:#eef7f5;text-decoration:none}
-.herb-category-library__search{margin:18px 0 12px;padding:16px;border:1px solid #b9d8d2;border-radius:12px;background:#f7fbfb}
+.herb-category-library__search{position:sticky;top:72px;z-index:20;margin:18px 0 12px;padding:16px;border:1px solid #b9d8d2;border-radius:12px;background:#f7fbfb;box-shadow:0 8px 22px rgba(15,76,129,.14)}
 .herb-category-library__search label{display:block;margin:0 0 8px;color:#102a43;font-weight:900}
 .herb-category-library__search-control{display:flex;align-items:center;gap:9px;padding:0 10px;border:2px solid #8fb9b1;border-radius:10px;background:#fff}
 .herb-category-library__search-control:focus-within{border-color:#087c69;box-shadow:0 0 0 3px rgba(8,124,105,.14)}
@@ -2426,6 +2446,7 @@ echo $OUTPUT->header();
 .herb-category-library__search input{width:100%;min-height:44px;padding:8px 2px;border:0;background:transparent;color:#102a43;font-size:16px;outline:0}
 .herb-category-library__search-action{min-height:34px;padding:6px 10px;border:0;border-radius:8px;background:#e5f6f2;color:#075f52;font-weight:800;cursor:pointer;white-space:nowrap}
 .herb-category-library__search-action:hover,.herb-category-library__search-action:focus{background:#087c69;color:#fff}
+.herb-category-library__search-action:disabled{background:#edf2f2;color:#8a9a9a;cursor:not-allowed;opacity:.72}
 .herb-category-library__search-status{min-height:20px;margin:7px 1px 0;color:#526b84;font-size:13px;font-weight:700}
 .herb-category-library__search-highlight{padding:0 2px;border-radius:3px;background:#fff3a3;color:inherit;box-shadow:inset 0 -2px 0 #e6b800}
 .herb-category-library__search-highlight.is-current{background:#ffdc35;box-shadow:0 0 0 4px rgba(255,193,7,.48),0 3px 12px rgba(151,105,0,.38)}
@@ -2500,7 +2521,7 @@ echo $OUTPUT->header();
         </div>
         <p class="herb-category-library__search-status" id="herb-category-search-status" aria-live="polite"
             data-none="<?php echo s($ises ? 'No se encontraron coincidencias.' : 'No matches found.'); ?>"
-            data-results="<?php echo s($ises ? '{current} de {total} coincidencias en {categories} categorías.' : '{current} of {total} matches in {categories} categories.'); ?>"></p>
+            data-results="<?php echo s($ises ? '{current} de {total} coincidencias · Categoría actual: {category} · {categories} categorías con resultados.' : '{current} of {total} matches · Current category: {category} · {categories} categories with results.'); ?>"></p>
     </div>
 
     <nav class="herb-category-library__index" id="herb-category-index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
