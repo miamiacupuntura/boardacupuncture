@@ -36,6 +36,7 @@ $categoryids = [
     'qi-tonics',
     'blood-tonics',
     'yang-tonics',
+    'yin-tonics',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1159,13 +1160,52 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Very warm" => "Muy tibia",
         "Bitter, sweet, acrid" => "Amarga, dulce, picante",
         "Sweet, slightly acrid" => "Dulce, ligeramente picante",
+        "25. Yin Tonics" => "25. Tónicos de Yin",
+        "Board Guideline 2026 · 9 herbs · Common foundation: nourish Yin, generate fluids, moisten dryness, clear deficiency Heat and anchor Yang." => "Guía Board 2026 · 9 sustancias · Fundamento común: nutrir Yin, generar líquidos, humedecer sequedad, eliminar Calor por deficiencia y anclar Yang.",
+        "Lung, Stomach, Liver or Kidney Yin deficiency, dry cough, thirst, bowel dryness, vision, premature greying, floating Yang, masses and digestive weakness." => "deficiencia de Yin de Pulmón, Estómago, Hígado o Riñón, tos seca, sed, sequedad intestinal, visión, canas prematuras, Yang flotante, masas y debilidad digestiva.",
+        "Nourishes Lung Yin, moistens dryness, clears Heart Heat and calms the Spirit; used for Lily Bulb disorder." => "Nutre Yin de Pulmón, humedece sequedad, elimina Calor de Corazón y calma el Shen; se usa para el trastorno de Bulbo de Lirio.",
+        "Avoid in Wind-Cold cough, phlegm cough or diarrhea from Spleen and Stomach deficiency." => "Evitar en tos por Viento-Frío, tos con flema o diarrea por deficiencia de Bazo y Estómago.",
+        "Strongly nourishes Lung and Kidney Yin, clears Heat, generates fluids and moistens the Intestines." => "Nutre intensamente Yin de Pulmón y Riñón, elimina Calor, genera líquidos y humedece los Intestinos.",
+        "Avoid in low appetite from Spleen and Stomach deficiency with Cold or Wind-Cold cough." => "Evitar en poco apetito por deficiencia fría de Bazo y Estómago o tos por Viento-Frío.",
+        "Nourishes Lung and Stomach Yin, generates fluids, moistens the Intestines, clears Heart Heat and relieves irritability." => "Nutre Yin de Pulmón y Estómago, genera líquidos, humedece los Intestinos, elimina Calor de Corazón y alivia irritabilidad.",
+        "Avoid in cold-deficiency diarrhea or congested fluids; traditionally antagonized by Kuan Dong Hua." => "Evitar en diarrea por Frío de deficiencia o líquidos congestionados; tradicionalmente antagonizada por Kuan Dong Hua.",
+        "Nourishes Lung and Stomach Yin, clears Lung Heat, generates fluids and moistens dryness or dry itchy skin." => "Nutre Yin de Pulmón y Estómago, elimina Calor de Pulmón, genera líquidos y humedece sequedad o piel seca con picazón.",
+        "Avoid in Wind-Cold cough or Spleen deficiency with Cold; traditionally incompatible with Li Lu and antagonized by Fang Ji." => "Evitar en tos por Viento-Frío o deficiencia de Bazo con Frío; tradicionalmente incompatible con Li Lu y antagonizada por Fang Ji.",
+        "Nourishes Stomach and Kidney Yin, clears deficiency Heat, generates fluids, brightens vision and strengthens Essence." => "Nutre Yin de Estómago y Riñón, elimina Calor por deficiencia, genera líquidos, mejora la visión y fortalece Esencia.",
+        "Avoid in deficiency without Heat, excess Heat patterns, abdominal distension with thick greasy coating or early warm-febrile disease; traditionally antagonized by Ba Dou." => "Evitar en deficiencia sin Calor, patrones de Calor de exceso, distensión abdominal con saburra gruesa y grasosa o etapa temprana de enfermedad febril tibia; tradicionalmente antagonizada por Ba Dou.",
+        "Nourishes Liver and Kidney Yin, clears deficiency Heat, improves vision and treats premature greying of hair." => "Nutre Yin de Hígado y Riñón, elimina Calor por deficiencia, mejora la visión y trata canas prematuras.",
+        "Avoid in Yang deficiency with diarrhea from Spleen deficiency." => "Evitar en deficiencia de Yang con diarrea por deficiencia de Bazo.",
+        "Nourishes Liver and Kidney, enriches Blood, extinguishes Wind, moistens the Intestines and supports recovery or lactation." => "Nutre Hígado y Riñón, enriquece la Sangre, extingue Viento, humedece los Intestinos y apoya recuperación o lactancia.",
+        "Avoid in diarrhea." => "Evitar en diarrea.",
+        "Nourishes Liver and Kidney Yin, anchors Yang, strengthens bones, nourishes Blood and stabilizes the Chong and Ren vessels." => "Nutre Yin de Hígado y Riñón, ancla Yang, fortalece huesos, nutre Sangre y estabiliza los vasos Chong y Ren.",
+        "Avoid during pregnancy or in Stomach Cold-Damp, Yang deficiency or diarrhea; traditionally antagonized by Sha Shen and Ren Shen." => "Evitar durante el embarazo o en Frío-Humedad de Estómago, deficiencia de Yang o diarrea; tradicionalmente antagonizada por Sha Shen y Ren Shen.",
+        "Crush and cook 30 minutes longer." => "Triturar y cocinar 30 minutos más.",
+        "Nourishes Yin and anchors Yang; invigorates Blood, promotes menstruation and dissipates nodules or palpable masses." => "Nutre Yin y ancla Yang; vigoriza Sangre, promueve menstruación y disipa nódulos o masas palpables.",
+        "Avoid during pregnancy, poor appetite or diarrhea from Spleen deficiency, unresolved Exterior conditions or impotence; traditionally antagonized by Ming Fan." => "Evitar durante el embarazo, poco apetito o diarrea por deficiencia de Bazo, condiciones Exteriores sin resolver o impotencia; tradicionalmente antagonizada por Ming Fan.",
+        "Nourish Yin and generate fluids" => "Nutrir Yin y generar líquidos",
+        "All nine nourish Yin or related fluids, but differ in Lung, Stomach, Liver, Kidney, bowel, vision, Yang anchoring and mass-dissipating actions." => "Las nueve nutren Yin o líquidos relacionados, pero difieren en acciones sobre Pulmón, Estómago, Hígado, Riñón, intestinos, visión, anclaje de Yang y disipación de masas.",
+        "Nourish Lung Yin and moisten dry cough" => "Nutrir Yin de Pulmón y humedecer tos seca",
+        "Bai He, Tian Men Dong, Mai Men Dong and Sha Shen treat Lung Yin dryness; Bai He calms the Spirit, Tian Men Dong is very cold, Mai Men Dong clears Heart irritability and Sha Shen also nourishes Stomach Yin." => "Bai He, Tian Men Dong, Mai Men Dong y Sha Shen tratan sequedad por deficiencia de Yin de Pulmón; Bai He calma el Shen, Tian Men Dong es muy fría, Mai Men Dong elimina irritabilidad de Corazón y Sha Shen además nutre Yin de Estómago.",
+        "Tian Men Dong and Mai Men Dong" => "Tian Men Dong y Mai Men Dong",
+        "Tian Men Dong is colder and more strongly nourishes Kidney Yin; Mai Men Dong is gentler, emphasizes Stomach fluids and clears Heart irritability." => "Tian Men Dong es más fría y nutre con más intensidad Yin de Riñón; Mai Men Dong es más suave, enfatiza líquidos de Estómago y elimina irritabilidad de Corazón.",
+        "Nourish Stomach Yin and generate fluids" => "Nutrir Yin de Estómago y generar líquidos",
+        "Mai Men Dong, Sha Shen and Shi Hu address thirst and Stomach Yin deficiency; Shi Hu also strengthens Kidney Essence and brightens vision." => "Mai Men Dong, Sha Shen y Shi Hu tratan sed y deficiencia de Yin de Estómago; Shi Hu además fortalece Esencia de Riñón y mejora visión.",
+        "Liver-Kidney Yin, vision and premature greying" => "Yin de Hígado-Riñón, visión y canas prematuras",
+        "Nu Zhen Zi and Hei Zhi Ma nourish Liver and Kidney; Nu Zhen Zi clears deficiency Heat and Hei Zhi Ma more strongly nourishes Blood and moistens the Intestines." => "Nu Zhen Zi y Hei Zhi Ma nutren Hígado y Riñón; Nu Zhen Zi elimina Calor por deficiencia y Hei Zhi Ma nutre con más intensidad la Sangre y humedece los Intestinos.",
+        "Tian Men Dong, Mai Men Dong and Hei Zhi Ma relieve bowel dryness while nourishing Yin; avoid them when diarrhea or weak digestion predominates." => "Tian Men Dong, Mai Men Dong y Hei Zhi Ma alivian sequedad intestinal mientras nutren Yin; evitarlas cuando predominan diarrea o digestión débil.",
+        "Gui Ban and Bie Jia: anchor Yang" => "Gui Ban y Bie Jia: anclar Yang",
+        "Gui Ban emphasizes the ventral aspect, bones, Blood and Chong-Ren deficiency; Bie Jia emphasizes the dorsal aspect, Blood movement and palpable masses." => "Gui Ban enfatiza el aspecto ventral, huesos, Sangre y deficiencia de Chong-Ren; Bie Jia enfatiza el aspecto dorsal, movimiento de Sangre y masas palpables.",
+        "Calm the Spirit and clear Heart Heat" => "Calmar el Shen y eliminar Calor de Corazón",
+        "Bai He and Mai Men Dong nourish Yin while addressing Heart Heat, irritability or emotional disturbance." => "Bai He y Mai Men Dong nutren Yin mientras abordan Calor de Corazón, irritabilidad o alteración emocional.",
+        "Cold and cloying herbs with weak digestion" => "Hierbas frías y empalagosas con digestión débil",
+        "Many Yin tonics are cold or rich and can worsen Spleen deficiency, Dampness, phlegm or diarrhea; digestive tolerance guides selection." => "Muchos tónicos de Yin son fríos o densos y pueden empeorar deficiencia de Bazo, Humedad, flema o diarrea; la tolerancia digestiva guía la selección.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110s';
+$languageversion = '20261110t';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1718,6 +1758,31 @@ $yangtonicsimilarities = [
     ['Strong heat and toxicity', 'Lu Rong · Yin Yang Huo · Xian Mao · Bu Gu Zhi', 'Lu Rong is very potent; Xian Mao is hot and toxic; Yin Yang Huo and Bu Gu Zhi are warming and may injure Yin when Heat signs are present.'],
 ];
 
+
+$yintonicherbs = [
+    ['Bai He', 'Lilii Bulbus', 'Sweet, slightly bitter', 'Slightly cold', 'HT, LU', 'Nourishes Lung Yin, moistens dryness, clears Heart Heat and calms the Spirit; used for Lily Bulb disorder.', 'Avoid in Wind-Cold cough, phlegm cough or diarrhea from Spleen and Stomach deficiency.', '9–30 g', '—'],
+    ['Tian Men Dong', 'Asparagi Radix', 'Sweet, bitter', 'Very cold', 'KD, LU', 'Strongly nourishes Lung and Kidney Yin, clears Heat, generates fluids and moistens the Intestines.', 'Avoid in low appetite from Spleen and Stomach deficiency with Cold or Wind-Cold cough.', '6–12 g', '—'],
+    ['Mai Men Dong', 'Ophiopogonis Radix', 'Sweet, slightly bitter', 'Slightly cold', 'HT, LU, ST', 'Nourishes Lung and Stomach Yin, generates fluids, moistens the Intestines, clears Heart Heat and relieves irritability.', 'Avoid in cold-deficiency diarrhea or congested fluids; traditionally antagonized by Kuan Dong Hua.', '6–15 g', '—'],
+    ['Sha Shen', 'Glehniae Radix', 'Sweet, slightly bitter', 'Slightly cold', 'LU, ST', 'Nourishes Lung and Stomach Yin, clears Lung Heat, generates fluids and moistens dryness or dry itchy skin.', 'Avoid in Wind-Cold cough or Spleen deficiency with Cold; traditionally incompatible with Li Lu and antagonized by Fang Ji.', '9–15 g', '—'],
+    ['Shi Hu', 'Dendrobii Herba', 'Sweet, slightly salty, bland', 'Slightly cold', 'KD, ST', 'Nourishes Stomach and Kidney Yin, clears deficiency Heat, generates fluids, brightens vision and strengthens Essence.', 'Avoid in deficiency without Heat, excess Heat patterns, abdominal distension with thick greasy coating or early warm-febrile disease; traditionally antagonized by Ba Dou.', '6–12 g', '—'],
+    ['Nu Zhen Zi', 'Ligustri Lucidi Fructus', 'Bitter, sweet', 'Cool', 'KD, LV', 'Nourishes Liver and Kidney Yin, clears deficiency Heat, improves vision and treats premature greying of hair.', 'Avoid in Yang deficiency with diarrhea from Spleen deficiency.', '9–18 g', '—'],
+    ['Hei Zhi Ma', 'Sesami Semen Nigrum', 'Sweet', 'Neutral', 'KD, LV, LI', 'Nourishes Liver and Kidney, enriches Blood, extinguishes Wind, moistens the Intestines and supports recovery or lactation.', 'Avoid in diarrhea.', '9–30 g', '—'],
+    ['Gui Ban', 'Testudinis Plastrum', 'Salty, sweet', 'Cold', 'HT, KD, LV', 'Nourishes Liver and Kidney Yin, anchors Yang, strengthens bones, nourishes Blood and stabilizes the Chong and Ren vessels.', 'Avoid during pregnancy or in Stomach Cold-Damp, Yang deficiency or diarrhea; traditionally antagonized by Sha Shen and Ren Shen.', '15–45 g', 'Crush and cook 30 minutes longer.'],
+    ['Bie Jia', 'Trionycis Carapax', 'Salty', 'Slightly cold', 'LV, SP', 'Nourishes Yin and anchors Yang; invigorates Blood, promotes menstruation and dissipates nodules or palpable masses.', 'Avoid during pregnancy, poor appetite or diarrhea from Spleen deficiency, unresolved Exterior conditions or impotence; traditionally antagonized by Ming Fan.', '9–30 g', 'Crush and cook 30 minutes longer.'],
+];
+
+$yintonicsimilarities = [
+    ['Nourish Yin and generate fluids', 'Bai He · Tian Men Dong · Mai Men Dong · Sha Shen · Shi Hu · Nu Zhen Zi · Hei Zhi Ma · Gui Ban · Bie Jia', 'All nine nourish Yin or related fluids, but differ in Lung, Stomach, Liver, Kidney, bowel, vision, Yang anchoring and mass-dissipating actions.'],
+    ['Nourish Lung Yin and moisten dry cough', 'Bai He · Tian Men Dong · Mai Men Dong · Sha Shen', 'Bai He, Tian Men Dong, Mai Men Dong and Sha Shen treat Lung Yin dryness; Bai He calms the Spirit, Tian Men Dong is very cold, Mai Men Dong clears Heart irritability and Sha Shen also nourishes Stomach Yin.'],
+    ['Tian Men Dong and Mai Men Dong', 'Tian Men Dong · Mai Men Dong', 'Tian Men Dong is colder and more strongly nourishes Kidney Yin; Mai Men Dong is gentler, emphasizes Stomach fluids and clears Heart irritability.'],
+    ['Nourish Stomach Yin and generate fluids', 'Mai Men Dong · Sha Shen · Shi Hu', 'Mai Men Dong, Sha Shen and Shi Hu address thirst and Stomach Yin deficiency; Shi Hu also strengthens Kidney Essence and brightens vision.'],
+    ['Liver-Kidney Yin, vision and premature greying', 'Nu Zhen Zi · Hei Zhi Ma', 'Nu Zhen Zi and Hei Zhi Ma nourish Liver and Kidney; Nu Zhen Zi clears deficiency Heat and Hei Zhi Ma more strongly nourishes Blood and moistens the Intestines.'],
+    ['Moisten the Intestines', 'Tian Men Dong · Mai Men Dong · Hei Zhi Ma', 'Tian Men Dong, Mai Men Dong and Hei Zhi Ma relieve bowel dryness while nourishing Yin; avoid them when diarrhea or weak digestion predominates.'],
+    ['Gui Ban and Bie Jia: anchor Yang', 'Gui Ban · Bie Jia', 'Gui Ban emphasizes the ventral aspect, bones, Blood and Chong-Ren deficiency; Bie Jia emphasizes the dorsal aspect, Blood movement and palpable masses.'],
+    ['Calm the Spirit and clear Heart Heat', 'Bai He · Mai Men Dong', 'Bai He and Mai Men Dong nourish Yin while addressing Heart Heat, irritability or emotional disturbance.'],
+    ['Cold and cloying herbs with weak digestion', 'General category caution', 'Many Yin tonics are cold or rich and can worsen Spleen deficiency, Dampness, phlegm or diarrhea; digestive tolerance guides selection.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1813,6 +1878,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['qi-tonics']->out(false); ?>"<?php echo $selectedcategory === 'qi-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('22. Qi Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['blood-tonics']->out(false); ?>"<?php echo $selectedcategory === 'blood-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('23. Blood Tonics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['yang-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yang-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('24. Yang Tonics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['yin-tonics']->out(false); ?>"<?php echo $selectedcategory === 'yin-tonics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('25. Yin Tonics', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2926,6 +2992,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($yangtonicherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="yin-tonics"<?php echo $selectedcategory === 'yin-tonics' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('25. Yin Tonics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 9 herbs · Common foundation: nourish Yin, generate fluids, moisten dryness, clear deficiency Heat and anchor Yang.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($yintonicsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Lung, Stomach, Liver or Kidney Yin deficiency, dry cough, thirst, bowel dryness, vision, premature greying, floating Yang, masses and digestive weakness.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($yintonicherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
