@@ -279,8 +279,7 @@ class block_menu extends block_base {
                     'progressids' => [45, 44],
                     'area' => 'herbology',
                     'resources' => [
-                        [45, 'Single Herbs', 'questions', null, null, null,
-                            '/blocks/myprogress/single-herbs-study-guide.php'],
+                        [45, 'Single Herbs', 'questions'],
                         [44, 'Formulas', 'questions'],
                         [41, 'Simulation', 'simulation'],
                         [92, 'Exam Key', 'notes', 2020],
