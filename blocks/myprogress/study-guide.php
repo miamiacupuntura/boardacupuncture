@@ -466,7 +466,8 @@ $secondaryguidechapters = array_values(array_filter(
     static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
         return !$isHerbChapter($chapter)
             && !$isFormulaChapter($chapter)
-            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/patterns-tips-maciocia.html';
+            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/patterns-tips-maciocia.html'
+            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/safety.html';
     }
 ));
 $requestedview = optional_param('view', '', PARAM_ALPHA);
@@ -531,6 +532,9 @@ $duiyaostudyurl = new moodle_url(
 $formulasstudyurl = new moodle_url(
     '/blocks/myprogress/formulas-study-guide.php',
     $ises ? ['lang' => 'es'] : []
+);
+$safetylibraryurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html'
 );
 $singleherbscomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'
@@ -781,6 +785,9 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
+                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
