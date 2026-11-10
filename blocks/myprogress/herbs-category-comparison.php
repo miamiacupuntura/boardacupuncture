@@ -65,10 +65,22 @@ echo $OUTPUT->header();
 .herb-category-library__summary{margin:7px 0 16px;color:#526b84}
 .herb-category-library__scroll{overflow-x:auto;border:1px solid #a9bbc8;border-radius:10px}
 .herb-category-library table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.35}
-.herb-category-library th,.herb-category-library td{padding:9px 10px;border:1px solid #b9c7d1;vertical-align:top}
-.herb-category-library thead th{background:#d8f2ef;color:#102a43;text-align:left;white-space:nowrap}
-.herb-category-library tbody th{min-width:145px;background:#eef9f7;text-align:left}
-.herb-category-library tbody td{min-width:175px}
+.herb-category-library th,.herb-category-library td{padding:9px 10px;border:1px solid #b9c7d1;vertical-align:top;overflow-wrap:anywhere}
+.herb-category-library thead th{background:#d8f2ef;color:#102a43;text-align:left}
+.herb-category-library__comparison-table{min-width:1180px;table-layout:fixed}
+.herb-category-library__comparison-table col:nth-child(1){width:14%}
+.herb-category-library__comparison-table col:nth-child(2){width:8%}
+.herb-category-library__comparison-table col:nth-child(3){width:8%}
+.herb-category-library__comparison-table col:nth-child(4){width:7%}
+.herb-category-library__comparison-table col:nth-child(5){width:25%}
+.herb-category-library__comparison-table col:nth-child(6){width:20%}
+.herb-category-library__comparison-table col:nth-child(7){width:6%}
+.herb-category-library__comparison-table col:nth-child(8){width:12%}
+.herb-category-library__herb-identity{background:#eef9f7}
+.herb-category-library__herb-identity strong{display:block;color:#102a43;font-size:14px}
+.herb-category-library__herb-identity small{display:block;margin-top:4px;color:#526b84;font-size:12px;font-style:italic;font-weight:600}
+.herb-category-library__compact{font-size:12px}
+.herb-category-library__dosage{white-space:nowrap;text-align:center}
 .herb-category-library__similarities{margin-top:18px}
 .herb-category-library__similarities h4{margin:0;padding:12px 14px;border-radius:10px 10px 0 0;background:#087c69;color:#fff;font-size:20px}
 .herb-category-library__similarities table td:nth-child(1){font-weight:800;background:#eef9f7}
@@ -96,20 +108,30 @@ echo $OUTPUT->header();
         <h3>1. Disperse Wind-Cold</h3>
         <p class="herb-category-library__summary">Board Guideline 2026 · 15 herbs · Common foundation: predominantly acrid herbs that release exterior Wind-Cold.</p>
         <div class="herb-category-library__scroll">
-            <table>
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb</th><th>Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
                         <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($herbs as $herb): ?>
                     <tr>
-                    <?php foreach ($herb as $index => $value): ?>
-                        <?php if ($index === 0): ?><th scope="row"><?php echo s($value); ?></th>
-                        <?php else: ?><td><?php echo s($value); ?></td><?php endif; ?>
-                    <?php endforeach; ?>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
