@@ -106,14 +106,27 @@ grep -Fq 'Escribe una categoría, hierba, función o precaución' "$CATEGORY_TEM
 grep -Fq "normalize('NFD')" "$CATEGORY_TEMP"
 grep -Fq "event.key === 'Enter'" "$CATEGORY_TEMP"
 grep -Fq "event.key === 'Escape'" "$CATEGORY_TEMP"
-grep -Fq "section ? section.textContent : ''" "$CATEGORY_TEMP"
+grep -Fq 'document.createTreeWalker' "$CATEGORY_TEMP"
+grep -Fq 'normaliseWithMap' "$CATEGORY_TEMP"
+grep -Fq 'showCategory(section.id)' "$CATEGORY_TEMP"
+grep -Fq 'activateMatch(currentMatch + 1, true)' "$CATEGORY_TEMP"
+grep -Fq 'activateMatch(currentMatch - 1, true)' "$CATEGORY_TEMP"
+grep -Fq 'id="herb-category-search-previous"' "$CATEGORY_TEMP"
+grep -Fq 'id="herb-category-search-next"' "$CATEGORY_TEMP"
+grep -Fq 'Coincidencia anterior' "$CATEGORY_TEMP"
+grep -Fq 'Siguiente coincidencia' "$CATEGORY_TEMP"
+grep -Fq 'herb-category-library__search-highlight.is-current' "$CATEGORY_TEMP"
+grep -Fq 'rgba(255,193,7,.48)' "$CATEGORY_TEMP"
+grep -Fq 'data-results=' "$CATEGORY_TEMP"
 search_input_count="$(grep -Fo 'id="herb-category-search"' "$CATEGORY_TEMP" | wc -l)"
+search_previous_count="$(grep -Fo 'id="herb-category-search-previous"' "$CATEGORY_TEMP" | wc -l)"
+search_next_count="$(grep -Fo 'id="herb-category-search-next"' "$CATEGORY_TEMP" | wc -l)"
 search_clear_count="$(grep -Fo 'id="herb-category-search-clear"' "$CATEGORY_TEMP" | wc -l)"
 search_status_count="$(grep -Fo 'id="herb-category-search-status"' "$CATEGORY_TEMP" | wc -l)"
 search_index_count="$(grep -Fo 'id="herb-category-index"' "$CATEGORY_TEMP" | wc -l)"
-[[ "$search_input_count" -eq 1 && "$search_clear_count" -eq 1 && "$search_status_count" -eq 1 && "$search_index_count" -eq 1 ]] || {
-    echo "ERROR: la barra de búsqueda no contiene exactamente un campo, un botón Borrar, un estado y un índice." >&2
-    echo "Conteos: campo=$search_input_count borrar=$search_clear_count estado=$search_status_count índice=$search_index_count" >&2
+[[ "$search_input_count" -eq 1 && "$search_previous_count" -eq 1 && "$search_next_count" -eq 1 && "$search_clear_count" -eq 1 && "$search_status_count" -eq 1 && "$search_index_count" -eq 1 ]] || {
+    echo "ERROR: la búsqueda no contiene exactamente un campo, dos controles de coincidencias, Borrar, estado e índice." >&2
+    echo "Conteos: campo=$search_input_count anterior=$search_previous_count siguiente=$search_next_count borrar=$search_clear_count estado=$search_status_count índice=$search_index_count" >&2
     exit 1
 }
 category_button_count="$(grep -Fo "\$categoryurls['" "$CATEGORY_TEMP" | wc -l)"
@@ -993,9 +1006,11 @@ echo "OK: las validaciones cuentan ocurrencias reales: 224 campos de hierbas y 9
 echo "OK: los treinta y dos botones abren una sola categoría y conservan el idioma seleccionado."
 echo "OK: cada categoría tiene controles Anterior y Siguiente en la esquina superior derecha."
 echo "OK: los controles conservan el idioma y no avanzan fuera de las categorías 1 a 32."
-echo "OK: la barra busca en tiempo real categorías, hierbas, nombres farmacéuticos, funciones y precauciones."
-echo "OK: la búsqueda ignora acentos, muestra el número de resultados y abre el único resultado con Enter."
-echo "OK: Borrar y Escape restauran los treinta y dos botones de categorías."
+echo "OK: la barra busca todas las coincidencias en categorías, hierbas, nombres farmacéuticos, funciones y precauciones."
+echo "OK: Anterior, Siguiente, Enter y Mayús+Enter recorren coincidencias entre las treinta y dos categorías."
+echo "OK: la categoría de cada resultado se abre automáticamente y la coincidencia activa recibe resaltado y sombra amarillos."
+echo "OK: la búsqueda ignora acentos e informa posición, total de coincidencias y número de categorías."
+echo "OK: Borrar y Escape eliminan resaltados y restauran los treinta y dos botones de categorías."
 echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
