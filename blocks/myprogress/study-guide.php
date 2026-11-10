@@ -207,7 +207,7 @@ $areas = [
                 'secondary' => true,
             ],
             [
-                'title' => 'Secondary Actions',
+                'title' => 'Herbs Secondary Actions',
                 'description' => 'Study 60 secondary herb functions while keeping the primary category of each medicinal in view.',
                 'path' => '/study-guide/comparisons/secondary-actions.html',
                 'anchor' => '',
@@ -328,7 +328,7 @@ $spanishcopy = [
     'Learn herb relationships, Jun–Chen–Zuo–Shi hierarchy, dose architecture, preparation and an exam method.' => 'Aprende relaciones entre hierbas, jerarquía Jun–Chen–Zuo–Shi, arquitectura de dosis, preparación y un método de examen.',
     'Herbal Incompatibilities' => 'Incompatibilidades herbales',
     'Master the seven herb relationships, Eighteen Incompatibilities, Nineteen Antagonisms and their decisive exam clues.' => 'Domina las siete relaciones herbales, las Dieciocho Incompatibilidades, los Diecinueve Antagonismos y sus pistas decisivas.',
-    'Secondary Actions' => 'Acciones secundarias',
+    'Herbs Secondary Actions' => 'Acciones secundarias de hierbas',
     'Study 60 secondary herb functions while keeping the primary category of each medicinal in view.' => 'Estudia 60 funciones secundarias sin perder de vista la categoría principal de cada sustancia medicinal.',
     'Formula Comparisons' => 'Comparaciones de fórmulas',
     'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.' => 'Repasa 110 comparaciones por estrategia, patrón, acciones, ingredientes y pistas decisivas que distinguen fórmulas similares.',
