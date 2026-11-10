@@ -813,24 +813,6 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">3</span>
                                 <span class="subject-study-library__journey-copy">
-                                    <strong><?php echo s($ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?></strong>
-                                    <b><?php echo s($ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>
-                                </span>
-                            </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?>">
-                                <?php foreach ($secondaryguidechapters as $chapter): ?>
-                                    <?php $secondarychapterurl = $makechapterurl($chapter); ?>
-                                    <a class="subject-study-library__journey-option" href="<?php echo $secondarychapterurl->out(false); ?>">
-                                        <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
-                                    </a>
-                                <?php endforeach; ?>
-                            </nav>
-                        </section>
-
-                        <section class="subject-study-library__journey-card">
-                            <header class="subject-study-library__journey-heading">
-                                <span class="subject-study-library__journey-step">4</span>
-                                <span class="subject-study-library__journey-copy">
                                     <strong><?php echo s($ises ? 'Comparación de patologías y patrones' : 'Comparison Pathology and Patterns'); ?></strong>
                                     <b><?php echo s($ises ? 'Comparaciones clínicas' : 'Clinical comparisons'); ?></b>
                                 </span>
@@ -845,6 +827,24 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $patternmaciociacomparisonurl->out(false); ?>">
                                     <span><?php echo s($tr('Pattern Comparison Maciocia')); ?><small><?php echo s($ises ? '100 consejos clínicos de patrones' : '100 clinical pattern tips'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
+                            </nav>
+                        </section>
+
+                        <section class="subject-study-library__journey-card">
+                            <header class="subject-study-library__journey-heading">
+                                <span class="subject-study-library__journey-step">4</span>
+                                <span class="subject-study-library__journey-copy">
+                                    <strong><?php echo s($ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?></strong>
+                                    <b><?php echo s($ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>
+                                </span>
+                            </header>
+                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?>">
+                                <?php foreach ($secondaryguidechapters as $chapter): ?>
+                                    <?php $secondarychapterurl = $makechapterurl($chapter); ?>
+                                    <a class="subject-study-library__journey-option" href="<?php echo $secondarychapterurl->out(false); ?>">
+                                        <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
+                                    </a>
+                                <?php endforeach; ?>
                             </nav>
                         </section>
 
