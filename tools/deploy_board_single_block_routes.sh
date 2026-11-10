@@ -83,11 +83,31 @@ grep -Fq "optional_param('category', '', PARAM_ALPHANUMEXT)" "$CATEGORY_TEMP"
 grep -Fq 'foreach ($categoryids as $categoryid)' "$CATEGORY_TEMP"
 grep -Fq "\$languageparams['category'] = \$selectedcategory;" "$CATEGORY_TEMP"
 grep -Fq 'Selecciona una categoría para abrir solamente su tabla comparativa.' "$CATEGORY_TEMP"
+grep -Fq '$previouscategoryurl = null;' "$CATEGORY_TEMP"
+grep -Fq '$nextcategoryurl = null;' "$CATEGORY_TEMP"
+grep -Fq '$selectedcategoryindex = array_search($selectedcategory, $categoryids, true);' "$CATEGORY_TEMP"
+grep -Fq '$previouscategoryurl = $categoryurls[$categoryids[$selectedcategoryindex - 1]];' "$CATEGORY_TEMP"
+grep -Fq '$nextcategoryurl = $categoryurls[$categoryids[$selectedcategoryindex + 1]];' "$CATEGORY_TEMP"
+grep -Fq '"Previous" => "Anterior"' "$CATEGORY_TEMP"
+grep -Fq '"Next" => "Siguiente"' "$CATEGORY_TEMP"
+grep -Fq '"Category navigation" => "Navegación de categorías"' "$CATEGORY_TEMP"
+grep -Fq 'herb-category-library__section-heading' "$CATEGORY_TEMP"
+grep -Fq 'herb-category-library__pager' "$CATEGORY_TEMP"
+grep -Fq 'rel="prev"' "$CATEGORY_TEMP"
+grep -Fq 'rel="next"' "$CATEGORY_TEMP"
 category_button_count="$(grep -Fo "\$categoryurls['" "$CATEGORY_TEMP" | wc -l)"
 hidden_category_count="$(grep -Fo "? '' : ' hidden'" "$CATEGORY_TEMP" | wc -l)"
 [[ "$category_button_count" -eq 32 && "$hidden_category_count" -eq 32 ]] || {
     echo "ERROR: los treinta y dos botones no abren exactamente una categoría cada uno." >&2
     echo "Conteos: botones=$category_button_count secciones=$hidden_category_count" >&2
+    exit 1
+}
+previous_category_link_count="$(grep -Fo 'rel="prev"' "$CATEGORY_TEMP" | wc -l)"
+next_category_link_count="$(grep -Fo 'rel="next"' "$CATEGORY_TEMP" | wc -l)"
+category_pager_count="$(grep -Fo '<nav class="herb-category-library__pager"' "$CATEGORY_TEMP" | wc -l)"
+[[ "$previous_category_link_count" -eq 32 && "$next_category_link_count" -eq 32 && "$category_pager_count" -eq 32 ]] || {
+    echo "ERROR: los controles Anterior y Siguiente no están presentes en las treinta y dos categorías." >&2
+    echo "Conteos: anteriores=$previous_category_link_count siguientes=$next_category_link_count navegadores=$category_pager_count" >&2
     exit 1
 }
 localized_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$CATEGORY_TEMP" | wc -l)"
@@ -950,6 +970,8 @@ echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entr
 echo "OK: la vista Español localiza índice, títulos, tablas, semejanzas, funciones, precauciones y preparación."
 echo "OK: las validaciones cuentan ocurrencias reales: 224 campos de hierbas y 96 campos de semejanzas."
 echo "OK: los treinta y dos botones abren una sola categoría y conservan el idioma seleccionado."
+echo "OK: cada categoría tiene controles Anterior y Siguiente en la esquina superior derecha."
+echo "OK: los controles conservan el idioma y no avanzan fuera de las categorías 1 a 32."
 echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
