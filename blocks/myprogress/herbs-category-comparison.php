@@ -9,6 +9,313 @@ $lang = optional_param('lang', 'en', PARAM_ALPHA);
 $lang = $lang === 'es' ? 'es' : 'en';
 $ises = $lang === 'es';
 
+function board_herb_category_localize(string $text, bool $ises): string {
+    if (!$ises || $text === '' || $text === '—') {
+        return $text;
+    }
+
+    static $translations = [
+        "1. Disperse Wind-Cold" => "1. Dispersar Viento-Frío",
+        "2. Disperse Wind-Heat" => "2. Dispersar Viento-Calor",
+        "3. Clear and Purge Heat" => "3. Limpiar y purgar Calor",
+        "4. Clear Blood-Heat" => "4. Limpiar Calor de la Sangre",
+        "5. Clear Damp-Heat" => "5. Limpiar Humedad-Calor",
+        "6. Clear Toxic-Heat" => "6. Limpiar Calor Tóxico",
+        "7. Clear Deficient-Heat" => "7. Limpiar Calor por Deficiencia",
+        "8. Purgatives" => "8. Purgantes",
+        "9. Laxatives" => "9. Laxantes",
+        "10. Cathartics" => "10. Catárticos",
+        "11. Diuretics" => "11. Diuréticos",
+        "12. Dispel Wind-Damp" => "12. Dispersar Viento-Humedad",
+        "Similarities and Clinical Overlaps" => "Semejanzas y superposiciones clínicas",
+        "Shared clinical relationship" => "Relación clínica compartida",
+        "Herb / Pharmaceutical name" => "Hierba / nombre farmacéutico",
+        "Main functions and indications" => "Funciones e indicaciones principales",
+        "Cautions / contraindications" => "Precauciones / contraindicaciones",
+        "Selection focus:" => "Enfoque de selección:",
+        "Common foundation:" => "Fundamento común:",
+        "Board Guideline 2026" => "Guía Board 2026",
+        "Comparison" => "Comparación",
+        "Herbs" => "Hierbas",
+        "Taste" => "Sabor",
+        "Nature" => "Naturaleza",
+        "Channels" => "Canales",
+        "Dosage" => "Dosis",
+        "Preparation" => "Preparación",
+        "Strong exterior release / diaphoresis" => "Liberación exterior intensa / diaforesis",
+        "Gentle Wind-Cold release" => "Liberación suave de Viento-Frío",
+        "Wind-Cold-Damp pain and headache" => "Dolor y cefalea por Viento-Frío-Humedad",
+        "Nasal congestion and sinus discharge" => "Congestión nasal y secreción sinusal",
+        "Lung Qi, cough and phlegm" => "Qi de Pulmón, tos y flema",
+        "Three-burner emphasis" => "Énfasis en los tres calentadores",
+        "Painful urinary dribbling" => "Micción dolorosa y entrecortada",
+        "Wind-Damp Bi syndrome" => "Síndrome Bi por Viento-Humedad",
+        "Lower body versus upper limbs" => "Parte inferior del cuerpo frente a extremidades superiores",
+        "Unblock channels and relax sinews" => "Desobstruir canales y relajar tendones",
+        "Wind-Damp with Heat" => "Viento-Humedad con Calor",
+        "Strengthen Liver, Kidney, sinews and bones" => "Fortalecer Hígado, Riñón, tendones y huesos",
+        "Bitter, slightly acrid" => "Amargo, ligeramente picante",
+        "Acrid, slightly bitter" => "Picante, ligeramente amargo",
+        "Acrid, bitter, salty" => "Picante, amargo, salado",
+        "Salty, sweet, bitter" => "Salado, dulce, amargo",
+        "Bitter, sweet, salty" => "Amargo, dulce, salado",
+        "Sweet, slightly bitter" => "Dulce, ligeramente amargo",
+        "Bitter, slightly sweet" => "Amargo, ligeramente dulce",
+        "Acrid, sweet" => "Picante, dulce",
+        "Acrid, bitter" => "Picante, amargo",
+        "Bitter, acrid" => "Amargo, picante",
+        "Bitter, sweet" => "Amargo, dulce",
+        "Sweet, bitter" => "Dulce, amargo",
+        "Bitter, salty" => "Amargo, salado",
+        "Sweet, salty" => "Dulce, salado",
+        "Sweet, bland" => "Dulce, insípido",
+        "Acrid, salty" => "Picante, salado",
+        "Slightly warm, aromatic" => "Ligeramente tibia, aromática",
+        "Warm, aromatic" => "Tibia, aromática",
+        "Slightly warm" => "Ligeramente tibia",
+        "Slightly cold" => "Ligeramente fría",
+        "Very cold" => "Muy fría",
+        "Warm, toxic" => "Tibia, tóxica",
+        "Cold, toxic" => "Fría, tóxica",
+        "Warm" => "Tibia",
+        "Cold" => "Fría",
+        "Neutral" => "Neutra",
+        "Aromatic" => "Aromática",
+        "Acrid" => "Picante",
+        "Bitter" => "Amargo",
+        "Sweet" => "Dulce",
+        "Salty" => "Salado",
+        "Sour" => "Ácido",
+        "Bland" => "Insípido",
+        "Wind-Cold-Damp" => "Viento-Frío-Humedad",
+        "Wind-Cold" => "Viento-Frío",
+        "Wind-Heat" => "Viento-Calor",
+        "Wind-Damp" => "Viento-Humedad",
+        "Damp-Heat" => "Humedad-Calor",
+        "Toxic-Heat" => "Calor Tóxico",
+        "deficient Heat" => "Calor por Deficiencia",
+        "deficiency Heat" => "Calor por Deficiencia",
+        "Blood Heat" => "Calor de la Sangre",
+        "Lung Heat" => "Calor de Pulmón",
+        "Heart Heat" => "Calor de Corazón",
+        "Liver Heat" => "Calor de Hígado",
+        "Stomach Heat" => "Calor de Estómago",
+        "Summer-Heat" => "Calor de Verano",
+        "Fire toxicity" => "toxicidad de Fuego",
+        "Fire toxin" => "toxina de Fuego",
+        "Fire" => "Fuego",
+        "Heat" => "Calor",
+        "Cold" => "Frío",
+        "Dampness" => "Humedad",
+        "Damp" => "Humedad",
+        "Wind" => "Viento",
+        "Blood" => "Sangre",
+        "Lung" => "Pulmón",
+        "Heart" => "Corazón",
+        "Liver" => "Hígado",
+        "Kidney" => "Riñón",
+        "Spleen" => "Bazo",
+        "Stomach" => "Estómago",
+        "Gallbladder" => "Vesícula Biliar",
+        "Large Intestine" => "Intestino Grueso",
+        "Small Intestine" => "Intestino Delgado",
+        "Intestines" => "Intestinos",
+        "Intestine" => "Intestino",
+        "upper burner" => "calentador superior",
+        "middle burner" => "calentador medio",
+        "lower burner" => "calentador inferior",
+        "upper body" => "parte superior del cuerpo",
+        "lower body" => "parte inferior del cuerpo",
+        "upper limbs" => "extremidades superiores",
+        "lower back and legs" => "zona lumbar y piernas",
+        "painful urinary dribbling" => "micción dolorosa y entrecortada",
+        "urinary dribbling" => "goteo urinario",
+        "promotes urination" => "promueve la micción",
+        "Promotes urination" => "Promueve la micción",
+        "promote urination" => "promover la micción",
+        "Promote urination" => "Promover la micción",
+        "urination" => "micción",
+        "urinary" => "urinario",
+        "constipation" => "estreñimiento",
+        "diarrhea" => "diarrea",
+        "vomiting" => "vómitos",
+        "nausea" => "náuseas",
+        "cough" => "tos",
+        "wheezing" => "sibilancias",
+        "phlegm" => "flema",
+        "mucus" => "mucosidad",
+        "headache" => "cefalea",
+        "toothache" => "dolor dental",
+        "pain" => "dolor",
+        "itching" => "picazón",
+        "swelling" => "hinchazón",
+        "edema" => "edema",
+        "bleeding" => "sangrado",
+        "jaundice" => "ictericia",
+        "sweating" => "sudoración",
+        "dryness" => "sequedad",
+        "thirst" => "sed",
+        "sores" => "llagas",
+        "rashes" => "erupciones",
+        "rash" => "erupción",
+        "skin" => "piel",
+        "eyes" => "ojos",
+        "eye" => "ojo",
+        "throat" => "garganta",
+        "nose" => "nariz",
+        "joints" => "articulaciones",
+        "joint" => "articulación",
+        "sinews" => "tendones",
+        "bones" => "huesos",
+        "stool" => "heces",
+        "fluids" => "líquidos",
+        "fluid" => "líquido",
+        "pregnancy" => "embarazo",
+        "menstruation" => "menstruación",
+        "postpartum" => "posparto",
+        "deficiency" => "deficiencia",
+        "excess" => "exceso",
+        "toxic" => "tóxica",
+        "toxicity" => "toxicidad",
+        "parasites" => "parásitos",
+        "convulsions" => "convulsiones",
+        "tremors" => "temblores",
+        "abscesses" => "abscesos",
+        "abscess" => "absceso",
+        "nodules" => "nódulos",
+        "stasis" => "estasis",
+        "channels" => "canales",
+        "channel" => "canal",
+        "exterior" => "exterior",
+        "interior" => "interior",
+        "pattern" => "patrón",
+        "patterns" => "patrones",
+        "syndrome" => "síndrome",
+        "disorders" => "trastornos",
+        "disorder" => "trastorno",
+        "conditions" => "afecciones",
+        "condition" => "afección",
+        "symptoms" => "síntomas",
+        "signs" => "signos",
+        "location" => "localización",
+        "Clears" => "Elimina",
+        "clears" => "elimina",
+        "Clear" => "Eliminar",
+        "clear" => "eliminar",
+        "Dispels" => "Dispersa",
+        "dispels" => "dispersa",
+        "Dispel" => "Dispersar",
+        "dispel" => "dispersar",
+        "Drains" => "Drena",
+        "drains" => "drena",
+        "Drain" => "Drenar",
+        "drain" => "drenar",
+        "Releases" => "Libera",
+        "releases" => "libera",
+        "Release" => "Liberar",
+        "release" => "liberar",
+        "Relieves" => "Alivia",
+        "relieves" => "alivia",
+        "Relieve" => "Aliviar",
+        "relieve" => "aliviar",
+        "Promotes" => "Promueve",
+        "promotes" => "promueve",
+        "Transforms" => "Transforma",
+        "transforms" => "transforma",
+        "Nourishes" => "Nutre",
+        "nourishes" => "nutre",
+        "Strengthens" => "Fortalece",
+        "strengthens" => "fortalece",
+        "Strengthen" => "Fortalecer",
+        "strengthen" => "fortalecer",
+        "Tonifies" => "Tonifica",
+        "tonifies" => "tonifica",
+        "Benefits" => "Beneficia",
+        "benefits" => "beneficia",
+        "Warms" => "Calienta",
+        "warms" => "calienta",
+        "Cools" => "Enfría",
+        "cools" => "enfría",
+        "Moistens" => "Humedece",
+        "moistens" => "humedece",
+        "Softens" => "Ablanda",
+        "softens" => "ablanda",
+        "Calms" => "Calma",
+        "calms" => "calma",
+        "Stops" => "Detiene",
+        "stops" => "detiene",
+        "Reduces" => "Reduce",
+        "reduces" => "reduce",
+        "Expels" => "Expulsa",
+        "expels" => "expulsa",
+        "Unblocks" => "Desobstruye",
+        "unblocks" => "desobstruye",
+        "Unblock" => "Desobstruir",
+        "unblock" => "desobstruir",
+        "Moves" => "Mueve",
+        "moves" => "mueve",
+        "Invigorates" => "Vigoriza",
+        "invigorates" => "vigoriza",
+        "Treats" => "Trata",
+        "treats" => "trata",
+        "Addresses" => "Trata",
+        "addresses" => "trata",
+        "Supports" => "Apoya",
+        "supports" => "apoya",
+        "Harmonizes" => "Armoniza",
+        "harmonizes" => "armoniza",
+        "Settles" => "Calma",
+        "settles" => "calma",
+        "Avoid" => "Evitar",
+        "avoid" => "evitar",
+        "Use cautiously" => "Usar con precaución",
+        "use cautiously" => "usar con precaución",
+        "Contraindicated" => "Contraindicado",
+        "contraindicated" => "contraindicado",
+        "incompatible with" => "incompatible con",
+        "traditionally" => "tradicionalmente",
+        "Traditionally" => "Tradicionalmente",
+        "especially" => "especialmente",
+        "Especially" => "Especialmente",
+        "while" => "mientras",
+        "without" => "sin",
+        "with" => "con",
+        "from" => "por",
+        "during" => "durante",
+        "when" => "cuando",
+        "because" => "porque",
+        "and" => "y",
+        "or" => "o",
+        "of the" => "del",
+        "of" => "de",
+        "for" => "para",
+        "in" => "en",
+        "topically" => "tópicamente",
+        "externally" => "externamente",
+        "decoction" => "decocción",
+        "powder" => "polvo",
+        "pill" => "píldora",
+        "capsule" => "cápsula",
+        "up to" => "hasta",
+        "Cook first; remove foam." => "Cocinar primero y retirar la espuma.",
+        "Add late when appropriate." => "Agregar al final cuando sea apropiado.",
+        "Char for bleeding indications." => "Carbonizar para indicaciones de sangrado.",
+        "Wrap in cloth while decocting." => "Envolver en tela durante la decocción.",
+        "Fresh ginger." => "Jengibre fresco.",
+        "Use the white bulb." => "Usar el bulbo blanco.",
+        "Do not subject to prolonged cooking." => "No someter a cocción prolongada.",
+        "Dissolve into the strained decoction." => "Disolver en la decocción ya colada.",
+        "Crush before cooking." => "Triturar antes de cocinar.",
+        "Wrap in a porous bag before decocting." => "Envolver en una bolsa porosa antes de la decocción.",
+        "No specific caution noted in the guideline." => "La guía no señala una precaución específica.",
+        "Use only correctly identified and properly prepared medicinal material." => "Usar únicamente material medicinal correctamente identificado y preparado.",
+        "Use only the correctly identified, non-aristolochic medicinal species." => "Usar únicamente la especie medicinal correctamente identificada y sin ácido aristolóquico.",
+    ];
+
+    return strtr($text, $translations);
+}
+
+
 $pageurl = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $ises ? ['lang' => 'es'] : []);
 $backurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
@@ -315,36 +622,36 @@ echo $OUTPUT->header();
     </header>
 
     <nav class="herb-category-library__index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
-        <a href="#disperse-wind-cold">1. Disperse Wind-Cold</a>
-        <a href="#disperse-wind-heat">2. Disperse Wind-Heat</a>
-        <a href="#clear-and-purge-heat">3. Clear and Purge Heat</a>
-        <a href="#clear-blood-heat">4. Clear Blood-Heat</a>
-        <a href="#clear-damp-heat">5. Clear Damp-Heat</a>
-        <a href="#clear-toxic-heat">6. Clear Toxic-Heat</a>
-        <a href="#clear-deficient-heat">7. Clear Deficient-Heat</a>
-        <a href="#purgatives">8. Purgatives</a>
-        <a href="#laxatives">9. Laxatives</a>
-        <a href="#cathartics">10. Cathartics</a>
-        <a href="#diuretics">11. Diuretics</a>
-        <a href="#dispel-wind-damp">12. Dispel Wind-Damp</a>
+        <a href="#disperse-wind-cold"><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></a>
+        <a href="#disperse-wind-heat"><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></a>
+        <a href="#clear-and-purge-heat"><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></a>
+        <a href="#clear-blood-heat"><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></a>
+        <a href="#clear-damp-heat"><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></a>
+        <a href="#clear-toxic-heat"><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></a>
+        <a href="#clear-deficient-heat"><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></a>
+        <a href="#purgatives"><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></a>
+        <a href="#laxatives"><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></a>
+        <a href="#cathartics"><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></a>
+        <a href="#diuretics"><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></a>
+        <a href="#dispel-wind-damp"><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
-        <h3>1. Disperse Wind-Cold</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 15 herbs · Common foundation: predominantly acrid herbs that release exterior Wind-Cold.</p>
+        <h3><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 15 herbs · Common foundation: predominantly acrid herbs that release exterior Wind-Cold.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($similarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> sweating strength, pain location, nasal involvement, Lung symptoms and Dampness.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('sweating strength, pain location, nasal involvement, Lung symptoms and Dampness.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -354,8 +661,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -365,13 +672,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -380,22 +687,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="disperse-wind-heat">
-        <h3>2. Disperse Wind-Heat</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 11 herbs · Common foundation: predominantly cool and acrid herbs that disperse exterior Wind-Heat.</p>
+        <h3><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 11 herbs · Common foundation: predominantly cool and acrid herbs that disperse exterior Wind-Heat.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($windheatsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> throat and rash involvement, eye symptoms, headache location, Lung dryness, Shaoyang signs and sinking Qi.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('throat and rash involvement, eye symptoms, headache location, Lung dryness, Shaoyang signs and sinking Qi.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -405,8 +712,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -416,13 +723,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -432,22 +739,22 @@ echo $OUTPUT->header();
 
 
     <section class="herb-category-library__section" id="clear-and-purge-heat">
-        <h3>3. Clear and Purge Heat</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 8 herbs · Common foundation: cold herbs that clear internal Heat, drain Fire or protect fluids.</p>
+        <h3><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 8 herbs · Common foundation: cold herbs that clear internal Heat, drain Fire or protect fluids.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($clearheatsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> severity of Fire, fluid injury, Lung or Stomach involvement, irritability, urinary signs, eye symptoms and nodules.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('severity of Fire, fluid injury, Lung or Stomach involvement, irritability, urinary signs, eye symptoms and nodules.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -457,8 +764,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -468,13 +775,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -484,22 +791,22 @@ echo $OUTPUT->header();
 
 
     <section class="herb-category-library__section" id="clear-blood-heat">
-        <h3>4. Clear Blood-Heat</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 5 herbs · Common foundation: cool Blood-level Heat and protect against injury from Fire.</p>
+        <h3><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 5 herbs · Common foundation: cool Blood-level Heat and protect against injury from Fire.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($bloodheatsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> toxin severity, bleeding, Yin injury, deficiency Heat, Blood stasis, throat swelling and skin manifestations.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('toxin severity, bleeding, Yin injury, deficiency Heat, Blood stasis, throat swelling and skin manifestations.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -509,8 +816,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -520,13 +827,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -535,22 +842,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="clear-damp-heat">
-        <h3>5. Clear Damp-Heat</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 5 herbs · Common foundation: bitter, cold herbs that clear Heat and dry Dampness.</p>
+        <h3><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 5 herbs · Common foundation: bitter, cold herbs that clear Heat and dry Dampness.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($dampheatsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> upper, middle or lower burner location; Liver/Gallbladder Fire; diarrhea; jaundice; urinary or genital signs; and itching.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('upper, middle or lower burner location; Liver/Gallbladder Fire; diarrhea; jaundice; urinary or genital signs; and itching.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -560,8 +867,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -571,13 +878,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -586,22 +893,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="clear-toxic-heat">
-        <h3>6. Clear Toxic-Heat</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 9 herbs · Common foundation: clear Heat and relieve Fire toxicity, with distinct clinical locations and secondary actions.</p>
+        <h3><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 9 herbs · Common foundation: clear Heat and relieve Fire toxicity, with distinct clinical locations and secondary actions.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($toxicheatsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> Wind-Heat stage, throat severity, abscess location, Damp-Heat involvement, skin lesions, Summer-Heat and bleeding.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Wind-Heat stage, throat severity, abscess location, Damp-Heat involvement, skin lesions, Summer-Heat and bleeding.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -611,8 +918,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -622,13 +929,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -637,22 +944,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="clear-deficient-heat">
-        <h3>7. Clear Deficient-Heat</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 3 herbs · Common foundation: clear deficient Heat and cool the Blood.</p>
+        <h3><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 3 herbs · Common foundation: clear deficient Heat and cool the Blood.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($deficientheatsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> sweating with Yin-deficiency Heat, Lung cough, Summer-Heat or malarial patterns, urinary involvement, toxicity and swelling.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('sweating with Yin-deficiency Heat, Lung cough, Summer-Heat or malarial patterns, urinary involvement, toxicity and swelling.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -662,8 +969,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -673,13 +980,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -688,22 +995,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="purgatives">
-        <h3>8. Purgatives</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 3 herbs · Common foundation: drain Heat and move stool to purge accumulation.</p>
+        <h3><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 3 herbs · Common foundation: drain Heat and move stool to purge accumulation.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($purgativesimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> strength of purgation, dry-hard stool, Blood Heat or stasis, Liver Heat, external swelling and constitutional deficiency.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('strength of purgation, dry-hard stool, Blood Heat or stasis, Liver Heat, external swelling and constitutional deficiency.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -713,8 +1020,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -724,13 +1031,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -739,22 +1046,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="laxatives">
-        <h3>9. Laxatives</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 1 herb · Common foundation: gently moisten the Intestines and relieve dry constipation.</p>
+        <h3><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: gently moisten the Intestines and relieve dry constipation.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($laxativesimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> dryness or deficiency constipation, need for gentle action, Yin and fluid status, and long-term-use cautions.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('dryness or deficiency constipation, need for gentle action, Yin and fluid status, and long-term-use cautions.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -764,8 +1071,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -775,13 +1082,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -790,22 +1097,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="cathartics">
-        <h3>10. Cathartics</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 1 herb · Common foundation: strongly drain retained fluids downward.</p>
+        <h3><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: strongly drain retained fluids downward.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($catharticsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> severe fluid accumulation, edema, swelling or nodules, patient strength, toxicity and formula incompatibility.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('severe fluid accumulation, edema, swelling or nodules, patient strength, toxicity and formula incompatibility.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -815,8 +1122,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -826,13 +1133,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -841,22 +1148,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="diuretics">
-        <h3>11. Diuretics</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 17 herbs · Common foundation: promote urination, eliminate Water and Dampness, reduce edema or relieve painful urinary dribbling.</p>
+        <h3><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 17 herbs · Common foundation: promote urination, eliminate Water and Dampness, reduce edema or relieve painful urinary dribbling.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($diureticsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> edema versus Lin syndrome, Spleen deficiency, jaundice, Heart Fire, bleeding, Blood stasis, lactation, Lung phlegm, itching and cloudy urine.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('edema versus Lin syndrome, Spleen deficiency, jaundice, Heart Fire, bleeding, Blood stasis, lactation, Lung phlegm, itching and cloudy urine.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -866,8 +1173,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -877,13 +1184,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -892,22 +1199,22 @@ echo $OUTPUT->header();
     </section>
 
     <section class="herb-category-library__section" id="dispel-wind-damp">
-        <h3>12. Dispel Wind-Damp</h3>
-        <p class="herb-category-library__summary">Board Guideline 2026 · 10 herbs · Common foundation: dispel Wind-Damp, relieve pain from Bi syndrome, unblock channels and benefit sinews.</p>
+        <h3><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: dispel Wind-Damp, relieve pain from Bi syndrome, unblock channels and benefit sinews.', $ises)); ?></p>
 
         <div class="herb-category-library__similarities">
-            <h4>Similarities and Clinical Overlaps</h4>
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
             <div class="herb-category-library__scroll">
                 <table>
-                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($winddampsimilarities as $similarity): ?>
-                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> upper versus lower body, Cold versus Heat, channel obstruction, cramping, edema, skin involvement, convulsions and Liver-Kidney deficiency.</p>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('upper versus lower body, Cold versus Heat, channel obstruction, cramping, edema, skin involvement, convulsions and Liver-Kidney deficiency.', $ises)); ?></p>
         </div>
 
         <div class="herb-category-library__scroll">
@@ -917,8 +1224,8 @@ echo $OUTPUT->header();
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
-                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -928,13 +1235,13 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
-                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
-                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
-                        <td><?php echo s($herb[5]); ?></td>
-                        <td><?php echo s($herb[6]); ?></td>
-                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
-                        <td><?php echo s($herb[8]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
