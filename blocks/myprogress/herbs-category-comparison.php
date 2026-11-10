@@ -228,6 +228,30 @@ $diureticsimilarities = [
     ['Cloudy urine and turbid Dampness', 'Bi Xie · Che Qian Zi · Ze Xie', 'Bi Xie is most specific for separating clear from turbid, while Che Qian Zi and Ze Xie promote urinary drainage and clear lower-burner Dampness.'],
 ];
 
+$winddampherbs = [
+    ['Du Huo', 'Angelicae Pubescentis Radix', 'Bitter, acrid', 'Warm', 'KD, UB', 'Dispels Wind-Cold-Damp, especially from the lower back and legs; relieves pain from Bi syndrome; releases the exterior; treats Shaoyin headache and toothache.', 'Avoid in Yin deficiency with Heat signs.', '3–9 g', '—'],
+    ['Wei Ling Xian', 'Clematidis Radix', 'Acrid, salty', 'Warm', 'UB', 'Dispels Wind-Damp; unblocks the channels and relieves pain; softens and transforms fish bones; addresses focal distension and accumulation.', 'Avoid in Qi deficiency or Blood deficiency.', '6–9 g; 15–30 g for fish bones', '—'],
+    ['Hai Tong Pi', 'Erythrinae Cortex', 'Bitter, acrid', 'Neutral', 'LV, SP, KD', 'Dispels Wind-Damp and unblocks the channels; promotes urination and reduces edema; treats itching skin lesions; may be used as a gargle for toothache from dental cavities.', 'Avoid in Blood deficiency.', '6–15 g', '—'],
+    ['Qin Jiao', 'Gentianae Macrophyllae Radix', 'Bitter, acrid', 'Slightly cold', 'GB, LV, ST', 'Dispels Wind-Damp and relaxes the sinews; clears deficiency Heat; resolves Dampness and jaundice; moistens the Intestines and moves stool.', 'Avoid with frequent urination, chronic pain with emaciation, or Spleen deficiency with diarrhea.', '3–9 g', '—'],
+    ['Mu Gua', 'Chaenomelis Fructus', 'Sour', 'Warm', 'LV, SP', 'Relaxes the sinews and relieves cramping; harmonizes the Stomach and transforms Dampness; reduces food retention.', 'Avoid during exterior disorders; excessive use may damage the teeth and bones.', '6–12 g', '—'],
+    ['Sang Zhi', 'Mori Ramulus', 'Bitter', 'Neutral', 'LV', 'Dispels Wind-Damp, unblocks the channels and benefits the joints, especially the upper limbs; may reduce edema.', 'No specific caution noted in the guideline.', '9–15 g; up to 30 g', '—'],
+    ['Xi Xian Cao', 'Siegesbeckiae Herba', 'Bitter', 'Cold', 'KD, LV', 'Dispels Wind-Damp and strengthens the sinews; clears Heat and calms the Liver; transforms Damp-Heat; traditionally used in hypertension patterns.', 'Avoid in Yin deficiency or Blood deficiency.', '9–15 g', '—'],
+    ['Bai Hua She', 'Agkistrodon', 'Sweet, salty', 'Warm, toxic', 'LV', 'Powerfully dispels Wind from the skin and sinews; opens the channels; settles tremors and convulsions.', 'Avoid in Yin deficiency with Heat; use cautiously in Blood deficiency.', '3–9 g decoction; 1–1.5 g powder', 'Use only correctly identified and properly prepared medicinal material.'],
+    ['Wu Jia Pi', 'Eleutherococci Cortex', 'Acrid, bitter', 'Warm', 'KD, LV', 'Dispels Wind-Damp; strengthens the Liver and Kidneys, sinews and bones; transforms Dampness and reduces swelling.', 'Use cautiously in Yin deficiency with Heat.', '4.5–9 g', '—'],
+    ['Sang Ji Sheng', 'Taxilli Herba', 'Bitter, sweet', 'Neutral', 'KD, LV', 'Dispels Wind-Damp; strengthens the Liver and Kidneys, sinews and bones; nourishes Blood; calms the womb; benefits the skin; traditionally used in hypertension patterns.', 'No specific caution noted in the guideline.', '9–15 g', '—'],
+];
+
+$winddampsimilarities = [
+    ['Wind-Damp Bi syndrome', 'Du Huo · Wei Ling Xian · Hai Tong Pi · Qin Jiao · Mu Gua · Sang Zhi · Xi Xian Cao · Bai Hua She · Wu Jia Pi · Sang Ji Sheng', 'All address Wind-Damp painful obstruction, with selection based on location, temperature, deficiency, edema and channel involvement.'],
+    ['Lower body versus upper limbs', 'Du Huo · Sang Zhi', 'Du Huo emphasizes the lower back and legs, while Sang Zhi is especially useful for the shoulders and upper limbs.'],
+    ['Unblock channels and relax sinews', 'Wei Ling Xian · Hai Tong Pi · Qin Jiao · Mu Gua · Sang Zhi', 'Wei Ling Xian strongly unblocks pain, Hai Tong Pi adds edema and skin actions, Qin Jiao clears Heat, Mu Gua treats cramping, and Sang Zhi benefits joints.'],
+    ['Wind-Damp with Heat', 'Qin Jiao · Xi Xian Cao', 'Both are cooling choices for Heat-type Bi syndrome; Qin Jiao also clears deficiency Heat, while Xi Xian Cao calms the Liver and strengthens sinews.'],
+    ['Edema and Damp accumulation', 'Hai Tong Pi · Sang Zhi · Wu Jia Pi', 'All address Wind-Damp with swelling; Hai Tong Pi promotes urination, Sang Zhi benefits the joints, and Wu Jia Pi adds tonic support.'],
+    ['Strengthen Liver, Kidney, sinews and bones', 'Wu Jia Pi · Sang Ji Sheng', 'Both treat chronic Wind-Damp with deficiency; Sang Ji Sheng additionally nourishes Blood and calms the womb.'],
+    ['Severe Wind, skin and convulsions', 'Bai Hua She · Xi Xian Cao · Hai Tong Pi', 'Bai Hua She is strongest for entrenched Wind and convulsions, while Xi Xian Cao and Hai Tong Pi emphasize Heat, itching or skin involvement.'],
+    ['Special indications', 'Du Huo · Wei Ling Xian · Hai Tong Pi · Sang Ji Sheng', 'Du Huo treats Shaoyin headache and toothache, Wei Ling Xian fish-bone obstruction, Hai Tong Pi dental-cavity pain, and Sang Ji Sheng deficiency with pregnancy support.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -302,6 +326,7 @@ echo $OUTPUT->header();
         <a href="#laxatives">9. Laxatives</a>
         <a href="#cathartics">10. Cathartics</a>
         <a href="#diuretics">11. Diuretics</a>
+        <a href="#dispel-wind-damp">12. Dispel Wind-Damp</a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
@@ -847,6 +872,57 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($diureticherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="dispel-wind-damp">
+        <h3>12. Dispel Wind-Damp</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 10 herbs · Common foundation: dispel Wind-Damp, relieve pain from Bi syndrome, unblock channels and benefit sinews.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($winddampsimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> upper versus lower body, Cold versus Heat, channel obstruction, cramping, edema, skin involvement, convulsions and Liver-Kidney deficiency.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($winddampherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row">
                             <strong><?php echo s($herb[0]); ?></strong>
