@@ -27,6 +27,7 @@ $categoryids = [
     'dissolve-hot-phlegm',
     'dissolve-cold-phlegm',
     'stop-cough-wheezing',
+    'aromatics-for-damp',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -779,13 +780,47 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Bai Bu uniquely expels parasites and kills lice externally; larger guideline doses are reserved for pinworms." => "Bai Bu se distingue por expulsar parásitos y eliminar piojos externamente; las dosis mayores de la guía se reservan para oxiuros.",
         "Edema and hypertension patterns" => "Edema y patrones de hipertensión",
         "Sang Bai Pi clears Lung Heat, promotes urination, reduces edema and is traditionally used in hypertension patterns." => "Sang Bai Pi elimina Calor de Pulmón, promueve la micción, reduce edema y se usa tradicionalmente en patrones de hipertensión.",
+        "16. Aromatics for Damp" => "16. Aromáticas que transforman Humedad",
+        "Board Guideline 2026 · 7 herbs · Common foundation: transform excess and turbid Dampness from the Middle Jiao, regulate Qi and warm the center." => "Guía Board 2026 · 7 hierbas · Fundamento común: transformar Humedad excesiva y turbia del Jiao Medio, regular el Qi y calentar el centro.",
+        "Dampness severity, exterior involvement, Qi stagnation, nausea or vomiting, Spleen Cold, pregnancy, malaria and constitutional deficiency." => "intensidad de la Humedad, participación exterior, estancamiento de Qi, náuseas o vómitos, Frío de Bazo, embarazo, malaria y deficiencia constitucional.",
+        "Transforms Dampness; stops nausea and vomiting; releases the Exterior; treats Summer-Heat and may be used for dermatosis." => "Transforma Humedad; detiene náuseas y vómitos; libera el Exterior; trata Calor de Verano y puede utilizarse para dermatosis.",
+        "Use cautiously in Yin deficiency with Heat or Stomach Fire." => "Usar con precaución en deficiencia de Yin con Calor o Fuego de Estómago.",
+        "Do not cook for more than 15 minutes." => "No cocinar durante más de 15 minutos.",
+        "Strongly dries Dampness and strengthens the Spleen; clears Dampness from the Lower Jiao; improves vision; releases the Exterior and induces sweating for Wind-Damp pathogens." => "Seca intensamente la Humedad y fortalece el Bazo; elimina Humedad del Jiao Inferior; mejora la visión; libera el Exterior e induce sudoración ante patógenos Viento-Humedad.",
+        "Use cautiously with excessive sweating from Qi deficiency, Yin deficiency with Heat, or loose watery stools." => "Usar con precaución en sudoración excesiva por deficiencia de Qi, deficiencia de Yin con Calor o heces sueltas y acuosas.",
+        "Moves Qi and resolves stagnation; directs Qi downward; reduces phlegm and calms wheezing." => "Mueve el Qi y resuelve estancamiento; dirige el Qi hacia abajo; reduce flema y calma las sibilancias.",
+        "Use cautiously during pregnancy; traditionally antagonizes Ze Xie and Han Shui Shi." => "Usar con precaución durante el embarazo; tradicionalmente antagoniza Ze Xie y Han Shui Shi.",
+        "Transforms Dampness; moves Qi and resolves stagnation; warms the Middle Jiao; descends rebellious Qi to stop nausea and vomiting." => "Transforma Humedad; mueve el Qi y resuelve estancamiento; calienta el Jiao Medio; hace descender el Qi rebelde para detener náuseas y vómitos.",
+        "Avoid in Yin or Blood deficiency and when Cold-Damp is absent." => "Evitar en deficiencia de Yin o Sangre y cuando no existe Frío-Humedad.",
+        "Transforms Dampness; moves Qi and resolves stagnation; warms the Middle Jiao; stops vomiting and diarrhea from Spleen Cold; calms the fetus and morning sickness; prevents stagnation from tonic herbs." => "Transforma Humedad; mueve el Qi y resuelve estancamiento; calienta el Jiao Medio; detiene vómitos y diarrea por Frío de Bazo; calma el feto y las náuseas matutinas; previene estancamiento causado por hierbas tónicas.",
+        "Avoid in Yin deficiency with Heat." => "Evitar en deficiencia de Yin con Calor.",
+        "Crush and add near the end." => "Triturar y agregar cerca del final.",
+        "Dries Dampness; moves Qi and resolves stagnation; warms the Middle Jiao; descends rebellious Qi to relieve nausea and vomiting." => "Seca Humedad; mueve el Qi y resuelve estancamiento; calienta el Jiao Medio; hace descender el Qi rebelde para aliviar náuseas y vómitos.",
+        "Avoid in Yin deficiency." => "Evitar en deficiencia de Yin.",
+        "Add near the end." => "Agregar cerca del final.",
+        "Strongly dries Dampness and disperses Cold; treats malarial disorders." => "Seca intensamente la Humedad y dispersa Frío; trata trastornos maláricos.",
+        "Avoid in Qi or Blood deficiency and when Cold-Damp is absent; overdose may cause vomiting." => "Evitar en deficiencia de Qi o Sangre y cuando no existe Frío-Humedad; una sobredosis puede causar vómitos.",
+        "Transform turbid Dampness in the Middle Jiao" => "Transformar Humedad turbia en el Jiao Medio",
+        "All transform excess or turbid Dampness in the center; choose by dryness, Qi stagnation, Cold and accompanying symptoms." => "Todas transforman Humedad excesiva o turbia en el centro; seleccionar según sequedad, estancamiento de Qi, Frío y síntomas acompañantes.",
+        "Release the Exterior with Dampness" => "Liberar el Exterior con Humedad",
+        "Huo Xiang is gentler and especially useful for Summer-Heat with nausea, while Cang Zhu dries more strongly and promotes sweating." => "Huo Xiang es más suave y especialmente útil para Calor de Verano con náuseas, mientras Cang Zhu seca con mayor intensidad y promueve la sudoración.",
+        "Strongly dry Dampness" => "Secar intensamente la Humedad",
+        "Cang Zhu strongly dries and strengthens the Spleen; Cao Dou Kou warms the center; Cao Guo emphasizes Cold-Damp and malarial disorders." => "Cang Zhu seca intensamente y fortalece el Bazo; Cao Dou Kou calienta el centro; Cao Guo enfatiza Frío-Humedad y trastornos maláricos.",
+        "Move Qi and resolve stagnation" => "Mover el Qi y resolver estancamiento",
+        "Hou Po, Bai Dou Kou, Sha Ren and Cao Dou Kou move Qi; Hou Po descends Qi and calms wheezing, while the aromatic seeds emphasize the Middle Jiao." => "Hou Po, Bai Dou Kou, Sha Ren y Cao Dou Kou mueven el Qi; Hou Po hace descender el Qi y calma las sibilancias, mientras las semillas aromáticas enfatizan el Jiao Medio.",
+        "Nausea and vomiting from Dampness" => "Náuseas y vómitos por Humedad",
+        "Huo Xiang directly stops nausea and vomiting; Bai Dou Kou, Sha Ren and Cao Dou Kou warm the center and descend rebellious Qi." => "Huo Xiang detiene directamente náuseas y vómitos; Bai Dou Kou, Sha Ren y Cao Dou Kou calientan el centro y hacen descender el Qi rebelde.",
+        "Warm the Middle Jiao" => "Calentar el Jiao Medio",
+        "Bai Dou Kou, Sha Ren, Cao Dou Kou and Cao Guo address Cold-Damp in the center; Sha Ren is especially useful with diarrhea or pregnancy." => "Bai Dou Kou, Sha Ren, Cao Dou Kou y Cao Guo tratan Frío-Humedad en el centro; Sha Ren es especialmente útil con diarrea o embarazo.",
+        "Distinctive special indications" => "Indicaciones especiales distintivas",
+        "Cang Zhu improves vision, Sha Ren calms the fetus and Cao Guo is distinguished for malarial disorders." => "Cang Zhu mejora la visión, Sha Ren calma el feto y Cao Guo se distingue para trastornos maláricos.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110c';
+$languageversion = '20261110d';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1108,6 +1143,27 @@ $coughsimilarities = [
     ['Edema and hypertension patterns', 'Sang Bai Pi', 'Sang Bai Pi clears Lung Heat, promotes urination, reduces edema and is traditionally used in hypertension patterns.'],
 ];
 
+
+$aromaticherbs = [
+    ['Huo Xiang', 'Pogostemonis Herba', 'Acrid', 'Slightly warm', 'LU, SP, ST', 'Transforms Dampness; stops nausea and vomiting; releases the Exterior; treats Summer-Heat and may be used for dermatosis.', 'Use cautiously in Yin deficiency with Heat or Stomach Fire.', '3–9 g', 'Do not cook for more than 15 minutes.'],
+    ['Cang Zhu', 'Atractylodis Rhizoma', 'Acrid, bitter', 'Warm', 'SP, ST', 'Strongly dries Dampness and strengthens the Spleen; clears Dampness from the Lower Jiao; improves vision; releases the Exterior and induces sweating for Wind-Damp pathogens.', 'Use cautiously with excessive sweating from Qi deficiency, Yin deficiency with Heat, or loose watery stools.', '3–9 g', '—'],
+    ['Hou Po', 'Magnoliae Cortex', 'Bitter, acrid', 'Warm', 'LI, LU, SP, ST', 'Moves Qi and resolves stagnation; directs Qi downward; reduces phlegm and calms wheezing.', 'Use cautiously during pregnancy; traditionally antagonizes Ze Xie and Han Shui Shi.', '3–9 g', '—'],
+    ['Bai Dou Kou', 'Amomi Fructus Rotundus', 'Acrid', 'Warm, aromatic', 'LU, SP, ST', 'Transforms Dampness; moves Qi and resolves stagnation; warms the Middle Jiao; descends rebellious Qi to stop nausea and vomiting.', 'Avoid in Yin or Blood deficiency and when Cold-Damp is absent.', '3–6 g', '—'],
+    ['Sha Ren', 'Amomi Fructus', 'Acrid', 'Warm, aromatic', 'SP, ST', 'Transforms Dampness; moves Qi and resolves stagnation; warms the Middle Jiao; stops vomiting and diarrhea from Spleen Cold; calms the fetus and morning sickness; prevents stagnation from tonic herbs.', 'Avoid in Yin deficiency with Heat.', '3–6 g', 'Crush and add near the end.'],
+    ['Cao Dou Kou', 'Alpiniae Katsumadai Semen', 'Acrid', 'Warm, aromatic', 'SP, ST', 'Dries Dampness; moves Qi and resolves stagnation; warms the Middle Jiao; descends rebellious Qi to relieve nausea and vomiting.', 'Avoid in Yin deficiency.', '3–6 g', 'Add near the end.'],
+    ['Cao Guo', 'Tsaoko Fructus', 'Acrid', 'Warm', 'SP, ST', 'Strongly dries Dampness and disperses Cold; treats malarial disorders.', 'Avoid in Qi or Blood deficiency and when Cold-Damp is absent; overdose may cause vomiting.', '3–6 g', '—'],
+];
+
+$aromaticsimilarities = [
+    ['Transform turbid Dampness in the Middle Jiao', 'Huo Xiang · Cang Zhu · Hou Po · Bai Dou Kou · Sha Ren · Cao Dou Kou · Cao Guo', 'All transform excess or turbid Dampness in the center; choose by dryness, Qi stagnation, Cold and accompanying symptoms.'],
+    ['Release the Exterior with Dampness', 'Huo Xiang · Cang Zhu', 'Huo Xiang is gentler and especially useful for Summer-Heat with nausea, while Cang Zhu dries more strongly and promotes sweating.'],
+    ['Strongly dry Dampness', 'Cang Zhu · Cao Dou Kou · Cao Guo', 'Cang Zhu strongly dries and strengthens the Spleen; Cao Dou Kou warms the center; Cao Guo emphasizes Cold-Damp and malarial disorders.'],
+    ['Move Qi and resolve stagnation', 'Hou Po · Bai Dou Kou · Sha Ren · Cao Dou Kou', 'Hou Po, Bai Dou Kou, Sha Ren and Cao Dou Kou move Qi; Hou Po descends Qi and calms wheezing, while the aromatic seeds emphasize the Middle Jiao.'],
+    ['Nausea and vomiting from Dampness', 'Huo Xiang · Bai Dou Kou · Sha Ren · Cao Dou Kou', 'Huo Xiang directly stops nausea and vomiting; Bai Dou Kou, Sha Ren and Cao Dou Kou warm the center and descend rebellious Qi.'],
+    ['Warm the Middle Jiao', 'Bai Dou Kou · Sha Ren · Cao Dou Kou · Cao Guo', 'Bai Dou Kou, Sha Ren, Cao Dou Kou and Cao Guo address Cold-Damp in the center; Sha Ren is especially useful with diarrhea or pregnancy.'],
+    ['Distinctive special indications', 'Cang Zhu · Sha Ren · Cao Guo', 'Cang Zhu improves vision, Sha Ren calms the fetus and Cao Guo is distinguished for malarial disorders.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1194,6 +1250,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['dissolve-hot-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-hot-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></a>
         <a href="<?php echo $categoryurls['dissolve-cold-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-cold-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></a>
         <a href="<?php echo $categoryurls['stop-cough-wheezing']->out(false); ?>"<?php echo $selectedcategory === 'stop-cough-wheezing' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['aromatics-for-damp']->out(false); ?>"<?php echo $selectedcategory === 'aromatics-for-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -1929,6 +1986,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($coughherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="aromatics-for-damp"<?php echo $selectedcategory === 'aromatics-for-damp' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 7 herbs · Common foundation: transform excess and turbid Dampness from the Middle Jiao, regulate Qi and warm the center.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($aromaticsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Dampness severity, exterior involvement, Qi stagnation, nausea or vomiting, Spleen Cold, pregnancy, malaria and constitutional deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($aromaticherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
