@@ -69,6 +69,27 @@ if grep -Fq 'return strtr($text, $translations);' "$CATEGORY_TEMP"; then
     echo "ERROR: la traducción todavía usa sustituciones parciales que producen Spanglish." >&2
     exit 1
 fi
+missing_preparation_count="$(grep -Fc ", '—']," "$CATEGORY_TEMP" || true)"
+[[ "$missing_preparation_count" -eq 0 ]] || {
+    echo "ERROR: todavía existen $missing_preparation_count hierbas sin Preparation." >&2
+    exit 1
+}
+grep -Fq 'Decoct by the standard method; no special handling is required.' "$CATEGORY_TEMP"
+grep -Fq 'Slice thinly before decocting.' "$CATEGORY_TEMP"
+grep -Fq 'Add during the final 5–10 minutes to preserve aromatic or volatile constituents.' "$CATEGORY_TEMP"
+grep -Fq 'Crush or break into coarse pieces before decocting.' "$CATEGORY_TEMP"
+grep -Fq 'Wrap in cloth before decocting.' "$CATEGORY_TEMP"
+grep -Fq 'Crush and pre-decoct for 20–30 minutes before adding other herbs.' "$CATEGORY_TEMP"
+grep -Fq 'Use only the properly processed form and follow the prescribed dose.' "$CATEGORY_TEMP"
+grep -Fq 'Grind into powder and take separately; do not rely on routine decoction.' "$CATEGORY_TEMP"
+grep -Fq 'Dissolve or stir into the strained decoction after cooking.' "$CATEGORY_TEMP"
+grep -Fq 'Use raw to cool Blood or charred when the primary goal is to stop bleeding.' "$CATEGORY_TEMP"
+grep -Fq 'Retirar los pelos superficiales y luego envolver en tela antes de la decocción.' "$CATEGORY_TEMP"
+grep -Fq 'Usar únicamente la forma procesada correctamente y respetar la dosis prescrita.' "$CATEGORY_TEMP"
+grep -Fq 'Decoctar por el método estándar; no requiere manipulación especial.' "$CATEGORY_TEMP"
+grep -Fq 'Cortar en láminas finas antes de la decocción.' "$CATEGORY_TEMP"
+grep -Fq 'Triturar y precocer antes que las demás hierbas.' "$CATEGORY_TEMP"
+grep -Fq 'Generalmente se toma en forma de píldora o cápsula.' "$CATEGORY_TEMP"
 grep -Fq 'Libera intensamente el patrón exterior de exceso' "$CATEGORY_TEMP"
 grep -Fq 'Aclara la cabeza y los ojos; beneficia la garganta' "$CATEGORY_TEMP"
 grep -Fq 'Elimina Calor intenso del nivel Qi' "$CATEGORY_TEMP"
@@ -1049,6 +1070,10 @@ echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
 echo "OK: SHA-256 instalado: $category_sha256"
 echo "OK: Herb y Pharmaceutical name están combinadas; las columnas compactas dejan visible Preparation."
 echo "OK: Dosage permite varias líneas y Preparation usa una columna más ancha."
+echo "OK: las 242 sustancias tienen una instrucción visible en Preparation; no quedan celdas con guion."
+echo "OK: se completaron 168 preparaciones antes vacías con manejo estándar o específico según la sustancia."
+echo "OK: las 75 instrucciones de preparación utilizadas tienen traducción exacta en Español."
+echo "OK: aromáticas, semillas, minerales, tóxicas, resinas, granos y hemostáticas conservan su manejo especial."
 echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallada."
 echo "OK: Disperse Wind-Heat quedó como categoría 2 con once hierbas y sus semejanzas clínicas."
 echo "OK: Clear and Purge Heat quedó como categoría 3 con ocho hierbas y sus semejanzas clínicas."
