@@ -129,18 +129,18 @@ echo $OUTPUT->header();
 .herb-category-library thead th{background:#d8f2ef;color:#102a43;text-align:left}
 .herb-category-library__comparison-table{min-width:1180px;table-layout:fixed}
 .herb-category-library__comparison-table col:nth-child(1){width:14%}
-.herb-category-library__comparison-table col:nth-child(2){width:8%}
-.herb-category-library__comparison-table col:nth-child(3){width:8%}
+.herb-category-library__comparison-table col:nth-child(2){width:7%}
+.herb-category-library__comparison-table col:nth-child(3){width:7%}
 .herb-category-library__comparison-table col:nth-child(4){width:7%}
-.herb-category-library__comparison-table col:nth-child(5){width:25%}
-.herb-category-library__comparison-table col:nth-child(6){width:20%}
-.herb-category-library__comparison-table col:nth-child(7){width:6%}
-.herb-category-library__comparison-table col:nth-child(8){width:12%}
+.herb-category-library__comparison-table col:nth-child(5){width:24%}
+.herb-category-library__comparison-table col:nth-child(6){width:19%}
+.herb-category-library__comparison-table col:nth-child(7){width:8%}
+.herb-category-library__comparison-table col:nth-child(8){width:14%}
 .herb-category-library__herb-identity{background:#eef9f7}
 .herb-category-library__herb-identity strong{display:block;color:#102a43;font-size:14px}
 .herb-category-library__herb-identity small{display:block;margin-top:4px;color:#526b84;font-size:12px;font-style:italic;font-weight:600}
 .herb-category-library__compact{font-size:12px}
-.herb-category-library__dosage{white-space:nowrap;text-align:center}
+.herb-category-library__dosage{white-space:normal;text-align:center;overflow-wrap:anywhere}
 .herb-category-library__similarities{margin:18px 0}
 .herb-category-library__similarities h4{margin:0;padding:12px 14px;border-radius:10px 10px 0 0;background:#087c69;color:#fff;font-size:20px}
 .herb-category-library__similarities table td:nth-child(1){font-weight:800;background:#eef9f7}
