@@ -138,8 +138,8 @@ grep -Fq '$benskycrosswalkurl->out(false)' <<< "$main_study_guide_block"
 grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$main_study_guide_block"
 grep -Fq '$patterncomparisonsurl->out(false)' <<< "$main_study_guide_block"
 grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$main_study_guide_block"
-if grep -Fq 'subject-study-library__journey-option' <<< "$secondary_study_guides_block" \
-        || grep -Fq 'subject-study-library__journey-option' <<< "$pathology_patterns_block"; then
+if grep -Fq 'subject-study-library__journey-option"' <<< "$secondary_study_guides_block" \
+        || grep -Fq 'subject-study-library__journey-option"' <<< "$pathology_patterns_block"; then
     echo "ERROR: los módulos Comparison 2 o 3 todavía contienen botones." >&2
     exit 1
 fi
@@ -283,6 +283,7 @@ echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
 echo "OK: todos los botones de los dos módulos Comparison están en Main Study Guide."
+echo "OK: los módulos Comparison vacíos se validan usando la clase exacta de botón."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Main Study Guide."
 echo "OK: el botón general Comparisons fue eliminado."
