@@ -101,8 +101,8 @@ journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-c
 for step in 1 2 3 4 5 6 7 8 9 10; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
-secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,+50p' "$LIBRARY_TEMP")"
-pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">4</,+24p' "$LIBRARY_TEMP")"
+secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,/subject-study-library__journey-step">3</p' "$LIBRARY_TEMP")"
+pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">4</,/subject-study-library__journey-step">5</p' "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
@@ -262,6 +262,7 @@ echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Comparison Pathology and Patterns contiene tres botones independientes."
+echo "OK: las validaciones de los módulos 2 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
