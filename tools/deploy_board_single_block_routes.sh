@@ -101,9 +101,16 @@ journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-c
 for step in 1 2 3 4 5 6 7 8 9 10; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
+main_study_guide_block="$(sed -n '/subject-study-library__journey-step">1</,/subject-study-library__journey-step">2</p' "$LIBRARY_TEMP")"
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,/subject-study-library__journey-step">3</p' "$LIBRARY_TEMP")"
 pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">3</,/subject-study-library__journey-step">4</p' "$LIBRARY_TEMP")"
 secondary_guide_block="$(sed -n '/subject-study-library__journey-step">4</,/subject-study-library__journey-step">5</p' "$LIBRARY_TEMP")"
+grep -Fq "Safety Library" <<< "$main_study_guide_block"
+grep -Fq '$safetylibraryurl->out(false)' <<< "$main_study_guide_block"
+if grep -Fq '$safetylibraryurl->out(false)' <<< "$secondary_guide_block"; then
+    echo "ERROR: Safety Library todavía aparece en Secondary Study Guide." >&2
+    exit 1
+fi
 grep -Fq "Comparison Pathology and Patterns" <<< "$pathology_patterns_block"
 grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
@@ -141,6 +148,8 @@ if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$
     echo "ERROR: todavía aparece un botón general Comparisons u Other chapters." >&2
     exit 1
 fi
+grep -Fq "'/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html'" "$LIBRARY_TEMP"
+grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/safety.html';" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formula-navigator-es.html' : '/study-guide/comparisons/formula-navigator.html'" "$LIBRARY_TEMP"
@@ -159,6 +168,7 @@ if grep -Fq 'foreach ($comparisonchapters as $chapter)' "$LIBRARY_TEMP"; then
 fi
 single_herbs_study_route_count="$(grep -Fc '$singleherbsstudyurl->out(false)' "$LIBRARY_TEMP")"
 formulas_study_route_count="$(grep -Fc '$formulasstudyurl->out(false)' "$LIBRARY_TEMP")"
+safety_library_route_count="$(grep -Fc '$safetylibraryurl->out(false)' "$LIBRARY_TEMP")"
 single_herbs_comparisons_route_count="$(grep -Fc '$singleherbscomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_comparisons_route_count="$(grep -Fc '$formulacomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 formula_study_center_route_count="$(grep -Fc '$formulastudycenterurl->out(false)' "$LIBRARY_TEMP")"
@@ -167,6 +177,7 @@ pathology_comparisons_route_count="$(grep -Fc '$pathologycomparisonsurl->out(fal
 pattern_comparisons_route_count="$(grep -Fc '$patterncomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 pattern_maciocia_route_count="$(grep -Fc '$patternmaciociacomparisonurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
+        && "$safety_library_route_count" -eq 1 \
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
         && "$formula_study_center_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
@@ -266,6 +277,7 @@ echo "OK: los botones comienzan inmediatamente debajo del título de cada módul
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Comparison Pathology and Patterns contiene tres botones independientes."
 echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
+echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
 echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
