@@ -18,7 +18,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl php install grep sed stat cp cmp mkdir mktemp rm sha256sum; do
+for command in curl php install grep sed stat cp cmp mkdir mktemp rm sha256sum wc; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -70,12 +70,13 @@ grep -Fq 'Funciones e indicaciones principales' "$CATEGORY_TEMP"
 grep -Fq 'Precauciones / contraindicaciones' "$CATEGORY_TEMP"
 grep -Fq '12. Dispersar Viento-Humedad' "$CATEGORY_TEMP"
 grep -Fq 'Guía Board 2026' "$CATEGORY_TEMP"
-localized_herb_field_count="$(grep -Fc 'board_herb_category_localize($herb[' "$CATEGORY_TEMP")"
-localized_similarity_field_count="$(grep -Fc 'board_herb_category_localize($similarity[' "$CATEGORY_TEMP")"
-localized_title_count="$(grep -Fc '<h3><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP")"
-localized_summary_count="$(grep -Fc 'class="herb-category-library__summary"><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP")"
+localized_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$CATEGORY_TEMP" | wc -l)"
+localized_similarity_field_count="$(grep -Fo 'board_herb_category_localize($similarity[' "$CATEGORY_TEMP" | wc -l)"
+localized_title_count="$(grep -Fo '<h3><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP" | wc -l)"
+localized_summary_count="$(grep -Fo 'class="herb-category-library__summary"><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP" | wc -l)"
 [[ "$localized_herb_field_count" -eq 84 && "$localized_similarity_field_count" -eq 36 && "$localized_title_count" -eq 12 && "$localized_summary_count" -eq 12 ]] || {
     echo "ERROR: la vista en Español no localiza todos los campos de las doce categorías." >&2
+    echo "Conteos: hierbas=$localized_herb_field_count semejanzas=$localized_similarity_field_count títulos=$localized_title_count resúmenes=$localized_summary_count" >&2
     exit 1
 }
 grep -Fq 'id="disperse-wind-cold"' "$CATEGORY_TEMP"
@@ -538,10 +539,11 @@ grep -Fq 'function board_herb_category_localize' "$CATEGORY_TARGET"
 grep -Fq 'Idioma: Español' "$CATEGORY_TARGET"
 grep -Fq "optional_param('ui', '', PARAM_ALPHA)" "$CATEGORY_TARGET"
 grep -Fq "'ui' => 'es'" "$LIBRARY_TARGET"
-installed_herb_field_count="$(grep -Fc 'board_herb_category_localize($herb[' "$CATEGORY_TARGET")"
-installed_similarity_field_count="$(grep -Fc 'board_herb_category_localize($similarity[' "$CATEGORY_TARGET")"
+installed_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$CATEGORY_TARGET" | wc -l)"
+installed_similarity_field_count="$(grep -Fo 'board_herb_category_localize($similarity[' "$CATEGORY_TARGET" | wc -l)"
 [[ "$installed_herb_field_count" -eq 84 && "$installed_similarity_field_count" -eq 36 ]] || {
     echo "ERROR: el archivo instalado no contiene la localización completa en Español." >&2
+    echo "Conteos instalados: hierbas=$installed_herb_field_count semejanzas=$installed_similarity_field_count" >&2
     exit 1
 }
 category_sha256="$(sha256sum "$CATEGORY_TARGET")"
@@ -561,6 +563,7 @@ echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
 echo "OK: la vista Español localiza índice, títulos, tablas, semejanzas, funciones, precauciones y preparación."
+echo "OK: las validaciones cuentan ocurrencias reales: 84 campos de hierbas y 36 campos de semejanzas."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
 echo "OK: SHA-256 instalado: $category_sha256"
