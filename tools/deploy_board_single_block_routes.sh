@@ -59,6 +59,14 @@ if grep -Fq ". 'comparisons-dashboard-link\" href=\"' . \$libraryurl->out(false)
     exit 1
 fi
 
+if grep -Fq "Previous page" "$LIBRARY_TEMP" \
+        || grep -Fq "Página anterior" "$LIBRARY_TEMP" \
+        || grep -Fq "data-library-page-back" "$LIBRARY_TEMP"; then
+    echo "ERROR: el botón Previous page todavía aparece en la cabecera." >&2
+    exit 1
+fi
+grep -Fq "data-library-dashboard" "$LIBRARY_TEMP"
+
 # Cada botón de los tres primeros módulos debe resolver una sola vista.
 grep -Fq "['guides', 'comparisons', 'other', 'practice']" "$LIBRARY_TEMP"
 if grep -Fq '$studyguidesblockurl' "$LIBRARY_TEMP"; then
@@ -325,6 +333,7 @@ else
 fi
 
 echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
+echo "OK: Previous page fue eliminado; Español y Dashboard permanecen en la cabecera."
 echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
 echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
