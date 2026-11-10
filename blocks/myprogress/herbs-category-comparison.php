@@ -1156,13 +1156,16 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Xu Duan, Du Zhong and Tu Si Zi tonify Liver and Kidney while helping stabilize pregnancy." => "Xu Duan, Du Zhong y Tu Si Zi tonifican Hígado y Riñón mientras ayudan a estabilizar el embarazo.",
         "Strong heat and toxicity" => "Calor intenso y toxicidad",
         "Lu Rong is very potent; Xian Mao is hot and toxic; Yin Yang Huo and Bu Gu Zhi are warming and may injure Yin when Heat signs are present." => "Lu Rong es muy potente; Xian Mao es caliente y tóxica; Yin Yang Huo y Bu Gu Zhi son tibias y pueden lesionar Yin cuando existen signos de Calor.",
+        "Very warm" => "Muy tibia",
+        "Bitter, sweet, acrid" => "Amarga, dulce, picante",
+        "Sweet, slightly acrid" => "Dulce, ligeramente picante",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110r';
+$languageversion = '20261110s';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
