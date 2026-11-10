@@ -935,7 +935,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110j';
+$languageversion = '20261110k';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -2283,7 +2283,7 @@ echo $OUTPUT->header();
                 <table>
                     <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
-                    <?php foreach ($regulate-qiimilarities as $similarity): ?>
+                    <?php foreach ($regulateqisimilarities as $similarity): ?>
                         <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -2325,7 +2325,7 @@ echo $OUTPUT->header();
                 <table>
                     <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
                     <tbody>
-                    <?php foreach ($stop-bleedingimilarities as $similarity): ?>
+                    <?php foreach ($bleedingsimilarities as $similarity): ?>
                         <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
