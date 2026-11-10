@@ -78,6 +78,12 @@ grep -Fq "\$isHerbChapter = static function(array \$chapter): bool" "$LIBRARY_TE
 grep -Fq "\$isFormulaChapter = static function(array \$chapter): bool" "$LIBRARY_TEMP"
 grep -Fq "preg_match('/(?:herb|hierba)/iu'" "$LIBRARY_TEMP"
 grep -Fq "preg_match('/(?:formula|fórmula)/iu'" "$LIBRARY_TEMP"
+grep -Fq "'title' => 'Herbs Secondary Actions'" "$LIBRARY_TEMP"
+grep -Fq "'Herbs Secondary Actions' => 'Acciones secundarias de hierbas'" "$LIBRARY_TEMP"
+if grep -Fq "'title' => 'Secondary Actions'" "$LIBRARY_TEMP"; then
+    echo "ERROR: Secondary Actions todavía conserva el nombre anterior." >&2
+    exit 1
+fi
 grep -Fq '$secondarychapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
 grep -Fq '$secondarychapterurl->out(false)' "$LIBRARY_TEMP"
 grep -Fq '$herbchapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
@@ -211,6 +217,7 @@ fi
 echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
+echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
 echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
