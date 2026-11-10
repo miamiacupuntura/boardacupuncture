@@ -155,6 +155,43 @@ $deficientheatsimilarities = [
     ['Lung Heat versus urinary toxicity', 'Di Gu Pi · Bai Wei', 'Di Gu Pi emphasizes Lung Heat with cough, while Bai Wei emphasizes urination, toxicity and swelling.'],
 ];
 
+$purgativeherbs = [
+    ['Da Huang', 'Rhei Radix', 'Bitter', 'Cold', 'HT, LI, LV, ST', 'Drains Heat and moves stool to purge accumulation; clears Damp-Heat in jaundice or acute hot dysenteric disorders; clears Blood Heat and stops bleeding when charred; invigorates Blood and dispels stasis when wine-treated; clears toxic Heat.', 'Avoid with exterior conditions, Qi or Blood deficiency, Spleen and Stomach deficient Cold, pregnancy or menstruation; use cautiously in nursing mothers because it may enter breast milk.', '3–15 g', 'Cooking longer than 10 minutes reduces the purgative effect.'],
+    ['Mang Xiao', 'Natrii Sulfas', 'Acrid, bitter, salty', 'Very cold', 'ST, LI', 'Purges accumulation; moistens dryness and softens hardness; treats excess Heat in the Stomach and Large Intestine; clears Heat and reduces swelling when used externally.', 'Avoid without excess Heat, in elderly or debilitated patients, Spleen deficiency, pregnancy, the postpartum period or menstruation.', '6–18 g', 'Dissolve into the strained decoction.'],
+    ['Lu Hui', 'Aloe', 'Bitter', 'Cold', 'LI, LV, ST', 'Purges accumulation; clears Heat and cools the Liver; kills parasites and strengthens the Stomach.', 'Avoid during pregnancy or menstruation, with Spleen and Stomach deficient Cold, or with rectal bleeding.', '1.5–4.5 g', 'Usually taken as a pill or capsule.'],
+];
+
+$purgativesimilarities = [
+    ['Strong Heat-purgation', 'Da Huang · Mang Xiao · Lu Hui', 'All drain Heat and move stool, but their secondary actions determine the best choice.'],
+    ['Hot, dry or hard stool', 'Da Huang · Mang Xiao', 'Da Huang strongly purges accumulation, while Mang Xiao moistens dryness and softens hardness; they are often paired for excess Heat constipation.'],
+    ['Liver and toxic Heat', 'Da Huang · Lu Hui', 'Both enter the Liver; Da Huang adds Blood-moving and toxin-clearing actions, while Lu Hui more specifically cools the Liver and kills parasites.'],
+    ['Blood Heat and Blood stasis', 'Da Huang', 'Da Huang uniquely stops bleeding when charred and invigorates Blood when wine-treated.'],
+    ['External swelling', 'Mang Xiao', 'Mang Xiao may be used externally to clear Heat and reduce swelling in addition to its internal purgative action.'],
+    ['Cold or deficient patients', 'Da Huang · Mang Xiao · Lu Hui', 'All are strong, cold downward-draining substances and require caution in deficiency, Cold patterns and pregnancy.'],
+];
+
+$laxativeherbs = [
+    ['Huo Ma Ren', 'Cannabis Semen', 'Sweet', 'Neutral', 'LI, SP, ST', 'Nourishes and moistens the Intestines; nourishes Yin; clears Heat and promotes the healing of sores.', 'Excessive or long-term use may result in vaginal discharge or spermatorrhea.', '9–15 g', 'Crush before cooking.'],
+];
+
+$laxativesimilarities = [
+    ['Gentle moistening laxative', 'Huo Ma Ren', 'Moistens the Intestines and gently moves stool without the strong cold purgative action of the Purgatives.'],
+    ['Dryness versus excess Heat', 'Huo Ma Ren · Da Huang · Mang Xiao', 'Choose Huo Ma Ren for dryness or deficiency, Da Huang for strong excess accumulation, and Mang Xiao for hard, dry stool from excess Heat.'],
+    ['Yin and intestinal moisture', 'Huo Ma Ren', 'Its nourishing quality makes it especially useful when constipation accompanies fluid or Yin insufficiency.'],
+    ['Additional healing action', 'Huo Ma Ren', 'Beyond moistening the bowels, it clears Heat and supports the healing of sores.'],
+];
+
+$catharticherbs = [
+    ['Da Ji', 'Euphorbiae Pekinensis Radix', 'Bitter, acrid', 'Cold, toxic', 'KD, LI, SP', 'Drains water downward and drives out congested fluids; reduces swelling and dissipates nodules.', 'Contraindicated in cold deficient edema and pregnancy; use cautiously in weak patients; incompatible with Gan Cao.', '1.5–3 g', '—'],
+];
+
+$catharticsimilarities = [
+    ['Strong water-expelling cathartic', 'Da Ji', 'Drives congested fluids downward rather than primarily treating Heat constipation.'],
+    ['Fluid accumulation versus stool accumulation', 'Da Ji · Da Huang · Mang Xiao', 'Use Da Ji for severe retained fluids and edema; use Da Huang or Mang Xiao when Heat and stool accumulation predominate.'],
+    ['Swelling and nodules', 'Da Ji', 'Its downward-draining action is paired with an ability to reduce swelling and dissipate nodules.'],
+    ['Toxicity and incompatibility', 'Da Ji', 'Because it is toxic and incompatible with Gan Cao, dosing and formula compatibility require particular care.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -221,6 +258,9 @@ echo $OUTPUT->header();
         <a href="#clear-damp-heat">5. Clear Damp-Heat</a>
         <a href="#clear-toxic-heat">6. Clear Toxic-Heat</a>
         <a href="#clear-deficient-heat">7. Clear Deficient-Heat</a>
+        <a href="#purgatives">8. Purgatives</a>
+        <a href="#laxatives">9. Laxatives</a>
+        <a href="#cathartics">10. Cathartics</a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
@@ -562,6 +602,159 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($deficientheatherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="purgatives">
+        <h3>8. Purgatives</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 3 herbs · Common foundation: drain Heat and move stool to purge accumulation.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($purgativesimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> strength of purgation, dry-hard stool, Blood Heat or stasis, Liver Heat, external swelling and constitutional deficiency.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($purgativeherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="laxatives">
+        <h3>9. Laxatives</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 1 herb · Common foundation: gently moisten the Intestines and relieve dry constipation.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($laxativesimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> dryness or deficiency constipation, need for gentle action, Yin and fluid status, and long-term-use cautions.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($laxativeherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="cathartics">
+        <h3>10. Cathartics</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 1 herb · Common foundation: strongly drain retained fluids downward.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($catharticsimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> severe fluid accumulation, edema, swelling or nodules, patient strength, toxicity and formula incompatibility.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($catharticherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row">
                             <strong><?php echo s($herb[0]); ?></strong>
