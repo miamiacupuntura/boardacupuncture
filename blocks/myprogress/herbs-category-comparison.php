@@ -1403,7 +1403,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110search1';
+$languageversion = '20261110search2';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -2125,74 +2125,276 @@ $PAGE->requires->js_init_code(<<<'JS'
 (function() {
     const initialiseCategorySearch = function() {
         const search = document.getElementById('herb-category-search');
+        const searchBox = document.querySelector('.herb-category-library__search');
         const index = document.getElementById('herb-category-index');
         const status = document.getElementById('herb-category-search-status');
         const clear = document.getElementById('herb-category-search-clear');
-        if (!search || !index || !status || !clear || search.dataset.ready === 'true') {
+        const previousResult = document.getElementById('herb-category-search-previous');
+        const nextResult = document.getElementById('herb-category-search-next');
+        if (!search || !searchBox || !index || !status || !clear || !previousResult || !nextResult ||
+                search.dataset.ready === 'true') {
             return;
         }
 
         search.dataset.ready = 'true';
-        const links = Array.from(index.querySelectorAll('a'));
-        const normalise = function(value) {
-            return (value || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLocaleLowerCase();
-        };
-        const searchableLinks = links.map(function(link) {
-            const category = new URL(link.href, window.location.href).searchParams.get('category');
-            const section = category ? document.getElementById(category) : null;
-            return {
-                link: link,
-                text: normalise(link.textContent + ' ' + (section ? section.textContent : ''))
-            };
+        const categoryLinks = Array.from(index.querySelectorAll('a'));
+        const sections = Array.from(document.querySelectorAll('.herb-category-library__section'));
+        const initialSection = sections.find(function(section) {
+            return !section.hidden;
         });
+        const initialCategory = initialSection ? initialSection.id : '';
+        let matches = [];
+        let currentMatch = -1;
+        let searchTimer = null;
 
-        const update = function() {
-            const term = normalise(search.value.trim());
-            let matches = 0;
-            let onlyMatch = null;
+        const normaliseWithMap = function(value) {
+            let normalised = '';
+            const map = [];
+            for (let position = 0; position < value.length; position += 1) {
+                const character = value[position];
+                const folded = character.normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLocaleLowerCase();
+                for (let foldedPosition = 0; foldedPosition < folded.length; foldedPosition += 1) {
+                    normalised += folded[foldedPosition];
+                    map.push(position);
+                }
+            }
+            return {text: normalised, map: map};
+        };
 
-            searchableLinks.forEach(function(item) {
-                const visible = term === '' || item.text.includes(term);
-                item.link.hidden = !visible;
-                if (visible) {
-                    matches += 1;
-                    onlyMatch = item.link;
+        const normalise = function(value) {
+            return normaliseWithMap(value || '').text;
+        };
+
+        const clearHighlights = function() {
+            document.querySelectorAll('mark.herb-category-library__search-highlight').forEach(function(mark) {
+                const parent = mark.parentNode;
+                mark.replaceWith(document.createTextNode(mark.textContent || ''));
+                if (parent) {
+                    parent.normalize();
                 }
             });
-
-            clear.hidden = term === '';
-            if (term === '') {
-                status.textContent = '';
-            } else if (matches === 0) {
-                status.textContent = status.dataset.none;
-            } else if (matches === 1) {
-                status.textContent = status.dataset.one;
-            } else {
-                status.textContent = status.dataset.many.replace('{count}', String(matches));
-            }
-            search.dataset.onlyMatch = matches === 1 && onlyMatch ? onlyMatch.href : '';
+            matches = [];
+            currentMatch = -1;
         };
 
-        search.addEventListener('input', update);
+        const matchingOffsets = function(value, normalisedTerm) {
+            const folded = normaliseWithMap(value);
+            const offsets = [];
+            let from = 0;
+            let found = folded.text.indexOf(normalisedTerm, from);
+            while (found !== -1) {
+                const endInFoldedText = found + normalisedTerm.length - 1;
+                offsets.push({
+                    start: folded.map[found],
+                    end: folded.map[endInFoldedText] + 1
+                });
+                from = found + Math.max(normalisedTerm.length, 1);
+                found = folded.text.indexOf(normalisedTerm, from);
+            }
+            return offsets;
+        };
+
+        const highlightSection = function(section, normalisedTerm) {
+            const walker = document.createTreeWalker(section, NodeFilter.SHOW_TEXT, {
+                acceptNode: function(node) {
+                    if (!node.nodeValue || !node.nodeValue.trim()) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    const parent = node.parentElement;
+                    if (!parent || parent.closest('.herb-category-library__pager') ||
+                            parent.closest('script, style, button, input, textarea, mark')) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            });
+            const textNodes = [];
+            let textNode = walker.nextNode();
+            while (textNode) {
+                textNodes.push(textNode);
+                textNode = walker.nextNode();
+            }
+
+            textNodes.forEach(function(node) {
+                const offsets = matchingOffsets(node.nodeValue || '', normalisedTerm);
+                let workingNode = node;
+                for (let offsetIndex = offsets.length - 1; offsetIndex >= 0; offsetIndex -= 1) {
+                    const offset = offsets[offsetIndex];
+                    workingNode.splitText(offset.end);
+                    const matchedNode = workingNode.splitText(offset.start);
+                    const mark = document.createElement('mark');
+                    mark.className = 'herb-category-library__search-highlight';
+                    mark.textContent = matchedNode.nodeValue || '';
+                    matchedNode.replaceWith(mark);
+                }
+            });
+        };
+
+        const updateCategoryPager = function(section, categoryIndex) {
+            const pager = section ? section.querySelector('.herb-category-library__pager') : null;
+            if (!pager || categoryIndex < 0) {
+                return;
+            }
+            pager.replaceChildren();
+            if (categoryIndex > 0) {
+                const previous = document.createElement('a');
+                previous.rel = 'prev';
+                previous.href = categoryLinks[categoryIndex - 1].href;
+                previous.textContent = '← ' + searchBox.dataset.previous;
+                pager.appendChild(previous);
+            }
+            if (categoryIndex < categoryLinks.length - 1) {
+                const next = document.createElement('a');
+                next.rel = 'next';
+                next.href = categoryLinks[categoryIndex + 1].href;
+                next.textContent = searchBox.dataset.next + ' →';
+                pager.appendChild(next);
+            }
+        };
+
+        const showCategory = function(category) {
+            let activeIndex = -1;
+            sections.forEach(function(section) {
+                section.hidden = section.id !== category;
+            });
+            categoryLinks.forEach(function(link, linkIndex) {
+                const linkCategory = new URL(link.href, window.location.href).searchParams.get('category') || '';
+                if (linkCategory === category) {
+                    link.setAttribute('aria-current', 'page');
+                    activeIndex = linkIndex;
+                } else {
+                    link.removeAttribute('aria-current');
+                }
+            });
+            if (activeIndex >= 0) {
+                updateCategoryPager(document.getElementById(category), activeIndex);
+            }
+        };
+
+        const updateStatus = function() {
+            if (matches.length === 0) {
+                status.textContent = search.value.trim() === '' ? '' : status.dataset.none;
+                return;
+            }
+            const matchingCategories = new Set(matches.map(function(mark) {
+                const section = mark.closest('.herb-category-library__section');
+                return section ? section.id : '';
+            }));
+            status.textContent = status.dataset.results
+                .replace('{current}', String(currentMatch + 1))
+                .replace('{total}', String(matches.length))
+                .replace('{categories}', String(matchingCategories.size));
+        };
+
+        const activateMatch = function(matchIndex, shouldScroll) {
+            if (matches.length === 0) {
+                currentMatch = -1;
+                updateStatus();
+                return;
+            }
+            currentMatch = (matchIndex + matches.length) % matches.length;
+            matches.forEach(function(mark) {
+                mark.classList.remove('is-current');
+            });
+            const current = matches[currentMatch];
+            current.classList.add('is-current');
+            const section = current.closest('.herb-category-library__section');
+            if (section) {
+                showCategory(section.id);
+            }
+            updateStatus();
+            if (shouldScroll) {
+                current.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'});
+            }
+        };
+
+        const resetSearch = function() {
+            clearTimeout(searchTimer);
+            clearHighlights();
+            categoryLinks.forEach(function(link) {
+                link.hidden = false;
+            });
+            clear.hidden = true;
+            previousResult.hidden = true;
+            nextResult.hidden = true;
+            showCategory(initialCategory);
+            status.textContent = '';
+        };
+
+        const updateSearch = function(shouldScroll) {
+            clearHighlights();
+            const normalisedTerm = normalise(search.value.trim());
+            if (normalisedTerm === '') {
+                resetSearch();
+                return;
+            }
+
+            sections.forEach(function(section) {
+                highlightSection(section, normalisedTerm);
+            });
+            matches = Array.from(document.querySelectorAll('mark.herb-category-library__search-highlight'));
+            const matchingCategories = new Set(matches.map(function(mark) {
+                const section = mark.closest('.herb-category-library__section');
+                return section ? section.id : '';
+            }));
+            categoryLinks.forEach(function(link) {
+                const category = new URL(link.href, window.location.href).searchParams.get('category') || '';
+                link.hidden = !matchingCategories.has(category);
+            });
+
+            clear.hidden = false;
+            previousResult.hidden = matches.length < 2;
+            nextResult.hidden = matches.length < 2;
+
+            if (matches.length > 0) {
+                const visibleMatch = matches.findIndex(function(mark) {
+                    const section = mark.closest('.herb-category-library__section');
+                    return section && !section.hidden;
+                });
+                activateMatch(visibleMatch >= 0 ? visibleMatch : 0, shouldScroll);
+            } else {
+                sections.forEach(function(section) {
+                    section.hidden = true;
+                });
+                categoryLinks.forEach(function(link) {
+                    link.removeAttribute('aria-current');
+                });
+                updateStatus();
+            }
+        };
+
+        const scheduleSearch = function() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                updateSearch(false);
+            }, 120);
+        };
+
+        search.addEventListener('input', scheduleSearch);
         search.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && search.dataset.onlyMatch) {
+            if (event.key === 'Enter' && matches.length > 0) {
                 event.preventDefault();
-                window.location.assign(search.dataset.onlyMatch);
+                activateMatch(currentMatch + (event.shiftKey ? -1 : 1), true);
             } else if (event.key === 'Escape') {
                 search.value = '';
-                update();
+                resetSearch();
                 search.focus();
             }
         });
+        previousResult.addEventListener('click', function() {
+            activateMatch(currentMatch - 1, true);
+        });
+        nextResult.addEventListener('click', function() {
+            activateMatch(currentMatch + 1, true);
+        });
         clear.addEventListener('click', function() {
             search.value = '';
-            update();
+            resetSearch();
             search.focus();
         });
-        update();
+        resetSearch();
     };
 
     if (document.readyState === 'loading') {
@@ -2222,9 +2424,12 @@ echo $OUTPUT->header();
 .herb-category-library__search-control:focus-within{border-color:#087c69;box-shadow:0 0 0 3px rgba(8,124,105,.14)}
 .herb-category-library__search-icon{color:#087c69;font-size:19px;line-height:1}
 .herb-category-library__search input{width:100%;min-height:44px;padding:8px 2px;border:0;background:transparent;color:#102a43;font-size:16px;outline:0}
-.herb-category-library__search-clear{min-height:34px;padding:6px 10px;border:0;border-radius:8px;background:#e5f6f2;color:#075f52;font-weight:800;cursor:pointer}
-.herb-category-library__search-clear:hover,.herb-category-library__search-clear:focus{background:#087c69;color:#fff}
+.herb-category-library__search-action{min-height:34px;padding:6px 10px;border:0;border-radius:8px;background:#e5f6f2;color:#075f52;font-weight:800;cursor:pointer;white-space:nowrap}
+.herb-category-library__search-action:hover,.herb-category-library__search-action:focus{background:#087c69;color:#fff}
 .herb-category-library__search-status{min-height:20px;margin:7px 1px 0;color:#526b84;font-size:13px;font-weight:700}
+.herb-category-library__search-highlight{padding:0 2px;border-radius:3px;background:#fff3a3;color:inherit;box-shadow:inset 0 -2px 0 #e6b800}
+.herb-category-library__search-highlight.is-current{background:#ffdc35;box-shadow:0 0 0 4px rgba(255,193,7,.48),0 3px 12px rgba(151,105,0,.38)}
+@media (max-width:760px){.herb-category-library__search-control{flex-wrap:wrap;padding:7px 10px}.herb-category-library__search input{flex:1 1 calc(100% - 36px)}.herb-category-library__search-action{flex:1 1 auto}}
 .herb-category-library__index{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 18px}
 .herb-category-library__index a{padding:9px 13px;border-radius:999px;background:#087c69;color:#fff;font-weight:800;text-decoration:none}
 .herb-category-library__index a[aria-current="page"]{background:#064f46;box-shadow:0 0 0 3px rgba(8,124,105,.18)}
@@ -2281,18 +2486,21 @@ echo $OUTPUT->header();
         </div>
     </header>
 
-    <div class="herb-category-library__search">
+    <div class="herb-category-library__search"
+        data-previous="<?php echo s($ises ? 'Anterior' : 'Previous'); ?>"
+        data-next="<?php echo s($ises ? 'Siguiente' : 'Next'); ?>">
         <label for="herb-category-search"><?php echo s($ises ? 'Buscar categorías o hierbas' : 'Search categories or herbs'); ?></label>
         <div class="herb-category-library__search-control">
             <span class="herb-category-library__search-icon" aria-hidden="true">⌕</span>
             <input id="herb-category-search" type="search" autocomplete="off"
                 placeholder="<?php echo s($ises ? 'Escribe una categoría, hierba, función o precaución…' : 'Type a category, herb, function or caution…'); ?>">
-            <button class="herb-category-library__search-clear" id="herb-category-search-clear" type="button" hidden><?php echo s($ises ? 'Borrar' : 'Clear'); ?></button>
+            <button class="herb-category-library__search-action" id="herb-category-search-previous" type="button" hidden><?php echo s($ises ? '↑ Coincidencia anterior' : '↑ Previous match'); ?></button>
+            <button class="herb-category-library__search-action" id="herb-category-search-next" type="button" hidden><?php echo s($ises ? 'Siguiente coincidencia ↓' : 'Next match ↓'); ?></button>
+            <button class="herb-category-library__search-action" id="herb-category-search-clear" type="button" hidden><?php echo s($ises ? 'Borrar' : 'Clear'); ?></button>
         </div>
         <p class="herb-category-library__search-status" id="herb-category-search-status" aria-live="polite"
-            data-none="<?php echo s($ises ? 'No se encontraron categorías.' : 'No categories found.'); ?>"
-            data-one="<?php echo s($ises ? '1 categoría encontrada. Pulsa Enter para abrirla.' : '1 category found. Press Enter to open it.'); ?>"
-            data-many="<?php echo s($ises ? '{count} categorías encontradas.' : '{count} categories found.'); ?>"></p>
+            data-none="<?php echo s($ises ? 'No se encontraron coincidencias.' : 'No matches found.'); ?>"
+            data-results="<?php echo s($ises ? '{current} de {total} coincidencias en {categories} categorías.' : '{current} of {total} matches in {categories} categories.'); ?>"></p>
     </div>
 
     <nav class="herb-category-library__index" id="herb-category-index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
