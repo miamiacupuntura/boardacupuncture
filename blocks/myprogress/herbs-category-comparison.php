@@ -119,6 +119,28 @@ $dampheatsimilarities = [
     ['Skin itching and external use', 'Ku Shen · Huang Bai · Huang Lian', 'Clear Damp-Heat affecting the skin; Ku Shen is most specific for parasites and itching, while Huang Lian and Huang Bai emphasize Heat and toxicity.'],
 ];
 
+$toxicheatherbs = [
+    ['Jin Yin Hua', 'Lonicerae Flos', 'Sweet', 'Cold', 'LI, LU, ST', 'Clears Heat and relieves Fire toxicity; disperses externally contracted Wind-Heat; clears Damp-Heat from the lower burner.', 'Avoid in diarrhea from Spleen and Stomach deficient Cold, Qi-deficient sores with clear exudate, or Yin-type ulcers.', '6–20 g', 'Use smaller doses for Wind-Heat and larger doses for toxic Heat.'],
+    ['Lian Qiao', 'Forsythiae Fructus', 'Bitter, slightly acrid', 'Slightly cold', 'HT, LU, GB', 'Clears Heat and relieves Fire toxicity; disperses Wind-Heat; reduces abscesses and dissipates clumps; clears Heart Heat.', 'Avoid in diarrhea from Spleen and Stomach deficient Cold, ulcerated carbuncles, or cold Yin-type ulcers.', '6–15 g', '—'],
+    ['She Gan', 'Belamcandae Rhizoma', 'Bitter', 'Cold', 'LU', 'Clears Heat and relieves toxicity; benefits the throat; transforms phlegm and clears the Lung.', 'Avoid during pregnancy and use cautiously with diarrhea due to Spleen deficiency.', '3–9 g', '—'],
+    ['Ban Lan Gen', 'Isatidis Radix', 'Bitter', 'Cold', 'HT, LU, ST', 'Clears Heat and relieves toxicity; cools the Blood; benefits the throat; helps prevent epidemic febrile disease.', 'Use cautiously in weak patients or when Fire toxin is absent.', '9–15 g', '—'],
+    ['Shan Dou Gen', 'Sophorae Tonkinensis Radix', 'Bitter', 'Cold', 'LU, LI', 'Clears Heat and relieves toxicity; strongly benefits a swollen, painful throat; clears Lung Heat and cough.', 'Avoid with diarrhea due to Spleen-deficient Cold; use carefully because excessive doses may cause adverse effects.', '3–9 g', '—'],
+    ['Tu Fu Ling', 'Smilacis Glabrae Rhizoma', 'Sweet, bland', 'Neutral', 'LV, ST', 'Relieves toxicity and Dampness; benefits the joints; clears Damp-Heat from the skin; traditionally treats syphilitic lesions.', 'Use cautiously with Liver or Kidney Yin deficiency; traditionally should not be taken with tea.', '15–60 g', 'Do not combine with tea.'],
+    ['Pu Gong Ying', 'Taraxaci Herba', 'Bitter, sweet', 'Cold', 'LV, ST', 'Clears Heat and relieves toxicity; reduces abscesses, especially breast abscess and mastitis; promotes lactation; clears Liver Heat from the eyes; treats painful urinary dribbling.', 'Large doses may cause mild diarrhea.', '9–30 g', '—'],
+    ['Bai Jiang Cao', 'Patriniae Herba', 'Acrid, bitter', 'Slightly cold', 'LI, LV, ST', 'Clears Heat and relieves toxicity; reduces abscesses; expels pus from intestinal abscesses; dispels Blood stasis and relieves pain.', 'Use cautiously with Spleen and Stomach deficiency; excessive doses may cause nausea or dizziness.', '6–15 g', '—'],
+    ['He Ye', 'Nelumbinis Folium', 'Bitter, slightly sweet', 'Neutral', 'HT, LV, SP', 'Clears Summer-Heat; raises and clears Spleen Yang to treat diarrhea; stops bleeding.', 'Avoid when bleeding is due to deficiency or Cold; traditionally counteracts Fu Ling.', '3–9 g', '—'],
+];
+
+$toxicheatsimilarities = [
+    ['Core Fire-toxin clearing', 'Jin Yin Hua · Lian Qiao · Ban Lan Gen · Pu Gong Ying', 'All clear Heat and toxicity; Jin Yin Hua and Lian Qiao also disperse Wind-Heat, Ban Lan Gen emphasizes epidemic and throat disorders, and Pu Gong Ying emphasizes abscesses.'],
+    ['Externally contracted Wind-Heat', 'Jin Yin Hua · Lian Qiao', 'A classic paired comparison for early warm febrile disease; both disperse Wind-Heat while clearing toxicity.'],
+    ['Painful or swollen throat', 'She Gan · Ban Lan Gen · Shan Dou Gen', 'All benefit the throat; She Gan adds phlegm transformation, Ban Lan Gen cools Blood and addresses epidemics, and Shan Dou Gen is especially strong for severe throat swelling.'],
+    ['Abscesses and suppuration', 'Lian Qiao · Pu Gong Ying · Bai Jiang Cao', 'Lian Qiao dissipates clumps, Pu Gong Ying emphasizes breast abscess and lactation, and Bai Jiang Cao emphasizes intestinal abscess with pus and Blood stasis.'],
+    ['Damp-Heat and toxicity', 'Jin Yin Hua · Tu Fu Ling · Pu Gong Ying', 'Treat toxicity complicated by Dampness; Jin Yin Hua emphasizes the lower burner, Tu Fu Ling skin and joints, and Pu Gong Ying urinary or breast involvement.'],
+    ['Skin lesions and toxicity', 'Tu Fu Ling · Jin Yin Hua · Pu Gong Ying', 'Clear toxic skin manifestations with different emphases on Dampness, sores, swelling and abscess formation.'],
+    ['Distinct supportive actions', 'He Ye · Bai Jiang Cao · Pu Gong Ying', 'He Ye uniquely clears Summer-Heat and raises Spleen Yang; Bai Jiang Cao moves Blood and relieves pain; Pu Gong Ying promotes lactation and urination.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -183,6 +205,7 @@ echo $OUTPUT->header();
         <a href="#clear-and-purge-heat">3. Clear and Purge Heat</a>
         <a href="#clear-blood-heat">4. Clear Blood-Heat</a>
         <a href="#clear-damp-heat">5. Clear Damp-Heat</a>
+        <a href="#clear-toxic-heat">6. Clear Toxic-Heat</a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
@@ -422,6 +445,57 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($dampheatherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="clear-toxic-heat">
+        <h3>6. Clear Toxic-Heat</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 9 herbs · Common foundation: clear Heat and relieve Fire toxicity, with distinct clinical locations and secondary actions.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($toxicheatsimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> Wind-Heat stage, throat severity, abscess location, Damp-Heat involvement, skin lesions, Summer-Heat and bleeding.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($toxicheatherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row">
                             <strong><?php echo s($herb[0]); ?></strong>
