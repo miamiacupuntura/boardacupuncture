@@ -79,6 +79,22 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             : ($percentage >= 70
                 ? ($ises ? 'Aprobado' : 'Passed')
                 : ($ises ? 'No aprobado' : 'Not passed'));
+        $boardresumeurl = null;
+        if ($isincomplete) {
+            if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
+                $boardresumeurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'clinicalcases',
+                ] + $languageparams);
+            } else {
+                $boardresumemode = in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)
+                    ? 'adaptive'
+                    : 'linear';
+                $boardresumeurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'exams',
+                    'exam' => $boardresumemode,
+                ] + $languageparams);
+            }
+        }
         $historyrows[] = [
             'key' => 'board-' . (int) $attempt->id,
             'timestamp' => (int) $attempt->timecompleted,
@@ -91,7 +107,8 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'status' => $status,
             'statusclass' => $isincomplete ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration((int) $attempt->duration, $ises),
-            'resumeurl' => '',
+            'resumeurl' => $boardresumeurl ? $boardresumeurl->out(false) : '',
+            'resumelabel' => $ises ? 'Retomar examen →' : 'Resume Exam →',
         ];
     }
 }
@@ -147,6 +164,7 @@ if (($historytype === 'all' || $historytype === 'quiz') && $DB->get_manager()->t
             'statusclass' => !$isfinished ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration($duration, $ises),
             'resumeurl' => $resumeurl ? $resumeurl->out(false) : '',
+            'resumelabel' => $ises ? 'Retomar quiz →' : 'Resume Quiz →',
         ];
     }
 }
@@ -259,7 +277,7 @@ echo $OUTPUT->header();
                             <small><?php echo s($attempt['source'] . ($attempt['course'] !== '' ? ' · ' . $attempt['course'] : '')); ?></small>
                             <?php if ($attempt['resumeurl'] !== '') { ?>
                                 <a class="exam-history__resume" href="<?php echo s($attempt['resumeurl']); ?>">
-                                    <?php echo $ises ? 'Retomar quiz →' : 'Resume Quiz →'; ?>
+                                    <?php echo s($attempt['resumelabel']); ?>
                                 </a>
                             <?php } ?>
                         </div>
