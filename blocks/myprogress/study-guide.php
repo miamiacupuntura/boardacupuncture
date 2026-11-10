@@ -442,32 +442,14 @@ $comparisonoverviewchapters = array_values(array_filter($comparisonchapters, sta
 $otherchapters = array_values(array_filter($area['chapters'], static function(array $chapter): bool {
     return !empty($chapter['secondary']) && empty($chapter['practice_exam']) && empty($chapter['comparison']);
 }));
-$isHerbChapter = static function(array $chapter): bool {
-    return preg_match('/(?:herb|hierba)/iu', $chapter['title'] ?? '') === 1;
-};
-$isFormulaChapter = static function(array $chapter): bool {
-    return preg_match('/(?:formula|fórmula)/iu', $chapter['title'] ?? '') === 1;
-};
-$formulamiscchapters = array_values(array_filter(
-    $otherchapters,
-    static function(array $chapter) use ($isFormulaChapter): bool {
-        return $isFormulaChapter($chapter)
-            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/formula-navigator.html';
-    }
-));
-$herbmiscchapters = array_values(array_filter(
-    $otherchapters,
-    static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
-        return $isHerbChapter($chapter) && !$isFormulaChapter($chapter);
-    }
-));
 $secondaryguidechapters = array_values(array_filter(
     $otherchapters,
-    static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
-        return !$isHerbChapter($chapter)
-            && !$isFormulaChapter($chapter)
-            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/patterns-tips-maciocia.html'
-            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/safety.html';
+    static function(array $chapter): bool {
+        return !in_array($chapter['path'] ?? '', [
+            '/study-guide/comparisons/formula-navigator.html',
+            '/study-guide/comparisons/patterns-tips-maciocia.html',
+            '/study-guide/comparisons/safety.html',
+        ], true);
     }
 ));
 $requestedview = optional_param('view', '', PARAM_ALPHA);
@@ -863,14 +845,6 @@ echo $OUTPUT->header();
                                     <b><?php echo s($ises ? 'Material adicional de hierbas' : 'Additional herbs'); ?></b>
                                 </span>
                             </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Misceláneos de hierbas' : 'Herbs Miscellaneous'); ?>">
-                                <?php foreach ($herbmiscchapters as $chapter): ?>
-                                    <?php $herbchapterurl = $makechapterurl($chapter); ?>
-                                    <a class="subject-study-library__journey-option" href="<?php echo $herbchapterurl->out(false); ?>">
-                                        <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
-                                    </a>
-                                <?php endforeach; ?>
-                            </nav>
                         </section>
 
                         <section class="subject-study-library__journey-card">
@@ -881,14 +855,6 @@ echo $OUTPUT->header();
                                     <b><?php echo s($ises ? 'Material adicional de fórmulas' : 'Additional formulas'); ?></b>
                                 </span>
                             </header>
-                            <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Misceláneos de fórmulas' : 'Formulas Miscellaneous'); ?>">
-                                <?php foreach ($formulamiscchapters as $chapter): ?>
-                                    <?php $formulachapterurl = $makechapterurl($chapter); ?>
-                                    <a class="subject-study-library__journey-option" href="<?php echo $formulachapterurl->out(false); ?>">
-                                        <span><?php echo s($chapter['title']); ?><small><?php echo s($chapter['status'] ?? $chapter['description']); ?></small></span><span aria-hidden="true">›</span>
-                                    </a>
-                                <?php endforeach; ?>
-                            </nav>
                         </section>
 
                         <section class="subject-study-library__journey-card">
