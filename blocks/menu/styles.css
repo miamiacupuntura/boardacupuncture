@@ -553,10 +553,11 @@
     width: 100%;
     flex: 1 1 100%;
     min-width: 0;
-    height: 38px;
-    min-height: 38px;
-    padding: 8px 10px;
-    font-size: .78rem;
+    height: 32px;
+    min-height: 32px;
+    padding: 5px 9px;
+    font-size: .76rem;
+    line-height: 1.1;
 }
 
 .board-hub__card--board-level .comparisons-dashboard-link {
