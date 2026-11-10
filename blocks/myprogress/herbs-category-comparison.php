@@ -741,6 +741,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Toxicity and prepared forms" => "Toxicidad y formas preparadas",
         "Tian Nan Xing · Ban Xia · Bai Jie Zi" => "Tian Nan Xing · Ban Xia · Bai Jie Zi",
         "Tian Nan Xing and Ban Xia require properly prepared forms; Bai Jie Zi requires care with sensitive skin and prolonged decoction." => "Tian Nan Xing y Ban Xia requieren formas preparadas correctamente; Bai Jie Zi exige precaución en piel sensible y decocción prolongada.",
+        "Bitter, acrid, salty" => "Amargo, picante, salado",
     ];
 
     return $translations[$text] ?? $text;
