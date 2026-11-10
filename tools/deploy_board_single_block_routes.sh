@@ -56,6 +56,15 @@ grep -Fq 'href="#clear-and-purge-heat"' "$CATEGORY_TEMP"
 grep -Fq 'id="clear-and-purge-heat"' "$CATEGORY_TEMP"
 grep -Fq 'href="#clear-blood-heat"' "$CATEGORY_TEMP"
 grep -Fq 'id="clear-blood-heat"' "$CATEGORY_TEMP"
+grep -Fq 'href="#clear-damp-heat"' "$CATEGORY_TEMP"
+grep -Fq 'id="clear-damp-heat"' "$CATEGORY_TEMP"
+grep -Fq '$dampheatherbs = [' "$CATEGORY_TEMP"
+grep -Fq '$dampheatsimilarities = [' "$CATEGORY_TEMP"
+grep -Fq "'Huang Qin'" "$CATEGORY_TEMP"
+grep -Fq "'Huang Lian'" "$CATEGORY_TEMP"
+grep -Fq "'Huang Bai'" "$CATEGORY_TEMP"
+grep -Fq "'Long Dan Cao'" "$CATEGORY_TEMP"
+grep -Fq "'Ku Shen'" "$CATEGORY_TEMP"
 grep -Fq '$bloodheatherbs = [' "$CATEGORY_TEMP"
 grep -Fq '$bloodheatsimilarities = [' "$CATEGORY_TEMP"
 grep -Fq "'Shui Niu Jiao'" "$CATEGORY_TEMP"
@@ -79,8 +88,8 @@ grep -Fq "'Chai Hu'" "$CATEGORY_TEMP"
 grep -Fq "'Ge Gen'" "$CATEGORY_TEMP"
 similarities_block_count="$(grep -Fc 'class="herb-category-library__similarities"' "$CATEGORY_TEMP")"
 comparison_table_count="$(grep -Fc 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP")"
-[[ "$similarities_block_count" -eq 4 && "$comparison_table_count" -eq 4 ]] || {
-    echo "ERROR: las cuatro categorías no contienen ambos bloques comparativos." >&2
+[[ "$similarities_block_count" -eq 5 && "$comparison_table_count" -eq 5 ]] || {
+    echo "ERROR: las cinco categorías no contienen ambos bloques comparativos." >&2
     exit 1
 }
 grep -Fq "Similarities and Clinical Overlaps" "$CATEGORY_TEMP"
@@ -427,6 +436,7 @@ echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallad
 echo "OK: Disperse Wind-Heat quedó como categoría 2 con once hierbas y sus semejanzas clínicas."
 echo "OK: Clear and Purge Heat quedó como categoría 3 con ocho hierbas y sus semejanzas clínicas."
 echo "OK: Clear Blood-Heat quedó como categoría 4 con cinco hierbas y sus semejanzas clínicas."
+echo "OK: Clear Damp-Heat quedó como categoría 5 con cinco hierbas y sus semejanzas clínicas."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
