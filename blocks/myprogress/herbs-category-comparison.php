@@ -26,6 +26,7 @@ $categoryids = [
     'dispel-wind-damp',
     'dissolve-hot-phlegm',
     'dissolve-cold-phlegm',
+    'stop-cough-wheezing',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -742,13 +743,49 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Tian Nan Xing · Ban Xia · Bai Jie Zi" => "Tian Nan Xing · Ban Xia · Bai Jie Zi",
         "Tian Nan Xing and Ban Xia require properly prepared forms; Bai Jie Zi requires care with sensitive skin and prolonged decoction." => "Tian Nan Xing y Ban Xia requieren formas preparadas correctamente; Bai Jie Zi exige precaución en piel sensible y decocción prolongada.",
         "Bitter, acrid, salty" => "Amargo, picante, salado",
+        "15. Stop Cough and Wheezing" => "15. Detener la tos y las sibilancias",
+        "Board Guideline 2026 · 7 herbs · Common foundation: relieve cough, stop wheezing, regulate Lung Qi, transform phlegm or moisten the Lung." => "Guía Board 2026 · 7 hierbas · Fundamento común: aliviar la tos, detener las sibilancias, regular el Qi de Pulmón, transformar flema o humedecer el Pulmón.",
+        "cough temperature, dry versus phlegmy cough, rebellious Lung or Stomach Qi, bowel dryness, parasites, edema and constitutional deficiency." => "temperatura de la tos, tos seca frente a tos con flema, Qi rebelde de Pulmón o Estómago, sequedad intestinal, parásitos, edema y deficiencia constitucional.",
+        "Slightly warm, slightly toxic" => "Ligeramente tibia, ligeramente tóxica",
+        "Descends Lung Qi, stops cough and wheezing; broadly used for many types of cough, especially externally contracted dry cough; moistens the Intestines." => "Hace descender el Qi de Pulmón, detiene la tos y las sibilancias; se usa ampliamente para muchos tipos de tos, especialmente tos seca por factor exterior; humedece los Intestinos.",
+        "Use cautiously with diarrhea and in infants. Traditionally antagonizes Huang Qi, Ge Gen and Huang Qin." => "Usar con precaución en diarrea y en lactantes. Tradicionalmente antagoniza Huang Qi, Ge Gen y Huang Qin.",
+        "Crush and add near the end of decoction." => "Triturar y agregar cerca del final de la decocción.",
+        "Descends Lung Qi, stops cough and wheezing; transforms phlegm; relieves a stifling sensation in the chest; moistens the Intestines." => "Hace descender el Qi de Pulmón, detiene la tos y las sibilancias; transforma flema; alivia sensación de opresión en el tórax; humedece los Intestinos.",
+        "Avoid in chronic diarrhea." => "Evitar en diarrea crónica.",
+        "Usually grind before use." => "Generalmente triturar antes de usar.",
+        "Moistens the Lung; transforms phlegm; treats many types of cough and wheezing without being drying." => "Humedece el Pulmón; transforma flema; trata muchos tipos de tos y sibilancias sin resecar.",
+        "Use cautiously in cough from Yin deficiency with Heat or cough from excessive Heat; prolonged use or large doses are not recommended. Traditionally counteracts Yin Chen Hao." => "Usar con precaución en tos por deficiencia de Yin con Calor o por Calor excesivo; no se recomiendan el uso prolongado ni dosis grandes. Tradicionalmente contrarresta Yin Chen Hao.",
+        "Moistens the Lung; stops cough and wheezing in many patterns without being drying." => "Humedece el Pulmón; detiene la tos y las sibilancias en diversos patrones sin resecar.",
+        "Avoid in Heat-type cough. Traditionally antagonizes Xuan Shen and counteracts Bei Mu, Xin Yi Hua, Ma Huang, Huang Qin, Huang Lian and Huang Qi." => "Evitar en tos tipo Calor. Tradicionalmente antagoniza Xuan Shen y contrarresta Bei Mu, Xin Yi Hua, Ma Huang, Huang Qin, Huang Lian y Huang Qi.",
+        "Moistens the Lung and stops cough; expels parasites and kills lice when used externally." => "Humedece el Pulmón y detiene la tos; expulsa parásitos y elimina piojos cuando se usa externamente.",
+        "Avoid in Spleen deficiency or loose stools." => "Evitar en deficiencia de Bazo o heces sueltas.",
+        "Clears Lung Heat and transforms phlegm; descends rebellious Stomach Qi and stops nausea or vomiting from Stomach Heat." => "Elimina Calor de Pulmón y transforma flema; hace descender el Qi rebelde de Estómago y detiene náuseas o vómitos por Calor de Estómago.",
+        "Avoid in vomiting from Stomach Cold or cough from externally contracted Cold in the Lung." => "Evitar en vómitos por Frío de Estómago o tos por Frío exterior alojado en el Pulmón.",
+        "Clears Lung Heat; stops cough and wheezing; promotes urination and reduces edema; traditionally used in hypertension patterns." => "Elimina Calor de Pulmón; detiene la tos y las sibilancias; promueve la micción y reduce el edema; se usa tradicionalmente en patrones de hipertensión.",
+        "Avoid in Lung deficiency, excessive urination or cough from Wind-Cold." => "Evitar en deficiencia de Pulmón, micción excesiva o tos por Viento-Frío.",
+        "Descend Lung Qi and stop wheezing" => "Hacer descender el Qi de Pulmón y detener las sibilancias",
+        "All descend rebellious Qi; Xing Ren is broad for cough and wheezing, Zi Su Zi adds phlegm and chest constraint, and Pi Pa Ye adds Stomach Heat vomiting." => "Todas hacen descender el Qi rebelde; Xing Ren abarca tos y sibilancias, Zi Su Zi añade flema y opresión torácica, y Pi Pa Ye añade vómitos por Calor de Estómago.",
+        "Moistening cough herbs" => "Hierbas que humedecen en la tos",
+        "All moisten the Lung without being strongly drying; select by phlegm, Heat and parasite involvement." => "Todas humedecen el Pulmón sin resecar intensamente; seleccionar según flema, Calor y participación de parásitos.",
+        "Transform phlegm" => "Transformar flema",
+        "Zi Su Zi transforms phlegm with chest fullness, Zi Wan treats varied cough, and Pi Pa Ye clears Lung Heat." => "Zi Su Zi transforma flema con plenitud torácica, Zi Wan trata diversos tipos de tos y Pi Pa Ye elimina Calor de Pulmón.",
+        "Hot versus cold cough" => "Tos de Calor frente a tos de Frío",
+        "Pi Pa Ye and Sang Bai Pi are cooling for Lung Heat; the warm herbs suit Cold or neutral patterns and require caution with Heat." => "Pi Pa Ye y Sang Bai Pi enfrían el Calor de Pulmón; las hierbas tibias son apropiadas para patrones de Frío o neutros y requieren precaución con Calor.",
+        "Moisten the Intestines" => "Humedecer los Intestinos",
+        "Both descend Lung Qi and moisten the Intestines, useful when cough overlaps with dry stool." => "Ambas hacen descender el Qi de Pulmón y humedecen los Intestinos, útiles cuando la tos coincide con heces secas.",
+        "Nausea and vomiting" => "Náuseas y vómitos",
+        "Pi Pa Ye uniquely descends rebellious Stomach Qi and stops nausea or vomiting from Stomach Heat." => "Pi Pa Ye se distingue por hacer descender el Qi rebelde de Estómago y detener náuseas o vómitos por Calor de Estómago.",
+        "Parasites and external use" => "Parásitos y uso externo",
+        "Bai Bu uniquely expels parasites and kills lice externally; larger guideline doses are reserved for pinworms." => "Bai Bu se distingue por expulsar parásitos y eliminar piojos externamente; las dosis mayores de la guía se reservan para oxiuros.",
+        "Edema and hypertension patterns" => "Edema y patrones de hipertensión",
+        "Sang Bai Pi clears Lung Heat, promotes urination, reduces edema and is traditionally used in hypertension patterns." => "Sang Bai Pi elimina Calor de Pulmón, promueve la micción, reduce edema y se usa tradicionalmente en patrones de hipertensión.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110b';
+$languageversion = '20261110c';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1049,6 +1086,28 @@ $coldphlegmsimilarities = [
     ['Toxicity and prepared forms', 'Tian Nan Xing · Ban Xia · Bai Jie Zi', 'Tian Nan Xing and Ban Xia require properly prepared forms; Bai Jie Zi requires care with sensitive skin and prolonged decoction.'],
 ];
 
+
+$coughherbs = [
+    ['Xing Ren', 'Armeniacae Semen', 'Bitter', 'Slightly warm, slightly toxic', 'LU, LI', 'Descends Lung Qi, stops cough and wheezing; broadly used for many types of cough, especially externally contracted dry cough; moistens the Intestines.', 'Use cautiously with diarrhea and in infants. Traditionally antagonizes Huang Qi, Ge Gen and Huang Qin.', '3–9 g', 'Crush and add near the end of decoction.'],
+    ['Zi Su Zi', 'Perillae Fructus', 'Acrid', 'Warm', 'LI, LU', 'Descends Lung Qi, stops cough and wheezing; transforms phlegm; relieves a stifling sensation in the chest; moistens the Intestines.', 'Avoid in chronic diarrhea.', '3–9 g', 'Usually grind before use.'],
+    ['Zi Wan', 'Asteris Radix', 'Acrid, bitter', 'Slightly warm', 'LU', 'Moistens the Lung; transforms phlegm; treats many types of cough and wheezing without being drying.', 'Use cautiously in cough from Yin deficiency with Heat or cough from excessive Heat; prolonged use or large doses are not recommended. Traditionally counteracts Yin Chen Hao.', '5–9 g', '—'],
+    ['Kuan Dong Hua', 'Farfarae Flos', 'Acrid', 'Warm', 'LU', 'Moistens the Lung; stops cough and wheezing in many patterns without being drying.', 'Avoid in Heat-type cough. Traditionally antagonizes Xuan Shen and counteracts Bei Mu, Xin Yi Hua, Ma Huang, Huang Qin, Huang Lian and Huang Qi.', '4.5–9 g', '—'],
+    ['Bai Bu', 'Stemonae Radix', 'Sweet, bitter', 'Slightly warm', 'LU', 'Moistens the Lung and stops cough; expels parasites and kills lice when used externally.', 'Avoid in Spleen deficiency or loose stools.', '3–9 g; 30–60 g for pinworms', '—'],
+    ['Pi Pa Ye', 'Eriobotryae Folium', 'Bitter', 'Neutral', 'LU, ST', 'Clears Lung Heat and transforms phlegm; descends rebellious Stomach Qi and stops nausea or vomiting from Stomach Heat.', 'Avoid in vomiting from Stomach Cold or cough from externally contracted Cold in the Lung.', '6–15 g', '—'],
+    ['Sang Bai Pi', 'Mori Cortex', 'Sweet', 'Cold', 'LU', 'Clears Lung Heat; stops cough and wheezing; promotes urination and reduces edema; traditionally used in hypertension patterns.', 'Avoid in Lung deficiency, excessive urination or cough from Wind-Cold.', '6–15 g', '—'],
+];
+
+$coughsimilarities = [
+    ['Descend Lung Qi and stop wheezing', 'Xing Ren · Zi Su Zi · Pi Pa Ye', 'All descend rebellious Qi; Xing Ren is broad for cough and wheezing, Zi Su Zi adds phlegm and chest constraint, and Pi Pa Ye adds Stomach Heat vomiting.'],
+    ['Moistening cough herbs', 'Zi Wan · Kuan Dong Hua · Bai Bu', 'All moisten the Lung without being strongly drying; select by phlegm, Heat and parasite involvement.'],
+    ['Transform phlegm', 'Zi Su Zi · Zi Wan · Pi Pa Ye', 'Zi Su Zi transforms phlegm with chest fullness, Zi Wan treats varied cough, and Pi Pa Ye clears Lung Heat.'],
+    ['Hot versus cold cough', 'Pi Pa Ye · Sang Bai Pi · Xing Ren · Zi Su Zi · Zi Wan · Kuan Dong Hua', 'Pi Pa Ye and Sang Bai Pi are cooling for Lung Heat; the warm herbs suit Cold or neutral patterns and require caution with Heat.'],
+    ['Moisten the Intestines', 'Xing Ren · Zi Su Zi', 'Both descend Lung Qi and moisten the Intestines, useful when cough overlaps with dry stool.'],
+    ['Nausea and vomiting', 'Pi Pa Ye', 'Pi Pa Ye uniquely descends rebellious Stomach Qi and stops nausea or vomiting from Stomach Heat.'],
+    ['Parasites and external use', 'Bai Bu', 'Bai Bu uniquely expels parasites and kills lice externally; larger guideline doses are reserved for pinworms.'],
+    ['Edema and hypertension patterns', 'Sang Bai Pi', 'Sang Bai Pi clears Lung Heat, promotes urination, reduces edema and is traditionally used in hypertension patterns.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1134,6 +1193,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['dispel-wind-damp']->out(false); ?>"<?php echo $selectedcategory === 'dispel-wind-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></a>
         <a href="<?php echo $categoryurls['dissolve-hot-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-hot-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></a>
         <a href="<?php echo $categoryurls['dissolve-cold-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-cold-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['stop-cough-wheezing']->out(false); ?>"<?php echo $selectedcategory === 'stop-cough-wheezing' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -1827,6 +1887,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($coldphlegmherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="stop-cough-wheezing"<?php echo $selectedcategory === 'stop-cough-wheezing' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 7 herbs · Common foundation: relieve cough, stop wheezing, regulate Lung Qi, transform phlegm or moisten the Lung.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($coughsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('cough temperature, dry versus phlegmy cough, rebellious Lung or Stomach Qi, bowel dryness, parasites, edema and constitutional deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($coughherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
