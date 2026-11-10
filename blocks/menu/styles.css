@@ -604,6 +604,14 @@
     color: #fff !important;
 }
 
+.board-hub__card--board-level .board-hub__action--exam-history {
+    flex-basis: 100%;
+    order: 7;
+    border: 0;
+    background: #0f766e;
+    color: #fff !important;
+}
+
 .board-hub__card:not(.board-hub__card--board-level) .board-hub__action--simulation {
     flex-basis: 100%;
     order: 100;
