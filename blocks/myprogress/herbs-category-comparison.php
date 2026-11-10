@@ -927,13 +927,15 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Bai Ji astringes Lung bleeding, Ce Bai Ye stops cough and transforms phlegm, and Bai Mao Gen clears Lung Heat." => "Bai Ji astringe sangrado de Pulmón, Ce Bai Ye detiene la tos y transforma flema y Bai Mao Gen elimina Calor de Pulmón.",
         "Warm the womb and stop bleeding" => "Calentar el útero y detener el sangrado",
         "Ai Ye is the distinctive warm herb for uterine bleeding from Cold and also calms the fetus; it is inappropriate for Blood Heat." => "Ai Ye es la hierba tibia distintiva para sangrado uterino por Frío y además calma el feto; no es apropiada para Calor de Sangre.",
+        "Bitter, astringent" => "Amarga, astringente",
+        "Bitter, sour" => "Amarga, ácida",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110i';
+$languageversion = '20261110j';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
