@@ -528,7 +528,7 @@ $singleherbscomparisonsurl = new moodle_url(
 );
 $herbscategorycomparisonurl = new moodle_url(
     '/blocks/myprogress/herbs-category-comparison.php',
-    $ises ? ['lang' => 'es'] : []
+    $ises ? ['lang' => 'es', 'ui' => 'es'] : ['lang' => 'en', 'ui' => 'en']
 );
 $formulacomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'
