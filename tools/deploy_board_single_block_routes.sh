@@ -204,6 +204,12 @@ grep -Fq 'Las diez regulan el Qi' "$CATEGORY_TEMP"
 grep -Fq 'localización del estancamiento de Qi' "$CATEGORY_TEMP"
 grep -Fq '$bleedingherbs = [' "$CATEGORY_TEMP"
 grep -Fq '$bleedingsimilarities = [' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($regulateqisimilarities as $similarity)' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($bleedingsimilarities as $similarity)' "$CATEGORY_TEMP"
+if grep -Eq '\$[A-Za-z_][A-Za-z0-9_]*-[A-Za-z0-9_-]+' "$CATEGORY_TEMP"; then
+    echo "ERROR: la página contiene una variable PHP inválida con guion y cortaría el renderizado." >&2
+    exit 1
+fi
 grep -Fq "'Pu Huang'" "$CATEGORY_TEMP"
 grep -Fq "'San Qi'" "$CATEGORY_TEMP"
 grep -Fq "'Qian Cao Gen'" "$CATEGORY_TEMP"
@@ -677,6 +683,8 @@ grep -Fq 'Reduce estancamiento de alimentos, especialmente por carne' "$CATEGORY
 grep -Fq '18. Regular el Qi' "$CATEGORY_TARGET"
 grep -Fq 'Regula el Jiao Medio; alivia plenitud del diafragma' "$CATEGORY_TARGET"
 grep -Fq '19. Detener el sangrado' "$CATEGORY_TARGET"
+grep -Fq 'foreach ($regulateqisimilarities as $similarity)' "$CATEGORY_TARGET"
+grep -Fq 'foreach ($bleedingsimilarities as $similarity)' "$CATEGORY_TARGET"
 grep -Fq 'Astringe la Sangre y detiene el sangrado mientras mueve Sangre' "$CATEGORY_TARGET"
 grep -Fq 'Idioma: Español' "$CATEGORY_TARGET"
 grep -Fq "optional_param('ui', '', PARAM_ALPHA)" "$CATEGORY_TARGET"
@@ -732,6 +740,7 @@ echo "OK: Aromatics for Damp quedó como categoría 16 con siete hierbas y tradu
 echo "OK: Digestives quedó como categoría 17 con seis hierbas y traducción exacta en Español."
 echo "OK: Regulate Qi quedó como categoría 18 con diez hierbas y traducción exacta en Español."
 echo "OK: Stop Bleeding quedó como categoría 19 con diez hierbas y traducción exacta en Español."
+echo "OK: las categorías 18 y 19 renderizan sus semejanzas sin variables PHP con guiones."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
