@@ -25,6 +25,7 @@ $categoryids = [
     'diuretics',
     'dispel-wind-damp',
     'dissolve-hot-phlegm',
+    'dissolve-cold-phlegm',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -697,6 +698,49 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Hard nodules and edema" => "Nódulos duros y edema",
         "Hai Zao" => "Hai Zao",
         "Hai Zao softens hardness, dissipates neck nodules and promotes urination to reduce edema." => "Hai Zao ablanda durezas, disipa nódulos del cuello y promueve la micción para reducir edema.",
+        "14. Dissolve Cold Phlegm" => "14. Disolver Flema-Frío",
+        "Board Guideline 2026 · 6 herbs · Common foundation: warm and transform Cold-Phlegm, regulate Lung Qi, stop cough or resolve nodules." => "Guía Board 2026 · 6 hierbas · Fundamento común: calentar y transformar Flema-Frío, regular el Qi de Pulmón, detener la tos o resolver nódulos.",
+        "Cold-Phlegm location, dry versus rebellious phlegm, cough, vomiting, throat involvement, channel obstruction, nodules, toxicity and preparation." => "localización de Flema-Frío, flema seca frente a rebelde, tos, vómitos, afectación de garganta, obstrucción de canales, nódulos, toxicidad y preparación.",
+        "Dries Dampness and transforms phlegm; disperses Wind-Phlegm from the channels and stops spasms; reduces swelling and relieves pain when used topically." => "Seca Humedad y transforma flema; dispersa Viento-Flema de los canales y detiene espasmos; reduce hinchazón y alivia dolor cuando se usa tópicamente.",
+        "Avoid in Yin deficiency, pregnancy, dry phlegm or hot and dry Lung patterns; traditionally counteracts Fu Zi, Gan Jiang and Sheng Jiang." => "Evitar en deficiencia de Yin, embarazo, flema seca o patrones calientes y secos de Pulmón; tradicionalmente contrarresta Fu Zi, Gan Jiang y Sheng Jiang.",
+        "Use only the prepared form; Sheng Jiang and Ming Fan reduce its toxicity." => "Usar únicamente la forma preparada; Sheng Jiang y Ming Fan reducen su toxicidad.",
+        "Dries Dampness and transforms phlegm; directs rebellious Stomach Qi downward and stops vomiting; dissipates nodules and reduces swelling." => "Seca Humedad y transforma flema; hace descender el Qi rebelde de Estómago y detiene los vómitos; disipa nódulos y reduce hinchazón.",
+        "Avoid in bleeding, Yin-deficiency cough, depleted fluids or Heat patterns; incompatible with Wu Tou." => "Evitar en sangrado, tos por deficiencia de Yin, agotamiento de líquidos o patrones de Calor; incompatible con Wu Tou.",
+        "Use only the properly prepared form internally." => "Usar internamente únicamente la forma preparada correctamente.",
+        "Directs Lung Qi downward; transforms phlegm; treats vomiting, hiccup and belching." => "Hace descender el Qi de Pulmón; transforma flema; trata vómitos, hipo y eructos.",
+        "Use sparingly in deficient conditions." => "Usar con moderación en afecciones por deficiencia.",
+        "Wrap in cheesecloth before decocting." => "Envolver en tela de gasa antes de la decocción.",
+        "Descends Lung Qi and expels phlegm; treats Lung Qi blockage and stagnation, especially cough with phlegm lodged in the throat." => "Hace descender el Qi de Pulmón y expulsa flema; trata obstrucción y estancamiento del Qi de Pulmón, especialmente tos con flema alojada en la garganta.",
+        "Avoid in cough from Qi deficiency or Kidney failure to grasp Qi." => "Evitar en tos por deficiencia de Qi o incapacidad del Riñón para recibir el Qi.",
+        "Warms the Lung, regulates Qi and expels phlegm; opens the channels and stops pain; dissipates nodules and reduces swelling." => "Calienta el Pulmón, regula el Qi y expulsa flema; abre los canales y detiene el dolor; disipa nódulos y reduce hinchazón.",
+        "Avoid in cough from Lung deficiency or Yin-deficiency Heat; do not use topically on sensitive skin." => "Evitar en tos por deficiencia de Pulmón o Calor por deficiencia de Yin; no usar tópicamente sobre piel sensible.",
+        "Do not decoct for a long period." => "No cocinar durante un período prolongado.",
+        "Opens and diffuses Lung Qi; benefits the throat in both Cold-Phlegm and Phlegm-Heat; promotes discharge of pus; directs the effects of other herbs upward." => "Abre y difunde el Qi de Pulmón; beneficia la garganta tanto en Flema-Frío como en Flema-Calor; promueve la expulsión de pus; dirige hacia arriba los efectos de otras hierbas.",
+        "Avoid in hemoptysis; traditionally counteracts Long Dan Cao and Long Yan Rou." => "Evitar en hemoptisis; tradicionalmente contrarresta Long Dan Cao y Long Yan Rou.",
+        "Warm and transform Cold-Phlegm" => "Calentar y transformar Flema-Frío",
+        "Tian Nan Xing · Ban Xia · Xuan Fu Hua · Bai Qian · Bai Jie Zi · Jie Geng" => "Tian Nan Xing · Ban Xia · Xuan Fu Hua · Bai Qian · Bai Jie Zi · Jie Geng",
+        "All transform phlegm, but differ in emphasis on Dampness, rebellious Qi, Lung Qi descent, channel obstruction or throat involvement." => "Todas transforman flema, pero difieren en su énfasis sobre Humedad, Qi rebelde, descenso del Qi de Pulmón, obstrucción de canales o afectación de garganta.",
+        "Dry Dampness and transform phlegm" => "Secar Humedad y transformar flema",
+        "Tian Nan Xing · Ban Xia" => "Tian Nan Xing · Ban Xia",
+        "Both strongly dry Dampness; Tian Nan Xing emphasizes Wind-Phlegm and spasms, while Ban Xia emphasizes Stomach Qi and vomiting." => "Ambas secan intensamente Humedad; Tian Nan Xing enfatiza Viento-Flema y espasmos, mientras Ban Xia enfatiza Qi de Estómago y vómitos.",
+        "Rebellious Qi and vomiting" => "Qi rebelde y vómitos",
+        "Ban Xia · Xuan Fu Hua" => "Ban Xia · Xuan Fu Hua",
+        "Ban Xia descends rebellious Stomach Qi, while Xuan Fu Hua descends Lung Qi and treats vomiting, hiccup and belching." => "Ban Xia hace descender el Qi rebelde de Estómago, mientras Xuan Fu Hua hace descender el Qi de Pulmón y trata vómitos, hipo y eructos.",
+        "Descend Lung Qi and stop cough" => "Hacer descender el Qi de Pulmón y detener la tos",
+        "Xuan Fu Hua · Bai Qian" => "Xuan Fu Hua · Bai Qian",
+        "Both descend Lung Qi; Xuan Fu Hua is useful when vomiting accompanies phlegm, while Bai Qian emphasizes cough with throat phlegm." => "Ambas hacen descender el Qi de Pulmón; Xuan Fu Hua es útil cuando los vómitos acompañan la flema, mientras Bai Qian enfatiza tos con flema en la garganta.",
+        "Nodules and swelling" => "Nódulos e hinchazón",
+        "Tian Nan Xing · Ban Xia · Bai Jie Zi" => "Tian Nan Xing · Ban Xia · Bai Jie Zi",
+        "All dissipate nodules or swelling; Bai Jie Zi also opens channels and stops pain, while Tian Nan Xing may be used topically." => "Todas disipan nódulos o hinchazón; Bai Jie Zi también abre canales y detiene dolor, mientras Tian Nan Xing puede usarse tópicamente.",
+        "Channel obstruction and pain" => "Obstrucción de canales y dolor",
+        "Tian Nan Xing · Bai Jie Zi" => "Tian Nan Xing · Bai Jie Zi",
+        "Tian Nan Xing addresses Wind-Phlegm with spasms; Bai Jie Zi warms the Lung and opens channels to stop pain." => "Tian Nan Xing trata Viento-Flema con espasmos; Bai Jie Zi calienta el Pulmón y abre canales para detener dolor.",
+        "Open the Lung and benefit the throat" => "Abrir el Pulmón y beneficiar la garganta",
+        "Bai Qian · Jie Geng" => "Bai Qian · Jie Geng",
+        "Bai Qian descends Lung Qi and clears lodged phlegm; Jie Geng diffuses Lung Qi, benefits the throat and guides other herbs upward." => "Bai Qian hace descender el Qi de Pulmón y elimina flema alojada; Jie Geng difunde el Qi de Pulmón, beneficia la garganta y guía otras hierbas hacia arriba.",
+        "Toxicity and prepared forms" => "Toxicidad y formas preparadas",
+        "Tian Nan Xing · Ban Xia · Bai Jie Zi" => "Tian Nan Xing · Ban Xia · Bai Jie Zi",
+        "Tian Nan Xing and Ban Xia require properly prepared forms; Bai Jie Zi requires care with sensitive skin and prolonged decoction." => "Tian Nan Xing y Ban Xia requieren formas preparadas correctamente; Bai Jie Zi exige precaución en piel sensible y decocción prolongada.",
     ];
 
     return $translations[$text] ?? $text;
@@ -984,6 +1028,26 @@ $hotphlegmsimilarities = [
     ['Hard nodules and edema', 'Hai Zao', 'Hai Zao softens hardness, dissipates neck nodules and promotes urination to reduce edema.'],
 ];
 
+$coldphlegmherbs = [
+    ['Tian Nan Xing', 'Arisaematis Rhizoma Preparatum', 'Bitter, acrid', 'Warm, toxic', 'LV, LU, SP', 'Dries Dampness and transforms phlegm; disperses Wind-Phlegm from the channels and stops spasms; reduces swelling and relieves pain when used topically.', 'Avoid in Yin deficiency, pregnancy, dry phlegm or hot and dry Lung patterns; traditionally counteracts Fu Zi, Gan Jiang and Sheng Jiang.', '4.5–9 g decoction; 0.3–1 g powder', 'Use only the prepared form; Sheng Jiang and Ming Fan reduce its toxicity.'],
+    ['Ban Xia', 'Pinelliae Rhizoma Preparatum', 'Acrid', 'Warm, toxic', 'LU, SP, ST', 'Dries Dampness and transforms phlegm; directs rebellious Stomach Qi downward and stops vomiting; dissipates nodules and reduces swelling.', 'Avoid in bleeding, Yin-deficiency cough, depleted fluids or Heat patterns; incompatible with Wu Tou.', '3–9 g', 'Use only the properly prepared form internally.'],
+    ['Xuan Fu Hua', 'Inulae Flos', 'Bitter, acrid, salty', 'Slightly warm', 'LV, LU, ST, SP', 'Directs Lung Qi downward; transforms phlegm; treats vomiting, hiccup and belching.', 'Use sparingly in deficient conditions.', '3–9 g', 'Wrap in cheesecloth before decocting.'],
+    ['Bai Qian', 'Cynanchi Stauntonii Radix', 'Acrid, sweet', 'Slightly warm', 'LU', 'Descends Lung Qi and expels phlegm; treats Lung Qi blockage and stagnation, especially cough with phlegm lodged in the throat.', 'Avoid in cough from Qi deficiency or Kidney failure to grasp Qi.', '3–9 g', '—'],
+    ['Bai Jie Zi', 'Sinapis Semen', 'Acrid', 'Warm', 'LU', 'Warms the Lung, regulates Qi and expels phlegm; opens the channels and stops pain; dissipates nodules and reduces swelling.', 'Avoid in cough from Lung deficiency or Yin-deficiency Heat; do not use topically on sensitive skin.', '3–9 g', 'Do not decoct for a long period.'],
+    ['Jie Geng', 'Platycodi Radix', 'Bitter, acrid', 'Neutral', 'LU', 'Opens and diffuses Lung Qi; benefits the throat in both Cold-Phlegm and Phlegm-Heat; promotes discharge of pus; directs the effects of other herbs upward.', 'Avoid in hemoptysis; traditionally counteracts Long Dan Cao and Long Yan Rou.', '3–9 g', '—'],
+];
+
+$coldphlegmsimilarities = [
+    ['Warm and transform Cold-Phlegm', 'Tian Nan Xing · Ban Xia · Xuan Fu Hua · Bai Qian · Bai Jie Zi · Jie Geng', 'All transform phlegm, but differ in emphasis on Dampness, rebellious Qi, Lung Qi descent, channel obstruction or throat involvement.'],
+    ['Dry Dampness and transform phlegm', 'Tian Nan Xing · Ban Xia', 'Both strongly dry Dampness; Tian Nan Xing emphasizes Wind-Phlegm and spasms, while Ban Xia emphasizes Stomach Qi and vomiting.'],
+    ['Rebellious Qi and vomiting', 'Ban Xia · Xuan Fu Hua', 'Ban Xia descends rebellious Stomach Qi, while Xuan Fu Hua descends Lung Qi and treats vomiting, hiccup and belching.'],
+    ['Descend Lung Qi and stop cough', 'Xuan Fu Hua · Bai Qian', 'Both descend Lung Qi; Xuan Fu Hua is useful when vomiting accompanies phlegm, while Bai Qian emphasizes cough with throat phlegm.'],
+    ['Nodules and swelling', 'Tian Nan Xing · Ban Xia · Bai Jie Zi', 'All dissipate nodules or swelling; Bai Jie Zi also opens channels and stops pain, while Tian Nan Xing may be used topically.'],
+    ['Channel obstruction and pain', 'Tian Nan Xing · Bai Jie Zi', 'Tian Nan Xing addresses Wind-Phlegm with spasms; Bai Jie Zi warms the Lung and opens channels to stop pain.'],
+    ['Open the Lung and benefit the throat', 'Bai Qian · Jie Geng', 'Bai Qian descends Lung Qi and clears lodged phlegm; Jie Geng diffuses Lung Qi, benefits the throat and guides other herbs upward.'],
+    ['Toxicity and prepared forms', 'Tian Nan Xing · Ban Xia · Bai Jie Zi', 'Tian Nan Xing and Ban Xia require properly prepared forms; Bai Jie Zi requires care with sensitive skin and prolonged decoction.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1068,6 +1132,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['diuretics']->out(false); ?>"<?php echo $selectedcategory === 'diuretics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['dispel-wind-damp']->out(false); ?>"<?php echo $selectedcategory === 'dispel-wind-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></a>
         <a href="<?php echo $categoryurls['dissolve-hot-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-hot-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['dissolve-cold-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-cold-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -1719,6 +1784,48 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($hotphlegmherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="dissolve-cold-phlegm"<?php echo $selectedcategory === 'dissolve-cold-phlegm' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('14. Dissolve Cold Phlegm', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 6 herbs · Common foundation: warm and transform Cold-Phlegm, regulate Lung Qi, stop cough or resolve nodules.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($coldphlegmsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Cold-Phlegm location, dry versus rebellious phlegm, cough, vomiting, throat involvement, channel obstruction, nodules, toxicity and preparation.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($coldphlegmherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
