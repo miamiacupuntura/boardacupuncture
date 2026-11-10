@@ -673,6 +673,16 @@ if grep -Fq "[45, 'Single Herbs', 'questions', null, null, null," "$MENU_TEMP"; 
     exit 1
 fi
 grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--guide '" "$MENU_TEMP"
+grep -Fq ".board-hub__card--board-level .board-hub__action {" "$STYLES_TEMP"
+grep -Fq "height: 32px;" "$STYLES_TEMP"
+grep -Fq "min-height: 32px;" "$STYLES_TEMP"
+grep -Fq "padding: 5px 9px;" "$STYLES_TEMP"
+grep -Fq "font-size: .76rem;" "$STYLES_TEMP"
+grep -Fq "line-height: 1.1;" "$STYLES_TEMP"
+if sed -n '/\.board-hub__card--board-level \.board-hub__action {/,/^}/p' "$STYLES_TEMP" | grep -Fq "height: 38px;"; then
+    echo "ERROR: los botones Board Level todavía conservan la altura anterior de 38px." >&2
+    exit 1
+fi
 grep -Fq ".board-hub__card--board-level .board-hub__action--guide.comparisons-dashboard-link {" "$STYLES_TEMP"
 grep -Fq "background: #087c69 !important;" "$STYLES_TEMP"
 grep -Fq "color: #fff !important;" "$STYLES_TEMP"
@@ -1045,6 +1055,8 @@ echo "OK: Single Herbs School Level vuelve a abrir el curso 45, igual que Formul
 echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
 echo "OK: Previous page fue eliminado; Español y Dashboard permanecen en la cabecera."
 echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
+echo "OK: todos los botones Board Level usan una altura compacta uniforme de 32px."
+echo "OK: el padding y la tipografía fueron ajustados para conservar centrado y legibilidad."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
