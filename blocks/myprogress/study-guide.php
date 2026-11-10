@@ -449,6 +449,8 @@ $secondaryguidechapters = array_values(array_filter(
             '/study-guide/comparisons/formula-navigator.html',
             '/study-guide/comparisons/patterns-tips-maciocia.html',
             '/study-guide/comparisons/safety.html',
+            '/study-guide/comparisons/formula-theory.html',
+            '/study-guide/comparisons/herbal-incompatibilities.html',
         ], true);
     }
 ));
@@ -593,6 +595,17 @@ $makechapterurl = static function(array $chapter) use ($ises): moodle_url {
     }
     return $url;
 };
+
+$formulacompositionurl = $makechapterurl([
+    'path' => '/study-guide/comparisons/formula-theory.html',
+    'params' => [],
+    'anchor' => '',
+]);
+$herbalincompatibilitiesurl = $makechapterurl([
+    'path' => '/study-guide/comparisons/herbal-incompatibilities.html',
+    'params' => [],
+    'anchor' => '',
+]);
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -770,6 +783,12 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
                                     <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $formulacompositionurl->out(false); ?>">
+                                    <span><?php echo s($tr('Formula Composition')); ?><small><?php echo s($ises ? '12 temas de teoría' : '12 theory topics'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $herbalincompatibilitiesurl->out(false); ?>">
+                                    <span><?php echo s($tr('Herbal Incompatibilities')); ?><small><?php echo s($ises ? '10 capítulos de seguridad' : '10 safety chapters'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
