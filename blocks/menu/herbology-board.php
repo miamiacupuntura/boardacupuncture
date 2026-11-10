@@ -103,6 +103,7 @@ $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'do
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext);
+$unifiedexamhistoryurl = new moodle_url('/blocks/menu/exam-history.php', $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
@@ -2781,6 +2782,10 @@ echo $OUTPUT->header();
                             </h4>
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
+                        <a class="herb-board__exam-history-link"
+                            href="<?php echo s($unifiedexamhistoryurl->out(false)); ?>">
+                            <?php echo $ises ? '← Historial de exámenes' : '← Exam History'; ?>
+                        </a>
                     </header>
                     <p class="herb-board__exam-history-empty" data-clinical-history-empty
                         <?php echo $clinicalhistory ? 'hidden' : ''; ?>>
@@ -2992,6 +2997,10 @@ echo $OUTPUT->header();
                             </h4>
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
+                        <a class="herb-board__exam-history-link"
+                            href="<?php echo s($unifiedexamhistoryurl->out(false)); ?>">
+                            <?php echo $ises ? '← Historial de exámenes' : '← Exam History'; ?>
+                        </a>
                     </header>
                     <?php if (!$examhistory) { ?>
                         <p class="herb-board__exam-history-empty">
