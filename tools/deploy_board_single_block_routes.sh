@@ -112,12 +112,19 @@ fi
 grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
 grep -Fq "Pathology Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Pattern Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Pattern Comparison Maciocia" <<< "$secondary_study_guides_block"
+grep -Fq "'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia'" "$LIBRARY_TEMP"
+if grep -Fq "'title' => 'Patterns Tips Maciocia'" "$LIBRARY_TEMP"; then
+    echo "ERROR: Patterns Tips Maciocia todavía conserva el nombre anterior." >&2
+    exit 1
+fi
 grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$formulastudycenterurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"
 if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$LIBRARY_TEMP"; then
     echo "ERROR: todavía aparece un botón general Comparisons u Other chapters." >&2
     exit 1
@@ -128,6 +135,8 @@ grep -Fq "'/study-guide/comparisons/formula-navigator-es.html' : '/study-guide/c
 grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/formula-navigator.html';" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/pathologies-es.html' : '/study-guide/comparisons/pathologies.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/patterns-tips-maciocia-es.html' : '/study-guide/comparisons/patterns-tips-maciocia.html'" "$LIBRARY_TEMP"
+grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/patterns-tips-maciocia.html';" "$LIBRARY_TEMP"
 grep -Fq "'/blocks/myprogress/herb-formula-category-map.php'" "$LIBRARY_TEMP"
 grep -Fq "\$comparisonoverviewchapters = array_values(array_filter(\$comparisonchapters" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas.html'," "$LIBRARY_TEMP"
@@ -144,11 +153,12 @@ formula_study_center_route_count="$(grep -Fc '$formulastudycenterurl->out(false)
 bensky_crosswalk_route_count="$(grep -Fc '$benskycrosswalkurl->out(false)' "$LIBRARY_TEMP")"
 pathology_comparisons_route_count="$(grep -Fc '$pathologycomparisonsurl->out(false)' "$LIBRARY_TEMP")"
 pattern_comparisons_route_count="$(grep -Fc '$patterncomparisonsurl->out(false)' "$LIBRARY_TEMP")"
+pattern_maciocia_route_count="$(grep -Fc '$patternmaciociacomparisonurl->out(false)' "$LIBRARY_TEMP")"
 [[ "$single_herbs_study_route_count" -eq 1 && "$formulas_study_route_count" -eq 1 \
         && "$single_herbs_comparisons_route_count" -eq 1 && "$formula_comparisons_route_count" -eq 1 \
         && "$formula_study_center_route_count" -eq 1 \
         && "$bensky_crosswalk_route_count" -eq 1 && "$pathology_comparisons_route_count" -eq 1 \
-        && "$pattern_comparisons_route_count" -eq 1 ]] || {
+        && "$pattern_comparisons_route_count" -eq 1 && "$pattern_maciocia_route_count" -eq 1 ]] || {
     echo "ERROR: los botones de Main Study Guide y Comparison están incompletos o duplicados." >&2
     exit 1
 }
@@ -226,8 +236,9 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Comparison quedó como módulo 2 con seis botones independientes."
+echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
+echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de Secondary Study Guide."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
