@@ -29,6 +29,7 @@ $categoryids = [
     'stop-cough-wheezing',
     'aromatics-for-damp',
     'digestives',
+    'regulate-qi',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -847,13 +848,52 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Distinctive secondary actions" => "Acciones secundarias distintivas",
         "Shan Zha moves Blood, Mai Ya affects lactation, Ji Nei Jin treats stones and enuresis, and Lai Fu Zi descends Lung Qi." => "Shan Zha mueve Sangre, Mai Ya afecta la lactancia, Ji Nei Jin trata cálculos y enuresis, y Lai Fu Zi hace descender el Qi de Pulmón.",
         "Sour, sweet" => "Ácido, dulce",
+        "18. Regulate Qi" => "18. Regular el Qi",
+        "Board Guideline 2026 · 10 herbs · Common foundation: regulate Qi, remove stagnation, relieve pain and restore movement through the Middle and Lower Jiao." => "Guía Board 2026 · 10 hierbas · Fundamento común: regular el Qi, eliminar estancamiento, aliviar dolor y restaurar el movimiento en el Jiao Medio e Inferior.",
+        "location of Qi stagnation, strength needed, Heat or Cold, phlegm, food or Dampness, menstruation, urination, wheezing and constitutional deficiency." => "localización del estancamiento de Qi, intensidad necesaria, Calor o Frío, flema, alimentos o Humedad, menstruación, micción, sibilancias y deficiencia constitucional.",
+        "Regulates the Middle Jiao; relieves diaphragm fullness, nausea and vomiting; dries Dampness and transforms phlegm; prevents stagnation from tonic herbs." => "Regula el Jiao Medio; alivia plenitud del diafragma, náuseas y vómitos; seca Humedad y transforma flema; previene estancamiento causado por hierbas tónicas.",
+        "Avoid in dry cough from Qi or Yin deficiency, Heat-phlegm with a red tongue, dry cough from excess Heat, or hemoptysis." => "Evitar en tos seca por deficiencia de Qi o Yin, flema-Calor con lengua roja, tos seca por exceso de Calor o hemoptisis.",
+        "Breaks up constrained Liver Qi; dissipates clumps and stagnation; treats breast masses associated with Dampness or phlegm." => "Rompe el bloqueo de Qi de Hígado; disipa masas y estancamiento; trata masas mamarias asociadas con Humedad o flema.",
+        "Avoid in Qi deficiency." => "Evitar en deficiencia de Qi.",
+        "Strongly directs Qi downward; moves stool; transforms phlegm and relieves focal distension; may support formulas for Middle Jiao Qi sinking." => "Dirige intensamente el Qi hacia abajo; moviliza las heces; transforma flema y alivia distensión focal; puede apoyar fórmulas para hundimiento de Qi del Jiao Medio.",
+        "Avoid during pregnancy, with weak upright Qi, or with a cold deficient Stomach." => "Evitar durante el embarazo, con Qi correcto débil o con Estómago frío y deficiente.",
+        "Gently regulates Qi and relieves distension; milder than Zhi Shi and more suitable for weak patients." => "Regula suavemente el Qi y alivia distensión; es más suave que Zhi Shi y más apropiada para pacientes débiles.",
+        "Use cautiously during pregnancy." => "Usar con precaución durante el embarazo.",
+        "Directs Qi downward and reduces stagnation; promotes urination and moves Dampness." => "Dirige el Qi hacia abajo y reduce estancamiento; promueve la micción y moviliza Humedad.",
+        "Regulates Liver Qi, menstruation and pain; soothes emotional constraint and gynecologic Qi stagnation." => "Regula el Qi de Hígado, la menstruación y el dolor; suaviza bloqueo emocional y estancamiento ginecológico de Qi.",
+        "Avoid in Qi deficiency without stagnation or in Yin or Blood deficiency with Heat." => "Evitar en deficiencia de Qi sin estancamiento o en deficiencia de Yin o Sangre con Calor.",
+        "Regulates Liver Qi and relieves pain; clears Heat, dries Dampness and kills parasites." => "Regula el Qi de Hígado y alivia dolor; elimina Calor, seca Humedad y elimina parásitos.",
+        "Avoid in Spleen and Stomach deficiency with Cold." => "Evitar en deficiencia de Bazo y Estómago con Frío.",
+        "Dispels Cold, regulates Qi and relieves pain; warms the Kidney and improves frequent urination." => "Dispersa Frío, regula el Qi y alivia dolor; calienta el Riñón y mejora la micción frecuente.",
+        "Avoid in Qi deficiency or Interior Heat." => "Evitar en deficiencia de Qi o Calor Interior.",
+        "Directs rebellious Qi downward and regulates the Middle Jiao; warms the Kidney and assists asthma or wheezing." => "Dirige el Qi rebelde hacia abajo y regula el Jiao Medio; calienta el Riñón y ayuda en asma o sibilancias.",
+        "Avoid in prolapse from Qi deficiency or Yin deficiency with Heat." => "Evitar en prolapso por deficiencia de Qi o deficiencia de Yin con Calor.",
+        "Add near the end of the decoction." => "Agregar cerca del final de la decocción.",
+        "Regulates stagnant Qi in the Intestines, relieves pain and distension, and prevents cloying tonic herbs from obstructing Spleen transformation and transportation." => "Regula Qi estancado en los Intestinos, alivia dolor y distensión y evita que hierbas tónicas empalagosas obstruyan la transformación y el transporte del Bazo.",
+        "Avoid in Yin deficiency or depleted fluids." => "Evitar en deficiencia de Yin o líquidos agotados.",
+        "Regulate Qi and remove stagnation" => "Regular el Qi y eliminar estancamiento",
+        "All ten regulate Qi, but their clinical emphasis differs by organ, temperature, strength, pain, phlegm, Dampness and accompanying deficiency." => "Las diez regulan el Qi, pero su énfasis clínico difiere según órgano, temperatura, intensidad, dolor, flema, Humedad y deficiencia acompañante.",
+        "Same citrus fruit: mature and immature peel" => "Mismo cítrico: cáscara madura e inmadura",
+        "Chen Pi is the mature peel and gently harmonizes the Middle while transforming phlegm; Qing Pi is the immature peel and more strongly breaks constrained Liver Qi." => "Chen Pi es la cáscara madura y armoniza suavemente el Jiao Medio mientras transforma flema; Qing Pi es la cáscara inmadura y rompe con mayor intensidad el Qi de Hígado bloqueado.",
+        "Bitter orange: immature and mature fruit" => "Naranja amarga: fruto inmaduro y maduro",
+        "Zhi Shi is immature, stronger and more downward-directing; Zhi Ke is mature, gentler and more appropriate for weaker patients." => "Zhi Shi es inmaduro, más fuerte y dirige más hacia abajo; Zhi Ke es maduro, más suave y más apropiado para pacientes débiles.",
+        "Break severe Qi accumulation" => "Romper acumulación intensa de Qi",
+        "Qing Pi and Zhi Shi act more forcefully on clumps, focal distension and entrenched stagnation than the gentler Qi regulators." => "Qing Pi y Zhi Shi actúan con mayor fuerza sobre masas, distensión focal y estancamiento arraigado que los reguladores suaves de Qi.",
+        "Soothe Liver Qi and relieve pain" => "Suavizar el Qi de Hígado y aliviar dolor",
+        "Qing Pi, Xiang Fu and Chuan Lian Zi regulate Liver Qi; Xiang Fu emphasizes menstruation, while Chuan Lian Zi clears Heat and kills parasites." => "Qing Pi, Xiang Fu y Chuan Lian Zi regulan el Qi de Hígado; Xiang Fu enfatiza menstruación, mientras Chuan Lian Zi elimina Calor y parásitos.",
+        "Direct Qi downward" => "Dirigir el Qi hacia abajo",
+        "Zhi Shi and Da Fu Pi reduce abdominal stagnation; Chen Xiang descends rebellious Qi and warms the Kidney; Chen Pi also addresses nausea and vomiting." => "Zhi Shi y Da Fu Pi reducen estancamiento abdominal; Chen Xiang hace descender Qi rebelde y calienta el Riñón; Chen Pi también aborda náuseas y vómitos.",
+        "Warm the Kidney and Lower Jiao" => "Calentar el Riñón y el Jiao Inferior",
+        "Wu Yao is useful for Cold pain and frequent urination; Chen Xiang warms the Kidney while descending rebellious Qi for asthma or wheezing." => "Wu Yao es útil para dolor por Frío y micción frecuente; Chen Xiang calienta el Riñón mientras hace descender Qi rebelde en asma o sibilancias.",
+        "Prevent stagnation from tonics" => "Prevenir estancamiento causado por tónicos",
+        "Chen Pi and Mu Xiang prevent rich tonic herbs from obstructing digestion; Mu Xiang especially regulates intestinal Qi." => "Chen Pi y Mu Xiang evitan que hierbas tónicas densas obstruyan la digestión; Mu Xiang regula especialmente el Qi intestinal.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110f';
+$languageversion = '20261110g';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1217,6 +1257,31 @@ $digestivesimilarities = [
     ['Distinctive secondary actions', 'Shan Zha · Mai Ya · Ji Nei Jin · Lai Fu Zi', 'Shan Zha moves Blood, Mai Ya affects lactation, Ji Nei Jin treats stones and enuresis, and Lai Fu Zi descends Lung Qi.'],
 ];
 
+
+$regulateqiherbs = [
+    ['Chen Pi', 'Citri Pericarpium', 'Acrid, bitter', 'Warm, aromatic', 'LU, SP, ST', 'Regulates the Middle Jiao; relieves diaphragm fullness, nausea and vomiting; dries Dampness and transforms phlegm; prevents stagnation from tonic herbs.', 'Avoid in dry cough from Qi or Yin deficiency, Heat-phlegm with a red tongue, dry cough from excess Heat, or hemoptysis.', '3–9 g', '—'],
+    ['Qing Pi', 'Citri Viride Pericarpium', 'Bitter, acrid', 'Warm', 'GB, LV, ST', 'Breaks up constrained Liver Qi; dissipates clumps and stagnation; treats breast masses associated with Dampness or phlegm.', 'Avoid in Qi deficiency.', '3–9 g', '—'],
+    ['Zhi Shi', 'Aurantii Fructus Immaturus', 'Bitter, acrid', 'Slightly cold', 'LI, SP, ST', 'Strongly directs Qi downward; moves stool; transforms phlegm and relieves focal distension; may support formulas for Middle Jiao Qi sinking.', 'Avoid during pregnancy, with weak upright Qi, or with a cold deficient Stomach.', '3–9 g', '—'],
+    ['Zhi Ke', 'Aurantii Fructus', 'Bitter, acrid', 'Slightly cold', 'SP, ST', 'Gently regulates Qi and relieves distension; milder than Zhi Shi and more suitable for weak patients.', 'Use cautiously during pregnancy.', '3–9 g', '—'],
+    ['Da Fu Pi', 'Arecae Pericarpium', 'Acrid', 'Slightly warm', 'LI, SI, SP, ST', 'Directs Qi downward and reduces stagnation; promotes urination and moves Dampness.', 'Avoid in Qi deficiency.', '4.5–9 g', '—'],
+    ['Xiang Fu', 'Cyperi Rhizoma', 'Acrid, slightly bitter, slightly sweet', 'Neutral', 'LV, SJ, GB', 'Regulates Liver Qi, menstruation and pain; soothes emotional constraint and gynecologic Qi stagnation.', 'Avoid in Qi deficiency without stagnation or in Yin or Blood deficiency with Heat.', '6–12 g', '—'],
+    ['Chuan Lian Zi', 'Toosendan Fructus', 'Bitter', 'Cold, slightly toxic', 'UB, LV, SI, ST', 'Regulates Liver Qi and relieves pain; clears Heat, dries Dampness and kills parasites.', 'Avoid in Spleen and Stomach deficiency with Cold.', '4.5–9 g', '—'],
+    ['Wu Yao', 'Linderae Radix', 'Acrid', 'Warm', 'UB, KD, LU, SP', 'Dispels Cold, regulates Qi and relieves pain; warms the Kidney and improves frequent urination.', 'Avoid in Qi deficiency or Interior Heat.', '3–9 g', '—'],
+    ['Chen Xiang', 'Aquilariae Lignum', 'Acrid, bitter', 'Warm, aromatic', 'KD, SP, ST', 'Directs rebellious Qi downward and regulates the Middle Jiao; warms the Kidney and assists asthma or wheezing.', 'Avoid in prolapse from Qi deficiency or Yin deficiency with Heat.', '1–1.5 g powder', 'Add near the end of the decoction.'],
+    ['Mu Xiang', 'Aucklandiae Radix', 'Acrid, bitter', 'Warm', 'GB, LI, SP, ST, SJ', 'Regulates stagnant Qi in the Intestines, relieves pain and distension, and prevents cloying tonic herbs from obstructing Spleen transformation and transportation.', 'Avoid in Yin deficiency or depleted fluids.', '3–9 g', 'Add during the final 5 minutes.'],
+];
+
+$regulateqisimilarities = [
+    ['Regulate Qi and remove stagnation', 'Chen Pi · Qing Pi · Zhi Shi · Zhi Ke · Da Fu Pi · Xiang Fu · Chuan Lian Zi · Wu Yao · Chen Xiang · Mu Xiang', 'All ten regulate Qi, but their clinical emphasis differs by organ, temperature, strength, pain, phlegm, Dampness and accompanying deficiency.'],
+    ['Same citrus fruit: mature and immature peel', 'Chen Pi · Qing Pi', 'Chen Pi is the mature peel and gently harmonizes the Middle while transforming phlegm; Qing Pi is the immature peel and more strongly breaks constrained Liver Qi.'],
+    ['Bitter orange: immature and mature fruit', 'Zhi Shi · Zhi Ke', 'Zhi Shi is immature, stronger and more downward-directing; Zhi Ke is mature, gentler and more appropriate for weaker patients.'],
+    ['Break severe Qi accumulation', 'Qing Pi · Zhi Shi', 'Qing Pi and Zhi Shi act more forcefully on clumps, focal distension and entrenched stagnation than the gentler Qi regulators.'],
+    ['Soothe Liver Qi and relieve pain', 'Qing Pi · Xiang Fu · Chuan Lian Zi', 'Qing Pi, Xiang Fu and Chuan Lian Zi regulate Liver Qi; Xiang Fu emphasizes menstruation, while Chuan Lian Zi clears Heat and kills parasites.'],
+    ['Direct Qi downward', 'Chen Pi · Zhi Shi · Da Fu Pi · Chen Xiang', 'Zhi Shi and Da Fu Pi reduce abdominal stagnation; Chen Xiang descends rebellious Qi and warms the Kidney; Chen Pi also addresses nausea and vomiting.'],
+    ['Warm the Kidney and Lower Jiao', 'Wu Yao · Chen Xiang', 'Wu Yao is useful for Cold pain and frequent urination; Chen Xiang warms the Kidney while descending rebellious Qi for asthma or wheezing.'],
+    ['Prevent stagnation from tonics', 'Chen Pi · Mu Xiang', 'Chen Pi and Mu Xiang prevent rich tonic herbs from obstructing digestion; Mu Xiang especially regulates intestinal Qi.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1305,6 +1370,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['stop-cough-wheezing']->out(false); ?>"<?php echo $selectedcategory === 'stop-cough-wheezing' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('15. Stop Cough and Wheezing', $ises)); ?></a>
         <a href="<?php echo $categoryurls['aromatics-for-damp']->out(false); ?>"<?php echo $selectedcategory === 'aromatics-for-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></a>
         <a href="<?php echo $categoryurls['digestives']->out(false); ?>"<?php echo $selectedcategory === 'digestives' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['regulate-qi']->out(false); ?>"<?php echo $selectedcategory === 'regulate-qi' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2124,6 +2190,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($digestiveherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="regulate-qi"<?php echo $selectedcategory === 'regulate-qi' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: regulate Qi, remove stagnation, relieve pain and restore movement through the Middle and Lower Jiao.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($regulate-qiimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('location of Qi stagnation, strength needed, Heat or Cold, phlegm, food or Dampness, menstruation, urination, wheezing and constitutional deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($regulateqiherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
