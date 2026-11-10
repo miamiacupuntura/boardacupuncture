@@ -49,6 +49,11 @@ php -l "$MENU_TEMP" >/dev/null
 php -l "$CATEGORY_TEMP" >/dev/null
 
 grep -Fq "Herbs Category Comparison" "$CATEGORY_TEMP"
+grep -Fq '$languageurl = new moodle_url(' "$CATEGORY_TEMP"
+grep -Fq 'herb-category-library__actions' "$CATEGORY_TEMP"
+grep -Fq 'hreflang=' "$CATEGORY_TEMP"
+grep -Fq 'Español' "$CATEGORY_TEMP"
+grep -Fq "'English'" "$CATEGORY_TEMP"
 grep -Fq 'id="disperse-wind-cold"' "$CATEGORY_TEMP"
 grep -Fq 'href="#disperse-wind-heat"' "$CATEGORY_TEMP"
 grep -Fq 'id="disperse-wind-heat"' "$CATEGORY_TEMP"
@@ -493,6 +498,7 @@ echo "OK: Previous page fue eliminado; Español y Dashboard permanecen en la cab
 echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
+echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
 echo "OK: Herb y Pharmaceutical name están combinadas; las columnas compactas dejan visible Preparation."
 echo "OK: Dosage permite varias líneas y Preparation usa una columna más ancha."
 echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallada."
