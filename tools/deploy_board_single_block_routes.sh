@@ -18,7 +18,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
-for command in curl php install grep sed stat cp mkdir mktemp rm; do
+for command in curl php install grep sed stat cp cmp mkdir mktemp rm sha256sum; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -524,6 +524,29 @@ else
         "$CATEGORY_TEMP" "$CATEGORY_TARGET"
 fi
 
+# Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
+cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
+    echo "ERROR: study-guide.php instalado no coincide con la revisión descargada." >&2
+    exit 1
+}
+cmp -s "$CATEGORY_TEMP" "$CATEGORY_TARGET" || {
+    echo "ERROR: herbs-category-comparison.php instalado no coincide con la revisión descargada." >&2
+    exit 1
+}
+php -l "$CATEGORY_TARGET" >/dev/null
+grep -Fq 'function board_herb_category_localize' "$CATEGORY_TARGET"
+grep -Fq 'Idioma: Español' "$CATEGORY_TARGET"
+grep -Fq "optional_param('ui', '', PARAM_ALPHA)" "$CATEGORY_TARGET"
+grep -Fq "'ui' => 'es'" "$LIBRARY_TARGET"
+installed_herb_field_count="$(grep -Fc 'board_herb_category_localize($herb[' "$CATEGORY_TARGET")"
+installed_similarity_field_count="$(grep -Fc 'board_herb_category_localize($similarity[' "$CATEGORY_TARGET")"
+[[ "$installed_herb_field_count" -eq 84 && "$installed_similarity_field_count" -eq 36 ]] || {
+    echo "ERROR: el archivo instalado no contiene la localización completa en Español." >&2
+    exit 1
+}
+category_sha256="$(sha256sum "$CATEGORY_TARGET")"
+category_sha256="${category_sha256%% *}"
+
 if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
     runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 else
@@ -539,6 +562,8 @@ echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
 echo "OK: la vista Español localiza índice, títulos, tablas, semejanzas, funciones, precauciones y preparación."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
+echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
+echo "OK: SHA-256 instalado: $category_sha256"
 echo "OK: Herb y Pharmaceutical name están combinadas; las columnas compactas dejan visible Preparation."
 echo "OK: Dosage permite varias líneas y Preparation usa una columna más ancha."
 echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallada."
