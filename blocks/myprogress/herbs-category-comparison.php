@@ -11,6 +11,25 @@ $moodlelang = current_language();
 $displaylang = $requestedui !== '' ? $requestedui : ($requestedlang !== '' ? $requestedlang : $moodlelang);
 $ises = preg_match('/^es(?:[_-].*)?$/i', $displaylang) === 1;
 
+$categoryids = [
+    'disperse-wind-cold',
+    'disperse-wind-heat',
+    'clear-and-purge-heat',
+    'clear-blood-heat',
+    'clear-damp-heat',
+    'clear-toxic-heat',
+    'clear-deficient-heat',
+    'purgatives',
+    'laxatives',
+    'cathartics',
+    'diuretics',
+    'dispel-wind-damp',
+];
+$selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
+if (!in_array($selectedcategory, $categoryids, true)) {
+    $selectedcategory = '';
+}
+
 function board_herb_category_localize(string $text, bool $ises): string {
     if (!$ises || $text === '' || $text === '—') {
         return $text;
@@ -532,15 +551,27 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110';
-$activeparams = $ises
+$languageversion = '20261110b';
+$baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
+$activeparams = $baseparams;
 $languageparams = $ises
     ? ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion]
     : ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion];
+if ($selectedcategory !== '') {
+    $activeparams['category'] = $selectedcategory;
+    $languageparams['category'] = $selectedcategory;
+}
 
 $pageurl = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $activeparams);
+$categoriesurl = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $baseparams);
+$categoryurls = [];
+foreach ($categoryids as $categoryid) {
+    $categoryparams = $baseparams;
+    $categoryparams['category'] = $categoryid;
+    $categoryurls[$categoryid] = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $categoryparams);
+}
 $backurl = new moodle_url('/blocks/myprogress/study-guide.php', [
     'area' => 'herbology',
     'view' => 'library',
@@ -801,6 +832,8 @@ echo $OUTPUT->header();
 .herb-category-library__back:hover{background:#eef7f5;text-decoration:none}
 .herb-category-library__index{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
 .herb-category-library__index a{padding:9px 13px;border-radius:999px;background:#087c69;color:#fff;font-weight:800;text-decoration:none}
+.herb-category-library__index a[aria-current="page"]{background:#064f46;box-shadow:0 0 0 3px rgba(8,124,105,.18)}
+.herb-category-library__empty{margin-top:20px;padding:22px;border:1px dashed #8fb9b1;border-radius:12px;background:#f4fbfa;color:#294c5f;font-weight:700;text-align:center}
 .herb-category-library__section{margin-top:20px;padding:20px;border:1px solid #b9d8d2;border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(15,76,129,.06)}
 .herb-category-library__section h3{margin:0;font-size:25px}
 .herb-category-library__summary{margin:7px 0 16px;color:#526b84}
@@ -840,27 +873,36 @@ echo $OUTPUT->header();
             <p class="herb-category-library__language-state"><?php echo s($ises ? 'Idioma: Español' : 'Language: English'); ?></p>
         </div>
         <div class="herb-category-library__actions">
+            <?php if ($selectedcategory !== ''): ?>
+                <a class="herb-category-library__back" href="<?php echo $categoriesurl->out(false); ?>"><?php echo s($ises ? '← Categorías' : '← Categories'); ?></a>
+            <?php endif; ?>
             <a class="herb-category-library__back" href="<?php echo $backurl->out(false); ?>"><?php echo s($ises ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
             <a class="herb-category-library__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo s($ises ? 'English' : 'Español'); ?></a>
         </div>
     </header>
 
     <nav class="herb-category-library__index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
-        <a href="#disperse-wind-cold"><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></a>
-        <a href="#disperse-wind-heat"><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></a>
-        <a href="#clear-and-purge-heat"><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></a>
-        <a href="#clear-blood-heat"><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></a>
-        <a href="#clear-damp-heat"><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></a>
-        <a href="#clear-toxic-heat"><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></a>
-        <a href="#clear-deficient-heat"><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></a>
-        <a href="#purgatives"><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></a>
-        <a href="#laxatives"><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></a>
-        <a href="#cathartics"><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></a>
-        <a href="#diuretics"><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></a>
-        <a href="#dispel-wind-damp"><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['disperse-wind-cold']->out(false); ?>"<?php echo $selectedcategory === 'disperse-wind-cold' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['disperse-wind-heat']->out(false); ?>"<?php echo $selectedcategory === 'disperse-wind-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['clear-and-purge-heat']->out(false); ?>"<?php echo $selectedcategory === 'clear-and-purge-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['clear-blood-heat']->out(false); ?>"<?php echo $selectedcategory === 'clear-blood-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['clear-damp-heat']->out(false); ?>"<?php echo $selectedcategory === 'clear-damp-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['clear-toxic-heat']->out(false); ?>"<?php echo $selectedcategory === 'clear-toxic-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['clear-deficient-heat']->out(false); ?>"<?php echo $selectedcategory === 'clear-deficient-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['purgatives']->out(false); ?>"<?php echo $selectedcategory === 'purgatives' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['laxatives']->out(false); ?>"<?php echo $selectedcategory === 'laxatives' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['cathartics']->out(false); ?>"<?php echo $selectedcategory === 'cathartics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['diuretics']->out(false); ?>"<?php echo $selectedcategory === 'diuretics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['dispel-wind-damp']->out(false); ?>"<?php echo $selectedcategory === 'dispel-wind-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></a>
     </nav>
 
-    <section class="herb-category-library__section" id="disperse-wind-cold">
+    <?php if ($selectedcategory === ''): ?>
+        <div class="herb-category-library__empty"><?php echo s($ises
+            ? 'Selecciona una categoría para abrir solamente su tabla comparativa.'
+            : 'Select a category to open only its comparison table.'); ?></div>
+    <?php endif; ?>
+
+    <section class="herb-category-library__section" id="disperse-wind-cold"<?php echo $selectedcategory === 'disperse-wind-cold' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 15 herbs · Common foundation: predominantly acrid herbs that release exterior Wind-Cold.', $ises)); ?></p>
         <div class="herb-category-library__similarities">
@@ -910,7 +952,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="disperse-wind-heat">
+    <section class="herb-category-library__section" id="disperse-wind-heat"<?php echo $selectedcategory === 'disperse-wind-heat' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 11 herbs · Common foundation: predominantly cool and acrid herbs that disperse exterior Wind-Heat.', $ises)); ?></p>
 
@@ -962,7 +1004,7 @@ echo $OUTPUT->header();
     </section>
 
 
-    <section class="herb-category-library__section" id="clear-and-purge-heat">
+    <section class="herb-category-library__section" id="clear-and-purge-heat"<?php echo $selectedcategory === 'clear-and-purge-heat' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 8 herbs · Common foundation: cold herbs that clear internal Heat, drain Fire or protect fluids.', $ises)); ?></p>
 
@@ -1014,7 +1056,7 @@ echo $OUTPUT->header();
     </section>
 
 
-    <section class="herb-category-library__section" id="clear-blood-heat">
+    <section class="herb-category-library__section" id="clear-blood-heat"<?php echo $selectedcategory === 'clear-blood-heat' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('4. Clear Blood-Heat', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 5 herbs · Common foundation: cool Blood-level Heat and protect against injury from Fire.', $ises)); ?></p>
 
@@ -1065,7 +1107,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="clear-damp-heat">
+    <section class="herb-category-library__section" id="clear-damp-heat"<?php echo $selectedcategory === 'clear-damp-heat' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('5. Clear Damp-Heat', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 5 herbs · Common foundation: bitter, cold herbs that clear Heat and dry Dampness.', $ises)); ?></p>
 
@@ -1116,7 +1158,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="clear-toxic-heat">
+    <section class="herb-category-library__section" id="clear-toxic-heat"<?php echo $selectedcategory === 'clear-toxic-heat' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('6. Clear Toxic-Heat', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 9 herbs · Common foundation: clear Heat and relieve Fire toxicity, with distinct clinical locations and secondary actions.', $ises)); ?></p>
 
@@ -1167,7 +1209,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="clear-deficient-heat">
+    <section class="herb-category-library__section" id="clear-deficient-heat"<?php echo $selectedcategory === 'clear-deficient-heat' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('7. Clear Deficient-Heat', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 3 herbs · Common foundation: clear deficient Heat and cool the Blood.', $ises)); ?></p>
 
@@ -1218,7 +1260,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="purgatives">
+    <section class="herb-category-library__section" id="purgatives"<?php echo $selectedcategory === 'purgatives' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('8. Purgatives', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 3 herbs · Common foundation: drain Heat and move stool to purge accumulation.', $ises)); ?></p>
 
@@ -1269,7 +1311,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="laxatives">
+    <section class="herb-category-library__section" id="laxatives"<?php echo $selectedcategory === 'laxatives' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('9. Laxatives', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: gently moisten the Intestines and relieve dry constipation.', $ises)); ?></p>
 
@@ -1320,7 +1362,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="cathartics">
+    <section class="herb-category-library__section" id="cathartics"<?php echo $selectedcategory === 'cathartics' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: strongly drain retained fluids downward.', $ises)); ?></p>
 
@@ -1371,7 +1413,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="diuretics">
+    <section class="herb-category-library__section" id="diuretics"<?php echo $selectedcategory === 'diuretics' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 17 herbs · Common foundation: promote urination, eliminate Water and Dampness, reduce edema or relieve painful urinary dribbling.', $ises)); ?></p>
 
@@ -1422,7 +1464,7 @@ echo $OUTPUT->header();
         </div>
     </section>
 
-    <section class="herb-category-library__section" id="dispel-wind-damp">
+    <section class="herb-category-library__section" id="dispel-wind-damp"<?php echo $selectedcategory === 'dispel-wind-damp' ? '' : ' hidden'; ?>>
         <h3><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></h3>
         <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: dispel Wind-Damp, relieve pain from Bi syndrome, unblock channels and benefit sinews.', $ises)); ?></p>
 
