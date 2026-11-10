@@ -73,7 +73,7 @@ herb_misc_loop_count="$(grep -Fc '$herbmiscchapters as $chapter' "$LIBRARY_TEMP"
 formula_misc_loop_count="$(grep -Fc '$formulamiscchapters as $chapter' "$LIBRARY_TEMP")"
 [[ "$other_chapters_loop_count" -eq 1 && "$secondary_guide_loop_count" -eq 1 \
         && "$herb_misc_loop_count" -eq 1 && "$formula_misc_loop_count" -eq 1 ]] || {
-    echo "ERROR: los recursos de Other chapters no están distribuidos entre los módulos 3, 5 y 6." >&2
+    echo "ERROR: los recursos de Other chapters no están distribuidos entre los módulos 4, 5 y 6." >&2
     exit 1
 }
 grep -Fq "\$isHerbChapter = static function(array \$chapter): bool" "$LIBRARY_TEMP"
@@ -102,7 +102,10 @@ for step in 1 2 3 4 5 6 7 8 9 10; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,/subject-study-library__journey-step">3</p' "$LIBRARY_TEMP")"
-pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">4</,/subject-study-library__journey-step">5</p' "$LIBRARY_TEMP")"
+pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">3</,/subject-study-library__journey-step">4</p' "$LIBRARY_TEMP")"
+secondary_guide_block="$(sed -n '/subject-study-library__journey-step">4</,/subject-study-library__journey-step">5</p' "$LIBRARY_TEMP")"
+grep -Fq "Comparison Pathology and Patterns" <<< "$pathology_patterns_block"
+grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
@@ -262,12 +265,13 @@ echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
 echo "OK: Comparison Pathology and Patterns contiene tres botones independientes."
-echo "OK: las validaciones de los módulos 2 y 4 usan límites exactos."
+echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
+echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
-echo "OK: Bensky Category Crosswalk conserva su botón directo; Pathology y Pattern están en el módulo 4."
+echo "OK: Bensky Category Crosswalk conserva su botón directo; Pathology y Pattern están en el módulo 3."
 echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
