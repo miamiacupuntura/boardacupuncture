@@ -95,6 +95,27 @@ grep -Fq 'herb-category-library__section-heading' "$CATEGORY_TEMP"
 grep -Fq 'herb-category-library__pager' "$CATEGORY_TEMP"
 grep -Fq 'rel="prev"' "$CATEGORY_TEMP"
 grep -Fq 'rel="next"' "$CATEGORY_TEMP"
+grep -Fq '$PAGE->requires->js_init_code(' "$CATEGORY_TEMP"
+grep -Fq 'id="herb-category-search"' "$CATEGORY_TEMP"
+grep -Fq 'id="herb-category-search-clear"' "$CATEGORY_TEMP"
+grep -Fq 'id="herb-category-search-status"' "$CATEGORY_TEMP"
+grep -Fq 'id="herb-category-index"' "$CATEGORY_TEMP"
+grep -Fq 'Buscar categorías o hierbas' "$CATEGORY_TEMP"
+grep -Fq 'Search categories or herbs' "$CATEGORY_TEMP"
+grep -Fq 'Escribe una categoría, hierba, función o precaución' "$CATEGORY_TEMP"
+grep -Fq "normalize('NFD')" "$CATEGORY_TEMP"
+grep -Fq "event.key === 'Enter'" "$CATEGORY_TEMP"
+grep -Fq "event.key === 'Escape'" "$CATEGORY_TEMP"
+grep -Fq "section ? section.textContent : ''" "$CATEGORY_TEMP"
+search_input_count="$(grep -Fo 'id="herb-category-search"' "$CATEGORY_TEMP" | wc -l)"
+search_clear_count="$(grep -Fo 'id="herb-category-search-clear"' "$CATEGORY_TEMP" | wc -l)"
+search_status_count="$(grep -Fo 'id="herb-category-search-status"' "$CATEGORY_TEMP" | wc -l)"
+search_index_count="$(grep -Fo 'id="herb-category-index"' "$CATEGORY_TEMP" | wc -l)"
+[[ "$search_input_count" -eq 1 && "$search_clear_count" -eq 1 && "$search_status_count" -eq 1 && "$search_index_count" -eq 1 ]] || {
+    echo "ERROR: la barra de búsqueda no contiene exactamente un campo, un botón Borrar, un estado y un índice." >&2
+    echo "Conteos: campo=$search_input_count borrar=$search_clear_count estado=$search_status_count índice=$search_index_count" >&2
+    exit 1
+}
 category_button_count="$(grep -Fo "\$categoryurls['" "$CATEGORY_TEMP" | wc -l)"
 hidden_category_count="$(grep -Fo "? '' : ' hidden'" "$CATEGORY_TEMP" | wc -l)"
 [[ "$category_button_count" -eq 32 && "$hidden_category_count" -eq 32 ]] || {
@@ -972,6 +993,9 @@ echo "OK: las validaciones cuentan ocurrencias reales: 224 campos de hierbas y 9
 echo "OK: los treinta y dos botones abren una sola categoría y conservan el idioma seleccionado."
 echo "OK: cada categoría tiene controles Anterior y Siguiente en la esquina superior derecha."
 echo "OK: los controles conservan el idioma y no avanzan fuera de las categorías 1 a 32."
+echo "OK: la barra busca en tiempo real categorías, hierbas, nombres farmacéuticos, funciones y precauciones."
+echo "OK: la búsqueda ignora acentos, muestra el número de resultados y abre el único resultado con Enter."
+echo "OK: Borrar y Escape restauran los treinta y dos botones de categorías."
 echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
