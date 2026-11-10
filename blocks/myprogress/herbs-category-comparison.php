@@ -653,6 +653,8 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Treat red or painful eyes from Liver Heat; Xia Ku Cao dissipates nodules, while Jue Ming Zi moistens the intestines." => "Tratan ojos rojos o dolorosos por Calor de Hígado; Xia Ku Cao disipa nódulos, mientras Jue Ming Zi humedece los Intestinos.",
         "Reduce swelling, nodules or toxicity" => "Reducir hinchazón, nódulos o toxicidad",
         "Address Heat-related swelling through different mechanisms: expelling pus, reducing swelling, or dissipating nodules." => "Tratan hinchazón relacionada con Calor mediante distintos mecanismos: expulsar pus, reducir hinchazón o disipar nódulos.",
+        "Sweet, acrid" => "Dulce, picante",
+        "Gently releases the exterior; eliminates irritability and constraint." => "Libera suavemente el exterior; elimina irritabilidad y opresión.",
     ];
 
     return $translations[$text] ?? $text;
