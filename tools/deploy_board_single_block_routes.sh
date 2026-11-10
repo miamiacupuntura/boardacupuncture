@@ -85,8 +85,8 @@ grep -Fq "\$languageparams['category'] = \$selectedcategory;" "$CATEGORY_TEMP"
 grep -Fq 'Selecciona una categoría para abrir solamente su tabla comparativa.' "$CATEGORY_TEMP"
 category_button_count="$(grep -Fo "\$categoryurls['" "$CATEGORY_TEMP" | wc -l)"
 hidden_category_count="$(grep -Fo "? '' : ' hidden'" "$CATEGORY_TEMP" | wc -l)"
-[[ "$category_button_count" -eq 13 && "$hidden_category_count" -eq 13 ]] || {
-    echo "ERROR: los trece botones no abren exactamente una categoría cada uno." >&2
+[[ "$category_button_count" -eq 14 && "$hidden_category_count" -eq 14 ]] || {
+    echo "ERROR: los catorce botones no abren exactamente una categoría cada uno." >&2
     echo "Conteos: botones=$category_button_count secciones=$hidden_category_count" >&2
     exit 1
 }
@@ -94,8 +94,8 @@ localized_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$C
 localized_similarity_field_count="$(grep -Fo 'board_herb_category_localize($similarity[' "$CATEGORY_TEMP" | wc -l)"
 localized_title_count="$(grep -Fo '<h3><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP" | wc -l)"
 localized_summary_count="$(grep -Fo 'class="herb-category-library__summary"><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP" | wc -l)"
-[[ "$localized_herb_field_count" -eq 91 && "$localized_similarity_field_count" -eq 39 && "$localized_title_count" -eq 13 && "$localized_summary_count" -eq 13 ]] || {
-    echo "ERROR: la vista en Español no localiza todos los campos de las trece categorías." >&2
+[[ "$localized_herb_field_count" -eq 98 && "$localized_similarity_field_count" -eq 42 && "$localized_title_count" -eq 14 && "$localized_summary_count" -eq 14 ]] || {
+    echo "ERROR: la vista en Español no localiza todos los campos de las catorce categorías." >&2
     echo "Conteos: hierbas=$localized_herb_field_count semejanzas=$localized_similarity_field_count títulos=$localized_title_count resúmenes=$localized_summary_count" >&2
     exit 1
 }
@@ -125,6 +125,19 @@ grep -Fq "\$categoryurls['dispel-wind-damp']" "$CATEGORY_TEMP"
 grep -Fq 'id="dispel-wind-damp"' "$CATEGORY_TEMP"
 grep -Fq "\$categoryurls['dissolve-hot-phlegm']" "$CATEGORY_TEMP"
 grep -Fq 'id="dissolve-hot-phlegm"' "$CATEGORY_TEMP"
+grep -Fq "\$categoryurls['dissolve-cold-phlegm']" "$CATEGORY_TEMP"
+grep -Fq 'id="dissolve-cold-phlegm"' "$CATEGORY_TEMP"
+grep -Fq '$coldphlegmherbs = [' "$CATEGORY_TEMP"
+grep -Fq '$coldphlegmsimilarities = [' "$CATEGORY_TEMP"
+grep -Fq "'Tian Nan Xing'" "$CATEGORY_TEMP"
+grep -Fq "'Ban Xia'" "$CATEGORY_TEMP"
+grep -Fq "'Xuan Fu Hua'" "$CATEGORY_TEMP"
+grep -Fq "'Bai Qian'" "$CATEGORY_TEMP"
+grep -Fq "'Bai Jie Zi'" "$CATEGORY_TEMP"
+grep -Fq "'Jie Geng'" "$CATEGORY_TEMP"
+grep -Fq '14. Disolver Flema-Frío' "$CATEGORY_TEMP"
+grep -Fq 'Seca Humedad y transforma flema' "$CATEGORY_TEMP"
+grep -Fq 'Todas transforman flema, pero difieren' "$CATEGORY_TEMP"
 grep -Fq '$hotphlegmherbs = [' "$CATEGORY_TEMP"
 grep -Fq '$hotphlegmsimilarities = [' "$CATEGORY_TEMP"
 grep -Fq "'Qian Hu'" "$CATEGORY_TEMP"
@@ -231,8 +244,8 @@ grep -Fq "'Chai Hu'" "$CATEGORY_TEMP"
 grep -Fq "'Ge Gen'" "$CATEGORY_TEMP"
 similarities_block_count="$(grep -Fc 'class="herb-category-library__similarities"' "$CATEGORY_TEMP")"
 comparison_table_count="$(grep -Fc 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP")"
-[[ "$similarities_block_count" -eq 13 && "$comparison_table_count" -eq 13 ]] || {
-    echo "ERROR: las trece categorías no contienen ambos bloques comparativos." >&2
+[[ "$similarities_block_count" -eq 14 && "$comparison_table_count" -eq 14 ]] || {
+    echo "ERROR: las catorce categorías no contienen ambos bloques comparativos." >&2
     exit 1
 }
 grep -Fq "Similarities and Clinical Overlaps" "$CATEGORY_TEMP"
@@ -580,7 +593,7 @@ grep -Fq "optional_param('ui', '', PARAM_ALPHA)" "$CATEGORY_TARGET"
 grep -Fq "'ui' => 'es'" "$LIBRARY_TARGET"
 installed_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$CATEGORY_TARGET" | wc -l)"
 installed_similarity_field_count="$(grep -Fo 'board_herb_category_localize($similarity[' "$CATEGORY_TARGET" | wc -l)"
-[[ "$installed_herb_field_count" -eq 91 && "$installed_similarity_field_count" -eq 39 ]] || {
+[[ "$installed_herb_field_count" -eq 98 && "$installed_similarity_field_count" -eq 42 ]] || {
     echo "ERROR: el archivo instalado no contiene la localización completa en Español." >&2
     echo "Conteos instalados: hierbas=$installed_herb_field_count semejanzas=$installed_similarity_field_count" >&2
     exit 1
@@ -602,8 +615,8 @@ echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
 echo "OK: la vista Español localiza índice, títulos, tablas, semejanzas, funciones, precauciones y preparación."
-echo "OK: las validaciones cuentan ocurrencias reales: 91 campos de hierbas y 39 campos de semejanzas."
-echo "OK: los trece botones abren una sola categoría y conservan el idioma seleccionado."
+echo "OK: las validaciones cuentan ocurrencias reales: 98 campos de hierbas y 42 campos de semejanzas."
+echo "OK: los catorce botones abren una sola categoría y conservan el idioma seleccionado."
 echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
@@ -623,6 +636,7 @@ echo "OK: Cathartics quedó como categoría 10 con Da Ji y su comparación clín
 echo "OK: Diuretics quedó como categoría 11 con diecisiete hierbas y sus semejanzas clínicas."
 echo "OK: Dispel Wind-Damp quedó como categoría 12 con diez hierbas y sus semejanzas clínicas."
 echo "OK: Dissolve Hot Phlegm quedó como categoría 13 con ocho hierbas y traducción exacta en Español."
+echo "OK: Dissolve Cold Phlegm quedó como categoría 14 con seis hierbas y traducción exacta en Español."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
