@@ -192,6 +192,38 @@ $catharticsimilarities = [
     ['Toxicity and incompatibility', 'Da Ji', 'Because it is toxic and incompatible with Gan Cao, dosing and formula compatibility require particular care.'],
 ];
 
+$diureticherbs = [
+    ['Fu Ling', 'Poria', 'Sweet, bland', 'Neutral', 'HT, SP, KD, LU', 'Promotes urination, leaches Dampness and reduces edema; strengthens the Spleen; harmonizes the middle burner; transforms phlegm; quiets the Heart and calms the spirit.', 'Avoid with frequent, copious urination from deficient Cold; traditionally counteracts Di Yu, Qin Jiao and Bie Jia; avoid taking with vinegar.', '9–15 g', '—'],
+    ['Yi Yi Ren', 'Coicis Semen', 'Sweet, bland', 'Slightly cold', 'LU, SP, ST, KD', 'Promotes urination and leaches Dampness; strengthens the Spleen; clears Heat and expels pus; relieves Wind-Damp painful obstruction.', 'Use cautiously during pregnancy.', '9–30 g', '—'],
+    ['Zhu Ling', 'Polyporus', 'Sweet, bland', 'Slightly cold', 'SP, KD, UB', 'Promotes urination and leaches out Dampness, especially when water retention and edema predominate.', 'Avoid when Dampness is absent; prolonged use may injure Yin.', '6–12 g', '—'],
+    ['Ze Xie', 'Alismatis Rhizoma', 'Sweet, bland', 'Cold', 'KD, UB', 'Promotes urination and leaches Dampness; drains Damp-Heat from the lower burner; settles ministerial Fire in the Kidney.', 'Avoid in spermatorrhea or vaginal discharge from Kidney Yang deficiency and in Damp-Cold patterns.', '4.5–9 g', '—'],
+    ['Dong Gua Ren', 'Benincasae Semen', 'Sweet', 'Cold', 'LU, ST, LI, SI', 'Clears Heat and transforms phlegm; promotes urination; expels pus and supports the discharge of abscesses.', 'Use cautiously with Damp-Cold or loose stools.', '9–15 g', '—'],
+    ['Han Fang Ji', 'Stephaniae Tetrandrae Radix', 'Bitter, acrid', 'Cold', 'UB, SP, KD', 'Promotes urination and reduces edema; dispels Wind-Damp and relieves pain from painful obstruction.', 'Avoid in Yin deficiency or when Dampness is absent; use cautiously with interior Cold.', '4.5–9 g', '—'],
+    ['Yin Chen', 'Artemisiae Scopariae Herba', 'Bitter', 'Slightly cold', 'LV, SP, GB, ST', 'Clears Damp-Heat from the Liver and Gallbladder; promotes urination; is a principal herb for jaundice.', 'Avoid in deficiency jaundice with pale coloration, normal urine and signs that Damp-Heat is absent.', '9–30 g', '—'],
+    ['Deng Xin Cao', 'Junci Medulla', 'Sweet, bland', 'Slightly cold', 'HT, LU, SI', 'Promotes urination and relieves painful urinary dribbling; clears Heart Heat and directs Fire downward through the Small Intestine.', 'Use cautiously in deficient Cold patterns.', '1.5–4.5 g', '—'],
+    ['Mu Tong', 'Akebiae Caulis', 'Bitter', 'Slightly cold', 'UB, HT, SI', 'Promotes urination and relieves painful urinary dribbling; clears Heart Heat; unblocks Blood stasis and menstruation; promotes lactation.', 'Avoid during pregnancy and in deficiency without Damp-Heat; excessive use may damage Kidney function.', '3–6 g', 'Use only the correctly identified, non-aristolochic medicinal species.'],
+    ['Dong Kui Zi', 'Malvae Semen', 'Sweet', 'Cold', 'UB, LI, SI', 'Promotes urination and relieves painful urinary dribbling; benefits the breasts and promotes lactation; moistens the Intestines.', 'Avoid with diarrhea from Spleen deficiency; use cautiously during pregnancy.', '3–9 g', '—'],
+    ['Qu Mai', 'Dianthi Herba', 'Bitter', 'Cold', 'UB, HT, SI', 'Promotes urination and relieves painful urinary dribbling; breaks Blood stasis, unblocks menstruation and promotes lactation.', 'Avoid during pregnancy and in Spleen or Kidney deficiency; traditionally antagonizes Sang Piao Xiao.', '9–15 g', '—'],
+    ['Bian Xu', 'Polygoni Avicularis Herba', 'Bitter', 'Slightly cold', 'LI, UB', 'Promotes urination and relieves painful urinary dribbling; expels parasites and stops itching.', 'Excessive dosage may drain essential Qi.', '9–15 g', '—'],
+    ['Shi Wei', 'Pyrrosiae Folium', 'Bitter, sweet', 'Slightly cold', 'UB, LU', 'Promotes urination and relieves painful urinary dribbling; clears Heat and stops bleeding; clears Lung Heat, expels phlegm and stops cough.', 'Use cautiously when Damp-Heat is absent.', '6–9 g', '—'],
+    ['Che Qian Zi', 'Plantaginis Semen', 'Sweet', 'Cold', 'UB, KD, LV, LU', 'Promotes urination and leaches Dampness; relieves painful urinary dribbling; solidifies stool in diarrhea; clears the eyes; clears Lung Heat and phlegm.', 'Avoid during pregnancy and use cautiously with exhausted Yang Qi, spermatorrhea from Kidney deficiency or severe exhaustion.', '9–15 g', 'Wrap in a porous bag before decocting.'],
+    ['Hua Shi', 'Talcum', 'Sweet, bland', 'Cold', 'ST, UB', 'Promotes urination and relieves painful urinary dribbling; clears Summer-Heat; absorbs Dampness when used topically for eczema or sores.', 'Avoid with Spleen Qi deficiency, spermatorrhea, depleted fluids after warm-febrile disease or excessive urination; use cautiously during pregnancy.', '9–15 g', '—'],
+    ['Di Fu Zi', 'Kochiae Fructus', 'Sweet, bitter', 'Cold', 'UB, KD', 'Promotes urination and clears Damp-Heat; expels Dampness and stops itching, especially in the genital region or skin.', 'Traditionally antagonizes Hai Piao Xiao.', '9–15 g', '—'],
+    ['Bi Xie', 'Dioscoreae Hypoglaucae Rhizoma', 'Bitter', 'Neutral', 'UB, LV, ST', 'Separates the clear from the turbid in cloudy painful urinary disorders; dispels Wind-Damp and unblocks channels; clears Damp-Heat from the skin.', 'Avoid in Kidney Yin deficiency patterns.', '9–15 g', '—'],
+];
+
+$diureticsimilarities = [
+    ['Edema and water retention', 'Fu Ling · Yi Yi Ren · Zhu Ling · Ze Xie · Han Fang Ji', 'All promote urination and reduce retained fluids; Fu Ling and Yi Yi Ren strengthen the Spleen, Zhu Ling emphasizes urination, Ze Xie drains lower-burner Heat, and Han Fang Ji treats Wind-Damp pain.'],
+    ['Strengthen the Spleen while draining Dampness', 'Fu Ling · Yi Yi Ren', 'Both drain Dampness without strongly damaging the middle; Fu Ling also calms the spirit and transforms phlegm, while Yi Yi Ren clears Heat and expels pus.'],
+    ['Damp-Heat jaundice', 'Yin Chen · Ze Xie', 'Yin Chen is the principal herb for Liver and Gallbladder Damp-Heat jaundice; Ze Xie supports lower-burner drainage when urinary Damp-Heat is present.'],
+    ['Heart Fire through the Small Intestine', 'Deng Xin Cao · Mu Tong', 'Both clear Heart Heat and guide Fire downward through urination; Mu Tong is stronger for Blood stasis and lactation.'],
+    ['Painful urinary dribbling', 'Deng Xin Cao · Mu Tong · Dong Kui Zi · Qu Mai · Bian Xu · Shi Wei · Che Qian Zi · Hua Shi', 'All address Lin syndrome, with selection based on Heart Fire, Blood stasis, bleeding, stones, diarrhea, Summer-Heat or constitutional deficiency.'],
+    ['Blood stasis, menstruation and lactation', 'Mu Tong · Dong Kui Zi · Qu Mai', 'Mu Tong and Qu Mai unblock Blood and menstruation; all three may promote lactation, while Dong Kui Zi also moistens the Intestines.'],
+    ['Lung, phlegm and cough involvement', 'Fu Ling · Dong Gua Ren · Shi Wei · Che Qian Zi', 'Fu Ling transforms phlegm, Dong Gua Ren clears Heat and expels pus, Shi Wei stops cough, and Che Qian Zi clears Lung Heat and phlegm.'],
+    ['Skin Dampness and itching', 'Bian Xu · Hua Shi · Di Fu Zi · Bi Xie', 'Treat Damp-Heat affecting the skin; Bian Xu and Di Fu Zi emphasize itching, Hua Shi absorbs Dampness topically, and Bi Xie separates turbid Dampness.'],
+    ['Cloudy urine and turbid Dampness', 'Bi Xie · Che Qian Zi · Ze Xie', 'Bi Xie is most specific for separating clear from turbid, while Che Qian Zi and Ze Xie promote urinary drainage and clear lower-burner Dampness.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -261,6 +293,7 @@ echo $OUTPUT->header();
         <a href="#purgatives">8. Purgatives</a>
         <a href="#laxatives">9. Laxatives</a>
         <a href="#cathartics">10. Cathartics</a>
+        <a href="#diuretics">11. Diuretics</a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
@@ -755,6 +788,57 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($catharticherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="diuretics">
+        <h3>11. Diuretics</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 17 herbs · Common foundation: promote urination, eliminate Water and Dampness, reduce edema or relieve painful urinary dribbling.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($diureticsimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> edema versus Lin syndrome, Spleen deficiency, jaundice, Heart Fire, bleeding, Blood stasis, lactation, Lung phlegm, itching and cloudy urine.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($diureticherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row">
                             <strong><?php echo s($herb[0]); ?></strong>
