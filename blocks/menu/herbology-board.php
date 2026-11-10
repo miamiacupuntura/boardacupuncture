@@ -1061,6 +1061,19 @@ $pagetitle = in_array($track, ['exams', 'simulation'], true)
         : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
+$PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('[data-exit-to-exam-history]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const destination = link.href;
+        if (window.top !== window) {
+            window.top.location.replace(destination);
+            return;
+        }
+        window.location.replace(destination);
+    });
+});
+JS);
 
 $topics = [];
 $clearheatsections = [
@@ -2783,8 +2796,9 @@ echo $OUTPUT->header();
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
                         <a class="herb-board__exam-history-link"
-                            href="<?php echo s($unifiedexamhistoryurl->out(false)); ?>">
-                            <?php echo $ises ? '← Historial de exámenes' : '← Exam History'; ?>
+                            href="<?php echo s($unifiedexamhistoryurl->out(false)); ?>"
+                            target="_top" data-exit-to-exam-history>
+                            <?php echo $ises ? '← Salir a Historial de exámenes' : '← Exit to Exam History'; ?>
                         </a>
                     </header>
                     <p class="herb-board__exam-history-empty" data-clinical-history-empty
@@ -2998,8 +3012,9 @@ echo $OUTPUT->header();
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
                         <a class="herb-board__exam-history-link"
-                            href="<?php echo s($unifiedexamhistoryurl->out(false)); ?>">
-                            <?php echo $ises ? '← Historial de exámenes' : '← Exam History'; ?>
+                            href="<?php echo s($unifiedexamhistoryurl->out(false)); ?>"
+                            target="_top" data-exit-to-exam-history>
+                            <?php echo $ises ? '← Salir a Historial de exámenes' : '← Exit to Exam History'; ?>
                         </a>
                     </header>
                     <?php if (!$examhistory) { ?>
