@@ -674,11 +674,16 @@ if grep -Fq "[45, 'Single Herbs', 'questions', null, null, null," "$MENU_TEMP"; 
 fi
 grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--guide '" "$MENU_TEMP"
 grep -Fq ".board-hub__card--board-level .board-hub__action {" "$STYLES_TEMP"
-grep -Fq "height: 32px;" "$STYLES_TEMP"
-grep -Fq "min-height: 32px;" "$STYLES_TEMP"
-grep -Fq "padding: 5px 9px;" "$STYLES_TEMP"
-grep -Fq "font-size: .76rem;" "$STYLES_TEMP"
-grep -Fq "line-height: 1.1;" "$STYLES_TEMP"
+grep -Fq "height: 30px;" "$STYLES_TEMP"
+grep -Fq "min-height: 30px;" "$STYLES_TEMP"
+grep -Fq "padding: 3px 8px;" "$STYLES_TEMP"
+grep -Fq "font-size: .75rem;" "$STYLES_TEMP"
+grep -Fq "line-height: 1;" "$STYLES_TEMP"
+grep -Fq ".board-hub .board-hub__card.board-hub__card--board-level .board-hub__actions > .board-hub__action {" "$STYLES_TEMP"
+grep -Fq "height: 30px !important;" "$STYLES_TEMP"
+grep -Fq "min-height: 30px !important;" "$STYLES_TEMP"
+grep -Fq "max-height: 30px !important;" "$STYLES_TEMP"
+grep -Fq "padding: 3px 8px !important;" "$STYLES_TEMP"
 if sed -n '/\.board-hub__card--board-level \.board-hub__action {/,/^}/p' "$STYLES_TEMP" | grep -Fq "height: 38px;"; then
     echo "ERROR: los botones Board Level todavía conservan la altura anterior de 38px." >&2
     exit 1
@@ -1055,7 +1060,8 @@ echo "OK: Single Herbs School Level vuelve a abrir el curso 45, igual que Formul
 echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
 echo "OK: Previous page fue eliminado; Español y Dashboard permanecen en la cabecera."
 echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
-echo "OK: todos los botones Board Level usan una altura compacta uniforme de 32px."
+echo "OK: todos los botones Board Level usan una altura compacta forzada de 30px."
+echo "OK: enlaces y botones deshabilitados reciben height, min-height y max-height con prioridad explícita."
 echo "OK: el padding y la tipografía fueron ajustados para conservar centrado y legibilidad."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
