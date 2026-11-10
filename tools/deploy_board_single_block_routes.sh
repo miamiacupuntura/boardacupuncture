@@ -69,17 +69,19 @@ grep -Fq "<strong><?php echo s(\$ises ? 'Misceláneos de fórmulas' : 'Formulas 
 grep -Fq "<b><?php echo s(\$ises ? 'Material adicional de fórmulas' : 'Additional formulas'); ?></b>" "$LIBRARY_TEMP"
 other_chapters_loop_count="$(grep -Fc '$otherchapters as $chapter' "$LIBRARY_TEMP")"
 secondary_guide_loop_count="$(grep -Fc '$secondaryguidechapters as $chapter' "$LIBRARY_TEMP")"
-herb_misc_loop_count="$(grep -Fc '$herbmiscchapters as $chapter' "$LIBRARY_TEMP")"
-formula_misc_loop_count="$(grep -Fc '$formulamiscchapters as $chapter' "$LIBRARY_TEMP")"
-[[ "$other_chapters_loop_count" -eq 1 && "$secondary_guide_loop_count" -eq 1 \
-        && "$herb_misc_loop_count" -eq 1 && "$formula_misc_loop_count" -eq 1 ]] || {
-    echo "ERROR: los recursos de Other chapters no están distribuidos entre los módulos 4, 5 y 6." >&2
+[[ "$other_chapters_loop_count" -eq 1 && "$secondary_guide_loop_count" -eq 1 ]] || {
+    echo "ERROR: Secondary Study Guide no contiene la lista completa de Other chapters." >&2
     exit 1
 }
-grep -Fq "\$isHerbChapter = static function(array \$chapter): bool" "$LIBRARY_TEMP"
-grep -Fq "\$isFormulaChapter = static function(array \$chapter): bool" "$LIBRARY_TEMP"
-grep -Fq "preg_match('/(?:herb|hierba)/iu'" "$LIBRARY_TEMP"
-grep -Fq "preg_match('/(?:formula|fórmula)/iu'" "$LIBRARY_TEMP"
+if grep -Fq '$herbmiscchapters as $chapter' "$LIBRARY_TEMP" \
+        || grep -Fq '$formulamiscchapters as $chapter' "$LIBRARY_TEMP" \
+        || grep -Fq '$isHerbChapter' "$LIBRARY_TEMP" \
+        || grep -Fq '$isFormulaChapter' "$LIBRARY_TEMP"; then
+    echo "ERROR: todavía existe la división anterior entre Herbs y Formulas Miscellaneous." >&2
+    exit 1
+fi
+grep -Fq "\$secondaryguidechapters = array_values(array_filter(" "$LIBRARY_TEMP"
+grep -Fq "return !in_array(\$chapter['path'] ?? '', [" "$LIBRARY_TEMP"
 grep -Fq "'title' => 'Herbs Secondary Actions'" "$LIBRARY_TEMP"
 grep -Fq "'Herbs Secondary Actions' => 'Acciones secundarias de hierbas'" "$LIBRARY_TEMP"
 if grep -Fq "'title' => 'Secondary Actions'" "$LIBRARY_TEMP"; then
@@ -88,10 +90,6 @@ if grep -Fq "'title' => 'Secondary Actions'" "$LIBRARY_TEMP"; then
 fi
 grep -Fq '$secondarychapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
 grep -Fq '$secondarychapterurl->out(false)' "$LIBRARY_TEMP"
-grep -Fq '$herbchapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
-grep -Fq '$herbchapterurl->out(false)' "$LIBRARY_TEMP"
-grep -Fq '$formulachapterurl = $makechapterurl($chapter);' "$LIBRARY_TEMP"
-grep -Fq '$formulachapterurl->out(false)' "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material complementario' : 'Supplemental material'); ?></b>" "$LIBRARY_TEMP"
 journey_card_count="$(grep -Fc '<section class="subject-study-library__journey-card">' "$LIBRARY_TEMP")"
 [[ "$journey_card_count" -eq 10 ]] || {
@@ -105,6 +103,8 @@ main_study_guide_block="$(sed -n '/subject-study-library__journey-step">1</,/sub
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,/subject-study-library__journey-step">3</p' "$LIBRARY_TEMP")"
 pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">3</,/subject-study-library__journey-step">4</p' "$LIBRARY_TEMP")"
 secondary_guide_block="$(sed -n '/subject-study-library__journey-step">4</,/subject-study-library__journey-step">5</p' "$LIBRARY_TEMP")"
+herbs_misc_block="$(sed -n '/subject-study-library__journey-step">5</,/subject-study-library__journey-step">6</p' "$LIBRARY_TEMP")"
+formulas_misc_block="$(sed -n '/subject-study-library__journey-step">6</,/subject-study-library__journey-step">7</p' "$LIBRARY_TEMP")"
 grep -Fq "Safety Library" <<< "$main_study_guide_block"
 grep -Fq '$safetylibraryurl->out(false)' <<< "$main_study_guide_block"
 if grep -Fq '$safetylibraryurl->out(false)' <<< "$secondary_guide_block"; then
@@ -113,6 +113,13 @@ if grep -Fq '$safetylibraryurl->out(false)' <<< "$secondary_guide_block"; then
 fi
 grep -Fq "Comparison Pathology and Patterns" <<< "$pathology_patterns_block"
 grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
+grep -Fq '$secondaryguidechapters as $chapter' <<< "$secondary_guide_block"
+grep -Fq '$secondarychapterurl->out(false)' <<< "$secondary_guide_block"
+if grep -Fq 'subject-study-library__journey-option"' <<< "$herbs_misc_block" \
+        || grep -Fq 'subject-study-library__journey-option"' <<< "$formulas_misc_block"; then
+    echo "ERROR: Herbs Miscellaneous o Formulas Miscellaneous todavía contiene botones." >&2
+    exit 1
+fi
 grep -Fq "Single Herbs Comparisons" <<< "$main_study_guide_block"
 grep -Fq "Formula Comparisons" <<< "$main_study_guide_block"
 grep -Fq "63 Formulas Comparison" <<< "$main_study_guide_block"
@@ -148,15 +155,15 @@ if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$
     exit 1
 fi
 grep -Fq "'/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html'" "$LIBRARY_TEMP"
-grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/safety.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/safety.html'," "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formula-navigator-es.html' : '/study-guide/comparisons/formula-navigator.html'" "$LIBRARY_TEMP"
-grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/formula-navigator.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/formula-navigator.html'," "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/pathologies-es.html' : '/study-guide/comparisons/pathologies.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/patterns-es.html' : '/study-guide/comparisons/patterns.html'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/patterns-tips-maciocia-es.html' : '/study-guide/comparisons/patterns-tips-maciocia.html'" "$LIBRARY_TEMP"
-grep -Fq "&& (\$chapter['path'] ?? '') !== '/study-guide/comparisons/patterns-tips-maciocia.html'" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/patterns-tips-maciocia.html'," "$LIBRARY_TEMP"
 grep -Fq "'/blocks/myprogress/herb-formula-category-map.php'" "$LIBRARY_TEMP"
 grep -Fq "\$comparisonoverviewchapters = array_values(array_filter(\$comparisonchapters" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/formulas.html'," "$LIBRARY_TEMP"
@@ -273,15 +280,15 @@ echo "OK: 63 Formulas Comparison está en Main Study Guide y excluido de Formula
 echo "OK: Pattern Comparison Maciocia está en Main Study Guide y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
-echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
+echo "OK: Secondary Study Guide contiene todos los recursos secundarios de hierbas y fórmulas."
 echo "OK: Comparison Pathology and Patterns quedó como módulo 3 sin botones."
 echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
 echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
 echo "OK: Main Study Guide contiene once botones independientes."
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
 echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
-echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
-echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
+echo "OK: Herbs Miscellaneous y Formulas Miscellaneous quedaron vacíos."
+echo "OK: Herbs Secondary Actions está dentro de Secondary Study Guide."
 echo "OK: todos los botones de los dos módulos Comparison están en Main Study Guide."
 echo "OK: los módulos Comparison vacíos se validan usando la clase exacta de botón."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
