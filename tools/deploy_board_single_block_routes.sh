@@ -64,6 +64,15 @@ grep -Fq "'ui' => 'en'" "$CATEGORY_TEMP"
 grep -Fq "'ui' => 'es'" "$LIBRARY_TEMP"
 grep -Fq "'ui' => 'en'" "$LIBRARY_TEMP"
 grep -Fq 'function board_herb_category_localize' "$CATEGORY_TEMP"
+grep -Fq 'return $translations[$text] ?? $text;' "$CATEGORY_TEMP"
+if grep -Fq 'return strtr($text, $translations);' "$CATEGORY_TEMP"; then
+    echo "ERROR: la traducción todavía usa sustituciones parciales que producen Spanglish." >&2
+    exit 1
+fi
+grep -Fq 'Libera intensamente el patrón exterior de exceso' "$CATEGORY_TEMP"
+grep -Fq 'Aclara la cabeza y los ojos; beneficia la garganta' "$CATEGORY_TEMP"
+grep -Fq 'Elimina Calor intenso del nivel Qi' "$CATEGORY_TEMP"
+grep -Fq 'Ambas eliminan Calor interno intenso' "$CATEGORY_TEMP"
 grep -Fq 'Semejanzas y superposiciones clínicas' "$CATEGORY_TEMP"
 grep -Fq 'Hierba / nombre farmacéutico' "$CATEGORY_TEMP"
 grep -Fq 'Funciones e indicaciones principales' "$CATEGORY_TEMP"
@@ -548,6 +557,9 @@ cmp -s "$CATEGORY_TEMP" "$CATEGORY_TARGET" || {
 }
 php -l "$CATEGORY_TARGET" >/dev/null
 grep -Fq 'function board_herb_category_localize' "$CATEGORY_TARGET"
+grep -Fq 'return $translations[$text] ?? $text;' "$CATEGORY_TARGET"
+grep -Fq 'Libera intensamente el patrón exterior de exceso' "$CATEGORY_TARGET"
+grep -Fq 'Elimina Calor intenso del nivel Qi' "$CATEGORY_TARGET"
 grep -Fq 'Idioma: Español' "$CATEGORY_TARGET"
 grep -Fq "optional_param('ui', '', PARAM_ALPHA)" "$CATEGORY_TARGET"
 grep -Fq "'ui' => 'es'" "$LIBRARY_TARGET"
@@ -577,6 +589,7 @@ echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entr
 echo "OK: la vista Español localiza índice, títulos, tablas, semejanzas, funciones, precauciones y preparación."
 echo "OK: las validaciones cuentan ocurrencias reales: 84 campos de hierbas y 36 campos de semejanzas."
 echo "OK: los doce botones abren una sola categoría y conservan el idioma seleccionado."
+echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
 echo "OK: SHA-256 instalado: $category_sha256"
