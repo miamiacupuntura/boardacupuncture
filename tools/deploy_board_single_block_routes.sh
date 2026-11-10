@@ -50,6 +50,21 @@ php -l "$CATEGORY_TEMP" >/dev/null
 
 grep -Fq "Herbs Category Comparison" "$CATEGORY_TEMP"
 grep -Fq 'id="disperse-wind-cold"' "$CATEGORY_TEMP"
+grep -Fq 'href="#disperse-wind-heat"' "$CATEGORY_TEMP"
+grep -Fq 'id="disperse-wind-heat"' "$CATEGORY_TEMP"
+grep -Fq '\$windheatherbs = [' "$CATEGORY_TEMP"
+grep -Fq '\$windheatsimilarities = [' "$CATEGORY_TEMP"
+grep -Fq "'Bo He'" "$CATEGORY_TEMP"
+grep -Fq "'Niu Bang Zi'" "$CATEGORY_TEMP"
+grep -Fq "'Dan Dou Chi'" "$CATEGORY_TEMP"
+grep -Fq "'Chai Hu'" "$CATEGORY_TEMP"
+grep -Fq "'Ge Gen'" "$CATEGORY_TEMP"
+similarities_block_count="$(grep -Fc 'class="herb-category-library__similarities"' "$CATEGORY_TEMP")"
+comparison_table_count="$(grep -Fc 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP")"
+[[ "$similarities_block_count" -eq 2 && "$comparison_table_count" -eq 2 ]] || {
+    echo "ERROR: las dos categorías no contienen ambos bloques comparativos." >&2
+    exit 1
+}
 grep -Fq "Similarities and Clinical Overlaps" "$CATEGORY_TEMP"
 similarities_line="$(grep -n -m1 'class="herb-category-library__similarities"' "$CATEGORY_TEMP")"
 similarities_line="${similarities_line%%:*}"
@@ -384,6 +399,7 @@ echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herb y Pharmaceutical name están combinadas; las columnas compactas dejan visible Preparation."
 echo "OK: Similarities and Clinical Overlaps aparece encima de la tabla detallada."
+echo "OK: Disperse Wind-Heat quedó como categoría 2 con once hierbas y sus semejanzas clínicas."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
