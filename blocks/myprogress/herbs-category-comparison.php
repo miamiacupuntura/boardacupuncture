@@ -40,6 +40,10 @@ $categoryids = [
     'astringents',
     'anchor-calm-shen',
     'nourish-calm-shen',
+    'orifice-opening-aromatics',
+    'extinguish-liver-wind',
+    'expel-parasites',
+    'external-use',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -1311,13 +1315,92 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Deficiency versus excess agitation" => "Agitación por deficiencia frente a exceso",
         "These nourishing herbs suit deficiency-related insomnia; severe excess Heat, phlegm or unresolved excess patterns require different treatment." => "Estas hierbas nutritivas son apropiadas para insomnio por deficiencia; Calor intenso de exceso, flema o patrones de exceso sin resolver requieren otro tratamiento.",
         "Sweet, sour" => "Dulce, ácida",
+        "29. Orifice Opening Aromatics" => "29. Aromáticas que abren los orificios",
+        "30. Extinguish Liver Wind" => "30. Extinguir Viento de Hígado",
+        "31. Expel Parasites" => "31. Expulsar parásitos",
+        "32. External Use" => "32. Uso externo",
+        "Board Guideline 2026 · 1 substance · Common foundation: clear intense Heat, open the orifices, awaken the Spirit, extinguish Wind and relieve toxicity." => "Guía Board 2026 · 1 sustancia · Fundamento común: eliminar Calor intenso, abrir los orificios, despertar el Shen, extinguir Viento y aliviar toxicidad.",
+        "Board Guideline 2026 · 6 substances · Common foundation: calm the Liver, extinguish internal Wind, control spasms and address Yang rising or channel obstruction." => "Guía Board 2026 · 6 sustancias · Fundamento común: calmar el Hígado, extinguir Viento interno, controlar espasmos y tratar ascenso de Yang u obstrucción de canales.",
+        "Board Guideline 2026 · 1 herb · Common foundation: expel intestinal parasites while moving Qi and relieving accumulation." => "Guía Board 2026 · 1 hierba · Fundamento común: expulsar parásitos intestinales mientras mueve el Qi y alivia acumulación.",
+        "Board Guideline 2026 · 1 herb · Common foundation: dry Dampness, kill parasites, stop itching and warm Kidney Yang when appropriately used." => "Guía Board 2026 · 1 hierba · Fundamento común: secar Humedad, eliminar parásitos, detener picazón y calentar Yang de Riñón cuando se usa apropiadamente.",
+        "excess Heat, phlegm obstructing the orifices, loss of consciousness, tremor or convulsion, toxicity, pregnancy and digestive deficiency." => "Calor de exceso, flema que obstruye los orificios, pérdida de conciencia, temblor o convulsión, toxicidad, embarazo y deficiencia digestiva.",
+        "Heat or Cold origin of internal Wind, Liver Yang rising, spasms, tremor, visual symptoms, rebellious Qi, channel obstruction, wheezing and digestive weakness." => "origen por Calor o Frío del Viento interno, ascenso de Yang de Hígado, espasmos, temblor, síntomas visuales, Qi rebelde, obstrucción de canales, sibilancias y debilidad digestiva.",
+        "parasite type, abdominal distension, constipation, tenesmus, urination, malaria and Middle Qi deficiency." => "tipo de parásito, distensión abdominal, estreñimiento, tenesmo, micción, malaria y deficiencia del Qi Medio.",
+        "topical versus internal use, Dampness, parasites, itching, painful obstruction, Kidney Yang deficiency, toxicity and Heat patterns." => "uso tópico frente a interno, Humedad, parásitos, picazón, obstrucción dolorosa, deficiencia de Yang de Riñón, toxicidad y patrones de Calor.",
+        "Warm, slightly toxic" => "Tibia, ligeramente tóxica",
+        "Clears Heart Heat, opens the orifices, awakens the Spirit and expels phlegm; clears Liver Heat, relieves toxicity, extinguishes Wind and stops tremor; drains Heat and relieves toxicity." => "Elimina Calor de Corazón, abre los orificios, despierta el Shen y expulsa flema; elimina Calor de Hígado, alivia toxicidad, extingue Viento y detiene temblor; drena Calor y alivia toxicidad.",
+        "Avoid during pregnancy; use only in excess Heat patterns and avoid in Spleen/Stomach deficiency. Traditionally antagonizes Long Gu, Sheng Di, Long Dan Cao and Chang Shan; counteracts Niu Xi." => "Evitar durante el embarazo; usar solo en patrones de Calor de exceso y evitar en deficiencia de Bazo/Estómago. Tradicionalmente antagoniza Long Gu, Sheng Di, Long Dan Cao y Chang Shan; contrarresta Niu Xi.",
+        "Controls spasms and tremors; important for internal Liver Wind due to Heat or Cold; extinguishes Wind, relieves pain; used for painful obstruction or Bi syndrome." => "Controla espasmos y temblores; es importante para Viento interno de Hígado por Calor o Frío; extingue Viento y alivia dolor; se usa para obstrucción dolorosa o síndrome Bi.",
+        "Drains Liver Heat and pacifies Liver Yang; extinguishes Wind and controls spasms; releases the Exterior." => "Drena Calor de Hígado y pacifica Yang de Hígado; extingue Viento y controla espasmos; libera el Exterior.",
+        "Use cautiously when Wind-Heat or excess Heat is absent." => "Usar con precaución cuando no haya Viento-Calor ni Calor de exceso.",
+        "Do not cook for more than 20 minutes." => "No cocinar durante más de 20 minutos.",
+        "Anchors Liver Yang and clears Liver Heat; drains Liver Fire; improves the eyes and clears superficial visual obstruction; traditionally used for gastric acidity and topically for trauma." => "Ancla Yang de Hígado y elimina Calor de Hígado; drena Fuego de Hígado; mejora los ojos y elimina obstrucción visual superficial; se usa tradicionalmente para acidez gástrica y tópicamente en traumatismos.",
+        "Traditionally counteracts Xuan Fu Hua." => "Tradicionalmente contrarresta Xuan Fu Hua.",
+        "Crush and cook 60 minutes longer." => "Triturar y cocinar 60 minutos más.",
+        "Soothes Liver Qi; disperses Wind-Heat and brightens the eyes; dispels Wind and stops itching." => "Suaviza el Qi de Hígado; dispersa Viento-Calor e ilumina los ojos; expulsa Viento y detiene picazón.",
+        "Avoid during pregnancy or in Qi/Blood deficiency." => "Evitar durante el embarazo o en deficiencia de Qi/Sangre.",
+        "Strongly directs rebellious Stomach and Lung Qi downward; cools Blood and stops bleeding; anchors Liver Yang." => "Dirige con fuerza hacia abajo el Qi rebelde de Estómago y Pulmón; enfría la Sangre y detiene el sangrado; ancla Yang de Hígado.",
+        "Use cautiously during pregnancy; traditionally counteracts Fu Zi." => "Usar con precaución durante el embarazo; tradicionalmente contrarresta Fu Zi.",
+        "Clears Heat and unblocks channels and collaterals; stops spasms and convulsions; calms wheezing; promotes urination; traditionally used in hypertension patterns." => "Elimina Calor y desobstruye canales y colaterales; detiene espasmos y convulsiones; calma sibilancias; promueve la micción; se usa tradicionalmente en patrones de hipertensión.",
+        "Avoid in weak Spleen/Stomach or when excess Heat is absent." => "Evitar con Bazo/Estómago débiles o cuando no haya Calor de exceso.",
+        "Kills a wide variety of intestinal parasites, especially tapeworm; moves Qi in the Intestines for distension, constipation and tenesmus; promotes urination; used for malarial disorders." => "Elimina una amplia variedad de parásitos intestinales, especialmente tenia; mueve el Qi en los Intestinos para distensión, estreñimiento y tenesmo; promueve la micción; se usa para trastornos palúdicos.",
+        "Avoid in collapse or deficiency of Middle Qi." => "Evitar en colapso o deficiencia del Qi Medio.",
+        "Dries Dampness, kills parasites and stops itching topically; expels Wind-Cold-Damp for painful obstruction; warms Kidney Yang when used internally." => "Seca Humedad, elimina parásitos y detiene picazón por vía tópica; expulsa Viento-Frío-Humedad en obstrucción dolorosa; calienta Yang de Riñón cuando se usa internamente.",
+        "Avoid in Lower Jiao Damp-Heat or Yin deficiency with Heat. Traditionally antagonizes Mu Dan Pi, Ba Dou and Bei Mu." => "Evitar en Humedad-Calor del Jiao Inferior o deficiencia de Yin con Calor. Tradicionalmente antagoniza Mu Dan Pi, Ba Dou y Bei Mu.",
+        "Primarily used externally; internal use requires caution." => "Se usa principalmente de forma externa; el uso interno requiere precaución.",
+        "Open the orifices and awaken the Spirit" => "Abrir los orificios y despertar el Shen",
+        "Niu Huang clears Heart Heat, expels phlegm and restores consciousness when Heat and phlegm obstruct the orifices." => "Niu Huang elimina Calor de Corazón, expulsa flema y restaura la conciencia cuando Calor y flema obstruyen los orificios.",
+        "Extinguish Wind and stop tremor" => "Extinguir Viento y detener temblor",
+        "Niu Huang clears Liver Heat, extinguishes internal Wind and stops tremor or convulsion from intense Heat." => "Niu Huang elimina Calor de Hígado, extingue Viento interno y detiene temblor o convulsión por Calor intenso.",
+        "Clear Heat and relieve toxicity" => "Eliminar Calor y aliviar toxicidad",
+        "Niu Huang drains intense Heat and relieves Fire toxicity affecting the Heart, Liver or consciousness." => "Niu Huang drena Calor intenso y alivia toxicidad de Fuego que afecta Corazón, Hígado o conciencia.",
+        "Excess Heat requirement" => "Requisito de Calor de exceso",
+        "Niu Huang is reserved for strong excess Heat and is inappropriate in Spleen or Stomach deficiency." => "Niu Huang se reserva para Calor fuerte de exceso y no es apropiado en deficiencia de Bazo o Estómago.",
+        "Pill or powder administration" => "Administración en píldora o polvo",
+        "Niu Huang is given in small doses as a pill or powder rather than in a routine decoction." => "Niu Huang se administra en dosis pequeñas como píldora o polvo, no en una decocción habitual.",
+        "Extinguish Liver Wind and control spasms" => "Extinguir Viento de Hígado y controlar espasmos",
+        "All six calm internal Wind or its manifestations, with different emphasis on Yang rising, Heat, rebellious Qi, channels, pain or wheezing." => "Las seis sustancias calman Viento interno o sus manifestaciones, con distinto énfasis en ascenso de Yang, Calor, Qi rebelde, canales, dolor o sibilancias.",
+        "Tian Ma and Gou Teng" => "Tian Ma y Gou Teng",
+        "Tian Ma is neutral and treats internal Wind from Heat or Cold; Gou Teng is slightly cold and emphasizes clearing Heat and pacifying Yang." => "Tian Ma es neutra y trata Viento interno por Calor o Frío; Gou Teng es ligeramente fría y enfatiza eliminar Calor y pacificar Yang.",
+        "Anchor Liver Yang" => "Anclar Yang de Hígado",
+        "Shi Jue Ming and Dai Zhe Shi are heavy substances that anchor rising Liver Yang; Shi Jue Ming emphasizes the eyes and Dai Zhe Shi rebellious Qi." => "Shi Jue Ming y Dai Zhe Shi son sustancias pesadas que anclan el ascenso de Yang de Hígado; Shi Jue Ming enfatiza los ojos y Dai Zhe Shi el Qi rebelde.",
+        "Brighten the eyes" => "Iluminar los ojos",
+        "Gou Teng, Shi Jue Ming and Bai Ji Li address visual symptoms through clearing Liver Heat, pacifying Yang or dispersing Wind-Heat." => "Gou Teng, Shi Jue Ming y Bai Ji Li tratan síntomas visuales eliminando Calor de Hígado, pacificando Yang o dispersando Viento-Calor.",
+        "Clear Heat and stop convulsions" => "Eliminar Calor y detener convulsiones",
+        "Gou Teng and Di Long clear Heat and control spasms; Di Long additionally unblocks channels, calms wheezing and promotes urination." => "Gou Teng y Di Long eliminan Calor y controlan espasmos; Di Long además desobstruye canales, calma sibilancias y promueve la micción.",
+        "Direct rebellious Qi downward" => "Dirigir el Qi rebelde hacia abajo",
+        "Dai Zhe Shi strongly descends rebellious Stomach and Lung Qi while anchoring Liver Yang and cooling Blood." => "Dai Zhe Shi hace descender con fuerza el Qi rebelde de Estómago y Pulmón mientras ancla Yang de Hígado y enfría la Sangre.",
+        "Painful obstruction and channels" => "Obstrucción dolorosa y canales",
+        "Tian Ma treats painful obstruction, Bai Ji Li disperses Wind and Di Long unblocks channels and collaterals." => "Tian Ma trata obstrucción dolorosa, Bai Ji Li dispersa Viento y Di Long desobstruye canales y colaterales.",
+        "Mineral preparation" => "Preparación de minerales",
+        "Shi Jue Ming and Dai Zhe Shi require crushing and prolonged cooking before other herbs." => "Shi Jue Ming y Dai Zhe Shi requieren trituración y cocción prolongada antes que las demás hierbas.",
+        "Expel intestinal parasites" => "Expulsar parásitos intestinales",
+        "Bing Lang kills a broad range of intestinal parasites while moving Qi to relieve accumulation." => "Bing Lang elimina una amplia gama de parásitos intestinales mientras mueve el Qi para aliviar acumulación.",
+        "Tapeworm emphasis" => "Énfasis en la tenia",
+        "Bing Lang is especially emphasized for tapeworm and associated abdominal symptoms." => "Bing Lang se destaca especialmente para tenia y síntomas abdominales asociados.",
+        "Move intestinal Qi" => "Mover el Qi intestinal",
+        "Bing Lang relieves distension, constipation and tenesmus by moving Qi in the Intestines." => "Bing Lang alivia distensión, estreñimiento y tenesmo moviendo el Qi en los Intestinos.",
+        "Promote urination and treat malaria" => "Promover la micción y tratar malaria",
+        "Beyond parasites, Bing Lang promotes urination and is traditionally used for malarial disorders." => "Además de parásitos, Bing Lang promueve la micción y se usa tradicionalmente para trastornos palúdicos.",
+        "Middle Qi caution" => "Precaución por Qi Medio",
+        "Because Bing Lang moves Qi downward, avoid it in collapse or marked deficiency of Middle Qi." => "Como Bing Lang mueve el Qi hacia abajo, debe evitarse en colapso o deficiencia marcada del Qi Medio.",
+        "Topical Dampness and itching" => "Humedad tópica y picazón",
+        "She Chuang Zi dries Dampness and stops itching when applied externally." => "She Chuang Zi seca Humedad y detiene picazón cuando se aplica externamente.",
+        "Kill parasites" => "Eliminar parásitos",
+        "She Chuang Zi kills parasites affecting the skin or genital region and is commonly selected for external washes." => "She Chuang Zi elimina parásitos que afectan piel o región genital y se selecciona comúnmente para lavados externos.",
+        "Wind-Cold-Damp painful obstruction" => "Obstrucción dolorosa por Viento-Frío-Humedad",
+        "She Chuang Zi expels Wind-Cold-Damp to relieve painful obstruction when appropriately used." => "She Chuang Zi expulsa Viento-Frío-Humedad para aliviar obstrucción dolorosa cuando se usa apropiadamente.",
+        "Warm Kidney Yang" => "Calentar Yang de Riñón",
+        "When used internally, She Chuang Zi warms Kidney Yang, distinct from its more common topical role." => "Cuando se usa internamente, She Chuang Zi calienta Yang de Riñón, función distinta de su uso tópico más común.",
+        "Toxicity and internal-use caution" => "Toxicidad y precaución en uso interno",
+        "Its slight toxicity and warming nature require caution internally and avoidance in Damp-Heat or Yin-deficiency Heat." => "Su ligera toxicidad y naturaleza tibia exigen precaución interna y evitarla en Humedad-Calor o Calor por deficiencia de Yin.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110y';
+$languageversion = '20261110z';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1960,6 +2043,63 @@ $nourishcalmsimilarities = [
     ['Deficiency versus excess agitation', 'General category caution', 'These nourishing herbs suit deficiency-related insomnia; severe excess Heat, phlegm or unresolved excess patterns require different treatment.'],
 ];
 
+
+$orificeherbs = [
+    ['Niu Huang', 'Bovis Calculus', 'Bitter', 'Cool', 'HT, LV', 'Clears Heart Heat, opens the orifices, awakens the Spirit and expels phlegm; clears Liver Heat, relieves toxicity, extinguishes Wind and stops tremor; drains Heat and relieves toxicity.', 'Avoid during pregnancy; use only in excess Heat patterns and avoid in Spleen/Stomach deficiency. Traditionally antagonizes Long Gu, Sheng Di, Long Dan Cao and Chang Shan; counteracts Niu Xi.', '0.2–0.5 g', 'Use in pill or powder form.'],
+];
+
+$orificesimilarities = [
+    ['Open the orifices and awaken the Spirit', 'Niu Huang', 'Niu Huang clears Heart Heat, expels phlegm and restores consciousness when Heat and phlegm obstruct the orifices.'],
+    ['Extinguish Wind and stop tremor', 'Niu Huang', 'Niu Huang clears Liver Heat, extinguishes internal Wind and stops tremor or convulsion from intense Heat.'],
+    ['Clear Heat and relieve toxicity', 'Niu Huang', 'Niu Huang drains intense Heat and relieves Fire toxicity affecting the Heart, Liver or consciousness.'],
+    ['Excess Heat requirement', 'Niu Huang', 'Niu Huang is reserved for strong excess Heat and is inappropriate in Spleen or Stomach deficiency.'],
+    ['Pill or powder administration', 'Niu Huang', 'Niu Huang is given in small doses as a pill or powder rather than in a routine decoction.'],
+];
+
+$liverwindherbs = [
+    ['Tian Ma', 'Gastrodiae Rhizoma', 'Sweet', 'Neutral', 'LV', 'Controls spasms and tremors; important for internal Liver Wind due to Heat or Cold; extinguishes Wind, relieves pain; used for painful obstruction or Bi syndrome.', 'No specific caution noted.', '3–9 g', '—'],
+    ['Gou Teng', 'Uncariae Ramulus cum Uncis', 'Sweet', 'Slightly cold', 'PC, LV', 'Drains Liver Heat and pacifies Liver Yang; extinguishes Wind and controls spasms; releases the Exterior.', 'Use cautiously when Wind-Heat or excess Heat is absent.', '6–15 g', 'Do not cook for more than 20 minutes.'],
+    ['Shi Jue Ming', 'Haliotidis Concha', 'Salty', 'Cold', 'KD, LV', 'Anchors Liver Yang and clears Liver Heat; drains Liver Fire; improves the eyes and clears superficial visual obstruction; traditionally used for gastric acidity and topically for trauma.', 'Traditionally counteracts Xuan Fu Hua.', '15–30 g', 'Crush and cook 60 minutes longer.'],
+    ['Bai Ji Li', 'Tribuli Fructus', 'Acrid, bitter', 'Neutral', 'LV', 'Soothes Liver Qi; disperses Wind-Heat and brightens the eyes; dispels Wind and stops itching.', 'Avoid during pregnancy or in Qi/Blood deficiency.', '6–15 g', '—'],
+    ['Dai Zhe Shi', 'Haematitum', 'Bitter', 'Cold', 'LV, PC, HT', 'Strongly directs rebellious Stomach and Lung Qi downward; cools Blood and stops bleeding; anchors Liver Yang.', 'Use cautiously during pregnancy; traditionally counteracts Fu Zi.', '9–30 g decoction; 1–3 g powder', 'Crush and cook 20–30 minutes longer.'],
+    ['Di Long', 'Pheretima', 'Salty', 'Cold', 'UB, LV, LU, SP', 'Clears Heat and unblocks channels and collaterals; stops spasms and convulsions; calms wheezing; promotes urination; traditionally used in hypertension patterns.', 'Avoid in weak Spleen/Stomach or when excess Heat is absent.', '4.5–15 g', '—'],
+];
+
+$liverwindsimilarities = [
+    ['Extinguish Liver Wind and control spasms', 'Tian Ma · Gou Teng · Shi Jue Ming · Bai Ji Li · Dai Zhe Shi · Di Long', 'All six calm internal Wind or its manifestations, with different emphasis on Yang rising, Heat, rebellious Qi, channels, pain or wheezing.'],
+    ['Tian Ma and Gou Teng', 'Tian Ma · Gou Teng', 'Tian Ma is neutral and treats internal Wind from Heat or Cold; Gou Teng is slightly cold and emphasizes clearing Heat and pacifying Yang.'],
+    ['Anchor Liver Yang', 'Shi Jue Ming · Dai Zhe Shi', 'Shi Jue Ming and Dai Zhe Shi are heavy substances that anchor rising Liver Yang; Shi Jue Ming emphasizes the eyes and Dai Zhe Shi rebellious Qi.'],
+    ['Brighten the eyes', 'Gou Teng · Shi Jue Ming · Bai Ji Li', 'Gou Teng, Shi Jue Ming and Bai Ji Li address visual symptoms through clearing Liver Heat, pacifying Yang or dispersing Wind-Heat.'],
+    ['Clear Heat and stop convulsions', 'Gou Teng · Di Long', 'Gou Teng and Di Long clear Heat and control spasms; Di Long additionally unblocks channels, calms wheezing and promotes urination.'],
+    ['Direct rebellious Qi downward', 'Dai Zhe Shi', 'Dai Zhe Shi strongly descends rebellious Stomach and Lung Qi while anchoring Liver Yang and cooling Blood.'],
+    ['Painful obstruction and channels', 'Tian Ma · Bai Ji Li · Di Long', 'Tian Ma treats painful obstruction, Bai Ji Li disperses Wind and Di Long unblocks channels and collaterals.'],
+    ['Mineral preparation', 'Shi Jue Ming · Dai Zhe Shi', 'Shi Jue Ming and Dai Zhe Shi require crushing and prolonged cooking before other herbs.'],
+];
+
+$parasiteherbs = [
+    ['Bing Lang', 'Arecae Semen', 'Acrid, bitter', 'Warm', 'LI, ST', 'Kills a wide variety of intestinal parasites, especially tapeworm; moves Qi in the Intestines for distension, constipation and tenesmus; promotes urination; used for malarial disorders.', 'Avoid in collapse or deficiency of Middle Qi.', '6–15 g', '—'],
+];
+
+$parasitesimilarities = [
+    ['Expel intestinal parasites', 'Bing Lang', 'Bing Lang kills a broad range of intestinal parasites while moving Qi to relieve accumulation.'],
+    ['Tapeworm emphasis', 'Bing Lang', 'Bing Lang is especially emphasized for tapeworm and associated abdominal symptoms.'],
+    ['Move intestinal Qi', 'Bing Lang', 'Bing Lang relieves distension, constipation and tenesmus by moving Qi in the Intestines.'],
+    ['Promote urination and treat malaria', 'Bing Lang', 'Beyond parasites, Bing Lang promotes urination and is traditionally used for malarial disorders.'],
+    ['Middle Qi caution', 'Bing Lang', 'Because Bing Lang moves Qi downward, avoid it in collapse or marked deficiency of Middle Qi.'],
+];
+
+$externaluseherbs = [
+    ['She Chuang Zi', 'Cnidii Fructus', 'Acrid, bitter', 'Warm, slightly toxic', 'KD', 'Dries Dampness, kills parasites and stops itching topically; expels Wind-Cold-Damp for painful obstruction; warms Kidney Yang when used internally.', 'Avoid in Lower Jiao Damp-Heat or Yin deficiency with Heat. Traditionally antagonizes Mu Dan Pi, Ba Dou and Bei Mu.', '3–9 g', 'Primarily used externally; internal use requires caution.'],
+];
+
+$externalusesimilarities = [
+    ['Topical Dampness and itching', 'She Chuang Zi', 'She Chuang Zi dries Dampness and stops itching when applied externally.'],
+    ['Kill parasites', 'She Chuang Zi', 'She Chuang Zi kills parasites affecting the skin or genital region and is commonly selected for external washes.'],
+    ['Wind-Cold-Damp painful obstruction', 'She Chuang Zi', 'She Chuang Zi expels Wind-Cold-Damp to relieve painful obstruction when appropriately used.'],
+    ['Warm Kidney Yang', 'She Chuang Zi', 'When used internally, She Chuang Zi warms Kidney Yang, distinct from its more common topical role.'],
+    ['Toxicity and internal-use caution', 'She Chuang Zi', 'Its slight toxicity and warming nature require caution internally and avoidance in Damp-Heat or Yin-deficiency Heat.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -2059,6 +2199,10 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['astringents']->out(false); ?>"<?php echo $selectedcategory === 'astringents' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('26. Astringents', $ises)); ?></a>
         <a href="<?php echo $categoryurls['anchor-calm-shen']->out(false); ?>"<?php echo $selectedcategory === 'anchor-calm-shen' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('27. Anchor & Calm Shen', $ises)); ?></a>
         <a href="<?php echo $categoryurls['nourish-calm-shen']->out(false); ?>"<?php echo $selectedcategory === 'nourish-calm-shen' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('28. Nourish & Calm Shen', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['orifice-opening-aromatics']->out(false); ?>"<?php echo $selectedcategory === 'orifice-opening-aromatics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('29. Orifice Opening Aromatics', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['extinguish-liver-wind']->out(false); ?>"<?php echo $selectedcategory === 'extinguish-liver-wind' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('30. Extinguish Liver Wind', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['expel-parasites']->out(false); ?>"<?php echo $selectedcategory === 'expel-parasites' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('31. Expel Parasites', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['external-use']->out(false); ?>"<?php echo $selectedcategory === 'external-use' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('32. External Use', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -3340,6 +3484,174 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($nourishcalmherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="orifice-opening-aromatics"<?php echo $selectedcategory === 'orifice-opening-aromatics' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('29. Orifice Opening Aromatics', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 substance · Common foundation: clear intense Heat, open the orifices, awaken the Spirit, extinguish Wind and relieve toxicity.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($orificesimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('excess Heat, phlegm obstructing the orifices, loss of consciousness, tremor or convulsion, toxicity, pregnancy and digestive deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($orificeherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="extinguish-liver-wind"<?php echo $selectedcategory === 'extinguish-liver-wind' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('30. Extinguish Liver Wind', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 6 substances · Common foundation: calm the Liver, extinguish internal Wind, control spasms and address Yang rising or channel obstruction.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($liverwindsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('Heat or Cold origin of internal Wind, Liver Yang rising, spasms, tremor, visual symptoms, rebellious Qi, channel obstruction, wheezing and digestive weakness.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($liverwindherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="expel-parasites"<?php echo $selectedcategory === 'expel-parasites' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('31. Expel Parasites', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: expel intestinal parasites while moving Qi and relieving accumulation.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($parasitesimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('parasite type, abdominal distension, constipation, tenesmus, urination, malaria and Middle Qi deficiency.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($parasiteherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="external-use"<?php echo $selectedcategory === 'external-use' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('32. External Use', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 1 herb · Common foundation: dry Dampness, kill parasites, stop itching and warm Kidney Yang when appropriately used.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($externalusesimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('topical versus internal use, Dampness, parasites, itching, painful obstruction, Kidney Yang deficiency, toxicity and Heat patterns.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($externaluseherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
