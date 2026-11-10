@@ -30,6 +30,7 @@ $categoryids = [
     'aromatics-for-damp',
     'digestives',
     'regulate-qi',
+    'stop-bleeding',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -889,13 +890,50 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Chen Pi and Mu Xiang prevent rich tonic herbs from obstructing digestion; Mu Xiang especially regulates intestinal Qi." => "Chen Pi y Mu Xiang evitan que hierbas tónicas densas obstruyan la digestión; Mu Xiang regula especialmente el Qi intestinal.",
         "Acrid, slightly bitter, slightly sweet" => "Picante, ligeramente amarga, ligeramente dulce",
         "Cold, slightly toxic" => "Fría, ligeramente tóxica",
+        "19. Stop Bleeding" => "19. Detener el sangrado",
+        "Board Guideline 2026 · 10 herbs · Common foundation: stop bleeding by moving, astringing, cooling or warming the Blood according to the pattern." => "Guía Board 2026 · 10 hierbas · Fundamento común: detener el sangrado moviendo, astringiendo, enfriando o calentando la Sangre según el patrón.",
+        "bleeding mechanism and location, Blood stasis, Heat or Cold, trauma, pregnancy, diarrhea or dysentery, Lung symptoms and topical tissue repair." => "mecanismo y localización del sangrado, estasis de Sangre, Calor o Frío, trauma, embarazo, diarrea o disentería, síntomas de Pulmón y reparación tópica de tejidos.",
+        "Astringes Blood and stops bleeding while moving Blood; promotes urination." => "Astringe la Sangre y detiene el sangrado mientras mueve Sangre; promueve la micción.",
+        "Avoid during pregnancy." => "Evitar durante el embarazo.",
+        "Stops bleeding without retaining stasis; reduces swelling and relieves pain, especially after trauma." => "Detiene el sangrado sin retener estasis; reduce hinchazón y alivia dolor, especialmente después de trauma.",
+        "Avoid during pregnancy; use cautiously in Blood or Yin deficiency." => "Evitar durante el embarazo; usar con precaución en deficiencia de Sangre o Yin.",
+        "Cools Blood, stops bleeding and moves Blood stasis; especially useful for trauma." => "Enfría la Sangre, detiene el sangrado y mueve estasis de Sangre; especialmente útil para trauma.",
+        "Astringes Blood and stops bleeding; alleviates diarrhea and dysentery; eliminates parasites associated with trichomonas vaginitis or tapeworm." => "Astringe la Sangre y detiene el sangrado; alivia diarrea y disentería; elimina parásitos asociados con vaginitis por tricomonas o tenia.",
+        "May cause nausea or vomiting." => "Puede causar náuseas o vómitos.",
+        "Astringes Blood and stops bleeding, especially from the Lung or Stomach; reduces swelling and generates flesh when used topically." => "Astringe la Sangre y detiene el sangrado, especialmente de Pulmón o Estómago; reduce hinchazón y genera tejido cuando se usa tópicamente.",
+        "Avoid in early Lung abscess, hemoptysis from an Exterior condition, or excessive Lung and Stomach Heat; incompatible with Wu Tou and Fu Zi." => "Evitar en etapa inicial de absceso pulmonar, hemoptisis por condición Exterior o Calor excesivo de Pulmón y Estómago; incompatible con Wu Tou y Fu Zi.",
+        "Cools Blood and stops Large Intestine bleeding, especially hemorrhoids or dysentery; clears Liver Heat." => "Enfría la Sangre y detiene sangrado de Intestino Grueso, especialmente hemorroides o disentería; elimina Calor de Hígado.",
+        "Cools Blood and stops bleeding; clears Heat and generates flesh topically, especially for burns." => "Enfría la Sangre y detiene el sangrado; elimina Calor y genera tejido tópicamente, especialmente para quemaduras.",
+        "Avoid in cold deficient patterns." => "Evitar en patrones fríos y deficientes.",
+        "Cools Blood and stops bleeding; stops cough and transforms phlegm." => "Enfría la Sangre y detiene el sangrado; detiene la tos y transforma flema.",
+        "Long-term or large doses may cause nausea, vomiting or dizziness." => "El uso prolongado o dosis grandes pueden causar náuseas, vómitos o mareos.",
+        "Cools Blood and stops bleeding; clears Heat from the Lung and Stomach and promotes urination." => "Enfría la Sangre y detiene el sangrado; elimina Calor de Pulmón y Estómago y promueve la micción.",
+        "Avoid in Cold from Spleen deficiency." => "Evitar en Frío por deficiencia de Bazo.",
+        "Warms the womb and stops bleeding; calms the fetus; disperses Cold and relieves pain; eliminates Dampness and stops itching." => "Calienta el útero y detiene el sangrado; calma el feto; dispersa Frío y alivia dolor; elimina Humedad y detiene picazón.",
+        "Avoid in Blood Heat or Yin deficiency." => "Evitar en Calor de Sangre o deficiencia de Yin.",
+        "Stop bleeding by pattern" => "Detener el sangrado según el patrón",
+        "All ten stop bleeding, but selection depends on whether the pattern requires moving Blood, astringing, cooling Blood or warming the womb." => "Las diez detienen el sangrado, pero la selección depende de si el patrón requiere mover Sangre, astringir, enfriar la Sangre o calentar el útero.",
+        "Move Blood and stop bleeding" => "Mover Sangre y detener el sangrado",
+        "Pu Huang, San Qi and Qian Cao Gen stop bleeding while addressing stasis; San Qi emphasizes trauma and pain, while Qian Cao Gen is cooling." => "Pu Huang, San Qi y Qian Cao Gen detienen el sangrado mientras tratan estasis; San Qi enfatiza trauma y dolor, mientras Qian Cao Gen es fría.",
+        "Astringe Blood and stop bleeding" => "Astringir la Sangre y detener el sangrado",
+        "Pu Huang, Xian He Cao and Bai Ji have astringent action; Bai Ji strongly emphasizes Lung and Stomach bleeding and topical tissue repair." => "Pu Huang, Xian He Cao y Bai Ji tienen acción astringente; Bai Ji enfatiza sangrado de Pulmón y Estómago y reparación tópica de tejidos.",
+        "Cool Blood and stop bleeding" => "Enfriar la Sangre y detener el sangrado",
+        "Qian Cao Gen, Huai Hua Mi, Di Yu, Ce Bai Ye and Bai Mao Gen treat bleeding associated with Heat, with different organ and symptom emphasis." => "Qian Cao Gen, Huai Hua Mi, Di Yu, Ce Bai Ye y Bai Mao Gen tratan sangrado asociado con Calor, con diferentes énfasis de órgano y síntomas.",
+        "Large Intestine bleeding and dysentery" => "Sangrado de Intestino Grueso y disentería",
+        "Xian He Cao treats diarrhea and dysentery, Huai Hua Mi emphasizes hemorrhoidal bleeding, and Di Yu clears Heat and repairs tissue." => "Xian He Cao trata diarrea y disentería, Huai Hua Mi enfatiza sangrado hemorroidal y Di Yu elimina Calor y repara tejido.",
+        "Trauma and topical tissue repair" => "Trauma y reparación tópica de tejidos",
+        "San Qi is central for traumatic bleeding and pain; Bai Ji and Di Yu reduce swelling or generate flesh when used topically." => "San Qi es central para sangrado traumático y dolor; Bai Ji y Di Yu reducen hinchazón o generan tejido cuando se usan tópicamente.",
+        "Lung bleeding, cough and phlegm" => "Sangrado de Pulmón, tos y flema",
+        "Bai Ji astringes Lung bleeding, Ce Bai Ye stops cough and transforms phlegm, and Bai Mao Gen clears Lung Heat." => "Bai Ji astringe sangrado de Pulmón, Ce Bai Ye detiene la tos y transforma flema y Bai Mao Gen elimina Calor de Pulmón.",
+        "Warm the womb and stop bleeding" => "Calentar el útero y detener el sangrado",
+        "Ai Ye is the distinctive warm herb for uterine bleeding from Cold and also calms the fetus; it is inappropriate for Blood Heat." => "Ai Ye es la hierba tibia distintiva para sangrado uterino por Frío y además calma el feto; no es apropiada para Calor de Sangre.",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110h';
+$languageversion = '20261110i';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -1284,6 +1322,31 @@ $regulateqisimilarities = [
     ['Prevent stagnation from tonics', 'Chen Pi · Mu Xiang', 'Chen Pi and Mu Xiang prevent rich tonic herbs from obstructing digestion; Mu Xiang especially regulates intestinal Qi.'],
 ];
 
+
+$bleedingherbs = [
+    ['Pu Huang', 'Typhae Pollen', 'Sweet, acrid', 'Neutral', 'LV, HT, SP', 'Astringes Blood and stops bleeding while moving Blood; promotes urination.', 'Avoid during pregnancy.', '3–9 g', 'Wrap in cheesecloth before decocting.'],
+    ['San Qi', 'Notoginseng Radix', 'Sweet, slightly bitter', 'Warm', 'LV, ST', 'Stops bleeding without retaining stasis; reduces swelling and relieves pain, especially after trauma.', 'Avoid during pregnancy; use cautiously in Blood or Yin deficiency.', '1–1.5 g powder; 3–6 g decoction', '—'],
+    ['Qian Cao Gen', 'Rubiae Radix', 'Bitter', 'Cold', 'HT, LV', 'Cools Blood, stops bleeding and moves Blood stasis; especially useful for trauma.', 'Avoid in Spleen and Stomach deficiency with Cold.', '9–15 g', '—'],
+    ['Xian He Cao', 'Agrimoniae Herba', 'Bitter, astringent', 'Neutral', 'LU, LV, SP', 'Astringes Blood and stops bleeding; alleviates diarrhea and dysentery; eliminates parasites associated with trichomonas vaginitis or tapeworm.', 'May cause nausea or vomiting.', '6–12 g', '—'],
+    ['Bai Ji', 'Bletillae Rhizoma', 'Bitter, sweet', 'Cool', 'LU, ST, LV', 'Astringes Blood and stops bleeding, especially from the Lung or Stomach; reduces swelling and generates flesh when used topically.', 'Avoid in early Lung abscess, hemoptysis from an Exterior condition, or excessive Lung and Stomach Heat; incompatible with Wu Tou and Fu Zi.', '3–15 g; up to 30 g; 1.5–3 g powder', '—'],
+    ['Huai Hua Mi', 'Sophorae Flos', 'Bitter', 'Cool', 'LV, LI', 'Cools Blood and stops Large Intestine bleeding, especially hemorrhoids or dysentery; clears Liver Heat.', 'Avoid in Spleen and Stomach deficiency with Cold.', '4.5–9 g', '—'],
+    ['Di Yu', 'Sanguisorbae Radix', 'Bitter, sour', 'Slightly cold', 'LV, LI, ST', 'Cools Blood and stops bleeding; clears Heat and generates flesh topically, especially for burns.', 'Avoid in cold deficient patterns.', '9–15 g', '—'],
+    ['Ce Bai Ye', 'Platycladi Cacumen', 'Bitter, astringent', 'Slightly cold', 'LU, LV, LI', 'Cools Blood and stops bleeding; stops cough and transforms phlegm.', 'Long-term or large doses may cause nausea, vomiting or dizziness.', '6–15 g', '—'],
+    ['Bai Mao Gen', 'Imperatae Rhizoma', 'Sweet', 'Cold', 'LU, ST, SI, UB', 'Cools Blood and stops bleeding; clears Heat from the Lung and Stomach and promotes urination.', 'Avoid in Cold from Spleen deficiency.', '9–30 g', '—'],
+    ['Ai Ye', 'Artemisiae Argyi Folium', 'Bitter, acrid', 'Warm', 'SP, LV, KD', 'Warms the womb and stops bleeding; calms the fetus; disperses Cold and relieves pain; eliminates Dampness and stops itching.', 'Avoid in Blood Heat or Yin deficiency.', '3–9 g', '—'],
+];
+
+$bleedingsimilarities = [
+    ['Stop bleeding by pattern', 'Pu Huang · San Qi · Qian Cao Gen · Xian He Cao · Bai Ji · Huai Hua Mi · Di Yu · Ce Bai Ye · Bai Mao Gen · Ai Ye', 'All ten stop bleeding, but selection depends on whether the pattern requires moving Blood, astringing, cooling Blood or warming the womb.'],
+    ['Move Blood and stop bleeding', 'Pu Huang · San Qi · Qian Cao Gen', 'Pu Huang, San Qi and Qian Cao Gen stop bleeding while addressing stasis; San Qi emphasizes trauma and pain, while Qian Cao Gen is cooling.'],
+    ['Astringe Blood and stop bleeding', 'Pu Huang · Xian He Cao · Bai Ji', 'Pu Huang, Xian He Cao and Bai Ji have astringent action; Bai Ji strongly emphasizes Lung and Stomach bleeding and topical tissue repair.'],
+    ['Cool Blood and stop bleeding', 'Qian Cao Gen · Huai Hua Mi · Di Yu · Ce Bai Ye · Bai Mao Gen', 'Qian Cao Gen, Huai Hua Mi, Di Yu, Ce Bai Ye and Bai Mao Gen treat bleeding associated with Heat, with different organ and symptom emphasis.'],
+    ['Large Intestine bleeding and dysentery', 'Xian He Cao · Huai Hua Mi · Di Yu', 'Xian He Cao treats diarrhea and dysentery, Huai Hua Mi emphasizes hemorrhoidal bleeding, and Di Yu clears Heat and repairs tissue.'],
+    ['Trauma and topical tissue repair', 'San Qi · Bai Ji · Di Yu', 'San Qi is central for traumatic bleeding and pain; Bai Ji and Di Yu reduce swelling or generate flesh when used topically.'],
+    ['Lung bleeding, cough and phlegm', 'Bai Ji · Ce Bai Ye · Bai Mao Gen', 'Bai Ji astringes Lung bleeding, Ce Bai Ye stops cough and transforms phlegm, and Bai Mao Gen clears Lung Heat.'],
+    ['Warm the womb and stop bleeding', 'Ai Ye', 'Ai Ye is the distinctive warm herb for uterine bleeding from Cold and also calms the fetus; it is inappropriate for Blood Heat.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1373,6 +1436,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['aromatics-for-damp']->out(false); ?>"<?php echo $selectedcategory === 'aromatics-for-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('16. Aromatics for Damp', $ises)); ?></a>
         <a href="<?php echo $categoryurls['digestives']->out(false); ?>"<?php echo $selectedcategory === 'digestives' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('17. Digestives', $ises)); ?></a>
         <a href="<?php echo $categoryurls['regulate-qi']->out(false); ?>"<?php echo $selectedcategory === 'regulate-qi' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('18. Regulate Qi', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['stop-bleeding']->out(false); ?>"<?php echo $selectedcategory === 'stop-bleeding' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -2234,6 +2298,48 @@ echo $OUTPUT->header();
                 </tr></thead>
                 <tbody>
                 <?php foreach ($regulateqiherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="stop-bleeding"<?php echo $selectedcategory === 'stop-bleeding' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('19. Stop Bleeding', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 10 herbs · Common foundation: stop bleeding by moving, astringing, cooling or warming the Blood according to the pattern.', $ises)); ?></p>
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($stop-bleedingimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('bleeding mechanism and location, Blood stasis, Heat or Cold, trauma, pregnancy, diarrhea or dysentery, Lung symptoms and topical tissue repair.', $ises)); ?></p>
+        </div>
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                    <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                    <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($bleedingherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
