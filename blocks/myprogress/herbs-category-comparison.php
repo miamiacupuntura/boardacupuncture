@@ -1024,13 +1024,17 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Chuan Wu, Cao Wu and Fu Zi require correct preparation and prolonged cooking; Hua Jiao and Wu Zhu Yu also require caution because of toxicity or Yin injury." => "Chuan Wu, Cao Wu y Fu Zi requieren preparación correcta y cocción prolongada; Hua Jiao y Wu Zhu Yu también exigen precaución por toxicidad o lesión de Yin.",
         "Heat, Yin deficiency and pregnancy" => "Calor, deficiencia de Yin y embarazo",
         "Warm Interior herbs are generally inappropriate for Heat or Yin-deficiency Heat; several strongly warming herbs also require avoidance during pregnancy." => "Las hierbas que calientan el Interior generalmente no son apropiadas para Calor o Calor por deficiencia de Yin; varias hierbas fuertemente calientes también deben evitarse durante el embarazo.",
+        "Hot, very toxic" => "Caliente, muy tóxica",
+        "Hot, toxic" => "Caliente, tóxica",
+        "Hot" => "Caliente",
+        "Hot, slightly toxic" => "Caliente, ligeramente tóxica",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110n';
+$languageversion = '20261110o';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
