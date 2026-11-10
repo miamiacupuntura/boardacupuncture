@@ -791,13 +791,13 @@ echo $OUTPUT->header();
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbsstudyurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Categorías de hierbas individuales' : 'Single Herbs Categories'); ?></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $duiyaostudyurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guía de estudio de pares Duì Yào' : 'Duì Yào Pairs Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Categorías de pares Duì Yào' : 'Duì Yào Pairs Categories'); ?></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Guía de estudio de fórmulas' : 'Formulas Study Guide'); ?><small class="subject-study-library__journey-option-heading"><?php echo s($ises ? 'Categorías' : 'Categories'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Categorías de fórmulas' : 'Formulas Categories'); ?></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
                                     <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
