@@ -115,38 +115,32 @@ grep -Fq "Comparison Pathology and Patterns" <<< "$pathology_patterns_block"
 grep -Fq "Secondary Study Guide" <<< "$secondary_guide_block"
 grep -Fq "Single Herbs Comparisons" <<< "$main_study_guide_block"
 grep -Fq "Formula Comparisons" <<< "$main_study_guide_block"
-grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
+grep -Fq "63 Formulas Comparison" <<< "$main_study_guide_block"
+grep -Fq "Bensky Category Crosswalk" <<< "$main_study_guide_block"
+grep -Fq "Pathology Comparisons" <<< "$main_study_guide_block"
+grep -Fq "Pattern Comparisons" <<< "$main_study_guide_block"
+grep -Fq "Pattern Comparison Maciocia" <<< "$main_study_guide_block"
 grep -Fq "\$ises ? 'Estudio conectado de fórmulas' : 'Connected formula study'" "$LIBRARY_TEMP"
 grep -Fq "'63 Formulas Comparison' => 'Comparación de 63 fórmulas'" "$LIBRARY_TEMP"
+grep -Fq "'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia'" "$LIBRARY_TEMP"
 if grep -Fq "'title' => 'Formula Study Center'" "$LIBRARY_TEMP"; then
     echo "ERROR: el recurso todavía conserva el nombre Formula Study Center." >&2
     exit 1
 fi
-grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
-grep -Fq "Pathology Comparisons" <<< "$pathology_patterns_block"
-grep -Fq "Pattern Comparisons" <<< "$pathology_patterns_block"
-grep -Fq "Pattern Comparison Maciocia" <<< "$pathology_patterns_block"
-grep -Fq "'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia'" "$LIBRARY_TEMP"
 if grep -Fq "'title' => 'Patterns Tips Maciocia'" "$LIBRARY_TEMP"; then
     echo "ERROR: Patterns Tips Maciocia todavía conserva el nombre anterior." >&2
     exit 1
 fi
 grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$main_study_guide_block"
 grep -Fq '$formulacomparisonsurl->out(false)' <<< "$main_study_guide_block"
-if grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block" \
-        || grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"; then
-    echo "ERROR: Single Herbs Comparisons o Formula Comparisons todavía aparece en el módulo 2." >&2
-    exit 1
-fi
-grep -Fq '$formulastudycenterurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$pathology_patterns_block"
-grep -Fq '$patterncomparisonsurl->out(false)' <<< "$pathology_patterns_block"
-grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$pathology_patterns_block"
-if grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block" \
-        || grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block" \
-        || grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"; then
-    echo "ERROR: los botones de patologías o patrones todavía aparecen en el módulo 2." >&2
+grep -Fq '$formulastudycenterurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq '$benskycrosswalkurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq '$patterncomparisonsurl->out(false)' <<< "$main_study_guide_block"
+grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$main_study_guide_block"
+if grep -Fq 'subject-study-library__journey-option' <<< "$secondary_study_guides_block" \
+        || grep -Fq 'subject-study-library__journey-option' <<< "$pathology_patterns_block"; then
+    echo "ERROR: los módulos Comparison 2 o 3 todavía contienen botones." >&2
     exit 1
 fi
 if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$LIBRARY_TEMP"; then
@@ -274,28 +268,28 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Comparison Formulas and Herbs quedó como módulo 2 con dos botones independientes."
-echo "OK: 63 Formulas Comparison está en Comparison Formulas and Herbs y excluido de Formulas Miscellaneous."
-echo "OK: Pattern Comparison Maciocia está en Comparison Pathology and Patterns y excluido de los otros módulos."
+echo "OK: Comparison Formulas and Herbs quedó como módulo 2 sin botones."
+echo "OK: 63 Formulas Comparison está en Main Study Guide y excluido de Formulas Miscellaneous."
+echo "OK: Pattern Comparison Maciocia está en Main Study Guide y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
-echo "OK: Comparison Pathology and Patterns contiene tres botones independientes."
+echo "OK: Comparison Pathology and Patterns quedó como módulo 3 sin botones."
 echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
 echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
-echo "OK: Main Study Guide contiene seis botones independientes."
+echo "OK: Main Study Guide contiene once botones independientes."
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
 echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
-echo "OK: Single Herbs Comparisons y Formula Comparisons están en Main Study Guide."
+echo "OK: todos los botones de los dos módulos Comparison están en Main Study Guide."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
-echo "OK: Bensky Category Crosswalk conserva su botón directo; Pathology y Pattern están en el módulo 3."
+echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Main Study Guide."
 echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
 echo "OK: los diez módulos conservan su contenido, numeración y diseño uniforme."
-echo "OK: cada botón de los módulos 1, 2 y 3 abre un solo bloque."
+echo "OK: cada botón visible abre un solo bloque."
 echo "OK: se conservaron Main Study Guide, los recursos secundarios, las colecciones comparativas, Practice Exams y Quiz."
 echo "OK: la vista general interna permanece como respaldo, pero no se muestra como botón."
 echo "Respaldo: $BACKUP_DIR"
