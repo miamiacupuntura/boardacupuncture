@@ -448,7 +448,13 @@ $isHerbChapter = static function(array $chapter): bool {
 $isFormulaChapter = static function(array $chapter): bool {
     return preg_match('/(?:formula|fórmula)/iu', $chapter['title'] ?? '') === 1;
 };
-$formulamiscchapters = array_values(array_filter($otherchapters, $isFormulaChapter));
+$formulamiscchapters = array_values(array_filter(
+    $otherchapters,
+    static function(array $chapter) use ($isFormulaChapter): bool {
+        return $isFormulaChapter($chapter)
+            && ($chapter['path'] ?? '') !== '/study-guide/comparisons/formula-navigator.html';
+    }
+));
 $herbmiscchapters = array_values(array_filter(
     $otherchapters,
     static function(array $chapter) use ($isHerbChapter, $isFormulaChapter): bool {
@@ -529,6 +535,9 @@ $singleherbscomparisonsurl = new moodle_url(
 );
 $formulacomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/formulas-es.html' : '/study-guide/comparisons/formulas.html'
+);
+$formulastudycenterurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/formula-navigator-es.html' : '/study-guide/comparisons/formula-navigator.html'
 );
 $benskycrosswalkurl = new moodle_url(
     '/blocks/myprogress/herb-formula-category-map.php',
@@ -785,6 +794,9 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulacomparisonsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Comparaciones de fórmulas' : 'Formula Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de fórmulas' : 'Comparative formula study'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $formulastudycenterurl->out(false); ?>">
+                                    <span><?php echo s($tr('Formula Study Center')); ?><small><?php echo s($ises ? 'Estudio conectado de 63 fórmulas' : 'Connected study of 63 formulas'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $benskycrosswalkurl->out(false); ?>">
                                     <span><?php echo s($tr('Bensky Category Crosswalk')); ?><small><?php echo s($ises ? 'Compara categorías de hierbas y fórmulas' : 'Compare herb and formula categories'); ?></small></span><span aria-hidden="true">›</span>
