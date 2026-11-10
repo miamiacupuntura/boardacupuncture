@@ -41,7 +41,12 @@ php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
 
+grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--guide '" "$MENU_TEMP"
 grep -Fq ". 'comparisons-dashboard-link\" href=\"' . \$libraryurl->out(false) . '\">Study Guide</a>';" "$MENU_TEMP"
+if grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--board-library '" "$MENU_TEMP"; then
+    echo "ERROR: Study Guide todavía conserva el estilo naranja." >&2
+    exit 1
+fi
 grep -Fq "if (\$showstaffresources && \$subject['area'] !== 'herbology')" "$MENU_TEMP"
 if grep -Fq ". 'comparisons-dashboard-link\" href=\"' . \$libraryurl->out(false) . '\">Library</a>';" "$MENU_TEMP"; then
     echo "ERROR: el botón naranja de Herbology todavía conserva Library." >&2
@@ -311,7 +316,7 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: el botón naranja Library ahora se llama Study Guide y el botón verde duplicado fue eliminado en Herbology."
+echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
 echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
