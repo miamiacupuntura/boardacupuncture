@@ -44,6 +44,12 @@ php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
 
+grep -Fq "[45, 'Single Herbs', 'questions']" "$MENU_TEMP"
+grep -Fq "[44, 'Formulas', 'questions']" "$MENU_TEMP"
+if grep -Fq "[45, 'Single Herbs', 'questions', null, null, null," "$MENU_TEMP"; then
+    echo "ERROR: Single Herbs School Level todavía usa una ruta personalizada de Board Level." >&2
+    exit 1
+fi
 grep -Fq "\$libraryaction = '<a class=\"board-hub__action board-hub__action--guide '" "$MENU_TEMP"
 grep -Fq ".board-hub__card--board-level .board-hub__action--guide.comparisons-dashboard-link {" "$STYLES_TEMP"
 grep -Fq "background: #087c69 !important;" "$STYLES_TEMP"
@@ -332,6 +338,7 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
+echo "OK: Single Herbs School Level vuelve a abrir el curso 45, igual que Formulas abre el curso 44."
 echo "OK: Herbology muestra un solo botón Study Guide con el estilo verde."
 echo "OK: Previous page fue eliminado; Español y Dashboard permanecen en la cabecera."
 echo "OK: la hoja styles.css instala una regla verde específica con prioridad."
