@@ -102,7 +102,7 @@ $areas = [
                 'study_bank' => true,
             ],
             [
-                'title' => 'Multiple Formula Comparison',
+                'title' => '63 Formulas Comparison',
                 'description' => 'Find and study 63 core formulas, their patterns, actions, ingredients, safety notes and connected study questions.',
                 'path' => '/study-guide/comparisons/formula-navigator.html',
                 'anchor' => '',
@@ -302,7 +302,7 @@ $spanishcopy = [
     'Compare 34 action categories for individual herbs with 21 strategy chapters for complete formulas. Similar names show a study relationship, not the same classification.' => 'Compara 34 categorías de acción para hierbas individuales con 21 capítulos de estrategias para fórmulas completas. Los nombres parecidos muestran una relación de estudio, no la misma clasificación.',
     'Herbal Comparison Study Bank' => 'Banco de estudio comparativo de hierbas',
     'Study 249 comparative herb questions in book order with visible explanations, recall flashcards and 117 strength-and-temperature charts.' => 'Estudia 249 preguntas comparativas en el orden del libro con explicaciones visibles, flashcards y 117 tablas de potencia y temperatura.',
-    'Multiple Formula Comparison' => 'Comparación de múltiples fórmulas',
+    '63 Formulas Comparison' => 'Comparación de 63 fórmulas',
     'Find and study 63 core formulas, their patterns, actions, ingredients, safety notes and connected study questions.' => 'Busca y estudia 63 fórmulas principales, sus patrones, acciones, ingredientes, notas de seguridad y preguntas de estudio conectadas.',
     'Formula Families / Variations' => 'Familias y variaciones de fórmulas',
     'Study 22 formula families and their named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing each branch.' => 'Estudia 22 familias de fórmulas y sus variaciones. Cada ficha muestra la fórmula raíz, el cambio estructural, el patrón resultante y la pista decisiva.',
@@ -796,7 +796,7 @@ echo $OUTPUT->header();
                                     <span><?php echo s($ises ? 'Comparaciones de fórmulas' : 'Formula Comparisons'); ?><small><?php echo s($ises ? 'Estudio comparativo de fórmulas' : 'Comparative formula study'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulastudycenterurl->out(false); ?>">
-                                    <span><?php echo s($tr('Multiple Formula Comparison')); ?><small><?php echo s($ises ? 'Estudio conectado de 63 fórmulas' : 'Connected study of 63 formulas'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($tr('63 Formulas Comparison')); ?><small><?php echo s($ises ? 'Estudio conectado de fórmulas' : 'Connected formula study'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $benskycrosswalkurl->out(false); ?>">
                                     <span><?php echo s($tr('Bensky Category Crosswalk')); ?><small><?php echo s($ises ? 'Compara categorías de hierbas y fórmulas' : 'Compare herb and formula categories'); ?></small></span><span aria-hidden="true">›</span>
