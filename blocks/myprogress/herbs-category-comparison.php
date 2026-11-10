@@ -24,6 +24,7 @@ $categoryids = [
     'cathartics',
     'diuretics',
     'dispel-wind-damp',
+    'dissolve-hot-phlegm',
 ];
 $selectedcategory = optional_param('category', '', PARAM_ALPHANUMEXT);
 if (!in_array($selectedcategory, $categoryids, true)) {
@@ -655,6 +656,47 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Address Heat-related swelling through different mechanisms: expelling pus, reducing swelling, or dissipating nodules." => "Tratan hinchazón relacionada con Calor mediante distintos mecanismos: expulsar pus, reducir hinchazón o disipar nódulos.",
         "Sweet, acrid" => "Dulce, picante",
         "Gently releases the exterior; eliminates irritability and constraint." => "Libera suavemente el exterior; elimina irritabilidad y opresión.",
+        "13. Dissolve Hot Phlegm" => "13. Disolver Flema-Calor",
+        "Board Guideline 2026 · 8 herbs · Common foundation: cool and transform Phlegm-Heat, stop cough, open the chest or soften nodules." => "Guía Board 2026 · 8 hierbas · Fundamento común: enfriar y transformar Flema-Calor, detener la tos, abrir el tórax o ablandar nódulos.",
+        "cough type, dryness versus productive phlegm, chest constraint, nodules, bowel dryness, vomiting, edema and constitutional Cold." => "tipo de tos, sequedad frente a flema productiva, opresión torácica, nódulos, sequedad intestinal, vómitos, edema y Frío constitucional.",
+        "Descends Lung Qi and expels phlegm; releases exterior Wind." => "Hace descender el Qi de Pulmón y expulsa flema; libera Viento exterior.",
+        "Traditionally counteracts Li Lu." => "Tradicionalmente contrarresta Li Lu.",
+        "Stops cough; moistens the Lung; transforms phlegm; treats Yin-deficiency dry cough with scant sputum that is difficult to expectorate; dissipates nodules." => "Detiene la tos; humedece el Pulmón; transforma flema; trata tos seca por deficiencia de Yin con esputo escaso y difícil de expectorar; disipa nódulos.",
+        "Avoid in Spleen and Stomach deficiency; incompatible with Wu Tou; traditionally counteracts Qin Jiao." => "Evitar en deficiencia de Bazo y Estómago; incompatible con Wu Tou; tradicionalmente contrarresta Qin Jiao.",
+        "Use 1–1.5 g when taken as powder." => "Usar 1–1.5 g cuando se administra en polvo.",
+        "Clears Heat and transforms phlegm; stops productive cough from acute Lung Heat; dissipates nodules." => "Elimina Calor y transforma flema; detiene la tos productiva por Calor agudo de Pulmón; disipa nódulos.",
+        "Avoid when phlegm is due to Damp-Cold; incompatible with Wu Tou." => "Evitar cuando la flema se debe a Humedad-Frío; incompatible con Wu Tou.",
+        "Clears Heat and transforms phlegm; expands the chest and relieves constraint." => "Elimina Calor y transforma flema; expande el tórax y alivia la opresión.",
+        "Avoid in Damp-Phlegm caused by Spleen weakness; incompatible with Wu Tou." => "Evitar en Flema-Humedad causada por debilidad de Bazo; incompatible con Wu Tou.",
+        "Clears Heat and transforms phlegm; expands the chest; moistens the Intestines; dissipates nodules." => "Elimina Calor y transforma flema; expande el tórax; humedece los Intestinos; disipa nódulos.",
+        "Avoid in Spleen and Stomach deficient Cold, Cold-Phlegm or Damp-Phlegm; incompatible with Wu Tou; traditionally antagonizes Gan Jiang and counteracts Niu Xi." => "Evitar en Frío por deficiencia de Bazo y Estómago, Flema-Frío o Flema-Humedad; incompatible con Wu Tou; tradicionalmente antagoniza Gan Jiang y contrarresta Niu Xi.",
+        "Clears Heat and transforms phlegm; moistens the Intestines; dissipates nodules; promotes healing of sores." => "Elimina Calor y transforma flema; humedece los Intestinos; disipa nódulos; favorece la curación de llagas.",
+        "Avoid in Spleen and Stomach deficient Cold, diarrhea or patterns without Heat; incompatible with Wu Tou." => "Evitar en Frío por deficiencia de Bazo y Estómago, diarrea o patrones sin Calor; incompatible con Wu Tou.",
+        "Clears Phlegm-Heat; clears Gallbladder and Stomach Heat; stops vomiting." => "Elimina Flema-Calor; elimina Calor de Vesícula Biliar y Estómago; detiene los vómitos.",
+        "Avoid in nausea or vomiting from Stomach Cold or cold food stagnation." => "Evitar en náuseas o vómitos por Frío de Estómago o estancamiento de alimentos fríos.",
+        "Softens hardness and dissipates neck nodules; promotes urination and reduces edema; treats pain associated with hernial disorders." => "Ablanda durezas y disipa nódulos del cuello; promueve la micción y reduce el edema; trata dolor asociado con trastornos herniarios.",
+        "Avoid in Spleen and Stomach deficient Cold; incompatible with Gan Cao." => "Evitar en Frío por deficiencia de Bazo y Estómago; incompatible con Gan Cao.",
+        "Phlegm-Heat cough" => "Tos por Flema-Calor",
+        "Qian Hu · Chuan Bei Mu · Zhe Bei Mu · Gua Lou · Zhu Ru" => "Qian Hu · Chuan Bei Mu · Zhe Bei Mu · Gua Lou · Zhu Ru",
+        "All cool or transform Phlegm-Heat; Qian Hu descends Lung Qi, the Bei Mu herbs stop cough, Gua Lou opens the chest, and Zhu Ru stops vomiting." => "Todas enfrían o transforman Flema-Calor; Qian Hu hace descender el Qi de Pulmón, las Bei Mu detienen la tos, Gua Lou abre el tórax y Zhu Ru detiene los vómitos.",
+        "Dry versus productive cough" => "Tos seca frente a tos productiva",
+        "Chuan Bei Mu · Zhe Bei Mu" => "Chuan Bei Mu · Zhe Bei Mu",
+        "Chuan Bei Mu emphasizes dry deficiency cough with scant sputum; Zhe Bei Mu emphasizes acute Lung Heat with productive cough." => "Chuan Bei Mu enfatiza tos seca por deficiencia con esputo escaso; Zhe Bei Mu enfatiza Calor agudo de Pulmón con tos productiva.",
+        "Three parts of Gua Lou" => "Tres partes de Gua Lou",
+        "Gua Lou Pi · Gua Lou · Gua Lou Ren" => "Gua Lou Pi · Gua Lou · Gua Lou Ren",
+        "The peel emphasizes chest expansion, the whole fruit combines chest and intestinal actions, and the seed emphasizes moistening the Intestines." => "La cáscara enfatiza expandir el tórax, el fruto completo combina acciones torácicas e intestinales y la semilla enfatiza humedecer los Intestinos.",
+        "Chest constraint and nodules" => "Opresión torácica y nódulos",
+        "Gua Lou Pi · Gua Lou · Chuan Bei Mu · Zhe Bei Mu" => "Gua Lou Pi · Gua Lou · Chuan Bei Mu · Zhe Bei Mu",
+        "Gua Lou Pi and Gua Lou open the chest, while the Bei Mu herbs dissipate nodules and transform phlegm." => "Gua Lou Pi y Gua Lou abren el tórax, mientras las Bei Mu disipan nódulos y transforman flema.",
+        "Moisten the Intestines" => "Humedecer los Intestinos",
+        "Gua Lou · Gua Lou Ren" => "Gua Lou · Gua Lou Ren",
+        "Both moisten the Intestines; Gua Lou Ren is the seed and places greater emphasis on bowel dryness." => "Ambas humedecen los Intestinos; Gua Lou Ren es la semilla y enfatiza más la sequedad intestinal.",
+        "Gallbladder and Stomach Phlegm-Heat" => "Flema-Calor de Vesícula Biliar y Estómago",
+        "Zhu Ru" => "Zhu Ru",
+        "Zhu Ru is the distinctive choice for Phlegm-Heat with irritability, Gallbladder Fire or nausea and vomiting." => "Zhu Ru es la elección distintiva para Flema-Calor con irritabilidad, Fuego de Vesícula Biliar o náuseas y vómitos.",
+        "Hard nodules and edema" => "Nódulos duros y edema",
+        "Hai Zao" => "Hai Zao",
+        "Hai Zao softens hardness, dissipates neck nodules and promotes urination to reduce edema." => "Hai Zao ablanda durezas, disipa nódulos del cuello y promueve la micción para reducir edema.",
     ];
 
     return $translations[$text] ?? $text;
@@ -921,6 +963,27 @@ $winddampsimilarities = [
     ['Special indications', 'Du Huo · Wei Ling Xian · Hai Tong Pi · Sang Ji Sheng', 'Du Huo treats Shaoyin headache and toothache, Wei Ling Xian fish-bone obstruction, Hai Tong Pi dental-cavity pain, and Sang Ji Sheng deficiency with pregnancy support.'],
 ];
 
+$hotphlegmherbs = [
+    ['Qian Hu', 'Peucedani Radix', 'Bitter, acrid', 'Slightly cold', 'LU', 'Descends Lung Qi and expels phlegm; releases exterior Wind.', 'Traditionally counteracts Li Lu.', '3–9 g', '—'],
+    ['Chuan Bei Mu', 'Fritillariae Cirrhosae Bulbus', 'Bitter, sweet', 'Slightly cold', 'HT, LU', 'Stops cough; moistens the Lung; transforms phlegm; treats Yin-deficiency dry cough with scant sputum that is difficult to expectorate; dissipates nodules.', 'Avoid in Spleen and Stomach deficiency; incompatible with Wu Tou; traditionally counteracts Qin Jiao.', '3–9 g; 1–1.5 g powder', 'Use 1–1.5 g when taken as powder.'],
+    ['Zhe Bei Mu', 'Fritillariae Thunbergii Bulbus', 'Bitter', 'Cold', 'HT, LU', 'Clears Heat and transforms phlegm; stops productive cough from acute Lung Heat; dissipates nodules.', 'Avoid when phlegm is due to Damp-Cold; incompatible with Wu Tou.', '4.5–9 g', '—'],
+    ['Gua Lou Pi', 'Trichosanthis Pericarpium', 'Sweet', 'Cold', 'LU, ST, LI', 'Clears Heat and transforms phlegm; expands the chest and relieves constraint.', 'Avoid in Damp-Phlegm caused by Spleen weakness; incompatible with Wu Tou.', '6–12 g', '—'],
+    ['Gua Lou', 'Trichosanthis Fructus', 'Sweet', 'Cold', 'LI, LU, ST', 'Clears Heat and transforms phlegm; expands the chest; moistens the Intestines; dissipates nodules.', 'Avoid in Spleen and Stomach deficient Cold, Cold-Phlegm or Damp-Phlegm; incompatible with Wu Tou; traditionally antagonizes Gan Jiang and counteracts Niu Xi.', '9–21 g', '—'],
+    ['Gua Lou Ren', 'Trichosanthis Semen', 'Sweet', 'Cold', 'LU, ST, LI', 'Clears Heat and transforms phlegm; moistens the Intestines; dissipates nodules; promotes healing of sores.', 'Avoid in Spleen and Stomach deficient Cold, diarrhea or patterns without Heat; incompatible with Wu Tou.', '9–15 g', '—'],
+    ['Zhu Ru', 'Bambusae Caulis', 'Sweet', 'Slightly cold', 'LU, ST, GB', 'Clears Phlegm-Heat; clears Gallbladder and Stomach Heat; stops vomiting.', 'Avoid in nausea or vomiting from Stomach Cold or cold food stagnation.', '4.5–9 g', '—'],
+    ['Hai Zao', 'Sargassum', 'Bitter, salty', 'Cold', 'KD, LV, LU, ST', 'Softens hardness and dissipates neck nodules; promotes urination and reduces edema; treats pain associated with hernial disorders.', 'Avoid in Spleen and Stomach deficient Cold; incompatible with Gan Cao.', '6–15 g', '—'],
+];
+
+$hotphlegmsimilarities = [
+    ['Phlegm-Heat cough', 'Qian Hu · Chuan Bei Mu · Zhe Bei Mu · Gua Lou · Zhu Ru', 'All cool or transform Phlegm-Heat; Qian Hu descends Lung Qi, the Bei Mu herbs stop cough, Gua Lou opens the chest, and Zhu Ru stops vomiting.'],
+    ['Dry versus productive cough', 'Chuan Bei Mu · Zhe Bei Mu', 'Chuan Bei Mu emphasizes dry deficiency cough with scant sputum; Zhe Bei Mu emphasizes acute Lung Heat with productive cough.'],
+    ['Three parts of Gua Lou', 'Gua Lou Pi · Gua Lou · Gua Lou Ren', 'The peel emphasizes chest expansion, the whole fruit combines chest and intestinal actions, and the seed emphasizes moistening the Intestines.'],
+    ['Chest constraint and nodules', 'Gua Lou Pi · Gua Lou · Chuan Bei Mu · Zhe Bei Mu', 'Gua Lou Pi and Gua Lou open the chest, while the Bei Mu herbs dissipate nodules and transform phlegm.'],
+    ['Moisten the Intestines', 'Gua Lou · Gua Lou Ren', 'Both moisten the Intestines; Gua Lou Ren is the seed and places greater emphasis on bowel dryness.'],
+    ['Gallbladder and Stomach Phlegm-Heat', 'Zhu Ru', 'Zhu Ru is the distinctive choice for Phlegm-Heat with irritability, Gallbladder Fire or nausea and vomiting.'],
+    ['Hard nodules and edema', 'Hai Zao', 'Hai Zao softens hardness, dissipates neck nodules and promotes urination to reduce edema.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -1004,6 +1067,7 @@ echo $OUTPUT->header();
         <a href="<?php echo $categoryurls['cathartics']->out(false); ?>"<?php echo $selectedcategory === 'cathartics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('10. Cathartics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['diuretics']->out(false); ?>"<?php echo $selectedcategory === 'diuretics' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('11. Diuretics', $ises)); ?></a>
         <a href="<?php echo $categoryurls['dispel-wind-damp']->out(false); ?>"<?php echo $selectedcategory === 'dispel-wind-damp' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('12. Dispel Wind-Damp', $ises)); ?></a>
+        <a href="<?php echo $categoryurls['dissolve-hot-phlegm']->out(false); ?>"<?php echo $selectedcategory === 'dissolve-hot-phlegm' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></a>
     </nav>
 
     <?php if ($selectedcategory === ''): ?>
@@ -1611,6 +1675,52 @@ echo $OUTPUT->header();
                             <strong><?php echo s($herb[0]); ?></strong>
                             <small><?php echo s($herb[1]); ?></small>
                         </th>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[5], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[6], $ises)); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s(board_herb_category_localize($herb[7], $ises)); ?></td>
+                        <td><?php echo s(board_herb_category_localize($herb[8], $ises)); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="dissolve-hot-phlegm"<?php echo $selectedcategory === 'dissolve-hot-phlegm' ? '' : ' hidden'; ?>>
+        <h3><?php echo s(board_herb_category_localize('13. Dissolve Hot Phlegm', $ises)); ?></h3>
+        <p class="herb-category-library__summary"><?php echo s(board_herb_category_localize('Board Guideline 2026 · 8 herbs · Common foundation: cool and transform Phlegm-Heat, stop cough, open the chest or soften nodules.', $ises)); ?></p>
+
+        <div class="herb-category-library__similarities">
+            <h4><?php echo s(board_herb_category_localize('Similarities and Clinical Overlaps', $ises)); ?></h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th><?php echo s(board_herb_category_localize('Comparison', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Herbs', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Shared clinical relationship', $ises)); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ($hotphlegmsimilarities as $similarity): ?>
+                        <tr><td><?php echo s(board_herb_category_localize($similarity[0], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[1], $ises)); ?></td><td><?php echo s(board_herb_category_localize($similarity[2], $ises)); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong><?php echo s(board_herb_category_localize('Selection focus:', $ises)); ?></strong> <?php echo s(board_herb_category_localize('cough type, dryness versus productive phlegm, chest constraint, nodules, bowel dryness, vomiting, edema and constitutional Cold.', $ises)); ?></p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup><col><col><col><col><col><col><col><col></colgroup>
+                <thead>
+                    <tr>
+                        <th><?php echo s(board_herb_category_localize('Herb / Pharmaceutical name', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Taste', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Nature', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Channels', $ises)); ?></th>
+                        <th><?php echo s(board_herb_category_localize('Main functions and indications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Cautions / contraindications', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Dosage', $ises)); ?></th><th><?php echo s(board_herb_category_localize('Preparation', $ises)); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($hotphlegmherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row"><strong><?php echo s($herb[0]); ?></strong><small><?php echo s($herb[1]); ?></small></th>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[2], $ises)); ?></td>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[3], $ises)); ?></td>
                         <td class="herb-category-library__compact"><?php echo s(board_herb_category_localize($herb[4], $ises)); ?></td>
