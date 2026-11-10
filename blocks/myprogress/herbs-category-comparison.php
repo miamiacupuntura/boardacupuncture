@@ -141,6 +141,20 @@ $toxicheatsimilarities = [
     ['Distinct supportive actions', 'He Ye · Bai Jiang Cao · Pu Gong Ying', 'He Ye uniquely clears Summer-Heat and raises Spleen Yang; Bai Jiang Cao moves Blood and relieves pain; Pu Gong Ying promotes lactation and urination.'],
 ];
 
+$deficientheatherbs = [
+    ['Qing Hao', 'Artemisiae Annuae Herba', 'Bitter', 'Cold', 'KD, LV, GB', 'Clears deficient Heat and cools the Blood; clears Summer-Heat; stops bleeding; checks malarial disorders and relieves Heat.', 'Avoid in postpartum women with Blood deficiency and in Spleen or Stomach deficient Cold; traditionally should not be used with Sheng Di or Dang Gui.', '6–12 g', 'Do not subject to prolonged cooking.'],
+    ['Di Gu Pi', 'Lycii Cortex', 'Sweet, bland', 'Cold', 'LU, LV, KD', 'Clears deficient Heat and cools the Blood; reduces steaming from Kidney Yin deficiency with sweating; clears Lung Heat and stops cough; drains floating Fire from the Kidney channel, including toothache.', 'Avoid with loose stools from Spleen and Stomach deficient Cold and during external disorders.', '6–15 g', '—'],
+    ['Bai Wei', 'Cynanchi Atrati Radix', 'Bitter, salty', 'Cold', 'LU, ST, KD', 'Clears deficient Heat and cools the Blood; promotes urination; relieves toxicity and reduces swelling.', 'Traditionally antagonizes Huang Qi, Da Huang, Da Ji, Gan Jiang, Da Zao and Shan Zhu Yu.', '3–12 g', '—'],
+];
+
+$deficientheatsimilarities = [
+    ['Clear deficient Heat', 'Qing Hao · Di Gu Pi · Bai Wei', 'All clear deficient Heat and cool the Blood, but differ in their secondary emphasis on Summer-Heat, Lung Heat, urination or toxicity.'],
+    ['Yin-deficiency steaming', 'Qing Hao · Di Gu Pi', 'Both treat lingering deficiency Heat; Di Gu Pi is especially associated with steaming from Kidney Yin deficiency accompanied by sweating.'],
+    ['Cool the Blood', 'Qing Hao · Di Gu Pi · Bai Wei', 'All cool Blood-level Heat; Qing Hao additionally stops bleeding, Di Gu Pi treats steaming Heat, and Bai Wei promotes urination.'],
+    ['Febrile, Summer-Heat and malarial patterns', 'Qing Hao', 'Qing Hao is the distinctive choice when deficient Heat overlaps with Summer-Heat or malarial-type febrile disorders.'],
+    ['Lung Heat versus urinary toxicity', 'Di Gu Pi · Bai Wei', 'Di Gu Pi emphasizes Lung Heat with cough, while Bai Wei emphasizes urination, toxicity and swelling.'],
+];
+
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
@@ -206,6 +220,7 @@ echo $OUTPUT->header();
         <a href="#clear-blood-heat">4. Clear Blood-Heat</a>
         <a href="#clear-damp-heat">5. Clear Damp-Heat</a>
         <a href="#clear-toxic-heat">6. Clear Toxic-Heat</a>
+        <a href="#clear-deficient-heat">7. Clear Deficient-Heat</a>
     </nav>
 
     <section class="herb-category-library__section" id="disperse-wind-cold">
@@ -496,6 +511,57 @@ echo $OUTPUT->header();
                 </thead>
                 <tbody>
                 <?php foreach ($toxicheatherbs as $herb): ?>
+                    <tr>
+                        <th class="herb-category-library__herb-identity" scope="row">
+                            <strong><?php echo s($herb[0]); ?></strong>
+                            <small><?php echo s($herb[1]); ?></small>
+                        </th>
+                        <td class="herb-category-library__compact"><?php echo s($herb[2]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[3]); ?></td>
+                        <td class="herb-category-library__compact"><?php echo s($herb[4]); ?></td>
+                        <td><?php echo s($herb[5]); ?></td>
+                        <td><?php echo s($herb[6]); ?></td>
+                        <td class="herb-category-library__compact herb-category-library__dosage"><?php echo s($herb[7]); ?></td>
+                        <td><?php echo s($herb[8]); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="herb-category-library__section" id="clear-deficient-heat">
+        <h3>7. Clear Deficient-Heat</h3>
+        <p class="herb-category-library__summary">Board Guideline 2026 · 3 herbs · Common foundation: clear deficient Heat and cool the Blood.</p>
+
+        <div class="herb-category-library__similarities">
+            <h4>Similarities and Clinical Overlaps</h4>
+            <div class="herb-category-library__scroll">
+                <table>
+                    <thead><tr><th>Comparison</th><th>Herbs</th><th>Shared clinical relationship</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($deficientheatsimilarities as $similarity): ?>
+                        <tr><td><?php echo s($similarity[0]); ?></td><td><?php echo s($similarity[1]); ?></td><td><?php echo s($similarity[2]); ?></td></tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <p class="herb-category-library__foundation"><strong>Selection focus:</strong> sweating with Yin-deficiency Heat, Lung cough, Summer-Heat or malarial patterns, urinary involvement, toxicity and swelling.</p>
+        </div>
+
+        <div class="herb-category-library__scroll">
+            <table class="herb-category-library__comparison-table">
+                <colgroup>
+                    <col><col><col><col><col><col><col><col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Herb / Pharmaceutical name</th><th>Taste</th><th>Nature</th><th>Channels</th>
+                        <th>Main functions and indications</th><th>Cautions / contraindications</th><th>Dosage</th><th>Preparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($deficientheatherbs as $herb): ?>
                     <tr>
                         <th class="herb-category-library__herb-identity" scope="row">
                             <strong><?php echo s($herb[0]); ?></strong>
