@@ -1199,13 +1199,15 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Bai He and Mai Men Dong nourish Yin while addressing Heart Heat, irritability or emotional disturbance." => "Bai He y Mai Men Dong nutren Yin mientras abordan Calor de Corazón, irritabilidad o alteración emocional.",
         "Cold and cloying herbs with weak digestion" => "Hierbas frías y empalagosas con digestión débil",
         "Many Yin tonics are cold or rich and can worsen Spleen deficiency, Dampness, phlegm or diarrhea; digestive tolerance guides selection." => "Muchos tónicos de Yin son fríos o densos y pueden empeorar deficiencia de Bazo, Humedad, flema o diarrea; la tolerancia digestiva guía la selección.",
+        "Sweet, slightly salty, bland" => "Dulce, ligeramente salada, insípida",
+        "Salty, sweet" => "Salada, dulce",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110t';
+$languageversion = '20261110u';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
