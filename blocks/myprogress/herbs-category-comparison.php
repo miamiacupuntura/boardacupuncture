@@ -1403,7 +1403,7 @@ function board_herb_category_localize(string $text, bool $ises): string {
 }
 
 
-$languageversion = '20261110nav1';
+$languageversion = '20261110search1';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
@@ -2121,6 +2121,89 @@ $PAGE->set_title($ises ? 'Comparación de hierbas por categoría' : 'Herbs Categ
 $PAGE->set_heading($ises ? 'Comparación de hierbas por categoría' : 'Herbs Category Comparison');
 $PAGE->set_cacheable(false);
 
+$PAGE->requires->js_init_code(<<<'JS'
+(function() {
+    const initialiseCategorySearch = function() {
+        const search = document.getElementById('herb-category-search');
+        const index = document.getElementById('herb-category-index');
+        const status = document.getElementById('herb-category-search-status');
+        const clear = document.getElementById('herb-category-search-clear');
+        if (!search || !index || !status || !clear || search.dataset.ready === 'true') {
+            return;
+        }
+
+        search.dataset.ready = 'true';
+        const links = Array.from(index.querySelectorAll('a'));
+        const normalise = function(value) {
+            return (value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLocaleLowerCase();
+        };
+        const searchableLinks = links.map(function(link) {
+            const category = new URL(link.href, window.location.href).searchParams.get('category');
+            const section = category ? document.getElementById(category) : null;
+            return {
+                link: link,
+                text: normalise(link.textContent + ' ' + (section ? section.textContent : ''))
+            };
+        });
+
+        const update = function() {
+            const term = normalise(search.value.trim());
+            let matches = 0;
+            let onlyMatch = null;
+
+            searchableLinks.forEach(function(item) {
+                const visible = term === '' || item.text.includes(term);
+                item.link.hidden = !visible;
+                if (visible) {
+                    matches += 1;
+                    onlyMatch = item.link;
+                }
+            });
+
+            clear.hidden = term === '';
+            if (term === '') {
+                status.textContent = '';
+            } else if (matches === 0) {
+                status.textContent = status.dataset.none;
+            } else if (matches === 1) {
+                status.textContent = status.dataset.one;
+            } else {
+                status.textContent = status.dataset.many.replace('{count}', String(matches));
+            }
+            search.dataset.onlyMatch = matches === 1 && onlyMatch ? onlyMatch.href : '';
+        };
+
+        search.addEventListener('input', update);
+        search.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && search.dataset.onlyMatch) {
+                event.preventDefault();
+                window.location.assign(search.dataset.onlyMatch);
+            } else if (event.key === 'Escape') {
+                search.value = '';
+                update();
+                search.focus();
+            }
+        });
+        clear.addEventListener('click', function() {
+            search.value = '';
+            update();
+            search.focus();
+        });
+        update();
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialiseCategorySearch, {once: true});
+    } else {
+        initialiseCategorySearch();
+    }
+}());
+JS
+);
+
 echo $OUTPUT->header();
 ?>
 <style>
@@ -2133,7 +2216,16 @@ echo $OUTPUT->header();
 .herb-category-library__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
 .herb-category-library__back{display:inline-flex;min-height:42px;align-items:center;padding:9px 15px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81;font-weight:800;text-decoration:none;white-space:nowrap}
 .herb-category-library__back:hover{background:#eef7f5;text-decoration:none}
-.herb-category-library__index{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.herb-category-library__search{margin:18px 0 12px;padding:16px;border:1px solid #b9d8d2;border-radius:12px;background:#f7fbfb}
+.herb-category-library__search label{display:block;margin:0 0 8px;color:#102a43;font-weight:900}
+.herb-category-library__search-control{display:flex;align-items:center;gap:9px;padding:0 10px;border:2px solid #8fb9b1;border-radius:10px;background:#fff}
+.herb-category-library__search-control:focus-within{border-color:#087c69;box-shadow:0 0 0 3px rgba(8,124,105,.14)}
+.herb-category-library__search-icon{color:#087c69;font-size:19px;line-height:1}
+.herb-category-library__search input{width:100%;min-height:44px;padding:8px 2px;border:0;background:transparent;color:#102a43;font-size:16px;outline:0}
+.herb-category-library__search-clear{min-height:34px;padding:6px 10px;border:0;border-radius:8px;background:#e5f6f2;color:#075f52;font-weight:800;cursor:pointer}
+.herb-category-library__search-clear:hover,.herb-category-library__search-clear:focus{background:#087c69;color:#fff}
+.herb-category-library__search-status{min-height:20px;margin:7px 1px 0;color:#526b84;font-size:13px;font-weight:700}
+.herb-category-library__index{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 18px}
 .herb-category-library__index a{padding:9px 13px;border-radius:999px;background:#087c69;color:#fff;font-weight:800;text-decoration:none}
 .herb-category-library__index a[aria-current="page"]{background:#064f46;box-shadow:0 0 0 3px rgba(8,124,105,.18)}
 .herb-category-library__empty{margin-top:20px;padding:22px;border:1px dashed #8fb9b1;border-radius:12px;background:#f4fbfa;color:#294c5f;font-weight:700;text-align:center}
@@ -2189,7 +2281,21 @@ echo $OUTPUT->header();
         </div>
     </header>
 
-    <nav class="herb-category-library__index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
+    <div class="herb-category-library__search">
+        <label for="herb-category-search"><?php echo s($ises ? 'Buscar categorías o hierbas' : 'Search categories or herbs'); ?></label>
+        <div class="herb-category-library__search-control">
+            <span class="herb-category-library__search-icon" aria-hidden="true">⌕</span>
+            <input id="herb-category-search" type="search" autocomplete="off"
+                placeholder="<?php echo s($ises ? 'Escribe una categoría, hierba, función o precaución…' : 'Type a category, herb, function or caution…'); ?>">
+            <button class="herb-category-library__search-clear" id="herb-category-search-clear" type="button" hidden><?php echo s($ises ? 'Borrar' : 'Clear'); ?></button>
+        </div>
+        <p class="herb-category-library__search-status" id="herb-category-search-status" aria-live="polite"
+            data-none="<?php echo s($ises ? 'No se encontraron categorías.' : 'No categories found.'); ?>"
+            data-one="<?php echo s($ises ? '1 categoría encontrada. Pulsa Enter para abrirla.' : '1 category found. Press Enter to open it.'); ?>"
+            data-many="<?php echo s($ises ? '{count} categorías encontradas.' : '{count} categories found.'); ?>"></p>
+    </div>
+
+    <nav class="herb-category-library__index" id="herb-category-index" aria-label="<?php echo s($ises ? 'Índice de categorías' : 'Category index'); ?>">
         <a href="<?php echo $categoryurls['disperse-wind-cold']->out(false); ?>"<?php echo $selectedcategory === 'disperse-wind-cold' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('1. Disperse Wind-Cold', $ises)); ?></a>
         <a href="<?php echo $categoryurls['disperse-wind-heat']->out(false); ?>"<?php echo $selectedcategory === 'disperse-wind-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('2. Disperse Wind-Heat', $ises)); ?></a>
         <a href="<?php echo $categoryurls['clear-and-purge-heat']->out(false); ?>"<?php echo $selectedcategory === 'clear-and-purge-heat' ? ' aria-current="page"' : ''; ?>><?php echo s(board_herb_category_localize('3. Clear and Purge Heat', $ises)); ?></a>
