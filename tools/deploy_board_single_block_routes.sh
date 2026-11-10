@@ -102,6 +102,7 @@ for step in 1 2 3 4 5 6 7 8 9 10; do
     grep -Fq "<span class=\"subject-study-library__journey-step\">$step</span>" "$LIBRARY_TEMP"
 done
 secondary_study_guides_block="$(sed -n '/subject-study-library__journey-step">2</,+50p' "$LIBRARY_TEMP")"
+pathology_patterns_block="$(sed -n '/subject-study-library__journey-step">4</,+24p' "$LIBRARY_TEMP")"
 grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
 grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
@@ -112,9 +113,9 @@ if grep -Fq "'title' => 'Formula Study Center'" "$LIBRARY_TEMP"; then
     exit 1
 fi
 grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
-grep -Fq "Pathology Comparisons" <<< "$secondary_study_guides_block"
-grep -Fq "Pattern Comparisons" <<< "$secondary_study_guides_block"
-grep -Fq "Pattern Comparison Maciocia" <<< "$secondary_study_guides_block"
+grep -Fq "Pathology Comparisons" <<< "$pathology_patterns_block"
+grep -Fq "Pattern Comparisons" <<< "$pathology_patterns_block"
+grep -Fq "Pattern Comparison Maciocia" <<< "$pathology_patterns_block"
 grep -Fq "'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia'" "$LIBRARY_TEMP"
 if grep -Fq "'title' => 'Patterns Tips Maciocia'" "$LIBRARY_TEMP"; then
     echo "ERROR: Patterns Tips Maciocia todavía conserva el nombre anterior." >&2
@@ -124,9 +125,15 @@ grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_b
 grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$formulastudycenterurl->out(false)' <<< "$secondary_study_guides_block"
 grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
-grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$pathology_patterns_block"
+grep -Fq '$patterncomparisonsurl->out(false)' <<< "$pathology_patterns_block"
+grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$pathology_patterns_block"
+if grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block" \
+        || grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block" \
+        || grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"; then
+    echo "ERROR: los botones de patologías o patrones todavía aparecen en el módulo 2." >&2
+    exit 1
+fi
 if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$LIBRARY_TEMP"; then
     echo "ERROR: todavía aparece un botón general Comparisons u Other chapters." >&2
     exit 1
@@ -248,18 +255,18 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Comparison Formulas and Herbs quedó como módulo 2 con siete botones independientes."
+echo "OK: Comparison Formulas and Herbs quedó como módulo 2 con cuatro botones independientes."
 echo "OK: 63 Formulas Comparison está en Comparison Formulas and Herbs y excluido de Formulas Miscellaneous."
-echo "OK: Pattern Comparison Maciocia está en Comparison Formulas and Herbs y excluido de Secondary Study Guide."
+echo "OK: Pattern Comparison Maciocia está en Comparison Pathology and Patterns y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide conserva los recursos restantes de Other chapters."
-echo "OK: Comparison Pathology and Patterns quedó como nuevo módulo 4."
+echo "OK: Comparison Pathology and Patterns contiene tres botones independientes."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous separan sus recursos sin duplicarlos."
 echo "OK: Herbs Secondary Actions aparece dentro de Herbs Miscellaneous."
 echo "OK: Single Herbs Comparisons y Formula Comparisons abren directamente sus colecciones."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
-echo "OK: Bensky Category Crosswalk, Pathology Comparisons y Pattern Comparisons tienen botones directos."
+echo "OK: Bensky Category Crosswalk conserva su botón directo; Pathology y Pattern están en el módulo 4."
 echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
