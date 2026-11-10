@@ -85,8 +85,8 @@ grep -Fq "\$languageparams['category'] = \$selectedcategory;" "$CATEGORY_TEMP"
 grep -Fq 'Selecciona una categoría para abrir solamente su tabla comparativa.' "$CATEGORY_TEMP"
 category_button_count="$(grep -Fo "\$categoryurls['" "$CATEGORY_TEMP" | wc -l)"
 hidden_category_count="$(grep -Fo "? '' : ' hidden'" "$CATEGORY_TEMP" | wc -l)"
-[[ "$category_button_count" -eq 28 && "$hidden_category_count" -eq 28 ]] || {
-    echo "ERROR: los veintiocho botones no abren exactamente una categoría cada uno." >&2
+[[ "$category_button_count" -eq 32 && "$hidden_category_count" -eq 32 ]] || {
+    echo "ERROR: los treinta y dos botones no abren exactamente una categoría cada uno." >&2
     echo "Conteos: botones=$category_button_count secciones=$hidden_category_count" >&2
     exit 1
 }
@@ -94,8 +94,8 @@ localized_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$C
 localized_similarity_field_count="$(grep -Fo 'board_herb_category_localize($similarity[' "$CATEGORY_TEMP" | wc -l)"
 localized_title_count="$(grep -Fo '<h3><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP" | wc -l)"
 localized_summary_count="$(grep -Fo 'class="herb-category-library__summary"><?php echo s(board_herb_category_localize' "$CATEGORY_TEMP" | wc -l)"
-[[ "$localized_herb_field_count" -eq 196 && "$localized_similarity_field_count" -eq 84 && "$localized_title_count" -eq 28 && "$localized_summary_count" -eq 28 ]] || {
-    echo "ERROR: la vista en Español no localiza todos los campos de las veintiocho categorías." >&2
+[[ "$localized_herb_field_count" -eq 224 && "$localized_similarity_field_count" -eq 96 && "$localized_title_count" -eq 32 && "$localized_summary_count" -eq 32 ]] || {
+    echo "ERROR: la vista en Español no localiza todos los campos de las treinta y dos categorías." >&2
     echo "Conteos: hierbas=$localized_herb_field_count semejanzas=$localized_similarity_field_count títulos=$localized_title_count resúmenes=$localized_summary_count" >&2
     exit 1
 }
@@ -155,6 +155,51 @@ grep -Fq "\$categoryurls['anchor-calm-shen']" "$CATEGORY_TEMP"
 grep -Fq 'id="anchor-calm-shen"' "$CATEGORY_TEMP"
 grep -Fq "\$categoryurls['nourish-calm-shen']" "$CATEGORY_TEMP"
 grep -Fq 'id="nourish-calm-shen"' "$CATEGORY_TEMP"
+grep -Fq "\$categoryurls['orifice-opening-aromatics']" "$CATEGORY_TEMP"
+grep -Fq 'id="orifice-opening-aromatics"' "$CATEGORY_TEMP"
+grep -Fq "\$categoryurls['extinguish-liver-wind']" "$CATEGORY_TEMP"
+grep -Fq 'id="extinguish-liver-wind"' "$CATEGORY_TEMP"
+grep -Fq "\$categoryurls['expel-parasites']" "$CATEGORY_TEMP"
+grep -Fq 'id="expel-parasites"' "$CATEGORY_TEMP"
+grep -Fq "\$categoryurls['external-use']" "$CATEGORY_TEMP"
+grep -Fq 'id="external-use"' "$CATEGORY_TEMP"
+grep -Fq '$orificeherbs = [' "$CATEGORY_TEMP"
+grep -Fq '$orificesimilarities = [' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($orificesimilarities as $similarity)' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($orificeherbs as $herb)' "$CATEGORY_TEMP"
+grep -Fq "'Niu Huang'" "$CATEGORY_TEMP"
+grep -Fq '29. Aromáticas que abren los orificios' "$CATEGORY_TEMP"
+grep -Fq 'Elimina Calor de Corazón, abre los orificios, despierta el Shen' "$CATEGORY_TEMP"
+grep -Fq 'Niu Huang se administra en dosis pequeñas como píldora o polvo' "$CATEGORY_TEMP"
+grep -Fq '$liverwindherbs = [' "$CATEGORY_TEMP"
+grep -Fq '$liverwindsimilarities = [' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($liverwindsimilarities as $similarity)' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($liverwindherbs as $herb)' "$CATEGORY_TEMP"
+grep -Fq "'Tian Ma'" "$CATEGORY_TEMP"
+grep -Fq "'Gou Teng'" "$CATEGORY_TEMP"
+grep -Fq "'Shi Jue Ming'" "$CATEGORY_TEMP"
+grep -Fq "'Bai Ji Li'" "$CATEGORY_TEMP"
+grep -Fq "'Dai Zhe Shi'" "$CATEGORY_TEMP"
+grep -Fq "'Di Long'" "$CATEGORY_TEMP"
+grep -Fq '30. Extinguir Viento de Hígado' "$CATEGORY_TEMP"
+grep -Fq 'Las seis sustancias calman Viento interno o sus manifestaciones' "$CATEGORY_TEMP"
+grep -Fq 'origen por Calor o Frío del Viento interno' "$CATEGORY_TEMP"
+grep -Fq '$parasiteherbs = [' "$CATEGORY_TEMP"
+grep -Fq '$parasitesimilarities = [' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($parasitesimilarities as $similarity)' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($parasiteherbs as $herb)' "$CATEGORY_TEMP"
+grep -Fq "'Bing Lang'" "$CATEGORY_TEMP"
+grep -Fq '31. Expulsar parásitos' "$CATEGORY_TEMP"
+grep -Fq 'Elimina una amplia variedad de parásitos intestinales' "$CATEGORY_TEMP"
+grep -Fq 'Como Bing Lang mueve el Qi hacia abajo' "$CATEGORY_TEMP"
+grep -Fq '$externaluseherbs = [' "$CATEGORY_TEMP"
+grep -Fq '$externalusesimilarities = [' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($externalusesimilarities as $similarity)' "$CATEGORY_TEMP"
+grep -Fq 'foreach ($externaluseherbs as $herb)' "$CATEGORY_TEMP"
+grep -Fq "'She Chuang Zi'" "$CATEGORY_TEMP"
+grep -Fq '32. Uso externo' "$CATEGORY_TEMP"
+grep -Fq 'Seca Humedad, elimina parásitos y detiene picazón por vía tópica' "$CATEGORY_TEMP"
+grep -Fq 'Su ligera toxicidad y naturaleza tibia exigen precaución interna' "$CATEGORY_TEMP"
 grep -Fq '$coldphlegmherbs = [' "$CATEGORY_TEMP"
 grep -Fq '$coldphlegmsimilarities = [' "$CATEGORY_TEMP"
 grep -Fq "'Tian Nan Xing'" "$CATEGORY_TEMP"
@@ -493,8 +538,8 @@ grep -Fq "'Chai Hu'" "$CATEGORY_TEMP"
 grep -Fq "'Ge Gen'" "$CATEGORY_TEMP"
 similarities_block_count="$(grep -Fc 'class="herb-category-library__similarities"' "$CATEGORY_TEMP")"
 comparison_table_count="$(grep -Fc 'class="herb-category-library__comparison-table"' "$CATEGORY_TEMP")"
-[[ "$similarities_block_count" -eq 28 && "$comparison_table_count" -eq 28 ]] || {
-    echo "ERROR: las veintiocho categorías no contienen ambos bloques comparativos." >&2
+[[ "$similarities_block_count" -eq 32 && "$comparison_table_count" -eq 32 ]] || {
+    echo "ERROR: las treinta y dos categorías no contienen ambos bloques comparativos." >&2
     exit 1
 }
 grep -Fq "Similarities and Clinical Overlaps" "$CATEGORY_TEMP"
@@ -881,7 +926,7 @@ grep -Fq "optional_param('ui', '', PARAM_ALPHA)" "$CATEGORY_TARGET"
 grep -Fq "'ui' => 'es'" "$LIBRARY_TARGET"
 installed_herb_field_count="$(grep -Fo 'board_herb_category_localize($herb[' "$CATEGORY_TARGET" | wc -l)"
 installed_similarity_field_count="$(grep -Fo 'board_herb_category_localize($similarity[' "$CATEGORY_TARGET" | wc -l)"
-[[ "$installed_herb_field_count" -eq 196 && "$installed_similarity_field_count" -eq 84 ]] || {
+[[ "$installed_herb_field_count" -eq 224 && "$installed_similarity_field_count" -eq 96 ]] || {
     echo "ERROR: el archivo instalado no contiene la localización completa en Español." >&2
     echo "Conteos instalados: hierbas=$installed_herb_field_count semejanzas=$installed_similarity_field_count" >&2
     exit 1
@@ -903,8 +948,8 @@ echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
 echo "OK: la vista Español localiza índice, títulos, tablas, semejanzas, funciones, precauciones y preparación."
-echo "OK: las validaciones cuentan ocurrencias reales: 196 campos de hierbas y 84 campos de semejanzas."
-echo "OK: los veintiocho botones abren una sola categoría y conservan el idioma seleccionado."
+echo "OK: las validaciones cuentan ocurrencias reales: 224 campos de hierbas y 96 campos de semejanzas."
+echo "OK: los treinta y dos botones abren una sola categoría y conservan el idioma seleccionado."
 echo "OK: las categorías 1, 2 y 3 usan traducciones exactas por frase; strtr fue eliminado para evitar Spanglish."
 echo "OK: el idioma usa lang y ui, consulta el idioma de Moodle, evita caché y muestra su estado visible."
 echo "OK: archivo instalado verificado byte por byte: $CATEGORY_TARGET"
@@ -939,6 +984,10 @@ echo "OK: Yin Tonics quedó como categoría 25 con nueve sustancias y traducció
 echo "OK: Astringents quedó como categoría 26 con catorce sustancias y traducción exacta en Español."
 echo "OK: Anchor & Calm Shen quedó como categoría 27 con cuatro sustancias y traducción exacta en Español."
 echo "OK: Nourish & Calm Shen quedó como categoría 28 con cuatro hierbas y traducción exacta en Español."
+echo "OK: Orifice Opening Aromatics quedó como categoría 29 con Niu Huang y traducción exacta en Español."
+echo "OK: Extinguish Liver Wind quedó como categoría 30 con seis sustancias y traducción exacta en Español."
+echo "OK: Expel Parasites quedó como categoría 31 con Bing Lang y traducción exacta en Español."
+echo "OK: External Use quedó como categoría 32 con She Chuang Zi y traducción exacta en Español."
 echo "OK: las categorías 18 y 19 renderizan sus semejanzas sin variables PHP con guiones."
 echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
 echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
