@@ -58,7 +58,7 @@ open_button_count="$(grep -Fc "\$tr('Open')" "$LIBRARY_TEMP")"
     exit 1
 }
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?></strong>" "$LIBRARY_TEMP"
-grep -Fq "<strong><?php echo s(\$ises ? 'Comparación de fórmulas y hierbas' : 'Comparison Formulas and Herbs'); ?></strong>" "$LIBRARY_TEMP"
+grep -Fq "<strong><?php echo s(\$ises ? 'Comparación' : 'Comparison'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Guía de estudio secundaria' : 'Secondary Study Guide'); ?></strong>" "$LIBRARY_TEMP"
 grep -Fq "<b><?php echo s(\$ises ? 'Material de estudio adicional' : 'Additional study material'); ?></b>" "$LIBRARY_TEMP"
 grep -Fq "<strong><?php echo s(\$ises ? 'Comparación de patologías y patrones' : 'Comparison Pathology and Patterns'); ?></strong>" "$LIBRARY_TEMP"
@@ -120,13 +120,13 @@ if grep -Fq 'subject-study-library__journey-option"' <<< "$herbs_misc_block" \
     echo "ERROR: Herbs Miscellaneous o Formulas Miscellaneous todavía contiene botones." >&2
     exit 1
 fi
-grep -Fq "Single Herbs Comparisons" <<< "$main_study_guide_block"
-grep -Fq "Formula Comparisons" <<< "$main_study_guide_block"
-grep -Fq "63 Formulas Comparison" <<< "$main_study_guide_block"
-grep -Fq "Bensky Category Crosswalk" <<< "$main_study_guide_block"
-grep -Fq "Pathology Comparisons" <<< "$main_study_guide_block"
-grep -Fq "Pattern Comparisons" <<< "$main_study_guide_block"
-grep -Fq "Pattern Comparison Maciocia" <<< "$main_study_guide_block"
+grep -Fq "Single Herbs Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Formula Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "63 Formulas Comparison" <<< "$secondary_study_guides_block"
+grep -Fq "Bensky Category Crosswalk" <<< "$secondary_study_guides_block"
+grep -Fq "Pathology Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Pattern Comparisons" <<< "$secondary_study_guides_block"
+grep -Fq "Pattern Comparison Maciocia" <<< "$secondary_study_guides_block"
 grep -Fq "\$ises ? 'Estudio conectado de fórmulas' : 'Connected formula study'" "$LIBRARY_TEMP"
 grep -Fq "'63 Formulas Comparison' => 'Comparación de 63 fórmulas'" "$LIBRARY_TEMP"
 grep -Fq "'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia'" "$LIBRARY_TEMP"
@@ -138,18 +138,36 @@ if grep -Fq "'title' => 'Patterns Tips Maciocia'" "$LIBRARY_TEMP"; then
     echo "ERROR: Patterns Tips Maciocia todavía conserva el nombre anterior." >&2
     exit 1
 fi
-grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$main_study_guide_block"
-grep -Fq '$formulacomparisonsurl->out(false)' <<< "$main_study_guide_block"
-grep -Fq '$formulastudycenterurl->out(false)' <<< "$main_study_guide_block"
-grep -Fq '$benskycrosswalkurl->out(false)' <<< "$main_study_guide_block"
-grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$main_study_guide_block"
-grep -Fq '$patterncomparisonsurl->out(false)' <<< "$main_study_guide_block"
-grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$main_study_guide_block"
-if grep -Fq 'subject-study-library__journey-option"' <<< "$secondary_study_guides_block" \
-        || grep -Fq 'subject-study-library__journey-option"' <<< "$pathology_patterns_block"; then
-    echo "ERROR: los módulos Comparison 2 o 3 todavía contienen botones." >&2
+grep -Fq '$singleherbscomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$formulacomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$formulastudycenterurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$benskycrosswalkurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$pathologycomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$patterncomparisonsurl->out(false)' <<< "$secondary_study_guides_block"
+grep -Fq '$patternmaciociacomparisonurl->out(false)' <<< "$secondary_study_guides_block"
+main_study_guide_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<< "$main_study_guide_block")"
+comparison_button_count="$(grep -Fc 'subject-study-library__journey-option"' <<< "$secondary_study_guides_block")"
+[[ "$main_study_guide_button_count" -eq 4 && "$comparison_button_count" -eq 7 ]] || {
+    echo "ERROR: Main Study Guide debe tener cuatro botones y Comparison debe tener siete." >&2
+    exit 1
+}
+if grep -Fq 'subject-study-library__journey-option"' <<< "$pathology_patterns_block"; then
+    echo "ERROR: el módulo 3 todavía contiene botones comparativos." >&2
     exit 1
 fi
+for comparison_route in \
+        '$singleherbscomparisonsurl->out(false)' \
+        '$formulacomparisonsurl->out(false)' \
+        '$formulastudycenterurl->out(false)' \
+        '$benskycrosswalkurl->out(false)' \
+        '$pathologycomparisonsurl->out(false)' \
+        '$patterncomparisonsurl->out(false)' \
+        '$patternmaciociacomparisonurl->out(false)'; do
+    if grep -Fq "$comparison_route" <<< "$main_study_guide_block"; then
+        echo "ERROR: un botón de Comparison todavía aparece en Main Study Guide." >&2
+        exit 1
+    fi
+done
 if grep -Fq '$comparisonsurl' "$LIBRARY_TEMP" || grep -Fq '$otherchaptersurl' "$LIBRARY_TEMP"; then
     echo "ERROR: todavía aparece un botón general Comparisons u Other chapters." >&2
     exit 1
@@ -275,24 +293,24 @@ else
     php "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Comparison Formulas and Herbs quedó como módulo 2 sin botones."
-echo "OK: 63 Formulas Comparison está en Main Study Guide y excluido de Formulas Miscellaneous."
-echo "OK: Pattern Comparison Maciocia está en Main Study Guide y excluido de los otros módulos."
+echo "OK: Comparison quedó como módulo 2 con siete botones independientes."
+echo "OK: 63 Formulas Comparison está en Comparison y excluido de Formulas Miscellaneous."
+echo "OK: Pattern Comparison Maciocia está en Comparison y excluido de los otros módulos."
 echo "OK: el segundo renglón de los botones usa 13px."
 echo "OK: los botones comienzan inmediatamente debajo del título de cada módulo."
 echo "OK: Secondary Study Guide contiene todos los recursos secundarios de hierbas y fórmulas."
 echo "OK: Comparison Pathology and Patterns quedó como módulo 3 sin botones."
 echo "OK: los módulos Comparison ocupan las posiciones 2 y 3; Secondary Study Guide ocupa la 4."
 echo "OK: Safety Library está en Main Study Guide y excluido de Secondary Study Guide."
-echo "OK: Main Study Guide contiene once botones independientes."
+echo "OK: Main Study Guide conserva cuatro botones independientes."
 echo "OK: las exclusiones de recursos se validan sin depender del punto y coma."
 echo "OK: las validaciones de los módulos 2, 3 y 4 usan límites exactos."
 echo "OK: Herbs Miscellaneous y Formulas Miscellaneous quedaron vacíos."
 echo "OK: Herbs Secondary Actions está dentro de Secondary Study Guide."
-echo "OK: todos los botones de los dos módulos Comparison están en Main Study Guide."
-echo "OK: los módulos Comparison vacíos se validan usando la clase exacta de botón."
+echo "OK: los siete botones comparativos están en Comparison."
+echo "OK: el módulo 3 permanece vacío y se valida usando la clase exacta de botón."
 echo "OK: ambas colecciones fueron retiradas de la vista general Comparisons sin eliminar su contenido."
-echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Main Study Guide."
+echo "OK: Bensky Category Crosswalk, Pathology y Pattern están en Comparison."
 echo "OK: el botón general Comparisons fue eliminado."
 echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
