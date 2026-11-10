@@ -1251,13 +1251,21 @@ function board_herb_category_localize(string $text, bool $ises): string {
         "Lian Zi and Fu Xiao Mai support the Heart and calm the Spirit while also treating leakage patterns." => "Lian Zi y Fu Xiao Mai apoyan el Corazón y calman el Shen mientras también tratan patrones de pérdida.",
         "Toxicity and unresolved pathogens" => "Toxicidad y patógenos sin resolver",
         "Bai Guo is slightly toxic and must not be overused; astringents generally should not trap unresolved Exterior or excess pathogens." => "Bai Guo es ligeramente tóxica y no debe usarse en exceso; los astringentes generalmente no deben atrapar patógenos Exteriores o de exceso sin resolver.",
+        "Sour, astringent" => "Ácida, astringente",
+        "Salty, astringent" => "Salada, astringente",
+        "Sweet, astringent" => "Dulce, astringente",
+        "Sweet, bitter, astringent" => "Dulce, amarga, astringente",
+        "Neutral, slightly toxic" => "Neutra, ligeramente tóxica",
+        "Bitter, sour, astringent" => "Amarga, ácida, astringente",
+        "Sweet, sour, astringent" => "Dulce, ácida, astringente",
+        "Sweet, slightly salty" => "Dulce, ligeramente salada",
     ];
 
     return $translations[$text] ?? $text;
 }
 
 
-$languageversion = '20261110v';
+$languageversion = '20261110w';
 $baseparams = $ises
     ? ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion]
     : ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion];
