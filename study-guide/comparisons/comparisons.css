@@ -929,7 +929,11 @@ a { color: inherit; }
 
 .formula-practice-question-list {
   display: grid;
-  gap: 26px;
+  min-height: 320px;
+}
+
+.formula-practice-question-list > [hidden] {
+  display: none;
 }
 
 .formula-practice-question {
@@ -1349,3 +1353,75 @@ select:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
   }
 }
 
+
+
+/* One-question-at-a-time horizontal Quiz navigation. */
+.formula-practice-navigation {
+  position: sticky;
+  bottom: 12px;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: auto auto minmax(12px, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px solid #c7d8df;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 8px 24px rgba(23, 50, 77, .12);
+}
+
+.formula-practice-navigation button {
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #b8cad3;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.formula-practice-navigation button:hover:not(:disabled) {
+  background: #eef7f5;
+  border-color: var(--teal);
+}
+
+.formula-practice-navigation button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.formula-practice-navigation .formula-practice-next {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+}
+
+.formula-practice-navigation .formula-practice-restart {
+  border-color: #c76b5d;
+  color: #9b2f23;
+}
+
+.formula-practice-navigation .formula-practice-finish {
+  border-color: var(--orange-dark);
+  background: var(--orange-dark);
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .formula-practice-navigation {
+    position: static;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .formula-practice-navigation__spacer {
+    display: none;
+  }
+
+  .formula-practice-navigation button {
+    width: 100%;
+  }
+}

@@ -33,6 +33,7 @@
     accuracy: spanish ? 'precisión' : 'accuracy',
     needsReview: spanish ? 'Fórmulas para reforzar' : 'Formulas to reinforce',
     resetConfirm: spanish ? '¿Borrar el historial guardado en este dispositivo?' : 'Clear the history saved on this device?',
+    restartConfirm: spanish ? '¿Reiniciar esta sesión? Se borrarán las respuestas de la sesión actual.' : 'Restart this session? Answers from the current session will be cleared.',
     questionWord: spanish ? 'preguntas' : 'questions',
     modificationsTitle: spanish ? 'Quiz de modificaciones de fórmulas' : 'Formula Modifications Quiz',
     modificationsLead: spanish ? 'Practica exclusivamente las modificaciones clínicas de fórmulas en sesiones enfocadas.' : 'Practice only clinical formula modifications in focused Quiz sessions.',
@@ -97,9 +98,13 @@
     questionLanguage: document.querySelector('[data-question-language]'),
     position: document.querySelector('[data-practice-position]'),
     total: document.querySelector('[data-practice-total]'),
+    answered: document.querySelector('[data-practice-answered]'),
     score: document.querySelector('[data-practice-score]'),
     progressBar: document.querySelector('[data-practice-progress-bar]'),
     questionList: document.querySelector('[data-practice-question-list]'),
+    previous: document.querySelector('[data-practice-previous]'),
+    next: document.querySelector('[data-practice-next]'),
+    restart: document.querySelector('[data-practice-restart]'),
     finish: document.querySelector('[data-practice-finish]'),
     results: document.querySelector('[data-practice-results]'),
     finalScore: document.querySelector('[data-practice-final-score]'),
@@ -124,6 +129,7 @@
     size: 25,
     useMaximum: false,
     questions: [],
+    currentIndex: 0,
     score: 0,
     answers: [],
     answeredBySource: new Map()
@@ -553,8 +559,11 @@
     skip.className = 'formula-practice-skip';
     skip.textContent = text.skipForNow;
     skip.addEventListener('click', () => {
-      const target = card.nextElementSibling || elements.finish;
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (index < state.questions.length - 1) {
+        showQuestion(index + 1);
+      } else {
+        elements.finish.focus();
+      }
     });
 
     const feedback = document.createElement('section');
@@ -590,11 +599,29 @@
 
   function updateSessionProgress() {
     const answered = state.answers.length;
-    elements.position.textContent = String(answered);
+    const current = state.questions.length ? state.currentIndex + 1 : 0;
+    elements.position.textContent = String(current);
     elements.total.textContent = String(state.questions.length);
+    elements.answered.textContent = String(answered);
     elements.score.textContent = String(state.score);
-    elements.progressBar.style.width = `${state.questions.length ? (answered / state.questions.length) * 100 : 0}%`;
+    elements.progressBar.style.width = `${state.questions.length ? (current / state.questions.length) * 100 : 0}%`;
+    elements.previous.disabled = state.currentIndex <= 0;
+    elements.next.disabled = state.currentIndex >= state.questions.length - 1;
     elements.finish.textContent = text.finishProgress(answered, state.questions.length);
+  }
+
+  function showQuestion(index, focus = true) {
+    if (!state.questions.length) return;
+    state.currentIndex = Math.max(0, Math.min(index, state.questions.length - 1));
+    [...elements.questionList.children].forEach((card, cardIndex) => {
+      const active = cardIndex === state.currentIndex;
+      card.hidden = !active;
+      card.setAttribute('aria-hidden', String(!active));
+    });
+    updateSessionProgress();
+    if (focus) {
+      elements.questionList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   function renderQuestions() {
@@ -602,7 +629,7 @@
     state.questions.forEach((question, index) => {
       elements.questionList.append(createQuestionCard(question, index));
     });
-    updateSessionProgress();
+    showQuestion(0, false);
   }
 
   function recordAnswer(question, correct) {
@@ -711,6 +738,7 @@
     centralStartedAt = Date.now();
     centralSaved = false;
     state.questions = shuffle(pool).slice(0, Math.min(state.size, pool.length));
+    state.currentIndex = 0;
     state.score = 0;
     state.answers = [];
     state.answeredBySource = new Map();
@@ -720,6 +748,19 @@
     elements.workspace.hidden = false;
     renderQuestions();
     elements.workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function restartSession() {
+    if (!window.confirm(text.restartConfirm)) return;
+    centralAttemptUid = createCentralAttemptUid();
+    centralStartedAt = Date.now();
+    centralSaved = false;
+    state.currentIndex = 0;
+    state.score = 0;
+    state.answers = [];
+    state.answeredBySource = new Map();
+    renderQuestions();
+    elements.questionList.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function returnToSetup() {
@@ -747,6 +788,9 @@
     updateAvailability();
   });
   elements.start.addEventListener('click', startSession);
+  elements.previous.addEventListener('click', () => showQuestion(state.currentIndex - 1));
+  elements.next.addEventListener('click', () => showQuestion(state.currentIndex + 1));
+  elements.restart.addEventListener('click', restartSession);
   elements.finish.addEventListener('click', finishSession);
   elements.repeat.addEventListener('click', startSession);
   elements.configure.addEventListener('click', returnToSetup);
