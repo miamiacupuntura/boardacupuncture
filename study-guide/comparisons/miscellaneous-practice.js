@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-28';
+  const quizBuild = '20261111-29';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -98,7 +98,10 @@
     openComposition: spanish ? 'Ver principio y aplicación →' : 'Review principle and application →',
     differentIncompatibility: spanish ? 'es una incompatibilidad o interacción diferente. La advertencia descrita corresponde a' : 'is a different incompatibility or interaction. The described warning matches',
     reviewIncompatibilities: spanish ? 'Repasar las cuatro incompatibilidades o interacciones' : 'Review the four incompatibilities or interactions',
-    openIncompatibility: spanish ? 'Ver advertencia y manejo →' : 'Review warning and management →'
+    openIncompatibility: spanish ? 'Ver advertencia y manejo →' : 'Review warning and management →',
+    differentCombination: spanish ? 'describe una relación de combinación diferente. La aplicación clínica corresponde a' : 'describes a different combination relationship. The clinical application matches',
+    reviewCombinations: spanish ? 'Repasar las cuatro relaciones de combinaciones herbales' : 'Review the four herbal-combination relationships',
+    openCombination: spanish ? 'Ver combinación y funciones →' : 'Review combination and herb roles →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -214,7 +217,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-28');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-29');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -304,7 +307,13 @@
       const detail=requiresCurated?suppliedClue:readableParts(node,title);
       if(detail.length<35)return;
       const chapter=node.querySelector('[data-chapter-url]');
-      const chapterUrl=chapter?chapter.getAttribute('data-chapter-url')||'':'';
+      let chapterUrl=chapter?chapter.getAttribute('data-chapter-url')||'':'';
+      if(!chapterUrl&&state.resource&&state.resource.key==='combinations'&&heading.id){
+        const sourceUrl=new URL(state.resource.path,window.location.origin);
+        if(spanish)sourceUrl.searchParams.set('lang','es');
+        sourceUrl.hash=heading.id;
+        chapterUrl=sourceUrl.toString();
+      }
       items.push({title,detail,chapterUrl});
     });
     const seen=new Set();
@@ -810,6 +819,31 @@
     });
     panel.append(links);return panel;
   }
+  function combinationReviewUrl(item){
+    const review=new URL(spanish?'herbal-combination-review-es.html':'herbal-combination-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function combinationReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewCombinations:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentCombination+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewCombinations;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=combinationReviewUrl(item);
+      link.target='herbalCombinationReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openCombination;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -845,6 +879,8 @@
       el.feedback.append(compositionReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='incompat'){
       el.feedback.append(incompatibilityReviewPanel(question,value,correct));
+    }else if(state.resource&&state.resource.key==='combinations'){
+      el.feedback.append(combinationReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
