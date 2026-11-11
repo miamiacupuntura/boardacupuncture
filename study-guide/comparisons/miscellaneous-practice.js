@@ -51,7 +51,7 @@
     misleading: spanish ? '¿Qué fórmula con nombre engañoso corresponde a estas acciones reales?' : 'Which misleadingly named formula matches these actual actions?',
     advanced: spanish ? '¿Qué distinción avanzada de nombres corresponde a estas pistas?' : 'Which advanced name distinction matches these clues?',
     supplements: spanish ? '¿Qué grupo de estudio contiene los medicamentos descritos a continuación?' : 'Which named study group contains the medicinals described below?',
-    secondary: spanish ? '¿Qué hierba o acción secundaria corresponde a estas pistas clínicas?' : 'Which herb or secondary action matches these clinical clues?',
+    secondary: spanish ? '¿Qué acción secundaria comparten estos medicamentos?' : 'Which secondary action is shared by these medicinals?',
     pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
     patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
     maciocia: spanish ? '¿Qué comparación de patrones de Maciocia corresponde a estas claves?' : 'Which Maciocia pattern comparison matches these key findings?',
@@ -140,17 +140,22 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-7');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-8');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
     clone.querySelectorAll('br').forEach(br=>br.replaceWith(' '));
     return clean(clone.textContent);
   }
+  function isInstructionalText(value){
+    const text=fold(value);
+    return /(?:connect this|review [0-9]+|study (?:this|the)|exam clue|not a stand alone|preserve the source|available topics|choose a|read and continue|conecta esta|revisa [0-9]+|estudia (?:este|el)|pista de examen|no una indicacion|conservar la fuente|temas disponibles|elige un)/.test(text);
+  }
   function readableParts(node,title){
     const parts=[];
     const add=value=>{
       const text=clean(value).replace(/^(?:Rule|Clinical focus|Key distinction|Regla|Enfoque clínico|Diferencia clave)\s*:\s*/i,'');
+      if(isInstructionalText(text))return;
       if(text.length>=18&&text.length<=360&&fold(text)!==fold(title))parts.push(text);
     };
     Array.from(node.querySelectorAll('.comparison-card__category')).forEach(element=>add(readableElementText(element)));
@@ -172,11 +177,12 @@
   function questionContext(item){
     const context=redactAnswerClues(item.detail,item.title);
     const tokens=semanticTokens(context);
-    if(context.length<35||tokens.size<6)return '';
+    if(context.length<35||tokens.size<6||isInstructionalText(context))return '';
     const normalized=fold(context);
     const leaks=titleClues(item.title).some(clue=>{const value=fold(clue);return value.length>=4&&normalized.includes(value);});
     if(leaks)return '';
     if(state.resource&&state.resource.key==='supplements')return (spanish?'Medicamentos y funciones: ':'Medicinals and functions: ')+context;
+    if(state.resource&&state.resource.key==='secondary')return (spanish?'Medicamentos que comparten la acción: ':'Medicinals that share the action: ')+context;
     return context;
   }
   function extractItems(html){
@@ -189,7 +195,9 @@
       const heading=node.querySelector('h3,h2');
       const title=clean(heading&&heading.textContent);
       if(!title||title.length>160)return;
-      const detail=readableParts(node,title);
+      const suppliedClue=clean(node.getAttribute('data-quiz-clue'));
+      const requiresCurated=state.resource&&(state.resource.key==='secondary'||state.resource.key==='safety');
+      const detail=requiresCurated?suppliedClue:readableParts(node,title);
       if(detail.length<35)return;
       const chapter=node.querySelector('[data-chapter-url]');
       const chapterUrl=chapter?chapter.getAttribute('data-chapter-url')||'':'';
@@ -229,7 +237,7 @@
     const valid=state.items.map(item=>Object.assign({},item,{context:questionContext(item)})).filter(item=>item.context);
     if(valid.length<4)return [];
     const prompt=prompts[state.resource.key]||copy.prompt;
-    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid),explanation:item.detail,item})));
+    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid),explanation:state.resource.key==='secondary'?(spanish?'Estos medicamentos pertenecen a categorías primarias diferentes, pero comparten «'+item.title+'» como acción secundaria.':'These medicinals belong to different primary categories but share “'+item.title+'” as a secondary action.'):item.detail,item})));
   }
   function renderQuestion(){
     const question=state.questions[state.index];state.answered=false;
