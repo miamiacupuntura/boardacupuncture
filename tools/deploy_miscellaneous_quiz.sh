@@ -40,6 +40,8 @@ FORMULA_NAME_REVIEW="$TEMP_DIR/formula-name-trap-review.html"
 FORMULA_NAME_REVIEW_ES="$TEMP_DIR/formula-name-trap-review-es.html"
 MISLEADING_REVIEW="$TEMP_DIR/misleading-formula-review.html"
 MISLEADING_REVIEW_ES="$TEMP_DIR/misleading-formula-review-es.html"
+ADVANCED_REVIEW="$TEMP_DIR/advanced-name-trap-review.html"
+ADVANCED_REVIEW_ES="$TEMP_DIR/advanced-name-trap-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$EN_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$ES_HTML"
@@ -59,9 +61,11 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-name-trap-revi
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-name-trap-review-es.html" -o "$FORMULA_NAME_REVIEW_ES"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/misleading-formula-review.html" -o "$MISLEADING_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/misleading-formula-review-es.html" -o "$MISLEADING_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/advanced-name-trap-review.html" -o "$ADVANCED_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/advanced-name-trap-review-es.html" -o "$ADVANCED_REVIEW_ES"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-20" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-20" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-21" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-21" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
@@ -102,6 +106,10 @@ grep -Fq "function misleadingNameReviewPanel" "$JAVASCRIPT"
 grep -Fq "Review the four formulas and their actual actions" "$JAVASCRIPT"
 grep -Fq "Back to quiz" "$MISLEADING_REVIEW"
 grep -Fq "Regresar al quiz" "$MISLEADING_REVIEW_ES"
+grep -Fq "function advancedTrapReviewPanel" "$JAVASCRIPT"
+grep -Fq "Review the four advanced distinctions" "$JAVASCRIPT"
+grep -Fq "Back to quiz" "$ADVANCED_REVIEW"
+grep -Fq "Regresar al quiz" "$ADVANCED_REVIEW_ES"
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS_ES" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
@@ -162,7 +170,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     backup_dir="$BACKUP_ROOT/miscellaneous-quiz-$TIMESTAMP/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$backup_dir"
-    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html formula-name-trap-review.html formula-name-trap-review-es.html misleading-formula-review.html misleading-formula-review-es.html; do
+    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html formula-name-trap-review.html formula-name-trap-review-es.html misleading-formula-review.html misleading-formula-review-es.html advanced-name-trap-review.html advanced-name-trap-review-es.html; do
         if [[ -f "$target_dir/$file" ]]; then
             cp -a "$target_dir/$file" "$backup_dir/$file"
         fi
@@ -186,6 +194,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_one "$FORMULA_NAME_REVIEW_ES" "$target_dir/formula-name-trap-review-es.html" "$reference"
     install_one "$MISLEADING_REVIEW" "$target_dir/misleading-formula-review.html" "$reference"
     install_one "$MISLEADING_REVIEW_ES" "$target_dir/misleading-formula-review-es.html" "$reference"
+    install_one "$ADVANCED_REVIEW" "$target_dir/advanced-name-trap-review.html" "$reference"
+    install_one "$ADVANCED_REVIEW_ES" "$target_dir/advanced-name-trap-review-es.html" "$reference"
 
     cmp -s "$EN_HTML" "$target_dir/miscellaneous-practice.html"
     cmp -s "$ES_HTML" "$target_dir/miscellaneous-practice-es.html"
@@ -205,6 +215,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$FORMULA_NAME_REVIEW_ES" "$target_dir/formula-name-trap-review-es.html"
     cmp -s "$MISLEADING_REVIEW" "$target_dir/misleading-formula-review.html"
     cmp -s "$MISLEADING_REVIEW_ES" "$target_dir/misleading-formula-review-es.html"
+    cmp -s "$ADVANCED_REVIEW" "$target_dir/advanced-name-trap-review.html"
+    cmp -s "$ADVANCED_REVIEW_ES" "$target_dir/advanced-name-trap-review-es.html"
     grep -Fq "Which precaution applies to this medicinal?" "$target_dir/miscellaneous-practice.js"
     [[ "$(grep -Fo '"enCaution":' "$target_dir/miscellaneous-practice.js" | wc -l)" -eq 27 ]]
     if grep -Fq "Which safety topic matches this clinical precaution?" "$target_dir/miscellaneous-practice.js"; then
@@ -223,7 +235,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-20 activo."
+echo "OK: build 20261111-21 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
 echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."
@@ -235,3 +247,4 @@ echo "OK: Name Traps usa feedback breve y cuatro tarjetas con regreso al quiz."
 echo "OK: Herb Families & Parts usa feedback breve y cuatro tarjetas con regreso al quiz."
 echo "OK: Formula Name Traps usa feedback breve y cuatro tarjetas con regreso al quiz."
 echo "OK: Misleading Formula Names usa feedback breve y cuatro tarjetas con regreso al quiz."
+echo "OK: Advanced Name Traps usa feedback breve y cuatro tarjetas con regreso al quiz."
