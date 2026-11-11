@@ -95,3 +95,13 @@
   .formula-modifications__top-actions { width: 100%; }
   .formula-modification-card h2 { font-size: 20px; }
 }
+
+.formula-modification-card li.is-target {
+  margin: -4px -8px;
+  padding: 10px 12px;
+  border: 2px solid #0b817d;
+  border-radius: 9px;
+  background: #eaf8f4;
+  box-shadow: 0 0 0 4px rgba(11,129,125,.12);
+}
+.formula-modifications__return-footer { display: flex; justify-content: center; margin: 20px 0; }

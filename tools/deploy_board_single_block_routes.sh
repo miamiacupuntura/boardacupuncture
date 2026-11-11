@@ -332,8 +332,9 @@ for quiz_js in "$FORMULA_JS_TEMP" "$SINGLE_HERB_JS_TEMP"; do
 done
 grep -Fq "const modificationsOnly" "$FORMULA_JS_TEMP"
 grep -Fq "questionsForScope" "$FORMULA_JS_TEMP"
+grep -Fq "modificationCardLink" "$FORMULA_JS_TEMP"
 for quiz_html in "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP"; do
-    grep -Fq "formula-practice.js?v=20261111-2" "$quiz_html"
+    grep -Fq "formula-practice.js?v=20261111-3" "$quiz_html"
 done
 for quiz_html in "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP"; do
     grep -Fq "20261111-1" "$quiz_html"

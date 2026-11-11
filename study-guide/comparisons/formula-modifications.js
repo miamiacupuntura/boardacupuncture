@@ -15,7 +15,8 @@
     total: document.querySelector('[data-modification-total]'),
     formulaTotal: document.querySelector('[data-formula-total]'),
     visibleFormulas: document.querySelector('[data-visible-formulas]'),
-    visibleModifications: document.querySelector('[data-visible-modifications]')
+    visibleModifications: document.querySelector('[data-visible-modifications]'),
+    returnLinks: [...document.querySelectorAll('[data-modification-return]')]
   };
   const labels = spanish ? {
     category: 'Categoría',
@@ -37,6 +38,33 @@
     error: 'The modification library could not be loaded.'
   };
   let groups = [];
+  const params = new URLSearchParams(window.location.search);
+  const requestedFormula = params.get('q') || '';
+  const requestedFormulaNumber = params.get('formula') || '';
+  const requestedSource = params.get('source') || '';
+  const requestedReturn = params.get('return') || '';
+  let returnUrl = '';
+  try {
+    const candidate = new URL(requestedReturn, window.location.href);
+    if (candidate.origin === window.location.origin) returnUrl = candidate.toString();
+  } catch (_) { /* Ignore invalid return URLs. */ }
+
+  function returnToQuiz(event) {
+    if (window.opener && !window.opener.closed) {
+      event.preventDefault();
+      const fallback = returnUrl || event.currentTarget.href;
+      window.opener.focus();
+      setTimeout(() => { window.location.href = fallback; }, 250);
+      window.close();
+    }
+  }
+
+  elements.returnLinks.forEach(link => {
+    if (!returnUrl) return;
+    link.hidden = false;
+    link.href = returnUrl;
+    link.addEventListener('click', returnToQuiz);
+  });
 
   function normalized(value) {
     return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -76,6 +104,7 @@
     const article = document.createElement('article');
     article.className = 'formula-modification-card';
     article.dataset.category = group.formula.categoryKey;
+    article.dataset.formulaNumber = String(group.formula.number);
 
     const header = document.createElement('header');
     header.className = 'formula-modification-card__header';
@@ -96,6 +125,8 @@
     const list = document.createElement('ol');
     group.entries.forEach(question => {
       const item = document.createElement('li');
+      item.dataset.modificationSource = String(question.sourceNumber);
+      item.id = 'modification-' + String(question.sourceNumber).toLowerCase();
       const trigger = document.createElement('p');
       trigger.className = 'formula-modification-card__trigger';
       const triggerLabel = document.createElement('strong');
@@ -134,7 +165,8 @@
     let visibleModifications = 0;
     elements.grid.querySelectorAll('.formula-modification-card').forEach((card, index) => {
       const group = groups[index];
-      const visible = (!query || card.dataset.search.includes(query)) && (category === 'all' || card.dataset.category === category);
+      const exactFormula = !requestedFormulaNumber || card.dataset.formulaNumber === requestedFormulaNumber;
+      const visible = exactFormula && (!query || card.dataset.search.includes(query)) && (category === 'all' || card.dataset.category === category);
       card.hidden = !visible;
       if (visible) {
         visibleFormulas++;
@@ -145,6 +177,23 @@
     elements.visibleFormulas.textContent = String(visibleFormulas);
     elements.visibleModifications.textContent = String(visibleModifications);
     elements.empty.hidden = visibleFormulas !== 0;
+  }
+
+  function focusRequestedModification() {
+    if (!requestedSource) return;
+    const item = [...elements.grid.querySelectorAll('[data-modification-source]')]
+      .find(candidate => candidate.dataset.modificationSource === requestedSource);
+    if (!item) return;
+    const card = item.closest('.formula-modification-card');
+    if (card) card.hidden = false;
+    const details = item.closest('details');
+    if (details) details.open = true;
+    item.classList.add('is-target');
+    item.tabIndex = -1;
+    requestAnimationFrame(() => {
+      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      item.focus({ preventScroll: true });
+    });
   }
 
   Promise.all([
@@ -179,6 +228,7 @@
     elements.status.textContent = labels.ready;
     elements.status.classList.add('is-ready');
     applyFilters();
+    focusRequestedModification();
   }).catch(error => {
     console.error(error);
     elements.status.textContent = labels.error;
@@ -187,6 +237,5 @@
 
   elements.search.addEventListener('input', applyFilters);
   elements.category.addEventListener('change', applyFilters);
-  const requestedFormula = new URLSearchParams(window.location.search).get('q');
   if (requestedFormula) elements.search.value = requestedFormula;
 })();

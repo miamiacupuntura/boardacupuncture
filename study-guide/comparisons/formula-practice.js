@@ -37,6 +37,7 @@
     modificationsTitle: spanish ? 'Quiz de modificaciones de fórmulas' : 'Formula Modifications Quiz',
     modificationsLead: spanish ? 'Practica exclusivamente las modificaciones clínicas de fórmulas en sesiones enfocadas.' : 'Practice only clinical formula modifications in focused Quiz sessions.',
     modificationsSetup: spanish ? 'Configura el Quiz de modificaciones' : 'Configure the Formula Modifications Quiz',
+    openModificationCard: spanish ? 'Abrir la ficha exacta de esta modificación →' : 'Open the exact modification card →',
     modeHelp: {
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
       formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
@@ -467,6 +468,23 @@
     return link;
   }
 
+  function modificationCardLink(question) {
+    if (!(question.categoryKeys || []).includes('modifications')) return null;
+    const formula = state.formulaByNumber.get(Number(question.formulaNumbers?.[0]));
+    if (!formula) return null;
+    const url = new URL(spanish ? 'formula-modifications-es.html' : 'formula-modifications.html', window.location.href);
+    url.searchParams.set('q', formula.name);
+    url.searchParams.set('formula', String(formula.number));
+    url.searchParams.set('source', String(question.sourceNumber));
+    url.searchParams.set('return', window.location.href);
+    const link = document.createElement('a');
+    link.className = 'comparison-back formula-practice-modification-link';
+    link.href = url.toString();
+    link.target = 'formulaModificationReview';
+    link.textContent = text.openModificationCard;
+    return link;
+  }
+
   function displayedQuestion(question) {
     if (!spanish || state.showOriginal) return question;
     return state.translations.get(question.sourceNumber) || question;
@@ -500,6 +518,8 @@
       paragraph.textContent = value;
       feedbackText.append(paragraph);
     });
+    const modificationLink = modificationCardLink(question);
+    if (modificationLink) feedbackText.append(modificationLink);
   }
 
   function createQuestionCard(question, index) {
