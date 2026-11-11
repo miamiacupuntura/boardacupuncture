@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-22';
+  const quizBuild = '20261111-23';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -80,7 +80,10 @@
     openAdvancedTrap: spanish ? 'Ver identidad y función →' : 'Review identity and function →',
     differentSupplementalFamily: spanish ? 'es un grupo botánico diferente. Los medicinales, partes y funciones descritos corresponden a' : 'is a different botanical group. The described medicinals, parts and functions match',
     reviewSupplementalFamilies: spanish ? 'Repasar las cuatro familias adicionales' : 'Review the four supplemental families',
-    openSupplementalFamily: spanish ? 'Ver medicinales y funciones →' : 'Review medicinals and functions →'
+    openSupplementalFamily: spanish ? 'Ver medicinales y funciones →' : 'Review medicinals and functions →',
+    differentPathology: spanish ? 'corresponde a otra comparación patológica. El perfil clínico descrito corresponde a' : 'belongs to a different pathology comparison. The described clinical profile matches',
+    reviewPathologies: spanish ? 'Repasar las cuatro comparaciones patológicas' : 'Review the four pathology comparisons',
+    openPathology: spanish ? 'Ver claves clínicas →' : 'Review clinical distinctions →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -196,7 +199,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-22');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-23');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -642,6 +645,31 @@
     });
     panel.append(links);return panel;
   }
+  function pathologyReviewUrl(item){
+    const review=new URL(spanish?'pathology-review-es.html':'pathology-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function pathologyReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewPathologies:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentPathology+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewPathologies;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=pathologyReviewUrl(item);
+      link.target='pathologyReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openPathology;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -665,6 +693,8 @@
       el.feedback.append(advancedTrapReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='supplements'){
       el.feedback.append(supplementalFamilyReviewPanel(question,value,correct));
+    }else if(state.resource&&state.resource.key==='pathology'){
+      el.feedback.append(pathologyReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
