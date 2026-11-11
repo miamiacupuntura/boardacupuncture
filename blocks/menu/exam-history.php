@@ -13,11 +13,15 @@ $historytype = optional_param('type', 'all', PARAM_ALPHA);
 if (!in_array($historytype, ['all', 'board', 'quiz'], true)) {
     $historytype = 'all';
 }
-$returnto = optional_param('returnto', 'dashboard', PARAM_ALPHA);
+$returnto = optional_param('returnto', 'clinicalcases', PARAM_ALPHA);
 if (!in_array($returnto, ['dashboard', 'clinicalcases', 'exams'], true)) {
-    $returnto = 'dashboard';
+    $returnto = 'clinicalcases';
 }
 $returncaseexam = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
+if ($returnto === 'clinicalcases' && $returncaseexam === ''
+        && !empty($SESSION->block_menu_last_clinical_caseexam)) {
+    $returncaseexam = clean_param($SESSION->block_menu_last_clinical_caseexam, PARAM_ALPHANUMEXT);
+}
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = 25;
 $languageparams = $ises ? ['lang' => 'es', 'ui' => 'es'] : ['lang' => 'en', 'ui' => 'en'];
