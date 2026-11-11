@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Examen de selección múltiple basado en las 51 parejas oficiales Dui Yao.">
+  <title>Quiz de Dui Yao | AcupunctureTests</title>
+  <style>
+    :root{color-scheme:light;--green:#087c69;--navy:#102a43;--line:#bfd8d3;--soft:#f4faf8;--blue:#2b63e8}
+    *{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:var(--navy);font:16px/1.45 Arial,sans-serif}
+    .dui-practice{width:min(940px,calc(100% - 24px));margin:24px auto 56px}.dui-practice__top,.dui-practice__card{border:1px solid var(--line);border-radius:14px;background:#fff}
+    .dui-practice__top{border-top:5px solid var(--green);padding:22px}.dui-practice__actions{display:flex;justify-content:flex-end;gap:9px;margin-bottom:12px}
+    .dui-practice__actions a{padding:8px 12px;border:1px solid #afc5d4;border-radius:8px;color:#0f4c81;font-weight:800;text-decoration:none}
+    .dui-practice__eyebrow,.dui-practice__label{color:var(--green);font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
+    h1{margin:5px 0 8px;font-size:clamp(30px,5vw,44px)}h2{margin-top:0}.dui-practice__card{margin-top:16px;padding:22px}
+    .dui-practice__status{margin:12px 0;padding:10px 12px;border-radius:8px;background:var(--soft);font-weight:700}.dui-practice__status.is-error{background:#fff0ed;color:#a33}
+    label{display:grid;gap:6px;font-weight:800}select{width:min(240px,100%);height:42px;padding:7px 10px;border:1px solid #9db8c8;border-radius:8px;background:#fff}
+    button{border:0;border-radius:9px;font:inherit;font-weight:900;cursor:pointer}.dui-practice__primary{margin-top:16px;padding:10px 16px;background:var(--green);color:#fff}
+    .dui-practice__primary:disabled{opacity:.5;cursor:not-allowed}.dui-practice__meta{display:flex;justify-content:space-between;gap:12px;font-weight:900}
+    .dui-practice__track{height:8px;margin:12px 0 20px;border-radius:999px;background:#e5edf1;overflow:hidden}.dui-practice__bar{height:100%;width:0;background:var(--green)}
+    .dui-practice__context{padding:14px;border-left:4px solid var(--green);background:var(--soft);font-size:18px;font-weight:700}
+    .dui-practice__options{display:grid;gap:10px;margin-top:18px}.dui-practice__option{width:100%;padding:13px 15px;border:1px solid #c6d5df;background:#f8fafc;color:var(--navy);text-align:left}
+    .dui-practice__option:hover:not(:disabled){border-color:var(--blue);background:#eef4ff}.dui-practice__option.is-correct{border-color:#16834d;background:#eaf8f0}.dui-practice__option.is-incorrect{border-color:#c2413b;background:#fff0ed}
+    .dui-practice__feedback{margin-top:16px;padding:13px;border-radius:8px;font-weight:800}.dui-practice__feedback.is-correct{background:#eaf8f0;color:#11643d}.dui-practice__feedback.is-incorrect{background:#fff0ed;color:#9f2f2a}
+    .dui-practice__next{display:block;margin:16px 0 0 auto;padding:10px 18px;background:var(--blue);color:#fff}.dui-practice__score{font-size:32px;font-weight:900;color:var(--green)}
+    .dui-practice__save{min-height:24px;color:#526b84;font-weight:700}[hidden]{display:none!important}@media(max-width:560px){.dui-practice__top,.dui-practice__card{padding:16px}.dui-practice__actions{justify-content:flex-start;flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+<main class="dui-practice">
+  <header class="dui-practice__top">
+    <div class="dui-practice__actions"><a href="/blocks/myprogress/study-guide.php?area=herbology&view=library&lang=es">← Actividades Board Level</a><a href="#" data-dui-language>English</a></div>
+    <span class="dui-practice__eyebrow">QUIZ BOARD LEVEL</span>
+    <h1>Quiz de Dui Yao</h1>
+    <p>Practica acciones combinadas, categorías y fórmulas clásicas de las 51 parejas oficiales.</p>
+  </header>
+  <section class="dui-practice__card" data-dui-setup>
+    <h2>Configura tu examen</h2>
+    <p class="dui-practice__status" data-dui-status>Cargando banco de preguntas…</p>
+    <label>Cantidad de preguntas<select data-dui-size><option value="10">10</option><option value="25" selected>25</option><option value="51">51</option></select></label>
+    <button class="dui-practice__primary" type="button" data-dui-start disabled>Comenzar Quiz</button>
+  </section>
+  <section class="dui-practice__card" data-dui-workspace hidden>
+    <div class="dui-practice__meta"><span>Quiz de Dui Yao</span><span data-dui-position></span></div>
+    <div class="dui-practice__track"><div class="dui-practice__bar" data-dui-progress></div></div>
+    <h2 data-dui-prompt></h2><div class="dui-practice__context" data-dui-context></div>
+    <div class="dui-practice__options" data-dui-options></div>
+    <div class="dui-practice__feedback" data-dui-feedback hidden></div>
+    <button class="dui-practice__next" type="button" data-dui-next hidden></button>
+  </section>
+  <section class="dui-practice__card" data-dui-results hidden>
+    <span class="dui-practice__label">Resultado</span><p class="dui-practice__score" data-dui-score></p>
+    <p class="dui-practice__save" data-dui-save></p>
+    <button class="dui-practice__primary" type="button" data-dui-repeat>Intentar nuevamente</button>
+  </section>
+</main>
+<script src="dui-yao-practice.js?v=20261111-1" defer></script>
+</body></html>
