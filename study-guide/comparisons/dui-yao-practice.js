@@ -45,6 +45,8 @@
     context: document.querySelector('[data-dui-context]'),
     options: document.querySelector('[data-dui-options]'),
     feedback: document.querySelector('[data-dui-feedback]'),
+    back: document.querySelector('[data-dui-back]'),
+    restart: document.querySelector('[data-dui-restart]'),
     next: document.querySelector('[data-dui-next]'),
     results: document.querySelector('[data-dui-results]'),
     score: document.querySelector('[data-dui-score]'),
@@ -62,6 +64,7 @@
     questions: [],
     index: 0,
     score: 0,
+    answers: [],
     answered: false,
     startedAt: 0,
     attemptUid: ''
@@ -197,24 +200,39 @@
 
   function renderQuestion() {
     const question = state.questions[state.index];
-    state.answered = false;
+    const saved = state.answers[state.index] || null;
+    state.answered = saved !== null;
     elements.position.textContent = String(state.index + 1) + ' / ' + String(state.questions.length);
     elements.progress.style.width = (((state.index + 1) / state.questions.length) * 100) + '%';
     elements.prompt.textContent = question.prompt;
     elements.context.textContent = question.context;
     elements.options.replaceChildren();
-    elements.feedback.hidden = true;
+    elements.feedback.hidden = !saved;
     elements.feedback.className = 'dui-practice__feedback';
-    elements.next.hidden = true;
+    elements.feedback.replaceChildren();
+    elements.back.disabled = state.index === 0;
+    elements.next.hidden = !saved;
 
     question.options.forEach((option, optionIndex) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'dui-practice__option';
       button.textContent = String.fromCharCode(65 + optionIndex) + '. ' + option;
-      button.addEventListener('click', () => answerQuestion(button, option));
+      if (saved) {
+        button.disabled = true;
+        if (option === question.correct) button.classList.add('is-correct');
+        if (!saved.correct && option === saved.answer) button.classList.add('is-incorrect');
+      } else {
+        button.addEventListener('click', () => answerQuestion(button, option));
+      }
       elements.options.append(button);
     });
+
+    if (saved) {
+      elements.feedback.classList.add(saved.correct ? 'is-correct' : 'is-incorrect');
+      appendReviewFeedback(question, saved.answer, saved.correct);
+      elements.next.textContent = state.index + 1 === state.questions.length ? copy.finish : copy.next;
+    }
   }
 
   function reviewUrl(question, option) {
@@ -268,6 +286,7 @@
     state.answered = true;
     const question = state.questions[state.index];
     const isCorrect = answer === question.correct;
+    state.answers[state.index] = {answer, correct: isCorrect};
     if (isCorrect) state.score += 1;
 
     Array.from(elements.options.children).forEach(optionButton => {
@@ -332,6 +351,7 @@
     if (elements.workTitle) elements.workTitle.textContent = reverse ? copy.reverseSet : copy.mixedSet;
     state.index = 0;
     state.score = 0;
+    state.answers = Array(state.questions.length).fill(null);
     state.startedAt = Date.now();
     state.attemptUid = createAttemptUid();
     elements.setup.hidden = true;
@@ -342,6 +362,13 @@
   }
 
   elements.start.addEventListener('click', startQuiz);
+  elements.back.addEventListener('click', () => {
+    if (state.index === 0) return;
+    state.index -= 1;
+    renderQuestion();
+    elements.workspace.scrollIntoView({behavior: 'smooth', block: 'start'});
+  });
+  elements.restart.addEventListener('click', startQuiz);
   elements.next.addEventListener('click', () => {
     if (!state.answered) return;
     if (state.index + 1 >= state.questions.length) {

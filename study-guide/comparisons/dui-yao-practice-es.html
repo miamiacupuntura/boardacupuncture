@@ -22,8 +22,8 @@
     .dui-practice__options{display:grid;gap:10px;margin-top:18px}.dui-practice__option{width:100%;padding:13px 15px;border:1px solid #c6d5df;background:#f8fafc;color:var(--navy);text-align:left}
     .dui-practice__option:hover:not(:disabled){border-color:var(--blue);background:#eef4ff}.dui-practice__option.is-correct{border-color:#16834d;background:#eaf8f0}.dui-practice__option.is-incorrect{border-color:#c2413b;background:#fff0ed}
     .dui-practice__feedback{margin-top:16px;padding:13px;border-radius:8px;font-weight:800}.dui-practice__feedback.is-correct{background:#eaf8f0;color:#11643d}.dui-practice__feedback.is-incorrect{background:#fff0ed;color:#9f2f2a}
-    .dui-practice__next{display:block;margin:16px 0 0 auto;padding:10px 18px;background:var(--blue);color:#fff}.dui-practice__score{font-size:32px;font-weight:900;color:var(--green)}
-    .dui-practice__save{min-height:24px;color:#526b84;font-weight:700}[hidden]{display:none!important}@media(max-width:560px){.dui-practice__top,.dui-practice__card{padding:16px}.dui-practice__actions{justify-content:flex-start;flex-wrap:wrap}}
+    .dui-practice__controls{display:flex;align-items:center;gap:9px;margin-top:16px}.dui-practice__secondary{padding:10px 14px;border:1px solid #afc5d4;background:#fff;color:#0f4c81}.dui-practice__secondary:hover:not(:disabled){border-color:var(--blue);background:#eef4ff}.dui-practice__secondary:disabled{opacity:.45;cursor:not-allowed}.dui-practice__next{display:block;margin:0 0 0 auto;padding:10px 18px;background:var(--blue);color:#fff}.dui-practice__score{font-size:32px;font-weight:900;color:var(--green)}
+    .dui-practice__save{min-height:24px;color:#526b84;font-weight:700}[hidden]{display:none!important}@media(max-width:560px){.dui-practice__controls{align-items:stretch;flex-direction:column}.dui-practice__next{width:100%;margin-left:0}.dui-practice__top,.dui-practice__card{padding:16px}.dui-practice__actions{justify-content:flex-start;flex-wrap:wrap}}
 
     .dui-practice__card label+label{margin-top:12px}
     .dui-practice__feedback-heading,.dui-practice__review-title{display:block}.dui-practice__feedback p{margin:7px 0 12px;line-height:1.5}.dui-practice__review-title{margin-top:10px;color:var(--navy)}
@@ -51,7 +51,7 @@
     <h2 data-dui-prompt></h2><div class="dui-practice__context" data-dui-context></div>
     <div class="dui-practice__options" data-dui-options></div>
     <div class="dui-practice__feedback" data-dui-feedback hidden></div>
-    <button class="dui-practice__next" type="button" data-dui-next hidden></button>
+    <div class="dui-practice__controls"><button class="dui-practice__secondary" type="button" data-dui-back>← Atrás</button><button class="dui-practice__secondary" type="button" data-dui-restart>↻ Reiniciar quiz</button><button class="dui-practice__next" type="button" data-dui-next hidden></button></div>
   </section>
   <section class="dui-practice__card" data-dui-results hidden>
     <span class="dui-practice__label">Resultado</span><p class="dui-practice__score" data-dui-score></p>
@@ -59,5 +59,5 @@
     <button class="dui-practice__primary" type="button" data-dui-repeat>Intentar nuevamente</button>
   </section>
 </main>
-<script src="dui-yao-practice.js?v=20261111-5" defer></script>
+<script src="dui-yao-practice.js?v=20261111-6" defer></script>
 </body></html>
