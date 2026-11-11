@@ -859,6 +859,14 @@ fi
 grep -Fq "'/blocks/myprogress/single-herbs-study-guide.php'" "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/dui-yao.html'" "$LIBRARY_TEMP"
 grep -Fq "'/blocks/myprogress/formulas-study-guide.php'" "$LIBRARY_TEMP"
+grep -Fq '\$boardduiyaoquizurl = new moodle_url(' "$LIBRARY_TEMP"
+grep -Fq '\$boardmiscellaneousquizurl = new moodle_url(' "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html'" "$LIBRARY_TEMP"
+grep -Fq "'category' => 'modifications', 'size' => 25" "$LIBRARY_TEMP"
+grep -Fq "'Dui Yao Quiz'" "$LIBRARY_TEMP"
+grep -Fq "'Miscellaneous Quiz'" "$LIBRARY_TEMP"
+grep -Fq "'Quiz de Dui Yao'" "$LIBRARY_TEMP"
+grep -Fq "'Quiz misceláneo'" "$LIBRARY_TEMP"
 if grep -Fq '$practiceexamsurl' "$LIBRARY_TEMP"; then
     echo "ERROR: el botón Practice Exams todavía aparece en Board Level Activities." >&2
     exit 1
@@ -1373,6 +1381,7 @@ echo "OK: el botón general Other chapters fue eliminado."
 echo "OK: el módulo 1 se llama Main Study Guide."
 echo "OK: Single Herbs, Duì Yào Pairs y Formulas usan Categories como nombre del botón."
 echo "OK: los módulos 3, 5 y 6 fueron eliminados; los siete restantes quedaron renumerados y uniformes."
+echo "OK: Dui Yao Quiz y Miscellaneous Quiz aparecen en el módulo Quiz con rutas independientes."
 echo "OK: cada botón visible abre un solo bloque."
 echo "OK: se conservaron Main Study Guide, los recursos secundarios, las colecciones comparativas, Practice Exams y Quiz."
 echo "OK: la vista general interna permanece como respaldo, pero no se muestra como botón."
