@@ -1425,3 +1425,37 @@ select:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
     width: 100%;
   }
 }
+
+
+/* Keep Quiz navigation buttons aligned and preserve primary colors on hover. */
+.formula-practice-navigation {
+  align-items: stretch;
+}
+
+.formula-practice-navigation button {
+  display: inline-flex;
+  height: 46px;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.formula-practice-navigation button.formula-practice-next:hover:not(:disabled),
+.formula-practice-navigation button.formula-practice-next:focus-visible {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+  filter: brightness(.9);
+}
+
+.formula-practice-navigation button.formula-practice-finish:hover:not(:disabled),
+.formula-practice-navigation button.formula-practice-finish:focus-visible {
+  border-color: var(--orange-dark);
+  background: var(--orange-dark);
+  color: #fff;
+  filter: brightness(.9);
+}
