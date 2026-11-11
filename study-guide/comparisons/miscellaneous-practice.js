@@ -34,6 +34,25 @@
     saved: spanish ? 'Resultado guardado en Exam History.' : 'Result saved to Exam History.',
     saveFailed: spanish ? 'No se pudo guardar el resultado.' : 'The result could not be saved.'
   };
+  const prompts = {
+    families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
+    nametraps: spanish ? '¿Qué trampa de nombre se identifica con estas diferencias?' : 'Which name-trap entry is identified by these distinctions?',
+    herbparts: spanish ? '¿Qué familia botánica corresponde a estas funciones y partes medicinales?' : 'Which botanical family matches these functions and medicinal-part relationships?',
+    formulanames: spanish ? '¿Qué distinción entre nombres de fórmulas corresponde a estas pistas?' : 'Which formula-name distinction matches these clues?',
+    misleading: spanish ? '¿Qué fórmula con nombre engañoso corresponde a estas acciones reales?' : 'Which misleadingly named formula matches these actual actions?',
+    advanced: spanish ? '¿Qué distinción avanzada de nombres corresponde a estas pistas?' : 'Which advanced name distinction matches these clues?',
+    supplements: spanish ? '¿Qué familia botánica suplementaria corresponde a estas funciones?' : 'Which supplemental botanical family matches these functions?',
+    secondary: spanish ? '¿Qué hierba o acción secundaria corresponde a estas pistas clínicas?' : 'Which herb or secondary action matches these clinical clues?',
+    pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
+    patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
+    maciocia: spanish ? '¿Qué comparación de patrones de Maciocia corresponde a estas claves?' : 'Which Maciocia pattern comparison matches these key findings?',
+    safety: spanish ? '¿Qué tema de seguridad corresponde a esta precaución clínica?' : 'Which safety topic matches this clinical precaution?',
+    composition: spanish ? '¿Qué principio de composición de fórmulas corresponde a esta descripción?' : 'Which formula-composition principle matches this description?',
+    incompat: spanish ? '¿Qué incompatibilidad o interacción herbal corresponde a esta advertencia?' : 'Which herbal incompatibility or interaction matches this warning?',
+    combinations: spanish ? '¿Qué combinación herbal corresponde a estas funciones clínicas?' : 'Which herbal combination matches these clinical functions?'
+  };
+  const clueStopwords = new Set('the a an and or of to for with without one two three four job jobs part parts family families formula formulas pattern patterns herb herbs root roots leaf leaves seed seeds fruit fruits blood heat cold warm qi yin yang shen damp wind phlegm fire tonic tonics comparison comparisons trap traps advanced supplemental secondary action actions group groups genus topic topics el la los las un una uno dos tres cuatro de del y o para con sin familia familias formula formulas patron patrones hierba hierbas raiz raices hoja hojas semilla semillas fruto frutos sangre calor frio tibio viento flema fuego tonico tonicos comparacion comparaciones trampa trampas accion acciones grupo grupos genero tema temas'.split(' '));
+  const semanticStopwords = new Set('the a an and or of to for with without from into in on at by is are was were be this that these those which what matches match best corresponds corresponding description topic entry rule el la los las un una unos unas y o de del al para por con sin desde en es son esta este estas estos que cual cuales corresponde descripcion tema regla'.split(' '));
   const el = {
     list: document.querySelector('[data-misc-list]'),
     setup: document.querySelector('[data-misc-setup]'),
@@ -62,7 +81,46 @@
   function shuffle(values){const result=values.slice();for(let i=result.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const value=result[i];result[i]=result[j];result[j]=value;}return result;}
   function clean(value){return String(value||'').replace(/\s+/g,' ').trim();}
   function unique(values){return Array.from(new Set(values.map(clean).filter(Boolean)));}
-  function choices(correct,pool){return shuffle([correct].concat(shuffle(unique(pool).filter(value=>value!==correct)).slice(0,3)));}
+  function fold(value){return clean(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase().replace(/[^a-z0-9\u3400-\u9fff]+/g,' ').trim();}
+  function escapeRegex(value){return String(value).replace(/[.*+?^$()|[\]{}\\]/g,'\\$&');}
+  function titleClues(title){
+    const chunks=clean(title).split(/\s+[—–]\s+|[,;/]|\s+(?:and|y)\s+/i).map(value=>clean(value.replace(/[\u3400-\u9fff]+/g,' '))).filter(Boolean);
+    const words=(clean(title).match(/[A-Za-zÀ-ÿĀ-ž0-9'’]+/g)||[]).map(clean);
+    const clues=[];
+    chunks.forEach(chunk=>{
+      const meaningful=(chunk.match(/[A-Za-zÀ-ÿĀ-ž0-9'’]+/g)||[]).filter(word=>!clueStopwords.has(fold(word)));
+      if(meaningful.some(word=>fold(word).length>=3))clues.push(chunk);
+    });
+    words.forEach(word=>{const normalized=fold(word);if(normalized.length>=4&&!clueStopwords.has(normalized))clues.push(word);});
+    return unique(clues).sort((a,b)=>b.length-a.length);
+  }
+  function redactAnswerClues(detail,title){
+    let result=clean(detail);
+    titleClues(title).forEach(clue=>{result=result.replace(new RegExp(escapeRegex(clue),'giu'),'');});
+    return clean(result
+      .replace(/\b(?:the|a|an)\s+(?=(?:genus|family|group)\b)/gi,'The ')
+      .replace(/\b(?:el|la|un|una)\s+(?=(?:género|familia|grupo)\b)/gi,'La ')
+      .replace(/\s+([,.;:])/g,'$1')
+      .replace(/([,;:])(?:\s*[,;:])+/g,'$1')
+      .replace(/(^|[.!?]\s+)[,;:\-–—]+\s*/g,'$1')
+      .replace(/\s*•\s*(?=•|$)/g,'')
+      .replace(/\(\s*\)/g,''));
+  }
+  function semanticTokens(value){
+    return new Set(fold(value).split(' ').filter(token=>token.length>=3&&!semanticStopwords.has(token)));
+  }
+  function similarity(left,right){
+    const leftTokens=semanticTokens(left),rightTokens=semanticTokens(right);
+    let shared=0;leftTokens.forEach(token=>{if(rightTokens.has(token))shared+=1;});
+    return shared/Math.sqrt(Math.max(1,leftTokens.size*rightTokens.size));
+  }
+  function choices(correct,pool){
+    const ranked=pool.filter(item=>item!==correct).map(item=>({item,score:similarity(correct.title+' '+correct.detail,item.title+' '+item.detail)})).sort((a,b)=>b.score-a.score);
+    const close=ranked.filter(candidate=>candidate.score>0).slice(0,8);
+    const rest=ranked.filter(candidate=>!close.includes(candidate));
+    const distractors=shuffle(close).concat(shuffle(rest)).slice(0,3).map(candidate=>candidate.item.title);
+    return shuffle([correct.title].concat(distractors));
+  }
   function attemptUid(){if(globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function')return globalThis.crypto.randomUUID();return 'misc-'+Date.now()+'-'+Math.random().toString(36).slice(2);}
   function translatedPath(resource){
     if(resource.dynamic){
@@ -71,6 +129,36 @@
       return url.toString();
     }
     return spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
+  }
+  function readableParts(node,title){
+    const parts=[];
+    const add=value=>{
+      const text=clean(value).replace(/^(?:Rule|Clinical focus|Key distinction|Regla|Enfoque clínico|Diferencia clave)\s*:\s*/i,'');
+      if(text.length>=18&&text.length<=360&&fold(text)!==fold(title))parts.push(text);
+    };
+    Array.from(node.querySelectorAll('.comparison-card__category')).forEach(element=>add(element.textContent));
+    Array.from(node.querySelectorAll('p')).slice(0,3).forEach(element=>add(element.textContent));
+    Array.from(node.querySelectorAll('dl')).slice(0,1).forEach(list=>{
+      const terms=Array.from(list.querySelectorAll('dt'));
+      terms.slice(0,3).forEach(term=>{const definition=term.nextElementSibling;if(definition)add(term.textContent+': '+definition.textContent);});
+    });
+    if(parts.length<1){
+      Array.from(node.querySelectorAll('tr')).slice(0,3).forEach(row=>{
+        const cells=Array.from(row.querySelectorAll('th,td')).map(cell=>clean(cell.textContent)).filter(Boolean);
+        if(cells.length>1)add(cells.join(': '));
+      });
+    }
+    const selected=[];let length=0;
+    unique(parts).some(part=>{if(selected.length>=2||length+part.length>520)return true;selected.push(part);length+=part.length;return false;});
+    return selected.join(' • ');
+  }
+  function questionContext(item){
+    const context=redactAnswerClues(item.detail,item.title);
+    const tokens=semanticTokens(context);
+    if(context.length<35||tokens.size<6)return '';
+    const normalized=fold(context);
+    const leaks=titleClues(item.title).some(clue=>{const value=fold(clue);return value.length>=4&&normalized.includes(value);});
+    return leaks?'':context;
   }
   function extractItems(html){
     const doc=new DOMParser().parseFromString(html,'text/html');
@@ -82,18 +170,12 @@
       const heading=node.querySelector('h3,h2');
       const title=clean(heading&&heading.textContent);
       if(!title||title.length>160)return;
-      const preferred=node.querySelector('p,.comparison-card__category,table,dl');
-      let detail=clean(preferred&&preferred.textContent);
-      if(!detail){
-        const clone=node.cloneNode(true);
-        clone.querySelectorAll('a,button,script,style').forEach(child=>child.remove());
-        detail=clean(clone.textContent).replace(title,'').trim();
-      }
-      if(detail.length<18)return;
-      items.push({title,detail:detail.slice(0,420)});
+      const detail=readableParts(node,title);
+      if(detail.length<35)return;
+      items.push({title,detail});
     });
     const seen=new Set();
-    return items.filter(item=>{const key=item.title.toLocaleLowerCase();if(seen.has(key))return false;seen.add(key);return true;});
+    return items.filter(item=>{const key=fold(item.title);if(seen.has(key))return false;seen.add(key);return true;});
   }
   function renderResources(){
     resources.forEach(resource=>{
@@ -123,8 +205,10 @@
     }catch(_){el.status.textContent=copy.failed;el.status.classList.add('is-error');}
   }
   function buildQuestions(){
-    const titles=state.items.map(item=>item.title);
-    return shuffle(state.items.map(item=>({prompt:copy.prompt,context:item.detail,correct:item.title,options:choices(item.title,titles)})));
+    const valid=state.items.map(item=>Object.assign({},item,{context:questionContext(item)})).filter(item=>item.context);
+    if(valid.length<4)return [];
+    const prompt=prompts[state.resource.key]||copy.prompt;
+    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid)})));
   }
   function renderQuestion(){
     const question=state.questions[state.index];state.answered=false;
@@ -149,6 +233,7 @@
   }
   function startQuiz(){
     state.questions=buildQuestions().slice(0,Math.min(Number(el.size.value),state.items.length,99));
+    if(state.questions.length<4){el.status.textContent=copy.failed;el.status.classList.add('is-error');el.setup.hidden=false;el.work.hidden=true;return;}
     state.index=0;state.score=0;state.startedAt=Date.now();state.attemptUid=attemptUid();
     el.setup.hidden=true;el.results.hidden=true;el.work.hidden=false;renderQuestion();el.work.scrollIntoView({behavior:'smooth',block:'start'});
   }
