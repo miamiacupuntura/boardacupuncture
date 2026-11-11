@@ -80,7 +80,11 @@ MISC_ES_HTML_TEMP="$(mktemp)"
 MISC_JS_TEMP="$(mktemp)"
 SUPPLEMENTAL_FAMILIES_TEMP="$(mktemp)"
 SUPPLEMENTAL_FAMILIES_ES_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP" "$DUI_YAO_HTML_TEMP" "$DUI_YAO_ES_HTML_TEMP" "$DUI_YAO_JS_TEMP" "$MISC_HTML_TEMP" "$MISC_ES_HTML_TEMP" "$MISC_JS_TEMP" "$SUPPLEMENTAL_FAMILIES_TEMP" "$SUPPLEMENTAL_FAMILIES_ES_TEMP"' EXIT
+SECONDARY_ACTIONS_TEMP="$(mktemp)"
+SECONDARY_ACTIONS_ES_TEMP="$(mktemp)"
+SAFETY_TEMP="$(mktemp)"
+SAFETY_ES_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP" "$DUI_YAO_HTML_TEMP" "$DUI_YAO_ES_HTML_TEMP" "$DUI_YAO_JS_TEMP" "$MISC_HTML_TEMP" "$MISC_ES_HTML_TEMP" "$MISC_JS_TEMP" "$SUPPLEMENTAL_FAMILIES_TEMP" "$SUPPLEMENTAL_FAMILIES_ES_TEMP" "$SECONDARY_ACTIONS_TEMP" "$SECONDARY_ACTIONS_ES_TEMP" "$SAFETY_TEMP" "$SAFETY_ES_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
@@ -104,6 +108,10 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.js" -o "$MISC_JS_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/supplemental-herb-families.html" -o "$SUPPLEMENTAL_FAMILIES_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/supplemental-herb-families-es.html" -o "$SUPPLEMENTAL_FAMILIES_ES_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/secondary-actions.html" -o "$SECONDARY_ACTIONS_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/secondary-actions-es.html" -o "$SECONDARY_ACTIONS_ES_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/safety.html" -o "$SAFETY_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/safety-es.html" -o "$SAFETY_ES_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
@@ -126,8 +134,8 @@ grep -Fq "const resources = [" "$MISC_JS_TEMP"
 grep -Fq "extractItems" "$MISC_JS_TEMP"
 grep -Fq "'bqm_'+state.resource.key" "$MISC_JS_TEMP"
 grep -Fq "/blocks/menu/herbology-exam-history.php" "$MISC_JS_TEMP"
-grep -Fq "miscellaneous-practice.js?v=20261111-7" "$MISC_HTML_TEMP"
-grep -Fq "miscellaneous-practice.js?v=20261111-7" "$MISC_ES_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-8" "$MISC_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-8" "$MISC_ES_HTML_TEMP"
 grep -Fq "data-misc-work-title" "$MISC_HTML_TEMP"
 grep -Fq "data-misc-work-title" "$MISC_ES_HTML_TEMP"
 grep -Fq "workTitle: document.querySelector('[data-misc-work-title]')" "$MISC_JS_TEMP"
@@ -146,7 +154,15 @@ grep -Fq "Qīng Hāo (Artemisiae Annuae Herba) clears Deficiency Heat" "$SUPPLEM
 grep -Fq "Qīng Hāo (Artemisiae Annuae Herba) aclara Calor por Deficiencia" "$SUPPLEMENTAL_FAMILIES_ES_TEMP"
 grep -Fq "Fú Líng Pí (Poriae Cutis)" "$SUPPLEMENTAL_FAMILIES_TEMP"
 grep -Fq "Kǔ Liàn Pí (Meliae Cortex)" "$SUPPLEMENTAL_FAMILIES_TEMP"
-grep -Fq "url.searchParams.set('v','20261111-7')" "$MISC_JS_TEMP"
+grep -Fq "url.searchParams.set('v','20261111-8')" "$MISC_JS_TEMP"
+grep -Fq "function isInstructionalText" "$MISC_JS_TEMP"
+grep -Fq "Which secondary action is shared by these medicinals?" "$MISC_JS_TEMP"
+[[ "$(grep -Fo 'data-quiz-clue=' "$SECONDARY_ACTIONS_TEMP" | wc -l)" -eq 59 ]]
+[[ "$(grep -Fo 'data-quiz-clue=' "$SECONDARY_ACTIONS_ES_TEMP" | wc -l)" -eq 59 ]]
+[[ "$(grep -Fo 'data-quiz-clue=' "$SAFETY_TEMP" | wc -l)" -eq 12 ]]
+[[ "$(grep -Fo 'data-quiz-clue=' "$SAFETY_ES_TEMP" | wc -l)" -eq 12 ]]
+grep -Fq "Ma Huang (Ephedrae Herba) may raise blood pressure" "$SAFETY_TEMP"
+grep -Fq "Huai Niu Xi (Achyranthis Bidentatae Radix)" "$SECONDARY_ACTIONS_TEMP"
 grep -Fq "Supplemental resource quizzes" "$LIBRARY_TEMP"
 if grep -Fq "Formula Modifications" "$MISC_JS_TEMP" || grep -Fq "bqm_modifications" "$EXAM_HISTORY_TEMP"; then
     echo "ERROR: Formula Modifications todavía aparece duplicado dentro de Miscellaneous Quiz." >&2
@@ -1189,7 +1205,7 @@ mkdir -p "$BACKUP_DIR/study-guide/comparisons"
 for static_file in formula-practice.html formula-practice-es.html formula-practice.js single-herb-practice.html single-herb-practice-es.html single-herb-practice.js; do
     cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
 done
-for static_file in dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js supplemental-herb-families.html supplemental-herb-families-es.html; do
+for static_file in dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js supplemental-herb-families.html supplemental-herb-families-es.html secondary-actions.html secondary-actions-es.html safety.html safety-es.html; do
     if [[ -f "$STUDY_NOTE_DIR/$static_file" ]]; then
         cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
     fi
@@ -1253,6 +1269,10 @@ install_static_file "$MISC_ES_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice
 install_static_file "$MISC_JS_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.js"
 install_static_file "$SUPPLEMENTAL_FAMILIES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families.html"
 install_static_file "$SUPPLEMENTAL_FAMILIES_ES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families-es.html"
+install_static_file "$SECONDARY_ACTIONS_TEMP" "$STUDY_NOTE_DIR/secondary-actions.html"
+install_static_file "$SECONDARY_ACTIONS_ES_TEMP" "$STUDY_NOTE_DIR/secondary-actions-es.html"
+install_static_file "$SAFETY_TEMP" "$STUDY_NOTE_DIR/safety.html"
+install_static_file "$SAFETY_ES_TEMP" "$STUDY_NOTE_DIR/safety-es.html"
 
 # Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
 cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
@@ -1293,6 +1313,10 @@ cmp -s "$MISC_ES_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice-es.html"
 cmp -s "$MISC_JS_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.js"
 cmp -s "$SUPPLEMENTAL_FAMILIES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families.html"
 cmp -s "$SUPPLEMENTAL_FAMILIES_ES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families-es.html"
+cmp -s "$SECONDARY_ACTIONS_TEMP" "$STUDY_NOTE_DIR/secondary-actions.html"
+cmp -s "$SECONDARY_ACTIONS_ES_TEMP" "$STUDY_NOTE_DIR/secondary-actions-es.html"
+cmp -s "$SAFETY_TEMP" "$STUDY_NOTE_DIR/safety.html"
+cmp -s "$SAFETY_ES_TEMP" "$STUDY_NOTE_DIR/safety-es.html"
 php -l "$EXAM_HISTORY_TARGET" >/dev/null
 php -l "$EXAM_HISTORY_ENDPOINT_TARGET" >/dev/null
 php -l "$CATEGORY_TARGET" >/dev/null
@@ -1487,6 +1511,9 @@ echo "OK: respuestas incorrectas muestran la opción elegida, la respuesta corre
 echo "OK: el quiz elimina caracteres chinos de enunciados, opciones y feedback."
 echo "OK: las familias suplementarias usan nombres medicinales completos y una instrucción directa."
 echo "OK: las quince hierbas de las seis familias suplementarias muestran su nombre farmacéutico latino."
+echo "OK: Secondary Actions pregunta por una acción compartida usando hierbas concretas y nombres farmacéuticos."
+echo "OK: Safety Library pregunta mediante escenarios de riesgo concretos y no mediante explicaciones del tópico."
+echo "OK: las explicaciones introductorias e instrucciones de estudio quedan excluidas de todos los quizzes."
 echo "OK: el hub excluye los bancos por categorías de fórmulas y hierbas."
 echo "OK: Formula Modifications fue excluido de Miscellaneous Quiz porque ya pertenece al Quiz de fórmulas por categorías."
 echo "OK: los tópicos misceláneos guardan resultados e intentos separados en Exam History."
