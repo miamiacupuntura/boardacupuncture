@@ -30,11 +30,13 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$ES_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.js" -o "$JAVASCRIPT"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-10" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-10" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-11" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-11" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
+grep -Fq "function safetyChoices" "$JAVASCRIPT"
+grep -Fq "const safetyDomains = {" "$JAVASCRIPT"
 grep -Fq "Handbook of Oriental Medicine — Caution & Contraindication, p. 373" "$JAVASCRIPT"
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
 [[ "$(grep -Fo '"esCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
@@ -125,6 +127,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-10 activo."
+echo "OK: build 20261111-11 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
+echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."
