@@ -27,6 +27,8 @@ MISC_ES="$TEMP_DIR/miscellaneous-practice-es.html"
 MISC_JS="$TEMP_DIR/miscellaneous-practice.js"
 SECONDARY_REVIEW="$TEMP_DIR/secondary-action-review.html"
 SECONDARY_REVIEW_ES="$TEMP_DIR/secondary-action-review-es.html"
+FAMILY_REVIEW="$TEMP_DIR/formula-family-review.html"
+FAMILY_REVIEW_ES="$TEMP_DIR/formula-family-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$GUIDE_PHP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips.html" -o "$EN_PAGE"
@@ -36,6 +38,8 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.js" -o "$MISC_JS"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/secondary-action-review.html" -o "$SECONDARY_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/secondary-action-review-es.html" -o "$SECONDARY_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review.html" -o "$FAMILY_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review-es.html" -o "$FAMILY_REVIEW_ES"
 
 php -l "$GUIDE_PHP" >/dev/null
 grep -Fq "Maciocia Formula Tips" "$GUIDE_PHP"
@@ -45,13 +49,17 @@ grep -Fq "Module 2 · Comparison Study Guide" "$EN_PAGE"
 grep -Fq "Módulo 2 · Guía de comparaciones" "$ES_PAGE"
 grep -Fq "167 pattern-to-answer associations" "$EN_PAGE"
 grep -Fq "167 asociaciones de patrón y respuesta" "$ES_PAGE"
-grep -Fq "miscellaneous-practice.js?v=20261111-15" "$MISC_EN"
-grep -Fq "miscellaneous-practice.js?v=20261111-15" "$MISC_ES"
+grep -Fq "miscellaneous-practice.js?v=20261111-16" "$MISC_EN"
+grep -Fq "miscellaneous-practice.js?v=20261111-16" "$MISC_ES"
 grep -Fq "maciociaformulas" "$MISC_JS"
 grep -Fq "function secondaryReviewPanel" "$MISC_JS"
 grep -Fq "Review the four options" "$MISC_JS"
 grep -Fq "Back to quiz" "$SECONDARY_REVIEW"
 grep -Fq "Regresar al quiz" "$SECONDARY_REVIEW_ES"
+grep -Fq "function familyReviewPanel" "$MISC_JS"
+grep -Fq "Review the four families" "$MISC_JS"
+grep -Fq "Back to quiz" "$FAMILY_REVIEW"
+grep -Fq "Regresar al quiz" "$FAMILY_REVIEW_ES"
 grep -Fq "Which guideline formula or formula set matches this Maciocia pattern?" "$MISC_JS"
 [[ "$(grep -Fo '"answer":' "$EN_PAGE" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$ES_PAGE" | wc -l)" -eq 167 ]]
@@ -109,7 +117,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     target_backup="$BACKUP_DIR/study-guide/comparisons/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$target_backup"
-    for file in maciocia-formula-tips.html maciocia-formula-tips-es.html miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js secondary-action-review.html secondary-action-review-es.html; do
+    for file in maciocia-formula-tips.html maciocia-formula-tips-es.html miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html; do
         [[ -f "$target_dir/$file" ]] && cp -a "$target_dir/$file" "$target_backup/$file"
     done
     install_preserving "$EN_PAGE" "$target_dir/maciocia-formula-tips.html" "$reference"
@@ -119,6 +127,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_preserving "$MISC_JS" "$target_dir/miscellaneous-practice.js" "$reference"
     install_preserving "$SECONDARY_REVIEW" "$target_dir/secondary-action-review.html" "$reference"
     install_preserving "$SECONDARY_REVIEW_ES" "$target_dir/secondary-action-review-es.html" "$reference"
+    install_preserving "$FAMILY_REVIEW" "$target_dir/formula-family-review.html" "$reference"
+    install_preserving "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html" "$reference"
     cmp -s "$EN_PAGE" "$target_dir/maciocia-formula-tips.html"
     cmp -s "$ES_PAGE" "$target_dir/maciocia-formula-tips-es.html"
     cmp -s "$MISC_EN" "$target_dir/miscellaneous-practice.html"
@@ -126,6 +136,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$MISC_JS" "$target_dir/miscellaneous-practice.js"
     cmp -s "$SECONDARY_REVIEW" "$target_dir/secondary-action-review.html"
     cmp -s "$SECONDARY_REVIEW_ES" "$target_dir/secondary-action-review-es.html"
+    cmp -s "$FAMILY_REVIEW" "$target_dir/formula-family-review.html"
+    cmp -s "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html"
 done
 cmp -s "$GUIDE_PHP" "$GUIDE_TARGET"
 

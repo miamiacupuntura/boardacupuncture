@@ -30,6 +30,8 @@ MACIOCIA_FORMULA_TIPS="$TEMP_DIR/maciocia-formula-tips.html"
 MACIOCIA_FORMULA_TIPS_ES="$TEMP_DIR/maciocia-formula-tips-es.html"
 SECONDARY_REVIEW="$TEMP_DIR/secondary-action-review.html"
 SECONDARY_REVIEW_ES="$TEMP_DIR/secondary-action-review-es.html"
+FAMILY_REVIEW="$TEMP_DIR/formula-family-review.html"
+FAMILY_REVIEW_ES="$TEMP_DIR/formula-family-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$EN_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$ES_HTML"
@@ -39,9 +41,11 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips.
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips-es.html" -o "$MACIOCIA_FORMULA_TIPS_ES"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/secondary-action-review.html" -o "$SECONDARY_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/secondary-action-review-es.html" -o "$SECONDARY_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review.html" -o "$FAMILY_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review-es.html" -o "$FAMILY_REVIEW_ES"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-15" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-15" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-16" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-16" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
@@ -62,6 +66,10 @@ grep -Fq "function secondaryReviewPanel" "$JAVASCRIPT"
 grep -Fq "Review the four options" "$JAVASCRIPT"
 grep -Fq "Back to quiz" "$SECONDARY_REVIEW"
 grep -Fq "Regresar al quiz" "$SECONDARY_REVIEW_ES"
+grep -Fq "function familyReviewPanel" "$JAVASCRIPT"
+grep -Fq "Review the four families" "$JAVASCRIPT"
+grep -Fq "Back to quiz" "$FAMILY_REVIEW"
+grep -Fq "Regresar al quiz" "$FAMILY_REVIEW_ES"
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS_ES" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
@@ -122,7 +130,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     backup_dir="$BACKUP_ROOT/miscellaneous-quiz-$TIMESTAMP/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$backup_dir"
-    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html; do
+    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html; do
         if [[ -f "$target_dir/$file" ]]; then
             cp -a "$target_dir/$file" "$backup_dir/$file"
         fi
@@ -136,6 +144,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_one "$MACIOCIA_FORMULA_TIPS_ES" "$target_dir/maciocia-formula-tips-es.html" "$reference"
     install_one "$SECONDARY_REVIEW" "$target_dir/secondary-action-review.html" "$reference"
     install_one "$SECONDARY_REVIEW_ES" "$target_dir/secondary-action-review-es.html" "$reference"
+    install_one "$FAMILY_REVIEW" "$target_dir/formula-family-review.html" "$reference"
+    install_one "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html" "$reference"
 
     cmp -s "$EN_HTML" "$target_dir/miscellaneous-practice.html"
     cmp -s "$ES_HTML" "$target_dir/miscellaneous-practice-es.html"
@@ -145,6 +155,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$MACIOCIA_FORMULA_TIPS_ES" "$target_dir/maciocia-formula-tips-es.html"
     cmp -s "$SECONDARY_REVIEW" "$target_dir/secondary-action-review.html"
     cmp -s "$SECONDARY_REVIEW_ES" "$target_dir/secondary-action-review-es.html"
+    cmp -s "$FAMILY_REVIEW" "$target_dir/formula-family-review.html"
+    cmp -s "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html"
     grep -Fq "Which precaution applies to this medicinal?" "$target_dir/miscellaneous-practice.js"
     [[ "$(grep -Fo '"enCaution":' "$target_dir/miscellaneous-practice.js" | wc -l)" -eq 27 ]]
     if grep -Fq "Which safety topic matches this clinical precaution?" "$target_dir/miscellaneous-practice.js"; then
@@ -163,10 +175,11 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-15 activo."
+echo "OK: build 20261111-16 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
 echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."
 echo "OK: feedback tipo mock explica las cuatro opciones y Jue Ming Zi enlaza su tarjeta con regreso al quiz."
 echo "OK: Maciocia Formula Tips activo con 72 fórmulas del guideline y 167 preguntas."
 echo "OK: Secondary Actions usa feedback breve y tarjetas con botón de regreso al quiz."
+echo "OK: Formula Families usa feedback breve y cuatro tarjetas con regreso al quiz."

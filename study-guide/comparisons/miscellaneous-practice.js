@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-15';
+  const quizBuild = '20261111-16';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -59,7 +59,10 @@
     differentAction: spanish ? 'es un grupo de acción secundaria diferente. Los medicamentos de esta pregunta comparten' : 'is a different secondary-action group. The medicinals in this question share',
     reviewOptions: spanish ? 'Repasar las cuatro opciones' : 'Review the four options',
     correctBadge: spanish ? 'Correcta' : 'Correct',
-    openAction: spanish ? 'Ver hierbas →' : 'Review herbs →'
+    openAction: spanish ? 'Ver hierbas →' : 'Review herbs →',
+    differentFamily: spanish ? 'es una familia diferente. Las pistas corresponden a' : 'is a different formula family. The clues match',
+    reviewFamilies: spanish ? 'Repasar las cuatro familias' : 'Review the four families',
+    openFamily: spanish ? 'Ver familia →' : 'Review family →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -175,7 +178,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-15');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-16');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -446,6 +449,31 @@
     });
     panel.append(heading,reason,reviewTitle,links);return panel;
   }
+  function familyReviewUrl(item){
+    const review=new URL(spanish?'formula-family-review-es.html':'formula-family-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function familyReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewFamilies:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentFamily+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewFamilies;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=familyReviewUrl(item);
+      link.target='formulaFamilyReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openFamily;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -456,7 +484,7 @@
     if(!correct)feedbackLine(el.feedback,copy.chosen,value,'misc-practice__feedback-choice');
     feedbackLine(el.feedback,copy.answer,question.correct,'misc-practice__feedback-answer');
     if(state.resource&&state.resource.key==='families'){
-      const panel=teachingPanel();el.feedback.append(panel);void enrichFamilyFeedback(panel,question.item,questionIndex);
+      el.feedback.append(familyReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
