@@ -122,8 +122,13 @@ grep -Fq "const resources = [" "$MISC_JS_TEMP"
 grep -Fq "extractItems" "$MISC_JS_TEMP"
 grep -Fq "'bqm_'+state.resource.key" "$MISC_JS_TEMP"
 grep -Fq "/blocks/menu/herbology-exam-history.php" "$MISC_JS_TEMP"
-grep -Fq "miscellaneous-practice.js?v=20261111-1" "$MISC_HTML_TEMP"
-grep -Fq "miscellaneous-practice.js?v=20261111-1" "$MISC_ES_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-2" "$MISC_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-2" "$MISC_ES_HTML_TEMP"
+grep -Fq "Supplemental resource quizzes" "$LIBRARY_TEMP"
+if grep -Fq "Formula Modifications" "$MISC_JS_TEMP" || grep -Fq "bqm_modifications" "$EXAM_HISTORY_TEMP"; then
+    echo "ERROR: Formula Modifications todavía aparece duplicado dentro de Miscellaneous Quiz." >&2
+    exit 1
+fi
 grep -Fq "bqd_duiyao" "$EXAM_HISTORY_TEMP"
 grep -Fq "dui-yao-practice-es.html" "$EXAM_HISTORY_TEMP"
 grep -Fq "dui-yao-practice-es.html" "$LIBRARY_TEMP"
@@ -1448,7 +1453,7 @@ echo "OK: Dui Yao combina preguntas de acción, acción inversa, categoría, fó
 echo "OK: los distractores priorizan parejas y respuestas clínicamente cercanas."
 echo "OK: Miscellaneous Quiz abre un hub con un Quiz multiple choice independiente por recurso."
 echo "OK: el hub excluye los bancos por categorías de fórmulas y hierbas."
-echo "OK: Formula Modifications conserva su banco especializado y los demás recursos generan preguntas desde sus tarjetas."
+echo "OK: Formula Modifications fue excluido de Miscellaneous Quiz porque ya pertenece al Quiz de fórmulas por categorías."
 echo "OK: los tópicos misceláneos guardan resultados e intentos separados en Exam History."
 echo "OK: Dui Yao Quiz y Miscellaneous Quiz aparecen en el módulo Quiz con rutas independientes."
 echo "OK: cada botón visible abre un solo bloque."
