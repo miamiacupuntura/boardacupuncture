@@ -6,6 +6,7 @@ trap 'status=$?; echo "ERROR: despliegue detenido en la línea $LINENO (código 
 REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
+STUDY_NOTE_DIR="${STUDY_NOTE_DIR:-}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 BACKUP_DIR="$BACKUP_ROOT/board-single-block-routes-$(date +%Y%m%d-%H%M%S)"
 LIBRARY_TARGET="$MOODLE_ROOT/blocks/myprogress/study-guide.php"
@@ -14,6 +15,7 @@ MENU_TARGET="$MOODLE_ROOT/blocks/menu/block_menu.php"
 STYLES_TARGET="$MOODLE_ROOT/blocks/menu/styles.css"
 CATEGORY_TARGET="$MOODLE_ROOT/blocks/myprogress/herbs-category-comparison.php"
 EXAM_HISTORY_TARGET="$MOODLE_ROOT/blocks/menu/exam-history.php"
+EXAM_HISTORY_ENDPOINT_TARGET="$MOODLE_ROOT/blocks/menu/herbology-exam-history.php"
 CLINICAL_JS_TARGET="$MOODLE_ROOT/blocks/menu/herbology-clinical-cases.js"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -26,9 +28,32 @@ for command in curl php install grep sed stat cp cmp mkdir mktemp rm sha256sum w
         exit 1
     }
 done
-for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET" "$STYLES_TARGET" "$CLINICAL_JS_TARGET"; do
+for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET" "$STYLES_TARGET" "$CLINICAL_JS_TARGET" "$EXAM_HISTORY_ENDPOINT_TARGET"; do
     [[ -f "$target" ]] || {
         echo "ERROR: no se encontró $target" >&2
+        exit 1
+    }
+done
+if [[ -z "$STUDY_NOTE_DIR" ]]; then
+    for candidate in \
+        "/var/www/acupuncturetests-study-guide/current/comparisons" \
+        "$MOODLE_ROOT/study-guide/comparisons" \
+        "$(dirname "$MOODLE_ROOT")/study-guide/comparisons" \
+        "/var/www/html/study-guide/comparisons"; do
+        if [[ -d "$candidate" && -f "$candidate/formula-practice.html" ]]; then
+            STUDY_NOTE_DIR="$candidate"
+            break
+        fi
+    done
+fi
+if [[ -z "$STUDY_NOTE_DIR" || ! -d "$STUDY_NOTE_DIR" ]]; then
+    echo "ERROR: no se encontró el directorio activo de Study Notes. Indica STUDY_NOTE_DIR=/ruta/comparisons" >&2
+    exit 1
+fi
+for static_file in formula-practice.html formula-practice-es.html formula-practice.js \
+        single-herb-practice.html single-herb-practice-es.html single-herb-practice.js; do
+    [[ -f "$STUDY_NOTE_DIR/$static_file" ]] || {
+        echo "ERROR: no se encontró $STUDY_NOTE_DIR/$static_file" >&2
         exit 1
     }
 done
@@ -39,8 +64,15 @@ MENU_TEMP="$(mktemp)"
 STYLES_TEMP="$(mktemp)"
 CATEGORY_TEMP="$(mktemp)"
 EXAM_HISTORY_TEMP="$(mktemp)"
+EXAM_HISTORY_ENDPOINT_TEMP="$(mktemp)"
 CLINICAL_JS_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$CLINICAL_JS_TEMP"' EXIT
+FORMULA_HTML_TEMP="$(mktemp)"
+FORMULA_ES_HTML_TEMP="$(mktemp)"
+FORMULA_JS_TEMP="$(mktemp)"
+SINGLE_HERB_HTML_TEMP="$(mktemp)"
+SINGLE_HERB_ES_HTML_TEMP="$(mktemp)"
+SINGLE_HERB_JS_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
@@ -48,12 +80,37 @@ curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/block_menu.php" -o "$MENU_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/styles.css" -o "$STYLES_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/herbs-category-comparison.php" -o "$CATEGORY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/exam-history.php" -o "$EXAM_HISTORY_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-exam-history.php" -o "$EXAM_HISTORY_ENDPOINT_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-clinical-cases.js" -o "$CLINICAL_JS_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-practice.html" -o "$FORMULA_HTML_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-practice-es.html" -o "$FORMULA_ES_HTML_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-practice.js" -o "$FORMULA_JS_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/single-herb-practice.html" -o "$SINGLE_HERB_HTML_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/single-herb-practice-es.html" -o "$SINGLE_HERB_ES_HTML_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/single-herb-practice.js" -o "$SINGLE_HERB_JS_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
 php -l "$CATEGORY_TEMP" >/dev/null
 php -l "$EXAM_HISTORY_TEMP" >/dev/null
+php -l "$EXAM_HISTORY_ENDPOINT_TEMP" >/dev/null
+
+grep -Fq "boardquiz_h_" "$EXAM_HISTORY_TEMP"
+grep -Fq "boardquiz_f_" "$EXAM_HISTORY_TEMP"
+grep -Fq "historytype" "$EXAM_HISTORY_TEMP"
+grep -Fq "sesskey" "$EXAM_HISTORY_TEMP"
+grep -Fq "\$boardquizcounts" "$EXAM_HISTORY_TEMP"
+grep -Fq "Board Level Quiz" "$EXAM_HISTORY_TEMP"
+grep -Fq "^boardquiz_[hf]_" "$EXAM_HISTORY_ENDPOINT_TEMP"
+grep -Fq "\$total < 100" "$EXAM_HISTORY_ENDPOINT_TEMP"
+for quiz_js in "$FORMULA_JS_TEMP" "$SINGLE_HERB_JS_TEMP"; do
+    grep -Fq "centralHistorySesskey" "$quiz_js"
+    grep -Fq "saveCentralAttempt" "$quiz_js"
+    grep -Fq "/blocks/menu/herbology-exam-history.php" "$quiz_js"
+done
+for quiz_html in "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP"; do
+    grep -Fq "20261111-1" "$quiz_html"
+done
 
 grep -Fq "Exam History" "$EXAM_HISTORY_TEMP"
 grep -Fq "Historial de exámenes" "$EXAM_HISTORY_TEMP"
@@ -1056,6 +1113,11 @@ fi
 if [[ -f "$EXAM_HISTORY_TARGET" ]]; then
     cp -a "$EXAM_HISTORY_TARGET" "$BACKUP_DIR/blocks/menu/exam-history.php"
 fi
+cp -a "$EXAM_HISTORY_ENDPOINT_TARGET" "$BACKUP_DIR/blocks/menu/herbology-exam-history.php"
+mkdir -p "$BACKUP_DIR/study-guide/comparisons"
+for static_file in formula-practice.html formula-practice-es.html formula-practice.js single-herb-practice.html single-herb-practice-es.html single-herb-practice.js; do
+    cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
+done
 
 install_preserving_metadata() {
     local source_file="$1"
@@ -1088,6 +1150,13 @@ else
     install -o "${exam_history_owner_group%:*}" -g "${exam_history_owner_group#*:}" -m "$exam_history_mode" \
         "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_TARGET"
 fi
+install_preserving_metadata "$EXAM_HISTORY_ENDPOINT_TEMP" "$EXAM_HISTORY_ENDPOINT_TARGET"
+install_preserving_metadata "$FORMULA_HTML_TEMP" "$STUDY_NOTE_DIR/formula-practice.html"
+install_preserving_metadata "$FORMULA_ES_HTML_TEMP" "$STUDY_NOTE_DIR/formula-practice-es.html"
+install_preserving_metadata "$FORMULA_JS_TEMP" "$STUDY_NOTE_DIR/formula-practice.js"
+install_preserving_metadata "$SINGLE_HERB_HTML_TEMP" "$STUDY_NOTE_DIR/single-herb-practice.html"
+install_preserving_metadata "$SINGLE_HERB_ES_HTML_TEMP" "$STUDY_NOTE_DIR/single-herb-practice-es.html"
+install_preserving_metadata "$SINGLE_HERB_JS_TEMP" "$STUDY_NOTE_DIR/single-herb-practice.js"
 
 # Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
 cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
@@ -1110,7 +1179,18 @@ cmp -s "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_TARGET" || {
     echo "ERROR: exam-history.php instalado no coincide con la revisión descargada." >&2
     exit 1
 }
+cmp -s "$EXAM_HISTORY_ENDPOINT_TEMP" "$EXAM_HISTORY_ENDPOINT_TARGET" || {
+    echo "ERROR: herbology-exam-history.php instalado no coincide con la revisión descargada." >&2
+    exit 1
+}
+cmp -s "$FORMULA_HTML_TEMP" "$STUDY_NOTE_DIR/formula-practice.html"
+cmp -s "$FORMULA_ES_HTML_TEMP" "$STUDY_NOTE_DIR/formula-practice-es.html"
+cmp -s "$FORMULA_JS_TEMP" "$STUDY_NOTE_DIR/formula-practice.js"
+cmp -s "$SINGLE_HERB_HTML_TEMP" "$STUDY_NOTE_DIR/single-herb-practice.html"
+cmp -s "$SINGLE_HERB_ES_HTML_TEMP" "$STUDY_NOTE_DIR/single-herb-practice-es.html"
+cmp -s "$SINGLE_HERB_JS_TEMP" "$STUDY_NOTE_DIR/single-herb-practice.js"
 php -l "$EXAM_HISTORY_TARGET" >/dev/null
+php -l "$EXAM_HISTORY_ENDPOINT_TARGET" >/dev/null
 php -l "$CATEGORY_TARGET" >/dev/null
 grep -Fq 'function board_herb_category_localize' "$CATEGORY_TARGET"
 grep -Fq 'return $translations[$text] ?? $text;' "$CATEGORY_TARGET"
@@ -1187,6 +1267,10 @@ echo "OK: el historial muestra fecha, examen o quiz, resultado, estado, duració
 echo "OK: el historial incluye filtros, paginación, Español/English y respaldo durante el despliegue."
 echo "OK: Exam History puede ordenarse por fecha, examen o quiz, resultado, estado y duración."
 echo "OK: Exam History muestra catálogos separados para Quiz Board Level y Exam Board Level."
+echo "OK: los quizzes Board Level guardan resultado, total y duración en el historial central."
+echo "OK: Quiz Board Level actualiza Completed y Attempts después de finalizar un quiz."
+echo "OK: los enlaces del catálogo transmiten el tipo de evaluación y la sesión autenticada."
+echo "OK: Single Herbs y Formulas conservan su progreso local y además registran el intento central."
 echo "OK: Quiz Board Level enumera los tópicos de hierbas y fórmulas con quizzes de hasta 25 preguntas."
 echo "OK: Exam Board Level contiene Linear Board Exam, Adaptive Board Exam y Clinical Cases."
 echo "OK: Linear y Adaptive muestran 100 preguntas; Clinical Cases conserva su cantidad real."
