@@ -495,9 +495,11 @@ echo $OUTPUT->header();
             <h2><?php echo s($pagetitle); ?></h2>
             <p class="herb-formula-map__lead"><?php echo s($ises ? 'Relaciona dos niveles distintos de Bensky: acciones de sustancias individuales y estrategias de prescripciones completas. Los nombres parecidos facilitan el estudio, pero no representan la misma categoría.' : 'Connect two distinct Bensky levels: actions of individual substances and strategies of complete prescriptions. Similar names aid study but do not represent the same category.'); ?></p>
         </div>
-        <nav class="herb-formula-map__actions" aria-label="<?php echo s($ises ? 'Navegación del mapa' : 'Map navigation'); ?>">
-            <a class="herb-formula-map__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-        </nav>
+        <?php if (!$fromlibrary): ?>
+            <nav class="herb-formula-map__actions" aria-label="<?php echo s($ises ? 'Navegación del mapa' : 'Map navigation'); ?>">
+                <a class="herb-formula-map__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+            </nav>
+        <?php endif; ?>
     </header>
     <?php if ($fromlibrary): ?>
         <?php echo block_myprogress_render_herbology_library_navigation($ises, $pagetitle, 'guides'); ?>
