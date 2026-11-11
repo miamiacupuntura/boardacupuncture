@@ -30,7 +30,8 @@ $total = required_param('total', PARAM_INT);
 $duration = required_param('duration', PARAM_INT);
 $language = optional_param('language', 'en', PARAM_ALPHA);
 
-$validexamtype = in_array(
+$isboardquizattempt = preg_match('/^boardquiz_[hf]_[a-z0-9]{1,16}$/', $examtype) === 1;
+$validexamtype = $isboardquizattempt || in_array(
     $examtype,
     ['linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete', 'clinicalcases', 'clinicalincomplete'],
     true
@@ -41,9 +42,11 @@ $isincompleteattempt = in_array(
     ['linearincomplete', 'adaptiveincomplete', 'clinicalincomplete'],
     true
 );
-$validtotal = $isclinicalattempt
-    ? $total >= 1 && $total <= 500
-    : $total === 100;
+$validtotal = $isboardquizattempt
+    ? $total >= 1 && $total < 100
+    : ($isclinicalattempt
+        ? $total >= 1 && $total <= 500
+        : $total === 100);
 
 if (!$validexamtype
         || !$validtotal
