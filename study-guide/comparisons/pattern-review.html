@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Pattern comparison review"><title>Pattern comparison review | AcupunctureTests</title><link rel="stylesheet" href="comparisons.css?v=20261026-2"><style>.pattern-review__loading{margin:24px 0;padding:18px;border:1px solid #bfd8d3;border-radius:12px;background:#fff}.pattern-review__footer{display:flex;justify-content:center;padding:20px}.pattern-review__footer a{display:inline-flex;padding:10px 14px;border:1px solid #afc5d4;border-radius:8px;background:#fff;color:#0f4c81;font-weight:900;text-decoration:none}</style></head><body>
+<header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="patterns.html"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>Pattern comparison review</span></a><a class="comparison-back" data-quiz-return href="patterns.html">← Back to quiz</a></div></header>
+<main class="comparison-shell" data-review-content><div class="pattern-review__loading">Loading decisive pattern signs…</div></main>
+<div class="pattern-review__footer"><a data-quiz-return href="patterns.html">← Back to quiz</a></div>
+<script>
+(() => {
+  const params=new URLSearchParams(window.location.search),chapter=params.get('chapter')||'',requested=params.get('return')||'';
+  let returnUrl='';try{const candidate=new URL(requested,window.location.href);if(candidate.origin===window.location.origin)returnUrl=candidate.toString();}catch(_){}
+  const goBack=event=>{if(window.opener&&!window.opener.closed){event.preventDefault();const fallback=returnUrl||event.currentTarget.href;window.opener.focus();setTimeout(()=>{window.location.href=fallback;},250);window.close();}};
+  document.querySelectorAll('[data-quiz-return]').forEach(link=>{if(returnUrl)link.href=returnUrl;link.addEventListener('click',goBack);});
+  const target=document.querySelector('[data-review-content]');
+  if(!/^(?:[a-z0-9-]+-vs-[a-z0-9-]+|four-bi-syndrome-patterns|wei-qi-ying-xue-levels|three-yang-stages|yin-stages-taiyin-shaoyin-jueyin|upper-middle-lower-jiao-warm-disease)(?:-es)?\.html$/.test(chapter)){target.innerHTML='<div class="pattern-review__loading">This pattern comparison could not be opened.</div>';return;}
+  fetch(chapter,{credentials:'same-origin'}).then(response=>{if(!response.ok)throw new Error('load');return response.text();}).then(source=>{
+    const doc=new DOMParser().parseFromString(source,'text/html'),article=doc.querySelector('article.study-note');
+    if(!article)throw new Error('content');
+    const navigation=article.querySelector('nav[aria-label="Chapter navigation"],nav[aria-label="Navegación de capítulos"]');if(navigation)navigation.remove();
+    target.replaceChildren(document.importNode(article,true));const heading=target.querySelector('h1');if(heading)document.title=heading.textContent+' | AcupunctureTests';
+  }).catch(()=>{target.innerHTML='<div class="pattern-review__loading">This pattern comparison could not be opened.</div>';});
+})();
+</script></body></html>

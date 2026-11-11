@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-23';
+  const quizBuild = '20261111-24';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -83,7 +83,10 @@
     openSupplementalFamily: spanish ? 'Ver medicinales y funciones →' : 'Review medicinals and functions →',
     differentPathology: spanish ? 'corresponde a otra comparación patológica. El perfil clínico descrito corresponde a' : 'belongs to a different pathology comparison. The described clinical profile matches',
     reviewPathologies: spanish ? 'Repasar las cuatro comparaciones patológicas' : 'Review the four pathology comparisons',
-    openPathology: spanish ? 'Ver claves clínicas →' : 'Review clinical distinctions →'
+    openPathology: spanish ? 'Ver claves clínicas →' : 'Review clinical distinctions →',
+    differentPattern: spanish ? 'corresponde a otra comparación de patrones. Los signos decisivos descritos corresponden a' : 'belongs to a different pattern comparison. The described decisive signs match',
+    reviewPatterns: spanish ? 'Repasar las cuatro comparaciones de patrones' : 'Review the four pattern comparisons',
+    openPattern: spanish ? 'Ver signos decisivos →' : 'Review decisive signs →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -199,7 +202,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-23');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-24');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -670,6 +673,31 @@
     });
     panel.append(links);return panel;
   }
+  function patternReviewUrl(item){
+    const review=new URL(spanish?'pattern-review-es.html':'pattern-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function patternReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewPatterns:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentPattern+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewPatterns;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=patternReviewUrl(item);
+      link.target='patternReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openPattern;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -695,6 +723,8 @@
       el.feedback.append(supplementalFamilyReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='pathology'){
       el.feedback.append(pathologyReviewPanel(question,value,correct));
+    }else if(state.resource&&state.resource.key==='patterns'){
+      el.feedback.append(patternReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
