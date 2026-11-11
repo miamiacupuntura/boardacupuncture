@@ -139,7 +139,8 @@
       if(spanish)url.searchParams.set('lang','es');
       return url.toString();
     }
-    return spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
+    const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-7');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
