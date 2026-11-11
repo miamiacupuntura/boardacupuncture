@@ -567,8 +567,11 @@ $boardduiyaoquizurl = new moodle_url(
     ]
 );
 $boardmiscellaneousquizurl = new moodle_url(
-    $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html',
-    ['category' => 'modifications', 'size' => 25, 'from' => 'library']
+    $ises ? '/study-guide/comparisons/miscellaneous-practice-es.html' : '/study-guide/comparisons/miscellaneous-practice.html',
+    [
+        'sesskey' => sesskey(),
+        'from' => 'library',
+    ]
 );
 $boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'clinical'] + $boardlanguagecontext);
 $boardclinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $boardlanguagecontext);
