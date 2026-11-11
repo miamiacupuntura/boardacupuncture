@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-26';
+  const quizBuild = '20261111-27';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -92,7 +92,10 @@
     openMaciociaPattern: spanish ? 'Ver claves de Maciocia →' : 'Review Maciocia clues →',
     differentMaciociaFormula: spanish ? 'es una asociación de fórmula diferente. El patrón y la pista del guideline corresponden a' : 'is a different formula association. The pattern and guideline clue match',
     reviewMaciociaFormulas: spanish ? 'Repasar las cuatro asociaciones de fórmulas' : 'Review the four formula associations',
-    openMaciociaFormula: spanish ? 'Ver patrón y fórmulas →' : 'Review pattern and formulas →'
+    openMaciociaFormula: spanish ? 'Ver patrón y fórmulas →' : 'Review pattern and formulas →',
+    differentComposition: spanish ? 'es otro principio de composición. La descripción corresponde a' : 'is a different composition principle. The description matches',
+    reviewComposition: spanish ? 'Repasar los cuatro principios de composición' : 'Review the four composition principles',
+    openComposition: spanish ? 'Ver principio y aplicación →' : 'Review principle and application →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -208,7 +211,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-26');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-27');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -754,6 +757,31 @@
     });
     panel.append(links);return panel;
   }
+  function compositionReviewUrl(item){
+    const review=new URL(spanish?'formula-composition-review-es.html':'formula-composition-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function compositionReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewComposition:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentComposition+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewComposition;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=compositionReviewUrl(item);
+      link.target='formulaCompositionReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openComposition;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -785,6 +813,8 @@
       el.feedback.append(maciociaPatternReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='maciociaformulas'){
       el.feedback.append(maciociaFormulaReviewPanel(question,value,correct));
+    }else if(state.resource&&state.resource.key==='composition'){
+      el.feedback.append(compositionReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
