@@ -246,6 +246,7 @@ if ($track === 'clinicalcases') {
         $clinicalexamkey = (string)$selectedclinicalexam['key'];
     }
     if ($selectedclinicalexam !== null) {
+        $SESSION->block_menu_last_clinical_caseexam = $clinicalexamkey;
         $clinicalquestions = array_values(array_filter(
             $selectedclinicalexam['questions'],
             static fn($question): bool => is_array($question)
