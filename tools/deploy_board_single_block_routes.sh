@@ -78,7 +78,9 @@ DUI_YAO_JS_TEMP="$(mktemp)"
 MISC_HTML_TEMP="$(mktemp)"
 MISC_ES_HTML_TEMP="$(mktemp)"
 MISC_JS_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP" "$DUI_YAO_HTML_TEMP" "$DUI_YAO_ES_HTML_TEMP" "$DUI_YAO_JS_TEMP" "$MISC_HTML_TEMP" "$MISC_ES_HTML_TEMP" "$MISC_JS_TEMP"' EXIT
+SUPPLEMENTAL_FAMILIES_TEMP="$(mktemp)"
+SUPPLEMENTAL_FAMILIES_ES_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP" "$DUI_YAO_HTML_TEMP" "$DUI_YAO_ES_HTML_TEMP" "$DUI_YAO_JS_TEMP" "$MISC_HTML_TEMP" "$MISC_ES_HTML_TEMP" "$MISC_JS_TEMP" "$SUPPLEMENTAL_FAMILIES_TEMP" "$SUPPLEMENTAL_FAMILIES_ES_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
@@ -100,6 +102,8 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/dui-yao-practice.js" -
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$MISC_HTML_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$MISC_ES_HTML_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.js" -o "$MISC_JS_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/supplemental-herb-families.html" -o "$SUPPLEMENTAL_FAMILIES_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/supplemental-herb-families-es.html" -o "$SUPPLEMENTAL_FAMILIES_ES_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
@@ -122,8 +126,8 @@ grep -Fq "const resources = [" "$MISC_JS_TEMP"
 grep -Fq "extractItems" "$MISC_JS_TEMP"
 grep -Fq "'bqm_'+state.resource.key" "$MISC_JS_TEMP"
 grep -Fq "/blocks/menu/herbology-exam-history.php" "$MISC_JS_TEMP"
-grep -Fq "miscellaneous-practice.js?v=20261111-5" "$MISC_HTML_TEMP"
-grep -Fq "miscellaneous-practice.js?v=20261111-5" "$MISC_ES_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-6" "$MISC_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-6" "$MISC_ES_HTML_TEMP"
 grep -Fq "data-misc-work-title" "$MISC_HTML_TEMP"
 grep -Fq "data-misc-work-title" "$MISC_ES_HTML_TEMP"
 grep -Fq "workTitle: document.querySelector('[data-misc-work-title]')" "$MISC_JS_TEMP"
@@ -136,6 +140,10 @@ grep -Fq "function familyTeaching" "$MISC_JS_TEMP"
 grep -Fq "Individual formula vs. formula family" "$MISC_JS_TEMP"
 grep -Fq "misc-practice__feedback-teaching" "$MISC_HTML_TEMP"
 grep -Fq "misc-practice__feedback-teaching" "$MISC_ES_HTML_TEMP"
+grep -Fq "function stripHan" "$MISC_JS_TEMP"
+grep -Fq "Which named study group contains the medicinals described below?" "$MISC_JS_TEMP"
+grep -Fq "Qīng Hāo clears Deficiency Heat" "$SUPPLEMENTAL_FAMILIES_TEMP"
+grep -Fq "Qīng Hāo aclara Calor por Deficiencia" "$SUPPLEMENTAL_FAMILIES_ES_TEMP"
 grep -Fq "Supplemental resource quizzes" "$LIBRARY_TEMP"
 if grep -Fq "Formula Modifications" "$MISC_JS_TEMP" || grep -Fq "bqm_modifications" "$EXAM_HISTORY_TEMP"; then
     echo "ERROR: Formula Modifications todavía aparece duplicado dentro de Miscellaneous Quiz." >&2
@@ -1178,7 +1186,7 @@ mkdir -p "$BACKUP_DIR/study-guide/comparisons"
 for static_file in formula-practice.html formula-practice-es.html formula-practice.js single-herb-practice.html single-herb-practice-es.html single-herb-practice.js; do
     cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
 done
-for static_file in dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js; do
+for static_file in dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js supplemental-herb-families.html supplemental-herb-families-es.html; do
     if [[ -f "$STUDY_NOTE_DIR/$static_file" ]]; then
         cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
     fi
@@ -1240,6 +1248,8 @@ install_static_file "$DUI_YAO_JS_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice.js"
 install_static_file "$MISC_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.html"
 install_static_file "$MISC_ES_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice-es.html"
 install_static_file "$MISC_JS_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.js"
+install_static_file "$SUPPLEMENTAL_FAMILIES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families.html"
+install_static_file "$SUPPLEMENTAL_FAMILIES_ES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families-es.html"
 
 # Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
 cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
@@ -1278,6 +1288,8 @@ cmp -s "$DUI_YAO_JS_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice.js"
 cmp -s "$MISC_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.html"
 cmp -s "$MISC_ES_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice-es.html"
 cmp -s "$MISC_JS_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.js"
+cmp -s "$SUPPLEMENTAL_FAMILIES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families.html"
+cmp -s "$SUPPLEMENTAL_FAMILIES_ES_TEMP" "$STUDY_NOTE_DIR/supplemental-herb-families-es.html"
 php -l "$EXAM_HISTORY_TARGET" >/dev/null
 php -l "$EXAM_HISTORY_ENDPOINT_TARGET" >/dev/null
 php -l "$CATEGORY_TARGET" >/dev/null
@@ -1469,6 +1481,8 @@ echo "OK: las preguntas eliminan pistas que revelan literalmente la respuesta y 
 echo "OK: cada tópico usa una pregunta clínica específica y distractores relacionados semánticamente."
 echo "OK: el feedback de familias diferencia fórmula raíz, arquitectura, miembros y progresión clínica."
 echo "OK: respuestas incorrectas muestran la opción elegida, la respuesta correcta y la explicación educativa."
+echo "OK: el quiz elimina caracteres chinos de enunciados, opciones y feedback."
+echo "OK: las familias suplementarias usan nombres medicinales completos y una instrucción directa."
 echo "OK: el hub excluye los bancos por categorías de fórmulas y hierbas."
 echo "OK: Formula Modifications fue excluido de Miscellaneous Quiz porque ya pertenece al Quiz de fórmulas por categorías."
 echo "OK: los tópicos misceláneos guardan resultados e intentos separados en Exam History."
