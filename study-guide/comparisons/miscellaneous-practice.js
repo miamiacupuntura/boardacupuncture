@@ -41,7 +41,9 @@
     familyMembers: spanish ? 'Miembros de la familia' : 'Family members',
     progression: spanish ? 'Cómo distinguirlas' : 'How to distinguish them',
     architecture: spanish ? 'Arquitectura' : 'Architecture',
-    detailFailed: spanish ? 'La explicación detallada no está disponible; revisa la pista y la respuesta correcta.' : 'The detailed explanation is unavailable; review the clue and correct answer.'
+    detailFailed: spanish ? 'La explicación detallada no está disponible; revisa la pista y la respuesta correcta.' : 'The detailed explanation is unavailable; review the clue and correct answer.',
+    guidelineSource: spanish ? 'Fuente del guideline' : 'Guideline source',
+    safetyGuideline: 'Handbook of Oriental Medicine — Caution & Contraindication, p. 373'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -55,11 +57,12 @@
     pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
     patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
     maciocia: spanish ? '¿Qué comparación de patrones de Maciocia corresponde a estas claves?' : 'Which Maciocia pattern comparison matches these key findings?',
-    safety: spanish ? '¿Qué tema de seguridad corresponde a esta precaución clínica?' : 'Which safety topic matches this clinical precaution?',
+    safety: spanish ? '¿Qué precaución corresponde a este medicamento?' : 'Which precaution applies to this medicinal?',
     composition: spanish ? '¿Qué principio de composición de fórmulas corresponde a esta descripción?' : 'Which formula-composition principle matches this description?',
     incompat: spanish ? '¿Qué incompatibilidad o interacción herbal corresponde a esta advertencia?' : 'Which herbal incompatibility or interaction matches this warning?',
     combinations: spanish ? '¿Qué combinación herbal corresponde a estas funciones clínicas?' : 'Which herbal combination matches these clinical functions?'
   };
+  const safetyPrecautions = [{"herb":"Ma Huang","latin":"Ephedrae Herba","enCaution":"Raises blood pressure.","esCaution":"Eleva la presión arterial.","enNote":"Cardiovascular-active stimulant; screen hypertension, arrhythmia, stimulants and decongestants.","esNote":"Estimulante cardiovascular; evaluar hipertensión, arritmia, estimulantes y descongestionantes."},{"herb":"Xi Xin","latin":"Asari Herba","enCaution":"Caution: renal problem.","esCaution":"Precaución: problema renal.","enNote":"Confirm species, part and dose; renal risk and aristolochic-acid substitution or contamination matter.","esNote":"Confirmar especie, parte y dosis; importan el riesgo renal y la sustitución o contaminación con ácido aristolóquico."},{"herb":"Xiang Ru","latin":"Moslae Herba","enCaution":"Vomiting if taken hot.","esCaution":"Vómito si se toma caliente.","enNote":"Traditional administration caution; stop and assess persistent vomiting or dehydration.","esNote":"Precaución tradicional de administración; suspender y evaluar vómito persistente o deshidratación."},{"herb":"Sheng Ma","latin":"Cimicifugae Rhizoma","enCaution":"Breathing difficulties / upper excess and lower deficiency.","esCaution":"Dificultad respiratoria / exceso arriba y deficiencia abajo.","enNote":"The pattern phrase is historical; breathing difficulty itself needs prompt medical assessment.","esNote":"La frase de patrón es histórica; la dificultad respiratoria requiere evaluación médica pronta."},{"herb":"Jue Ming Zi","latin":"Cassiae Semen","enCaution":"Diarrhea and hypotension.","esCaution":"Diarrea e hipotensión.","enNote":"Its laxative effect may worsen diarrhea, dehydration or low blood pressure.","esNote":"Su efecto laxante puede agravar diarrea, deshidratación o presión baja."},{"herb":"Sheng Di","latin":"Rehmanniae Radix","enCaution":"Pregnancy with Blood deficiency.","esCaution":"Embarazo con deficiencia de Sangre.","enNote":"Older pregnancy/pattern caution; pregnancy use requires qualified obstetric review.","esNote":"Precaución antigua de embarazo/patrón; requiere revisión obstétrica cualificada."},{"herb":"Zi Cao","latin":"Arnebiae / Lithospermi Radix","enCaution":"Measles.","esCaution":"Sarampión.","enNote":"Do not treat measles from a chart; suspected measles needs medical and public-health guidance.","esNote":"No tratar sarampión desde una tabla; un caso sospechoso exige orientación médica y de salud pública."},{"herb":"Jin Yin Hua","latin":"Lonicerae Flos","enCaution":"Qi-deficient sores, Yin ulcers.","esCaution":"Llagas por deficiencia de Qi, úlceras Yin.","enNote":"A traditional pattern-mismatch warning rather than a universal toxicology rule.","esNote":"Advertencia tradicional por desajuste de patrón, no una regla toxicológica universal."},{"herb":"Tu Fu Ling","latin":"Smilacis Glabrae Rhizoma","enCaution":"Do not take with tea.","esCaution":"No tomar con té.","enNote":"Retain as a traditional dietary note; it is not established here as a universal toxic interaction.","esNote":"Conservar como nota dietética tradicional; aquí no se demuestra una interacción tóxica universal."},{"herb":"Qing Hao","latin":"Artemisiae Annuae Herba","enCaution":"Blood deficiency postpartum.","esCaution":"Deficiencia de Sangre posparto.","enNote":"Pattern caution; postpartum fever, weakness or bleeding requires medical evaluation.","esNote":"Precaución de patrón; fiebre, debilidad o sangrado posparto requieren evaluación médica."},{"herb":"Mu Tong","latin":"Akebiae Caulis","enCaution":"Overdose leads to renal failure.","esCaution":"La sobredosis causa fallo renal.","enNote":"Identity is critical: aristolochic-acid-containing sources are nephrotoxic and must not be used.","esNote":"La identidad es crítica: fuentes con ácido aristolóquico son nefrotóxicas y no deben usarse."},{"herb":"Mu Gua","latin":"Chaenomelis Fructus","enCaution":"Overuse damages teeth/bone.","esCaution":"El abuso daña dientes/huesos.","enNote":"Preserve as historical wording; do not convert it into a proven modern toxicity claim without evidence.","esNote":"Conservar como redacción histórica; no presentarla como toxicidad moderna comprobada sin evidencia."},{"herb":"Ban Xia","latin":"Pinelliae Rhizoma Preparatum","enCaution":"All bleeding due to Yin deficiency.","esCaution":"Todo sangrado por deficiencia de Yin.","enNote":"Pattern caution; only correctly processed material is used, and raw Ban Xia is toxic.","esNote":"Precaución de patrón; solo se usa material correctamente procesado y Ban Xia cruda es tóxica."},{"herb":"Bai Qian","latin":"Cynanchi Stauntonii Radix","enCaution":"Cough from Kidney not grasping Qi.","esCaution":"Tos por Riñón que no capta el Qi.","enNote":"Pattern mismatch: it does not address the root deficiency of every chronic cough.","esNote":"Desajuste de patrón: no trata la deficiencia raíz de toda tos crónica."},{"herb":"Bai Jie Zi","latin":"Sinapis Semen","enCaution":"No topical use for sensitive skin.","esCaution":"No usar tópicamente en piel sensible.","enNote":"Topical mustard preparations may irritate or blister; avoid damaged or sensitive skin.","esNote":"Los preparados tópicos de mostaza pueden irritar o formar ampollas; evitar piel dañada o sensible."},{"herb":"Jie Geng","latin":"Platycodi Radix","enCaution":"Hemoptysis.","esCaution":"Hemoptisis.","enNote":"Coughing blood is a red flag requiring medical evaluation, not routine self-treatment.","esNote":"Toser sangre es una señal de alarma que requiere evaluación médica."},{"herb":"Xing Ren","latin":"Armeniacae Semen","enCaution":"Caution: infants and diarrhea.","esCaution":"Precaución: lactantes y diarrea.","enNote":"Cyanogenic toxicity risk makes identity, processing and dose essential; infants are especially vulnerable.","esNote":"El riesgo cianogénico exige identidad, procesamiento y dosis correctos; los lactantes son especialmente vulnerables."},{"herb":"Shan Zha","latin":"Crataegi Fructus","enCaution":"Acid regurgitation.","esCaution":"Regurgitación ácida.","enNote":"Its acidity may worsen reflux or upper-GI irritation.","esNote":"Su acidez puede agravar reflujo o irritación gastrointestinal alta."},{"herb":"Chen Pi","latin":"Citri Pericarpium","enCaution":"Dry cough from Qi and Yin deficiency, hot phlegm, dry-heat cough, blood spitting.","esCaution":"Tos seca por deficiencia de Qi y Yin, flema caliente, tos por calor-sequedad, expectoración de sangre.","enNote":"Its drying, moving action may aggravate dry or Yin-deficient presentations; hemoptysis is a red flag.","esNote":"Su acción secante y movilizadora puede agravar sequedad o deficiencia de Yin; la hemoptisis es señal de alarma."},{"herb":"Fu Zi","latin":"Aconiti Lateralis Radix Praeparata","enCaution":"False cold, true heat.","esCaution":"Frío falso, calor verdadero.","enNote":"Pattern mismatch plus serious aconite cardiotoxicity; requires correct processing and specialist control.","esNote":"Desajuste de patrón más cardiotoxicidad grave del acónito; exige procesamiento correcto y control especializado."},{"herb":"Ren Shen","latin":"Ginseng Radix","enCaution":"Hypertension (systolic over 180 mm Hg).","esCaution":"Hipertensión (sistólica superior a 180 mm Hg).","enNote":"The cutoff is historical, not a universal dosing rule; systolic pressure at or above 180 may require urgent assessment.","esNote":"El umbral es histórico, no una regla universal; una sistólica de 180 o más puede requerir evaluación urgente."},{"herb":"Da Zao","latin":"Jujubae Fructus","enCaution":"Excess Damp, food stagnation, parasites, Damp-Phlegm disorders.","esCaution":"Exceso de Humedad, estancamiento de alimentos, parásitos y Flema-Humedad.","enNote":"A traditional cloying/sweet pattern-fit caution, not a stand-alone diagnosis.","esNote":"Precaución tradicional por su cualidad dulce y empalagosa, no un diagnóstico independiente."},{"herb":"Lu Rong","latin":"Cervi Cornu","enCaution":"Increase dose slowly.","esCaution":"Aumentar la dosis lentamente.","enNote":"Historical dosing note; also review endocrine/bleeding risk and lawful, ethical animal sourcing.","esNote":"Nota histórica; revisar además riesgo endocrino/hemorrágico y procedencia animal legal y ética."},{"herb":"Wu Wei Zi","latin":"Schisandrae Fructus","enCaution":"May cause heartburn.","esCaution":"Puede causar acidez.","enNote":"Monitor reflux or gastric irritation and stop if symptoms worsen.","esNote":"Vigilar reflujo o irritación gástrica y suspender si empeoran."},{"herb":"Yuan Zhi","latin":"Polygalae Radix","enCaution":"Caution: ulcers and gastritis.","esCaution":"Precaución: úlceras y gastritis.","enNote":"May irritate the gastrointestinal tract; avoid casual use with active ulceration.","esNote":"Puede irritar el tracto gastrointestinal; evitar uso casual con ulceración activa."},{"herb":"Bing Lang","latin":"Arecae Semen","enCaution":"Caution: Middle-Jiao Qi collapse.","esCaution":"Precaución: colapso del Qi del Jiao Medio.","enNote":"Older pattern warning; areca also requires modern safety and legal review.","esNote":"Advertencia antigua de patrón; la areca también exige revisión moderna de seguridad y legalidad."},{"herb":"Da Huang","latin":"Rhei Radix","enCaution":"Enters milk.","esCaution":"Pasa a la leche.","enNote":"Use during lactation needs professional review because infant exposure and diarrhea are concerns.","esNote":"Su uso en lactancia requiere revisión profesional por exposición y posible diarrea del lactante."}];
   const clueStopwords = new Set('the a an and or of to for with without one two three four job jobs part parts family families formula formulas pattern patterns herb herbs root roots leaf leaves seed seeds fruit fruits blood heat cold warm qi yin yang shen damp wind phlegm fire tonic tonics comparison comparisons trap traps advanced supplemental secondary action actions group groups genus topic topics el la los las un una uno dos tres cuatro de del y o para con sin familia familias formula formulas patron patrones hierba hierbas raiz raices hoja hojas semilla semillas fruto frutos sangre calor frio tibio viento flema fuego tonico tonicos comparacion comparaciones trampa trampas accion acciones grupo grupos genero tema temas'.split(' '));
   const semanticStopwords = new Set('the a an and or of to for with without from into in on at by is are was were be this that these those which what matches match best corresponds corresponding description topic entry rule el la los las un una unos unas y o de del al para por con sin desde en es son esta este estas estos que cual cuales corresponde descripcion tema regla'.split(' '));
   const el = {
@@ -140,7 +143,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-8');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-9');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -175,6 +178,7 @@
     return selected.join(' • ');
   }
   function questionContext(item){
+    if(state.resource&&state.resource.key==='safety')return item.detail;
     const context=redactAnswerClues(item.detail,item.title);
     const tokens=semanticTokens(context);
     if(context.length<35||tokens.size<6||isInstructionalText(context))return '';
@@ -186,6 +190,15 @@
     return context;
   }
   function extractItems(html){
+    if(state.resource&&state.resource.key==='safety'){
+      return safetyPrecautions.map(entry=>({
+        title:spanish?entry.esCaution:entry.enCaution,
+        detail:entry.herb+' ('+entry.latin+')',
+        explanation:spanish?entry.esNote:entry.enNote,
+        herb:entry.herb,
+        chapterUrl:''
+      }));
+    }
     const doc=new DOMParser().parseFromString(html,'text/html');
     let nodes=Array.from(doc.querySelectorAll('article.comparison-card'));
     if(nodes.length<4)nodes=Array.from(doc.querySelectorAll('article'));
@@ -233,11 +246,16 @@
       const url=new URL(window.location.href);url.searchParams.set('source',resource.key);history.replaceState({},'',url);
     }catch(_){el.status.textContent=copy.failed;el.status.classList.add('is-error');}
   }
+  function questionExplanation(item){
+    if(state.resource.key==='secondary')return spanish?'Estos medicamentos pertenecen a categorías primarias diferentes, pero comparten «'+item.title+'» como acción secundaria.':'These medicinals belong to different primary categories but share “'+item.title+'” as a secondary action.';
+    if(state.resource.key==='safety')return item.explanation;
+    return item.detail;
+  }
   function buildQuestions(){
     const valid=state.items.map(item=>Object.assign({},item,{context:questionContext(item)})).filter(item=>item.context);
     if(valid.length<4)return [];
     const prompt=prompts[state.resource.key]||copy.prompt;
-    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid),explanation:state.resource.key==='secondary'?(spanish?'Estos medicamentos pertenecen a categorías primarias diferentes, pero comparten «'+item.title+'» como acción secundaria.':'These medicinals belong to different primary categories but share “'+item.title+'” as a secondary action.'):item.detail,item})));
+    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid),explanation:questionExplanation(item),item})));
   }
   function renderQuestion(){
     const question=state.questions[state.index];state.answered=false;
@@ -328,6 +346,7 @@
       const panel=teachingPanel();el.feedback.append(panel);void enrichFamilyFeedback(panel,question.item,questionIndex);
     }else{
       feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
+      if(state.resource&&state.resource.key==='safety')feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
     }
     el.next.hidden=false;el.next.textContent=state.index+1===state.questions.length?copy.finish:copy.next;
   }
