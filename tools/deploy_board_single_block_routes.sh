@@ -307,6 +307,8 @@ grep -Fq "bqd_duiyao" "$EXAM_HISTORY_TEMP"
 grep -Fq "dui-yao-practice-es.html" "$EXAM_HISTORY_TEMP"
 grep -Fq "dui-yao-practice-es.html" "$LIBRARY_TEMP"
 grep -Fq "bqd_duiyao" "$LIBRARY_TEMP"
+grep -Fq "boardformulamodificationsquizurl" "$LIBRARY_TEMP"
+grep -Fq "bqf_modifications" "$LIBRARY_TEMP"
 grep -Fq "fetch('dui-yao-data.json'" "$DUI_YAO_JS_TEMP"
 grep -Fq "saveAttempt" "$DUI_YAO_JS_TEMP"
 grep -Fq "/blocks/menu/herbology-exam-history.php" "$DUI_YAO_JS_TEMP"
@@ -328,7 +330,12 @@ for quiz_js in "$FORMULA_JS_TEMP" "$SINGLE_HERB_JS_TEMP"; do
     grep -Fq "saveCentralAttempt" "$quiz_js"
     grep -Fq "/blocks/menu/herbology-exam-history.php" "$quiz_js"
 done
-for quiz_html in "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP"; do
+grep -Fq "const modificationsOnly" "$FORMULA_JS_TEMP"
+grep -Fq "questionsForScope" "$FORMULA_JS_TEMP"
+for quiz_html in "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP"; do
+    grep -Fq "formula-practice.js?v=20261111-2" "$quiz_html"
+done
+for quiz_html in "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP"; do
     grep -Fq "20261111-1" "$quiz_html"
 done
 
