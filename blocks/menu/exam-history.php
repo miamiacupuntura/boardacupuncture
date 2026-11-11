@@ -13,6 +13,10 @@ $historytype = optional_param('type', 'all', PARAM_ALPHA);
 if (!in_array($historytype, ['all', 'board', 'quiz', 'boardquizcatalog', 'boardexamcatalog'], true)) {
     $historytype = 'all';
 }
+$progressfilter = optional_param('progress', 'all', PARAM_ALPHA);
+if (!in_array($progressfilter, ['all', 'completed', 'pending'], true)) {
+    $progressfilter = 'all';
+}
 $sortfield = optional_param('sort', 'date', PARAM_ALPHA);
 if (!in_array($sortfield, ['date', 'exam', 'result', 'status', 'duration'], true)) {
     $sortfield = 'date';
@@ -28,11 +32,13 @@ $sortparams = ['sort' => $sortfield, 'direction' => $sortdirection];
 $pageurl = new moodle_url('/blocks/menu/exam-history.php', [
     'type' => $historytype,
     'page' => $page,
+    'progress' => $progressfilter,
 ] + $sortparams + $languageparams);
 $dashboardurl = new moodle_url('/my/', [], 'board-level-herbology');
 $languageurl = new moodle_url('/blocks/menu/exam-history.php', [
     'type' => $historytype,
     'page' => $page,
+    'progress' => $progressfilter,
 ] + $sortparams + ($ises ? ['lang' => 'en', 'ui' => 'en'] : ['lang' => 'es', 'ui' => 'es']));
 
 $PAGE->set_url($pageurl);
@@ -168,18 +174,28 @@ if ($formulabankpath !== '') {
             if ($questioncount < 1) {
                 continue;
             }
-            $quizhistorytype = 'bqf_' . substr(sha1($key), 0, 12);
-            $quizurl = new moodle_url($formulapracticepath, [
+            $ismodifications = $key === 'modifications';
+            $quizhistorytype = $ismodifications
+                ? 'bqf_modifications'
+                : 'bqf_' . substr(sha1($key), 0, 12);
+            $quizparams = [
                 'category' => $key,
                 'size' => min(25, $questioncount),
                 'historytype' => $quizhistorytype,
                 'sesskey' => sesskey(),
-            ]);
+                'from' => 'history',
+            ];
+            if ($ismodifications) {
+                $quizparams['scope'] = 'modifications';
+            }
+            $quizurl = new moodle_url($formulapracticepath, $quizparams);
             $boardquizrows[] = [
-                'key' => 'formula-' . $key,
+                'key' => $ismodifications ? 'formula-modifications' : 'formula-' . $key,
                 'examtype' => $quizhistorytype,
                 'topic' => $name,
-                'source' => $ises ? 'Quiz de fórmulas' : 'Formula Quiz',
+                'source' => $ismodifications
+                    ? ($ises ? 'Quiz de modificaciones de fórmulas' : 'Formula Modifications Quiz')
+                    : ($ises ? 'Quiz de fórmulas' : 'Formula Quiz'),
                 'course' => $ises ? 'Herbología China Board Level' : 'Chinese Herbology Board Level',
                 'questions' => min(25, $questioncount),
                 'status' => $ises ? 'Disponible' : 'Available',
@@ -390,37 +406,107 @@ foreach ($boardexamdefinitions as $examkey => $definition) {
     ];
 }
 
-$boardquiztotal = count($boardquizrows);
+$boardquizcatalogrows = $boardquizrows;
+foreach ($boardexamrows as $boardexamrow) {
+    if ($boardexamrow['key'] !== 'exam-clinicalcases') {
+        continue;
+    }
+    $clinicalcatalogrow = $boardexamrow;
+    $clinicalcatalogrow['key'] = 'clinical-cases';
+    $clinicalcatalogrow['source'] = $ises ? 'Casos clínicos' : 'Clinical Cases';
+    $boardquizcatalogrows[] = $clinicalcatalogrow;
+    break;
+}
+
+$boardquizgroupdefinitions = [
+    'single-herbs' => [
+        'title' => $ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz',
+        'description' => $ises ? 'Categorías de hierbas individuales.' : 'Single-herb category quizzes.',
+    ],
+    'formulas' => [
+        'title' => $ises ? 'Quiz de fórmulas' : 'Formula Quiz',
+        'description' => $ises ? 'Fórmulas organizadas por estrategia terapéutica.' : 'Formulas organized by treatment strategy.',
+    ],
+    'dui-yao' => [
+        'title' => $ises ? 'Quiz de Dui Yao' : 'Dui Yao Quiz',
+        'description' => $ises ? 'Los 51 pares oficiales.' : 'The 51 official pairs.',
+    ],
+    'formula-modifications' => [
+        'title' => $ises ? 'Quiz de modificaciones de fórmulas' : 'Formula Modifications Quiz',
+        'description' => $ises ? 'Modificaciones clínicas de fórmulas.' : 'Clinical formula modifications.',
+    ],
+    'miscellaneous' => [
+        'title' => $ises ? 'Quiz misceláneo' : 'Miscellaneous Quiz',
+        'description' => $ises ? 'Recursos suplementarios organizados por tópico.' : 'Supplemental resources organized by topic.',
+    ],
+    'clinical-cases' => [
+        'title' => $ises ? 'Casos clínicos' : 'Clinical Cases',
+        'description' => $ises ? 'Casos integrados con retroalimentación.' : 'Integrated cases with feedback.',
+    ],
+];
+
+foreach ($boardquizcatalogrows as &$boardquizcatalogrow) {
+    $rowkey = (string) $boardquizcatalogrow['key'];
+    if ($rowkey === 'formula-modifications') {
+        $boardquizcatalogrow['group'] = 'formula-modifications';
+    } else if (str_starts_with($rowkey, 'herb-')) {
+        $boardquizcatalogrow['group'] = 'single-herbs';
+    } else if (str_starts_with($rowkey, 'formula-')) {
+        $boardquizcatalogrow['group'] = 'formulas';
+    } else if ($rowkey === 'dui-yao') {
+        $boardquizcatalogrow['group'] = 'dui-yao';
+    } else if (str_starts_with($rowkey, 'misc-')) {
+        $boardquizcatalogrow['group'] = 'miscellaneous';
+    } else {
+        $boardquizcatalogrow['group'] = 'clinical-cases';
+    }
+
+    if ($boardquizcatalogrow['statusclass'] === 'is-completed') {
+        $boardquizcatalogrow['status'] = $ises ? 'Respondido' : 'Answered';
+    } else if ($boardquizcatalogrow['statusclass'] === 'is-available'
+            || $boardquizcatalogrow['statusclass'] === 'is-not-started') {
+        $boardquizcatalogrow['status'] = $ises ? 'Pendiente' : 'Pending';
+        $boardquizcatalogrow['statusclass'] = 'is-pending';
+    }
+}
+unset($boardquizcatalogrow);
+
+$boardquiztotal = count($boardquizcatalogrows);
 $boardexamtotal = count($boardexamrows);
-$catalogrows = $historytype === 'boardquizcatalog' ? $boardquizrows : $boardexamrows;
-$catalogtotal = count($catalogrows);
-$catalogquestions = array_sum(array_column($catalogrows, 'questions'));
+$catalogallrows = $historytype === 'boardquizcatalog' ? $boardquizcatalogrows : $boardexamrows;
+$catalogtotal = count($catalogallrows);
+$catalogquestions = array_sum(array_column($catalogallrows, 'questions'));
 $catalogcompleted = count(array_filter(
-    $catalogrows,
+    $catalogallrows,
     static fn(array $row): bool => $row['statusclass'] === 'is-completed'
 ));
+$catalogpending = $catalogtotal - $catalogcompleted;
 $catalogprogress = count(array_filter(
-    $catalogrows,
+    $catalogallrows,
     static fn(array $row): bool => $row['statusclass'] === 'is-progress'
 ));
 $catalognotstarted = count(array_filter(
-    $catalogrows,
-    static fn(array $row): bool => $row['statusclass'] === 'is-not-started'
+    $catalogallrows,
+    static fn(array $row): bool => in_array($row['statusclass'], ['is-not-started', 'is-pending'], true)
 ));
+$catalogrows = $catalogallrows;
+if ($historytype === 'boardquizcatalog' && $progressfilter !== 'all') {
+    $catalogrows = array_values(array_filter(
+        $catalogallrows,
+        static function(array $row) use ($progressfilter): bool {
+            $iscompleted = $row['statusclass'] === 'is-completed';
+            return $progressfilter === 'completed' ? $iscompleted : !$iscompleted;
+        }
+    ));
+}
 if ($historytype === 'boardquizcatalog') {
     $catalogtitle = $ises ? 'Catálogo de Quiz Board Level' : 'Quiz Board Level Catalog';
     $catalogkicker = $ises ? 'QUIZZES DEL SISTEMA NUEVO' : 'NEW-SYSTEM QUIZZES';
     $catalogsummaries = [
         [$ises ? 'Quizzes' : 'Quizzes', $catalogtotal],
+        [$ises ? 'Respondidos' : 'Answered', $catalogcompleted],
+        [$ises ? 'Pendientes' : 'Pending', $catalogpending],
         [$ises ? 'Preguntas' : 'Questions', $catalogquestions],
-        [$ises ? 'Hierbas individuales' : 'Single Herbs', count(array_filter(
-            $catalogrows,
-            static fn(array $row): bool => str_starts_with($row['key'], 'herb-')
-        ))],
-        [$ises ? 'Fórmulas' : 'Formulas', count(array_filter(
-            $catalogrows,
-            static fn(array $row): bool => str_starts_with($row['key'], 'formula-')
-        ))],
     ];
 } else {
     $catalogtitle = $ises ? 'Catálogo de Exam Board Level' : 'Exam Board Level Catalog';
@@ -430,6 +516,46 @@ if ($historytype === 'boardquizcatalog') {
         [$ises ? 'Completados' : 'Completed', $catalogcompleted],
         [$ises ? 'En progreso' : 'In progress', $catalogprogress],
         [$ises ? 'No intentados' : 'Not attempted', $catalognotstarted],
+    ];
+}
+
+$cataloggroups = [];
+if ($historytype === 'boardquizcatalog') {
+    foreach ($boardquizgroupdefinitions as $groupkey => $groupdefinition) {
+        $allgrouprows = array_values(array_filter(
+            $catalogallrows,
+            static fn(array $row): bool => ($row['group'] ?? '') === $groupkey
+        ));
+        $visiblegrouprows = array_values(array_filter(
+            $catalogrows,
+            static fn(array $row): bool => ($row['group'] ?? '') === $groupkey
+        ));
+        if (!$allgrouprows || !$visiblegrouprows) {
+            continue;
+        }
+        $groupcompleted = count(array_filter(
+            $allgrouprows,
+            static fn(array $row): bool => $row['statusclass'] === 'is-completed'
+        ));
+        $cataloggroups[] = [
+            'key' => $groupkey,
+            'title' => $groupdefinition['title'],
+            'description' => $groupdefinition['description'],
+            'total' => count($allgrouprows),
+            'completed' => $groupcompleted,
+            'pending' => count($allgrouprows) - $groupcompleted,
+            'rows' => $visiblegrouprows,
+        ];
+    }
+} else {
+    $cataloggroups[] = [
+        'key' => 'board-exams',
+        'title' => '',
+        'description' => '',
+        'total' => count($catalogrows),
+        'completed' => $catalogcompleted,
+        'pending' => $catalogtotal - $catalogcompleted,
+        'rows' => $catalogrows,
     ];
 }
 
@@ -621,7 +747,21 @@ echo $OUTPUT->header();
 .exam-history__catalog-stat{padding:11px 13px;border:1px solid #c7ddd9;border-radius:9px;background:#fff}
 .exam-history__catalog-stat span{display:block;color:#087c69;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
 .exam-history__catalog-stat strong{display:block;margin-top:4px;font-size:20px}
-.exam-history__catalog-list{display:grid;gap:9px}
+.exam-history__progress-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.exam-history__progress-filters a{padding:8px 13px;border:1px solid #8fb9b1;border-radius:999px;background:#fff;color:#075f52;font-weight:850;text-decoration:none}
+.exam-history__progress-filters a[aria-current="page"]{background:#102a43;border-color:#102a43;color:#fff}
+.exam-history__catalog-groups{display:grid;gap:16px}
+.exam-history__catalog-group{overflow:hidden;border:1px solid #b9d8d2;border-radius:12px;background:#eef8f6}
+.exam-history__catalog-group-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:15px 16px;border-bottom:1px solid #c7ddd9;background:#e6f5f1}
+.exam-history__catalog-group-header h4{margin:0 0 3px;font-size:18px}
+.exam-history__catalog-group-header p{margin:0;color:#526b84;font-size:13px}
+.exam-history__catalog-group-counts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}
+.exam-history__catalog-group-counts span{padding:5px 9px;border-radius:999px;background:#fff;color:#35566f;font-size:12px;font-weight:850;white-space:nowrap}
+.exam-history__catalog-group-counts .is-done{background:#dff4e8;color:#087c3b}
+.exam-history__catalog-group-counts .is-pending{background:#fff2d7;color:#8a5b00}
+.exam-history__catalog-progress{grid-column:1/-1;height:7px;overflow:hidden;border-radius:999px;background:#d7e4e8}
+.exam-history__catalog-progress span{display:block;height:100%;border-radius:inherit;background:#087c69}
+.exam-history__catalog-list{display:grid;gap:9px;padding:12px}
 .exam-history__catalog-item{display:grid;grid-template-columns:1.3fr 1.1fr .5fr .65fr .5fr .55fr auto;align-items:center;gap:14px;padding:13px;border:1px solid #c7ddd9;border-radius:10px;background:#fff}
 .exam-history__catalog-item>div{min-width:0}
 .exam-history__catalog-item strong{display:block;overflow-wrap:anywhere;font-size:14px}
@@ -630,6 +770,7 @@ echo $OUTPUT->header();
 .exam-history__catalog-status.is-progress{color:#9a6700}
 .exam-history__catalog-status.is-not-started{color:#526b84}
 .exam-history__catalog-status.is-available{color:#0f4c81}
+.exam-history__catalog-status.is-pending{color:#9a6700}
 .exam-history__catalog-open{display:inline-flex;min-height:36px;align-items:center;justify-content:center;padding:7px 12px;border-radius:8px;background:#2b63e8;color:#fff!important;font-weight:900;text-decoration:none;white-space:nowrap}
 .exam-history__catalog-open:hover,.exam-history__catalog-open:focus{background:#1749bc;color:#fff!important;text-decoration:none}
 .exam-history__list{display:grid;gap:9px}
@@ -647,7 +788,7 @@ echo $OUTPUT->header();
 .exam-history__pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
 .exam-history__pagination span{font-weight:800;color:#526b84}
 .exam-history__pagination a{padding:8px 12px;border:1px solid #8fb9b1;border-radius:8px;background:#fff;color:#075f52;font-weight:800;text-decoration:none}
-@media(max-width:850px){.exam-history__attempt{grid-template-columns:1fr 1fr}.exam-history__catalog-summary{grid-template-columns:1fr 1fr}.exam-history__catalog-item{grid-template-columns:1fr 1fr}.exam-history__catalog-item>a{justify-self:start}.exam-history__top{display:block}.exam-history__actions{justify-content:flex-start;margin-top:14px}.exam-history__sort{align-items:stretch}.exam-history__sort label{flex:1 1 150px}.exam-history__sort button{flex:1 1 100%}}
+@media(max-width:850px){.exam-history__attempt{grid-template-columns:1fr 1fr}.exam-history__catalog-summary{grid-template-columns:1fr 1fr}.exam-history__catalog-item{grid-template-columns:1fr 1fr}.exam-history__catalog-item>a{justify-self:start}.exam-history__catalog-group-header{grid-template-columns:1fr}.exam-history__catalog-group-counts{justify-content:flex-start}.exam-history__top{display:block}.exam-history__actions{justify-content:flex-start;margin-top:14px}.exam-history__sort{align-items:stretch}.exam-history__sort label{flex:1 1 150px}.exam-history__sort button{flex:1 1 100%}}
 @media(max-width:520px){.exam-history__attempt,.exam-history__catalog-item,.exam-history__catalog-summary{grid-template-columns:1fr}.exam-history{width:min(100% - 16px,1180px)}}
 </style>
 <main class="exam-history">
@@ -670,6 +811,7 @@ echo $OUTPUT->header();
             $filterurl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $filterkey,
                 'page' => 0,
+                'progress' => $filterkey === 'boardquizcatalog' ? $progressfilter : 'all',
             ] + $sortparams + $languageparams);
         ?>
             <a href="<?php echo $filterurl->out(false); ?>"<?php echo $historytype === $filterkey ? ' aria-current="page"' : ''; ?>><?php echo s($filterlabel); ?></a>
@@ -725,47 +867,100 @@ echo $OUTPUT->header();
             <?php } ?>
         </div>
 
+        <?php if ($historytype === 'boardquizcatalog') {
+            $progresslabels = [
+                'all' => $ises ? 'Todos' : 'All',
+                'completed' => $ises ? 'Respondidos' : 'Answered',
+                'pending' => $ises ? 'Pendientes' : 'Pending',
+            ];
+        ?>
+            <nav class="exam-history__progress-filters" aria-label="<?php echo $ises ? 'Filtrar quizzes por progreso' : 'Filter quizzes by progress'; ?>">
+                <?php foreach ($progresslabels as $progresskey => $progresslabel) {
+                    $progressurl = new moodle_url('/blocks/menu/exam-history.php', [
+                        'type' => 'boardquizcatalog',
+                        'page' => 0,
+                        'progress' => $progresskey,
+                    ] + $sortparams + $languageparams);
+                ?>
+                    <a href="<?php echo $progressurl->out(false); ?>"<?php echo $progressfilter === $progresskey ? ' aria-current="page"' : ''; ?>>
+                        <?php echo s($progresslabel); ?>
+                    </a>
+                <?php } ?>
+            </nav>
+        <?php } ?>
+
         <?php if (!$catalogrows) { ?>
             <p class="exam-history__empty"><?php echo $ises
-                ? 'No se encontraron evaluaciones disponibles.'
-                : 'No available assessments were found.'; ?></p>
+                ? 'No hay evaluaciones en este filtro.'
+                : 'No assessments match this filter.'; ?></p>
         <?php } else { ?>
-            <div class="exam-history__catalog-list">
-                <?php foreach ($catalogrows as $catalogrow) { ?>
-                    <article class="exam-history__catalog-item">
-                        <div>
-                            <span class="exam-history__label"><?php echo $ises ? 'Tópico / Evaluación' : 'Topic / Assessment'; ?></span>
-                            <strong><?php echo s($catalogrow['topic']); ?></strong>
+            <div class="exam-history__catalog-groups">
+                <?php foreach ($cataloggroups as $cataloggroup) {
+                    $isquizgroup = $historytype === 'boardquizcatalog';
+                    $completionpercentage = $cataloggroup['total'] > 0
+                        ? (int) round(($cataloggroup['completed'] / $cataloggroup['total']) * 100)
+                        : 0;
+                ?>
+                    <?php if ($isquizgroup) { ?>
+                    <section class="exam-history__catalog-group" aria-labelledby="quiz-group-<?php echo s($cataloggroup['key']); ?>">
+                        <header class="exam-history__catalog-group-header">
+                            <div>
+                                <h4 id="quiz-group-<?php echo s($cataloggroup['key']); ?>"><?php echo s($cataloggroup['title']); ?></h4>
+                                <p><?php echo s($cataloggroup['description']); ?></p>
+                            </div>
+                            <div class="exam-history__catalog-group-counts" aria-label="<?php echo $ises ? 'Progreso del bloque' : 'Block progress'; ?>">
+                                <span><?php echo (int) $cataloggroup['total']; ?> <?php echo $ises ? 'quizzes' : 'quizzes'; ?></span>
+                                <span class="is-done"><?php echo (int) $cataloggroup['completed']; ?> <?php echo $ises ? 'respondidos' : 'answered'; ?></span>
+                                <span class="is-pending"><?php echo (int) $cataloggroup['pending']; ?> <?php echo $ises ? 'pendientes' : 'pending'; ?></span>
+                            </div>
+                            <div class="exam-history__catalog-progress" role="progressbar"
+                                aria-valuemin="0" aria-valuemax="<?php echo (int) $cataloggroup['total']; ?>"
+                                aria-valuenow="<?php echo (int) $cataloggroup['completed']; ?>">
+                                <span style="width:<?php echo $completionpercentage; ?>%"></span>
+                            </div>
+                        </header>
+                    <?php } ?>
+                        <div class="exam-history__catalog-list">
+                            <?php foreach ($cataloggroup['rows'] as $catalogrow) { ?>
+                                <article class="exam-history__catalog-item">
+                                    <div>
+                                        <span class="exam-history__label"><?php echo $ises ? 'Tópico / Evaluación' : 'Topic / Assessment'; ?></span>
+                                        <strong><?php echo s($catalogrow['topic']); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span class="exam-history__label"><?php echo $ises ? 'Sistema' : 'System'; ?></span>
+                                        <strong><?php echo s($catalogrow['source']); ?></strong>
+                                        <small><?php echo s($catalogrow['course']); ?></small>
+                                    </div>
+                                    <div>
+                                        <span class="exam-history__label"><?php echo $ises ? 'Preguntas' : 'Questions'; ?></span>
+                                        <strong><?php echo (int) $catalogrow['questions']; ?></strong>
+                                    </div>
+                                    <div>
+                                        <span class="exam-history__label"><?php echo $ises ? 'Estado' : 'Status'; ?></span>
+                                        <strong class="exam-history__catalog-status <?php echo s($catalogrow['statusclass']); ?>">
+                                            <?php echo s($catalogrow['status']); ?>
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        <span class="exam-history__label"><?php echo $ises ? 'Intentos' : 'Attempts'; ?></span>
+                                        <strong><?php echo $catalogrow['attempts'] === null ? '—' : (int) $catalogrow['attempts']; ?></strong>
+                                    </div>
+                                    <div>
+                                        <span class="exam-history__label"><?php echo $ises ? 'Promedio' : 'Average'; ?></span>
+                                        <strong><?php echo $catalogrow['average'] === null
+                                            ? '—'
+                                            : s(board_exam_history_number((float) $catalogrow['average']) . '%'); ?></strong>
+                                    </div>
+                                    <a class="exam-history__catalog-open" href="<?php echo s($catalogrow['url']); ?>">
+                                        <?php echo s($catalogrow['action']); ?> →
+                                    </a>
+                                </article>
+                            <?php } ?>
                         </div>
-                        <div>
-                            <span class="exam-history__label"><?php echo $ises ? 'Sistema' : 'System'; ?></span>
-                            <strong><?php echo s($catalogrow['source']); ?></strong>
-                            <small><?php echo s($catalogrow['course']); ?></small>
-                        </div>
-                        <div>
-                            <span class="exam-history__label"><?php echo $ises ? 'Preguntas' : 'Questions'; ?></span>
-                            <strong><?php echo (int) $catalogrow['questions']; ?></strong>
-                        </div>
-                        <div>
-                            <span class="exam-history__label"><?php echo $ises ? 'Estado' : 'Status'; ?></span>
-                            <strong class="exam-history__catalog-status <?php echo s($catalogrow['statusclass']); ?>">
-                                <?php echo s($catalogrow['status']); ?>
-                            </strong>
-                        </div>
-                        <div>
-                            <span class="exam-history__label"><?php echo $ises ? 'Intentos' : 'Attempts'; ?></span>
-                            <strong><?php echo $catalogrow['attempts'] === null ? '—' : (int) $catalogrow['attempts']; ?></strong>
-                        </div>
-                        <div>
-                            <span class="exam-history__label"><?php echo $ises ? 'Promedio' : 'Average'; ?></span>
-                            <strong><?php echo $catalogrow['average'] === null
-                                ? '—'
-                                : s(board_exam_history_number((float) $catalogrow['average']) . '%'); ?></strong>
-                        </div>
-                        <a class="exam-history__catalog-open" href="<?php echo s($catalogrow['url']); ?>">
-                            <?php echo s($catalogrow['action']); ?> →
-                        </a>
-                    </article>
+                    <?php if ($isquizgroup) { ?>
+                    </section>
+                    <?php } ?>
                 <?php } ?>
             </div>
         <?php } ?>
