@@ -40,7 +40,10 @@
       : [[total, 'answers'], [correct, 'correct'], [`${percent}%`, 'accuracy']],
     resetConfirm: spanish
       ? '¿Borrar el historial guardado en este dispositivo?'
-      : 'Clear the history saved on this device?'
+      : 'Clear the history saved on this device?',
+    restartConfirm: spanish
+      ? '¿Reiniciar esta sesión? Se borrarán las respuestas de la sesión actual.'
+      : 'Restart this session? Answers from the current session will be cleared.'
   };
   const storageKey = 'single-herb-practice-progress-v1';
   const centralHistoryParams = new URLSearchParams(window.location.search);
@@ -96,9 +99,13 @@
     returnToSetup: document.querySelector('[data-herb-return]'),
     position: document.querySelector('[data-herb-position]'),
     sessionTotal: document.querySelector('[data-herb-session-total]'),
+    answered: document.querySelector('[data-herb-answered]'),
     score: document.querySelector('[data-herb-score]'),
     progress: document.querySelector('[data-herb-progress-bar]'),
     list: document.querySelector('[data-herb-question-list]'),
+    previous: document.querySelector('[data-herb-previous]'),
+    next: document.querySelector('[data-herb-next]'),
+    restart: document.querySelector('[data-herb-restart]'),
     finish: document.querySelector('[data-herb-finish]'),
     results: document.querySelector('[data-herb-results]'),
     finalScore: document.querySelector('[data-herb-final-score]'),
@@ -115,6 +122,7 @@
     categories: [],
     mode: 'all',
     session: [],
+    currentIndex: 0,
     size: 25,
     useMaximum: false,
     answers: new Map(),
@@ -347,11 +355,29 @@
 
   function updateProgress() {
     const answered = state.answers.size;
-    elements.position.textContent = String(answered);
+    const current = state.session.length ? state.currentIndex + 1 : 0;
+    elements.position.textContent = String(current);
     elements.sessionTotal.textContent = String(state.session.length);
+    elements.answered.textContent = String(answered);
     elements.score.textContent = String(state.score);
-    elements.progress.style.width = `${state.session.length ? (answered / state.session.length) * 100 : 0}%`;
+    elements.progress.style.width = `${state.session.length ? (current / state.session.length) * 100 : 0}%`;
+    elements.previous.disabled = state.currentIndex <= 0;
+    elements.next.disabled = state.currentIndex >= state.session.length - 1;
     elements.finish.textContent = copy.finish(answered, state.session.length);
+  }
+
+  function showQuestion(index, focus = true) {
+    if (!state.session.length) return;
+    state.currentIndex = Math.max(0, Math.min(index, state.session.length - 1));
+    [...elements.list.children].forEach((card, cardIndex) => {
+      const active = cardIndex === state.currentIndex;
+      card.hidden = !active;
+      card.setAttribute('aria-hidden', String(!active));
+    });
+    updateProgress();
+    if (focus) {
+      elements.list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   function createQuestion(question, index) {
@@ -425,7 +451,7 @@
   function renderSession() {
     elements.list.replaceChildren();
     state.session.forEach((question, index) => elements.list.append(createQuestion(question, index)));
-    updateProgress();
+    showQuestion(0, false);
   }
 
   function startSession() {
@@ -434,6 +460,7 @@
     centralStartedAt = Date.now();
     centralSaved = false;
     state.session = shuffle(pool).slice(0, Math.min(state.size, pool.length));
+    state.currentIndex = 0;
     state.answers = new Map();
     state.score = 0;
     elements.setup.hidden = true;
@@ -442,6 +469,18 @@
     elements.workspace.hidden = false;
     renderSession();
     elements.workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function restartSession() {
+    if (!window.confirm(copy.restartConfirm)) return;
+    centralAttemptUid = createCentralAttemptUid();
+    centralStartedAt = Date.now();
+    centralSaved = false;
+    state.currentIndex = 0;
+    state.answers = new Map();
+    state.score = 0;
+    renderSession();
+    elements.list.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function showSetup() {
@@ -511,6 +550,9 @@
     updateSetup();
   });
   elements.start.addEventListener('click', startSession);
+  elements.previous.addEventListener('click', () => showQuestion(state.currentIndex - 1));
+  elements.next.addEventListener('click', () => showQuestion(state.currentIndex + 1));
+  elements.restart.addEventListener('click', restartSession);
   elements.repeat.addEventListener('click', startSession);
   elements.configure.addEventListener('click', showSetup);
   elements.returnToSetup.addEventListener('click', showSetup);
