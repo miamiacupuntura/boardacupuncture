@@ -558,7 +558,13 @@ $boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => '
 $boardherbquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'herbs'] + $boardlanguagecontext);
 $boardformulaquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'formulas'] + $boardlanguagecontext);
 $boardduiyaoquizurl = new moodle_url(
-    $ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html'
+    $ises ? '/study-guide/comparisons/dui-yao-practice-es.html' : '/study-guide/comparisons/dui-yao-practice.html',
+    [
+        'size' => 25,
+        'historytype' => 'bqd_duiyao',
+        'sesskey' => sesskey(),
+        'from' => 'library',
+    ]
 );
 $boardmiscellaneousquizurl = new moodle_url(
     $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html',
