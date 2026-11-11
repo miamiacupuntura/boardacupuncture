@@ -50,7 +50,7 @@
     formulanames: spanish ? '¿Qué distinción entre nombres de fórmulas corresponde a estas pistas?' : 'Which formula-name distinction matches these clues?',
     misleading: spanish ? '¿Qué fórmula con nombre engañoso corresponde a estas acciones reales?' : 'Which misleadingly named formula matches these actual actions?',
     advanced: spanish ? '¿Qué distinción avanzada de nombres corresponde a estas pistas?' : 'Which advanced name distinction matches these clues?',
-    supplements: spanish ? '¿Qué familia botánica suplementaria corresponde a estas funciones?' : 'Which supplemental botanical family matches these functions?',
+    supplements: spanish ? '¿Qué grupo de estudio contiene los medicamentos descritos a continuación?' : 'Which named study group contains the medicinals described below?',
     secondary: spanish ? '¿Qué hierba o acción secundaria corresponde a estas pistas clínicas?' : 'Which herb or secondary action matches these clinical clues?',
     pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
     patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
@@ -89,7 +89,8 @@
   const familyFeedbackCache=new Map();
 
   function shuffle(values){const result=values.slice();for(let i=result.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const value=result[i];result[i]=result[j];result[j]=value;}return result;}
-  function clean(value){return String(value||'').replace(/\s+/g,' ').trim();}
+  function stripHan(value){return String(value||'').replace(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g,' ');}
+  function clean(value){return stripHan(value).replace(/\s+/g,' ').trim();}
   function unique(values){return Array.from(new Set(values.map(clean).filter(Boolean)));}
   function fold(value){return clean(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase().replace(/[^a-z0-9\u3400-\u9fff]+/g,' ').trim();}
   function escapeRegex(value){return String(value).replace(/[.*+?^$()|[\]{}\\]/g,'\\$&');}
@@ -173,7 +174,9 @@
     if(context.length<35||tokens.size<6)return '';
     const normalized=fold(context);
     const leaks=titleClues(item.title).some(clue=>{const value=fold(clue);return value.length>=4&&normalized.includes(value);});
-    return leaks?'':context;
+    if(leaks)return '';
+    if(state.resource&&state.resource.key==='supplements')return (spanish?'Medicamentos y funciones: ':'Medicinals and functions: ')+context;
+    return context;
   }
   function extractItems(html){
     const doc=new DOMParser().parseFromString(html,'text/html');
