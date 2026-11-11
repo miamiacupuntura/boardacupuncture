@@ -25,6 +25,7 @@
     .dui-practice__next{display:block;margin:16px 0 0 auto;padding:10px 18px;background:var(--blue);color:#fff}.dui-practice__score{font-size:32px;font-weight:900;color:var(--green)}
     .dui-practice__save{min-height:24px;color:#526b84;font-weight:700}[hidden]{display:none!important}@media(max-width:560px){.dui-practice__top,.dui-practice__card{padding:16px}.dui-practice__actions{justify-content:flex-start;flex-wrap:wrap}}
 
+    .dui-practice__card label+label{margin-top:12px}
     .dui-practice__feedback-heading,.dui-practice__review-title{display:block}.dui-practice__feedback p{margin:7px 0 12px;line-height:1.5}.dui-practice__review-title{margin-top:10px;color:var(--navy)}
     .dui-practice__review-list{display:grid;gap:8px;margin-top:8px}.dui-practice__review-link{display:block;padding:10px 12px;border:1px solid #c6d5df;border-radius:8px;background:#fff;color:#17486f;text-decoration:none;line-height:1.4}.dui-practice__review-link:hover{border-color:var(--blue);background:#eef4ff}.dui-practice__review-link.is-correct{border-color:#16834d;background:#eaf8f0;color:#11643d}
   </style>
@@ -40,11 +41,12 @@
   <section class="dui-practice__card" data-dui-setup>
     <h2>Configura tu examen</h2>
     <p class="dui-practice__status" data-dui-status>Cargando banco de preguntas…</p>
+    <label>Conjunto de preguntas<select data-dui-set><option value="mixed" selected>Dui Yao mixto</option><option value="reverse">Dui Yao inverso — acción → pareja</option></select></label>
     <label>Cantidad de preguntas<select data-dui-size><option value="10">10</option><option value="25" selected>25</option><option value="51">51</option></select></label>
     <button class="dui-practice__primary" type="button" data-dui-start disabled>Comenzar Quiz</button>
   </section>
   <section class="dui-practice__card" data-dui-workspace hidden>
-    <div class="dui-practice__meta"><span>Quiz de Dui Yao</span><span data-dui-position></span></div>
+    <div class="dui-practice__meta"><span data-dui-work-title>Quiz de Dui Yao</span><span data-dui-position></span></div>
     <div class="dui-practice__track"><div class="dui-practice__bar" data-dui-progress></div></div>
     <h2 data-dui-prompt></h2><div class="dui-practice__context" data-dui-context></div>
     <div class="dui-practice__options" data-dui-options></div>
@@ -57,5 +59,5 @@
     <button class="dui-practice__primary" type="button" data-dui-repeat>Intentar nuevamente</button>
   </section>
 </main>
-<script src="dui-yao-practice.js?v=20261111-4" defer></script>
+<script src="dui-yao-practice.js?v=20261111-5" defer></script>
 </body></html>

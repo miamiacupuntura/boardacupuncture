@@ -4,6 +4,8 @@
   const spanish = document.documentElement.lang === 'es';
   const copy = {
     title: spanish ? 'Quiz de Dui Yao' : 'Dui Yao Quiz',
+    mixedSet: spanish ? 'Dui Yao mixto' : 'Mixed Dui Yao',
+    reverseSet: spanish ? 'Dui Yao inverso' : 'Reverse Dui Yao',
     ready: spanish ? '51 parejas oficiales cargadas.' : '51 official pairs loaded.',
     loadError: spanish ? 'No se pudo cargar el banco de Dui Yao.' : 'The Dui Yao question bank could not be loaded.',
     choose: spanish ? 'Selecciona una respuesta.' : 'Choose one answer.',
@@ -32,7 +34,9 @@
   const elements = {
     status: document.querySelector('[data-dui-status]'),
     setup: document.querySelector('[data-dui-setup]'),
+    set: document.querySelector('[data-dui-set]'),
     size: document.querySelector('[data-dui-size]'),
+    workTitle: document.querySelector('[data-dui-work-title]'),
     start: document.querySelector('[data-dui-start]'),
     workspace: document.querySelector('[data-dui-workspace]'),
     position: document.querySelector('[data-dui-position]'),
@@ -92,6 +96,79 @@
   }
 
   function buildQuestions() {
+    const records = shuffle(state.records);
+    const titles = unique(records.map(record => record.title));
+    const actions = unique(records.map(record => record.action && record.action[spanish ? 'es' : 'en']));
+    const categories = unique(records.map(record => record.category && record.category[spanish ? 'es' : 'en']));
+    const formulas = unique(records.map(record => record.formulas && record.formulas[spanish ? 'es' : 'en']));
+
+    return records.map((record, index) => {
+      const title = String(record.title || '');
+      const action = String((record.action && record.action[spanish ? 'es' : 'en']) || '');
+      const category = String((record.category && record.category[spanish ? 'es' : 'en']) || '');
+      const formula = String((record.formulas && record.formulas[spanish ? 'es' : 'en']) || '');
+      const related = records.filter(candidate => {
+        const candidateCategory = String((candidate.category && candidate.category[spanish ? 'es' : 'en']) || '');
+        return candidate !== record && candidateCategory === category;
+      });
+      const relatedTitles = related.map(candidate => candidate.title);
+      const relatedActions = related.map(candidate => candidate.action && candidate.action[spanish ? 'es' : 'en']);
+      const relatedFormulas = related.map(candidate => candidate.formulas && candidate.formulas[spanish ? 'es' : 'en']);
+      const explanation = title + ' — ' + action + ' ' + (spanish ? 'Fórmula: ' : 'Formula: ') + formula;
+      const questionType = index % 5;
+
+      if (questionType === 1 && action) {
+        return {
+          prompt: copy.reverseActionPrompt,
+          context: title,
+          correct: action,
+          options: choices(action, relatedActions, actions),
+          explanation,
+          reviewType: 'action'
+        };
+      }
+      if (questionType === 2 && category) {
+        return {
+          prompt: copy.categoryPrompt,
+          context: title,
+          correct: category,
+          options: choices(category, [], categories),
+          explanation,
+          reviewType: 'category'
+        };
+      }
+      if (questionType === 3 && formula) {
+        return {
+          prompt: copy.formulaPrompt,
+          context: title,
+          correct: formula,
+          options: choices(formula, relatedFormulas, formulas),
+          explanation,
+          reviewType: 'formula'
+        };
+      }
+      if (questionType === 4 && action) {
+        return {
+          prompt: copy.cluePrompt,
+          context: action + ' · ' + formula,
+          correct: title,
+          options: choices(title, relatedTitles, titles),
+          explanation,
+          reviewType: 'pair'
+        };
+      }
+      return {
+        prompt: copy.actionPrompt,
+        context: action,
+        correct: title,
+        options: choices(title, relatedTitles, titles),
+        explanation,
+        reviewType: 'pair'
+      };
+    });
+  }
+
+  function buildReverseQuestions() {
     const records = shuffle(state.records).filter(record => {
       const action = String((record.action && record.action[spanish ? 'es' : 'en']) || '').trim();
       return action.length > 0 && String(record.title || '').trim().length > 0;
@@ -250,7 +327,9 @@
 
   function startQuiz() {
     const requestedSize = Number(elements.size.value);
-    state.questions = buildQuestions().slice(0, Math.min(requestedSize, 99));
+    const reverse = elements.set && elements.set.value === 'reverse';
+    state.questions = (reverse ? buildReverseQuestions() : buildQuestions()).slice(0, Math.min(requestedSize, 99));
+    if (elements.workTitle) elements.workTitle.textContent = reverse ? copy.reverseSet : copy.mixedSet;
     state.index = 0;
     state.score = 0;
     state.startedAt = Date.now();

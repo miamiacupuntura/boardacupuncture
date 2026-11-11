@@ -11,11 +11,13 @@ for command in curl grep install stat cp cmp mkdir mktemp readlink tr date php r
 TEMP_DIR="$(mktemp -d)"; trap 'rm -rf -- "$TEMP_DIR"' EXIT
 FILES=(dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js dui-yao-option-review.html dui-yao-option-review-es.html dui-yao-data.json)
 for file in "${FILES[@]}"; do curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/$file"; done
-grep -Fq "dui-yao-practice.js?v=20261111-4" "$TEMP_DIR/dui-yao-practice.html"
-grep -Fq "dui-yao-practice.js?v=20261111-4" "$TEMP_DIR/dui-yao-practice-es.html"
+grep -Fq "dui-yao-practice.js?v=20261111-5" "$TEMP_DIR/dui-yao-practice.html"
+grep -Fq "dui-yao-practice.js?v=20261111-5" "$TEMP_DIR/dui-yao-practice-es.html"
 grep -Fq "function appendReviewFeedback" "$TEMP_DIR/dui-yao-practice.js"
 grep -Fq "prompt: copy.actionPrompt" "$TEMP_DIR/dui-yao-practice.js"
 grep -Fq "reviewType: 'pair'" "$TEMP_DIR/dui-yao-practice.js"
+grep -Fq "function buildReverseQuestions" "$TEMP_DIR/dui-yao-practice.js"
+grep -Fq "data-dui-set" "$TEMP_DIR/dui-yao-practice.html"
 grep -Fq "Review the four options" "$TEMP_DIR/dui-yao-practice.js"
 grep -Fq "Back to quiz" "$TEMP_DIR/dui-yao-option-review.html"
 grep -Fq "Regresar al quiz" "$TEMP_DIR/dui-yao-option-review-es.html"
@@ -33,6 +35,7 @@ for target in "${TARGETS[@]}";do
  echo "ACTUALIZADO Y VERIFICADO: $target";echo "RESPALDO: $backup"
 done
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]];then if command -v runuser >/dev/null 2>&1&&id www-data >/dev/null 2>&1;then runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php";else php "$MOODLE_ROOT/admin/cli/purge_caches.php";fi;fi
-echo "OK: Dui Yao Quiz build 20261111-4 activo."
+echo "OK: Dui Yao Quiz build 20261111-5 activo."
 echo "OK: 51 parejas oficiales verificadas."
+echo "OK: preguntas mixtas conservadas y nuevo set Reverse Dui Yao activo."
 echo "OK: feedback breve, Why not, cuatro fichas y regreso al mismo quiz."
