@@ -75,7 +75,10 @@ SINGLE_HERB_JS_TEMP="$(mktemp)"
 DUI_YAO_HTML_TEMP="$(mktemp)"
 DUI_YAO_ES_HTML_TEMP="$(mktemp)"
 DUI_YAO_JS_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP" "$DUI_YAO_HTML_TEMP" "$DUI_YAO_ES_HTML_TEMP" "$DUI_YAO_JS_TEMP"' EXIT
+MISC_HTML_TEMP="$(mktemp)"
+MISC_ES_HTML_TEMP="$(mktemp)"
+MISC_JS_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$EXAM_HISTORY_ENDPOINT_TEMP" "$CLINICAL_JS_TEMP" "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP" "$FORMULA_JS_TEMP" "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP" "$SINGLE_HERB_JS_TEMP" "$DUI_YAO_HTML_TEMP" "$DUI_YAO_ES_HTML_TEMP" "$DUI_YAO_JS_TEMP" "$MISC_HTML_TEMP" "$MISC_ES_HTML_TEMP" "$MISC_JS_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
@@ -94,6 +97,9 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/single-herb-practice.j
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/dui-yao-practice.html" -o "$DUI_YAO_HTML_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/dui-yao-practice-es.html" -o "$DUI_YAO_ES_HTML_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/dui-yao-practice.js" -o "$DUI_YAO_JS_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$MISC_HTML_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$MISC_ES_HTML_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.js" -o "$MISC_JS_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
@@ -107,7 +113,17 @@ grep -Fq "historytype" "$EXAM_HISTORY_TEMP"
 grep -Fq "sesskey" "$EXAM_HISTORY_TEMP"
 grep -Fq "\$boardquizcounts" "$EXAM_HISTORY_TEMP"
 grep -Fq "Board Level Quiz" "$EXAM_HISTORY_TEMP"
-grep -Fq "^bq[dfh]_" "$EXAM_HISTORY_ENDPOINT_TEMP"
+grep -Fq "^bq[dfhm]_" "$EXAM_HISTORY_ENDPOINT_TEMP"
+grep -Fq "bqm_" "$EXAM_HISTORY_TEMP"
+grep -Fq "\$miscquizdefinitions" "$EXAM_HISTORY_TEMP"
+grep -Fq "miscellaneous-practice-es.html" "$EXAM_HISTORY_TEMP"
+grep -Fq "miscellaneous-practice-es.html" "$LIBRARY_TEMP"
+grep -Fq "const resources = [" "$MISC_JS_TEMP"
+grep -Fq "extractItems" "$MISC_JS_TEMP"
+grep -Fq "'bqm_'+state.resource.key" "$MISC_JS_TEMP"
+grep -Fq "/blocks/menu/herbology-exam-history.php" "$MISC_JS_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-1" "$MISC_HTML_TEMP"
+grep -Fq "miscellaneous-practice.js?v=20261111-1" "$MISC_ES_HTML_TEMP"
 grep -Fq "bqd_duiyao" "$EXAM_HISTORY_TEMP"
 grep -Fq "dui-yao-practice-es.html" "$EXAM_HISTORY_TEMP"
 grep -Fq "dui-yao-practice-es.html" "$LIBRARY_TEMP"
@@ -877,7 +893,7 @@ grep -Fq "'/blocks/myprogress/formulas-study-guide.php'" "$LIBRARY_TEMP"
 grep -Fq '$boardduiyaoquizurl = new moodle_url(' "$LIBRARY_TEMP"
 grep -Fq '$boardmiscellaneousquizurl = new moodle_url(' "$LIBRARY_TEMP"
 grep -Fq "'/study-guide/comparisons/dui-yao-practice-es.html' : '/study-guide/comparisons/dui-yao-practice.html'" "$LIBRARY_TEMP"
-grep -Fq "'category' => 'modifications', 'size' => 25" "$LIBRARY_TEMP"
+grep -Fq "'/study-guide/comparisons/miscellaneous-practice-es.html' : '/study-guide/comparisons/miscellaneous-practice.html'" "$LIBRARY_TEMP"
 grep -Fq "'Dui Yao Quiz'" "$LIBRARY_TEMP"
 grep -Fq "'Miscellaneous Quiz'" "$LIBRARY_TEMP"
 grep -Fq "'Quiz de Dui Yao'" "$LIBRARY_TEMP"
@@ -1145,7 +1161,7 @@ mkdir -p "$BACKUP_DIR/study-guide/comparisons"
 for static_file in formula-practice.html formula-practice-es.html formula-practice.js single-herb-practice.html single-herb-practice-es.html single-herb-practice.js; do
     cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
 done
-for static_file in dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js; do
+for static_file in dui-yao-practice.html dui-yao-practice-es.html dui-yao-practice.js miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js; do
     if [[ -f "$STUDY_NOTE_DIR/$static_file" ]]; then
         cp -a "$STUDY_NOTE_DIR/$static_file" "$BACKUP_DIR/study-guide/comparisons/$static_file"
     fi
@@ -1204,6 +1220,9 @@ install_static_file() {
 install_static_file "$DUI_YAO_HTML_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice.html"
 install_static_file "$DUI_YAO_ES_HTML_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice-es.html"
 install_static_file "$DUI_YAO_JS_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice.js"
+install_static_file "$MISC_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.html"
+install_static_file "$MISC_ES_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice-es.html"
+install_static_file "$MISC_JS_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.js"
 
 # Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
 cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
@@ -1239,6 +1258,9 @@ cmp -s "$SINGLE_HERB_JS_TEMP" "$STUDY_NOTE_DIR/single-herb-practice.js"
 cmp -s "$DUI_YAO_HTML_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice.html"
 cmp -s "$DUI_YAO_ES_HTML_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice-es.html"
 cmp -s "$DUI_YAO_JS_TEMP" "$STUDY_NOTE_DIR/dui-yao-practice.js"
+cmp -s "$MISC_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.html"
+cmp -s "$MISC_ES_HTML_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice-es.html"
+cmp -s "$MISC_JS_TEMP" "$STUDY_NOTE_DIR/miscellaneous-practice.js"
 php -l "$EXAM_HISTORY_TARGET" >/dev/null
 php -l "$EXAM_HISTORY_ENDPOINT_TARGET" >/dev/null
 php -l "$CATEGORY_TARGET" >/dev/null
@@ -1421,6 +1443,10 @@ echo "OK: Single Herbs, Duì Yào Pairs y Formulas usan Categories como nombre d
 echo "OK: los módulos 3, 5 y 6 fueron eliminados; los siete restantes quedaron renumerados y uniformes."
 echo "OK: Dui Yao Quiz abre un examen real de selección múltiple basado en las 51 parejas oficiales."
 echo "OK: el quiz Dui Yao guarda puntuación, duración, intentos y promedio en Exam History."
+echo "OK: Miscellaneous Quiz abre un hub con un Quiz multiple choice independiente por recurso."
+echo "OK: el hub excluye los bancos por categorías de fórmulas y hierbas."
+echo "OK: Formula Modifications conserva su banco especializado y los demás recursos generan preguntas desde sus tarjetas."
+echo "OK: los tópicos misceláneos guardan resultados e intentos separados en Exam History."
 echo "OK: Dui Yao Quiz y Miscellaneous Quiz aparecen en el módulo Quiz con rutas independientes."
 echo "OK: cada botón visible abre un solo bloque."
 echo "OK: se conservaron Main Study Guide, los recursos secundarios, las colecciones comparativas, Practice Exams y Quiz."
