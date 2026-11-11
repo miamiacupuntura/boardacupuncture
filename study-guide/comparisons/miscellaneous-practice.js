@@ -42,6 +42,7 @@
     size: document.querySelector('[data-misc-size]'),
     start: document.querySelector('[data-misc-start]'),
     work: document.querySelector('[data-misc-work]'),
+    workTitle: document.querySelector('[data-misc-work-title]'),
     position: document.querySelector('[data-misc-position]'),
     bar: document.querySelector('[data-misc-bar]'),
     prompt: document.querySelector('[data-misc-prompt]'),
@@ -107,7 +108,7 @@
     });
   }
   async function selectResource(resource){
-    state.resource=resource;state.items=[];el.title.textContent=spanish?resource.es:resource.en;
+    state.resource=resource;state.items=[];el.title.textContent=spanish?resource.es:resource.en;el.workTitle.textContent=spanish?resource.es:resource.en;
     el.status.textContent=copy.loading;el.status.classList.remove('is-error');el.start.disabled=true;
     el.setup.hidden=false;el.work.hidden=true;el.results.hidden=true;
     try{
