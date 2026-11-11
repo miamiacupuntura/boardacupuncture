@@ -4,6 +4,8 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
+  const quizBuild = '20261111-10';
+  document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
     {key:'nametraps', en:'Name Traps', es:'Trampas de nombres', path:'name-traps.html'},
@@ -143,7 +145,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-9');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-10');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
