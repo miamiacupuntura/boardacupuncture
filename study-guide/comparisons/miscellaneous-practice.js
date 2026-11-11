@@ -32,7 +32,16 @@
     next: spanish ? 'Siguiente' : 'Next',
     finish: spanish ? 'Finalizar Quiz' : 'Finish Quiz',
     saved: spanish ? 'Resultado guardado en Exam History.' : 'Result saved to Exam History.',
-    saveFailed: spanish ? 'No se pudo guardar el resultado.' : 'The result could not be saved.'
+    saveFailed: spanish ? 'No se pudo guardar el resultado.' : 'The result could not be saved.',
+    chosen: spanish ? 'Tu respuesta' : 'Your answer',
+    why: spanish ? 'Por qué' : 'Why',
+    distinction: spanish ? 'Fórmula individual vs. familia de fórmulas' : 'Individual formula vs. formula family',
+    distinctionNote: spanish ? 'Una fórmula es una receta específica. Una familia reúne una fórmula raíz y sus variaciones estructurales.' : 'A formula is one specific prescription. A family includes a root formula and its structural variations.',
+    rootFormula: spanish ? 'Fórmula raíz' : 'Root formula',
+    familyMembers: spanish ? 'Miembros de la familia' : 'Family members',
+    progression: spanish ? 'Cómo distinguirlas' : 'How to distinguish them',
+    architecture: spanish ? 'Arquitectura' : 'Architecture',
+    detailFailed: spanish ? 'La explicación detallada no está disponible; revisa la pista y la respuesta correcta.' : 'The detailed explanation is unavailable; review the clue and correct answer.'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -77,6 +86,7 @@
     language: document.querySelector('[data-misc-language]')
   };
   const state={resource:null,items:[],questions:[],index:0,score:0,answered:false,startedAt:0,attemptUid:''};
+  const familyFeedbackCache=new Map();
 
   function shuffle(values){const result=values.slice();for(let i=result.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const value=result[i];result[i]=result[j];result[j]=value;}return result;}
   function clean(value){return String(value||'').replace(/\s+/g,' ').trim();}
@@ -130,21 +140,26 @@
     }
     return spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
   }
+  function readableElementText(element){
+    const clone=element.cloneNode(true);
+    clone.querySelectorAll('br').forEach(br=>br.replaceWith(' '));
+    return clean(clone.textContent);
+  }
   function readableParts(node,title){
     const parts=[];
     const add=value=>{
       const text=clean(value).replace(/^(?:Rule|Clinical focus|Key distinction|Regla|Enfoque clínico|Diferencia clave)\s*:\s*/i,'');
       if(text.length>=18&&text.length<=360&&fold(text)!==fold(title))parts.push(text);
     };
-    Array.from(node.querySelectorAll('.comparison-card__category')).forEach(element=>add(element.textContent));
-    Array.from(node.querySelectorAll('p')).slice(0,3).forEach(element=>add(element.textContent));
+    Array.from(node.querySelectorAll('.comparison-card__category')).forEach(element=>add(readableElementText(element)));
+    Array.from(node.querySelectorAll('p')).slice(0,3).forEach(element=>add(readableElementText(element)));
     Array.from(node.querySelectorAll('dl')).slice(0,1).forEach(list=>{
       const terms=Array.from(list.querySelectorAll('dt'));
-      terms.slice(0,3).forEach(term=>{const definition=term.nextElementSibling;if(definition)add(term.textContent+': '+definition.textContent);});
+      terms.slice(0,3).forEach(term=>{const definition=term.nextElementSibling;if(definition)add(readableElementText(term)+': '+readableElementText(definition));});
     });
     if(parts.length<1){
       Array.from(node.querySelectorAll('tr')).slice(0,3).forEach(row=>{
-        const cells=Array.from(row.querySelectorAll('th,td')).map(cell=>clean(cell.textContent)).filter(Boolean);
+        const cells=Array.from(row.querySelectorAll('th,td')).map(readableElementText).filter(Boolean);
         if(cells.length>1)add(cells.join(': '));
       });
     }
@@ -172,7 +187,9 @@
       if(!title||title.length>160)return;
       const detail=readableParts(node,title);
       if(detail.length<35)return;
-      items.push({title,detail});
+      const chapter=node.querySelector('[data-chapter-url]');
+      const chapterUrl=chapter?chapter.getAttribute('data-chapter-url')||'':'';
+      items.push({title,detail,chapterUrl});
     });
     const seen=new Set();
     return items.filter(item=>{const key=fold(item.title);if(seen.has(key))return false;seen.add(key);return true;});
@@ -208,7 +225,7 @@
     const valid=state.items.map(item=>Object.assign({},item,{context:questionContext(item)})).filter(item=>item.context);
     if(valid.length<4)return [];
     const prompt=prompts[state.resource.key]||copy.prompt;
-    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid)})));
+    return shuffle(valid.map(item=>({prompt,context:item.context,correct:item.title,options:choices(item,valid),explanation:item.detail,item})));
   }
   function renderQuestion(){
     const question=state.questions[state.index];state.answered=false;
@@ -222,13 +239,84 @@
       button.addEventListener('click',()=>answer(button,option));el.options.append(button);
     });
   }
+  function feedbackLine(parent,label,value,className){
+    if(!value)return;
+    const line=document.createElement('p');line.className=className||'misc-practice__feedback-line';
+    const strong=document.createElement('strong');strong.textContent=label+': ';
+    line.append(strong,document.createTextNode(value));parent.append(line);
+  }
+  function familySection(doc){
+    return Array.from(doc.querySelectorAll('section')).find(section=>{
+      const heading=section.querySelector('h2');
+      return heading&&/(family members|miembros de la familia)/i.test(clean(heading.textContent));
+    });
+  }
+  function tableValue(doc,labels){
+    const wanted=labels.map(fold);
+    for(const row of Array.from(doc.querySelectorAll('tr'))){
+      const heading=row.querySelector('th'),cell=row.querySelector('td');
+      if(heading&&cell&&wanted.includes(fold(heading.textContent)))return readableElementText(cell);
+    }
+    return '';
+  }
+  function familyMemberNames(doc){
+    const section=familySection(doc);
+    if(!section)return [];
+    return Array.from(section.querySelectorAll('tbody tr')).map(row=>{
+      const heading=row.querySelector('th');if(!heading)return '';
+      const clone=heading.cloneNode(true);clone.querySelectorAll('.formula-family__badge').forEach(badge=>badge.remove());
+      return clean(clone.textContent);
+    }).filter(Boolean).slice(0,6);
+  }
+  async function familyTeaching(item){
+    if(!item.chapterUrl)return null;
+    if(!familyFeedbackCache.has(item.chapterUrl)){
+      familyFeedbackCache.set(item.chapterUrl,(async()=>{
+        const response=await fetch(new URL(item.chapterUrl,window.location.href),{credentials:'same-origin'});
+        if(!response.ok)throw new Error('family-detail');
+        const doc=new DOMParser().parseFromString(await response.text(),'text/html');
+        return {
+          root:tableValue(doc,['Root','Raíz']),
+          architecture:tableValue(doc,['Architecture','Arquitectura']),
+          members:familyMemberNames(doc),
+          progression:tableValue(doc,['How to choose','Cómo elegir'])
+        };
+      })());
+    }
+    return familyFeedbackCache.get(item.chapterUrl);
+  }
+  function teachingPanel(){
+    const panel=document.createElement('div');panel.className='misc-practice__feedback-teaching';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';heading.textContent=copy.distinction;
+    const note=document.createElement('p');note.textContent=copy.distinctionNote;
+    panel.append(heading,note);return panel;
+  }
+  async function enrichFamilyFeedback(panel,item,questionIndex){
+    try{
+      const detail=await familyTeaching(item);
+      if(state.index!==questionIndex||!state.answered||!detail)return;
+      feedbackLine(panel,copy.rootFormula,detail.root);
+      feedbackLine(panel,copy.architecture,detail.architecture);
+      if(detail.members.length)feedbackLine(panel,copy.familyMembers,detail.members.join(' → '));
+      feedbackLine(panel,copy.progression,detail.progression);
+    }catch(_){
+      if(state.index===questionIndex&&state.answered)feedbackLine(panel,copy.why,copy.detailFailed);
+    }
+  }
   function answer(button,value){
-    if(state.answered)return;state.answered=true;const question=state.questions[state.index];const correct=value===question.correct;
+    if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
     Array.from(el.options.children).forEach(option=>{option.disabled=true;if(option.textContent.slice(3)===question.correct)option.classList.add('is-correct');});
     if(!correct)button.classList.add('is-incorrect');
-    el.feedback.hidden=false;el.feedback.classList.add(correct?'is-correct':'is-incorrect');
-    el.feedback.textContent=(correct?copy.correct:copy.incorrect)+' '+copy.answer+': '+question.correct;
+    el.feedback.hidden=false;el.feedback.classList.add(correct?'is-correct':'is-incorrect');el.feedback.replaceChildren();
+    const title=document.createElement('strong');title.className='misc-practice__feedback-title';title.textContent=correct?copy.correct:copy.incorrect;el.feedback.append(title);
+    if(!correct)feedbackLine(el.feedback,copy.chosen,value,'misc-practice__feedback-choice');
+    feedbackLine(el.feedback,copy.answer,question.correct,'misc-practice__feedback-answer');
+    if(state.resource&&state.resource.key==='families'){
+      const panel=teachingPanel();el.feedback.append(panel);void enrichFamilyFeedback(panel,question.item,questionIndex);
+    }else{
+      feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
+    }
     el.next.hidden=false;el.next.textContent=state.index+1===state.questions.length?copy.finish:copy.next;
   }
   function startQuiz(){
