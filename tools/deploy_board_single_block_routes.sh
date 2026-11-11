@@ -95,13 +95,13 @@ php -l "$CATEGORY_TEMP" >/dev/null
 php -l "$EXAM_HISTORY_TEMP" >/dev/null
 php -l "$EXAM_HISTORY_ENDPOINT_TEMP" >/dev/null
 
-grep -Fq "boardquiz_h_" "$EXAM_HISTORY_TEMP"
-grep -Fq "boardquiz_f_" "$EXAM_HISTORY_TEMP"
+grep -Fq "bqh_" "$EXAM_HISTORY_TEMP"
+grep -Fq "bqf_" "$EXAM_HISTORY_TEMP"
 grep -Fq "historytype" "$EXAM_HISTORY_TEMP"
 grep -Fq "sesskey" "$EXAM_HISTORY_TEMP"
 grep -Fq "\$boardquizcounts" "$EXAM_HISTORY_TEMP"
 grep -Fq "Board Level Quiz" "$EXAM_HISTORY_TEMP"
-grep -Fq "^boardquiz_[hf]_" "$EXAM_HISTORY_ENDPOINT_TEMP"
+grep -Fq "^bq[fh]_" "$EXAM_HISTORY_ENDPOINT_TEMP"
 grep -Fq "\$total < 100" "$EXAM_HISTORY_ENDPOINT_TEMP"
 for quiz_js in "$FORMULA_JS_TEMP" "$SINGLE_HERB_JS_TEMP"; do
     grep -Fq "centralHistorySesskey" "$quiz_js"
