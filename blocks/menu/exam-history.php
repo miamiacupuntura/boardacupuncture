@@ -191,6 +191,28 @@ if ($formulabankpath !== '') {
         }
     }
 }
+$duiyaopracticepath = '/study-guide/comparisons/'
+    . ($ises ? 'dui-yao-practice-es.html' : 'dui-yao-practice.html');
+$duiyaoquizurl = new moodle_url($duiyaopracticepath, [
+    'size' => 25,
+    'historytype' => 'bqd_duiyao',
+    'sesskey' => sesskey(),
+    'from' => 'history',
+]);
+$boardquizrows[] = [
+    'key' => 'dui-yao',
+    'examtype' => 'bqd_duiyao',
+    'topic' => 'Dui Yao',
+    'source' => $ises ? 'Quiz de Dui Yao' : 'Dui Yao Quiz',
+    'course' => $ises ? 'Herbología China Board Level' : 'Chinese Herbology Board Level',
+    'questions' => 51,
+    'status' => $ises ? 'Disponible' : 'Available',
+    'statusclass' => 'is-available',
+    'attempts' => null,
+    'url' => $duiyaoquizurl->out(false),
+    'action' => $ises ? 'Abrir' : 'Open',
+];
+
 usort($boardquizrows, static function(array $left, array $right): int {
     $sourcecomparison = strnatcasecmp($left['source'], $right['source']);
     return $sourcecomparison !== 0
