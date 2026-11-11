@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-18';
+  const quizBuild = '20261111-19';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -68,7 +68,10 @@
     openNameTrap: spanish ? 'Ver distinción →' : 'Review distinction →',
     differentHerbFamily: spanish ? 'es una familia botánica diferente. Las funciones y partes descritas corresponden a' : 'is a different botanical family. The described functions and medicinal parts match',
     reviewHerbFamilies: spanish ? 'Repasar las cuatro familias botánicas' : 'Review the four botanical families',
-    openHerbFamily: spanish ? 'Ver familia y partes →' : 'Review family and parts →'
+    openHerbFamily: spanish ? 'Ver familia y partes →' : 'Review family and parts →',
+    differentFormulaNameTrap: spanish ? 'es una distinción de nombres diferente. La arquitectura y las pistas clínicas corresponden a' : 'is a different formula-name distinction. The architecture and clinical clues match',
+    reviewFormulaNameTraps: spanish ? 'Repasar las cuatro distinciones de nombres' : 'Review the four formula-name distinctions',
+    openFormulaNameTrap: spanish ? 'Ver comparación →' : 'Review comparison →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -184,7 +187,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-18');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-19');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -530,6 +533,31 @@
     });
     panel.append(links);return panel;
   }
+  function formulaNameTrapReviewUrl(item){
+    const review=new URL(spanish?'formula-name-trap-review-es.html':'formula-name-trap-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function formulaNameTrapReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewFormulaNameTraps:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentFormulaNameTrap+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewFormulaNameTraps;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=formulaNameTrapReviewUrl(item);
+      link.target='formulaNameTrapReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openFormulaNameTrap;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -545,6 +573,8 @@
       el.feedback.append(nameTrapReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='herbparts'){
       el.feedback.append(herbFamilyReviewPanel(question,value,correct));
+    }else if(state.resource&&state.resource.key==='formulanames'){
+      el.feedback.append(formulaNameTrapReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
