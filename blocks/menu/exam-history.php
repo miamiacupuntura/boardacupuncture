@@ -228,31 +228,17 @@ $miscquizdefinitions = [
     'safety' => ['Safety Library', 'Biblioteca de seguridad', 12],
     'composition' => ['Formula Composition', 'Composición de fórmulas', 12],
     'incompat' => ['Herbal Incompatibilities', 'Incompatibilidades herbales', 10],
-    'modifications' => ['Formula Modifications', 'Modificaciones de fórmulas', 305],
     'combinations' => ['Herbal Combination', 'Combinaciones herbales', 70],
 ];
 $miscpracticepath = '/study-guide/comparisons/'
     . ($ises ? 'miscellaneous-practice-es.html' : 'miscellaneous-practice.html');
 foreach ($miscquizdefinitions as $misckey => [$misctitleen, $misctitlees, $miscquestioncount]) {
     $miscexamtype = 'bqm_' . $misckey;
-    if ($misckey === 'modifications') {
-        $miscquizurl = new moodle_url(
-            '/study-guide/comparisons/' . ($ises ? 'formula-practice-es.html' : 'formula-practice.html'),
-            [
-                'category' => 'modifications',
-                'size' => 25,
-                'historytype' => $miscexamtype,
-                'sesskey' => sesskey(),
-                'from' => 'history',
-            ]
-        );
-    } else {
-        $miscquizurl = new moodle_url($miscpracticepath, [
-            'source' => $misckey,
-            'sesskey' => sesskey(),
-            'from' => 'history',
-        ]);
-    }
+    $miscquizurl = new moodle_url($miscpracticepath, [
+        'source' => $misckey,
+        'sesskey' => sesskey(),
+        'from' => 'history',
+    ]);
     $boardquizrows[] = [
         'key' => 'misc-' . $misckey,
         'examtype' => $miscexamtype,
