@@ -48,6 +48,8 @@ PATHOLOGY_REVIEW="$TEMP_DIR/pathology-review.html"
 PATHOLOGY_REVIEW_ES="$TEMP_DIR/pathology-review-es.html"
 PATTERN_REVIEW="$TEMP_DIR/pattern-review.html"
 PATTERN_REVIEW_ES="$TEMP_DIR/pattern-review-es.html"
+MACIOCIA_PATTERN_REVIEW="$TEMP_DIR/maciocia-pattern-review.html"
+MACIOCIA_PATTERN_REVIEW_ES="$TEMP_DIR/maciocia-pattern-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$EN_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$ES_HTML"
@@ -75,9 +77,11 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pathology-review.html"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pathology-review-es.html" -o "$PATHOLOGY_REVIEW_ES"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pattern-review.html" -o "$PATTERN_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pattern-review-es.html" -o "$PATTERN_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-pattern-review.html" -o "$MACIOCIA_PATTERN_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-pattern-review-es.html" -o "$MACIOCIA_PATTERN_REVIEW_ES"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-24" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-24" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-25" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-25" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
@@ -134,6 +138,10 @@ grep -Fq "function patternReviewPanel" "$JAVASCRIPT"
 grep -Fq "Review the four pattern comparisons" "$JAVASCRIPT"
 grep -Fq "Back to quiz" "$PATTERN_REVIEW"
 grep -Fq "Regresar al quiz" "$PATTERN_REVIEW_ES"
+grep -Fq "function maciociaPatternReviewPanel" "$JAVASCRIPT"
+grep -Fq "Review the four Maciocia comparisons" "$JAVASCRIPT"
+grep -Fq "Back to quiz" "$MACIOCIA_PATTERN_REVIEW"
+grep -Fq "Regresar al quiz" "$MACIOCIA_PATTERN_REVIEW_ES"
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS_ES" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
@@ -194,7 +202,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     backup_dir="$BACKUP_ROOT/miscellaneous-quiz-$TIMESTAMP/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$backup_dir"
-    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html formula-name-trap-review.html formula-name-trap-review-es.html misleading-formula-review.html misleading-formula-review-es.html advanced-name-trap-review.html advanced-name-trap-review-es.html supplemental-family-review.html supplemental-family-review-es.html pathology-review.html pathology-review-es.html pattern-review.html pattern-review-es.html; do
+    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html formula-name-trap-review.html formula-name-trap-review-es.html misleading-formula-review.html misleading-formula-review-es.html advanced-name-trap-review.html advanced-name-trap-review-es.html supplemental-family-review.html supplemental-family-review-es.html pathology-review.html pathology-review-es.html pattern-review.html pattern-review-es.html maciocia-pattern-review.html maciocia-pattern-review-es.html; do
         if [[ -f "$target_dir/$file" ]]; then
             cp -a "$target_dir/$file" "$backup_dir/$file"
         fi
@@ -226,6 +234,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_one "$PATHOLOGY_REVIEW_ES" "$target_dir/pathology-review-es.html" "$reference"
     install_one "$PATTERN_REVIEW" "$target_dir/pattern-review.html" "$reference"
     install_one "$PATTERN_REVIEW_ES" "$target_dir/pattern-review-es.html" "$reference"
+    install_one "$MACIOCIA_PATTERN_REVIEW" "$target_dir/maciocia-pattern-review.html" "$reference"
+    install_one "$MACIOCIA_PATTERN_REVIEW_ES" "$target_dir/maciocia-pattern-review-es.html" "$reference"
 
     cmp -s "$EN_HTML" "$target_dir/miscellaneous-practice.html"
     cmp -s "$ES_HTML" "$target_dir/miscellaneous-practice-es.html"
@@ -253,6 +263,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$PATHOLOGY_REVIEW_ES" "$target_dir/pathology-review-es.html"
     cmp -s "$PATTERN_REVIEW" "$target_dir/pattern-review.html"
     cmp -s "$PATTERN_REVIEW_ES" "$target_dir/pattern-review-es.html"
+    cmp -s "$MACIOCIA_PATTERN_REVIEW" "$target_dir/maciocia-pattern-review.html"
+    cmp -s "$MACIOCIA_PATTERN_REVIEW_ES" "$target_dir/maciocia-pattern-review-es.html"
     grep -Fq "Which precaution applies to this medicinal?" "$target_dir/miscellaneous-practice.js"
     [[ "$(grep -Fo '"enCaution":' "$target_dir/miscellaneous-practice.js" | wc -l)" -eq 27 ]]
     if grep -Fq "Which safety topic matches this clinical precaution?" "$target_dir/miscellaneous-practice.js"; then
@@ -271,7 +283,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-24 activo."
+echo "OK: build 20261111-25 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
 echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."
@@ -287,3 +299,4 @@ echo "OK: Advanced Name Traps usa feedback breve y cuatro tarjetas con regreso a
 echo "OK: Supplemental Herb Families usa feedback breve y cuatro tarjetas con regreso al quiz."
 echo "OK: Pathology Comparisons usa feedback breve y cuatro tarjetas con regreso al quiz."
 echo "OK: Pattern Comparisons usa feedback breve y cuatro tarjetas con regreso al quiz."
+echo "OK: Pattern Comparison Maciocia usa feedback breve y cuatro tarjetas con regreso al quiz."

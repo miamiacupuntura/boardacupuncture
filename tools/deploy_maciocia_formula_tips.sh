@@ -45,6 +45,8 @@ PATHOLOGY_REVIEW="$TEMP_DIR/pathology-review.html"
 PATHOLOGY_REVIEW_ES="$TEMP_DIR/pathology-review-es.html"
 PATTERN_REVIEW="$TEMP_DIR/pattern-review.html"
 PATTERN_REVIEW_ES="$TEMP_DIR/pattern-review-es.html"
+MACIOCIA_PATTERN_REVIEW="$TEMP_DIR/maciocia-pattern-review.html"
+MACIOCIA_PATTERN_REVIEW_ES="$TEMP_DIR/maciocia-pattern-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$GUIDE_PHP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips.html" -o "$EN_PAGE"
@@ -72,6 +74,8 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pathology-review.html"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pathology-review-es.html" -o "$PATHOLOGY_REVIEW_ES"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pattern-review.html" -o "$PATTERN_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/pattern-review-es.html" -o "$PATTERN_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-pattern-review.html" -o "$MACIOCIA_PATTERN_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-pattern-review-es.html" -o "$MACIOCIA_PATTERN_REVIEW_ES"
 
 php -l "$GUIDE_PHP" >/dev/null
 grep -Fq "Maciocia Formula Tips" "$GUIDE_PHP"
@@ -81,8 +85,8 @@ grep -Fq "Module 2 · Comparison Study Guide" "$EN_PAGE"
 grep -Fq "Módulo 2 · Guía de comparaciones" "$ES_PAGE"
 grep -Fq "167 pattern-to-answer associations" "$EN_PAGE"
 grep -Fq "167 asociaciones de patrón y respuesta" "$ES_PAGE"
-grep -Fq "miscellaneous-practice.js?v=20261111-24" "$MISC_EN"
-grep -Fq "miscellaneous-practice.js?v=20261111-24" "$MISC_ES"
+grep -Fq "miscellaneous-practice.js?v=20261111-25" "$MISC_EN"
+grep -Fq "miscellaneous-practice.js?v=20261111-25" "$MISC_ES"
 grep -Fq "maciociaformulas" "$MISC_JS"
 grep -Fq "function secondaryReviewPanel" "$MISC_JS"
 grep -Fq "Review the four options" "$MISC_JS"
@@ -124,6 +128,10 @@ grep -Fq "function patternReviewPanel" "$MISC_JS"
 grep -Fq "Review the four pattern comparisons" "$MISC_JS"
 grep -Fq "Back to quiz" "$PATTERN_REVIEW"
 grep -Fq "Regresar al quiz" "$PATTERN_REVIEW_ES"
+grep -Fq "function maciociaPatternReviewPanel" "$MISC_JS"
+grep -Fq "Review the four Maciocia comparisons" "$MISC_JS"
+grep -Fq "Back to quiz" "$MACIOCIA_PATTERN_REVIEW"
+grep -Fq "Regresar al quiz" "$MACIOCIA_PATTERN_REVIEW_ES"
 grep -Fq "Which guideline formula or formula set matches this Maciocia pattern?" "$MISC_JS"
 [[ "$(grep -Fo '"answer":' "$EN_PAGE" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$ES_PAGE" | wc -l)" -eq 167 ]]
@@ -181,7 +189,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     target_backup="$BACKUP_DIR/study-guide/comparisons/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$target_backup"
-    for file in maciocia-formula-tips.html maciocia-formula-tips-es.html miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html formula-name-trap-review.html formula-name-trap-review-es.html misleading-formula-review.html misleading-formula-review-es.html advanced-name-trap-review.html advanced-name-trap-review-es.html supplemental-family-review.html supplemental-family-review-es.html pathology-review.html pathology-review-es.html pattern-review.html pattern-review-es.html; do
+    for file in maciocia-formula-tips.html maciocia-formula-tips-es.html miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html formula-name-trap-review.html formula-name-trap-review-es.html misleading-formula-review.html misleading-formula-review-es.html advanced-name-trap-review.html advanced-name-trap-review-es.html supplemental-family-review.html supplemental-family-review-es.html pathology-review.html pathology-review-es.html pattern-review.html pattern-review-es.html maciocia-pattern-review.html maciocia-pattern-review-es.html; do
         [[ -f "$target_dir/$file" ]] && cp -a "$target_dir/$file" "$target_backup/$file"
     done
     install_preserving "$EN_PAGE" "$target_dir/maciocia-formula-tips.html" "$reference"
@@ -209,6 +217,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_preserving "$PATHOLOGY_REVIEW_ES" "$target_dir/pathology-review-es.html" "$reference"
     install_preserving "$PATTERN_REVIEW" "$target_dir/pattern-review.html" "$reference"
     install_preserving "$PATTERN_REVIEW_ES" "$target_dir/pattern-review-es.html" "$reference"
+    install_preserving "$MACIOCIA_PATTERN_REVIEW" "$target_dir/maciocia-pattern-review.html" "$reference"
+    install_preserving "$MACIOCIA_PATTERN_REVIEW_ES" "$target_dir/maciocia-pattern-review-es.html" "$reference"
     cmp -s "$EN_PAGE" "$target_dir/maciocia-formula-tips.html"
     cmp -s "$ES_PAGE" "$target_dir/maciocia-formula-tips-es.html"
     cmp -s "$MISC_EN" "$target_dir/miscellaneous-practice.html"
@@ -234,6 +244,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$PATHOLOGY_REVIEW_ES" "$target_dir/pathology-review-es.html"
     cmp -s "$PATTERN_REVIEW" "$target_dir/pattern-review.html"
     cmp -s "$PATTERN_REVIEW_ES" "$target_dir/pattern-review-es.html"
+    cmp -s "$MACIOCIA_PATTERN_REVIEW" "$target_dir/maciocia-pattern-review.html"
+    cmp -s "$MACIOCIA_PATTERN_REVIEW_ES" "$target_dir/maciocia-pattern-review-es.html"
 done
 cmp -s "$GUIDE_PHP" "$GUIDE_TARGET"
 

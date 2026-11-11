@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-24';
+  const quizBuild = '20261111-25';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -86,7 +86,10 @@
     openPathology: spanish ? 'Ver claves clínicas →' : 'Review clinical distinctions →',
     differentPattern: spanish ? 'corresponde a otra comparación de patrones. Los signos decisivos descritos corresponden a' : 'belongs to a different pattern comparison. The described decisive signs match',
     reviewPatterns: spanish ? 'Repasar las cuatro comparaciones de patrones' : 'Review the four pattern comparisons',
-    openPattern: spanish ? 'Ver signos decisivos →' : 'Review decisive signs →'
+    openPattern: spanish ? 'Ver signos decisivos →' : 'Review decisive signs →',
+    differentMaciociaPattern: spanish ? 'corresponde a otra comparación de Maciocia. Las claves de signos, lengua y pulso corresponden a' : 'belongs to a different Maciocia comparison. The signs, tongue and pulse clues match',
+    reviewMaciociaPatterns: spanish ? 'Repasar las cuatro comparaciones de Maciocia' : 'Review the four Maciocia comparisons',
+    openMaciociaPattern: spanish ? 'Ver claves de Maciocia →' : 'Review Maciocia clues →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -202,7 +205,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-24');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-25');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -698,6 +701,31 @@
     });
     panel.append(links);return panel;
   }
+  function maciociaPatternReviewUrl(item){
+    const review=new URL(spanish?'maciocia-pattern-review-es.html':'maciocia-pattern-review.html',window.location.href);
+    review.searchParams.set('chapter',item.chapterUrl);
+    review.searchParams.set('return',window.location.href);
+    return review.toString();
+  }
+  function maciociaPatternReviewPanel(question,value,correct){
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';
+    heading.textContent=correct?copy.reviewMaciociaPatterns:copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    if(!correct){
+      const reason=document.createElement('p');reason.textContent='“'+value+'” '+copy.differentMaciociaPattern+' “'+question.correct+'”.';panel.append(reason);
+      const reviewTitle=document.createElement('strong');reviewTitle.className='misc-practice__action-review-title';reviewTitle.textContent=copy.reviewMaciociaPatterns;panel.append(reviewTitle);
+    }
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';link.href=maciociaPatternReviewUrl(item);
+      link.target='maciociaPatternReview';if(option===question.correct)link.classList.add('is-correct');link.textContent=String.fromCharCode(65+index)+'. '+option+' · '+(option===question.correct?copy.correctBadge+' · ':'')+copy.openMaciociaPattern;
+      links.append(link);
+    });
+    panel.append(links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -725,6 +753,8 @@
       el.feedback.append(pathologyReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='patterns'){
       el.feedback.append(patternReviewPanel(question,value,correct));
+    }else if(state.resource&&state.resource.key==='maciocia'){
+      el.feedback.append(maciociaPatternReviewPanel(question,value,correct));
     }else if(state.resource&&state.resource.key==='safety'){
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
