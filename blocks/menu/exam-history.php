@@ -87,12 +87,16 @@ if ($herbbankpath !== '') {
             if ($number <= 1 || $name === '' || $questioncount < 1) {
                 continue;
             }
+            $quizhistorytype = 'boardquiz_h_' . $number;
             $quizurl = new moodle_url($singleherbquizpath, [
                 'category' => $number,
                 'size' => min(25, $questioncount),
+                'historytype' => $quizhistorytype,
+                'sesskey' => sesskey(),
             ]);
             $boardquizrows[] = [
                 'key' => 'herb-' . $number,
+                'examtype' => $quizhistorytype,
                 'topic' => $name,
                 'source' => $ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz',
                 'course' => $ises ? 'Herbología China Board Level' : 'Chinese Herbology Board Level',
@@ -164,12 +168,16 @@ if ($formulabankpath !== '') {
             if ($questioncount < 1) {
                 continue;
             }
+            $quizhistorytype = 'boardquiz_f_' . substr(sha1($key), 0, 12);
             $quizurl = new moodle_url($formulapracticepath, [
                 'category' => $key,
                 'size' => min(25, $questioncount),
+                'historytype' => $quizhistorytype,
+                'sesskey' => sesskey(),
             ]);
             $boardquizrows[] = [
                 'key' => 'formula-' . $key,
+                'examtype' => $quizhistorytype,
                 'topic' => $name,
                 'source' => $ises ? 'Quiz de fórmulas' : 'Formula Quiz',
                 'course' => $ises ? 'Herbología China Board Level' : 'Chinese Herbology Board Level',
@@ -190,6 +198,12 @@ usort($boardquizrows, static function(array $left, array $right): int {
         : strnatcasecmp($left['topic'], $right['topic']);
 });
 
+$boardquiznamesbytype = [];
+$boardquizcounts = [];
+foreach ($boardquizrows as $boardquizrow) {
+    $boardquiznamesbytype[$boardquizrow['examtype']] = $boardquizrow['topic'];
+    $boardquizcounts[$boardquizrow['examtype']] = 0;
+}
 $boardexamcounts = [
     'linear' => ['attempts' => 0, 'completed' => 0],
     'adaptive' => ['attempts' => 0, 'completed' => 0],
@@ -206,6 +220,10 @@ if ($DB->get_manager()->table_exists($customtable)) {
     );
     foreach ($boardattempts as $boardattempt) {
         $examtype = (string) $boardattempt->examtype;
+        if (array_key_exists($examtype, $boardquizcounts)) {
+            $boardquizcounts[$examtype]++;
+            continue;
+        }
         $examkey = '';
         if (in_array($examtype, ['linear', 'linearincomplete'], true)) {
             $examkey = 'linear';
@@ -223,6 +241,16 @@ if ($DB->get_manager()->table_exists($customtable)) {
         }
     }
 }
+foreach ($boardquizrows as &$boardquizrow) {
+    $attemptcount = $boardquizcounts[$boardquizrow['examtype']] ?? 0;
+    $boardquizrow['attempts'] = $attemptcount;
+    if ($attemptcount > 0) {
+        $boardquizrow['status'] = $ises ? 'Completado' : 'Completed';
+        $boardquizrow['statusclass'] = 'is-completed';
+    }
+}
+unset($boardquizrow);
+
 $clinicalquestioncount = 63;
 $clinicalbankpath = $CFG->dataroot . '/board-domain-banks/herbology-clinical-cases.json';
 if (is_readable($clinicalbankpath)) {
@@ -348,7 +376,10 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
         $percentage = (int) $attempt->total > 0
             ? (int) round(((float) $attempt->score / (float) $attempt->total) * 100)
             : 0;
-        if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
+        $isboardquiz = isset($boardquiznamesbytype[$examtype]);
+        if ($isboardquiz) {
+            $examname = $boardquiznamesbytype[$examtype];
+        } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
             $examname = $ises ? 'Examen Board adaptativo' : 'Adaptive Board Exam';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
             $examname = $ises ? 'Casos clínicos' : 'Clinical Cases';
@@ -366,7 +397,9 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'key' => 'board-' . (int) $attempt->id,
             'timestamp' => (int) $attempt->timecompleted,
             'exam' => $examname,
-            'source' => $ises ? 'Examen Board' : 'Board Exam',
+            'source' => $isboardquiz
+                ? ($ises ? 'Quiz Board Level' : 'Board Level Quiz')
+                : ($ises ? 'Examen Board' : 'Board Exam'),
             'course' => (string) ($attempt->coursename ?? ''),
             'score' => board_exam_history_number((float) $attempt->score),
             'total' => board_exam_history_number((float) $attempt->total),
