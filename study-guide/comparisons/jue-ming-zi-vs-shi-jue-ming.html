@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Comparative Study Note for Jue Ming Zi and Shi Jue Ming."><title>Jue Ming Zi vs. Shi Jue Ming | AcupunctureTests</title><link rel="stylesheet" href="comparisons.css?v=20261024-1"></head>
-<body><header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="index.html"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>Comparative Study Notes</span></a><a class="comparison-back" href="index.html">← Back to Comparisons</a></div></header>
+<body><header class="comparison-topbar"><div class="comparison-shell comparison-topbar__inner"><a class="comparison-brand" href="index.html"><span class="comparison-brand__mark" aria-hidden="true">☯</span><span>Comparative Study Notes</span></a><a class="comparison-back" data-safety-return href="index.html">← Back to Comparisons</a></div></header>
 <main class="comparison-shell"><article class="study-note">
   <p class="comparison-eyebrow">Herb comparison</p><h1 class="study-note__title">Jue Ming Zi vs. Shi Jue Ming</h1>
   <section class="study-note__block" aria-labelledby="clues-title"><h2 class="study-note__heading" id="clues-title">Study tip · Clues to help answer</h2><table><thead><tr><th scope="col">Clue</th><th scope="col">Jue Ming Zi</th><th scope="col">Shi Jue Ming</th></tr></thead><tbody>
@@ -15,10 +15,39 @@
     <tr><th scope="row">Eye action</th><td>Brightens the eyes by clearing Liver Fire.</td><td>Brightens the eyes while anchoring rising Yang.</td></tr>
     <tr><th scope="row">Additional action</th><td>Moistens the Intestines.</td><td>Its heavy shell anchors and settles.</td></tr>
   </tbody></table></section>
+  <section class="study-note__block" aria-labelledby="safety-title"><h2 class="study-note__heading study-note__heading--green" id="safety-title">Safety Library connection</h2><table><tbody>
+    <tr><th scope="row">Medicinal</th><td>Jue Ming Zi (Cassiae Semen).</td></tr>
+    <tr><th scope="row">Guideline precaution</th><td>Diarrhea and hypotension.</td></tr>
+    <tr><th scope="row">Why it matters</th><td>Its laxative effect may worsen diarrhea, dehydration or low blood pressure.</td></tr>
+    <tr><th scope="row">Guideline source</th><td><em>Handbook of Oriental Medicine</em> — Caution &amp; Contraindication, p. 373.</td></tr>
+  </tbody></table></section>
   <section class="study-note__block" aria-labelledby="focus-title"><h2 class="study-note__heading study-note__heading--purple" id="focus-title">Study guide · Exam focus</h2><table class="study-note__focus"><tbody>
     <tr><th scope="row">Why it matters</th><td>The similar names and shared eye indication can obscure the key mechanism: clearing Liver Fire versus heavily anchoring Liver Yang.</td></tr>
     <tr><th scope="row">Memory cue</th><td><strong>Jue Ming Zi clears Fire and moistens;</strong> <strong>Shi Jue Ming is a heavy shell that anchors Yang.</strong></td></tr>
     <tr><th scope="row">Source</th><td><em>Chinese Herbal Medicine: Materia Medica</em>, Third Edition, Dan Bensky, Steven Clavey, Erich Stöger and Andrew Gamble (2004), p. 112. Source Exam Key CMID 8996, questions 1–2.</td></tr>
   </tbody></table></section>
   <section class="study-note__block" aria-labelledby="prompts-title"><h2 class="study-note__heading study-note__heading--green" id="prompts-title">Possible exam questions · Study prompts</h2><ul class="study-note__prompts"><li>Which substance is better suited to cooling Liver Fire?</li><li>Which substance is salty, heavy and anchors ascendant Liver Yang?</li><li>Which herb also moistens the Intestines?</li><li>Match each substance to its therapeutic category.</li></ul></section>
-</article></main><footer class="comparison-footer"><div class="comparison-shell">Independent Comparative Study Note · Exam keys and Mock feedback remain in Exam Key.</div></footer></body></html>
+</article></main><footer class="comparison-footer"><div class="comparison-shell">Independent Comparative Study Note · Exam keys and Mock feedback remain in Exam Key.</div></footer><script>
+(() => {
+  const link=document.querySelector('[data-safety-return]');
+  const params=new URLSearchParams(window.location.search);
+  if(!link||params.get('from')!=='safety')return;
+  const requested=params.get('return');
+  let returnUrl='';
+  try{
+    const candidate=new URL(requested||'',window.location.href);
+    if(candidate.origin===window.location.origin)returnUrl=candidate.toString();
+  }catch(_){}
+  if(returnUrl)link.href=returnUrl;
+  link.textContent=params.get('lang')==='es'?'← Regresar a la pregunta del quiz':'← Back to the quiz question';
+  link.addEventListener('click',event=>{
+    if(window.opener&&!window.opener.closed){
+      event.preventDefault();
+      const fallback=returnUrl||link.href;
+      window.opener.focus();
+      setTimeout(()=>{window.location.href=fallback;},250);
+      window.close();
+    }
+  });
+})();
+</script></body></html>
