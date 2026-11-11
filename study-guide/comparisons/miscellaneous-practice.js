@@ -19,7 +19,6 @@
     {key:'safety', en:'Safety Library', es:'Biblioteca de seguridad', path:'safety.html'},
     {key:'composition', en:'Formula Composition', es:'Composición de fórmulas', path:'formula-theory.html'},
     {key:'incompat', en:'Herbal Incompatibilities', es:'Incompatibilidades herbales', path:'herbal-incompatibilities.html'},
-    {key:'modifications', en:'Formula Modifications', es:'Modificaciones de fórmulas', direct:true},
     {key:'combinations', en:'Herbal Combination', es:'Combinaciones herbales', path:'/blocks/myprogress/common-herbal-combinations.php', dynamic:true}
   ];
   const copy = {
@@ -102,23 +101,12 @@
       button.className='misc-practice__resource';
       button.innerHTML='<strong></strong><span></span>';
       button.querySelector('strong').textContent=spanish?resource.es:resource.en;
-      button.querySelector('span').textContent=resource.direct
-        ? (spanish?'Banco especializado de modificaciones':'Specialized modifications bank')
-        : (spanish?'Abrir Quiz multiple choice':'Open multiple-choice Quiz');
+      button.querySelector('span').textContent=spanish?'Abrir Quiz multiple choice':'Open multiple-choice Quiz';
       button.addEventListener('click',()=>selectResource(resource));
       el.list.append(button);
     });
   }
   async function selectResource(resource){
-    if(resource.direct){
-      const target=new URL(spanish?'formula-practice-es.html':'formula-practice.html',window.location.href);
-      target.searchParams.set('category','modifications');
-      target.searchParams.set('size','25');
-      target.searchParams.set('historytype','bqm_modifications');
-      if(sesskey)target.searchParams.set('sesskey',sesskey);
-      window.location.href=target.toString();
-      return;
-    }
     state.resource=resource;state.items=[];el.title.textContent=spanish?resource.es:resource.en;
     el.status.textContent=copy.loading;el.status.classList.remove('is-error');el.start.disabled=true;
     el.setup.hidden=false;el.work.hidden=true;el.results.hidden=true;
