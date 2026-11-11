@@ -581,6 +581,17 @@ $boardduiyaoquizurl = new moodle_url(
         'from' => 'library',
     ]
 );
+$boardformulamodificationsquizurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html',
+    [
+        'scope' => 'modifications',
+        'category' => 'modifications',
+        'size' => 25,
+        'historytype' => 'bqf_modifications',
+        'sesskey' => sesskey(),
+        'from' => 'library',
+    ]
+);
 $boardmiscellaneousquizurl = new moodle_url(
     $ises ? '/study-guide/comparisons/miscellaneous-practice-es.html' : '/study-guide/comparisons/miscellaneous-practice.html',
     [
@@ -941,6 +952,7 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardherbquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulaquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de fórmulas' : 'Formula Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardduiyaoquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de Dui Yao' : 'Dui Yao Quiz'); ?><small><?php echo s($ises ? '51 parejas oficiales' : '51 official pairs'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardformulamodificationsquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de modificaciones de fórmulas' : 'Formula Modifications Quiz'); ?><small><?php echo s($ises ? '293 preguntas de modificaciones' : '293 modification questions'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardmiscellaneousquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz misceláneo' : 'Miscellaneous Quiz'); ?><small><?php echo s($ises ? 'Quizzes de recursos suplementarios' : 'Supplemental resource quizzes'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalquizurl->out(false); ?>"><span><?php echo s($ises ? 'Casos clínicos' : 'Clinical Cases'); ?><small><?php echo s($ises ? 'Elige un caso y recibe feedback' : 'Choose a case and receive feedback'); ?></small></span><span aria-hidden="true">›</span></a>
 

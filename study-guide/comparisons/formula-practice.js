@@ -34,14 +34,20 @@
     needsReview: spanish ? 'Fórmulas para reforzar' : 'Formulas to reinforce',
     resetConfirm: spanish ? '¿Borrar el historial guardado en este dispositivo?' : 'Clear the history saved on this device?',
     questionWord: spanish ? 'preguntas' : 'questions',
+    modificationsTitle: spanish ? 'Quiz de modificaciones de fórmulas' : 'Formula Modifications Quiz',
+    modificationsLead: spanish ? 'Practica exclusivamente las modificaciones clínicas de fórmulas en sesiones enfocadas.' : 'Practice only clinical formula modifications in focused Quiz sessions.',
+    modificationsSetup: spanish ? 'Configura el Quiz de modificaciones' : 'Configure the Formula Modifications Quiz',
     modeHelp: {
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
       formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
       category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.'
     }
   };
-  const storageKey = 'formula-practice-progress-v1';
   const centralHistoryParams = new URLSearchParams(window.location.search);
+  const modificationsOnly = centralHistoryParams.get('scope') === 'modifications';
+  const storageKey = modificationsOnly
+    ? 'formula-modifications-practice-progress-v1'
+    : 'formula-practice-progress-v1';
   const centralHistorySesskey = centralHistoryParams.get('sesskey') || '';
   const centralHistoryType = centralHistoryParams.get('historytype') || '';
   let centralAttemptUid = '';
@@ -155,16 +161,24 @@
     parent.append(element);
   }
 
+  function questionsForScope(questions) {
+    return questions.filter(question => {
+      const modification = (question.categoryKeys || []).includes('modifications');
+      return modificationsOnly ? modification : !modification;
+    });
+  }
+
   function filteredQuestions() {
+    const scoped = questionsForScope(state.data.questions);
     if (state.mode === 'formula') {
       const formula = Number(elements.formula.value);
-      return state.data.questions.filter(question => question.formulaNumbers.includes(formula));
+      return scoped.filter(question => question.formulaNumbers.includes(formula));
     }
     if (state.mode === 'category') {
       const category = elements.category.value;
-      return state.data.questions.filter(question => question.categoryKeys.includes(category));
+      return scoped.filter(question => question.categoryKeys.includes(category));
     }
-    return [...state.data.questions];
+    return scoped;
   }
 
   function updateUrl() {
@@ -269,11 +283,16 @@
   }
 
   function populateControls() {
-    state.data.formulas.forEach(formula => {
-      option(elements.formula, formula.number, `${formula.number}. ${formula.name} (${formula.questionCount})`);
+    const scopedQuestions = questionsForScope(state.data.questions);
+    const scopedFormulaNumbers = new Set(scopedQuestions.flatMap(question => question.formulaNumbers || []).map(Number));
+    state.data.formulas.filter(formula => scopedFormulaNumbers.has(Number(formula.number))).forEach(formula => {
+      const count = scopedQuestions.filter(question => question.formulaNumbers.includes(Number(formula.number))).length;
+      option(elements.formula, formula.number, `${formula.number}. ${formula.name} (${count})`);
     });
-    state.data.categories.forEach(category => {
-      const count = state.data.questions.filter(question => question.categoryKeys.includes(category.key)).length;
+    state.data.categories.filter(category =>
+      modificationsOnly ? category.key === 'modifications' : category.key !== 'modifications'
+    ).forEach(category => {
+      const count = scopedQuestions.filter(question => question.categoryKeys.includes(category.key)).length;
       option(elements.category, category.key, `${spanish ? category.es : category.en} (${count})`);
     });
     const params = new URLSearchParams(window.location.search);
@@ -282,8 +301,21 @@
     const requestedSize = Number(params.get('size'));
     if ([...elements.formula.options].some(item => item.value === requestedFormula)) elements.formula.value = requestedFormula;
     if ([...elements.category.options].some(item => item.value === requestedCategory)) elements.category.value = requestedCategory;
-    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= state.data.totals.questions) state.size = requestedSize;
-    if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
+    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= scopedQuestions.length) state.size = requestedSize;
+    if (modificationsOnly) {
+      elements.category.value = 'modifications';
+      setMode('category', false);
+      elements.modeButtons[0]?.closest('fieldset')?.setAttribute('hidden', '');
+      elements.formulaField.hidden = true;
+      elements.categoryField.hidden = true;
+      const heroTitle = document.querySelector('.formula-practice-hero h1');
+      const heroLead = document.querySelector('.formula-practice-hero h1 + p');
+      const setupTitle = document.querySelector('#practice-setup-title');
+      if (heroTitle) heroTitle.textContent = text.modificationsTitle;
+      if (heroLead) heroLead.textContent = text.modificationsLead;
+      if (setupTitle) setupTitle.textContent = text.modificationsSetup;
+      document.title = text.modificationsTitle + ' | AcupunctureTests';
+    } else if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
     else if (requestedCategory && [...elements.category.options].some(item => item.value === requestedCategory)) setMode('category', false);
     else setMode('all', false);
     state.useMaximum = state.mode !== 'all' && requestedSize === filteredQuestions().length;
@@ -769,9 +801,12 @@
       applyGuidelineScope(data, guideline);
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
-      elements.questionTotals.forEach(element => { element.textContent = String(data.totals.questions); });
-      elements.formulaTotals.forEach(element => { element.textContent = String(data.totals.formulas); });
-      elements.categoryTotals.forEach(element => { element.textContent = String(data.totals.categories); });
+      const scopedQuestions = questionsForScope(data.questions);
+      const scopedFormulaNumbers = new Set(scopedQuestions.flatMap(question => question.formulaNumbers || []).map(Number));
+      const scopedCategories = new Set(scopedQuestions.flatMap(question => question.categoryKeys || []));
+      elements.questionTotals.forEach(element => { element.textContent = String(scopedQuestions.length); });
+      elements.formulaTotals.forEach(element => { element.textContent = String(scopedFormulaNumbers.size); });
+      elements.categoryTotals.forEach(element => { element.textContent = String(scopedCategories.size); });
       const translationMap = new Map((translations?.questions || []).map(question => [question.sourceNumber, question]));
       if (data.questions.every(question => translationMap.has(question.sourceNumber))) {
         state.translations = translationMap;
