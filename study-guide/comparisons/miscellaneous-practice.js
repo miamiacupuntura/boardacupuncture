@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-11';
+  const quizBuild = '20261111-12';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -45,7 +45,15 @@
     architecture: spanish ? 'Arquitectura' : 'Architecture',
     detailFailed: spanish ? 'La explicación detallada no está disponible; revisa la pista y la respuesta correcta.' : 'The detailed explanation is unavailable; review the clue and correct answer.',
     guidelineSource: spanish ? 'Fuente del guideline' : 'Guideline source',
-    safetyGuideline: 'Handbook of Oriental Medicine — Caution & Contraindication, p. 373'
+    safetyGuideline: 'Handbook of Oriental Medicine — Caution & Contraindication, p. 373',
+    mockReview: spanish ? 'Revisión tipo mock · Por qué cada opción es correcta o incorrecta' : 'Mock review · Why each option is right or wrong',
+    correctOption: spanish ? 'Correcta' : 'Correct',
+    incorrectOption: spanish ? 'Incorrecta' : 'Incorrect',
+    selectedOption: spanish ? 'Tu selección' : 'Your selection',
+    guidelineAssigns: spanish ? 'El guideline asigna esta precaución a' : 'The guideline assigns this precaution to',
+    notTargetHerb: spanish ? 'no a' : 'not to',
+    correctForHerb: spanish ? 'Esta es la precaución indicada en el guideline para' : 'This is the guideline precaution for',
+    openStudyCard: spanish ? 'Abrir tarjeta de Jue Ming Zi →' : 'Open Jue Ming Zi study card →'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -287,6 +295,46 @@
     const strong=document.createElement('strong');strong.textContent=label+': ';
     line.append(strong,document.createTextNode(value));parent.append(line);
   }
+  function safetyOwner(caution){
+    return state.items.find(item=>item.title===caution);
+  }
+  function safetyMockReview(question,value){
+    const panel=document.createElement('section');panel.className='misc-practice__mock-review';
+    const heading=document.createElement('strong');heading.className='misc-practice__mock-title';heading.textContent=copy.mockReview;
+    panel.append(heading);
+    question.options.forEach((option,index)=>{
+      const owner=safetyOwner(option);
+      const isCorrect=option===question.correct;
+      const row=document.createElement('div');row.className='misc-practice__mock-option '+(isCorrect?'is-correct':'is-incorrect');
+      const rowHeading=document.createElement('div');rowHeading.className='misc-practice__mock-option-heading';
+      const label=document.createElement('strong');label.textContent=String.fromCharCode(65+index)+' · '+(isCorrect?copy.correctOption:copy.incorrectOption);
+      rowHeading.append(label);
+      if(option===value){
+        const selected=document.createElement('span');selected.className='misc-practice__mock-selected';selected.textContent=copy.selectedOption;rowHeading.append(selected);
+      }
+      const caution=document.createElement('p');caution.className='misc-practice__mock-caution';caution.textContent=option;
+      const reason=document.createElement('p');reason.className='misc-practice__mock-reason';
+      if(isCorrect){
+        reason.textContent=copy.correctForHerb+' '+question.item.detail+'. '+question.item.explanation;
+      }else if(owner){
+        reason.textContent=copy.guidelineAssigns+' '+owner.detail+', '+copy.notTargetHerb+' '+question.item.detail+'. '+owner.explanation;
+      }else{
+        reason.textContent=copy.detailFailed;
+      }
+      row.append(rowHeading,caution,reason);panel.append(row);
+    });
+    return panel;
+  }
+  function appendSafetyStudyCard(parent,question){
+    if(!question.item||question.item.herb!=='Jue Ming Zi')return;
+    const cardUrl=new URL('jue-ming-zi-vs-shi-jue-ming.html',window.location.href);
+    cardUrl.searchParams.set('from','safety');
+    cardUrl.searchParams.set('lang',spanish?'es':'en');
+    cardUrl.searchParams.set('return',window.location.href);
+    const link=document.createElement('a');link.className='misc-practice__study-card-link';link.href=cardUrl.toString();
+    link.target='jueMingZiStudyCard';link.textContent=copy.openStudyCard;
+    parent.append(link);
+  }
   function familySection(doc){
     return Array.from(doc.querySelectorAll('section')).find(section=>{
       const heading=section.querySelector('h2');
@@ -356,9 +404,12 @@
     feedbackLine(el.feedback,copy.answer,question.correct,'misc-practice__feedback-answer');
     if(state.resource&&state.resource.key==='families'){
       const panel=teachingPanel();el.feedback.append(panel);void enrichFamilyFeedback(panel,question.item,questionIndex);
+    }else if(state.resource&&state.resource.key==='safety'){
+      el.feedback.append(safetyMockReview(question,value));
+      feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
+      appendSafetyStudyCard(el.feedback,question);
     }else{
       feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
-      if(state.resource&&state.resource.key==='safety')feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
     }
     el.next.hidden=false;el.next.textContent=state.index+1===state.questions.length?copy.finish:copy.next;
   }
