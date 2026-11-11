@@ -10,7 +10,6 @@
         const questions = [...quiz.querySelectorAll('[data-clinical-question]')];
         const navigation = quiz.querySelector('[data-clinical-navigation]');
         const nextButton = quiz.querySelector('[data-clinical-next]');
-        const restartButton = quiz.querySelector('[data-clinical-restart]');
         const finishButton = quiz.querySelector('[data-clinical-finish]');
         const progress = quiz.querySelector('[data-clinical-progress]');
         const scoreOutput = quiz.querySelector('[data-clinical-score]');
@@ -521,17 +520,6 @@
             }
         };
 
-        const restartExam = async () => {
-            if (!window.confirm(quiz.dataset.restartConfirm)) {
-                return;
-            }
-            restartButton.disabled = true;
-            stopTimer();
-            await saveAttempt(activeQuestions.length, 'clinicalincomplete');
-            startAttempt(questions, true);
-            restartButton.disabled = false;
-        };
-
         const finishExamEarly = () => {
             if (complete || answered === 0) {
                 return;
@@ -556,7 +544,6 @@
             }
         });
         retryButton.addEventListener('click', retryErrors);
-        restartButton.addEventListener('click', restartExam);
         finishButton.addEventListener('click', finishExamEarly);
         quiz.addEventListener('submit', event => event.preventDefault());
 
