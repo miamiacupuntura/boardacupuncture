@@ -557,6 +557,13 @@ $boarddomainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' =
 $boardquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $boardlanguagecontext);
 $boardherbquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'herbs'] + $boardlanguagecontext);
 $boardformulaquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'formulas'] + $boardlanguagecontext);
+$boardduiyaoquizurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html'
+);
+$boardmiscellaneousquizurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/formula-practice-es.html' : '/study-guide/comparisons/formula-practice.html',
+    ['category' => 'modifications', 'size' => 25, 'from' => 'library']
+);
 $boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'clinical'] + $boardlanguagecontext);
 $boardclinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $boardlanguagecontext);
 $boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
@@ -906,6 +913,8 @@ echo $OUTPUT->header();
                             <nav class="subject-study-library__journey-options" aria-label="Quiz">
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardherbquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de hierbas individuales' : 'Single Herbs Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardformulaquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de fórmulas' : 'Formula Quiz'); ?><small><?php echo s($ises ? 'Feedback inmediato' : 'Immediate feedback'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardduiyaoquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz de Dui Yao' : 'Dui Yao Quiz'); ?><small><?php echo s($ises ? '51 parejas oficiales' : '51 official pairs'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardmiscellaneousquizurl->out(false); ?>"><span><?php echo s($ises ? 'Quiz misceláneo' : 'Miscellaneous Quiz'); ?><small><?php echo s($ises ? 'Modificaciones y temas especiales' : 'Modifications and special topics'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalquizurl->out(false); ?>"><span><?php echo s($ises ? 'Casos clínicos' : 'Clinical Cases'); ?><small><?php echo s($ises ? 'Elige un caso y recibe feedback' : 'Choose a case and receive feedback'); ?></small></span><span aria-hidden="true">›</span></a>
 
                             </nav>
