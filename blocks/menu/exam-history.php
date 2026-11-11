@@ -13,44 +13,18 @@ $historytype = optional_param('type', 'all', PARAM_ALPHA);
 if (!in_array($historytype, ['all', 'board', 'quiz'], true)) {
     $historytype = 'all';
 }
-$returnto = optional_param('returnto', 'clinicalcases', PARAM_ALPHA);
-if (!in_array($returnto, ['dashboard', 'clinicalcases', 'exams'], true)) {
-    $returnto = 'clinicalcases';
-}
-$returncaseexam = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
-if ($returnto === 'clinicalcases' && $returncaseexam === ''
-        && !empty($SESSION->block_menu_last_clinical_caseexam)) {
-    $returncaseexam = clean_param($SESSION->block_menu_last_clinical_caseexam, PARAM_ALPHANUMEXT);
-}
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = 25;
 $languageparams = $ises ? ['lang' => 'es', 'ui' => 'es'] : ['lang' => 'en', 'ui' => 'en'];
-$originparams = ['returnto' => $returnto];
-if ($returnto === 'clinicalcases' && $returncaseexam !== '') {
-    $originparams['caseexam'] = $returncaseexam;
-}
 $pageurl = new moodle_url('/blocks/menu/exam-history.php', [
     'type' => $historytype,
     'page' => $page,
-] + $originparams + $languageparams);
-if ($returnto === 'clinicalcases') {
-    $returnparams = ['track' => 'clinicalcases'];
-    if ($returncaseexam !== '') {
-        $returnparams['caseexam'] = $returncaseexam;
-    }
-    $returnurl = new moodle_url('/blocks/menu/herbology-board.php', $returnparams + $languageparams);
-    $returnlabel = '← Clinical Cases';
-} else if ($returnto === 'exams') {
-    $returnurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languageparams);
-    $returnlabel = $ises ? '← Exámenes Board' : '← Board Exams';
-} else {
-    $returnurl = new moodle_url('/my/', [], 'board-level-herbology');
-    $returnlabel = '← Dashboard';
-}
+] + $languageparams);
+$dashboardurl = new moodle_url('/my/', [], 'board-level-herbology');
 $languageurl = new moodle_url('/blocks/menu/exam-history.php', [
     'type' => $historytype,
     'page' => $page,
-] + $originparams + ($ises ? ['lang' => 'en', 'ui' => 'en'] : ['lang' => 'es', 'ui' => 'es']));
+] + ($ises ? ['lang' => 'en', 'ui' => 'en'] : ['lang' => 'es', 'ui' => 'es']));
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -105,22 +79,6 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             : ($percentage >= 70
                 ? ($ises ? 'Aprobado' : 'Passed')
                 : ($ises ? 'No aprobado' : 'Not passed'));
-        $boardresumeurl = null;
-        if ($isincomplete) {
-            if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
-                $boardresumeurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                    'track' => 'clinicalcases',
-                ] + $languageparams);
-            } else {
-                $boardresumemode = in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)
-                    ? 'adaptive'
-                    : 'linear';
-                $boardresumeurl = new moodle_url('/blocks/menu/herbology-board.php', [
-                    'track' => 'exams',
-                    'exam' => $boardresumemode,
-                ] + $languageparams);
-            }
-        }
         $historyrows[] = [
             'key' => 'board-' . (int) $attempt->id,
             'timestamp' => (int) $attempt->timecompleted,
@@ -133,8 +91,7 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'status' => $status,
             'statusclass' => $isincomplete ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration((int) $attempt->duration, $ises),
-            'resumeurl' => $boardresumeurl ? $boardresumeurl->out(false) : '',
-            'resumelabel' => $ises ? 'Retomar examen →' : 'Resume Exam →',
+            'resumeurl' => '',
         ];
     }
 }
@@ -260,7 +217,7 @@ echo $OUTPUT->header();
                 : 'Results from your Board exams and Moodle quizzes, combined in chronological order.'; ?></p>
         </div>
         <div class="exam-history__actions">
-            <a class="exam-history__button" href="<?php echo $returnurl->out(false); ?>"><?php echo s($returnlabel); ?></a>
+            <a class="exam-history__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? '← Dashboard' : '← Dashboard'; ?></a>
             <a class="exam-history__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
     </header>
@@ -270,7 +227,7 @@ echo $OUTPUT->header();
             $filterurl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $filterkey,
                 'page' => 0,
-            ] + $originparams + $languageparams);
+            ] + $languageparams);
         ?>
             <a href="<?php echo $filterurl->out(false); ?>"<?php echo $historytype === $filterkey ? ' aria-current="page"' : ''; ?>><?php echo s($filterlabel); ?></a>
         <?php } ?>
@@ -328,11 +285,11 @@ echo $OUTPUT->header();
             $previousurl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $historytype,
                 'page' => max(0, $page - 1),
-            ] + $originparams + $languageparams);
+            ] + $languageparams);
             $nexturl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $historytype,
                 'page' => min($totalpages - 1, $page + 1),
-            ] + $originparams + $languageparams);
+            ] + $languageparams);
         ?>
             <nav class="exam-history__pagination" aria-label="<?php echo $ises ? 'Paginación' : 'Pagination'; ?>">
                 <?php if ($page > 0) { ?><a rel="prev" href="<?php echo $previousurl->out(false); ?>"><?php echo $ises ? '← Anterior' : '← Previous'; ?></a><?php } ?>
