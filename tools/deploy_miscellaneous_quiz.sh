@@ -26,14 +26,18 @@ EN_HTML="$TEMP_DIR/miscellaneous-practice.html"
 ES_HTML="$TEMP_DIR/miscellaneous-practice-es.html"
 JAVASCRIPT="$TEMP_DIR/miscellaneous-practice.js"
 JUE_MING_CARD="$TEMP_DIR/jue-ming-zi-vs-shi-jue-ming.html"
+MACIOCIA_FORMULA_TIPS="$TEMP_DIR/maciocia-formula-tips.html"
+MACIOCIA_FORMULA_TIPS_ES="$TEMP_DIR/maciocia-formula-tips-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$EN_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$ES_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.js" -o "$JAVASCRIPT"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/jue-ming-zi-vs-shi-jue-ming.html" -o "$JUE_MING_CARD"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips.html" -o "$MACIOCIA_FORMULA_TIPS"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips-es.html" -o "$MACIOCIA_FORMULA_TIPS_ES"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-12" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-12" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-13" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-13" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
@@ -46,6 +50,12 @@ grep -Fq "Open Jue Ming Zi study card" "$JAVASCRIPT"
 grep -Fq "Back to the quiz question" "$JUE_MING_CARD"
 grep -Fq "Regresar a la pregunta del quiz" "$JUE_MING_CARD"
 grep -Fq "Guideline precaution</th><td>Diarrhea and hypotension." "$JUE_MING_CARD"
+grep -Fq "Maciocia Formula Tips" "$MACIOCIA_FORMULA_TIPS"
+grep -Fq "167 pattern-to-answer associations" "$MACIOCIA_FORMULA_TIPS"
+grep -Fq "167 asociaciones de patrón y respuesta" "$MACIOCIA_FORMULA_TIPS_ES"
+grep -Fq "maciociaformulas" "$JAVASCRIPT"
+[[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS" | wc -l)" -eq 167 ]]
+[[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS_ES" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
 [[ "$(grep -Fo '"esCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
 if grep -Fq "Which safety topic matches this clinical precaution?" "$JAVASCRIPT"; then
@@ -104,7 +114,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     backup_dir="$BACKUP_ROOT/miscellaneous-quiz-$TIMESTAMP/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$backup_dir"
-    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html; do
+    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html; do
         if [[ -f "$target_dir/$file" ]]; then
             cp -a "$target_dir/$file" "$backup_dir/$file"
         fi
@@ -114,11 +124,15 @@ for target_dir in "${TARGETS[@]}"; do
     install_one "$ES_HTML" "$target_dir/miscellaneous-practice-es.html" "$reference"
     install_one "$JAVASCRIPT" "$target_dir/miscellaneous-practice.js" "$reference"
     install_one "$JUE_MING_CARD" "$target_dir/jue-ming-zi-vs-shi-jue-ming.html" "$reference"
+    install_one "$MACIOCIA_FORMULA_TIPS" "$target_dir/maciocia-formula-tips.html" "$reference"
+    install_one "$MACIOCIA_FORMULA_TIPS_ES" "$target_dir/maciocia-formula-tips-es.html" "$reference"
 
     cmp -s "$EN_HTML" "$target_dir/miscellaneous-practice.html"
     cmp -s "$ES_HTML" "$target_dir/miscellaneous-practice-es.html"
     cmp -s "$JAVASCRIPT" "$target_dir/miscellaneous-practice.js"
     cmp -s "$JUE_MING_CARD" "$target_dir/jue-ming-zi-vs-shi-jue-ming.html"
+    cmp -s "$MACIOCIA_FORMULA_TIPS" "$target_dir/maciocia-formula-tips.html"
+    cmp -s "$MACIOCIA_FORMULA_TIPS_ES" "$target_dir/maciocia-formula-tips-es.html"
     grep -Fq "Which precaution applies to this medicinal?" "$target_dir/miscellaneous-practice.js"
     [[ "$(grep -Fo '"enCaution":' "$target_dir/miscellaneous-practice.js" | wc -l)" -eq 27 ]]
     if grep -Fq "Which safety topic matches this clinical precaution?" "$target_dir/miscellaneous-practice.js"; then
@@ -137,8 +151,9 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-12 activo."
+echo "OK: build 20261111-13 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
 echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."
 echo "OK: feedback tipo mock explica las cuatro opciones y Jue Ming Zi enlaza su tarjeta con regreso al quiz."
+echo "OK: Maciocia Formula Tips activo con 72 fórmulas del guideline y 167 preguntas."

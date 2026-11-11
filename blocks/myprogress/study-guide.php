@@ -183,6 +183,14 @@ $areas = [
                 'secondary' => true,
             ],
             [
+                'title' => 'Maciocia Formula Tips',
+                'description' => 'Cross-reference 96 Maciocia pattern comparisons with 72 formulas from the official 2026 Appendix C roster, using decisive clinical clues.',
+                'path' => '/study-guide/comparisons/maciocia-formula-tips.html',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 72 GUIDELINE FORMULAS',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Most Important Formulas',
                 'description' => 'Review 85 formulas by pattern, action, decisive clue, contrast, memory cue and safety.',
                 'path' => '/study-guide/comparisons/most-important-formulas.html',
@@ -322,6 +330,9 @@ $spanishcopy = [
     'Review six additional plant, medicinal-part and related-herb groups that are commonly confused.' => 'Repasa seis grupos adicionales de plantas, partes medicinales y hierbas relacionadas que suelen confundirse.',
     'Pattern Comparison Maciocia' => 'Comparación de patrones Maciocia',
     'Review signs, tongue, pulse and representative formulas through 100 organ-pattern clinical tips.' => 'Repasa signos, lengua, pulso y fórmulas representativas mediante 100 consejos clínicos de patrones de órganos.',
+    'Maciocia Formula Tips' => 'Consejos de fórmulas Maciocia',
+    'Cross-reference 96 Maciocia pattern comparisons with 72 formulas from the official 2026 Appendix C roster, using decisive clinical clues.' => 'Cruza 96 comparaciones de patrones Maciocia con 72 fórmulas del roster oficial 2026 de Appendix C mediante pistas clínicas decisivas.',
+    'AVAILABLE · 72 GUIDELINE FORMULAS' => 'DISPONIBLE · 72 FÓRMULAS DEL GUIDELINE',
     'Most Important Formulas' => 'Fórmulas más importantes',
     'Review 85 formulas by pattern, action, decisive clue, contrast, memory cue and safety.' => 'Repasa 85 fórmulas por patrón, acción, pista decisiva, contraste, recurso de memoria y seguridad.',
     'Formula Composition' => 'Composición de fórmulas',
@@ -448,6 +459,7 @@ $secondaryguidechapters = array_values(array_filter(
         return !in_array($chapter['path'] ?? '', [
             '/study-guide/comparisons/formula-navigator.html',
             '/study-guide/comparisons/patterns-tips-maciocia.html',
+            '/study-guide/comparisons/maciocia-formula-tips.html',
             '/study-guide/comparisons/safety.html',
             '/study-guide/comparisons/formula-theory.html',
             '/study-guide/comparisons/herbal-incompatibilities.html',
@@ -548,6 +560,9 @@ $patterncomparisonsurl = new moodle_url(
 );
 $patternmaciociacomparisonurl = new moodle_url(
     $ises ? '/study-guide/comparisons/patterns-tips-maciocia-es.html' : '/study-guide/comparisons/patterns-tips-maciocia.html'
+);
+$maciociaformulatipsurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/maciocia-formula-tips-es.html' : '/study-guide/comparisons/maciocia-formula-tips.html'
 );
 $boardlanguagecontext = $ises ? ['lang' => 'es'] : [];
 $boardpracticeurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $boardlanguagecontext);
@@ -871,6 +886,9 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $patternmaciociacomparisonurl->out(false); ?>">
                                     <span><?php echo s($tr('Pattern Comparison Maciocia')); ?><small><?php echo s($ises ? '100 consejos clínicos de patrones' : '100 clinical pattern tips'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $maciociaformulatipsurl->out(false); ?>">
+                                    <span><?php echo s($tr('Maciocia Formula Tips')); ?><small><?php echo s($ises ? '72 fórmulas del guideline · 167 preguntas' : '72 guideline formulas · 167 questions'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>

@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-12';
+  const quizBuild = '20261111-13';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -18,6 +18,7 @@
     {key:'pathology', en:'Pathology Comparisons', es:'Comparaciones de patologías', path:'pathologies.html'},
     {key:'patterns', en:'Pattern Comparisons', es:'Comparaciones de patrones', path:'patterns.html'},
     {key:'maciocia', en:'Pattern Comparison Maciocia', es:'Comparación de patrones Maciocia', path:'patterns-tips-maciocia.html'},
+    {key:'maciociaformulas', en:'Maciocia Formula Tips', es:'Consejos de fórmulas Maciocia', path:'maciocia-formula-tips.html'},
     {key:'safety', en:'Safety Library', es:'Biblioteca de seguridad', path:'safety.html'},
     {key:'composition', en:'Formula Composition', es:'Composición de fórmulas', path:'formula-theory.html'},
     {key:'incompat', en:'Herbal Incompatibilities', es:'Incompatibilidades herbales', path:'herbal-incompatibilities.html'},
@@ -67,6 +68,7 @@
     pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
     patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
     maciocia: spanish ? '¿Qué comparación de patrones de Maciocia corresponde a estas claves?' : 'Which Maciocia pattern comparison matches these key findings?',
+    maciociaformulas: spanish ? '¿Qué fórmula o conjunto de fórmulas del guideline corresponde a este patrón de Maciocia?' : 'Which guideline formula or formula set matches this Maciocia pattern?',
     safety: spanish ? '¿Qué precaución corresponde a este medicamento?' : 'Which precaution applies to this medicinal?',
     composition: spanish ? '¿Qué principio de composición de fórmulas corresponde a esta descripción?' : 'Which formula-composition principle matches this description?',
     incompat: spanish ? '¿Qué incompatibilidad o interacción herbal corresponde a esta advertencia?' : 'Which herbal incompatibility or interaction matches this warning?',
@@ -149,9 +151,15 @@
   function choices(correct,pool){
     if(state.resource&&state.resource.key==='safety')return safetyChoices(correct,pool);
     const ranked=pool.filter(item=>item!==correct).map(item=>({item,score:similarity(correct.title+' '+correct.detail,item.title+' '+item.detail)})).sort((a,b)=>b.score-a.score);
-    const close=ranked.filter(candidate=>candidate.score>0).slice(0,8);
+    const close=ranked.filter(candidate=>candidate.score>0).slice(0,12);
     const rest=ranked.filter(candidate=>!close.includes(candidate));
-    const distractors=shuffle(close).concat(shuffle(rest)).slice(0,3).map(candidate=>candidate.item.title);
+    const seen=new Set([fold(correct.title)]),distractors=[];
+    shuffle(close).concat(shuffle(rest)).some(candidate=>{
+      const key=fold(candidate.item.title);
+      if(!key||seen.has(key))return false;
+      seen.add(key);distractors.push(candidate.item.title);
+      return distractors.length===3;
+    });
     return shuffle([correct.title].concat(distractors));
   }
   function attemptUid(){if(globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function')return globalThis.crypto.randomUUID();return 'misc-'+Date.now()+'-'+Math.random().toString(36).slice(2);}
@@ -162,7 +170,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-11');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-13');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -209,6 +217,25 @@
     return context;
   }
   function extractItems(html){
+    if(state.resource&&state.resource.key==='maciociaformulas'){
+      const doc=new DOMParser().parseFromString(html,'text/html');
+      const bank=doc.querySelector('#maciocia-formula-tip-data');
+      if(!bank)return [];
+      try{
+        const rows=JSON.parse(bank.textContent);
+        return rows.map(row=>({
+          title:clean(row.answer),
+          detail:[row.system,row.pattern,row.clue].map(clean).filter(Boolean).join(' • '),
+          explanation:spanish
+            ? clean(row.answer)+' es la asociación del roster oficial para '+clean(row.pattern)+'.'
+            : clean(row.answer)+' is the official-roster association for '+clean(row.pattern)+'.',
+          chapterUrl:clean(row.sourceUrl),
+          domain:clean(row.system)
+        })).filter(item=>item.title&&item.detail);
+      }catch(_){
+        return [];
+      }
+    }
     if(state.resource&&state.resource.key==='safety'){
       return safetyPrecautions.map(entry=>({
         title:spanish?entry.esCaution:entry.enCaution,
@@ -268,7 +295,7 @@
   }
   function questionExplanation(item){
     if(state.resource.key==='secondary')return spanish?'Estos medicamentos pertenecen a categorías primarias diferentes, pero comparten «'+item.title+'» como acción secundaria.':'These medicinals belong to different primary categories but share “'+item.title+'” as a secondary action.';
-    if(state.resource.key==='safety')return item.explanation;
+    if(state.resource.key==='safety'||state.resource.key==='maciociaformulas')return item.explanation;
     return item.detail;
   }
   function buildQuestions(){
