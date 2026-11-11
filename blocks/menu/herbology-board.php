@@ -103,13 +103,6 @@ $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'do
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext);
-$unifiedclinicalhistoryurl = new moodle_url('/blocks/menu/exam-history.php', [
-    'returnto' => 'clinicalcases',
-    'caseexam' => $clinicalexamkey,
-] + $languagecontext);
-$unifiedboardhistoryurl = new moodle_url('/blocks/menu/exam-history.php', [
-    'returnto' => 'exams',
-] + $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
@@ -246,7 +239,6 @@ if ($track === 'clinicalcases') {
         $clinicalexamkey = (string)$selectedclinicalexam['key'];
     }
     if ($selectedclinicalexam !== null) {
-        $SESSION->block_menu_last_clinical_caseexam = $clinicalexamkey;
         $clinicalquestions = array_values(array_filter(
             $selectedclinicalexam['questions'],
             static fn($question): bool => is_array($question)
@@ -1068,19 +1060,6 @@ $pagetitle = in_array($track, ['exams', 'simulation'], true)
         : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
-$PAGE->requires->js_init_code(<<<'JS'
-document.querySelectorAll('[data-exit-to-exam-history]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const destination = link.href;
-        if (window.top !== window) {
-            window.top.location.replace(destination);
-            return;
-        }
-        window.location.replace(destination);
-    });
-});
-JS);
 
 $topics = [];
 $clearheatsections = [
@@ -2454,9 +2433,6 @@ echo $OUTPUT->header();
                     data-incorrect-word="<?php echo $ises ? 'Incorrecta' : 'Incorrect'; ?>"
                     data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
                     data-results-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
-                    data-restart-confirm="<?php echo $ises
-                        ? '¿Deseas reiniciar y mezclar el examen? Se borrarán las respuestas actuales, este intento se registrará como No completado y las preguntas aparecerán en un orden nuevo.'
-                        : 'Restart and shuffle the exam? Your current answers will be cleared, this attempt will be recorded as Not completed, and the questions will appear in a new order.'; ?>"
                     data-finish-confirm="<?php echo $ises
                         ? '¿Deseas finalizar ahora? Las preguntas sin responder contarán como incorrectas y el resultado se guardará.'
                         : 'Finish now? Unanswered questions will count as incorrect and the result will be saved.'; ?>"
@@ -2692,9 +2668,6 @@ echo $OUTPUT->header();
                     <?php } ?>
 
                     <div class="herb-board__exam-submit" data-clinical-navigation>
-                        <button type="button" class="herb-board__clinical-restart" data-clinical-restart>
-                            <?php echo $ises ? '↻ Reiniciar y mezclar' : '↻ Restart and shuffle'; ?>
-                        </button>
                         <button type="button" class="herb-board__clinical-finish" data-clinical-finish disabled>
                             <?php echo $ises ? 'Finalizar examen' : 'Finish exam'; ?>
                         </button>
@@ -2802,11 +2775,6 @@ echo $OUTPUT->header();
                             </h4>
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
-                        <a class="herb-board__exam-history-link"
-                            href="<?php echo s($unifiedclinicalhistoryurl->out(false)); ?>"
-                            target="_top" data-exit-to-exam-history>
-                            <?php echo $ises ? '← Salir a Historial de exámenes' : '← Exit to Exam History'; ?>
-                        </a>
                     </header>
                     <p class="herb-board__exam-history-empty" data-clinical-history-empty
                         <?php echo $clinicalhistory ? 'hidden' : ''; ?>>
@@ -3018,11 +2986,6 @@ echo $OUTPUT->header();
                             </h4>
                         </div>
                         <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
-                        <a class="herb-board__exam-history-link"
-                            href="<?php echo s($unifiedboardhistoryurl->out(false)); ?>"
-                            target="_top" data-exit-to-exam-history>
-                            <?php echo $ises ? '← Salir a Historial de exámenes' : '← Exit to Exam History'; ?>
-                        </a>
                     </header>
                     <?php if (!$examhistory) { ?>
                         <p class="herb-board__exam-history-empty">
