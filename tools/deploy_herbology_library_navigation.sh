@@ -174,6 +174,13 @@ grep -Fq 'event.persisted' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-standard-header' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'library-context-nav__route--active' "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'activeRouteFiles' "$TEMP_DIR/static/library-navigation.js"
+grep -Fq "allResources: 'Exam History'" "$TEMP_DIR/static/library-navigation.js"
+grep -Fq "allResources: 'Historial de exámenes'" "$TEMP_DIR/static/library-navigation.js"
+grep -Fq "/blocks/menu/exam-history.php?lang=" "$TEMP_DIR/static/library-navigation.js"
+if grep -Fq "allResources: 'Library home'" "$TEMP_DIR/static/library-navigation.js"; then
+    echo "ERROR: Library home todavía aparece en la navegación estática." >&2
+    exit 1
+fi
 grep -Fq "new Set(['single-herb-practice.html', 'formula-practice.html'])" "$TEMP_DIR/static/library-navigation.js"
 grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$TEMP_DIR/static/library-navigation.js"
 grep -Fq 'data-herb-mode="category"' "$TEMP_DIR/static/single-herb-practice.html"
@@ -269,11 +276,14 @@ for relative in "${MOODLE_FILES[@]}"; do
         php -l "$MOODLE_ROOT/$relative" >/dev/null
     fi
 done
-grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261108-14' "$STUDY_NOTE_DIR/dui-yao.html"
+grep -Fq '/study-guide/comparisons/library-navigation.js?v=20261111-1' "$STUDY_NOTE_DIR/dui-yao.html"
 grep -Fq 'dataset.libraryContextNavigation' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-standard-header' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'library-context-nav__route--active' "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'activeRouteFiles' "$STUDY_NOTE_DIR/library-navigation.js"
+grep -Fq "allResources: 'Exam History'" "$STUDY_NOTE_DIR/library-navigation.js"
+grep -Fq "allResources: 'Historial de exámenes'" "$STUDY_NOTE_DIR/library-navigation.js"
+grep -Fq "/blocks/menu/exam-history.php?lang=" "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq "new Set(['single-herb-practice.html', 'formula-practice.html'])" "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq "document.querySelectorAll('.comparison-collection-links')" "$STUDY_NOTE_DIR/library-navigation.js"
 grep -Fq 'data-herb-mode="category"' "$STUDY_NOTE_DIR/single-herb-practice.html"
@@ -392,4 +402,6 @@ fi
 echo "Despliegue completado: $REVISION"
 echo "HTML actualizados: $STUDY_NOTE_DIR"
 echo "Backup: $BACKUP_DIR"
+echo "OK: Library home fue reemplazado por Exam History en todas las fichas."
+echo "OK: Exam History conserva English/Español mediante el parámetro lang."
 echo "Prueba: https://www.acupuncturetests.com/study-guide/comparisons/single-herb-practice.html?from=library&category=14&size=25&revision=$REVISION"

@@ -27,7 +27,7 @@
     || /-es\.html$/i.test(currentUrl.pathname);
   const copy = spanish ? {
     library: 'Biblioteca',
-    allResources: 'Inicio de Library',
+    allResources: 'Historial de exámenes',
     studyGuides: 'Guías de estudio',
     practice: 'Herbology Practice',
     quiz: 'Quiz',
@@ -39,7 +39,7 @@
     closeNavigation: 'Ocultar navegación'
   } : {
     library: 'Library',
-    allResources: 'Library home',
+    allResources: 'Exam History',
     studyGuides: 'Study Guides',
     practice: 'Herbology Practice',
     quiz: 'Quiz',
@@ -52,8 +52,9 @@
   };
   const languageParams = spanish ? '&lang=es' : '';
   const libraryUrl = '/blocks/myprogress/study-guide.php?area=herbology&view=library' + languageParams;
+  const examHistoryUrl = '/blocks/menu/exam-history.php?lang=' + (spanish ? 'es' : 'en');
   const routes = [
-    [copy.allResources, libraryUrl],
+    [copy.allResources, examHistoryUrl],
     [copy.studyGuides, libraryUrl + '#library-group-core-guides'],
     [copy.practice, '/blocks/menu/herbology-board.php?track=herbs&from=library' + languageParams],
     [copy.quiz, '/blocks/menu/herbology-board.php?track=quiz&from=library' + languageParams],
@@ -112,15 +113,15 @@
   };
 
   const brand = document.querySelector('.comparison-topbar .comparison-brand');
-  let activeRouteIndex = 0;
+  let activeRouteIndex = -1;
   if (brand) {
     try {
       const brandUrl = new URL(brand.href, currentUrl);
       if (/\/blocks\/menu\/herbology-board\.php$/i.test(brandUrl.pathname)) {
-        activeRouteIndex = { herbs: 2, quiz: 3, exams: 4 }[brandUrl.searchParams.get('track')] || 0;
+        activeRouteIndex = { herbs: 2, quiz: 3, exams: 4 }[brandUrl.searchParams.get('track')] ?? -1;
       }
     } catch (error) {
-      activeRouteIndex = 0;
+      activeRouteIndex = -1;
     }
   }
   const activeRouteFiles = new Map([
