@@ -224,7 +224,7 @@ echo $OUTPUT->header();
 .exam-history__filters a{padding:8px 13px;border:1px solid #8fb9b1;border-radius:999px;background:#fff;color:#075f52;font-weight:800;text-decoration:none}
 .exam-history__filters a[aria-current="page"]{background:#087c69;color:#fff}
 .exam-history__sort{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin:-2px 0 16px;padding:12px 14px;border:1px solid #c7ddd9;border-radius:10px;background:#f8fcfb}
-.exam-history__sort label{display:grid;gap:4px;color:#35566f;font-size:12px;font-weight:800}
+.exam-history__sort label{display:grid;gap:4px;margin:0;padding:0;color:#35566f;font-size:12px;font-weight:800}
 .exam-history__sort select{box-sizing:border-box;height:40px;padding:6px 34px 6px 10px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font-weight:700}
 .exam-history__sort button{box-sizing:border-box;height:40px;align-self:flex-end;margin:0;padding:7px 15px;border:0;border-radius:8px;background:#087c69;color:#fff;font-weight:900;line-height:1;cursor:pointer}
 .exam-history__sort button:hover,.exam-history__sort button:focus{background:#066354}
