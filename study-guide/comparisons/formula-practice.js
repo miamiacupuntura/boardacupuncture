@@ -41,6 +41,18 @@
     }
   };
   const storageKey = 'formula-practice-progress-v1';
+  const centralHistoryParams = new URLSearchParams(window.location.search);
+  const centralHistorySesskey = centralHistoryParams.get('sesskey') || '';
+  const centralHistoryType = centralHistoryParams.get('historytype') || '';
+  let centralAttemptUid = '';
+  let centralStartedAt = Date.now();
+  let centralSaved = false;
+  const createCentralAttemptUid = () => {
+    if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
+      return globalThis.crypto.randomUUID();
+    }
+    return `formula-quiz-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  };
   const categoryOrder = [
     'release-exterior', 'purge', 'harmonize', 'clear-heat', 'dispel-summerheat',
     'warm-interior', 'exterior-interior-excess', 'tonify', 'stabilize-bind',
@@ -598,7 +610,35 @@
     elements.breakdown.append(heading, list);
   }
 
+  async function saveCentralAttempt() {
+    if (!centralHistorySesskey || !centralHistoryType || centralSaved || !centralAttemptUid) return;
+    centralSaved = true;
+    const body = new URLSearchParams({
+      sesskey: centralHistorySesskey,
+      attemptuid: centralAttemptUid,
+      examtype: centralHistoryType,
+      score: String(state.score),
+      total: String(state.questions.length),
+      duration: String(Math.max(0, Math.round((Date.now() - centralStartedAt) / 1000))),
+      language: spanish ? 'es' : 'en'
+    });
+    try {
+      const response = await fetch('/blocks/menu/herbology-exam-history.php', {
+        method: 'POST',
+        credentials: 'same-origin',
+        keepalive: true,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        body
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.success) throw new Error('History save failed.');
+    } catch (_) {
+      centralSaved = false;
+    }
+  }
+
   function finishSession() {
+    void saveCentralAttempt();
     elements.workspace.hidden = true;
     elements.results.hidden = false;
     const answered = state.answers.length;
@@ -615,6 +655,9 @@
   function startSession() {
     const pool = filteredQuestions();
     if (!pool.length) return;
+    centralAttemptUid = createCentralAttemptUid();
+    centralStartedAt = Date.now();
+    centralSaved = false;
     state.questions = shuffle(pool).slice(0, Math.min(state.size, pool.length));
     state.score = 0;
     state.answers = [];
