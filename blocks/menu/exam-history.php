@@ -13,18 +13,27 @@ $historytype = optional_param('type', 'all', PARAM_ALPHA);
 if (!in_array($historytype, ['all', 'board', 'quiz'], true)) {
     $historytype = 'all';
 }
+$sortfield = optional_param('sort', 'date', PARAM_ALPHA);
+if (!in_array($sortfield, ['date', 'exam', 'result', 'status', 'duration'], true)) {
+    $sortfield = 'date';
+}
+$sortdirection = optional_param('direction', 'desc', PARAM_ALPHA);
+if (!in_array($sortdirection, ['asc', 'desc'], true)) {
+    $sortdirection = 'desc';
+}
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = 25;
 $languageparams = $ises ? ['lang' => 'es', 'ui' => 'es'] : ['lang' => 'en', 'ui' => 'en'];
+$sortparams = ['sort' => $sortfield, 'direction' => $sortdirection];
 $pageurl = new moodle_url('/blocks/menu/exam-history.php', [
     'type' => $historytype,
     'page' => $page,
-] + $languageparams);
+] + $sortparams + $languageparams);
 $dashboardurl = new moodle_url('/my/', [], 'board-level-herbology');
 $languageurl = new moodle_url('/blocks/menu/exam-history.php', [
     'type' => $historytype,
     'page' => $page,
-] + ($ises ? ['lang' => 'en', 'ui' => 'en'] : ['lang' => 'es', 'ui' => 'es']));
+] + $sortparams + ($ises ? ['lang' => 'en', 'ui' => 'en'] : ['lang' => 'es', 'ui' => 'es']));
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -91,6 +100,7 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'status' => $status,
             'statusclass' => $isincomplete ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration((int) $attempt->duration, $ises),
+            'durationseconds' => (int) $attempt->duration,
             'resumeurl' => '',
         ];
     }
@@ -146,17 +156,39 @@ if (($historytype === 'all' || $historytype === 'quiz') && $DB->get_manager()->t
             'status' => $status,
             'statusclass' => !$isfinished ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration($duration, $ises),
+            'durationseconds' => $duration,
             'resumeurl' => $resumeurl ? $resumeurl->out(false) : '',
             'resumelabel' => $ises ? 'Retomar quiz →' : 'Resume Quiz →',
         ];
     }
 }
 
-usort($historyrows, static function(array $left, array $right): int {
-    if ($left['timestamp'] === $right['timestamp']) {
-        return strcmp($right['key'], $left['key']);
+usort($historyrows, static function(array $left, array $right) use ($sortfield, $sortdirection): int {
+    switch ($sortfield) {
+        case 'exam':
+            $comparison = strnatcasecmp($left['exam'], $right['exam']);
+            break;
+        case 'result':
+            $comparison = $left['percentage'] <=> $right['percentage'];
+            break;
+        case 'status':
+            $comparison = strnatcasecmp($left['status'], $right['status']);
+            break;
+        case 'duration':
+            $comparison = $left['durationseconds'] <=> $right['durationseconds'];
+            break;
+        case 'date':
+        default:
+            $comparison = $left['timestamp'] <=> $right['timestamp'];
+            break;
     }
-    return $right['timestamp'] <=> $left['timestamp'];
+    if ($comparison !== 0) {
+        return $sortdirection === 'asc' ? $comparison : -$comparison;
+    }
+    if ($left['timestamp'] !== $right['timestamp']) {
+        return $right['timestamp'] <=> $left['timestamp'];
+    }
+    return strcmp($right['key'], $left['key']);
 });
 $totalattempts = count($historyrows);
 $totalpages = max(1, (int) ceil($totalattempts / $perpage));
@@ -170,6 +202,13 @@ $filterlabels = [
     'quiz' => $ises ? 'Quizzes de Moodle' : 'Moodle Quizzes',
 ];
 
+$sortlabels = [
+    'date' => $ises ? 'Fecha y hora' : 'Date and time',
+    'exam' => $ises ? 'Examen / Quiz' : 'Exam / Quiz',
+    'result' => $ises ? 'Resultado' : 'Result',
+    'status' => $ises ? 'Estado' : 'Status',
+    'duration' => $ises ? 'Duración' : 'Duration',
+];
 echo $OUTPUT->header();
 ?>
 <style>
@@ -184,6 +223,11 @@ echo $OUTPUT->header();
 .exam-history__filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
 .exam-history__filters a{padding:8px 13px;border:1px solid #8fb9b1;border-radius:999px;background:#fff;color:#075f52;font-weight:800;text-decoration:none}
 .exam-history__filters a[aria-current="page"]{background:#087c69;color:#fff}
+.exam-history__sort{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:-2px 0 16px;padding:12px 14px;border:1px solid #c7ddd9;border-radius:10px;background:#f8fcfb}
+.exam-history__sort label{display:grid;gap:4px;color:#35566f;font-size:12px;font-weight:800}
+.exam-history__sort select{min-height:38px;padding:6px 34px 6px 10px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font-weight:700}
+.exam-history__sort button{min-height:38px;padding:7px 15px;border:0;border-radius:8px;background:#087c69;color:#fff;font-weight:900;cursor:pointer}
+.exam-history__sort button:hover,.exam-history__sort button:focus{background:#066354}
 .exam-history__panel{padding:18px;border:1px solid #b9d8d2;border-top:4px solid #087c69;border-radius:13px;background:#f8fcfb}
 .exam-history__panel-header{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}
 .exam-history__panel-header span{display:block;color:#087c69;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
@@ -204,7 +248,7 @@ echo $OUTPUT->header();
 .exam-history__pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
 .exam-history__pagination span{font-weight:800;color:#526b84}
 .exam-history__pagination a{padding:8px 12px;border:1px solid #8fb9b1;border-radius:8px;background:#fff;color:#075f52;font-weight:800;text-decoration:none}
-@media(max-width:850px){.exam-history__attempt{grid-template-columns:1fr 1fr}.exam-history__top{display:block}.exam-history__actions{justify-content:flex-start;margin-top:14px}}
+@media(max-width:850px){.exam-history__attempt{grid-template-columns:1fr 1fr}.exam-history__top{display:block}.exam-history__actions{justify-content:flex-start;margin-top:14px}.exam-history__sort{align-items:stretch}.exam-history__sort label{flex:1 1 150px}.exam-history__sort button{flex:1 1 100%}}
 @media(max-width:520px){.exam-history__attempt{grid-template-columns:1fr}.exam-history{width:min(100% - 16px,1180px)}}
 </style>
 <main class="exam-history">
@@ -227,11 +271,39 @@ echo $OUTPUT->header();
             $filterurl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $filterkey,
                 'page' => 0,
-            ] + $languageparams);
+            ] + $sortparams + $languageparams);
         ?>
             <a href="<?php echo $filterurl->out(false); ?>"<?php echo $historytype === $filterkey ? ' aria-current="page"' : ''; ?>><?php echo s($filterlabel); ?></a>
         <?php } ?>
     </nav>
+
+    <form class="exam-history__sort" method="get" action="<?php echo (new moodle_url('/blocks/menu/exam-history.php'))->out(false); ?>">
+        <input type="hidden" name="type" value="<?php echo s($historytype); ?>">
+        <input type="hidden" name="lang" value="<?php echo $ises ? 'es' : 'en'; ?>">
+        <input type="hidden" name="ui" value="<?php echo $ises ? 'es' : 'en'; ?>">
+        <label>
+            <span><?php echo $ises ? 'Ordenar por' : 'Sort by'; ?></span>
+            <select name="sort">
+                <?php foreach ($sortlabels as $sortkey => $sortlabel) { ?>
+                    <option value="<?php echo s($sortkey); ?>"<?php echo $sortfield === $sortkey ? ' selected' : ''; ?>>
+                        <?php echo s($sortlabel); ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </label>
+        <label>
+            <span><?php echo $ises ? 'Dirección' : 'Direction'; ?></span>
+            <select name="direction">
+                <option value="desc"<?php echo $sortdirection === 'desc' ? ' selected' : ''; ?>>
+                    <?php echo $ises ? 'Descendente' : 'Descending'; ?>
+                </option>
+                <option value="asc"<?php echo $sortdirection === 'asc' ? ' selected' : ''; ?>>
+                    <?php echo $ises ? 'Ascendente' : 'Ascending'; ?>
+                </option>
+            </select>
+        </label>
+        <button type="submit"><?php echo $ises ? 'Ordenar' : 'Sort'; ?></button>
+    </form>
 
     <section class="exam-history__panel" aria-labelledby="exam-history-title">
         <header class="exam-history__panel-header">
@@ -285,11 +357,11 @@ echo $OUTPUT->header();
             $previousurl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $historytype,
                 'page' => max(0, $page - 1),
-            ] + $languageparams);
+            ] + $sortparams + $languageparams);
             $nexturl = new moodle_url('/blocks/menu/exam-history.php', [
                 'type' => $historytype,
                 'page' => min($totalpages - 1, $page + 1),
-            ] + $languageparams);
+            ] + $sortparams + $languageparams);
         ?>
             <nav class="exam-history__pagination" aria-label="<?php echo $ises ? 'Paginación' : 'Pagination'; ?>">
                 <?php if ($page > 0) { ?><a rel="prev" href="<?php echo $previousurl->out(false); ?>"><?php echo $ises ? '← Anterior' : '← Previous'; ?></a><?php } ?>
