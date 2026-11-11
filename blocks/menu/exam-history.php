@@ -202,12 +202,12 @@ $boardquiznamesbytype = [];
 $boardquizcounts = [];
 foreach ($boardquizrows as $boardquizrow) {
     $boardquiznamesbytype[$boardquizrow['examtype']] = $boardquizrow['topic'];
-    $boardquizcounts[$boardquizrow['examtype']] = 0;
+    $boardquizcounts[$boardquizrow['examtype']] = ['attempts' => 0, 'percentagesum' => 0.0];
 }
 $boardexamcounts = [
-    'linear' => ['attempts' => 0, 'completed' => 0],
-    'adaptive' => ['attempts' => 0, 'completed' => 0],
-    'clinicalcases' => ['attempts' => 0, 'completed' => 0],
+    'linear' => ['attempts' => 0, 'completed' => 0, 'percentagesum' => 0.0],
+    'adaptive' => ['attempts' => 0, 'completed' => 0, 'percentagesum' => 0.0],
+    'clinicalcases' => ['attempts' => 0, 'completed' => 0, 'percentagesum' => 0.0],
 ];
 $customtable = new xmldb_table('block_menu_exam_attempts');
 if ($DB->get_manager()->table_exists($customtable)) {
@@ -216,12 +216,16 @@ if ($DB->get_manager()->table_exists($customtable)) {
         'userid = :userid',
         ['userid' => $USER->id],
         '',
-        'id, examtype'
+        'id, examtype, score, total'
     );
     foreach ($boardattempts as $boardattempt) {
         $examtype = (string) $boardattempt->examtype;
+        $attemptpercentage = (int) $boardattempt->total > 0
+            ? ((float) $boardattempt->score / (float) $boardattempt->total) * 100
+            : 0.0;
         if (array_key_exists($examtype, $boardquizcounts)) {
-            $boardquizcounts[$examtype]++;
+            $boardquizcounts[$examtype]['attempts']++;
+            $boardquizcounts[$examtype]['percentagesum'] += $attemptpercentage;
             continue;
         }
         $examkey = '';
@@ -238,12 +242,17 @@ if ($DB->get_manager()->table_exists($customtable)) {
         $boardexamcounts[$examkey]['attempts']++;
         if (!str_ends_with($examtype, 'incomplete')) {
             $boardexamcounts[$examkey]['completed']++;
+            $boardexamcounts[$examkey]['percentagesum'] += $attemptpercentage;
         }
     }
 }
 foreach ($boardquizrows as &$boardquizrow) {
-    $attemptcount = $boardquizcounts[$boardquizrow['examtype']] ?? 0;
+    $quizcount = $boardquizcounts[$boardquizrow['examtype']] ?? ['attempts' => 0, 'percentagesum' => 0.0];
+    $attemptcount = $quizcount['attempts'];
     $boardquizrow['attempts'] = $attemptcount;
+    $boardquizrow['average'] = $attemptcount > 0
+        ? round($quizcount['percentagesum'] / $attemptcount, 1)
+        : null;
     if ($attemptcount > 0) {
         $boardquizrow['status'] = $ises ? 'Completado' : 'Completed';
         $boardquizrow['statusclass'] = 'is-completed';
@@ -310,6 +319,9 @@ foreach ($boardexamdefinitions as $examkey => $definition) {
         'status' => $status,
         'statusclass' => $statusclass,
         'attempts' => $attemptcount,
+        'average' => $completedcount > 0
+            ? round($boardexamcounts[$examkey]['percentagesum'] / $completedcount, 1)
+            : null,
         'url' => $definition['url']->out(false),
         'action' => $ises ? 'Abrir' : 'Open',
     ];
@@ -547,7 +559,7 @@ echo $OUTPUT->header();
 .exam-history__catalog-stat span{display:block;color:#087c69;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
 .exam-history__catalog-stat strong{display:block;margin-top:4px;font-size:20px}
 .exam-history__catalog-list{display:grid;gap:9px}
-.exam-history__catalog-item{display:grid;grid-template-columns:1.3fr 1.1fr .55fr .7fr .55fr auto;align-items:center;gap:14px;padding:13px;border:1px solid #c7ddd9;border-radius:10px;background:#fff}
+.exam-history__catalog-item{display:grid;grid-template-columns:1.3fr 1.1fr .5fr .65fr .5fr .55fr auto;align-items:center;gap:14px;padding:13px;border:1px solid #c7ddd9;border-radius:10px;background:#fff}
 .exam-history__catalog-item>div{min-width:0}
 .exam-history__catalog-item strong{display:block;overflow-wrap:anywhere;font-size:14px}
 .exam-history__catalog-item small{display:block;margin-top:3px;color:#61758a;overflow-wrap:anywhere}
@@ -680,6 +692,12 @@ echo $OUTPUT->header();
                         <div>
                             <span class="exam-history__label"><?php echo $ises ? 'Intentos' : 'Attempts'; ?></span>
                             <strong><?php echo $catalogrow['attempts'] === null ? '—' : (int) $catalogrow['attempts']; ?></strong>
+                        </div>
+                        <div>
+                            <span class="exam-history__label"><?php echo $ises ? 'Promedio' : 'Average'; ?></span>
+                            <strong><?php echo $catalogrow['average'] === null
+                                ? '—'
+                                : s(board_exam_history_number((float) $catalogrow['average']) . '%'); ?></strong>
                         </div>
                         <a class="exam-history__catalog-open" href="<?php echo s($catalogrow['url']); ?>">
                             <?php echo s($catalogrow['action']); ?> →
