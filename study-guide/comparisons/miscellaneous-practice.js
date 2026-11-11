@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-13';
+  const quizBuild = '20261111-14';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -54,7 +54,15 @@
     guidelineAssigns: spanish ? 'El guideline asigna esta precaución a' : 'The guideline assigns this precaution to',
     notTargetHerb: spanish ? 'no a' : 'not to',
     correctForHerb: spanish ? 'Esta es la precaución indicada en el guideline para' : 'This is the guideline precaution for',
-    openStudyCard: spanish ? 'Abrir tarjeta de Jue Ming Zi →' : 'Open Jue Ming Zi study card →'
+    openStudyCard: spanish ? 'Abrir tarjeta de Jue Ming Zi →' : 'Open Jue Ming Zi study card →',
+    whyNot: spanish ? '¿Por qué no' : 'Why not',
+    clueMedicinals: spanish ? 'Medicamentos de la pregunta' : 'Medicinals in the question',
+    selectedActionGroup: spanish ? 'Grupo de la acción seleccionada' : 'Selected action group',
+    correctActionGroup: spanish ? 'Grupo de la acción correcta' : 'Correct action group',
+    noGroupOverlap: spanish ? 'Ninguno de los medicamentos que definen la opción seleccionada aparece en la pregunta; por eso esa acción no es compartida por este grupo.' : 'None of the medicinals that define the selected option appears in the question, so that action is not shared by this group.',
+    incompleteGroupOverlap: spanish ? 'La opción seleccionada no corresponde al conjunto completo de medicamentos de la pregunta; por eso no es la acción secundaria compartida.' : 'The selected option does not match the complete medicinal set in the question, so it is not the shared secondary action.',
+    categoryEvidence: spanish ? 'Medicamento y categoría primaria' : 'Medicinal and primary category',
+    sourceGroup: spanish ? 'Fuente: Handbook of Oriental Medicine, “Herb Category by Secondary Actions”, pp. 374–382.' : 'Source: Handbook of Oriental Medicine, “Herb Category by Secondary Actions,” pp. 374–382.'
   };
   const prompts = {
     families: spanish ? '¿Qué familia o variación de fórmulas corresponde a estas características?' : 'Which formula family or variation matches these characteristics?',
@@ -103,6 +111,7 @@
   };
   const state={resource:null,items:[],questions:[],index:0,score:0,answered:false,startedAt:0,attemptUid:''};
   const familyFeedbackCache=new Map();
+  const secondaryFeedbackCache=new Map();
 
   function shuffle(values){const result=values.slice();for(let i=result.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const value=result[i];result[i]=result[j];result[j]=value;}return result;}
   function stripHan(value){return String(value||'').replace(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g,' ');}
@@ -170,7 +179,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-13');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-14');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -420,6 +429,62 @@
       if(state.index===questionIndex&&state.answered)feedbackLine(panel,copy.why,copy.detailFailed);
     }
   }
+  function secondaryNames(item){
+    return clean(item&&item.detail).split(';').map(value=>clean(value).replace(/\s*\([^)]*\)\s*$/,'')).filter(Boolean);
+  }
+  function secondaryRows(doc){
+    const heading=Array.from(doc.querySelectorAll('h2')).find(node=>/(Medicinals in the source|Medicamentos en la fuente)/i.test(clean(node.textContent)));
+    const section=heading&&heading.closest('section');
+    if(!section)return [];
+    return Array.from(section.querySelectorAll('tbody tr')).map(row=>{
+      const medicinal=row.querySelector('th'),category=row.querySelector('td');
+      return medicinal&&category?{medicinal:clean(medicinal.textContent),category:clean(category.textContent)}:null;
+    }).filter(Boolean);
+  }
+  async function secondaryTeaching(item){
+    if(!item||!item.chapterUrl)return [];
+    if(!secondaryFeedbackCache.has(item.chapterUrl)){
+      secondaryFeedbackCache.set(item.chapterUrl,(async()=>{
+        const response=await fetch(new URL(item.chapterUrl,window.location.href),{credentials:'same-origin'});
+        if(!response.ok)throw new Error('secondary-detail');
+        return secondaryRows(new DOMParser().parseFromString(await response.text(),'text/html'));
+      })());
+    }
+    return secondaryFeedbackCache.get(item.chapterUrl);
+  }
+  function secondaryRowText(rows){
+    const visible=rows.slice(0,6).map(row=>row.medicinal+' — '+row.category);
+    if(rows.length>6)visible.push((spanish?'+ ':'+ ')+(rows.length-6)+(spanish?' más':' more'));
+    return visible.join('; ');
+  }
+  function secondaryWhyNotPanel(question,value){
+    const selectedItem=state.items.find(item=>item.title===value);
+    const panel=document.createElement('section');panel.className='misc-practice__feedback-teaching misc-practice__why-not';
+    const heading=document.createElement('strong');heading.className='misc-practice__feedback-heading';heading.textContent=copy.whyNot+' “'+value+'”?';
+    panel.append(heading);
+    feedbackLine(panel,copy.clueMedicinals,secondaryNames(question.item).join('; '));
+    if(selectedItem)feedbackLine(panel,copy.selectedActionGroup,secondaryNames(selectedItem).join('; '));
+    feedbackLine(panel,copy.correctActionGroup,secondaryNames(question.item).join('; '));
+    const reason=document.createElement('p');reason.className='misc-practice__feedback-explanation';
+    const clueNames=secondaryNames(question.item).map(fold);
+    const selectedNames=secondaryNames(selectedItem).map(fold);
+    const overlap=selectedNames.filter(name=>clueNames.includes(name)).length;
+    reason.textContent=overlap===0?copy.noGroupOverlap:copy.incompleteGroupOverlap;
+    panel.append(reason);
+    const source=document.createElement('p');source.className='misc-practice__feedback-source';source.textContent=copy.sourceGroup;panel.append(source);
+    return {panel,selectedItem};
+  }
+  async function enrichSecondaryWhyNot(panel,question,selectedItem,questionIndex){
+    try{
+      const details=await Promise.all([secondaryTeaching(selectedItem),secondaryTeaching(question.item)]);
+      if(state.index!==questionIndex||!state.answered)return;
+      const selectedRows=details[0],correctRows=details[1];
+      if(selectedRows.length)feedbackLine(panel,copy.categoryEvidence+' — '+selectedItem.title,secondaryRowText(selectedRows));
+      if(correctRows.length)feedbackLine(panel,copy.categoryEvidence+' — '+question.correct,secondaryRowText(correctRows));
+    }catch(_){
+      if(state.index===questionIndex&&state.answered)feedbackLine(panel,copy.why,copy.detailFailed);
+    }
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -435,6 +500,12 @@
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
       appendSafetyStudyCard(el.feedback,question);
+    }else if(state.resource&&state.resource.key==='secondary'){
+      feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
+      if(!correct){
+        const review=secondaryWhyNotPanel(question,value);el.feedback.append(review.panel);
+        if(review.selectedItem)void enrichSecondaryWhyNot(review.panel,question,review.selectedItem,questionIndex);
+      }
     }else{
       feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
     }

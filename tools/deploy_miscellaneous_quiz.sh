@@ -36,8 +36,8 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/jue-ming-zi-vs-shi-jue
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips.html" -o "$MACIOCIA_FORMULA_TIPS"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips-es.html" -o "$MACIOCIA_FORMULA_TIPS_ES"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-13" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-13" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-14" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-14" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
@@ -54,6 +54,8 @@ grep -Fq "Maciocia Formula Tips" "$MACIOCIA_FORMULA_TIPS"
 grep -Fq "167 pattern-to-answer associations" "$MACIOCIA_FORMULA_TIPS"
 grep -Fq "167 asociaciones de patrón y respuesta" "$MACIOCIA_FORMULA_TIPS_ES"
 grep -Fq "maciociaformulas" "$JAVASCRIPT"
+grep -Fq "function secondaryWhyNotPanel" "$JAVASCRIPT"
+grep -Fq "Medicinal and primary category" "$JAVASCRIPT"
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS_ES" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
@@ -151,7 +153,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-13 activo."
+echo "OK: build 20261111-14 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
 echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."

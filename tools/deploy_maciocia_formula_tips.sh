@@ -41,9 +41,11 @@ grep -Fq "Module 2 · Comparison Study Guide" "$EN_PAGE"
 grep -Fq "Módulo 2 · Guía de comparaciones" "$ES_PAGE"
 grep -Fq "167 pattern-to-answer associations" "$EN_PAGE"
 grep -Fq "167 asociaciones de patrón y respuesta" "$ES_PAGE"
-grep -Fq "miscellaneous-practice.js?v=20261111-13" "$MISC_EN"
-grep -Fq "miscellaneous-practice.js?v=20261111-13" "$MISC_ES"
+grep -Fq "miscellaneous-practice.js?v=20261111-14" "$MISC_EN"
+grep -Fq "miscellaneous-practice.js?v=20261111-14" "$MISC_ES"
 grep -Fq "maciociaformulas" "$MISC_JS"
+grep -Fq "function secondaryWhyNotPanel" "$MISC_JS"
+grep -Fq "Medicinal and primary category" "$MISC_JS"
 grep -Fq "Which guideline formula or formula set matches this Maciocia pattern?" "$MISC_JS"
 [[ "$(grep -Fo '"answer":' "$EN_PAGE" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$ES_PAGE" | wc -l)" -eq 167 ]]
