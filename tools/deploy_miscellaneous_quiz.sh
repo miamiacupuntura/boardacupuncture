@@ -34,6 +34,8 @@ FAMILY_REVIEW="$TEMP_DIR/formula-family-review.html"
 FAMILY_REVIEW_ES="$TEMP_DIR/formula-family-review-es.html"
 NAME_TRAP_REVIEW="$TEMP_DIR/name-trap-review.html"
 NAME_TRAP_REVIEW_ES="$TEMP_DIR/name-trap-review-es.html"
+HERB_FAMILY_REVIEW="$TEMP_DIR/herb-family-review.html"
+HERB_FAMILY_REVIEW_ES="$TEMP_DIR/herb-family-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice.html" -o "$EN_HTML"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/miscellaneous-practice-es.html" -o "$ES_HTML"
@@ -47,9 +49,11 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review.
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review-es.html" -o "$FAMILY_REVIEW_ES"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/name-trap-review.html" -o "$NAME_TRAP_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/name-trap-review-es.html" -o "$NAME_TRAP_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/herb-family-review.html" -o "$HERB_FAMILY_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/herb-family-review-es.html" -o "$HERB_FAMILY_REVIEW_ES"
 
-grep -Fq "miscellaneous-practice.js?v=20261111-17" "$EN_HTML"
-grep -Fq "miscellaneous-practice.js?v=20261111-17" "$ES_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-18" "$EN_HTML"
+grep -Fq "miscellaneous-practice.js?v=20261111-18" "$ES_HTML"
 grep -Fq "Which precaution applies to this medicinal?" "$JAVASCRIPT"
 grep -Fq "¿Qué precaución corresponde a este medicamento?" "$JAVASCRIPT"
 grep -Fq "data-misc-quiz-build" "$JAVASCRIPT"
@@ -78,6 +82,10 @@ grep -Fq "function nameTrapReviewPanel" "$JAVASCRIPT"
 grep -Fq "Review the four name traps" "$JAVASCRIPT"
 grep -Fq "Back to quiz" "$NAME_TRAP_REVIEW"
 grep -Fq "Regresar al quiz" "$NAME_TRAP_REVIEW_ES"
+grep -Fq "function herbFamilyReviewPanel" "$JAVASCRIPT"
+grep -Fq "Review the four botanical families" "$JAVASCRIPT"
+grep -Fq "Back to quiz" "$HERB_FAMILY_REVIEW"
+grep -Fq "Regresar al quiz" "$HERB_FAMILY_REVIEW_ES"
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$MACIOCIA_FORMULA_TIPS_ES" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"enCaution":' "$JAVASCRIPT" | wc -l)" -eq 27 ]]
@@ -138,7 +146,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     backup_dir="$BACKUP_ROOT/miscellaneous-quiz-$TIMESTAMP/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$backup_dir"
-    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html; do
+    for file in miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js jue-ming-zi-vs-shi-jue-ming.html maciocia-formula-tips.html maciocia-formula-tips-es.html secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html; do
         if [[ -f "$target_dir/$file" ]]; then
             cp -a "$target_dir/$file" "$backup_dir/$file"
         fi
@@ -156,6 +164,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_one "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html" "$reference"
     install_one "$NAME_TRAP_REVIEW" "$target_dir/name-trap-review.html" "$reference"
     install_one "$NAME_TRAP_REVIEW_ES" "$target_dir/name-trap-review-es.html" "$reference"
+    install_one "$HERB_FAMILY_REVIEW" "$target_dir/herb-family-review.html" "$reference"
+    install_one "$HERB_FAMILY_REVIEW_ES" "$target_dir/herb-family-review-es.html" "$reference"
 
     cmp -s "$EN_HTML" "$target_dir/miscellaneous-practice.html"
     cmp -s "$ES_HTML" "$target_dir/miscellaneous-practice-es.html"
@@ -169,6 +179,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html"
     cmp -s "$NAME_TRAP_REVIEW" "$target_dir/name-trap-review.html"
     cmp -s "$NAME_TRAP_REVIEW_ES" "$target_dir/name-trap-review-es.html"
+    cmp -s "$HERB_FAMILY_REVIEW" "$target_dir/herb-family-review.html"
+    cmp -s "$HERB_FAMILY_REVIEW_ES" "$target_dir/herb-family-review-es.html"
     grep -Fq "Which precaution applies to this medicinal?" "$target_dir/miscellaneous-practice.js"
     [[ "$(grep -Fo '"enCaution":' "$target_dir/miscellaneous-practice.js" | wc -l)" -eq 27 ]]
     if grep -Fq "Which safety topic matches this clinical precaution?" "$target_dir/miscellaneous-practice.js"; then
@@ -187,7 +199,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: build 20261111-17 activo."
+echo "OK: build 20261111-18 activo."
 echo "OK: Safety Library muestra una hierba y ofrece cuatro precauciones del guideline."
 echo "OK: banco verificado con 27 precauciones en English y 27 en Español."
 echo "OK: distractores verificados por dominios diferentes; no se mezclan dos precauciones renales en una pregunta."
@@ -196,3 +208,4 @@ echo "OK: Maciocia Formula Tips activo con 72 fórmulas del guideline y 167 preg
 echo "OK: Secondary Actions usa feedback breve y tarjetas con botón de regreso al quiz."
 echo "OK: Formula Families usa feedback breve y cuatro tarjetas con regreso al quiz."
 echo "OK: Name Traps usa feedback breve y cuatro tarjetas con regreso al quiz."
+echo "OK: Herb Families & Parts usa feedback breve y cuatro tarjetas con regreso al quiz."

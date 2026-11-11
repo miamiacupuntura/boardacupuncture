@@ -31,6 +31,8 @@ FAMILY_REVIEW="$TEMP_DIR/formula-family-review.html"
 FAMILY_REVIEW_ES="$TEMP_DIR/formula-family-review-es.html"
 NAME_TRAP_REVIEW="$TEMP_DIR/name-trap-review.html"
 NAME_TRAP_REVIEW_ES="$TEMP_DIR/name-trap-review-es.html"
+HERB_FAMILY_REVIEW="$TEMP_DIR/herb-family-review.html"
+HERB_FAMILY_REVIEW_ES="$TEMP_DIR/herb-family-review-es.html"
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$GUIDE_PHP"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/maciocia-formula-tips.html" -o "$EN_PAGE"
@@ -44,6 +46,8 @@ curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review.
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/formula-family-review-es.html" -o "$FAMILY_REVIEW_ES"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/name-trap-review.html" -o "$NAME_TRAP_REVIEW"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/name-trap-review-es.html" -o "$NAME_TRAP_REVIEW_ES"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/herb-family-review.html" -o "$HERB_FAMILY_REVIEW"
+curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/herb-family-review-es.html" -o "$HERB_FAMILY_REVIEW_ES"
 
 php -l "$GUIDE_PHP" >/dev/null
 grep -Fq "Maciocia Formula Tips" "$GUIDE_PHP"
@@ -53,8 +57,8 @@ grep -Fq "Module 2 · Comparison Study Guide" "$EN_PAGE"
 grep -Fq "Módulo 2 · Guía de comparaciones" "$ES_PAGE"
 grep -Fq "167 pattern-to-answer associations" "$EN_PAGE"
 grep -Fq "167 asociaciones de patrón y respuesta" "$ES_PAGE"
-grep -Fq "miscellaneous-practice.js?v=20261111-17" "$MISC_EN"
-grep -Fq "miscellaneous-practice.js?v=20261111-17" "$MISC_ES"
+grep -Fq "miscellaneous-practice.js?v=20261111-18" "$MISC_EN"
+grep -Fq "miscellaneous-practice.js?v=20261111-18" "$MISC_ES"
 grep -Fq "maciociaformulas" "$MISC_JS"
 grep -Fq "function secondaryReviewPanel" "$MISC_JS"
 grep -Fq "Review the four options" "$MISC_JS"
@@ -68,6 +72,10 @@ grep -Fq "function nameTrapReviewPanel" "$MISC_JS"
 grep -Fq "Review the four name traps" "$MISC_JS"
 grep -Fq "Back to quiz" "$NAME_TRAP_REVIEW"
 grep -Fq "Regresar al quiz" "$NAME_TRAP_REVIEW_ES"
+grep -Fq "function herbFamilyReviewPanel" "$MISC_JS"
+grep -Fq "Review the four botanical families" "$MISC_JS"
+grep -Fq "Back to quiz" "$HERB_FAMILY_REVIEW"
+grep -Fq "Regresar al quiz" "$HERB_FAMILY_REVIEW_ES"
 grep -Fq "Which guideline formula or formula set matches this Maciocia pattern?" "$MISC_JS"
 [[ "$(grep -Fo '"answer":' "$EN_PAGE" | wc -l)" -eq 167 ]]
 [[ "$(grep -Fo '"answer":' "$ES_PAGE" | wc -l)" -eq 167 ]]
@@ -125,7 +133,7 @@ for target_dir in "${TARGETS[@]}"; do
     [[ -f "$reference" ]] || reference="$target_dir/miscellaneous-practice.html"
     target_backup="$BACKUP_DIR/study-guide/comparisons/$(echo "$target_dir" | tr '/ ' '__')"
     mkdir -p "$target_backup"
-    for file in maciocia-formula-tips.html maciocia-formula-tips-es.html miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html; do
+    for file in maciocia-formula-tips.html maciocia-formula-tips-es.html miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js secondary-action-review.html secondary-action-review-es.html formula-family-review.html formula-family-review-es.html name-trap-review.html name-trap-review-es.html herb-family-review.html herb-family-review-es.html; do
         [[ -f "$target_dir/$file" ]] && cp -a "$target_dir/$file" "$target_backup/$file"
     done
     install_preserving "$EN_PAGE" "$target_dir/maciocia-formula-tips.html" "$reference"
@@ -139,6 +147,8 @@ for target_dir in "${TARGETS[@]}"; do
     install_preserving "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html" "$reference"
     install_preserving "$NAME_TRAP_REVIEW" "$target_dir/name-trap-review.html" "$reference"
     install_preserving "$NAME_TRAP_REVIEW_ES" "$target_dir/name-trap-review-es.html" "$reference"
+    install_preserving "$HERB_FAMILY_REVIEW" "$target_dir/herb-family-review.html" "$reference"
+    install_preserving "$HERB_FAMILY_REVIEW_ES" "$target_dir/herb-family-review-es.html" "$reference"
     cmp -s "$EN_PAGE" "$target_dir/maciocia-formula-tips.html"
     cmp -s "$ES_PAGE" "$target_dir/maciocia-formula-tips-es.html"
     cmp -s "$MISC_EN" "$target_dir/miscellaneous-practice.html"
@@ -150,6 +160,8 @@ for target_dir in "${TARGETS[@]}"; do
     cmp -s "$FAMILY_REVIEW_ES" "$target_dir/formula-family-review-es.html"
     cmp -s "$NAME_TRAP_REVIEW" "$target_dir/name-trap-review.html"
     cmp -s "$NAME_TRAP_REVIEW_ES" "$target_dir/name-trap-review-es.html"
+    cmp -s "$HERB_FAMILY_REVIEW" "$target_dir/herb-family-review.html"
+    cmp -s "$HERB_FAMILY_REVIEW_ES" "$target_dir/herb-family-review-es.html"
 done
 cmp -s "$GUIDE_PHP" "$GUIDE_TARGET"
 
