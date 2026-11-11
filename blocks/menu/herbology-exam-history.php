@@ -30,7 +30,7 @@ $total = required_param('total', PARAM_INT);
 $duration = required_param('duration', PARAM_INT);
 $language = optional_param('language', 'en', PARAM_ALPHA);
 
-$isboardquizattempt = preg_match('/^boardquiz_[hf]_[a-z0-9]{1,16}$/', $examtype) === 1;
+$isboardquizattempt = preg_match('/^bq[fh]_[a-z0-9]{1,16}$/', $examtype) === 1;
 $validexamtype = $isboardquizattempt || in_array(
     $examtype,
     ['linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete', 'clinicalcases', 'clinicalincomplete'],
