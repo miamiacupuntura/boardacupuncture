@@ -1,0 +1,35 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Repaso de opciones de Dui Yao"><title>Repaso de opción Dui Yao | AcupunctureTests</title><style>:root{color-scheme:light;--green:#087c69;--navy:#102a43;--line:#bfd8d3;--soft:#f4faf8}*{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:var(--navy);font:16px/1.5 Arial,sans-serif}.dui-review{width:min(940px,calc(100% - 24px));margin:24px auto 56px}.dui-review__top,.dui-review__panel{border:1px solid var(--line);border-radius:14px;background:#fff}.dui-review__top{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:5px solid var(--green);padding:18px 22px}.dui-review__top strong{font-size:19px}.dui-review__back{padding:9px 13px;border:1px solid #afc5d4;border-radius:8px;color:#0f4c81;font-weight:900;text-decoration:none}.dui-review__panel{margin-top:16px;padding:22px}.dui-review__eyebrow{margin:0;color:var(--green);font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.dui-review h1{margin:5px 0 4px;font-size:clamp(25px,4vw,36px)}.dui-review__count{margin:0;color:#526b84;font-weight:700}.dui-review__content{display:grid;gap:12px;margin-top:18px}.dui-review__card{padding:17px;border:1px solid var(--line);border-radius:11px;background:#fff}.dui-review__card h2{margin:0 0 13px;font-size:21px}.dui-review dl{display:grid;grid-template-columns:minmax(130px,190px) 1fr;gap:8px 14px;margin:0}.dui-review dt{color:var(--green);font-weight:900}.dui-review dd{margin:0}.dui-review__notice{padding:16px;border-radius:9px;background:var(--soft);font-weight:800}.dui-review__footer{display:flex;justify-content:center;margin-top:18px}@media(max-width:620px){.dui-review__top{align-items:stretch;flex-direction:column}.dui-review dl{grid-template-columns:1fr}.dui-review dd{margin-bottom:8px}}</style></head><body><main class="dui-review"><header class="dui-review__top"><strong>Repaso de opción Dui Yao</strong><a class="dui-review__back" data-quiz-return href="dui-yao-practice-es.html">← Regresar al quiz</a></header><section class="dui-review__panel"><p class="dui-review__eyebrow">Banco oficial de 51 parejas</p><h1 data-review-value>Repasar opción</h1><p class="dui-review__count" data-review-count>Cargando…</p><div class="dui-review__content" data-review-content><p class="dui-review__notice">Cargando relación y aplicación…</p></div><div class="dui-review__footer"><a class="dui-review__back" data-quiz-return href="dui-yao-practice-es.html">← Regresar al quiz</a></div></section></main><script>(() => {
+  'use strict';
+  const spanish=true,params=new URLSearchParams(window.location.search),type=params.get('type')||'pair',value=params.get('value')||'',requested=params.get('return')||'';
+  const allowed=new Set(['pair','action','category','formula']);let returnUrl='';
+  try{const candidate=new URL(requested,window.location.href);if(candidate.origin===window.location.origin)returnUrl=candidate.toString();}catch(_){}
+  const goBack=event=>{if(window.opener&&!window.opener.closed){event.preventDefault();const fallback=returnUrl||event.currentTarget.href;window.opener.focus();setTimeout(()=>{window.location.href=fallback;},250);window.close();}};
+  document.querySelectorAll('[data-quiz-return]').forEach(link=>{if(returnUrl)link.href=returnUrl;link.addEventListener('click',goBack);});
+  const target=document.querySelector('[data-review-content]'),heading=document.querySelector('[data-review-value]');
+  heading.textContent=value;
+  if(!allowed.has(type)||!value){target.innerHTML='<p class="dui-review__notice">'+(spanish?'No se pudo abrir esta opción.':'This option could not be opened.')+'</p>';return;}
+  const localized=(record,field)=>String((record[field]&&record[field][spanish?'es':'en'])||'');
+  fetch('dui-yao-data.json',{credentials:'same-origin'}).then(response=>{if(!response.ok)throw new Error('load');return response.json();}).then(rows=>{
+    const records=rows.filter(record=>{
+      if(type==='pair')return String(record.title||'')===value;
+      if(type==='action')return localized(record,'action')===value;
+      if(type==='category')return localized(record,'category')===value;
+      return localized(record,'formulas')===value;
+    });
+    if(!records.length)throw new Error('empty');
+    target.replaceChildren();
+    records.forEach(record=>{
+      const card=document.createElement('article');card.className='dui-review__card';
+      const title=document.createElement('h2');title.textContent=record.title||'';card.append(title);
+      const grid=document.createElement('dl');
+      const fields=[
+        [spanish?'Categoría':'Category',localized(record,'category')],
+        [spanish?'Acción combinada':'Combined action',localized(record,'action')],
+        [spanish?'Fórmula asociada':'Associated formula',localized(record,'formulas')]
+      ];
+      fields.forEach(([label,text])=>{const dt=document.createElement('dt');dt.textContent=label;const dd=document.createElement('dd');dd.textContent=text;grid.append(dt,dd);});
+      card.append(grid);target.append(card);
+    });
+    const count=document.querySelector('[data-review-count]');count.textContent=spanish?(records.length+' '+(records.length===1?'pareja relacionada':'parejas relacionadas')):(records.length+' related '+(records.length===1?'pair':'pairs'));
+  }).catch(()=>{target.innerHTML='<p class="dui-review__notice">'+(spanish?'No se pudo cargar esta opción desde el banco oficial.':'This option could not be loaded from the official bank.')+'</p>';});
+})();</script></body></html>

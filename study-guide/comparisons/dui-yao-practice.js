@@ -18,7 +18,15 @@
     categoryPrompt: spanish ? '¿Qué categoría corresponde mejor a esta pareja?' : 'Which category best matches this pair?',
     formulaPrompt: spanish ? '¿Qué fórmula clásica está asociada con esta pareja?' : 'Which classical formula is associated with this pair?',
     cluePrompt: spanish ? 'Identifica la pareja por su pista clínica y su fórmula asociada.' : 'Identify the pair from its clinical clue and associated formula.',
-    explanation: spanish ? 'Respuesta correcta' : 'Correct answer'
+    explanation: spanish ? 'Respuesta correcta' : 'Correct answer',
+    whyNot: spanish ? '¿Por qué no' : 'Why not',
+    reviewFour: spanish ? 'Repasar las cuatro opciones' : 'Review the four options',
+    correctBadge: spanish ? 'Correcta' : 'Correct',
+    openReview: spanish ? 'Ver relación y aplicación →' : 'Review relationship and application →',
+    differentPair: spanish ? 'es una pareja Dui Yao diferente. La pista corresponde a' : 'is a different Dui Yao pair. The clue matches',
+    differentAction: spanish ? 'es una acción combinada diferente. La pareja corresponde a' : 'is a different combined action. The pair matches',
+    differentCategory: spanish ? 'es una categoría diferente. La pareja corresponde a' : 'is a different category. The pair matches',
+    differentFormula: spanish ? 'es una asociación de fórmula diferente. La pareja corresponde a' : 'is a different formula association. The pair matches'
   };
 
   const elements = {
@@ -111,7 +119,8 @@
           context: title,
           correct: action,
           options: choices(action, relatedActions, actions),
-          explanation
+          explanation,
+          reviewType: 'action'
         };
       }
       if (questionType === 2 && category) {
@@ -120,7 +129,8 @@
           context: title,
           correct: category,
           options: choices(category, [], categories),
-          explanation
+          explanation,
+          reviewType: 'category'
         };
       }
       if (questionType === 3 && formula) {
@@ -129,7 +139,8 @@
           context: title,
           correct: formula,
           options: choices(formula, relatedFormulas, formulas),
-          explanation
+          explanation,
+          reviewType: 'formula'
         };
       }
       if (questionType === 4 && action) {
@@ -138,7 +149,8 @@
           context: action + ' · ' + formula,
           correct: title,
           options: choices(title, relatedTitles, titles),
-          explanation
+          explanation,
+          reviewType: 'pair'
         };
       }
       return {
@@ -146,7 +158,8 @@
         context: action,
         correct: title,
         options: choices(title, relatedTitles, titles),
-        explanation
+        explanation,
+        reviewType: 'pair'
       };
     });
   }
@@ -173,6 +186,52 @@
     });
   }
 
+  function reviewUrl(question, option) {
+    const review = new URL(spanish ? 'dui-yao-option-review-es.html' : 'dui-yao-option-review.html', window.location.href);
+    review.searchParams.set('type', question.reviewType || 'pair');
+    review.searchParams.set('value', option);
+    review.searchParams.set('return', window.location.href);
+    return review.toString();
+  }
+
+  function differentReason(question) {
+    if (question.reviewType === 'action') return copy.differentAction;
+    if (question.reviewType === 'category') return copy.differentCategory;
+    if (question.reviewType === 'formula') return copy.differentFormula;
+    return copy.differentPair;
+  }
+
+  function appendReviewFeedback(question, answer, isCorrect) {
+    const heading = document.createElement('strong');
+    heading.className = 'dui-practice__feedback-heading';
+    heading.textContent = isCorrect ? copy.correct : copy.incorrect;
+    elements.feedback.append(heading);
+
+    if (!isCorrect) {
+      const reason = document.createElement('p');
+      reason.textContent = copy.whyNot + ' “' + answer + '”? “' + answer + '” ' + differentReason(question) + ' “' + question.correct + '”.';
+      elements.feedback.append(reason);
+    }
+
+    const reviewTitle = document.createElement('strong');
+    reviewTitle.className = 'dui-practice__review-title';
+    reviewTitle.textContent = copy.reviewFour;
+    elements.feedback.append(reviewTitle);
+
+    const links = document.createElement('div');
+    links.className = 'dui-practice__review-list';
+    question.options.forEach((option, index) => {
+      const link = document.createElement('a');
+      link.className = 'dui-practice__review-link';
+      link.href = reviewUrl(question, option);
+      link.target = 'duiYaoOptionReview';
+      if (option === question.correct) link.classList.add('is-correct');
+      link.textContent = String.fromCharCode(65 + index) + '. ' + option + ' · ' + (option === question.correct ? copy.correctBadge + ' · ' : '') + copy.openReview;
+      links.append(link);
+    });
+    elements.feedback.append(links);
+  }
+
   function answerQuestion(button, answer) {
     if (state.answered) return;
     state.answered = true;
@@ -189,7 +248,8 @@
 
     elements.feedback.hidden = false;
     elements.feedback.classList.add(isCorrect ? 'is-correct' : 'is-incorrect');
-    elements.feedback.textContent = (isCorrect ? copy.correct : copy.incorrect) + ' ' + copy.explanation + ': ' + question.explanation;
+    elements.feedback.replaceChildren();
+    appendReviewFeedback(question, answer, isCorrect);
     elements.next.hidden = false;
     elements.next.textContent = state.index + 1 === state.questions.length ? copy.finish : copy.next;
   }
