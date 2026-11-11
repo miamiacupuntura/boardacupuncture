@@ -14,6 +14,7 @@ MENU_TARGET="$MOODLE_ROOT/blocks/menu/block_menu.php"
 STYLES_TARGET="$MOODLE_ROOT/blocks/menu/styles.css"
 CATEGORY_TARGET="$MOODLE_ROOT/blocks/myprogress/herbs-category-comparison.php"
 EXAM_HISTORY_TARGET="$MOODLE_ROOT/blocks/menu/exam-history.php"
+CLINICAL_JS_TARGET="$MOODLE_ROOT/blocks/menu/herbology-clinical-cases.js"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_board_single_block_routes.sh COMMIT_DE_40_CARACTERES" >&2
@@ -25,7 +26,7 @@ for command in curl php install grep sed stat cp cmp mkdir mktemp rm sha256sum w
         exit 1
     }
 done
-for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET" "$STYLES_TARGET"; do
+for target in "$LIBRARY_TARGET" "$BOARD_TARGET" "$MENU_TARGET" "$STYLES_TARGET" "$CLINICAL_JS_TARGET"; do
     [[ -f "$target" ]] || {
         echo "ERROR: no se encontró $target" >&2
         exit 1
@@ -38,7 +39,8 @@ MENU_TEMP="$(mktemp)"
 STYLES_TEMP="$(mktemp)"
 CATEGORY_TEMP="$(mktemp)"
 EXAM_HISTORY_TEMP="$(mktemp)"
-trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP"' EXIT
+CLINICAL_JS_TEMP="$(mktemp)"
+trap 'rm -f "$LIBRARY_TEMP" "$BOARD_TEMP" "$MENU_TEMP" "$STYLES_TEMP" "$CATEGORY_TEMP" "$EXAM_HISTORY_TEMP" "$CLINICAL_JS_TEMP"' EXIT
 
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$LIBRARY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-board.php" -o "$BOARD_TEMP"
@@ -46,6 +48,7 @@ curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/block_menu.php" -o "$MENU_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/styles.css" -o "$STYLES_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/herbs-category-comparison.php" -o "$CATEGORY_TEMP"
 curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/exam-history.php" -o "$EXAM_HISTORY_TEMP"
+curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/herbology-clinical-cases.js" -o "$CLINICAL_JS_TEMP"
 php -l "$LIBRARY_TEMP" >/dev/null
 php -l "$BOARD_TEMP" >/dev/null
 php -l "$MENU_TEMP" >/dev/null
@@ -75,21 +78,17 @@ grep -Fq "'attempt' => (int) \$attempt->id" "$EXAM_HISTORY_TEMP"
 grep -Fq "'cmid' => (int) \$attempt->cmid" "$EXAM_HISTORY_TEMP"
 grep -Fq "Retomar quiz →" "$EXAM_HISTORY_TEMP"
 grep -Fq "Resume Quiz →" "$EXAM_HISTORY_TEMP"
-grep -Fq "Retomar examen →" "$EXAM_HISTORY_TEMP"
-grep -Fq "Resume Exam →" "$EXAM_HISTORY_TEMP"
-grep -Fq "'track' => 'clinicalcases'" "$EXAM_HISTORY_TEMP"
-grep -Fq "'track' => 'exams'" "$EXAM_HISTORY_TEMP"
-grep -Fq "'exam' => \$boardresumemode" "$EXAM_HISTORY_TEMP"
-grep -Fq "'resumeurl' => \$boardresumeurl ? \$boardresumeurl->out(false) : ''" "$EXAM_HISTORY_TEMP"
+grep -Fq "'resumeurl' => ''" "$EXAM_HISTORY_TEMP"
 grep -Fq "exam-history__resume" "$EXAM_HISTORY_TEMP"
-grep -Fq "optional_param('returnto', 'clinicalcases', PARAM_ALPHA)" "$EXAM_HISTORY_TEMP"
-grep -Fq "optional_param('caseexam', '', PARAM_ALPHANUMEXT)" "$EXAM_HISTORY_TEMP"
-grep -Fq "\$SESSION->block_menu_last_clinical_caseexam" "$EXAM_HISTORY_TEMP"
-grep -Fq "clean_param(\$SESSION->block_menu_last_clinical_caseexam, PARAM_ALPHANUMEXT)" "$EXAM_HISTORY_TEMP"
-grep -Fq "\$returnparams['caseexam'] = \$returncaseexam" "$EXAM_HISTORY_TEMP"
-grep -Fq "\$returnlabel = '← Clinical Cases'" "$EXAM_HISTORY_TEMP"
-grep -Fq "\$returnurl = new moodle_url('/blocks/menu/herbology-board.php'" "$EXAM_HISTORY_TEMP"
-grep -Fq "] + \$originparams + \$languageparams);" "$EXAM_HISTORY_TEMP"
+grep -Fq "\$dashboardurl = new moodle_url('/my/'" "$EXAM_HISTORY_TEMP"
+if grep -Fq "Retomar examen →" "$EXAM_HISTORY_TEMP" \
+        || grep -Fq "Resume Exam →" "$EXAM_HISTORY_TEMP" \
+        || grep -Fq "\$boardresumeurl" "$EXAM_HISTORY_TEMP" \
+        || grep -Fq "optional_param('returnto'" "$EXAM_HISTORY_TEMP" \
+        || grep -Fq "\$originparams" "$EXAM_HISTORY_TEMP"; then
+    echo "ERROR: Exam History todavía conserva enlaces que reabren exámenes Board." >&2
+    exit 1
+fi
 grep -Fq "Herbs Category Comparison" "$CATEGORY_TEMP"
 grep -Fq '$languageurl = new moodle_url(' "$CATEGORY_TEMP"
 grep -Fq 'herb-category-library__actions' "$CATEGORY_TEMP"
@@ -985,24 +984,18 @@ grep -Fq "['track' => 'quiz', 'quizsection' => 'clinical']" "$LIBRARY_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'herbs'], true)" "$BOARD_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'formulas'], true)" "$BOARD_TEMP"
 grep -Fq "in_array(\$quizsection, ['all', 'clinical'], true)" "$BOARD_TEMP"
-grep -Fq "\$unifiedclinicalhistoryurl = new moodle_url('/blocks/menu/exam-history.php'" "$BOARD_TEMP"
-grep -Fq "'returnto' => 'clinicalcases'" "$BOARD_TEMP"
-grep -Fq "'caseexam' => \$clinicalexamkey" "$BOARD_TEMP"
-grep -Fq "\$SESSION->block_menu_last_clinical_caseexam = \$clinicalexamkey;" "$BOARD_TEMP"
-grep -Fq "\$unifiedboardhistoryurl = new moodle_url('/blocks/menu/exam-history.php'" "$BOARD_TEMP"
-grep -Fq "'returnto' => 'exams'" "$BOARD_TEMP"
-grep -Fq "← Salir a Historial de exámenes" "$BOARD_TEMP"
-grep -Fq "← Exit to Exam History" "$BOARD_TEMP"
-grep -Fq "document.querySelectorAll('[data-exit-to-exam-history]')" "$BOARD_TEMP"
-grep -Fq "window.top.location.replace(destination)" "$BOARD_TEMP"
-grep -Fq "window.location.replace(destination)" "$BOARD_TEMP"
-grep -Fq 'href="<?php echo s(\$unifiedclinicalhistoryurl->out(false)); ?>"' "$BOARD_TEMP"
-grep -Fq 'href="<?php echo s(\$unifiedboardhistoryurl->out(false)); ?>"' "$BOARD_TEMP"
-history_exit_target_count="$(grep -Fc 'target="_top" data-exit-to-exam-history' "$BOARD_TEMP" || true)"
-[[ "$history_exit_target_count" -eq 2 ]] || {
-    echo "ERROR: los historiales internos no tienen sus dos botones de salida completa a Exam History." >&2
+grep -Fq "data-clinical-finish" "$BOARD_TEMP"
+grep -Fq "data-clinical-next" "$BOARD_TEMP"
+if grep -Fq "data-exit-to-exam-history" "$BOARD_TEMP" \
+        || grep -Fq "\$unifiedclinicalhistoryurl" "$BOARD_TEMP" \
+        || grep -Fq "\$unifiedboardhistoryurl" "$BOARD_TEMP" \
+        || grep -Fq "data-clinical-restart" "$BOARD_TEMP" \
+        || grep -Fq "data-clinical-restart" "$CLINICAL_JS_TEMP" \
+        || grep -Fq "restartButton" "$CLINICAL_JS_TEMP" \
+        || grep -Fq "restartExam" "$CLINICAL_JS_TEMP"; then
+    echo "ERROR: todavía existe un botón para volver a Exam History o reiniciar Clinical Cases." >&2
     exit 1
-}
+fi
 
 # Guardas de conservación: las colecciones y sus recorridos deben seguir presentes.
 for required in     '$primarychapters as $chapter'     '$practicechapters as $chapter'     '$comparisonoverviewchapters as $chapter'     '$otherchapters as $chapter'; do
@@ -1021,6 +1014,7 @@ fi
 mkdir -p "$BACKUP_DIR/blocks/myprogress" "$BACKUP_DIR/blocks/menu"
 cp -a "$LIBRARY_TARGET" "$BACKUP_DIR/blocks/myprogress/study-guide.php"
 cp -a "$BOARD_TARGET" "$BACKUP_DIR/blocks/menu/herbology-board.php"
+cp -a "$CLINICAL_JS_TARGET" "$BACKUP_DIR/blocks/menu/herbology-clinical-cases.js"
 cp -a "$MENU_TARGET" "$BACKUP_DIR/blocks/menu/block_menu.php"
 cp -a "$STYLES_TARGET" "$BACKUP_DIR/blocks/menu/styles.css"
 if [[ -f "$CATEGORY_TARGET" ]]; then
@@ -1041,6 +1035,7 @@ install_preserving_metadata() {
 
 install_preserving_metadata "$LIBRARY_TEMP" "$LIBRARY_TARGET"
 install_preserving_metadata "$BOARD_TEMP" "$BOARD_TARGET"
+install_preserving_metadata "$CLINICAL_JS_TEMP" "$CLINICAL_JS_TARGET"
 install_preserving_metadata "$MENU_TEMP" "$MENU_TARGET"
 install_preserving_metadata "$STYLES_TEMP" "$STYLES_TARGET"
 if [[ -f "$CATEGORY_TARGET" ]]; then
@@ -1064,6 +1059,14 @@ fi
 # Verificación posterior: el archivo servido debe ser idéntico al descargado y contener la localización completa.
 cmp -s "$LIBRARY_TEMP" "$LIBRARY_TARGET" || {
     echo "ERROR: study-guide.php instalado no coincide con la revisión descargada." >&2
+    exit 1
+}
+cmp -s "$BOARD_TEMP" "$BOARD_TARGET" || {
+    echo "ERROR: herbology-board.php instalado no coincide con la revisión descargada." >&2
+    exit 1
+}
+cmp -s "$CLINICAL_JS_TEMP" "$CLINICAL_JS_TARGET" || {
+    echo "ERROR: herbology-clinical-cases.js instalado no coincide con la revisión descargada." >&2
     exit 1
 }
 cmp -s "$CATEGORY_TEMP" "$CATEGORY_TARGET" || {
@@ -1149,18 +1152,13 @@ echo "OK: Exam History aparece debajo de Simulation en Chinese Herbology Board L
 echo "OK: la página unifica intentos Board y quizzes Moodle del usuario conectado."
 echo "OK: el historial muestra fecha, examen o quiz, resultado, estado, duración y curso."
 echo "OK: el historial incluye filtros, paginación, Español/English y respaldo durante el despliegue."
-echo "OK: los quizzes Moodle en progreso o vencidos muestran Retomar quiz / Resume Quiz."
+echo "OK: los quizzes Moodle en progreso o vencidos conservan Retomar quiz / Resume Quiz."
 echo "OK: cada enlace Moodle usa el attempt y cmid exactos del intento guardado."
-echo "OK: los exámenes Board incompletos muestran Retomar examen / Resume Exam."
-echo "OK: cada enlace Board vuelve al modo adaptativo, lineal o casos clínicos que corresponde."
-echo "OK: los historiales internos de Board y Clinical Cases tienen un botón para salir a Exam History."
-echo "OK: Exam History recuerda si se abrió desde Clinical Cases o Board Exams."
-echo "OK: aun sin parámetros, Exam History regresa por defecto a Clinical Cases."
-echo "OK: la sesión conserva el último caseexam abierto y restaura exactamente esa pantalla."
-echo "OK: filtros, paginación e idioma conservan el destino de regreso."
-echo "OK: la salida reemplaza la página del examen y evita que Atrás reabra el intento."
-echo "OK: los botones de salida conservan Español o English y funcionan desde la ventana superior."
-echo "OK: los intentos finalizados no muestran enlaces de reanudación."
+echo "OK: Exam History volvió a usar Dashboard como botón de regreso."
+echo "OK: los intentos Board no muestran enlaces que reinicien o reabran el examen."
+echo "OK: los historiales internos ya no muestran botones para abrir Exam History."
+echo "OK: Clinical Cases ya no muestra Reiniciar y mezclar ni conserva su controlador JavaScript."
+echo "OK: Finalizar examen y Siguiente permanecen disponibles."
 echo "OK: Comparison quedó como módulo 2 con ocho botones independientes."
 echo "OK: Herbs Category Comparison abre una página nueva preparada para tablas por categoría."
 echo "OK: Herbs Category Comparison conserva un botón visible para cambiar entre Español y English."
