@@ -213,6 +213,61 @@ $boardquizrows[] = [
     'action' => $ises ? 'Abrir' : 'Open',
 ];
 
+$miscquizdefinitions = [
+    'families' => ['Formula Families / Variations', 'Familias y variaciones de fórmulas', 22],
+    'nametraps' => ['Name Traps', 'Trampas de nombres', 22],
+    'herbparts' => ['Herb Families & Parts', 'Familias y partes de hierbas', 20],
+    'formulanames' => ['Formula Name Traps', 'Trampas de nombres de fórmulas', 22],
+    'misleading' => ['Misleading Formula Names', 'Nombres engañosos de fórmulas', 6],
+    'advanced' => ['Advanced Name Traps', 'Trampas avanzadas de nombres', 8],
+    'supplements' => ['Supplemental Herb Families', 'Familias suplementarias de hierbas', 6],
+    'secondary' => ['Herbs Secondary Actions', 'Acciones secundarias de hierbas', 60],
+    'pathology' => ['Pathology Comparisons', 'Comparaciones de patologías', 66],
+    'patterns' => ['Pattern Comparisons', 'Comparaciones de patrones', 50],
+    'maciocia' => ['Pattern Comparison Maciocia', 'Comparación de patrones Maciocia', 100],
+    'safety' => ['Safety Library', 'Biblioteca de seguridad', 12],
+    'composition' => ['Formula Composition', 'Composición de fórmulas', 12],
+    'incompat' => ['Herbal Incompatibilities', 'Incompatibilidades herbales', 10],
+    'modifications' => ['Formula Modifications', 'Modificaciones de fórmulas', 305],
+    'combinations' => ['Herbal Combination', 'Combinaciones herbales', 70],
+];
+$miscpracticepath = '/study-guide/comparisons/'
+    . ($ises ? 'miscellaneous-practice-es.html' : 'miscellaneous-practice.html');
+foreach ($miscquizdefinitions as $misckey => [$misctitleen, $misctitlees, $miscquestioncount]) {
+    $miscexamtype = 'bqm_' . $misckey;
+    if ($misckey === 'modifications') {
+        $miscquizurl = new moodle_url(
+            '/study-guide/comparisons/' . ($ises ? 'formula-practice-es.html' : 'formula-practice.html'),
+            [
+                'category' => 'modifications',
+                'size' => 25,
+                'historytype' => $miscexamtype,
+                'sesskey' => sesskey(),
+                'from' => 'history',
+            ]
+        );
+    } else {
+        $miscquizurl = new moodle_url($miscpracticepath, [
+            'source' => $misckey,
+            'sesskey' => sesskey(),
+            'from' => 'history',
+        ]);
+    }
+    $boardquizrows[] = [
+        'key' => 'misc-' . $misckey,
+        'examtype' => $miscexamtype,
+        'topic' => $ises ? $misctitlees : $misctitleen,
+        'source' => $ises ? 'Quiz misceláneo' : 'Miscellaneous Quiz',
+        'course' => $ises ? 'Herbología China Board Level' : 'Chinese Herbology Board Level',
+        'questions' => min(25, $miscquestioncount),
+        'status' => $ises ? 'Disponible' : 'Available',
+        'statusclass' => 'is-available',
+        'attempts' => null,
+        'url' => $miscquizurl->out(false),
+        'action' => $ises ? 'Abrir' : 'Open',
+    ];
+}
+
 usort($boardquizrows, static function(array $left, array $right): int {
     $sourcecomparison = strnatcasecmp($left['source'], $right['source']);
     return $sourcecomparison !== 0
