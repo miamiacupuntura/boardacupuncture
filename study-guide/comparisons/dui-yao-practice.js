@@ -14,8 +14,10 @@
     saved: spanish ? 'Resultado guardado en Exam History.' : 'Result saved to Exam History.',
     saveError: spanish ? 'El resultado no pudo guardarse. Intenta nuevamente desde Exam History.' : 'The result could not be saved. Try again from Exam History.',
     actionPrompt: spanish ? '¿Qué pareja Dui Yao corresponde a esta acción combinada?' : 'Which Dui Yao pair matches this combined action?',
+    reverseActionPrompt: spanish ? '¿Cuál es la acción combinada principal de esta pareja?' : 'What is the primary combined action of this pair?',
     categoryPrompt: spanish ? '¿Qué categoría corresponde mejor a esta pareja?' : 'Which category best matches this pair?',
     formulaPrompt: spanish ? '¿Qué fórmula clásica está asociada con esta pareja?' : 'Which classical formula is associated with this pair?',
+    cluePrompt: spanish ? 'Identifica la pareja por su pista clínica y su fórmula asociada.' : 'Identify the pair from its clinical clue and associated formula.',
     explanation: spanish ? 'Respuesta correcta' : 'Correct answer'
   };
 
@@ -68,8 +70,9 @@
     return Array.from(new Set(values.map(value => String(value || '').trim()).filter(Boolean)));
   }
 
-  function choices(correct, pool) {
-    const distractors = shuffle(unique(pool).filter(value => value !== correct)).slice(0, 3);
+  function choices(correct, nearbyPool, fullPool) {
+    const orderedPool = unique([].concat(shuffle(nearbyPool || []), shuffle(fullPool || [])));
+    const distractors = orderedPool.filter(value => value !== correct).slice(0, 3);
     return shuffle([correct].concat(distractors));
   }
 
@@ -81,46 +84,71 @@
   }
 
   function buildQuestions() {
-    const titles = unique(state.records.map(record => record.title));
-    const categories = unique(state.records.map(record => record.category && record.category[spanish ? 'es' : 'en']));
-    const formulas = unique(state.records.map(record => record.formulas && record.formulas[spanish ? 'es' : 'en']));
-    const questions = [];
+    const records = shuffle(state.records);
+    const titles = unique(records.map(record => record.title));
+    const actions = unique(records.map(record => record.action && record.action[spanish ? 'es' : 'en']));
+    const categories = unique(records.map(record => record.category && record.category[spanish ? 'es' : 'en']));
+    const formulas = unique(records.map(record => record.formulas && record.formulas[spanish ? 'es' : 'en']));
 
-    state.records.forEach((record, index) => {
+    return records.map((record, index) => {
       const title = String(record.title || '');
       const action = String((record.action && record.action[spanish ? 'es' : 'en']) || '');
       const category = String((record.category && record.category[spanish ? 'es' : 'en']) || '');
       const formula = String((record.formulas && record.formulas[spanish ? 'es' : 'en']) || '');
+      const related = records.filter(candidate => {
+        const candidateCategory = String((candidate.category && candidate.category[spanish ? 'es' : 'en']) || '');
+        return candidate !== record && candidateCategory === category;
+      });
+      const relatedTitles = related.map(candidate => candidate.title);
+      const relatedActions = related.map(candidate => candidate.action && candidate.action[spanish ? 'es' : 'en']);
+      const relatedFormulas = related.map(candidate => candidate.formulas && candidate.formulas[spanish ? 'es' : 'en']);
+      const explanation = title + ' — ' + action + ' ' + (spanish ? 'Fórmula: ' : 'Formula: ') + formula;
+      const questionType = index % 5;
 
-      if (action) {
-        questions.push({
-          prompt: copy.actionPrompt,
-          context: action,
-          correct: title,
-          options: choices(title, titles),
-          explanation: title + ' — ' + action
-        });
+      if (questionType === 1 && action) {
+        return {
+          prompt: copy.reverseActionPrompt,
+          context: title,
+          correct: action,
+          options: choices(action, relatedActions, actions),
+          explanation
+        };
       }
-      if (category) {
-        questions.push({
+      if (questionType === 2 && category) {
+        return {
           prompt: copy.categoryPrompt,
           context: title,
           correct: category,
-          options: choices(category, categories),
-          explanation: title + ' — ' + category
-        });
+          options: choices(category, [], categories),
+          explanation
+        };
       }
-      if (formula) {
-        questions.push({
+      if (questionType === 3 && formula) {
+        return {
           prompt: copy.formulaPrompt,
           context: title,
           correct: formula,
-          options: choices(formula, formulas),
-          explanation: title + ' — ' + formula
-        });
+          options: choices(formula, relatedFormulas, formulas),
+          explanation
+        };
       }
+      if (questionType === 4 && action) {
+        return {
+          prompt: copy.cluePrompt,
+          context: action + ' · ' + formula,
+          correct: title,
+          options: choices(title, relatedTitles, titles),
+          explanation
+        };
+      }
+      return {
+        prompt: copy.actionPrompt,
+        context: action,
+        correct: title,
+        options: choices(title, relatedTitles, titles),
+        explanation
+      };
     });
-    return shuffle(questions);
   }
 
   function renderQuestion() {
