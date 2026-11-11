@@ -92,73 +92,27 @@
   }
 
   function buildQuestions() {
-    const records = shuffle(state.records);
+    const records = shuffle(state.records).filter(record => {
+      const action = String((record.action && record.action[spanish ? 'es' : 'en']) || '').trim();
+      return action.length > 0 && String(record.title || '').trim().length > 0;
+    });
     const titles = unique(records.map(record => record.title));
-    const actions = unique(records.map(record => record.action && record.action[spanish ? 'es' : 'en']));
-    const categories = unique(records.map(record => record.category && record.category[spanish ? 'es' : 'en']));
-    const formulas = unique(records.map(record => record.formulas && record.formulas[spanish ? 'es' : 'en']));
 
-    return records.map((record, index) => {
+    return records.map(record => {
       const title = String(record.title || '');
       const action = String((record.action && record.action[spanish ? 'es' : 'en']) || '');
       const category = String((record.category && record.category[spanish ? 'es' : 'en']) || '');
-      const formula = String((record.formulas && record.formulas[spanish ? 'es' : 'en']) || '');
-      const related = records.filter(candidate => {
+      const relatedTitles = records.filter(candidate => {
         const candidateCategory = String((candidate.category && candidate.category[spanish ? 'es' : 'en']) || '');
         return candidate !== record && candidateCategory === category;
-      });
-      const relatedTitles = related.map(candidate => candidate.title);
-      const relatedActions = related.map(candidate => candidate.action && candidate.action[spanish ? 'es' : 'en']);
-      const relatedFormulas = related.map(candidate => candidate.formulas && candidate.formulas[spanish ? 'es' : 'en']);
-      const explanation = title + ' — ' + action + ' ' + (spanish ? 'Fórmula: ' : 'Formula: ') + formula;
-      const questionType = index % 5;
+      }).map(candidate => candidate.title);
 
-      if (questionType === 1 && action) {
-        return {
-          prompt: copy.reverseActionPrompt,
-          context: title,
-          correct: action,
-          options: choices(action, relatedActions, actions),
-          explanation,
-          reviewType: 'action'
-        };
-      }
-      if (questionType === 2 && category) {
-        return {
-          prompt: copy.categoryPrompt,
-          context: title,
-          correct: category,
-          options: choices(category, [], categories),
-          explanation,
-          reviewType: 'category'
-        };
-      }
-      if (questionType === 3 && formula) {
-        return {
-          prompt: copy.formulaPrompt,
-          context: title,
-          correct: formula,
-          options: choices(formula, relatedFormulas, formulas),
-          explanation,
-          reviewType: 'formula'
-        };
-      }
-      if (questionType === 4 && action) {
-        return {
-          prompt: copy.cluePrompt,
-          context: action + ' · ' + formula,
-          correct: title,
-          options: choices(title, relatedTitles, titles),
-          explanation,
-          reviewType: 'pair'
-        };
-      }
       return {
         prompt: copy.actionPrompt,
         context: action,
         correct: title,
         options: choices(title, relatedTitles, titles),
-        explanation,
+        explanation: title + ' — ' + action,
         reviewType: 'pair'
       };
     });
