@@ -87,7 +87,7 @@ if ($herbbankpath !== '') {
             if ($number <= 1 || $name === '' || $questioncount < 1) {
                 continue;
             }
-            $quizhistorytype = 'boardquiz_h_' . $number;
+            $quizhistorytype = 'bqh_' . $number;
             $quizurl = new moodle_url($singleherbquizpath, [
                 'category' => $number,
                 'size' => min(25, $questioncount),
@@ -168,7 +168,7 @@ if ($formulabankpath !== '') {
             if ($questioncount < 1) {
                 continue;
             }
-            $quizhistorytype = 'boardquiz_f_' . substr(sha1($key), 0, 12);
+            $quizhistorytype = 'bqf_' . substr(sha1($key), 0, 12);
             $quizurl = new moodle_url($formulapracticepath, [
                 'category' => $key,
                 'size' => min(25, $questioncount),
