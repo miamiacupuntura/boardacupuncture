@@ -64,16 +64,20 @@ $formulachiefmapurl = new moodle_url('/blocks/myprogress/formula-chief-herbs-map
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
 $additionpath = __DIR__ . '/formula-guideline-profile-additions.json';
+$herbindexpath = __DIR__ . '/single-herb-card-index.json';
 $roster = is_readable($rosterpath) ? json_decode(file_get_contents($rosterpath), true) : null;
 $studydata = is_readable($detailpath) ? json_decode(file_get_contents($detailpath), true) : null;
 $profileadditions = is_readable($additionpath)
     ? json_decode(file_get_contents($additionpath), true)
     : ['total' => 0, 'formulas' => []];
-if (!is_array($roster) || !is_array($studydata) || !is_array($profileadditions)
+$herbindex = is_readable($herbindexpath) ? json_decode(file_get_contents($herbindexpath), true) : null;
+if (!is_array($roster) || !is_array($studydata) || !is_array($profileadditions) || !is_array($herbindex)
         || (int)($roster['total'] ?? 0) !== 181
         || count($roster['formulas'] ?? []) !== 181
         || count($studydata['formulas'] ?? []) !== 63
         || count($studydata['supplementalFormulas'] ?? []) !== 227
+        || (int)($herbindex['total'] ?? 0) !== 304
+        || count($herbindex['herbs'] ?? []) !== 304
         || (int)($profileadditions['total'] ?? -1) !== count($profileadditions['formulas'] ?? [])) {
     throw new coding_exception('Official Formula guideline data is unavailable.');
 }
@@ -91,6 +95,84 @@ $detailtext = static function(array $profile, string $field, bool $ises): string
         }
     }
     return trim((string)($profile[$field] ?? ''));
+};
+
+$herbaliases = [];
+foreach ($herbindex['herbs'] as $herb) {
+    $herbname = trim((string)($herb['name'] ?? ''));
+    if ($herbname !== '') {
+        $herbaliases[$herbname] = $herbname;
+    }
+}
+foreach ([
+    'Chuan Jiao' => 'Hua Jiao',
+    'Fu Ling Pi' => 'Fu Ling',
+    'Ju Pi' => 'Chen Pi',
+    'Jing Jie Sui' => 'Jing Jie',
+    'Sheng Di' => 'Sheng Di Huang',
+    'Sheng Gan Cao' => 'Gan Cao',
+    'Sheng Jiang Pi' => 'Sheng Jiang',
+    'Shu Di' => 'Shu Di Huang',
+    'Su Ye' => 'Zi Su Ye',
+    'Su Zi' => 'Zi Su Zi',
+    'Zhi Cao Wu' => 'Cao Wu',
+    'Zhi Chuan Wu' => 'Chuan Wu',
+    'Zhi Fu Zi' => 'Fu Zi',
+    'Zhi Gan Cao' => 'Gan Cao',
+] as $alias => $target) {
+    $herbaliases[$alias] = $target;
+}
+uksort($herbaliases, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
+$herbaliaslookup = [];
+foreach ($herbaliases as $alias => $target) {
+    $herbaliaslookup[core_text::strtolower($alias)] = ['target' => $target];
+}
+$herbaliaspattern = '/(?<![A-Za-z])(' . implode('|', array_map(
+    static fn(string $alias): string => preg_quote($alias, '/'),
+    array_keys($herbaliases)
+)) . ')(?![A-Za-z])/iu';
+
+$renderherblinks = static function(
+    string $value,
+    string $chiefs,
+    string $formula,
+    bool $ises
+) use ($herbaliaspattern, $herbaliaslookup, $herbaliases, $normalize): string {
+    $chieftargets = [];
+    foreach ($herbaliases as $alias => $target) {
+        if (preg_match('/(?<![A-Za-z])' . preg_quote($alias, '/') . '(?![A-Za-z])/iu', $chiefs)) {
+            $chieftargets[$normalize($target)] = true;
+        }
+    }
+    $parts = preg_split($herbaliaspattern, $value, -1, PREG_SPLIT_DELIM_CAPTURE);
+    if (!is_array($parts)) {
+        return s($value);
+    }
+    $output = '';
+    foreach ($parts as $part) {
+        $lookup = $herbaliaslookup[core_text::strtolower($part)] ?? null;
+        if (!$lookup) {
+            $output .= s($part);
+            continue;
+        }
+        $target = $lookup['target'];
+        $ischief = isset($chieftargets[$normalize($target)]);
+        $params = [
+            'herb' => $target,
+            'sort' => 'az',
+            'from' => 'formula',
+            'returnformula' => $formula,
+        ];
+        if ($ises) {
+            $params['lang'] = 'es';
+        }
+        $url = new moodle_url('/blocks/myprogress/single-herbs-list.php', $params);
+        $output .= html_writer::link($url, ($ischief ? '★ ' : '') . $part, [
+            'class' => 'formula-list__herb-link' . ($ischief ? ' is-chief' : ''),
+            'title' => $ises ? 'Abrir tarjeta de la hierba' : 'Open herb card',
+        ]);
+    }
+    return $output;
 };
 
 $detailsbyname = [];
@@ -270,6 +352,8 @@ echo $OUTPUT->header();
 .formula-list__category{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf5f3;color:#087c69!important;font-size:11px;font-weight:850;text-decoration:none!important}.formula-list__category:hover{background:#087c69;color:#fff!important}
 .formula-list__status{display:block;margin-top:7px;color:#64748b;font-size:11px;font-weight:800}.formula-list__status.is-detailed{color:#087c69}
 .formula-list__body{padding:18px 22px 22px;border-top:1px solid #d8e2e7}.formula-list__body dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px 16px;margin:0}.formula-list__body dt{font-size:13px;font-weight:900}.formula-list__body dd{margin:0;color:#52657a;font-size:14px;line-height:1.6}.formula-list__body dd.is-safety{color:#a64b13}.formula-list__clue{color:#075f60!important;font-weight:800}
+.formula-list__herb-link{display:inline-flex;align-items:center;margin:2px 1px;padding:3px 8px;border:1px solid #b7ccd7;border-radius:999px;background:#f4f8fa;color:#0f4c81!important;font-weight:800;text-decoration:none!important}.formula-list__herb-link:hover,.formula-list__herb-link:focus{border-color:#087c69;background:#e5f3ef;color:#075f54!important}.formula-list__herb-link.is-chief{border:2px solid #d58a00;background:#fff0b8;color:#6f4300!important;box-shadow:0 0 0 2px rgba(255,193,7,.15);font-weight:950}
+.formula-list__connections{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;padding-top:14px;border-top:1px solid #d8e2e7}.formula-list__connection{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border:1px solid #0d7868;border-radius:8px;background:#edf8f5;color:#075f54!important;font-weight:850;text-decoration:none!important}.formula-list__connection:hover,.formula-list__connection:focus{background:#0d7868;color:#fff!important}
 .formula-list__profile-note{margin:0;padding:11px;border-radius:8px;background:#fff7e8;color:#7a5412;font-size:12px;line-height:1.5}
 .formula-list__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;color:#526b84;text-align:center;font-weight:750}
 @media(max-width:1000px){.formula-list__cards{grid-template-columns:1fr}}@media(max-width:700px){.formula-list__top{display:block}.formula-list__actions{margin-top:15px}.formula-list__form,.formula-list__summary,.formula-list__cards{grid-template-columns:1fr}.formula-list__tools{justify-content:flex-start}.formula-list__body dl{grid-template-columns:1fr}.formula-list__body dd{margin-top:-5px}}
@@ -363,6 +447,10 @@ echo $OUTPUT->header();
                             'sort' => 'category',
                             'category' => $card['categorycode'],
                         ]);
+                        $cardcomparisonurl = new moodle_url(
+                            '/study-guide/comparisons/' . ($ises ? 'formulas-es.html' : 'formulas.html'),
+                            ['q' => $card['name'], 'returnformula' => $card['name']]
+                        );
                     ?>
                         <details class="formula-list__card"<?php echo $autoopen ? ' open' : ''; ?>>
                             <summary>
@@ -382,8 +470,8 @@ echo $OUTPUT->header();
                                     <?php if ($card['action'] !== '') { ?><dt><?php echo $ises ? 'Acción' : 'Action'; ?></dt><dd><?php echo s($card['action']); ?></dd><?php } ?>
                                     <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Pista decisiva' : 'Decisive clue'; ?></dt><dd class="formula-list__clue"><?php echo s($card['clue']); ?></dd><?php } ?>
                                     <?php if ($card['examfocus'] !== '') { ?><dt><?php echo $ises ? 'Enfoque Board' : 'Board focus'; ?></dt><dd><?php echo s($card['examfocus']); ?></dd><?php } ?>
-                                    <?php if ($card['kings'] !== '') { ?><dt><?php echo $ises ? 'Hierba principal' : 'Chief herb'; ?></dt><dd><?php echo s($card['kings']); ?></dd><?php } ?>
-                                    <?php if ($card['ingredients'] !== '') { ?><dt><?php echo $ises ? 'Ingredientes' : 'Ingredients'; ?></dt><dd><?php echo s($card['ingredients']); ?></dd><?php } ?>
+                                    <?php if ($card['kings'] !== '') { ?><dt><?php echo $ises ? 'Hierba principal' : 'Chief herb'; ?></dt><dd><?php echo $renderherblinks($card['kings'], $card['kings'], $card['name'], $ises); ?></dd><?php } ?>
+                                    <?php if ($card['ingredients'] !== '') { ?><dt><?php echo $ises ? 'Ingredientes' : 'Ingredients'; ?></dt><dd><?php echo $renderherblinks($card['ingredients'], $card['kings'], $card['name'], $ises); ?></dd><?php } ?>
                                     <?php if ($card['roles'] !== '') { ?><dt><?php echo $ises ? 'Arquitectura' : 'Architecture'; ?></dt><dd><?php echo s($card['roles']); ?></dd><?php } ?>
                                     <?php if ($card['comparison'] !== '') { ?><dt><?php echo $ises ? 'Contraste' : 'Contrast'; ?></dt><dd><?php echo s($card['comparison']); ?></dd><?php } ?>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
@@ -397,6 +485,9 @@ echo $OUTPUT->header();
                                         ? 'Esta fórmula pertenece al Appendix C oficial de 2026. El banco suministrado todavía no contiene un perfil clínico detallado verificado; por eso no se completan campos por inferencia.'
                                         : 'This formula belongs to the official 2026 Appendix C roster. The supplied bank does not yet contain a verified detailed clinical profile, so no fields are completed by inference.'; ?></p>
                                 <?php } ?>
+                                <nav class="formula-list__connections" aria-label="<?php echo $ises ? 'Enlaces relacionados' : 'Related links'; ?>">
+                                    <a class="formula-list__connection" href="<?php echo $cardcomparisonurl->out(false); ?>"><?php echo $ises ? 'Comparar esta fórmula →' : 'Compare this formula →'; ?></a>
+                                </nav>
                             </div>
                         </details>
                     <?php } ?>
