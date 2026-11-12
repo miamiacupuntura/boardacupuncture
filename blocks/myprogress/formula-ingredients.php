@@ -143,7 +143,7 @@ $renderingredients = static function(
             [
                 'class' => $classes,
                 'title' => $ischief
-                    ? ($ises ? 'Ingrediente Chief · Abrir tarjeta' : 'Chief ingredient · Open card')
+                    ? ($ises ? 'Ingrediente Chief; no necesariamente es el término buscado · Abrir tarjeta' : 'Chief ingredient; not necessarily the searched term · Open card')
                     : ($ises ? 'Abrir tarjeta de hierba' : 'Open herb card'),
             ]
         );
@@ -227,7 +227,7 @@ echo $OUTPUT->header();
 .formula-ingredients__tools{display:grid;grid-template-columns:minmax(240px,1fr) auto;gap:12px;align-items:end;margin-bottom:18px;padding:16px;border:1px solid #c7ddd9;border-radius:12px;background:#f8fcfb}
 .formula-ingredients__tools label{display:grid;gap:6px;font-size:12px;font-weight:850}.formula-ingredients__tools input{width:100%;min-height:46px;padding:9px 12px;border:1px solid #aebfca;border-radius:8px;font:inherit}
 .formula-ingredients__summary{margin:0;color:#36566c;font-weight:850}
-.formula-ingredients__legend{margin:0 0 16px;padding:13px 15px;border-left:5px solid #e9a11b;border-radius:8px;background:#fff7df;color:#5a4310}
+.formula-ingredients__legend{margin:0 0 10px;padding:13px 15px;border-left:5px solid #e9a11b;border-radius:8px;background:#fff7df;color:#5a4310}.formula-ingredients__search-legend{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 16px;padding:12px 15px;border-left:5px solid #2563a7;border-radius:8px;background:#edf5ff;color:#174d78}.formula-ingredients__search-chip{display:inline-flex;padding:4px 9px;border:3px solid #2563a7;border-radius:999px;background:#fff;color:#0b4f87;font-weight:900}
 .formula-ingredients__table-wrap{overflow-x:auto;border:1px solid #bfd0d9;border-radius:12px;background:#fff;box-shadow:0 5px 18px rgba(23,50,77,.06)}
 .formula-ingredients__table{width:100%;min-width:960px;border-collapse:collapse}.formula-ingredients__table th,.formula-ingredients__table td{padding:11px 13px;border-bottom:1px solid #d5e1e7;vertical-align:top;text-align:left;line-height:1.55}.formula-ingredients__table thead th{background:#0d7868;color:#fff;font-size:.76rem;letter-spacing:.05em;text-transform:uppercase}.formula-ingredients__table tbody tr:nth-child(even){background:#f8fbfc}.formula-ingredients__formula-link{color:#0f4c81!important;font-weight:900;text-decoration:none}.formula-ingredients__formula-link:hover{text-decoration:underline}.formula-ingredients__alias{display:block;margin-top:3px;color:#657c8d;font-size:11px}
 .formula-ingredients__herb-link{display:inline-flex;align-items:center;margin:2px 1px;padding:3px 7px;border:1px solid #b7ccd7;border-radius:999px;background:#f4f8fa;color:#0f4c81!important;font-weight:800;text-decoration:none!important}.formula-ingredients__herb-link:hover{background:#e5f3ef}.formula-ingredients__herb-link.is-chief{border:2px solid #d58a00;background:#fff0b8;color:#6f4300!important;box-shadow:0 0 0 2px rgba(255,193,7,.18);font-weight:950}.formula-ingredients__herb-link.is-search-match:not(.is-chief){border:2px solid #2563a7;background:#eaf3ff;color:#0b4f87!important}.formula-ingredients__herb-link.is-chief.is-search-match{outline:3px solid #2563a7;outline-offset:2px}
@@ -260,6 +260,14 @@ echo $OUTPUT->header();
     <p class="formula-ingredients__legend"><strong>★ Chief:</strong> <?php echo $ises
         ? 'el ingrediente o grupo de ingredientes principales aparece en amarillo.'
         : 'the principal ingredient or principal group is highlighted in yellow.'; ?> <?php echo $ises ? 'Fuente suministrada: CA Formulas, Chart 4.' : 'Supplied source: CA Formulas, Chart 4.'; ?></p>
+    <?php if ($query !== '') { ?>
+        <p class="formula-ingredients__search-legend">
+            <strong class="formula-ingredients__search-chip"><?php echo $ises ? 'Borde azul = búsqueda' : 'Blue outline = search'; ?>: <?php echo s($query); ?></strong>
+            <span><?php echo $ises
+                ? 'El amarillo con ★ continúa mostrando todos los Chief de la fórmula, aunque no sean el término buscado. La búsqueda filtra fórmulas; no cambia qué ingrediente es Chief.'
+                : 'Yellow with ★ continues to show every Chief in the formula, even when it is not the searched term. Search filters formulas; it does not change which ingredient is Chief.'; ?></span>
+        </p>
+    <?php } ?>
 
     <?php if (!$rows) { ?>
         <p class="formula-ingredients__empty"><?php echo $ises ? 'No se encontraron fórmulas.' : 'No formulas matched the search.'; ?></p>
