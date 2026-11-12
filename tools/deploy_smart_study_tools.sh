@@ -22,7 +22,7 @@ trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php)
-DATA_FILES=(single-herb-safety-supplement.json)
+DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json)
 STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
@@ -55,6 +55,10 @@ if grep -Fq "subject-study-library__journey-option subject-study-library__journe
     exit 1
 fi
 grep -Fq "Find similar formulas" "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq "formula-architecture-data.json" "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq "formula-list__architecture-groups" "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq '"total": 12' "$TEMP_DIR/data/formula-architecture-data.json"
+grep -Fq '"name": "Ba Zhen Tang"' "$TEMP_DIR/data/formula-architecture-data.json"
 grep -Fq "Find similar herbs" "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq '$fromsmart' "$TEMP_DIR/moodle/formula-list.php"
 grep -Fq '$fromsmart' "$TEMP_DIR/moodle/single-herbs-list.php"
@@ -146,6 +150,7 @@ echo "OK: Chief Herb Alternatives muestra 117 hierbas individuales y 78 grupos m
 echo "OK: Similar Formulas, Similar Herbs, Pattern, Tongue & Pulse, Ingredients y Chief usan el guideline verificado."
 echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con sus bancos oficiales."
 echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
+echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: archivos públicos instalados en $STUDY_NOTE_DIR."
