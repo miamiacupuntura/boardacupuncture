@@ -19,14 +19,19 @@ done
 
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
-mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/static"
+mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php)
+DATA_FILES=(single-herb-safety-supplement.json)
 STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
     php -l "$TEMP_DIR/moodle/$file" >/dev/null
+done
+for file in "${DATA_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/data/$file"
+    php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data)) { exit(1); }' "$TEMP_DIR/data/$file"
 done
 for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
@@ -48,7 +53,7 @@ grep -Fq "percentage(result.correct, result.total) < 80" "$TEMP_DIR/static/formu
 
 TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
 [[ -d "$TARGET_DIR" ]] || { echo "ERROR: no existe $TARGET_DIR" >&2; exit 1; }
-for file in study-guide.php formula-list.php single-herbs-list.php     formula-board-roster-2026.json formulas-study-guide-data.json formula-guideline-profile-additions.json     formula-tongue-pulse-data.json single-herb-card-index.json single-herb-properties.json     single-herb-rich-profiles.json single-herb-actions-indications-supplement.json     single-herb-safety-supplement.json; do
+for file in study-guide.php formula-list.php single-herbs-list.php     formula-board-roster-2026.json formulas-study-guide-data.json formula-guideline-profile-additions.json     formula-tongue-pulse-data.json single-herb-card-index.json single-herb-properties.json     single-herb-rich-profiles.json single-herb-actions-indications-supplement.json; do
     [[ -f "$TARGET_DIR/$file" ]] || { echo "ERROR: falta $TARGET_DIR/$file" >&2; exit 1; }
 done
 
@@ -81,6 +86,20 @@ for file in "${MOODLE_FILES[@]}"; do
     install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/moodle/$file" "$target"
     cmp -s "$TEMP_DIR/moodle/$file" "$target"
     php -l "$target" >/dev/null
+done
+
+for file in "${DATA_FILES[@]}"; do
+    target="$TARGET_DIR/$file"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP/moodle/$file"
+        file_owner_group="$(stat -c '%u:%g' "$target")"
+        file_mode="$(stat -c '%a' "$target")"
+    else
+        file_owner_group="$owner_group"
+        file_mode="$mode"
+    fi
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/data/$file" "$target"
+    cmp -s "$TEMP_DIR/data/$file" "$target"
 done
 
 static_reference="$STUDY_NOTE_DIR/formula-practice.html"
