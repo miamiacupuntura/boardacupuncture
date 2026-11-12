@@ -42,7 +42,8 @@
     modeHelp: {
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
       formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
-      category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.'
+      category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.',
+      weak: spanish ? 'Prioriza fórmulas con menos de 80% de precisión en tu historial local.' : 'Prioritizes formulas below 80% accuracy in your local history.'
     }
   };
   const centralHistoryParams = new URLSearchParams(window.location.search);
@@ -185,6 +186,17 @@
       const category = elements.category.value;
       return scoped.filter(question => question.categoryKeys.includes(category));
     }
+    if (state.mode === 'weak') {
+      const history = readHistory();
+      const weakFormulas = new Set(Object.entries(history.formulas || {})
+        .map(([number, result]) => ({ number: Number(number), total: Number(result.total || 0), correct: Number(result.correct || 0) }))
+        .filter(result => result.total > 0 && percentage(result.correct, result.total) < 80)
+        .sort((a, b) => percentage(a.correct, a.total) - percentage(b.correct, b.total) || b.total - a.total)
+        .slice(0, 8)
+        .map(result => result.number));
+      if (!weakFormulas.size) return [];
+      return scoped.filter(question => (question.formulaNumbers || []).some(number => weakFormulas.has(Number(number))));
+    }
     return scoped;
   }
 
@@ -192,15 +204,17 @@
     const url = new URL(window.location.href);
     url.searchParams.delete('formula');
     url.searchParams.delete('category');
+    url.searchParams.delete('focus');
     if (state.mode === 'formula') url.searchParams.set('formula', elements.formula.value);
     if (state.mode === 'category') url.searchParams.set('category', elements.category.value);
+    if (state.mode === 'weak') url.searchParams.set('focus', 'weak');
     url.searchParams.set('size', String(state.size));
     history.replaceState(null, '', url);
     if (elements.language) elements.language.href = `${elements.language.getAttribute('href').split('?')[0]}${url.search}`;
   }
 
   function setMode(mode, refresh = true) {
-    state.mode = ['all', 'formula', 'category'].includes(mode) ? mode : 'all';
+    state.mode = ['all', 'formula', 'category', 'weak'].includes(mode) ? mode : 'all';
     elements.modeButtons.forEach(button => {
       button.setAttribute('aria-pressed', String(button.dataset.practiceMode === state.mode));
     });
@@ -305,6 +319,7 @@
     const params = new URLSearchParams(window.location.search);
     const requestedFormula = params.get('formula');
     const requestedCategory = params.get('category');
+    const requestedFocus = params.get('focus');
     const requestedSize = Number(params.get('size'));
     if ([...elements.formula.options].some(item => item.value === requestedFormula)) elements.formula.value = requestedFormula;
     if ([...elements.category.options].some(item => item.value === requestedCategory)) elements.category.value = requestedCategory;
@@ -322,7 +337,8 @@
       if (heroLead) heroLead.textContent = text.modificationsLead;
       if (setupTitle) setupTitle.textContent = text.modificationsSetup;
       document.title = text.modificationsTitle + ' | AcupunctureTests';
-    } else if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
+    } else if (requestedFocus === 'weak') setMode('weak', false);
+    else if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
     else if (requestedCategory && [...elements.category.options].some(item => item.value === requestedCategory)) setMode('category', false);
     else setMode('all', false);
     state.useMaximum = state.mode !== 'all' && requestedSize === filteredQuestions().length;
