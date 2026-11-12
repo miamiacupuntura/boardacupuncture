@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
-MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
 
@@ -68,6 +68,12 @@ grep -Fq '"total": 51' "$TEMP_DIR/data/dui-yao-smart-data.json"
 grep -Fq 'is-embedded' "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq 'PARAM_BOOL' "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "subject-study-library__smart-top" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "subject-study-library__score-top" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "/blocks/myprogress/study-score.php" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "formula-practice-progress-v1" "$TEMP_DIR/moodle/study-score.php"
+grep -Fq "40% accuracy, 25% coverage, 20% retention and 15% consistency" "$TEMP_DIR/moodle/study-score.php"
+grep -Fq "data-category-body" "$TEMP_DIR/moodle/study-score.php"
+grep -Fq "data-recommendations" "$TEMP_DIR/moodle/study-score.php"
 if grep -Fq "subject-study-library__journey-option subject-study-library__journey-option--smart" "$TEMP_DIR/moodle/study-guide.php"; then
     echo "ERROR: Smart Study Tools todavía aparece dentro de Main Study Guide." >&2
     exit 1
@@ -161,6 +167,8 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
+echo "OK: My Study Score visible antes de Smart Study Tools y conectado con el historial local del Formula Quiz."
+echo "OK: My Study Score calcula precisión, cobertura, retención, consistencia, categorías y recomendaciones."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
 echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgos verificados."
