@@ -87,6 +87,7 @@ $herbpropertiespath = __DIR__ . '/single-herb-properties.json';
 $herbrichpath = __DIR__ . '/single-herb-rich-profiles.json';
 $herbactionspath = __DIR__ . '/single-herb-actions-indications-supplement.json';
 $herbsafetypath = __DIR__ . '/single-herb-safety-supplement.json';
+$duiyaodatapath = __DIR__ . '/dui-yao-smart-data.json';
 
 $formularoster = is_readable($formularosterpath) ? json_decode(file_get_contents($formularosterpath), true) : null;
 $formulaprofiles = is_readable($formulaprofilespath) ? json_decode(file_get_contents($formulaprofilespath), true) : null;
@@ -97,17 +98,20 @@ $herbproperties = is_readable($herbpropertiespath) ? json_decode(file_get_conten
 $herbrich = is_readable($herbrichpath) ? json_decode(file_get_contents($herbrichpath), true) : null;
 $herbactions = is_readable($herbactionspath) ? json_decode(file_get_contents($herbactionspath), true) : null;
 $herbsafety = is_readable($herbsafetypath) ? json_decode(file_get_contents($herbsafetypath), true) : null;
+$duiyaodata = is_readable($duiyaodatapath) ? json_decode(file_get_contents($duiyaodatapath), true) : null;
 
 if (!is_array($formularoster) || !is_array($formulaprofiles) || !is_array($formulaadditions)
         || !is_array($tonguepulse) || !is_array($herbindex) || !is_array($herbproperties)
-        || !is_array($herbrich) || !is_array($herbactions) || !is_array($herbsafety)
+        || !is_array($herbrich) || !is_array($herbactions) || !is_array($herbsafety) || !is_array($duiyaodata)
         || count($formularoster['formulas'] ?? []) !== 181
         || count($formulaprofiles['formulas'] ?? []) !== 63
         || count($formulaprofiles['supplementalFormulas'] ?? []) !== 227
         || count($tonguepulse['formulas'] ?? []) !== 63
         || count($herbindex['herbs'] ?? []) !== 304
         || count($herbproperties['herbs'] ?? []) !== 304
-        || count($herbrich['profiles'] ?? []) < 180) {
+        || count($herbrich['profiles'] ?? []) < 180
+        || (int)($duiyaodata['total'] ?? 0) !== 51
+        || count($duiyaodata['pairs'] ?? []) !== 51) {
     throw new coding_exception('Smart Study Tools guideline data is unavailable.');
 }
 
@@ -164,6 +168,29 @@ $queryscore = static function(string $queryvalue, string $text) use ($tokenize, 
     $exact = core_text::strpos($normalize($text), $normalize($queryvalue)) !== false ? 0.25 : 0.0;
     return min(1.0, $coverage * 0.75 + $exact);
 };
+
+$duipairs = [];
+$duiherbcounts = [];
+foreach ($duiyaodata['pairs'] as $pair) {
+    $pairherbs = array_values(array_filter(array_map('trim', $pair['herbs'] ?? [])));
+    if (count($pairherbs) !== 2) {
+        continue;
+    }
+    foreach ($pairherbs as $pairherb) {
+        $duiherbcounts[$pairherb] = ($duiherbcounts[$pairherb] ?? 0) + 1;
+    }
+    $duipairs[] = [
+        'number' => (int)($pair['number'] ?? 0),
+        'slug' => trim((string)($pair['slug'] ?? '')),
+        'title' => trim((string)($pair['title'] ?? '')),
+        'characters' => trim((string)($pair['characters'] ?? '')),
+        'herbs' => $pairherbs,
+        'category' => $localized($pair['category'] ?? '', $ises),
+        'action' => $localized($pair['action'] ?? '', $ises),
+        'formulas' => $localized($pair['formulas'] ?? '', $ises),
+    ];
+}
+uksort($duiherbcounts, 'strnatcasecmp');
 
 $profilemap = [];
 foreach (array_merge(
@@ -378,6 +405,7 @@ $herbresults = [];
 $ingredientresults = [];
 $chiefresults = [];
 $safetyresults = [];
+$duiresults = [];
 $searchresults = [];
 
 if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) {
@@ -493,6 +521,19 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
     }
     usort($safetyresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
     $safetyresults = array_slice($safetyresults, 0, 15);
+} else if ($mode === 'dui' && $item !== '') {
+    foreach ($duipairs as $candidate) {
+        $matches = false;
+        foreach ($candidate['herbs'] as $pairherb) {
+            if ($normalize($pairherb) === $normalize($item)) {
+                $matches = true;
+                break;
+            }
+        }
+        if (!$matches) continue;
+        $duiresults[] = ['score' => 1.0, 'card' => $candidate];
+    }
+    usort($duiresults, static fn(array $left, array $right): int => $left['card']['number'] <=> $right['card']['number']);
 }
 
 $returnparams = ['mode' => $mode];
@@ -717,9 +758,17 @@ echo $OUTPUT->header();
                 <?php } ?>
             </form>
         <?php } else if ($mode === 'dui') { ?>
-            <h3><?php echo $ises ? 'Pares similares Duì Yào' : 'Duì Yào Similar Pairs'; ?></h3>
-            <p><?php echo $ises ? 'Explora pares de hierbas con acciones complementarias, parecidas o contrastantes.' : 'Explore herb pairs with complementary, similar or contrasting actions.'; ?></p>
-            <div class="smart-tools__launchers"><a class="smart-tools__launcher" href="<?php echo $duiyaourl->out(false); ?>"><?php echo $ises ? 'Abrir biblioteca Duì Yào →' : 'Open Duì Yào library →'; ?></a></div>
+            <h3><?php echo $ises ? 'Buscador de pares Duì Yào por hierba' : 'Duì Yào Pairs by Herb'; ?></h3>
+            <p><?php echo $ises ? 'Selecciona una hierba para ver todos sus pares oficiales, acciones combinadas y fórmulas relacionadas.' : 'Select an herb to see all of its official pairs, combined actions and related formulas.'; ?></p>
+            <form class="smart-tools__form" method="get">
+                <input type="hidden" name="mode" value="dui"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
+                <label><span><?php echo $ises ? 'Hierba con Duì Yào' : 'Herb with Duì Yào pairs'; ?></span><select name="item" required>
+                    <option value=""><?php echo $ises ? 'Seleccionar hierba…' : 'Select an herb…'; ?></option>
+                    <?php foreach ($duiherbcounts as $duiherb => $duicount) { ?><option value="<?php echo s($duiherb); ?>"<?php echo $normalize($item) === $normalize($duiherb) ? ' selected' : ''; ?>><?php echo s($duiherb . ' (' . $duicount . ')'); ?></option><?php } ?>
+                </select></label>
+                <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar pares' : 'Find pairs'; ?></button>
+            </form>
+            <div class="smart-tools__launchers"><a class="smart-tools__button" href="<?php echo $duiyaourl->out(false); ?>"><?php echo $ises ? 'Abrir biblioteca completa →' : 'Open complete library →'; ?></a></div>
         <?php } else if ($mode === 'traps') { ?>
             <h3><?php echo $ises ? 'Detector de nombres confundibles' : 'Name Trap Detector'; ?></h3>
             <p><?php echo $ises ? 'Compara fórmulas y hierbas cuyos nombres se confunden fácilmente en el examen.' : 'Compare formulas and herbs whose names are easily confused on exams.'; ?></p>
@@ -749,6 +798,7 @@ echo $OUTPUT->header();
         'clue' => $searchresults,
         'tongue' => $searchresults,
         'safety' => $safetyresults,
+        'dui' => $duiresults,
     ];
     $activeresults = $resultsets[$mode] ?? [];
     $resultcount = count($activeresults);
@@ -781,6 +831,20 @@ echo $OUTPUT->header();
                         </dl>
                         <div class="smart-tools__reason"><?php if (!empty($result['reasons'])) { foreach ($result['reasons'] as $reason) { ?><span><?php echo s($reason); ?></span><?php } } else { ?><span><?php echo $ises ? 'Coincidencia con la búsqueda' : 'Search match'; ?></span><?php } ?></div>
                         <a class="smart-tools__open" href="<?php echo $formulalink($card['name'])->out(false); ?>"><?php echo $ises ? 'Abrir tarjeta de fórmula →' : 'Open formula card →'; ?></a>
+                    </article>
+                <?php }} else if ($mode === 'dui') {
+                    foreach ($activeresults as $result) { $card = $result['card'];
+                        $pairurl = new moodle_url('/study-guide/comparisons/' . $card['slug'] . ($ises ? '-es' : '') . '.html');
+                    ?>
+                    <article class="smart-tools__result">
+                        <header class="smart-tools__result-head"><h4><?php echo s($card['title']); ?></h4><span class="smart-tools__score">#<?php echo $card['number']; ?></span></header>
+                        <p class="smart-tools__category"><?php echo s($card['characters'] . ' · ' . $card['category']); ?></p>
+                        <dl>
+                            <dt><?php echo $ises ? 'Acción conjunta' : 'Combined action'; ?></dt><dd><?php echo s($card['action']); ?></dd>
+                            <dt><?php echo $ises ? 'Fórmulas' : 'Formulas'; ?></dt><dd><?php echo s($card['formulas']); ?></dd>
+                        </dl>
+                        <div class="smart-tools__reason"><span><?php echo s($ises ? 'Contiene ' . $item : 'Contains ' . $item); ?></span></div>
+                        <a class="smart-tools__open" href="<?php echo $pairurl->out(false); ?>"><?php echo $ises ? 'Abrir ficha Duì Yào →' : 'Open Duì Yào card →'; ?></a>
                     </article>
                 <?php }} else if ($mode === 'herb' || $mode === 'safety') {
                     foreach ($activeresults as $result) { $card = $result['card']; ?>
