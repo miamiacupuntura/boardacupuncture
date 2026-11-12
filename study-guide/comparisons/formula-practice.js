@@ -44,7 +44,7 @@
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
       formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
       category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.',
-      weak: spanish ? 'Prioriza fórmulas con menos de 80% de precisión; si aún no hay historial, comienza con un diagnóstico general.' : 'Prioritizes formulas below 80% accuracy; if no history exists yet, it starts with a general diagnostic.',
+      weak: spanish ? 'Prioriza fórmulas y enfoques por debajo de 80%; si no hay debilidades registradas, repasa lo menos practicado o inicia un diagnóstico general.' : 'Prioritizes formulas and focus areas below 80%; if no weakness is recorded, it reviews the least-practiced material or starts a general diagnostic.',
       dui: spanish ? 'Practica acciones y asociaciones de los 51 pares Duì Yào oficiales.' : 'Practice actions and associations from the 51 official Duì Yào pairs.',
       modifications: spanish ? 'Practica modificaciones clínicas verificadas y sus cambios de ingredientes.' : 'Practice verified clinical modifications and their ingredient changes.',
       clinical: spanish ? 'Filtra viñetas de pacientes y preguntas construidas como casos clínicos.' : 'Filter patient vignettes and questions written as clinical cases.',
@@ -221,15 +221,45 @@
     }
     if (state.mode === 'weak') {
       const history = readHistory();
-      if (!Number(history.total || 0)) return scoped.filter(question => !(question.categoryKeys || []).includes('dui-yao'));
-      const weakFormulas = new Set(Object.entries(history.formulas || {})
-        .map(([number, result]) => ({ number: Number(number), total: Number(result.total || 0), correct: Number(result.correct || 0) }))
-        .filter(result => result.total > 0 && percentage(result.correct, result.total) < 80)
-        .sort((a, b) => percentage(a.correct, a.total) - percentage(b.correct, b.total) || b.total - a.total)
-        .slice(0, 8)
-        .map(result => result.number));
-      if (!weakFormulas.size) return [];
-      return scoped.filter(question => (question.formulaNumbers || []).some(number => weakFormulas.has(Number(number))));
+      const diagnosticPool = scoped.filter(question =>
+        !(question.categoryKeys || []).includes('dui-yao') &&
+        !(question.categoryKeys || []).includes('modifications') &&
+        (question.formulaNumbers || []).length
+      );
+      const formulaStats = Object.entries(history.formulas || {})
+        .map(([number, result]) => ({
+          number: Number(number),
+          total: Number(result.total || 0),
+          correct: Number(result.correct || 0)
+        }))
+        .filter(result => result.number > 0 && result.total > 0)
+        .sort((left, right) =>
+          percentage(left.correct, left.total) - percentage(right.correct, right.total) ||
+          left.total - right.total
+        );
+      const belowTarget = formulaStats.filter(result => percentage(result.correct, result.total) < 80);
+      const selectedFormulas = new Set((belowTarget.length ? belowTarget : formulaStats).slice(0, 8).map(result => result.number));
+      const focusStats = Object.entries(history.focuses || {})
+        .map(([mode, result]) => ({
+          mode,
+          total: Number(result.total || 0),
+          correct: Number(result.correct || 0)
+        }))
+        .filter(result => topicalModes.has(result.mode) && result.total > 0 && percentage(result.correct, result.total) < 80)
+        .sort((left, right) =>
+          percentage(left.correct, left.total) - percentage(right.correct, right.total) ||
+          right.total - left.total
+        )
+        .slice(0, 3);
+      const selectedFocuses = new Set(focusStats.map(result => result.mode));
+      const personalized = scoped.filter(question => {
+        const formulaMatch = (question.formulaNumbers || []).some(number => selectedFormulas.has(Number(number)));
+        const focusMatch = [...selectedFocuses].some(mode => questionMatchesFocus(question, mode));
+        return formulaMatch || focusMatch;
+      });
+      if (personalized.length) return personalized;
+      if (diagnosticPool.length) return diagnosticPool;
+      return scoped;
     }
     if (topicalModes.has(state.mode)) return scoped.filter(question => questionMatchesFocus(question, state.mode));
     return scoped;
