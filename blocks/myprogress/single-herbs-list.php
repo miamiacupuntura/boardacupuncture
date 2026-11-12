@@ -362,11 +362,13 @@ echo $OUTPUT->header();
     <section class="single-herbs-list__controls" aria-label="<?php echo $ises ? 'Controles de la lista' : 'List controls'; ?>">
         <nav class="single-herbs-list__modes" aria-label="<?php echo $ises ? 'Organizar tarjetas' : 'Organize cards'; ?>">
             <?php
+            // Sorting modes always start from the complete guideline roster.
+            // Category filtering is controlled only by the selector or a card badge.
             $azurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + [
-                'sort' => 'az', 'q' => $query, 'category' => $categoryfilter,
+                'sort' => 'az', 'q' => $query,
             ]);
             $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + [
-                'sort' => 'category', 'q' => $query, 'category' => $categoryfilter,
+                'sort' => 'category', 'q' => $query,
             ]);
             ?>
             <a class="single-herbs-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
@@ -418,7 +420,10 @@ echo $OUTPUT->header();
             <section class="single-herbs-list__group" id="herb-group-<?php echo s($groupkey); ?>">
                 <header class="single-herbs-list__group-header">
                     <h3><?php echo s($group['title']); ?></h3>
-                    <span><?php echo count($group['cards']); ?> <?php echo $ises ? 'hierbas' : 'herbs'; ?></span>
+                    <?php $groupcount = count($group['cards']); ?>
+                    <span><?php echo $groupcount; ?> <?php echo $ises
+                        ? ($groupcount === 1 ? 'hierba' : 'hierbas')
+                        : ($groupcount === 1 ? 'herb' : 'herbs'); ?></span>
                 </header>
                 <div class="single-herbs-list__cards">
                     <?php foreach ($group['cards'] as $card) {
