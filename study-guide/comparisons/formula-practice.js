@@ -13,6 +13,7 @@
       : `Question ${position} of ${total} · Source ${source}`,
     related: spanish ? 'Relacionada con:' : 'Related to:',
     general: spanish ? 'Pregunta general de fórmulas' : 'General formula question',
+    duiAssociation: spanish ? 'Pregunta oficial de Duì Yào' : 'Official Duì Yào question',
     correct: spanish ? 'Correcto' : 'Correct',
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
@@ -425,6 +426,87 @@
     });
   }
 
+  function duiChoiceIndices(pairs, correctIndex, valueForPair) {
+    const indices = [correctIndex];
+    const values = new Set([valueForPair(pairs[correctIndex])]);
+    for (let step = 1; step < pairs.length && indices.length < 4; step += 1) {
+      const candidate = (correctIndex + step * 7) % pairs.length;
+      const value = valueForPair(pairs[candidate]);
+      if (!value || values.has(value)) continue;
+      indices.push(candidate);
+      values.add(value);
+    }
+    const correctPosition = correctIndex % indices.length;
+    [indices[0], indices[correctPosition]] = [indices[correctPosition], indices[0]];
+    return {indices, correctLabel: String.fromCharCode(65 + correctPosition)};
+  }
+
+  function duiOptions(pairs, choice, valueForPair) {
+    return choice.indices.map((pairIndex, optionIndex) => ({
+      label: String.fromCharCode(65 + optionIndex),
+      text: valueForPair(pairs[pairIndex])
+    }));
+  }
+
+  function appendDuiYaoQuestions(data, translations, pairs) {
+    if (!Array.isArray(pairs) || pairs.length !== 51) throw new Error('Unexpected Duì Yào inventory');
+    const known = new Set(data.questions.map(question => String(question.sourceNumber)));
+    pairs.forEach((pair, index) => {
+      const title = String(pair.title || '');
+      const characters = String(pair.characters || '');
+      const actionEn = String(pair.action?.en || '');
+      const actionEs = String(pair.action?.es || actionEn);
+      const categoryEn = String(pair.category?.en || '');
+      const categoryEs = String(pair.category?.es || categoryEn);
+      const pairChoice = duiChoiceIndices(pairs, index, candidate => String(candidate.title || ''));
+      const actionChoice = duiChoiceIndices(pairs, index, candidate => String(candidate.action?.en || ''));
+
+      const questions = [
+        {
+          sourceNumber: 'DUY-' + String(pair.number).padStart(2, '0') + '-PAIR',
+          prompt: 'Which Duì Yào pair matches this combined action?',
+          body: [actionEn],
+          options: duiOptions(pairs, pairChoice, candidate => String(candidate.title || '')),
+          correctLabel: pairChoice.correctLabel,
+          feedback: [title + ' ' + characters + ': ' + actionEn],
+          formulaNumbers: [],
+          categoryKeys: ['dui-yao'],
+          translationEs: {
+            prompt: '¿Qué pareja Duì Yào corresponde a esta acción combinada?',
+            body: [actionEs],
+            options: duiOptions(pairs, pairChoice, candidate => String(candidate.title || '')),
+            feedback: [title + ' ' + characters + ': ' + actionEs]
+          }
+        },
+        {
+          sourceNumber: 'DUY-' + String(pair.number).padStart(2, '0') + '-ACTION',
+          prompt: 'What is the primary combined action of this Duì Yào pair?',
+          body: [title + (characters ? ' · ' + characters : '') + (categoryEn ? ' · ' + categoryEn : '')],
+          options: duiOptions(pairs, actionChoice, candidate => String(candidate.action?.en || '')),
+          correctLabel: actionChoice.correctLabel,
+          feedback: [actionEn],
+          formulaNumbers: [],
+          categoryKeys: ['dui-yao'],
+          translationEs: {
+            prompt: '¿Cuál es la acción combinada principal de esta pareja Duì Yào?',
+            body: [title + (characters ? ' · ' + characters : '') + (categoryEs ? ' · ' + categoryEs : '')],
+            options: duiOptions(pairs, actionChoice, candidate => String(candidate.action?.es || candidate.action?.en || '')),
+            feedback: [actionEs]
+          }
+        }
+      ];
+
+      questions.forEach(entry => {
+        if (known.has(entry.sourceNumber)) return;
+        const {translationEs, ...question} = entry;
+        data.questions.push(question);
+        known.add(question.sourceNumber);
+        if (translations) translations.questions.push({sourceNumber: question.sourceNumber, ...translationEs});
+      });
+    });
+    data.totals.questions = data.questions.length;
+  }
+
   function formulaNamesInQuestion(question) {
     const values = [
       question.prompt,
@@ -631,7 +713,7 @@
         if (formula) associations.append(associationLink(formula, index + 1));
       });
     } else {
-      label.textContent = text.general;
+      label.textContent = (question.categoryKeys || []).includes('dui-yao') ? text.duiAssociation : text.general;
       associations.append(label);
     }
     const feedbackText = document.createElement('div');
@@ -687,6 +769,12 @@
       if (correct) formula.correct += 1;
       history.formulas[String(number)] = formula;
     });
+    const focusKey = state.mode || 'all';
+    history.focuses = history.focuses && typeof history.focuses === 'object' ? history.focuses : {};
+    const focus = history.focuses[focusKey] || {total: 0, correct: 0};
+    focus.total += 1;
+    if (correct) focus.correct += 1;
+    history.focuses[focusKey] = focus;
     history.lastAt = new Date().toISOString();
     writeHistory(history);
   }
@@ -902,22 +990,29 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     });
+  const duiYaoRequest = fetch('dui-yao-data.json', { credentials: 'same-origin' })
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    });
 
-  Promise.all([bankRequest, translationsRequest, supplementsRequest, guidelineRequest])
-    .then(([data, translations, supplements, guideline]) => {
+  Promise.all([bankRequest, translationsRequest, supplementsRequest, guidelineRequest, duiYaoRequest])
+    .then(([data, translations, supplements, guideline, duiYaoPairs]) => {
       if (data.totals?.questions < 572 || data.formulas?.length !== 63) throw new Error('Unexpected bank totals');
       mergeSupplements(data, translations, supplements);
       applyGuidelineScope(data, guideline);
+      appendDuiYaoQuestions(data, translations, duiYaoPairs);
       state.data = data;
       state.formulaByNumber = new Map(data.formulas.map(formula => [formula.number, formula]));
       const scopedQuestions = questionsForScope(data.questions);
       const scopedFormulaNumbers = new Set(scopedQuestions.flatMap(question => question.formulaNumbers || []).map(Number));
-      const scopedCategories = new Set(scopedQuestions.flatMap(question => question.categoryKeys || []));
+      const scopedCategories = new Set(scopedQuestions.flatMap(question => question.categoryKeys || [])
+        .filter(key => !['modifications', 'dui-yao'].includes(key)));
       elements.questionTotals.forEach(element => { element.textContent = String(scopedQuestions.length); });
       elements.formulaTotals.forEach(element => { element.textContent = String(scopedFormulaNumbers.size); });
       elements.categoryTotals.forEach(element => { element.textContent = String(scopedCategories.size); });
       const translationMap = new Map((translations?.questions || []).map(question => [question.sourceNumber, question]));
-      if (data.questions.every(question => translationMap.has(question.sourceNumber))) {
+      if (translations) {
         state.translations = translationMap;
       } else if (spanish) {
         state.showOriginal = true;
