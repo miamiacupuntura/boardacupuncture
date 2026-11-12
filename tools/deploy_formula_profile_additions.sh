@@ -29,6 +29,10 @@ grep -Fq "\$profileadditions['formulas']" "$TEMP_DIR/formula-list.php"
 grep -Fq "'source' => \$detailtext" "$TEMP_DIR/formula-list.php"
 grep -Fq "Bensky formula profile, pp. 55–56." "$TEMP_DIR/formula-guideline-profile-additions.json"
 grep -Fq "\"name\": \"Jia Jian Wei Rui Tang\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
+grep -Fq "\"name\": \"Qing Wei San\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
+grep -Fq "\"verificationStatus\": \"partial\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
+grep -Fq "Verified partial profile" "$TEMP_DIR/formula-list.php"
+grep -Fq "formula-list__chinese" "$TEMP_DIR/formula-list.php"
 
 TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
 [[ -d "$TARGET_DIR" ]] || { echo "ERROR: no existe $TARGET_DIR" >&2; exit 1; }
@@ -52,24 +56,45 @@ $official = [];
 foreach ($roster["formulas"] as $formula) {
     $official[$normalize((string)($formula["name"] ?? ""))] = true;
 }
-$required = [
-    "name", "kings", "pattern", "patternEs", "action", "actionEs",
-    "clue", "clueEs", "examFocus", "examFocusEs", "ingredients", "ingredientsEs",
-    "ingredientRoles", "ingredientRolesEs", "comparison", "comparisonEs",
-    "safety", "safetyEs", "source", "sourceEs"
+$common = ["name", "chineseName", "action", "actionEs", "source", "sourceEs"];
+$completeRequired = [
+    "kings", "pattern", "patternEs", "clue", "clueEs", "examFocus", "examFocusEs",
+    "ingredients", "ingredientsEs", "ingredientRoles", "ingredientRolesEs",
+    "comparison", "comparisonEs", "safety", "safetyEs"
 ];
+$complete = 0;
+$partial = 0;
 foreach ($additions["formulas"] as $profile) {
     $name = $normalize((string)($profile["name"] ?? ""));
     if (!isset($official[$name])) {
         fwrite(STDERR, "ERROR: perfil fuera del guideline: ".($profile["name"] ?? "sin nombre").".\n");
         exit(1);
     }
-    foreach ($required as $field) {
+    foreach ($common as $field) {
         if (trim((string)($profile[$field] ?? "")) === "") {
             fwrite(STDERR, "ERROR: campo $field vacío en ".($profile["name"] ?? "sin nombre").".\n");
             exit(1);
         }
     }
+    $status = (string)($profile["verificationStatus"] ?? "");
+    if ($status === "complete") {
+        foreach ($completeRequired as $field) {
+            if (trim((string)($profile[$field] ?? "")) === "") {
+                fwrite(STDERR, "ERROR: campo completo $field vacío en ".($profile["name"] ?? "sin nombre").".\n");
+                exit(1);
+            }
+        }
+        $complete++;
+    } elseif ($status === "partial") {
+        $partial++;
+    } else {
+        fwrite(STDERR, "ERROR: estado de verificación inválido en ".($profile["name"] ?? "sin nombre").".\n");
+        exit(1);
+    }
+}
+if ($complete !== 1 || $partial !== 23) {
+    fwrite(STDERR, "ERROR: se esperaba 1 perfil completo y 23 perfiles parciales; encontrados $complete y $partial.\n");
+    exit(1);
 }
 ' "$TEMP_DIR/formula-guideline-profile-additions.json" "$TARGET_DIR/formula-board-roster-2026.json"
 
@@ -107,8 +132,9 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
 fi
 
 echo "OK: Jia Jian Wei Rui Tang completada desde la fuente suministrada, pp. 55–56."
-echo "OK: patrón, acción, pista, Chief, ingredientes, arquitectura, contraste, seguridad y fuente instalados."
-echo "OK: perfil disponible en English y Español."
+echo "OK: 23 acciones principales adicionales instaladas como perfiles parciales verificados."
+echo "OK: nombres chinos tradicionales visibles en las 24 tarjetas actualizadas."
+echo "OK: los perfiles parciales no ocultan que patrón, ingredientes, Chief, pista y seguridad siguen pendientes."
 echo "OK: solo se aceptan adiciones presentes en el roster oficial de 181 fórmulas."
-echo "OK: quedan 47 fórmulas oficiales pendientes de fuente verificada."
+echo "OK: quedan 24 fórmulas sin perfil y 23 perfiles parciales por completar con fuentes."
 echo "RESPALDO: $BACKUP"
