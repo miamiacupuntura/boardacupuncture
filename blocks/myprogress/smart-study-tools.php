@@ -167,6 +167,20 @@ foreach ($formularoster['formulas'] as $position => $official) {
     ];
 }
 uasort($formulas, static fn(array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
+$patternoptions = [];
+foreach ($formulas as $formula) {
+    $patternlabel = trim((string)$formula['pattern']);
+    if ($patternlabel !== '') {
+        $patternkey = $normalize($patternlabel);
+        if (!isset($patternoptions[$patternkey])) {
+            $patternoptions[$patternkey] = [
+                'pattern' => $patternlabel,
+                'formula' => $formula['name'],
+            ];
+        }
+    }
+}
+uasort($patternoptions, static fn(array $left, array $right): int => strnatcasecmp($left['pattern'], $right['pattern']));
 
 $propertymap = [];
 foreach ($herbproperties['herbs'] as $profile) {
@@ -525,8 +539,17 @@ echo $OUTPUT->header();
             <p><?php echo s($paneldescriptions[$mode]); ?></p>
             <form class="smart-tools__form" method="get">
                 <input type="hidden" name="mode" value="<?php echo s($mode); ?>"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-                <label><span><?php echo $ises ? 'Términos de búsqueda' : 'Search terms'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"></label>
+                <label><span><?php echo ($mode === 'pattern' || $mode === 'clinical')
+                    ? ($ises ? 'Selecciona o escribe un patrón' : 'Select or type a pattern')
+                    : ($ises ? 'Términos de búsqueda' : 'Search terms'); ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"<?php echo ($mode === 'pattern' || $mode === 'clinical') ? ' list="smart-pattern-options" autocomplete="off"' : ''; ?>></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar' : 'Search'; ?></button>
+                <?php if ($mode === 'pattern' || $mode === 'clinical') { ?>
+                    <datalist id="smart-pattern-options">
+                        <?php foreach ($patternoptions as $patternoption) { ?>
+                            <option value="<?php echo s($patternoption['pattern']); ?>"><?php echo s($patternoption['formula']); ?></option>
+                        <?php } ?>
+                    </datalist>
+                <?php } ?>
             </form>
         <?php } else if ($mode === 'dui') { ?>
             <h3><?php echo $ises ? 'Pares similares Duì Yào' : 'Duì Yào Similar Pairs'; ?></h3>
