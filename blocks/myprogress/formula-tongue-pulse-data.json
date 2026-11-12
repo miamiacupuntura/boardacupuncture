@@ -1,0 +1,384 @@
+{
+  "source": "CA Formulas, Chart 7: Tongue and Pulse",
+  "total": 63,
+  "formulas": [
+    {
+      "number": 1,
+      "name": "Ma Huang Tang",
+      "tongue": "Thin, white tongue coating.",
+      "pulse": "Floating, tight pulse."
+    },
+    {
+      "number": 2,
+      "name": "Gui Zhi Tang",
+      "tongue": "Thin, white, and moist tongue coating.",
+      "pulse": "Floating pulse that is either moderate or frail."
+    },
+    {
+      "number": 3,
+      "name": "Ge Gen Tang",
+      "tongue": "Thin, white tongue coating.",
+      "pulse": "Floating, rapid pulse."
+    },
+    {
+      "number": 4,
+      "name": "Sang Ju Yin",
+      "tongue": "Thin, white tongue coating.",
+      "pulse": "Floating, rapid pulse."
+    },
+    {
+      "number": 5,
+      "name": "Yin Qiao San",
+      "tongue": "Thin, white, or thin, yellow tongue coating.",
+      "pulse": "Floating, rapid pulse."
+    },
+    {
+      "number": 6,
+      "name": "Chai Ge Jie Ji Tang",
+      "tongue": "Thin, yellow tongue coating.",
+      "pulse": "Floating, slightly flooding pulse."
+    },
+    {
+      "number": 7,
+      "name": "Ren Shen Bai Du San",
+      "tongue": "Greasy, white tongue coating.",
+      "pulse": "Floating, soggy pulse."
+    },
+    {
+      "number": 8,
+      "name": "Bai Hu Tang",
+      "tongue": "Red tongue with a dry, yellow coating.",
+      "pulse": "Flooding, forceful, or slippery, rapid pulse."
+    },
+    {
+      "number": 9,
+      "name": "Huang Lian Jie Du Tang",
+      "tongue": "Red tongue with a yellow coating.",
+      "pulse": "Rapid, forceful pulse."
+    },
+    {
+      "number": 10,
+      "name": "Ma Xing Shi Gan Tang",
+      "tongue": "Yellow tongue coating.",
+      "pulse": "Slippery, rapid pulse."
+    },
+    {
+      "number": 11,
+      "name": "Long Dan Xie Gan Tang",
+      "tongue": "Red tongue with a yellow coating.",
+      "pulse": "Wiry, rapid, forceful pulse."
+    },
+    {
+      "number": 12,
+      "name": "Qing Hao Bie Jia Tang",
+      "tongue": "Red tongue with little coating.",
+      "pulse": "Fine, rapid pulse."
+    },
+    {
+      "number": 13,
+      "name": "Da Cheng Qi Tang",
+      "tongue": "Dry, yellow or dry, black tongue coating with prickles.",
+      "pulse": "Submerged, excessive pulse."
+    },
+    {
+      "number": 14,
+      "name": "Xiao Cheng Qi Tang",
+      "tongue": "“Old-looking” (dirty and dry) yellow tongue coating.",
+      "pulse": "Slippery, rapid pulse."
+    },
+    {
+      "number": 15,
+      "name": "Tiao Wei Cheng Qi Tang",
+      "tongue": "Yellow coating.",
+      "pulse": "Slippery, rapid pulse."
+    },
+    {
+      "number": 16,
+      "name": "Xiao Chai Hu Tang",
+      "tongue": "Thin, white tongue coating.",
+      "pulse": "Wiry pulse."
+    },
+    {
+      "number": 17,
+      "name": "Si Ni San",
+      "tongue": "Red tongue with a yellow coating.",
+      "pulse": "Wiry pulse."
+    },
+    {
+      "number": 18,
+      "name": "Xiao Yao San",
+      "tongue": "Pale-red tongue.",
+      "pulse": "Wiry, deficient pulse."
+    },
+    {
+      "number": 19,
+      "name": "Ban Xia Xie Xin Tang",
+      "tongue": "Thin, yellow, and greasy tongue coating.",
+      "pulse": "Wiry, rapid pulse."
+    },
+    {
+      "number": 20,
+      "name": "Ping Wei San",
+      "tongue": "Swollen tongue with a thick, white, and greasy coating.",
+      "pulse": "Moderate or slippery pulse."
+    },
+    {
+      "number": 21,
+      "name": "Huo Xiang Zheng Qi San",
+      "tongue": "White, greasy tongue coating.",
+      "pulse": "Moderate, soggy pulse."
+    },
+    {
+      "number": 22,
+      "name": "Ba Zheng San",
+      "tongue": "Yellow, greasy tongue coating.",
+      "pulse": "Slippery, rapid pulse."
+    },
+    {
+      "number": 23,
+      "name": "Wu Ling San",
+      "tongue": "White coating.",
+      "pulse": "Floating pulse."
+    },
+    {
+      "number": 24,
+      "name": "Zhu Ling Tang",
+      "tongue": "Red tongue with a white or slightly yellow coating.",
+      "pulse": "Thready, rapid pulse."
+    },
+    {
+      "number": 25,
+      "name": "Wu Pi San",
+      "tongue": "White, greasy tongue coating.",
+      "pulse": "Submerged and moderate pulse."
+    },
+    {
+      "number": 26,
+      "name": "Zhen Wu Tang",
+      "tongue": "Pale or dark swollen tongue with tooth marks and a white, slippery coating.",
+      "pulse": "Submerged, thin, and forceless pulse."
+    },
+    {
+      "number": 27,
+      "name": "Du Huo Ji Sheng Tang",
+      "tongue": "Pale tongue with a white coating.",
+      "pulse": "Thin, weak, slow pulse."
+    },
+    {
+      "number": 28,
+      "name": "Li Zhong Wan",
+      "tongue": "Pale tongue with a white coating.",
+      "pulse": "Submerged, thin pulse."
+    },
+    {
+      "number": 29,
+      "name": "Wu Zhu Yu Tang",
+      "tongue": "Not red, but has a white, slippery coating.",
+      "pulse": "Thin, slow pulse or thin, wiry pulse."
+    },
+    {
+      "number": 30,
+      "name": "Da Jian Zhong Tang",
+      "tongue": "White, slippery tongue coating.",
+      "pulse": "Thin, tight or slow, wiry pulse; in especially severe cases, hidden."
+    },
+    {
+      "number": 31,
+      "name": "Si Ni Tang",
+      "tongue": "Pale tongue with a white, slippery coating.",
+      "pulse": "Submerged, thin or submerged, faint pulse."
+    },
+    {
+      "number": 32,
+      "name": "Si Jun Zi Tang",
+      "tongue": "Pale tongue.",
+      "pulse": "Thin and/or frail pulse."
+    },
+    {
+      "number": 33,
+      "name": "Bu Zhong Yi Qi Tang",
+      "tongue": "Pale tongue with a thin, white coating.",
+      "pulse": "Flooding, deficient or deficient, rootless at the right middle position."
+    },
+    {
+      "number": 34,
+      "name": "Sheng Mai San",
+      "tongue": "Pale-red tongue with a dry, thin coating.",
+      "pulse": "Deficient, rapid or deficient, thin pulse."
+    },
+    {
+      "number": 35,
+      "name": "Si Wu Tang",
+      "tongue": "Pale tongue.",
+      "pulse": "Thin, wiry or thin, choppy pulse."
+    },
+    {
+      "number": 36,
+      "name": "Gui Pi Tang",
+      "tongue": "Pale tongue with a thin, white coating.",
+      "pulse": "Thin, frail pulse."
+    },
+    {
+      "number": 37,
+      "name": "Shi Quan Da Bu Tang",
+      "tongue": "Pale, dusky tongue with a thin, white coating.",
+      "pulse": "Thin, weak, deep, possibly slow pulse."
+    },
+    {
+      "number": 38,
+      "name": "Liu Wei Di Huang Wan",
+      "tongue": "Red tongue with little coating.",
+      "pulse": "Rapid, thin pulse."
+    },
+    {
+      "number": 39,
+      "name": "Jin Gui Shen Qi Wan",
+      "tongue": "Pale, swollen tongue with a thin, white, and moist coating.",
+      "pulse": "Empty or frail pulse that is submerged and faint at the proximal position."
+    },
+    {
+      "number": 40,
+      "name": "Yue Ju Wan",
+      "tongue": "Dusky, purple or red tongue with a yellow, greasy coat.",
+      "pulse": "Wiry, slippery, possibly rapid pulse."
+    },
+    {
+      "number": 41,
+      "name": "Ban Xia Hou Po Tang",
+      "tongue": "Moist or greasy, white tongue coating.",
+      "pulse": "Wiry, slow or wiry, slippery pulse."
+    },
+    {
+      "number": 42,
+      "name": "Su Zi Jiang Qi Tang",
+      "tongue": "White tongue coating that is either slippery or greasy.",
+      "pulse": "Slippery, weak pulse."
+    },
+    {
+      "number": 43,
+      "name": "Ding Chuan Tang",
+      "tongue": "Greasy, yellow tongue coating.",
+      "pulse": "Slippery, rapid pulse."
+    },
+    {
+      "number": 44,
+      "name": "Ju Pi Zhu Ru Tang",
+      "tongue": "Tender, red tongue.",
+      "pulse": "Deficient, rapid pulse."
+    },
+    {
+      "number": 45,
+      "name": "Tao He Cheng Qi Tang",
+      "tongue": "Purple tongue with a thin, yellow coating.",
+      "pulse": "Submerged, full, or choppy pulse."
+    },
+    {
+      "number": 46,
+      "name": "Xue Fu Zhu Yu Tang",
+      "tongue": "Dark-red tongue with dark spots on the sides.",
+      "pulse": "Choppy or wiry, tight pulse."
+    },
+    {
+      "number": 47,
+      "name": "Wen Jing Tang",
+      "tongue": "Dusky tongue with a thin coating.",
+      "pulse": "Deep, slow, thin or choppy, wiry, tight pulse."
+    },
+    {
+      "number": 48,
+      "name": "Gui Zhi Fu Ling Wan",
+      "tongue": "Purple tongue with dark spots and a white or yellow coating.",
+      "pulse": "Choppy pulse."
+    },
+    {
+      "number": 49,
+      "name": "Yu Ping Feng San",
+      "tongue": "Pale tongue with a white coating.",
+      "pulse": "Floating, deficient, and soft pulse."
+    },
+    {
+      "number": 50,
+      "name": "Si Shen Wan",
+      "tongue": "Pale tongue with a thin, white coating.",
+      "pulse": "Submerged, slow, and forceless pulse."
+    },
+    {
+      "number": 51,
+      "name": "Gu Jing Wan",
+      "tongue": "Red tongue.",
+      "pulse": "Rapid, wiry pulse."
+    },
+    {
+      "number": 52,
+      "name": "Suan Zao Ren Tang",
+      "tongue": "Dry, red tongue.",
+      "pulse": "Wiry or thin, rapid pulse."
+    },
+    {
+      "number": 53,
+      "name": "Tian Wang Bu Xin Dan",
+      "tongue": "Red tongue with little coating.",
+      "pulse": "Thin, rapid pulse."
+    },
+    {
+      "number": 54,
+      "name": "Gan Mai Da Zao Tang",
+      "tongue": "Red tongue with a sparse coating.",
+      "pulse": "Thin, rapid pulse."
+    },
+    {
+      "number": 55,
+      "name": "Xiao Feng San",
+      "tongue": "Yellow or white tongue coating.",
+      "pulse": "Forceful, floating, and rapid pulse."
+    },
+    {
+      "number": 56,
+      "name": "Xiao Huo Luo Dan",
+      "tongue": "White, moist tongue coating.",
+      "pulse": "Wiry and tight, or soft and moderate pulse."
+    },
+    {
+      "number": 57,
+      "name": "Tian Ma Gou Teng Yin",
+      "tongue": "Red tongue.",
+      "pulse": "Wiry, rapid pulse."
+    },
+    {
+      "number": 58,
+      "name": "Er Chen Tang",
+      "tongue": "Swollen tongue with a white, thick, greasy coating.",
+      "pulse": "Slippery pulse."
+    },
+    {
+      "number": 59,
+      "name": "Wen Dan Tang",
+      "tongue": "Greasy, yellow tongue coating.",
+      "pulse": "Rapid pulse that is either slippery or wiry."
+    },
+    {
+      "number": 60,
+      "name": "Bei Mu Gua Lou San",
+      "tongue": "Red and dry tongue with little coating.",
+      "pulse": "Rapid and thin but strong pulse."
+    },
+    {
+      "number": 61,
+      "name": "Zhi Sou San",
+      "tongue": "Thin, white tongue coating.",
+      "pulse": "Moderate, floating pulse."
+    },
+    {
+      "number": 62,
+      "name": "Ban Xia Bai Zhu Tian Ma Tang",
+      "tongue": "White, greasy tongue coating.",
+      "pulse": "Wiry, slippery pulse."
+    },
+    {
+      "number": 63,
+      "name": "Bao He Wan",
+      "tongue": "Yellow, greasy tongue coating.",
+      "pulse": "Slippery pulse."
+    }
+  ]
+}
