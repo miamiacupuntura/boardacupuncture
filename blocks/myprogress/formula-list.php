@@ -227,7 +227,7 @@ JS);
 echo $OUTPUT->header();
 ?>
 <style>
-.formula-list{width:min(1220px,calc(100% - 28px));margin:24px auto 58px;color:#102a43}
+.formula-list{width:min(1380px,calc(100% - 28px));margin:24px auto 58px;color:#102a43}
 .formula-list__top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px;padding:22px;border:1px solid #c8d9df;border-top:5px solid #f47b20;border-radius:14px;background:#fff}
 .formula-list__eyebrow{margin:0 0 5px;color:#087c69;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .formula-list h2{margin:0 0 8px;font-size:clamp(28px,4vw,40px)}
@@ -244,16 +244,16 @@ echo $OUTPUT->header();
 .formula-list__stat{padding:11px 13px;border:1px solid #c7ddd9;border-radius:9px;background:#fff}.formula-list__stat span{display:block;color:#087c69;font-size:11px;font-weight:900;text-transform:uppercase}.formula-list__stat strong{display:block;margin-top:4px;font-size:21px}
 .formula-list__tools{justify-content:flex-end}
 .formula-list__group{scroll-margin-top:18px;margin:0 0 22px}.formula-list__group-header{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:0 0 10px;padding:0 4px 8px;border-bottom:3px solid #f47b20}.formula-list__group-header h3{margin:0;font-size:21px}.formula-list__group-header span{color:#526b84;font-weight:800}
-.formula-list__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
-.formula-list__card{overflow:hidden;border:1px solid #cbd9df;border-top:4px solid #f47b20;border-radius:11px;background:#fff}.formula-list__card[open]{box-shadow:0 6px 18px rgba(23,50,77,.08)}
-.formula-list__card summary{position:relative;display:block;min-height:112px;padding:15px 48px 14px 16px;cursor:pointer;list-style:none}.formula-list__card summary::-webkit-details-marker{display:none}.formula-list__card summary::after{content:'+';position:absolute;top:15px;right:15px;display:grid;width:27px;height:27px;place-items:center;border-radius:50%;background:#eaf5f3;color:#087c69;font-size:18px;font-weight:900}.formula-list__card[open] summary::after{content:'−'}
-.formula-list__name{display:block;font-size:18px;font-weight:900}.formula-list__english{display:block;margin-top:3px;color:#64748b;font-size:12px;font-style:italic}
+.formula-list__cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+.formula-list__card{overflow:hidden;border:1px solid #cbd9df;border-top:5px solid #f47b20;border-radius:13px;background:#fff}.formula-list__card[open]{box-shadow:0 6px 18px rgba(23,50,77,.08)}
+.formula-list__card summary{position:relative;display:block;min-height:124px;padding:20px 58px 18px 22px;cursor:pointer;list-style:none}.formula-list__card summary::-webkit-details-marker{display:none}.formula-list__card summary::after{content:'+';position:absolute;top:15px;right:15px;display:grid;width:27px;height:27px;place-items:center;border-radius:50%;background:#eaf5f3;color:#087c69;font-size:18px;font-weight:900}.formula-list__card[open] summary::after{content:'−'}
+.formula-list__name{display:block;font-size:20px;font-weight:900}.formula-list__english{display:block;margin-top:3px;color:#64748b;font-size:12px;font-style:italic}
 .formula-list__category{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf5f3;color:#087c69!important;font-size:11px;font-weight:850;text-decoration:none!important}.formula-list__category:hover{background:#087c69;color:#fff!important}
 .formula-list__status{display:block;margin-top:7px;color:#64748b;font-size:11px;font-weight:800}.formula-list__status.is-detailed{color:#087c69}
-.formula-list__body{padding:14px 16px 16px;border-top:1px solid #d8e2e7}.formula-list__body dl{display:grid;grid-template-columns:104px minmax(0,1fr);gap:9px 10px;margin:0}.formula-list__body dt{font-size:12px;font-weight:900}.formula-list__body dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}.formula-list__body dd.is-safety{color:#a64b13}.formula-list__clue{color:#075f60!important;font-weight:800}
+.formula-list__body{padding:18px 22px 22px;border-top:1px solid #d8e2e7}.formula-list__body dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px 16px;margin:0}.formula-list__body dt{font-size:13px;font-weight:900}.formula-list__body dd{margin:0;color:#52657a;font-size:14px;line-height:1.6}.formula-list__body dd.is-safety{color:#a64b13}.formula-list__clue{color:#075f60!important;font-weight:800}
 .formula-list__profile-note{margin:0;padding:11px;border-radius:8px;background:#fff7e8;color:#7a5412;font-size:12px;line-height:1.5}
 .formula-list__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;color:#526b84;text-align:center;font-weight:750}
-@media(max-width:930px){.formula-list__cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.formula-list__top{display:block}.formula-list__actions{margin-top:15px}.formula-list__form,.formula-list__summary,.formula-list__cards{grid-template-columns:1fr}.formula-list__tools{justify-content:flex-start}.formula-list__body dl{grid-template-columns:1fr}.formula-list__body dd{margin-top:-5px}}
+@media(max-width:1000px){.formula-list__cards{grid-template-columns:1fr}}@media(max-width:700px){.formula-list__top{display:block}.formula-list__actions{margin-top:15px}.formula-list__form,.formula-list__summary,.formula-list__cards{grid-template-columns:1fr}.formula-list__tools{justify-content:flex-start}.formula-list__body dl{grid-template-columns:1fr}.formula-list__body dd{margin-top:-5px}}
 </style>
 <main class="formula-list">
     <?php if ($fromlibrary) {
