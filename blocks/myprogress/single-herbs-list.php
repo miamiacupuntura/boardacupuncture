@@ -18,12 +18,13 @@ $fromcontext = optional_param('from', '', PARAM_ALPHA);
 $fromlibrary = $fromcontext === 'library';
 $fromquiz = $fromcontext === 'quiz';
 $fromchief = $fromcontext === 'chief';
+$fromingredients = $fromcontext === 'ingredients';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients) {
     $baseparams['from'] = $fromcontext;
 }
 $pageparams = $baseparams + [
@@ -42,7 +43,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients) {
     $languageparams['from'] = $fromcontext;
 }
 $languageurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $languageparams);
@@ -53,6 +54,7 @@ if ($fromlibrary) {
 $studyguideurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $studyguideparams);
 $dashboardurl = new moodle_url('/my/');
 $chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-herbs-property-es.html' : 'chief-herbs-property.html'));
+$formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.php', $ises ? ['lang' => 'es'] : []);
 
 $indexpath = __DIR__ . '/single-herb-card-index.json';
 $propertiespath = __DIR__ . '/single-herb-properties.json';
@@ -414,6 +416,8 @@ echo $OUTPUT->header();
                 <button class="single-herbs-list__button" type="button" data-return-to-herb-question data-fallback-url="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
             <?php } else if ($fromchief) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
+            <?php } else if ($fromingredients) { ?>
+                <a class="single-herbs-list__button" href="<?php echo $formulaingredientsurl->out(false); ?>"><?php echo $ises ? '← Volver a Fórmulas e ingredientes' : '← Back to Formula and Ingredients'; ?></a>
             <?php } else { ?>
                 <a class="single-herbs-list__button" href="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Single Herbs' : '← Single Herbs'; ?></a>
             <?php } ?>
@@ -447,7 +451,7 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromquiz || $fromchief) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <label>
                 <span><?php echo $ises ? 'Buscar hierba' : 'Search herb'; ?></span>
                 <input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, latín, acción…' : 'Name, Latin, action…'; ?>">
