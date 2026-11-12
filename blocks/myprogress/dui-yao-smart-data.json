@@ -1,0 +1,1299 @@
+{
+  "source": "Derived from the verified 51-pair Duì Yào study bank.",
+  "total": 51,
+  "pairs": [
+    {
+      "number": 1,
+      "slug": "ma-huang-gui-zhi-dui-yao",
+      "title": "Má Huáng + Guì Zhī",
+      "characters": "麻黄 + 桂枝",
+      "category": {
+        "en": "Exterior-Resolving · Pungent-Warm",
+        "es": "Liberar Exterior · Acre-Tibio"
+      },
+      "action": {
+        "en": "Strongly induce sweating and release an excess Wind-Cold Exterior pattern.",
+        "es": "Inducir sudoración con fuerza y liberar Viento-Frío Exterior por exceso."
+      },
+      "formulas": {
+        "en": "Má Huáng Tāng.",
+        "es": "Má Huáng Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ma Huang",
+        "Gui Zhi"
+      ]
+    },
+    {
+      "number": 2,
+      "slug": "ma-huang-xing-ren-dui-yao",
+      "title": "Má Huáng + Xìng Rén",
+      "characters": "麻黄 + 杏仁",
+      "category": {
+        "en": "Exterior-Resolving · Regulate Lung Qi",
+        "es": "Liberar Exterior · Regular Qi de Pulmón"
+      },
+      "action": {
+        "en": "Restore Lung diffusion and descent to stop cough and wheezing in appropriately balanced hot or cold formulas.",
+        "es": "Restaurar difusión y descenso de Qi pulmonar para detener tos/sibilancias en fórmulas calientes o frías bien equilibradas."
+      },
+      "formulas": {
+        "en": "Má Huáng Tāng; Má Xìng Shí Gān Tāng.",
+        "es": "Má Huáng Tāng; Má Xìng Shí Gān Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ma Huang",
+        "Xing Ren"
+      ]
+    },
+    {
+      "number": 3,
+      "slug": "ma-huang-shi-gao-dui-yao",
+      "title": "Má Huáng + Shí Gāo",
+      "characters": "麻黄 + 石膏",
+      "category": {
+        "en": "Clear Lung Heat · Relieve Wheezing",
+        "es": "Aclarar Calor de Pulmón · Aliviar Sibilancias"
+      },
+      "action": {
+        "en": "Diffuse Lung Qi while strongly clearing Lung Heat for hot wheezing.",
+        "es": "Difundir Qi de Pulmón mientras aclara con fuerza Calor pulmonar para sibilancia caliente."
+      },
+      "formulas": {
+        "en": "Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng.",
+        "es": "Má Xìng Shí Gān Tāng; Dà Qīng Lóng Tāng."
+      },
+      "formulaBridge": {
+        "kind": "structural",
+        "label": {
+          "en": "Structural transformation",
+          "es": "Transformación estructural"
+        },
+        "base": "Má Huáng Tāng",
+        "result": "Má Xìng Shí Gān Tāng",
+        "change": {
+          "en": "Retain Má Huáng, remove Guì Zhī, add Shí Gāo, and rebalance the formula. This creates the pair but is not simple addition of the complete Duì Yào.",
+          "es": "Se conserva Má Huáng, se retira Guì Zhī, se añade Shí Gāo y se reequilibra la fórmula. Así aparece la pareja, pero no es una adición simple del Duì Yào completo."
+        }
+      },
+      "herbs": [
+        "Ma Huang",
+        "Shi Gao"
+      ]
+    },
+    {
+      "number": 4,
+      "slug": "gui-zhi-bai-shao-dui-yao",
+      "title": "Guì Zhī + Bái Sháo",
+      "characters": "桂枝 + 白芍",
+      "category": {
+        "en": "Harmonize Ying and Wei",
+        "es": "Armonizar Ying y Wei"
+      },
+      "action": {
+        "en": "Harmonize nutritive and protective Qi in Exterior deficiency and regulate tension between movement and containment.",
+        "es": "Armonizar Qi nutritivo y protector en deficiencia Exterior y regular tensión entre movimiento y contención."
+      },
+      "formulas": {
+        "en": "Guì Zhī Tāng; Bái Sháo is doubled in Xiǎo Jiàn Zhōng Tāng.",
+        "es": "Guì Zhī Tāng; Bái Sháo se duplica en Xiǎo Jiàn Zhōng Tāng."
+      },
+      "formulaBridge": {
+        "kind": "structural",
+        "label": {
+          "en": "Ratio change + one addition",
+          "es": "Cambio de proporción + una adición"
+        },
+        "base": "Guì Zhī Tāng",
+        "result": "Xiǎo Jiàn Zhōng Tāng",
+        "change": {
+          "en": "The base already contains Guì Zhī + Bái Sháo; Bái Sháo is doubled and Yí Táng is added. Do not write this as adding the complete pair.",
+          "es": "La base ya contiene Guì Zhī + Bái Sháo; se duplica Bái Sháo y se añade Yí Táng. No debe redactarse como adición de la pareja completa."
+        }
+      },
+      "herbs": [
+        "Gui Zhi",
+        "Bai Shao"
+      ]
+    },
+    {
+      "number": 5,
+      "slug": "jing-jie-fang-feng-dui-yao",
+      "title": "Jīng Jiè + Fáng Fēng",
+      "characters": "荆芥 + 防风",
+      "category": {
+        "en": "Dispel Wind from the Exterior",
+        "es": "Expulsar Viento del Exterior"
+      },
+      "action": {
+        "en": "Dispel Wind from the surface and stop itching across Wind-Cold, Wind-Heat, rash and early sore presentations.",
+        "es": "Expulsar Viento de la superficie y detener picor en Viento-Frío, Viento-Calor, erupciones y llagas tempranas."
+      },
+      "formulas": {
+        "en": "Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn.",
+        "es": "Jīng Fáng Bài Dú Sǎn; Xiāo Fēng Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Jing Jie",
+        "Fang Feng"
+      ]
+    },
+    {
+      "number": 6,
+      "slug": "cang-er-zi-xin-yi-hua-dui-yao",
+      "title": "Cāng Ěr Zǐ + Xīn Yí Huā",
+      "characters": "苍耳子 + 辛夷花",
+      "category": {
+        "en": "Open the Nasal Passages",
+        "es": "Abrir Pasajes Nasales"
+      },
+      "action": {
+        "en": "Dispel Wind and open the nasal passages for congestion, sinus pressure and reduced smell.",
+        "es": "Expulsar Viento y abrir pasajes nasales para congestión, presión sinusal y olfato reducido."
+      },
+      "formulas": {
+        "en": "Cāng Ěr Zǐ Sǎn.",
+        "es": "Cāng Ěr Zǐ Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Cang Er Zi",
+        "Xin Yi Hua"
+      ]
+    },
+    {
+      "number": 7,
+      "slug": "sang-ye-ju-hua-dui-yao",
+      "title": "Sāng Yè + Jú Huā",
+      "characters": "桑叶 + 菊花",
+      "category": {
+        "en": "Disperse Wind-Heat · Brighten the Eyes",
+        "es": "Dispersar Viento-Calor · Aclarar Ojos"
+      },
+      "action": {
+        "en": "Disperse Wind-Heat, clear Lung and Liver Heat and brighten the eyes.",
+        "es": "Dispersar Viento-Calor, aclarar Calor de Pulmón/Hígado y mejorar ojos."
+      },
+      "formulas": {
+        "en": "Sāng Jú Yǐn.",
+        "es": "Sāng Jú Yǐn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Sang Ye",
+        "Ju Hua"
+      ]
+    },
+    {
+      "number": 8,
+      "slug": "ge-gen-sheng-ma-dui-yao",
+      "title": "Gé Gēn + Shēng Má",
+      "characters": "葛根 + 升麻",
+      "category": {
+        "en": "Vent Rashes · Release the Muscle Layer",
+        "es": "Ventilar Erupciones · Liberar Capa Muscular"
+      },
+      "action": {
+        "en": "Release the muscle layer and vent an early rash that is failing to erupt fully.",
+        "es": "Liberar capa muscular y ventilar erupción temprana que no emerge completamente."
+      },
+      "formulas": {
+        "en": "Shēng Má Gé Gēn Tāng.",
+        "es": "Shēng Má Gé Gēn Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ge Gen",
+        "Sheng Ma"
+      ]
+    },
+    {
+      "number": 9,
+      "slug": "chai-hu-sheng-ma-dui-yao",
+      "title": "Chái Hú + Shēng Má",
+      "characters": "柴胡 + 升麻",
+      "category": {
+        "en": "Raise Clear Yang",
+        "es": "Elevar Yang Claro"
+      },
+      "action": {
+        "en": "Raise clear Yang and guide a tonic formula upward for sinking Middle Qi.",
+        "es": "Elevar Yang claro y guiar fórmula tónica hacia arriba para Qi Medio hundido."
+      },
+      "formulas": {
+        "en": "Bǔ Zhōng Yì Qì Tāng.",
+        "es": "Bǔ Zhōng Yì Qì Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Chai Hu",
+        "Sheng Ma"
+      ]
+    },
+    {
+      "number": 10,
+      "slug": "zhi-zi-dan-dou-chi-dui-yao",
+      "title": "Zhī Zǐ + Dàn Dòu Chǐ",
+      "characters": "栀子 + 淡豆豉",
+      "category": {
+        "en": "Vent Constrained Heat from the Chest",
+        "es": "Ventilar Calor Constreñido del Pecho"
+      },
+      "action": {
+        "en": "Clear and vent constrained residual Heat from the chest after an unresolved febrile process.",
+        "es": "Aclarar y ventilar Calor residual constreñido del pecho tras proceso febril no resuelto."
+      },
+      "formulas": {
+        "en": "Zhī Zǐ Chǐ Tāng.",
+        "es": "Zhī Zǐ Chǐ Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Zhi Zi",
+        "Dan Dou Chi"
+      ]
+    },
+    {
+      "number": 11,
+      "slug": "shi-gao-zhi-mu-dui-yao",
+      "title": "Shí Gāo + Zhī Mǔ",
+      "characters": "石膏 + 知母",
+      "category": {
+        "en": "Clear Qi-Level Heat",
+        "es": "Aclarar Calor de Nivel Qi"
+      },
+      "action": {
+        "en": "Clear blazing Qi-level Heat, drain Lung and Stomach Fire and protect fluids.",
+        "es": "Aclarar Calor ardiente de nivel Qi, drenar Fuego de Pulmón/Estómago y proteger líquidos."
+      },
+      "formulas": {
+        "en": "Bái Hǔ Tāng.",
+        "es": "Bái Hǔ Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Shi Gao",
+        "Zhi Mu"
+      ]
+    },
+    {
+      "number": 12,
+      "slug": "zhi-mu-huang-bai-dui-yao",
+      "title": "Zhī Mǔ + Huáng Bǎi",
+      "characters": "知母 + 黄柏",
+      "category": {
+        "en": "Drain Deficiency Fire",
+        "es": "Drenar Fuego por Deficiencia"
+      },
+      "action": {
+        "en": "Enrich Yin while draining deficiency Fire from the Kidney and lower burner.",
+        "es": "Enriquecer Yin mientras drena Fuego por deficiencia de Riñón y Jiao inferior."
+      },
+      "formulas": {
+        "en": "Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán.",
+        "es": "Zhī Bǎi Dì Huáng Wán; Dà Bǔ Yīn Wán."
+      },
+      "formulaBridge": {
+        "kind": "direct",
+        "label": {
+          "en": "Direct pair addition",
+          "es": "Adición directa de la pareja"
+        },
+        "base": "Liù Wèi Dì Huáng Wán",
+        "result": "Zhī Bǎi Dì Huáng Wán",
+        "change": {
+          "en": "Add Zhī Mǔ + Huáng Bǎi when Kidney-Yin deficiency has more pronounced deficient Fire.",
+          "es": "Añadir Zhī Mǔ + Huáng Bǎi cuando la deficiencia de Yin de Riñón presenta Fuego vacío más marcado."
+        }
+      },
+      "herbs": [
+        "Zhi Mu",
+        "Huang Bai"
+      ]
+    },
+    {
+      "number": 13,
+      "slug": "sang-bai-pi-di-gu-pi-dui-yao",
+      "title": "Sāng Bái Pí + Dì Gǔ Pí",
+      "characters": "桑白皮 + 地骨皮",
+      "category": {
+        "en": "Drain Smoldering Lung Heat",
+        "es": "Drenar Calor Latente de Pulmón"
+      },
+      "action": {
+        "en": "Drain Lung Heat, calm cough and wheezing and clear lingering afternoon Heat.",
+        "es": "Drenar Calor pulmonar, calmar tos/sibilancia y aclarar Calor vespertino persistente."
+      },
+      "formulas": {
+        "en": "Xiè Bái Sǎn.",
+        "es": "Xiè Bái Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Sang Bai Pi",
+        "Di Gu Pi"
+      ]
+    },
+    {
+      "number": 14,
+      "slug": "huang-lian-rou-gui-dui-yao",
+      "title": "Huáng Lián + Ròu Guì",
+      "characters": "黄连 + 肉桂",
+      "category": {
+        "en": "Restore Heart–Kidney Communication",
+        "es": "Restaurar Comunicación Corazón–Riñón"
+      },
+      "action": {
+        "en": "Restore Heart–Kidney communication by descending Heart Fire and warming Kidney Yang so Water can rise.",
+        "es": "Restaurar comunicación Corazón–Riñón descendiendo Fuego cardíaco y calentando Yang renal para que Agua ascienda."
+      },
+      "formulas": {
+        "en": "Jiāo Tài Wán.",
+        "es": "Jiāo Tài Wán."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Huang Lian",
+        "Rou Gui"
+      ]
+    },
+    {
+      "number": 15,
+      "slug": "jin-yin-hua-lian-qiao-dui-yao",
+      "title": "Jīn Yín Huā + Lián Qiào",
+      "characters": "金银花 + 连翘",
+      "category": {
+        "en": "Clear Heat and Resolve Toxicity",
+        "es": "Aclarar Calor y Resolver Toxicidad"
+      },
+      "action": {
+        "en": "Disperse Wind-Heat, clear Heat and resolve toxicity at the surface and in hot swellings.",
+        "es": "Dispersar Viento-Calor, aclarar Calor y resolver toxicidad en superficie e hinchazones calientes."
+      },
+      "formulas": {
+        "en": "Yín Qiáo Sǎn.",
+        "es": "Yín Qiáo Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Jin Yin Hua",
+        "Lian Qiao"
+      ]
+    },
+    {
+      "number": 16,
+      "slug": "niu-bang-zi-lian-qiao-dui-yao",
+      "title": "Niú Bàng Zǐ + Lián Qiào",
+      "characters": "牛蒡子 + 连翘",
+      "category": {
+        "en": "Benefit the Throat · Reduce Swelling",
+        "es": "Beneficiar Garganta · Reducir Hinchazón"
+      },
+      "action": {
+        "en": "Disperse Wind-Heat, resolve toxicity, benefit the throat and reduce swelling.",
+        "es": "Dispersar Viento-Calor, resolver toxicidad, beneficiar garganta y reducir hinchazón."
+      },
+      "formulas": {
+        "en": "Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn.",
+        "es": "Yín Qiáo Sǎn; Pǔ Jì Xiāo Dú Yǐn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Niu Bang Zi",
+        "Lian Qiao"
+      ]
+    },
+    {
+      "number": 17,
+      "slug": "qing-hao-bie-jia-dui-yao",
+      "title": "Qīng Hāo + Biē Jiǎ",
+      "characters": "青蒿 + 鳖甲",
+      "category": {
+        "en": "Vent Heat Lurking in Yin",
+        "es": "Ventilar Calor Oculto en Yin"
+      },
+      "action": {
+        "en": "Enrich Yin and vent Heat lurking deep in the Yin level after warm disease.",
+        "es": "Enriquecer Yin y ventilar Calor oculto profundamente en nivel Yin tras enfermedad caliente."
+      },
+      "formulas": {
+        "en": "Qīng Hāo Biē Jiǎ Tāng.",
+        "es": "Qīng Hāo Biē Jiǎ Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Qing Hao",
+        "Bie Jia"
+      ]
+    },
+    {
+      "number": 18,
+      "slug": "ren-shen-huang-qi-dui-yao",
+      "title": "Rén Shēn + Huáng Qí",
+      "characters": "人参 + 黄芪",
+      "category": {
+        "en": "Strongly Supplement Qi",
+        "es": "Suplementar Qi con Fuerza"
+      },
+      "action": {
+        "en": "Strongly supplement original and Spleen–Lung Qi, raise Yang and secure the Exterior.",
+        "es": "Suplementar fuertemente Qi original y de Bazo–Pulmón, elevar Yang y asegurar Exterior."
+      },
+      "formulas": {
+        "en": "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng.",
+        "es": "Bǔ Zhōng Yì Qì Tāng; Guī Pí Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ren Shen",
+        "Huang Qi"
+      ]
+    },
+    {
+      "number": 19,
+      "slug": "bai-zhu-fu-ling-dui-yao",
+      "title": "Bái Zhú + Fú Líng",
+      "characters": "白术 + 茯苓",
+      "category": {
+        "en": "Strengthen the Spleen · Drain Dampness",
+        "es": "Fortalecer Bazo · Drenar Humedad"
+      },
+      "action": {
+        "en": "Strengthen the Spleen while drying and draining Dampness so fluids move normally.",
+        "es": "Fortalecer Bazo mientras seca y drena Humedad para normalizar movimiento de líquidos."
+      },
+      "formulas": {
+        "en": "Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng.",
+        "es": "Sì Jūn Zǐ Tāng; Wǔ Líng Sǎn; Líng Guì Zhú Gān Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Bai Zhu",
+        "Fu Ling"
+      ]
+    },
+    {
+      "number": 20,
+      "slug": "bai-shao-gan-cao-dui-yao",
+      "title": "Bái Sháo + Gān Cǎo",
+      "characters": "白芍 + 甘草",
+      "category": {
+        "en": "Relax Spasm · Stop Pain",
+        "es": "Relajar Espasmo · Detener Dolor"
+      },
+      "action": {
+        "en": "Nourish Yin and Blood, soften tension, relax spasm and stop cramping pain.",
+        "es": "Nutrir Yin y Sangre, suavizar tensión, relajar espasmo y detener dolor tipo calambre."
+      },
+      "formulas": {
+        "en": "Sháo Yào Gān Cǎo Tāng.",
+        "es": "Sháo Yào Gān Cǎo Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Bai Shao",
+        "Gan Cao"
+      ]
+    },
+    {
+      "number": 21,
+      "slug": "jie-geng-gan-cao-dui-yao",
+      "title": "Jié Gěng + Gān Cǎo",
+      "characters": "桔梗 + 甘草",
+      "category": {
+        "en": "Benefit the Throat · Expel Pus",
+        "es": "Beneficiar Garganta · Expulsar Pus"
+      },
+      "action": {
+        "en": "Benefit the throat, diffuse Lung Qi and expel phlegm or pus from the upper burner.",
+        "es": "Beneficiar garganta, difundir Qi de Pulmón y expulsar flema o pus del Jiao superior."
+      },
+      "formulas": {
+        "en": "Jié Gěng Tāng.",
+        "es": "Jié Gěng Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Jie Geng",
+        "Gan Cao"
+      ]
+    },
+    {
+      "number": 22,
+      "slug": "sheng-jiang-da-zao-dui-yao",
+      "title": "Shēng Jiāng + Dà Zǎo",
+      "characters": "生姜 + 大枣",
+      "category": {
+        "en": "Harmonize Ying–Wei and the Middle",
+        "es": "Armonizar Ying–Wei y el Centro"
+      },
+      "action": {
+        "en": "Harmonize Ying and Wei, support the Spleen and Stomach and buffer harsher medicinals.",
+        "es": "Armonizar Ying y Wei, apoyar Bazo/Estómago y amortiguar medicinas más fuertes."
+      },
+      "formulas": {
+        "en": "Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn.",
+        "es": "Guì Zhī Tāng; Xiǎo Chái Hú Tāng; Xiāo Yáo Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Sheng Jiang",
+        "Da Zao"
+      ]
+    },
+    {
+      "number": 23,
+      "slug": "dang-gui-huang-qi-dui-yao",
+      "title": "Dāng Guī + Huáng Qí",
+      "characters": "当归 + 黄芪",
+      "category": {
+        "en": "Supplement Qi to Generate Blood",
+        "es": "Suplementar Qi para Generar Sangre"
+      },
+      "action": {
+        "en": "Use strongly supplemented Qi to generate Blood and support tissue recovery after loss or depletion.",
+        "es": "Usar Qi fuertemente suplementado para generar Sangre y apoyar reparación tras pérdida o agotamiento."
+      },
+      "formulas": {
+        "en": "Dāng Guī Bǔ Xuè Tāng — Huáng Qí 5 : Dāng Guī 1.",
+        "es": "Dāng Guī Bǔ Xuè Tāng — Huáng Qí 5 : Dāng Guī 1."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Dang Gui",
+        "Huang Qi"
+      ]
+    },
+    {
+      "number": 24,
+      "slug": "dang-gui-chuan-xiong-dui-yao",
+      "title": "Dāng Guī + Chuān Xiōng",
+      "characters": "当归 + 川芎",
+      "category": {
+        "en": "Nourish and Invigorate Blood",
+        "es": "Nutrir y Movilizar Sangre"
+      },
+      "action": {
+        "en": "Nourish and invigorate Blood, regulate menstruation and stop pain from deficiency with stasis.",
+        "es": "Nutrir y movilizar Sangre, regular menstruación y detener dolor por deficiencia con estasis."
+      },
+      "formulas": {
+        "en": "Fó Shǒu Sǎn; Sì Wù Tāng.",
+        "es": "Fó Shǒu Sǎn; Sì Wù Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Dang Gui",
+        "Chuan Xiong"
+      ]
+    },
+    {
+      "number": 25,
+      "slug": "dang-gui-xiang-fu-dui-yao",
+      "title": "Dāng Guī + Xiāng Fù",
+      "characters": "当归 + 香附",
+      "category": {
+        "en": "Regulate Qi, Blood and Menses",
+        "es": "Regular Qi, Sangre y Menstruación"
+      },
+      "action": {
+        "en": "Regulate Qi and Blood, regulate menstruation and relieve pain from Liver-Qi constraint with Blood deficiency.",
+        "es": "Regular Qi y Sangre, regular menstruación y aliviar dolor por estancamiento de Qi hepático con deficiencia de Sangre."
+      },
+      "formulas": {
+        "en": "Xiāng Fù Sì Wù Tāng — an off-list exemplar built on Sì Wù Tāng.",
+        "es": "Xiāng Fù Sì Wù Tāng — ejemplo fuera de lista basado en Sì Wù Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Dang Gui",
+        "Xiang Fu"
+      ]
+    },
+    {
+      "number": 26,
+      "slug": "ai-ye-e-jiao-dui-yao",
+      "title": "Ài Yè + Ē Jiāo",
+      "characters": "艾叶 + 阿胶",
+      "category": {
+        "en": "Warm the Womb · Stop Bleeding",
+        "es": "Calentar Útero · Detener Sangrado"
+      },
+      "action": {
+        "en": "Warm the channels, nourish Blood, stop uterine bleeding and calm the fetus.",
+        "es": "Calentar canales, nutrir Sangre, detener sangrado uterino y calmar feto."
+      },
+      "formulas": {
+        "en": "Jiāo Ài Tāng.",
+        "es": "Jiāo Ài Tāng."
+      },
+      "formulaBridge": {
+        "kind": "qualified",
+        "label": {
+          "en": "Pair + cofactor",
+          "es": "Pareja + cofactor"
+        },
+        "base": "Sì Wù Tāng",
+        "result": "Jiāo Ài Tāng",
+        "change": {
+          "en": "Add Ài Yè + Ē Jiāo and Gān Cǎo. The pair is central, but the named variant requires the additional cofactor.",
+          "es": "Añadir Ài Yè + Ē Jiāo y Gān Cǎo. La pareja es central, pero la variante nombrada requiere el cofactor adicional."
+        }
+      },
+      "herbs": [
+        "Ai Ye",
+        "E Jiao"
+      ]
+    },
+    {
+      "number": 27,
+      "slug": "mai-men-dong-sha-shen-dui-yao",
+      "title": "Mài Mén Dōng + Shā Shēn",
+      "characters": "麦门冬 + 沙参",
+      "category": {
+        "en": "Nourish Lung–Stomach Yin",
+        "es": "Nutrir Yin de Pulmón–Estómago"
+      },
+      "action": {
+        "en": "Nourish Lung and Stomach Yin, generate fluids and moisten dryness.",
+        "es": "Nutrir Yin de Pulmón/Estómago, generar líquidos y humedecer sequedad."
+      },
+      "formulas": {
+        "en": "Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān.",
+        "es": "Shā Shēn Mài Mén Dōng Tāng; Yī Guàn Jiān."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Mai Men Dong",
+        "Sha Shen"
+      ]
+    },
+    {
+      "number": 28,
+      "slug": "gou-qi-zi-ju-hua-dui-yao",
+      "title": "Gǒu Qǐ Zǐ + Jú Huā",
+      "characters": "枸杞子 + 菊花",
+      "category": {
+        "en": "Nourish Liver–Kidney · Brighten Eyes",
+        "es": "Nutrir Hígado–Riñón · Aclarar Ojos"
+      },
+      "action": {
+        "en": "Nourish Liver and Kidney Yin and brighten deficient, dry or blurred eyes.",
+        "es": "Nutrir Yin de Hígado/Riñón y aclarar ojos deficientes, secos o borrosos."
+      },
+      "formulas": {
+        "en": "Qǐ Jú Dì Huáng Wán.",
+        "es": "Qǐ Jú Dì Huáng Wán."
+      },
+      "formulaBridge": {
+        "kind": "direct",
+        "label": {
+          "en": "Direct pair addition",
+          "es": "Adición directa de la pareja"
+        },
+        "base": "Liù Wèi Dì Huáng Wán",
+        "result": "Qǐ Jú Dì Huáng Wán",
+        "change": {
+          "en": "Add Gǒu Qǐ Zǐ + Jú Huā when Liver-Kidney Yin deficiency affects the eyes.",
+          "es": "Añadir Gǒu Qǐ Zǐ + Jú Huā cuando la deficiencia de Yin de Hígado-Riñón afecta los ojos."
+        }
+      },
+      "herbs": [
+        "Gou Qi Zi",
+        "Ju Hua"
+      ]
+    },
+    {
+      "number": 29,
+      "slug": "han-lian-cao-nu-zhen-zi-dui-yao",
+      "title": "Hàn Lián Cǎo + Nǚ Zhēn Zǐ",
+      "characters": "旱莲草 + 女贞子",
+      "category": {
+        "en": "Gently Enrich Liver–Kidney Yin",
+        "es": "Enriquecer Suavemente Yin Hígado–Riñón"
+      },
+      "action": {
+        "en": "Gently enrich Liver–Kidney Yin, cool the Blood and stop deficiency bleeding.",
+        "es": "Enriquecer suavemente Yin de Hígado–Riñón, enfriar Sangre y detener sangrado por deficiencia."
+      },
+      "formulas": {
+        "en": "Èr Zhì Wán — the formula is the pair.",
+        "es": "Èr Zhì Wán — la fórmula es la pareja."
+      },
+      "formulaBridge": {
+        "kind": "same-composition",
+        "label": {
+          "en": "Pair = formula",
+          "es": "Pareja = fórmula"
+        },
+        "base": "Hàn Lián Cǎo + Nǚ Zhēn Zǐ",
+        "result": "Èr Zhì Wán",
+        "change": {
+          "en": "The classical two-herb formula is the pair itself. This is identity of composition, not substitution; ratio, dose, preparation, and safety still matter.",
+          "es": "La fórmula clásica de dos hierbas es la propia pareja. Es identidad de composición, no sustitución; todavía importan proporción, dosis, preparación y seguridad."
+        }
+      },
+      "herbs": [
+        "Han Lian Cao",
+        "Nu Zhen Zi"
+      ]
+    },
+    {
+      "number": 30,
+      "slug": "gui-ban-bie-jia-dui-yao",
+      "title": "Guī Bǎn + Biē Jiǎ",
+      "characters": "龟板 + 鳖甲",
+      "category": {
+        "en": "Enrich Yin · Subdue Yang · Extinguish Wind",
+        "es": "Enriquecer Yin · Someter Yang · Extinguir Viento"
+      },
+      "action": {
+        "en": "Deeply enrich Yin, subdue Yang and extinguish deficiency Wind in late-stage depletion.",
+        "es": "Enriquecer Yin profundamente, someter Yang y extinguir Viento por deficiencia en agotamiento tardío."
+      },
+      "formulas": {
+        "en": "Dà Dìng Fēng Zhū.",
+        "es": "Dà Dìng Fēng Zhū."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Gui Ban",
+        "Bie Jia"
+      ]
+    },
+    {
+      "number": 31,
+      "slug": "du-zhong-xu-duan-dui-yao",
+      "title": "Dù Zhòng + Xù Duàn",
+      "characters": "杜仲 + 续断",
+      "category": {
+        "en": "Strengthen the Back · Calm the Fetus",
+        "es": "Fortalecer Espalda · Calmar Feto"
+      },
+      "action": {
+        "en": "Supplement Liver and Kidney, strengthen sinews and bones and stabilize pregnancy.",
+        "es": "Suplementar Hígado/Riñón, fortalecer tendones/huesos y estabilizar embarazo."
+      },
+      "formulas": {
+        "en": "Shòu Tāi Wán emphasizes Xù Duàn; Dú Huó Jì Shēng Tāng emphasizes Dù Zhòng.",
+        "es": "Shòu Tāi Wán enfatiza Xù Duàn; Dú Huó Jì Shēng Tāng enfatiza Dù Zhòng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Du Zhong",
+        "Xu Duan"
+      ]
+    },
+    {
+      "number": 32,
+      "slug": "dang-gui-rou-cong-rong-dui-yao",
+      "title": "Dāng Guī + Ròu Cōng Róng",
+      "characters": "当归 + 肉苁蓉",
+      "category": {
+        "en": "Warm and Moisten the Intestines",
+        "es": "Calentar y Humedecer Intestinos"
+      },
+      "action": {
+        "en": "Nourish Blood, warm Kidney Yang and moisten the intestines for deficiency constipation.",
+        "es": "Nutrir Sangre, calentar Yang de Riñón y humedecer intestinos en estreñimiento por deficiencia."
+      },
+      "formulas": {
+        "en": "Jì Chuān Jiān.",
+        "es": "Jì Chuān Jiān."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Dang Gui",
+        "Rou Cong Rong"
+      ]
+    },
+    {
+      "number": 33,
+      "slug": "di-yu-huai-mi-dui-yao",
+      "title": "Dì Yú + Huái Mǐ",
+      "characters": "地榆 + 槐米",
+      "category": {
+        "en": "Cool Blood · Stop Lower Bleeding",
+        "es": "Enfriar Sangre · Detener Sangrado Inferior"
+      },
+      "action": {
+        "en": "Cool the Blood and stop bleeding concentrated in the lower body.",
+        "es": "Enfriar Sangre y detener sangrado concentrado en parte inferior del cuerpo."
+      },
+      "formulas": {
+        "en": "Huái Huā Sǎn.",
+        "es": "Huái Huā Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Di Yu",
+        "Huai Mi"
+      ]
+    },
+    {
+      "number": 34,
+      "slug": "tao-ren-hong-hua-dui-yao",
+      "title": "Táo Rén + Hóng Huā",
+      "characters": "桃仁 + 红花",
+      "category": {
+        "en": "Invigorate Blood · Dispel Stasis",
+        "es": "Movilizar Sangre · Disipar Estasis"
+      },
+      "action": {
+        "en": "Invigorate Blood and dispel stasis for fixed pain, clots and obstructed menstruation.",
+        "es": "Movilizar Sangre y disipar estasis en dolor fijo, coágulos y menstruación obstruida."
+      },
+      "formulas": {
+        "en": "Táo Hóng Sì Wù Tāng; Xuè Fǔ Zhú Yū Tāng.",
+        "es": "Táo Hóng Sì Wù Tāng; Xuè Fǔ Zhú Yū Tāng."
+      },
+      "formulaBridge": {
+        "kind": "direct",
+        "label": {
+          "en": "Direct pair addition",
+          "es": "Adición directa de la pareja"
+        },
+        "base": "Sì Wù Tāng",
+        "result": "Táo Hóng Sì Wù Tāng",
+        "change": {
+          "en": "Add Táo Rén + Hóng Huā to shift the base toward a clearer Blood-stasis strategy.",
+          "es": "Añadir Táo Rén + Hóng Huā para orientar la base hacia una estrategia más clara contra estasis de Sangre."
+        }
+      },
+      "herbs": [
+        "Tao Ren",
+        "Hong Hua"
+      ]
+    },
+    {
+      "number": 35,
+      "slug": "ru-xiang-mo-yao-dui-yao",
+      "title": "Rǔ Xiāng + Mò Yào",
+      "characters": "乳香 + 没药",
+      "category": {
+        "en": "Move Qi and Blood · Stop Pain",
+        "es": "Mover Qi y Sangre · Detener Dolor"
+      },
+      "action": {
+        "en": "Invigorate Blood, move Qi, reduce swelling, stop pain and support tissue repair.",
+        "es": "Movilizar Sangre, mover Qi, reducir hinchazón, detener dolor y apoyar reparación tisular."
+      },
+      "formulas": {
+        "en": "Xiǎo Huó Luò Dān.",
+        "es": "Xiǎo Huó Luò Dān."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ru Xiang",
+        "Mo Yao"
+      ]
+    },
+    {
+      "number": 36,
+      "slug": "san-leng-e-zhu-dui-yao",
+      "title": "Sān Léng + É Zhú",
+      "characters": "三棱 + 莪术",
+      "category": {
+        "en": "Break Qi and Blood · Disperse Masses",
+        "es": "Romper Qi y Sangre · Dispersar Masas"
+      },
+      "action": {
+        "en": "Forcefully break Blood and Qi, disperse masses and relieve severe fixed distention and pain.",
+        "es": "Romper con fuerza Sangre/Qi, dispersar masas y aliviar distensión/dolor fijo severo."
+      },
+      "formulas": {
+        "en": "Xiāng Léng Wán.",
+        "es": "Xiāng Léng Wán."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "San Leng",
+        "E Zhu"
+      ]
+    },
+    {
+      "number": 37,
+      "slug": "ban-xia-chen-pi-dui-yao",
+      "title": "Bàn Xià + Chén Pí",
+      "characters": "半夏 + 陈皮",
+      "category": {
+        "en": "Dry Dampness · Transform Phlegm",
+        "es": "Secar Humedad · Transformar Flema"
+      },
+      "action": {
+        "en": "Dry Dampness, transform Phlegm, regulate Qi and harmonize the Middle.",
+        "es": "Secar Humedad, transformar Flema, regular Qi y armonizar Centro."
+      },
+      "formulas": {
+        "en": "Èr Chén Tāng.",
+        "es": "Èr Chén Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ban Xia",
+        "Chen Pi"
+      ]
+    },
+    {
+      "number": 38,
+      "slug": "ban-xia-sheng-jiang-dui-yao",
+      "title": "Bàn Xià + Shēng Jiāng",
+      "characters": "半夏 + 生姜",
+      "category": {
+        "en": "Stop Vomiting · Transform Phlegm",
+        "es": "Detener Vómito · Transformar Flema"
+      },
+      "action": {
+        "en": "Descend rebellious Stomach Qi, stop vomiting and transform Phlegm.",
+        "es": "Descender Qi rebelde de Estómago, detener vómito y transformar Flema."
+      },
+      "formulas": {
+        "en": "Xiǎo Bàn Xià Tāng; also used within Xiǎo Chái Hú Tāng and Èr Chén Tāng.",
+        "es": "Xiǎo Bàn Xià Tāng; también dentro de Xiǎo Chái Hú Tāng y Èr Chén Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ban Xia",
+        "Sheng Jiang"
+      ]
+    },
+    {
+      "number": 39,
+      "slug": "gua-lou-xie-bai-dui-yao",
+      "title": "Guā Lóu + Xiè Bái",
+      "characters": "瓜蒌 + 薤白",
+      "category": {
+        "en": "Unblock Chest Yang · Dissipate Binding",
+        "es": "Desbloquear Yang Torácico · Disipar Opresión"
+      },
+      "action": {
+        "en": "Unblock chest Yang, dissipate Phlegm binding and move Qi through the chest.",
+        "es": "Desbloquear Yang torácico, disipar opresión por Flema y mover Qi en pecho."
+      },
+      "formulas": {
+        "en": "Guā Lóu Xiè Bái Bàn Xià Tāng.",
+        "es": "Guā Lóu Xiè Bái Bàn Xià Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Gua Lou",
+        "Xie Bai"
+      ]
+    },
+    {
+      "number": 40,
+      "slug": "zi-wan-kuan-dong-hua-dui-yao",
+      "title": "Zǐ Wǎn + Kuǎn Dōng Huā",
+      "characters": "紫菀 + 款冬花",
+      "category": {
+        "en": "Descend Lung Qi · Stop Cough",
+        "es": "Descender Qi de Pulmón · Detener Tos"
+      },
+      "action": {
+        "en": "Moisten the Lung, descend Qi, transform Phlegm and stop cough across hot or cold, acute or chronic patterns.",
+        "es": "Humedecer Pulmón, descender Qi, transformar Flema y detener tos en patterns calientes/fríos, agudos/crónicos."
+      },
+      "formulas": {
+        "en": "Shè Gān Má Huáng Tāng.",
+        "es": "Shè Gān Má Huáng Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Zi Wan",
+        "Kuan Dong Hua"
+      ]
+    },
+    {
+      "number": 41,
+      "slug": "ting-li-zi-da-zao-dui-yao",
+      "title": "Tíng Lì Zǐ + Dà Zǎo",
+      "characters": "葶苈子 + 大枣",
+      "category": {
+        "en": "Drain Lung Fluid · Calm Wheezing",
+        "es": "Drenar Líquido Pulmonar · Calmar Sibilancia"
+      },
+      "action": {
+        "en": "Drain water and Phlegm from the Lung, calm wheezing and promote urination while protecting the Middle.",
+        "es": "Drenar agua/Flema de Pulmón, calmar sibilancia y promover orina mientras protege Centro."
+      },
+      "formulas": {
+        "en": "Tíng Lì Dà Zǎo Xiè Fèi Tāng.",
+        "es": "Tíng Lì Dà Zǎo Xiè Fèi Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Ting Li Zi",
+        "Da Zao"
+      ]
+    },
+    {
+      "number": 42,
+      "slug": "fu-zi-gan-jiang-dui-yao",
+      "title": "Fù Zǐ + Gān Jiāng",
+      "characters": "附子 + 干姜",
+      "category": {
+        "en": "Restore Devastated Yang",
+        "es": "Restaurar Yang Devastado"
+      },
+      "action": {
+        "en": "Restore devastated Yang, warm the Middle and rescue collapse from severe interior Cold.",
+        "es": "Restaurar Yang devastado, calentar Centro y rescatar colapso por Frío interior grave."
+      },
+      "formulas": {
+        "en": "Sì Nì Tāng.",
+        "es": "Sì Nì Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Fu Zi",
+        "Gan Jiang"
+      ]
+    },
+    {
+      "number": 43,
+      "slug": "fu-zi-rou-gui-dui-yao",
+      "title": "Fù Zǐ + Ròu Guì",
+      "characters": "附子 + 肉桂",
+      "category": {
+        "en": "Warm and Supplement Kidney Yang",
+        "es": "Calentar y Suplementar Yang de Riñón"
+      },
+      "action": {
+        "en": "Warm and supplement Kidney Yang and lead Fire back to its source.",
+        "es": "Calentar/suplementar Yang de Riñón y conducir Fuego de vuelta a su fuente."
+      },
+      "formulas": {
+        "en": "Yòu Guī Wán; later versions of Shèn Qì Wán.",
+        "es": "Yòu Guī Wán; versiones tardías de Shèn Qì Wán."
+      },
+      "formulaBridge": {
+        "kind": "qualified",
+        "label": {
+          "en": "Version-dependent family link",
+          "es": "Vínculo familiar dependiente de versión"
+        },
+        "base": "Liù Wèi Dì Huáng Wán",
+        "result": "Bā Wèi Dì Huáng Wán / Jīn Guì Shèn Qì Wán lineage",
+        "change": {
+          "en": "Processed Fù Zǐ plus cinnamon pivots the family toward Kidney Yang and water transformation. Some sources use Ròu Guì and others Guì Zhī, so the textual version must be identified.",
+          "es": "Fù Zǐ procesado más canela orienta la familia hacia Yang de Riñón y transformación del agua. Algunas fuentes usan Ròu Guì y otras Guì Zhī, por lo que debe identificarse la versión textual."
+        }
+      },
+      "herbs": [
+        "Fu Zi",
+        "Rou Gui"
+      ]
+    },
+    {
+      "number": 44,
+      "slug": "gan-jiang-bai-zhu-dui-yao",
+      "title": "Gān Jiāng + Bái Zhú",
+      "characters": "干姜 + 白术",
+      "category": {
+        "en": "Warm the Middle · Dry Dampness",
+        "es": "Calentar Centro · Secar Humedad"
+      },
+      "action": {
+        "en": "Warm the Middle, strengthen the Spleen and dry Cold-Dampness.",
+        "es": "Calentar Centro, fortalecer Bazo y secar Frío-Humedad."
+      },
+      "formulas": {
+        "en": "Lǐ Zhōng Wán.",
+        "es": "Lǐ Zhōng Wán."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Gan Jiang",
+        "Bai Zhu"
+      ]
+    },
+    {
+      "number": 45,
+      "slug": "chai-hu-huang-qin-dui-yao",
+      "title": "Chái Hú + Huáng Qín",
+      "characters": "柴胡 + 黄芩",
+      "category": {
+        "en": "Harmonize Shaoyang",
+        "es": "Armonizar Shaoyang"
+      },
+      "action": {
+        "en": "Harmonize Shaoyang by venting the pathogen outward while clearing Heat inside.",
+        "es": "Armonizar Shaoyang ventilando patógeno hacia afuera mientras aclara Calor interior."
+      },
+      "formulas": {
+        "en": "Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng.",
+        "es": "Xiǎo Chái Hú Tāng; Dà Chái Hú Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Chai Hu",
+        "Huang Qin"
+      ]
+    },
+    {
+      "number": 46,
+      "slug": "chai-hu-bai-shao-dui-yao",
+      "title": "Chái Hú + Bái Sháo",
+      "characters": "柴胡 + 白芍",
+      "category": {
+        "en": "Course the Liver · Nourish Blood",
+        "es": "Mover Hígado · Nutrir Sangre"
+      },
+      "action": {
+        "en": "Course Liver Qi, nourish Blood, soften tension and relieve constraint pain.",
+        "es": "Mover Qi hepático, nutrir Sangre, suavizar tensión y aliviar dolor por estancamiento."
+      },
+      "formulas": {
+        "en": "Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn.",
+        "es": "Sì Nì Sǎn; Xiāo Yáo Sǎn; Chái Hú Shū Gān Sǎn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Chai Hu",
+        "Bai Shao"
+      ]
+    },
+    {
+      "number": 47,
+      "slug": "huo-xiang-pei-lan-dui-yao",
+      "title": "Huò Xiāng + Pèi Lán",
+      "characters": "藿香 + 佩兰",
+      "category": {
+        "en": "Aromatically Transform Dampness",
+        "es": "Transformar Humedad Aromáticamente"
+      },
+      "action": {
+        "en": "Aromatically transform Dampness, awaken the Spleen and relieve Summerheat-Dampness.",
+        "es": "Transformar Humedad aromáticamente, despertar Bazo y aliviar Humedad-Calor de verano."
+      },
+      "formulas": {
+        "en": "Huò Xiāng Zhèng Qì Sǎn modified with Pèi Lán.",
+        "es": "Huò Xiāng Zhèng Qì Sǎn modificada con Pèi Lán."
+      },
+      "formulaBridge": {
+        "kind": "structural",
+        "label": {
+          "en": "Add only the missing partner",
+          "es": "Añadir solo la compañera faltante"
+        },
+        "base": "Huò Xiāng Zhèng Qì Sǎn",
+        "result": "Huò Xiāng Zhèng Qì Sǎn + Pèi Lán",
+        "change": {
+          "en": "The base already contains Huò Xiāng, so only Pèi Lán is added. The resulting prescription contains the pair, but the complete pair was not added.",
+          "es": "La base ya contiene Huò Xiāng, por lo que se añade solo Pèi Lán. La prescripción resultante contiene la pareja, pero no se añadió la pareja completa."
+        }
+      },
+      "herbs": [
+        "Huo Xiang",
+        "Pei Lan"
+      ]
+    },
+    {
+      "number": 48,
+      "slug": "jin-qian-cao-hai-jin-sha-dui-yao",
+      "title": "Jīn Qián Cǎo + Hǎi Jīn Shā",
+      "characters": "金钱草 + 海金沙",
+      "category": {
+        "en": "Unblock Lin · Expel Stones",
+        "es": "Desbloquear Lin · Expulsar Cálculos"
+      },
+      "action": {
+        "en": "Promote urination, unblock painful Lin and help expel urinary or biliary stones.",
+        "es": "Promover orina, desbloquear Lin doloroso y ayudar a expulsar cálculos urinarios o biliares."
+      },
+      "formulas": {
+        "en": "Sān Jīn Tāng.",
+        "es": "Sān Jīn Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Jin Qian Cao",
+        "Hai Jin Sha"
+      ]
+    },
+    {
+      "number": 49,
+      "slug": "da-huang-mang-xiao-dui-yao",
+      "title": "Dà Huáng + Máng Xiāo",
+      "characters": "大黄 + 芒硝",
+      "category": {
+        "en": "Purge Heat · Soften Hardness",
+        "es": "Purgar Calor · Ablandar Dureza"
+      },
+      "action": {
+        "en": "Purge Heat accumulation and soften dry hardness in Yangming bowel excess.",
+        "es": "Purgar acumulación de Calor y ablandar dureza seca en exceso intestinal Yangming."
+      },
+      "formulas": {
+        "en": "Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng.",
+        "es": "Dà Chéng Qì Tāng; Tiáo Wèi Chéng Qì Tāng."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Da Huang",
+        "Mang Xiao"
+      ]
+    },
+    {
+      "number": 50,
+      "slug": "long-gu-mu-li-dui-yao",
+      "title": "Lóng Gǔ + Mǔ Lì",
+      "characters": "龙骨 + 牡蛎",
+      "category": {
+        "en": "Anchor Yang · Calm Spirit · Secure Leakage",
+        "es": "Anclar Yang · Calmar Shen · Asegurar Pérdidas"
+      },
+      "action": {
+        "en": "Settle and calm the Spirit, anchor floating Yang and secure deficiency leakage.",
+        "es": "Asentar/calmar Shen, anclar Yang flotante y asegurar pérdidas por deficiencia."
+      },
+      "formulas": {
+        "en": "Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng; Chái Hú Jiā Lóng Gǔ Mǔ Lì Tāng; Zhèn Gān Xī Fēng Tāng.",
+        "es": "Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng; Chái Hú Jiā Lóng Gǔ Mǔ Lì Tāng; Zhèn Gān Xī Fēng Tāng."
+      },
+      "formulaBridge": {
+        "kind": "direct",
+        "label": {
+          "en": "Direct pair addition",
+          "es": "Adición directa de la pareja"
+        },
+        "base": "Guì Zhī Tāng",
+        "result": "Guì Zhī Jiā Lóng Gǔ Mǔ Lì Tāng",
+        "change": {
+          "en": "Add Lóng Gǔ + Mǔ Lì to anchor, calm, and contain deficiency leakage.",
+          "es": "Añadir Lóng Gǔ + Mǔ Lì para anclar, calmar y contener pérdidas por deficiencia."
+        }
+      },
+      "herbs": [
+        "Long Gu",
+        "Mu Li"
+      ]
+    },
+    {
+      "number": 51,
+      "slug": "tian-ma-gou-teng-dui-yao",
+      "title": "Tiān Má + Gōu Téng",
+      "characters": "天麻 + 钩藤",
+      "category": {
+        "en": "Calm the Liver · Extinguish Wind",
+        "es": "Calmar Hígado · Extinguir Viento"
+      },
+      "action": {
+        "en": "Calm the Liver, extinguish internal Wind, stop dizziness and headache and ease spasms.",
+        "es": "Calmar Hígado, extinguir Viento interno, detener mareo/cefalea y aliviar espasmos."
+      },
+      "formulas": {
+        "en": "Tiān Má Gōu Téng Yǐn.",
+        "es": "Tiān Má Gōu Téng Yǐn."
+      },
+      "formulaBridge": null,
+      "herbs": [
+        "Tian Ma",
+        "Gou Teng"
+      ]
+    }
+  ]
+}
