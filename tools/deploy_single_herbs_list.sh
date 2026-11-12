@@ -24,7 +24,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 
 PHP_FILES=(single-herbs-list.php single-herbs-study-guide.php study-guide.php)
-DATA_FILES=(single-herb-rich-profiles.json)
+DATA_FILES=(single-herb-rich-profiles.json single-herb-actions-indications-supplement.json single-herb-safety-supplement.json)
 FILES=("${PHP_FILES[@]}" "${DATA_FILES[@]}")
 for file in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/$file"
@@ -55,15 +55,21 @@ if grep -Fq "Open full study card" "$TEMP_DIR/single-herbs-list.php"; then
     exit 1
 fi
 php -r '
-$data = json_decode(file_get_contents($argv[1]), true);
-if (!is_array($data)
-    || (int)($data["guidelineTotal"] ?? 0) !== 304
-    || (int)($data["total"] ?? 0) < 180
-    || count($data["profiles"] ?? []) !== (int)$data["total"]) {
-    fwrite(STDERR, "ERROR: el banco enriquecido de hierbas no es válido.\n");
+$rich = json_decode(file_get_contents($argv[1]), true);
+$actions = json_decode(file_get_contents($argv[2]), true);
+$safety = json_decode(file_get_contents($argv[3]), true);
+if (!is_array($rich) || !is_array($actions) || !is_array($safety)
+    || (int)($rich["guidelineTotal"] ?? 0) !== 304
+    || (int)($rich["total"] ?? 0) < 180
+    || count($rich["profiles"] ?? []) !== (int)$rich["total"]
+    || count($actions["herbs"] ?? []) < 100
+    || count($safety["categoryCautions"] ?? []) < 30) {
+    fwrite(STDERR, "ERROR: los bancos clínicos enriquecidos no son válidos.\n");
     exit(1);
 }
-' "$TEMP_DIR/single-herb-rich-profiles.json"
+' "$TEMP_DIR/single-herb-rich-profiles.json" \
+  "$TEMP_DIR/single-herb-actions-indications-supplement.json" \
+  "$TEMP_DIR/single-herb-safety-supplement.json"
 grep -Fq "single-herbs-list.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -Fq "304 official guideline herbs" "$TEMP_DIR/study-guide.php"
 
@@ -127,7 +133,8 @@ echo "OK: botón Single Herbs List instalado en Single Herbs y en la biblioteca.
 echo "OK: lista limitada a las 304 hierbas oficiales del guideline."
 echo "OK: organización A–Z y por categoría activa."
 echo "OK: búsqueda, filtro de categoría y tarjetas expandibles activos."
-echo "OK: 185 perfiles detallados incluyen acciones, reconocimiento clínico, memoria, huella diferencial y seguridad."
+echo "OK: 185 perfiles detallados incluyen memoria y huella diferencial; 291 hierbas tienen acciones e indicaciones verificadas."
+echo "OK: precauciones por hierba o categoría disponibles para las 304 hierbas."
 echo "OK: la categoría abre su grupo y ofrece regreso a todas las hierbas."
 echo "OK: no se requiere navegar a otra tarjeta."
 echo "OK: la lista usa únicamente bancos JSON verificados; no carga páginas PHP de categoría."

@@ -50,14 +50,21 @@ $dashboardurl = new moodle_url('/my/');
 $indexpath = __DIR__ . '/single-herb-card-index.json';
 $propertiespath = __DIR__ . '/single-herb-properties.json';
 $richprofilespath = __DIR__ . '/single-herb-rich-profiles.json';
+$actionspath = __DIR__ . '/single-herb-actions-indications-supplement.json';
+$safetypath = __DIR__ . '/single-herb-safety-supplement.json';
 $cardindex = is_readable($indexpath) ? json_decode(file_get_contents($indexpath), true) : null;
 $properties = is_readable($propertiespath) ? json_decode(file_get_contents($propertiespath), true) : null;
 $richprofiledata = is_readable($richprofilespath) ? json_decode(file_get_contents($richprofilespath), true) : null;
+$actionsdata = is_readable($actionspath) ? json_decode(file_get_contents($actionspath), true) : null;
+$safetydata = is_readable($safetypath) ? json_decode(file_get_contents($safetypath), true) : null;
 if (!is_array($cardindex) || !is_array($properties) || !is_array($richprofiledata)
+        || !is_array($actionsdata) || !is_array($safetydata)
         || (int)($cardindex['total'] ?? 0) !== 304
         || count($cardindex['herbs'] ?? []) !== 304
         || (int)($properties['total'] ?? 0) !== 304
-        || (int)($richprofiledata['total'] ?? 0) < 180) {
+        || (int)($richprofiledata['total'] ?? 0) < 180
+        || count($actionsdata['herbs'] ?? []) < 100
+        || count($safetydata['categoryCautions'] ?? []) < 30) {
     throw new coding_exception('Official Single Herbs guideline data is unavailable.');
 }
 
@@ -82,6 +89,41 @@ foreach ($properties['herbs'] ?? [] as $profile) {
         $propertiesbyname[$normalize($name)] = $profile;
     }
 }
+
+$actionsbyname = [];
+foreach ($actionsdata['herbs'] ?? [] as $name => $actionprofile) {
+    $actionsbyname[$normalize((string)$name)] = $actionprofile;
+}
+$safetybyname = [];
+foreach ($safetydata['herbs'] ?? [] as $name => $safetyprofile) {
+    $safetybyname[$normalize((string)$name)] = $safetyprofile;
+}
+$formatpairfield = static function($profile, bool $ises, int $field): string {
+    if (!is_array($profile)) {
+        return '';
+    }
+    $pairs = $profile[$ises ? 'es' : 'en'] ?? $profile['en'] ?? [];
+    if (!is_array($pairs)) {
+        return '';
+    }
+    $values = [];
+    foreach ($pairs as $pair) {
+        $value = is_array($pair) ? trim((string)($pair[$field] ?? '')) : '';
+        if ($value !== '') {
+            $values[] = rtrim($value, ". ");
+        }
+    }
+    return $values ? implode('; ', array_values(array_unique($values))) . '.' : '';
+};
+$firstnonempty = static function(...$values): string {
+    foreach ($values as $value) {
+        $value = trim((string)$value);
+        if ($value !== '') {
+            return $value;
+        }
+    }
+    return '';
+};
 
 // Load the independently generated enrichment bank. No rendered category PHP
 // page is included or evaluated at runtime.
@@ -124,6 +166,13 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
     }
     $categories[$categorycode] = $categoryname;
     $latin = trim((string)($officialherb['latin'] ?? $profile['latin'] ?? ''));
+    $actionprofile = $actionsbyname[$profilekey] ?? [];
+    $safetyprofile = $safetybyname[$profilekey] ?? [];
+    $supplementactions = $formatpairfield($actionprofile, $ises, 0);
+    $supplementindications = $formatpairfield($actionprofile, $ises, 1);
+    $categorycaution = $localized($safetydata['categoryCautions'][$categorycode] ?? '', $ises);
+    $categorypregnancy = $localized($safetydata['categoryPregnancy'][$categorycode] ?? '', $ises);
+    $categoryinteractions = $localized($safetydata['categoryInteractions'][$categorycode] ?? '', $ises);
     $card = [
         'id' => (int)($officialherb['id'] ?? ($position + 1)),
         'name' => $name,
@@ -136,11 +185,33 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         'channels' => trim((string)($richprofile['channels'] ?? $localized($profile['channels'] ?? '', $ises))),
         'properties' => trim((string)($richprofile['properties'] ?? '')),
         'dose' => trim((string)($richprofile['dose'] ?? $profile['dose'] ?? $profile['appendixDose'] ?? '')),
-        'identity' => trim((string)($richprofile['identity'] ?? $localized($profile['actionSummary'] ?? '', $ises))),
-        'clue' => trim((string)($richprofile['clue'] ?? $localized($profile['indicationSummary'] ?? '', $ises))),
+        'identity' => $firstnonempty(
+            $richprofile['identity'] ?? '',
+            $localized($profile['actionSummary'] ?? '', $ises),
+            $supplementactions
+        ),
+        'clue' => $firstnonempty(
+            $richprofile['clue'] ?? '',
+            $localized($profile['indicationSummary'] ?? '', $ises),
+            $supplementindications
+        ),
         'memory' => trim((string)($richprofile['memory'] ?? '')),
         'unique' => trim((string)($richprofile['unique'] ?? '')),
-        'safety' => trim((string)($richprofile['caution'] ?? $localized($profile['safetyNote'] ?? '', $ises))),
+        'safety' => $firstnonempty(
+            $richprofile['caution'] ?? '',
+            $localized($profile['safetyNote'] ?? '', $ises),
+            $localized($safetyprofile['caution'] ?? '', $ises),
+            $categorycaution
+        ),
+        'preparation' => $localized($safetyprofile['preparation'] ?? '', $ises),
+        'pregnancy' => $firstnonempty(
+            $localized($safetyprofile['pregnancy'] ?? '', $ises),
+            $categorypregnancy
+        ),
+        'interactions' => $firstnonempty(
+            $localized($safetyprofile['interactions'] ?? '', $ises),
+            $categoryinteractions
+        ),
         'status' => (string)($profile['status'] ?? 'properties-only'),
     ];
     $haystack = core_text::strtolower(implode(' ', [
@@ -154,6 +225,10 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         $card['clue'],
         $card['memory'],
         $card['unique'],
+        $card['safety'],
+        $card['preparation'],
+        $card['pregnancy'],
+        $card['interactions'],
     ]));
     if ($query !== '' && core_text::strpos($haystack, core_text::strtolower($query)) === false) {
         continue;
@@ -370,7 +445,10 @@ echo $OUTPUT->header();
                                     <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Reconocimiento clínico' : 'Clinical recognition'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
                                     <?php if ($card['memory'] !== '') { ?><dt><?php echo $ises ? 'Memoria' : 'Memory'; ?></dt><dd class="single-herbs-list__memory"><?php echo s($card['memory']); ?></dd><?php } ?>
                                     <?php if ($card['unique'] !== '') { ?><dt><?php echo $ises ? 'Huella única' : 'Unique fingerprint'; ?></dt><dd><?php echo s($card['unique']); ?></dd><?php } ?>
-                                    <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
+                                    <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Precaución' : 'Caution'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
+                                    <?php if ($card['preparation'] !== '') { ?><dt><?php echo $ises ? 'Preparación segura' : 'Safe preparation'; ?></dt><dd class="is-safety"><?php echo s($card['preparation']); ?></dd><?php } ?>
+                                    <?php if ($card['pregnancy'] !== '') { ?><dt><?php echo $ises ? 'Embarazo' : 'Pregnancy'; ?></dt><dd class="is-safety"><?php echo s($card['pregnancy']); ?></dd><?php } ?>
+                                    <?php if ($card['interactions'] !== '') { ?><dt><?php echo $ises ? 'Interacciones' : 'Interactions'; ?></dt><dd class="is-safety"><?php echo s($card['interactions']); ?></dd><?php } ?>
                                 </dl>
                                 <?php if ($card['identity'] === '' && $card['clue'] === '') { ?>
                                     <p class="single-herbs-list__profile-note"><?php echo $ises
