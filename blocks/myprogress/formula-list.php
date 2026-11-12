@@ -66,7 +66,9 @@ $detailpath = __DIR__ . '/formulas-study-guide-data.json';
 $additionpath = __DIR__ . '/formula-guideline-profile-additions.json';
 $roster = is_readable($rosterpath) ? json_decode(file_get_contents($rosterpath), true) : null;
 $studydata = is_readable($detailpath) ? json_decode(file_get_contents($detailpath), true) : null;
-$profileadditions = is_readable($additionpath) ? json_decode(file_get_contents($additionpath), true) : null;
+$profileadditions = is_readable($additionpath)
+    ? json_decode(file_get_contents($additionpath), true)
+    : ['total' => 0, 'formulas' => []];
 if (!is_array($roster) || !is_array($studydata) || !is_array($profileadditions)
         || (int)($roster['total'] ?? 0) !== 181
         || count($roster['formulas'] ?? []) !== 181
