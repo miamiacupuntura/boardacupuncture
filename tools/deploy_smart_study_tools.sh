@@ -104,6 +104,9 @@ if grep -Eq 'data-practice-size="(25|50|100)"' "$TEMP_DIR/static/formula-practic
 fi
 grep -Fq "appendDuiYaoQuestions" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq "history.focuses" "$TEMP_DIR/static/formula-practice.js"
+grep -Fq "const diagnosticPool" "$TEMP_DIR/static/formula-practice.js"
+grep -Fq "if (personalized.length) return personalized" "$TEMP_DIR/static/formula-practice.js"
+grep -Fq "if (diagnosticPool.length) return diagnosticPool" "$TEMP_DIR/static/formula-practice.js"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data) !== 51) { exit(1); }' "$TEMP_DIR/static/dui-yao-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data["questions"] ?? []) < 290) { exit(1); }' "$TEMP_DIR/static/formula-modifications-generated.json"
 
@@ -198,6 +201,7 @@ echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con su
 echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
 echo "OK: Formula Quiz incluye Duì Yào, modificaciones, casos clínicos, patrones, precauciones, indicaciones y acciones."
 echo "OK: Formula Quiz ofrece sesiones de 5, 10, 15 o 20 preguntas y registra el resultado por enfoque."
+echo "OK: Personalized Review nunca queda vacío: usa debilidades, menor dominio o diagnóstico general."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
