@@ -278,7 +278,7 @@ echo $OUTPUT->header();
                 <thead><tr><th>#</th><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Ingredientes · Chief resaltado' : 'Ingredients · Chief highlighted'; ?></th></tr></thead>
                 <tbody>
                 <?php foreach ($rows as $row) { ?>
-                    <tr>
+                    <tr data-formula-ingredient-row data-formula="<?php echo s($row['name']); ?>" data-chief="<?php echo s($row['chiefs']); ?>">
                         <td data-label="#"><?php echo $row['number']; ?></td>
                         <th scope="row" data-label="<?php echo $ises ? 'Fórmula' : 'Formula'; ?>">
                             <a class="formula-ingredients__formula-link" href="<?php echo $row['formulaUrl']->out(false); ?>"><?php echo s($row['name']); ?></a>
