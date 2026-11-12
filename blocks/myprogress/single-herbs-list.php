@@ -87,17 +87,35 @@ $richprofiles = [];
 $categoryfiles = glob(__DIR__ . '/single-herbs-category-*.php') ?: [];
 foreach ($categoryfiles as $categoryfile) {
     $loadedprofiles = (static function(string $path, bool $ises): array {
-        // Category files also render their complete chapter. Buffer and discard
-        // that HTML so this list reuses only their detailed profile arrays.
-        $outputlevel = ob_get_level();
-        ob_start();
-        try {
-            include($path);
-        } finally {
-            while (ob_get_level() > $outputlevel) {
-                ob_end_clean();
+        // Category files contain a data-definition PHP block followed by their
+        // complete rendered chapter. Evaluate only that first PHP block so this
+        // list can reuse the profile arrays without executing the category page.
+        $source = file_get_contents($path);
+        if ($source === false) {
+            return [];
+        }
+        $definitions = '';
+        $inphp = false;
+        foreach (token_get_all($source) as $token) {
+            if (is_array($token)) {
+                if ($token[0] === T_OPEN_TAG) {
+                    $inphp = true;
+                    continue;
+                }
+                if ($token[0] === T_CLOSE_TAG) {
+                    break;
+                }
+                if ($inphp) {
+                    $definitions .= $token[1];
+                }
+            } else if ($inphp) {
+                $definitions .= $token;
             }
         }
+        if ($definitions === '') {
+            return [];
+        }
+        eval($definitions);
         $profiles = [];
         foreach (get_defined_vars() as $candidate) {
             if (!is_array($candidate)) {

@@ -38,8 +38,12 @@ grep -Fq "data-herb-category-link" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Back to all herbs" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Unique fingerprint" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Formula boundary" "$TEMP_DIR/single-herbs-list.php"
-grep -Fq "ob_start();" "$TEMP_DIR/single-herbs-list.php"
-grep -Fq "ob_end_clean();" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "token_get_all" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "T_CLOSE_TAG" "$TEMP_DIR/single-herbs-list.php"
+if grep -Fq "include(\$path)" "$TEMP_DIR/single-herbs-list.php"; then
+    echo "ERROR: Single Herbs List todavía ejecuta páginas completas de categoría." >&2
+    exit 1
+fi
 if grep -Fq "Open full study card" "$TEMP_DIR/single-herbs-list.php"; then
     echo "ERROR: Single Herbs List todavía depende de otra tarjeta." >&2
     exit 1
@@ -108,5 +112,5 @@ echo "OK: búsqueda, filtro de categoría y tarjetas expandibles activos."
 echo "OK: cada tarjeta contiene identidad, pista, memoria, huella, límite de fórmulas y seguridad disponibles."
 echo "OK: la categoría abre su grupo y ofrece regreso a todas las hierbas."
 echo "OK: no se requiere navegar a otra tarjeta."
-echo "OK: las páginas completas de categoría no se imprimen dentro de la lista."
+echo "OK: solo se leen los datos de categoría; sus páginas completas no se ejecutan."
 echo "RESPALDO: $BACKUP"
