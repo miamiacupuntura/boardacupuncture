@@ -42,8 +42,12 @@ grep -Fq "\$fromchief = \$fromcontext === 'chief'" "$TEMP_DIR/single-herbs-list.
 grep -Fq "Back to Chief Herbs" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "'Acciones' : 'Actions'" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "'Indicaciones' : 'Indications'" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "Do not carry a previous search or focused herb" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "\$query !== '' || \$categoryfilter !== '' || \$herbfocus !== ''" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "\$formulafocus = trim(optional_param('formula'" "$TEMP_DIR/formula-list.php"
 grep -Fq "Back to Chief Herbs" "$TEMP_DIR/formula-list.php"
+grep -Fq "Do not carry a previous search or focused formula" "$TEMP_DIR/formula-list.php"
+grep -Fq "\$query !== '' || \$categoryfilter !== '' || \$formulafocus !== ''" "$TEMP_DIR/formula-list.php"
 php -r '
 $data = json_decode(file_get_contents($argv[1]), true);
 $required = ["Bai Zhi", "Cong Bai", "Fang Feng", "Gao Ben", "Gui Zhi", "Jing Jie", "Ma Huang", "Qiang Huo", "Sheng Jiang", "Xi Xin", "Xiang Ru", "Xin Yi", "Zi Su Ye"];
@@ -137,6 +141,8 @@ echo "OK: tabla bilingüe con 60 hierbas, propiedades, canales y fórmulas."
 echo "OK: búsqueda instantánea y vista adaptable a móvil activas."
 echo "OK: las 60 hierbas y todas las fórmulas enlazan sus tarjetas exactas."
 echo "OK: las tarjetas ofrecen regreso a Chief Herbs sin perder el idioma."
+echo "OK: A–Z y By Bensky order limpian búsquedas anteriores y muestran nuevamente el banco completo."
+echo "OK: las búsquedas activas muestran un botón para volver a todas las hierbas o fórmulas."
 echo "OK: las 304 hierbas oficiales tienen acciones principales e indicaciones clínicas."
 echo "OK: Ma Huang y las otras 12 hierbas que liberan el Exterior fueron completadas en English y Español."
 echo "OK: terminología Chief aplicada."
