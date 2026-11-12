@@ -1687,6 +1687,11 @@ if (!$ises) {
 $languageurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $languageparams);
 $herbologyurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology']);
 $dashboardurl = new moodle_url('/my/');
+$formulalistparams = $ises ? ['lang' => 'es'] : [];
+if ($fromlibrary) {
+    $formulalistparams['from'] = 'library';
+}
+$formulalisturl = new moodle_url('/blocks/myprogress/formula-list.php', $formulalistparams);
 $singleherbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $ises ? ['lang' => 'es'] : []);
 $duiyaomoduleurl = new moodle_url($ises
     ? '/study-guide/comparisons/dui-yao-es.html'
@@ -1891,6 +1896,7 @@ echo $OUTPUT->header();
                 <?php if (!$fromlibrary): ?>
                     <a class="formula-study-guide__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
                 <?php endif; ?>
+                <a class="formula-study-guide__button formula-study-guide__button--active" href="<?php echo $formulalisturl->out(false); ?>">Formula List</a>
                 <a class="formula-study-guide__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo s($ises ? '← Dashboard' : '← Back to Dashboard'); ?></a>
             </div>
         </nav>
