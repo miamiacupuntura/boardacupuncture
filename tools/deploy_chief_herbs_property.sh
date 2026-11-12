@@ -32,8 +32,8 @@ grep -Fq "AVAILABLE · 60 CHIEF HERBS" "$TEMP_DIR/study-guide.php"
 grep -Fq "Property of Chief Herbs" "$TEMP_DIR/chief-herbs-property.html"
 grep -Fq "Propiedades de las hierbas principales" "$TEMP_DIR/chief-herbs-property-es.html"
 grep -Fq "data-chief-search" "$TEMP_DIR/chief-herbs-property.html"
-[[ "$(grep -o 'data-chief-row' "$TEMP_DIR/chief-herbs-property.html" | wc -l)" -eq 60 ]]
-[[ "$(grep -o 'data-chief-row' "$TEMP_DIR/chief-herbs-property-es.html" | wc -l)" -eq 60 ]]
+[[ "$(grep -o '<tr data-chief-row' "$TEMP_DIR/chief-herbs-property.html" | wc -l)" -eq 60 ]]
+[[ "$(grep -o '<tr data-chief-row' "$TEMP_DIR/chief-herbs-property-es.html" | wc -l)" -eq 60 ]]
 
 TARGET_PHP="$MOODLE_ROOT/blocks/myprogress/study-guide.php"
 [[ -f "$TARGET_PHP" ]] || { echo "ERROR: no existe $TARGET_PHP" >&2; exit 1; }
