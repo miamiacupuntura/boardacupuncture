@@ -509,8 +509,8 @@ echo $OUTPUT->header();
                             <div class="single-herbs-list__body">
                                 <dl>
                                     <?php if ($card['dose'] !== '') { ?><dt><?php echo $ises ? 'Dosis de estudio' : 'Study dose'; ?></dt><dd><?php echo s($card['dose']); ?></dd><?php } ?>
-                                    <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Acciones principales' : 'Core actions'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
-                                    <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Reconocimiento clínico' : 'Clinical recognition'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
+                                    <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Acciones' : 'Actions'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
+                                    <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Indicaciones' : 'Indications'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
                                     <?php if ($card['memory'] !== '') { ?><dt><?php echo $ises ? 'Memoria' : 'Memory'; ?></dt><dd class="single-herbs-list__memory"><?php echo s($card['memory']); ?></dd><?php } ?>
                                     <?php if ($card['unique'] !== '') { ?><dt><?php echo $ises ? 'Huella única' : 'Unique fingerprint'; ?></dt><dd><?php echo s($card['unique']); ?></dd><?php } ?>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Precaución' : 'Caution'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
