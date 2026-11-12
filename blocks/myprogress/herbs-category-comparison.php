@@ -10,6 +10,7 @@ $requestedlang = optional_param('lang', '', PARAM_ALPHANUMEXT);
 $moodlelang = current_language();
 $displaylang = $requestedui !== '' ? $requestedui : ($requestedlang !== '' ? $requestedlang : $moodlelang);
 $ises = preg_match('/^es(?:[_-].*)?$/i', $displaylang) === 1;
+$embed = optional_param('embed', 0, PARAM_BOOL) === 1;
 
 $categoryids = [
     'disperse-wind-cold',
@@ -1441,6 +1442,11 @@ $activeparams = $baseparams;
 $languageparams = $ises
     ? ['lang' => 'en', 'ui' => 'en', 'v' => $languageversion]
     : ['lang' => 'es', 'ui' => 'es', 'v' => $languageversion];
+if ($embed) {
+    $baseparams['embed'] = 1;
+    $activeparams['embed'] = 1;
+    $languageparams['embed'] = 1;
+}
 if ($selectedcategory !== '') {
     $activeparams['category'] = $selectedcategory;
     $languageparams['category'] = $selectedcategory;
@@ -2146,7 +2152,7 @@ $externalusesimilarities = [
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
-$PAGE->set_pagelayout('standard');
+$PAGE->set_pagelayout($embed ? 'embedded' : 'standard');
 $PAGE->set_title($ises ? 'Comparación de hierbas por categoría' : 'Herbs Category Comparison');
 $PAGE->set_heading($ises ? 'Comparación de hierbas por categoría' : 'Herbs Category Comparison');
 $PAGE->set_cacheable(false);
@@ -2585,9 +2591,10 @@ echo $OUTPUT->header();
 .herb-category-library__similarities table td:nth-child(1){font-weight:800;background:#eef9f7}
 .herb-category-library__similarities table td:nth-child(2){font-weight:700}
 .herb-category-library__foundation{margin:14px 0 0;padding:13px 15px;border-left:5px solid #087c69;background:#e5f6f2}
+.herb-category-library.is-embedded{width:100%;margin:0;padding:0}.herb-category-library.is-embedded>.herb-category-library__top,.herb-category-library.is-embedded>.herb-category-library__search,.herb-category-library.is-embedded>.herb-category-library__index{display:none!important}.herb-category-library.is-embedded>.herb-category-library__section{margin:0;padding:18px;border:0;border-radius:0;box-shadow:none}.herb-category-library.is-embedded .herb-category-library__pager,.herb-category-library.is-embedded>.herb-category-library__section>.herb-category-library__scroll{display:none!important}
 @media(max-width:720px){.herb-category-library__top{flex-direction:column}.herb-category-library__actions{width:100%;flex-direction:column}.herb-category-library__back{width:100%;justify-content:center}}
 </style>
-<main class="herb-category-library" data-language="<?php echo $ises ? 'es' : 'en'; ?>">
+<main class="herb-category-library<?php echo $embed ? ' is-embedded' : ''; ?>" data-language="<?php echo $ises ? 'es' : 'en'; ?>" data-embedded="<?php echo $embed ? 'true' : 'false'; ?>">
     <header class="herb-category-library__top">
         <div>
             <p class="herb-category-library__eyebrow"><?php echo s($ises ? 'Biblioteca comparativa' : 'Comparative library'); ?></p>
