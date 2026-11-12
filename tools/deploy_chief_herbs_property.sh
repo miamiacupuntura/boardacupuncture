@@ -25,6 +25,7 @@ for file in study-guide.php single-herbs-list.php formula-list.php; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/$file"
     php -l "$TEMP_DIR/$file" >/dev/null
 done
+curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/single-herb-actions-indications-supplement.json" -o "$TEMP_DIR/single-herb-actions-indications-supplement.json"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/chief-herbs-property.html" -o "$TEMP_DIR/chief-herbs-property.html"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/chief-herbs-property-es.html" -o "$TEMP_DIR/chief-herbs-property-es.html"
 
@@ -41,11 +42,28 @@ grep -Fq "\$fromchief = \$fromcontext === 'chief'" "$TEMP_DIR/single-herbs-list.
 grep -Fq "Back to Chief Herbs" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "\$formulafocus = trim(optional_param('formula'" "$TEMP_DIR/formula-list.php"
 grep -Fq "Back to Chief Herbs" "$TEMP_DIR/formula-list.php"
+php -r '
+$data = json_decode(file_get_contents($argv[1]), true);
+$required = ["Bai Zhi", "Cong Bai", "Fang Feng", "Gao Ben", "Gui Zhi", "Jing Jie", "Ma Huang", "Qiang Huo", "Sheng Jiang", "Xi Xin", "Xiang Ru", "Xin Yi", "Zi Su Ye"];
+if (!is_array($data) || count($data["herbs"] ?? []) < 119) {
+    fwrite(STDERR, "ERROR: banco de acciones e indicaciones incompleto.\n");
+    exit(1);
+}
+foreach ($required as $name) {
+    foreach (["en", "es"] as $language) {
+        $pairs = $data["herbs"][$name][$language] ?? [];
+        if (!$pairs || trim((string)($pairs[0][0] ?? "")) === "" || trim((string)($pairs[0][1] ?? "")) === "") {
+            fwrite(STDERR, "ERROR: faltan acciones o indicaciones para $name ($language).\n");
+            exit(1);
+        }
+    }
+}
+' "$TEMP_DIR/single-herb-actions-indications-supplement.json"
 [[ "$(grep -o '<tr data-chief-row' "$TEMP_DIR/chief-herbs-property.html" | wc -l)" -eq 60 ]]
 [[ "$(grep -o '<tr data-chief-row' "$TEMP_DIR/chief-herbs-property-es.html" | wc -l)" -eq 60 ]]
 
 TARGET_PHP_DIR="$MOODLE_ROOT/blocks/myprogress"
-for file in study-guide.php single-herbs-list.php formula-list.php; do
+for file in study-guide.php single-herbs-list.php formula-list.php single-herb-actions-indications-supplement.json; do
     [[ -f "$TARGET_PHP_DIR/$file" ]] || { echo "ERROR: no existe $TARGET_PHP_DIR/$file" >&2; exit 1; }
 done
 
@@ -82,6 +100,14 @@ for file in study-guide.php single-herbs-list.php formula-list.php; do
     php -l "$target_php" >/dev/null
 done
 
+data_file="single-herb-actions-indications-supplement.json"
+data_target="$TARGET_PHP_DIR/$data_file"
+cp -a "$data_target" "$BACKUP/moodle/$data_file"
+data_owner_group="$(stat -c '%u:%g' "$data_target")"
+data_mode="$(stat -c '%a' "$data_target")"
+install -o "${data_owner_group%:*}" -g "${data_owner_group#*:}" -m "$data_mode" "$TEMP_DIR/$data_file" "$data_target"
+cmp -s "$TEMP_DIR/$data_file" "$data_target"
+
 for target in "${TARGETS[@]}"; do
     sub="$BACKUP/static/$(echo "$target" | tr '/ ' '__')"
     mkdir -p "$sub"
@@ -109,5 +135,7 @@ echo "OK: tabla bilingüe con 60 hierbas, propiedades, canales y fórmulas."
 echo "OK: búsqueda instantánea y vista adaptable a móvil activas."
 echo "OK: las 60 hierbas y todas las fórmulas enlazan sus tarjetas exactas."
 echo "OK: las tarjetas ofrecen regreso a Chief Herbs sin perder el idioma."
+echo "OK: las 304 hierbas oficiales tienen acciones principales e indicaciones clínicas."
+echo "OK: Ma Huang y las otras 12 hierbas que liberan el Exterior fueron completadas en English y Español."
 echo "OK: terminología Chief aplicada."
 echo "RESPALDO: $BACKUP"
