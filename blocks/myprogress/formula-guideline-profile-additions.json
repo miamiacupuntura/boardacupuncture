@@ -9,12 +9,30 @@
       "englishName": "Pulsatilla Decoction",
       "action": "Clears Heat, drains Fire, cools the Blood, and relieves toxicity, especially for Heat-type dysenteric disorder with predominance of Blood.",
       "actionEs": "Limpia el Calor, drena el Fuego, enfría la Sangre y alivia la toxicidad, especialmente para disentería de tipo Calor con predominio de Sangre.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Bai Tou Weng",
+      "pattern": "Toxic Damp-Heat in the Intestines producing Heat-type dysentery.",
+      "patternEs": "Calor-Humedad tóxica en los Intestinos que produce disentería de tipo Calor.",
+      "ingredients": "Bai Tou Weng, Huang Lian, Huang Bai, and Qin Pi.",
+      "ingredientsEs": "Bai Tou Weng, Huang Lian, Huang Bai y Qin Pi.",
+      "clue": "Diarrhea with Blood and mucus, burning at the anus, tenesmus, and intense thirst.",
+      "clueEs": "Diarrea con Sangre y moco, ardor anal, tenesmo, urgencia dolorosa al defecar y sed intensa.",
+      "ingredientRoles": "Bai Tou Weng is the Chief for toxic Heat and Blood in the Intestines; Huang Lian and Huang Bai drain Damp-Heat; Qin Pi secures the Intestines and eliminates Dampness.",
+      "ingredientRolesEs": "Bai Tou Weng es la hierba Chief para el Calor tóxico y la Sangre en los Intestinos; Huang Lian y Huang Bai drenan Calor-Humedad; Qin Pi asegura los Intestinos y elimina Humedad.",
+      "safety": "Contraindicated in diarrhea from Spleen deficiency and Cold.",
+      "safetyEs": "Contraindicada en diarrea por deficiencia y Frío del Bazo."
     },
     {
       "id": 16,
@@ -23,12 +41,30 @@
       "englishName": "Bupleurum and Cinnamon Twig Decoction",
       "action": "Harmonizes Shaoyang and releases the Exterior by combining the actions of Xiao Chai Hu Tang and Gui Zhi Tang.",
       "actionEs": "Armoniza el Shaoyang y libera el Exterior combinando los efectos de Xiao Chai Hu Tang y Gui Zhi Tang.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Chai Hu, Gui Zhi",
+      "pattern": "Concurrent Shaoyang disorder and Taiyang exterior involvement.",
+      "patternEs": "Trastorno Shaoyang concurrente con afectación exterior de Taiyang.",
+      "ingredients": "Chai Hu, Huang Qin, Ren Shen, Ban Xia, Gan Cao, Sheng Jiang, Da Zao, Gui Zhi, and Bai Shao.",
+      "ingredientsEs": "Chai Hu, Huang Qin, Ren Shen, Ban Xia, Gan Cao, Sheng Jiang, Da Zao, Gui Zhi y Bai Shao.",
+      "clue": "Alternating fever and chills, chest and hypochondriac fullness, muscle or joint pain, nausea, mild headache, or neck stiffness.",
+      "clueEs": "Fiebre y escalofríos alternantes, plenitud torácica e hipocondríaca, dolor muscular o articular, náuseas, cefalea leve o rigidez cervical.",
+      "ingredientRoles": "Combines Xiao Chai Hu Tang to harmonize Shaoyang with Gui Zhi Tang to release the Exterior and harmonize protective and nutritive Qi.",
+      "ingredientRolesEs": "Combina Xiao Chai Hu Tang para armonizar Shaoyang con Gui Zhi Tang para liberar el Exterior y armonizar el Qi defensivo y nutritivo.",
+      "safety": "Use cautiously with Liver-Yang hyperactivity or severe Yin deficiency.",
+      "safetyEs": "Usar con cautela en hiperactividad de Yang de Hígado o deficiencia grave de Yin."
     },
     {
       "id": 17,
@@ -37,12 +73,30 @@
       "englishName": "Bupleurum plus Dragon Bone and Oyster Shell Decoction",
       "action": "Calms the Spirit, settles the Liver, harmonizes Shaoyang, and unblocks constraint associated with Phlegm-Heat or San Jiao disorder.",
       "actionEs": "Calma el Espíritu, tranquiliza el Hígado, armoniza el Shaoyang y desata bloqueos asociados con Flema-Calor o trastorno del San Jiao.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Chai Hu, Long Gu, Mu Li",
+      "pattern": "Heat and Phlegm obstructing Shaoyang with severe Shen agitation and Heart disturbance.",
+      "patternEs": "Calor y Flema que obstruyen Shaoyang con agitación intensa del Shen y perturbación del Corazón.",
+      "ingredients": "Chai Hu, Huang Qin, Ren Shen, Ban Xia, Fu Ling, Gui Zhi, Da Huang, Long Gu, Mu Li, Qian Shi, Sheng Jiang, and Da Zao.",
+      "ingredientsEs": "Chai Hu, Huang Qin, Ren Shen, Ban Xia, Fu Ling, Gui Zhi, Da Huang, Long Gu, Mu Li, Qian Shi, Sheng Jiang y Da Zao.",
+      "clue": "Insomnia, palpitations, severe anxiety, heaviness, chest oppression, irritability, and possibly mild convulsions or delirium.",
+      "clueEs": "Insomnio, palpitaciones, ansiedad intensa, pesadez, opresión torácica, irritabilidad y posibles convulsiones leves o delirio.",
+      "ingredientRoles": "Chai Hu and Huang Qin clear and harmonize Shaoyang; Long Gu and Mu Li anchor and calm the Shen; Da Huang drains accumulated Heat downward.",
+      "ingredientRolesEs": "Chai Hu y Huang Qin limpian y armonizan Shaoyang; Long Gu y Mu Li anclan y tranquilizan el Shen; Da Huang drena el Calor acumulado hacia abajo.",
+      "safety": "Contains Da Huang and heavy mineral substances; use cautiously with chronic digestive weakness and during pregnancy.",
+      "safetyEs": "Contiene Da Huang y sustancias minerales pesadas; usar con cautela en debilidad digestiva crónica y durante el embarazo."
     },
     {
       "id": 25,
@@ -51,12 +105,30 @@
       "englishName": "Major Bluegreen Dragon Decoction",
       "action": "Releases the Exterior and disperses exterior Cold with constrained interior Heat, while promoting urination to reduce edema.",
       "actionEs": "Libera el Exterior y dispersa el Frío exterior con Calor interior atrapado, promoviendo la micción para reducir el edema.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Ma Huang",
+      "pattern": "Exterior excess Wind-Cold with constrained interior Heat and disordered fluids.",
+      "patternEs": "Exceso exterior de Viento-Frío con Calor interior retenido y alteración de líquidos.",
+      "ingredients": "Ma Huang, Gui Zhi, Gan Cao, Xing Ren, Sheng Jiang, Da Zao, and Shi Gao.",
+      "ingredientsEs": "Ma Huang, Gui Zhi, Gan Cao, Xing Ren, Sheng Jiang, Da Zao y Shi Gao.",
+      "clue": "Fever without sweating, intense chills, generalized body aches, restlessness, irritability, and a tendency toward mild edema.",
+      "clueEs": "Fiebre sin sudor, escalofríos intensos, dolor corporal generalizado, inquietud, irritabilidad y tendencia a edema leve.",
+      "ingredientRoles": "Ma Huang and Gui Zhi open a strongly blocked Exterior; Shi Gao vigorously clears the constrained interior Heat generated beneath the Cold obstruction.",
+      "ingredientRolesEs": "Ma Huang y Gui Zhi abren el Exterior fuertemente bloqueado; Shi Gao elimina con potencia el Calor interior atrapado bajo la obstrucción por Frío.",
+      "safety": "A potent, strongly dispersing and sweating formula; contraindicated in general weakness, Qi deficiency, or preexisting spontaneous sweating.",
+      "safetyEs": "Fórmula potente, fuertemente dispersante y sudorífica; contraindicada en debilidad general, deficiencia de Qi o sudoración espontánea previa."
     },
     {
       "id": 28,
@@ -65,12 +137,30 @@
       "englishName": "Tangkuei and Six-Yellow Decoction",
       "action": "Enriches Yin, drains Fire, stabilizes the Exterior, and stops sweating in Yin deficiency with floating Fire.",
       "actionEs": "Enriquece el Yin, drena el Fuego, estabiliza el Exterior y detiene la sudoración en deficiencia de Yin con Fuego flotante.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Shu Di Huang, Sheng Di Huang",
+      "pattern": "Yin deficiency with floating Fire destabilizing the Exterior and causing night sweating.",
+      "patternEs": "Deficiencia de Yin con Fuego flotante que desestabiliza el Exterior y causa sudoración nocturna.",
+      "ingredients": "Dang Gui, Sheng Di Huang, Shu Di Huang, Huang Qin, Huang Lian, Huang Bai, and Huang Qi.",
+      "ingredientsEs": "Dang Gui, Sheng Di Huang, Shu Di Huang, Huang Qin, Huang Lian, Huang Bai y Huang Qi.",
+      "clue": "Severe drenching night sweats, afternoon fever, irritability, flushed face, and dry mouth and throat.",
+      "clueEs": "Sudoración nocturna intensa que empapa la ropa, fiebre vespertina, irritabilidad, rubor facial y sequedad de boca y garganta.",
+      "ingredientRoles": "Sheng Di Huang, Shu Di Huang, and Dang Gui nourish Yin and Blood; Huang Qin, Huang Lian, and Huang Bai drain deficiency Fire; Huang Qi secures the Exterior to stop fluid loss.",
+      "ingredientRolesEs": "Sheng Di Huang, Shu Di Huang y Dang Gui nutren Yin y Sangre; Huang Qin, Huang Lian y Huang Bai drenan el Fuego por deficiencia; Huang Qi asegura el Exterior para detener la pérdida de líquidos.",
+      "safety": "The strongly bitter-cold herbs may damage the Spleen and Stomach when used for prolonged periods in patients with weak digestion.",
+      "safetyEs": "Las hierbas intensamente amargas y frías pueden lesionar Bazo y Estómago si se usan de forma prolongada en personas con digestión débil."
     },
     {
       "id": 31,
@@ -79,12 +169,30 @@
       "englishName": "Tangkuei Drink",
       "action": "Nourishes and harmonizes the Blood, disperses Wind, and relieves itching in chronic skin presentations.",
       "actionEs": "Nutre y armoniza la Sangre, dispersa el Viento y alivia el prurito en cuadros cutáneos crónicos.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Dang Gui, Shu Di Huang",
+      "pattern": "Blood deficiency with dryness generating internal Wind and chronic skin itching.",
+      "patternEs": "Deficiencia de Sangre con sequedad que genera Viento interno y prurito cutáneo crónico.",
+      "ingredients": "Dang Gui, Shu Di Huang, Bai Shao, Chuan Xiong, Ji Li, Fang Feng, He Shou Wu, Huang Qi, Jing Jie, and Gan Cao.",
+      "ingredientsEs": "Dang Gui, Shu Di Huang, Bai Shao, Chuan Xiong, Ji Li, Fang Feng, He Shou Wu, Huang Qi, Jing Jie y Gan Cao.",
+      "clue": "Chronic dry, scaly, intensely itchy eruptions with rough and peeling skin.",
+      "clueEs": "Erupciones crónicas secas, escamosas y muy pruriginosas, con piel áspera y descamada.",
+      "ingredientRoles": "The Four Substances nourish and move Blood; Ji Li, Fang Feng, and Jing Jie dispel Wind from the skin, applying the principle that nourishing Blood allows Wind to dissipate.",
+      "ingredientRolesEs": "Las Cuatro Sustancias nutren y movilizan Sangre; Ji Li, Fang Feng y Jing Jie expulsan Viento de la piel, aplicando el principio de que al nutrir la Sangre el Viento se disipa.",
+      "safety": "Avoid in acute, moist, exudative dermatitis with clear inflammatory Damp-Heat signs.",
+      "safetyEs": "Evitar en dermatitis aguda húmeda y exudativa con signos claros de Calor-Humedad inflamatorio."
     },
     {
       "id": 32,
@@ -93,12 +201,30 @@
       "englishName": "Guide Out the Red Powder",
       "action": "Clears Heat and promotes urination to drain Heart Fire, including urinary problems and mouth ulcers from Heat.",
       "actionEs": "Limpia el Calor y promueve la micción para drenar el Fuego de Corazón, incluidos problemas urinarios y úlceras bucales por Calor.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Sheng Di Huang, Mu Tong",
+      "pattern": "Heart-channel Fire transferring to the Small Intestine and urinary pathway.",
+      "patternEs": "Fuego del canal de Corazón que se transfiere al Intestino Delgado y a la vía urinaria.",
+      "ingredients": "Sheng Di Huang, Mu Tong, Dan Zhu Ye, and Gan Cao.",
+      "ingredientsEs": "Sheng Di Huang, Mu Tong, Dan Zhu Ye y Gan Cao.",
+      "clue": "Scanty, dark, painful or burning urination with mouth ulcers or a red, inflamed tongue.",
+      "clueEs": "Micción escasa, oscura, dolorosa o ardorosa, con úlceras bucales o lengua roja e inflamada.",
+      "ingredientRoles": "Sheng Di Huang cools Blood and nourishes Yin; Mu Tong and Dan Zhu Ye guide Heat downward through urination; Gan Cao harmonizes and protects the Stomach.",
+      "ingredientRolesEs": "Sheng Di Huang enfría Sangre y nutre Yin; Mu Tong y Dan Zhu Ye dirigen el Calor hacia abajo mediante la orina; Gan Cao armoniza y protege el Estómago.",
+      "safety": "Prolonged use is discouraged in patients with a weak Spleen because of the diuretic effect and cold nature of the ingredients.",
+      "safetyEs": "Se desaconseja el uso prolongado en personas con Bazo débil por el efecto diurético y la naturaleza fría de los ingredientes."
     },
     {
       "id": 36,
@@ -107,12 +233,30 @@
       "englishName": "Capital Qi Pill",
       "action": "Enriches Kidney Yin, secures the Essence, and supports the Lungs for wheezing or cough from Lung-Kidney insufficiency.",
       "actionEs": "Enriquece el Yin de Riñón, asegura la Esencia y apoya los Pulmones para sibilancias o tos por insuficiencia de Pulmón y Riñón.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Shu Di Huang",
+      "pattern": "Kidney Yin deficiency with failure of the Kidneys to grasp Qi, producing chronic cough or wheezing.",
+      "patternEs": "Deficiencia de Yin de Riñón con incapacidad renal para captar Qi, produciendo tos o sibilancias crónicas.",
+      "ingredients": "Shu Di Huang, Shan Zhu Yu, Shan Yao, Ze Xie, Mu Dan Pi, Fu Ling, and Wu Wei Zi.",
+      "ingredientsEs": "Shu Di Huang, Shan Zhu Yu, Shan Yao, Ze Xie, Mu Dan Pi, Fu Ling y Wu Wei Zi.",
+      "clue": "Chronic wheezing, exertional dyspnea, dizziness, tinnitus, low-back pain, and fatigue associated with Kidney-origin respiratory insufficiency.",
+      "clueEs": "Sibilancias crónicas, disnea de esfuerzo, mareos, acúfenos, dolor lumbar y fatiga asociados con insuficiencia respiratoria de origen renal.",
+      "ingredientRoles": "Uses Liu Wei Di Huang Wan to nourish Kidney Yin and adds Wu Wei Zi to secure leaking Qi and consolidate Lung function.",
+      "ingredientRolesEs": "Usa Liu Wei Di Huang Wan para nutrir Yin de Riñón y añade Wu Wei Zi para asegurar el Qi que se escapa y consolidar la función pulmonar.",
+      "safety": "Avoid with acute Phlegm-Damp accumulation or an unresolved external Cold presentation.",
+      "safetyEs": "Evitar en acumulación aguda de Flema-Humedad o en un cuadro exterior de Frío aún no resuelto."
     },
     {
       "id": 44,
@@ -121,12 +265,30 @@
       "englishName": "Aconite Accessory Root Pill to Regulate the Middle",
       "action": "Warms the Middle Burner, disperses Cold, tonifies the Spleen, and supports Yang in Spleen-Stomach Yang deficiency.",
       "actionEs": "Calienta el Jiao Medio, dispersa el Frío, tonifica el Bazo y beneficia el Yang en deficiencia de Yang de Bazo y Estómago.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Fu Zi, Gan Jiang",
+      "pattern": "Spleen and Stomach Yang deficiency with internal Cold in the Middle Burner.",
+      "patternEs": "Deficiencia de Yang de Bazo y Estómago con Frío interno en el Jiao Medio.",
+      "ingredients": "Fu Zi, Ren Shen, Gan Jiang, Bai Zhu, and Gan Cao.",
+      "ingredientsEs": "Fu Zi, Ren Shen, Gan Jiang, Bai Zhu y Gan Cao.",
+      "clue": "Sharp or dull abdominal pain improved by warmth and pressure, cold limbs, clear watery diarrhea, clear vomiting, and poor appetite.",
+      "clueEs": "Dolor abdominal agudo o sordo que mejora con calor y presión, extremidades frías, diarrea acuosa clara, vómitos claros y falta de apetito.",
+      "ingredientRoles": "Fu Zi and Gan Jiang strongly warm digestive Yang; Ren Shen and Bai Zhu tonify Spleen Qi; Gan Cao harmonizes.",
+      "ingredientRolesEs": "Fu Zi y Gan Jiang calientan intensamente el Yang digestivo; Ren Shen y Bai Zhu tonifican Qi de Bazo; Gan Cao armoniza.",
+      "safety": "Contains potentially toxic Fu Zi unless properly processed; contraindicated during pregnancy and in interior excess-Heat or febrile presentations.",
+      "safetyEs": "Contiene Fu Zi potencialmente tóxico si no está correctamente procesado; contraindicado durante el embarazo y en cuadros de Calor interno de exceso o fiebre."
     },
     {
       "id": 48,
@@ -135,12 +297,30 @@
       "englishName": "Drive Out Stasis Below the Diaphragm Decoction",
       "action": "Invigorates the Blood, removes stasis, promotes the movement of Qi, and relieves pain in the upper or middle abdomen.",
       "actionEs": "Vitaliza la Sangre, elimina la estasis, promueve la circulación de Qi y alivia el dolor en el abdomen superior o medio.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Tao Ren, Hong Hua, Dang Gui",
+      "pattern": "Blood stasis below the diaphragm involving the hypochondrium and upper abdomen.",
+      "patternEs": "Estasis de Sangre bajo el diafragma que afecta hipocondrio y abdomen superior.",
+      "ingredients": "Dang Gui, Chuan Xiong, Chi Shao, Tao Ren, Hong Hua, Zhi Ke, Yan Hu Suo, Gan Cao, Xiang Fu, Wu Ling Zhi, and Dan Pi.",
+      "ingredientsEs": "Dang Gui, Chuan Xiong, Chi Shao, Tao Ren, Hong Hua, Zhi Ke, Yan Hu Suo, Gan Cao, Xiang Fu, Wu Ling Zhi y Dan Pi.",
+      "clue": "A fixed mass or stabbing upper-abdominal or hypochondriac pain worsened by pressure, with persistent fullness.",
+      "clueEs": "Masa fija o dolor punzante en abdomen superior o hipocondrio, peor con presión, con plenitud persistente.",
+      "ingredientRoles": "A strong combination of Blood-breaking herbs with Qi movers such as Xiang Fu, Zhi Ke, and Yan Hu Suo relieves localized visceral pain.",
+      "ingredientRolesEs": "Una combinación potente de hierbas que rompen estasis con movilizadores de Qi como Xiang Fu, Zhi Ke y Yan Hu Suo alivia dolor visceral localizado.",
+      "safety": "Strictly contraindicated during pregnancy because of its strong Blood-moving action.",
+      "safetyEs": "Estrictamente contraindicada durante el embarazo por su intensa acción movilizadora de Sangre."
     },
     {
       "id": 50,
@@ -149,12 +329,30 @@
       "englishName": "Trichosanthes Fruit, Chinese Garlic, and Pinellia Decoction",
       "action": "Unblocks chest Yang, transforms Phlegm, and expands the chest in precordial oppression or pain from Qi and Phlegm obstruction.",
       "actionEs": "Desobstruye el Yang pectoral, transforma la Flema y ensancha el tórax en opresión o dolor precordial por obstrucción de Qi y Flema.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Gua Lou, Xie Bai",
+      "pattern": "Chest painful obstruction from Qi stagnation and turbid Phlegm obstructing the chest.",
+      "patternEs": "Obstrucción dolorosa del tórax por estancamiento de Qi y Flema turbia que bloquea el pecho.",
+      "ingredients": "Gua Lou, Xie Bai, Ban Xia, and Chinese rice wine.",
+      "ingredientsEs": "Gua Lou, Xie Bai, Ban Xia y vino de arroz chino.",
+      "clue": "Severe chest oppression, precordial pain radiating to the back or left arm, breathlessness, and Phlegm expectoration.",
+      "clueEs": "Opresión torácica intensa, dolor precordial irradiado a espalda o brazo izquierdo, sensación de ahogo y expectoración de Flema.",
+      "ingredientRoles": "Gua Lou and Xie Bai open the chest and disperse constrained Yang; Ban Xia transforms Phlegm; wine guides the formula to the upper chest.",
+      "ingredientRolesEs": "Gua Lou y Xie Bai abren el tórax y dispersan Yang constreñido; Ban Xia transforma Flema; el vino guía la fórmula al pecho superior.",
+      "safety": "Do not use for chest oppression due solely to Yin deficiency without Phlegm, or severe deficiency-Heat.",
+      "safetyEs": "No usar en opresión torácica debida únicamente a deficiencia de Yin sin Flema ni en Calor grave por insuficiencia."
     },
     {
       "id": 59,
@@ -163,12 +361,30 @@
       "englishName": "Astragalus Decoction to Construct the Middle",
       "action": "Warms and tonifies Spleen Qi, harmonizes the Middle, and relieves spasmodic pain, with additional Qi support from Huang Qi.",
       "actionEs": "Calienta y tonifica el Qi de Bazo, armoniza el Centro y alivia el dolor espasmódico, con apoyo adicional al Qi por Huang Qi.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Huang Qi, Yi Tang",
+      "pattern": "Spleen and Stomach Qi deficiency with chronic fatigue, muscular laxity, and spasmodic pain.",
+      "patternEs": "Deficiencia de Qi de Bazo y Estómago con fatiga crónica, laxitud muscular y dolor espasmódico.",
+      "ingredients": "Huang Qi, Gui Zhi, Bai Shao, Gan Cao, Sheng Jiang, Da Zao, and Yi Tang.",
+      "ingredientsEs": "Huang Qi, Gui Zhi, Bai Shao, Gan Cao, Sheng Jiang, Da Zao y Yi Tang.",
+      "clue": "Dull abdominal pain improved by warm food and pressure, chronic fatigue, weak limbs, poor appetite, and spontaneous sweating.",
+      "clueEs": "Dolor abdominal sordo que mejora con comida caliente y presión, fatiga crónica, debilidad de extremidades, poco apetito y sudor espontáneo.",
+      "ingredientRoles": "Adds Huang Qi to Xiao Jian Zhong Tang to strengthen superficial Qi tonification and improve constitutional resistance.",
+      "ingredientRolesEs": "Añade Huang Qi a Xiao Jian Zhong Tang para reforzar la tonificación del Qi superficial y la resistencia del organismo.",
+      "safety": "Avoid with interior excess Heat, food stagnation, or severe retained Dampness.",
+      "safetyEs": "Evitar en Calor interno de exceso, estancamiento de alimentos o Humedad retenida intensa."
     },
     {
       "id": 61,
@@ -177,12 +393,30 @@
       "englishName": "Benefit the River (Flow) Decoction",
       "action": "Warms the Kidneys, nourishes the Blood, and moistens the Intestines to facilitate bowel movement in Kidney Yang and Blood deficiency.",
       "actionEs": "Calienta los Riñones, nutre la Sangre y humecta los Intestinos para facilitar la evacuación en deficiencia de Yang de Riñón y Sangre.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Rou Cong Rong",
+      "pattern": "Constipation from Kidney Yang deficiency and insufficient intestinal lubrication.",
+      "patternEs": "Estreñimiento por deficiencia de Yang de Riñón e insuficiente lubricación intestinal.",
+      "ingredients": "Rou Cong Rong, Dang Gui, Niu Xi, Ze Xie, Zhi Ke, and Rou Gui.",
+      "ingredientsEs": "Rou Cong Rong, Dang Gui, Niu Xi, Ze Xie, Zhi Ke y Rou Gui.",
+      "clue": "Difficult passage of stool that may not be hard, with clear abundant urination, low-back pain, and cold low back and knees.",
+      "clueEs": "Evacuación difícil de heces no necesariamente duras, con orina clara abundante, dolor lumbar y frío en región lumbar y rodillas.",
+      "ingredientRoles": "Rou Cong Rong and Rou Gui warm the Kidneys; Dang Gui and Niu Xi nourish and lubricate Blood; Zhi Ke regulates Qi to aid intestinal transit without damaging Qi.",
+      "ingredientRolesEs": "Rou Cong Rong y Rou Gui calientan Riñón; Dang Gui y Niu Xi nutren y lubrican Sangre; Zhi Ke regula Qi para facilitar el tránsito sin dañar Qi.",
+      "safety": "Not appropriate for constipation from Heat accumulation or true Yangming excess.",
+      "safetyEs": "No es apropiada para estreñimiento por acumulación de Calor o verdadero exceso Yangming."
     },
     {
       "id": 62,
@@ -230,12 +464,30 @@
       "englishName": "Augmented Rambling Powder",
       "action": "Courses the Liver, relieves Qi constraint, strengthens the Spleen, nourishes the Blood, clears Heat, and drains Fire.",
       "actionEs": "Desbloquea el Hígado, alivia el estancamiento de Qi, fortalece el Bazo, nutre la Sangre, limpia el Calor y drena el Fuego.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Chai Hu, Dang Gui, Bai Shao",
+      "pattern": "Liver Qi constraint transforming into Fire with concurrent Spleen and Blood deficiency.",
+      "patternEs": "Estancamiento de Qi de Hígado que se transforma en Fuego con deficiencia concomitante de Bazo y Sangre.",
+      "ingredients": "Chai Hu, Dang Gui, Bai Shao, Bai Zhu, Fu Ling, Gan Cao, Bo He, Sheng Jiang, Mu Dan Pi, and Zhi Zi.",
+      "ingredientsEs": "Chai Hu, Dang Gui, Bai Shao, Bai Zhu, Fu Ling, Gan Cao, Bo He, Sheng Jiang, Mu Dan Pi y Zhi Zi.",
+      "clue": "Irritability, mood changes, chest oppression, flank pain, irregular menstruation, hot flashes, and pronounced premenstrual symptoms.",
+      "clueEs": "Irritabilidad, cambios de humor, opresión torácica, dolor costal, menstruación irregular, sofocos y síntomas premenstruales marcados.",
+      "ingredientRoles": "Builds on Xiao Yao San by adding Mu Dan Pi and Zhi Zi to clear Liver Fire generated by constraint.",
+      "ingredientRolesEs": "Amplía Xiao Yao San con Mu Dan Pi y Zhi Zi para eliminar Fuego de Hígado generado por estancamiento.",
+      "safety": "Use cautiously during pregnancy because the formula moves Qi and clears Heat from the Blood.",
+      "safetyEs": "Usar con cautela durante el embarazo porque moviliza Qi y elimina Calor de la Sangre."
     },
     {
       "id": 67,
@@ -244,12 +496,30 @@
       "englishName": "Schizonepeta and Saposhnikovia Powder to Overcome Pathogenic Influences",
       "action": "Releases the Exterior, dispels Wind-Cold-Dampness, relieves toxicity, and reduces early inflammation or swelling.",
       "actionEs": "Libera el Exterior, expulsa Viento-Frío-Humedad, alivia la toxicidad y reduce inflamación o tumefacción inicial.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Jing Jie, Fang Feng",
+      "pattern": "External Wind-Cold-Damp invasion with a tendency toward inflammation, toxicity, or severe body pain.",
+      "patternEs": "Invasión exterior de Viento-Frío-Humedad con tendencia a inflamación, toxicidad o dolor corporal intenso.",
+      "ingredients": "Jing Jie, Fang Feng, Qian Hu, Chai Hu, Qiang Huo, Du Huo, Jie Geng, Chuan Xiong, Fu Ling, and Gan Cao.",
+      "ingredientsEs": "Jing Jie, Fang Feng, Qian Hu, Chai Hu, Qiang Huo, Du Huo, Jie Geng, Chuan Xiong, Fu Ling y Gan Cao.",
+      "clue": "Fever, chills, intense headache, generalized muscle and joint pain, and early superficial swelling or sore throat.",
+      "clueEs": "Fiebre, escalofríos, cefalea intensa, dolor muscular y articular generalizado, e inflamación superficial temprana o dolor de garganta.",
+      "ingredientRoles": "Jing Jie, Fang Feng, Qiang Huo, and Du Huo form a broad exterior-releasing and Wind-Damp-dispelling strategy that opens the pores and relieves pain.",
+      "ingredientRolesEs": "Jing Jie, Fang Feng, Qiang Huo y Du Huo forman una estrategia amplia que libera Exterior, expulsa Viento-Humedad, abre poros y alivia dolor.",
+      "safety": "Do not use for Yin-deficient colds or extreme dryness without an active external pathogen.",
+      "safetyEs": "No usar en resfriados por deficiencia de Yin ni sequedad extrema sin patógeno exterior activo."
     },
     {
       "id": 72,
@@ -258,12 +528,30 @@
       "englishName": "Cool the Diaphragm Powder",
       "action": "Drains Heat, cools the diaphragm, clears the upper digestive tract, and relieves accumulated Heat in the San Jiao.",
       "actionEs": "Drena el Calor, refresca el diafragma, despeja el tracto digestivo superior y alivia la acumulación de Calor en el San Jiao.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Lian Qiao, Zhi Zi",
+      "pattern": "Accumulated Heat in the Middle and Upper Burners, especially the diaphragm and upper digestive tract.",
+      "patternEs": "Calor acumulado en los Jiao Medio y Superior, especialmente diafragma y tracto digestivo alto.",
+      "ingredients": "Lian Qiao, Zhi Zi, Da Huang, Mang Xiao, Gan Cao, Huang Qin, Dan Zhu Ye, and Bo He.",
+      "ingredientsEs": "Lian Qiao, Zhi Zi, Da Huang, Mang Xiao, Gan Cao, Huang Qin, Dan Zhu Ye y Bo He.",
+      "clue": "Suffocating Heat in the chest and diaphragm, irritability, dry mouth, swollen throat, mouth ulcers, constipation, and dark urine.",
+      "clueEs": "Calor sofocante en pecho y diafragma, irritabilidad, boca seca, garganta inflamada, úlceras bucales, estreñimiento y orina oscura.",
+      "ingredientRoles": "Da Huang and Mang Xiao purge accumulated Heat downward while Huang Qin, Zhi Zi, and Lian Qiao clear upper-Burner Heat.",
+      "ingredientRolesEs": "Da Huang y Mang Xiao purgan Calor acumulado hacia abajo, mientras Huang Qin, Zhi Zi y Lian Qiao eliminan Calor del Jiao Superior.",
+      "safety": "Contraindicated in debilitated patients or diarrhea from Spleen Cold.",
+      "safetyEs": "Contraindicada en pacientes debilitados o con diarrea por Frío de Bazo."
     },
     {
       "id": 74,
@@ -272,12 +560,30 @@
       "englishName": "Antelope Horn and Uncaria Decoction",
       "action": "Calms the Liver, extinguishes Wind, clears Heat, and settles hyperactive Yang in internal-Wind presentations.",
       "actionEs": "Calma el Hígado, extingue el Viento, limpia el Calor y pacifica el Yang hiperactivo en cuadros de Viento interno.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Ling Jiao, Gou Teng",
+      "pattern": "Extreme Liver Heat generating internal Wind with risk of convulsions or acute neurologic crisis.",
+      "patternEs": "Calor extremo de Hígado que genera Viento interno con riesgo de convulsiones o crisis neurológica aguda.",
+      "ingredients": "Ling Jiao, Gou Teng, Sang Ye, Ju Hua, Di Huang, Bai Shao, Chuan Bei Mu, Fu Shen, Zhu Ru, and Gan Cao.",
+      "ingredientsEs": "Ling Jiao, Gou Teng, Sang Ye, Ju Hua, Di Huang, Bai Shao, Chuan Bei Mu, Fu Shen, Zhu Ru y Gan Cao.",
+      "clue": "High fever, convulsions, muscle spasms, tremors, stiff neck, deviated eyes, or intense dizziness.",
+      "clueEs": "Fiebre alta, convulsiones, espasmos musculares, temblores, rigidez cervical, desviación ocular o mareo intenso.",
+      "ingredientRoles": "Ling Jiao strongly cools Blood and settles the Liver; Gou Teng, Sang Ye, and Ju Hua extinguish Wind; Di Huang and Bai Shao protect underlying Yin.",
+      "ingredientRolesEs": "Ling Jiao enfría intensamente Sangre y calma Hígado; Gou Teng, Sang Ye y Ju Hua extinguen Viento; Di Huang y Bai Shao protegen Yin subyacente.",
+      "safety": "Requires emergency-level clinical supervision. Traditional antelope horn is from a protected animal; modern legal substitutes must follow current regulation.",
+      "safetyEs": "Requiere supervisión clínica de nivel urgente. El cuerno de antílope tradicional procede de un animal protegido; los sustitutos modernos legales deben seguir la normativa vigente."
     },
     {
       "id": 75,
@@ -286,12 +592,30 @@
       "englishName": "Six-Gentlemen Decoction",
       "action": "Tonifies Spleen Qi and transforms Phlegm-Dampness in Spleen deficiency with internal Phlegm accumulation.",
       "actionEs": "Tonifica el Qi de Bazo y transforma Flema-Humedad en deficiencia de Bazo con acumulación interna de Flema.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Ren Shen, Bai Zhu",
+      "pattern": "Spleen Qi deficiency with internal Phlegm-Damp retention.",
+      "patternEs": "Deficiencia de Qi de Bazo con retención interna de Flema-Humedad.",
+      "ingredients": "Ren Shen, Bai Zhu, Fu Ling, Zhi Gan Cao, Ban Xia, and Chen Pi.",
+      "ingredientsEs": "Ren Shen, Bai Zhu, Fu Ling, Zhi Gan Cao, Ban Xia y Chen Pi.",
+      "clue": "Poor appetite, fatigue, postprandial epigastric or abdominal distention, nausea, occasional vomiting, and clear white Phlegm.",
+      "clueEs": "Poco apetito, fatiga, distensión epigástrica o abdominal tras comer, náuseas, vómitos ocasionales y Flema blanca clara.",
+      "ingredientRoles": "Adds Ban Xia and Chen Pi, the core of Er Chen Tang, to Si Jun Zi Tang so Spleen Qi is tonified while Phlegm is directly transformed.",
+      "ingredientRolesEs": "Añade Ban Xia y Chen Pi, núcleo de Er Chen Tang, a Si Jun Zi Tang para tonificar Qi de Bazo y transformar directamente Flema.",
+      "safety": "Avoid in deficiency-Heat or pure Stomach dryness.",
+      "safetyEs": "Evitar en Calor por deficiencia o sequedad pura de Estómago."
     },
     {
       "id": 81,
@@ -300,12 +624,30 @@
       "englishName": "Hemp Seed Pill",
       "action": "Moistens the Intestines, promotes fluid movement, and drains Heat to treat constipation from intestinal dryness.",
       "actionEs": "Humecta los Intestinos, promueve el movimiento de líquidos y descarga el Calor para tratar estreñimiento por sequedad intestinal.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Huo Ma Ren",
+      "pattern": "Intestinal dryness constipation from Stomach Heat and disordered fluid distribution.",
+      "patternEs": "Estreñimiento por sequedad intestinal debido a Calor de Estómago y distribución alterada de líquidos.",
+      "ingredients": "Huo Ma Ren, Shao Yao, Zhi Shi, Hou Po, Da Huang, and Xing Ren.",
+      "ingredientsEs": "Huo Ma Ren, Shao Yao, Zhi Shi, Hou Po, Da Huang y Xing Ren.",
+      "clue": "Dry pellet-like stools, frequent urination from diversion of fluids to the Bladder, and no severe abdominal pain.",
+      "clueEs": "Heces secas en bolitas, micción frecuente por desvío de líquidos hacia Vejiga y ausencia de dolor abdominal intenso.",
+      "ingredientRoles": "Huo Ma Ren moistens the Intestines; Da Huang, Zhi Shi, and Hou Po move Qi and discharge Heat; Xing Ren descends Lung Qi to assist defecation.",
+      "ingredientRolesEs": "Huo Ma Ren humecta Intestinos; Da Huang, Zhi Shi y Hou Po mueven Qi y descargan Calor; Xing Ren desciende Qi de Pulmón para ayudar a defecar.",
+      "safety": "Avoid during pregnancy because of the strong purgative and intestinal-stimulating action.",
+      "safetyEs": "Evitar durante el embarazo por la potente acción purgante y estimulante intestinal."
     },
     {
       "id": 86,
@@ -314,12 +656,30 @@
       "englishName": "Universal Benefit Drink to Eliminate Toxin",
       "action": "Clears Heat, relieves toxicity, and disperses epidemic Wind-Heat affecting the head and throat.",
       "actionEs": "Limpia el Calor, alivia la toxicidad y dispersa Viento-Calor epidémico que afecta la cabeza y la garganta.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Huang Qin, Huang Lian",
+      "pattern": "Acute epidemic toxic Wind-Heat attacking the head and face.",
+      "patternEs": "Ataque agudo de Viento-Calor epidémico tóxico localizado en cabeza y cara.",
+      "ingredients": "Huang Qin, Huang Lian, Niu Bang Zi, Bo He, Jiang Can, Sheng Ma, Chai Hu, Jie Geng, Gan Cao, Ban Lan Gen, and Xuan Shen.",
+      "ingredientsEs": "Huang Qin, Huang Lian, Niu Bang Zi, Bo He, Jiang Can, Sheng Ma, Chai Hu, Jie Geng, Gan Cao, Ban Lan Gen y Xuan Shen.",
+      "clue": "Severe painful swelling of the face, head, and neck, very red swollen throat, high fever, and chills.",
+      "clueEs": "Hinchazón intensa y dolorosa de cara, cabeza y cuello, garganta muy roja e inflamada, fiebre alta y escalofríos.",
+      "ingredientRoles": "Huang Qin and Huang Lian strongly clear toxic Heat; the remaining herbs relieve toxicity and guide the treatment to the upper body and throat.",
+      "ingredientRolesEs": "Huang Qin y Huang Lian eliminan intensamente Calor tóxico; las demás hierbas alivian toxicidad y dirigen el tratamiento a la parte superior y garganta.",
+      "safety": "Contraindicated in chronic Cold disorders or severe digestive weakness because of the formula's intensely cold nature.",
+      "safetyEs": "Contraindicada en trastornos crónicos por Frío o debilidad digestiva grave por la naturaleza intensamente fría de la fórmula."
     },
     {
       "id": 87,
@@ -328,12 +688,30 @@
       "englishName": "Lycium Fruit, Chrysanthemum, and Rehmannia Pill",
       "action": "Nourishes Liver and Kidney Yin, clears the eyes, and supports vision in Yin-deficiency presentations.",
       "actionEs": "Nutre el Yin de Hígado y Riñón, aclara los ojos y apoya la visión en cuadros de deficiencia de Yin.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Shu Di Huang, Gou Qi Zi, Ju Hua",
+      "pattern": "Liver and Kidney Yin deficiency affecting the eyes.",
+      "patternEs": "Deficiencia de Yin de Hígado y Riñón que afecta los ojos.",
+      "ingredients": "Gou Qi Zi, Ju Hua, Shu Di Huang, Shan Zhu Yu, Shan Yao, Ze Xie, Mu Dan Pi, and Fu Ling.",
+      "ingredientsEs": "Gou Qi Zi, Ju Hua, Shu Di Huang, Shan Zhu Yu, Shan Yao, Ze Xie, Mu Dan Pi y Fu Ling.",
+      "clue": "Dry eyes, blurred vision, visual fatigue, photophobia, dizziness, and mild tinnitus.",
+      "clueEs": "Ojos secos, visión borrosa, fatiga visual, fotofobia, mareos y acúfenos leves.",
+      "ingredientRoles": "Liu Wei Di Huang Wan nourishes systemic Yin; Gou Qi Zi and Ju Hua specifically nourish the Liver and clear the eyes.",
+      "ingredientRolesEs": "Liu Wei Di Huang Wan nutre Yin general; Gou Qi Zi y Ju Hua nutren específicamente Hígado y aclaran los ojos.",
+      "safety": "Use cautiously with Phlegm-Damp digestive disorders because the nourishing ingredients can be heavy and cloying.",
+      "safetyEs": "Usar con cautela en trastornos digestivos por Flema-Humedad porque los ingredientes nutritivos pueden ser pesados y empalagosos."
     },
     {
       "id": 90,
@@ -342,12 +720,30 @@
       "englishName": "Cool the Bones Powder",
       "action": "Clears deep Heat, drains deficiency Fire, and relieves afternoon fever or steaming-bone sensations.",
       "actionEs": "Limpia el Calor profundo, drena el Fuego por deficiencia y alivia la fiebre vespertina o la sensación de calor en los huesos.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Yin Chai Hu, Hu Huang Lian, Bie Jia",
+      "pattern": "Yin-deficiency Fire penetrating deeply into the bones and causing steaming-bone fever.",
+      "patternEs": "Fuego por deficiencia de Yin que penetra profundamente en huesos y causa fiebre de huesos humeantes.",
+      "ingredients": "Yin Chai Hu, Hu Huang Lian, Qin Pi, Di Gu Pi, Zhi Mu, Bie Jia, Qing Hao, and Gan Cao.",
+      "ingredientsEs": "Yin Chai Hu, Hu Huang Lian, Qin Pi, Di Gu Pi, Zhi Mu, Bie Jia, Qing Hao y Gan Cao.",
+      "clue": "Deep internal or bone Heat, afternoon or nocturnal fever, night sweats, emaciation, and a red tongue with scant coating.",
+      "clueEs": "Calor interno profundo o en huesos, fiebre vespertina o nocturna, sudores nocturnos, emaciación y lengua roja con poca saburra.",
+      "ingredientRoles": "Bie Jia, Qing Hao, and Yin Chai Hu draw hidden Heat from the deep Blood and bone levels without further damaging residual Yin.",
+      "ingredientRolesEs": "Bie Jia, Qing Hao y Yin Chai Hu extraen Calor oculto de niveles profundos de Sangre y huesos sin lesionar más el Yin residual.",
+      "safety": "Do not use for externally contracted fever or diarrhea from Spleen Cold.",
+      "safetyEs": "No usar en fiebre de origen exterior ni diarrea por Frío de Bazo."
     },
     {
       "id": 93,
@@ -356,12 +752,30 @@
       "englishName": "Clear the Stomach Powder",
       "action": "Clears Stomach Heat and cools the Blood in toothache and swollen or bleeding gums from Stomach Fire.",
       "actionEs": "Limpia el Calor de Estómago y enfría la Sangre en dolor dental y encías inflamadas o sangrantes por Fuego de Estómago.",
-      "verificationStatus": "partial",
+      "verificationStatus": "complete",
       "verifiedFields": [
-        "action"
+        "pattern",
+        "action",
+        "clue",
+        "ingredients",
+        "ingredientRoles",
+        "kings",
+        "safety",
+        "source"
       ],
-      "source": "User-supplied formula action summary.",
-      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+      "source": "User-supplied detailed formula profile.",
+      "sourceEs": "Perfil detallado de fórmula suministrado por el usuario.",
+      "kings": "Huang Lian, Sheng Di Huang",
+      "pattern": "Stomach-channel Fire rising to the mouth and face.",
+      "patternEs": "Fuego del canal de Estómago que asciende hacia boca y cara.",
+      "ingredients": "Huang Lian, Sheng Di Huang, Mu Dan Pi, Sheng Ma, and Dang Gui.",
+      "ingredientsEs": "Huang Lian, Sheng Di Huang, Mu Dan Pi, Sheng Ma y Dang Gui.",
+      "clue": "Toothache, swollen painful bleeding gums, halitosis, dry mouth, red lips, and facial burning.",
+      "clueEs": "Dolor dental, encías inflamadas, dolorosas y sangrantes, halitosis, boca seca, labios rojos y ardor facial.",
+      "ingredientRoles": "Huang Lian drains Stomach Fire; Sheng Di Huang and Mu Dan Pi cool Blood and reduce local inflammation; Sheng Ma vents the Fire upward and outward.",
+      "ingredientRolesEs": "Huang Lian drena Fuego de Estómago; Sheng Di Huang y Mu Dan Pi enfrían Sangre y reducen inflamación local; Sheng Ma libera el Fuego hacia arriba y afuera.",
+      "safety": "Avoid prolonged use for dental pain due to true Yin deficiency without evident Stomach Heat.",
+      "safetyEs": "Evitar uso prolongado en dolor dental por verdadera deficiencia de Yin sin Calor de Estómago evidente."
     }
   ]
 }
