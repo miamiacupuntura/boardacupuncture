@@ -239,6 +239,14 @@ $areas = [
                 'secondary' => true,
             ],
             [
+                'title' => 'Formula and Actions',
+                'description' => 'Review 63 official guideline formulas by category and principal action, with direct links to every formula card.',
+                'path' => '/blocks/myprogress/formula-actions.php',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 63 GUIDELINE FORMULAS',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Formula Comparisons',
                 'description' => 'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.',
                 'path' => '/study-guide/comparisons/formulas.html',
@@ -314,6 +322,8 @@ $areas = [
 ];
 
 $spanishcopy = [
+    'Formula and Actions' => 'Fórmulas y acciones',
+    'Review 63 official guideline formulas by category and principal action, with direct links to every formula card.' => 'Repasa las 63 fórmulas oficiales del guideline por categoría y acción principal, con enlaces directos a cada tarjeta.',
     'Chinese Herbology' => 'Herbología China',
     'Study Single Herbs, Duì Yào and Formulas, then compare their related—but distinct—Bensky classification levels.' => 'Estudia Hierbas individuales, Duì Yào y Fórmulas; después compara sus niveles de clasificación Bensky, relacionados pero distintos.',
     'Single Herbs' => 'Hierbas individuales',
