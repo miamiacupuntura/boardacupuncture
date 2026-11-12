@@ -257,6 +257,27 @@ foreach ($herbindex['herbs'] as $position => $official) {
     ];
 }
 uasort($herbs, static fn(array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
+$haschief = static function(string $chieftext, string $herbname) use ($normalize): bool {
+    $target = $normalize($herbname);
+    $haystack = $normalize($chieftext);
+    return $target !== '' && $haystack !== ''
+        && preg_match('/(^| )' . preg_quote($target, '/') . '( |$)/', $haystack) === 1;
+};
+$chiefherboptions = [];
+foreach ($herbs as $herb) {
+    $formulacount = 0;
+    foreach ($formulas as $formula) {
+        if ($haschief($formula['kings'], $herb['name'])) {
+            $formulacount++;
+        }
+    }
+    if ($formulacount > 0) {
+        $chiefherboptions[] = [
+            'name' => $herb['name'],
+            'count' => $formulacount,
+        ];
+    }
+}
 
 $tonguerows = [];
 $officialformula = [];
@@ -331,10 +352,8 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
     usort($ingredientresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
     $ingredientresults = array_slice($ingredientresults, 0, 12);
 } else if ($mode === 'chief' && $item !== '') {
-    $target = $normalize($item);
     foreach ($formulas as $candidate) {
-        $chieftext = $normalize($candidate['kings']);
-        if ($chieftext === '' || !preg_match('/(^| )' . preg_quote($target, '/') . '( |$)/', $chieftext)) continue;
+        if (!$haschief($candidate['kings'], $item)) continue;
         $chiefresults[] = ['score' => 1.0, 'card' => $candidate, 'reasons' => [$ises ? 'Usa esta hierba como Chief' : 'Uses this herb as a Chief']];
     }
     usort($chiefresults, static fn(array $left, array $right): int => strnatcasecmp($left['card']['name'], $right['card']['name']));
@@ -511,7 +530,7 @@ echo $OUTPUT->header();
             <p><?php echo $ises ? 'Organiza las fórmulas oficiales por hierba principal y función.' : 'Browse official formulas by principal herb and function.'; ?></p>
             <form class="smart-tools__form" method="get">
                 <input type="hidden" name="mode" value="chief"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-                <label><span><?php echo $ises ? 'Chief herb' : 'Chief herb'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar hierba…' : 'Select an herb…'; ?></option><?php foreach ($herbs as $herb) { ?><option value="<?php echo s($herb['name']); ?>"<?php echo $normalize($item) === $normalize($herb['name']) ? ' selected' : ''; ?>><?php echo s($herb['name']); ?></option><?php } ?></select></label>
+                <label><span><?php echo $ises ? 'Chief herb documentada' : 'Documented Chief herb'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar Chief herb…' : 'Select a Chief herb…'; ?></option><?php foreach ($chiefherboptions as $chiefoption) { ?><option value="<?php echo s($chiefoption['name']); ?>"<?php echo $normalize($item) === $normalize($chiefoption['name']) ? ' selected' : ''; ?>><?php echo s($chiefoption['name'] . ' (' . $chiefoption['count'] . ')'); ?></option><?php } ?></select></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar fórmulas' : 'Find formulas'; ?></button>
             </form>
         <?php } else if ($mode === 'pattern' || $mode === 'clinical' || $mode === 'clue' || $mode === 'safety' || $mode === 'tongue') {
@@ -607,7 +626,9 @@ echo $OUTPUT->header();
     ?>
         <header class="smart-tools__results-heading"><h3><?php echo $ises ? 'Resultados relacionados' : 'Related results'; ?></h3><span><?php echo $resultcount; ?> <?php echo $ises ? 'resultados' : 'results'; ?></span></header>
         <?php if ($resultcount === 0) { ?>
-            <p class="smart-tools__empty"><?php echo $ises ? 'No se encontraron coincidencias verificadas. Prueba términos más generales u otra hierba.' : 'No verified matches were found. Try broader terms or another herb.'; ?></p>
+            <p class="smart-tools__empty"><?php echo $mode === 'chief'
+                ? ($ises ? 'Esta hierba no está documentada como Chief en ninguna fórmula oficial del guideline.' : 'This herb is not documented as a Chief in any official guideline formula.')
+                : ($ises ? 'No se encontraron coincidencias verificadas. Prueba términos más generales u otra hierba.' : 'No verified matches were found. Try broader terms or another herb.'); ?></p>
         <?php } else { ?>
             <div class="smart-tools__results">
                 <?php if (in_array($mode, ['formula', 'ingredients', 'chief', 'pattern', 'clinical', 'clue', 'tongue'], true)) {
