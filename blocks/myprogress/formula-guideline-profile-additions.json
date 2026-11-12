@@ -1,0 +1,32 @@
+{
+  "source": "User-provided Bensky formula profile pages 55–56",
+  "total": 1,
+  "formulas": [
+    {
+      "id": 62,
+      "name": "Jia Jian Wei Rui Tang",
+      "englishName": "Modified Solomon's Seal Decoction",
+      "categoryKey": "release-exterior",
+      "source": "Bensky formula profile, pp. 55–56.",
+      "sourceEs": "Perfil de fórmula de Bensky, pp. 55–56.",
+      "kings": "Yu Zhu",
+      "pattern": "Externally contracted Wind-Heat in a patient with underlying Yin and fluid deficiency.",
+      "patternEs": "Viento-Calor contraído externamente en un paciente con deficiencia subyacente de Yin y líquidos.",
+      "action": "Nourishes the Yin, clears Heat, induces sweating, and releases the Exterior.",
+      "actionEs": "Nutre el Yin, elimina Calor, induce sudoración y libera el Exterior.",
+      "clue": "Fever with slight chills, little or no sweating, headache, dry throat, cough with sputum that is difficult to expectorate, thirst, irritability, a dark-red tongue, and a rapid pulse.",
+      "clueEs": "Fiebre con escalofríos leves, poco o ningún sudor, cefalea, garganta seca, tos con esputo difícil de expectorar, sed, irritabilidad, lengua rojo-oscura y pulso rápido.",
+      "examFocus": "Choose it when an exterior Wind-Heat presentation occurs on a Yin-deficient, fluid-depleted background: the patient needs a physiological sweat, but stronger dispersing herbs could further injure the fluids.",
+      "examFocusEs": "Elígela cuando un cuadro exterior de Viento-Calor ocurre sobre deficiencia de Yin y agotamiento de líquidos: el paciente necesita un sudor fisiológico, pero los dispersantes más fuertes podrían lesionar aún más los líquidos.",
+      "ingredients": "Yu Zhu, Cong Bai, Jie Geng, Dan Dou Chi, Bo He, Bai Wei, Zhi Gan Cao, and Da Zao.",
+      "ingredientsEs": "Yu Zhu, Cong Bai, Jie Geng, Dan Dou Chi, Bo He, Bai Wei, Zhi Gan Cao y Da Zao.",
+      "ingredientRoles": "Yu Zhu is the Chief: it nourishes Lung and Stomach Yin, clears Heat, and generates fluids without causing stagnation. Cong Bai, Dan Dou Chi, and Bo He mildly vent Wind-Heat. Bai Wei cools the Blood and clears Heat without injuring Yin. Jie Geng disseminates Lung Qi, stops cough, and expels phlegm. Zhi Gan Cao and Da Zao assist moistening and harmonize the formula.",
+      "ingredientRolesEs": "Yu Zhu es la hierba Chief: nutre el Yin de Pulmón y Estómago, elimina Calor y genera líquidos sin causar estancamiento. Cong Bai, Dan Dou Chi y Bo He liberan suavemente el Viento-Calor. Bai Wei enfría la Sangre y elimina Calor sin lesionar el Yin. Jie Geng difunde el Qi de Pulmón, detiene la tos y expulsa Flema. Zhi Gan Cao y Da Zao ayudan a humectar y armonizan la fórmula.",
+      "comparison": "The original Wei Rui Tang uses stronger acrid-warm exterior dispersants. This modified formula replaces that emphasis with Cong Bai and Dan Dou Chi so Wind-Heat can be vented while Yu Zhu protects and restores depleted fluids.",
+      "comparisonEs": "La Wei Rui Tang original utiliza dispersantes exteriores acre-tibios más fuertes. Esta modificación reemplaza ese énfasis con Cong Bai y Dan Dou Chi para liberar Viento-Calor mientras Yu Zhu protege y restaura los líquidos agotados.",
+      "safety": "Use only for the described exterior Wind-Heat presentation with underlying Yin and fluid deficiency. The supplied pages do not provide a separate contraindications section; individual-herb precautions still require review.",
+      "safetyEs": "Usar únicamente para el cuadro descrito de Viento-Calor exterior con deficiencia subyacente de Yin y líquidos. Las páginas suministradas no incluyen una sección separada de contraindicaciones; aún deben revisarse las precauciones de cada hierba.",
+      "safetyTier": "source-limited"
+    }
+  ]
+}
