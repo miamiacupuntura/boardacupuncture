@@ -1466,3 +1466,8 @@ select:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
 .herb-feedback-option-links a{display:flex;align-items:center;min-height:42px;padding:9px 11px;border:1px solid #b8cbd7;border-radius:8px;background:#fff;color:#0f4c81;font-weight:800;text-decoration:none}
 .herb-feedback-option-links a:hover,.herb-feedback-option-links a:focus{border-color:#087c69;background:#eef8f5;color:#075f54;text-decoration:none}
 @media(max-width:700px){.herb-feedback-option-links{grid-template-columns:1fr}}
+
+.herb-feedback-option-links a.is-correct{border-color:#14804a;background:#e4f5eb;color:#075d37}
+.herb-feedback-option-links a.is-correct:hover,.herb-feedback-option-links a.is-correct:focus{border-color:#0d6b3c;background:#d5efdf;color:#064d2f}
+.herb-feedback-option-links a.is-selected-incorrect{border-color:#dc4c40;background:#fff0ed;color:#9f261f}
+.herb-feedback-option-links a.is-selected-incorrect:hover,.herb-feedback-option-links a.is-selected-incorrect:focus{border-color:#c43b31;background:#ffe3df;color:#852019}

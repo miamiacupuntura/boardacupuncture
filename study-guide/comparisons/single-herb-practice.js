@@ -445,6 +445,13 @@
           source.href = `/blocks/myprogress/single-herbs-list.php?${params}`;
           source.textContent = `${option.label}. ${option.profile.name} — ${copy.openCard}`;
           source.dataset.herbSourceLink = '';
+          if (option.label === question.correctLabel) {
+            source.classList.add('is-correct');
+            source.setAttribute('aria-label', `${source.textContent} (${copy.correct})`);
+          } else if (option.label === answer.label) {
+            source.classList.add('is-selected-incorrect');
+            source.setAttribute('aria-label', `${source.textContent} (${copy.incorrect})`);
+          }
           source.addEventListener('click', event => openSourceViewer(event, source, option.profile, index + 1));
           optionLinks.append(source);
         });

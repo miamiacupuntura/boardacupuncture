@@ -35,13 +35,16 @@ for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/$file"
 done
 
-grep -Fq "single-herb-practice.js?v=20261112-1" "$TEMP_DIR/single-herb-practice.html"
-grep -Fq "comparisons.css?v=20261112-1" "$TEMP_DIR/single-herb-practice-es.html"
+grep -Fq "single-herb-practice.js?v=20261112-2" "$TEMP_DIR/single-herb-practice.html"
+grep -Fq "comparisons.css?v=20261112-2" "$TEMP_DIR/single-herb-practice-es.html"
 grep -Fq "data-herb-previous" "$TEMP_DIR/single-herb-practice.html"
 grep -Fq "data-herb-next" "$TEMP_DIR/single-herb-practice-es.html"
 grep -Fq "data-herb-restart" "$TEMP_DIR/single-herb-practice-es.html"
 grep -Fq "function showQuestion" "$TEMP_DIR/single-herb-practice.js"
 grep -Fq "herb-feedback-option-links" "$TEMP_DIR/single-herb-practice.js"
+grep -Fq "is-correct" "$TEMP_DIR/single-herb-practice.js"
+grep -Fq "is-selected-incorrect" "$TEMP_DIR/single-herb-practice.js"
+grep -Fq ".herb-feedback-option-links a.is-correct" "$TEMP_DIR/comparisons.css"
 grep -Fq "/blocks/myprogress/single-herbs-list.php" "$TEMP_DIR/single-herb-practice.js"
 grep -Fq "formula-practice-navigation" "$TEMP_DIR/comparisons.css"
 grep -Fq "allResources: 'Exam History'" "$TEMP_DIR/library-navigation.js"
