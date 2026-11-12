@@ -77,6 +77,18 @@ $herbcategorypageids = [
     'expel-parasites' => 'expel-parasites',
     'external-application' => 'external-use',
 ];
+$safetypresets = [
+    ['en' => 'Pregnancy', 'es' => 'Embarazo', 'queryen' => 'pregnancy', 'queryes' => 'embarazo'],
+    ['en' => 'Toxicity', 'es' => 'Toxicidad', 'queryen' => 'toxic', 'queryes' => 'toxicidad'],
+    ['en' => 'Anticoagulants', 'es' => 'Anticoagulantes', 'queryen' => 'anticoagulants', 'queryes' => 'anticoagulantes'],
+    ['en' => 'Bleeding risk', 'es' => 'Riesgo de sangrado', 'queryen' => 'bleeding', 'queryes' => 'sangrado'],
+    ['en' => 'Hypertension', 'es' => 'Hipertensión', 'queryen' => 'hypertension', 'queryes' => 'hipertensión'],
+    ['en' => 'Stimulants', 'es' => 'Estimulantes', 'queryen' => 'stimulant', 'queryes' => 'estimulante'],
+    ['en' => 'Drug interactions', 'es' => 'Interacciones', 'queryen' => 'interactions', 'queryes' => 'interacciones'],
+    ['en' => 'Special preparation', 'es' => 'Preparación especial', 'queryen' => 'preparation', 'queryes' => 'preparación'],
+    ['en' => 'Diarrhea / weak digestion', 'es' => 'Diarrea / digestión débil', 'queryen' => 'diarrhea', 'queryes' => 'diarrea'],
+    ['en' => 'Dehydration', 'es' => 'Deshidratación', 'queryen' => 'dehydration', 'queryes' => 'deshidratación'],
+];
 
 $formularosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $formulaprofilespath = __DIR__ . '/formulas-study-guide-data.json';
@@ -619,6 +631,7 @@ echo $OUTPUT->header();
 .smart-tools__launchers{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.smart-tools__launcher{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:10px 16px;border-radius:9px;background:#0d7868;color:#fff!important;font-weight:900;text-decoration:none!important}.smart-tools__launcher--alt{background:#6d28d9}.smart-tools__notice{margin:18px 0 0;padding:13px 15px;border-left:5px solid #6d28d9;border-radius:9px;background:#f5f0ff;color:#4c1d95}.smart-tools__results-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:26px 0 13px}.smart-tools__results-heading h3{margin:0;font-size:24px}.smart-tools__results-heading span{color:#526b84;font-weight:800}
 .smart-tools__results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.smart-tools__result{padding:18px;border:1px solid #cbd9df;border-top:5px solid #087c69;border-radius:12px;background:#fff}.smart-tools__result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.smart-tools__result h4{margin:0;font-size:20px}.smart-tools__score{flex:0 0 auto;padding:5px 9px;border-radius:999px;background:#e8f7f1;color:#075f50;font-size:12px;font-weight:950}.smart-tools__category{margin:5px 0 10px;color:#6d28d9;font-size:12px;font-weight:850}.smart-tools__result dl{display:grid;grid-template-columns:105px 1fr;gap:8px 10px;margin:0}.smart-tools__result dt{font-size:12px;font-weight:900}.smart-tools__result dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}.smart-tools__reason{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.smart-tools__reason span{padding:4px 8px;border-radius:999px;background:#fff1d6;color:#7c4308;font-size:11px;font-weight:850}.smart-tools__open{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border-radius:8px;background:#0d7868;color:#fff!important;font-weight:850;text-decoration:none!important}.smart-tools__empty{margin-top:22px;padding:26px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;text-align:center;color:#526b84;font-weight:800}
 .smart-tools__method{margin-top:22px;padding:15px;border-left:5px solid #e9a11b;border-radius:9px;background:#fff8e9;color:#71420c;line-height:1.5}
+.smart-tools__presets{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.smart-tools__presets-label{flex-basis:100%;margin:0;color:#526b84;font-size:12px;font-weight:900}.smart-tools__preset{display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border:1px solid #d4c2ef;border-radius:999px;background:#f7f2ff;color:#5b21b6!important;font-size:12px;font-weight:850;text-decoration:none!important}.smart-tools__preset:hover,.smart-tools__preset:focus{border-color:#6d28d9;background:#6d28d9;color:#fff!important}
 .smart-tools__category-actions{margin-top:14px}.smart-tools__category-panel{scroll-margin-top:18px;margin-top:24px;padding:14px;border:1px solid #b9d8d2;border-top:5px solid #087c69;border-radius:13px;background:#fff}.smart-tools__category-panel[hidden]{display:none}.smart-tools__category-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}.smart-tools__category-panel-head h3{margin:0;font-size:22px}.smart-tools__category-frame{display:block;width:100%;height:520px;border:1px solid #d1e0e4;border-radius:9px;background:#fff}
 @media(max-width:800px){.smart-tools__hero{display:block}.smart-tools__actions{margin-top:16px}.smart-tools__form,.smart-tools__results{grid-template-columns:1fr}.smart-tools__result dl{grid-template-columns:1fr}.smart-tools__result dd{margin-top:-4px}}
 </style>
@@ -736,9 +749,13 @@ echo $OUTPUT->header();
                     ? ($ises ? 'Selecciona o escribe un patrón' : 'Select or type a pattern')
                     : ($mode === 'tongue'
                         ? ($ises ? 'Selecciona o escribe lengua y pulso' : 'Select or type tongue and pulse')
-                        : ($ises ? 'Términos de búsqueda' : 'Search terms')); ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"<?php echo ($mode === 'pattern' || $mode === 'clinical')
+                        : ($mode === 'safety'
+                            ? ($ises ? 'Selecciona o escribe un tema de seguridad' : 'Select or type a safety topic')
+                            : ($ises ? 'Términos de búsqueda' : 'Search terms'))); ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"<?php echo ($mode === 'pattern' || $mode === 'clinical')
                         ? ' list="smart-pattern-options" autocomplete="off"'
-                        : ($mode === 'tongue' ? ' list="smart-tongue-pulse-options" autocomplete="off"' : ''); ?>></label>
+                        : ($mode === 'tongue'
+                            ? ' list="smart-tongue-pulse-options" autocomplete="off"'
+                            : ($mode === 'safety' ? ' list="smart-safety-options" autocomplete="off"' : '')); ?>></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar' : 'Search'; ?></button>
                 <?php if ($mode === 'pattern' || $mode === 'clinical') { ?>
                     <datalist id="smart-pattern-options">
@@ -756,7 +773,23 @@ echo $OUTPUT->header();
                         <?php } ?>
                     </datalist>
                 <?php } ?>
+                <?php if ($mode === 'safety') { ?>
+                    <datalist id="smart-safety-options">
+                        <?php foreach ($safetypresets as $safetypreset) { ?><option value="<?php echo s($safetypreset[$ises ? 'queryes' : 'queryen']); ?>"><?php echo s($safetypreset[$ises ? 'es' : 'en']); ?></option><?php } ?>
+                    </datalist>
+                <?php } ?>
             </form>
+            <?php if ($mode === 'safety') { ?>
+                <div class="smart-tools__presets" aria-label="<?php echo s($ises ? 'Búsquedas de seguridad sugeridas' : 'Suggested safety searches'); ?>">
+                    <p class="smart-tools__presets-label"><?php echo $ises ? 'Búsquedas rápidas:' : 'Quick searches:'; ?></p>
+                    <?php foreach ($safetypresets as $safetypreset) {
+                        $presetquery = $safetypreset[$ises ? 'queryes' : 'queryen'];
+                        $presetparams = ['mode' => 'safety', 'q' => $presetquery];
+                        if ($ises) $presetparams['lang'] = 'es';
+                        $preseturl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $presetparams);
+                    ?><a class="smart-tools__preset" href="<?php echo $preseturl->out(false); ?>"><?php echo s($safetypreset[$ises ? 'es' : 'en']); ?></a><?php } ?>
+                </div>
+            <?php } ?>
         <?php } else if ($mode === 'dui') { ?>
             <p class="smart-tools__eyebrow"><?php echo $ises ? '51 PARES OFICIALES · 77 HIERBAS BUSCABLES' : '51 OFFICIAL PAIRS · 77 SEARCHABLE HERBS'; ?></p>
             <h3><?php echo $ises ? 'Buscador de pares Duì Yào por hierba' : 'Duì Yào Pairs by Herb'; ?></h3>
