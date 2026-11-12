@@ -22,7 +22,7 @@ trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
-DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json)
+DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
@@ -51,6 +51,9 @@ grep -Fq 'Multiple Chief-herb groups' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq '$chiefgroupoptions' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'data-herb-category-toggle' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'data-herb-category-panel' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq 'Duì Yào Pairs by Herb' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq '$duiherbcounts' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq '"total": 51' "$TEMP_DIR/data/dui-yao-smart-data.json"
 grep -Fq 'is-embedded' "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq 'PARAM_BOOL' "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "subject-study-library__smart-top" "$TEMP_DIR/moodle/study-guide.php"
@@ -153,6 +156,7 @@ echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgo
 echo "OK: Chief Herb Alternatives muestra 117 hierbas individuales y 78 grupos múltiples documentados."
 echo "OK: Similar Formulas, Similar Herbs, Pattern, Tongue & Pulse, Ingredients y Chief usan el guideline verificado."
 echo "OK: Similar Herbs despliega debajo la tabla comparativa de su categoría Bensky."
+echo "OK: Duì Yào permite buscar 51 pares oficiales desde un índice de 77 hierbas."
 echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con sus bancos oficiales."
 echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
