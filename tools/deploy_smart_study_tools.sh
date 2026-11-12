@@ -37,6 +37,18 @@ for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
 
+for file in "$TEMP_DIR"/static/herbal-incompatibilities*.html "$TEMP_DIR"/static/incompatibilities-*.html; do
+    php -r '$html=file_get_contents($argv[1]); if (preg_match("/\\p{Han}/u", $html)) { fwrite(STDERR, "ERROR: quedan caracteres chinos en $argv[1]\\n"); exit(1); }' "$file"
+done
+grep -Fq 'guideline-herb-index' "$TEMP_DIR/static/incompatibilities-seven-relationships.html"
+grep -Fq 'Official guideline herbs &amp; pharmaceutical names' "$TEMP_DIR/static/incompatibilities-shi-ba-fan-aconite.html"
+grep -Fq 'origin-guideline-star' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'Agkistrodon/Bungarus' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'returnorigin=animal' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq '$fromincompatibilities' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq 'Back to incompatibility chapter' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq 'returnchapter' "$TEMP_DIR/moodle/single-herbs-list.php"
+
 for label in "Similar Formulas" "Similar Herbs" "Pattern → Formula Finder" "Tongue & Pulse Matcher" \
     "Formula Ingredient Similarity" "Chief Herb Alternatives" "Duì Yào Pairs by Herb" \
     "Safety & Contraindication Finder" "Clinical Clue Finder" "Name Trap Detector" "Personalized Quiz"; do
@@ -226,8 +238,10 @@ echo "OK: Personalized Review nunca queda vacío: usa debilidades, menor dominio
 echo "OK: Herbal Incompatibilities incluye 11 capítulos y la variante alimentaria de la imagen suministrada."
 echo "OK: Medicinal Origins separa Animal, Vegetal y Mineral mediante tres botones visibles."
 echo "OK: 30 entradas animales corregidas incluyen límites legales, éticos y taxonómicos."
-echo "OK: las sustancias presentes en el guideline oficial están marcadas y enlazadas a su tarjeta."
-echo "OK: la vista Vegetal separa grupos, tarjetas oficiales y referencias de fuente sin duplicar enlaces."
+echo "OK: los 11 capítulos eliminan caracteres chinos y muestran un índice plegable de hierbas oficiales."
+echo "OK: cada hierba oficial lleva asterisco, nombre farmacéutico, enlace a su tarjeta y regreso al capítulo exacto."
+echo "OK: Medicinal Origins muestra nombres farmacéuticos directamente en Animal, Vegetal y Mineral."
+echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin enlace."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
