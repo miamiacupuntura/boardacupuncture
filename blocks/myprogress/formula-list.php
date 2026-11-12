@@ -12,31 +12,36 @@ $ises = $displaylang === 'es';
 $sortmode = optional_param('sort', 'az', PARAM_ALPHA);
 $sortmode = $sortmode === 'category' ? 'category' : 'az';
 $query = trim(optional_param('q', '', PARAM_TEXT));
+$formulafocus = trim(optional_param('formula', '', PARAM_TEXT));
 $categoryfilter = optional_param('category', '', PARAM_ALPHANUMEXT);
-$fromlibrary = optional_param('from', '', PARAM_ALPHA) === 'library';
+$fromcontext = optional_param('from', '', PARAM_ALPHA);
+$fromlibrary = $fromcontext === 'library';
+$fromchief = $fromcontext === 'chief';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary) {
-    $baseparams['from'] = 'library';
+if ($fromlibrary || $fromchief) {
+    $baseparams['from'] = $fromcontext;
 }
 $pageurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + [
     'sort' => $sortmode,
     'q' => $query,
+    'formula' => $formulafocus,
     'category' => $categoryfilter,
 ]);
 $languageparams = [
     'sort' => $sortmode,
     'q' => $query,
+    'formula' => $formulafocus,
     'category' => $categoryfilter,
 ];
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary) {
-    $languageparams['from'] = 'library';
+if ($fromlibrary || $fromchief) {
+    $languageparams['from'] = $fromcontext;
 }
 $languageurl = new moodle_url('/blocks/myprogress/formula-list.php', $languageparams);
 $studyparams = $ises ? ['lang' => 'es'] : [];
@@ -45,6 +50,7 @@ if ($fromlibrary) {
 }
 $formulastudyurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $studyparams);
 $dashboardurl = new moodle_url('/my/');
+$chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-herbs-property-es.html' : 'chief-herbs-property.html'));
 
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
@@ -132,6 +138,9 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'kings' => trim((string)($detail['kings'] ?? '')),
     ];
     $haystack = core_text::strtolower(implode(' ', array_values($card)));
+    if ($formulafocus !== '' && $normalize($name) !== $normalize($formulafocus)) {
+        continue;
+    }
     if ($query !== '' && core_text::strpos($haystack, core_text::strtolower($query)) === false) {
         continue;
     }
@@ -172,7 +181,7 @@ uasort($groups, static function(array $left, array $right) use ($sortmode): int 
     }
     return strnatcasecmp($left['title'], $right['title']);
 });
-$autoopen = $query !== '' && count($cards) <= 10;
+$autoopen = $formulafocus !== '' || ($query !== '' && count($cards) <= 10);
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -245,7 +254,11 @@ echo $OUTPUT->header();
                 : 'The 181 official Appendix C formulas, organized A–Z or in the conventional Bensky Chapters 1–21 sequence. Only chapters containing official roster formulas are shown.'; ?></p>
         </div>
         <div class="formula-list__actions">
-            <a class="formula-list__button" href="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Fórmulas' : '← Formulas'; ?></a>
+            <?php if ($fromchief) { ?>
+                <a class="formula-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
+            <?php } else { ?>
+                <a class="formula-list__button" href="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Fórmulas' : '← Formulas'; ?></a>
+            <?php } ?>
             <a class="formula-list__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <a class="formula-list__button" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
         </div>
@@ -270,7 +283,7 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary) { ?><input type="hidden" name="from" value="library"><?php } ?>
+            <?php if ($fromlibrary || $fromchief) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
             <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
                 <option value=""><?php echo $ises ? 'Todos los capítulos con fórmulas oficiales' : 'All chapters with official formulas'; ?></option>
