@@ -269,16 +269,17 @@ foreach ($tonguepulse['formulas'] as $finding) {
 
 $formularesults = [];
 $herbresults = [];
+$ingredientresults = [];
+$chiefresults = [];
+$safetyresults = [];
 $searchresults = [];
+
 if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) {
     $source = $formulas[$normalize($item)];
     foreach ($formulas as $candidate) {
-        if ($candidate['name'] === $source['name']) {
-            continue;
-        }
-        $categorymatch = $source['categorycode'] !== '' && $source['categorycode'] === $candidate['categorycode'] ? 1.0 : 0.0;
+        if ($candidate['name'] === $source['name']) continue;
         $scores = [
-            'category' => $categorymatch,
+            'category' => $source['categorycode'] !== '' && $source['categorycode'] === $candidate['categorycode'] ? 1.0 : 0.0,
             'pattern' => $fieldscore($source['pattern'], $candidate['pattern']),
             'action' => $fieldscore($source['action'], $candidate['action']),
             'ingredients' => $fieldscore($source['ingredients'], $candidate['ingredients']),
@@ -287,11 +288,9 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
         ];
         $score = $scores['category'] * 0.08 + $scores['pattern'] * 0.30 + $scores['action'] * 0.27
             + $scores['ingredients'] * 0.17 + $scores['chief'] * 0.08 + $scores['clue'] * 0.10;
-        if ($score <= 0.01) {
-            continue;
-        }
+        if ($score <= 0.01) continue;
         $reasons = [];
-        if ($scores['category'] > 0) $reasons[] = $ises ? 'Misma categoría Bensky' : 'Same Bensky category';
+        if ($scores['category'] > 0) $reasons[] = $ises ? 'Misma categoría funcional' : 'Same functional category';
         if ($scores['pattern'] >= 0.12) $reasons[] = $ises ? 'Patrón relacionado' : 'Related pattern';
         if ($scores['action'] >= 0.12) $reasons[] = $ises ? 'Acciones relacionadas' : 'Related actions';
         if ($scores['ingredients'] >= 0.10) $reasons[] = $ises ? 'Ingredientes superpuestos' : 'Overlapping ingredients';
@@ -300,34 +299,65 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
     }
     usort($formularesults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
     $formularesults = array_slice($formularesults, 0, 10);
+} else if ($mode === 'ingredients' && $item !== '' && isset($formulas[$normalize($item)])) {
+    $source = $formulas[$normalize($item)];
+    foreach ($formulas as $candidate) {
+        if ($candidate['name'] === $source['name']) continue;
+        $ingredientscore = $fieldscore($source['ingredients'], $candidate['ingredients']);
+        $chiefscore = $fieldscore($source['kings'], $candidate['kings']);
+        $score = $ingredientscore * 0.75 + $chiefscore * 0.25;
+        if ($score <= 0.01) continue;
+        $reasons = [];
+        if ($ingredientscore > 0) $reasons[] = $ises ? 'Comparte ingredientes' : 'Shares ingredients';
+        if ($chiefscore > 0) $reasons[] = $ises ? 'Comparte Chief herbs' : 'Shares Chief herbs';
+        $ingredientresults[] = ['score' => $score, 'card' => $candidate, 'reasons' => $reasons];
+    }
+    usort($ingredientresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
+    $ingredientresults = array_slice($ingredientresults, 0, 12);
+} else if ($mode === 'chief' && $item !== '') {
+    $target = $normalize($item);
+    foreach ($formulas as $candidate) {
+        $chieftext = $normalize($candidate['kings']);
+        if ($chieftext === '' || !preg_match('/(^| )' . preg_quote($target, '/') . '( |$)/', $chieftext)) continue;
+        $chiefresults[] = ['score' => 1.0, 'card' => $candidate, 'reasons' => [$ises ? 'Usa esta hierba como Chief' : 'Uses this herb as a Chief']];
+    }
+    usort($chiefresults, static fn(array $left, array $right): int => strnatcasecmp($left['card']['name'], $right['card']['name']));
 } else if ($mode === 'herb' && $item !== '' && isset($herbs[$normalize($item)])) {
     $source = $herbs[$normalize($item)];
     foreach ($herbs as $candidate) {
-        if ($candidate['name'] === $source['name']) {
-            continue;
-        }
+        if ($candidate['name'] === $source['name']) continue;
         $scores = [
             'category' => $source['categorycode'] !== '' && $source['categorycode'] === $candidate['categorycode'] ? 1.0 : 0.0,
             'properties' => $fieldscore($source['properties'] . ' ' . $source['flavor'] . ' ' . $source['temperature'], $candidate['properties'] . ' ' . $candidate['flavor'] . ' ' . $candidate['temperature']),
             'channels' => $fieldscore($source['channels'], $candidate['channels']),
             'action' => $fieldscore($source['identity'], $candidate['identity']),
             'clue' => $fieldscore($source['clue'], $candidate['clue']),
+            'safety' => $fieldscore($source['caution'] . ' ' . $source['pregnancy'] . ' ' . $source['interactions'], $candidate['caution'] . ' ' . $candidate['pregnancy'] . ' ' . $candidate['interactions']),
         ];
-        $score = $scores['category'] * 0.32 + $scores['properties'] * 0.18 + $scores['channels'] * 0.15
-            + $scores['action'] * 0.25 + $scores['clue'] * 0.10;
+        $score = $scores['category'] * 0.25 + $scores['properties'] * 0.15 + $scores['channels'] * 0.12
+            + $scores['action'] * 0.23 + $scores['clue'] * 0.10 + $scores['safety'] * 0.15;
         if ($score <= 0.01) continue;
         $reasons = [];
         if ($scores['category'] > 0) $reasons[] = $ises ? 'Misma categoría Bensky' : 'Same Bensky category';
         if ($scores['action'] >= 0.12) $reasons[] = $ises ? 'Acciones relacionadas' : 'Related actions';
         if ($scores['channels'] >= 0.20) $reasons[] = $ises ? 'Canales compartidos' : 'Shared channels';
-        if ($scores['properties'] >= 0.12) $reasons[] = $ises ? 'Propiedades similares' : 'Similar properties';
+        if ($scores['properties'] >= 0.12) $reasons[] = $ises ? 'Sabor y temperatura similares' : 'Similar flavor and temperature';
+        if ($scores['safety'] >= 0.12) $reasons[] = $ises ? 'Precauciones relacionadas' : 'Related safety cautions';
         $herbresults[] = ['score' => $score, 'card' => $candidate, 'reasons' => $reasons];
     }
     usort($herbresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
-    $herbresults = array_slice($herbresults, 0, 6);
-} else if ($mode === 'clinical' && $query !== '') {
+    $herbresults = array_slice($herbresults, 0, 10);
+} else if (($mode === 'pattern' || $mode === 'clinical') && $query !== '') {
     foreach ($formulas as $candidate) {
-        $text = implode(' ', [$candidate['category'], $candidate['pattern'], $candidate['action'], $candidate['clue'], $candidate['examfocus'], $candidate['ingredients'], $candidate['kings']]);
+        $text = implode(' ', [$candidate['category'], $candidate['pattern'], $candidate['action']]);
+        $score = $queryscore($query, $text);
+        if ($score > 0) $searchresults[] = ['score' => $score, 'card' => $candidate];
+    }
+    usort($searchresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
+    $searchresults = array_slice($searchresults, 0, 12);
+} else if ($mode === 'clue' && $query !== '') {
+    foreach ($formulas as $candidate) {
+        $text = implode(' ', [$candidate['clue'], $candidate['examfocus'], $candidate['pattern']]);
         $score = $queryscore($query, $text);
         if ($score > 0) $searchresults[] = ['score' => $score, 'card' => $candidate];
     }
@@ -340,6 +370,14 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
     }
     usort($searchresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
     $searchresults = array_slice($searchresults, 0, 12);
+} else if ($mode === 'safety' && $query !== '') {
+    foreach ($herbs as $candidate) {
+        $text = implode(' ', [$candidate['name'], $candidate['category'], $candidate['caution'], $candidate['pregnancy'], $candidate['interactions'], $candidate['preparation']]);
+        $score = $queryscore($query, $text);
+        if ($score > 0) $safetyresults[] = ['score' => $score, 'card' => $candidate];
+    }
+    usort($safetyresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
+    $safetyresults = array_slice($safetyresults, 0, 15);
 }
 
 $returnparams = ['mode' => $mode];
