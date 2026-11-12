@@ -41,7 +41,7 @@ grep -Fq '$fromformula' "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq "Back to " "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq "data-return-to-formula-card" "$TEMP_DIR/static/comparisons.js"
 grep -Fq "returnformula" "$TEMP_DIR/static/continuous-reader.js"
-grep -Fq "comparisons.js?v=20261112-2" "$TEMP_DIR/static/formulas.html"
+grep -Fq "comparisons.js?v=20261112-3" "$TEMP_DIR/static/formulas.html"
 grep -Fq "continuous-reader.js?v=20261112-1" "$TEMP_DIR/static/continuous-reader.html"
 
 MOODLE_TARGET="$MOODLE_ROOT/blocks/myprogress"
