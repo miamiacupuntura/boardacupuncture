@@ -43,6 +43,8 @@ done
 grep -Fq "single-herb-safety-supplement.json" "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'datalist id="smart-pattern-options"' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'Select or type a pattern' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq 'datalist id="smart-tongue-pulse-options"' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq 'Select or type tongue and pulse' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq "subject-study-library__smart-top" "$TEMP_DIR/moodle/study-guide.php"
 if grep -Fq "subject-study-library__journey-option subject-study-library__journey-option--smart" "$TEMP_DIR/moodle/study-guide.php"; then
     echo "ERROR: Smart Study Tools todavía aparece dentro de Main Study Guide." >&2
@@ -135,6 +137,7 @@ fi
 
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
+echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgos verificados."
 echo "OK: Similar Formulas, Similar Herbs, Pattern, Tongue & Pulse, Ingredients y Chief usan el guideline verificado."
 echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con sus bancos oficiales."
 echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
