@@ -15,17 +15,22 @@ $query = trim(optional_param('q', '', PARAM_TEXT));
 $herbfocus = trim(optional_param('herb', '', PARAM_TEXT));
 $categoryfilter = optional_param('category', '', PARAM_ALPHANUMEXT);
 $fromcontext = optional_param('from', '', PARAM_ALPHA);
+$returnformula = trim(optional_param('returnformula', '', PARAM_TEXT));
 $fromlibrary = $fromcontext === 'library';
 $fromquiz = $fromcontext === 'quiz';
 $fromchief = $fromcontext === 'chief';
 $fromingredients = $fromcontext === 'ingredients';
+$fromformula = $fromcontext === 'formula' && $returnformula !== '';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula) {
     $baseparams['from'] = $fromcontext;
+}
+if ($fromformula) {
+    $baseparams['returnformula'] = $returnformula;
 }
 $pageparams = $baseparams + [
     'sort' => $sortmode,
@@ -43,8 +48,11 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula) {
     $languageparams['from'] = $fromcontext;
+}
+if ($fromformula) {
+    $languageparams['returnformula'] = $returnformula;
 }
 $languageurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $languageparams);
 $studyguideparams = $ises ? ['lang' => 'es'] : [];
@@ -55,6 +63,11 @@ $studyguideurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php
 $dashboardurl = new moodle_url('/my/');
 $chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-herbs-property-es.html' : 'chief-herbs-property.html'));
 $formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.php', $ises ? ['lang' => 'es'] : []);
+$formulabackparams = ['formula' => $returnformula, 'sort' => 'az'];
+if ($ises) {
+    $formulabackparams['lang'] = 'es';
+}
+$formulabackurl = new moodle_url('/blocks/myprogress/formula-list.php', $formulabackparams);
 
 $indexpath = __DIR__ . '/single-herb-card-index.json';
 $propertiespath = __DIR__ . '/single-herb-properties.json';
@@ -412,7 +425,9 @@ echo $OUTPUT->header();
                 : 'The 304 official guideline herbs, organized alphabetically or in the conventional sequence of the 33 Bensky categories.'; ?></p>
         </div>
         <div class="single-herbs-list__actions">
-            <?php if ($fromquiz) { ?>
+            <?php if ($fromformula) { ?>
+                <a class="single-herbs-list__button" href="<?php echo $formulabackurl->out(false); ?>"><?php echo ($ises ? '← Volver a ' : '← Back to ') . s($returnformula); ?></a>
+            <?php } else if ($fromquiz) { ?>
                 <button class="single-herbs-list__button" type="button" data-return-to-herb-question data-fallback-url="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
             <?php } else if ($fromchief) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
@@ -451,7 +466,8 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromformula) { ?><input type="hidden" name="returnformula" value="<?php echo s($returnformula); ?>"><?php } ?>
             <label>
                 <span><?php echo $ises ? 'Buscar hierba' : 'Search herb'; ?></span>
                 <input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, latín, acción…' : 'Name, Latin, action…'; ?>">
