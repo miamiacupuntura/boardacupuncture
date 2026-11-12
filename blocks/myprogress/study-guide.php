@@ -909,7 +909,7 @@ echo $OUTPUT->header();
                                     <span>Formula List<small><?php echo s($ises ? '181 fórmulas oficiales del guideline · A–Z o por categoría' : '181 official guideline formulas · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--smart" href="<?php echo $smartstudytoolsurl->out(false); ?>">
-                                    <span><?php echo s($ises ? '✨ Herramientas de estudio inteligentes' : '✨ Smart Study Tools'); ?><small><?php echo s($ises ? 'NUEVO · Fórmulas, hierbas, pistas clínicas, lengua y pulso' : 'NEW · Formulas, herbs, clinical clues, tongue and pulse'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? '✨ Herramientas de estudio inteligentes' : '✨ Smart Study Tools'); ?><small><?php echo s($ises ? 'NUEVO · Similitud, Chief herbs, seguridad, Duì Yào y Quiz personalizado' : 'NEW · Similarity, Chief herbs, safety, Duì Yào and personalized Quiz'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $chiefherbsmapurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Mapa de fórmulas y hierbas Chief' : 'Chief Herbs Formula Map'); ?><small><?php echo s($ises ? '63 fórmulas oficiales · mapa vectorial' : '63 official formulas · vector map'); ?></small></span><span aria-hidden="true">›</span>
