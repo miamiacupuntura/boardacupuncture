@@ -440,7 +440,7 @@
         optionLinks.className = 'herb-feedback-option-links';
         question.options.forEach(option => {
           const source = document.createElement('a');
-          const params = new URLSearchParams({ herb: option.profile.name, sort: 'az' });
+          const params = new URLSearchParams({ herb: option.profile.name, sort: 'az', from: 'quiz' });
           if (spanish) params.set('lang', 'es');
           source.href = `/blocks/myprogress/single-herbs-list.php?${params}`;
           source.textContent = `${option.label}. ${option.profile.name} — ${copy.openCard}`;
@@ -582,7 +582,16 @@
   });
   if (elements.sourceViewer) {
     elements.sourceViewer.querySelectorAll('[data-herb-source-close]').forEach(control => {
-      control.addEventListener('click', closeSourceViewer);
+      control.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        closeSourceViewer();
+      });
+    });
+    window.addEventListener('message', event => {
+      if (event.origin === window.location.origin && event.data?.type === 'single-herb-card-close') {
+        closeSourceViewer();
+      }
     });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && !elements.sourceViewer.hidden) closeSourceViewer();
