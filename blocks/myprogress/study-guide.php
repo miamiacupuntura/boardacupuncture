@@ -111,6 +111,14 @@ $areas = [
                 'study_bank' => true,
             ],
             [
+                'title' => 'Guideline Medicinals by Origin',
+                'description' => 'Classify all 304 official guideline medicinals as animal-derived, mineral-derived, or plant/fungal, with pharmaceutical names and direct herb-card links.',
+                'path' => '/study-guide/comparisons/guideline-herbs-by-origin.html',
+                'anchor' => '',
+                'status' => 'NEW · 304 GUIDELINE MEDICINALS',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Formula Tongue and Pulse',
                 'description' => 'Review tongue and pulse findings for all 63 official guideline formulas, organized by formula category.',
                 'path' => '/blocks/myprogress/formula-tongue-pulse.php',
@@ -330,6 +338,10 @@ $areas = [
 ];
 
 $spanishcopy = [
+    'Guideline Medicinals by Origin' => 'Sustancias del guideline por origen',
+    'Classify all 304 official guideline medicinals as animal-derived, mineral-derived, or plant/fungal, with pharmaceutical names and direct herb-card links.' => 'Clasifica las 304 sustancias oficiales del guideline por origen animal, mineral o vegetal/fúngico, con nombres farmacéuticos y enlaces directos a cada tarjeta.',
+    'NEW · 304 GUIDELINE MEDICINALS' => 'NUEVO · 304 SUSTANCIAS DEL GUIDELINE',
+
     'Formula Tongue and Pulse' => 'Lengua y pulso de fórmulas',
     'Review tongue and pulse findings for all 63 official guideline formulas, organized by formula category.' => 'Repasa los hallazgos de lengua y pulso de las 63 fórmulas oficiales del guideline, organizadas por categoría.',
     'Formula and Actions' => 'Fórmulas y acciones',
