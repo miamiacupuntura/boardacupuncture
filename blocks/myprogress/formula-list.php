@@ -17,12 +17,13 @@ $categoryfilter = optional_param('category', '', PARAM_ALPHANUMEXT);
 $fromcontext = optional_param('from', '', PARAM_ALPHA);
 $fromlibrary = $fromcontext === 'library';
 $fromchief = $fromcontext === 'chief';
+$fromingredients = $fromcontext === 'ingredients';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief) {
+if ($fromlibrary || $fromchief || $fromingredients) {
     $baseparams['from'] = $fromcontext;
 }
 $pageurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + [
@@ -40,7 +41,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief) {
+if ($fromlibrary || $fromchief || $fromingredients) {
     $languageparams['from'] = $fromcontext;
 }
 $languageurl = new moodle_url('/blocks/myprogress/formula-list.php', $languageparams);
@@ -51,6 +52,7 @@ if ($fromlibrary) {
 $formulastudyurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $studyparams);
 $dashboardurl = new moodle_url('/my/');
 $chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-herbs-property-es.html' : 'chief-herbs-property.html'));
+$formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.php', $ises ? ['lang' => 'es'] : []);
 
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
@@ -256,6 +258,8 @@ echo $OUTPUT->header();
         <div class="formula-list__actions">
             <?php if ($fromchief) { ?>
                 <a class="formula-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
+            <?php } else if ($fromingredients) { ?>
+                <a class="formula-list__button" href="<?php echo $formulaingredientsurl->out(false); ?>"><?php echo $ises ? '← Volver a Fórmulas e ingredientes' : '← Back to Formula and Ingredients'; ?></a>
             <?php } else { ?>
                 <a class="formula-list__button" href="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Fórmulas' : '← Formulas'; ?></a>
             <?php } ?>
@@ -284,7 +288,7 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromchief) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromchief || $fromingredients) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
             <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
                 <option value=""><?php echo $ises ? 'Todos los capítulos con fórmulas oficiales' : 'All chapters with official formulas'; ?></option>
