@@ -425,7 +425,7 @@ echo $OUTPUT->header();
 .smart-tools__button,.smart-tools__tab{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81!important;font-weight:850;text-decoration:none!important;cursor:pointer}.smart-tools__button:hover,.smart-tools__tab:hover{background:#eef7f5}.smart-tools__tab.is-active{border-color:#6d28d9;background:#6d28d9;color:#fff!important}
 .smart-tools__tabs{margin-bottom:18px}.smart-tools__panel{padding:20px;border:1px solid #d6dfe5;border-radius:13px;background:#fff;box-shadow:0 5px 18px rgba(23,50,77,.05)}.smart-tools__panel h3{margin:0 0 7px;font-size:24px}.smart-tools__panel>p{margin:0 0 16px;color:#526b84}
 .smart-tools__form{display:grid;grid-template-columns:minmax(250px,1fr) auto;gap:11px;align-items:end}.smart-tools__form label{display:grid;gap:6px;font-size:12px;font-weight:900}.smart-tools__form select,.smart-tools__form input{width:100%;min-height:48px;padding:9px 12px;border:1px solid #aebfca;border-radius:8px;background:#fff;color:#102a43;font:inherit}
-.smart-tools__notice{margin:18px 0 0;padding:13px 15px;border-left:5px solid #6d28d9;border-radius:9px;background:#f5f0ff;color:#4c1d95}.smart-tools__results-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:26px 0 13px}.smart-tools__results-heading h3{margin:0;font-size:24px}.smart-tools__results-heading span{color:#526b84;font-weight:800}
+.smart-tools__launchers{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.smart-tools__launcher{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:10px 16px;border-radius:9px;background:#0d7868;color:#fff!important;font-weight:900;text-decoration:none!important}.smart-tools__launcher--alt{background:#6d28d9}.smart-tools__notice{margin:18px 0 0;padding:13px 15px;border-left:5px solid #6d28d9;border-radius:9px;background:#f5f0ff;color:#4c1d95}.smart-tools__results-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:26px 0 13px}.smart-tools__results-heading h3{margin:0;font-size:24px}.smart-tools__results-heading span{color:#526b84;font-weight:800}
 .smart-tools__results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.smart-tools__result{padding:18px;border:1px solid #cbd9df;border-top:5px solid #087c69;border-radius:12px;background:#fff}.smart-tools__result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.smart-tools__result h4{margin:0;font-size:20px}.smart-tools__score{flex:0 0 auto;padding:5px 9px;border-radius:999px;background:#e8f7f1;color:#075f50;font-size:12px;font-weight:950}.smart-tools__category{margin:5px 0 10px;color:#6d28d9;font-size:12px;font-weight:850}.smart-tools__result dl{display:grid;grid-template-columns:105px 1fr;gap:8px 10px;margin:0}.smart-tools__result dt{font-size:12px;font-weight:900}.smart-tools__result dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}.smart-tools__reason{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.smart-tools__reason span{padding:4px 8px;border-radius:999px;background:#fff1d6;color:#7c4308;font-size:11px;font-weight:850}.smart-tools__open{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border-radius:8px;background:#0d7868;color:#fff!important;font-weight:850;text-decoration:none!important}.smart-tools__empty{margin-top:22px;padding:26px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;text-align:center;color:#526b84;font-weight:800}
 .smart-tools__method{margin-top:22px;padding:15px;border-left:5px solid #e9a11b;border-radius:9px;background:#fff8e9;color:#71420c;line-height:1.5}
 @media(max-width:800px){.smart-tools__hero{display:block}.smart-tools__actions{margin-top:16px}.smart-tools__form,.smart-tools__results{grid-template-columns:1fr}.smart-tools__result dl{grid-template-columns:1fr}.smart-tools__result dd{margin-top:-4px}}
@@ -450,8 +450,15 @@ echo $OUTPUT->header();
         $tabs = [
             'formula' => $ises ? '✨ Fórmulas similares' : '✨ Similar Formulas',
             'herb' => $ises ? '🌿 Hierbas similares' : '🌿 Similar Herbs',
-            'clinical' => $ises ? '🔎 Patrón y pista clínica' : '🔎 Pattern & Clinical Clue',
+            'pattern' => $ises ? '🧭 Patrón → Fórmula' : '🧭 Pattern → Formula',
             'tongue' => $ises ? '👅 Lengua y pulso' : '👅 Tongue & Pulse',
+            'ingredients' => $ises ? '🧪 Ingredientes similares' : '🧪 Ingredient Similarity',
+            'chief' => $ises ? '⭐ Alternativas Chief' : '⭐ Chief Alternatives',
+            'dui' => $ises ? '🔗 Pares Duì Yào' : '🔗 Duì Yào Pairs',
+            'safety' => $ises ? '⚠ Seguridad' : '⚠ Safety Finder',
+            'clue' => $ises ? '🔎 Pista clínica' : '🔎 Clinical Clue',
+            'traps' => $ises ? '🧠 Nombres confundibles' : '🧠 Name Traps',
+            'quiz' => $ises ? '🎯 Quiz personalizado' : '🎯 Personalized Quiz',
         ];
         foreach ($tabs as $tabmode => $label) {
             $params = ['mode' => $tabmode];
@@ -463,85 +470,147 @@ echo $OUTPUT->header();
     </nav>
 
     <section class="smart-tools__panel">
-        <?php if ($mode === 'formula') { ?>
-            <h3><?php echo $ises ? 'Encontrar fórmulas similares' : 'Find Similar Formulas'; ?></h3>
-            <p><?php echo $ises ? 'Compara categoría, patrón, acción, ingredientes, Chief herbs y pista decisiva.' : 'Compare category, pattern, action, ingredients, Chief herbs and decisive clues.'; ?></p>
+        <?php if ($mode === 'formula' || $mode === 'ingredients') { ?>
+            <h3><?php echo $mode === 'formula'
+                ? ($ises ? 'Encontrar fórmulas similares' : 'Find Similar Formulas')
+                : ($ises ? 'Similitud por ingredientes' : 'Formula Ingredient Similarity'); ?></h3>
+            <p><?php echo $mode === 'formula'
+                ? ($ises ? 'Compara categoría, patrón, acción, ingredientes, Chief herbs y pista decisiva.' : 'Compare category, pattern, action, ingredients, Chief herbs and decisive clues.')
+                : ($ises ? 'Encuentra fórmulas que comparten ingredientes o Chief herbs.' : 'Find formulas that share ingredients or Chief herbs.'); ?></p>
             <form class="smart-tools__form" method="get">
-                <input type="hidden" name="mode" value="formula"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
+                <input type="hidden" name="mode" value="<?php echo s($mode); ?>"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
                 <label><span><?php echo $ises ? 'Fórmula de origen' : 'Source formula'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar fórmula…' : 'Select a formula…'; ?></option><?php foreach ($formulas as $formula) { ?><option value="<?php echo s($formula['name']); ?>"<?php echo $normalize($item) === $normalize($formula['name']) ? ' selected' : ''; ?>><?php echo s($formula['name']); ?></option><?php } ?></select></label>
-                <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Encontrar similares' : 'Find similar'; ?></button>
+                <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar relaciones' : 'Find relationships'; ?></button>
             </form>
         <?php } else if ($mode === 'herb') { ?>
             <h3><?php echo $ises ? 'Encontrar hierbas similares' : 'Find Similar Herbs'; ?></h3>
-            <p><?php echo $ises ? 'Compara categoría Bensky, propiedades, canales, acciones e indicaciones.' : 'Compare Bensky category, properties, channels, actions and indications.'; ?></p>
+            <p><?php echo $ises ? 'Compara acción, categoría Bensky, temperatura, sabor, canales, indicaciones y seguridad.' : 'Compare action, Bensky category, temperature, flavor, channels, indications and safety.'; ?></p>
             <form class="smart-tools__form" method="get">
                 <input type="hidden" name="mode" value="herb"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
                 <label><span><?php echo $ises ? 'Hierba de origen' : 'Source herb'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar hierba…' : 'Select an herb…'; ?></option><?php foreach ($herbs as $herb) { ?><option value="<?php echo s($herb['name']); ?>"<?php echo $normalize($item) === $normalize($herb['name']) ? ' selected' : ''; ?>><?php echo s($herb['name']); ?></option><?php } ?></select></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Encontrar similares' : 'Find similar'; ?></button>
             </form>
-        <?php } else if ($mode === 'clinical') { ?>
-            <h3><?php echo $ises ? 'Buscador por patrón y pista clínica' : 'Pattern & Clinical Clue Finder'; ?></h3>
-            <p><?php echo $ises ? 'Describe una pista de estudio; se buscará únicamente dentro de perfiles verificados.' : 'Enter a study clue; only verified profiles are searched.'; ?></p>
+        <?php } else if ($mode === 'chief') { ?>
+            <h3><?php echo $ises ? 'Alternativas por Chief herb' : 'Chief Herb Alternatives'; ?></h3>
+            <p><?php echo $ises ? 'Organiza las fórmulas oficiales por hierba principal y función.' : 'Browse official formulas by principal herb and function.'; ?></p>
             <form class="smart-tools__form" method="get">
-                <input type="hidden" name="mode" value="clinical"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-                <label><span><?php echo $ises ? 'Patrón, acción o pista' : 'Pattern, action or clue'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo $ises ? 'Ej.: tos seca, sudores nocturnos, esputo con sangre' : 'Example: dry cough, night sweats, blood-streaked sputum'; ?>"></label>
+                <input type="hidden" name="mode" value="chief"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
+                <label><span><?php echo $ises ? 'Chief herb' : 'Chief herb'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar hierba…' : 'Select an herb…'; ?></option><?php foreach ($herbs as $herb) { ?><option value="<?php echo s($herb['name']); ?>"<?php echo $normalize($item) === $normalize($herb['name']) ? ' selected' : ''; ?>><?php echo s($herb['name']); ?></option><?php } ?></select></label>
+                <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar fórmulas' : 'Find formulas'; ?></button>
+            </form>
+        <?php } else if ($mode === 'pattern' || $mode === 'clinical' || $mode === 'clue' || $mode === 'safety' || $mode === 'tongue') {
+            $paneltitles = [
+                'pattern' => $ises ? 'Patrón → Buscador de fórmulas' : 'Pattern → Formula Finder',
+                'clinical' => $ises ? 'Patrón → Buscador de fórmulas' : 'Pattern → Formula Finder',
+                'clue' => $ises ? 'Buscador por pista clínica' : 'Clinical Clue Finder',
+                'safety' => $ises ? 'Seguridad y contraindicaciones' : 'Safety & Contraindication Finder',
+                'tongue' => $ises ? 'Coincidencia por lengua y pulso' : 'Tongue & Pulse Matcher',
+            ];
+            $paneldescriptions = [
+                'pattern' => $ises ? 'Busca patrones clínicos y fórmulas oficiales relacionadas.' : 'Search clinical patterns and related official formulas.',
+                'clinical' => $ises ? 'Busca patrones clínicos y fórmulas oficiales relacionadas.' : 'Search clinical patterns and related official formulas.',
+                'clue' => $ises ? 'Busca pistas decisivas como “tos seca con sudores nocturnos”.' : 'Search decisive clues such as “dry cough with night sweats.”',
+                'safety' => $ises ? 'Busca embarazo, toxicidad, interacciones, preparación e incompatibilidades.' : 'Search pregnancy, toxicity, interactions, preparation and incompatibilities.',
+                'tongue' => $ises ? 'Busca entre 63 fórmulas con hallazgos verificados de lengua y pulso.' : 'Search 63 formulas with verified tongue and pulse findings.',
+            ];
+            $placeholders = [
+                'pattern' => $ises ? 'Ej.: deficiencia Yin de Pulmón y Riñón' : 'Example: Lung and Kidney Yin deficiency',
+                'clinical' => $ises ? 'Ej.: deficiencia Yin de Pulmón y Riñón' : 'Example: Lung and Kidney Yin deficiency',
+                'clue' => $ises ? 'Ej.: tos seca, sudores nocturnos' : 'Example: dry cough, night sweats',
+                'safety' => $ises ? 'Ej.: embarazo, anticoagulantes, toxicidad' : 'Example: pregnancy, anticoagulants, toxicity',
+                'tongue' => $ises ? 'Ej.: lengua roja, pulso fino y rápido' : 'Example: red tongue, thin rapid pulse',
+            ];
+        ?>
+            <h3><?php echo s($paneltitles[$mode]); ?></h3>
+            <p><?php echo s($paneldescriptions[$mode]); ?></p>
+            <form class="smart-tools__form" method="get">
+                <input type="hidden" name="mode" value="<?php echo s($mode); ?>"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
+                <label><span><?php echo $ises ? 'Términos de búsqueda' : 'Search terms'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar' : 'Search'; ?></button>
             </form>
+        <?php } else if ($mode === 'dui') { ?>
+            <h3><?php echo $ises ? 'Pares similares Duì Yào' : 'Duì Yào Similar Pairs'; ?></h3>
+            <p><?php echo $ises ? 'Explora pares de hierbas con acciones complementarias, parecidas o contrastantes.' : 'Explore herb pairs with complementary, similar or contrasting actions.'; ?></p>
+            <div class="smart-tools__launchers"><a class="smart-tools__launcher" href="<?php echo $duiyaourl->out(false); ?>"><?php echo $ises ? 'Abrir biblioteca Duì Yào →' : 'Open Duì Yào library →'; ?></a></div>
+        <?php } else if ($mode === 'traps') { ?>
+            <h3><?php echo $ises ? 'Detector de nombres confundibles' : 'Name Trap Detector'; ?></h3>
+            <p><?php echo $ises ? 'Compara fórmulas y hierbas cuyos nombres se confunden fácilmente en el examen.' : 'Compare formulas and herbs whose names are easily confused on exams.'; ?></p>
+            <div class="smart-tools__launchers">
+                <a class="smart-tools__launcher" href="<?php echo $formulanametrapsurl->out(false); ?>"><?php echo $ises ? 'Trampas de fórmulas →' : 'Formula name traps →'; ?></a>
+                <a class="smart-tools__launcher smart-tools__launcher--alt" href="<?php echo $nametrapsurl->out(false); ?>"><?php echo $ises ? 'Trampas de hierbas →' : 'Herb name traps →'; ?></a>
+            </div>
         <?php } else { ?>
-            <h3><?php echo $ises ? 'Coincidencia por lengua y pulso' : 'Tongue & Pulse Matcher'; ?></h3>
-            <p><?php echo $ises ? 'Busca entre las 63 fórmulas oficiales que cuentan con hallazgos verificados de lengua y pulso.' : 'Search the 63 official formulas with verified tongue and pulse findings.'; ?></p>
-            <form class="smart-tools__form" method="get">
-                <input type="hidden" name="mode" value="tongue"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-                <label><span><?php echo $ises ? 'Hallazgos de lengua o pulso' : 'Tongue or pulse findings'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo $ises ? 'Ej.: lengua roja, pulso fino y rápido' : 'Example: red tongue, thin rapid pulse'; ?>"></label>
-                <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar' : 'Search'; ?></button>
-            </form>
+            <h3><?php echo $ises ? 'Quiz personalizado' : 'Personalized Quiz'; ?></h3>
+            <p><?php echo $ises ? 'Genera preguntas con prioridad para las fórmulas donde el estudiante obtiene menos de 80%.' : 'Prioritize questions from formulas where the student scores below 80%.'; ?></p>
+            <div class="smart-tools__launchers"><a class="smart-tools__launcher" href="<?php echo $personalizedquizurl->out(false); ?>"><?php echo $ises ? 'Comenzar repaso personalizado →' : 'Start personalized review →'; ?></a></div>
         <?php } ?>
         <p class="smart-tools__notice"><?php echo $ises
-            ? 'El porcentaje indica similitud educativa dentro de nuestra base; no equivale a una recomendación clínica ni sustituye el diagnóstico profesional.'
-            : 'The percentage represents educational similarity inside our database; it is not a clinical recommendation and does not replace professional diagnosis.'; ?></p>
+            ? 'Los resultados usan únicamente datos verificados del guideline. Son material educativo y no sustituyen el diagnóstico profesional.'
+            : 'Results use only verified guideline data. They are educational material and do not replace professional diagnosis.'; ?></p>
+        <?php if ($mode === 'safety') { ?><div class="smart-tools__launchers"><a class="smart-tools__button" href="<?php echo $safetylibraryurl->out(false); ?>"><?php echo $ises ? 'Biblioteca de seguridad' : 'Safety Library'; ?></a><a class="smart-tools__button" href="<?php echo $incompatibilitiesurl->out(false); ?>"><?php echo $ises ? 'Incompatibilidades herbales' : 'Herbal incompatibilities'; ?></a></div><?php } ?>
     </section>
 
     <?php
-    $resultcount = $mode === 'formula' ? count($formularesults) : ($mode === 'herb' ? count($herbresults) : count($searchresults));
-    if (($item !== '' || $query !== '')) {
+    $resultsets = [
+        'formula' => $formularesults,
+        'ingredients' => $ingredientresults,
+        'chief' => $chiefresults,
+        'herb' => $herbresults,
+        'pattern' => $searchresults,
+        'clinical' => $searchresults,
+        'clue' => $searchresults,
+        'tongue' => $searchresults,
+        'safety' => $safetyresults,
+    ];
+    $activeresults = $resultsets[$mode] ?? [];
+    $resultcount = count($activeresults);
+    $showresults = isset($resultsets[$mode]) && ($item !== '' || $query !== '');
+    if ($showresults) {
     ?>
         <header class="smart-tools__results-heading"><h3><?php echo $ises ? 'Resultados relacionados' : 'Related results'; ?></h3><span><?php echo $resultcount; ?> <?php echo $ises ? 'resultados' : 'results'; ?></span></header>
         <?php if ($resultcount === 0) { ?>
-            <p class="smart-tools__empty"><?php echo $ises ? 'No se encontraron coincidencias verificadas. Prueba con términos más generales.' : 'No verified matches were found. Try broader terms.'; ?></p>
+            <p class="smart-tools__empty"><?php echo $ises ? 'No se encontraron coincidencias verificadas. Prueba términos más generales u otra hierba.' : 'No verified matches were found. Try broader terms or another herb.'; ?></p>
         <?php } else { ?>
             <div class="smart-tools__results">
-                <?php if ($mode === 'formula') { foreach ($formularesults as $result) { $card = $result['card']; ?>
-                    <article class="smart-tools__result">
-                        <header class="smart-tools__result-head"><h4><?php echo s($card['name']); ?></h4><span class="smart-tools__score"><?php echo (int)round($result['score'] * 100); ?>%</span></header>
-                        <p class="smart-tools__category"><?php echo s($card['category']); ?></p>
-                        <dl><?php if ($card['pattern'] !== '') { ?><dt><?php echo $ises ? 'Patrón' : 'Pattern'; ?></dt><dd><?php echo s($card['pattern']); ?></dd><?php } ?><?php if ($card['action'] !== '') { ?><dt><?php echo $ises ? 'Acción' : 'Action'; ?></dt><dd><?php echo s($card['action']); ?></dd><?php } ?><?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Diferencia clave' : 'Key distinction'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?></dl>
-                        <?php if ($result['reasons']) { ?><div class="smart-tools__reason"><?php foreach ($result['reasons'] as $reason) { ?><span><?php echo s($reason); ?></span><?php } ?></div><?php } ?>
-                        <a class="smart-tools__open" href="<?php echo $formulalink($card['name'])->out(false); ?>"><?php echo $ises ? 'Abrir tarjeta de fórmula →' : 'Open formula card →'; ?></a>
-                    </article>
-                <?php }} else if ($mode === 'herb') { foreach ($herbresults as $result) { $card = $result['card']; ?>
-                    <article class="smart-tools__result">
-                        <header class="smart-tools__result-head"><h4><?php echo s($card['name']); ?></h4><span class="smart-tools__score"><?php echo (int)round($result['score'] * 100); ?>%</span></header>
-                        <p class="smart-tools__category"><?php echo s($card['category']); ?></p>
-                        <dl><?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Acción' : 'Action'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?><?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Indicaciones' : 'Indications'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?><?php if ($card['channels'] !== '') { ?><dt><?php echo $ises ? 'Canales' : 'Channels'; ?></dt><dd><?php echo s($card['channels']); ?></dd><?php } ?></dl>
-                        <?php if ($result['reasons']) { ?><div class="smart-tools__reason"><?php foreach ($result['reasons'] as $reason) { ?><span><?php echo s($reason); ?></span><?php } ?></div><?php } ?>
-                        <a class="smart-tools__open" href="<?php echo $herblink($card['name'])->out(false); ?>"><?php echo $ises ? 'Abrir tarjeta de hierba →' : 'Open herb card →'; ?></a>
-                    </article>
-                <?php }} else { foreach ($searchresults as $result) { $card = $result['card']; ?>
+                <?php if (in_array($mode, ['formula', 'ingredients', 'chief', 'pattern', 'clinical', 'clue', 'tongue'], true)) {
+                    foreach ($activeresults as $result) { $card = $result['card']; ?>
                     <article class="smart-tools__result">
                         <header class="smart-tools__result-head"><h4><?php echo s($card['name']); ?></h4><span class="smart-tools__score"><?php echo (int)round($result['score'] * 100); ?>%</span></header>
                         <p class="smart-tools__category"><?php echo s($card['category']); ?></p>
                         <dl>
-                            <?php if ($mode === 'clinical') { ?>
-                                <?php if ($card['pattern'] !== '') { ?><dt><?php echo $ises ? 'Patrón' : 'Pattern'; ?></dt><dd><?php echo s($card['pattern']); ?></dd><?php } ?>
-                                <?php if ($card['action'] !== '') { ?><dt><?php echo $ises ? 'Acción' : 'Action'; ?></dt><dd><?php echo s($card['action']); ?></dd><?php } ?>
-                                <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Pista' : 'Clue'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
-                            <?php } else { ?>
+                            <?php if ($mode === 'tongue') { ?>
                                 <dt><?php echo $ises ? 'Lengua' : 'Tongue'; ?></dt><dd><?php echo s($card['tongue']); ?></dd>
                                 <dt><?php echo $ises ? 'Pulso' : 'Pulse'; ?></dt><dd><?php echo s($card['pulse']); ?></dd>
+                            <?php } else { ?>
+                                <?php if (($mode === 'ingredients' || $mode === 'chief') && $card['kings'] !== '') { ?><dt>Chief</dt><dd><?php echo s($card['kings']); ?></dd><?php } ?>
+                                <?php if ($mode === 'ingredients' && $card['ingredients'] !== '') { ?><dt><?php echo $ises ? 'Ingredientes' : 'Ingredients'; ?></dt><dd><?php echo s($card['ingredients']); ?></dd><?php } ?>
+                                <?php if ($card['pattern'] !== '') { ?><dt><?php echo $ises ? 'Patrón' : 'Pattern'; ?></dt><dd><?php echo s($card['pattern']); ?></dd><?php } ?>
+                                <?php if ($card['action'] !== '') { ?><dt><?php echo $ises ? 'Acción' : 'Action'; ?></dt><dd><?php echo s($card['action']); ?></dd><?php } ?>
+                                <?php if (($mode === 'formula' || $mode === 'clue') && $card['clue'] !== '') { ?><dt><?php echo $ises ? 'Pista decisiva' : 'Decisive clue'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
                             <?php } ?>
                         </dl>
-                        <div class="smart-tools__reason"><span><?php echo $ises ? 'Coincidencia con la búsqueda' : 'Search match'; ?></span></div>
+                        <div class="smart-tools__reason"><?php if (!empty($result['reasons'])) { foreach ($result['reasons'] as $reason) { ?><span><?php echo s($reason); ?></span><?php } } else { ?><span><?php echo $ises ? 'Coincidencia con la búsqueda' : 'Search match'; ?></span><?php } ?></div>
                         <a class="smart-tools__open" href="<?php echo $formulalink($card['name'])->out(false); ?>"><?php echo $ises ? 'Abrir tarjeta de fórmula →' : 'Open formula card →'; ?></a>
+                    </article>
+                <?php }} else if ($mode === 'herb' || $mode === 'safety') {
+                    foreach ($activeresults as $result) { $card = $result['card']; ?>
+                    <article class="smart-tools__result">
+                        <header class="smart-tools__result-head"><h4><?php echo s($card['name']); ?></h4><span class="smart-tools__score"><?php echo (int)round($result['score'] * 100); ?>%</span></header>
+                        <p class="smart-tools__category"><?php echo s($card['category']); ?></p>
+                        <dl>
+                            <?php if ($mode === 'herb') { ?>
+                                <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Acción' : 'Action'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
+                                <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Indicaciones' : 'Indications'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
+                                <?php if ($card['flavor'] !== '' || $card['temperature'] !== '') { ?><dt><?php echo $ises ? 'Sabor / temp.' : 'Flavor / temp.'; ?></dt><dd><?php echo s(trim($card['flavor'] . ' · ' . $card['temperature'], ' ·')); ?></dd><?php } ?>
+                                <?php if ($card['channels'] !== '') { ?><dt><?php echo $ises ? 'Canales' : 'Channels'; ?></dt><dd><?php echo s($card['channels']); ?></dd><?php } ?>
+                            <?php } ?>
+                            <?php if ($card['caution'] !== '') { ?><dt><?php echo $ises ? 'Precaución' : 'Caution'; ?></dt><dd><?php echo s($card['caution']); ?></dd><?php } ?>
+                            <?php if ($card['pregnancy'] !== '') { ?><dt><?php echo $ises ? 'Embarazo' : 'Pregnancy'; ?></dt><dd><?php echo s($card['pregnancy']); ?></dd><?php } ?>
+                            <?php if ($card['interactions'] !== '') { ?><dt><?php echo $ises ? 'Interacciones' : 'Interactions'; ?></dt><dd><?php echo s($card['interactions']); ?></dd><?php } ?>
+                            <?php if ($card['preparation'] !== '') { ?><dt><?php echo $ises ? 'Preparación' : 'Preparation'; ?></dt><dd><?php echo s($card['preparation']); ?></dd><?php } ?>
+                        </dl>
+                        <?php if (!empty($result['reasons'])) { ?><div class="smart-tools__reason"><?php foreach ($result['reasons'] as $reason) { ?><span><?php echo s($reason); ?></span><?php } ?></div><?php } ?>
+                        <a class="smart-tools__open" href="<?php echo $herblink($card['name'])->out(false); ?>"><?php echo $ises ? 'Abrir tarjeta de hierba →' : 'Open herb card →'; ?></a>
                     </article>
                 <?php }} ?>
             </div>
