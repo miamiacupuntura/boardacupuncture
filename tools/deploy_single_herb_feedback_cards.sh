@@ -27,13 +27,16 @@ done
 curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/single-herbs-list.php" -o "$TEMP_DIR/single-herbs-list.php"
 php -l "$TEMP_DIR/single-herbs-list.php" >/dev/null
 
-grep -Fq "single-herb-practice.js?v=20261112-2" "$TEMP_DIR/single-herb-practice.html"
-grep -Fq "comparisons.css?v=20261112-2" "$TEMP_DIR/single-herb-practice-es.html"
+grep -Fq "single-herb-practice.js?v=20261112-3" "$TEMP_DIR/single-herb-practice.html"
+grep -Fq "comparisons.css?v=20261112-3" "$TEMP_DIR/single-herb-practice-es.html"
 grep -Fq "herb-feedback-option-links" "$TEMP_DIR/single-herb-practice.js"
 grep -Fq "is-correct" "$TEMP_DIR/single-herb-practice.js"
 grep -Fq "is-selected-incorrect" "$TEMP_DIR/single-herb-practice.js"
 grep -Fq ".herb-feedback-option-links a.is-correct" "$TEMP_DIR/comparisons.css"
 grep -Fq "question.options.forEach(option =>" "$TEMP_DIR/single-herb-practice.js"
+grep -Fq "from: 'quiz'" "$TEMP_DIR/single-herb-practice.js"
+grep -Fq "single-herb-card-close" "$TEMP_DIR/single-herb-practice.js"
+grep -Fq "data-return-to-herb-question" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "/blocks/myprogress/single-herbs-list.php" "$TEMP_DIR/single-herb-practice.js"
 grep -Fq "\$herbfocus !== '' ||" "$TEMP_DIR/single-herbs-list.php"
 
@@ -94,6 +97,6 @@ fi
 
 echo "OK: feedback enlaza las cuatro opciones A–D con sus tarjetas de Single Herbs List."
 echo "OK: opción correcta marcada en verde y selección incorrecta marcada en rojo."
-echo "OK: cada enlace abre la hierba exacta y conserva el botón de regreso a la pregunta."
+echo "OK: cada enlace abre la hierba exacta y ambos botones superiores regresan a la misma pregunta."
 echo "OK: respuestas, puntuación y posición del Quiz se conservan."
 echo "RESPALDO: $BACKUP"
