@@ -646,7 +646,7 @@ echo $OUTPUT->header();
             'tongue' => $ises ? '👅 Lengua y pulso' : '👅 Tongue & Pulse',
             'ingredients' => $ises ? '🧪 Ingredientes similares' : '🧪 Ingredient Similarity',
             'chief' => $ises ? '⭐ Alternativas Chief' : '⭐ Chief Alternatives',
-            'dui' => $ises ? '🔗 Pares Duì Yào' : '🔗 Duì Yào Pairs',
+            'dui' => $ises ? '🔎 Buscar Duì Yào · 77 hierbas' : '🔎 Duì Yào Finder · 77 herbs',
             'safety' => $ises ? '⚠ Seguridad' : '⚠ Safety Finder',
             'clue' => $ises ? '🔎 Pista clínica' : '🔎 Clinical Clue',
             'traps' => $ises ? '🧠 Nombres confundibles' : '🧠 Name Traps',
@@ -758,6 +758,7 @@ echo $OUTPUT->header();
                 <?php } ?>
             </form>
         <?php } else if ($mode === 'dui') { ?>
+            <p class="smart-tools__eyebrow"><?php echo $ises ? '51 PARES OFICIALES · 77 HIERBAS BUSCABLES' : '51 OFFICIAL PAIRS · 77 SEARCHABLE HERBS'; ?></p>
             <h3><?php echo $ises ? 'Buscador de pares Duì Yào por hierba' : 'Duì Yào Pairs by Herb'; ?></h3>
             <p><?php echo $ises ? 'Selecciona una hierba para ver todos sus pares oficiales, acciones combinadas y fórmulas relacionadas.' : 'Select an herb to see all of its official pairs, combined actions and related formulas.'; ?></p>
             <form class="smart-tools__form" method="get">
