@@ -133,6 +133,13 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'label' => $categorylabel,
     ];
     $isdetailed = !empty($detail);
+    $iscomplete = $isdetailed;
+    foreach (['pattern', 'action', 'clue', 'ingredients', 'safety'] as $requiredfield) {
+        if (trim((string)($detail[$requiredfield] ?? '')) === '') {
+            $iscomplete = false;
+            break;
+        }
+    }
     if ($isdetailed) {
         $detailedcount++;
     }
@@ -145,6 +152,8 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'categorychapter' => $categorychapter,
         'categorylabel' => $categorylabel,
         'detailed' => $isdetailed,
+        'complete' => $iscomplete,
+        'chinese' => trim((string)($detail['chineseName'] ?? '')),
         'pattern' => $detailtext($detail, 'pattern', $ises),
         'action' => $detailtext($detail, 'action', $ises),
         'clue' => $detailtext($detail, 'clue', $ises),
@@ -257,7 +266,7 @@ echo $OUTPUT->header();
 .formula-list__cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
 .formula-list__card{overflow:hidden;border:1px solid #cbd9df;border-top:5px solid #f47b20;border-radius:13px;background:#fff}.formula-list__card[open]{box-shadow:0 6px 18px rgba(23,50,77,.08)}
 .formula-list__card summary{position:relative;display:block;min-height:124px;padding:20px 58px 18px 22px;cursor:pointer;list-style:none}.formula-list__card summary::-webkit-details-marker{display:none}.formula-list__card summary::after{content:'+';position:absolute;top:15px;right:15px;display:grid;width:27px;height:27px;place-items:center;border-radius:50%;background:#eaf5f3;color:#087c69;font-size:18px;font-weight:900}.formula-list__card[open] summary::after{content:'−'}
-.formula-list__name{display:block;font-size:20px;font-weight:900}.formula-list__english{display:block;margin-top:3px;color:#64748b;font-size:12px;font-style:italic}
+.formula-list__name{display:block;font-size:20px;font-weight:900}.formula-list__english{display:block;margin-top:3px;color:#64748b;font-size:12px;font-style:italic}.formula-list__chinese{display:block;margin-top:3px;color:#0f766e;font-size:15px;font-weight:850}
 .formula-list__category{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf5f3;color:#087c69!important;font-size:11px;font-weight:850;text-decoration:none!important}.formula-list__category:hover{background:#087c69;color:#fff!important}
 .formula-list__status{display:block;margin-top:7px;color:#64748b;font-size:11px;font-weight:800}.formula-list__status.is-detailed{color:#087c69}
 .formula-list__body{padding:18px 22px 22px;border-top:1px solid #d8e2e7}.formula-list__body dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px 16px;margin:0}.formula-list__body dt{font-size:13px;font-weight:900}.formula-list__body dd{margin:0;color:#52657a;font-size:14px;line-height:1.6}.formula-list__body dd.is-safety{color:#a64b13}.formula-list__clue{color:#075f60!important;font-weight:800}
@@ -359,9 +368,12 @@ echo $OUTPUT->header();
                             <summary>
                                 <span class="formula-list__name"><?php echo s($card['name']); ?>*</span>
                                 <?php if ($card['english'] !== '') { ?><span class="formula-list__english"><?php echo s($card['english']); ?></span><?php } ?>
+                                <?php if ($card['chinese'] !== '') { ?><span class="formula-list__chinese" lang="zh-Hant"><?php echo s($card['chinese']); ?></span><?php } ?>
                                 <a class="formula-list__category" data-formula-category-link href="<?php echo $cardcategoryurl->out(false); ?>"><?php echo s($card['categorylabel']); ?></a>
                                 <span class="formula-list__status<?php echo $card['detailed'] ? ' is-detailed' : ''; ?>"><?php echo $card['detailed']
-                                    ? ($ises ? 'Perfil clínico detallado' : 'Detailed clinical profile')
+                                    ? ($card['complete']
+                                        ? ($ises ? 'Perfil clínico detallado' : 'Detailed clinical profile')
+                                        : ($ises ? 'Perfil parcial verificado' : 'Verified partial profile'))
                                     : ($ises ? 'Roster oficial · perfil pendiente' : 'Official roster · profile pending'); ?></span>
                             </summary>
                             <div class="formula-list__body">
@@ -376,7 +388,11 @@ echo $OUTPUT->header();
                                     <?php if ($card['comparison'] !== '') { ?><dt><?php echo $ises ? 'Contraste' : 'Contrast'; ?></dt><dd><?php echo s($card['comparison']); ?></dd><?php } ?>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
                                     <?php if ($card['source'] !== '') { ?><dt><?php echo $ises ? 'Fuente' : 'Source'; ?></dt><dd><?php echo s($card['source']); ?></dd><?php } ?>
-                                </dl><?php } else { ?>
+                                </dl>
+                                <?php if (!$card['complete']) { ?><p class="formula-list__profile-note"><?php echo $ises
+                                    ? 'Perfil parcial: solo se muestran los campos respaldados por la información suministrada. Patrón, ingredientes, Chief, pista y seguridad permanecen pendientes de fuente.'
+                                    : 'Partial profile: only fields supported by the supplied information are shown. Pattern, ingredients, Chief, clue, and safety remain source-pending.'; ?></p><?php } ?>
+                                <?php } else { ?>
                                     <p class="formula-list__profile-note"><?php echo $ises
                                         ? 'Esta fórmula pertenece al Appendix C oficial de 2026. El banco suministrado todavía no contiene un perfil clínico detallado verificado; por eso no se completan campos por inferencia.'
                                         : 'This formula belongs to the official 2026 Appendix C roster. The supplied bank does not yet contain a verified detailed clinical profile, so no fields are completed by inference.'; ?></p>
