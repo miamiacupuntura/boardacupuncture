@@ -43,7 +43,7 @@
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
       formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
       category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.',
-      weak: spanish ? 'Prioriza fórmulas con menos de 80% de precisión en tu historial local.' : 'Prioritizes formulas below 80% accuracy in your local history.'
+      weak: spanish ? 'Prioriza fórmulas con menos de 80% de precisión; si aún no hay historial, comienza con un diagnóstico general.' : 'Prioritizes formulas below 80% accuracy; if no history exists yet, it starts with a general diagnostic.'
     }
   };
   const centralHistoryParams = new URLSearchParams(window.location.search);
@@ -188,6 +188,7 @@
     }
     if (state.mode === 'weak') {
       const history = readHistory();
+      if (!Number(history.total || 0)) return scoped;
       const weakFormulas = new Set(Object.entries(history.formulas || {})
         .map(([number, result]) => ({ number: Number(number), total: Number(result.total || 0), correct: Number(result.correct || 0) }))
         .filter(result => result.total > 0 && percentage(result.correct, result.total) < 80)
