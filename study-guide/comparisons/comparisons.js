@@ -101,7 +101,7 @@
   let relatedNotice;
 
   function showRelatedNotice(active) {
-    if (!relatedCategory || !returnFormula) return;
+    if (!returnFormula) return;
     if (!relatedNotice) {
       relatedNotice = document.createElement('p');
       relatedNotice.setAttribute('role', 'status');
@@ -118,9 +118,13 @@
     relatedNotice.hidden = !active;
     if (active) {
       const spanish = document.documentElement.lang.toLowerCase().startsWith('es');
-      relatedNotice.textContent = spanish
-        ? `No hay una comparación directa para ${returnFormula}. Se muestran comparaciones relacionadas de ${relatedCategory}.`
-        : `No direct comparison is available for ${returnFormula}. Showing related comparisons from ${relatedCategory}.`;
+      relatedNotice.textContent = relatedCategory
+        ? (spanish
+          ? `No hay una comparación directa para ${returnFormula}. Se muestran comparaciones relacionadas de ${relatedCategory}.`
+          : `No direct comparison is available for ${returnFormula}. Showing related comparisons from ${relatedCategory}.`)
+        : (spanish
+          ? `No hay una comparación directa para ${returnFormula}. Se muestran todas las comparaciones disponibles.`
+          : `No direct comparison is available for ${returnFormula}. Showing all available comparisons.`);
     }
   }
 
@@ -139,9 +143,9 @@
     const query = normalise(search ? search.value : '');
     let visible = applyQuery(query);
     let showingRelated = false;
-    if (visible === 0 && allowRelatedFallback && relatedCategory
+    if (visible === 0 && allowRelatedFallback && returnFormula
         && query === normalise(initialQuery)) {
-      visible = applyQuery(normalise(relatedCategory));
+      visible = applyQuery(relatedCategory ? normalise(relatedCategory) : '');
       showingRelated = visible > 0;
     }
     showRelatedNotice(showingRelated);
