@@ -279,7 +279,16 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'source' => $detailtext($detail, 'source', $ises),
         'kings' => trim((string)($detail['kings'] ?? '')),
     ];
-    $haystack = core_text::strtolower(implode(' ', array_values($card)));
+    $searchparts = [];
+    foreach ($card as $cardvalue) {
+        if (is_scalar($cardvalue)) {
+            $searchparts[] = (string)$cardvalue;
+        }
+    }
+    if (is_array($card['architecture'])) {
+        $searchparts[] = (string)json_encode($card['architecture'], JSON_UNESCAPED_UNICODE);
+    }
+    $haystack = core_text::strtolower(implode(' ', $searchparts));
     if ($formulafocus !== '' && $normalize($name) !== $normalize($formulafocus)) {
         continue;
     }
