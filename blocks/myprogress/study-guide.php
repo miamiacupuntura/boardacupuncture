@@ -231,6 +231,14 @@ $areas = [
                 'secondary' => true,
             ],
             [
+                'title' => 'Formula and Ingredients',
+                'description' => 'Review 63 official guideline formulas, open every formula and ingredient card, and identify each highlighted Chief herb.',
+                'path' => '/blocks/myprogress/formula-ingredients.php',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 63 GUIDELINE FORMULAS',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Formula Comparisons',
                 'description' => 'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.',
                 'path' => '/study-guide/comparisons/formulas.html',
@@ -351,6 +359,8 @@ $spanishcopy = [
     'Study 60 secondary herb functions while keeping the primary category of each medicinal in view.' => 'Estudia 60 funciones secundarias sin perder de vista la categoría principal de cada sustancia medicinal.',
     'Chief Herbs Property' => 'Propiedades de las hierbas principales',
     'Review 60 chief herbs by flavor, temperature, channels and the formulas in which they serve a central role.' => 'Repasa 60 hierbas principales por sabor, temperatura, canales y las fórmulas en las que cumplen una función central.',
+    'Formula and Ingredients' => 'Fórmulas e ingredientes',
+    'Review 63 official guideline formulas, open every formula and ingredient card, and identify each highlighted Chief herb.' => 'Repasa 63 fórmulas oficiales del guideline, abre cada tarjeta de fórmula e ingrediente e identifica cada hierba Chief resaltada.',
     'Formula Comparisons' => 'Comparaciones de fórmulas',
     'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.' => 'Repasa 110 comparaciones por estrategia, patrón, acciones, ingredientes y pistas decisivas que distinguen fórmulas similares.',
     'Single Herbs Comparisons' => 'Comparaciones de hierbas individuales',
