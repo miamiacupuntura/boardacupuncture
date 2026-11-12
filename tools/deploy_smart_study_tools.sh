@@ -37,8 +37,13 @@ for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
 
-for label in "Similar Formulas" "Similar Herbs" "Pattern → Formula Finder" "Tongue & Pulse Matcher"     "Formula Ingredient Similarity" "Chief Herb Alternatives" "Duì Yào Similar Pairs"     "Safety & Contraindication Finder" "Clinical Clue Finder" "Name Trap Detector" "Personalized Quiz"; do
-    grep -Fq "$label" "$TEMP_DIR/moodle/smart-study-tools.php"
+for label in "Similar Formulas" "Similar Herbs" "Pattern → Formula Finder" "Tongue & Pulse Matcher" \
+    "Formula Ingredient Similarity" "Chief Herb Alternatives" "Duì Yào Pairs by Herb" \
+    "Safety & Contraindication Finder" "Clinical Clue Finder" "Name Trap Detector" "Personalized Quiz"; do
+    if ! grep -Fq "$label" "$TEMP_DIR/moodle/smart-study-tools.php"; then
+        echo "ERROR: validación ausente en smart-study-tools.php: $label" >&2
+        exit 1
+    fi
 done
 grep -Fq "single-herb-safety-supplement.json" "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'datalist id="smart-pattern-options"' "$TEMP_DIR/moodle/smart-study-tools.php"
