@@ -581,6 +581,10 @@ $formulaslisturl = new moodle_url(
     '/blocks/myprogress/formula-list.php',
     $ises ? ['lang' => 'es', 'from' => 'library'] : ['from' => 'library']
 );
+$chiefherbsmapurl = new moodle_url(
+    '/blocks/myprogress/formula-chief-herbs-map.php',
+    $ises ? ['lang' => 'es'] : []
+);
 $safetylibraryurl = new moodle_url(
     $ises ? '/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html'
 );
@@ -898,6 +902,9 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulaslisturl->out(false); ?>">
                                     <span>Formula List<small><?php echo s($ises ? '181 fórmulas oficiales del guideline · A–Z o por categoría' : '181 official guideline formulas · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $chiefherbsmapurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Mapa de fórmulas y hierbas Chief' : 'Chief Herbs Formula Map'); ?><small><?php echo s($ises ? '63 fórmulas oficiales · mapa vectorial' : '63 official formulas · vector map'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
                                     <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
