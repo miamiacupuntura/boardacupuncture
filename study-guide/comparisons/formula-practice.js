@@ -203,7 +203,7 @@
     const value = questionSearchText(question);
     if (mode === 'clinical') return /\b(patient|year[- ]old|presents?|complains?|clinical case|case describes?|history of|symptoms include|woman|female|male|man)\b/i.test(value);
     if (mode === 'patterns') return /\b(pattern|syndrome|diagnosis|diagnostic|pathogenesis|etiology|disharmony|presentation)\b/i.test(value);
-    if (mode === 'cautions') return /\b(caution|contraindication|contraindicated|safety|avoid|warning|precaution|prohibited|pregnan|toxic|overdose|should not|must not|adverse|risk|improper|inappropriate)\b/i.test(value);
+    if (mode === 'cautions') return /\b(caution|contraindication|contraindicated|safety|avoid|warning|precaution|prohibited|pregnan|toxic|overdose|should not|must not|adverse|risk|improper|inappropriate|attention|long-term|hypertension|dosage)\b/i.test(value);
     if (mode === 'indications') return /\b(indication|indicated|key point|best used|used for|treats?|appropriate for|clinical manifestation)\b/i.test(value);
     if (mode === 'actions') return /\b(action|actions|function|functions|therapeutic|effect|effects|treatment principle|strategy)\b/i.test(value);
     return true;
