@@ -23,7 +23,7 @@
     maximumAvailable: count => spanish
       ? `Máximo disponible para esta selección: ${count} preguntas.`
       : `Maximum available for this selection: ${count} questions.`,
-    sessionMaximum: spanish ? 'Máximo por sesión en el banco completo: 100 preguntas.' : 'Maximum per full-bank session: 100 questions.',
+    sessionMaximum: spanish ? 'Selecciona 5, 10, 15 o 20 preguntas por sesión.' : 'Choose 5, 10, 15 or 20 questions per session.',
     finishProgress: (answered, total) => spanish
       ? `Finalizar Quiz (${answered}/${total} respondidas)`
       : `Finish Quiz (${answered}/${total} answered)`,
@@ -43,7 +43,14 @@
       all: spanish ? 'Incluye preguntas de todas las fórmulas y temas generales.' : 'Includes questions from every formula and general topic.',
       formula: spanish ? 'Incluye todas las preguntas del Quiz relacionadas con una fórmula específica.' : 'Includes every Quiz question related to one specific formula.',
       category: spanish ? 'Incluye preguntas del Quiz de las fórmulas que pertenecen a una categoría.' : 'Includes Quiz questions from formulas in one category.',
-      weak: spanish ? 'Prioriza fórmulas con menos de 80% de precisión; si aún no hay historial, comienza con un diagnóstico general.' : 'Prioritizes formulas below 80% accuracy; if no history exists yet, it starts with a general diagnostic.'
+      weak: spanish ? 'Prioriza fórmulas con menos de 80% de precisión; si aún no hay historial, comienza con un diagnóstico general.' : 'Prioritizes formulas below 80% accuracy; if no history exists yet, it starts with a general diagnostic.',
+      dui: spanish ? 'Practica acciones y asociaciones de los 51 pares Duì Yào oficiales.' : 'Practice actions and associations from the 51 official Duì Yào pairs.',
+      modifications: spanish ? 'Practica modificaciones clínicas verificadas y sus cambios de ingredientes.' : 'Practice verified clinical modifications and their ingredient changes.',
+      clinical: spanish ? 'Filtra viñetas de pacientes y preguntas construidas como casos clínicos.' : 'Filter patient vignettes and questions written as clinical cases.',
+      patterns: spanish ? 'Practica diagnóstico, patrones, síndromes y mecanismos de desarmonía.' : 'Practice diagnosis, patterns, syndromes and mechanisms of disharmony.',
+      cautions: spanish ? 'Practica precauciones, contraindicaciones, toxicidad y uso inapropiado.' : 'Practice cautions, contraindications, toxicity and inappropriate use.',
+      indications: spanish ? 'Practica indicaciones, manifestaciones y pistas diagnósticas decisivas.' : 'Practice indications, manifestations and decisive diagnostic clues.',
+      actions: spanish ? 'Practica acciones terapéuticas, funciones y principios de tratamiento.' : 'Practice therapeutic actions, functions and treatment principles.'
     }
   };
   const centralHistoryParams = new URLSearchParams(window.location.search);
@@ -127,7 +134,7 @@
     showOriginal: false,
     formulaByNumber: new Map(),
     mode: 'all',
-    size: 25,
+    size: 10,
     useMaximum: false,
     questions: [],
     currentIndex: 0,
@@ -169,11 +176,36 @@
     parent.append(element);
   }
 
+  const topicalModes = new Set(['dui', 'modifications', 'clinical', 'patterns', 'cautions', 'indications', 'actions']);
+
   function questionsForScope(questions) {
-    return questions.filter(question => {
-      const modification = (question.categoryKeys || []).includes('modifications');
-      return modificationsOnly ? modification : !modification;
-    });
+    if (modificationsOnly) {
+      return questions.filter(question => (question.categoryKeys || []).includes('modifications'));
+    }
+    return questions;
+  }
+
+  function questionSearchText(question) {
+    return [
+      question.prompt,
+      ...(question.body || []),
+      ...(question.options || []).map(option => option.text),
+      ...(question.feedback || [])
+    ].join(' ');
+  }
+
+  function questionMatchesFocus(question, mode) {
+    const keys = question.categoryKeys || [];
+    if (mode === 'dui') return keys.includes('dui-yao');
+    if (mode === 'modifications') return keys.includes('modifications');
+    if (keys.includes('dui-yao') || keys.includes('modifications')) return false;
+    const value = questionSearchText(question);
+    if (mode === 'clinical') return /\b(patient|year[- ]old|presents?|complains?|clinical case|case describes?|history of|symptoms include|woman|female|male|man)\b/i.test(value);
+    if (mode === 'patterns') return /\b(pattern|syndrome|diagnosis|diagnostic|pathogenesis|etiology|disharmony|presentation)\b/i.test(value);
+    if (mode === 'cautions') return /\b(caution|contraindication|contraindicated|safety|avoid|warning|precaution|prohibited|pregnan|toxic|overdose|should not|must not|adverse|risk|improper|inappropriate)\b/i.test(value);
+    if (mode === 'indications') return /\b(indication|indicated|key point|best used|used for|treats?|appropriate for|clinical manifestation)\b/i.test(value);
+    if (mode === 'actions') return /\b(action|actions|function|functions|therapeutic|effect|effects|treatment principle|strategy)\b/i.test(value);
+    return true;
   }
 
   function filteredQuestions() {
@@ -188,7 +220,7 @@
     }
     if (state.mode === 'weak') {
       const history = readHistory();
-      if (!Number(history.total || 0)) return scoped;
+      if (!Number(history.total || 0)) return scoped.filter(question => !(question.categoryKeys || []).includes('dui-yao'));
       const weakFormulas = new Set(Object.entries(history.formulas || {})
         .map(([number, result]) => ({ number: Number(number), total: Number(result.total || 0), correct: Number(result.correct || 0) }))
         .filter(result => result.total > 0 && percentage(result.correct, result.total) < 80)
@@ -198,6 +230,7 @@
       if (!weakFormulas.size) return [];
       return scoped.filter(question => (question.formulaNumbers || []).some(number => weakFormulas.has(Number(number))));
     }
+    if (topicalModes.has(state.mode)) return scoped.filter(question => questionMatchesFocus(question, state.mode));
     return scoped;
   }
 
@@ -209,13 +242,14 @@
     if (state.mode === 'formula') url.searchParams.set('formula', elements.formula.value);
     if (state.mode === 'category') url.searchParams.set('category', elements.category.value);
     if (state.mode === 'weak') url.searchParams.set('focus', 'weak');
+    if (topicalModes.has(state.mode)) url.searchParams.set('focus', state.mode);
     url.searchParams.set('size', String(state.size));
     history.replaceState(null, '', url);
     if (elements.language) elements.language.href = `${elements.language.getAttribute('href').split('?')[0]}${url.search}`;
   }
 
   function setMode(mode, refresh = true) {
-    state.mode = ['all', 'formula', 'category', 'weak'].includes(mode) ? mode : 'all';
+    state.mode = ['all', 'formula', 'category', 'weak', ...topicalModes].includes(mode) ? mode : 'all';
     elements.modeButtons.forEach(button => {
       button.setAttribute('aria-pressed', String(button.dataset.practiceMode === state.mode));
     });
@@ -228,30 +262,23 @@
   function updateAvailability() {
     const count = filteredQuestions().length;
     const presets = elements.sizeButtons.map(button => Number(button.dataset.practiceSize));
-    if (state.mode === 'all' && !presets.includes(state.size)) {
-      state.size = 25;
-      state.useMaximum = false;
-    }
-    if (state.useMaximum && state.mode !== 'all') state.size = count;
-    if (state.useMaximum && presets.includes(count)) state.useMaximum = false;
+    if (!presets.includes(state.size)) state.size = 10;
+    state.useMaximum = false;
     if (count > 0 && state.size > count) {
-      state.size = count;
-      state.useMaximum = state.mode !== 'all';
+      const availablePreset = presets.filter(size => size <= count).sort((left, right) => right - left)[0];
+      state.size = availablePreset || count;
     }
-    if (count > 0 && state.size < 1) state.size = Math.min(25, count);
+    if (count > 0 && state.size < 1) state.size = Math.min(10, count);
     const sessionCount = Math.min(count, state.size);
     elements.sizeButtons.forEach(button => {
       const size = Number(button.dataset.practiceSize);
       button.disabled = size > count;
       button.setAttribute('aria-pressed', String(!state.useMaximum && size === state.size));
     });
-    const showMaximum = state.mode !== 'all' && count > 0 && !presets.includes(count);
-    elements.maxSizeButton.hidden = !showMaximum;
-    elements.maxSizeButton.textContent = text.allAvailable(count);
-    elements.maxSizeButton.setAttribute('aria-pressed', String(showMaximum && state.useMaximum));
-    elements.maxHelp.textContent = state.mode === 'all'
-      ? text.sessionMaximum
-      : text.maximumAvailable(count);
+    const showMaximum = false;
+    elements.maxSizeButton.hidden = true;
+    elements.maxSizeButton.setAttribute('aria-pressed', 'false');
+    elements.maxHelp.textContent = text.sessionMaximum;
     elements.available.textContent = String(count);
     elements.start.disabled = count === 0;
     elements.start.textContent = text.startPractice(sessionCount);
@@ -324,7 +351,7 @@
     const requestedSize = Number(params.get('size'));
     if ([...elements.formula.options].some(item => item.value === requestedFormula)) elements.formula.value = requestedFormula;
     if ([...elements.category.options].some(item => item.value === requestedCategory)) elements.category.value = requestedCategory;
-    if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= scopedQuestions.length) state.size = requestedSize;
+    if ([5, 10, 15, 20].includes(requestedSize) && requestedSize <= scopedQuestions.length) state.size = requestedSize;
     if (modificationsOnly) {
       elements.category.value = 'modifications';
       setMode('category', false);
@@ -339,10 +366,11 @@
       if (setupTitle) setupTitle.textContent = text.modificationsSetup;
       document.title = text.modificationsTitle + ' | AcupunctureTests';
     } else if (requestedFocus === 'weak') setMode('weak', false);
+    else if (topicalModes.has(requestedFocus)) setMode(requestedFocus, false);
     else if (requestedFormula && [...elements.formula.options].some(item => item.value === requestedFormula)) setMode('formula', false);
     else if (requestedCategory && [...elements.category.options].some(item => item.value === requestedCategory)) setMode('category', false);
     else setMode('all', false);
-    state.useMaximum = state.mode !== 'all' && requestedSize === filteredQuestions().length;
+    state.useMaximum = false;
     elements.setup.hidden = false;
     elements.status.hidden = false;
     updateAvailability();
