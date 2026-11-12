@@ -91,7 +91,7 @@ $detailtext = static function(array $profile, string $field, bool $ises): string
     }
     return trim((string)($profile[$field] ?? ''));
 };
-$stops = array_fill_keys(explode(' ', 'a an and are as at be by con de del el en es for from la las los of on or para por que se the to un una y with formulas formula herbs herb tang san wan yin qi'), true);
+$stops = array_fill_keys(explode(' ', 'a an and are as at be by con de del el en es for from la las los of on or para por que se the to un una y with formulas formula herbs herb tang san wan'), true);
 $tokenize = static function(string $value) use ($normalize, $stops): array {
     $tokens = preg_split('/\s+/', $normalize($value), -1, PREG_SPLIT_NO_EMPTY);
     $set = [];
@@ -149,7 +149,7 @@ foreach ($formularoster['formulas'] as $position => $official) {
         'name' => $name,
         'english' => trim((string)($official['englishName'] ?? '')),
         'category' => $categoryname,
-        'categorycode' => trim((string)($category['code'] ?? '')),
+        'categorycode' => trim((string)($profile['categoryKey'] ?? $category['code'] ?? '')),
         'pattern' => $detailtext($profile, 'pattern', $ises),
         'action' => $detailtext($profile, 'action', $ises),
         'clue' => $detailtext($profile, 'clue', $ises),
@@ -271,8 +271,8 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
             'chief' => $fieldscore($source['kings'], $candidate['kings']),
             'clue' => $fieldscore($source['clue'] . ' ' . $source['examfocus'], $candidate['clue'] . ' ' . $candidate['examfocus']),
         ];
-        $score = $scores['category'] * 0.28 + $scores['pattern'] * 0.22 + $scores['action'] * 0.20
-            + $scores['ingredients'] * 0.14 + $scores['chief'] * 0.10 + $scores['clue'] * 0.06;
+        $score = $scores['category'] * 0.08 + $scores['pattern'] * 0.30 + $scores['action'] * 0.27
+            + $scores['ingredients'] * 0.17 + $scores['chief'] * 0.08 + $scores['clue'] * 0.10;
         if ($score <= 0.01) {
             continue;
         }
@@ -285,7 +285,7 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
         $formularesults[] = ['score' => $score, 'card' => $candidate, 'reasons' => $reasons];
     }
     usort($formularesults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
-    $formularesults = array_slice($formularesults, 0, 6);
+    $formularesults = array_slice($formularesults, 0, 10);
 } else if ($mode === 'herb' && $item !== '' && isset($herbs[$normalize($item)])) {
     $source = $herbs[$normalize($item)];
     foreach ($herbs as $candidate) {
