@@ -12,6 +12,7 @@ $ises = $displaylang === 'es';
 $sortmode = optional_param('sort', 'az', PARAM_ALPHA);
 $sortmode = $sortmode === 'category' ? 'category' : 'az';
 $query = trim(optional_param('q', '', PARAM_TEXT));
+$herbfocus = trim(optional_param('herb', '', PARAM_TEXT));
 $categoryfilter = optional_param('category', '', PARAM_ALPHANUMEXT);
 $fromlibrary = optional_param('from', '', PARAM_ALPHA) === 'library';
 
@@ -25,12 +26,14 @@ if ($fromlibrary) {
 $pageparams = $baseparams + [
     'sort' => $sortmode,
     'q' => $query,
+    'herb' => $herbfocus,
     'category' => $categoryfilter,
 ];
 $pageurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $pageparams);
 $languageparams = [
     'sort' => $sortmode,
     'q' => $query,
+    'herb' => $herbfocus,
     'category' => $categoryfilter,
 ];
 if (!$ises) {
@@ -250,6 +253,9 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         $card['pregnancy'],
         $card['interactions'],
     ]));
+    if ($herbfocus !== '' && $normalize($name) !== $normalize($herbfocus)) {
+        continue;
+    }
     if ($query !== '' && core_text::strpos($haystack, core_text::strtolower($query)) === false) {
         continue;
     }
@@ -290,7 +296,7 @@ uasort($groups, static function(array $left, array $right) use ($sortmode): int 
     }
     return strnatcasecmp($left['title'], $right['title']);
 });
-$autoopen = $query !== '' && count($cards) <= 12;
+$autoopen = $herbfocus !== '' || ($query !== '' && count($cards) <= 12);
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -407,7 +413,7 @@ echo $OUTPUT->header();
             ?>
             <a class="single-herbs-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
             <a class="single-herbs-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por orden Bensky' : 'By Bensky order'; ?></a>
-            <?php if ($categoryfilter !== '') {
+            <?php if ($categoryfilter !== '' || $herbfocus !== '') {
                 $backtoallurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + ['sort' => 'az']);
             ?>
                 <a class="single-herbs-list__button" href="<?php echo $backtoallurl->out(false); ?>"><?php echo $ises ? '← Volver a todas las hierbas' : '← Back to all herbs'; ?></a>

@@ -27,7 +27,8 @@
     incorrect: spanish ? 'Incorrecto' : 'Incorrect',
     correctAnswer: spanish ? 'Respuesta correcta:' : 'Correct answer:',
     safety: spanish ? 'Seguridad:' : 'Safety:',
-    source: spanish ? 'Abrir tarjeta fuente →' : 'Open source card →',
+    reviewOptions: spanish ? 'Revisar las cuatro opciones:' : 'Review all four options:',
+    openCard: spanish ? 'Abrir tarjeta →' : 'Open card →',
     backToQuestion: position => spanish ? `← Volver a la pregunta ${position}` : `← Back to question ${position}`,
     finish: (answered, total) => spanish
       ? `Finalizar Quiz (${answered}/${total} respondidas)`
@@ -219,11 +220,11 @@
     activeSourceLink = null;
   }
 
-  function openSourceViewer(event, link, question, position) {
+  function openSourceViewer(event, link, profile, position) {
     if (!elements.sourceViewer || !elements.sourceFrame || !elements.sourceTitle || !elements.sourceReturn) return;
     event.preventDefault();
     activeSourceLink = link;
-    elements.sourceTitle.textContent = `${question.profile.name} (${question.profile.latin})`;
+    elements.sourceTitle.textContent = `${profile.name} (${profile.latin})`;
     elements.sourceReturn.textContent = copy.backToQuestion(position);
     elements.sourceFrame.src = link.href;
     elements.sourceViewer.hidden = false;
@@ -277,7 +278,8 @@
         correctLabel: letters[correctIndex],
         options: choices.map((choice, optionIndex) => ({
           label: letters[optionIndex],
-          text: `${choice.name} (${choice.latin})`
+          text: `${choice.name} (${choice.latin})`,
+          profile: choice
         }))
       };
     });
@@ -430,15 +432,24 @@
         const safetyStrong = document.createElement('strong');
         safetyStrong.textContent = `${copy.safety} `;
         safety.append(safetyStrong, value(profile.safetyNote));
-        const source = document.createElement('a');
-        const params = new URLSearchParams({ herb: profile.name });
-        if (spanish) params.set('lang', 'es');
-        source.href = `/blocks/myprogress/single-herbs-study-guide.php?${params}`;
-        source.textContent = copy.source;
-        source.dataset.herbSourceLink = '';
-        source.addEventListener('click', event => openSourceViewer(event, source, question, index + 1));
+        const reviewHeading = document.createElement('p');
+        const reviewStrong = document.createElement('strong');
+        reviewStrong.textContent = copy.reviewOptions;
+        reviewHeading.append(reviewStrong);
+        const optionLinks = document.createElement('div');
+        optionLinks.className = 'herb-feedback-option-links';
+        question.options.forEach(option => {
+          const source = document.createElement('a');
+          const params = new URLSearchParams({ herb: option.profile.name, sort: 'az' });
+          if (spanish) params.set('lang', 'es');
+          source.href = `/blocks/myprogress/single-herbs-list.php?${params}`;
+          source.textContent = `${option.label}. ${option.profile.name} — ${copy.openCard}`;
+          source.dataset.herbSourceLink = '';
+          source.addEventListener('click', event => openSourceViewer(event, source, option.profile, index + 1));
+          optionLinks.append(source);
+        });
         feedback.classList.add(correct ? 'is-correct' : 'is-incorrect');
-        feedback.append(verdict, answerLine, explanation, indication, safety, source);
+        feedback.append(verdict, answerLine, explanation, indication, safety, reviewHeading, optionLinks);
         feedback.hidden = false;
         updateProgress();
       });
