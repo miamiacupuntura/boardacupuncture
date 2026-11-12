@@ -525,6 +525,10 @@ $singleherbsstudyurl = new moodle_url(
     '/blocks/myprogress/single-herbs-study-guide.php',
     $ises ? ['lang' => 'es'] : []
 );
+$singleherbslisturl = new moodle_url(
+    '/blocks/myprogress/single-herbs-list.php',
+    $ises ? ['lang' => 'es', 'from' => 'library'] : ['from' => 'library']
+);
 $duiyaostudyurl = new moodle_url(
     $ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html'
 );
@@ -837,6 +841,9 @@ echo $OUTPUT->header();
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?>">
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbsstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Categorías de hierbas individuales' : 'Single Herbs Categories'); ?></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $singleherbslisturl->out(false); ?>">
+                                    <span>Single Herbs List<small><?php echo s($ises ? '304 hierbas oficiales del guideline · A–Z o por categoría' : '304 official guideline herbs · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $duiyaostudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Categorías de pares Duì Yào' : 'Duì Yào Pairs Categories'); ?></span><span aria-hidden="true">›</span>

@@ -1265,6 +1265,11 @@ $duiyaourl = new moodle_url($ises
     ? '/study-guide/comparisons/dui-yao-es.html'
     : '/study-guide/comparisons/dui-yao.html');
 $dashboardurl = new moodle_url('/my/');
+$singleherbslistparams = $ises ? ['lang' => 'es'] : [];
+if ($fromlibrary) {
+    $singleherbslistparams['from'] = 'library';
+}
+$singleherbslisturl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $singleherbslistparams);
 $benskymapurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $ises ? ['lang' => 'es'] : []);
 $singleherbroutetitle = $ises ? 'Todas las categorías de hierbas' : 'All herb categories';
 if ($singleherbcurrentindex === 34) {
@@ -1557,6 +1562,7 @@ ob_start();
                 <?php if (!$fromlibrary): ?>
                     <a class="single-herbs-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
                 <?php endif; ?>
+                <a class="single-herbs-guide__back single-herbs-guide__back--active" href="<?php echo $singleherbslisturl->out(false); ?>">Single Herbs List</a>
                 <a class="single-herbs-guide__back" href="<?php echo $dashboardurl->out(false); ?>"><?php echo s($ises ? '← Dashboard' : '← Back to Dashboard'); ?></a>
             </div>
         </nav>
