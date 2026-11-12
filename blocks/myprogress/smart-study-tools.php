@@ -280,6 +280,8 @@ foreach ($tonguepulse['formulas'] as $finding) {
         'pulse' => trim((string)($finding['pulse'] ?? '')),
     ];
 }
+$tonguepulseoptions = $tonguerows;
+usort($tonguepulseoptions, static fn(array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
 
 $formularesults = [];
 $herbresults = [];
@@ -541,12 +543,25 @@ echo $OUTPUT->header();
                 <input type="hidden" name="mode" value="<?php echo s($mode); ?>"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
                 <label><span><?php echo ($mode === 'pattern' || $mode === 'clinical')
                     ? ($ises ? 'Selecciona o escribe un patrón' : 'Select or type a pattern')
-                    : ($ises ? 'Términos de búsqueda' : 'Search terms'); ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"<?php echo ($mode === 'pattern' || $mode === 'clinical') ? ' list="smart-pattern-options" autocomplete="off"' : ''; ?>></label>
+                    : ($mode === 'tongue'
+                        ? ($ises ? 'Selecciona o escribe lengua y pulso' : 'Select or type tongue and pulse')
+                        : ($ises ? 'Términos de búsqueda' : 'Search terms')); ?></span><input type="search" name="q" value="<?php echo s($query); ?>" required placeholder="<?php echo s($placeholders[$mode]); ?>"<?php echo ($mode === 'pattern' || $mode === 'clinical')
+                        ? ' list="smart-pattern-options" autocomplete="off"'
+                        : ($mode === 'tongue' ? ' list="smart-tongue-pulse-options" autocomplete="off"' : ''); ?>></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar' : 'Search'; ?></button>
                 <?php if ($mode === 'pattern' || $mode === 'clinical') { ?>
                     <datalist id="smart-pattern-options">
                         <?php foreach ($patternoptions as $patternoption) { ?>
                             <option value="<?php echo s($patternoption['pattern']); ?>"><?php echo s($patternoption['formula']); ?></option>
+                        <?php } ?>
+                    </datalist>
+                <?php } ?>
+                <?php if ($mode === 'tongue') { ?>
+                    <datalist id="smart-tongue-pulse-options">
+                        <?php foreach ($tonguepulseoptions as $tonguepulseoption) {
+                            $findinglabel = trim($tonguepulseoption['tongue'] . '; ' . $tonguepulseoption['pulse'], '; ');
+                        ?>
+                            <option value="<?php echo s($findinglabel); ?>"><?php echo s($tonguepulseoption['name']); ?></option>
                         <?php } ?>
                     </datalist>
                 <?php } ?>
