@@ -63,13 +63,16 @@ $formulachiefmapurl = new moodle_url('/blocks/myprogress/formula-chief-herbs-map
 
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
+$additionpath = __DIR__ . '/formula-guideline-profile-additions.json';
 $roster = is_readable($rosterpath) ? json_decode(file_get_contents($rosterpath), true) : null;
 $studydata = is_readable($detailpath) ? json_decode(file_get_contents($detailpath), true) : null;
-if (!is_array($roster) || !is_array($studydata)
+$profileadditions = is_readable($additionpath) ? json_decode(file_get_contents($additionpath), true) : null;
+if (!is_array($roster) || !is_array($studydata) || !is_array($profileadditions)
         || (int)($roster['total'] ?? 0) !== 181
         || count($roster['formulas'] ?? []) !== 181
         || count($studydata['formulas'] ?? []) !== 63
-        || count($studydata['supplementalFormulas'] ?? []) !== 227) {
+        || count($studydata['supplementalFormulas'] ?? []) !== 227
+        || (int)($profileadditions['total'] ?? -1) !== count($profileadditions['formulas'] ?? [])) {
     throw new coding_exception('Official Formula guideline data is unavailable.');
 }
 
@@ -89,7 +92,11 @@ $detailtext = static function(array $profile, string $field, bool $ises): string
 };
 
 $detailsbyname = [];
-foreach (array_merge($studydata['formulas'] ?? [], $studydata['supplementalFormulas'] ?? []) as $profile) {
+foreach (array_merge(
+    $studydata['formulas'] ?? [],
+    $studydata['supplementalFormulas'] ?? [],
+    $profileadditions['formulas'] ?? []
+) as $profile) {
     $name = trim((string)($profile['name'] ?? ''));
     if ($name !== '') {
         $detailsbyname[$normalize($name)] = $profile;
@@ -144,6 +151,7 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'roles' => $detailtext($detail, 'ingredientRoles', $ises),
         'comparison' => $detailtext($detail, 'comparison', $ises),
         'safety' => $detailtext($detail, 'safety', $ises),
+        'source' => $detailtext($detail, 'source', $ises),
         'kings' => trim((string)($detail['kings'] ?? '')),
     ];
     $haystack = core_text::strtolower(implode(' ', array_values($card)));
@@ -365,6 +373,7 @@ echo $OUTPUT->header();
                                     <?php if ($card['roles'] !== '') { ?><dt><?php echo $ises ? 'Arquitectura' : 'Architecture'; ?></dt><dd><?php echo s($card['roles']); ?></dd><?php } ?>
                                     <?php if ($card['comparison'] !== '') { ?><dt><?php echo $ises ? 'Contraste' : 'Contrast'; ?></dt><dd><?php echo s($card['comparison']); ?></dd><?php } ?>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
+                                    <?php if ($card['source'] !== '') { ?><dt><?php echo $ises ? 'Fuente' : 'Source'; ?></dt><dd><?php echo s($card['source']); ?></dd><?php } ?>
                                 </dl><?php } else { ?>
                                     <p class="formula-list__profile-note"><?php echo $ises
                                         ? 'Esta fórmula pertenece al Appendix C oficial de 2026. El banco suministrado todavía no contiene un perfil clínico detallado verificado; por eso no se completan campos por inferencia.'
