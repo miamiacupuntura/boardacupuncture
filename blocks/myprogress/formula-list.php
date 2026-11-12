@@ -18,12 +18,13 @@ $fromcontext = optional_param('from', '', PARAM_ALPHA);
 $fromlibrary = $fromcontext === 'library';
 $fromchief = $fromcontext === 'chief';
 $fromingredients = $fromcontext === 'ingredients';
+$fromquiz = $fromcontext === 'quiz';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromquiz) {
     $baseparams['from'] = $fromcontext;
 }
 $pageurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + [
@@ -41,7 +42,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromquiz) {
     $languageparams['from'] = $fromcontext;
 }
 $languageurl = new moodle_url('/blocks/myprogress/formula-list.php', $languageparams);
@@ -192,6 +193,15 @@ $PAGE->set_title('Formula List');
 $PAGE->set_heading('Formula List');
 $PAGE->set_cacheable(false);
 $PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('[data-return-to-formula-question]').forEach(function(button) {
+    button.addEventListener('click', function() {
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+        window.location.href = button.getAttribute('data-fallback-url');
+    });
+});
 document.querySelectorAll('[data-formula-list-expand]').forEach(function(button) {
     button.addEventListener('click', function() {
         document.querySelectorAll('.formula-list__card').forEach(function(card) { card.open = true; });
@@ -256,7 +266,9 @@ echo $OUTPUT->header();
                 : 'The 181 official Appendix C formulas, organized A–Z or in the conventional Bensky Chapters 1–21 sequence. Only chapters containing official roster formulas are shown.'; ?></p>
         </div>
         <div class="formula-list__actions">
-            <?php if ($fromchief) { ?>
+            <?php if ($fromquiz) { ?>
+                <button class="formula-list__button" type="button" data-return-to-formula-question data-fallback-url="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
+            <?php } else if ($fromchief) { ?>
                 <a class="formula-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
             <?php } else if ($fromingredients) { ?>
                 <a class="formula-list__button" href="<?php echo $formulaingredientsurl->out(false); ?>"><?php echo $ises ? '← Volver a Fórmulas e ingredientes' : '← Back to Formula and Ingredients'; ?></a>
@@ -288,7 +300,7 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromchief || $fromingredients) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromquiz) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
             <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
                 <option value=""><?php echo $ises ? 'Todos los capítulos con fórmulas oficiales' : 'All chapters with official formulas'; ?></option>
