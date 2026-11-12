@@ -99,7 +99,8 @@ $aliaspattern = '/(?<![A-Za-z])(' . implode('|', array_map(
 $renderingredients = static function(
     string $ingredients,
     string $chiefs,
-    bool $ises
+    bool $ises,
+    string $query
 ) use ($aliaspattern, $aliaslookup, $herbaliases, $normalize): string {
     $chieftargets = [];
     $chiefaliases = [];
@@ -121,13 +122,21 @@ $renderingredients = static function(
             continue;
         }
         $target = $lookup['target'];
-        $ischief = isset($chiefaliases[$normalize($part)]) || isset($chieftargets[$normalize($target)]);
+        $partkey = $normalize($part);
+        $targetkey = $normalize($target);
+        $querykey = $normalize($query);
+        $ischief = isset($chiefaliases[$partkey]) || isset($chieftargets[$targetkey]);
+        $issearchmatch = $querykey !== ''
+            && (core_text::strpos($partkey, $querykey) !== false
+                || core_text::strpos($targetkey, $querykey) !== false);
         $params = ['herb' => $target, 'sort' => 'az', 'from' => 'ingredients'];
         if ($ises) {
             $params['lang'] = 'es';
         }
         $url = new moodle_url('/blocks/myprogress/single-herbs-list.php', $params);
-        $classes = 'formula-ingredients__herb-link' . ($ischief ? ' is-chief' : '');
+        $classes = 'formula-ingredients__herb-link'
+            . ($ischief ? ' is-chief' : '')
+            . ($issearchmatch ? ' is-search-match' : '');
         $output .= html_writer::link(
             $url,
             ($ischief ? '★ ' : '') . $part,
@@ -170,13 +179,25 @@ foreach ($formuladata['formulas'] as $profile) {
     if ($ises) {
         $formulaparams['lang'] = 'es';
     }
+    $querykey = $normalize($query);
+    $matchtype = '';
+    if ($querykey !== '') {
+        if (core_text::strpos($normalize($officialname . ' ' . $sourcename), $querykey) !== false) {
+            $matchtype = 'formula';
+        } else if (core_text::strpos($normalize($chiefs), $querykey) !== false) {
+            $matchtype = 'chief';
+        } else {
+            $matchtype = 'ingredient';
+        }
+    }
     $rows[] = [
         'number' => (int)($profile['number'] ?? 0),
         'name' => $officialname,
         'sourceName' => $sourcename,
         'formulaUrl' => new moodle_url('/blocks/myprogress/formula-list.php', $formulaparams),
-        'ingredients' => $renderingredients($ingredients, $chiefs, $ises),
+        'ingredients' => $renderingredients($ingredients, $chiefs, $ises, $query),
         'chiefs' => $chiefs,
+        'matchtype' => $matchtype,
         'category' => trim((string)($profile[$ises ? 'categoryEs' : 'category'] ?? '')),
     ];
 }
@@ -209,8 +230,8 @@ echo $OUTPUT->header();
 .formula-ingredients__legend{margin:0 0 16px;padding:13px 15px;border-left:5px solid #e9a11b;border-radius:8px;background:#fff7df;color:#5a4310}
 .formula-ingredients__table-wrap{overflow-x:auto;border:1px solid #bfd0d9;border-radius:12px;background:#fff;box-shadow:0 5px 18px rgba(23,50,77,.06)}
 .formula-ingredients__table{width:100%;min-width:960px;border-collapse:collapse}.formula-ingredients__table th,.formula-ingredients__table td{padding:11px 13px;border-bottom:1px solid #d5e1e7;vertical-align:top;text-align:left;line-height:1.55}.formula-ingredients__table thead th{background:#0d7868;color:#fff;font-size:.76rem;letter-spacing:.05em;text-transform:uppercase}.formula-ingredients__table tbody tr:nth-child(even){background:#f8fbfc}.formula-ingredients__formula-link{color:#0f4c81!important;font-weight:900;text-decoration:none}.formula-ingredients__formula-link:hover{text-decoration:underline}.formula-ingredients__alias{display:block;margin-top:3px;color:#657c8d;font-size:11px}
-.formula-ingredients__herb-link{display:inline-flex;align-items:center;margin:2px 1px;padding:3px 7px;border:1px solid #b7ccd7;border-radius:999px;background:#f4f8fa;color:#0f4c81!important;font-weight:800;text-decoration:none!important}.formula-ingredients__herb-link:hover{background:#e5f3ef}.formula-ingredients__herb-link.is-chief{border:2px solid #d58a00;background:#fff0b8;color:#6f4300!important;box-shadow:0 0 0 2px rgba(255,193,7,.18);font-weight:950}
-.formula-ingredients__category{color:#526b84;font-size:12px;font-weight:750}.formula-ingredients__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;text-align:center;font-weight:800}
+.formula-ingredients__herb-link{display:inline-flex;align-items:center;margin:2px 1px;padding:3px 7px;border:1px solid #b7ccd7;border-radius:999px;background:#f4f8fa;color:#0f4c81!important;font-weight:800;text-decoration:none!important}.formula-ingredients__herb-link:hover{background:#e5f3ef}.formula-ingredients__herb-link.is-chief{border:2px solid #d58a00;background:#fff0b8;color:#6f4300!important;box-shadow:0 0 0 2px rgba(255,193,7,.18);font-weight:950}.formula-ingredients__herb-link.is-search-match:not(.is-chief){border:2px solid #2563a7;background:#eaf3ff;color:#0b4f87!important}.formula-ingredients__herb-link.is-chief.is-search-match{outline:3px solid #2563a7;outline-offset:2px}
+.formula-ingredients__category{display:block;margin-top:4px;color:#526b84;font-size:12px;font-weight:750}.formula-ingredients__match{display:inline-flex;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eaf3ff;color:#0b4f87;font-size:11px;font-weight:900;text-transform:uppercase}.formula-ingredients__match.is-chief{background:#fff0b8;color:#6f4300}.formula-ingredients__match.is-ingredient{background:#edf6ff;color:#155b91}.formula-ingredients__match.is-formula{background:#e8f7f1;color:#075f50}.formula-ingredients__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;text-align:center;font-weight:800}
 @media(max-width:760px){.formula-ingredients__hero{display:block}.formula-ingredients__actions{margin-top:16px}.formula-ingredients__tools{grid-template-columns:1fr}.formula-ingredients__table{min-width:0}.formula-ingredients__table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.formula-ingredients__table,.formula-ingredients__table tbody,.formula-ingredients__table tr,.formula-ingredients__table th,.formula-ingredients__table td{display:block;width:100%}.formula-ingredients__table tr{padding:12px;border-bottom:5px solid #e5eef2}.formula-ingredients__table th,.formula-ingredients__table td{display:grid;grid-template-columns:105px 1fr;gap:10px;border:0;background:#fff!important}.formula-ingredients__table th::before,.formula-ingredients__table td::before{content:attr(data-label);color:#087c69;font-size:.7rem;font-weight:900;text-transform:uppercase}}
 </style>
 <main class="formula-ingredients">
@@ -255,6 +276,15 @@ echo $OUTPUT->header();
                             <a class="formula-ingredients__formula-link" href="<?php echo $row['formulaUrl']->out(false); ?>"><?php echo s($row['name']); ?></a>
                             <?php if ($row['sourceName'] !== $row['name']) { ?><small class="formula-ingredients__alias"><?php echo s($row['sourceName']); ?></small><?php } ?>
                             <small class="formula-ingredients__category"><?php echo s($row['category']); ?></small>
+                            <?php if ($row['matchtype'] !== '') {
+                                $matchlabels = [
+                                    'formula' => $ises ? 'Coincidencia de fórmula' : 'Formula match',
+                                    'chief' => $ises ? 'Coincidencia Chief' : 'Chief match',
+                                    'ingredient' => $ises ? 'Coincidencia de ingrediente' : 'Ingredient match',
+                                ];
+                            ?>
+                                <small class="formula-ingredients__match is-<?php echo s($row['matchtype']); ?>"><?php echo s($matchlabels[$row['matchtype']]); ?></small>
+                            <?php } ?>
                         </th>
                         <td data-label="<?php echo $ises ? 'Ingredientes' : 'Ingredients'; ?>"><?php echo $row['ingredients']; ?></td>
                     </tr>
