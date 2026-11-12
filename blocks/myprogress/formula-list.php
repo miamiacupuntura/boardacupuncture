@@ -83,21 +83,25 @@ $smarttoolsurl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $sma
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
 $additionpath = __DIR__ . '/formula-guideline-profile-additions.json';
+$architecturepath = __DIR__ . '/formula-architecture-data.json';
 $herbindexpath = __DIR__ . '/single-herb-card-index.json';
 $roster = is_readable($rosterpath) ? json_decode(file_get_contents($rosterpath), true) : null;
 $studydata = is_readable($detailpath) ? json_decode(file_get_contents($detailpath), true) : null;
 $profileadditions = is_readable($additionpath)
     ? json_decode(file_get_contents($additionpath), true)
     : ['total' => 0, 'formulas' => []];
+$architecturedata = is_readable($architecturepath) ? json_decode(file_get_contents($architecturepath), true) : null;
 $herbindex = is_readable($herbindexpath) ? json_decode(file_get_contents($herbindexpath), true) : null;
-if (!is_array($roster) || !is_array($studydata) || !is_array($profileadditions) || !is_array($herbindex)
+if (!is_array($roster) || !is_array($studydata) || !is_array($profileadditions) || !is_array($architecturedata) || !is_array($herbindex)
         || (int)($roster['total'] ?? 0) !== 181
         || count($roster['formulas'] ?? []) !== 181
         || count($studydata['formulas'] ?? []) !== 63
         || count($studydata['supplementalFormulas'] ?? []) !== 227
         || (int)($herbindex['total'] ?? 0) !== 304
         || count($herbindex['herbs'] ?? []) !== 304
-        || (int)($profileadditions['total'] ?? -1) !== count($profileadditions['formulas'] ?? [])) {
+        || (int)($profileadditions['total'] ?? -1) !== count($profileadditions['formulas'] ?? [])
+        || (int)($architecturedata['total'] ?? -1) !== count($architecturedata['architectures'] ?? [])
+        || count($architecturedata['architectures'] ?? []) < 12) {
     throw new coding_exception('Official Formula guideline data is unavailable.');
 }
 
@@ -115,6 +119,14 @@ $detailtext = static function(array $profile, string $field, bool $ises): string
     }
     return trim((string)($profile[$field] ?? ''));
 };
+
+$architecturemap = [];
+foreach ($architecturedata['architectures'] as $architecture) {
+    $architecturename = trim((string)($architecture['name'] ?? ''));
+    if ($architecturename !== '') {
+        $architecturemap[$normalize($architecturename)] = $architecture;
+    }
+}
 
 $herbaliases = [];
 foreach ($herbindex['herbs'] as $herb) {
@@ -260,6 +272,7 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'clue' => $detailtext($detail, 'clue', $ises),
         'examfocus' => $detailtext($detail, 'examFocus', $ises),
         'ingredients' => $detailtext($detail, 'ingredients', $ises),
+        'architecture' => $architecturemap[$normalize($name)] ?? null,
         'roles' => $detailtext($detail, 'ingredientRoles', $ises),
         'comparison' => $detailtext($detail, 'comparison', $ises),
         'safety' => $detailtext($detail, 'safety', $ises),
@@ -371,11 +384,12 @@ echo $OUTPUT->header();
 .formula-list__category{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf5f3;color:#087c69!important;font-size:11px;font-weight:850;text-decoration:none!important}.formula-list__category:hover{background:#087c69;color:#fff!important}
 .formula-list__status{display:block;margin-top:7px;color:#64748b;font-size:11px;font-weight:800}.formula-list__status.is-detailed{color:#087c69}
 .formula-list__body{padding:18px 22px 22px;border-top:1px solid #d8e2e7}.formula-list__body dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px 16px;margin:0}.formula-list__body dt{font-size:13px;font-weight:900}.formula-list__body dd{margin:0;color:#52657a;font-size:14px;line-height:1.6}.formula-list__body dd.is-safety{color:#a64b13}.formula-list__clue{color:#075f60!important;font-weight:800}
+.formula-list__architecture{padding:12px;border:1px solid #c8d9df;border-left:5px solid #6d28d9;border-radius:9px;background:#faf8ff}.formula-list__architecture-intro{margin:0 0 10px;color:#4c1d95;font-weight:850}.formula-list__architecture-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.formula-list__architecture-group{padding:10px;border:1px solid #ddd4ef;border-radius:8px;background:#fff}.formula-list__architecture-group strong{display:block;color:#102a43}.formula-list__architecture-group>span{display:block;margin:2px 0 7px;color:#6b4ba1;font-size:12px;font-weight:750}.formula-list__architecture-note{margin:10px 0 0;color:#71420c;font-size:12px;font-weight:750}
 .formula-list__herb-link{display:inline-flex;align-items:center;margin:2px 1px;padding:3px 8px;border:1px solid #b7ccd7;border-radius:999px;background:#f4f8fa;color:#0f4c81!important;font-weight:800;text-decoration:none!important}.formula-list__herb-link:hover,.formula-list__herb-link:focus{border-color:#087c69;background:#e5f3ef;color:#075f54!important}.formula-list__herb-link.is-chief{border:2px solid #d58a00;background:#fff0b8;color:#6f4300!important;box-shadow:0 0 0 2px rgba(255,193,7,.15);font-weight:950}
 .formula-list__connections{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;padding-top:14px;border-top:1px solid #d8e2e7}.formula-list__connection{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border:1px solid #0d7868;border-radius:8px;background:#edf8f5;color:#075f54!important;font-weight:850;text-decoration:none!important}.formula-list__connection:hover,.formula-list__connection:focus{background:#0d7868;color:#fff!important}
 .formula-list__profile-note{margin:0;padding:11px;border-radius:8px;background:#fff7e8;color:#7a5412;font-size:12px;line-height:1.5}
 .formula-list__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;color:#526b84;text-align:center;font-weight:750}
-@media(max-width:1000px){.formula-list__cards{grid-template-columns:1fr}}@media(max-width:700px){.formula-list__top{display:block}.formula-list__actions{margin-top:15px}.formula-list__form,.formula-list__summary,.formula-list__cards{grid-template-columns:1fr}.formula-list__tools{justify-content:flex-start}.formula-list__body dl{grid-template-columns:1fr}.formula-list__body dd{margin-top:-5px}}
+@media(max-width:1000px){.formula-list__cards{grid-template-columns:1fr}}@media(max-width:760px){.formula-list__architecture-groups{grid-template-columns:1fr}}@media(max-width:700px){.formula-list__top{display:block}.formula-list__actions{margin-top:15px}.formula-list__form,.formula-list__summary,.formula-list__cards{grid-template-columns:1fr}.formula-list__tools{justify-content:flex-start}.formula-list__body dl{grid-template-columns:1fr}.formula-list__body dd{margin-top:-5px}}
 </style>
 <main class="formula-list">
     <?php if ($fromlibrary) {
@@ -501,7 +515,32 @@ echo $OUTPUT->header();
                                     <?php if ($card['examfocus'] !== '') { ?><dt><?php echo $ises ? 'Enfoque Board' : 'Board focus'; ?></dt><dd><?php echo s($card['examfocus']); ?></dd><?php } ?>
                                     <?php if ($card['kings'] !== '') { ?><dt><?php echo $ises ? 'Hierba principal' : 'Chief herb'; ?></dt><dd><?php echo $renderherblinks($card['kings'], $card['kings'], $card['name'], $ises); ?></dd><?php } ?>
                                     <?php if ($card['ingredients'] !== '') { ?><dt><?php echo $ises ? 'Ingredientes' : 'Ingredients'; ?></dt><dd><?php echo $renderherblinks($card['ingredients'], $card['kings'], $card['name'], $ises); ?></dd><?php } ?>
-                                    <?php if ($card['roles'] !== '') { ?><dt><?php echo $ises ? 'Arquitectura' : 'Architecture'; ?></dt><dd><?php echo s($card['roles']); ?></dd><?php } ?>
+                                    <?php if (is_array($card['architecture'])) {
+                                        $architecture = $card['architecture'];
+                                        $architecturesummary = trim((string)($architecture['summary'][$ises ? 'es' : 'en'] ?? $architecture['summary']['en'] ?? ''));
+                                    ?>
+                                        <dt><?php echo $ises ? 'Composición estructural' : 'Formula architecture'; ?></dt>
+                                        <dd class="formula-list__architecture">
+                                            <?php if ($architecturesummary !== '') { ?><p class="formula-list__architecture-intro"><?php echo s($architecturesummary); ?></p><?php } ?>
+                                            <div class="formula-list__architecture-groups">
+                                                <?php foreach ($architecture['groups'] ?? [] as $architecturegroup) {
+                                                    $grouplabel = $ises ? trim((string)($architecturegroup['labelEs'] ?? $architecturegroup['label'] ?? '')) : trim((string)($architecturegroup['label'] ?? ''));
+                                                    $grouprole = trim((string)($architecturegroup['role'][$ises ? 'es' : 'en'] ?? $architecturegroup['role']['en'] ?? ''));
+                                                    $groupherbs = implode(', ', array_map('strval', $architecturegroup['herbs'] ?? []));
+                                                ?>
+                                                    <section class="formula-list__architecture-group">
+                                                        <strong><?php echo s($grouplabel); ?></strong>
+                                                        <?php if ($grouprole !== '') { ?><span><?php echo s($grouprole); ?></span><?php } ?>
+                                                        <div><?php echo $renderherblinks($groupherbs, $card['kings'], $card['name'], $ises); ?></div>
+                                                    </section>
+                                                <?php } ?>
+                                            </div>
+                                            <?php
+                                            $architecturenote = trim((string)($architecture['note'][$ises ? 'es' : 'en'] ?? $architecture['note']['en'] ?? ''));
+                                            if ($architecturenote !== '') { ?><p class="formula-list__architecture-note"><?php echo s($architecturenote); ?></p><?php } ?>
+                                        </dd>
+                                    <?php } ?>
+                                    <?php if ($card['roles'] !== '') { ?><dt><?php echo $ises ? 'Funciones internas' : 'Internal roles'; ?></dt><dd><?php echo s($card['roles']); ?></dd><?php } ?>
                                     <?php if ($card['comparison'] !== '') { ?><dt><?php echo $ises ? 'Contraste' : 'Contrast'; ?></dt><dd><?php echo s($card['comparison']); ?></dd><?php } ?>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
                                     <?php if ($card['source'] !== '') { ?><dt><?php echo $ises ? 'Fuente' : 'Source'; ?></dt><dd><?php echo s($card['source']); ?></dd><?php } ?>
