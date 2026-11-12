@@ -585,6 +585,10 @@ $smartstudytoolsurl = new moodle_url(
     '/blocks/myprogress/smart-study-tools.php',
     $ises ? ['lang' => 'es'] : []
 );
+$studyscoreurl = new moodle_url(
+    '/blocks/myprogress/study-score.php',
+    $ises ? ['lang' => 'es'] : []
+);
 $chiefherbsmapurl = new moodle_url(
     '/blocks/myprogress/formula-chief-herbs-map.php',
     $ises ? ['lang' => 'es'] : []
@@ -797,7 +801,7 @@ echo $OUTPUT->header();
 .subject-study-library__journey-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58;font-weight:850;line-height:1.25;text-decoration:none!important}
 .subject-study-library__journey-option small{display:block;margin-top:4px;color:#64748b;font-size:13px;font-weight:600;line-height:1.35}.subject-study-library__journey-option small.subject-study-library__journey-option-heading{color:inherit;font-size:inherit;font-weight:inherit;line-height:1.25}.subject-study-library__journey-option span:last-child{align-self:center;font-size:18px}
 .subject-study-library__journey-option:hover,.subject-study-library__journey-option:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
-.subject-study-library__journey-option--smart{border:2px solid #6d28d9;background:linear-gradient(135deg,#f5f0ff,#fff8e9);color:#4c1d95}.subject-study-library__journey-option--smart small{color:#6b4ba1}.subject-study-library__journey-option--smart:hover,.subject-study-library__journey-option--smart:focus{border-color:#4c1d95;background:#eee6ff;color:#3b167c}.subject-study-library__smart-top{border:2px solid #6d28d9!important;background:linear-gradient(135deg,#f5f0ff,#fff8e9)!important;color:#4c1d95!important;white-space:nowrap}.subject-study-library__smart-top:hover,.subject-study-library__smart-top:focus{border-color:#4c1d95!important;background:#eee6ff!important;color:#3b167c!important}
+.subject-study-library__journey-option--smart{border:2px solid #6d28d9;background:linear-gradient(135deg,#f5f0ff,#fff8e9);color:#4c1d95}.subject-study-library__journey-option--smart small{color:#6b4ba1}.subject-study-library__journey-option--smart:hover,.subject-study-library__journey-option--smart:focus{border-color:#4c1d95;background:#eee6ff;color:#3b167c}.subject-study-library__smart-top{border:2px solid #6d28d9!important;background:linear-gradient(135deg,#f5f0ff,#fff8e9)!important;color:#4c1d95!important;white-space:nowrap}.subject-study-library__smart-top:hover,.subject-study-library__smart-top:focus{border-color:#4c1d95!important;background:#eee6ff!important;color:#3b167c!important}.subject-study-library__score-top{border:2px solid #ea6a19!important;background:linear-gradient(135deg,#fff3e8,#fffaf5)!important;color:#9a3f08!important;white-space:nowrap}.subject-study-library__score-top:hover,.subject-study-library__score-top:focus{border-color:#c54b08!important;background:#ffe6cf!important;color:#7c2d06!important}
 .subject-study-library__journey-option--primary{min-height:46px;align-items:center;justify-content:center;margin-bottom:3px;background:#f7fcfb;font-size:14px;text-align:center}.subject-study-library__journey-option--primary:hover,.subject-study-library__journey-option--primary:focus{background:#0b817d;color:#fff}
 .subject-study-library__search{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px;padding:18px;border:1px solid #d4dde4;border-radius:11px;background:#fff}.subject-study-library__search label{display:grid;gap:6px;color:#213e51;font-weight:800}.subject-study-library__search input{width:100%;min-height:48px;box-sizing:border-box;padding:10px 13px;border:1px solid #9fb3c1;border-radius:8px;background:#fff;color:#17232a;font-size:16px}.subject-study-library__search input:focus{border-color:#2563eb;outline:3px solid rgba(37,99,235,.16)}.subject-study-library__search-count{padding-bottom:12px;color:#52677a;font-size:13px;font-weight:800;white-space:nowrap}
 .subject-study-library__empty{margin:0;padding:18px;border:1px dashed #9fb3c1;border-radius:10px;background:#f8fafc;color:#52677a;text-align:center}
@@ -879,6 +883,7 @@ echo $OUTPUT->header();
                                 : 'Each block contains the actual options that belong to that activity.'); ?></p>
                         </div>
                         <nav class="subject-study-library__map-actions" aria-label="<?php echo s($ises ? 'Controles de navegación' : 'Navigation controls'); ?>">
+                            <a class="subject-study-guide__back subject-study-library__score-top" href="<?php echo $studyscoreurl->out(false); ?>"><?php echo s($ises ? '📊 Mi puntuación' : '📊 My Study Score'); ?></a>
                             <a class="subject-study-guide__back subject-study-library__smart-top" href="<?php echo $smartstudytoolsurl->out(false); ?>"><?php echo s($ises ? '✨ Herramientas inteligentes' : '✨ Smart Study Tools'); ?></a>
                             <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
                             <a class="subject-study-guide__back subject-study-library__dashboard" data-library-dashboard href="<?php echo (new moodle_url('/my/'))->out(false); ?>">Dashboard</a>
