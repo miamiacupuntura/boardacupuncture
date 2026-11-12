@@ -7,13 +7,14 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
+REQUESTED_DIR="${STUDY_NOTE_DIR:-}"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash tools/deploy_formula_ingredients.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
 
-for command in curl php grep install stat cp cmp mkdir mktemp date rm id; do
+for command in curl php grep install stat cp cmp mkdir mktemp readlink tr dirname date rm id; do
     command -v "$command" >/dev/null 2>&1 || { echo "ERROR: falta el comando $command" >&2; exit 1; }
 done
 
@@ -24,6 +25,11 @@ PHP_FILES=(formula-ingredients.php study-guide.php single-herbs-list.php formula
 for file in "${PHP_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/$file"
     php -l "$TEMP_DIR/$file" >/dev/null
+done
+
+STATIC_FILES=(miscellaneous-practice.html miscellaneous-practice-es.html miscellaneous-practice.js)
+for file in "${STATIC_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/$file"
 done
 
 grep -Fq "Formula and Ingredients" "$TEMP_DIR/formula-ingredients.php"
@@ -43,6 +49,13 @@ grep -Fq "Back to Formula and Ingredients" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Back to Formula and Ingredients" "$TEMP_DIR/formula-list.php"
 grep -Fq "\$fromingredients = \$fromcontext === 'ingredients'" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "\$fromingredients = \$fromcontext === 'ingredients'" "$TEMP_DIR/formula-list.php"
+grep -Fq "\$fromquiz = \$fromcontext === 'quiz'" "$TEMP_DIR/formula-list.php"
+grep -Fq "data-return-to-formula-question" "$TEMP_DIR/formula-list.php"
+grep -Fq "miscellaneous-practice.js?v=20261112-31" "$TEMP_DIR/miscellaneous-practice.html"
+grep -Fq "miscellaneous-practice.js?v=20261112-31" "$TEMP_DIR/miscellaneous-practice-es.html"
+grep -Fq "key:'formulaingredients'" "$TEMP_DIR/miscellaneous-practice.js"
+grep -Fq "data-formula-ingredient-row" "$TEMP_DIR/miscellaneous-practice.js"
+grep -Fq "function formulaIngredientsReviewPanel" "$TEMP_DIR/miscellaneous-practice.js"
 
 TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
 [[ -d "$TARGET_DIR" ]] || { echo "ERROR: no existe $TARGET_DIR" >&2; exit 1; }
@@ -87,9 +100,29 @@ if ($count !== 63) {
 }
 ' "$TARGET_DIR/formulas-study-guide-data.json" "$TARGET_DIR/formula-board-roster-2026.json" "$TARGET_DIR/single-herb-card-index.json"
 
+declare -a STATIC_TARGETS=()
+declare -A SEEN=()
+add_static_target() {
+    local candidate="$1"
+    [[ -d "$candidate" && -f "$candidate/miscellaneous-practice.html" ]] || return 0
+    local resolved
+    resolved="$(readlink -f "$candidate")"
+    [[ -n "$resolved" ]] || return 0
+    if [[ -z "${SEEN[$resolved]:-}" ]]; then SEEN["$resolved"]=1; STATIC_TARGETS+=("$resolved"); fi
+}
+if [[ -n "$REQUESTED_DIR" ]]; then
+    add_static_target "$REQUESTED_DIR"
+else
+    add_static_target "/var/www/acupuncturetests-study-guide/current/comparisons"
+    add_static_target "$MOODLE_ROOT/study-guide/comparisons"
+    add_static_target "$(dirname "$MOODLE_ROOT")/study-guide/comparisons"
+    add_static_target "/var/www/html/study-guide/comparisons"
+fi
+[[ "${#STATIC_TARGETS[@]}" -gt 0 ]] || { echo "ERROR: no se encontró Miscellaneous Quiz activo." >&2; exit 1; }
+
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP="$BACKUP_ROOT/formula-ingredients-$TIMESTAMP"
-mkdir -p "$BACKUP"
+mkdir -p "$BACKUP" "$BACKUP/static"
 reference="$TARGET_DIR/study-guide.php"
 default_owner_group="$(stat -c '%u:%g' "$reference")"
 default_mode="$(stat -c '%a' "$reference")"
@@ -109,6 +142,20 @@ for file in "${PHP_FILES[@]}"; do
     php -l "$target" >/dev/null
 done
 
+for target in "${STATIC_TARGETS[@]}"; do
+    sub="$BACKUP/static/$(echo "$target" | tr '/ ' '__')"
+    mkdir -p "$sub"
+    reference="$target/miscellaneous-practice.html"
+    owner_group="$(stat -c '%u:%g' "$reference")"
+    mode="$(stat -c '%a' "$reference")"
+    for file in "${STATIC_FILES[@]}"; do
+        cp -a "$target/$file" "$sub/$file"
+        install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" "$TEMP_DIR/$file" "$target/$file"
+        cmp -s "$TEMP_DIR/$file" "$target/$file"
+    done
+    echo "ACTUALIZADO Y VERIFICADO: $target"
+done
+
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
         runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -118,6 +165,7 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
 fi
 
 echo "OK: botón Formula and Ingredients instalado en Secondary Study Guide."
+echo "OK: módulo Formula and Ingredients instalado en Miscellaneous Quiz con 63 preguntas."
 echo "OK: 63 fórmulas oficiales del guideline verificadas."
 echo "OK: ingredientes Chief resaltados en amarillo."
 echo "OK: la búsqueda distingue Formula match, Chief match e Ingredient match."
