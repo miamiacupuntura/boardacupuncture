@@ -247,6 +247,14 @@ $areas = [
                 'secondary' => true,
             ],
             [
+                'title' => 'Formula Tongue and Pulse',
+                'description' => 'Review tongue and pulse findings for all 63 official guideline formulas, organized by formula category.',
+                'path' => '/blocks/myprogress/formula-tongue-pulse.php',
+                'anchor' => '',
+                'status' => 'AVAILABLE · 63 GUIDELINE FORMULAS',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Formula Comparisons',
                 'description' => 'Review 110 focused comparisons by treatment strategy, pattern, actions, ingredients and the decisive clues that distinguish similar formulas.',
                 'path' => '/study-guide/comparisons/formulas.html',
@@ -322,6 +330,8 @@ $areas = [
 ];
 
 $spanishcopy = [
+    'Formula Tongue and Pulse' => 'Lengua y pulso de fórmulas',
+    'Review tongue and pulse findings for all 63 official guideline formulas, organized by formula category.' => 'Repasa los hallazgos de lengua y pulso de las 63 fórmulas oficiales del guideline, organizadas por categoría.',
     'Formula and Actions' => 'Fórmulas y acciones',
     'Review 63 official guideline formulas by category and principal action, with direct links to every formula card.' => 'Repasa las 63 fórmulas oficiales del guideline por categoría y acción principal, con enlaces directos a cada tarjeta.',
     'Chinese Herbology' => 'Herbología China',
