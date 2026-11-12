@@ -40,6 +40,7 @@ $incompatibilitychapters = [
 $fromincompatibilities = $fromcontext === 'incompatibilities'
     && in_array($returnchapter, $incompatibilitychapters, true);
 $returnorigin = in_array($returnorigin, ['animal', 'plant', 'mineral'], true) ? $returnorigin : '';
+$fromoriginmap = $fromcontext === 'originmap';
 $smartmode = optional_param('smartmode', 'herb', PARAM_ALPHA);
 $smartitem = trim(optional_param('smartitem', '', PARAM_TEXT));
 $smartq = trim(optional_param('smartq', '', PARAM_TEXT));
@@ -48,7 +49,7 @@ $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap) {
     $baseparams['from'] = $fromcontext;
 }
 if ($fromformula) {
@@ -57,6 +58,9 @@ if ($fromformula) {
 if ($fromincompatibilities) {
     $baseparams['returnchapter'] = $returnchapter;
     if ($returnorigin !== '') $baseparams['returnorigin'] = $returnorigin;
+}
+if ($fromoriginmap && $returnorigin !== '') {
+    $baseparams['returnorigin'] = $returnorigin;
 }
 if ($fromsmart) {
     $baseparams['smartmode'] = $smartmode;
@@ -79,7 +83,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap) {
     $languageparams['from'] = $fromcontext;
 }
 if ($fromformula) {
@@ -88,6 +92,9 @@ if ($fromformula) {
 if ($fromincompatibilities) {
     $languageparams['returnchapter'] = $returnchapter;
     if ($returnorigin !== '') $languageparams['returnorigin'] = $returnorigin;
+}
+if ($fromoriginmap && $returnorigin !== '') {
+    $languageparams['returnorigin'] = $returnorigin;
 }
 if ($fromsmart) {
     $languageparams['smartmode'] = $smartmode;
@@ -121,6 +128,10 @@ $incompatibilityreturnparams = $returnorigin !== '' ? ['origin' => $returnorigin
 $incompatibilityreturnurl = new moodle_url(
     '/study-guide/comparisons/' . $localizedreturnchapter,
     $incompatibilityreturnparams
+);
+$originmapreturnurl = new moodle_url(
+    '/study-guide/comparisons/' . ($ises ? 'guideline-herbs-by-origin-es.html' : 'guideline-herbs-by-origin.html'),
+    $returnorigin !== '' ? ['origin' => $returnorigin] : []
 );
 
 $indexpath = __DIR__ . '/single-herb-card-index.json';
@@ -480,7 +491,9 @@ echo $OUTPUT->header();
                 : 'The 304 official guideline herbs, organized alphabetically or in the conventional sequence of the 33 Bensky categories.'; ?></p>
         </div>
         <div class="single-herbs-list__actions">
-            <?php if ($fromincompatibilities) { ?>
+            <?php if ($fromoriginmap) { ?>
+                <a class="single-herbs-list__button" href="<?php echo $originmapreturnurl->out(false); ?>"><?php echo $ises ? '← Volver a sustancias por origen' : '← Back to medicinals by origin'; ?></a>
+            <?php } else if ($fromincompatibilities) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $incompatibilityreturnurl->out(false); ?>"><?php echo $ises ? '← Volver al capítulo de incompatibilidades' : '← Back to incompatibility chapter'; ?></a>
             <?php } else if ($fromsmart) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $smarttoolsurl->out(false); ?>"><?php echo $ises ? '← Volver a Smart Study Tools' : '← Back to Smart Study Tools'; ?></a>
@@ -525,7 +538,7 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <?php if ($fromformula) { ?><input type="hidden" name="returnformula" value="<?php echo s($returnformula); ?>"><?php } ?>
             <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>
             <label>
