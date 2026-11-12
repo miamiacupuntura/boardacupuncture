@@ -40,6 +40,8 @@ grep -Fq "chief-herbs-card-link--herb" "$TEMP_DIR/chief-herbs-property.html"
 grep -Fq "chief-herbs-card-link--formula" "$TEMP_DIR/chief-herbs-property.html"
 grep -Fq "\$fromchief = \$fromcontext === 'chief'" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Back to Chief Herbs" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "'Acciones' : 'Actions'" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "'Indicaciones' : 'Indications'" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "\$formulafocus = trim(optional_param('formula'" "$TEMP_DIR/formula-list.php"
 grep -Fq "Back to Chief Herbs" "$TEMP_DIR/formula-list.php"
 php -r '
