@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -90,6 +90,22 @@ grep -Fq "data-practice-mode=\"weak\"" "$TEMP_DIR/static/formula-practice.html"
 grep -Fq "data-practice-mode=\"weak\"" "$TEMP_DIR/static/formula-practice-es.html"
 grep -Fq "state.mode === 'weak'" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq "percentage(result.correct, result.total) < 80" "$TEMP_DIR/static/formula-practice.js"
+for focus in dui modifications clinical patterns cautions indications actions; do
+    grep -Fq "data-practice-mode=\"$focus\"" "$TEMP_DIR/static/formula-practice.html"
+    grep -Fq "data-practice-mode=\"$focus\"" "$TEMP_DIR/static/formula-practice-es.html"
+done
+for size in 5 10 15 20; do
+    grep -Fq "data-practice-size=\"$size\"" "$TEMP_DIR/static/formula-practice.html"
+    grep -Fq "data-practice-size=\"$size\"" "$TEMP_DIR/static/formula-practice-es.html"
+done
+if grep -Eq 'data-practice-size="(25|50|100)"' "$TEMP_DIR/static/formula-practice.html" "$TEMP_DIR/static/formula-practice-es.html"; then
+    echo "ERROR: todavía existen tamaños antiguos 25, 50 o 100 en Formula Quiz." >&2
+    exit 1
+fi
+grep -Fq "appendDuiYaoQuestions" "$TEMP_DIR/static/formula-practice.js"
+grep -Fq "history.focuses" "$TEMP_DIR/static/formula-practice.js"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data) !== 51) { exit(1); }' "$TEMP_DIR/static/dui-yao-data.json"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data["questions"] ?? []) < 290) { exit(1); }' "$TEMP_DIR/static/formula-modifications-generated.json"
 
 TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
 [[ -d "$TARGET_DIR" ]] || { echo "ERROR: no existe $TARGET_DIR" >&2; exit 1; }
@@ -180,6 +196,8 @@ echo "OK: Safety Finder incluye 10 búsquedas predeterminadas y búsqueda libre.
 echo "OK: Clinical Clue Finder incluye 10 pistas clínicas predeterminadas y búsqueda libre."
 echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con sus bancos oficiales."
 echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
+echo "OK: Formula Quiz incluye Duì Yào, modificaciones, casos clínicos, patrones, precauciones, indicaciones y acciones."
+echo "OK: Formula Quiz ofrece sesiones de 5, 10, 15 o 20 preguntas y registra el resultado por enfoque."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
