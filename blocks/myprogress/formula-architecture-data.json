@@ -1,0 +1,458 @@
+{
+  "source": "Formula architecture notes derived from the verified ingredient and ingredient-role fields already used by the official 181-formula card roster.",
+  "total": 12,
+  "architectures": [
+    {
+      "name": "Ba Zhen Tang",
+      "summary": {
+        "en": "A direct combination of Si Jun Zi Tang and Si Wu Tang.",
+        "es": "Combinación directa de Si Jun Zi Tang y Si Wu Tang."
+      },
+      "groups": [
+        {
+          "label": "Si Jun Zi Tang",
+          "role": {
+            "en": "Qi-tonifying half",
+            "es": "Mitad que tonifica el Qi"
+          },
+          "herbs": [
+            "Ren Shen",
+            "Bai Zhu",
+            "Fu Ling",
+            "Zhi Gan Cao"
+          ]
+        },
+        {
+          "label": "Si Wu Tang",
+          "role": {
+            "en": "Blood-nourishing and Blood-regulating half",
+            "es": "Mitad que nutre y regula la Sangre"
+          },
+          "herbs": [
+            "Shu Di Huang",
+            "Bai Shao",
+            "Dang Gui",
+            "Chuan Xiong"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shi Quan Da Bu Tang",
+      "summary": {
+        "en": "Ba Zhen Tang strengthened with one Qi tonic and one warming herb.",
+        "es": "Ba Zhen Tang reforzada con un tónico de Qi y una hierba calentadora."
+      },
+      "groups": [
+        {
+          "label": "Ba Zhen Tang",
+          "role": {
+            "en": "Combined Qi-and-Blood-tonifying base",
+            "es": "Base combinada que tonifica Qi y Sangre"
+          },
+          "herbs": [
+            "Ren Shen",
+            "Bai Zhu",
+            "Fu Ling",
+            "Zhi Gan Cao",
+            "Shu Di Huang",
+            "Bai Shao",
+            "Dang Gui",
+            "Chuan Xiong"
+          ]
+        },
+        {
+          "label": "Added support",
+          "labelEs": "Refuerzo añadido",
+          "role": {
+            "en": "Strengthens Qi and warms Yang",
+            "es": "Fortalece el Qi y calienta el Yang"
+          },
+          "herbs": [
+            "Huang Qi",
+            "Rou Gui"
+          ]
+        }
+      ],
+      "note": {
+        "en": "Sheng Jiang and Da Zao may be used as decoction support.",
+        "es": "Sheng Jiang y Da Zao pueden utilizarse como apoyo en la decocción."
+      }
+    },
+    {
+      "name": "Chai Hu Gui Zhi Tang",
+      "summary": {
+        "en": "Combines the strategies of Xiao Chai Hu Tang and Gui Zhi Tang.",
+        "es": "Combina las estrategias de Xiao Chai Hu Tang y Gui Zhi Tang."
+      },
+      "groups": [
+        {
+          "label": "Xiao Chai Hu Tang",
+          "role": {
+            "en": "Harmonizes Shaoyang",
+            "es": "Armoniza Shaoyang"
+          },
+          "herbs": [
+            "Chai Hu",
+            "Huang Qin",
+            "Ren Shen",
+            "Ban Xia",
+            "Sheng Jiang",
+            "Da Zao",
+            "Zhi Gan Cao"
+          ]
+        },
+        {
+          "label": "Gui Zhi Tang",
+          "role": {
+            "en": "Releases the Exterior and harmonizes nutritive and protective Qi",
+            "es": "Libera el Exterior y armoniza el Qi nutritivo y protector"
+          },
+          "herbs": [
+            "Gui Zhi",
+            "Bai Shao",
+            "Sheng Jiang",
+            "Da Zao",
+            "Zhi Gan Cao"
+          ]
+        }
+      ],
+      "note": {
+        "en": "Sheng Jiang, Da Zao and Zhi Gan Cao serve both structural halves.",
+        "es": "Sheng Jiang, Da Zao y Zhi Gan Cao participan en ambas mitades estructurales."
+      }
+    },
+    {
+      "name": "Du Qi Wan",
+      "summary": {
+        "en": "Liu Wei Di Huang Wan with one astringent addition.",
+        "es": "Liu Wei Di Huang Wan con una adición astringente."
+      },
+      "groups": [
+        {
+          "label": "Liu Wei Di Huang Wan",
+          "role": {
+            "en": "Nourishes Kidney Yin",
+            "es": "Nutre el Yin de Riñón"
+          },
+          "herbs": [
+            "Shu Di Huang",
+            "Shan Zhu Yu",
+            "Shan Yao",
+            "Ze Xie",
+            "Mu Dan Pi",
+            "Fu Ling"
+          ]
+        },
+        {
+          "label": "Added herb",
+          "labelEs": "Hierba añadida",
+          "role": {
+            "en": "Secures leaking Qi and supports Lung-Kidney grasping",
+            "es": "Asegura el Qi que se escapa y apoya la captación Pulmón-Riñón"
+          },
+          "herbs": [
+            "Wu Wei Zi"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Huang Qi Jian Zhong Tang",
+      "summary": {
+        "en": "Xiao Jian Zhong Tang with added Huang Qi.",
+        "es": "Xiao Jian Zhong Tang con Huang Qi añadido."
+      },
+      "groups": [
+        {
+          "label": "Xiao Jian Zhong Tang",
+          "role": {
+            "en": "Warms and harmonizes the Middle and relieves deficiency pain",
+            "es": "Calienta y armoniza el Centro y alivia el dolor por deficiencia"
+          },
+          "herbs": [
+            "Gui Zhi",
+            "Bai Shao",
+            "Zhi Gan Cao",
+            "Sheng Jiang",
+            "Da Zao",
+            "Yi Tang"
+          ]
+        },
+        {
+          "label": "Added herb",
+          "labelEs": "Hierba añadida",
+          "role": {
+            "en": "Strengthens Qi and the Exterior",
+            "es": "Fortalece el Qi y el Exterior"
+          },
+          "herbs": [
+            "Huang Qi"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Liu Jun Zi Tang",
+      "summary": {
+        "en": "Si Jun Zi Tang extended to transform Phlegm.",
+        "es": "Si Jun Zi Tang ampliada para transformar Flema."
+      },
+      "groups": [
+        {
+          "label": "Si Jun Zi Tang",
+          "role": {
+            "en": "Tonifies Spleen Qi",
+            "es": "Tonifica el Qi de Bazo"
+          },
+          "herbs": [
+            "Ren Shen",
+            "Bai Zhu",
+            "Fu Ling",
+            "Zhi Gan Cao"
+          ]
+        },
+        {
+          "label": "Phlegm-transforming addition",
+          "labelEs": "Adición que transforma Flema",
+          "role": {
+            "en": "The core transforming pair associated with Er Chen Tang",
+            "es": "El par transformador central asociado con Er Chen Tang"
+          },
+          "herbs": [
+            "Ban Xia",
+            "Chen Pi"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jia Wei Xiao Yao San",
+      "summary": {
+        "en": "Xiao Yao San with two Heat-clearing additions.",
+        "es": "Xiao Yao San con dos adiciones que limpian Calor."
+      },
+      "groups": [
+        {
+          "label": "Xiao Yao San",
+          "role": {
+            "en": "Spreads Liver Qi, nourishes Blood and supports the Spleen",
+            "es": "Dispersa el Qi de Hígado, nutre la Sangre y apoya el Bazo"
+          },
+          "herbs": [
+            "Chai Hu",
+            "Dang Gui",
+            "Bai Shao",
+            "Bai Zhu",
+            "Fu Ling",
+            "Gan Cao",
+            "Bo He",
+            "Sheng Jiang"
+          ]
+        },
+        {
+          "label": "Heat-clearing addition",
+          "labelEs": "Adición que limpia Calor",
+          "role": {
+            "en": "Clears constraint-generated Heat",
+            "es": "Limpia el Calor generado por estancamiento"
+          },
+          "herbs": [
+            "Mu Dan Pi",
+            "Zhi Zi"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Qi Ju Di Huang Wan",
+      "summary": {
+        "en": "Liu Wei Di Huang Wan directed more specifically to the eyes.",
+        "es": "Liu Wei Di Huang Wan dirigida más específicamente a los ojos."
+      },
+      "groups": [
+        {
+          "label": "Liu Wei Di Huang Wan",
+          "role": {
+            "en": "Nourishes Liver and Kidney Yin",
+            "es": "Nutre el Yin de Hígado y Riñón"
+          },
+          "herbs": [
+            "Shu Di Huang",
+            "Shan Zhu Yu",
+            "Shan Yao",
+            "Ze Xie",
+            "Mu Dan Pi",
+            "Fu Ling"
+          ]
+        },
+        {
+          "label": "Eye-focused addition",
+          "labelEs": "Adición dirigida a los ojos",
+          "role": {
+            "en": "Nourishes the Liver and clears vision",
+            "es": "Nutre el Hígado y aclara la visión"
+          },
+          "herbs": [
+            "Gou Qi Zi",
+            "Ju Hua"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fu Zi Li Zhong Wan",
+      "summary": {
+        "en": "Li Zhong Wan with added prepared Fu Zi.",
+        "es": "Li Zhong Wan con Fu Zi preparado añadido."
+      },
+      "groups": [
+        {
+          "label": "Li Zhong Wan",
+          "role": {
+            "en": "Warms and tonifies the Middle Burner",
+            "es": "Calienta y tonifica el Jiao Medio"
+          },
+          "herbs": [
+            "Ren Shen",
+            "Bai Zhu",
+            "Gan Jiang",
+            "Zhi Gan Cao"
+          ]
+        },
+        {
+          "label": "Added herb",
+          "labelEs": "Hierba añadida",
+          "role": {
+            "en": "Strengthens the warming and Yang-restoring action",
+            "es": "Refuerza la acción calentadora y restauradora del Yang"
+          },
+          "herbs": [
+            "Fu Zi"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Zhi Bai Di Huang Wan",
+      "summary": {
+        "en": "Liu Wei Di Huang Wan with two deficiency-Heat-clearing additions.",
+        "es": "Liu Wei Di Huang Wan con dos adiciones que limpian Calor por deficiencia."
+      },
+      "groups": [
+        {
+          "label": "Liu Wei Di Huang Wan",
+          "role": {
+            "en": "Nourishes Kidney Yin",
+            "es": "Nutre el Yin de Riñón"
+          },
+          "herbs": [
+            "Shu Di Huang",
+            "Shan Zhu Yu",
+            "Shan Yao",
+            "Ze Xie",
+            "Mu Dan Pi",
+            "Fu Ling"
+          ]
+        },
+        {
+          "label": "Deficiency-Heat addition",
+          "labelEs": "Adición para Calor por deficiencia",
+          "role": {
+            "en": "Clears deficiency Heat and ministerial Fire",
+            "es": "Limpia Calor por deficiencia y Fuego ministerial"
+          },
+          "herbs": [
+            "Zhi Mu",
+            "Huang Bai"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shen Ling Bai Zhu San",
+      "summary": {
+        "en": "A Si Jun Zi Tang foundation expanded for chronic Dampness and diarrhea.",
+        "es": "Base de Si Jun Zi Tang ampliada para Humedad crónica y diarrea."
+      },
+      "groups": [
+        {
+          "label": "Si Jun Zi Tang",
+          "role": {
+            "en": "Tonifies Spleen Qi",
+            "es": "Tonifica el Qi de Bazo"
+          },
+          "herbs": [
+            "Ren Shen",
+            "Bai Zhu",
+            "Fu Ling",
+            "Zhi Gan Cao"
+          ]
+        },
+        {
+          "label": "Dampness and assimilation support",
+          "labelEs": "Apoyo para Humedad y asimilación",
+          "role": {
+            "en": "Drains Dampness, supports digestion and stops chronic diarrhea",
+            "es": "Drena Humedad, apoya la digestión y detiene la diarrea crónica"
+          },
+          "herbs": [
+            "Shan Yao",
+            "Bai Bian Dou",
+            "Lian Zi",
+            "Yi Yi Ren",
+            "Sha Ren",
+            "Jie Geng"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wen Dan Tang",
+      "summary": {
+        "en": "An Er Chen Tang structure redirected to Phlegm-Heat and Gallbladder-Stomach disharmony.",
+        "es": "Estructura de Er Chen Tang redirigida a Flema-Calor y desarmonía Vesícula-Estómago."
+      },
+      "groups": [
+        {
+          "label": "Er Chen Tang structure",
+          "labelEs": "Estructura de Er Chen Tang",
+          "role": {
+            "en": "Transforms Phlegm and regulates Qi",
+            "es": "Transforma Flema y regula el Qi"
+          },
+          "herbs": [
+            "Ban Xia",
+            "Chen Pi",
+            "Fu Ling",
+            "Zhi Gan Cao"
+          ]
+        },
+        {
+          "label": "Redirecting additions",
+          "labelEs": "Adiciones que redirigen la fórmula",
+          "role": {
+            "en": "Clear Phlegm-Heat and regulate the Gallbladder and Stomach",
+            "es": "Limpian Flema-Calor y regulan Vesícula y Estómago"
+          },
+          "herbs": [
+            "Zhu Ru",
+            "Zhi Shi"
+          ]
+        },
+        {
+          "label": "Decoction support",
+          "labelEs": "Apoyo de decocción",
+          "role": {
+            "en": "Harmonizes the Middle",
+            "es": "Armoniza el Centro"
+          },
+          "herbs": [
+            "Sheng Jiang",
+            "Da Zao"
+          ]
+        }
+      ]
+    }
+  ]
+}
