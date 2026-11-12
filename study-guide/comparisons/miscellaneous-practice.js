@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261112-32';
+  const quizBuild = '20261112-33';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -18,6 +18,7 @@
     {key:'chiefherbs', en:'Property of Chief Herbs', es:'Propiedades de las hierbas principales', path:'chief-herbs-property.html'},
     {key:'formulaingredients', en:'Formula and Ingredients', es:'Fórmulas e ingredientes', path:'/blocks/myprogress/formula-ingredients.php', dynamic:true},
     {key:'formulaactions', en:'Formula and Actions', es:'Fórmulas y acciones', path:'/blocks/myprogress/formula-actions.php', dynamic:true},
+    {key:'formulatonguepulse', en:'Formula Tongue and Pulse', es:'Lengua y pulso de fórmulas', path:'/blocks/myprogress/formula-tongue-pulse.php', dynamic:true},
     {key:'pathology', en:'Pathology Comparisons', es:'Comparaciones de patologías', path:'pathologies.html'},
     {key:'patterns', en:'Pattern Comparisons', es:'Comparaciones de patrones', path:'patterns.html'},
     {key:'maciocia', en:'Pattern Comparison Maciocia', es:'Comparación de patrones Maciocia', path:'patterns-tips-maciocia.html'},
@@ -118,6 +119,7 @@
     chiefherbs: spanish ? '¿Qué hierba principal corresponde a estas propiedades, canales y fórmulas?' : 'Which chief herb matches these properties, channels, and formulas?',
     formulaingredients: spanish ? '¿Qué fórmula oficial del guideline corresponde a estos ingredientes y Chief?' : 'Which official guideline formula matches these ingredients and highlighted Chief?',
     formulaactions: spanish ? '¿Qué fórmula oficial del guideline corresponde a esta categoría y acción principal?' : 'Which official guideline formula matches this category and principal action?',
+    formulatonguepulse: spanish ? '¿Qué fórmula oficial del guideline corresponde a estos hallazgos de lengua y pulso?' : 'Which official guideline formula matches these tongue and pulse findings?',
     pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
     patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
     maciocia: spanish ? '¿Qué comparación de patrones de Maciocia corresponde a estas claves?' : 'Which Maciocia pattern comparison matches these key findings?',
@@ -223,7 +225,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261112-32');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261112-33');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -335,6 +337,31 @@
         };
       }).filter(Boolean);
     }
+    if(state.resource&&state.resource.key==='formulatonguepulse'){
+      const doc=new DOMParser().parseFromString(html,'text/html');
+      return Array.from(doc.querySelectorAll('tr[data-formula-tongue-pulse-row]')).map(row=>{
+        const formulaLink=row.querySelector('a.formula-tp__formula-link');
+        const categoryCell=row.querySelector('.formula-tp__category');
+        const findings=Array.from(row.querySelectorAll('.formula-tp__finding'));
+        const title=clean(row.getAttribute('data-formula'));
+        const category=clean(categoryCell&&categoryCell.textContent);
+        const tongue=clean(findings[0]&&findings[0].textContent);
+        const pulse=clean(findings[1]&&findings[1].textContent);
+        if(!formulaLink||!title||!category||!tongue||!pulse)return null;
+        const cardUrl=new URL(formulaLink.getAttribute('href'),window.location.origin);
+        cardUrl.searchParams.set('from','quiz');
+        if(spanish)cardUrl.searchParams.set('lang','es');
+        return {
+          title,
+          detail:(spanish?'Categoría: ':'Category: ')+category+' • '+(spanish?'Lengua: ':'Tongue: ')+tongue+' • '+(spanish?'Pulso: ':'Pulse: ')+pulse,
+          explanation:spanish
+            ? title+' es la fórmula oficial asociada con estos hallazgos de lengua y pulso.'
+            : title+' is the official formula associated with these tongue and pulse findings.',
+          chapterUrl:cardUrl.toString(),
+          domain:category
+        };
+      }).filter(Boolean);
+    }
     if(state.resource&&state.resource.key==='chiefherbs'){
       const doc=new DOMParser().parseFromString(html,'text/html');
       return Array.from(doc.querySelectorAll('tr[data-chief-row]')).map(row=>{
@@ -422,7 +449,7 @@
   }
   function questionExplanation(item){
     if(state.resource.key==='secondary')return spanish?'Estos medicamentos pertenecen a categorías primarias diferentes, pero comparten «'+item.title+'» como acción secundaria.':'These medicinals belong to different primary categories but share “'+item.title+'” as a secondary action.';
-    if(state.resource.key==='safety'||state.resource.key==='maciociaformulas'||state.resource.key==='chiefherbs'||state.resource.key==='formulaingredients'||state.resource.key==='formulaactions')return item.explanation;
+    if(state.resource.key==='safety'||state.resource.key==='maciociaformulas'||state.resource.key==='chiefherbs'||state.resource.key==='formulaingredients'||state.resource.key==='formulaactions'||state.resource.key==='formulatonguepulse')return item.explanation;
     return item.detail;
   }
   function buildQuestions(){
@@ -995,6 +1022,9 @@
       feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
       el.feedback.append(formulaIngredientsReviewPanel(question));
     }else if(state.resource&&state.resource.key==='formulaactions'){
+      feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
+      el.feedback.append(formulaIngredientsReviewPanel(question));
+    }else if(state.resource&&state.resource.key==='formulatonguepulse'){
       feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
       el.feedback.append(formulaIngredientsReviewPanel(question));
     }else if(state.resource&&state.resource.key==='chiefherbs'){
