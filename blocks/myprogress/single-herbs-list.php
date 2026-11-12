@@ -427,16 +427,17 @@ echo $OUTPUT->header();
             <?php
             // Sorting modes always start from the complete guideline roster.
             // Category filtering is controlled only by the selector or a card badge.
+            // Do not carry a previous search or focused herb into a new sorting mode.
             $azurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + [
-                'sort' => 'az', 'q' => $query,
+                'sort' => 'az',
             ]);
             $categoryurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + [
-                'sort' => 'category', 'q' => $query,
+                'sort' => 'category',
             ]);
             ?>
             <a class="single-herbs-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
             <a class="single-herbs-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por orden Bensky' : 'By Bensky order'; ?></a>
-            <?php if ($categoryfilter !== '' || $herbfocus !== '') {
+            <?php if ($query !== '' || $categoryfilter !== '' || $herbfocus !== '') {
                 $backtoallurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + ['sort' => 'az']);
             ?>
                 <a class="single-herbs-list__button" href="<?php echo $backtoallurl->out(false); ?>"><?php echo $ises ? '← Volver a todas las hierbas' : '← Back to all herbs'; ?></a>
