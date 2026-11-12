@@ -87,7 +87,17 @@ $richprofiles = [];
 $categoryfiles = glob(__DIR__ . '/single-herbs-category-*.php') ?: [];
 foreach ($categoryfiles as $categoryfile) {
     $loadedprofiles = (static function(string $path, bool $ises): array {
-        include($path);
+        // Category files also render their complete chapter. Buffer and discard
+        // that HTML so this list reuses only their detailed profile arrays.
+        $outputlevel = ob_get_level();
+        ob_start();
+        try {
+            include($path);
+        } finally {
+            while (ob_get_level() > $outputlevel) {
+                ob_end_clean();
+            }
+        }
         $profiles = [];
         foreach (get_defined_vars() as $candidate) {
             if (!is_array($candidate)) {
