@@ -14,14 +14,16 @@ $sortmode = $sortmode === 'category' ? 'category' : 'az';
 $query = trim(optional_param('q', '', PARAM_TEXT));
 $herbfocus = trim(optional_param('herb', '', PARAM_TEXT));
 $categoryfilter = optional_param('category', '', PARAM_ALPHANUMEXT);
-$fromlibrary = optional_param('from', '', PARAM_ALPHA) === 'library';
+$fromcontext = optional_param('from', '', PARAM_ALPHA);
+$fromlibrary = $fromcontext === 'library';
+$fromquiz = $fromcontext === 'quiz';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary) {
-    $baseparams['from'] = 'library';
+if ($fromlibrary || $fromquiz) {
+    $baseparams['from'] = $fromcontext;
 }
 $pageparams = $baseparams + [
     'sort' => $sortmode,
@@ -39,8 +41,8 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary) {
-    $languageparams['from'] = 'library';
+if ($fromlibrary || $fromquiz) {
+    $languageparams['from'] = $fromcontext;
 }
 $languageurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $languageparams);
 $studyguideparams = $ises ? ['lang' => 'es'] : [];
@@ -305,6 +307,19 @@ $PAGE->set_title($ises ? 'Lista de hierbas individuales' : 'Single Herbs List');
 $PAGE->set_heading($ises ? 'Lista de hierbas individuales' : 'Single Herbs List');
 $PAGE->set_cacheable(false);
 $PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('[data-return-to-herb-question]').forEach(function(button) {
+    button.addEventListener('click', function() {
+        if (window.parent !== window) {
+            window.parent.postMessage({type: 'single-herb-card-close'}, window.location.origin);
+            return;
+        }
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+        window.location.href = button.getAttribute('data-fallback-url');
+    });
+});
 document.querySelectorAll('[data-herb-list-expand]').forEach(function(button) {
     button.addEventListener('click', function() {
         document.querySelectorAll('.single-herbs-list__card').forEach(function(card) {
@@ -393,7 +408,11 @@ echo $OUTPUT->header();
                 : 'The 304 official guideline herbs, organized alphabetically or in the conventional sequence of the 33 Bensky categories.'; ?></p>
         </div>
         <div class="single-herbs-list__actions">
-            <a class="single-herbs-list__button" href="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Single Herbs' : '← Single Herbs'; ?></a>
+            <?php if ($fromquiz) { ?>
+                <button class="single-herbs-list__button" type="button" data-return-to-herb-question data-fallback-url="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
+            <?php } else { ?>
+                <a class="single-herbs-list__button" href="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Single Herbs' : '← Single Herbs'; ?></a>
+            <?php } ?>
             <a class="single-herbs-list__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <a class="single-herbs-list__button" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
         </div>
@@ -423,7 +442,7 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary) { ?><input type="hidden" name="from" value="library"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <label>
                 <span><?php echo $ises ? 'Buscar hierba' : 'Search herb'; ?></span>
                 <input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, latín, acción…' : 'Name, Latin, action…'; ?>">
