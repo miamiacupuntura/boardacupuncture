@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
-MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php)
+MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json)
 STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
 
@@ -49,6 +49,10 @@ grep -Fq '$chiefherboptions' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'Documented Chief herb' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq 'Multiple Chief-herb groups' "$TEMP_DIR/moodle/smart-study-tools.php"
 grep -Fq '$chiefgroupoptions' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq 'data-herb-category-toggle' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq 'data-herb-category-panel' "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq 'is-embedded' "$TEMP_DIR/moodle/herbs-category-comparison.php"
+grep -Fq 'PARAM_BOOL' "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "subject-study-library__smart-top" "$TEMP_DIR/moodle/study-guide.php"
 if grep -Fq "subject-study-library__journey-option subject-study-library__journey-option--smart" "$TEMP_DIR/moodle/study-guide.php"; then
     echo "ERROR: Smart Study Tools todavía aparece dentro de Main Study Guide." >&2
@@ -148,6 +152,7 @@ echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patron
 echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgos verificados."
 echo "OK: Chief Herb Alternatives muestra 117 hierbas individuales y 78 grupos múltiples documentados."
 echo "OK: Similar Formulas, Similar Herbs, Pattern, Tongue & Pulse, Ingredients y Chief usan el guideline verificado."
+echo "OK: Similar Herbs despliega debajo la tabla comparativa de su categoría Bensky."
 echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con sus bancos oficiales."
 echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
