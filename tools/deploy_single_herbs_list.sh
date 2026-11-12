@@ -23,9 +23,13 @@ done
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 
-FILES=(single-herbs-list.php single-herbs-study-guide.php study-guide.php)
+PHP_FILES=(single-herbs-list.php single-herbs-study-guide.php study-guide.php)
+DATA_FILES=(single-herb-rich-profiles.json)
+FILES=("${PHP_FILES[@]}" "${DATA_FILES[@]}")
 for file in "${FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/$file"
+done
+for file in "${PHP_FILES[@]}"; do
     php -l "$TEMP_DIR/$file" >/dev/null
 done
 
@@ -37,7 +41,8 @@ grep -Fq "By category" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "data-herb-category-link" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Back to all herbs" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "Unique fingerprint" "$TEMP_DIR/single-herbs-list.php"
-grep -Fq "Formula boundary" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "Clinical recognition" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "single-herb-rich-profiles.json" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "single-herb-card-index.json" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "single-herb-properties.json" "$TEMP_DIR/single-herbs-list.php"
 if grep -Fq "single-herbs-category-" "$TEMP_DIR/single-herbs-list.php" \
@@ -49,6 +54,16 @@ if grep -Fq "Open full study card" "$TEMP_DIR/single-herbs-list.php"; then
     echo "ERROR: Single Herbs List todavía depende de otra tarjeta." >&2
     exit 1
 fi
+php -r '
+$data = json_decode(file_get_contents($argv[1]), true);
+if (!is_array($data)
+    || (int)($data["guidelineTotal"] ?? 0) !== 304
+    || (int)($data["total"] ?? 0) < 180
+    || count($data["profiles"] ?? []) !== (int)$data["total"]) {
+    fwrite(STDERR, "ERROR: el banco enriquecido de hierbas no es válido.\n");
+    exit(1);
+}
+' "$TEMP_DIR/single-herb-rich-profiles.json"
 grep -Fq "single-herbs-list.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -Fq "304 official guideline herbs" "$TEMP_DIR/study-guide.php"
 
@@ -95,7 +110,9 @@ for file in "${FILES[@]}"; do
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" \
         "$TEMP_DIR/$file" "$target"
     cmp -s "$TEMP_DIR/$file" "$target"
-    php -l "$target" >/dev/null
+    if [[ "$file" == *.php ]]; then
+        php -l "$target" >/dev/null
+    fi
 done
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
@@ -110,8 +127,8 @@ echo "OK: botón Single Herbs List instalado en Single Herbs y en la biblioteca.
 echo "OK: lista limitada a las 304 hierbas oficiales del guideline."
 echo "OK: organización A–Z y por categoría activa."
 echo "OK: búsqueda, filtro de categoría y tarjetas expandibles activos."
-echo "OK: cada tarjeta contiene identidad, pista, memoria, huella, límite de fórmulas y seguridad disponibles."
+echo "OK: 185 perfiles detallados incluyen acciones, reconocimiento clínico, memoria, huella diferencial y seguridad."
 echo "OK: la categoría abre su grupo y ofrece regreso a todas las hierbas."
 echo "OK: no se requiere navegar a otra tarjeta."
-echo "OK: la lista usa únicamente los bancos JSON verificados; no carga páginas PHP de categoría."
+echo "OK: la lista usa únicamente bancos JSON verificados; no carga páginas PHP de categoría."
 echo "RESPALDO: $BACKUP"

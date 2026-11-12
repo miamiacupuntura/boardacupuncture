@@ -49,12 +49,15 @@ $dashboardurl = new moodle_url('/my/');
 
 $indexpath = __DIR__ . '/single-herb-card-index.json';
 $propertiespath = __DIR__ . '/single-herb-properties.json';
+$richprofilespath = __DIR__ . '/single-herb-rich-profiles.json';
 $cardindex = is_readable($indexpath) ? json_decode(file_get_contents($indexpath), true) : null;
 $properties = is_readable($propertiespath) ? json_decode(file_get_contents($propertiespath), true) : null;
-if (!is_array($cardindex) || !is_array($properties)
+$richprofiledata = is_readable($richprofilespath) ? json_decode(file_get_contents($richprofilespath), true) : null;
+if (!is_array($cardindex) || !is_array($properties) || !is_array($richprofiledata)
         || (int)($cardindex['total'] ?? 0) !== 304
         || count($cardindex['herbs'] ?? []) !== 304
-        || (int)($properties['total'] ?? 0) !== 304) {
+        || (int)($properties['total'] ?? 0) !== 304
+        || (int)($richprofiledata['total'] ?? 0) < 180) {
     throw new coding_exception('Official Single Herbs guideline data is unavailable.');
 }
 
@@ -80,36 +83,25 @@ foreach ($properties['herbs'] ?? [] as $profile) {
     }
 }
 
-// Keep this catalog independent from the rendered category PHP pages. The two
-// verified JSON banks above are the only runtime data sources for all 304 cards.
+// Load the independently generated enrichment bank. No rendered category PHP
+// page is included or evaluated at runtime.
 $richprofiles = [];
-
-$formatformulaboundary = static function($formulas, bool $ises): string {
-    if (is_string($formulas)) {
-        return trim($formulas);
+foreach ($richprofiledata['profiles'] ?? [] as $richprofile) {
+    $richname = trim((string)($richprofile['name'] ?? ''));
+    if ($richname === '') {
+        continue;
     }
-    if (!is_array($formulas) || !$formulas) {
-        return $ises
-            ? 'Sin función principal o coprincipal en el roster Board vigente de 63 fórmulas.'
-            : 'No chief or co-chief role in the current 63-formula Board roster.';
-    }
-    $connections = [];
-    foreach ($formulas as $formula) {
-        if (!is_array($formula)) {
-            continue;
-        }
-        $name = trim((string)($formula['name'] ?? $formula[2] ?? ''));
-        $role = trim((string)($formula['role'] ?? $formula[3] ?? ''));
-        if ($name !== '') {
-            $connections[] = $role !== '' ? $name . ' — ' . $role : $name;
-        }
-    }
-    return $connections
-        ? implode('; ', $connections) . '.'
-        : ($ises
-            ? 'Sin función principal o coprincipal en el roster Board vigente de 63 fórmulas.'
-            : 'No chief or co-chief role in the current 63-formula Board roster.');
-};
+    $richprofiles[$normalize($richname)] = [
+        'properties' => $localized($richprofile['properties'] ?? '', $ises),
+        'channels' => $localized($richprofile['channels'] ?? '', $ises),
+        'dose' => $localized($richprofile['dose'] ?? '', $ises),
+        'identity' => $localized($richprofile['identity'] ?? '', $ises),
+        'clue' => $localized($richprofile['clue'] ?? '', $ises),
+        'memory' => $localized($richprofile['memory'] ?? '', $ises),
+        'unique' => $localized($richprofile['unique'] ?? '', $ises),
+        'caution' => $localized($richprofile['caution'] ?? '', $ises),
+    ];
+}
 
 $categories = [];
 $cards = [];
@@ -148,7 +140,6 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         'clue' => trim((string)($richprofile['clue'] ?? $localized($profile['indicationSummary'] ?? '', $ises))),
         'memory' => trim((string)($richprofile['memory'] ?? '')),
         'unique' => trim((string)($richprofile['unique'] ?? '')),
-        'formulas' => $formatformulaboundary($richprofile['formulas'] ?? [], $ises),
         'safety' => trim((string)($richprofile['caution'] ?? $localized($profile['safetyNote'] ?? '', $ises))),
         'status' => (string)($profile['status'] ?? 'properties-only'),
     ];
@@ -163,7 +154,6 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         $card['clue'],
         $card['memory'],
         $card['unique'],
-        $card['formulas'],
     ]));
     if ($query !== '' && core_text::strpos($haystack, core_text::strtolower($query)) === false) {
         continue;
@@ -376,11 +366,10 @@ echo $OUTPUT->header();
                             <div class="single-herbs-list__body">
                                 <dl>
                                     <?php if ($card['dose'] !== '') { ?><dt><?php echo $ises ? 'Dosis de estudio' : 'Study dose'; ?></dt><dd><?php echo s($card['dose']); ?></dd><?php } ?>
-                                    <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Identidad' : 'Identity'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
-                                    <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Pista de examen' : 'Exam clue'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
+                                    <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Acciones principales' : 'Core actions'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
+                                    <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Reconocimiento clínico' : 'Clinical recognition'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
                                     <?php if ($card['memory'] !== '') { ?><dt><?php echo $ises ? 'Memoria' : 'Memory'; ?></dt><dd class="single-herbs-list__memory"><?php echo s($card['memory']); ?></dd><?php } ?>
                                     <?php if ($card['unique'] !== '') { ?><dt><?php echo $ises ? 'Huella única' : 'Unique fingerprint'; ?></dt><dd><?php echo s($card['unique']); ?></dd><?php } ?>
-                                    <dt><?php echo $ises ? 'Límite de fórmulas' : 'Formula boundary'; ?></dt><dd><?php echo s($card['formulas']); ?></dd>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
                                 </dl>
                                 <?php if ($card['identity'] === '' && $card['clue'] === '') { ?>
