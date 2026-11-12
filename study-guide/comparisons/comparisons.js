@@ -7,6 +7,8 @@
 
   const params = new URLSearchParams(window.location.search);
   const returnFormula = (params.get('returnformula') || '').trim();
+  const relatedCategory = (params.get('related') || '').trim();
+  const initialQuery = params.get('q') || '';
 
   function addFormulaReturnButton() {
     if (!returnFormula || document.querySelector('[data-return-to-formula-card]')) {
@@ -54,7 +56,7 @@
   let activeFilter = 'all';
 
   if (search) {
-    search.value = params.get('q') || '';
+    search.value = initialQuery;
   }
 
   if (returnFormula) {
@@ -96,23 +98,55 @@
     cards.sort(compareCards).forEach(card => grid.appendChild(card));
   }
 
-  function refresh() {
-    const query = normalise(search ? search.value : '');
+  let relatedNotice;
+
+  function showRelatedNotice(active) {
+    if (!relatedCategory || !returnFormula) return;
+    if (!relatedNotice) {
+      relatedNotice = document.createElement('p');
+      relatedNotice.setAttribute('role', 'status');
+      relatedNotice.style.margin = '-8px 0 22px';
+      relatedNotice.style.padding = '13px 15px';
+      relatedNotice.style.border = '1px solid #e6c88e';
+      relatedNotice.style.borderLeft = '5px solid #c37a12';
+      relatedNotice.style.borderRadius = '9px';
+      relatedNotice.style.background = '#fff8e9';
+      relatedNotice.style.color = '#71420c';
+      const tools = document.querySelector('.comparison-tools');
+      if (tools) tools.insertAdjacentElement('afterend', relatedNotice);
+    }
+    relatedNotice.hidden = !active;
+    if (active) {
+      const spanish = document.documentElement.lang.toLowerCase().startsWith('es');
+      relatedNotice.textContent = spanish
+        ? `No hay una comparación directa para ${returnFormula}. Se muestran comparaciones relacionadas de ${relatedCategory}.`
+        : `No direct comparison is available for ${returnFormula}. Showing related comparisons from ${relatedCategory}.`;
+    }
+  }
+
+  function applyQuery(query) {
     let visible = 0;
     cards.forEach(card => {
       const typeMatches = activeFilter === 'all' || card.dataset.type === activeFilter;
       const textMatches = !query || normalise(card.dataset.search + ' ' + card.textContent).includes(query);
       card.hidden = !(typeMatches && textMatches);
-      if (!card.hidden) {
-        visible++;
-      }
+      if (!card.hidden) visible++;
     });
-    if (count) {
-      count.textContent = String(visible);
+    return visible;
+  }
+
+  function refresh(allowRelatedFallback = false) {
+    const query = normalise(search ? search.value : '');
+    let visible = applyQuery(query);
+    let showingRelated = false;
+    if (visible === 0 && allowRelatedFallback && relatedCategory
+        && query === normalise(initialQuery)) {
+      visible = applyQuery(normalise(relatedCategory));
+      showingRelated = visible > 0;
     }
-    if (empty) {
-      empty.hidden = visible !== 0;
-    }
+    showRelatedNotice(showingRelated);
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible !== 0;
   }
 
   filters.forEach(button => {
@@ -121,7 +155,7 @@
       filters.forEach(candidate => {
         candidate.setAttribute('aria-pressed', candidate === button ? 'true' : 'false');
       });
-      refresh();
+      refresh(true);
     });
   });
   if (search) {
@@ -129,8 +163,8 @@
       const url = new URL(window.location.href);
       search.value.trim() ? url.searchParams.set('q', search.value.trim()) : url.searchParams.delete('q');
       history.replaceState(null, '', url);
-      refresh();
+      refresh(false);
     });
   }
-  refresh();
+  refresh(true);
 })();
