@@ -89,6 +89,18 @@ $safetypresets = [
     ['en' => 'Diarrhea / weak digestion', 'es' => 'Diarrea / digestión débil', 'queryen' => 'diarrhea', 'queryes' => 'diarrea'],
     ['en' => 'Dehydration', 'es' => 'Deshidratación', 'queryen' => 'dehydration', 'queryes' => 'deshidratación'],
 ];
+$cluepresets = [
+    ['en' => 'Dry cough + night sweats', 'es' => 'Tos seca + sudores nocturnos', 'queryen' => 'dry cough night sweats', 'queryes' => 'tos seca sudores nocturnos'],
+    ['en' => 'Alternating chills and fever', 'es' => 'Escalofríos y fiebre alternantes', 'queryen' => 'alternating chills fever', 'queryes' => 'escalofríos fiebre alternantes'],
+    ['en' => 'Palpitations + irregular pulse', 'es' => 'Palpitaciones + pulso irregular', 'queryen' => 'palpitations irregular pulse', 'queryes' => 'palpitaciones pulso irregular'],
+    ['en' => 'Spontaneous sweating + recurrent colds', 'es' => 'Sudor espontáneo + resfriados', 'queryen' => 'spontaneous sweating recurrent colds', 'queryes' => 'sudoración espontánea resfriados recurrentes'],
+    ['en' => 'Burning painful urination', 'es' => 'Micción dolorosa con ardor', 'queryen' => 'burning painful urination', 'queryes' => 'micción dolorosa ardor'],
+    ['en' => 'Fixed stabbing pain', 'es' => 'Dolor fijo y punzante', 'queryen' => 'fixed stabbing pain', 'queryes' => 'dolor fijo punzante'],
+    ['en' => 'Nausea + epigastric distention', 'es' => 'Náuseas + distensión epigástrica', 'queryen' => 'nausea epigastric focal distention', 'queryes' => 'náuseas distensión epigástrica'],
+    ['en' => 'Edema + scant urination', 'es' => 'Edema + orina escasa', 'queryen' => 'edema scant urination', 'queryes' => 'edema orina escasa'],
+    ['en' => 'Insomnia + irritability', 'es' => 'Insomnio + irritabilidad', 'queryen' => 'insomnia irritability', 'queryes' => 'insomnio irritabilidad'],
+    ['en' => 'Blood-streaked sputum', 'es' => 'Esputo con sangre', 'queryen' => 'blood streaked sputum', 'queryes' => 'esputo con sangre'],
+];
 
 $formularosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $formulaprofilespath = __DIR__ . '/formulas-study-guide-data.json';
@@ -755,7 +767,9 @@ echo $OUTPUT->header();
                         ? ' list="smart-pattern-options" autocomplete="off"'
                         : ($mode === 'tongue'
                             ? ' list="smart-tongue-pulse-options" autocomplete="off"'
-                            : ($mode === 'safety' ? ' list="smart-safety-options" autocomplete="off"' : '')); ?>></label>
+                            : ($mode === 'safety'
+                                ? ' list="smart-safety-options" autocomplete="off"'
+                                : ($mode === 'clue' ? ' list="smart-clue-options" autocomplete="off"' : ''))); ?>></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar' : 'Search'; ?></button>
                 <?php if ($mode === 'pattern' || $mode === 'clinical') { ?>
                     <datalist id="smart-pattern-options">
@@ -778,16 +792,27 @@ echo $OUTPUT->header();
                         <?php foreach ($safetypresets as $safetypreset) { ?><option value="<?php echo s($safetypreset[$ises ? 'queryes' : 'queryen']); ?>"><?php echo s($safetypreset[$ises ? 'es' : 'en']); ?></option><?php } ?>
                     </datalist>
                 <?php } ?>
+                <?php if ($mode === 'clue') { ?>
+                    <datalist id="smart-clue-options">
+                        <?php foreach ($cluepresets as $cluepreset) { ?><option value="<?php echo s($cluepreset[$ises ? 'queryes' : 'queryen']); ?>"><?php echo s($cluepreset[$ises ? 'es' : 'en']); ?></option><?php } ?>
+                    </datalist>
+                <?php } ?>
             </form>
-            <?php if ($mode === 'safety') { ?>
-                <div class="smart-tools__presets" aria-label="<?php echo s($ises ? 'Búsquedas de seguridad sugeridas' : 'Suggested safety searches'); ?>">
-                    <p class="smart-tools__presets-label"><?php echo $ises ? 'Búsquedas rápidas:' : 'Quick searches:'; ?></p>
-                    <?php foreach ($safetypresets as $safetypreset) {
-                        $presetquery = $safetypreset[$ises ? 'queryes' : 'queryen'];
-                        $presetparams = ['mode' => 'safety', 'q' => $presetquery];
+            <?php if ($mode === 'safety' || $mode === 'clue') {
+                $activepresets = $mode === 'safety' ? $safetypresets : $cluepresets;
+            ?>
+                <div class="smart-tools__presets" aria-label="<?php echo s($mode === 'safety'
+                    ? ($ises ? 'Búsquedas de seguridad sugeridas' : 'Suggested safety searches')
+                    : ($ises ? 'Pistas clínicas sugeridas' : 'Suggested clinical clues')); ?>">
+                    <p class="smart-tools__presets-label"><?php echo $mode === 'safety'
+                        ? ($ises ? 'Búsquedas rápidas:' : 'Quick searches:')
+                        : ($ises ? 'Pistas clínicas rápidas:' : 'Quick clinical clues:'); ?></p>
+                    <?php foreach ($activepresets as $activepreset) {
+                        $presetquery = $activepreset[$ises ? 'queryes' : 'queryen'];
+                        $presetparams = ['mode' => $mode, 'q' => $presetquery];
                         if ($ises) $presetparams['lang'] = 'es';
                         $preseturl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $presetparams);
-                    ?><a class="smart-tools__preset" href="<?php echo $preseturl->out(false); ?>"><?php echo s($safetypreset[$ises ? 'es' : 'en']); ?></a><?php } ?>
+                    ?><a class="smart-tools__preset" href="<?php echo $preseturl->out(false); ?>"><?php echo s($activepreset[$ises ? 'es' : 'en']); ?></a><?php } ?>
                 </div>
             <?php } ?>
         <?php } else if ($mode === 'dui') { ?>
