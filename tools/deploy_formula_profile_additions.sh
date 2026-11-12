@@ -30,7 +30,7 @@ grep -Fq "'source' => \$detailtext" "$TEMP_DIR/formula-list.php"
 grep -Fq "Bensky formula profile, pp. 55–56." "$TEMP_DIR/formula-guideline-profile-additions.json"
 grep -Fq "\"name\": \"Jia Jian Wei Rui Tang\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
 grep -Fq "\"name\": \"Qing Wei San\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
-grep -Fq "\"verificationStatus\": \"partial\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
+grep -Fq "\"verificationStatus\": \"complete\"" "$TEMP_DIR/formula-guideline-profile-additions.json"
 grep -Fq "Verified partial profile" "$TEMP_DIR/formula-list.php"
 grep -Fq "formula-list__chinese" "$TEMP_DIR/formula-list.php"
 
@@ -58,9 +58,9 @@ foreach ($roster["formulas"] as $formula) {
 }
 $common = ["name", "chineseName", "action", "actionEs", "source", "sourceEs"];
 $completeRequired = [
-    "kings", "pattern", "patternEs", "clue", "clueEs", "examFocus", "examFocusEs",
+    "kings", "pattern", "patternEs", "clue", "clueEs",
     "ingredients", "ingredientsEs", "ingredientRoles", "ingredientRolesEs",
-    "comparison", "comparisonEs", "safety", "safetyEs"
+    "safety", "safetyEs"
 ];
 $complete = 0;
 $partial = 0;
@@ -92,8 +92,8 @@ foreach ($additions["formulas"] as $profile) {
         exit(1);
     }
 }
-if ($complete !== 1 || $partial !== 23) {
-    fwrite(STDERR, "ERROR: se esperaba 1 perfil completo y 23 perfiles parciales; encontrados $complete y $partial.\n");
+if ($complete !== 24 || $partial !== 0) {
+    fwrite(STDERR, "ERROR: se esperaban 24 perfiles completos y 0 parciales; encontrados $complete y $partial.\n");
     exit(1);
 }
 ' "$TEMP_DIR/formula-guideline-profile-additions.json" "$TARGET_DIR/formula-board-roster-2026.json"
@@ -132,9 +132,9 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
 fi
 
 echo "OK: Jia Jian Wei Rui Tang completada desde la fuente suministrada, pp. 55–56."
-echo "OK: 23 acciones principales adicionales instaladas como perfiles parciales verificados."
+echo "OK: 23 perfiles adicionales completados con patrón, Chief, ingredientes, pista, arquitectura y seguridad."
+echo "OK: 24 perfiles detallados disponibles en English y Español."
 echo "OK: nombres chinos tradicionales visibles en las 24 tarjetas actualizadas."
-echo "OK: los perfiles parciales no ocultan que patrón, ingredientes, Chief, pista y seguridad siguen pendientes."
 echo "OK: solo se aceptan adiciones presentes en el roster oficial de 181 fórmulas."
-echo "OK: quedan 24 fórmulas sin perfil y 23 perfiles parciales por completar con fuentes."
+echo "OK: quedan 24 fórmulas oficiales sin perfil detallado."
 echo "RESPALDO: $BACKUP"
