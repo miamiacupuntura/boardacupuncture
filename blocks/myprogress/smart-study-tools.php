@@ -211,6 +211,8 @@ foreach ($herbindex['herbs'] as $position => $official) {
     $rich = $richmap[$key] ?? [];
     $action = $actionmap[$key] ?? [];
     $category = $official['benskyCategory'] ?? [];
+    $categorycode = trim((string)($category['code'] ?? ''));
+    $safetyprofile = $herbsafety['herbs'][$name] ?? [];
     $identity = $localized($rich['identity'] ?? '', $ises);
     if ($identity === '') {
         $identity = $localized($property['actionSummary'] ?? '', $ises);
@@ -227,13 +229,17 @@ foreach ($herbindex['herbs'] as $position => $official) {
         'name' => $name,
         'latin' => trim((string)($official['latin'] ?? $property['latin'] ?? '')),
         'category' => trim((string)($category[$ises ? 'es' : 'en'] ?? $category['en'] ?? '')),
-        'categorycode' => trim((string)($category['code'] ?? '')),
+        'categorycode' => $categorycode,
         'flavor' => $localized($property['flavor'] ?? '', $ises),
         'temperature' => $localized($property['temperature'] ?? '', $ises),
         'channels' => $localized($rich['channels'] ?? ($property['channels'] ?? ''), $ises),
         'properties' => $localized($rich['properties'] ?? '', $ises),
         'identity' => $identity,
         'clue' => $clue,
+        'caution' => $localized($safetyprofile['caution'] ?? ($herbsafety['categoryCautions'][$categorycode] ?? ''), $ises),
+        'pregnancy' => $localized($safetyprofile['pregnancy'] ?? ($herbsafety['categoryPregnancy'][$categorycode] ?? ''), $ises),
+        'interactions' => $localized($safetyprofile['interactions'] ?? ($herbsafety['categoryInteractions'][$categorycode] ?? ''), $ises),
+        'preparation' => $localized($safetyprofile['preparation'] ?? '', $ises),
     ];
 }
 uasort($herbs, static fn(array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
