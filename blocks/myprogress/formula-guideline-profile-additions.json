@@ -1,7 +1,189 @@
 {
   "source": "User-provided Bensky formula profile pages 55–56",
-  "total": 1,
+  "total": 24,
   "formulas": [
+    {
+      "id": 5,
+      "name": "Bai Tou Weng Tang",
+      "chineseName": "白頭翁湯",
+      "englishName": "Pulsatilla Decoction",
+      "action": "Clears Heat, drains Fire, cools the Blood, and relieves toxicity, especially for Heat-type dysenteric disorder with predominance of Blood.",
+      "actionEs": "Limpia el Calor, drena el Fuego, enfría la Sangre y alivia la toxicidad, especialmente para disentería de tipo Calor con predominio de Sangre.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 16,
+      "name": "Chai Hu Gui Zhi Tang",
+      "chineseName": "柴胡桂枝湯",
+      "englishName": "Bupleurum and Cinnamon Twig Decoction",
+      "action": "Harmonizes Shaoyang and releases the Exterior by combining the actions of Xiao Chai Hu Tang and Gui Zhi Tang.",
+      "actionEs": "Armoniza el Shaoyang y libera el Exterior combinando los efectos de Xiao Chai Hu Tang y Gui Zhi Tang.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 17,
+      "name": "Chai Hu Jia Long Gu Mu Li Tang",
+      "chineseName": "柴胡加龍骨牡蠣湯",
+      "englishName": "Bupleurum plus Dragon Bone and Oyster Shell Decoction",
+      "action": "Calms the Spirit, settles the Liver, harmonizes Shaoyang, and unblocks constraint associated with Phlegm-Heat or San Jiao disorder.",
+      "actionEs": "Calma el Espíritu, tranquiliza el Hígado, armoniza el Shaoyang y desata bloqueos asociados con Flema-Calor o trastorno del San Jiao.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 25,
+      "name": "Da Qing Long Tang",
+      "chineseName": "大青龍湯",
+      "englishName": "Major Bluegreen Dragon Decoction",
+      "action": "Releases the Exterior and disperses exterior Cold with constrained interior Heat, while promoting urination to reduce edema.",
+      "actionEs": "Libera el Exterior y dispersa el Frío exterior con Calor interior atrapado, promoviendo la micción para reducir el edema.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 28,
+      "name": "Dang Gui Liu Huang Tang",
+      "chineseName": "當歸六黃湯",
+      "englishName": "Tangkuei and Six-Yellow Decoction",
+      "action": "Enriches Yin, drains Fire, stabilizes the Exterior, and stops sweating in Yin deficiency with floating Fire.",
+      "actionEs": "Enriquece el Yin, drena el Fuego, estabiliza el Exterior y detiene la sudoración en deficiencia de Yin con Fuego flotante.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 31,
+      "name": "Dang Gui Yin Zi",
+      "chineseName": "當歸飲子",
+      "englishName": "Tangkuei Drink",
+      "action": "Nourishes and harmonizes the Blood, disperses Wind, and relieves itching in chronic skin presentations.",
+      "actionEs": "Nutre y armoniza la Sangre, dispersa el Viento y alivia el prurito en cuadros cutáneos crónicos.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 32,
+      "name": "Dao Chi San",
+      "chineseName": "導赤散",
+      "englishName": "Guide Out the Red Powder",
+      "action": "Clears Heat and promotes urination to drain Heart Fire, including urinary problems and mouth ulcers from Heat.",
+      "actionEs": "Limpia el Calor y promueve la micción para drenar el Fuego de Corazón, incluidos problemas urinarios y úlceras bucales por Calor.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 36,
+      "name": "Du Qi Wan",
+      "chineseName": "都氣丸",
+      "englishName": "Capital Qi Pill",
+      "action": "Enriches Kidney Yin, secures the Essence, and supports the Lungs for wheezing or cough from Lung-Kidney insufficiency.",
+      "actionEs": "Enriquece el Yin de Riñón, asegura la Esencia y apoya los Pulmones para sibilancias o tos por insuficiencia de Pulmón y Riñón.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 44,
+      "name": "Fu Zi Li Zhong Wan",
+      "chineseName": "附子理中丸",
+      "englishName": "Aconite Accessory Root Pill to Regulate the Middle",
+      "action": "Warms the Middle Burner, disperses Cold, tonifies the Spleen, and supports Yang in Spleen-Stomach Yang deficiency.",
+      "actionEs": "Calienta el Jiao Medio, dispersa el Frío, tonifica el Bazo y beneficia el Yang en deficiencia de Yang de Bazo y Estómago.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 48,
+      "name": "Ge Xia Zhu Yu Tang",
+      "chineseName": "膈下逐瘀湯",
+      "englishName": "Drive Out Stasis Below the Diaphragm Decoction",
+      "action": "Invigorates the Blood, removes stasis, promotes the movement of Qi, and relieves pain in the upper or middle abdomen.",
+      "actionEs": "Vitaliza la Sangre, elimina la estasis, promueve la circulación de Qi y alivia el dolor en el abdomen superior o medio.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 50,
+      "name": "Gua Lou Xie Bai Ban Xia Tang",
+      "chineseName": "瓜蔞薤白半夏湯",
+      "englishName": "Trichosanthes Fruit, Chinese Garlic, and Pinellia Decoction",
+      "action": "Unblocks chest Yang, transforms Phlegm, and expands the chest in precordial oppression or pain from Qi and Phlegm obstruction.",
+      "actionEs": "Desobstruye el Yang pectoral, transforma la Flema y ensancha el tórax en opresión o dolor precordial por obstrucción de Qi y Flema.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 59,
+      "name": "Huang Qi Jian Zhong Tang",
+      "chineseName": "黃耆建中湯",
+      "englishName": "Astragalus Decoction to Construct the Middle",
+      "action": "Warms and tonifies Spleen Qi, harmonizes the Middle, and relieves spasmodic pain, with additional Qi support from Huang Qi.",
+      "actionEs": "Calienta y tonifica el Qi de Bazo, armoniza el Centro y alivia el dolor espasmódico, con apoyo adicional al Qi por Huang Qi.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 61,
+      "name": "Ji Chuan Jian",
+      "chineseName": "濟川煎",
+      "englishName": "Benefit the River (Flow) Decoction",
+      "action": "Warms the Kidneys, nourishes the Blood, and moistens the Intestines to facilitate bowel movement in Kidney Yang and Blood deficiency.",
+      "actionEs": "Calienta los Riñones, nutre la Sangre y humecta los Intestinos para facilitar la evacuación en deficiencia de Yang de Riñón y Sangre.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
     {
       "id": 62,
       "name": "Jia Jian Wei Rui Tang",
@@ -26,7 +208,160 @@
       "comparisonEs": "La Wei Rui Tang original utiliza dispersantes exteriores acre-tibios más fuertes. Esta modificación reemplaza ese énfasis con Cong Bai y Dan Dou Chi para liberar Viento-Calor mientras Yu Zhu protege y restaura los líquidos agotados.",
       "safety": "Use only for the described exterior Wind-Heat presentation with underlying Yin and fluid deficiency. The supplied pages do not provide a separate contraindications section; individual-herb precautions still require review.",
       "safetyEs": "Usar únicamente para el cuadro descrito de Viento-Calor exterior con deficiencia subyacente de Yin y líquidos. Las páginas suministradas no incluyen una sección separada de contraindicaciones; aún deben revisarse las precauciones de cada hierba.",
-      "safetyTier": "source-limited"
+      "safetyTier": "source-limited",
+      "chineseName": "加減葳蕤湯",
+      "verificationStatus": "complete",
+      "verifiedFields": [
+        "pattern",
+        "action",
+        "clue",
+        "examFocus",
+        "ingredients",
+        "ingredientRoles",
+        "comparison",
+        "safety",
+        "source"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "Jia Wei Xiao Yao San",
+      "chineseName": "加味逍遙散",
+      "englishName": "Augmented Rambling Powder",
+      "action": "Courses the Liver, relieves Qi constraint, strengthens the Spleen, nourishes the Blood, clears Heat, and drains Fire.",
+      "actionEs": "Desbloquea el Hígado, alivia el estancamiento de Qi, fortalece el Bazo, nutre la Sangre, limpia el Calor y drena el Fuego.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 67,
+      "name": "Jing Fang Bai Du San",
+      "chineseName": "荊防敗毒散",
+      "englishName": "Schizonepeta and Saposhnikovia Powder to Overcome Pathogenic Influences",
+      "action": "Releases the Exterior, dispels Wind-Cold-Dampness, relieves toxicity, and reduces early inflammation or swelling.",
+      "actionEs": "Libera el Exterior, expulsa Viento-Frío-Humedad, alivia la toxicidad y reduce inflamación o tumefacción inicial.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 72,
+      "name": "Liang Ge San",
+      "chineseName": "涼膈散",
+      "englishName": "Cool the Diaphragm Powder",
+      "action": "Drains Heat, cools the diaphragm, clears the upper digestive tract, and relieves accumulated Heat in the San Jiao.",
+      "actionEs": "Drena el Calor, refresca el diafragma, despeja el tracto digestivo superior y alivia la acumulación de Calor en el San Jiao.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 74,
+      "name": "Ling Jiao Gou Teng Yin",
+      "chineseName": "羚角鉤藤飲",
+      "englishName": "Antelope Horn and Uncaria Decoction",
+      "action": "Calms the Liver, extinguishes Wind, clears Heat, and settles hyperactive Yang in internal-Wind presentations.",
+      "actionEs": "Calma el Hígado, extingue el Viento, limpia el Calor y pacifica el Yang hiperactivo en cuadros de Viento interno.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 75,
+      "name": "Liu Jun Zi Tang",
+      "chineseName": "六君子湯",
+      "englishName": "Six-Gentlemen Decoction",
+      "action": "Tonifies Spleen Qi and transforms Phlegm-Dampness in Spleen deficiency with internal Phlegm accumulation.",
+      "actionEs": "Tonifica el Qi de Bazo y transforma Flema-Humedad en deficiencia de Bazo con acumulación interna de Flema.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 81,
+      "name": "Ma Zi Ren Wan",
+      "chineseName": "麻子仁丸",
+      "englishName": "Hemp Seed Pill",
+      "action": "Moistens the Intestines, promotes fluid movement, and drains Heat to treat constipation from intestinal dryness.",
+      "actionEs": "Humecta los Intestinos, promueve el movimiento de líquidos y descarga el Calor para tratar estreñimiento por sequedad intestinal.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 86,
+      "name": "Pu Ji Xiao Du Yin",
+      "chineseName": "普濟消毒飲",
+      "englishName": "Universal Benefit Drink to Eliminate Toxin",
+      "action": "Clears Heat, relieves toxicity, and disperses epidemic Wind-Heat affecting the head and throat.",
+      "actionEs": "Limpia el Calor, alivia la toxicidad y dispersa Viento-Calor epidémico que afecta la cabeza y la garganta.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 87,
+      "name": "Qi Ju Di Huang Wan",
+      "chineseName": "杞菊地黃丸",
+      "englishName": "Lycium Fruit, Chrysanthemum, and Rehmannia Pill",
+      "action": "Nourishes Liver and Kidney Yin, clears the eyes, and supports vision in Yin-deficiency presentations.",
+      "actionEs": "Nutre el Yin de Hígado y Riñón, aclara los ojos y apoya la visión en cuadros de deficiencia de Yin.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 90,
+      "name": "Qing Gu San",
+      "chineseName": "清骨散",
+      "englishName": "Cool the Bones Powder",
+      "action": "Clears deep Heat, drains deficiency Fire, and relieves afternoon fever or steaming-bone sensations.",
+      "actionEs": "Limpia el Calor profundo, drena el Fuego por deficiencia y alivia la fiebre vespertina o la sensación de calor en los huesos.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
+    },
+    {
+      "id": 93,
+      "name": "Qing Wei San",
+      "chineseName": "清胃散",
+      "englishName": "Clear the Stomach Powder",
+      "action": "Clears Stomach Heat and cools the Blood in toothache and swollen or bleeding gums from Stomach Fire.",
+      "actionEs": "Limpia el Calor de Estómago y enfría la Sangre en dolor dental y encías inflamadas o sangrantes por Fuego de Estómago.",
+      "verificationStatus": "partial",
+      "verifiedFields": [
+        "action"
+      ],
+      "source": "User-supplied formula action summary.",
+      "sourceEs": "Resumen de acciones de fórmulas suministrado por el usuario."
     }
   ]
 }
