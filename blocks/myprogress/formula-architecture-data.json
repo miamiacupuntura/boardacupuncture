@@ -334,20 +334,21 @@
       ]
     },
     {
-      "name": "Zhi Bai Di Huang Wan",
+      "name": "Shen Qi Wan",
       "summary": {
-        "en": "Liu Wei Di Huang Wan with two deficiency-Heat-clearing additions.",
-        "es": "Liu Wei Di Huang Wan con dos adiciones que limpian Calor por deficiencia."
+        "en": "A six-herb Di Huang Yin-supporting and water-regulating base activated by two warming herbs.",
+        "es": "Base de seis hierbas Di Huang que apoya el Yin y regula el agua, activada por dos hierbas calentadoras."
       },
       "groups": [
         {
-          "label": "Liu Wei Di Huang Wan",
+          "label": "Six-herb Di Huang base",
+          "labelEs": "Base Di Huang de seis hierbas",
           "role": {
-            "en": "Nourishes Kidney Yin",
-            "es": "Nutre el Yin de Riñón"
+            "en": "Supports Kidney Yin and regulates water metabolism",
+            "es": "Apoya el Yin de Riñón y regula el metabolismo del agua"
           },
           "herbs": [
-            "Shu Di Huang",
+            "Sheng Di Huang",
             "Shan Zhu Yu",
             "Shan Yao",
             "Ze Xie",
@@ -356,18 +357,22 @@
           ]
         },
         {
-          "label": "Deficiency-Heat addition",
-          "labelEs": "Adición para Calor por deficiencia",
+          "label": "Warming activation",
+          "labelEs": "Activación calentadora",
           "role": {
-            "en": "Clears deficiency Heat and ministerial Fire",
-            "es": "Limpia Calor por deficiencia y Fuego ministerial"
+            "en": "Kindles Kidney Yang so Qi transformation can occur",
+            "es": "Aviva el Yang de Riñón para permitir la transformación del Qi"
           },
           "herbs": [
-            "Zhi Mu",
-            "Huang Bai"
+            "Zhi Fu Zi",
+            "Gui Zhi"
           ]
         }
-      ]
+      ],
+      "note": {
+        "en": "Modern versions often use Shu Di Huang and Rou Gui; the card preserves the documented source lineage.",
+        "es": "Las versiones modernas suelen usar Shu Di Huang y Rou Gui; la tarjeta conserva el linaje de la fuente documentada."
+      }
     },
     {
       "name": "Shen Ling Bai Zhu San",
