@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -54,6 +54,16 @@ grep -Fq 'Índice farmacéutico' "$TEMP_DIR/static/incompatibilities-shi-ba-fan-
 grep -Fq 'This is not an incompatibility rule' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
 grep -Fq 'Esto no es una regla de incompatibilidad' "$TEMP_DIR/static/incompatibilities-medicinal-origins-es.html"
 grep -Fq 'Reference appendix' "$TEMP_DIR/static/herbal-incompatibilities.html"
+grep -Fq 'Guideline Medicinals by Origin' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '/study-guide/comparisons/guideline-herbs-by-origin.html' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '$fromoriginmap' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq 'Back to medicinals by origin' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq 'Animal · 24' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+grep -Fq 'Mineral · 8' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+grep -Fq 'Plant &amp; fungal · 272' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+grep -Fq 'Vegetal y fúngico · 272' "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<a class=\"source-card\"") !== 304 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<a class=\"source-card\"") !== 304 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"
 grep -Fq 'origin-guideline-star' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
 grep -Fq 'Agkistrodon/Bungarus' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
 grep -Fq 'returnorigin=animal' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
@@ -253,6 +263,8 @@ echo "OK: 30 entradas animales corregidas incluyen límites legales, éticos y t
 echo "OK: los 11 capítulos eliminan caracteres chinos y muestran un índice plegable de hierbas oficiales."
 echo "OK: cada capítulo explica primero su regla y presenta después el índice farmacéutico."
 echo "OK: Medicinal Source Guide aparece como apéndice de referencia, no como regla de incompatibilidad."
+echo "OK: Secondary Study Guide incluye Guideline Medicinals by Origin con las 304 entradas oficiales."
+echo "OK: clasificación completa: 24 animales, 8 minerales y 272 vegetales/fúngicas, con buscador y regreso contextual."
 echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin enlace."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
