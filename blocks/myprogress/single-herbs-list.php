@@ -80,65 +80,9 @@ foreach ($properties['herbs'] ?? [] as $profile) {
     }
 }
 
-// Reuse the detailed, guideline-based category cards already maintained by
-// the Single Herbs Study Guide. Off-roster entries are never rendered because
-// the final card loop is driven exclusively by single-herb-card-index.json.
+// Keep this catalog independent from the rendered category PHP pages. The two
+// verified JSON banks above are the only runtime data sources for all 304 cards.
 $richprofiles = [];
-$categoryfiles = glob(__DIR__ . '/single-herbs-category-*.php') ?: [];
-foreach ($categoryfiles as $categoryfile) {
-    $loadedprofiles = (static function(string $path, bool $ises): array {
-        // Category files contain a data-definition PHP block followed by their
-        // complete rendered chapter. Evaluate only that first PHP block so this
-        // list can reuse the profile arrays without executing the category page.
-        $source = file_get_contents($path);
-        if ($source === false) {
-            return [];
-        }
-        $definitions = '';
-        $inphp = false;
-        foreach (token_get_all($source) as $token) {
-            if (is_array($token)) {
-                if ($token[0] === T_OPEN_TAG) {
-                    $inphp = true;
-                    continue;
-                }
-                if ($token[0] === T_CLOSE_TAG) {
-                    break;
-                }
-                if ($inphp) {
-                    $definitions .= $token[1];
-                }
-            } else if ($inphp) {
-                $definitions .= $token;
-            }
-        }
-        if ($definitions === '') {
-            return [];
-        }
-        eval($definitions);
-        $profiles = [];
-        foreach (get_defined_vars() as $candidate) {
-            if (!is_array($candidate)) {
-                continue;
-            }
-            foreach ($candidate as $item) {
-                if (!is_array($item)
-                        || empty($item['name'])
-                        || empty($item['latin'])
-                        || (!array_key_exists('identity', $item)
-                            && !array_key_exists('clue', $item)
-                            && !array_key_exists('memory', $item))) {
-                    continue;
-                }
-                $profiles[] = $item;
-            }
-        }
-        return $profiles;
-    })($categoryfile, $ises);
-    foreach ($loadedprofiles as $richprofile) {
-        $richprofiles[$normalize((string)$richprofile['name'])] = $richprofile;
-    }
-}
 
 $formatformulaboundary = static function($formulas, bool $ises): string {
     if (is_string($formulas)) {
