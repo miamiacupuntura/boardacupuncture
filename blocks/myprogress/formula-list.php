@@ -449,7 +449,11 @@ echo $OUTPUT->header();
                         ]);
                         $cardcomparisonurl = new moodle_url(
                             '/study-guide/comparisons/' . ($ises ? 'formulas-es.html' : 'formulas.html'),
-                            ['q' => $card['name'], 'returnformula' => $card['name']]
+                            [
+                                'q' => $card['name'],
+                                'returnformula' => $card['name'],
+                                'related' => $card['category'],
+                            ]
                         );
                     ?>
                         <details class="formula-list__card"<?php echo $autoopen ? ' open' : ''; ?>>
