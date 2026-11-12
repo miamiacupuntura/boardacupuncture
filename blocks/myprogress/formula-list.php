@@ -99,7 +99,15 @@ foreach ($roster['formulas'] as $position => $officialformula) {
     if ($categoryname === '') {
         $categoryname = $ises ? 'Sin categoría' : 'Uncategorized';
     }
-    $categories[$categorycode] = $categoryname;
+    $categorychapter = (int)($category['chapter'] ?? 0);
+    $categorylabel = ($ises ? 'Capítulo ' : 'Chapter ')
+        . ($categorychapter > 0 ? $categorychapter . ' · ' : '')
+        . $categoryname;
+    $categories[$categorycode] = [
+        'chapter' => $categorychapter,
+        'title' => $categoryname,
+        'label' => $categorylabel,
+    ];
     $isdetailed = !empty($detail);
     if ($isdetailed) {
         $detailedcount++;
@@ -110,6 +118,8 @@ foreach ($roster['formulas'] as $position => $officialformula) {
         'english' => trim((string)($officialformula['englishName'] ?? '')),
         'categorycode' => $categorycode,
         'category' => $categoryname,
+        'categorychapter' => $categorychapter,
+        'categorylabel' => $categorylabel,
         'detailed' => $isdetailed,
         'pattern' => $detailtext($detail, 'pattern', $ises),
         'action' => $detailtext($detail, 'action', $ises),
@@ -130,24 +140,38 @@ foreach ($roster['formulas'] as $position => $officialformula) {
     }
     $cards[] = $card;
 }
-asort($categories, SORT_NATURAL | SORT_FLAG_CASE);
+// Preserve the conventional Bensky book sequence instead of alphabetizing chapters.
+uasort($categories, static function(array $left, array $right): int {
+    $chaptercompare = ($left['chapter'] ?? 0) <=> ($right['chapter'] ?? 0);
+    return $chaptercompare !== 0 ? $chaptercompare : strnatcasecmp($left['title'], $right['title']);
+});
 usort($cards, static fn(array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
 
 $groups = [];
 foreach ($cards as $card) {
     if ($sortmode === 'category') {
         $groupkey = $card['categorycode'];
-        $grouptitle = $card['category'];
+        $grouptitle = $card['categorylabel'];
+        $grouporder = $card['categorychapter'];
     } else {
         $groupkey = strtoupper(substr($card['name'], 0, 1));
         $grouptitle = $groupkey;
+        $grouporder = 0;
     }
     if (!isset($groups[$groupkey])) {
-        $groups[$groupkey] = ['title' => $grouptitle, 'cards' => []];
+        $groups[$groupkey] = ['title' => $grouptitle, 'order' => $grouporder, 'cards' => []];
     }
     $groups[$groupkey]['cards'][] = $card;
 }
-uasort($groups, static fn(array $left, array $right): int => strnatcasecmp($left['title'], $right['title']));
+uasort($groups, static function(array $left, array $right) use ($sortmode): int {
+    if ($sortmode === 'category') {
+        $ordercompare = ($left['order'] ?? 0) <=> ($right['order'] ?? 0);
+        if ($ordercompare !== 0) {
+            return $ordercompare;
+        }
+    }
+    return strnatcasecmp($left['title'], $right['title']);
+});
 $autoopen = $query !== '' && count($cards) <= 10;
 
 $PAGE->set_url($pageurl);
@@ -217,8 +241,8 @@ echo $OUTPUT->header();
             <p class="formula-list__eyebrow"><?php echo $ises ? 'GUIDELINE VIGENTE 2026' : 'CURRENT 2026 GUIDELINE'; ?></p>
             <h2>Formula List</h2>
             <p class="formula-list__lead"><?php echo $ises
-                ? 'Las 181 fórmulas oficiales del Appendix C, organizadas de la A a la Z o por capítulo Bensky. Las fichas clínicas solo muestran información presente en los bancos verificados.'
-                : 'The 181 official Appendix C formulas, organized A–Z or by Bensky chapter. Clinical cards show only information present in the verified study banks.'; ?></p>
+                ? 'Las 181 fórmulas oficiales del Appendix C, organizadas de la A a la Z o en el orden convencional de los capítulos 1–21 de Bensky. Solo se muestran los capítulos que contienen fórmulas del roster oficial.'
+                : 'The 181 official Appendix C formulas, organized A–Z or in the conventional Bensky Chapters 1–21 sequence. Only chapters containing official roster formulas are shown.'; ?></p>
         </div>
         <div class="formula-list__actions">
             <a class="formula-list__button" href="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Fórmulas' : '← Formulas'; ?></a>
@@ -235,7 +259,7 @@ echo $OUTPUT->header();
             $categoryurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'category', 'q' => $query]);
             ?>
             <a class="formula-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
-            <a class="formula-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por categoría' : 'By category'; ?></a>
+            <a class="formula-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por capítulo Bensky' : 'By Bensky chapter'; ?></a>
             <?php if ($categoryfilter !== '') {
                 $backurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'az']);
             ?>
@@ -248,9 +272,9 @@ echo $OUTPUT->header();
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
             <?php if ($fromlibrary) { ?><input type="hidden" name="from" value="library"><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
-            <label><span><?php echo $ises ? 'Categoría' : 'Category'; ?></span><select name="category">
-                <option value=""><?php echo $ises ? 'Todas las categorías' : 'All categories'; ?></option>
-                <?php foreach ($categories as $code => $title) { ?><option value="<?php echo s($code); ?>"<?php echo $categoryfilter === $code ? ' selected' : ''; ?>><?php echo s($title); ?></option><?php } ?>
+            <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
+                <option value=""><?php echo $ises ? 'Todos los capítulos con fórmulas oficiales' : 'All chapters with official formulas'; ?></option>
+                <?php foreach ($categories as $code => $categoryitem) { ?><option value="<?php echo s($code); ?>"<?php echo $categoryfilter === $code ? ' selected' : ''; ?>><?php echo s($categoryitem['label']); ?></option><?php } ?>
             </select></label>
             <button class="formula-list__button is-active" type="submit"><?php echo $ises ? 'Aplicar' : 'Apply'; ?></button>
         </form>
@@ -258,7 +282,7 @@ echo $OUTPUT->header();
         <div class="formula-list__summary">
             <div class="formula-list__stat"><span>Guideline</span><strong>181</strong></div>
             <div class="formula-list__stat"><span><?php echo $ises ? 'Mostradas' : 'Displayed'; ?></span><strong><?php echo count($cards); ?></strong></div>
-            <div class="formula-list__stat"><span><?php echo $ises ? 'Perfiles detallados' : 'Detailed profiles'; ?></span><strong><?php echo $detailedcount; ?></strong></div>
+            <div class="formula-list__stat"><span><?php echo $ises ? 'Capítulos Bensky' : 'Bensky chapters'; ?></span><strong><?php echo count($categories); ?></strong></div>
         </div>
         <div class="formula-list__tools">
             <button class="formula-list__button" type="button" data-formula-list-expand><?php echo $ises ? 'Expandir todas' : 'Expand all'; ?></button>
@@ -283,7 +307,7 @@ echo $OUTPUT->header();
                             <summary>
                                 <span class="formula-list__name"><?php echo s($card['name']); ?>*</span>
                                 <?php if ($card['english'] !== '') { ?><span class="formula-list__english"><?php echo s($card['english']); ?></span><?php } ?>
-                                <a class="formula-list__category" data-formula-category-link href="<?php echo $cardcategoryurl->out(false); ?>"><?php echo s($card['category']); ?></a>
+                                <a class="formula-list__category" data-formula-category-link href="<?php echo $cardcategoryurl->out(false); ?>"><?php echo s($card['categorylabel']); ?></a>
                                 <span class="formula-list__status<?php echo $card['detailed'] ? ' is-detailed' : ''; ?>"><?php echo $card['detailed']
                                     ? ($ises ? 'Perfil clínico detallado' : 'Detailed clinical profile')
                                     : ($ises ? 'Roster oficial · perfil pendiente' : 'Official roster · profile pending'); ?></span>

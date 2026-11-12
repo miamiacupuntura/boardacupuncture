@@ -29,6 +29,8 @@ done
 grep -Fq "Formula List" "$TEMP_DIR/formula-list.php"
 grep -Fq "count(\$roster['formulas'] ?? []) !== 181" "$TEMP_DIR/formula-list.php"
 grep -Fq "Sorting modes reset category filters and start from all 181 formulas." "$TEMP_DIR/formula-list.php"
+grep -Fq "Preserve the conventional Bensky book sequence instead of alphabetizing chapters." "$TEMP_DIR/formula-list.php"
+grep -Fq "By Bensky chapter" "$TEMP_DIR/formula-list.php"
 grep -Fq "Detailed clinical profile" "$TEMP_DIR/formula-list.php"
 grep -Fq "Back to all formulas" "$TEMP_DIR/formula-list.php"
 grep -Fq "Formula List" "$TEMP_DIR/formulas-study-guide.php"
@@ -84,7 +86,8 @@ fi
 
 echo "OK: botón Formula List instalado en Formulas y en la biblioteca."
 echo "OK: lista limitada a las 181 fórmulas oficiales del Appendix C 2026."
-echo "OK: organización A–Z y por categoría, búsqueda y filtros activos."
+echo "OK: organización A–Z y por capítulos en el orden convencional de Bensky activa."
+echo "OK: selector y encabezados muestran el número de capítulo Bensky."
 echo "OK: 133 fórmulas enlazan con perfiles clínicos detallados verificados."
 echo "OK: las 48 fórmulas restantes conservan identidad oficial sin contenido inferido."
 echo "RESPALDO: $BACKUP"
