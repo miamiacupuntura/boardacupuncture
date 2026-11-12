@@ -5,6 +5,46 @@
   returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
   document.head.appendChild(returnNavigation);
 
+  const params = new URLSearchParams(window.location.search);
+  const returnFormula = (params.get('returnformula') || '').trim();
+
+  function addFormulaReturnButton() {
+    if (!returnFormula || document.querySelector('[data-return-to-formula-card]')) {
+      return;
+    }
+    const topbar = document.querySelector('.comparison-topbar__inner');
+    if (!topbar) {
+      return;
+    }
+    let actions = [...topbar.children].find(element =>
+      element.tagName === 'SPAN' && !element.classList.contains('comparison-brand')
+    );
+    if (!actions) {
+      actions = document.createElement('span');
+      actions.style.display = 'flex';
+      actions.style.flexWrap = 'wrap';
+      actions.style.gap = '8px';
+      topbar.appendChild(actions);
+    }
+    const back = document.createElement('a');
+    const url = new URL('/blocks/myprogress/formula-list.php', window.location.origin);
+    url.searchParams.set('formula', returnFormula);
+    url.searchParams.set('sort', 'az');
+    if (document.documentElement.lang.toLowerCase().startsWith('es')) {
+      url.searchParams.set('lang', 'es');
+    }
+    back.className = 'comparison-back';
+    back.dataset.returnToFormulaCard = '';
+    back.href = url.toString();
+    back.textContent = (document.documentElement.lang.toLowerCase().startsWith('es')
+      ? '← Volver a '
+      : '← Back to ') + returnFormula;
+    actions.prepend(back);
+  }
+
+  returnNavigation.addEventListener('load', addFormulaReturnButton);
+  addFormulaReturnButton();
+
   const search = document.querySelector('[data-comparison-search]');
   const filters = [...document.querySelectorAll('[data-filter]')];
   const cards = [...document.querySelectorAll('.comparison-card')];
@@ -14,7 +54,15 @@
   let activeFilter = 'all';
 
   if (search) {
-    search.value = new URLSearchParams(window.location.search).get('q') || '';
+    search.value = params.get('q') || '';
+  }
+
+  if (returnFormula) {
+    document.querySelectorAll('.comparison-card__open').forEach(link => {
+      const url = new URL(link.href, window.location.href);
+      url.searchParams.set('returnformula', returnFormula);
+      link.href = url.toString();
+    });
   }
 
   function normalise(value) {
