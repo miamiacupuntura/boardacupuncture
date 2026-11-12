@@ -119,11 +119,24 @@ $PAGE->set_title($ises ? 'Mapa de fórmulas y hierbas Chief' : 'Chief Herbs Form
 $PAGE->set_heading($ises ? 'Mapa de fórmulas y hierbas Chief' : 'Chief Herbs Formula Map');
 $PAGE->set_cacheable(false);
 $PAGE->requires->js_init_code(<<<'JS'
-const button=document.querySelector('[data-chief-map-download]');
+const downloadButton=document.querySelector('[data-chief-map-download]');
+const zoomIn=document.querySelector('[data-chief-map-zoom-in]');
+const zoomOut=document.querySelector('[data-chief-map-zoom-out]');
+const zoomReset=document.querySelector('[data-chief-map-zoom-reset]');
+const fullscreen=document.querySelector('[data-chief-map-fullscreen]');
+const canvas=document.querySelector('.chief-map__canvas');
 const svg=document.querySelector('[data-chief-map-svg]');
-if(button&&svg){
-  button.addEventListener('click',function(){
+let zoom=1;
+function applyZoom(){
+  if(!svg)return;
+  svg.style.width=Math.round(zoom*100)+'%';
+  svg.style.maxWidth='none';
+  if(zoomReset)zoomReset.textContent=Math.round(zoom*100)+'%';
+}
+if(downloadButton&&svg){
+  downloadButton.addEventListener('click',function(){
     const copy=svg.cloneNode(true);
+    copy.removeAttribute('style');
     copy.setAttribute('xmlns','http://www.w3.org/2000/svg');
     const blob=new Blob([new XMLSerializer().serializeToString(copy)],{type:'image/svg+xml;charset=utf-8'});
     const url=URL.createObjectURL(blob);
@@ -132,6 +145,14 @@ if(button&&svg){
     setTimeout(function(){URL.revokeObjectURL(url);},1000);
   });
 }
+if(zoomIn)zoomIn.addEventListener('click',function(){zoom=Math.min(2.5,zoom+0.2);applyZoom();});
+if(zoomOut)zoomOut.addEventListener('click',function(){zoom=Math.max(1,zoom-0.2);applyZoom();});
+if(zoomReset)zoomReset.addEventListener('click',function(){zoom=1;applyZoom();if(canvas)canvas.scrollTo({top:0,left:0,behavior:'smooth'});});
+if(fullscreen&&canvas)fullscreen.addEventListener('click',function(){
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(canvas.requestFullscreen)canvas.requestFullscreen();
+});
+if(svg)svg.addEventListener('dblclick',function(){zoom=Math.min(2.5,zoom+0.2);applyZoom();});
 JS);
 
 echo $OUTPUT->header();
@@ -142,7 +163,7 @@ echo $OUTPUT->header();
 .chief-map__eyebrow{margin:0 0 6px;color:#087c69;font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
 .chief-map h2{margin:0 0 8px;font-size:clamp(29px,4vw,42px)}
 .chief-map__lead{max-width:850px;margin:0;color:#526b84;line-height:1.55}
-.chief-map__actions{display:flex;flex-wrap:wrap;gap:9px}.chief-map__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81!important;font-weight:850;text-decoration:none!important;cursor:pointer}.chief-map__button:hover{background:#eef7f5}
+.chief-map__actions{display:flex;flex-wrap:wrap;gap:9px}.chief-map__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81!important;font-weight:850;text-decoration:none!important;cursor:pointer}.chief-map__button:hover{background:#eef7f5}.chief-map__zoom-value{min-width:68px}.chief-map__canvas:fullscreen{padding:14px;background:#fffaf1}.chief-map__canvas:fullscreen svg{min-width:1180px}
 .chief-map__legend{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 14px;padding:12px 15px;border:1px solid #c7ddd9;border-radius:10px;background:#f8fcfb;color:#36566c;font-weight:750}.chief-map__legend span{display:inline-flex;align-items:center;gap:7px}.chief-map__swatch{width:18px;height:12px;border-radius:999px;background:#ffedd5;border:1px solid #fb923c}.chief-map__swatch.is-category{background:#0f766e;border-color:#0f766e}
 .chief-map__canvas{overflow:auto;border:1px solid #bfd0d9;border-radius:14px;background:#fffaf1;box-shadow:0 7px 22px rgba(23,50,77,.08)}.chief-map__canvas svg{display:block;min-width:1180px;width:100%;height:auto}
 .chief-map__note{margin:14px 0 0;color:#526b84;font-size:13px;line-height:1.5}
@@ -160,6 +181,10 @@ echo $OUTPUT->header();
         </div>
         <div class="chief-map__actions">
             <a class="chief-map__button" href="<?php echo $guideurl->out(false); ?>"><?php echo $ises ? '← Guía principal' : '← Main Study Guide'; ?></a>
+            <button class="chief-map__button" type="button" data-chief-map-zoom-out aria-label="<?php echo $ises ? 'Reducir mapa' : 'Zoom out'; ?>">−</button>
+            <button class="chief-map__button chief-map__zoom-value" type="button" data-chief-map-zoom-reset aria-label="<?php echo $ises ? 'Restablecer tamaño' : 'Reset zoom'; ?>">100%</button>
+            <button class="chief-map__button" type="button" data-chief-map-zoom-in aria-label="<?php echo $ises ? 'Agrandar mapa' : 'Zoom in'; ?>">＋</button>
+            <button class="chief-map__button" type="button" data-chief-map-fullscreen><?php echo $ises ? 'Pantalla completa' : 'Full screen'; ?></button>
             <button class="chief-map__button" type="button" data-chief-map-download><?php echo $ises ? 'Descargar SVG' : 'Download SVG'; ?></button>
             <a class="chief-map__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
