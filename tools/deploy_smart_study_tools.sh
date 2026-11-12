@@ -9,60 +9,95 @@ MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
-    echo "Uso: sudo bash tools/deploy_smart_study_tools.sh COMMIT_DE_40_CARACTERES" >&2
+    echo "Uso: sudo bash /tmp/deploy_smart_study_tools.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
 
-for command in curl php grep install stat cp cmp mkdir mktemp date rm id; do
+for command in curl php grep install stat cp cmp mkdir mktemp date rm id dirname; do
     command -v "$command" >/dev/null 2>&1 || { echo "ERROR: falta el comando $command" >&2; exit 1; }
 done
 
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
-FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php)
+mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/static"
 
-for file in "${FILES[@]}"; do
-    curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/$file"
-    php -l "$TEMP_DIR/$file" >/dev/null
+MOODLE_FILES=(smart-study-tools.php study-guide.php formula-list.php single-herbs-list.php)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html)
+
+for file in "${MOODLE_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
+    php -l "$TEMP_DIR/moodle/$file" >/dev/null
+done
+for file in "${STATIC_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
 
-grep -Fq "Smart Study Tools" "$TEMP_DIR/smart-study-tools.php"
-grep -Fq "Find Similar Formulas" "$TEMP_DIR/smart-study-tools.php"
-grep -Fq "Find Similar Herbs" "$TEMP_DIR/smart-study-tools.php"
-grep -Fq "Pattern & Clinical Clue Finder" "$TEMP_DIR/smart-study-tools.php"
-grep -Fq "Tongue & Pulse Matcher" "$TEMP_DIR/smart-study-tools.php"
-grep -Fq "subject-study-library__journey-option--smart" "$TEMP_DIR/study-guide.php"
-grep -Fq "Find similar formulas" "$TEMP_DIR/formula-list.php"
-grep -Fq "Find similar herbs" "$TEMP_DIR/single-herbs-list.php"
-grep -Fq '$fromsmart' "$TEMP_DIR/formula-list.php"
-grep -Fq '$fromsmart' "$TEMP_DIR/single-herbs-list.php"
+for label in "Similar Formulas" "Similar Herbs" "Pattern → Formula Finder" "Tongue & Pulse Matcher"     "Formula Ingredient Similarity" "Chief Herb Alternatives" "Duì Yào Similar Pairs"     "Safety & Contraindication Finder" "Clinical Clue Finder" "Name Trap Detector" "Personalized Quiz"; do
+    grep -Fq "$label" "$TEMP_DIR/moodle/smart-study-tools.php"
+done
+grep -Fq "single-herb-safety-supplement.json" "$TEMP_DIR/moodle/smart-study-tools.php"
+grep -Fq "subject-study-library__journey-option--smart" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "Find similar formulas" "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq "Find similar herbs" "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq '$fromsmart' "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq '$fromsmart' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq "data-practice-mode=\"weak\"" "$TEMP_DIR/static/formula-practice.html"
+grep -Fq "data-practice-mode=\"weak\"" "$TEMP_DIR/static/formula-practice-es.html"
+grep -Fq "state.mode === 'weak'" "$TEMP_DIR/static/formula-practice.js"
+grep -Fq "percentage(result.correct, result.total) < 80" "$TEMP_DIR/static/formula-practice.js"
 
 TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
 [[ -d "$TARGET_DIR" ]] || { echo "ERROR: no existe $TARGET_DIR" >&2; exit 1; }
-for file in study-guide.php formula-list.php single-herbs-list.php     formula-board-roster-2026.json formulas-study-guide-data.json formula-guideline-profile-additions.json     formula-tongue-pulse-data.json single-herb-card-index.json single-herb-properties.json     single-herb-rich-profiles.json single-herb-actions-indications-supplement.json; do
+for file in study-guide.php formula-list.php single-herbs-list.php     formula-board-roster-2026.json formulas-study-guide-data.json formula-guideline-profile-additions.json     formula-tongue-pulse-data.json single-herb-card-index.json single-herb-properties.json     single-herb-rich-profiles.json single-herb-actions-indications-supplement.json     single-herb-safety-supplement.json; do
     [[ -f "$TARGET_DIR/$file" ]] || { echo "ERROR: falta $TARGET_DIR/$file" >&2; exit 1; }
 done
 
+STUDY_NOTE_DIR=""
+for candidate in     "/var/www/acupuncturetests-study-guide/current/comparisons"     "$MOODLE_ROOT/study-guide/comparisons"     "$(dirname "$MOODLE_ROOT")/study-guide/comparisons"     "/var/www/html/study-guide/comparisons"; do
+    if [[ -d "$candidate" && -f "$candidate/formula-practice.html" ]]; then
+        STUDY_NOTE_DIR="$candidate"
+        break
+    fi
+done
+[[ -n "$STUDY_NOTE_DIR" ]] || { echo "ERROR: no se encontró el directorio público study-guide/comparisons" >&2; exit 1; }
+
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP="$BACKUP_ROOT/smart-study-tools-$TIMESTAMP"
-mkdir -p "$BACKUP"
+mkdir -p "$BACKUP/moodle" "$BACKUP/static"
 reference="$TARGET_DIR/study-guide.php"
 owner_group="$(stat -c '%u:%g' "$reference")"
 mode="$(stat -c '%a' "$reference")"
 
-for file in "${FILES[@]}"; do
+for file in "${MOODLE_FILES[@]}"; do
     target="$TARGET_DIR/$file"
     if [[ -f "$target" ]]; then
-        cp -a "$target" "$BACKUP/$file"
+        cp -a "$target" "$BACKUP/moodle/$file"
         file_owner_group="$(stat -c '%u:%g' "$target")"
         file_mode="$(stat -c '%a' "$target")"
     else
         file_owner_group="$owner_group"
         file_mode="$mode"
     fi
-    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/$file" "$target"
-    cmp -s "$TEMP_DIR/$file" "$target"
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/moodle/$file" "$target"
+    cmp -s "$TEMP_DIR/moodle/$file" "$target"
     php -l "$target" >/dev/null
+done
+
+static_reference="$STUDY_NOTE_DIR/formula-practice.html"
+static_owner_group="$(stat -c '%u:%g' "$static_reference")"
+static_mode="$(stat -c '%a' "$static_reference")"
+for file in "${STATIC_FILES[@]}"; do
+    target="$STUDY_NOTE_DIR/$file"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP/static/$file"
+        file_owner_group="$(stat -c '%u:%g' "$target")"
+        file_mode="$(stat -c '%a' "$target")"
+    else
+        file_owner_group="$static_owner_group"
+        file_mode="$static_mode"
+    fi
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/static/$file" "$target"
+    cmp -s "$TEMP_DIR/static/$file" "$target"
 done
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
@@ -73,10 +108,11 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
-echo "OK: Smart Study Tools visible en Main Study Guide."
-echo "OK: Similar Formulas analiza las 181 fórmulas oficiales."
-echo "OK: Similar Herbs analiza las 304 hierbas oficiales."
-echo "OK: Pattern & Clinical Clue y Tongue & Pulse usan únicamente datos verificados."
-echo "OK: tarjetas de fórmulas y hierbas incluyen acceso contextual y botón de regreso."
-echo "OK: motor local gratuito; no usa API externa."
+echo "OK: Smart Study Tools visible en Main Study Guide con 11 módulos."
+echo "OK: Similar Formulas, Similar Herbs, Pattern, Tongue & Pulse, Ingredients y Chief usan el guideline verificado."
+echo "OK: Duì Yào, Name Traps, Safety y Clinical Clue están conectados con sus bancos oficiales."
+echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el historial local."
+echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
+echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
+echo "OK: archivos públicos instalados en $STUDY_NOTE_DIR."
 echo "RESPALDO: $BACKUP"
