@@ -22,13 +22,22 @@ $fromactions = $fromcontext === 'actions';
 $fromtonguepulse = $fromcontext === 'tonguepulse';
 $fromchiefmap = $fromcontext === 'chiefmap';
 $fromquiz = $fromcontext === 'quiz';
+$fromsmart = $fromcontext === 'smart';
+$smartmode = optional_param('smartmode', 'formula', PARAM_ALPHA);
+$smartitem = trim(optional_param('smartitem', '', PARAM_TEXT));
+$smartq = trim(optional_param('smartq', '', PARAM_TEXT));
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart) {
     $baseparams['from'] = $fromcontext;
+}
+if ($fromsmart) {
+    $baseparams['smartmode'] = $smartmode;
+    if ($smartitem !== '') $baseparams['smartitem'] = $smartitem;
+    if ($smartq !== '') $baseparams['smartq'] = $smartq;
 }
 $pageurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + [
     'sort' => $sortmode,
@@ -45,8 +54,13 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart) {
     $languageparams['from'] = $fromcontext;
+}
+if ($fromsmart) {
+    $languageparams['smartmode'] = $smartmode;
+    if ($smartitem !== '') $languageparams['smartitem'] = $smartitem;
+    if ($smartq !== '') $languageparams['smartq'] = $smartq;
 }
 $languageurl = new moodle_url('/blocks/myprogress/formula-list.php', $languageparams);
 $studyparams = $ises ? ['lang' => 'es'] : [];
@@ -60,6 +74,11 @@ $formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.
 $formulaactionsurl = new moodle_url('/blocks/myprogress/formula-actions.php', $ises ? ['lang' => 'es'] : []);
 $formulatonguepulseurl = new moodle_url('/blocks/myprogress/formula-tongue-pulse.php', $ises ? ['lang' => 'es'] : []);
 $formulachiefmapurl = new moodle_url('/blocks/myprogress/formula-chief-herbs-map.php', $ises ? ['lang' => 'es'] : []);
+$smartreturnparams = ['mode' => $smartmode];
+if ($smartitem !== '') $smartreturnparams['item'] = $smartitem;
+if ($smartq !== '') $smartreturnparams['q'] = $smartq;
+if ($ises) $smartreturnparams['lang'] = 'es';
+$smarttoolsurl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $smartreturnparams);
 
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
@@ -375,7 +394,9 @@ echo $OUTPUT->header();
                 : 'The 181 official Appendix C formulas, organized A–Z or in the conventional Bensky Chapters 1–21 sequence. Only chapters containing official roster formulas are shown.'; ?></p>
         </div>
         <div class="formula-list__actions">
-            <?php if ($fromquiz) { ?>
+            <?php if ($fromsmart) { ?>
+                <a class="formula-list__button" href="<?php echo $smarttoolsurl->out(false); ?>"><?php echo $ises ? '← Volver a Smart Study Tools' : '← Back to Smart Study Tools'; ?></a>
+            <?php } else if ($fromquiz) { ?>
                 <button class="formula-list__button" type="button" data-return-to-formula-question data-fallback-url="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
             <?php } else if ($fromchief) { ?>
                 <a class="formula-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
@@ -415,7 +436,8 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
             <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
                 <option value=""><?php echo $ises ? 'Todos los capítulos con fórmulas oficiales' : 'All chapters with official formulas'; ?></option>
@@ -455,6 +477,9 @@ echo $OUTPUT->header();
                                 'related' => $card['category'],
                             ]
                         );
+                        $cardsmartparams = ['mode' => 'formula', 'item' => $card['name']];
+                        if ($ises) $cardsmartparams['lang'] = 'es';
+                        $cardsmarturl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $cardsmartparams);
                     ?>
                         <details class="formula-list__card"<?php echo $autoopen ? ' open' : ''; ?>>
                             <summary>
@@ -490,6 +515,7 @@ echo $OUTPUT->header();
                                         : 'This formula belongs to the official 2026 Appendix C roster. The supplied bank does not yet contain a verified detailed clinical profile, so no fields are completed by inference.'; ?></p>
                                 <?php } ?>
                                 <nav class="formula-list__connections" aria-label="<?php echo $ises ? 'Enlaces relacionados' : 'Related links'; ?>">
+                                    <a class="formula-list__connection" href="<?php echo $cardsmarturl->out(false); ?>"><?php echo $ises ? '✨ Encontrar fórmulas similares' : '✨ Find similar formulas'; ?></a>
                                     <a class="formula-list__connection" href="<?php echo $cardcomparisonurl->out(false); ?>"><?php echo $ises ? 'Comparar esta fórmula →' : 'Compare this formula →'; ?></a>
                                 </nav>
                             </div>
