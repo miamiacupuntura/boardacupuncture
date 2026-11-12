@@ -164,7 +164,25 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
     if ($categoryname === '') {
         $categoryname = $ises ? 'Sin categoría' : 'Uncategorized';
     }
-    $categories[$categorycode] = $categoryname;
+    $internalguidenumber = (int)($officialherb['guideNumber'] ?? 0);
+    if ($internalguidenumber >= 12 && $internalguidenumber <= 21) {
+        $categoryorder = $internalguidenumber + 1;
+    } else if ($internalguidenumber > 0) {
+        $categoryorder = $internalguidenumber;
+    } else {
+        $specialfocus = (string)($officialherb['specialFocus'] ?? '');
+        $categoryorder = [
+            'bensky4' => 12,
+            'bensky17' => 32,
+            'bensky18' => 33,
+        ][$specialfocus] ?? 99;
+    }
+    $categorylabel = $categoryorder . ' · ' . $categoryname;
+    $categories[$categorycode] = [
+        'order' => $categoryorder,
+        'title' => $categoryname,
+        'label' => $categorylabel,
+    ];
     $latin = trim((string)($officialherb['latin'] ?? $profile['latin'] ?? ''));
     $actionprofile = $actionsbyname[$profilekey] ?? [];
     $safetyprofile = $safetybyname[$profilekey] ?? [];
@@ -179,6 +197,8 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         'latin' => $latin,
         'categorycode' => $categorycode,
         'category' => $categoryname,
+        'categoryorder' => $categoryorder,
+        'categorylabel' => $categorylabel,
         'guide' => (int)($officialherb['guideNumber'] ?? $profile['guideNumber'] ?? 0),
         'flavor' => $localized($profile['flavor'] ?? '', $ises),
         'temperature' => $localized($profile['temperature'] ?? '', $ises),
@@ -238,24 +258,38 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
     }
     $cards[] = $card;
 }
-asort($categories, SORT_NATURAL | SORT_FLAG_CASE);
+// Preserve the conventional Bensky category sequence instead of alphabetizing it.
+uasort($categories, static function(array $left, array $right): int {
+    $ordercompare = ($left['order'] ?? 99) <=> ($right['order'] ?? 99);
+    return $ordercompare !== 0 ? $ordercompare : strnatcasecmp($left['title'], $right['title']);
+});
 usort($cards, static fn(array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
 
 $groups = [];
 foreach ($cards as $card) {
     if ($sortmode === 'category') {
         $groupkey = $card['categorycode'];
-        $grouptitle = $card['category'];
+        $grouptitle = $card['categorylabel'];
+        $grouporder = $card['categoryorder'];
     } else {
         $groupkey = strtoupper(substr($card['name'], 0, 1));
         $grouptitle = $groupkey;
+        $grouporder = 0;
     }
     if (!isset($groups[$groupkey])) {
-        $groups[$groupkey] = ['title' => $grouptitle, 'cards' => []];
+        $groups[$groupkey] = ['title' => $grouptitle, 'order' => $grouporder, 'cards' => []];
     }
     $groups[$groupkey]['cards'][] = $card;
 }
-uasort($groups, static fn(array $left, array $right): int => strnatcasecmp($left['title'], $right['title']));
+uasort($groups, static function(array $left, array $right) use ($sortmode): int {
+    if ($sortmode === 'category') {
+        $ordercompare = ($left['order'] ?? 99) <=> ($right['order'] ?? 99);
+        if ($ordercompare !== 0) {
+            return $ordercompare;
+        }
+    }
+    return strnatcasecmp($left['title'], $right['title']);
+});
 $autoopen = $query !== '' && count($cards) <= 12;
 
 $PAGE->set_url($pageurl);
@@ -349,8 +383,8 @@ echo $OUTPUT->header();
             <p class="single-herbs-list__eyebrow"><?php echo $ises ? 'GUIDELINE VIGENTE 2026' : 'CURRENT 2026 GUIDELINE'; ?></p>
             <h2>Single Herbs List</h2>
             <p class="single-herbs-list__lead"><?php echo $ises
-                ? 'Las 304 hierbas oficiales del guideline, presentadas como tarjetas individuales y organizadas alfabéticamente o por categoría Bensky.'
-                : 'The 304 official guideline herbs, shown as individual cards and organized alphabetically or by Bensky category.'; ?></p>
+                ? 'Las 304 hierbas oficiales del guideline, organizadas alfabéticamente o según la secuencia convencional de las 33 categorías Bensky.'
+                : 'The 304 official guideline herbs, organized alphabetically or in the conventional sequence of the 33 Bensky categories.'; ?></p>
         </div>
         <div class="single-herbs-list__actions">
             <a class="single-herbs-list__button" href="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Single Herbs' : '← Single Herbs'; ?></a>
@@ -372,7 +406,7 @@ echo $OUTPUT->header();
             ]);
             ?>
             <a class="single-herbs-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
-            <a class="single-herbs-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por categoría' : 'By category'; ?></a>
+            <a class="single-herbs-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por orden Bensky' : 'By Bensky order'; ?></a>
             <?php if ($categoryfilter !== '') {
                 $backtoallurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + ['sort' => 'az']);
             ?>
@@ -389,11 +423,11 @@ echo $OUTPUT->header();
                 <input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, latín, acción…' : 'Name, Latin, action…'; ?>">
             </label>
             <label>
-                <span><?php echo $ises ? 'Categoría' : 'Category'; ?></span>
+                <span><?php echo $ises ? 'Categoría Bensky' : 'Bensky category'; ?></span>
                 <select name="category">
-                    <option value=""><?php echo $ises ? 'Todas las categorías' : 'All categories'; ?></option>
-                    <?php foreach ($categories as $categorycode => $categoryname) { ?>
-                        <option value="<?php echo s($categorycode); ?>"<?php echo $categoryfilter === $categorycode ? ' selected' : ''; ?>><?php echo s($categoryname); ?></option>
+                    <option value=""><?php echo $ises ? 'Las 33 categorías vigentes' : 'All 33 current categories'; ?></option>
+                    <?php foreach ($categories as $categorycode => $categoryitem) { ?>
+                        <option value="<?php echo s($categorycode); ?>"<?php echo $categoryfilter === $categorycode ? ' selected' : ''; ?>><?php echo s($categoryitem['label']); ?></option>
                     <?php } ?>
                 </select>
             </label>
@@ -440,7 +474,7 @@ echo $OUTPUT->header();
                             <summary>
                                 <span class="single-herbs-list__name"><?php echo s($card['name']); ?>*</span>
                                 <span class="single-herbs-list__latin"><?php echo s($card['latin']); ?></span>
-                                <a class="single-herbs-list__category" data-herb-category-link href="<?php echo $cardcategoryurl->out(false); ?>"><?php echo s($card['category']); ?></a>
+                                <a class="single-herbs-list__category" data-herb-category-link href="<?php echo $cardcategoryurl->out(false); ?>"><?php echo s($card['categorylabel']); ?></a>
                                 <?php if ($metaparts) { ?><span class="single-herbs-list__meta"><?php echo s(implode(' · ', $metaparts)); ?></span><?php } ?>
                             </summary>
                             <div class="single-herbs-list__body">
