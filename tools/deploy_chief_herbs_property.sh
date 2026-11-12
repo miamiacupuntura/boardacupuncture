@@ -21,22 +21,33 @@ done
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 
-curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/study-guide.php" -o "$TEMP_DIR/study-guide.php"
+for file in study-guide.php single-herbs-list.php formula-list.php; do
+    curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/$file"
+    php -l "$TEMP_DIR/$file" >/dev/null
+done
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/chief-herbs-property.html" -o "$TEMP_DIR/chief-herbs-property.html"
 curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/chief-herbs-property-es.html" -o "$TEMP_DIR/chief-herbs-property-es.html"
 
-php -l "$TEMP_DIR/study-guide.php" >/dev/null
 grep -Fq "Chief Herbs Property" "$TEMP_DIR/study-guide.php"
 grep -Fq "/study-guide/comparisons/chief-herbs-property.html" "$TEMP_DIR/study-guide.php"
 grep -Fq "AVAILABLE · 60 CHIEF HERBS" "$TEMP_DIR/study-guide.php"
 grep -Fq "Property of Chief Herbs" "$TEMP_DIR/chief-herbs-property.html"
 grep -Fq "Propiedades de las hierbas principales" "$TEMP_DIR/chief-herbs-property-es.html"
 grep -Fq "data-chief-search" "$TEMP_DIR/chief-herbs-property.html"
+grep -Fq "from=chief" "$TEMP_DIR/chief-herbs-property.html"
+grep -Fq "chief-herbs-card-link--herb" "$TEMP_DIR/chief-herbs-property.html"
+grep -Fq "chief-herbs-card-link--formula" "$TEMP_DIR/chief-herbs-property.html"
+grep -Fq "\$fromchief = \$fromcontext === 'chief'" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "Back to Chief Herbs" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "\$formulafocus = trim(optional_param('formula'" "$TEMP_DIR/formula-list.php"
+grep -Fq "Back to Chief Herbs" "$TEMP_DIR/formula-list.php"
 [[ "$(grep -o '<tr data-chief-row' "$TEMP_DIR/chief-herbs-property.html" | wc -l)" -eq 60 ]]
 [[ "$(grep -o '<tr data-chief-row' "$TEMP_DIR/chief-herbs-property-es.html" | wc -l)" -eq 60 ]]
 
-TARGET_PHP="$MOODLE_ROOT/blocks/myprogress/study-guide.php"
-[[ -f "$TARGET_PHP" ]] || { echo "ERROR: no existe $TARGET_PHP" >&2; exit 1; }
+TARGET_PHP_DIR="$MOODLE_ROOT/blocks/myprogress"
+for file in study-guide.php single-herbs-list.php formula-list.php; do
+    [[ -f "$TARGET_PHP_DIR/$file" ]] || { echo "ERROR: no existe $TARGET_PHP_DIR/$file" >&2; exit 1; }
+done
 
 declare -a TARGETS=()
 declare -A SEEN=()
@@ -61,12 +72,15 @@ fi
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP="$BACKUP_ROOT/chief-herbs-property-$TIMESTAMP"
 mkdir -p "$BACKUP/moodle" "$BACKUP/static"
-cp -a "$TARGET_PHP" "$BACKUP/moodle/study-guide.php"
-php_owner_group="$(stat -c '%u:%g' "$TARGET_PHP")"
-php_mode="$(stat -c '%a' "$TARGET_PHP")"
-install -o "${php_owner_group%:*}" -g "${php_owner_group#*:}" -m "$php_mode" "$TEMP_DIR/study-guide.php" "$TARGET_PHP"
-cmp -s "$TEMP_DIR/study-guide.php" "$TARGET_PHP"
-php -l "$TARGET_PHP" >/dev/null
+for file in study-guide.php single-herbs-list.php formula-list.php; do
+    target_php="$TARGET_PHP_DIR/$file"
+    cp -a "$target_php" "$BACKUP/moodle/$file"
+    php_owner_group="$(stat -c '%u:%g' "$target_php")"
+    php_mode="$(stat -c '%a' "$target_php")"
+    install -o "${php_owner_group%:*}" -g "${php_owner_group#*:}" -m "$php_mode" "$TEMP_DIR/$file" "$target_php"
+    cmp -s "$TEMP_DIR/$file" "$target_php"
+    php -l "$target_php" >/dev/null
+done
 
 for target in "${TARGETS[@]}"; do
     sub="$BACKUP/static/$(echo "$target" | tr '/ ' '__')"
@@ -93,5 +107,7 @@ fi
 echo "OK: botón Chief Herbs Property instalado en Secondary Study Guide."
 echo "OK: tabla bilingüe con 60 hierbas, propiedades, canales y fórmulas."
 echo "OK: búsqueda instantánea y vista adaptable a móvil activas."
+echo "OK: las 60 hierbas y todas las fórmulas enlazan sus tarjetas exactas."
+echo "OK: las tarjetas ofrecen regreso a Chief Herbs sin perder el idioma."
 echo "OK: terminología Chief aplicada."
 echo "RESPALDO: $BACKUP"
