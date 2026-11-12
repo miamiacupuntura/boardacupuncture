@@ -43,6 +43,40 @@ $formulanametrapsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'fo
 $personalizedquizurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'formula-practice-es.html' : 'formula-practice.html'), ['focus' => 'weak']);
 $safetylibraryurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'safety-es.html' : 'safety.html'));
 $incompatibilitiesurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'herbal-incompatibilities-es.html' : 'herbal-incompatibilities.html'));
+$herbcategorypageids = [
+    'warm-acrid-release-exterior' => 'disperse-wind-cold',
+    'cool-acrid-release-exterior' => 'disperse-wind-heat',
+    'clear-heat-drain-fire' => 'clear-and-purge-heat',
+    'cool-blood' => 'clear-blood-heat',
+    'clear-heat-dry-dampness' => 'clear-damp-heat',
+    'clear-heat-resolve-toxicity' => 'clear-toxic-heat',
+    'clear-deficiency-heat' => 'clear-deficient-heat',
+    'downward-draining-purgatives' => 'purgatives',
+    'moist-laxatives' => 'laxatives',
+    'harsh-expellants' => 'cathartics',
+    'drain-dampness' => 'diuretics',
+    'dispel-wind-dampness' => 'dispel-wind-damp',
+    'cool-transform-phlegm-heat' => 'dissolve-hot-phlegm',
+    'warm-transform-cold-phlegm' => 'dissolve-cold-phlegm',
+    'stop-coughing-calm-wheezing' => 'stop-cough-wheezing',
+    'aromatic-transform-dampness' => 'aromatics-for-damp',
+    'relieve-food-stagnation' => 'digestives',
+    'regulate-qi' => 'regulate-qi',
+    'stop-bleeding' => 'stop-bleeding',
+    'invigorate-blood' => 'activate-blood',
+    'warm-interior-expel-cold' => 'warm-interior',
+    'tonify-qi' => 'qi-tonics',
+    'tonify-blood' => 'blood-tonics',
+    'tonify-yang' => 'yang-tonics',
+    'tonify-yin' => 'yin-tonics',
+    'stabilize-bind' => 'astringents',
+    'anchor-settle-calm-spirit' => 'anchor-calm-shen',
+    'nourish-heart-calm-spirit' => 'nourish-calm-shen',
+    'open-orifices' => 'orifice-opening-aromatics',
+    'extinguish-wind-stop-tremors' => 'extinguish-liver-wind',
+    'expel-parasites' => 'expel-parasites',
+    'external-application' => 'external-use',
+];
 
 $formularosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $formulaprofilespath = __DIR__ . '/formulas-study-guide-data.json';
@@ -297,6 +331,23 @@ foreach ($formulas as $formula) {
 $chiefgroupoptions = array_values($chiefgroupmap);
 usort($chiefgroupoptions, static fn(array $left, array $right): int => strnatcasecmp($left['label'], $right['label']));
 
+$categorycomparisonurl = null;
+$categorycomparisonfullurl = null;
+if ($mode === 'herb' && $item !== '' && isset($herbs[$normalize($item)])) {
+    $selectedherbcategorycode = $herbs[$normalize($item)]['categorycode'];
+    $selectedherbcategoryid = $herbcategorypageids[$selectedherbcategorycode] ?? '';
+    if ($selectedherbcategoryid !== '') {
+        $comparisonparams = [
+            'category' => $selectedherbcategoryid,
+            'lang' => $ises ? 'es' : 'en',
+            'ui' => $ises ? 'es' : 'en',
+        ];
+        $categorycomparisonfullurl = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $comparisonparams);
+        $comparisonparams['embed'] = 1;
+        $categorycomparisonurl = new moodle_url('/blocks/myprogress/herbs-category-comparison.php', $comparisonparams);
+    }
+}
+
 $tonguerows = [];
 $officialformula = [];
 foreach ($formularoster['formulas'] as $formula) {
@@ -479,6 +530,41 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title($ises ? 'Herramientas de estudio inteligentes' : 'Smart Study Tools');
 $PAGE->set_heading($ises ? 'Herramientas de estudio inteligentes' : 'Smart Study Tools');
 $PAGE->set_cacheable(false);
+$PAGE->requires->js_init_code(<<<'JS'
+(function() {
+    const button = document.querySelector('[data-herb-category-toggle]');
+    const panel = document.querySelector('[data-herb-category-panel]');
+    const frame = document.querySelector('[data-herb-category-frame]');
+    if (!button || !panel || !frame) return;
+
+    const resizeFrame = function() {
+        try {
+            const doc = frame.contentDocument;
+            if (!doc) return;
+            const height = Math.max(
+                doc.body ? doc.body.scrollHeight : 0,
+                doc.documentElement ? doc.documentElement.scrollHeight : 0
+            );
+            if (height > 0) frame.style.height = Math.min(Math.max(height + 12, 360), 1100) + 'px';
+        } catch (_) {
+            frame.style.height = '620px';
+        }
+    };
+    frame.addEventListener('load', function() {
+        resizeFrame();
+        window.setTimeout(resizeFrame, 250);
+    });
+    button.addEventListener('click', function() {
+        const opening = panel.hidden;
+        panel.hidden = !opening;
+        button.setAttribute('aria-expanded', String(opening));
+        button.textContent = opening ? button.dataset.hideLabel : button.dataset.showLabel;
+        if (opening && !frame.getAttribute('src')) frame.setAttribute('src', frame.dataset.src);
+        if (opening) window.setTimeout(function() { panel.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 60);
+    });
+}());
+JS
+);
 
 echo $OUTPUT->header();
 ?>
@@ -492,6 +578,7 @@ echo $OUTPUT->header();
 .smart-tools__launchers{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.smart-tools__launcher{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:10px 16px;border-radius:9px;background:#0d7868;color:#fff!important;font-weight:900;text-decoration:none!important}.smart-tools__launcher--alt{background:#6d28d9}.smart-tools__notice{margin:18px 0 0;padding:13px 15px;border-left:5px solid #6d28d9;border-radius:9px;background:#f5f0ff;color:#4c1d95}.smart-tools__results-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:26px 0 13px}.smart-tools__results-heading h3{margin:0;font-size:24px}.smart-tools__results-heading span{color:#526b84;font-weight:800}
 .smart-tools__results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.smart-tools__result{padding:18px;border:1px solid #cbd9df;border-top:5px solid #087c69;border-radius:12px;background:#fff}.smart-tools__result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.smart-tools__result h4{margin:0;font-size:20px}.smart-tools__score{flex:0 0 auto;padding:5px 9px;border-radius:999px;background:#e8f7f1;color:#075f50;font-size:12px;font-weight:950}.smart-tools__category{margin:5px 0 10px;color:#6d28d9;font-size:12px;font-weight:850}.smart-tools__result dl{display:grid;grid-template-columns:105px 1fr;gap:8px 10px;margin:0}.smart-tools__result dt{font-size:12px;font-weight:900}.smart-tools__result dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}.smart-tools__reason{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.smart-tools__reason span{padding:4px 8px;border-radius:999px;background:#fff1d6;color:#7c4308;font-size:11px;font-weight:850}.smart-tools__open{display:inline-flex;min-height:40px;align-items:center;padding:8px 12px;border-radius:8px;background:#0d7868;color:#fff!important;font-weight:850;text-decoration:none!important}.smart-tools__empty{margin-top:22px;padding:26px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;text-align:center;color:#526b84;font-weight:800}
 .smart-tools__method{margin-top:22px;padding:15px;border-left:5px solid #e9a11b;border-radius:9px;background:#fff8e9;color:#71420c;line-height:1.5}
+.smart-tools__category-actions{margin-top:14px}.smart-tools__category-panel{scroll-margin-top:18px;margin-top:24px;padding:14px;border:1px solid #b9d8d2;border-top:5px solid #087c69;border-radius:13px;background:#fff}.smart-tools__category-panel[hidden]{display:none}.smart-tools__category-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}.smart-tools__category-panel-head h3{margin:0;font-size:22px}.smart-tools__category-frame{display:block;width:100%;height:520px;border:1px solid #d1e0e4;border-radius:9px;background:#fff}
 @media(max-width:800px){.smart-tools__hero{display:block}.smart-tools__actions{margin-top:16px}.smart-tools__form,.smart-tools__results{grid-template-columns:1fr}.smart-tools__result dl{grid-template-columns:1fr}.smart-tools__result dd{margin-top:-4px}}
 </style>
 <main class="smart-tools">
@@ -554,6 +641,13 @@ echo $OUTPUT->header();
                 <label><span><?php echo $ises ? 'Hierba de origen' : 'Source herb'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar hierba…' : 'Select an herb…'; ?></option><?php foreach ($herbs as $herb) { ?><option value="<?php echo s($herb['name']); ?>"<?php echo $normalize($item) === $normalize($herb['name']) ? ' selected' : ''; ?>><?php echo s($herb['name']); ?></option><?php } ?></select></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Encontrar similares' : 'Find similar'; ?></button>
             </form>
+            <?php if ($categorycomparisonurl !== null) { ?>
+                <div class="smart-tools__category-actions">
+                    <button class="smart-tools__button" type="button" data-herb-category-toggle aria-expanded="false"
+                        data-show-label="<?php echo s($ises ? '▦ Mostrar comparación de la categoría' : '▦ Show category comparison'); ?>"
+                        data-hide-label="<?php echo s($ises ? '▦ Ocultar comparación de la categoría' : '▦ Hide category comparison'); ?>"><?php echo $ises ? '▦ Mostrar comparación de la categoría' : '▦ Show category comparison'; ?></button>
+                </div>
+            <?php } ?>
         <?php } else if ($mode === 'chief') { ?>
             <h3><?php echo $ises ? 'Alternativas por Chief herb' : 'Chief Herb Alternatives'; ?></h3>
             <p><?php echo $ises ? 'Busca por una Chief herb individual o por un grupo completo de varias Chief herbs.' : 'Search by one Chief herb or by a complete group of multiple Chief herbs.'; ?></p>
@@ -711,6 +805,17 @@ echo $OUTPUT->header();
                 <?php }} ?>
             </div>
         <?php } ?>
+    <?php } ?>
+
+    <?php if ($mode === 'herb' && $categorycomparisonurl !== null) { ?>
+        <section class="smart-tools__category-panel" data-herb-category-panel hidden aria-label="<?php echo s($ises ? 'Comparación de la categoría Bensky' : 'Bensky category comparison'); ?>">
+            <header class="smart-tools__category-panel-head">
+                <h3><?php echo s(($ises ? 'Comparación de categoría: ' : 'Category comparison: ') . ($herbs[$normalize($item)]['category'] ?? '')); ?></h3>
+                <a class="smart-tools__button" href="<?php echo $categorycomparisonfullurl->out(false); ?>"><?php echo $ises ? 'Abrir tabla completa →' : 'Open full table →'; ?></a>
+            </header>
+            <iframe class="smart-tools__category-frame" data-herb-category-frame data-src="<?php echo $categorycomparisonurl->out(false); ?>"
+                title="<?php echo s($ises ? 'Tabla comparativa de la categoría de hierbas' : 'Herb category comparison table'); ?>" loading="lazy"></iframe>
+        </section>
     <?php } ?>
 
     <aside class="smart-tools__method"><strong><?php echo $ises ? 'Cómo funciona:' : 'How it works:'; ?></strong> <?php echo $ises
