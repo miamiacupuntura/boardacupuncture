@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -107,6 +107,19 @@ grep -Fq "history.focuses" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq "const diagnosticPool" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq "if (personalized.length) return personalized" "$TEMP_DIR/static/formula-practice.js"
 grep -Fq "if (diagnosticPool.length) return diagnosticPool" "$TEMP_DIR/static/formula-practice.js"
+grep -Fq 'data-sequence="11"' "$TEMP_DIR/static/herbal-incompatibilities.html"
+grep -Fq 'data-sequence="11"' "$TEMP_DIR/static/herbal-incompatibilities-es.html"
+grep -Fq 'id="origin-animal"' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'id="origin-plant"' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'id="origin-mineral"' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'Jīn Qián Bái Huā Shé' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'Yú Nǎo Shí' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'Variante de la imagen suministrada' "$TEMP_DIR/static/incompatibilities-dietary-es.html"
+grep -Fq 'Chì Sháo' "$TEMP_DIR/static/incompatibilities-shi-ba-fan-gancao-lilu.html"
+if grep -Fq 'Multibranded krait' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"; then
+    echo "ERROR: se encontró la identificación errónea Multibranded krait." >&2
+    exit 1
+fi
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data) !== 51) { exit(1); }' "$TEMP_DIR/static/dui-yao-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data["questions"] ?? []) < 290) { exit(1); }' "$TEMP_DIR/static/formula-modifications-generated.json"
 
@@ -202,6 +215,9 @@ echo "OK: Personalized Quiz prioriza fórmulas por debajo de 80% según el histo
 echo "OK: Formula Quiz incluye Duì Yào, modificaciones, casos clínicos, patrones, precauciones, indicaciones y acciones."
 echo "OK: Formula Quiz ofrece sesiones de 5, 10, 15 o 20 preguntas y registra el resultado por enfoque."
 echo "OK: Personalized Review nunca queda vacío: usa debilidades, menor dominio o diagnóstico general."
+echo "OK: Herbal Incompatibilities incluye 11 capítulos y la variante alimentaria de la imagen suministrada."
+echo "OK: Medicinal Origins separa Animal, Vegetal y Mineral mediante tres botones visibles."
+echo "OK: 30 entradas animales corregidas incluyen límites legales, éticos y taxonómicos."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
