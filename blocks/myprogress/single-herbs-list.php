@@ -80,6 +80,65 @@ foreach ($properties['herbs'] ?? [] as $profile) {
     }
 }
 
+// Reuse the detailed, guideline-based category cards already maintained by
+// the Single Herbs Study Guide. Off-roster entries are never rendered because
+// the final card loop is driven exclusively by single-herb-card-index.json.
+$richprofiles = [];
+$categoryfiles = glob(__DIR__ . '/single-herbs-category-*.php') ?: [];
+foreach ($categoryfiles as $categoryfile) {
+    $loadedprofiles = (static function(string $path, bool $ises): array {
+        include($path);
+        $profiles = [];
+        foreach (get_defined_vars() as $candidate) {
+            if (!is_array($candidate)) {
+                continue;
+            }
+            foreach ($candidate as $item) {
+                if (!is_array($item)
+                        || empty($item['name'])
+                        || empty($item['latin'])
+                        || (!array_key_exists('identity', $item)
+                            && !array_key_exists('clue', $item)
+                            && !array_key_exists('memory', $item))) {
+                    continue;
+                }
+                $profiles[] = $item;
+            }
+        }
+        return $profiles;
+    })($categoryfile, $ises);
+    foreach ($loadedprofiles as $richprofile) {
+        $richprofiles[$normalize((string)$richprofile['name'])] = $richprofile;
+    }
+}
+
+$formatformulaboundary = static function($formulas, bool $ises): string {
+    if (is_string($formulas)) {
+        return trim($formulas);
+    }
+    if (!is_array($formulas) || !$formulas) {
+        return $ises
+            ? 'Sin función principal o coprincipal en el roster Board vigente de 63 fórmulas.'
+            : 'No chief or co-chief role in the current 63-formula Board roster.';
+    }
+    $connections = [];
+    foreach ($formulas as $formula) {
+        if (!is_array($formula)) {
+            continue;
+        }
+        $name = trim((string)($formula['name'] ?? $formula[2] ?? ''));
+        $role = trim((string)($formula['role'] ?? $formula[3] ?? ''));
+        if ($name !== '') {
+            $connections[] = $role !== '' ? $name . ' — ' . $role : $name;
+        }
+    }
+    return $connections
+        ? implode('; ', $connections) . '.'
+        : ($ises
+            ? 'Sin función principal o coprincipal en el roster Board vigente de 63 fórmulas.'
+            : 'No chief or co-chief role in the current 63-formula Board roster.');
+};
+
 $categories = [];
 $cards = [];
 foreach ($cardindex['herbs'] as $position => $officialherb) {
@@ -87,7 +146,9 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
     if ($name === '') {
         continue;
     }
-    $profile = $propertiesbyname[$normalize($name)] ?? [];
+    $profilekey = $normalize($name);
+    $profile = $propertiesbyname[$profilekey] ?? [];
+    $richprofile = $richprofiles[$profilekey] ?? [];
     $category = $officialherb['benskyCategory'] ?? [];
     $categorycode = clean_param((string)($category['code'] ?? 'uncategorized'), PARAM_ALPHANUMEXT);
     if ($categorycode === '') {
@@ -108,11 +169,15 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         'guide' => (int)($officialherb['guideNumber'] ?? $profile['guideNumber'] ?? 0),
         'flavor' => $localized($profile['flavor'] ?? '', $ises),
         'temperature' => $localized($profile['temperature'] ?? '', $ises),
-        'channels' => $localized($profile['channels'] ?? '', $ises),
-        'dose' => trim((string)($profile['dose'] ?? $profile['appendixDose'] ?? '')),
-        'action' => $localized($profile['actionSummary'] ?? '', $ises),
-        'indication' => $localized($profile['indicationSummary'] ?? '', $ises),
-        'safety' => $localized($profile['safetyNote'] ?? '', $ises),
+        'channels' => trim((string)($richprofile['channels'] ?? $localized($profile['channels'] ?? '', $ises))),
+        'properties' => trim((string)($richprofile['properties'] ?? '')),
+        'dose' => trim((string)($richprofile['dose'] ?? $profile['dose'] ?? $profile['appendixDose'] ?? '')),
+        'identity' => trim((string)($richprofile['identity'] ?? $localized($profile['actionSummary'] ?? '', $ises))),
+        'clue' => trim((string)($richprofile['clue'] ?? $localized($profile['indicationSummary'] ?? '', $ises))),
+        'memory' => trim((string)($richprofile['memory'] ?? '')),
+        'unique' => trim((string)($richprofile['unique'] ?? '')),
+        'formulas' => $formatformulaboundary($richprofile['formulas'] ?? [], $ises),
+        'safety' => trim((string)($richprofile['caution'] ?? $localized($profile['safetyNote'] ?? '', $ises))),
         'status' => (string)($profile['status'] ?? 'properties-only'),
     ];
     $haystack = core_text::strtolower(implode(' ', [
@@ -122,8 +187,11 @@ foreach ($cardindex['herbs'] as $position => $officialherb) {
         $card['flavor'],
         $card['temperature'],
         $card['channels'],
-        $card['action'],
-        $card['indication'],
+        $card['identity'],
+        $card['clue'],
+        $card['memory'],
+        $card['unique'],
+        $card['formulas'],
     ]));
     if ($query !== '' && core_text::strpos($haystack, core_text::strtolower($query)) === false) {
         continue;
@@ -165,6 +233,11 @@ document.querySelectorAll('[data-herb-list-expand]').forEach(function(button) {
         document.querySelectorAll('.single-herbs-list__card').forEach(function(card) {
             card.open = true;
         });
+    });
+});
+document.querySelectorAll('[data-herb-category-link]').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        event.stopPropagation();
     });
 });
 document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) {
@@ -212,7 +285,8 @@ echo $OUTPUT->header();
 .single-herbs-list__card[open] summary::after{content:'−'}
 .single-herbs-list__name{display:block;font-size:18px;font-weight:900}
 .single-herbs-list__latin{display:block;margin-top:3px;color:#64748b;font-size:12px;font-style:italic}
-.single-herbs-list__category{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf5f3;color:#087c69;font-size:11px;font-weight:850}
+.single-herbs-list__category{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf5f3;color:#087c69!important;font-size:11px;font-weight:850;text-decoration:none!important}
+.single-herbs-list__category:hover,.single-herbs-list__category:focus{background:#087c69;color:#fff!important}
 .single-herbs-list__meta{display:block;margin-top:8px;color:#075f60;font-size:12px;font-weight:800}
 .single-herbs-list__body{padding:14px 16px 16px;border-top:1px solid #d8e2e7}
 .single-herbs-list__body dl{display:grid;grid-template-columns:94px minmax(0,1fr);gap:9px 10px;margin:0}
@@ -220,7 +294,7 @@ echo $OUTPUT->header();
 .single-herbs-list__body dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}
 .single-herbs-list__body dd.is-safety{color:#a64b13}
 .single-herbs-list__profile-note{margin:12px 0 0;padding:10px;border-radius:8px;background:#fff7e8;color:#7a5412;font-size:12px;line-height:1.45}
-.single-herbs-list__open{display:inline-flex;margin-top:13px;color:#075f60;font-size:12px;font-weight:900;text-decoration:none}
+.single-herbs-list__memory{color:#075f60!important;font-weight:800}
 .single-herbs-list__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;color:#526b84;text-align:center;font-weight:750}
 @media(max-width:930px){.single-herbs-list__cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.single-herbs-list__top{display:block}.single-herbs-list__actions{margin-top:15px}.single-herbs-list__form,.single-herbs-list__summary,.single-herbs-list__cards{grid-template-columns:1fr}.single-herbs-list__tools{justify-content:flex-start}.single-herbs-list__body dl{grid-template-columns:1fr}.single-herbs-list__body dd{margin-top:-5px}}
@@ -260,6 +334,11 @@ echo $OUTPUT->header();
             ?>
             <a class="single-herbs-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
             <a class="single-herbs-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por categoría' : 'By category'; ?></a>
+            <?php if ($categoryfilter !== '') {
+                $backtoallurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $baseparams + ['sort' => 'az']);
+            ?>
+                <a class="single-herbs-list__button" href="<?php echo $backtoallurl->out(false); ?>"><?php echo $ises ? '← Volver a todas las hierbas' : '← Back to all herbs'; ?></a>
+            <?php } ?>
         </nav>
 
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
@@ -306,36 +385,37 @@ echo $OUTPUT->header();
                 </header>
                 <div class="single-herbs-list__cards">
                     <?php foreach ($group['cards'] as $card) {
-                        $profileparams = ['herb' => $card['name']];
-                        if ($ises) {
-                            $profileparams['lang'] = 'es';
-                        }
-                        if ($fromlibrary) {
-                            $profileparams['from'] = 'library';
-                        }
-                        $profileurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $profileparams);
-                        $metaparts = array_values(array_filter([$card['flavor'], $card['temperature'], $card['channels']]));
+                        $categoryparams = $baseparams + [
+                            'sort' => 'category',
+                            'category' => $card['categorycode'],
+                        ];
+                        $cardcategoryurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $categoryparams);
+                        $metaparts = $card['properties'] !== ''
+                            ? array_values(array_filter([$card['properties'], $card['channels']]))
+                            : array_values(array_filter([$card['flavor'], $card['temperature'], $card['channels']]));
                     ?>
                         <details class="single-herbs-list__card"<?php echo $autoopen ? ' open' : ''; ?>>
                             <summary>
                                 <span class="single-herbs-list__name"><?php echo s($card['name']); ?>*</span>
                                 <span class="single-herbs-list__latin"><?php echo s($card['latin']); ?></span>
-                                <span class="single-herbs-list__category"><?php echo s($card['category']); ?></span>
+                                <a class="single-herbs-list__category" data-herb-category-link href="<?php echo $cardcategoryurl->out(false); ?>"><?php echo s($card['category']); ?></a>
                                 <?php if ($metaparts) { ?><span class="single-herbs-list__meta"><?php echo s(implode(' · ', $metaparts)); ?></span><?php } ?>
                             </summary>
                             <div class="single-herbs-list__body">
                                 <dl>
-                                    <?php if ($card['dose'] !== '') { ?><dt><?php echo $ises ? 'Dosis' : 'Dose'; ?></dt><dd><?php echo s($card['dose']); ?></dd><?php } ?>
-                                    <?php if ($card['action'] !== '') { ?><dt><?php echo $ises ? 'Acciones' : 'Actions'; ?></dt><dd><?php echo s($card['action']); ?></dd><?php } ?>
-                                    <?php if ($card['indication'] !== '') { ?><dt><?php echo $ises ? 'Indicaciones' : 'Indications'; ?></dt><dd><?php echo s($card['indication']); ?></dd><?php } ?>
+                                    <?php if ($card['dose'] !== '') { ?><dt><?php echo $ises ? 'Dosis de estudio' : 'Study dose'; ?></dt><dd><?php echo s($card['dose']); ?></dd><?php } ?>
+                                    <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Identidad' : 'Identity'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
+                                    <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Pista de examen' : 'Exam clue'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
+                                    <?php if ($card['memory'] !== '') { ?><dt><?php echo $ises ? 'Memoria' : 'Memory'; ?></dt><dd class="single-herbs-list__memory"><?php echo s($card['memory']); ?></dd><?php } ?>
+                                    <?php if ($card['unique'] !== '') { ?><dt><?php echo $ises ? 'Huella única' : 'Unique fingerprint'; ?></dt><dd><?php echo s($card['unique']); ?></dd><?php } ?>
+                                    <dt><?php echo $ises ? 'Límite de fórmulas' : 'Formula boundary'; ?></dt><dd><?php echo s($card['formulas']); ?></dd>
                                     <?php if ($card['safety'] !== '') { ?><dt><?php echo $ises ? 'Seguridad' : 'Safety'; ?></dt><dd class="is-safety"><?php echo s($card['safety']); ?></dd><?php } ?>
                                 </dl>
-                                <?php if ($card['action'] === '' && $card['indication'] === '') { ?>
+                                <?php if ($card['identity'] === '' && $card['clue'] === '') { ?>
                                     <p class="single-herbs-list__profile-note"><?php echo $ises
-                                        ? 'Hierba oficial del guideline con identidad, propiedades y categoría verificadas; el perfil clínico detallado todavía no está disponible en la fuente.'
-                                        : 'Official guideline herb with verified identity, properties and category; a detailed clinical profile is not yet available in the source.'; ?></p>
+                                        ? 'Hierba oficial del guideline con identidad farmacéutica, propiedades y categoría verificadas; la fuente no incluye todavía un perfil clínico detallado.'
+                                        : 'Official guideline herb with verified pharmaceutical identity, properties and category; the source does not yet include a detailed clinical profile.'; ?></p>
                                 <?php } ?>
-                                <a class="single-herbs-list__open" href="<?php echo $profileurl->out(false); ?>"><?php echo $ises ? 'Abrir tarjeta de estudio completa →' : 'Open full study card →'; ?></a>
                             </div>
                         </details>
                     <?php } ?>

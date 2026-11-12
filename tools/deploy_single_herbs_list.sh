@@ -34,6 +34,14 @@ grep -Fq "count(\$cardindex['herbs'] ?? []) !== 304" "$TEMP_DIR/single-herbs-lis
 grep -Fq "foreach (\$cardindex['herbs']" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "A–Z" "$TEMP_DIR/single-herbs-list.php"
 grep -Fq "By category" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "data-herb-category-link" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "Back to all herbs" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "Unique fingerprint" "$TEMP_DIR/single-herbs-list.php"
+grep -Fq "Formula boundary" "$TEMP_DIR/single-herbs-list.php"
+if grep -Fq "Open full study card" "$TEMP_DIR/single-herbs-list.php"; then
+    echo "ERROR: Single Herbs List todavía depende de otra tarjeta." >&2
+    exit 1
+fi
 grep -Fq "single-herbs-list.php" "$TEMP_DIR/single-herbs-study-guide.php"
 grep -Fq "304 official guideline herbs" "$TEMP_DIR/study-guide.php"
 
@@ -95,4 +103,7 @@ echo "OK: botón Single Herbs List instalado en Single Herbs y en la biblioteca.
 echo "OK: lista limitada a las 304 hierbas oficiales del guideline."
 echo "OK: organización A–Z y por categoría activa."
 echo "OK: búsqueda, filtro de categoría y tarjetas expandibles activos."
+echo "OK: cada tarjeta contiene identidad, pista, memoria, huella, límite de fórmulas y seguridad disponibles."
+echo "OK: la categoría abre su grupo y ofrece regreso a todas las hierbas."
+echo "OK: no se requiere navegar a otra tarjeta."
 echo "RESPALDO: $BACKUP"
