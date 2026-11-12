@@ -9,7 +9,7 @@ $displaylang = optional_param('lang', 'en', PARAM_ALPHA);
 $displaylang = $displaylang === 'es' ? 'es' : 'en';
 $ises = $displaylang === 'es';
 $mode = optional_param('mode', 'formula', PARAM_ALPHA);
-$allowedmodes = ['formula', 'herb', 'clinical', 'tongue'];
+$allowedmodes = ['formula', 'herb', 'pattern', 'clinical', 'clue', 'tongue', 'ingredients', 'chief', 'dui', 'safety', 'traps', 'quiz'];
 $mode = in_array($mode, $allowedmodes, true) ? $mode : 'formula';
 $item = trim(optional_param('item', '', PARAM_TEXT));
 $query = trim(optional_param('q', '', PARAM_TEXT));
@@ -37,6 +37,12 @@ if ($ises) {
     $libraryparams['lang'] = 'es';
 }
 $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', $libraryparams);
+$duiyaourl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'dui-yao-es.html' : 'dui-yao.html'));
+$nametrapsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'name-traps-es.html' : 'name-traps.html'));
+$formulanametrapsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'formula-name-traps-es.html' : 'formula-name-traps.html'));
+$personalizedquizurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'formula-practice-es.html' : 'formula-practice.html'), ['focus' => 'weak']);
+$safetylibraryurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'safety-es.html' : 'safety.html'));
+$incompatibilitiesurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'herbal-incompatibilities-es.html' : 'herbal-incompatibilities.html'));
 
 $formularosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $formulaprofilespath = __DIR__ . '/formulas-study-guide-data.json';
@@ -46,6 +52,7 @@ $herbindexpath = __DIR__ . '/single-herb-card-index.json';
 $herbpropertiespath = __DIR__ . '/single-herb-properties.json';
 $herbrichpath = __DIR__ . '/single-herb-rich-profiles.json';
 $herbactionspath = __DIR__ . '/single-herb-actions-indications-supplement.json';
+$herbsafetypath = __DIR__ . '/single-herb-safety-supplement.json';
 
 $formularoster = is_readable($formularosterpath) ? json_decode(file_get_contents($formularosterpath), true) : null;
 $formulaprofiles = is_readable($formulaprofilespath) ? json_decode(file_get_contents($formulaprofilespath), true) : null;
@@ -55,10 +62,11 @@ $herbindex = is_readable($herbindexpath) ? json_decode(file_get_contents($herbin
 $herbproperties = is_readable($herbpropertiespath) ? json_decode(file_get_contents($herbpropertiespath), true) : null;
 $herbrich = is_readable($herbrichpath) ? json_decode(file_get_contents($herbrichpath), true) : null;
 $herbactions = is_readable($herbactionspath) ? json_decode(file_get_contents($herbactionspath), true) : null;
+$herbsafety = is_readable($herbsafetypath) ? json_decode(file_get_contents($herbsafetypath), true) : null;
 
 if (!is_array($formularoster) || !is_array($formulaprofiles) || !is_array($formulaadditions)
         || !is_array($tonguepulse) || !is_array($herbindex) || !is_array($herbproperties)
-        || !is_array($herbrich) || !is_array($herbactions)
+        || !is_array($herbrich) || !is_array($herbactions) || !is_array($herbsafety)
         || count($formularoster['formulas'] ?? []) !== 181
         || count($formulaprofiles['formulas'] ?? []) !== 63
         || count($formulaprofiles['supplementalFormulas'] ?? []) !== 227
