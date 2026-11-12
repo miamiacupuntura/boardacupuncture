@@ -4,7 +4,7 @@
   const spanish = document.documentElement.lang === 'es';
   const params = new URLSearchParams(window.location.search);
   const sesskey = params.get('sesskey') || '';
-  const quizBuild = '20261111-29';
+  const quizBuild = '20261112-30';
   document.documentElement.setAttribute('data-misc-quiz-build',quizBuild);
   const resources = [
     {key:'families', en:'Formula Families / Variations', es:'Familias y variaciones de fórmulas', path:'families.html'},
@@ -15,6 +15,7 @@
     {key:'advanced', en:'Advanced Name Traps', es:'Trampas avanzadas de nombres', path:'advanced-name-traps.html'},
     {key:'supplements', en:'Supplemental Herb Families', es:'Familias suplementarias de hierbas', path:'supplemental-herb-families.html'},
     {key:'secondary', en:'Herbs Secondary Actions', es:'Acciones secundarias de hierbas', path:'secondary-actions.html'},
+    {key:'chiefherbs', en:'Property of Chief Herbs', es:'Propiedades de las hierbas principales', path:'chief-herbs-property.html'},
     {key:'pathology', en:'Pathology Comparisons', es:'Comparaciones de patologías', path:'pathologies.html'},
     {key:'patterns', en:'Pattern Comparisons', es:'Comparaciones de patrones', path:'patterns.html'},
     {key:'maciocia', en:'Pattern Comparison Maciocia', es:'Comparación de patrones Maciocia', path:'patterns-tips-maciocia.html'},
@@ -112,6 +113,7 @@
     advanced: spanish ? '¿Qué distinción avanzada de nombres corresponde a estas pistas?' : 'Which advanced name distinction matches these clues?',
     supplements: spanish ? '¿Qué grupo de estudio contiene los medicamentos descritos a continuación?' : 'Which named study group contains the medicinals described below?',
     secondary: spanish ? '¿Qué acción secundaria comparten estos medicamentos?' : 'Which secondary action is shared by these medicinals?',
+    chiefherbs: spanish ? '¿Qué hierba principal corresponde a estas propiedades, canales y fórmulas?' : 'Which chief herb matches these properties, channels, and formulas?',
     pathology: spanish ? '¿Qué comparación patológica corresponde a este perfil clínico?' : 'Which pathology comparison matches this clinical profile?',
     patterns: spanish ? '¿Qué comparación de patrones corresponde a este conjunto de signos?' : 'Which pattern comparison matches this set of signs?',
     maciocia: spanish ? '¿Qué comparación de patrones de Maciocia corresponde a estas claves?' : 'Which Maciocia pattern comparison matches these key findings?',
@@ -217,7 +219,7 @@
       return url.toString();
     }
     const path=spanish?resource.path.replace(/\.html$/,'-es.html'):resource.path;
-    const url=new URL(path,window.location.href);url.searchParams.set('v','20261111-29');return url.toString();
+    const url=new URL(path,window.location.href);url.searchParams.set('v','20261112-30');return url.toString();
   }
   function readableElementText(element){
     const clone=element.cloneNode(true);
@@ -282,6 +284,28 @@
       }catch(_){
         return [];
       }
+    }
+    if(state.resource&&state.resource.key==='chiefherbs'){
+      const doc=new DOMParser().parseFromString(html,'text/html');
+      return Array.from(doc.querySelectorAll('tr[data-chief-row]')).map(row=>{
+        const herbLink=row.querySelector('th[scope="row"] a');
+        const cells=Array.from(row.querySelectorAll('td'));
+        const title=clean(herbLink&&herbLink.textContent);
+        const property=clean(cells[1]&&cells[1].textContent);
+        const formulas=clean(cells[2]&&cells[2].textContent);
+        if(!title||!property||!formulas)return null;
+        const cardUrl=new URL(herbLink.getAttribute('href'),window.location.origin);
+        cardUrl.searchParams.set('from','quiz');
+        if(spanish)cardUrl.searchParams.set('lang','es');
+        return {
+          title,
+          detail:(spanish?'Propiedad, temperatura y canales: ':'Property, temperature, and channels: ')+property+' • '+(spanish?'Fórmulas: ':'Formulas: ')+formulas,
+          explanation:spanish
+            ? title+' coincide con las propiedades, los canales y las fórmulas presentadas en la tabla de Chief Herbs.'
+            : title+' matches the properties, channels, and formulas shown in the Chief Herbs table.',
+          chapterUrl:cardUrl.toString()
+        };
+      }).filter(Boolean);
     }
     if(state.resource&&state.resource.key==='safety'){
       return safetyPrecautions.map(entry=>({
@@ -348,7 +372,7 @@
   }
   function questionExplanation(item){
     if(state.resource.key==='secondary')return spanish?'Estos medicamentos pertenecen a categorías primarias diferentes, pero comparten «'+item.title+'» como acción secundaria.':'These medicinals belong to different primary categories but share “'+item.title+'” as a secondary action.';
-    if(state.resource.key==='safety'||state.resource.key==='maciociaformulas')return item.explanation;
+    if(state.resource.key==='safety'||state.resource.key==='maciociaformulas'||state.resource.key==='chiefherbs')return item.explanation;
     return item.detail;
   }
   function buildQuestions(){
@@ -844,6 +868,22 @@
     });
     panel.append(links);return panel;
   }
+  function chiefHerbReviewPanel(question){
+    const panel=document.createElement('section');panel.className='misc-practice__mock-review';
+    const heading=document.createElement('strong');heading.className='misc-practice__action-review-title';
+    heading.textContent=spanish?'Repasar las cuatro tarjetas de hierbas':'Review all four herb cards';
+    const links=document.createElement('div');links.className='misc-practice__action-review-list';
+    question.options.forEach((option,index)=>{
+      const item=state.items.find(candidate=>candidate.title===option);
+      if(!item||!item.chapterUrl)return;
+      const link=document.createElement('a');link.className='misc-practice__action-review-link';
+      if(option===question.correct)link.classList.add('is-correct');
+      link.href=item.chapterUrl;
+      link.textContent=String.fromCharCode(65+index)+'. '+option+' — '+(spanish?'Abrir tarjeta →':'Open card →');
+      links.append(link);
+    });
+    panel.append(heading,links);return panel;
+  }
   function answer(button,value){
     if(state.answered)return;state.answered=true;const question=state.questions[state.index];const questionIndex=state.index;const correct=value===question.correct;
     if(correct)state.score+=1;
@@ -885,6 +925,9 @@
       el.feedback.append(safetyMockReview(question,value));
       feedbackLine(el.feedback,copy.guidelineSource,copy.safetyGuideline,'misc-practice__feedback-source');
       appendSafetyStudyCard(el.feedback,question);
+    }else if(state.resource&&state.resource.key==='chiefherbs'){
+      feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
+      el.feedback.append(chiefHerbReviewPanel(question));
     }else if(state.resource&&state.resource.key==='secondary'){
       feedbackLine(el.feedback,copy.why,question.explanation,'misc-practice__feedback-explanation');
       if(!correct)el.feedback.append(secondaryReviewPanel(question,value));
