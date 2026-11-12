@@ -8,6 +8,8 @@
     'secondary-actions'
   ]);
   const params = new URLSearchParams(window.location.search);
+  const returnFormula = (params.get('returnformula') || '').trim();
+  const returnQuery = returnFormula ? `&returnformula=${encodeURIComponent(returnFormula)}` : '';
   const group = groups.has(params.get('group')) ? params.get('group') : 'index';
   const language = params.get('lang') === 'es' ? 'es' : 'en';
   const es = language === 'es';
@@ -25,11 +27,27 @@
     bottomPrevious: el('reader-bottom-previous'), bottomNext: el('reader-bottom-next'), bottomIndex: el('reader-bottom-index'), footer: el('reader-footer')
   };
 
+  function addFormulaReturnButton() {
+    if (!returnFormula || document.querySelector('[data-return-to-formula-card]')) return;
+    const actions = ui.dashboard.parentElement;
+    if (!actions) return;
+    const back = document.createElement('a');
+    const url = new URL('/blocks/myprogress/formula-list.php', window.location.origin);
+    url.searchParams.set('formula', returnFormula);
+    url.searchParams.set('sort', 'az');
+    if (es) url.searchParams.set('lang', 'es');
+    back.className = 'comparison-back';
+    back.dataset.returnToFormulaCard = '';
+    back.href = url.toString();
+    back.textContent = (es ? '← Volver a ' : '← Back to ') + returnFormula;
+    actions.insertBefore(back, ui.language);
+  }
+
   function setLanguageLabels() {
     document.documentElement.lang = language;
     ui.brand.textContent = es ? 'Lectura Continua' : 'Continuous Reading';
     ui.language.textContent = es ? 'English' : 'Español';
-    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}`;
+    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}`;
     ui.dashboard.textContent = es ? '← Dashboard' : '← Back to Dashboard';
     ui.previous.textContent = ui.bottomPrevious.textContent = es ? '← Anterior' : '← Previous';
     ui.next.textContent = ui.bottomNext.textContent = es ? 'Siguiente →' : 'Next →';
@@ -63,7 +81,7 @@
     url.searchParams.set('lang', language);
     url.searchParams.set('chapter', String(current + 1));
     history.replaceState({chapter: current + 1}, '', url);
-    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}`;
+    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}`;
   }
 
   async function loadChapter(position, scroll = true) {
@@ -106,6 +124,7 @@
   }
 
   async function initialize() {
+    addFormulaReturnButton();
     setLanguageLabels();
     ui.index.href = ui.bottomIndex.href = ui.groupLink.href = indexUrl;
     try {
