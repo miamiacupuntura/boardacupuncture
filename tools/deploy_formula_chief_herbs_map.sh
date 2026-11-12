@@ -31,6 +31,9 @@ grep -Fq "count(\$data['formulas'] ?? []) !== 63" "$TEMP_DIR/formula-chief-herbs
 grep -Fq "count(\$grouporder) !== 14" "$TEMP_DIR/formula-chief-herbs-map.php"
 grep -Fq "data-chief-map-svg" "$TEMP_DIR/formula-chief-herbs-map.php"
 grep -Fq "data-chief-map-download" "$TEMP_DIR/formula-chief-herbs-map.php"
+grep -Fq "data-chief-map-zoom-in" "$TEMP_DIR/formula-chief-herbs-map.php"
+grep -Fq "data-chief-map-fullscreen" "$TEMP_DIR/formula-chief-herbs-map.php"
+grep -Fq "zoom=Math.min(2.5" "$TEMP_DIR/formula-chief-herbs-map.php"
 grep -Fq "'from' => 'chiefmap'" "$TEMP_DIR/formula-chief-herbs-map.php"
 grep -Fq "\$chiefherbsmapurl = new moodle_url" "$TEMP_DIR/study-guide.php"
 grep -Fq "Chief Herbs Formula Map" "$TEMP_DIR/study-guide.php"
@@ -114,6 +117,6 @@ fi
 
 echo "OK: botón Chief Herbs Formula Map instalado en Main Study Guide."
 echo "OK: mapa vectorial limitado a 63 fórmulas oficiales y 14 categorías."
-echo "OK: hierbas Chief resaltadas y descarga SVG activa."
+echo "OK: hierbas Chief resaltadas, zoom hasta 250%, pantalla completa y descarga SVG activos."
 echo "OK: cada fórmula abre su tarjeta exacta y ofrece regreso al mapa."
 echo "RESPALDO: $BACKUP"
