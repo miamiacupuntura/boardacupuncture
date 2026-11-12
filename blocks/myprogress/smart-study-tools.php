@@ -79,13 +79,13 @@ $herbcategorypageids = [
 ];
 $safetypresets = [
     ['en' => 'Pregnancy', 'es' => 'Embarazo', 'queryen' => 'pregnancy', 'queryes' => 'embarazo'],
-    ['en' => 'Toxicity', 'es' => 'Toxicidad', 'queryen' => 'toxic', 'queryes' => 'toxicidad'],
+    ['en' => 'Toxicity', 'es' => 'Toxicidad', 'queryen' => 'toxic', 'queryes' => 'tóxico tóxica'],
     ['en' => 'Anticoagulants', 'es' => 'Anticoagulantes', 'queryen' => 'anticoagulants', 'queryes' => 'anticoagulantes'],
     ['en' => 'Bleeding risk', 'es' => 'Riesgo de sangrado', 'queryen' => 'bleeding', 'queryes' => 'sangrado'],
     ['en' => 'Hypertension', 'es' => 'Hipertensión', 'queryen' => 'hypertension', 'queryes' => 'hipertensión'],
     ['en' => 'Stimulants', 'es' => 'Estimulantes', 'queryen' => 'stimulant', 'queryes' => 'estimulante'],
-    ['en' => 'Drug interactions', 'es' => 'Interacciones', 'queryen' => 'interactions', 'queryes' => 'interacciones'],
-    ['en' => 'Special preparation', 'es' => 'Preparación especial', 'queryen' => 'preparation', 'queryes' => 'preparación'],
+    ['en' => 'Drug interactions', 'es' => 'Interacciones', 'queryen' => 'medicines', 'queryes' => 'medicamentos'],
+    ['en' => 'Special preparation', 'es' => 'Preparación especial', 'queryen' => 'dose decoct', 'queryes' => 'dosis decocción'],
     ['en' => 'Diarrhea / weak digestion', 'es' => 'Diarrea / digestión débil', 'queryen' => 'diarrhea', 'queryes' => 'diarrea'],
     ['en' => 'Dehydration', 'es' => 'Deshidratación', 'queryen' => 'dehydration', 'queryes' => 'deshidratación'],
 ];
