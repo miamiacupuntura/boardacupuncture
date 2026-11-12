@@ -268,12 +268,13 @@ echo $OUTPUT->header();
         <nav class="formula-list__modes" aria-label="<?php echo $ises ? 'Organizar fórmulas' : 'Organize formulas'; ?>">
             <?php
             // Sorting modes reset category filters and start from all 181 formulas.
-            $azurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'az', 'q' => $query]);
-            $categoryurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'category', 'q' => $query]);
+            // Do not carry a previous search or focused formula into a new sorting mode.
+            $azurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'az']);
+            $categoryurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'category']);
             ?>
             <a class="formula-list__button<?php echo $sortmode === 'az' ? ' is-active' : ''; ?>" href="<?php echo $azurl->out(false); ?>"<?php echo $sortmode === 'az' ? ' aria-current="page"' : ''; ?>>A–Z</a>
             <a class="formula-list__button<?php echo $sortmode === 'category' ? ' is-active' : ''; ?>" href="<?php echo $categoryurl->out(false); ?>"<?php echo $sortmode === 'category' ? ' aria-current="page"' : ''; ?>><?php echo $ises ? 'Por capítulo Bensky' : 'By Bensky chapter'; ?></a>
-            <?php if ($categoryfilter !== '') {
+            <?php if ($query !== '' || $categoryfilter !== '' || $formulafocus !== '') {
                 $backurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + ['sort' => 'az']);
             ?>
                 <a class="formula-list__button" href="<?php echo $backurl->out(false); ?>"><?php echo $ises ? '← Volver a todas las fórmulas' : '← Back to all formulas'; ?></a>
