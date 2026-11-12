@@ -114,6 +114,10 @@ grep -Fq 'id="origin-plant"' "$TEMP_DIR/static/incompatibilities-medicinal-origi
 grep -Fq 'id="origin-mineral"' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
 grep -Fq 'Jīn Qián Bái Huā Shé' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
 grep -Fq 'Yú Nǎo Shí' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'origin-guideline-link' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'Official guideline' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
+grep -Fq 'Guideline oficial' "$TEMP_DIR/static/incompatibilities-medicinal-origins-es.html"
+grep -Fq 'single-herbs-list.php?herb=Bai%20Hua%20She' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"
 grep -Fq 'Variante de la imagen suministrada' "$TEMP_DIR/static/incompatibilities-dietary-es.html"
 grep -Fq 'Chì Sháo' "$TEMP_DIR/static/incompatibilities-shi-ba-fan-gancao-lilu.html"
 if grep -Fq 'Multibranded krait' "$TEMP_DIR/static/incompatibilities-medicinal-origins.html"; then
@@ -218,6 +222,7 @@ echo "OK: Personalized Review nunca queda vacío: usa debilidades, menor dominio
 echo "OK: Herbal Incompatibilities incluye 11 capítulos y la variante alimentaria de la imagen suministrada."
 echo "OK: Medicinal Origins separa Animal, Vegetal y Mineral mediante tres botones visibles."
 echo "OK: 30 entradas animales corregidas incluyen límites legales, éticos y taxonómicos."
+echo "OK: las sustancias presentes en el guideline oficial están marcadas y enlazadas a su tarjeta."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
