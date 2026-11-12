@@ -20,13 +20,14 @@ $fromchief = $fromcontext === 'chief';
 $fromingredients = $fromcontext === 'ingredients';
 $fromactions = $fromcontext === 'actions';
 $fromtonguepulse = $fromcontext === 'tonguepulse';
+$fromchiefmap = $fromcontext === 'chiefmap';
 $fromquiz = $fromcontext === 'quiz';
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromquiz) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz) {
     $baseparams['from'] = $fromcontext;
 }
 $pageurl = new moodle_url('/blocks/myprogress/formula-list.php', $baseparams + [
@@ -44,7 +45,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromquiz) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz) {
     $languageparams['from'] = $fromcontext;
 }
 $languageurl = new moodle_url('/blocks/myprogress/formula-list.php', $languageparams);
@@ -58,6 +59,7 @@ $chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-he
 $formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.php', $ises ? ['lang' => 'es'] : []);
 $formulaactionsurl = new moodle_url('/blocks/myprogress/formula-actions.php', $ises ? ['lang' => 'es'] : []);
 $formulatonguepulseurl = new moodle_url('/blocks/myprogress/formula-tongue-pulse.php', $ises ? ['lang' => 'es'] : []);
+$formulachiefmapurl = new moodle_url('/blocks/myprogress/formula-chief-herbs-map.php', $ises ? ['lang' => 'es'] : []);
 
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
@@ -280,6 +282,8 @@ echo $OUTPUT->header();
                 <a class="formula-list__button" href="<?php echo $formulaactionsurl->out(false); ?>"><?php echo $ises ? '← Volver a Fórmulas y acciones' : '← Back to Formula and Actions'; ?></a>
             <?php } else if ($fromtonguepulse) { ?>
                 <a class="formula-list__button" href="<?php echo $formulatonguepulseurl->out(false); ?>"><?php echo $ises ? '← Volver a Lengua y pulso' : '← Back to Formula Tongue and Pulse'; ?></a>
+            <?php } else if ($fromchiefmap) { ?>
+                <a class="formula-list__button" href="<?php echo $formulachiefmapurl->out(false); ?>"><?php echo $ises ? '← Volver al mapa de hierbas Chief' : '← Back to Chief Herbs Formula Map'; ?></a>
             <?php } else { ?>
                 <a class="formula-list__button" href="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Fórmulas' : '← Formulas'; ?></a>
             <?php } ?>
@@ -308,7 +312,7 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromquiz) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
             <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
                 <option value=""><?php echo $ises ? 'Todos los capítulos con fórmulas oficiales' : 'All chapters with official formulas'; ?></option>
