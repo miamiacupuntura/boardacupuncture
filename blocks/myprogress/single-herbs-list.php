@@ -21,16 +21,25 @@ $fromquiz = $fromcontext === 'quiz';
 $fromchief = $fromcontext === 'chief';
 $fromingredients = $fromcontext === 'ingredients';
 $fromformula = $fromcontext === 'formula' && $returnformula !== '';
+$fromsmart = $fromcontext === 'smart';
+$smartmode = optional_param('smartmode', 'herb', PARAM_ALPHA);
+$smartitem = trim(optional_param('smartitem', '', PARAM_TEXT));
+$smartq = trim(optional_param('smartq', '', PARAM_TEXT));
 
 $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart) {
     $baseparams['from'] = $fromcontext;
 }
 if ($fromformula) {
     $baseparams['returnformula'] = $returnformula;
+}
+if ($fromsmart) {
+    $baseparams['smartmode'] = $smartmode;
+    if ($smartitem !== '') $baseparams['smartitem'] = $smartitem;
+    if ($smartq !== '') $baseparams['smartq'] = $smartq;
 }
 $pageparams = $baseparams + [
     'sort' => $sortmode,
@@ -48,11 +57,16 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart) {
     $languageparams['from'] = $fromcontext;
 }
 if ($fromformula) {
     $languageparams['returnformula'] = $returnformula;
+}
+if ($fromsmart) {
+    $languageparams['smartmode'] = $smartmode;
+    if ($smartitem !== '') $languageparams['smartitem'] = $smartitem;
+    if ($smartq !== '') $languageparams['smartq'] = $smartq;
 }
 $languageurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $languageparams);
 $studyguideparams = $ises ? ['lang' => 'es'] : [];
@@ -68,6 +82,11 @@ if ($ises) {
     $formulabackparams['lang'] = 'es';
 }
 $formulabackurl = new moodle_url('/blocks/myprogress/formula-list.php', $formulabackparams);
+$smartreturnparams = ['mode' => $smartmode];
+if ($smartitem !== '') $smartreturnparams['item'] = $smartitem;
+if ($smartq !== '') $smartreturnparams['q'] = $smartq;
+if ($ises) $smartreturnparams['lang'] = 'es';
+$smarttoolsurl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $smartreturnparams);
 
 $indexpath = __DIR__ . '/single-herb-card-index.json';
 $propertiespath = __DIR__ . '/single-herb-properties.json';
@@ -402,6 +421,7 @@ echo $OUTPUT->header();
 .single-herbs-list__body dt{font-size:12px;font-weight:900}
 .single-herbs-list__body dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}
 .single-herbs-list__body dd.is-safety{color:#a64b13}
+.single-herbs-list__connections{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid #d8e2e7}.single-herbs-list__connection{display:inline-flex;min-height:38px;align-items:center;padding:7px 11px;border:1px solid #6d28d9;border-radius:8px;background:#f5f0ff;color:#4c1d95!important;font-size:12px;font-weight:900;text-decoration:none!important}.single-herbs-list__connection:hover,.single-herbs-list__connection:focus{background:#6d28d9;color:#fff!important}
 .single-herbs-list__profile-note{margin:12px 0 0;padding:10px;border-radius:8px;background:#fff7e8;color:#7a5412;font-size:12px;line-height:1.45}
 .single-herbs-list__memory{color:#075f60!important;font-weight:800}
 .single-herbs-list__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;color:#526b84;text-align:center;font-weight:750}
@@ -425,7 +445,9 @@ echo $OUTPUT->header();
                 : 'The 304 official guideline herbs, organized alphabetically or in the conventional sequence of the 33 Bensky categories.'; ?></p>
         </div>
         <div class="single-herbs-list__actions">
-            <?php if ($fromformula) { ?>
+            <?php if ($fromsmart) { ?>
+                <a class="single-herbs-list__button" href="<?php echo $smarttoolsurl->out(false); ?>"><?php echo $ises ? '← Volver a Smart Study Tools' : '← Back to Smart Study Tools'; ?></a>
+            <?php } else if ($fromformula) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $formulabackurl->out(false); ?>"><?php echo ($ises ? '← Volver a ' : '← Back to ') . s($returnformula); ?></a>
             <?php } else if ($fromquiz) { ?>
                 <button class="single-herbs-list__button" type="button" data-return-to-herb-question data-fallback-url="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
@@ -466,8 +488,9 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <?php if ($fromformula) { ?><input type="hidden" name="returnformula" value="<?php echo s($returnformula); ?>"><?php } ?>
+            <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>
             <label>
                 <span><?php echo $ises ? 'Buscar hierba' : 'Search herb'; ?></span>
                 <input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, latín, acción…' : 'Name, Latin, action…'; ?>">
@@ -516,6 +539,9 @@ echo $OUTPUT->header();
                             'category' => $card['categorycode'],
                         ];
                         $cardcategoryurl = new moodle_url('/blocks/myprogress/single-herbs-list.php', $categoryparams);
+                        $cardsmartparams = ['mode' => 'herb', 'item' => $card['name']];
+                        if ($ises) $cardsmartparams['lang'] = 'es';
+                        $cardsmarturl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $cardsmartparams);
                         $metaparts = $card['properties'] !== ''
                             ? array_values(array_filter([$card['properties'], $card['channels']]))
                             : array_values(array_filter([$card['flavor'], $card['temperature'], $card['channels']]));
@@ -544,6 +570,9 @@ echo $OUTPUT->header();
                                         ? 'Hierba oficial del guideline con identidad farmacéutica, propiedades y categoría verificadas; la fuente no incluye todavía un perfil clínico detallado.'
                                         : 'Official guideline herb with verified pharmaceutical identity, properties and category; the source does not yet include a detailed clinical profile.'; ?></p>
                                 <?php } ?>
+                                <nav class="single-herbs-list__connections" aria-label="<?php echo $ises ? 'Enlaces relacionados' : 'Related links'; ?>">
+                                    <a class="single-herbs-list__connection" href="<?php echo $cardsmarturl->out(false); ?>"><?php echo $ises ? '✨ Encontrar hierbas similares' : '✨ Find similar herbs'; ?></a>
+                                </nav>
                             </div>
                         </details>
                     <?php } ?>
