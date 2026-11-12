@@ -278,6 +278,24 @@ foreach ($herbs as $herb) {
         ];
     }
 }
+$chiefgroupmap = [];
+foreach ($formulas as $formula) {
+    $chiefgroup = trim((string)$formula['kings']);
+    if ($chiefgroup === '' || !preg_match('/[,\/]/', $chiefgroup)) {
+        continue;
+    }
+    $groupkey = $normalize($chiefgroup);
+    if (!isset($chiefgroupmap[$groupkey])) {
+        $chiefgroupmap[$groupkey] = [
+            'value' => 'group:' . $chiefgroup,
+            'label' => trim((string)preg_replace('/\s*[,\/]\s*/', ' + ', $chiefgroup)),
+            'count' => 0,
+        ];
+    }
+    $chiefgroupmap[$groupkey]['count']++;
+}
+$chiefgroupoptions = array_values($chiefgroupmap);
+usort($chiefgroupoptions, static fn(array $left, array $right): int => strnatcasecmp($left['label'], $right['label']));
 
 $tonguerows = [];
 $officialformula = [];
@@ -352,9 +370,20 @@ if ($mode === 'formula' && $item !== '' && isset($formulas[$normalize($item)])) 
     usort($ingredientresults, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
     $ingredientresults = array_slice($ingredientresults, 0, 12);
 } else if ($mode === 'chief' && $item !== '') {
+    $ischiefgroup = strpos($item, 'group:') === 0;
+    $selectedchiefgroup = $ischiefgroup ? trim(substr($item, 6)) : '';
     foreach ($formulas as $candidate) {
-        if (!$haschief($candidate['kings'], $item)) continue;
-        $chiefresults[] = ['score' => 1.0, 'card' => $candidate, 'reasons' => [$ises ? 'Usa esta hierba como Chief' : 'Uses this herb as a Chief']];
+        $matches = $ischiefgroup
+            ? $normalize($candidate['kings']) === $normalize($selectedchiefgroup)
+            : $haschief($candidate['kings'], $item);
+        if (!$matches) continue;
+        $chiefresults[] = [
+            'score' => 1.0,
+            'card' => $candidate,
+            'reasons' => [$ischiefgroup
+                ? ($ises ? 'Usa este grupo completo de Chief herbs' : 'Uses this complete Chief-herb group')
+                : ($ises ? 'Usa esta hierba como Chief' : 'Uses this herb as a Chief')],
+        ];
     }
     usort($chiefresults, static fn(array $left, array $right): int => strnatcasecmp($left['card']['name'], $right['card']['name']));
 } else if ($mode === 'herb' && $item !== '' && isset($herbs[$normalize($item)])) {
@@ -527,10 +556,18 @@ echo $OUTPUT->header();
             </form>
         <?php } else if ($mode === 'chief') { ?>
             <h3><?php echo $ises ? 'Alternativas por Chief herb' : 'Chief Herb Alternatives'; ?></h3>
-            <p><?php echo $ises ? 'Organiza las fórmulas oficiales por hierba principal y función.' : 'Browse official formulas by principal herb and function.'; ?></p>
+            <p><?php echo $ises ? 'Busca por una Chief herb individual o por un grupo completo de varias Chief herbs.' : 'Search by one Chief herb or by a complete group of multiple Chief herbs.'; ?></p>
             <form class="smart-tools__form" method="get">
                 <input type="hidden" name="mode" value="chief"><?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-                <label><span><?php echo $ises ? 'Chief herb documentada' : 'Documented Chief herb'; ?></span><select name="item" required><option value=""><?php echo $ises ? 'Seleccionar Chief herb…' : 'Select a Chief herb…'; ?></option><?php foreach ($chiefherboptions as $chiefoption) { ?><option value="<?php echo s($chiefoption['name']); ?>"<?php echo $normalize($item) === $normalize($chiefoption['name']) ? ' selected' : ''; ?>><?php echo s($chiefoption['name'] . ' (' . $chiefoption['count'] . ')'); ?></option><?php } ?></select></label>
+                <label><span><?php echo $ises ? 'Chief herb o grupo documentado' : 'Documented Chief herb or group'; ?></span><select name="item" required>
+                    <option value=""><?php echo $ises ? 'Seleccionar Chief herb o grupo…' : 'Select a Chief herb or group…'; ?></option>
+                    <optgroup label="<?php echo $ises ? 'Grupos de varias Chief herbs' : 'Multiple Chief-herb groups'; ?>">
+                        <?php foreach ($chiefgroupoptions as $chiefgroupoption) { ?><option value="<?php echo s($chiefgroupoption['value']); ?>"<?php echo $normalize($item) === $normalize($chiefgroupoption['value']) ? ' selected' : ''; ?>><?php echo s($chiefgroupoption['label'] . ' (' . $chiefgroupoption['count'] . ')'); ?></option><?php } ?>
+                    </optgroup>
+                    <optgroup label="<?php echo $ises ? 'Chief herbs individuales' : 'Individual Chief herbs'; ?>">
+                        <?php foreach ($chiefherboptions as $chiefoption) { ?><option value="<?php echo s($chiefoption['name']); ?>"<?php echo $normalize($item) === $normalize($chiefoption['name']) ? ' selected' : ''; ?>><?php echo s($chiefoption['name'] . ' (' . $chiefoption['count'] . ')'); ?></option><?php } ?>
+                    </optgroup>
+                </select></label>
                 <button class="smart-tools__button" type="submit"><?php echo $ises ? 'Buscar fórmulas' : 'Find formulas'; ?></button>
             </form>
         <?php } else if ($mode === 'pattern' || $mode === 'clinical' || $mode === 'clue' || $mode === 'safety' || $mode === 'tongue') {
