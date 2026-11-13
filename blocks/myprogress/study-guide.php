@@ -922,7 +922,7 @@ echo $OUTPUT->header();
                                     <span><?php echo s($ises ? 'Categorías de fórmulas' : 'Formulas Categories'); ?></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulacategorymapurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Mapa de categorías de fórmulas' : 'Formula Category Map'); ?><small><?php echo s($ises ? '18 ramas · 181 oficiales y referencias separadas' : '18 branches · 181 official formulas and separated references'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Mapa de categorías de fórmulas' : 'Formula Category Map'); ?><small><?php echo s($ises ? 'Tarjetas buscables + árbol visual · 181 fórmulas oficiales' : 'Searchable cards + visual tree · 181 official formulas'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulaslisturl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Lista de fórmulas' : 'Formula List'); ?><small><?php echo s($ises ? '181 fórmulas oficiales del guideline · A–Z o por categoría' : '181 official guideline formulas · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
