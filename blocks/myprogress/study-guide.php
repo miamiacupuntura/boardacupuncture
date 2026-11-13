@@ -616,6 +616,11 @@ $preparationdecoctionurl = new moodle_url(
         ? '/study-guide/comparisons/safety-preparation-es.html'
         : '/study-guide/comparisons/safety-preparation.html'
 );
+$cautionscontraindicationsurl = new moodle_url(
+    $ises
+        ? '/study-guide/comparisons/cautions-contraindications-es.html'
+        : '/study-guide/comparisons/cautions-contraindications.html'
+);
 $singleherbscomparisonsurl = new moodle_url(
     $ises ? '/study-guide/comparisons/index-es.html' : '/study-guide/comparisons/index.html'
 );
@@ -956,6 +961,9 @@ echo $OUTPUT->header();
                                 <p class="subject-study-library__option-group" data-main-guide-group="safety"><?php echo s($ises ? 'Seguridad' : 'Safety'); ?></p>
                                 <a class="subject-study-library__journey-option" href="<?php echo $preparationdecoctionurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Preparación y decocción' : 'Preparation & Decoction'); ?><small><?php echo s($ises ? 'El procesamiento y el momento cambian dirección, potencia y toxicidad' : 'Processing and timing change direction, potency and toxicity'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $cautionscontraindicationsurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Precauciones y contraindicaciones' : 'Cautions & Contraindications'); ?><small><?php echo s($ises ? 'Niveles de riesgo · embarazo · precauciones por patrón' : 'Risk levels · pregnancy · pattern cautions'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
                                     <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones · incluye incompatibilidades' : '12 sections · includes incompatibilities'); ?></small></span><span aria-hidden="true">›</span>
