@@ -23,6 +23,12 @@ $fromtonguepulse = $fromcontext === 'tonguepulse';
 $fromchiefmap = $fromcontext === 'chiefmap';
 $fromquiz = $fromcontext === 'quiz';
 $fromsmart = $fromcontext === 'smart';
+$fromformulamap = $fromcontext === 'formulamap';
+$mapcategory = optional_param('mapcategory', 'all', PARAM_ALPHANUMEXT);
+$mapcategory = in_array($mapcategory, array_merge(['all'], array_map('strval', range(1, 19))), true) ? $mapcategory : 'all';
+$mapmode = optional_param('mapmode', 'official', PARAM_ALPHA);
+$mapmode = $mapmode === 'all' ? 'all' : 'official';
+$mapq = trim(optional_param('mapq', '', PARAM_TEXT));
 $smartmode = optional_param('smartmode', 'formula', PARAM_ALPHA);
 $smartitem = trim(optional_param('smartitem', '', PARAM_TEXT));
 $smartq = trim(optional_param('smartq', '', PARAM_TEXT));
@@ -31,8 +37,13 @@ $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap) {
     $baseparams['from'] = $fromcontext;
+}
+if ($fromformulamap) {
+    $baseparams['mapcategory'] = $mapcategory;
+    $baseparams['mapmode'] = $mapmode;
+    if ($mapq !== '') $baseparams['mapq'] = $mapq;
 }
 if ($fromsmart) {
     $baseparams['smartmode'] = $smartmode;
@@ -54,8 +65,13 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap) {
     $languageparams['from'] = $fromcontext;
+}
+if ($fromformulamap) {
+    $languageparams['mapcategory'] = $mapcategory;
+    $languageparams['mapmode'] = $mapmode;
+    if ($mapq !== '') $languageparams['mapq'] = $mapq;
 }
 if ($fromsmart) {
     $languageparams['smartmode'] = $smartmode;
@@ -79,6 +95,12 @@ if ($smartitem !== '') $smartreturnparams['item'] = $smartitem;
 if ($smartq !== '') $smartreturnparams['q'] = $smartq;
 if ($ises) $smartreturnparams['lang'] = 'es';
 $smarttoolsurl = new moodle_url('/blocks/myprogress/smart-study-tools.php', $smartreturnparams);
+$formulamapreturnparams = ['category' => $mapcategory, 'mode' => $mapmode];
+if ($mapq !== '') $formulamapreturnparams['q'] = $mapq;
+$formulamapreturnurl = new moodle_url(
+    '/study-guide/comparisons/' . ($ises ? 'formula-category-map-es.html' : 'formula-category-map.html'),
+    $formulamapreturnparams
+);
 
 $rosterpath = __DIR__ . '/formula-board-roster-2026.json';
 $detailpath = __DIR__ . '/formulas-study-guide-data.json';
@@ -417,7 +439,9 @@ echo $OUTPUT->header();
                 : 'The 181 official Appendix C formulas, organized A–Z or in the conventional Bensky Chapters 1–21 sequence. Only chapters containing official roster formulas are shown.'; ?></p>
         </div>
         <div class="formula-list__actions">
-            <?php if ($fromsmart) { ?>
+            <?php if ($fromformulamap) { ?>
+                <a class="formula-list__button" href="<?php echo $formulamapreturnurl->out(false); ?>"><?php echo $ises ? '← Volver al mapa de categorías' : '← Back to Formula Category Map'; ?></a>
+            <?php } else if ($fromsmart) { ?>
                 <a class="formula-list__button" href="<?php echo $smarttoolsurl->out(false); ?>"><?php echo $ises ? '← Volver a Smart Study Tools' : '← Back to Smart Study Tools'; ?></a>
             <?php } else if ($fromquiz) { ?>
                 <button class="formula-list__button" type="button" data-return-to-formula-question data-fallback-url="<?php echo $formulastudyurl->out(false); ?>"><?php echo $ises ? '← Volver a la pregunta' : '← Back to question'; ?></button>
@@ -459,7 +483,8 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromformulamap) { ?><input type="hidden" name="mapcategory" value="<?php echo s($mapcategory); ?>"><input type="hidden" name="mapmode" value="<?php echo s($mapmode); ?>"><?php if ($mapq !== '') { ?><input type="hidden" name="mapq" value="<?php echo s($mapq); ?>"><?php } ?><?php } ?>
             <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>
             <label><span><?php echo $ises ? 'Buscar fórmula' : 'Search formula'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $ises ? 'Nombre, patrón, acción…' : 'Name, pattern, action…'; ?>"></label>
             <label><span><?php echo $ises ? 'Capítulo Bensky' : 'Bensky chapter'; ?></span><select name="category">
