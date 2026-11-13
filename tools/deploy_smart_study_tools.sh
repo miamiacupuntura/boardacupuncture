@@ -177,7 +177,13 @@ grep -Fq '$preparationdecoctionurl' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq 'Preparation & Decoction' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq 'safety-preparation.html' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '<h1 class="study-note__title">Preparation &amp; Decoction</h1>' "$TEMP_DIR/static/safety-preparation.html"
+grep -Fq 'Processing purposes and methods' "$TEMP_DIR/static/safety-preparation.html"
+grep -Fq 'Yan Hu Suo is classically vinegar-processed, not salt-processed' "$TEMP_DIR/static/safety-preparation.html"
+grep -Fq 'Zhu Sha contains mercury' "$TEMP_DIR/static/safety-preparation.html"
 grep -Fq '<h1 class="study-note__title">Preparación y Decocción</h1>' "$TEMP_DIR/static/safety-preparation-es.html"
+grep -Fq 'Propósitos y métodos de procesamiento' "$TEMP_DIR/static/safety-preparation-es.html"
+grep -Fq 'Yan Hu Suo se procesa clásicamente con vinagre, no con sal' "$TEMP_DIR/static/safety-preparation-es.html"
+grep -Fq 'Zhu Sha contiene mercurio' "$TEMP_DIR/static/safety-preparation-es.html"
 if grep -Fq 'data-category-jump' "$TEMP_DIR/static/guideline-herbs-by-origin.html" "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"; then
     echo "ERROR: todavía existen los 33 botones de salto por categoría." >&2
     exit 1
@@ -392,6 +398,7 @@ echo "OK: los 33 botones de categorías fueron reemplazados por una barra de bú
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào & Combinations y Safety."
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
+echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: Preparation & Decoction fue retirado de Safety Library; la biblioteca muestra 12 secciones restantes."
 echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library, con navegación de ida y regreso."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
