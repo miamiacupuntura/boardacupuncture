@@ -73,8 +73,17 @@ grep -Fq '/study-guide/comparisons/formula-category-map.html' "$TEMP_DIR/moodle/
 grep -Fq '$fromformulamap' "$TEMP_DIR/moodle/formula-list.php"
 grep -Fq 'Back to Formula Category Map' "$TEMP_DIR/moodle/formula-list.php"
 grep -Fq 'Official guideline only · 181' "$TEMP_DIR/static/formula-category-map.html"
-grep -Fq 'Include source references · 326' "$TEMP_DIR/static/formula-category-map.html"
+grep -Fq 'Full source map · +145 non-guideline' "$TEMP_DIR/static/formula-category-map.html"
+grep -Fq 'data-map-mode-help' "$TEMP_DIR/static/formula-category-map.html"
+grep -Fq 'source-only formulas' "$TEMP_DIR/static/formula-category-map.html"
 grep -Fq 'Solo guideline oficial · 181' "$TEMP_DIR/static/formula-category-map-es.html"
+grep -Fq 'Mapa fuente completo · +145 no oficiales' "$TEMP_DIR/static/formula-category-map-es.html"
+grep -Fq 'data-map-mode-help' "$TEMP_DIR/static/formula-category-map-es.html"
+grep -Fq 'fórmulas solo de la fuente' "$TEMP_DIR/static/formula-category-map-es.html"
+if grep -Fq 'Include source references · 326' "$TEMP_DIR/static/formula-category-map.html"; then
+  echo "ERROR: el modo fuente conserva la etiqueta ambigua anterior." >&2
+  exit 1
+fi
 grep -Fq '18 supplied branches + additional section' "$TEMP_DIR/static/formula-category-map.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "\"o\":true") !== 181 || substr_count($html, "\"o\":false") !== 145 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/formula-category-map.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "\"o\":true") !== 181 || substr_count($html, "\"o\":false") !== 145 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/formula-category-map-es.html"
@@ -291,6 +300,7 @@ echo "OK: botón By Bensky Category agrupa las 304 sustancias en las 33 categor�
 echo "OK: los 33 botones de categorías fueron reemplazados por una barra de búsqueda con sugerencias."
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
+echo "OK: el segundo modo explica que añade 145 fórmulas no oficiales y muestra conteos official + source-only."
 echo "OK: el mapa separa 181 fórmulas oficiales de 145 referencias de la fuente y conserva regreso contextual."
 echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin enlace."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
