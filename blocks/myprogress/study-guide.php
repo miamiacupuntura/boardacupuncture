@@ -589,6 +589,9 @@ $formulasstudyurl = new moodle_url(
     '/blocks/myprogress/formulas-study-guide.php',
     $ises ? ['lang' => 'es'] : []
 );
+$formulacategorymapurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/formula-category-map-es.html' : '/study-guide/comparisons/formula-category-map.html'
+);
 $formulaslisturl = new moodle_url(
     '/blocks/myprogress/formula-list.php',
     $ises ? ['lang' => 'es', 'from' => 'library'] : ['from' => 'library']
@@ -922,6 +925,9 @@ echo $OUTPUT->header();
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Categorías de fórmulas' : 'Formulas Categories'); ?></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $formulacategorymapurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Mapa de categorías de fórmulas' : 'Formula Category Map'); ?><small><?php echo s($ises ? '18 ramas · 181 oficiales y referencias separadas' : '18 branches · 181 official formulas and separated references'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulaslisturl->out(false); ?>">
                                     <span>Formula List<small><?php echo s($ises ? '181 fórmulas oficiales del guideline · A–Z o por categoría' : '181 official guideline formulas · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
