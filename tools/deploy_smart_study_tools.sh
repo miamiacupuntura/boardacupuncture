@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html safety.html safety-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -73,6 +73,17 @@ grep -Fq 'data-main-guide-group="single-herbs"' "$TEMP_DIR/moodle/study-guide.ph
 grep -Fq 'data-main-guide-group="formulas"' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq 'data-main-guide-group="dui-yao"' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq 'data-main-guide-group="safety"' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '13 sections · includes incompatibilities' "$TEMP_DIR/moodle/study-guide.php"
+if grep -Fq '$herbalincompatibilitiesurl' "$TEMP_DIR/moodle/study-guide.php"; then
+  echo "ERROR: Herbal Incompatibilities todavía aparece como opción separada en Main Study Guide." >&2
+  exit 1
+fi
+grep -Fq 'data-sequence="13"' "$TEMP_DIR/static/safety.html"
+grep -Fq 'href="herbal-incompatibilities.html?from=safety"' "$TEMP_DIR/static/safety.html"
+grep -Fq 'data-sequence="13"' "$TEMP_DIR/static/safety-es.html"
+grep -Fq 'href="herbal-incompatibilities-es.html?from=safety"' "$TEMP_DIR/static/safety-es.html"
+grep -Fq 'href="safety.html">← Safety Library' "$TEMP_DIR/static/herbal-incompatibilities.html"
+grep -Fq 'href="safety-es.html">← Biblioteca de Seguridad' "$TEMP_DIR/static/herbal-incompatibilities-es.html"
 grep -Fq 'subject-study-library__option-group' "$TEMP_DIR/moodle/study-guide.php"
 php -r '$html=file_get_contents($argv[1]); $groups=["single-herbs","formulas","dui-yao","safety"]; $previous=-1; foreach ($groups as $group) { $position=strpos($html, "data-main-guide-group=\"".$group."\""); if ($position === false || $position <= $previous) { exit(1); } $previous=$position; }' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '/study-guide/comparisons/formula-category-map.html' "$TEMP_DIR/moodle/study-guide.php"
@@ -316,6 +327,7 @@ echo "OK: botón By Bensky Category agrupa las 304 sustancias en las 33 categor�
 echo "OK: los 33 botones de categorías fueron reemplazados por una barra de búsqueda con sugerencias."
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào & Combinations y Safety."
+echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library, con navegación de ida y regreso."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
 echo "OK: el segundo modo explica que añade 145 fórmulas no oficiales y muestra conteos official + source-only."
 echo "OK: un tercer botón abre el mapa original de 63 perfiles enlazados y permite regresar al mapa de categorías."
