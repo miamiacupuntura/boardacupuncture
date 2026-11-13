@@ -15,6 +15,8 @@
   const es = language === 'es';
   const suffix = es ? '-es' : '';
   const indexUrl = `${group}${suffix}.html`;
+  const studyGuideUrl = `/blocks/myprogress/study-guide.php?area=herbology&view=library${es ? '&lang=es' : ''}`;
+  const exitUrl = group === 'safety' ? studyGuideUrl : indexUrl;
   let chapters = [];
   let current = Math.max(0, Number.parseInt(params.get('chapter') || '1', 10) - 1);
 
@@ -48,10 +50,13 @@
     ui.brand.textContent = es ? 'Lectura Continua' : 'Continuous Reading';
     ui.language.textContent = es ? 'English' : 'Español';
     ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}`;
-    ui.dashboard.textContent = es ? '← Dashboard' : '← Back to Dashboard';
+    ui.dashboard.textContent = es ? '← Guía de estudio' : '← Study Guide';
+    ui.dashboard.href = studyGuideUrl;
     ui.previous.textContent = ui.bottomPrevious.textContent = es ? '← Anterior' : '← Previous';
     ui.next.textContent = ui.bottomNext.textContent = es ? 'Siguiente →' : 'Next →';
-    ui.index.textContent = ui.bottomIndex.textContent = es ? 'Todos los capítulos' : 'All chapters';
+    ui.index.textContent = ui.bottomIndex.textContent = group === 'safety'
+      ? (es ? 'Guía de estudio' : 'Study Guide')
+      : (es ? 'Todos los capítulos' : 'All chapters');
     ui.loading.textContent = es ? 'Cargando capítulo…' : 'Loading chapter…';
     ui.footer.textContent = es ? 'Lectura continua · Anterior · Siguiente · Todos los capítulos' : 'Continuous reading · Previous · Next · All chapters';
   }
@@ -74,8 +79,8 @@
     ui.previous.disabled = ui.bottomPrevious.disabled = current === 0;
     const last = current === chapters.length - 1;
     ui.next.textContent = ui.bottomNext.textContent = last ? (es ? 'Finalizar →' : 'Finish →') : (es ? 'Siguiente →' : 'Next →');
-    ui.index.href = ui.bottomIndex.href = indexUrl;
-    ui.groupLink.href = indexUrl;
+    ui.index.href = ui.bottomIndex.href = exitUrl;
+    ui.groupLink.href = exitUrl;
     const url = new URL(window.location.href);
     url.searchParams.set('group', group);
     url.searchParams.set('lang', language);
@@ -88,7 +93,7 @@
     if (!chapters.length) return;
     if (position < 0) position = 0;
     if (position >= chapters.length) {
-      window.location.href = indexUrl;
+      window.location.href = exitUrl;
       return;
     }
     current = position;
@@ -117,7 +122,7 @@
 
   function move(delta) {
     if (delta > 0 && current === chapters.length - 1) {
-      window.location.href = indexUrl;
+      window.location.href = exitUrl;
       return;
     }
     loadChapter(current + delta);
@@ -126,13 +131,14 @@
   async function initialize() {
     addFormulaReturnButton();
     setLanguageLabels();
-    ui.index.href = ui.bottomIndex.href = ui.groupLink.href = indexUrl;
+    ui.index.href = ui.bottomIndex.href = ui.groupLink.href = exitUrl;
     try {
       const response = await fetch(indexUrl, {cache: 'no-cache'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
       const groupTitle = doc.querySelector('.comparison-hero h1')?.textContent?.trim();
-      if (groupTitle) ui.brand.textContent = groupTitle;
+      if (group === 'safety') ui.brand.textContent = es ? 'Guía de estudio' : 'Study Guide';
+      else if (groupTitle) ui.brand.textContent = groupTitle;
       chapters = [...doc.querySelectorAll('.comparison-card__open')]
         .map(link => ({url: link.dataset.chapterUrl || link.getAttribute('href'), title: link.closest('.comparison-card')?.querySelector('h3')?.textContent?.trim(), order: Number(link.dataset.chapterNumber)}))
         .filter(chapter => chapter.url && chapter.title && Number.isFinite(chapter.order))
