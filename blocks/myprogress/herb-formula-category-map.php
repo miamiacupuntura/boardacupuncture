@@ -423,7 +423,7 @@ $renderbridgeformulas = static function(string $text, array $colors) use ($rende
 $langparams = $ises ? ['lang' => 'es'] : [];
 $pageurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $langparams);
 $languageurl = new moodle_url('/blocks/myprogress/herb-formula-category-map.php', $ises ? [] : ['lang' => 'es']);
-$huburl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology'] + $langparams);
+$huburl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'herbology', 'view' => 'library'] + $langparams);
 $herbsurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $langparams);
 $duiyaourl = new moodle_url($ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html');
 $formulasurl = new moodle_url('/blocks/myprogress/formulas-study-guide.php', $langparams);

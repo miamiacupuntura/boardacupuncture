@@ -2608,7 +2608,7 @@ echo $OUTPUT->header();
             <?php if ($selectedcategory !== ''): ?>
                 <a class="herb-category-library__back" href="<?php echo $categoriesurl->out(false); ?>"><?php echo s($ises ? '← Categorías' : '← Categories'); ?></a>
             <?php endif; ?>
-            <a class="herb-category-library__back" href="<?php echo $backurl->out(false); ?>"><?php echo s($ises ? '← Actividades Board Level' : '← Board Level Activities'); ?></a>
+            <a class="herb-category-library__back" href="<?php echo $backurl->out(false); ?>"><?php echo s($ises ? '← Guía de estudio' : '← Study Guide'); ?></a>
             <a class="herb-category-library__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo s($ises ? 'English' : 'Español'); ?></a>
         </div>
     </header>
