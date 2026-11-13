@@ -1656,9 +1656,9 @@ echo $OUTPUT->header();
 ?>
 <main class="herb-board">
     <nav class="herb-board__page-navigation" aria-label="<?php echo $ises
-        ? 'Regresar a las actividades Board Level' : 'Return to Board Level activities'; ?>">
+        ? 'Regresar a la Guía de estudio' : 'Return to Study Guide'; ?>">
         <a class="herb-board__back" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises
-            ? '← Actividades Board Level' : '← Board Level Activities'; ?></a>
+            ? '← Guía de estudio' : '← Study Guide'; ?></a>
         <a class="herb-board__tab herb-board__tab--language" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
             href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
     </nav>
