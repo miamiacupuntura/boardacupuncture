@@ -65,6 +65,13 @@ grep -Fq 'data-source-tab="category"' "$TEMP_DIR/static/guideline-herbs-by-origi
 grep -Fq 'By Bensky category · 33' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
 grep -Fq 'Por categoría Bensky · 33' "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"
 grep -Fq 'returnorigin=category' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+grep -Fq 'datalist id="source-search-options"' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+grep -Fq 'data-source-select' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
+grep -Fq 'source-mobile-view' "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"
+if grep -Fq 'data-category-jump' "$TEMP_DIR/static/guideline-herbs-by-origin.html" "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"; then
+    echo "ERROR: todavía existen los 33 botones de salto por categoría." >&2
+    exit 1
+fi
 grep -Fq "'animal', 'plant', 'mineral', 'category'" "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq 'Vegetal y fúngico · 272' "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<a class=\"source-card\"") !== 304 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
@@ -271,6 +278,8 @@ echo "OK: Medicinal Source Guide aparece como apéndice de referencia, no como r
 echo "OK: Secondary Study Guide incluye Guideline Medicinals by Origin con las 304 entradas oficiales."
 echo "OK: clasificación completa: 24 animales, 8 minerales y 272 vegetales/fúngicas, con buscador y regreso contextual."
 echo "OK: botón By Bensky Category agrupa las 304 sustancias en las 33 categorías oficiales."
+echo "OK: los 33 botones de categorías fueron reemplazados por una barra de búsqueda con sugerencias."
+echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin enlace."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
