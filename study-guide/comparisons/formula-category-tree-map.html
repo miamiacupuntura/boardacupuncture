@@ -15,6 +15,7 @@ var pageSelect=document.querySelector("[data-tree-page]"),modeSelect=document.qu
 words.openMap=lang==="es"?"Abrir mapa buscable":"Open searchable map";words.openCategory=lang==="es"?"Abrir categoría ":"Open category ";words.openSubgroup=lang==="es"?"Abrir subgrupo ":"Open subgroup ";words.formulaHeader=lang==="es"?"FÓRMULA":"FORMULA";words.chiefHeader=lang==="es"?"HIERBA CHIEF":"CHIEF HERB";words.notVerified=lang==="es"?"Chief no verificado":"Chief not verified";words.openHerb=lang==="es"?"Abrir tarjeta de ":"Open card for ";words.notInGuideline=lang==="es"?"Sin tarjeta en el guideline de 304 hierbas":"No card in the 304-herb guideline";var NS="http://www.w3.org/2000/svg",zoom=1;
 function add(parent,name,attrs,text){var el=document.createElementNS(NS,name);Object.keys(attrs||{}).forEach(function(key){el.setAttribute(key,attrs[key]);});if(text!==undefined)el.textContent=text;parent.appendChild(el);return el;}
 function short(value,max){value=String(value||"");return value.length>max?value.slice(0,max-1)+"…":value;}
+function wrapTwoLines(value,max){value=String(value||"");if(value.length<=max)return[value];var words=value.split(/\s+/),lines=[""];words.forEach(function(word){var current=lines[lines.length-1];if(lines.length===1&&(current?current.length+1:0)+word.length<=max){lines[0]+=(current?" ":"")+word;}else if(lines.length===1){lines.push(word);}else{lines[1]+=(lines[1]?" ":"")+word;}});if(lines[1]&&lines[1].length>max)lines[1]=short(lines[1],max);return lines.slice(0,2);}
 function title(el,value){add(el,"title",{},value);}
 function path(group,d,stroke,width){add(group,"path",{d:d,fill:"none",stroke:stroke||"#547086","stroke-width":width||2,"stroke-linecap":"round","stroke-linejoin":"round"});}
 function mapHref(page,mode,category,query){var params=new URLSearchParams();params.set("mode",mode);params.set("category",category||"all");if(query)params.set("q",query);params.set("from","formulatree");params.set("treepage",page);params.set("treemode",mode);return(lang==="es"?"formula-category-map-es.html":"formula-category-map.html")+"?"+params.toString();}
@@ -65,8 +66,10 @@ function render(){
   var catText=add(catLink,"text",{x:"390",y:String(layout.center+5),"text-anchor":"middle",fill:"#fff","font-family":"Arial,sans-serif","font-size":"16.5","font-weight":"850","text-decoration":"underline"},short(layout.cat.id+". "+catName,34));title(catText,catName);
   layout.groups.forEach(function(group){
    var groupParent=group.formulas.length?add(nodes,"a",{href:mapHref(page,mode,layout.cat.id,group.label),target:"_top","aria-label":words.openSubgroup+group.label}):nodes;
-   add(groupParent,"rect",{x:"585",y:String(group.center-20),width:"400",height:"40",rx:"9",fill:"#f4efff",stroke:"#7c3aed","stroke-width":"2"});
-   var groupText=add(groupParent,"text",{x:"600",y:String(group.center+5),fill:"#4c1d95","font-family":"Arial,sans-serif","font-size":"14.5","font-weight":"800","text-decoration":group.formulas.length?"underline":"none"},short(words.subgroup+group.label,52));title(groupText,words.subgroup+group.label);
+   var groupLabel=words.subgroup+group.label,groupLines=wrapTwoLines(groupLabel,40),groupTall=groupLines.length>1;
+   add(groupParent,"rect",{x:"585",y:String(group.center-(groupTall?27:22)),width:"400",height:String(groupTall?54:44),rx:"9",fill:"#f4efff",stroke:"#7c3aed","stroke-width":"2"});
+   var groupText=add(groupParent,"text",{x:"600",y:String(group.center+(groupTall?-6:5)),fill:"#4c1d95","font-family":"Arial,sans-serif","font-size":"14.5","font-weight":"800","text-decoration":group.formulas.length?"underline":"none"});
+   groupLines.forEach(function(line,lineIndex){add(groupText,"tspan",{x:"600",dy:lineIndex?"18":"0"},line);});title(groupText,groupLabel);
    if(!group.formulas.length){
     add(nodes,"rect",{x:"1005",y:String(group.ys[0]-18),width:"850",height:"30",rx:"6",fill:"#f1f5f9",stroke:"#cbd5e1"});
     add(nodes,"text",{x:"1020",y:String(group.ys[0]+3),fill:"#64748b","font-family":"Arial,sans-serif","font-size":"12.5","font-style":"italic"},words.noOfficial);
