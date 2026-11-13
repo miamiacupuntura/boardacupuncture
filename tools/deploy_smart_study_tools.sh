@@ -225,8 +225,12 @@ php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<details cla
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<details class=\"study-note__block prep-block\"") !== 4 || substr_count($html, "<summary class=\"study-note__heading") !== 4 || substr_count($html, "class=\"prep-page-rule\"") !== 1 || substr_count($html, "class=\"prep-block__headline\"") !== 4 || strpos($html, "<p class=\"prep-block__intro\"") !== false || substr_count($html, "<table") !== 6 || substr_count($html, "<thead") !== 4 || substr_count($html, "data-label=") !== 75 || strpos($html, "<details class=\"prep-table-group\"") !== false || strpos($html, "class=\"prep-block__label\"") !== false || strpos($html, "<details class=\"study-note__block prep-block\" open") !== false) { exit(1); }' "$TEMP_DIR/static/safety-preparation-es.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "Confirm identity and required processing before deciding how the substance enters the formula.") !== 1) { exit(1); }' "$TEMP_DIR/static/safety-preparation.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "Confirma la identidad y el procesamiento requerido antes de decidir cómo entra la sustancia en la fórmula.") !== 1) { exit(1); }' "$TEMP_DIR/static/safety-preparation-es.html"
-grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php">← Study Guide</a>' "$TEMP_DIR/static/safety-preparation.html"
-grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/safety-preparation-es.html"
+grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/safety-preparation.html"
+grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/safety-preparation-es.html"
+if grep -Fq 'href="/blocks/myprogress/study-guide.php">← Study Guide' "$TEMP_DIR/static/safety-preparation.html"; then
+    echo "ERROR: el regreso a Study Guide no abre directamente la biblioteca de Herbology." >&2
+    exit 1
+fi
 if grep -Fq 'href="/my/">← Dashboard' "$TEMP_DIR/static/safety-preparation.html" "$TEMP_DIR/static/safety-preparation-es.html"; then
     echo "ERROR: Preparation & Decoction todavía regresa al Dashboard general." >&2
     exit 1
@@ -485,7 +489,7 @@ echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de
 echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào & Combinations y Safety."
 echo "OK: el encabezado del mapa principal se titula Study Guide / Guía de estudio."
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
-echo "OK: el botón superior de Preparation & Decoction regresa a Study Guide / Guía de estudio."
+echo "OK: el botón superior regresa directamente a Study Guide > Herbology > Library, conservando el idioma."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: la regla principal aparece como encabezado superior informativo, sin pregunta ni control desplegable."
 echo "OK: los otros cuatro encabezados mezclan pregunta y respuesta breve en la misma barra desplegable."
