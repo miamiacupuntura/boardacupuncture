@@ -158,7 +158,8 @@ for file in "${COMPARISON_FILES_ES[@]}"; do
         exit 1
     fi
 done
-grep -Fq "'area' => 'herbology', 'view' => 'library'" "$TEMP_DIR/moodle/herbs-category-comparison.php"
+grep -Fq "'area' => 'herbology'," "$TEMP_DIR/moodle/herbs-category-comparison.php"
+grep -Fq "'view' => 'library'," "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "'← Guía de estudio' : '← Study Guide'" "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "['area' => 'herbology', 'view' => 'library']" "$TEMP_DIR/moodle/herb-formula-category-map.php"
 
