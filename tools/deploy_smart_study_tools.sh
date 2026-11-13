@@ -184,8 +184,12 @@ grep -Fq 'Yan Hu Suo se procesa clásicamente con vinagre, no con sal' "$TEMP_DI
 grep -Fq 'Zhu Sha contiene mercurio' "$TEMP_DIR/static/safety-preparation-es.html"
 grep -Fq 'class="study-note__block prep-block"' "$TEMP_DIR/static/safety-preparation.html"
 grep -Fq 'class="study-note__block prep-block"' "$TEMP_DIR/static/safety-preparation-es.html"
-grep -Fq 'What must be confirmed before an herb enters a formula?' "$TEMP_DIR/static/safety-preparation.html"
-grep -Fq '¿Qué debe confirmarse antes de añadir una hierba a una fórmula?' "$TEMP_DIR/static/safety-preparation-es.html"
+grep -Fq '<h2 class="prep-page-rule"><span>Core rule</span>Confirm identity and required processing before deciding how the substance enters the formula.</h2>' "$TEMP_DIR/static/safety-preparation.html"
+grep -Fq '<h2 class="prep-page-rule"><span>Regla principal</span>Confirma la identidad y el procesamiento requerido antes de decidir cómo entra la sustancia en la fórmula.</h2>' "$TEMP_DIR/static/safety-preparation-es.html"
+if grep -Fq 'What must be confirmed before an herb enters a formula?' "$TEMP_DIR/static/safety-preparation.html" || grep -Fq '¿Qué debe confirmarse antes de añadir una hierba a una fórmula?' "$TEMP_DIR/static/safety-preparation-es.html"; then
+    echo "ERROR: la regla superior todavía aparece como pregunta o barra interactiva." >&2
+    exit 1
+fi
 grep -Fq 'How does processing change the herb?' "$TEMP_DIR/static/safety-preparation.html"
 grep -Fq '¿Cómo cambia el procesamiento la hierba?' "$TEMP_DIR/static/safety-preparation-es.html"
 grep -Fq 'Why and how are herbs processed?' "$TEMP_DIR/static/safety-preparation.html"
@@ -212,8 +216,8 @@ grep -Fq '¿Qué hierbas pierden actividad si se hierven demasiado?' "$TEMP_DIR/
 grep -Fq '¿Qué síntomas exigen atención urgente tras un medicinal tóxico?' "$TEMP_DIR/static/safety-preparation-es.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "?</th>") !== 27) { exit(1); }' "$TEMP_DIR/static/safety-preparation.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "?</th>") !== 27) { exit(1); }' "$TEMP_DIR/static/safety-preparation-es.html"
-php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<details class=\"study-note__block prep-block\"") !== 4 || substr_count($html, "<summary class=\"study-note__heading") !== 4 || substr_count($html, "<section class=\"study-note__block prep-block prep-block--static\"") !== 1 || substr_count($html, "class=\"prep-block__headline\"") !== 5 || strpos($html, "<p class=\"prep-block__intro\"") !== false || substr_count($html, "<table") !== 6 || substr_count($html, "<thead") !== 4 || substr_count($html, "data-label=") !== 75 || strpos($html, "<details class=\"prep-table-group\"") !== false || strpos($html, "class=\"prep-block__label\"") !== false || strpos($html, "<details class=\"study-note__block prep-block\" open") !== false) { exit(1); }' "$TEMP_DIR/static/safety-preparation.html"
-php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<details class=\"study-note__block prep-block\"") !== 4 || substr_count($html, "<summary class=\"study-note__heading") !== 4 || substr_count($html, "<section class=\"study-note__block prep-block prep-block--static\"") !== 1 || substr_count($html, "class=\"prep-block__headline\"") !== 5 || strpos($html, "<p class=\"prep-block__intro\"") !== false || substr_count($html, "<table") !== 6 || substr_count($html, "<thead") !== 4 || substr_count($html, "data-label=") !== 75 || strpos($html, "<details class=\"prep-table-group\"") !== false || strpos($html, "class=\"prep-block__label\"") !== false || strpos($html, "<details class=\"study-note__block prep-block\" open") !== false) { exit(1); }' "$TEMP_DIR/static/safety-preparation-es.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<details class=\"study-note__block prep-block\"") !== 4 || substr_count($html, "<summary class=\"study-note__heading") !== 4 || substr_count($html, "class=\"prep-page-rule\"") !== 1 || substr_count($html, "class=\"prep-block__headline\"") !== 4 || strpos($html, "<p class=\"prep-block__intro\"") !== false || substr_count($html, "<table") !== 6 || substr_count($html, "<thead") !== 4 || substr_count($html, "data-label=") !== 75 || strpos($html, "<details class=\"prep-table-group\"") !== false || strpos($html, "class=\"prep-block__label\"") !== false || strpos($html, "<details class=\"study-note__block prep-block\" open") !== false) { exit(1); }' "$TEMP_DIR/static/safety-preparation.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<details class=\"study-note__block prep-block\"") !== 4 || substr_count($html, "<summary class=\"study-note__heading") !== 4 || substr_count($html, "class=\"prep-page-rule\"") !== 1 || substr_count($html, "class=\"prep-block__headline\"") !== 4 || strpos($html, "<p class=\"prep-block__intro\"") !== false || substr_count($html, "<table") !== 6 || substr_count($html, "<thead") !== 4 || substr_count($html, "data-label=") !== 75 || strpos($html, "<details class=\"prep-table-group\"") !== false || strpos($html, "class=\"prep-block__label\"") !== false || strpos($html, "<details class=\"study-note__block prep-block\" open") !== false) { exit(1); }' "$TEMP_DIR/static/safety-preparation-es.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "Confirm identity and required processing before deciding how the substance enters the formula.") !== 1) { exit(1); }' "$TEMP_DIR/static/safety-preparation.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "Confirma la identidad y el procesamiento requerido antes de decidir cómo entra la sustancia en la fórmula.") !== 1) { exit(1); }' "$TEMP_DIR/static/safety-preparation-es.html"
 grep -Fq '<a class="comparison-back" href="/my/">← Dashboard</a>' "$TEMP_DIR/static/safety-preparation.html"
@@ -473,8 +477,8 @@ echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
 echo "OK: el botón superior de Preparation & Decoction regresa al Dashboard."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
-echo "OK: la regla principal queda estática y los otros cuatro encabezados siguen siendo plegables."
-echo "OK: cada encabezado mezcla pregunta y respuesta breve en la misma barra; al abrir, aparece directamente la tabla."
+echo "OK: la regla principal aparece como encabezado superior informativo, sin pregunta ni control desplegable."
+echo "OK: los otros cuatro encabezados mezclan pregunta y respuesta breve en la misma barra desplegable."
 echo "OK: en teléfono, las filas abiertas se apilan como tarjetas verticales con etiquetas visibles."
 echo "OK: las 27 filas de Preparation & Decoction usan preguntas-gancho en inglés y español."
 echo "OK: Preparation & Decoction fue retirado de Safety Library; la biblioteca muestra 12 secciones restantes."
