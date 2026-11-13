@@ -133,7 +133,7 @@ echo $OUTPUT->header();
                 : 'Compare the category, tongue, and pulse of every official formula. Each formula name opens its detailed study card.'; ?></p>
         </div>
         <div class="formula-tp__actions">
-            <a class="formula-tp__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Guía secundaria' : '← Secondary Study Guide'; ?></a>
+            <a class="formula-tp__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
             <a class="formula-tp__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
     </header>

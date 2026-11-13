@@ -244,7 +244,7 @@ echo $OUTPUT->header();
                 : 'Connect every official formula with its ingredients. The Chief ingredient is highlighted, and every name opens its exact study card.'; ?></p>
         </div>
         <div class="formula-ingredients__actions">
-            <a class="formula-ingredients__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Guía secundaria' : '← Secondary Study Guide'; ?></a>
+            <a class="formula-ingredients__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
             <a class="formula-ingredients__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
     </header>

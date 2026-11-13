@@ -122,7 +122,7 @@ echo $OUTPUT->header();
                 : 'Review every official formula by category and principal action. Each formula name opens its detailed study card.'; ?></p>
         </div>
         <div class="formula-actions__actions">
-            <a class="formula-actions__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Guía secundaria' : '← Secondary Study Guide'; ?></a>
+            <a class="formula-actions__button" href="<?php echo $libraryurl->out(false); ?>"><?php echo $ises ? '← Guía de estudio' : '← Study Guide'; ?></a>
             <a class="formula-actions__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
     </header>
