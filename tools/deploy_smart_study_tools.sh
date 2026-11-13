@@ -125,7 +125,7 @@ if grep -Fq '$herbalincompatibilitiesurl' "$TEMP_DIR/moodle/study-guide.php"; th
   echo "ERROR: Herbal Incompatibilities todavía aparece como opción separada en Main Study Guide." >&2
   exit 1
 fi
-grep -Fq "['v' => '20261113-6']" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "['v' => time()]" "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '/study-guide/comparisons/safety-library.html' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '<a class="comparison-brand" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">' "$TEMP_DIR/static/safety-library.html"
 grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/safety-library.html"
@@ -607,7 +607,7 @@ echo "OK: el botón superior regresa directamente a Study Guide > Herbology > Li
 echo "OK: todos los controles Dashboard/Library dentro de Study Guide regresan a Herbology > Library; la navegación global de Moodle no se modifica."
 echo "OK: todas las salidas de las secciones de Safety Library, incluida la lectura continua, regresan directamente a Herbology > Study Guide."
 echo "OK: el botón superior de Safety Library se titula Study Guide / Guía de estudio y abre directamente Herbology > Library."
-echo "OK: Safety Library y Continuous Reader usan versión de caché 20261113-6 para impedir que el navegador conserve los botones anteriores."
+echo "OK: el enlace de Safety Library recibe una versión dinámica en cada apertura; Continuous Reader conserva versión de recurso 20261113-6."
 echo "OK: Safety Library usa el nuevo archivo safety-library.html; tanto el logotipo como el botón superior regresan a Herbology > Study Guide y no queda ninguna salida a /my/."
 echo "OK: la página pública safety-library.html fue descargada y validada después de instalar todas las rutas estáticas detectadas."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
