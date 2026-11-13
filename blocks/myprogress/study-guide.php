@@ -812,7 +812,7 @@ echo $OUTPUT->header();
 .subject-study-library__journey-step{display:inline-flex;width:31px;height:31px;flex:0 0 31px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-weight:900}
 .subject-study-library__journey-card:nth-child(5) .subject-study-library__journey-step{background:#6d4bc3}.subject-study-library__journey-card:nth-child(6) .subject-study-library__journey-step{background:#2563eb}.subject-study-library__journey-card:nth-child(7) .subject-study-library__journey-step{background:#e96512}
 .subject-study-library__journey-copy{display:block;min-width:0}.subject-study-library__journey-copy strong,.subject-study-library__journey-copy b{display:block}.subject-study-library__journey-copy strong{font-size:16px;line-height:1.25}.subject-study-library__journey-copy b{margin-top:5px;color:#08746f;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
-.subject-study-library__journey-options{display:grid;gap:7px;margin-top:0}
+.subject-study-library__journey-options{display:grid;gap:7px;margin-top:0}.subject-study-library__option-group{margin:8px 2px 0;padding:4px 2px 2px;border-bottom:2px solid #dbe7ec;color:#0b6f69;font-size:11px;font-weight:950;letter-spacing:.08em;line-height:1.2;text-transform:uppercase}.subject-study-library__option-group:first-child{margin-top:0}
 .subject-study-library__journey-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58;font-weight:850;line-height:1.25;text-decoration:none!important}
 .subject-study-library__journey-option small{display:block;margin-top:4px;color:#64748b;font-size:13px;font-weight:600;line-height:1.35}.subject-study-library__journey-option small.subject-study-library__journey-option-heading{color:inherit;font-size:inherit;font-weight:inherit;line-height:1.25}.subject-study-library__journey-option span:last-child{align-self:center;font-size:18px}
 .subject-study-library__journey-option:hover,.subject-study-library__journey-option:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
@@ -914,15 +914,15 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Guía de estudio principal' : 'Main Study Guide'); ?>">
+                                <p class="subject-study-library__option-group" data-main-guide-group="single-herbs"><?php echo s($ises ? 'Hierbas individuales' : 'Single Herbs'); ?></p>
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbsstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Categorías de hierbas individuales' : 'Single Herbs Categories'); ?></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $singleherbslisturl->out(false); ?>">
-                                    <span>Single Herbs List<small><?php echo s($ises ? '304 hierbas oficiales del guideline · A–Z o por categoría' : '304 official guideline herbs · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Lista de hierbas individuales' : 'Single Herbs List'); ?><small><?php echo s($ises ? '304 hierbas oficiales del guideline · A–Z o por categoría' : '304 official guideline herbs · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $duiyaostudyurl->out(false); ?>">
-                                    <span><?php echo s($ises ? 'Categorías de pares Duì Yào' : 'Duì Yào Pairs Categories'); ?></span><span aria-hidden="true">›</span>
-                                </a>
+
+                                <p class="subject-study-library__option-group" data-main-guide-group="formulas"><?php echo s($ises ? 'Fórmulas' : 'Formulas'); ?></p>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulasstudyurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Categorías de fórmulas' : 'Formulas Categories'); ?></span><span aria-hidden="true">›</span>
                                 </a>
@@ -930,19 +930,13 @@ echo $OUTPUT->header();
                                     <span><?php echo s($ises ? 'Mapa de categorías de fórmulas' : 'Formula Category Map'); ?><small><?php echo s($ises ? '18 ramas · 181 oficiales y referencias separadas' : '18 branches · 181 official formulas and separated references'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulaslisturl->out(false); ?>">
-                                    <span>Formula List<small><?php echo s($ises ? '181 fórmulas oficiales del guideline · A–Z o por categoría' : '181 official guideline formulas · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($ises ? 'Lista de fórmulas' : 'Formula List'); ?><small><?php echo s($ises ? '181 fórmulas oficiales del guideline · A–Z o por categoría' : '181 official guideline formulas · A–Z or by category'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $chiefherbsmapurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Mapa de fórmulas y hierbas Chief' : 'Chief Herbs Formula Map'); ?><small><?php echo s($ises ? '63 fórmulas oficiales · mapa vectorial' : '63 official formulas · vector map'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
-                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulacompositionurl->out(false); ?>">
                                     <span><?php echo s($tr('Formula Composition')); ?><small><?php echo s($ises ? '12 temas de teoría' : '12 theory topics'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $herbalincompatibilitiesurl->out(false); ?>">
-                                    <span><?php echo s($tr('Herbal Incompatibilities')); ?><small><?php echo s($ises ? '10 capítulos de seguridad' : '10 safety chapters'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $mostimportantformulasurl->out(false); ?>">
                                     <span><?php echo s($tr('Most Important Formulas')); ?><small><?php echo s($ises ? '85 fórmulas' : '85 formulas'); ?></small></span><span aria-hidden="true">›</span>
@@ -950,8 +944,21 @@ echo $OUTPUT->header();
                                 <a class="subject-study-library__journey-option" href="<?php echo $formulamodificationsurl->out(false); ?>">
                                     <span><?php echo s($tr('Formula Modifications')); ?><small><?php echo s($ises ? '305 modificaciones' : '305 modifications'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
+
+                                <p class="subject-study-library__option-group" data-main-guide-group="dui-yao"><?php echo s($ises ? 'Duì Yào y combinaciones' : 'Duì Yào & Combinations'); ?></p>
+                                <a class="subject-study-library__journey-option" href="<?php echo $duiyaostudyurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Categorías de pares Duì Yào' : 'Duì Yào Pairs Categories'); ?></span><span aria-hidden="true">›</span>
+                                </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $commonherbalcombinationsurl->out(false); ?>">
                                     <span><?php echo s($tr('Herbal Combination')); ?><small><?php echo s($ises ? 'Apéndice 2' : 'Appendix 2'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+
+                                <p class="subject-study-library__option-group" data-main-guide-group="safety"><?php echo s($ises ? 'Seguridad' : 'Safety'); ?></p>
+                                <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
+                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $herbalincompatibilitiesurl->out(false); ?>">
+                                    <span><?php echo s($tr('Herbal Incompatibilities')); ?><small><?php echo s($ises ? '10 capítulos de seguridad' : '10 safety chapters'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
