@@ -726,11 +726,6 @@ $formulacompositionurl = $makechapterurl([
     'params' => [],
     'anchor' => '',
 ]);
-$herbalincompatibilitiesurl = $makechapterurl([
-    'path' => '/study-guide/comparisons/herbal-incompatibilities.html',
-    'params' => [],
-    'anchor' => '',
-]);
 $mostimportantformulasurl = $makechapterurl([
     'path' => '/study-guide/comparisons/most-important-formulas.html',
     'params' => [],
@@ -955,10 +950,7 @@ echo $OUTPUT->header();
 
                                 <p class="subject-study-library__option-group" data-main-guide-group="safety"><?php echo s($ises ? 'Seguridad' : 'Safety'); ?></p>
                                 <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
-                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones de seguridad' : '12 safety sections'); ?></small></span><span aria-hidden="true">›</span>
-                                </a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $herbalincompatibilitiesurl->out(false); ?>">
-                                    <span><?php echo s($tr('Herbal Incompatibilities')); ?><small><?php echo s($ises ? '10 capítulos de seguridad' : '10 safety chapters'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '13 secciones · incluye incompatibilidades' : '13 sections · includes incompatibilities'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
