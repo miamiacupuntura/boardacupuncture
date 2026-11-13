@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html safety.html safety-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -184,6 +184,20 @@ grep -Fq '<h1 class="study-note__title">Preparación y Decocción</h1>' "$TEMP_D
 grep -Fq 'Propósitos y métodos de procesamiento' "$TEMP_DIR/static/safety-preparation-es.html"
 grep -Fq 'Yan Hu Suo se procesa clásicamente con vinagre, no con sal' "$TEMP_DIR/static/safety-preparation-es.html"
 grep -Fq 'Zhu Sha contiene mercurio' "$TEMP_DIR/static/safety-preparation-es.html"
+grep -Fq '$cautionscontraindicationsurl' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'Cautions & Contraindications' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'cautions-contraindications.html' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '$fromcautions' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq 'Back to Cautions & Contraindications' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq '<h1>Cautions &amp; Contraindications</h1>' "$TEMP_DIR/static/cautions-contraindications.html"
+grep -Fq 'Educational framework, not a clinical calculator' "$TEMP_DIR/static/cautions-contraindications.html"
+grep -Fq 'data-caution-filter="high"' "$TEMP_DIR/static/cautions-contraindications.html"
+grep -Fq 'from=cautions' "$TEMP_DIR/static/cautions-contraindications.html"
+grep -Fq '<h1>Precauciones y contraindicaciones</h1>' "$TEMP_DIR/static/cautions-contraindications-es.html"
+grep -Fq 'Marco educativo, no calculadora clínica' "$TEMP_DIR/static/cautions-contraindications-es.html"
+grep -Fq 'data-caution-filter="pregnancy"' "$TEMP_DIR/static/cautions-contraindications-es.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article class=\"cc-card\"") !== 27 || substr_count($html, "<tr data-caution-item") !== 12 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/cautions-contraindications.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article class=\"cc-card\"") !== 27 || substr_count($html, "<tr data-caution-item") !== 12 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/cautions-contraindications-es.html"
 if grep -Fq 'data-category-jump' "$TEMP_DIR/static/guideline-herbs-by-origin.html" "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"; then
     echo "ERROR: todavía existen los 33 botones de salto por categoría." >&2
     exit 1
@@ -400,6 +414,8 @@ echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: Preparation & Decoction fue retirado de Safety Library; la biblioteca muestra 12 secciones restantes."
+echo "OK: Cautions & Contraindications aparece como herramienta independiente en Main Study Guide."
+echo "OK: 27 precauciones y 12 grupos de embarazo se organizan en cuatro niveles, con búsqueda, filtros y regreso contextual a las fichas oficiales."
 echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library, con navegación de ida y regreso."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
 echo "OK: Formula Category Visual Tree recrea los mapas 1–5 como SVG enlazado, con zoom, pantalla completa y descarga."
