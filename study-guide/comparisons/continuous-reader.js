@@ -7,7 +7,7 @@
     'most-important-formulas', 'formula-navigator', 'formula-theory', 'herbal-incompatibilities',
     'secondary-actions'
   ]);
-  const readerVersion = '20261113-5';
+  const readerVersion = '20261113-6';
   const params = new URLSearchParams(window.location.search);
   const returnFormula = (params.get('returnformula') || '').trim();
   const returnQuery = returnFormula ? `&returnformula=${encodeURIComponent(returnFormula)}` : '';

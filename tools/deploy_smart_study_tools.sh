@@ -13,7 +13,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     exit 1
 fi
 
-for command in curl php grep install stat cp cmp mkdir mktemp date rm id dirname; do
+for command in curl php grep install stat cp cmp mkdir mktemp date rm id dirname find; do
     command -v "$command" >/dev/null 2>&1 || { echo "ERROR: falta el comando $command" >&2; exit 1; }
 done
 
@@ -125,7 +125,7 @@ if grep -Fq '$herbalincompatibilitiesurl' "$TEMP_DIR/moodle/study-guide.php"; th
   echo "ERROR: Herbal Incompatibilities todavía aparece como opción separada en Main Study Guide." >&2
   exit 1
 fi
-grep -Fq "['v' => '20261113-5']" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "['v' => '20261113-6']" "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '/study-guide/comparisons/safety-library.html' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '<a class="comparison-brand" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">' "$TEMP_DIR/static/safety-library.html"
 grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/safety-library.html"
@@ -136,10 +136,10 @@ if grep -Fq 'href="/my/"' "$TEMP_DIR/static/safety.html" "$TEMP_DIR/static/safet
     exit 1
 fi
 grep -Fq 'http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"' "$TEMP_DIR/static/safety.html"
-grep -Fq 'continuous-reader.html?group=safety&amp;lang=en&amp;v=20261113-5&amp;chapter=2' "$TEMP_DIR/static/safety.html"
-grep -Fq 'continuous-reader.html?group=safety&amp;lang=es&amp;v=20261113-5&amp;chapter=2' "$TEMP_DIR/static/safety-es.html"
-grep -Fq 'continuous-reader.js?v=20261113-5' "$TEMP_DIR/static/continuous-reader.html"
-grep -Fq "const readerVersion = '20261113-5';" "$TEMP_DIR/static/continuous-reader.js"
+grep -Fq 'continuous-reader.html?group=safety&amp;lang=en&amp;v=20261113-6&amp;chapter=2' "$TEMP_DIR/static/safety.html"
+grep -Fq 'continuous-reader.html?group=safety&amp;lang=es&amp;v=20261113-6&amp;chapter=2' "$TEMP_DIR/static/safety-es.html"
+grep -Fq 'continuous-reader.js?v=20261113-6' "$TEMP_DIR/static/continuous-reader.html"
+grep -Fq "const readerVersion = '20261113-6';" "$TEMP_DIR/static/continuous-reader.js"
 grep -Fq 'const indexFetchUrl = `${indexUrl}?v=${readerVersion}`;' "$TEMP_DIR/static/continuous-reader.js"
 grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/safety.html"
 grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/safety-es.html"
@@ -458,14 +458,38 @@ for file in study-guide.php formula-list.php single-herbs-list.php     formula-b
     [[ -f "$TARGET_DIR/$file" ]] || { echo "ERROR: falta $TARGET_DIR/$file" >&2; exit 1; }
 done
 
-STUDY_NOTE_DIR=""
+STUDY_NOTE_DIRS=()
 for candidate in     "/var/www/acupuncturetests-study-guide/current/comparisons"     "$MOODLE_ROOT/study-guide/comparisons"     "$(dirname "$MOODLE_ROOT")/study-guide/comparisons"     "/var/www/html/study-guide/comparisons"; do
     if [[ -d "$candidate" && -f "$candidate/formula-practice.html" ]]; then
-        STUDY_NOTE_DIR="$candidate"
-        break
+        already_added=0
+        for existing_dir in "${STUDY_NOTE_DIRS[@]}"; do
+            if [[ "$existing_dir" == "$candidate" ]]; then
+                already_added=1
+                break
+            fi
+        done
+        if [[ "$already_added" -eq 0 ]]; then
+            STUDY_NOTE_DIRS+=("$candidate")
+        fi
     fi
 done
-[[ -n "$STUDY_NOTE_DIR" ]] || { echo "ERROR: no se encontró el directorio público study-guide/comparisons" >&2; exit 1; }
+while IFS= read -r reference_file; do
+    candidate="$(dirname "$reference_file")"
+    case "$candidate" in
+        */backups/*|*/releases/*) continue ;;
+    esac
+    already_added=0
+    for existing_dir in "${STUDY_NOTE_DIRS[@]}"; do
+        if [[ "$existing_dir" == "$candidate" ]]; then
+            already_added=1
+            break
+        fi
+    done
+    if [[ "$already_added" -eq 0 ]]; then
+        STUDY_NOTE_DIRS+=("$candidate")
+    fi
+done < <(find /var/www -type f -name formula-practice.html -path '*/comparisons/formula-practice.html' -print)
+[[ "${#STUDY_NOTE_DIRS[@]}" -gt 0 ]] || { echo "ERROR: no se encontró ningún directorio público study-guide/comparisons" >&2; exit 1; }
 
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP="$BACKUP_ROOT/smart-study-tools-$TIMESTAMP"
@@ -503,21 +527,33 @@ for file in "${DATA_FILES[@]}"; do
     cmp -s "$TEMP_DIR/data/$file" "$target"
 done
 
-static_reference="$STUDY_NOTE_DIR/formula-practice.html"
-static_owner_group="$(stat -c '%u:%g' "$static_reference")"
-static_mode="$(stat -c '%a' "$static_reference")"
-for file in "${STATIC_FILES[@]}"; do
-    target="$STUDY_NOTE_DIR/$file"
-    if [[ -f "$target" ]]; then
-        cp -a "$target" "$BACKUP/static/$file"
-        file_owner_group="$(stat -c '%u:%g' "$target")"
-        file_mode="$(stat -c '%a' "$target")"
-    else
-        file_owner_group="$static_owner_group"
-        file_mode="$static_mode"
+static_index=0
+for STUDY_NOTE_DIR in "${STUDY_NOTE_DIRS[@]}"; do
+    static_index=$((static_index + 1))
+    static_backup="$BACKUP/static/$static_index"
+    mkdir -p "$static_backup"
+    static_reference="$STUDY_NOTE_DIR/formula-practice.html"
+    static_owner_group="$(stat -c '%u:%g' "$static_reference")"
+    static_mode="$(stat -c '%a' "$static_reference")"
+    for file in "${STATIC_FILES[@]}"; do
+        target="$STUDY_NOTE_DIR/$file"
+        if [[ -f "$target" ]]; then
+            cp -a "$target" "$static_backup/$file"
+            file_owner_group="$(stat -c '%u:%g' "$target")"
+            file_mode="$(stat -c '%a' "$target")"
+        else
+            file_owner_group="$static_owner_group"
+            file_mode="$static_mode"
+        fi
+        install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/static/$file" "$target"
+        cmp -s "$TEMP_DIR/static/$file" "$target"
+    done
+    grep -Fq '← Study Guide' "$STUDY_NOTE_DIR/safety-library.html"
+    grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library' "$STUDY_NOTE_DIR/safety-library.html"
+    if grep -Fq 'href="/my/"' "$STUDY_NOTE_DIR/safety-library.html" "$STUDY_NOTE_DIR/safety-library-es.html"; then
+        echo "ERROR: $STUDY_NOTE_DIR conserva una salida de Safety Library hacia /my/." >&2
+        exit 1
     fi
-    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/static/$file" "$target"
-    cmp -s "$TEMP_DIR/static/$file" "$target"
 done
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
@@ -526,6 +562,15 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     else
         php "$MOODLE_ROOT/admin/cli/purge_caches.php"
     fi
+fi
+
+PUBLIC_SAFETY_URL="https://www.acupuncturetests.com/study-guide/comparisons/safety-library.html?rev=$REVISION"
+curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "$PUBLIC_SAFETY_URL" -o "$TEMP_DIR/public-safety-library.html"
+grep -Fq '← Study Guide' "$TEMP_DIR/public-safety-library.html"
+grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library' "$TEMP_DIR/public-safety-library.html"
+if grep -Fq 'href="/my/"' "$TEMP_DIR/public-safety-library.html"; then
+    echo "ERROR: la página pública todavía contiene una salida hacia /my/." >&2
+    exit 1
 fi
 
 echo "OK: My Study Score visible antes de Smart Study Tools y conectado con el historial local del Formula Quiz."
@@ -562,8 +607,9 @@ echo "OK: el botón superior regresa directamente a Study Guide > Herbology > Li
 echo "OK: todos los controles Dashboard/Library dentro de Study Guide regresan a Herbology > Library; la navegación global de Moodle no se modifica."
 echo "OK: todas las salidas de las secciones de Safety Library, incluida la lectura continua, regresan directamente a Herbology > Study Guide."
 echo "OK: el botón superior de Safety Library se titula Study Guide / Guía de estudio y abre directamente Herbology > Library."
-echo "OK: Safety Library y Continuous Reader usan versión de caché 20261113-5 para impedir que el navegador conserve los botones anteriores."
+echo "OK: Safety Library y Continuous Reader usan versión de caché 20261113-6 para impedir que el navegador conserve los botones anteriores."
 echo "OK: Safety Library usa el nuevo archivo safety-library.html; tanto el logotipo como el botón superior regresan a Herbology > Study Guide y no queda ninguna salida a /my/."
+echo "OK: la página pública safety-library.html fue descargada y validada después de instalar todas las rutas estáticas detectadas."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: la regla principal aparece como encabezado superior informativo, sin pregunta ni control desplegable."
 echo "OK: los otros cuatro encabezados mezclan pregunta y respuesta breve en la misma barra desplegable."
@@ -591,5 +637,5 @@ echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin 
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
-echo "OK: archivos públicos instalados en $STUDY_NOTE_DIR."
+echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
 echo "RESPALDO: $BACKUP"
