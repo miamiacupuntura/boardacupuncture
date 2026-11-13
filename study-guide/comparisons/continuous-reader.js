@@ -7,7 +7,7 @@
     'most-important-formulas', 'formula-navigator', 'formula-theory', 'herbal-incompatibilities',
     'secondary-actions'
   ]);
-  const readerVersion = '20261113-4';
+  const readerVersion = '20261113-5';
   const params = new URLSearchParams(window.location.search);
   const returnFormula = (params.get('returnformula') || '').trim();
   const returnQuery = returnFormula ? `&returnformula=${encodeURIComponent(returnFormula)}` : '';
@@ -15,7 +15,7 @@
   const language = params.get('lang') === 'es' ? 'es' : 'en';
   const es = language === 'es';
   const suffix = es ? '-es' : '';
-  const indexUrl = `${group}${suffix}.html`;
+  const indexUrl = group === 'safety' ? `safety-library${suffix}.html` : `${group}${suffix}.html`;
   const indexFetchUrl = `${indexUrl}?v=${readerVersion}`;
   const studyGuideUrl = `/blocks/myprogress/study-guide.php?area=herbology&view=library${es ? '&lang=es' : ''}`;
   const exitUrl = group === 'safety' ? studyGuideUrl : indexUrl;
