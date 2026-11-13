@@ -73,7 +73,7 @@ grep -Fq 'data-main-guide-group="single-herbs"' "$TEMP_DIR/moodle/study-guide.ph
 grep -Fq 'data-main-guide-group="formulas"' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq 'data-main-guide-group="dui-yao"' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq 'data-main-guide-group="safety"' "$TEMP_DIR/moodle/study-guide.php"
-grep -Fq '13 sections · includes incompatibilities' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '12 sections · includes incompatibilities' "$TEMP_DIR/moodle/study-guide.php"
 if grep -Fq '$herbalincompatibilitiesurl' "$TEMP_DIR/moodle/study-guide.php"; then
   echo "ERROR: Herbal Incompatibilities todavía aparece como opción separada en Main Study Guide." >&2
   exit 1
@@ -81,6 +81,12 @@ fi
 grep -Fq 'data-sequence="13"' "$TEMP_DIR/static/safety.html"
 grep -Fq 'href="herbal-incompatibilities.html?from=safety"' "$TEMP_DIR/static/safety.html"
 grep -Fq 'data-sequence="13"' "$TEMP_DIR/static/safety-es.html"
+if grep -Fq 'safety-preparation' "$TEMP_DIR/static/safety.html" "$TEMP_DIR/static/safety-es.html"; then
+  echo "ERROR: Preparation & Decoction todavía aparece dentro de Safety Library." >&2
+  exit 1
+fi
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article class=\"comparison-card\"") !== 12 || strpos($html, "data-sequence=\"1\"") !== false) { exit(1); }' "$TEMP_DIR/static/safety.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article class=\"comparison-card\"") !== 12 || strpos($html, "data-sequence=\"1\"") !== false) { exit(1); }' "$TEMP_DIR/static/safety-es.html"
 grep -Fq 'href="herbal-incompatibilities-es.html?from=safety"' "$TEMP_DIR/static/safety-es.html"
 grep -Fq 'href="safety.html">← Safety Library' "$TEMP_DIR/static/herbal-incompatibilities.html"
 grep -Fq 'href="safety-es.html">← Biblioteca de Seguridad' "$TEMP_DIR/static/herbal-incompatibilities-es.html"
@@ -386,6 +392,7 @@ echo "OK: los 33 botones de categorías fueron reemplazados por una barra de bú
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào & Combinations y Safety."
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
+echo "OK: Preparation & Decoction fue retirado de Safety Library; la biblioteca muestra 12 secciones restantes."
 echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library, con navegación de ida y regreso."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
 echo "OK: Formula Category Visual Tree recrea los mapas 1–5 como SVG enlazado, con zoom, pantalla completa y descarga."
