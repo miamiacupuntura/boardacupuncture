@@ -39,7 +39,7 @@ $incompatibilitychapters = [
 ];
 $fromincompatibilities = $fromcontext === 'incompatibilities'
     && in_array($returnchapter, $incompatibilitychapters, true);
-$returnorigin = in_array($returnorigin, ['animal', 'plant', 'mineral'], true) ? $returnorigin : '';
+$returnorigin = in_array($returnorigin, ['animal', 'plant', 'mineral', 'category'], true) ? $returnorigin : '';
 $fromoriginmap = $fromcontext === 'originmap';
 $smartmode = optional_param('smartmode', 'herb', PARAM_ALPHA);
 $smartitem = trim(optional_param('smartitem', '', PARAM_TEXT));
