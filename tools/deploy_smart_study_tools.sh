@@ -125,6 +125,12 @@ if grep -Fq '$herbalincompatibilitiesurl' "$TEMP_DIR/moodle/study-guide.php"; th
   echo "ERROR: Herbal Incompatibilities todavía aparece como opción separada en Main Study Guide." >&2
   exit 1
 fi
+grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/safety.html"
+grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/safety-es.html"
+if grep -Eiq 'Back to Dashboard|Board Level Activities|Actividades Board Level' "$TEMP_DIR/static/safety.html" "$TEMP_DIR/static/safety-es.html"; then
+    echo "ERROR: Safety Library todavía muestra un regreso al Dashboard o al menú anterior." >&2
+    exit 1
+fi
 grep -Fq 'data-sequence="13"' "$TEMP_DIR/static/safety.html"
 grep -Fq 'href="herbal-incompatibilities.html?from=safety"' "$TEMP_DIR/static/safety.html"
 grep -Fq 'data-sequence="13"' "$TEMP_DIR/static/safety-es.html"
@@ -539,6 +545,7 @@ echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre
 echo "OK: el botón superior regresa directamente a Study Guide > Herbology > Library, conservando el idioma."
 echo "OK: todos los controles Dashboard/Library dentro de Study Guide regresan a Herbology > Library; la navegación global de Moodle no se modifica."
 echo "OK: todas las salidas de las secciones de Safety Library, incluida la lectura continua, regresan directamente a Herbology > Study Guide."
+echo "OK: el botón superior de Safety Library se titula Study Guide / Guía de estudio y abre directamente Herbology > Library."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: la regla principal aparece como encabezado superior informativo, sin pregunta ni control desplegable."
 echo "OK: los otros cuatro encabezados mezclan pregunta y respuesta breve en la misma barra desplegable."
