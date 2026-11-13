@@ -958,7 +958,7 @@ echo $OUTPUT->header();
                                     <span><?php echo s($ises ? 'Preparación y decocción' : 'Preparation & Decoction'); ?><small><?php echo s($ises ? 'El procesamiento y el momento cambian dirección, potencia y toxicidad' : 'Processing and timing change direction, potency and toxicity'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                                 <a class="subject-study-library__journey-option" href="<?php echo $safetylibraryurl->out(false); ?>">
-                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '13 secciones · incluye incompatibilidades' : '13 sections · includes incompatibilities'); ?></small></span><span aria-hidden="true">›</span>
+                                    <span><?php echo s($tr('Safety Library')); ?><small><?php echo s($ises ? '12 secciones · incluye incompatibilidades' : '12 sections · includes incompatibilities'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>
                             </nav>
                         </section>
