@@ -116,8 +116,8 @@ fi
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article class=\"comparison-card\"") !== 12 || strpos($html, "data-sequence=\"1\"") !== false) { exit(1); }' "$TEMP_DIR/static/safety.html"
 php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article class=\"comparison-card\"") !== 12 || strpos($html, "data-sequence=\"1\"") !== false) { exit(1); }' "$TEMP_DIR/static/safety-es.html"
 grep -Fq 'href="herbal-incompatibilities-es.html?from=safety"' "$TEMP_DIR/static/safety-es.html"
-grep -Fq 'href="safety.html">← Safety Library' "$TEMP_DIR/static/herbal-incompatibilities.html"
-grep -Fq 'href="safety-es.html">← Biblioteca de Seguridad' "$TEMP_DIR/static/herbal-incompatibilities-es.html"
+grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/herbal-incompatibilities.html"
+grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/herbal-incompatibilities-es.html"
 grep -Fq "<?php echo s(\$ises ? 'Guía de estudio' : 'Study Guide'); ?>" "$TEMP_DIR/moodle/study-guide.php"
 if grep -Fq 'Choose a Board Level activity' "$TEMP_DIR/moodle/study-guide.php" || grep -Fq 'Elige una actividad Board Level' "$TEMP_DIR/moodle/study-guide.php"; then
     echo "ERROR: permanece el título anterior del mapa principal." >&2
@@ -529,7 +529,7 @@ echo "OK: Cautions & Contraindications aparece como herramienta independiente en
 echo "OK: Cautions & Contraindications muestra 25 precauciones de monografía y 60 hierbas con advertencia de embarazo del guideline."
 echo "OK: las filas muestran la frase exacta del guideline; los filtros solo buscan los términos “contraindicated”, “avoid” y “use cautiously”."
 echo "OK: el título de Pregnancy & lactation permanece visible mientras se recorre su sección."
-echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library, con navegación de ida y regreso."
+echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library y sus controles de salida regresan a Study Guide."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
 echo "OK: Formula Category Visual Tree recrea los mapas 1–5 como SVG enlazado, con zoom, pantalla completa y descarga."
 echo "OK: Visual Tree Map aparece como el primer botón, a la izquierda de los modos Official y Full source."
