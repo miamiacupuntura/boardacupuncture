@@ -22,6 +22,7 @@ $fromchief = $fromcontext === 'chief';
 $fromingredients = $fromcontext === 'ingredients';
 $fromformula = $fromcontext === 'formula' && $returnformula !== '';
 $fromsmart = $fromcontext === 'smart';
+$fromcautions = $fromcontext === 'cautions';
 $returnchapter = optional_param('returnchapter', '', PARAM_FILE);
 $returnorigin = optional_param('returnorigin', '', PARAM_ALPHA);
 $incompatibilitychapters = [
@@ -54,7 +55,7 @@ $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap || $fromformulatree) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromcautions || $fromincompatibilities || $fromoriginmap || $fromformulatree) {
     $baseparams['from'] = $fromcontext;
 }
 if ($fromformula) {
@@ -92,7 +93,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap || $fromformulatree) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromcautions || $fromincompatibilities || $fromoriginmap || $fromformulatree) {
     $languageparams['from'] = $fromcontext;
 }
 if ($fromformula) {
@@ -141,6 +142,9 @@ $incompatibilityreturnparams = $returnorigin !== '' ? ['origin' => $returnorigin
 $incompatibilityreturnurl = new moodle_url(
     '/study-guide/comparisons/' . $localizedreturnchapter,
     $incompatibilityreturnparams
+);
+$cautionsreturnurl = new moodle_url(
+    '/study-guide/comparisons/' . ($ises ? 'cautions-contraindications-es.html' : 'cautions-contraindications.html')
 );
 $originmapreturnurl = new moodle_url(
     '/study-guide/comparisons/' . ($ises ? 'guideline-herbs-by-origin-es.html' : 'guideline-herbs-by-origin.html'),
@@ -512,6 +516,8 @@ echo $OUTPUT->header();
                 <a class="single-herbs-list__button" href="<?php echo $formulatreereturnurl->out(false); ?>"><?php echo $ises ? '← Volver al mapa visual de fórmulas' : '← Back to Formula Visual Tree'; ?></a>
             <?php } else if ($fromoriginmap) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $originmapreturnurl->out(false); ?>"><?php echo $ises ? '← Volver a sustancias por origen' : '← Back to medicinals by origin'; ?></a>
+            <?php } else if ($fromcautions) { ?>
+                <a class="single-herbs-list__button" href="<?php echo $cautionsreturnurl->out(false); ?>"><?php echo $ises ? '← Volver a Precauciones y contraindicaciones' : '← Back to Cautions & Contraindications'; ?></a>
             <?php } else if ($fromincompatibilities) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $incompatibilityreturnurl->out(false); ?>"><?php echo $ises ? '← Volver al capítulo de incompatibilidades' : '← Back to incompatibility chapter'; ?></a>
             <?php } else if ($fromsmart) { ?>
@@ -557,7 +563,7 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap || $fromformulatree) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromcautions || $fromincompatibilities || $fromoriginmap || $fromformulatree) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <?php if ($fromformula) { ?><input type="hidden" name="returnformula" value="<?php echo s($returnformula); ?>"><?php } ?>
             <?php if ($fromformulatree) { ?><input type="hidden" name="treepage" value="<?php echo $treepage; ?>"><input type="hidden" name="treemode" value="<?php echo s($treemode); ?>"><?php } ?>
             <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>
