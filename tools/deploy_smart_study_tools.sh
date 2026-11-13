@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -68,6 +68,16 @@ grep -Fq 'returnorigin=category' "$TEMP_DIR/static/guideline-herbs-by-origin.htm
 grep -Fq 'datalist id="source-search-options"' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
 grep -Fq 'data-source-select' "$TEMP_DIR/static/guideline-herbs-by-origin.html"
 grep -Fq 'source-mobile-view' "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"
+grep -Fq 'Formula Category Map' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '/study-guide/comparisons/formula-category-map.html' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '$fromformulamap' "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq 'Back to Formula Category Map' "$TEMP_DIR/moodle/formula-list.php"
+grep -Fq 'Official guideline only · 181' "$TEMP_DIR/static/formula-category-map.html"
+grep -Fq 'Include source references · 326' "$TEMP_DIR/static/formula-category-map.html"
+grep -Fq 'Solo guideline oficial · 181' "$TEMP_DIR/static/formula-category-map-es.html"
+grep -Fq '18 supplied branches + additional section' "$TEMP_DIR/static/formula-category-map.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "\"o\":true") !== 181 || substr_count($html, "\"o\":false") !== 145 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/formula-category-map.html"
+php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "\"o\":true") !== 181 || substr_count($html, "\"o\":false") !== 145 || preg_match("/\\p{Han}/u", $html)) { exit(1); }' "$TEMP_DIR/static/formula-category-map-es.html"
 if grep -Fq 'data-category-jump' "$TEMP_DIR/static/guideline-herbs-by-origin.html" "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"; then
     echo "ERROR: todavía existen los 33 botones de salto por categoría." >&2
     exit 1
@@ -280,6 +290,8 @@ echo "OK: clasificación completa: 24 animales, 8 minerales y 272 vegetales/fún
 echo "OK: botón By Bensky Category agrupa las 304 sustancias en las 33 categorías oficiales."
 echo "OK: los 33 botones de categorías fueron reemplazados por una barra de búsqueda con sugerencias."
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
+echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
+echo "OK: el mapa separa 181 fórmulas oficiales de 145 referencias de la fuente y conserva regreso contextual."
 echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin enlace."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
