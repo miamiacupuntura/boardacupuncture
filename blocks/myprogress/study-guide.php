@@ -897,7 +897,7 @@ echo $OUTPUT->header();
                 <section class="subject-study-library__map" aria-labelledby="library-navigation-map-title">
                     <header class="subject-study-library__map-header">
                         <div class="subject-study-library__map-copy">
-                            <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Elige una actividad Board Level' : 'Choose a Board Level activity'); ?></h3>
+                            <h3 id="library-navigation-map-title"><?php echo s($ises ? 'Guía de estudio' : 'Study Guide'); ?></h3>
                             <p><?php echo s($ises
                                 ? 'Cada bloque contiene las opciones que realmente pertenecen a esa actividad.'
                                 : 'Each block contains the actual options that belong to that activity.'); ?></p>
