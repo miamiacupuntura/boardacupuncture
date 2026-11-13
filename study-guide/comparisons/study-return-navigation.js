@@ -8,7 +8,9 @@
 
   const spanish = document.documentElement.lang.toLowerCase().startsWith('es')
     || /-es\.html$/.test(window.location.pathname);
-  const dashboardUrl = '/my/';
+  const studyGuideUrl = spanish
+    ? '/blocks/myprogress/study-guide.php?area=herbology&view=library&lang=es'
+    : '/blocks/myprogress/study-guide.php?area=herbology&view=library';
   let actions = topbar.querySelector('.herb-bank-top-actions,.formula-modifications__top-actions');
 
   if (!actions) {
@@ -27,23 +29,24 @@
 
   [...actions.querySelectorAll('a')].forEach(link => {
     const url = new URL(link.href, window.location.href);
-    if (url.pathname === '/blocks/myprogress/study-guide.php'
-        && url.searchParams.get('area') === 'herbology') {
+    if (url.pathname === '/my/') {
       link.remove();
     }
   });
 
-  let dashboardLink = [...actions.querySelectorAll('a')].find(link => {
+  let studyGuideLink = [...actions.querySelectorAll('a')].find(link => {
     const url = new URL(link.href, window.location.href);
-    return url.pathname === dashboardUrl;
+    return url.pathname === '/blocks/myprogress/study-guide.php'
+      && url.searchParams.get('area') === 'herbology'
+      && url.searchParams.get('view') === 'library';
   });
-  if (!dashboardLink) {
-    dashboardLink = document.createElement('a');
-    dashboardLink.className = 'comparison-back';
-    dashboardLink.href = dashboardUrl;
-    actions.appendChild(dashboardLink);
+  if (!studyGuideLink) {
+    studyGuideLink = document.createElement('a');
+    studyGuideLink.className = 'comparison-back';
+    actions.appendChild(studyGuideLink);
   }
-  dashboardLink.textContent = spanish ? '← Panel principal' : '← Back to Dashboard';
+  studyGuideLink.href = studyGuideUrl;
+  studyGuideLink.textContent = spanish ? '← Guía de estudio' : '← Study Guide';
 
   if (document.querySelector('.practice-study-route')) {
     return;

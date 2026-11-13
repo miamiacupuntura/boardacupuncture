@@ -2,7 +2,7 @@
   'use strict';
 
   const returnNavigation = document.createElement('script');
-  returnNavigation.src = 'study-return-navigation.js?v=20261031-1';
+  returnNavigation.src = 'study-return-navigation.js?v=20261113-3';
   document.head.appendChild(returnNavigation);
 
   const params = new URLSearchParams(window.location.search);

@@ -56,6 +56,11 @@ $html = preg_replace(
     $html,
     1
 );
+$html = preg_replace(
+    '#comparisons\\.js\\?v=[^"]+#',
+    'comparisons.js?v=20261113-3',
+    $html
+);
 $html = str_replace('<head>', '<head><base href="/study-guide/comparisons/">', $html);
 
 header('Content-Type: text/html; charset=utf-8');
