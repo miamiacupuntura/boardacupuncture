@@ -158,6 +158,15 @@ for file in "${COMPARISON_FILES_ES[@]}"; do
         exit 1
     fi
 done
+PERMANENT_STUDY_GUIDE_FILES_EN=(dui-yao.html herb-comparison-bank.html formula-practice.html dui-yao-practice.html miscellaneous-practice.html)
+PERMANENT_STUDY_GUIDE_FILES_ES=(dui-yao-es.html herb-comparison-bank-es.html formula-practice-es.html dui-yao-practice-es.html miscellaneous-practice-es.html)
+for file in "${PERMANENT_STUDY_GUIDE_FILES_EN[@]}"; do
+    grep -Fq 'href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/$file"
+done
+for file in "${PERMANENT_STUDY_GUIDE_FILES_ES[@]}"; do
+    grep -Fq 'href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/$file"
+done
+
 grep -Fq "'area' => 'herbology'," "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "'view' => 'library'," "$TEMP_DIR/moodle/herbs-category-comparison.php"
 grep -Fq "'← Guía de estudio' : '← Study Guide'" "$TEMP_DIR/moodle/herbs-category-comparison.php"
@@ -689,6 +698,7 @@ echo "OK: study-return-navigation.js ya no elimina Study Guide ni crea Back to D
 echo "OK: las 13 opciones de Secondary Study Guide regresan a Herbology > Library en inglés y español, con etiquetas Study Guide normalizadas."
 echo "OK: las 9 opciones de Comparison regresan a Herbology > Library en inglés y español, sin enlaces a Dashboard."
 echo "OK: se retiró el botón redundante Board Level Activities de 16 páginas que ya muestran navegación contextual de Study Guide."
+echo "OK: 10 páginas que no cargan la navegación compartida conservan un botón visible de regreso a Study Guide."
 echo "OK: Safety Library usa el nuevo archivo safety-library.html; tanto el logotipo como el botón superior regresan a Herbology > Study Guide y no queda ninguna salida a /my/."
 echo "OK: la página pública safety-library.html fue descargada y validada después de instalar todas las rutas estáticas detectadas."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
