@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety.html safety-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html safety.html safety-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -167,6 +167,11 @@ grep -Fq '$fromformulatree' "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq 'Back to Formula Visual Tree' "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq 'Back to Visual Tree Map' "$TEMP_DIR/moodle/formula-list.php"
 grep -Fq 'Searchable cards + visual tree' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '$preparationdecoctionurl' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'Preparation & Decoction' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'safety-preparation.html' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq '<h1 class="study-note__title">Preparation &amp; Decoction</h1>' "$TEMP_DIR/static/safety-preparation.html"
+grep -Fq '<h1 class="study-note__title">Preparación y Decocción</h1>' "$TEMP_DIR/static/safety-preparation-es.html"
 if grep -Fq 'data-category-jump' "$TEMP_DIR/static/guideline-herbs-by-origin.html" "$TEMP_DIR/static/guideline-herbs-by-origin-es.html"; then
     echo "ERROR: todavía existen los 33 botones de salto por categoría." >&2
     exit 1
@@ -380,6 +385,7 @@ echo "OK: botón By Bensky Category agrupa las 304 sustancias en las 33 categor�
 echo "OK: los 33 botones de categorías fueron reemplazados por una barra de búsqueda con sugerencias."
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào & Combinations y Safety."
+echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
 echo "OK: Herbal Incompatibilities está integrado como la sección 13 de Safety Library, con navegación de ida y regreso."
 echo "OK: Formula Category Map convierte las cinco imágenes en 18 ramas interactivas y una sección adicional."
 echo "OK: Formula Category Visual Tree recrea los mapas 1–5 como SVG enlazado, con zoom, pantalla completa y descarga."
