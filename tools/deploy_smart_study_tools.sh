@@ -90,6 +90,11 @@ php -r '$html=file_get_contents($argv[1]); if (substr_count($html, "<article cla
 grep -Fq 'href="herbal-incompatibilities-es.html?from=safety"' "$TEMP_DIR/static/safety-es.html"
 grep -Fq 'href="safety.html">← Safety Library' "$TEMP_DIR/static/herbal-incompatibilities.html"
 grep -Fq 'href="safety-es.html">← Biblioteca de Seguridad' "$TEMP_DIR/static/herbal-incompatibilities-es.html"
+grep -Fq "<?php echo s(\$ises ? 'Guía de estudio' : 'Study Guide'); ?>" "$TEMP_DIR/moodle/study-guide.php"
+if grep -Fq 'Choose a Board Level activity' "$TEMP_DIR/moodle/study-guide.php" || grep -Fq 'Elige una actividad Board Level' "$TEMP_DIR/moodle/study-guide.php"; then
+    echo "ERROR: permanece el título anterior del mapa principal." >&2
+    exit 1
+fi
 grep -Fq 'subject-study-library__option-group' "$TEMP_DIR/moodle/study-guide.php"
 php -r '$html=file_get_contents($argv[1]); $groups=["single-herbs","formulas","dui-yao","safety"]; $previous=-1; foreach ($groups as $group) { $position=strpos($html, "data-main-guide-group=\"".$group."\""); if ($position === false || $position <= $previous) { exit(1); } $previous=$position; }' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '/study-guide/comparisons/formula-category-map.html' "$TEMP_DIR/moodle/study-guide.php"
@@ -474,6 +479,7 @@ echo "OK: botón By Bensky Category agrupa las 304 sustancias en las 33 categor�
 echo "OK: los 33 botones de categorías fueron reemplazados por una barra de búsqueda con sugerencias."
 echo "OK: en teléfonos, las cuatro vistas usan un selector compacto en lugar de una fila de botones."
 echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào & Combinations y Safety."
+echo "OK: el encabezado del mapa principal se titula Study Guide / Guía de estudio."
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
 echo "OK: el botón superior de Preparation & Decoction regresa al Dashboard."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
