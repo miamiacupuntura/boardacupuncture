@@ -41,6 +41,11 @@ $fromincompatibilities = $fromcontext === 'incompatibilities'
     && in_array($returnchapter, $incompatibilitychapters, true);
 $returnorigin = in_array($returnorigin, ['animal', 'plant', 'mineral', 'category'], true) ? $returnorigin : '';
 $fromoriginmap = $fromcontext === 'originmap';
+$fromformulatree = $fromcontext === 'formulatree';
+$treepage = optional_param('treepage', 1, PARAM_INT);
+$treepage = $treepage >= 1 && $treepage <= 6 ? $treepage : 1;
+$treemode = optional_param('treemode', 'all', PARAM_ALPHA);
+$treemode = $treemode === 'official' ? 'official' : 'all';
 $smartmode = optional_param('smartmode', 'herb', PARAM_ALPHA);
 $smartitem = trim(optional_param('smartitem', '', PARAM_TEXT));
 $smartq = trim(optional_param('smartq', '', PARAM_TEXT));
@@ -49,7 +54,7 @@ $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap || $fromformulatree) {
     $baseparams['from'] = $fromcontext;
 }
 if ($fromformula) {
@@ -61,6 +66,10 @@ if ($fromincompatibilities) {
 }
 if ($fromoriginmap && $returnorigin !== '') {
     $baseparams['returnorigin'] = $returnorigin;
+}
+if ($fromformulatree) {
+    $baseparams['treepage'] = $treepage;
+    $baseparams['treemode'] = $treemode;
 }
 if ($fromsmart) {
     $baseparams['smartmode'] = $smartmode;
@@ -83,7 +92,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap) {
+if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap || $fromformulatree) {
     $languageparams['from'] = $fromcontext;
 }
 if ($fromformula) {
@@ -95,6 +104,10 @@ if ($fromincompatibilities) {
 }
 if ($fromoriginmap && $returnorigin !== '') {
     $languageparams['returnorigin'] = $returnorigin;
+}
+if ($fromformulatree) {
+    $languageparams['treepage'] = $treepage;
+    $languageparams['treemode'] = $treemode;
 }
 if ($fromsmart) {
     $languageparams['smartmode'] = $smartmode;
@@ -132,6 +145,10 @@ $incompatibilityreturnurl = new moodle_url(
 $originmapreturnurl = new moodle_url(
     '/study-guide/comparisons/' . ($ises ? 'guideline-herbs-by-origin-es.html' : 'guideline-herbs-by-origin.html'),
     $returnorigin !== '' ? ['origin' => $returnorigin] : []
+);
+$formulatreereturnurl = new moodle_url(
+    '/study-guide/comparisons/' . ($ises ? 'formula-category-tree-map-es.html' : 'formula-category-tree-map.html'),
+    ['page' => $treepage, 'mode' => $treemode]
 );
 
 $indexpath = __DIR__ . '/single-herb-card-index.json';
@@ -491,7 +508,9 @@ echo $OUTPUT->header();
                 : 'The 304 official guideline herbs, organized alphabetically or in the conventional sequence of the 33 Bensky categories.'; ?></p>
         </div>
         <div class="single-herbs-list__actions">
-            <?php if ($fromoriginmap) { ?>
+            <?php if ($fromformulatree) { ?>
+                <a class="single-herbs-list__button" href="<?php echo $formulatreereturnurl->out(false); ?>"><?php echo $ises ? '← Volver al mapa visual de fórmulas' : '← Back to Formula Visual Tree'; ?></a>
+            <?php } else if ($fromoriginmap) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $originmapreturnurl->out(false); ?>"><?php echo $ises ? '← Volver a sustancias por origen' : '← Back to medicinals by origin'; ?></a>
             <?php } else if ($fromincompatibilities) { ?>
                 <a class="single-herbs-list__button" href="<?php echo $incompatibilityreturnurl->out(false); ?>"><?php echo $ises ? '← Volver al capítulo de incompatibilidades' : '← Back to incompatibility chapter'; ?></a>
@@ -538,8 +557,9 @@ echo $OUTPUT->header();
         <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromincompatibilities || $fromoriginmap || $fromformulatree) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <?php if ($fromformula) { ?><input type="hidden" name="returnformula" value="<?php echo s($returnformula); ?>"><?php } ?>
+            <?php if ($fromformulatree) { ?><input type="hidden" name="treepage" value="<?php echo $treepage; ?>"><input type="hidden" name="treemode" value="<?php echo s($treemode); ?>"><?php } ?>
             <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>
             <label>
                 <span><?php echo $ises ? 'Buscar hierba' : 'Search herb'; ?></span>
