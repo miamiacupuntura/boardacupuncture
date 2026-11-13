@@ -121,7 +121,9 @@ if ($fromlibrary) {
     $studyguideparams['from'] = 'library';
 }
 $studyguideurl = new moodle_url('/blocks/myprogress/single-herbs-study-guide.php', $studyguideparams);
-$dashboardurl = new moodle_url('/my/');
+$dashboardurl = new moodle_url('/blocks/myprogress/study-guide.php', $ises
+    ? ['area' => 'herbology', 'view' => 'library', 'lang' => 'es']
+    : ['area' => 'herbology', 'view' => 'library']);
 $chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-herbs-property-es.html' : 'chief-herbs-property.html'));
 $formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.php', $ises ? ['lang' => 'es'] : []);
 $formulabackparams = ['formula' => $returnformula, 'sort' => 'az'];
@@ -534,7 +536,7 @@ echo $OUTPUT->header();
                 <a class="single-herbs-list__button" href="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Single Herbs' : '← Single Herbs'; ?></a>
             <?php } ?>
             <a class="single-herbs-list__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-            <a class="single-herbs-list__button" href="<?php echo $dashboardurl->out(false); ?>">Dashboard</a>
+            <a class="single-herbs-list__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a>
         </div>
     </header>
 

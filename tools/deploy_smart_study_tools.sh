@@ -23,7 +23,7 @@ mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/data" "$TEMP_DIR/static"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formula-list.php single-herbs-list.php herbs-category-comparison.php)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
-STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html)
+STATIC_FILES=(formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -35,6 +35,34 @@ for file in "${DATA_FILES[@]}"; do
 done
 for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
+done
+
+RETURN_LINK_FILES_EN=(advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html herbal-incompatibilities.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html cautions-contraindications.html index.html safety-preparation.html)
+RETURN_LINK_FILES_ES=(advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html herbal-incompatibilities-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html cautions-contraindications-es.html index-es.html safety-preparation-es.html)
+
+for file in "${RETURN_LINK_FILES_EN[@]}"; do
+    grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library' "$TEMP_DIR/static/$file"
+done
+for file in "${RETURN_LINK_FILES_ES[@]}"; do
+    grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es' "$TEMP_DIR/static/$file"
+done
+if grep -Fq 'href="/my/">← Dashboard' "$TEMP_DIR"/static/*.html \
+    || grep -Fq 'href="/my/">← Back to Dashboard' "$TEMP_DIR"/static/*.html \
+    || grep -Fq 'href="safety.html">Safety Library' "$TEMP_DIR"/static/*.html \
+    || grep -Fq 'href="safety.html">← Safety Library' "$TEMP_DIR"/static/*.html \
+    || grep -Fq 'href="safety-es.html">Biblioteca de Seguridad' "$TEMP_DIR"/static/*.html \
+    || grep -Fq 'href="safety-es.html">← Biblioteca de Seguridad' "$TEMP_DIR"/static/*.html; then
+    echo "ERROR: queda un control Dashboard/Library con un destino anterior dentro de Study Guide." >&2
+    exit 1
+fi
+for file in formula-list.php single-herbs-list.php; do
+    grep -Fq "new moodle_url('/blocks/myprogress/study-guide.php'" "$TEMP_DIR/moodle/$file"
+    grep -Fq "'area' => 'herbology', 'view' => 'library'" "$TEMP_DIR/moodle/$file"
+    grep -Fq "'Guía de estudio' : 'Study Guide'" "$TEMP_DIR/moodle/$file"
+    if grep -Fq "\$dashboardurl = new moodle_url('/my/');" "$TEMP_DIR/moodle/$file"; then
+        echo "ERROR: $file todavía dirige Dashboard a /my/." >&2
+        exit 1
+    fi
 done
 
 for file in "$TEMP_DIR"/static/herbal-incompatibilities*.html "$TEMP_DIR"/static/incompatibilities-*.html; do
@@ -490,6 +518,7 @@ echo "OK: Main Study Guide está organizado en Single Herbs, Formulas, Duì Yào
 echo "OK: el encabezado del mapa principal se titula Study Guide / Guía de estudio."
 echo "OK: Preparation & Decoction aparece en Safety de la guía principal y abre directamente Safety 1."
 echo "OK: el botón superior regresa directamente a Study Guide > Herbology > Library, conservando el idioma."
+echo "OK: todos los controles Dashboard/Library dentro de Study Guide regresan a Herbology > Library; la navegación global de Moodle no se modifica."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: la regla principal aparece como encabezado superior informativo, sin pregunta ni control desplegable."
 echo "OK: los otros cuatro encabezados mezclan pregunta y respuesta breve en la misma barra desplegable."
