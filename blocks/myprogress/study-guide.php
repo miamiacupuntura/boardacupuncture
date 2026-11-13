@@ -609,7 +609,8 @@ $chiefherbsmapurl = new moodle_url(
     $ises ? ['lang' => 'es'] : []
 );
 $safetylibraryurl = new moodle_url(
-    $ises ? '/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html'
+    $ises ? '/study-guide/comparisons/safety-es.html' : '/study-guide/comparisons/safety.html',
+    ['v' => '20261113-4']
 );
 $preparationdecoctionurl = new moodle_url(
     $ises

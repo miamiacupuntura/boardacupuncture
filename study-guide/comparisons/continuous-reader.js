@@ -7,6 +7,7 @@
     'most-important-formulas', 'formula-navigator', 'formula-theory', 'herbal-incompatibilities',
     'secondary-actions'
   ]);
+  const readerVersion = '20261113-4';
   const params = new URLSearchParams(window.location.search);
   const returnFormula = (params.get('returnformula') || '').trim();
   const returnQuery = returnFormula ? `&returnformula=${encodeURIComponent(returnFormula)}` : '';
@@ -15,6 +16,7 @@
   const es = language === 'es';
   const suffix = es ? '-es' : '';
   const indexUrl = `${group}${suffix}.html`;
+  const indexFetchUrl = `${indexUrl}?v=${readerVersion}`;
   const studyGuideUrl = `/blocks/myprogress/study-guide.php?area=herbology&view=library${es ? '&lang=es' : ''}`;
   const exitUrl = group === 'safety' ? studyGuideUrl : indexUrl;
   let chapters = [];
@@ -49,7 +51,7 @@
     document.documentElement.lang = language;
     ui.brand.textContent = es ? 'Lectura Continua' : 'Continuous Reading';
     ui.language.textContent = es ? 'English' : 'Español';
-    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}`;
+    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}&v=${readerVersion}`;
     ui.dashboard.textContent = es ? '← Guía de estudio' : '← Study Guide';
     ui.dashboard.href = studyGuideUrl;
     ui.previous.textContent = ui.bottomPrevious.textContent = es ? '← Anterior' : '← Previous';
@@ -85,8 +87,9 @@
     url.searchParams.set('group', group);
     url.searchParams.set('lang', language);
     url.searchParams.set('chapter', String(current + 1));
+    url.searchParams.set('v', readerVersion);
     history.replaceState({chapter: current + 1}, '', url);
-    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}`;
+    ui.language.href = `continuous-reader.html?group=${encodeURIComponent(group)}&lang=${es ? 'en' : 'es'}&chapter=${current + 1}${returnQuery}&v=${readerVersion}`;
   }
 
   async function loadChapter(position, scroll = true) {
@@ -133,7 +136,7 @@
     setLanguageLabels();
     ui.index.href = ui.bottomIndex.href = ui.groupLink.href = exitUrl;
     try {
-      const response = await fetch(indexUrl, {cache: 'no-cache'});
+      const response = await fetch(indexFetchUrl, {cache: 'no-cache'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
       const groupTitle = doc.querySelector('.comparison-hero h1')?.textContent?.trim();

@@ -125,6 +125,13 @@ if grep -Fq '$herbalincompatibilitiesurl' "$TEMP_DIR/moodle/study-guide.php"; th
   echo "ERROR: Herbal Incompatibilities todavía aparece como opción separada en Main Study Guide." >&2
   exit 1
 fi
+grep -Fq "['v' => '20261113-4']" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"' "$TEMP_DIR/static/safety.html"
+grep -Fq 'continuous-reader.html?group=safety&amp;lang=en&amp;v=20261113-4&amp;chapter=2' "$TEMP_DIR/static/safety.html"
+grep -Fq 'continuous-reader.html?group=safety&amp;lang=es&amp;v=20261113-4&amp;chapter=2' "$TEMP_DIR/static/safety-es.html"
+grep -Fq 'continuous-reader.js?v=20261113-4' "$TEMP_DIR/static/continuous-reader.html"
+grep -Fq "const readerVersion = '20261113-4';" "$TEMP_DIR/static/continuous-reader.js"
+grep -Fq 'const indexFetchUrl = `${indexUrl}?v=${readerVersion}`;' "$TEMP_DIR/static/continuous-reader.js"
 grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library">← Study Guide</a>' "$TEMP_DIR/static/safety.html"
 grep -Fq '<a class="comparison-back" href="/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es">← Guía de estudio</a>' "$TEMP_DIR/static/safety-es.html"
 if grep -Eiq 'Back to Dashboard|Board Level Activities|Actividades Board Level' "$TEMP_DIR/static/safety.html" "$TEMP_DIR/static/safety-es.html"; then
@@ -546,6 +553,7 @@ echo "OK: el botón superior regresa directamente a Study Guide > Herbology > Li
 echo "OK: todos los controles Dashboard/Library dentro de Study Guide regresan a Herbology > Library; la navegación global de Moodle no se modifica."
 echo "OK: todas las salidas de las secciones de Safety Library, incluida la lectura continua, regresan directamente a Herbology > Study Guide."
 echo "OK: el botón superior de Safety Library se titula Study Guide / Guía de estudio y abre directamente Herbology > Library."
+echo "OK: Safety Library y Continuous Reader usan versión de caché 20261113-4 para impedir que el navegador conserve los botones anteriores."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
 echo "OK: la regla principal aparece como encabezado superior informativo, sin pregunta ni control desplegable."
 echo "OK: los otros cuatro encabezados mezclan pregunta y respuesta breve en la misma barra desplegable."
