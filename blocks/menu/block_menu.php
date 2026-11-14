@@ -198,6 +198,10 @@ class block_menu extends block_base {
         $loginurl = (new moodle_url('/login/index.php'))->out(false);
         $signupurl = (new moodle_url('/login/signup.php'))->out(false);
         $isguestview = !isloggedin() || isguestuser();
+        $levelview = optional_param('level', 'school', PARAM_ALPHA);
+        if (!in_array($levelview, ['school', 'board'], true)) {
+            $levelview = 'school';
+        }
 
         // One 30-day purchase unlocks all five Board areas.
         $membershipcourseid = 116;
@@ -459,14 +463,25 @@ class block_menu extends block_base {
                 $complementarycoursebuttons .= $this->complementary_course_button($coursename);
             }
             $boardguidelinesurl = (new moodle_url('/study-guide/board-guidelines.html'))->out(false);
+            $schoollevelurl = (new moodle_url('/my/', ['level' => 'school']))->out(false);
+            $boardlevelurl = (new moodle_url('/my/', ['level' => 'board']))->out(false);
+            $schoolactive = $levelview === 'school' ? ' is-active' : '';
+            $boardactive = $levelview === 'board' ? ' is-active' : '';
+            $schoolcurrent = $levelview === 'school' ? ' aria-current="page"' : '';
+            $boardcurrent = $levelview === 'board' ? ' aria-current="page"' : '';
 
-            $this->content->text = <<<HTML
-<section class="board-hub" aria-labelledby="board-hub-title">
-  <header class="board-hub__heading">
-    <p>BOARD PREPARATION</p>
-    <h2 id="board-hub-title">Your NCBAHM Board Preparation</h2>
-    <span>Continue School Level resources or open the separate Board Level Practice and Simulation workspaces.</span>
-  </header>
+            $levelnavigation = <<<HTML
+  <nav class="board-hub__level-nav" aria-label="Choose School Level or Board Level">
+    <a class="board-hub__level-link{$schoolactive}" href="{$schoollevelurl}"{$schoolcurrent}>School Level</a>
+    <a class="board-hub__level-link{$boardactive}" href="{$boardlevelurl}"{$boardcurrent}>Board Level</a>
+  </nav>
+HTML;
+
+            if ($levelview === 'board') {
+                $leveleyebrow = 'BOARD LEVEL';
+                $leveltitle = 'Your Board Level Activities';
+                $levelintro = 'Open Study Guides, Board practice, quizzes, exams and simulations without mixing School Level resources.';
+                $levelcontent = <<<HTML
   <aside class="board-guidelines-dashboard-panel" aria-label="NCBAHM Board Guidelines">
     <div>
       <strong>NCBAHM Board Guidelines</strong>
@@ -474,8 +489,14 @@ class block_menu extends block_base {
     </div>
     <a class="board-guidelines-dashboard-link" href="{$boardguidelinesurl}">Open Board Guidelines</a>
   </aside>
-  <div class="board-hub__grid">{$boardcards}</div>
   <div class="board-hub__grid board-hub__grid--board-level" aria-label="Board Level modules">{$boardlevelcards}</div>
+HTML;
+            } else {
+                $leveleyebrow = 'SCHOOL LEVEL';
+                $leveltitle = 'Your School Level Activities';
+                $levelintro = 'Continue questions, simulations, exam keys and complementary courses without mixing Board Level workspaces.';
+                $levelcontent = <<<HTML
+  <div class="board-hub__grid" aria-label="School Level modules">{$boardcards}</div>
   <aside class="module-school-dashboard-panel" aria-labelledby="module-school-dashboard-title">
     <div class="module-school-dashboard-panel__copy">
       <p>COMPLEMENTARY COURSES</p>
@@ -486,6 +507,59 @@ class block_menu extends block_base {
       {$complementarycoursebuttons}
     </nav>
   </aside>
+HTML;
+            }
+
+            $this->content->text = <<<HTML
+<style>
+.board-hub__level-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 20px 0 24px;
+}
+.board-hub__level-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 11px 18px;
+    border: 1px solid #b9cbd3;
+    border-radius: 10px;
+    background: #fff;
+    color: #12324a;
+    font-weight: 800;
+    text-decoration: none;
+}
+.board-hub__level-link:hover,
+.board-hub__level-link:focus {
+    border-color: #087f7b;
+    color: #056560;
+    text-decoration: none;
+}
+.board-hub__level-link.is-active {
+    border-color: #087f7b;
+    background: #087f7b;
+    color: #fff;
+}
+.board-hub__level-link:focus-visible {
+    outline: 3px solid #ff7a2b;
+    outline-offset: 2px;
+}
+@media (max-width: 640px) {
+    .board-hub__level-nav {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+<section class="board-hub board-hub--{$levelview}" aria-labelledby="board-hub-title">
+  <header class="board-hub__heading">
+    <p>{$leveleyebrow}</p>
+    <h2 id="board-hub-title">{$leveltitle}</h2>
+    <span>{$levelintro}</span>
+  </header>
+{$levelnavigation}
+{$levelcontent}
 </section>
 HTML;
             return $this->content;
