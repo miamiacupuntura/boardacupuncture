@@ -479,7 +479,7 @@ HTML;
 
             if ($levelview === 'board') {
                 $leveleyebrow = 'NCBAHM COMPREHENSIVE REVIEW';
-                $leveltitle = 'Your NCBAHM Comprehensive Review Activities';
+                $leveltitle = 'NCBAHM Comprehensive Review';
                 $levelintro = 'Open Study Guides, Board practice, quizzes, exams and simulations without mixing NCCAOM Focused Practice resources.';
                 $levelcontent = <<<HTML
   <aside class="board-guidelines-dashboard-panel" aria-label="NCBAHM Board Guidelines">
@@ -493,15 +493,15 @@ HTML;
 HTML;
             } else {
                 $leveleyebrow = 'NCCAOM FOCUSED PRACTICE';
-                $leveltitle = 'Your NCCAOM Focused Practice Activities';
+                $leveltitle = 'NCCAOM Focused Practice';
                 $levelintro = 'Continue questions, simulations, exam keys and complementary courses without mixing NCBAHM Comprehensive Review workspaces.';
                 $levelcontent = <<<HTML
   <div class="board-hub__grid" aria-label="NCCAOM Focused Practice modules">{$boardcards}</div>
   <aside class="module-school-dashboard-panel" aria-labelledby="module-school-dashboard-title">
     <div class="module-school-dashboard-panel__copy">
       <p>COMPLEMENTARY COURSES</p>
-      <h3 id="module-school-dashboard-title">Complementary Courses NCCAOM Focused Practice</h3>
-      <span>Open the complementary NCCAOM Focused Practice course you want to study.</span>
+      <h3 id="module-school-dashboard-title">Complementary Courses</h3>
+      <span>Open the complementary courses available in NCCAOM Focused Practice.</span>
     </div>
     <nav class="module-school-dashboard-panel__actions" aria-label="Complementary Courses NCCAOM Focused Practice">
       {$complementarycoursebuttons}
