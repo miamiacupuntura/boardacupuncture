@@ -2522,7 +2522,7 @@ ob_start();
 
         const beginReading = function(text, target, message) {
             const textSegments = String(text || '').split(/\n+/).map(function(segment) {
-                return segment.replace(/\s+/g, ' ').trim();
+                return segment.replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim();
             }).filter(Boolean);
             if (!textSegments.length) {
                 readStatus.textContent = language.indexOf('es') === 0
