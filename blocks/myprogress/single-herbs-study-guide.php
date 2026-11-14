@@ -969,22 +969,22 @@ $yangcomparisoncharts = [
         'title' => 'Sweat-inducing strength',
         'figure' => 'Yang Fig. 2.2',
         'items' => ['Ma Huang' => 100, 'Gui Zhi' => 50, 'Zi Su Ye' => 30, 'Jing Jie' => 20],
-        'interpretation_en' => 'Ma Huang is the strongest sweat-inducing reference at 100. Gui Zhi reaches half that reference at 50, followed by Zi Su Ye at 30 and Jing Jie at 20.',
-        'interpretation_es' => 'Ma Huang es la referencia más fuerte para inducir sudor, con 100. Gui Zhi alcanza la mitad de esa referencia, con 50, seguida por Zi Su Ye con 30 y Jing Jie con 20.',
+        'interpretation_en' => 'All four herbs release the Exterior, but their sweat-inducing strength differs. Ma Huang has the strongest and most direct diaphoretic action. Gui Zhi occupies the intermediate level: it supports Exterior release and harmonizes Nutritive and Defensive Qi with less force. Zi Su Ye and Jing Jie are gentler diaphoretics; their lower position reflects a milder way of releasing the Exterior, while their additional actions help determine when each herb is selected.',
+        'interpretation_es' => 'Las cuatro hierbas liberan el Exterior, pero difieren en su fuerza para inducir sudor. Ma Huang posee la acción diaforética más fuerte y directa. Gui Zhi ocupa el nivel intermedio: favorece la liberación del Exterior y armoniza el Qi Nutritivo y el Qi Defensivo con menor intensidad. Zi Su Ye y Jing Jie son diaforéticas más suaves; su posición inferior refleja una forma más moderada de liberar el Exterior, mientras sus acciones adicionales ayudan a decidir cuándo seleccionar cada hierba.',
     ],
     [
         'title' => 'Light and dispersing quality',
         'figure' => 'Yang Fig. 2.3',
         'items' => ['Ma Huang' => 100, 'Jing Jie' => 80, 'Xin Yi Hua' => 80, 'Fang Feng' => 60, 'Zi Su Ye' => 50, 'Gui Zhi' => 40],
-        'interpretation_en' => 'Ma Huang has the highest light and dispersing index at 100. Jing Jie and Xin Yi Hua follow at 80, Fang Feng at 60, Zi Su Ye at 50, and Gui Zhi at 40. Higher bars indicate a stronger relative light, outward-dispersing quality in this comparison.',
-        'interpretation_es' => 'Ma Huang tiene el índice más alto de cualidad ligera y dispersante, con 100. Jing Jie y Xin Yi Hua siguen con 80, Fang Feng con 60, Zi Su Ye con 50 y Gui Zhi con 40. Las barras más altas indican una cualidad relativa más ligera y más dispersante hacia el exterior en esta comparación.',
+        'interpretation_en' => 'Light and dispersing describes how readily an herb moves outward and acts at the superficial level. Ma Huang shows the strongest outward dispersion. Jing Jie and Xin Yi Hua are also strongly dispersing, while Fang Feng and Zi Su Ye occupy the intermediate range. Gui Zhi is the least light and dispersing of those compared because its profile emphasizes warming, unblocking and harmonizing more than rapid outward diffusion.',
+        'interpretation_es' => 'La cualidad ligera y dispersante describe la facilidad con que una hierba se mueve hacia afuera y actúa en el nivel superficial. Ma Huang muestra la dispersión hacia el exterior más intensa. Jing Jie y Xin Yi Hua también son marcadamente dispersantes, mientras Fang Feng y Zi Su Ye ocupan el rango intermedio. Gui Zhi es la menos ligera y dispersante de las comparadas porque su perfil enfatiza más el calentamiento, el desbloqueo y la armonización que la difusión rápida hacia el exterior.',
     ],
     [
         'title' => 'Expelling exogenous Dampness',
         'figure' => 'Yang Fig. 2.5',
         'items' => ['Qiang Huo' => 70, 'Bai Zhi' => 70, 'Zi Su Ye' => 40, 'Fang Feng' => 40],
-        'interpretation_en' => 'Qiang Huo and Bai Zhi lead the displayed comparison for expelling exogenous Dampness at 70. Zi Su Ye and Fang Feng form the lower group at 40.',
-        'interpretation_es' => 'Qiang Huo y Bai Zhi encabezan la comparación mostrada para expulsar Humedad exógena, con 70. Zi Su Ye y Fang Feng forman el grupo inferior, con 40.',
+        'interpretation_en' => 'Within this group, Qiang Huo and Bai Zhi place the strongest emphasis on expelling exogenous Dampness. Qiang Huo is especially suited when Wind-Cold-Dampness presents with body and upper-back pain, while Bai Zhi combines Exterior release with drying Dampness and a Yangming head-and-face focus. Zi Su Ye and Fang Feng provide a more moderate contribution against Dampness, so this feature is less dominant in their overall profiles.',
+        'interpretation_es' => 'Dentro de este grupo, Qiang Huo y Bai Zhi presentan el mayor énfasis en expulsar Humedad exógena. Qiang Huo destaca cuando el Viento-Frío-Humedad se manifiesta con dolor corporal y de la parte superior de la espalda, mientras Bai Zhi combina la liberación del Exterior con el secado de Humedad y una afinidad por la cabeza y la cara del Yangming. Zi Su Ye y Fang Feng aportan una acción más moderada frente a la Humedad, por lo que esta cualidad es menos dominante en sus perfiles generales.',
     ],
 ];
 
