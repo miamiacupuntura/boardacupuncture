@@ -2567,12 +2567,8 @@ ob_start();
             }, 80);
         };
 
-        const punctuateSelectedPart = function(text) {
-            const cleanText = String(text || '').replace(/\s+/g, ' ').trim();
-            if (!cleanText) {
-                return '';
-            }
-            return /[.!?;:]$/.test(cleanText) ? cleanText : cleanText + '.';
+        const cleanSelectedPart = function(text) {
+            return String(text || '').replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim();
         };
 
         const liveSelectedStudyText = function() {
@@ -2613,7 +2609,7 @@ ob_start();
                 if (node === range.endContainer) {
                     end = range.endOffset;
                 }
-                const selectedPart = punctuateSelectedPart(node.nodeValue.slice(start, end));
+                const selectedPart = cleanSelectedPart(node.nodeValue.slice(start, end));
                 if (selectedPart) {
                     selectedParts.push(selectedPart);
                 }
@@ -2621,7 +2617,7 @@ ob_start();
             }
 
             if (!selectedParts.length) {
-                const fallbackText = punctuateSelectedPart(selection.toString());
+                const fallbackText = cleanSelectedPart(selection.toString());
                 return fallbackText;
             }
             return selectedParts.join('\n');
