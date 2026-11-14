@@ -112,15 +112,15 @@ return [
     'Perilla Leaf' => 'Hoja de perilla',
     'Releases mild Wind-Cold, moves Qi, calms the fetus, relieves morning sickness and may be used for seafood poisoning.' => 'Libera Viento-Frío leve, moviliza el Qi, calma al feto, alivia las náuseas matutinas y puede usarse para intoxicación por mariscos.',
 
-    // Comparative bars from Yang.
-    'Yang comparative fingerprint' => 'Huella comparativa de Yang',
+    // Comparative bars from Yang, the book author.
+    'Comparative fingerprint from Yang, the book author' => 'Huella comparativa de Yang, autor del libro',
     'Use the bars to see what makes each Board herb stand out relative to its neighbors. The view below keeps only the nine herbs in this Board category.' => 'Usa las barras para ver qué hace destacar a cada hierba Board frente a sus vecinas. La vista siguiente conserva solamente las nueve hierbas de esta categoría Board.',
     'Relative warmth' => 'Tibieza relativa',
     'Sweat-inducing strength' => 'Potencia para inducir sudoración',
     'Light and dispersing quality' => 'Cualidad ligera y dispersante',
     'Expelling exogenous Dampness' => 'Expulsión de Humedad exógena',
     'How to read these bars:' => 'Cómo leer estas barras:',
-    'they are relative comparison indices transcribed from Yang, Chapter 2, Figures 2.1, 2.2, 2.3 and 2.5. They are not doses, efficacy percentages or prescribing instructions. Herbs outside this Board category that appear in the original figures are intentionally omitted here.' => 'son índices comparativos relativos transcritos de Yang, capítulo 2, figuras 2.1, 2.2, 2.3 y 2.5. No son dosis, porcentajes de eficacia ni instrucciones de prescripción. Aquí se omiten intencionalmente las hierbas de las figuras originales que están fuera de esta categoría Board.',
+    'they are relative comparison indices transcribed from Yang, the book author, Chapter 2, Figures 2.1, 2.2, 2.3 and 2.5. They are not doses, efficacy percentages or prescribing instructions. Herbs outside this Board category that appear in the original figures are intentionally omitted here.' => 'son índices comparativos relativos transcritos de Yang, autor del libro, capítulo 2, figuras 2.1, 2.2, 2.3 y 2.5. No son dosis, porcentajes de eficacia ni instrucciones de prescripción. Aquí se omiten intencionalmente las hierbas de las figuras originales que están fuera de esta categoría Board.',
 
     // Decision map.
     'Fast decision map' => 'Mapa de decisión rápida',
@@ -163,28 +163,28 @@ return [
     'The strongest diaphoretic in this group; disseminates Lung Qi, calms wheezing and promotes urination.' => 'La diaforética más potente del grupo; difunde el Qi de Pulmón, calma las sibilancias y promueve la micción.',
     'Marked chills, no sweating, body aches and wheezing in an Exterior excess presentation.' => 'Escalofríos intensos, ausencia de sudor, dolor corporal y sibilancias en una presentación de exceso del Exterior.',
     'MA = Maximum opening: Ma Huang throws open the pores when Cold has locked the exterior.' => 'MA = Máxima apertura: Ma Huang abre de par en par los poros cuando el Frío ha cerrado el Exterior.',
-    "Within this Board subset it is the hottest and ranks highest for both sweating and light dispersion in Yang's comparative figures." => 'Dentro de este subconjunto Board es la más caliente y ocupa el primer lugar tanto en sudoración como en dispersión ligera en las figuras comparativas de Yang.',
+    "Within this Board subset it is the hottest and ranks highest for both sweating and light dispersion in the comparative figures by Yang, the author of the book." => 'Dentro de este subconjunto Board es la más caliente y ocupa el primer lugar tanto en sudoración como en dispersión ligera en las figuras comparativas de Yang, autor del libro.',
     'Chief: Ma Huang Tang. Co-chief: Xiao Qing Long Tang with Gui Zhi, and Ma Xing Shi Gan Tang with Shi Gao.' => 'Principal: Ma Huang Tang. Coprincipal: Xiao Qing Long Tang con Gui Zhi, y Ma Xing Shi Gan Tang con Shi Gao.',
     'Use cautiously with spontaneous sweating, Yin deficiency, hypertension, insomnia or cardiovascular disease.' => 'Usar con cautela ante sudoración espontánea, deficiencia de Yin, hipertensión, insomnio o enfermedad cardiovascular.',
 
     'Releases the muscle layer, warms and unblocks the channels, supports Yang and harmonizes Nutritive and Defensive Qi.' => 'Libera la capa muscular, calienta y desbloquea los canales, sostiene el Yang y armoniza el Qi Nutritivo y Defensivo.',
     'Exterior Wind-Cold with sweating, or Cold obstructing the channels and circulation.' => 'Viento-Frío exterior con sudoración, o Frío que obstruye los canales y la circulación.',
     'A twig reaches the branches: Gui Zhi carries warmth through the channels and limbs.' => 'Una ramita llega a las ramas: Gui Zhi conduce calor por los canales y las extremidades.',
-    "Yang ranks it second in warmth in this Board subset. Its Heart-channel and Blood-circulating emphasis distinguishes it from Ma Huang's stronger surface release." => 'Yang la sitúa en segundo lugar por calor dentro de este subconjunto Board. Su énfasis en el canal de Corazón y en circular la Sangre la distingue de la liberación superficial más potente de Ma Huang.',
+    "In the comparison by Yang, the author of the book, it ranks second in warmth within this Board subset. Its Heart-channel and Blood-circulating emphasis distinguishes it from the stronger surface release of Ma Huang." => 'En la comparación de Yang, autor del libro, ocupa el segundo lugar por tibieza dentro de este subconjunto Board. Su énfasis en el canal de Corazón y en circular la Sangre la distingue de la liberación superficial más potente de Ma Huang.',
     'Chief: Gui Zhi Tang. Co-chief: Xiao Qing Long Tang with Ma Huang.' => 'Principal: Gui Zhi Tang. Coprincipal: Xiao Qing Long Tang con Ma Huang.',
     'Use cautiously with febrile disease, Yin deficiency with Heat, hot Blood or pregnancy with Heat signs.' => 'Usar con cautela ante enfermedad febril, deficiencia de Yin con Calor, Calor en la Sangre o embarazo con signos de Calor.',
 
     'Gently releases Wind-Cold while moving Qi, harmonizing the Middle and calming the fetus.' => 'Libera suavemente Viento-Frío mientras moviliza el Qi, armoniza el Jiao Medio y calma al feto.',
     'A mild exterior pattern with chest or epigastric fullness, nausea, vomiting or pregnancy-related Qi constraint.' => 'Patrón exterior leve con plenitud torácica o epigástrica, náusea, vómito o estancamiento del Qi relacionado con el embarazo.',
     'The Perilla leaf moves at the surface and settles what is restless in the Middle—including the fetus.' => 'La hoja de Perilla se mueve en la superficie y calma lo inquieto en el Centro, incluido el feto.',
-    "Among the least warm herbs in Yang's warm-herb figure, yet it uniquely combines gentle Exterior release with Middle-Jiao Qi regulation and calming the fetus." => 'Está entre las menos calientes de la figura de hierbas tibias de Yang, pero combina de manera distintiva una liberación suave del Exterior con regulación del Qi del Jiao Medio y calma del feto.',
+    "In the warm-herb figure by Yang, the author of the book, it is among the least warm herbs, yet it uniquely combines gentle Exterior release with Middle-Jiao Qi regulation and calming the fetus." => 'En la gráfica de hierbas tibias de Yang, autor del libro, está entre las menos tibias, pero combina de manera distintiva una liberación suave del Exterior con regulación del Qi del Jiao Medio y calma del feto.',
     'No chief or co-chief formula from the current Board Domain roster is linked here. Keep the herb profile without adding an off-list formula.' => 'Aquí no se enlaza ninguna fórmula principal o coprincipal del listado vigente de los Domains del Board. Conserva el perfil de la hierba sin añadir una fórmula fuera del listado.',
     'Its aromatic oils are best preserved with a relatively short decoction.' => 'Sus aceites aromáticos se preservan mejor con una decocción relativamente corta.',
 
     'A light, gentle Wind herb that releases the Exterior, vents rashes and benefits itchy skin eruptions.' => 'Hierba ligera y suave para el Viento que libera el Exterior, exterioriza erupciones y beneficia lesiones cutáneas pruriginosas.',
     'Superficial Wind with rash or itching; raw herb disperses Wind, while the charred form is used differently for bleeding.' => 'Viento superficial con erupción o prurito; la hierba cruda dispersa Viento, mientras que la forma carbonizada se usa de manera diferente para sangrado.',
     'Jing Jie sweeps Wind from the skin; once charred, the same herb turns inward to stop bleeding.' => 'Jing Jie barre el Viento de la piel; una vez carbonizada, la misma hierba gira hacia dentro para detener el sangrado.',
-    "It is among the least warm yet tied for second in light dispersion in Yang's figures; processing can shift it from dispersing Wind to stopping bleeding." => 'Está entre las menos calientes, pero empata en segundo lugar en dispersión ligera en las figuras de Yang; el procesamiento puede cambiarla de dispersar Viento a detener sangrado.',
+    "In the figures by Yang, the author of the book, it is among the least warm herbs yet tied for second in light dispersion; processing can shift it from dispersing Wind to stopping bleeding." => 'En las figuras de Yang, autor del libro, está entre las hierbas menos tibias y empata en segundo lugar en dispersión ligera; el procesamiento puede cambiarla de dispersar Viento a detener sangrado.',
     'Co-chief: Xiao Feng San with Fang Feng. Supporting ingredient: Yin Qiao San and Zhi Sou San.' => 'Coprincipal: Xiao Feng San con Fang Feng. Ingrediente de apoyo: Yin Qiao San y Zhi Sou San.',
     'Do not confuse the actions of raw Jing Jie, Jing Jie Sui and charred Jing Jie.' => 'No confundir las acciones de Jing Jie cruda, Jing Jie Sui y Jing Jie carbonizada.',
 
@@ -198,32 +198,32 @@ return [
     'Strongly releases Wind-Cold-Damp and relieves pain, especially along the Taiyang region and upper body.' => 'Libera con fuerza Viento-Frío-Humedad y alivia el dolor, especialmente en la región Taiyang y la parte superior del cuerpo.',
     'Occipital headache, stiff upper back and generalized aches aggravated by Cold-Damp.' => 'Cefalea occipital, rigidez de la espalda superior y dolores generalizados agravados por Frío-Humedad.',
     'Qiang Huo climbs the back of the head: occiput, neck and upper back reveal its Taiyang route.' => 'Qiang Huo asciende por la parte posterior de la cabeza: occipucio, cuello y espalda superior revelan su ruta Taiyang.',
-    'It ties for the highest exogenous-Dampness score among the Board herbs shown by Yang; its decisive location is the occiput, neck and upper Taiyang region.' => 'Empata con la puntuación más alta para Humedad exógena entre las hierbas Board mostradas por Yang; su localización decisiva es el occipucio, el cuello y la región Taiyang superior.',
+    'It ties for the highest exogenous-Dampness score among the Board herbs shown by Yang, the author of the book; its decisive location is the occiput, neck and upper Taiyang region.' => 'Empata con la puntuación más alta para Humedad exógena entre las hierbas Board mostradas por Yang, autor del libro; su localización decisiva es el occipucio, el cuello y la región Taiyang superior.',
     'Co-chief: Qiang Huo Sheng Shi Tang with Du Huo.' => 'Coprincipal: Qiang Huo Sheng Shi Tang con Du Huo.',
     'Drying and dispersing; use cautiously with Yin or Blood deficiency and in patients with depleted fluids.' => 'Secante y dispersante; usar con cautela ante deficiencia de Yin o Sangre y en pacientes con líquidos agotados.',
 
     'Releases Wind-Cold, opens the nasal passages, relieves Yangming frontal pain and reduces swelling and pus.' => 'Libera Viento-Frío, abre los conductos nasales, alivia el dolor frontal Yangming y reduce inflamación y pus.',
     'Frontal headache with nasal obstruction or thick, foul discharge and sinus fullness.' => 'Cefalea frontal con obstrucción nasal o secreción espesa y fétida, y plenitud de los senos paranasales.',
     'Bai Zhi lights the front of the face: forehead, eyebrows, nose, teeth and purulent swelling.' => 'Bai Zhi ilumina la parte frontal del rostro: frente, cejas, nariz, dientes e inflamación purulenta.',
-    'It ties Qiang Huo for the highest exogenous-Dampness score among these Board herbs, but its rich aroma and Yangming route point to frontal pain, the nose and pus.' => 'Empata con Qiang Huo en la puntuación más alta para Humedad exógena entre estas hierbas Board, pero su aroma intenso y su ruta Yangming apuntan al dolor frontal, la nariz y el pus.',
+    'In the comparison by Yang, the author of the book, it ties Qiang Huo for the highest exogenous-Dampness score among these Board herbs, but its rich aroma and Yangming route point to frontal pain, the nose and pus.' => 'En la comparación de Yang, autor del libro, empata con Qiang Huo en la puntuación más alta para Humedad exógena entre estas hierbas Board, pero su aroma intenso y su ruta Yangming apuntan al dolor frontal, la nariz y el pus.',
     'Appears in Cang Er Zi San and Chuan Xiong Cha Tiao San, but another herb leads each formula.' => 'Aparece en Cang Er Zi San y Chuan Xiong Cha Tiao San, pero otra hierba dirige cada fórmula.',
     'Its warm, drying nature is unsuitable for headache or nasal disease caused primarily by Yin deficiency or Heat.' => 'Su naturaleza tibia y secante no es adecuada para cefalea o enfermedad nasal causada principalmente por deficiencia de Yin o Calor.',
 
     'Gently releases Wind-Cold, warms the Middle, stops vomiting, warms the Lung and reduces toxicity of certain herbs.' => 'Libera suavemente Viento-Frío, calienta el Jiao Medio, detiene el vómito, calienta el Pulmón y reduce la toxicidad de ciertas hierbas.',
     'A mild exterior pattern accompanied by nausea, vomiting, cough or Middle-Jiao Cold.' => 'Patrón exterior leve acompañado de náusea, vómito, tos o Frío del Jiao Medio.',
     'Fresh ginger begins at the front door but returns to the kitchen: Exterior release plus Stomach harmony.' => 'El jengibre fresco comienza en la puerta principal, pero regresa a la cocina: libera el Exterior y armoniza el Estómago.',
-    "It sits in the middle of Yang's warmth comparison, but the text calls it a first-line choice for nausea because it uniquely joins mild Exterior release with Stomach harmony." => 'Ocupa la zona media de la comparación de calor de Yang, pero el texto la considera una primera elección para la náusea porque une de forma distintiva la liberación suave del Exterior con la armonización del Estómago.',
+    "It sits in the middle of the warmth comparison by Yang, the author of the book, but the text calls it a first-line choice for nausea because it uniquely joins mild Exterior release with Stomach harmony." => 'Ocupa la zona media de la comparación de calor de Yang, autor del libro, pero el texto la considera una primera elección para la náusea porque une de forma distintiva la liberación suave del Exterior con la armonización del Estómago.',
     'Appears in Gui Zhi Tang and Ju Pi Zhu Ru Tang as a supporting ingredient rather than the chief.' => 'Aparece en Gui Zhi Tang y Ju Pi Zhu Ru Tang como ingrediente de apoyo, no como principal.',
     'Use cautiously with spontaneous sweating from deficiency or prominent internal Heat.' => 'Usar con cautela ante sudoración espontánea por deficiencia o Calor interno prominente.',
 
     'Focuses on opening the nasal passages, dispersing Wind-Cold and restoring the sense of smell.' => 'Se concentra en abrir los conductos nasales, dispersar Viento-Frío y restaurar el olfato.',
     'Nasal obstruction, reduced smell and sinus pain where the nose is the dominant problem.' => 'Obstrucción nasal, disminución del olfato y dolor sinusal cuando la nariz es el problema dominante.',
     'The Magnolia flower opens at the nose: when smell disappears, think Xin Yi Hua.' => 'La flor de Magnolia se abre en la nariz: cuando desaparece el olfato, piensa en Xin Yi Hua.',
-    "It is among the least warm herbs yet tied with Jing Jie for second in light dispersion in Yang's figures; its most specific target is nasal opening and smell." => 'Está entre las hierbas menos calientes, pero empata con Jing Jie en segundo lugar en dispersión ligera en las figuras de Yang; su objetivo más específico es abrir la nariz y recuperar el olfato.',
+    "In the figures by Yang, the author of the book, it is among the least warm herbs yet tied with Jing Jie for second in light dispersion; its most specific target is nasal opening and smell." => 'En las figuras de Yang, autor del libro, está entre las hierbas menos tibias y empata con Jing Jie en segundo lugar en dispersión ligera; su objetivo más específico es abrir la nariz y recuperar el olfato.',
     'Appears in Cang Er Zi San as a supporting nasal-opening ingredient; Cang Er Zi is the chief herb.' => 'Aparece en Cang Er Zi San como ingrediente de apoyo para abrir la nariz; Cang Er Zi es la hierba principal.',
     'The flower hairs can irritate the throat; traditionally decocted in a cloth bag.' => 'Los pelos de la flor pueden irritar la garganta; tradicionalmente se decocta dentro de una bolsa de tela.',
 
-    // Formula leadership and category-specific Yang questions.
+    // Formula leadership and category-specific questions from Yang, the book author.
     'When the herb leads the formula' => 'Cuando la hierba dirige la fórmula',
     'These connections are limited to formulas in the current Board Domain rosters in which one of the nine herbs is a chief or co-chief ingredient. Off-list textbook connections are deliberately omitted.' => 'Estas conexiones se limitan a fórmulas de los listados vigentes de los Domains del Board donde una de las nueve hierbas es ingrediente principal o coprincipal. Las conexiones del libro que están fuera del listado se omiten deliberadamente.',
     'Chief:' => 'Principal:',
@@ -237,10 +237,10 @@ return [
     'Qiang Huo Sheng Shi Tang with Du Huo for Wind-Damp pain concentrated in the upper body.' => 'Qiang Huo Sheng Shi Tang con Du Huo para dolor por Viento-Humedad concentrado en la parte superior del cuerpo.',
     'Role check:' => 'Verificación del papel:',
     'Fang Feng supports Yu Ping Feng San, Bai Zhi and Xin Yi Hua support Cang Er Zi San, and Sheng Jiang supports Gui Zhi Tang and Ju Pi Zhu Ru Tang. These formulas are on the Board rosters, but the named herb does not lead each formula.' => 'Fang Feng apoya Yu Ping Feng San; Bai Zhi y Xin Yi Hua apoyan Cang Er Zi San; y Sheng Jiang apoya Gui Zhi Tang y Ju Pi Zhu Ru Tang. Estas fórmulas están en los listados del Board, pero la hierba nombrada no dirige cada fórmula.',
-    'Yang questions for this category' => 'Preguntas de Yang para esta categoría',
+    'Questions from Yang, the book author, for this category' => 'Preguntas de Yang, autor del libro, para esta categoría',
     'Selected and adapted from Chapter 2 to match only the nine herbs in this Board Level category.' => 'Seleccionadas y adaptadas del capítulo 2 para corresponder solamente a las nueve hierbas de esta categoría Board Level.',
     'One study card holds all selected Chapter 2 questions. Think through the question, reveal the answer, then move to the next card. References outside the current list are explicitly identified.' => 'Una sola tarjeta de estudio contiene todas las preguntas seleccionadas del capítulo 2. Piensa la pregunta, revela la respuesta y después pasa a la siguiente. Las referencias fuera del listado vigente se identifican explícitamente.',
-    'Yang study card controls' => 'Controles de la tarjeta de estudio de Yang',
+    'Yang study card controls' => 'Controles de las tarjetas de estudio de preguntas de Yang, autor del libro',
     '← Previous' => '← Anterior',
     'Show answer' => 'Mostrar respuesta',
     'Show question' => 'Mostrar pregunta',
@@ -295,7 +295,7 @@ return [
     'Which herb points to occipital headache and stiff upper back from Wind-Cold-Damp?' => '¿Qué hierba señala cefalea occipital y rigidez de espalda superior por Viento-Frío-Humedad?',
     ' Its Taiyang and upper-body emphasis is the decisive clue.' => ' Su énfasis Taiyang y en la parte superior del cuerpo es la pista decisiva.',
     'Sources used for this prototype:' => 'Fuentes utilizadas para este prototipo:',
-    'category and individual monographs; and Yang,' => 'monografías de categoría e individuales; y Yang,',
+    'category and individual monographs; and Yang, the book author of' => 'monografías de categoría e individuales; y Yang, autor del libro',
     '2nd ed., Chapter 2. This is educational review material and not prescribing guidance.' => '2.ª ed., capítulo 2. Este es material educativo de repaso y no constituye una guía para prescribir.',
 
     // Framework shown in categories whose content is still pending.

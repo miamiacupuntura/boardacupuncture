@@ -180,7 +180,8 @@ foreach ($actionsProfiles as [$name, $latin, $propertiesEn, $propertiesEs, $chan
 }
 
 // User-provided Bensky Chapter 1 excerpts are used only to complete fields that
-// are still empty. They never replace a detailed Yang-based profile or any
+// are still empty. They never replace a detailed profile based on the work of
+// Yang, the book author, or any
 // existing property value. Page references follow the printed chapter pages.
 $benskyChapterOneSource = 'Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1 (user-provided excerpts)';
 $benskyChapterOneProfiles = [
@@ -490,7 +491,7 @@ $payload = [
     'actionsTableSource' => 'User-provided NCCAOM Herbs: Actions and Indications table; property fields only',
     'benskyChapterOneSource' => $benskyChapterOneSource,
     'benskySuppliedSource' => $benskySuppliedSource,
-    'benskyMergeRule' => 'Bensky fills empty fields only; existing Yang-based profiles are never replaced',
+    'benskyMergeRule' => 'Bensky fills empty fields only; existing profiles based on the work of Yang, the book author, are never replaced',
     'total' => $total,
     'verified' => $verified,
     'propertiesOnly' => $propertiesOnly,

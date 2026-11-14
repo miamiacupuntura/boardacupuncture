@@ -22,10 +22,49 @@ trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES+=(
+    single-herbs-category-anchor-settle-spirit.php
+    single-herbs-category-aromatic-transform-dampness.php
+    single-herbs-category-clear-deficient-heat.php
+    single-herbs-category-clear-heat-cool-blood.php
+    single-herbs-category-clear-heat-drain-fire.php
+    single-herbs-category-clear-heat-dry-damp.php
+    single-herbs-category-clear-resolve-toxicity.php
+    single-herbs-category-clear-summer-heat.php
+    single-herbs-category-cool-acrid.php
+    single-herbs-category-cool-transform-phlegm.php
+    single-herbs-category-downward-draining-purgatives.php
+    single-herbs-category-drain-dampness.php
+    single-herbs-category-extinguish-wind.php
+    single-herbs-category-harsh-expellants.php
+    single-herbs-category-invigorate-blood.php
+    single-herbs-category-moist-laxatives.php
+    single-herbs-category-nourish-heart-calm-spirit.php
+    single-herbs-category-open-orifices.php
+    single-herbs-category-regulate-qi.php
+    single-herbs-category-relieve-cough-wheezing.php
+    single-herbs-category-relieve-food-stagnation.php
+    single-herbs-category-stabilize-bind.php
+    single-herbs-category-stop-bleeding.php
+    single-herbs-category-tonify-blood.php
+    single-herbs-category-tonify-qi.php
+    single-herbs-category-tonify-yang.php
+    single-herbs-category-tonify-yin.php
+    single-herbs-category-warm-interior.php
+    single-herbs-category-warm-transform-phlegm.php
+)
 MENU_FILES=(herbology-board.php block_menu.php)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
-DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
+DATA_FILES=(single-herb-safety-supplement.json single-herb-rich-profiles.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(read-aloud-test.html formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html safety-toxicity.html safety-interactions.html safety-regulation.html safety-toxic-herbs.html safety-pregnancy.html safety-anticoagulants.html safety-ma-huang-hypertension.html safety-fu-zi-cardiac-toxicity.html safety-clinical-interaction-cases.html safety-obsolete-prohibited-substances.html safety-herb-specific-cautions.html safety-toxicity-es.html safety-interactions-es.html safety-regulation-es.html safety-toxic-herbs-es.html safety-pregnancy-es.html safety-anticoagulants-es.html safety-ma-huang-hypertension-es.html safety-fu-zi-cardiac-toxicity-es.html safety-clinical-interaction-cases-es.html safety-obsolete-prohibited-substances-es.html safety-herb-specific-cautions-es.html continuous-reader.html continuous-reader.js safety-library.html safety-library-es.html comparisons.js study-return-navigation.js chief-herbs-property.html chief-herbs-property-es.html formulas.html formulas-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html maciocia-formula-tips.html maciocia-formula-tips-es.html dui-yao.html dui-yao-es.html herb-comparison-bank.html herb-comparison-bank-es.html dui-yao-practice.html dui-yao-practice-es.html miscellaneous-practice.html miscellaneous-practice-es.html)
+STATIC_FILES+=(
+    bai-ji-vs-ce-bai-ye.html bai-ji-vs-ce-bai-ye-es.html
+    gan-sui-vs-hong-da-ji-vs-yuan-hua.html gan-sui-vs-hong-da-ji-vs-yuan-hua-es.html
+    gu-ya-vs-mai-ya.html gu-ya-vs-mai-ya-es.html
+    huo-ma-ren-vs-yu-li-ren.html huo-ma-ren-vs-yu-li-ren-es.html
+    zhu-li-vs-zhu-ru.html zhu-li-vs-zhu-ru-es.html
+    single-herb-practice.js
+)
 
 for file in "${MOODLE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
@@ -45,6 +84,20 @@ done
 for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
+
+grep -Fq 'Yang, the book author' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'Yang, autor del libro' "$TEMP_DIR/moodle/single-herbs-study-guide-es.php"
+grep -Fq 'Yang, autor del libro' "$TEMP_DIR/menu/herbology-board.php"
+for file in "$TEMP_DIR"/moodle/single-herbs-category-*.php; do
+    grep -Fq 'Yang, the book author' "$file"
+    grep -Fq 'Yang, autor del libro' "$file"
+done
+grep -Fq 'Yang, the book author' "$TEMP_DIR/static/single-herb-practice.js"
+grep -Fq 'Yang, autor del libro' "$TEMP_DIR/static/single-herb-practice.js"
+if grep -REq 'Yin (the )?(book|work) by Yang|Yangming, (the book author|autor del libro)|Yang (Qi|de Hígado|de Riñón), autor del libro|Liver Yang, the book author|tonif(y|ies) Yang, the book author' "$TEMP_DIR/moodle" "$TEMP_DIR/data"; then
+    echo "ERROR: una referencia clínica a Yang fue confundida con el autor del libro." >&2
+    exit 1
+fi
 
 grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'SpeechSynthesisUtterance' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -894,6 +947,7 @@ echo "OK: Selección conserva el texto marcado y no usa la sección elegida en e
 echo "OK: la selección se reconstruye por elementos para incluir barras, tarjetas y cajas internas."
 echo "OK: cada lectura usa una sesión aislada; al terminar no continúa con fragmentos anteriores."
 echo "OK: el último fragmento cierra la lectura inmediatamente y nunca reinicia desde el principio."
+echo "OK: todas las categorías identifican a Yang como autor del libro sin alterar Yang Qi, Yangming, Liver-Yang, Yin Yang Huo ni las deficiencias de Yang."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."

@@ -19,8 +19,8 @@
         ? 'Incluye preguntas de todos los perfiles verificados de hierbas individuales.'
         : 'Includes questions from every verified Single Herbs profile.',
       category: spanish
-        ? 'Incluye preguntas de las hierbas que pertenecen a una categoría del libro de Yang.'
-        : "Includes questions from the herbs in one Yang book category."
+        ? 'Incluye preguntas de las hierbas que pertenecen a una categoría del libro de Yang, autor del libro.'
+        : "Includes questions from the herbs in one category in the book by Yang, the book author."
     },
     position: (position, total) => spanish ? `Pregunta ${position} de ${total}` : `Question ${position} of ${total}`,
     correct: spanish ? 'Correcto' : 'Correct',
@@ -61,7 +61,7 @@
   };
   const letters = ['A', 'B', 'C', 'D'];
   // The verified profiles use detailed clinical guide numbers. Group those
-  // narrower subjects into the broader chapter sequence used in Yang's book.
+  // narrower subjects into the broader chapter sequence used in the book by Yang, the book author.
   const guideNumbersByYangChapter = new Map([
     [2, [1, 2]],
     [3, [3, 4, 5, 6, 7, 8]],

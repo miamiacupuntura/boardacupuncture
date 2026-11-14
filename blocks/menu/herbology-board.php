@@ -1727,8 +1727,8 @@ echo $OUTPUT->header();
             </div>
 
             <h4 class="herb-board__subheading" id="practice-herb-categories"><?php echo $ises
-                ? 'Práctica de hierbas individuales por capítulo de Yang'
-                : 'Single Herbs Practice by Yang chapter'; ?></h4>
+                ? 'Práctica de hierbas individuales por capítulo de Yang, autor del libro'
+                : 'Single Herbs Practice by chapter from Yang, the book author'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($herbcategories as $category) {
                     $categoryurl = new moodle_url($herbquestionbankpath, [
@@ -1817,8 +1817,8 @@ echo $OUTPUT->header();
                 </a>
             </div>
             <h4 class="herb-board__subheading"><?php echo $ises
-                ? 'Estudiar por capítulos de Yang'
-                : "Study by Yang Chapter's"; ?></h4>
+                ? 'Estudiar por capítulos de Yang, autor del libro'
+                : 'Study by chapters from Yang, the book author'; ?></h4>
             <div class="herb-board__topics">
                 <?php foreach ($herbcategories as $category) {
                     $categoryurl = new moodle_url($herbquestionbankpath, [
@@ -1897,7 +1897,7 @@ echo $OUTPUT->header();
                                 <?php } ?>
                             </div>
                             <p class="herb-board__subcategories-note">The original Clear Heat topic remains the main
-                                Yang-based card. These five Bensky sections are study supplements, not replacements.</p>
+                                card based on Yang, the book author. These five Bensky sections are study supplements, not replacements.</p>
                         </section>
                     <?php } ?>
                     <?php if ($isdownwarddraining) { ?>
@@ -1927,7 +1927,7 @@ echo $OUTPUT->header();
                                 <?php } ?>
                             </div>
                             <p class="herb-board__subcategories-note">The original Downward-Draining topic remains the
-                                main Yang-based card. These three Bensky sections are study supplements, not replacements.</p>
+                                main card based on Yang, the book author. These three Bensky sections are study supplements, not replacements.</p>
                         </section>
                     <?php } ?>
                     <?php if ($isdraindampness) { ?>
@@ -1957,7 +1957,7 @@ echo $OUTPUT->header();
                                 <?php } ?>
                             </div>
                             <p class="herb-board__subcategories-note">The original course topic remains the main
-                                Yang-based card. This Bensky chapter adds 30 grouped materia-medica profiles, high-yield
+                                card based on Yang, the book author. This Bensky chapter adds 30 grouped materia-medica profiles, high-yield
                                 comparisons and persistent safety alerts.</p>
                         </section>
                     <?php } ?>
@@ -2297,8 +2297,8 @@ echo $OUTPUT->header();
             <?php if (in_array($quizsection, ['all', 'herbs'], true)) { ?>
                 <section aria-labelledby="quiz-herb-categories">
                     <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises
-                        ? 'Quiz de hierbas individuales por categoría de Yang'
-                        : 'Single Herbs Quiz by Yang category'; ?></h4>
+                        ? 'Quiz de hierbas individuales por categoría de Yang, autor del libro'
+                        : 'Single Herbs Quiz by category from Yang, the book author'; ?></h4>
                     <div class="herb-board__topics">
                         <?php foreach ($herbcategories as $category) {
                             if ($category['number'] === 1) {

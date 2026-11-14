@@ -138,8 +138,8 @@ $aromaticherbs = [
             'El carro de especias más rápido mueve Qi por la cocina, asegura el cuarto del embarazo y calienta el piso inferior.'
         ),
         'unique' => $aromatictext(
-            'Yang ranks it first of the four seed spices for regulating Middle-Jiao Qi and relieving distension and pain.',
-            'Yang la coloca primera entre las cuatro semillas aromáticas para regular Qi del Centro y aliviar distensión y dolor.'
+            'Yang, the book author, ranks it first of the four seed spices for regulating Middle-Jiao Qi and relieving distension and pain.',
+            'Yang, autor del libro, la coloca primera entre las cuatro semillas aromáticas para regular Qi del Centro y aliviar distensión y dolor.'
         ),
         'caution' => $aromatictext(
             'Crush and add late to preserve aroma; use cautiously when Heat or Yin deficiency predominates.',
@@ -194,8 +194,8 @@ $aromaticherbs = [
             'El fruto grande y caliente es el horno y la campana de malaria al fondo de la cocina húmeda.'
         ),
         'unique' => $aromatictext(
-            'Yang ranks it strongest of the four seed spices for warming and drying Cold-Dampness, but weakest for Qi movement.',
-            'Yang la coloca como la más fuerte de las cuatro semillas para calentar y secar Frío-Humedad, pero la más débil moviendo Qi.'
+            'Yang, the book author, ranks it strongest of the four seed spices for warming and drying Cold-Dampness, but weakest for Qi movement.',
+            'Yang, autor del libro, la coloca como la más fuerte de las cuatro semillas para calentar y secar Frío-Humedad, pero la más débil moviendo Qi.'
         ),
         'caution' => $aromatictext(
             'Strongly warm and drying; avoid when Heat or fluid deficiency predominates.',
@@ -294,7 +294,7 @@ $aromaticquestions = [
         $aromatictext('Huo Xiang is slightly warm and stronger for nausea, vomiting and Exterior Cold-Dampness. Pei Lan is neutral and especially clears foul, sweet-sticky turbidity.', 'Huo Xiang es ligeramente tibia y más fuerte para náusea, vómito y Frío-Humedad Exterior. Pei Lan es neutra y destaca para turbidez fétida, dulce-pegajosa.'),
     ],
     [
-        $aromatictext('What are Yang’s two opposite rankings for the four seed spices?', '¿Cuáles son los dos órdenes opuestos de Yang para las cuatro semillas aromáticas?'),
+        $aromatictext('What are the two opposite rankings from Yang, the book author for the four seed spices?', '¿Cuáles son los dos órdenes opuestos de Yang, autor del libro, para las cuatro semillas aromáticas?'),
         $aromatictext('Qi movement/distension: Sha Ren > Bai Dou Kou > Cao Dou Kou > Cao Guo. Warming-drying Cold-Dampness: Cao Guo > Cao Dou Kou > Bai Dou Kou > Sha Ren.', 'Movimiento de Qi/distensión: Sha Ren > Bai Dou Kou > Cao Dou Kou > Cao Guo. Calentar-secar Frío-Humedad: Cao Guo > Cao Dou Kou > Bai Dou Kou > Sha Ren.'),
     ],
     [
@@ -370,17 +370,17 @@ $aromaticchapterannex = [
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-sixteen-yang">
-    <h4 id="topic-sixteen-yang"><?php echo s($aromatictext('Yang comparative fingerprints', 'Huellas comparativas de Yang')); ?></h4>
-    <p class="single-herbs-guide__section-lead"><?php echo s($aromatictext('Yang figure 7.2 gives all four listed Middle-Jiao aromatics the same relative index of 100, so that graph confirms their shared strength but does not distinguish which one to choose. Use the study question below to separate them.', 'La figura 7.2 de Yang asigna a las cuatro aromáticas del Jiao Medio listadas el mismo índice relativo de 100; la gráfica confirma su fuerza compartida, pero no distingue cuál elegir. Usa la pregunta de estudio siguiente para separarlas.')); ?></p>
+    <h4 id="topic-sixteen-yang"><?php echo s($aromatictext('Comparative fingerprints from Yang, the book author', 'Huellas comparativas de Yang, autor del libro')); ?></h4>
+    <p class="single-herbs-guide__section-lead"><?php echo s($aromatictext('Figure 7.2 by Yang, the book author gives all four listed Middle-Jiao aromatics the same relative index of 100, so that graph confirms their shared strength but does not distinguish which one to choose. Use the study question below to separate them.', 'La figura 7.2 de Yang, autor del libro, asigna a las cuatro aromáticas del Jiao Medio listadas el mismo índice relativo de 100; la gráfica confirma su fuerza compartida, pero no distingue cuál elegir. Usa la pregunta de estudio siguiente para separarlas.')); ?></p>
     <aside class="single-herbs-guide__memory-path">
-        <p class="single-herbs-guide__memory-line"><?php echo s($aromatictext('Yang question shown in full', 'Pregunta de Yang mostrada completa')); ?></p>
+        <p class="single-herbs-guide__memory-line"><?php echo s($aromatictext('Question from Yang, the book author, shown in full', 'Pregunta de Yang, autor del libro, mostrada completa')); ?></p>
         <p><strong><?php echo s($aromatictext('What are the differences between the functions of Sha Ren (Amomi xanthioidis Fructus), Bai Dou Kou (Amomi Fructus rotundus), Cao Dou Kou (Alpiniae katsumadai Semen) and Cao Guo (Tsaoko Fructus)?', '¿Cuáles son las diferencias entre las funciones de Sha Ren (Amomi xanthioidis Fructus), Bai Dou Kou (Amomi Fructus rotundus), Cao Dou Kou (Alpiniae katsumadai Semen) y Cao Guo (Tsaoko Fructus)?')); ?></strong></p>
         <p><?php echo s($aromatictext('Answer it on two axes: which herb moves Qi and relieves distension best, and which herb warms and dries Cold-Dampness most strongly?', 'Respóndela con dos ejes: ¿cuál mueve mejor el Qi y alivia la distensión, y cuál calienta y seca Frío-Humedad con mayor fuerza?')); ?></p>
     </aside>
     <div class="single-herbs-guide__yang-charts">
         <article class="single-herbs-guide__yang-chart">
             <h5><?php echo s($aromatictext('Transform Dampness from the Middle Jiao', 'Transformar Humedad del Jiao Medio')); ?></h5>
-            <small>Yang fig. 7.2</small>
+            <small>Yang, the book author · Fig. 7.2</small>
             <?php foreach (['Huo Xiang' => 100, 'Hou Po' => 100, 'Sha Ren' => 100, 'Bai Dou Kou' => 100] as $name => $value): ?>
                 <div class="single-herbs-guide__yang-bar"><span><?php echo s($name); ?></span><span class="single-herbs-guide__yang-bar-track"><span class="single-herbs-guide__yang-bar-fill" style="width:<?php echo $value; ?>%"></span></span><b><?php echo $value; ?></b></div>
             <?php endforeach; ?>
@@ -436,12 +436,12 @@ $aromaticchapterannex = [
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-sixteen-questions">
-    <h4 id="topic-sixteen-questions"><?php echo s($aromatictext('Yang questions for this category', 'Preguntas de Yang para esta categoría')); ?></h4>
+    <h4 id="topic-sixteen-questions"><?php echo s($aromatictext('Questions from Yang, the book author, for this category', 'Preguntas de Yang, autor del libro, para esta categoría')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($aromatictext('One reversible deck keeps the relevant chapter 7 distinctions together and identifies references outside the current list.', 'Una sola baraja reversible mantiene juntas las distinciones pertinentes del capítulo 7 e identifica referencias fuera de la lista vigente.')); ?></p>
     <div class="single-herbs-guide__yang-deck" data-yang-deck data-card-label="<?php echo s($aromatictext('Card', 'Tarjeta')); ?>" data-of-label="<?php echo s($aromatictext('of', 'de')); ?>">
         <?php foreach ($aromaticquestions as $index => $question): ?>
             <article class="single-herbs-guide__yang-card<?php echo $index === 0 ? ' is-active' : ''; ?>" data-yang-card aria-hidden="<?php echo $index === 0 ? 'false' : 'true'; ?>">
-                <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--front"><span class="single-herbs-guide__yang-label"><?php echo s($aromatictext('Question', 'Pregunta')); ?> <?php echo $index + 1; ?> <?php echo s($aromatictext('of', 'de')); ?> <?php echo count($aromaticquestions); ?> · Yang, <?php echo s($aromatictext('Chapter', 'capítulo')); ?> 7</span><p class="single-herbs-guide__yang-question"><?php echo s($question[0]); ?></p></div>
+                <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--front"><span class="single-herbs-guide__yang-label"><?php echo s($aromatictext('Question', 'Pregunta')); ?> <?php echo $index + 1; ?> <?php echo s($aromatictext('of', 'de')); ?> <?php echo count($aromaticquestions); ?> · <?php echo s($aromatictext('Yang, the book author · Chapter', 'Yang, autor del libro · capítulo')); ?> 7</span><p class="single-herbs-guide__yang-question"><?php echo s($question[0]); ?></p></div>
                 <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--back"><span class="single-herbs-guide__yang-label"><?php echo s($aromatictext('Answer', 'Respuesta')); ?> <?php echo $index + 1; ?></span><p class="single-herbs-guide__yang-answer"><?php echo s($question[1]); ?></p></div>
             </article>
         <?php endforeach; ?>

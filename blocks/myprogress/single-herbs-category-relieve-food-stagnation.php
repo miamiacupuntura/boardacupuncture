@@ -16,7 +16,7 @@ $foodherbs = [
         'identity' => $foodtext('Strongly digests every type of retained food, strengthens the Stomach, dissolves stones and secures essence and urine.', 'Digiere con fuerza todo tipo de alimento retenido, fortalece Estómago, disuelve cálculos y asegura Esencia y orina.'),
         'clue' => $foodtext('Mixed or stubborn Food Stagnation, especially with childhood malnutrition, stones, enuresis or seminal leakage.', 'Estancamiento alimentario mixto o persistente, especialmente con desnutrición infantil, cálculos, enuresis o pérdida seminal.'),
         'memory' => $foodtext('The chicken gizzard mill grinds every meal and even wears down stones.', 'El molino de la molleja de pollo tritura cualquier comida e incluso desgasta cálculos.'),
-        'unique' => $foodtext('Yang gives it the highest index for both grain/fruit digestion and cereal/alcohol digestion; it also remains strong for meat and fat.', 'Yang le da el índice más alto tanto para trigo/arroz/fruta como para cereales/alcohol; también permanece fuerte para carne y grasa.'),
+        'unique' => $foodtext('Yang, the book author, gives it the highest index for both grain/fruit digestion and cereal/alcohol digestion; it also remains strong for meat and fat.', 'Yang, autor del libro, le da el índice más alto tanto para trigo/arroz/fruta como para cereales/alcohol; también permanece fuerte para carne y grasa.'),
         'caution' => $foodtext('Strongly disperses accumulation; use carefully when there is marked Spleen-Stomach deficiency without retained food.', 'Dispersa acumulación con fuerza; usar con cuidado en deficiencia marcada de Bazo-Estómago sin alimento retenido.'),
         'formulas' => [],
     ],
@@ -42,7 +42,7 @@ $foodherbs = [
         'identity' => $foodtext('Digests meat, fat and dairy accumulation while moving Blood and dispersing stasis.', 'Digiere acumulación de carne, grasa y lácteos mientras mueve Sangre y dispersa estasis.'),
         'clue' => $foodtext('Food retention after rich or greasy meals, especially with postpartum abdominal pain, amenorrhea or fixed Blood-stasis pain.', 'Retención tras comidas ricas o grasosas, especialmente con dolor abdominal posparto, amenorrea o dolor fijo por estasis de Sangre.'),
         'memory' => $foodtext('The hawthorn butcher cuts meat and fat, then clears the Blood traffic behind the kitchen.', 'El carnicero de espino corta carne y grasa y luego despeja el tráfico de Sangre detrás de la cocina.'),
-        'unique' => $foodtext('Yang gives it the maximum meat-and-fat digestion index, 100; its Liver entry and Blood-moving action distinguish it from the other digestives.', 'Yang le da el índice máximo para digerir carne y grasa, 100; su entrada al Hígado y acción sobre Sangre la distinguen de las otras digestivas.'),
+        'unique' => $foodtext('Yang, the book author, gives it the maximum meat-and-fat digestion index, 100; its Liver entry and Blood-moving action distinguish it from the other digestives.', 'Yang, autor del libro, le da el índice máximo para digerir carne y grasa, 100; su entrada al Hígado y acción sobre Sangre la distinguen de las otras digestivas.'),
         'caution' => $foodtext('Sour and dispersing; use cautiously with gastric hyperacidity, active ulceration or pregnancy when Blood-moving is inappropriate.', 'Ácida y dispersante; usar con cautela en hiperacidez, ulceración activa o embarazo cuando mover Sangre sea inapropiado.'),
         'formulas' => [[63, 'bao-he-wan', 'Bao He Wan', $foodtext('chief', 'principal')]],
     ],
@@ -68,7 +68,7 @@ $foodherbs = [
         'identity' => $foodtext('Gently improves digestion of grains and starches while strengthening the Spleen and awakening appetite.', 'Mejora suavemente la digestión de granos y almidones mientras fortalece Bazo y despierta apetito.'),
         'clue' => $foodtext('Chronic weak digestion, poor appetite or mild Food Stagnation in children, older adults or deficient patients.', 'Digestión débil crónica, poco apetito o estancamiento leve en niños, adultos mayores o pacientes deficientes.'),
         'memory' => $foodtext('The rice sprout is the gentle kitchen helper who can work longer without exhausting the weak patient.', 'El brote de arroz es el ayudante suave de cocina que puede trabajar más tiempo sin agotar al paciente débil.'),
-        'unique' => $foodtext('Weakest and gentlest digestive in Yang’s grain comparisons, but the most tonifying and suitable for longer use in deficiency.', 'La digestiva más débil y suave en las comparaciones de granos de Yang, pero la más tonificante y adecuada para uso más prolongado en deficiencia.'),
+        'unique' => $foodtext('Weakest and gentlest digestive in Yang, the book author’s grain comparisons, but the most tonifying and suitable for longer use in deficiency.', 'La digestiva más débil y suave en las comparaciones de granos de Yang, autor del libro, pero la más tonificante y adecuada para uso más prolongado en deficiencia.'),
         'caution' => $foodtext('Do not mistake gentleness for an indication to treat persistent obstruction without evaluation.', 'No confundir suavidad con indicación para tratar obstrucción persistente sin evaluación.'),
         'formulas' => [],
     ],
@@ -81,7 +81,7 @@ $foodherbs = [
         'identity' => $foodtext('Digests grains and heavy starchy foods, moves Qi, harmonizes the Stomach and dispels the effects of alcohol.', 'Digiere granos y almidones pesados, mueve Qi, armoniza Estómago y disipa los efectos del alcohol.'),
         'clue' => $foodtext('Cereal or alcohol retention with pronounced epigastric distension, heaviness or explosive diarrhea.', 'Retención de cereales o alcohol con distensión epigástrica marcada, pesadez o diarrea explosiva.'),
         'memory' => $foodtext('The fermented kitchen culture breaks down heavy bread and cleans up after the wine banquet.', 'El fermento de cocina descompone pan pesado y limpia después del banquete con vino.'),
-        'unique' => $foodtext('Stronger and more Qi-moving than Gu Ya; Yang specifically distinguishes its ability to dispel alcohol effects.', 'Más fuerte y movilizadora de Qi que Gu Ya; Yang distingue específicamente su capacidad para disipar efectos del alcohol.'),
+        'unique' => $foodtext('Stronger and more Qi-moving than Gu Ya; Yang, the book author, specifically distinguishes its ability to dispel alcohol effects.', 'Más fuerte y movilizadora de Qi que Gu Ya; Yang, autor del libro, distingue específicamente su capacidad para disipar efectos del alcohol.'),
         'caution' => $foodtext('Contains fermented grain material; verify product composition when grain sensitivity matters.', 'Contiene material de granos fermentados; verificar composición del producto cuando importe la sensibilidad a granos.'),
         'formulas' => [],
     ],
@@ -90,17 +90,17 @@ $foodherbs = [
 $foodcharts = [
     [
         'title' => $foodtext('Digest wheat, rice and fruits', 'Digerir trigo, arroz y frutas'),
-        'figure' => $foodtext('Yang figure 9.1 · relative study indices', 'Figura 9.1 de Yang · índices relativos de estudio'),
+        'figure' => $foodtext('Figure 9.1 by Yang, the book author · relative study indices', 'Figura 9.1 de Yang, autor del libro · índices relativos de estudio'),
         'items' => ['Ji Nei Jin' => 100, 'Lai Fu Zi' => 80, 'Mai Ya' => 60, 'Gu Ya' => 40],
     ],
     [
         'title' => $foodtext('Digest cereals / dispel alcohol effects', 'Digerir cereales / disipar efectos del alcohol'),
-        'figure' => $foodtext('Yang figure 9.2 · relative study indices', 'Figura 9.2 de Yang · índices relativos de estudio'),
+        'figure' => $foodtext('Figure 9.2 by Yang, the book author · relative study indices', 'Figura 9.2 de Yang, autor del libro · índices relativos de estudio'),
         'items' => ['Ji Nei Jin' => 100, 'Shen Qu' => 80, 'Gu Ya' => 60],
     ],
     [
         'title' => $foodtext('Digest meat and remove fat', 'Digerir carne y eliminar grasa'),
-        'figure' => $foodtext('Yang figure 9.3 · current-list values', 'Figura 9.3 de Yang · valores de la lista vigente'),
+        'figure' => $foodtext('Figure 9.3 by Yang, the book author · current-list values', 'Figura 9.3 de Yang, autor del libro · valores de la lista vigente'),
         'items' => ['Shan Zha' => 100, 'Ji Nei Jin' => 80],
     ],
 ];
@@ -159,14 +159,14 @@ $foodquestions = [
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-seventeen-yang">
-    <h4 id="topic-seventeen-yang"><?php echo s($foodtext('Yang comparative fingerprints', 'Huellas comparativas de Yang')); ?></h4>
+    <h4 id="topic-seventeen-yang"><?php echo s($foodtext('Comparative fingerprints from Yang, the book author', 'Huellas comparativas de Yang, autor del libro')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($foodtext('These graphs answer three practical questions: which herb handles grains and fruit, which handles cereals and alcohol, and which handles meat and fat? Values are relative study indices, not doses or clinical percentages.', 'Estas gráficas responden tres preguntas prácticas: ¿cuál maneja granos y frutas, cuál cereales y alcohol, y cuál carne y grasa? Los valores son índices relativos de estudio, no dosis ni porcentajes clínicos.')); ?></p>
     <div class="single-herbs-guide__yang-charts">
         <?php foreach ($foodcharts as $chart): ?>
             <article class="single-herbs-guide__yang-chart"><h5><?php echo s($chart['title']); ?></h5><small><?php echo s($chart['figure']); ?></small><?php foreach ($chart['items'] as $name => $value): ?><div class="single-herbs-guide__yang-bar"><span><?php echo s($name); ?></span><span class="single-herbs-guide__yang-bar-track"><span class="single-herbs-guide__yang-bar-fill" style="width:<?php echo (int) $value; ?>%"></span></span><b><?php echo (int) $value; ?></b></div><?php endforeach; ?></article>
         <?php endforeach; ?>
     </div>
-    <p class="single-herbs-guide__yang-note"><strong><?php echo s($foodtext('Outside-list note:', 'Nota fuera de lista:')); ?></strong> <?php echo s($foodtext('Yang figure 9.3 also includes A Wei between Shan Zha and Ji Nei Jin; it is omitted from the bars because it is not in this current category list.', 'La figura 9.3 de Yang también incluye A Wei entre Shan Zha y Ji Nei Jin; se omite de las barras porque no está en esta lista vigente de categoría.')); ?></p>
+    <p class="single-herbs-guide__yang-note"><strong><?php echo s($foodtext('Outside-list note:', 'Nota fuera de lista:')); ?></strong> <?php echo s($foodtext('Figure 9.3 by Yang, the book author also includes A Wei between Shan Zha and Ji Nei Jin; it is omitted from the bars because it is not in this current category list.', 'La figura 9.3 de Yang, autor del libro también incluye A Wei entre Shan Zha y Ji Nei Jin; se omite de las barras porque no está en esta lista vigente de categoría.')); ?></p>
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-seventeen-profiles">
@@ -194,11 +194,11 @@ $foodquestions = [
 </section>
 
 <section class="single-herbs-guide__section" aria-labelledby="topic-seventeen-questions">
-    <h4 id="topic-seventeen-questions"><?php echo s($foodtext('Yang questions shown in full', 'Preguntas de Yang mostradas completas')); ?></h4>
+    <h4 id="topic-seventeen-questions"><?php echo s($foodtext('Questions from Yang, the book author, shown in full', 'Preguntas de Yang, autor del libro, mostradas completas')); ?></h4>
     <p class="single-herbs-guide__section-lead"><?php echo s($foodtext('The five relevant chapter 9 questions appear on the front of the cards; no external question number is required to understand them.', 'Las cinco preguntas pertinentes del capítulo 9 aparecen completas al frente de las tarjetas; no hace falta conocer un número externo.')); ?></p>
     <div class="single-herbs-guide__yang-deck" data-yang-deck data-card-label="<?php echo s($foodtext('Card', 'Tarjeta')); ?>" data-of-label="<?php echo s($foodtext('of', 'de')); ?>">
         <?php foreach ($foodquestions as $index => $question): ?>
-            <article class="single-herbs-guide__yang-card<?php echo $index === 0 ? ' is-active' : ''; ?>" data-yang-card aria-hidden="<?php echo $index === 0 ? 'false' : 'true'; ?>"><div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--front"><span class="single-herbs-guide__yang-label"><?php echo s($foodtext('Question', 'Pregunta')); ?> <?php echo $index + 1; ?> <?php echo s($foodtext('of', 'de')); ?> <?php echo count($foodquestions); ?> · Yang, <?php echo s($foodtext('Chapter', 'capítulo')); ?> 9</span><p class="single-herbs-guide__yang-question"><?php echo s($question[0]); ?></p></div><div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--back"><span class="single-herbs-guide__yang-label"><?php echo s($foodtext('Answer', 'Respuesta')); ?> <?php echo $index + 1; ?></span><p class="single-herbs-guide__yang-answer"><?php echo s($question[1]); ?></p></div></article>
+            <article class="single-herbs-guide__yang-card<?php echo $index === 0 ? ' is-active' : ''; ?>" data-yang-card aria-hidden="<?php echo $index === 0 ? 'false' : 'true'; ?>"><div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--front"><span class="single-herbs-guide__yang-label"><?php echo s($foodtext('Question', 'Pregunta')); ?> <?php echo $index + 1; ?> <?php echo s($foodtext('of', 'de')); ?> <?php echo count($foodquestions); ?> · <?php echo s($foodtext('Yang, the book author · Chapter', 'Yang, autor del libro · capítulo')); ?> 9</span><p class="single-herbs-guide__yang-question"><?php echo s($question[0]); ?></p></div><div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--back"><span class="single-herbs-guide__yang-label"><?php echo s($foodtext('Answer', 'Respuesta')); ?> <?php echo $index + 1; ?></span><p class="single-herbs-guide__yang-answer"><?php echo s($question[1]); ?></p></div></article>
         <?php endforeach; ?>
         <div class="single-herbs-guide__yang-controls"><button class="single-herbs-guide__yang-control" type="button" data-yang-prev>← <?php echo s($foodtext('Previous', 'Anterior')); ?></button><button class="single-herbs-guide__yang-control single-herbs-guide__yang-control--flip" type="button" data-yang-flip data-show-label="<?php echo s($foodtext('Show answer', 'Mostrar respuesta')); ?>" data-hide-label="<?php echo s($foodtext('Show question', 'Mostrar pregunta')); ?>"><?php echo s($foodtext('Show answer', 'Mostrar respuesta')); ?></button><button class="single-herbs-guide__yang-control single-herbs-guide__yang-control--next" type="button" data-yang-next><?php echo s($foodtext('Next', 'Siguiente')); ?> →</button></div>
         <p class="single-herbs-guide__yang-progress" data-yang-progress><?php echo s($foodtext('Card', 'Tarjeta')); ?> 1 <?php echo s($foodtext('of', 'de')); ?> <?php echo count($foodquestions); ?></p>
