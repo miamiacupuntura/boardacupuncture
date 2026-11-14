@@ -59,6 +59,7 @@ grep -Fq "optional_param('level', 'school', PARAM_ALPHA)" "$TEMP_DIR/menu/block_
 grep -Fq "['level' => 'school']" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "['level' => 'board']" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "Explore School Level" "$TEMP_DIR/theme/templates/frontpage.mustache"
+grep -Fq "new moodle_url('/my/', ['level' => 'board'])" "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq "{{{wwwroot}}}/my/?level=school" "$TEMP_DIR/theme/templates/frontpage.mustache"
 grep -Fq "{{{wwwroot}}}/my/?level=board" "$TEMP_DIR/theme/templates/frontpage.mustache"
 if grep -Fqi "Continuing Education" "$TEMP_DIR/menu/block_menu.php"; then
@@ -764,6 +765,7 @@ echo "OK: 10 páginas que no cargan la navegación compartida conservan un botó
 echo "OK: Herbology Simulation muestra el botón Study Guide y regresa a la biblioteca de Herbology."
 echo "OK: la pantalla inicial posterior al login muestra únicamente Board Preparation; Continuing Education fue retirada."
 echo "OK: School Level y Board Level usan páginas separadas con navegación entre ambas."
+echo "OK: los botones Dashboard de Study Guide regresan directamente a Board Level."
 echo "OK: la portada pública muestra accesos independientes a School Level, Board Level y Continuing Education."
 echo "OK: Safety Library usa el nuevo archivo safety-library.html; tanto el logotipo como el botón superior regresan a Herbology > Study Guide y no queda ninguna salida a /my/."
 echo "OK: la página pública safety-library.html fue descargada y validada después de instalar todas las rutas estáticas detectadas."
