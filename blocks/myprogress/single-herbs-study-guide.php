@@ -2302,6 +2302,8 @@ ob_start();
         let activeReadTarget = null;
         let activeUtterance = null;
         let readingStopped = true;
+        let readingSessionId = 0;
+        let speechTimer = null;
         let cachedSelectedStudyText = '';
 
         const visibleText = function(element) {
@@ -2440,6 +2442,10 @@ ob_start();
 
         const finishReading = function(message) {
             readingStopped = true;
+            if (speechTimer !== null) {
+                window.clearTimeout(speechTimer);
+                speechTimer = null;
+            }
             speechChunks = [];
             speechChunkIndex = 0;
             activeUtterance = null;
@@ -2452,8 +2458,8 @@ ob_start();
             readStatus.textContent = message;
         };
 
-        const speakNextChunk = function() {
-            if (readingStopped) {
+        const speakNextChunk = function(sessionId) {
+            if (readingStopped || sessionId !== readingSessionId) {
                 return;
             }
             if (speechChunkIndex >= speechChunks.length) {
@@ -2469,12 +2475,17 @@ ob_start();
                 activeUtterance.voice = voice;
             }
             activeUtterance.onend = function() {
-                if (!readingStopped) {
+                if (!readingStopped && sessionId === readingSessionId) {
                     speechChunkIndex += 1;
-                    window.setTimeout(speakNextChunk, 280);
+                    speechTimer = window.setTimeout(function() {
+                        speakNextChunk(sessionId);
+                    }, 280);
                 }
             };
             activeUtterance.onerror = function(event) {
+                if (sessionId !== readingSessionId) {
+                    return;
+                }
                 if (event.error !== 'canceled' && event.error !== 'interrupted') {
                     finishReading(language.indexOf('es') === 0
                         ? 'El navegador no pudo completar la lectura.'
@@ -2485,23 +2496,42 @@ ob_start();
         };
 
         const stopReading = function(message) {
+            readingSessionId += 1;
             readingStopped = true;
+            if (speechTimer !== null) {
+                window.clearTimeout(speechTimer);
+                speechTimer = null;
+            }
             window.speechSynthesis.cancel();
             finishReading(message || (language.indexOf('es') === 0 ? 'Lectura detenida.' : 'Reading stopped.'));
         };
 
         const beginReading = function(text, target, message) {
-            const cleanText = String(text || '').replace(/\s+/g, ' ').trim();
-            if (!cleanText) {
+            const textSegments = String(text || '').split(/\n+/).map(function(segment) {
+                return segment.replace(/\s+/g, ' ').trim();
+            }).filter(Boolean);
+            if (!textSegments.length) {
                 readStatus.textContent = language.indexOf('es') === 0
                     ? 'No se encontró texto para leer.'
                     : 'No readable text was found.';
                 return;
             }
 
+            readingSessionId += 1;
+            const sessionId = readingSessionId;
+            readingStopped = true;
+            if (speechTimer !== null) {
+                window.clearTimeout(speechTimer);
+                speechTimer = null;
+            }
             window.speechSynthesis.cancel();
+            if (activeReadTarget) {
+                activeReadTarget.classList.remove('single-herbs-reader__active');
+            }
             readingStopped = false;
-            speechChunks = splitSpeechText(cleanText, 230);
+            speechChunks = textSegments.reduce(function(chunks, segment) {
+                return chunks.concat(splitSpeechText(segment, 230));
+            }, []);
             speechChunkIndex = 0;
             activeReadTarget = target || null;
             if (activeReadTarget) {
@@ -2509,17 +2539,17 @@ ob_start();
             }
             setReadControls(true);
             readStatus.textContent = message;
-            window.setTimeout(speakNextChunk, 80);
+            speechTimer = window.setTimeout(function() {
+                speakNextChunk(sessionId);
+            }, 80);
         };
 
-        const punctuateSelectedText = function(text) {
-            return String(text || '').split(/\n+/).map(function(line) {
-                const cleanLine = line.replace(/\s+/g, ' ').trim();
-                if (!cleanLine) {
-                    return '';
-                }
-                return /[.!?;:]$/.test(cleanLine) ? cleanLine : cleanLine + '.';
-            }).filter(Boolean).join(' ');
+        const punctuateSelectedPart = function(text) {
+            const cleanText = String(text || '').replace(/\s+/g, ' ').trim();
+            if (!cleanText) {
+                return '';
+            }
+            return /[.!?;:]$/.test(cleanText) ? cleanText : cleanText + '.';
         };
 
         const liveSelectedStudyText = function() {
@@ -2531,7 +2561,47 @@ ob_start();
             if (!readAloudRoot.contains(range.startContainer) || !readAloudRoot.contains(range.endContainer)) {
                 return '';
             }
-            return punctuateSelectedText(selection.toString());
+
+            const selectedParts = [];
+            const walker = document.createTreeWalker(readAloudRoot, NodeFilter.SHOW_TEXT, {
+                acceptNode: function(node) {
+                    if (!node.nodeValue || !node.nodeValue.trim()) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    const parent = node.parentElement;
+                    if (!parent || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"]')) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    try {
+                        return range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                    } catch (error) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                }
+            });
+
+            let node = walker.nextNode();
+            while (node) {
+                let start = 0;
+                let end = node.nodeValue.length;
+                if (node === range.startContainer) {
+                    start = range.startOffset;
+                }
+                if (node === range.endContainer) {
+                    end = range.endOffset;
+                }
+                const selectedPart = punctuateSelectedPart(node.nodeValue.slice(start, end));
+                if (selectedPart) {
+                    selectedParts.push(selectedPart);
+                }
+                node = walker.nextNode();
+            }
+
+            if (!selectedParts.length) {
+                const fallbackText = punctuateSelectedPart(selection.toString());
+                return fallbackText;
+            }
+            return selectedParts.join('\n');
         };
 
         const captureSelectedStudyText = function() {
@@ -2671,8 +2741,8 @@ ob_start();
                 text,
                 null,
                 language.indexOf('es') === 0
-                    ? 'Leyendo únicamente el texto seleccionado…'
-                    : 'Reading selected text only…'
+                    ? 'Leyendo la selección por partes; el menú de secciones está ignorado…'
+                    : 'Reading the selection in parts; the section menu is ignored…'
             );
         });
 
