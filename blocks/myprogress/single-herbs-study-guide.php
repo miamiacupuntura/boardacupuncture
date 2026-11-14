@@ -3153,12 +3153,16 @@ ob_start();
                     : 'This category does not have a herb flash yet.';
                 return;
             }
+            const flashText = flashSource.dataset.readAloudFlash.replace(
+                /\s+(?=(?:La hierba número|Herb number))/g,
+                '\n'
+            );
             beginReading(
-                flashSource.dataset.readAloudFlash,
+                flashText,
                 flashSource,
                 language.indexOf('es') === 0
-                    ? 'Escuchando flash de hierbas: pinyin, nombre farmacéutico y diferencia decisiva…'
-                    : 'Playing herb flash: pinyin, pharmaceutical name and decisive difference…'
+                    ? 'Escuchando flash de hierbas: pinyin, nombre farmacéutico e indicación principal…'
+                    : 'Playing herb flash: pinyin, pharmaceutical name and primary indication…'
             );
         });
 

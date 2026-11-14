@@ -160,6 +160,7 @@ grep -Fq 'voicePreferenceScore' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-flash' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq '⚡ Flash de hierbas' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'flashSource.dataset.readAloudFlash' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq '/\s+(?=(?:La hierba número|Herb number))/g' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'applySpeechPronunciations' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "'Bo He': 'Bó Ge'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "'Niu Bang Zi': 'Niú, Bang, Tzí'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -207,6 +208,9 @@ grep -Fq 'data-read-aloud-summary="<?php echo s($cooldecisionsummary); ?>"' "$TE
 grep -Fq 'data-read-aloud-extended="<?php echo s($cooldecisionextended); ?>"' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
 grep -Fq 'data-read-aloud-flash="<?php echo s($coolflashnarration); ?>"' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
 grep -Fq 'Flash de hierbas frescas y acres que liberan el Exterior' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
+grep -Fq 'La hierba número uno es Bo He. Su nombre farmacéutico es Menthae haplocalycis Herba.' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
+grep -Fq 'La hierba número dos es Niu Bang Zi. Su nombre farmacéutico es Arctii Fructus.' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
+grep -Fq 'La hierba número once es Mu Zei. Su nombre farmacéutico es Equiseti hiemalis Herba.' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
 if grep -Fq '2.6 y 2.7; no son dosis ni porcentajes de eficacia' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"; then
     echo "ERROR: Cool Acrid todavía narra referencias numéricas de las figuras." >&2
     exit 1
@@ -989,6 +993,7 @@ echo "OK: el control de velocidad fue retirado; la narración usa velocidad norm
 echo "OK: el lector prioriza voces naturales y permite guardar una voz inglesa o española por navegador."
 echo "OK: el lector conserva una sola voz continua; no cambia automáticamente entre voz española y china."
 echo "OK: Cool Acrid ofrece un Flash de hierbas independiente con pinyin, nombre farmacéutico y diferencia decisiva."
+echo "OK: el Flash enumera once hierbas; cada número anuncia primero la hierba, luego el nombre farmacéutico y finalmente su indicación principal."
 echo "OK: la barra de progreso permite avanzar, retroceder y mover la lectura por fragmentos."
 echo "OK: la narración aplica pronunciaciones de pinyin y excluye gráficas y referencias numéricas de figuras."
 echo "OK: Bo He conserva su escritura visible y se envía a la voz española como ‘Bó Ge’ para producir la pronunciación ‘Bo Je’."
