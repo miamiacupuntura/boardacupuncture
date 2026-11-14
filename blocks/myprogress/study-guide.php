@@ -879,7 +879,7 @@ echo $OUTPUT->header();
                 <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"
                     href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <?php else: ?>
-                <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/'))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
+                <a class="subject-study-guide__back" href="<?php echo (new moodle_url('/my/', ['level' => 'board']))->out(false); ?>"><?php echo s($tr('← Back to Dashboard')); ?></a>
             <?php endif; ?>
         </nav>
     </header>
@@ -907,7 +907,7 @@ echo $OUTPUT->header();
                             <a class="subject-study-guide__back subject-study-library__score-top" href="<?php echo $studyscoreurl->out(false); ?>"><?php echo s($ises ? '📊 Mi puntuación' : '📊 My Study Score'); ?></a>
                             <a class="subject-study-guide__back subject-study-library__smart-top" href="<?php echo $smartstudytoolsurl->out(false); ?>"><?php echo s($ises ? '✨ Herramientas inteligentes' : '✨ Smart Study Tools'); ?></a>
                             <a class="subject-study-guide__back" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-                            <a class="subject-study-guide__back subject-study-library__dashboard" data-library-dashboard href="<?php echo (new moodle_url('/my/'))->out(false); ?>">Dashboard</a>
+                            <a class="subject-study-guide__back subject-study-library__dashboard" data-library-dashboard href="<?php echo (new moodle_url('/my/', ['level' => 'board']))->out(false); ?>">Dashboard</a>
                         </nav>
                     </header>
                     <div class="subject-study-library__journey" aria-label="<?php echo s($ises ? 'Actividades Board Level' : 'Board Level activities'); ?>">
