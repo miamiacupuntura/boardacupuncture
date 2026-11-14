@@ -54,19 +54,13 @@ if grep -Fq "? '← Actividades Board Level' : '← Board Level Activities'; ?>"
     exit 1
 fi
 grep -Fq "BOARD PREPARATION" "$TEMP_DIR/menu/block_menu.php"
-grep -Fq "School Level" "$TEMP_DIR/menu/block_menu.php"
-grep -Fq "Board Level" "$TEMP_DIR/menu/block_menu.php"
-grep -Fq "board-hub__card--mixed" "$TEMP_DIR/menu/block_menu.php"
-if grep -Fq "optional_param('level'" "$TEMP_DIR/menu/block_menu.php"; then
-    echo "ERROR: School Level y Board Level todavía usan páginas separadas." >&2
-    exit 1
-fi
-grep -Fq "Explore Board Preparation" "$TEMP_DIR/theme/templates/frontpage.mustache"
-grep -Fq "View Continuing Education" "$TEMP_DIR/theme/templates/frontpage.mustache"
-if grep -Fq "Explore School Level" "$TEMP_DIR/theme/templates/frontpage.mustache"; then
-    echo "ERROR: la portada todavía muestra el tercer botón cancelado." >&2
-    exit 1
-fi
+grep -Fq "Board Preparation" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "optional_param('level', 'school', PARAM_ALPHA)" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "['level' => 'school']" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "['level' => 'board']" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "Explore School Level" "$TEMP_DIR/theme/templates/frontpage.mustache"
+grep -Fq "{{{wwwroot}}}/my/?level=school" "$TEMP_DIR/theme/templates/frontpage.mustache"
+grep -Fq "{{{wwwroot}}}/my/?level=board" "$TEMP_DIR/theme/templates/frontpage.mustache"
 if grep -Fqi "Continuing Education" "$TEMP_DIR/menu/block_menu.php"; then
     echo "ERROR: la pantalla inicial todavía muestra la opción Continuing Education." >&2
     exit 1
@@ -769,8 +763,8 @@ echo "OK: se retiró el botón redundante Board Level Activities de 16 páginas 
 echo "OK: 10 páginas que no cargan la navegación compartida conservan un botón visible de regreso a Study Guide."
 echo "OK: Herbology Simulation muestra el botón Study Guide y regresa a la biblioteca de Herbology."
 echo "OK: la pantalla inicial posterior al login muestra únicamente Board Preparation; Continuing Education fue retirada."
-echo "OK: cada materia combina School Level y Board Level dentro de una sola tarjeta."
-echo "OK: la portada pública vuelve a mostrar Board Preparation y Continuing Education sin el tercer botón cancelado."
+echo "OK: School Level y Board Level usan páginas separadas con navegación entre ambas."
+echo "OK: la portada pública muestra accesos independientes a School Level, Board Level y Continuing Education."
 echo "OK: Safety Library usa el nuevo archivo safety-library.html; tanto el logotipo como el botón superior regresan a Herbology > Study Guide y no queda ninguna salida a /my/."
 echo "OK: la página pública safety-library.html fue descargada y validada después de instalar todas las rutas estáticas detectadas."
 echo "OK: Safety 1 integra propósito, métodos, tostado y excipientes líquidos, con correcciones para Yan Hu Suo, sal y Zhu Sha."
