@@ -1582,6 +1582,7 @@ ob_start();
 .single-herbs-reader__progress-value{color:#52677a;font-variant-numeric:tabular-nums;white-space:nowrap}
 .single-herbs-reader__status{min-height:21px;margin:10px 0 0;color:#52677a;font-size:13px;font-weight:800}
 .single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
+.single-herbs-reader__revealed{outline:3px solid rgba(247,126,37,.45);outline-offset:6px;border-radius:8px;transition:outline-color .35s ease}
 @media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:1/-1}.single-herbs-reader__progress{grid-template-columns:1fr 1fr}.single-herbs-reader__progress-field{grid-column:1/-1;grid-row:1}}
 @media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:auto}.single-herbs-reader__progress{grid-template-columns:1fr}.single-herbs-reader__progress-field{grid-column:auto;grid-row:auto}}
 </style>
@@ -2356,6 +2357,7 @@ ob_start();
         let readingStopped = true;
         let readingSessionId = 0;
         let speechTimer = null;
+        let revealedSectionTimer = null;
         let cachedSelectedStudyText = '';
 
         const graphMetadataPattern = /(?:relative study indices|relative indices|indices transcribed|values (?:are )?transcribed|not doses|clinical percentages|efficacy percentages|\bfig(?:ure|ures)?\.?\s*\d|índices relativos|índices de estudio|valores transcritos|no son dosis|porcentajes clínicos|porcentajes de eficacia|\bfiguras?\s*\d)/i;
@@ -3036,6 +3038,36 @@ ob_start();
             sectionSelect.appendChild(option);
         });
 
+        const revealSelectedSection = function(item) {
+            if (!item || !item.element) {
+                return;
+            }
+            if (revealedSectionTimer !== null) {
+                window.clearTimeout(revealedSectionTimer);
+                revealedSectionTimer = null;
+            }
+            readAloudRoot.querySelectorAll('.single-herbs-reader__revealed').forEach(function(element) {
+                element.classList.remove('single-herbs-reader__revealed');
+            });
+
+            const toolbarHeight = readAloudToolbar.getBoundingClientRect().height;
+            const elementTop = item.element.getBoundingClientRect().top + window.scrollY;
+            const prefersReducedMotion = window.matchMedia
+                && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            item.element.classList.add('single-herbs-reader__revealed');
+            window.scrollTo({
+                top: Math.max(0, elementTop - toolbarHeight - 16),
+                behavior: prefersReducedMotion ? 'auto' : 'smooth'
+            });
+            readStatus.textContent = language.indexOf('es') === 0
+                ? 'Sección visible: ' + item.label + '.'
+                : 'Section in view: ' + item.label + '.';
+            revealedSectionTimer = window.setTimeout(function() {
+                item.element.classList.remove('single-herbs-reader__revealed');
+                revealedSectionTimer = null;
+            }, 1800);
+        };
+
         try {
             const storedExplanationMode = window.localStorage.getItem('acupuncturetests-reader-explanation-mode');
             if (storedExplanationMode === 'extended' || storedExplanationMode === 'summary') {
@@ -3100,6 +3132,7 @@ ob_start();
 
         startButton.addEventListener('click', function() {
             const selected = sectionTargets[Number(sectionSelect.value) || 0];
+            revealSelectedSection(selected);
             beginReading(
                 selected ? visibleText(selected.element) : '',
                 selected ? selected.element : null,
@@ -3213,9 +3246,13 @@ ob_start();
             if (!readingStopped) {
                 stopReading(language.indexOf('es') === 0 ? 'Sección cambiada.' : 'Section changed.');
             }
+            revealSelectedSection(sectionTargets[Number(sectionSelect.value) || 0]);
         });
 
         window.addEventListener('beforeunload', function() {
+            if (revealedSectionTimer !== null) {
+                window.clearTimeout(revealedSectionTimer);
+            }
             if (speechSupported) {
                 window.speechSynthesis.cancel();
             }
