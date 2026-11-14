@@ -513,6 +513,10 @@ HTML;
 
             $this->content->text = <<<HTML
 <style>
+.board-hub__card h3 {
+    text-align: center;
+    text-wrap: balance;
+}
 .board-hub__card--board-level h3 {
     line-height: 1.18;
 }
