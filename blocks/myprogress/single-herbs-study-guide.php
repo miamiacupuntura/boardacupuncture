@@ -2312,7 +2312,7 @@ ob_start();
                 'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
                 '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
                 '.single-herbs-guide__source', '.single-herbs-guide__yang-controls',
-                '.single-herbs-guide__roster-modal'
+                '.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge'
             ].join(',')).forEach(function(node) {
                 node.remove();
             });
@@ -2583,7 +2583,7 @@ ob_start();
                         return NodeFilter.FILTER_REJECT;
                     }
                     const parent = node.parentElement;
-                    if (!parent || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"]')) {
+                    if (!parent || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"], .single-herbs-guide__category-herb-badge')) {
                         return NodeFilter.FILTER_REJECT;
                     }
                     try {
