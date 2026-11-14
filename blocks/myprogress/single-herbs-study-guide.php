@@ -1542,6 +1542,23 @@ ob_start();
 @media(max-width:720px){.single-herbs-guide__workspace--introduction{padding:14px 13px;border-top-width:4px;border-radius:9px}.single-herbs-guide__workspace--introduction .single-herbs-guide__workspace-header{margin-bottom:14px;padding-bottom:12px}.single-herbs-guide__workspace--introduction .single-herbs-guide__eyebrow{margin-bottom:4px;font-size:10px}.single-herbs-guide__workspace--introduction .single-herbs-guide__workspace-header h3{margin-bottom:5px;font-size:18px;line-height:1.25}.single-herbs-guide__workspace--introduction .single-herbs-guide__workspace-intro{font-size:12px;line-height:1.45}.single-herbs-intro__callout{padding:13px 14px;border-left-width:4px;border-radius:8px}.single-herbs-intro__callout h4{font-size:17px;line-height:1.3}.single-herbs-intro__callout p:last-child{font-size:12px;line-height:1.5}.single-herbs-intro__section{margin-top:21px}.single-herbs-intro__section>h4{margin-bottom:5px;font-size:17px;line-height:1.3}.single-herbs-intro__section>h5{margin:17px 0 7px;font-size:15px;line-height:1.3}.single-herbs-intro__section>p{margin-top:6px;font-size:12px;line-height:1.5}.single-herbs-intro :is(.single-herbs-intro__timeline,.single-herbs-intro__profile-grid,.single-herbs-intro__relationships,.single-herbs-intro__special-grid,.single-herbs-intro__reading-levels,.single-herbs-intro__taste-grid,.single-herbs-intro__two-column,.single-herbs-intro__direction-grid,.single-herbs-intro__processing-grid,.single-herbs-intro__dose-factors,.single-herbs-intro__safety-grid,.single-herbs-intro__delivery-grid){gap:7px;margin-top:10px}.single-herbs-intro article{padding:10px 11px;border-radius:7px}.single-herbs-intro article strong{margin-bottom:3px;font-size:13px;line-height:1.35}.single-herbs-intro :is(article span,article p){font-size:12px;line-height:1.4}.single-herbs-intro__two-column article p{margin:4px 0 0}.single-herbs-intro__methods{gap:5px;margin-top:10px}.single-herbs-intro__methods span{padding:5px 8px;font-size:10px}.single-herbs-intro .single-herbs-guide__note,.single-herbs-intro .single-herbs-guide__safety{margin-top:11px;padding:11px 12px;border-radius:7px;font-size:12px;line-height:1.45}.single-herbs-intro__workflow{gap:5px;margin:10px 0;padding-left:20px;font-size:12px}.single-herbs-intro__workflow li{padding:7px 9px}.single-herbs-intro .single-herbs-guide__source{margin-top:20px;font-size:11px;line-height:1.45}}
 @media(max-width:600px){.single-herbs-intro__nature-scale{grid-template-columns:repeat(5,minmax(0,1fr));margin:10px 0;font-size:10px}.single-herbs-intro__nature-scale span{padding:7px 2px}}
 @media(max-width:720px){.single-herbs-intro.is-mobile-linear .single-herbs-intro__section{margin:0;border-bottom:1px solid #dce5e9}.single-herbs-intro__mobile-toggle{display:flex;width:100%;min-height:48px;align-items:center;justify-content:space-between;gap:12px;padding:10px 2px;border:0;background:transparent;color:#123246;font-size:14px;font-weight:900;line-height:1.3;text-align:left;cursor:pointer}.single-herbs-intro__mobile-toggle[aria-expanded="true"]{color:#08746f}.single-herbs-intro__mobile-indicator{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:18px;line-height:1}.single-herbs-intro__section-panel{padding:0 0 13px}.single-herbs-intro__section-panel[hidden]{display:none}.single-herbs-intro.is-mobile-linear>.single-herbs-guide__source{margin-top:14px}}
+
+.single-herbs-reader{margin:0 0 18px;padding:16px 18px;border:1px solid #a9d5d1;border-left:5px solid #0b817d;border-radius:11px;background:#f5fbfa}
+.single-herbs-reader[hidden]{display:none}
+.single-herbs-reader__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:13px}
+.single-herbs-reader__heading h3{margin:0;color:#123246;font-size:18px}
+.single-herbs-reader__heading p{margin:3px 0 0;color:#60717e;font-size:13px;line-height:1.45}
+.single-herbs-reader__controls{display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,max-content) minmax(100px,120px);gap:9px;align-items:end}
+.single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}
+.single-herbs-reader select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #aebdc6;border-radius:8px;background:#fff;color:#17364a}
+.single-herbs-reader button{min-height:42px;padding:8px 13px;border:1px solid #0b817d;border-radius:8px;background:#0b817d;color:#fff;font-weight:900;cursor:pointer;white-space:nowrap}
+.single-herbs-reader button:hover:not(:disabled),.single-herbs-reader button:focus-visible:not(:disabled){background:#086963;border-color:#086963}
+.single-herbs-reader button.single-herbs-reader__secondary{background:#fff;color:#0b6f69}
+.single-herbs-reader button:disabled{cursor:not-allowed;opacity:.46}
+.single-herbs-reader__status{min-height:21px;margin:10px 0 0;color:#52677a;font-size:13px;font-weight:800}
+.single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
+@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field:first-child{grid-column:1/-1}.single-herbs-reader__field:last-child{grid-column:1/-1}}
+@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field:first-child,.single-herbs-reader__field:last-child{grid-column:auto}.single-herbs-reader button{width:100%}}
 </style>
 
 <main class="single-herbs-guide">
@@ -1567,6 +1584,40 @@ ob_start();
             </div>
         </nav>
     </header>
+
+    <section class="single-herbs-reader" data-single-herbs-reader
+        data-language="<?php echo $ises ? 'es-ES' : 'en-US'; ?>"
+        data-pause-label="<?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?>"
+        data-continue-label="<?php echo s($ises ? '▶ Continuar' : '▶ Continue'); ?>"
+        hidden>
+        <div class="single-herbs-reader__heading">
+            <div>
+                <h3><?php echo s($ises ? 'Escuchar esta guía' : 'Listen to this Study Guide'); ?></h3>
+                <p><?php echo s($ises
+                    ? 'Escucha toda la página actual o selecciona una sección.'
+                    : 'Listen to the current page or choose one section.'); ?></p>
+            </div>
+        </div>
+        <div class="single-herbs-reader__controls">
+            <label class="single-herbs-reader__field">
+                <?php echo s($ises ? 'Sección' : 'Section'); ?>
+                <select data-read-aloud-section aria-label="<?php echo s($ises ? 'Seleccionar sección para escuchar' : 'Choose a section to listen to'); ?>"></select>
+            </label>
+            <button type="button" data-read-aloud-start><?php echo s($ises ? '▶ Escuchar' : '▶ Read Aloud'); ?></button>
+            <button class="single-herbs-reader__secondary" type="button" data-read-aloud-pause disabled><?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?></button>
+            <button class="single-herbs-reader__secondary" type="button" data-read-aloud-stop disabled><?php echo s($ises ? '■ Detener' : '■ Stop'); ?></button>
+            <label class="single-herbs-reader__field">
+                <?php echo s($ises ? 'Velocidad' : 'Speed'); ?>
+                <select data-read-aloud-speed>
+                    <option value="0.75">0.75×</option>
+                    <option value="1" selected>1×</option>
+                    <option value="1.25">1.25×</option>
+                    <option value="1.5">1.5×</option>
+                </select>
+            </label>
+        </div>
+        <p class="single-herbs-reader__status" data-read-aloud-status role="status" aria-live="polite"><?php echo s($ises ? 'Lista para escuchar.' : 'Ready to read.'); ?></p>
+    </section>
 
     <?php if ($fromlibrary): ?>
         <?php echo block_myprogress_render_herbology_library_navigation($ises, $ises ? 'Hierbas individuales' : 'Single Herbs', 'guides'); ?>
@@ -2229,6 +2280,230 @@ ob_start();
 </main>
 <script>
 (function() {
+
+    const readAloudToolbar = document.querySelector('[data-single-herbs-reader]');
+    const readAloudRoot = document.querySelector('.single-herbs-guide__workspace');
+    if (readAloudToolbar && readAloudRoot) {
+        const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+        const sectionSelect = readAloudToolbar.querySelector('[data-read-aloud-section]');
+        const speedSelect = readAloudToolbar.querySelector('[data-read-aloud-speed]');
+        const startButton = readAloudToolbar.querySelector('[data-read-aloud-start]');
+        const pauseButton = readAloudToolbar.querySelector('[data-read-aloud-pause]');
+        const stopButton = readAloudToolbar.querySelector('[data-read-aloud-stop]');
+        const readStatus = readAloudToolbar.querySelector('[data-read-aloud-status]');
+        const language = readAloudToolbar.dataset.language || 'en-US';
+        const sectionTargets = [];
+        let speechChunks = [];
+        let speechChunkIndex = 0;
+        let activeReadTarget = null;
+        let activeUtterance = null;
+        let readingStopped = true;
+
+        const visibleText = function(element) {
+            const clone = element.cloneNode(true);
+            clone.querySelectorAll([
+                'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
+                '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
+                '.single-herbs-guide__source', '.single-herbs-guide__yang-controls',
+                '.single-herbs-guide__roster-modal'
+            ].join(',')).forEach(function(node) {
+                node.remove();
+            });
+            return clone.textContent.replace(/\s+/g, ' ').trim();
+        };
+
+        const splitSpeechText = function(text, maximumLength) {
+            const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text];
+            const chunks = [];
+            let current = '';
+            sentences.forEach(function(sentence) {
+                const cleanSentence = sentence.replace(/\s+/g, ' ').trim();
+                if (!cleanSentence) {
+                    return;
+                }
+                if ((current + ' ' + cleanSentence).trim().length <= maximumLength) {
+                    current = (current + ' ' + cleanSentence).trim();
+                    return;
+                }
+                if (current) {
+                    chunks.push(current);
+                    current = '';
+                }
+                if (cleanSentence.length <= maximumLength) {
+                    current = cleanSentence;
+                    return;
+                }
+                const words = cleanSentence.split(' ');
+                words.forEach(function(word) {
+                    if ((current + ' ' + word).trim().length > maximumLength && current) {
+                        chunks.push(current);
+                        current = word;
+                    } else {
+                        current = (current + ' ' + word).trim();
+                    }
+                });
+            });
+            if (current) {
+                chunks.push(current);
+            }
+            return chunks;
+        };
+
+        const chooseVoice = function() {
+            const voices = window.speechSynthesis.getVoices();
+            const languagePrefix = language.slice(0, 2).toLowerCase();
+            return voices.find(function(voice) {
+                return voice.lang.toLowerCase() === language.toLowerCase();
+            }) || voices.find(function(voice) {
+                return voice.lang.toLowerCase().slice(0, 2) === languagePrefix;
+            }) || null;
+        };
+
+        const setReadControls = function(isReading) {
+            startButton.disabled = isReading;
+            pauseButton.disabled = !isReading;
+            stopButton.disabled = !isReading;
+            sectionSelect.disabled = isReading;
+        };
+
+        const finishReading = function(message) {
+            readingStopped = true;
+            speechChunks = [];
+            speechChunkIndex = 0;
+            activeUtterance = null;
+            setReadControls(false);
+            pauseButton.textContent = readAloudToolbar.dataset.pauseLabel;
+            if (activeReadTarget) {
+                activeReadTarget.classList.remove('single-herbs-reader__active');
+            }
+            activeReadTarget = null;
+            readStatus.textContent = message;
+        };
+
+        const speakNextChunk = function() {
+            if (readingStopped) {
+                return;
+            }
+            if (speechChunkIndex >= speechChunks.length) {
+                finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.');
+                return;
+            }
+
+            activeUtterance = new SpeechSynthesisUtterance(speechChunks[speechChunkIndex]);
+            activeUtterance.lang = language;
+            activeUtterance.rate = Number(speedSelect.value) || 1;
+            const voice = chooseVoice();
+            if (voice) {
+                activeUtterance.voice = voice;
+            }
+            activeUtterance.onend = function() {
+                if (!readingStopped) {
+                    speechChunkIndex += 1;
+                    speakNextChunk();
+                }
+            };
+            activeUtterance.onerror = function(event) {
+                if (event.error !== 'canceled' && event.error !== 'interrupted') {
+                    finishReading(language.indexOf('es') === 0
+                        ? 'El navegador no pudo completar la lectura.'
+                        : 'The browser could not complete the reading.');
+                }
+            };
+            window.speechSynthesis.speak(activeUtterance);
+        };
+
+        const stopReading = function(message) {
+            readingStopped = true;
+            window.speechSynthesis.cancel();
+            finishReading(message || (language.indexOf('es') === 0 ? 'Lectura detenida.' : 'Reading stopped.'));
+        };
+
+        sectionTargets.push({
+            label: language.indexOf('es') === 0 ? 'Página de estudio actual' : 'Current study page',
+            element: readAloudRoot
+        });
+        const candidateSections = Array.from(readAloudRoot.querySelectorAll(
+            '.single-herbs-intro__section, .single-herbs-guide__section'
+        ));
+        candidateSections.forEach(function(section) {
+            const heading = section.querySelector('h3, h4, h5');
+            const label = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
+            if (label && visibleText(section).length > 40) {
+                sectionTargets.push({label: label, element: section});
+            }
+        });
+
+        sectionTargets.forEach(function(item, index) {
+            const option = document.createElement('option');
+            option.value = String(index);
+            option.textContent = item.label;
+            sectionSelect.appendChild(option);
+        });
+
+        readAloudToolbar.hidden = false;
+
+        if (!speechSupported) {
+            startButton.disabled = true;
+            readStatus.textContent = language.indexOf('es') === 0
+                ? 'Este navegador no admite la lectura en voz alta.'
+                : 'Read Aloud is not supported by this browser.';
+        } else {
+            window.speechSynthesis.getVoices();
+        }
+
+        startButton.addEventListener('click', function() {
+            const selected = sectionTargets[Number(sectionSelect.value) || 0];
+            const text = selected ? visibleText(selected.element) : '';
+            if (!text) {
+                readStatus.textContent = language.indexOf('es') === 0
+                    ? 'Esta sección no contiene texto para leer.'
+                    : 'This section has no text to read.';
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+            readingStopped = false;
+            speechChunks = splitSpeechText(text, 230);
+            speechChunkIndex = 0;
+            activeReadTarget = selected.element;
+            activeReadTarget.classList.add('single-herbs-reader__active');
+            setReadControls(true);
+            readStatus.textContent = language.indexOf('es') === 0 ? 'Leyendo en voz alta…' : 'Reading aloud…';
+            window.setTimeout(speakNextChunk, 40);
+        });
+
+        pauseButton.addEventListener('click', function() {
+            if (!window.speechSynthesis.speaking) {
+                return;
+            }
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                pauseButton.textContent = readAloudToolbar.dataset.pauseLabel;
+                readStatus.textContent = language.indexOf('es') === 0 ? 'Leyendo en voz alta…' : 'Reading aloud…';
+            } else {
+                window.speechSynthesis.pause();
+                pauseButton.textContent = readAloudToolbar.dataset.continueLabel;
+                readStatus.textContent = language.indexOf('es') === 0 ? 'Lectura pausada.' : 'Reading paused.';
+            }
+        });
+
+        stopButton.addEventListener('click', function() {
+            stopReading();
+        });
+
+        sectionSelect.addEventListener('change', function() {
+            if (!readingStopped) {
+                stopReading(language.indexOf('es') === 0 ? 'Sección cambiada.' : 'Section changed.');
+            }
+        });
+
+        window.addEventListener('beforeunload', function() {
+            if (speechSupported) {
+                window.speechSynthesis.cancel();
+            }
+        });
+    }
+
     const rosterTrigger = document.querySelector('[data-guideline-roster-open]');
     const rosterModal = document.querySelector('[data-guideline-roster-modal]');
     const rosterDialog = rosterModal ? rosterModal.querySelector('[role="dialog"]') : null;
