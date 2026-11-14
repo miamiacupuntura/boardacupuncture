@@ -1543,7 +1543,7 @@ ob_start();
 @media(max-width:600px){.single-herbs-intro__nature-scale{grid-template-columns:repeat(5,minmax(0,1fr));margin:10px 0;font-size:10px}.single-herbs-intro__nature-scale span{padding:7px 2px}}
 @media(max-width:720px){.single-herbs-intro.is-mobile-linear .single-herbs-intro__section{margin:0;border-bottom:1px solid #dce5e9}.single-herbs-intro__mobile-toggle{display:flex;width:100%;min-height:48px;align-items:center;justify-content:space-between;gap:12px;padding:10px 2px;border:0;background:transparent;color:#123246;font-size:14px;font-weight:900;line-height:1.3;text-align:left;cursor:pointer}.single-herbs-intro__mobile-toggle[aria-expanded="true"]{color:#08746f}.single-herbs-intro__mobile-indicator{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:18px;line-height:1}.single-herbs-intro__section-panel{padding:0 0 13px}.single-herbs-intro__section-panel[hidden]{display:none}.single-herbs-intro.is-mobile-linear>.single-herbs-guide__source{margin-top:14px}}
 
-.single-herbs-reader{margin:0 0 18px;padding:16px 18px;border:1px solid #a9d5d1;border-left:5px solid #0b817d;border-radius:11px;background:#f5fbfa}
+.single-herbs-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;padding:16px 18px;border:1px solid #a9d5d1;border-left:5px solid #0b817d;border-radius:11px;background:#f5fbfa;box-shadow:0 8px 24px rgba(15,23,42,.12)}
 .single-herbs-reader[hidden]{display:none}
 .single-herbs-reader__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:13px}
 .single-herbs-reader__heading h3{margin:0;color:#123246;font-size:18px}
@@ -2301,6 +2301,14 @@ ob_start();
 
         const visibleText = function(element) {
             const clone = element.cloneNode(true);
+            clone.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function(heading) {
+                const headingText = heading.textContent.replace(/\s+/g, ' ').trim();
+                if (headingText && !/[.!?;:]$/.test(headingText)) {
+                    heading.appendChild(document.createTextNode('. '));
+                } else {
+                    heading.appendChild(document.createTextNode(' '));
+                }
+            });
             clone.querySelectorAll([
                 'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
                 '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
