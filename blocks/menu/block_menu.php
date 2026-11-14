@@ -376,7 +376,7 @@ class block_menu extends block_base {
 
                 $boardcards .= '<article class="board-hub__card board-hub__card--school-level board-hub__card--'
                     . s($subject['area']) . '">'
-                    . '<h3>' . s($subject['name'] . ' School Level') . '</h3>'
+                    . '<h3>' . s($subject['name'] . ' NCCAOM Focused Practice') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__progress"><strong>' . format_float($progress['grade'], 2, true)
                     . '%</strong><span>' . $progress['passed'] . ' of ' . number_format($progress['total'])
@@ -426,7 +426,7 @@ class block_menu extends block_base {
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'
                     . s($subject['area']) . '">'
-                    . '<h3>' . s($subject['name'] . ' Board Level') . '</h3>'
+                    . '<h3>' . s($subject['name'] . ' NCBAHM Comprehensive Review') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__actions">' . $boardlevelactions . '</div>'
                     . '</article>';
@@ -471,16 +471,16 @@ class block_menu extends block_base {
             $boardcurrent = $levelview === 'board' ? ' aria-current="page"' : '';
 
             $levelnavigation = <<<HTML
-  <nav class="board-hub__level-nav" aria-label="Choose School Level or Board Level">
-    <a class="board-hub__level-link{$schoolactive}" href="{$schoollevelurl}"{$schoolcurrent}>School Level</a>
-    <a class="board-hub__level-link{$boardactive}" href="{$boardlevelurl}"{$boardcurrent}>Board Level</a>
+  <nav class="board-hub__level-nav" aria-label="Choose NCCAOM Focused Practice or NCBAHM Comprehensive Review">
+    <a class="board-hub__level-link{$schoolactive}" href="{$schoollevelurl}"{$schoolcurrent}>NCCAOM Focused Practice</a>
+    <a class="board-hub__level-link{$boardactive}" href="{$boardlevelurl}"{$boardcurrent}>NCBAHM Comprehensive Review</a>
   </nav>
 HTML;
 
             if ($levelview === 'board') {
-                $leveleyebrow = 'BOARD LEVEL';
-                $leveltitle = 'Your Board Level Activities';
-                $levelintro = 'Open Study Guides, Board practice, quizzes, exams and simulations without mixing School Level resources.';
+                $leveleyebrow = 'NCBAHM COMPREHENSIVE REVIEW';
+                $leveltitle = 'Your NCBAHM Comprehensive Review Activities';
+                $levelintro = 'Open Study Guides, Board practice, quizzes, exams and simulations without mixing NCCAOM Focused Practice resources.';
                 $levelcontent = <<<HTML
   <aside class="board-guidelines-dashboard-panel" aria-label="NCBAHM Board Guidelines">
     <div>
@@ -489,21 +489,21 @@ HTML;
     </div>
     <a class="board-guidelines-dashboard-link" href="{$boardguidelinesurl}">Open Board Guidelines</a>
   </aside>
-  <div class="board-hub__grid board-hub__grid--board-level" aria-label="Board Level modules">{$boardlevelcards}</div>
+  <div class="board-hub__grid board-hub__grid--board-level" aria-label="NCBAHM Comprehensive Review modules">{$boardlevelcards}</div>
 HTML;
             } else {
-                $leveleyebrow = 'SCHOOL LEVEL';
-                $leveltitle = 'Your School Level Activities';
-                $levelintro = 'Continue questions, simulations, exam keys and complementary courses without mixing Board Level workspaces.';
+                $leveleyebrow = 'NCCAOM FOCUSED PRACTICE';
+                $leveltitle = 'Your NCCAOM Focused Practice Activities';
+                $levelintro = 'Continue questions, simulations, exam keys and complementary courses without mixing NCBAHM Comprehensive Review workspaces.';
                 $levelcontent = <<<HTML
-  <div class="board-hub__grid" aria-label="School Level modules">{$boardcards}</div>
+  <div class="board-hub__grid" aria-label="NCCAOM Focused Practice modules">{$boardcards}</div>
   <aside class="module-school-dashboard-panel" aria-labelledby="module-school-dashboard-title">
     <div class="module-school-dashboard-panel__copy">
       <p>COMPLEMENTARY COURSES</p>
-      <h3 id="module-school-dashboard-title">Complementary Courses School Level</h3>
-      <span>Open the complementary School Level course you want to study.</span>
+      <h3 id="module-school-dashboard-title">Complementary Courses NCCAOM Focused Practice</h3>
+      <span>Open the complementary NCCAOM Focused Practice course you want to study.</span>
     </div>
-    <nav class="module-school-dashboard-panel__actions" aria-label="Complementary Courses School Level">
+    <nav class="module-school-dashboard-panel__actions" aria-label="Complementary Courses NCCAOM Focused Practice">
       {$complementarycoursebuttons}
     </nav>
   </aside>
