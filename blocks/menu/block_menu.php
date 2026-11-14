@@ -426,7 +426,8 @@ class block_menu extends block_base {
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'
                     . s($subject['area']) . '">'
-                    . '<h3>' . s($subject['name'] . ' Comprehensive Review') . '</h3>'
+                    . '<h3><span class="board-hub__card-subject">' . s($subject['name']) . '</span>'
+                    . '<span class="board-hub__card-mode">Comprehensive Review</span></h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__actions">' . $boardlevelactions . '</div>'
                     . '</article>';
@@ -512,6 +513,18 @@ HTML;
 
             $this->content->text = <<<HTML
 <style>
+.board-hub__card--board-level h3 {
+    line-height: 1.18;
+}
+.board-hub__card-subject,
+.board-hub__card-mode {
+    display: block;
+}
+.board-hub__card-mode {
+    margin-top: 2px;
+    font-size: .86em;
+    white-space: nowrap;
+}
 .board-hub__level-nav {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
