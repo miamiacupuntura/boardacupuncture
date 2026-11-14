@@ -2458,16 +2458,22 @@ ob_start();
             readStatus.textContent = message;
         };
 
+        const completeReading = function() {
+            readingSessionId += 1;
+            finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.');
+        };
+
         const speakNextChunk = function(sessionId) {
             if (readingStopped || sessionId !== readingSessionId) {
                 return;
             }
             if (speechChunkIndex >= speechChunks.length) {
-                finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.');
+                completeReading();
                 return;
             }
 
-            activeUtterance = new SpeechSynthesisUtterance(speechChunks[speechChunkIndex]);
+            const currentChunkIndex = speechChunkIndex;
+            activeUtterance = new SpeechSynthesisUtterance(speechChunks[currentChunkIndex]);
             activeUtterance.lang = language;
             activeUtterance.rate = 1;
             const voice = chooseVoice();
@@ -2475,12 +2481,17 @@ ob_start();
                 activeUtterance.voice = voice;
             }
             activeUtterance.onend = function() {
-                if (!readingStopped && sessionId === readingSessionId) {
-                    speechChunkIndex += 1;
-                    speechTimer = window.setTimeout(function() {
-                        speakNextChunk(sessionId);
-                    }, 280);
+                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
+                    return;
                 }
+                speechChunkIndex += 1;
+                if (speechChunkIndex >= speechChunks.length) {
+                    completeReading();
+                    return;
+                }
+                speechTimer = window.setTimeout(function() {
+                    speakNextChunk(sessionId);
+                }, 280);
             };
             activeUtterance.onerror = function(event) {
                 if (sessionId !== readingSessionId) {
