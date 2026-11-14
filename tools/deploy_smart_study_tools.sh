@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MENU_FILES=(herbology-board.php block_menu.php)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
@@ -46,6 +46,9 @@ for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
 
+grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'SpeechSynthesisUtterance' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'splitSpeechText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'id="read-aloud"' "$TEMP_DIR/static/read-aloud-test.html"
 grep -Fq 'speechSynthesis' "$TEMP_DIR/static/read-aloud-test.html"
 grep -Fq 'Chinese herbs are commonly organized' "$TEMP_DIR/static/read-aloud-test.html"
@@ -805,6 +808,7 @@ echo "OK: el mapa separa 181 fórmulas oficiales de 145 referencias de la fuente
 echo "OK: los términos ambiguos o no oficiales permanecen como referencias sin enlace."
 echo "OK: 12 tarjetas derivadas muestran la composición por fórmula base y las hierbas de cada grupo."
 echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón de regreso."
+echo "OK: Single Herbs Study Guide permite escuchar la página actual o una sección, en inglés y español."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
