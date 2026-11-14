@@ -1619,8 +1619,8 @@ ob_start();
             <div>
                 <h3><?php echo s($ises ? 'Escuchar esta guía' : 'Listen to this Study Guide'); ?></h3>
                 <p><?php echo s($ises
-                    ? 'Escucha toda la página o una sección. Los nombres de hierbas usan voz china para el pinyin cuando está disponible.'
-                    : 'Listen to the full page or one section. Herb names use a Chinese voice for pinyin when available.'); ?></p>
+                    ? 'Escucha toda la página actual o selecciona una sección.'
+                    : 'Listen to the current page or choose one section.'); ?></p>
             </div>
         </div>
         <div class="single-herbs-reader__controls">
@@ -1645,6 +1645,7 @@ ob_start();
             <button type="button" data-read-aloud-start><?php echo s($ises ? '▶ Escuchar sección' : '▶ Read Section'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-selection><?php echo s($ises ? '🔊 Selección' : '🔊 Selection'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-visible><?php echo s($ises ? '👁 Texto visible' : '👁 Visible Text'); ?></button>
+            <button class="single-herbs-reader__secondary" type="button" data-read-aloud-flash hidden><?php echo s($ises ? '⚡ Flash de hierbas' : '⚡ Herb Flash'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-pause disabled><?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-stop disabled><?php echo s($ises ? '■ Detener' : '■ Stop'); ?></button>
         </div>
@@ -2336,6 +2337,7 @@ ob_start();
         const startButton = readAloudToolbar.querySelector('[data-read-aloud-start]');
         const selectionButton = readAloudToolbar.querySelector('[data-read-aloud-selection]');
         const visibleButton = readAloudToolbar.querySelector('[data-read-aloud-visible]');
+        const flashButton = readAloudToolbar.querySelector('[data-read-aloud-flash]');
         const pauseButton = readAloudToolbar.querySelector('[data-read-aloud-pause]');
         const stopButton = readAloudToolbar.querySelector('[data-read-aloud-stop]');
         const backButton = readAloudToolbar.querySelector('[data-read-aloud-back]');
@@ -2344,11 +2346,9 @@ ob_start();
         const progressValue = readAloudToolbar.querySelector('[data-read-aloud-progress-value]');
         const readStatus = readAloudToolbar.querySelector('[data-read-aloud-status]');
         const language = readAloudToolbar.dataset.language || 'en-US';
-        const pinyinHerbNames = <?php echo json_encode(array_values(array_unique(array_column($guidelineherbroster, 'name'))), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+        const flashSource = readAloudRoot.querySelector('[data-read-aloud-flash]');
         const sectionTargets = [];
-        let allVoices = [];
         let availableVoices = [];
-        let pinyinVoice = null;
         let speechChunks = [];
         let speechChunkIndex = 0;
         let activeReadTarget = null;
@@ -2657,27 +2657,12 @@ ob_start();
         const populateVoiceOptions = function() {
             const languagePrefix = language.slice(0, 2).toLowerCase();
             const previousValue = voiceSelect.value;
-            allVoices = window.speechSynthesis.getVoices();
-            availableVoices = allVoices.filter(function(voice) {
+            availableVoices = window.speechSynthesis.getVoices().filter(function(voice) {
                 return voice.lang.toLowerCase().slice(0, 2) === languagePrefix;
             }).sort(function(first, second) {
                 const scoreDifference = voicePreferenceScore(first) - voicePreferenceScore(second);
                 return scoreDifference || first.name.localeCompare(second.name);
             });
-            const pinyinVoices = allVoices.filter(function(voice) {
-                return voice.lang.toLowerCase().slice(0, 2) === 'zh';
-            }).sort(function(first, second) {
-                const firstName = first.name.toLowerCase();
-                const secondName = second.name.toLowerCase();
-                const firstScore = (first.lang.toLowerCase() === 'zh-cn' ? -40 : 0)
-                    + (/natural|neural|premium|enhanced|xiaoxiao|yunxi/.test(firstName) ? -30 : 0)
-                    + (first.localService ? 0 : -5);
-                const secondScore = (second.lang.toLowerCase() === 'zh-cn' ? -40 : 0)
-                    + (/natural|neural|premium|enhanced|xiaoxiao|yunxi/.test(secondName) ? -30 : 0)
-                    + (second.localService ? 0 : -5);
-                return firstScore - secondScore || first.name.localeCompare(second.name);
-            });
-            pinyinVoice = pinyinVoices[0] || null;
 
             voiceSelect.replaceChildren();
             const automaticOption = document.createElement('option');
@@ -2720,84 +2705,6 @@ ob_start();
             return availableVoices[0] || null;
         };
 
-        const choosePinyinVoice = function() {
-            return pinyinVoice;
-        };
-
-        const pinyinHerbNameSet = new Set((pinyinHerbNames || []).map(function(name) {
-            return cleanStructuredText(name);
-        }).filter(Boolean));
-        readAloudRoot.querySelectorAll('.single-herbs-guide__category-herb-head strong, .single-herbs-guide__profile-name').forEach(function(element) {
-            const herbName = cleanStructuredText(element.textContent);
-            if (herbName) {
-                pinyinHerbNameSet.add(herbName);
-            }
-        });
-        const pinyinHerbPattern = new RegExp(
-            '\\b(' + Array.from(pinyinHerbNameSet).sort(function(first, second) {
-                return second.length - first.length;
-            }).map(function(name) {
-                return name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            }).join('|') + ')\\b',
-            'gi'
-        );
-
-        const prepareSpeechSegments = function(text) {
-            const preparedText = stripFigureReferencesForSpeech(normalizeSpeechSymbols(text));
-            const chineseVoice = choosePinyinVoice();
-            if (!chineseVoice || !pinyinHerbNameSet.size) {
-                return [{
-                    text: applySpeechPronunciations(preparedText),
-                    lang: language,
-                    voice: chooseVoice(),
-                    isPinyin: false
-                }];
-            }
-
-            const segments = [];
-            let cursor = 0;
-            pinyinHerbPattern.lastIndex = 0;
-            let match = pinyinHerbPattern.exec(preparedText);
-            while (match) {
-                if (match.index > cursor) {
-                    const surroundingText = preparedText.slice(cursor, match.index);
-                    if (surroundingText.trim()) {
-                        segments.push({
-                            text: applySpeechPronunciations(surroundingText),
-                            lang: language,
-                            voice: chooseVoice(),
-                            isPinyin: false
-                        });
-                    }
-                }
-                segments.push({
-                    text: match[0],
-                    lang: chineseVoice.lang || 'zh-CN',
-                    voice: chineseVoice,
-                    isPinyin: true
-                });
-                cursor = match.index + match[0].length;
-                match = pinyinHerbPattern.exec(preparedText);
-            }
-            if (cursor < preparedText.length) {
-                const remainingText = preparedText.slice(cursor);
-                if (remainingText.trim()) {
-                    segments.push({
-                        text: applySpeechPronunciations(remainingText),
-                        lang: language,
-                        voice: chooseVoice(),
-                        isPinyin: false
-                    });
-                }
-            }
-            return segments.length ? segments : [{
-                text: applySpeechPronunciations(preparedText),
-                lang: language,
-                voice: chooseVoice(),
-                isPinyin: false
-            }];
-        };
-
         const progressLabel = function(index, total, completed) {
             if (!total) {
                 return language.indexOf('es') === 0 ? 'Sin lectura' : 'Not started';
@@ -2831,6 +2738,7 @@ ob_start();
             startButton.disabled = isReading;
             selectionButton.disabled = isReading;
             visibleButton.disabled = isReading;
+            flashButton.disabled = isReading || !flashSource;
             pauseButton.disabled = !isReading;
             stopButton.disabled = !isReading;
             sectionSelect.disabled = isReading;
@@ -2867,64 +2775,6 @@ ob_start();
             finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.', true);
         };
 
-        const speakPreparedSegment = function(sessionId, currentChunkIndex, segments, segmentIndex) {
-            if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
-                return;
-            }
-            if (segmentIndex >= segments.length) {
-                speechChunkIndex += 1;
-                updateReadingProgress(false);
-                if (speechChunkIndex >= speechChunks.length) {
-                    completeReading();
-                    return;
-                }
-                speechTimer = window.setTimeout(function() {
-                    speakNextChunk(sessionId);
-                }, 280);
-                return;
-            }
-
-            const segment = segments[segmentIndex];
-            activeUtterance = new SpeechSynthesisUtterance(segment.text);
-            activeUtterance.lang = segment.lang;
-            activeUtterance.rate = 1;
-            if (segment.voice) {
-                activeUtterance.voice = segment.voice;
-            }
-            activeUtterance.onend = function() {
-                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
-                    return;
-                }
-                speechTimer = window.setTimeout(function() {
-                    speakPreparedSegment(sessionId, currentChunkIndex, segments, segmentIndex + 1);
-                }, segment.isPinyin ? 90 : 45);
-            };
-            activeUtterance.onerror = function(event) {
-                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
-                    return;
-                }
-                if (event.error === 'canceled' || event.error === 'interrupted') {
-                    return;
-                }
-                if (segment.isPinyin) {
-                    segments[segmentIndex] = {
-                        text: applySpeechPronunciations(segment.text),
-                        lang: language,
-                        voice: chooseVoice(),
-                        isPinyin: false
-                    };
-                    speechTimer = window.setTimeout(function() {
-                        speakPreparedSegment(sessionId, currentChunkIndex, segments, segmentIndex);
-                    }, 45);
-                    return;
-                }
-                finishReading(language.indexOf('es') === 0
-                    ? 'El navegador no pudo completar la lectura.'
-                    : 'The browser could not complete the reading.');
-            };
-            window.speechSynthesis.speak(activeUtterance);
-        };
-
         const speakNextChunk = function(sessionId) {
             if (readingStopped || sessionId !== readingSessionId) {
                 return;
@@ -2936,12 +2786,38 @@ ob_start();
 
             const currentChunkIndex = speechChunkIndex;
             updateReadingProgress(false);
-            speakPreparedSegment(
-                sessionId,
-                currentChunkIndex,
-                prepareSpeechSegments(speechChunks[currentChunkIndex]),
-                0
-            );
+            activeUtterance = new SpeechSynthesisUtterance(applySpeechPronunciations(speechChunks[currentChunkIndex]));
+            activeUtterance.lang = language;
+            activeUtterance.rate = 1;
+            const voice = chooseVoice();
+            if (voice) {
+                activeUtterance.voice = voice;
+            }
+            activeUtterance.onend = function() {
+                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
+                    return;
+                }
+                speechChunkIndex += 1;
+                updateReadingProgress(false);
+                if (speechChunkIndex >= speechChunks.length) {
+                    completeReading();
+                    return;
+                }
+                speechTimer = window.setTimeout(function() {
+                    speakNextChunk(sessionId);
+                }, 280);
+            };
+            activeUtterance.onerror = function(event) {
+                if (sessionId !== readingSessionId) {
+                    return;
+                }
+                if (event.error !== 'canceled' && event.error !== 'interrupted') {
+                    finishReading(language.indexOf('es') === 0
+                        ? 'El navegador no pudo completar la lectura.'
+                        : 'The browser could not complete the reading.');
+                }
+            };
+            window.speechSynthesis.speak(activeUtterance);
         };
 
         const seekToSpeechChunk = function(targetIndex) {
@@ -3170,12 +3046,14 @@ ob_start();
         }
 
         readAloudToolbar.hidden = false;
+        flashButton.hidden = !flashSource;
 
         if (!speechSupported) {
             fullButton.disabled = true;
             startButton.disabled = true;
             selectionButton.disabled = true;
             visibleButton.disabled = true;
+            flashButton.disabled = true;
             voiceSelect.disabled = true;
             explanationModeSelect.disabled = true;
             readStatus.textContent = language.indexOf('es') === 0
@@ -3265,6 +3143,22 @@ ob_start();
                 text,
                 null,
                 language.indexOf('es') === 0 ? 'Leyendo el texto visible…' : 'Reading visible text…'
+            );
+        });
+
+        flashButton.addEventListener('click', function() {
+            if (!flashSource || !flashSource.dataset.readAloudFlash) {
+                readStatus.textContent = language.indexOf('es') === 0
+                    ? 'Esta categoría todavía no tiene un flash de hierbas.'
+                    : 'This category does not have a herb flash yet.';
+                return;
+            }
+            beginReading(
+                flashSource.dataset.readAloudFlash,
+                flashSource,
+                language.indexOf('es') === 0
+                    ? 'Escuchando flash de hierbas: pinyin, nombre farmacéutico y diferencia decisiva…'
+                    : 'Playing herb flash: pinyin, pharmaceutical name and decisive difference…'
             );
         });
 
