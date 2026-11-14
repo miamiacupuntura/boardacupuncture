@@ -2431,12 +2431,25 @@ ob_start();
                     ? summary.querySelector('.single-herbs-guide__profile-name').textContent : '');
                 const latin = cleanStructuredText(summary.querySelector('.single-herbs-guide__profile-latin')
                     ? summary.querySelector('.single-herbs-guide__profile-latin').textContent : '');
-                const properties = cleanStructuredText(summary.querySelector('.single-herbs-guide__profile-meta')
+                const profileMeta = cleanStructuredText(summary.querySelector('.single-herbs-guide__profile-meta')
                     ? summary.querySelector('.single-herbs-guide__profile-meta').textContent : '');
+                const profileMetaParts = profileMeta.split(/\s*·\s*/).map(function(part) {
+                    return part.trim();
+                }).filter(Boolean);
+                let spokenProfileMeta = '';
+                if (profileMetaParts.length >= 2) {
+                    spokenProfileMeta = (isSpanish ? 'Propiedades de la hierba: ' : 'Herb properties: ')
+                        + profileMetaParts[0] + '. '
+                        + (isSpanish ? 'Meridianos que penetra: ' : 'Channels entered: ')
+                        + profileMetaParts.slice(1).join(', ') + '.';
+                } else if (profileMeta) {
+                    spokenProfileMeta = (isSpanish ? 'Resumen del perfil: ' : 'Profile summary: ')
+                        + profileMeta + '.';
+                }
                 if (name) {
                     summary.dataset.readAloudText = name + '. '
                         + (latin ? (isSpanish ? 'Nombre farmacéutico: ' : 'Pharmaceutical name: ') + latin + '. ' : '')
-                        + (properties ? (isSpanish ? 'Propiedades principales: ' : 'Main properties: ') + properties + '.' : '');
+                        + spokenProfileMeta;
                     summary.dataset.readAloudGenerated = 'profile-heading';
                 }
             });
