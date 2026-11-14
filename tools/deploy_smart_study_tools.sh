@@ -60,6 +60,9 @@ grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/single-herbs-study-g
 grep -Fq 'cachedSelectedStudyText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "document.addEventListener('selectionchange'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'captureSelectedStudyText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'readingSessionId' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'range.intersectsNode(node)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'NodeFilter.SHOW_TEXT' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 if grep -Fq 'data-read-aloud-speed' "$TEMP_DIR/moodle/single-herbs-study-guide.php"; then
     echo "ERROR: Single Herbs Study Guide todavía muestra el control de velocidad." >&2
     exit 1
@@ -831,6 +834,8 @@ echo "OK: el lector permite página completa, sección, selección manual y text
 echo "OK: el control de velocidad fue retirado; la narración usa velocidad normal fija."
 echo "OK: el lector prioriza voces naturales y permite guardar una voz inglesa o española por navegador."
 echo "OK: Selección conserva el texto marcado y no usa la sección elegida en el menú."
+echo "OK: la selección se reconstruye por elementos para incluir barras, tarjetas y cajas internas."
+echo "OK: cada lectura usa una sesión aislada; al terminar no continúa con fragmentos anteriores."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
