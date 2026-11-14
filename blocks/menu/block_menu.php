@@ -376,7 +376,7 @@ class block_menu extends block_base {
 
                 $boardcards .= '<article class="board-hub__card board-hub__card--school-level board-hub__card--'
                     . s($subject['area']) . '">'
-                    . '<h3>' . s($subject['name'] . ' NCCAOM Focused Practice') . '</h3>'
+                    . '<h3>' . s($subject['name'] . ' Focused Practice') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__progress"><strong>' . format_float($progress['grade'], 2, true)
                     . '%</strong><span>' . $progress['passed'] . ' of ' . number_format($progress['total'])
@@ -426,7 +426,7 @@ class block_menu extends block_base {
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'
                     . s($subject['area']) . '">'
-                    . '<h3>' . s($subject['name'] . ' NCBAHM Comprehensive Review') . '</h3>'
+                    . '<h3>' . s($subject['name'] . ' Comprehensive Review') . '</h3>'
                     . '<p class="board-hub__description">' . s($subject['description']) . '</p>'
                     . '<div class="board-hub__actions">' . $boardlevelactions . '</div>'
                     . '</article>';
