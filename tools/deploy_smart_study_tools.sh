@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MENU_FILES=(herbology-board.php block_menu.php)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
 DATA_FILES=(single-herb-safety-supplement.json formula-architecture-data.json dui-yao-smart-data.json)
@@ -882,6 +882,7 @@ echo "OK: las conclusiones se concentran en el contenido académico y omiten acl
 echo "OK: Calor relativo explica grados internos de tibieza sin reclasificar las nueve hierbas como calientes."
 echo "OK: las cuatro conclusiones interpretan selección, mecanismo y énfasis terapéutico sin narrar lo evidente en las barras."
 echo "OK: cada conclusión anuncia la gráfica interpretada e incorpora pinyin y nombre farmacéutico."
+echo "OK: el archivo español de Single Herbs Study Guide se descarga, valida, respalda e instala junto con la página principal."
 echo "OK: la gráfica española usa “Tibieza relativa” para conservar la clasificación térmica correcta."
 echo "OK: los asteriscos permanecen visibles como marcadores, pero se eliminan antes de narrar."
 echo "OK: Selección pausa por fragmentos sin insertar ni pronunciar “punto” donde estaba el asterisco."
