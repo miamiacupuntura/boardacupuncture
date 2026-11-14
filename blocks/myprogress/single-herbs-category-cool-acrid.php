@@ -222,7 +222,10 @@ $coolquestions = [
     <div class="single-herbs-guide__bensky-grid">
         <article class="single-herbs-guide__bensky-card">
             <h5><?php echo s($cooltext('1 · Wind-Heat and rash dispersion', '1 · Dispersión de Viento-Calor y erupciones')); ?></h5>
-            <table><tbody>
+            <table data-read-aloud-text="<?php echo s($cooltext(
+                    'This order is clinically useful because Bo He (Menthae haplocalycis Herba) disperses Wind-Heat most lightly and quickly while also moving constrained Liver Qi. Choose Niu Bang Zi (Arctii Fructus) when painful throat swelling, Heat-toxin, incomplete rash expression or constipation is more important. Chan Tui (Cicadae Periostracum) is gentler and becomes distinctive with itching, hoarseness, eye symptoms or spasms. Sang Ye (Mori Folium) and Ju Hua (Chrysanthemi Flos) are less centered on sweating: Sang Ye fits dry Lung cough, whereas Ju Hua fits Liver Heat affecting the eyes.',
+                    'Este orden es clínicamente útil porque Bo He (Menthae haplocalycis Herba) dispersa Viento-Calor de manera más ligera y rápida, y además moviliza el Qi de Hígado estancado. Elige Niu Bang Zi (Arctii Fructus) cuando predominan la inflamación dolorosa de garganta, el Calor-Toxina, la exteriorización incompleta de una erupción o el estreñimiento. Chan Tui (Cicadae Periostracum) es más suave y se distingue cuando aparecen prurito, ronquera, síntomas oculares o espasmos. Sang Ye (Mori Folium) y Ju Hua (Chrysanthemi Flos) se centran menos en inducir sudoración: Sang Ye corresponde mejor a tos seca de Pulmón, mientras Ju Hua corresponde a Calor de Hígado que afecta los ojos.'
+                )); ?>"><tbody>
                 <tr><th><?php echo s($cooltext('Strength order', 'Orden de fuerza')); ?></th><td>Bo He* → Niu Bang Zi* → Chan Tui* → Sang Ye* → Ju Hua*</td></tr>
                 <tr><th>Bo He*</th><td><?php echo s($cooltext('Strongest light, sweat-promoting dispersion; head, throat and constrained Liver Qi.', 'Mayor dispersión ligera y sudorífica; cabeza, garganta y Qi de Hígado estancado.')); ?></td></tr>
                 <tr><th>Niu Bang Zi*</th><td><?php echo s($cooltext('Throat toxicity, heavier seed and bowel-moistening direction.', 'Toxicidad de garganta, semilla más pesada y dirección humectante hacia intestino.')); ?></td></tr>

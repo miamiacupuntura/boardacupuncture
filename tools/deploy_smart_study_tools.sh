@@ -167,6 +167,8 @@ grep -Fq 'isGraphMetadataElement' "$TEMP_DIR/moodle/single-herbs-study-guide.php
 grep -Fq "'.single-herbs-guide__yang-visual', '.single-herbs-guide__yang-charts'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'cachedSelectedStudyText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "clone.querySelectorAll('[data-read-aloud-text]')" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "closest('[data-read-aloud-text]')" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "document.addEventListener('selectionchange'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'captureSelectedStudyText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'readingSessionId' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -182,6 +184,8 @@ grep -Fq 'speakNextChunk(sessionId);' "$TEMP_DIR/moodle/single-herbs-study-guide
 grep -Fq 'const completeReading = function()' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'currentChunkIndex !== speechChunkIndex' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'Bo He (Menthae haplocalycis Herba) y Niu Bang Zi (Arctii Fructus) comparten el perfil térmico más fresco del grupo' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
+grep -Fq 'Este orden es clínicamente útil porque Bo He (Menthae haplocalycis Herba) dispersa Viento-Calor' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
+grep -Fq '<table data-read-aloud-text="<?php echo s($cooltext(' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"
 if grep -Fq '2.6 y 2.7; no son dosis ni porcentajes de eficacia' "$TEMP_DIR/moodle/single-herbs-category-cool-acrid.php"; then
     echo "ERROR: Cool Acrid todavía narra referencias numéricas de las figuras." >&2
     exit 1
@@ -968,6 +972,7 @@ echo "OK: Bo He conserva su escritura visible y se envía a la voz española com
 echo "OK: Niu Bang Zi se separa como ‘Niú, Bang, Tzí’ y las secuencias añaden nombres farmacéuticos para doble comprobación."
 echo "OK: Dan Dou Chi se narra por sílabas sin acentos gráficos que el motor pueda pronunciar como símbolos."
 echo "OK: las flechas de secuencia se narran como ‘luego’ o ‘then’, sin pronunciar el nombre del símbolo."
+echo "OK: la tabla de orden comparativo conserva su formato visual, pero el audio explica el razonamiento clínico y los nombres farmacéuticos."
 echo "OK: Selección conserva el texto marcado y no usa la sección elegida en el menú."
 echo "OK: la selección se reconstruye por elementos para incluir barras, tarjetas y cajas internas."
 echo "OK: cada lectura usa una sesión aislada; al terminar no continúa con fragmentos anteriores."

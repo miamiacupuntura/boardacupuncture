@@ -2356,6 +2356,9 @@ ob_start();
 
         const visibleText = function(element) {
             const clone = element.cloneNode(true);
+            clone.querySelectorAll('[data-read-aloud-text]').forEach(function(alternative) {
+                alternative.replaceChildren(document.createTextNode(alternative.dataset.readAloudText || ''));
+            });
             clone.querySelectorAll('.single-herbs-guide__section-lead').forEach(function(lead) {
                 if (isGraphMetadataElement(lead)) {
                     lead.remove();
@@ -2758,6 +2761,7 @@ ob_start();
             }
 
             const selectedParts = [];
+            const emittedAlternatives = new Set();
             const walker = document.createTreeWalker(readAloudRoot, NodeFilter.SHOW_TEXT, {
                 acceptNode: function(node) {
                     if (!node.nodeValue || !node.nodeValue.trim()) {
@@ -2777,6 +2781,18 @@ ob_start();
 
             let node = walker.nextNode();
             while (node) {
+                const alternative = node.parentElement ? node.parentElement.closest('[data-read-aloud-text]') : null;
+                if (alternative) {
+                    if (!emittedAlternatives.has(alternative)) {
+                        const alternativeText = cleanSelectedPart(alternative.dataset.readAloudText || '');
+                        if (alternativeText) {
+                            selectedParts.push(alternativeText);
+                        }
+                        emittedAlternatives.add(alternative);
+                    }
+                    node = walker.nextNode();
+                    continue;
+                }
                 let start = 0;
                 let end = node.nodeValue.length;
                 if (node === range.startContainer) {
@@ -2835,7 +2851,8 @@ ob_start();
             });
             const seen = new Set();
             return candidates.map(function(element) {
-                let text = element.textContent.replace(/\s+/g, ' ').trim();
+                const alternative = element.closest('[data-read-aloud-text]');
+                let text = (alternative ? alternative.dataset.readAloudText : element.textContent).replace(/\s+/g, ' ').trim();
                 if (!text || seen.has(text)) {
                     return '';
                 }
