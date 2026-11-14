@@ -1619,8 +1619,8 @@ ob_start();
             <div>
                 <h3><?php echo s($ises ? 'Escuchar esta guía' : 'Listen to this Study Guide'); ?></h3>
                 <p><?php echo s($ises
-                    ? 'Escucha toda la página actual o selecciona una sección.'
-                    : 'Listen to the current page or choose one section.'); ?></p>
+                    ? 'Escucha toda la página o una sección. Los nombres de hierbas usan voz china para el pinyin cuando está disponible.'
+                    : 'Listen to the full page or one section. Herb names use a Chinese voice for pinyin when available.'); ?></p>
             </div>
         </div>
         <div class="single-herbs-reader__controls">
@@ -2344,8 +2344,11 @@ ob_start();
         const progressValue = readAloudToolbar.querySelector('[data-read-aloud-progress-value]');
         const readStatus = readAloudToolbar.querySelector('[data-read-aloud-status]');
         const language = readAloudToolbar.dataset.language || 'en-US';
+        const pinyinHerbNames = <?php echo json_encode(array_values(array_unique(array_column($guidelineherbroster, 'name'))), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
         const sectionTargets = [];
+        let allVoices = [];
         let availableVoices = [];
+        let pinyinVoice = null;
         let speechChunks = [];
         let speechChunkIndex = 0;
         let activeReadTarget = null;
@@ -2585,7 +2588,7 @@ ob_start();
                 'Bo He': 'Bó Ge', 'Niu Bang Zi': 'Niú, Bang, Tzí', 'Sang Ye': 'Sang Yé',
                 'Chan Tui': 'Chan Tuéi', 'Ju Hua': 'Yú Juá', 'Sheng Ma': 'Sheng Má',
                 'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
-                'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu Dsei', 'Jin Yin Hua': 'Yin Yin Juá',
+                'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu, Tsei', 'Jin Yin Hua': 'Yin Yin Juá',
                 'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin'
             }
         };
@@ -2654,12 +2657,27 @@ ob_start();
         const populateVoiceOptions = function() {
             const languagePrefix = language.slice(0, 2).toLowerCase();
             const previousValue = voiceSelect.value;
-            availableVoices = window.speechSynthesis.getVoices().filter(function(voice) {
+            allVoices = window.speechSynthesis.getVoices();
+            availableVoices = allVoices.filter(function(voice) {
                 return voice.lang.toLowerCase().slice(0, 2) === languagePrefix;
             }).sort(function(first, second) {
                 const scoreDifference = voicePreferenceScore(first) - voicePreferenceScore(second);
                 return scoreDifference || first.name.localeCompare(second.name);
             });
+            const pinyinVoices = allVoices.filter(function(voice) {
+                return voice.lang.toLowerCase().slice(0, 2) === 'zh';
+            }).sort(function(first, second) {
+                const firstName = first.name.toLowerCase();
+                const secondName = second.name.toLowerCase();
+                const firstScore = (first.lang.toLowerCase() === 'zh-cn' ? -40 : 0)
+                    + (/natural|neural|premium|enhanced|xiaoxiao|yunxi/.test(firstName) ? -30 : 0)
+                    + (first.localService ? 0 : -5);
+                const secondScore = (second.lang.toLowerCase() === 'zh-cn' ? -40 : 0)
+                    + (/natural|neural|premium|enhanced|xiaoxiao|yunxi/.test(secondName) ? -30 : 0)
+                    + (second.localService ? 0 : -5);
+                return firstScore - secondScore || first.name.localeCompare(second.name);
+            });
+            pinyinVoice = pinyinVoices[0] || null;
 
             voiceSelect.replaceChildren();
             const automaticOption = document.createElement('option');
@@ -2700,6 +2718,84 @@ ob_start();
                 }
             }
             return availableVoices[0] || null;
+        };
+
+        const choosePinyinVoice = function() {
+            return pinyinVoice;
+        };
+
+        const pinyinHerbNameSet = new Set((pinyinHerbNames || []).map(function(name) {
+            return cleanStructuredText(name);
+        }).filter(Boolean));
+        readAloudRoot.querySelectorAll('.single-herbs-guide__category-herb-head strong, .single-herbs-guide__profile-name').forEach(function(element) {
+            const herbName = cleanStructuredText(element.textContent);
+            if (herbName) {
+                pinyinHerbNameSet.add(herbName);
+            }
+        });
+        const pinyinHerbPattern = new RegExp(
+            '\\b(' + Array.from(pinyinHerbNameSet).sort(function(first, second) {
+                return second.length - first.length;
+            }).map(function(name) {
+                return name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }).join('|') + ')\\b',
+            'gi'
+        );
+
+        const prepareSpeechSegments = function(text) {
+            const preparedText = stripFigureReferencesForSpeech(normalizeSpeechSymbols(text));
+            const chineseVoice = choosePinyinVoice();
+            if (!chineseVoice || !pinyinHerbNameSet.size) {
+                return [{
+                    text: applySpeechPronunciations(preparedText),
+                    lang: language,
+                    voice: chooseVoice(),
+                    isPinyin: false
+                }];
+            }
+
+            const segments = [];
+            let cursor = 0;
+            pinyinHerbPattern.lastIndex = 0;
+            let match = pinyinHerbPattern.exec(preparedText);
+            while (match) {
+                if (match.index > cursor) {
+                    const surroundingText = preparedText.slice(cursor, match.index);
+                    if (surroundingText.trim()) {
+                        segments.push({
+                            text: applySpeechPronunciations(surroundingText),
+                            lang: language,
+                            voice: chooseVoice(),
+                            isPinyin: false
+                        });
+                    }
+                }
+                segments.push({
+                    text: match[0],
+                    lang: chineseVoice.lang || 'zh-CN',
+                    voice: chineseVoice,
+                    isPinyin: true
+                });
+                cursor = match.index + match[0].length;
+                match = pinyinHerbPattern.exec(preparedText);
+            }
+            if (cursor < preparedText.length) {
+                const remainingText = preparedText.slice(cursor);
+                if (remainingText.trim()) {
+                    segments.push({
+                        text: applySpeechPronunciations(remainingText),
+                        lang: language,
+                        voice: chooseVoice(),
+                        isPinyin: false
+                    });
+                }
+            }
+            return segments.length ? segments : [{
+                text: applySpeechPronunciations(preparedText),
+                lang: language,
+                voice: chooseVoice(),
+                isPinyin: false
+            }];
         };
 
         const progressLabel = function(index, total, completed) {
@@ -2771,6 +2867,64 @@ ob_start();
             finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.', true);
         };
 
+        const speakPreparedSegment = function(sessionId, currentChunkIndex, segments, segmentIndex) {
+            if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
+                return;
+            }
+            if (segmentIndex >= segments.length) {
+                speechChunkIndex += 1;
+                updateReadingProgress(false);
+                if (speechChunkIndex >= speechChunks.length) {
+                    completeReading();
+                    return;
+                }
+                speechTimer = window.setTimeout(function() {
+                    speakNextChunk(sessionId);
+                }, 280);
+                return;
+            }
+
+            const segment = segments[segmentIndex];
+            activeUtterance = new SpeechSynthesisUtterance(segment.text);
+            activeUtterance.lang = segment.lang;
+            activeUtterance.rate = 1;
+            if (segment.voice) {
+                activeUtterance.voice = segment.voice;
+            }
+            activeUtterance.onend = function() {
+                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
+                    return;
+                }
+                speechTimer = window.setTimeout(function() {
+                    speakPreparedSegment(sessionId, currentChunkIndex, segments, segmentIndex + 1);
+                }, segment.isPinyin ? 90 : 45);
+            };
+            activeUtterance.onerror = function(event) {
+                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
+                    return;
+                }
+                if (event.error === 'canceled' || event.error === 'interrupted') {
+                    return;
+                }
+                if (segment.isPinyin) {
+                    segments[segmentIndex] = {
+                        text: applySpeechPronunciations(segment.text),
+                        lang: language,
+                        voice: chooseVoice(),
+                        isPinyin: false
+                    };
+                    speechTimer = window.setTimeout(function() {
+                        speakPreparedSegment(sessionId, currentChunkIndex, segments, segmentIndex);
+                    }, 45);
+                    return;
+                }
+                finishReading(language.indexOf('es') === 0
+                    ? 'El navegador no pudo completar la lectura.'
+                    : 'The browser could not complete the reading.');
+            };
+            window.speechSynthesis.speak(activeUtterance);
+        };
+
         const speakNextChunk = function(sessionId) {
             if (readingStopped || sessionId !== readingSessionId) {
                 return;
@@ -2782,38 +2936,12 @@ ob_start();
 
             const currentChunkIndex = speechChunkIndex;
             updateReadingProgress(false);
-            activeUtterance = new SpeechSynthesisUtterance(applySpeechPronunciations(speechChunks[currentChunkIndex]));
-            activeUtterance.lang = language;
-            activeUtterance.rate = 1;
-            const voice = chooseVoice();
-            if (voice) {
-                activeUtterance.voice = voice;
-            }
-            activeUtterance.onend = function() {
-                if (readingStopped || sessionId !== readingSessionId || currentChunkIndex !== speechChunkIndex) {
-                    return;
-                }
-                speechChunkIndex += 1;
-                updateReadingProgress(false);
-                if (speechChunkIndex >= speechChunks.length) {
-                    completeReading();
-                    return;
-                }
-                speechTimer = window.setTimeout(function() {
-                    speakNextChunk(sessionId);
-                }, 280);
-            };
-            activeUtterance.onerror = function(event) {
-                if (sessionId !== readingSessionId) {
-                    return;
-                }
-                if (event.error !== 'canceled' && event.error !== 'interrupted') {
-                    finishReading(language.indexOf('es') === 0
-                        ? 'El navegador no pudo completar la lectura.'
-                        : 'The browser could not complete the reading.');
-                }
-            };
-            window.speechSynthesis.speak(activeUtterance);
+            speakPreparedSegment(
+                sessionId,
+                currentChunkIndex,
+                prepareSpeechSegments(speechChunks[currentChunkIndex]),
+                0
+            );
         };
 
         const seekToSpeechChunk = function(targetIndex) {
