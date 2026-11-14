@@ -962,8 +962,8 @@ $yangcomparisoncharts = [
         'title' => 'Relative warmth',
         'figure' => 'Yang Fig. 2.1',
         'items' => ['Ma Huang' => 100, 'Gui Zhi' => 80, 'Sheng Jiang' => 50, 'Qiang Huo' => 50, 'Bai Zhi' => 30, 'Fang Feng' => 30, 'Jing Jie' => 20, 'Xin Yi Hua' => 20, 'Zi Su Ye' => 20],
-        'interpretation_en' => 'Ma Huang is the warmest reference at 100, followed by Gui Zhi at 80. Sheng Jiang and Qiang Huo form the middle group at 50. Bai Zhi and Fang Feng are lower at 30, while Jing Jie, Xin Yi Hua and Zi Su Ye share the lowest displayed index at 20.',
-        'interpretation_es' => 'Ma Huang es la referencia más cálida con 100, seguida por Gui Zhi con 80. Sheng Jiang y Qiang Huo forman el grupo intermedio con 50. Bai Zhi y Fang Feng quedan en 30, mientras Jing Jie, Xin Yi Hua y Zi Su Ye comparten el índice más bajo mostrado, con 20.',
+        'interpretation_en' => 'All nine herbs in this category are warm in nature and release Exterior Wind-Cold. This comparison shows different degrees of warmth within the group without reclassifying any of them as hot herbs. Ma Huang has the strongest warm nature, followed by Gui Zhi. Sheng Jiang and Qiang Huo, both at 50 on this relative scale, occupy the middle position. Bai Zhi and Fang Feng are milder, while Jing Jie, Xin Yi Hua and Zi Su Ye show the lowest relative warmth. Even so, all nine remain classified as warm herbs.',
+        'interpretation_es' => 'Las nueve hierbas de esta categoría son de naturaleza tibia y liberan el Exterior en patrones de Viento-Frío. Esta comparación muestra distintos grados de tibieza dentro del grupo, sin reclasificar ninguna como hierba caliente. Ma Huang posee la naturaleza tibia más intensa, seguida por Gui Zhi. Sheng Jiang y Qiang Huo, ambas con 50 en esta escala relativa, ocupan la posición intermedia. Bai Zhi y Fang Feng son más suaves, mientras Jing Jie, Xin Yi Hua y Zi Su Ye presentan el grado relativo más bajo de tibieza. Aun así, las nueve conservan su clasificación como hierbas de naturaleza tibia.',
     ],
     [
         'title' => 'Sweat-inducing strength',
