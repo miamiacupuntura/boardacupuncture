@@ -2459,6 +2459,23 @@ ob_start();
                 }
             });
 
+            readAloudRoot.querySelectorAll('.single-herbs-guide__final-question:not([data-read-aloud-text])').forEach(function(question, index) {
+                const prompt = question.querySelector(':scope > summary > span:not(.single-herbs-guide__final-number)')
+                    || question.querySelector(':scope > summary');
+                const answer = question.querySelector(':scope > .single-herbs-guide__final-answer');
+                const questionText = cleanStructuredText(prompt ? prompt.textContent : '');
+                const answerText = cleanStructuredText(answer ? answer.textContent : '');
+                if (questionText && answerText) {
+                    const spokenQuestion = /[.!?]$/.test(questionText) ? questionText : questionText + '.';
+                    const spokenAnswer = /[.!?]$/.test(answerText) ? answerText : answerText + '.';
+                    question.dataset.readAloudKind = 'review-question-with-answer';
+                    question.dataset.readAloudText = (isSpanish ? 'Pregunta número ' : 'Question number ')
+                        + (index + 1) + '. ' + spokenQuestion + ' '
+                        + (isSpanish ? 'Respuesta. ' : 'Answer. ') + spokenAnswer;
+                    question.dataset.readAloudGenerated = 'review-question';
+                }
+            });
+
             readAloudRoot.querySelectorAll('.single-herbs-guide__decision:not([data-read-aloud-text])').forEach(function(container) {
                 const cards = Array.from(container.children).filter(function(card) {
                     return card.querySelector('strong') && card.querySelector('span');
@@ -2557,9 +2574,10 @@ ob_start();
                 }
             });
             clone.querySelectorAll([
-                'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
+                'nav', 'button', 'form', 'select', 'option', 'script', 'style', 'svg', 'img',
                 '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
                 '.single-herbs-guide__source', '.single-herbs-guide__yang-controls',
+                '.single-herbs-guide__final-controls',
                 '.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge',
                 '.single-herbs-guide__yang-visual', '.single-herbs-guide__yang-charts'
             ].join(',')).forEach(function(node) {
@@ -3059,7 +3077,7 @@ ob_start();
         });
 
         const viewportStudyText = function() {
-            const selector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td';
+            const selector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td, [data-read-aloud-kind="review-question-with-answer"]';
             const toolbarBottom = readAloudToolbar.getBoundingClientRect().bottom + 4;
             const viewportBottom = window.innerHeight || document.documentElement.clientHeight;
             const candidates = Array.from(readAloudRoot.querySelectorAll(selector)).filter(function(element) {
@@ -3074,7 +3092,8 @@ ob_start();
                 if (rectangle.bottom <= toolbarBottom || rectangle.top >= viewportBottom || rectangle.width === 0 || rectangle.height === 0) {
                     return false;
                 }
-                return !element.querySelector(selector);
+                return element.dataset.readAloudKind === 'review-question-with-answer'
+                    || !element.querySelector(selector);
             });
             const seen = new Set();
             return candidates.map(function(element) {
@@ -3091,28 +3110,45 @@ ob_start();
             }).filter(Boolean).join(' ');
         };
 
-        const candidateSections = Array.from(readAloudRoot.querySelectorAll(
-            '.single-herbs-intro__section, .single-herbs-guide__section'
-        ));
-        candidateSections.forEach(function(section) {
-            const heading = section.querySelector('h3, h4, h5');
-            const label = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
-            if (label && visibleText(section).length > 40) {
-                sectionTargets.push({label: label, element: section});
-            }
-        });
-        if (sectionTargets.length === 0) {
-            sectionTargets.push({
-                label: language.indexOf('es') === 0 ? 'Página de estudio actual' : 'Current study page',
-                element: readAloudRoot
+        const rebuildReadAloudSections = function() {
+            const previousIndex = Number(sectionSelect.value) || 0;
+            const previousTarget = sectionTargets[previousIndex] || null;
+            sectionTargets.length = 0;
+            sectionSelect.replaceChildren();
+            Array.from(readAloudRoot.querySelectorAll(
+                '.single-herbs-intro__section, .single-herbs-guide__section'
+            )).forEach(function(section) {
+                const heading = section.querySelector('h3, h4, h5');
+                const label = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
+                if (label && visibleText(section).length > 40) {
+                    sectionTargets.push({label: label, element: section});
+                }
             });
-        }
+            if (sectionTargets.length === 0) {
+                sectionTargets.push({
+                    label: language.indexOf('es') === 0 ? 'Página de estudio actual' : 'Current study page',
+                    element: readAloudRoot
+                });
+            }
 
-        sectionTargets.forEach(function(item, index) {
-            const option = document.createElement('option');
-            option.value = String(index);
-            option.textContent = item.label;
-            sectionSelect.appendChild(option);
+            sectionTargets.forEach(function(item, index) {
+                const option = document.createElement('option');
+                option.value = String(index);
+                option.textContent = item.label;
+                sectionSelect.appendChild(option);
+            });
+            if (previousTarget) {
+                const matchingIndex = sectionTargets.findIndex(function(item) {
+                    return item.element === previousTarget.element;
+                });
+                sectionSelect.value = String(matchingIndex >= 0 ? matchingIndex : 0);
+            }
+        };
+        rebuildReadAloudSections();
+
+        window.addEventListener('single-herbs-content-updated', function() {
+            installStructuredNarrations();
+            rebuildReadAloudSections();
         });
 
         const revealSelectedSection = function(item) {
@@ -3707,6 +3743,15 @@ ob_start();
             ? 'Responde mentalmente antes de abrir cada elemento, o usa los controles para abrir y cerrar todas las respuestas.'
             : 'Answer mentally before opening each item, or use the controls to open and close all answers.';
     }
+    if (hasLegacyYangQuestions && hasBenskyReviewQuestions) {
+        lead.dataset.readAloudText = isSpanishQuestions
+            ? 'Este repaso reúne preguntas de Yang, autor del libro, y preguntas de repaso Bensky. A continuación se leerá cada pregunta seguida de su respuesta y explicación.'
+            : 'This review combines questions from Yang, the book author, with Bensky review questions. Each question will now be read followed by its answer and explanation.';
+    } else {
+        lead.dataset.readAloudText = isSpanishQuestions
+            ? 'A continuación se leerá cada pregunta seguida de su respuesta y explicación.'
+            : 'Each question will now be read followed by its answer and explanation.';
+    }
 
     const controls = document.createElement('div');
     const openAll = document.createElement('button');
@@ -3721,8 +3766,13 @@ ob_start();
     controls.appendChild(openAll);
     controls.appendChild(closeAll);
     questionList.className = 'single-herbs-guide__recall single-herbs-guide__unified-questions';
+    const spokenQuestionNumbers = isSpanishQuestions
+        ? ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 'veinte']
+        : ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
     unifiedQuestions.forEach(function(question, index) {
         const number = question.querySelector(':scope > summary .single-herbs-guide__final-number');
+        const prompt = question.querySelector(':scope > summary > span:not(.single-herbs-guide__final-number)');
+        const answer = question.querySelector(':scope > .single-herbs-guide__final-answer');
         const source = question.dataset.questionSource || (isSpanishQuestions ? 'Repaso del capítulo' : 'Chapter review');
         if (number) {
             number.replaceChildren();
@@ -3731,6 +3781,15 @@ ob_start();
             sourceLabel.textContent = source;
             number.appendChild(sourceLabel);
         }
+        const questionText = prompt ? prompt.textContent.replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim() : '';
+        const answerText = answer ? answer.textContent.replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim() : '';
+        const spokenNumber = spokenQuestionNumbers[index + 1] || String(index + 1);
+        const spokenQuestion = /[.!?]$/.test(questionText) ? questionText : questionText + '.';
+        const spokenAnswer = /[.!?]$/.test(answerText) ? answerText : answerText + '.';
+        question.dataset.readAloudKind = 'review-question-with-answer';
+        question.dataset.readAloudText = (isSpanishQuestions ? 'Pregunta número ' : 'Question number ')
+            + spokenNumber + '. ' + spokenQuestion + ' '
+            + (isSpanishQuestions ? 'Respuesta. ' : 'Answer. ') + spokenAnswer;
         questionList.appendChild(question);
     });
 
@@ -3752,6 +3811,7 @@ ob_start();
             question.open = false;
         });
     });
+    window.dispatchEvent(new CustomEvent('single-herbs-content-updated'));
 })();
 </script>
 <?php
