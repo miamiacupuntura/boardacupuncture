@@ -57,6 +57,12 @@ grep -Fq "'interpretation_es' => 'Ma Huang es la referencia más cálida con 100
 grep -Fq 'single-herbs-guide__yang-interpretation' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "s(\$chart[\$ises ? 'interpretation_es' : 'interpretation_en'])" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "segment.replace(/[*＊]+/g, '').replace" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'const cleanSelectedPart = function(text)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "String(text || '').replace(/[*＊]+/g, '').replace" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+if grep -Fq 'punctuateSelectedPart' "$TEMP_DIR/moodle/single-herbs-study-guide.php"; then
+    echo "ERROR: Selección todavía añade puntuación artificial después de los marcadores." >&2
+    exit 1
+fi
 grep -Fq "'.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq '[aria-hidden="true"], .single-herbs-guide__category-herb-badge' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-full' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -844,6 +850,7 @@ echo "OK: la barra de audio permanece visible al desplazarse y la narración pau
 echo "OK: encabezados, párrafos, listas y definiciones reciben puntuación de cierre para pausas naturales."
 echo "OK: las cuatro gráficas Yang incluyen una interpretación escrita, visible y narrable en inglés y español."
 echo "OK: los asteriscos permanecen visibles como marcadores, pero se eliminan antes de narrar."
+echo "OK: Selección pausa por fragmentos sin insertar ni pronunciar “punto” donde estaba el asterisco."
 echo "OK: la etiqueta “In current guideline 2026” permanece visible y queda excluida de la narración."
 echo "OK: el lector permite página completa, sección, selección manual y texto visible en pantalla."
 echo "OK: el control de velocidad fue retirado; la narración usa velocidad normal fija."
