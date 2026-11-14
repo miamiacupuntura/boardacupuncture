@@ -54,6 +54,11 @@ grep -Fq "clone.querySelectorAll('h1, h2, h3, h4, h5, h6')" "$TEMP_DIR/moodle/si
 grep -Fq 'data-read-aloud-full' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-selection' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-visible' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+if grep -Fq 'data-read-aloud-speed' "$TEMP_DIR/moodle/single-herbs-study-guide.php"; then
+    echo "ERROR: Single Herbs Study Guide todavía muestra el control de velocidad." >&2
+    exit 1
+fi
+grep -Fq 'activeUtterance.rate = 1;' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'window.setTimeout(speakNextChunk, 280)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'id="read-aloud"' "$TEMP_DIR/static/read-aloud-test.html"
 grep -Fq 'speechSynthesis' "$TEMP_DIR/static/read-aloud-test.html"
@@ -817,6 +822,7 @@ echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón d
 echo "OK: Single Herbs Study Guide permite escuchar la página actual o una sección, en inglés y español."
 echo "OK: la barra de audio permanece visible al desplazarse y la narración pausa después de cada encabezado."
 echo "OK: el lector permite página completa, sección, selección manual y texto visible en pantalla."
+echo "OK: el control de velocidad fue retirado; la narración usa velocidad normal fija."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
