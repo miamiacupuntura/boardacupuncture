@@ -115,7 +115,7 @@ return [
     // Comparative bars from Yang.
     'Yang comparative fingerprint' => 'Huella comparativa de Yang',
     'Use the bars to see what makes each Board herb stand out relative to its neighbors. The view below keeps only the nine herbs in this Board category.' => 'Usa las barras para ver qué hace destacar a cada hierba Board frente a sus vecinas. La vista siguiente conserva solamente las nueve hierbas de esta categoría Board.',
-    'Relative warmth' => 'Calor relativo',
+    'Relative warmth' => 'Tibieza relativa',
     'Sweat-inducing strength' => 'Potencia para inducir sudoración',
     'Light and dispersing quality' => 'Cualidad ligera y dispersante',
     'Expelling exogenous Dampness' => 'Expulsión de Humedad exógena',
