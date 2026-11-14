@@ -2302,6 +2302,7 @@ ob_start();
         let activeReadTarget = null;
         let activeUtterance = null;
         let readingStopped = true;
+        let cachedSelectedStudyText = '';
 
         const visibleText = function(element) {
             const clone = element.cloneNode(true);
@@ -2521,7 +2522,7 @@ ob_start();
             }).filter(Boolean).join(' ');
         };
 
-        const selectedStudyText = function() {
+        const liveSelectedStudyText = function() {
             const selection = window.getSelection();
             if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
                 return '';
@@ -2532,6 +2533,22 @@ ob_start();
             }
             return punctuateSelectedText(selection.toString());
         };
+
+        const captureSelectedStudyText = function() {
+            const text = liveSelectedStudyText();
+            if (text) {
+                cachedSelectedStudyText = text;
+            }
+            return cachedSelectedStudyText;
+        };
+
+        document.addEventListener('selectionchange', function() {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+                return;
+            }
+            cachedSelectedStudyText = liveSelectedStudyText();
+        });
 
         const viewportStudyText = function() {
             const selector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td';
@@ -2635,11 +2652,15 @@ ob_start();
             );
         });
 
+        selectionButton.addEventListener('pointerdown', function() {
+            captureSelectedStudyText();
+        });
         selectionButton.addEventListener('mousedown', function(event) {
+            captureSelectedStudyText();
             event.preventDefault();
         });
         selectionButton.addEventListener('click', function() {
-            const text = selectedStudyText();
+            const text = captureSelectedStudyText();
             if (!text) {
                 readStatus.textContent = language.indexOf('es') === 0
                     ? 'Selecciona primero un texto dentro de la guía.'
@@ -2649,7 +2670,9 @@ ob_start();
             beginReading(
                 text,
                 null,
-                language.indexOf('es') === 0 ? 'Leyendo el texto seleccionado…' : 'Reading selected text…'
+                language.indexOf('es') === 0
+                    ? 'Leyendo únicamente el texto seleccionado…'
+                    : 'Reading selected text only…'
             );
         });
 
