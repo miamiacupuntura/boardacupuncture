@@ -1575,10 +1575,15 @@ ob_start();
 .single-herbs-reader button:hover:not(:disabled),.single-herbs-reader button:focus-visible:not(:disabled){background:#086963;border-color:#086963}
 .single-herbs-reader button.single-herbs-reader__secondary{background:#fff;color:#0b6f69}
 .single-herbs-reader button:disabled{cursor:not-allowed;opacity:.46}
+.single-herbs-reader__progress{display:grid;grid-template-columns:minmax(115px,auto) minmax(180px,1fr) minmax(105px,auto);gap:10px;align-items:end;margin-top:10px}
+.single-herbs-reader__progress-field{display:grid;grid-template-columns:1fr auto;gap:5px 12px;align-items:center;color:#17364a;font-size:12px;font-weight:800}
+.single-herbs-reader__progress-field input{grid-column:1/-1;width:100%;height:22px;margin:0;accent-color:#0b817d;cursor:pointer}
+.single-herbs-reader__progress-field input:disabled{cursor:not-allowed;opacity:.48}
+.single-herbs-reader__progress-value{color:#52677a;font-variant-numeric:tabular-nums;white-space:nowrap}
 .single-herbs-reader__status{min-height:21px;margin:10px 0 0;color:#52677a;font-size:13px;font-weight:800}
 .single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
-@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:1/-1}}
-@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:auto}}
+@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:1/-1}.single-herbs-reader__progress{grid-template-columns:1fr 1fr}.single-herbs-reader__progress-field{grid-column:1/-1;grid-row:1}}
+@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:auto}.single-herbs-reader__progress{grid-template-columns:1fr}.single-herbs-reader__progress-field{grid-column:auto;grid-row:auto}}
 </style>
 
 <main class="single-herbs-guide">
@@ -1635,6 +1640,16 @@ ob_start();
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-visible><?php echo s($ises ? '👁 Texto visible' : '👁 Visible Text'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-pause disabled><?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-stop disabled><?php echo s($ises ? '■ Detener' : '■ Stop'); ?></button>
+        </div>
+        <div class="single-herbs-reader__progress">
+            <button class="single-herbs-reader__secondary" type="button" data-read-aloud-back disabled><?php echo s($ises ? '↶ Retroceder' : '↶ Back'); ?></button>
+            <label class="single-herbs-reader__progress-field">
+                <span><?php echo s($ises ? 'Progreso de lectura' : 'Reading progress'); ?></span>
+                <span class="single-herbs-reader__progress-value" data-read-aloud-progress-value><?php echo s($ises ? 'Sin lectura' : 'Not started'); ?></span>
+                <input type="range" min="0" max="100" step="1" value="0" data-read-aloud-progress disabled
+                    aria-label="<?php echo s($ises ? 'Mover la posición de la lectura' : 'Move the reading position'); ?>">
+            </label>
+            <button class="single-herbs-reader__secondary" type="button" data-read-aloud-forward disabled><?php echo s($ises ? 'Avanzar ↷' : 'Forward ↷'); ?></button>
         </div>
         <p class="single-herbs-reader__status" data-read-aloud-status role="status" aria-live="polite"><?php echo s($ises ? 'Lista para escuchar.' : 'Ready to read.'); ?></p>
     </section>
@@ -2315,6 +2330,10 @@ ob_start();
         const visibleButton = readAloudToolbar.querySelector('[data-read-aloud-visible]');
         const pauseButton = readAloudToolbar.querySelector('[data-read-aloud-pause]');
         const stopButton = readAloudToolbar.querySelector('[data-read-aloud-stop]');
+        const backButton = readAloudToolbar.querySelector('[data-read-aloud-back]');
+        const forwardButton = readAloudToolbar.querySelector('[data-read-aloud-forward]');
+        const progressInput = readAloudToolbar.querySelector('[data-read-aloud-progress]');
+        const progressValue = readAloudToolbar.querySelector('[data-read-aloud-progress-value]');
         const readStatus = readAloudToolbar.querySelector('[data-read-aloud-status]');
         const language = readAloudToolbar.dataset.language || 'en-US';
         const sectionTargets = [];
@@ -2328,14 +2347,26 @@ ob_start();
         let speechTimer = null;
         let cachedSelectedStudyText = '';
 
+        const graphMetadataPattern = /(?:relative study indices|relative indices|indices transcribed|values (?:are )?transcribed|not doses|clinical percentages|efficacy percentages|\bfig(?:ure|ures)?\.?\s*\d|índices relativos|índices de estudio|valores transcritos|no son dosis|porcentajes clínicos|porcentajes de eficacia|\bfiguras?\s*\d)/i;
+        const isGraphMetadataElement = function(element) {
+            const lead = element ? element.closest('.single-herbs-guide__section-lead') : null;
+            const section = lead ? lead.closest('section') : null;
+            return Boolean(section && section.querySelector('.single-herbs-guide__yang-charts') && graphMetadataPattern.test(lead.textContent));
+        };
+
         const visibleText = function(element) {
             const clone = element.cloneNode(true);
+            clone.querySelectorAll('.single-herbs-guide__section-lead').forEach(function(lead) {
+                if (isGraphMetadataElement(lead)) {
+                    lead.remove();
+                }
+            });
             clone.querySelectorAll([
                 'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
                 '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
                 '.single-herbs-guide__source', '.single-herbs-guide__yang-controls',
                 '.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge',
-                '.single-herbs-guide__yang-visual'
+                '.single-herbs-guide__yang-visual', '.single-herbs-guide__yang-charts'
             ].join(',')).forEach(function(node) {
                 node.remove();
             });
@@ -2388,6 +2419,51 @@ ob_start();
                 chunks.push(current);
             }
             return chunks;
+        };
+
+        const speechPronunciations = {
+            en: {
+                'Ma Huang': 'mah hwahng', 'Gui Zhi': 'gway jir', 'Zi Su Ye': 'dzuh soo yeh',
+                'Xi Xin': 'shee sheen', 'Bai Zhi': 'bye jir', 'Fang Feng': 'fahng fung',
+                'Qiang Huo': 'chyahng hwaw', 'Jing Jie': 'jeeng jyeh', 'Sheng Jiang': 'shung jyahng',
+                'Bo He': 'bwaw huh', 'Niu Bang Zi': 'nyoh bahng dzuh', 'Sang Ye': 'sahng yeh',
+                'Chan Tui': 'chahn tway', 'Ju Hua': 'jyoo hwah', 'Sheng Ma': 'shung mah',
+                'Man Jing Zi': 'mahn jeeng dzuh', 'Ge Gen': 'guh gun', 'Chai Hu': 'chye hoo',
+                'Dan Dou Chi': 'dahn doh chir', 'Mu Zei': 'moo dzay', 'Jin Yin Hua': 'jeen yin hwah',
+                'Lian Qiao': 'lyen chyow', 'Yin Qiao San': 'yin chyow sahn', 'Sang Ju Yin': 'sahng jyoo yin'
+            },
+            es: {
+                'Ma Huang': 'Ma Juang', 'Gui Zhi': 'Guéi Yi', 'Zi Su Ye': 'Dsi Su Yé',
+                'Xi Xin': 'Shi Shin', 'Bai Zhi': 'Bái Yi', 'Fang Feng': 'Fang Feng',
+                'Qiang Huo': 'Chiang Juo', 'Jing Jie': 'Ying Yie', 'Sheng Jiang': 'Sheng Chiang',
+                'Bo He': 'Bó Je', 'Niu Bang Zi': 'Nióu Bang Dsi', 'Sang Ye': 'Sang Yé',
+                'Chan Tui': 'Chan Tuéi', 'Ju Hua': 'Yú Juá', 'Sheng Ma': 'Sheng Má',
+                'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
+                'Dan Dou Chi': 'Dan Dóu Chi', 'Mu Zei': 'Mu Dsei', 'Jin Yin Hua': 'Yin Yin Juá',
+                'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin'
+            }
+        };
+
+        const stripFigureReferencesForSpeech = function(text) {
+            return String(text || '')
+                .replace(/\b(?:figures?|figuras?)\s+(?:by\s+Yang(?:,\s*the\s+book\s+author)?|de\s+Yang(?:,\s*autor\s+del\s+libro)?)?\s*:?\s*\d+(?:\.\d+)?(?:\s*(?:,|and|y|&|\u2013|-)\s*\d+(?:\.\d+)?)*\b/gi, '')
+                .replace(/\b(?:fig\.?|figure|figura)\s*\d+(?:\.\d+)?\b/gi, '')
+                .replace(/\s+([,.;:!?])/g, '$1')
+                .replace(/\s{2,}/g, ' ')
+                .trim();
+        };
+
+        const applySpeechPronunciations = function(text) {
+            const languageKey = language.indexOf('es') === 0 ? 'es' : 'en';
+            return Object.keys(speechPronunciations[languageKey])
+                .sort(function(first, second) { return second.length - first.length; })
+                .reduce(function(preparedText, herbName) {
+                    const escapedName = herbName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    return preparedText.replace(
+                        new RegExp('\\b' + escapedName + '\\b', 'gi'),
+                        speechPronunciations[languageKey][herbName]
+                    );
+                }, stripFigureReferencesForSpeech(text));
         };
 
         const voicePreferenceScore = function(voice) {
@@ -2455,6 +2531,34 @@ ob_start();
             return availableVoices[0] || null;
         };
 
+        const progressLabel = function(index, total, completed) {
+            if (!total) {
+                return language.indexOf('es') === 0 ? 'Sin lectura' : 'Not started';
+            }
+            if (completed) {
+                return language.indexOf('es') === 0
+                    ? 'Completada · ' + total + ' fragmentos'
+                    : 'Complete · ' + total + ' chunks';
+            }
+            const current = Math.min(index + 1, total);
+            return language.indexOf('es') === 0
+                ? 'Fragmento ' + current + ' de ' + total
+                : 'Chunk ' + current + ' of ' + total;
+        };
+
+        const updateReadingProgress = function(completed) {
+            const total = speechChunks.length;
+            const lastIndex = Math.max(total - 1, 0);
+            const percent = completed ? 100 : (lastIndex ? Math.round((speechChunkIndex / lastIndex) * 100) : 0);
+            progressInput.value = String(Math.max(0, Math.min(100, percent)));
+            progressValue.textContent = progressLabel(speechChunkIndex, total, Boolean(completed));
+            progressInput.setAttribute('aria-valuetext', progressValue.textContent);
+            const canNavigate = !readingStopped && total > 0;
+            progressInput.disabled = !canNavigate || total < 2;
+            backButton.disabled = !canNavigate || speechChunkIndex <= 0;
+            forwardButton.disabled = !canNavigate || speechChunkIndex >= lastIndex;
+        };
+
         const setReadControls = function(isReading) {
             fullButton.disabled = isReading;
             startButton.disabled = isReading;
@@ -2464,14 +2568,20 @@ ob_start();
             stopButton.disabled = !isReading;
             sectionSelect.disabled = isReading;
             voiceSelect.disabled = isReading;
+            if (!isReading) {
+                progressInput.disabled = true;
+                backButton.disabled = true;
+                forwardButton.disabled = true;
+            }
         };
 
-        const finishReading = function(message) {
+        const finishReading = function(message, completed) {
             readingStopped = true;
             if (speechTimer !== null) {
                 window.clearTimeout(speechTimer);
                 speechTimer = null;
             }
+            updateReadingProgress(Boolean(completed));
             speechChunks = [];
             speechChunkIndex = 0;
             activeUtterance = null;
@@ -2486,7 +2596,7 @@ ob_start();
 
         const completeReading = function() {
             readingSessionId += 1;
-            finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.');
+            finishReading(language.indexOf('es') === 0 ? 'Lectura terminada.' : 'Reading complete.', true);
         };
 
         const speakNextChunk = function(sessionId) {
@@ -2499,7 +2609,8 @@ ob_start();
             }
 
             const currentChunkIndex = speechChunkIndex;
-            activeUtterance = new SpeechSynthesisUtterance(speechChunks[currentChunkIndex]);
+            updateReadingProgress(false);
+            activeUtterance = new SpeechSynthesisUtterance(applySpeechPronunciations(speechChunks[currentChunkIndex]));
             activeUtterance.lang = language;
             activeUtterance.rate = 1;
             const voice = chooseVoice();
@@ -2511,6 +2622,7 @@ ob_start();
                     return;
                 }
                 speechChunkIndex += 1;
+                updateReadingProgress(false);
                 if (speechChunkIndex >= speechChunks.length) {
                     completeReading();
                     return;
@@ -2530,6 +2642,30 @@ ob_start();
                 }
             };
             window.speechSynthesis.speak(activeUtterance);
+        };
+
+        const seekToSpeechChunk = function(targetIndex) {
+            if (readingStopped || !speechChunks.length) {
+                return;
+            }
+            const lastIndex = speechChunks.length - 1;
+            speechChunkIndex = Math.max(0, Math.min(lastIndex, targetIndex));
+            readingSessionId += 1;
+            const sessionId = readingSessionId;
+            if (speechTimer !== null) {
+                window.clearTimeout(speechTimer);
+                speechTimer = null;
+            }
+            window.speechSynthesis.cancel();
+            activeUtterance = null;
+            pauseButton.textContent = readAloudToolbar.dataset.pauseLabel;
+            readStatus.textContent = language.indexOf('es') === 0
+                ? 'Continuando desde el fragmento ' + (speechChunkIndex + 1) + '…'
+                : 'Continuing from chunk ' + (speechChunkIndex + 1) + '…';
+            updateReadingProgress(false);
+            speechTimer = window.setTimeout(function() {
+                speakNextChunk(sessionId);
+            }, 80);
         };
 
         const stopReading = function(message) {
@@ -2575,6 +2711,7 @@ ob_start();
                 activeReadTarget.classList.add('single-herbs-reader__active');
             }
             setReadControls(true);
+            updateReadingProgress(false);
             readStatus.textContent = message;
             speechTimer = window.setTimeout(function() {
                 speakNextChunk(sessionId);
@@ -2602,7 +2739,7 @@ ob_start();
                         return NodeFilter.FILTER_REJECT;
                     }
                     const parent = node.parentElement;
-                    if (!parent || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"], .single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual')) {
+                    if (!parent || isGraphMetadataElement(parent) || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"], .single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual, .single-herbs-guide__yang-charts')) {
                         return NodeFilter.FILTER_REJECT;
                     }
                     try {
@@ -2658,7 +2795,7 @@ ob_start();
             const toolbarBottom = readAloudToolbar.getBoundingClientRect().bottom + 4;
             const viewportBottom = window.innerHeight || document.documentElement.clientHeight;
             const candidates = Array.from(readAloudRoot.querySelectorAll(selector)).filter(function(element) {
-                if (element.closest('[hidden], nav, form, [aria-hidden="true"], .single-herbs-guide__yang-visual')) {
+                if (isGraphMetadataElement(element) || element.closest('[hidden], nav, form, [aria-hidden="true"], .single-herbs-guide__yang-visual, .single-herbs-guide__yang-charts')) {
                     return false;
                 }
                 const style = window.getComputedStyle(element);
@@ -2792,6 +2929,30 @@ ob_start();
                 null,
                 language.indexOf('es') === 0 ? 'Leyendo el texto visible…' : 'Reading visible text…'
             );
+        });
+
+        progressInput.addEventListener('input', function() {
+            if (readingStopped || speechChunks.length < 2) {
+                return;
+            }
+            const targetIndex = Math.round((Number(progressInput.value) / 100) * (speechChunks.length - 1));
+            progressValue.textContent = progressLabel(targetIndex, speechChunks.length, false);
+            progressInput.setAttribute('aria-valuetext', progressValue.textContent);
+        });
+
+        progressInput.addEventListener('change', function() {
+            if (readingStopped || speechChunks.length < 2) {
+                return;
+            }
+            seekToSpeechChunk(Math.round((Number(progressInput.value) / 100) * (speechChunks.length - 1)));
+        });
+
+        backButton.addEventListener('click', function() {
+            seekToSpeechChunk(speechChunkIndex - 1);
+        });
+
+        forwardButton.addEventListener('click', function() {
+            seekToSpeechChunk(speechChunkIndex + 1);
         });
 
         pauseButton.addEventListener('click', function() {
