@@ -63,6 +63,14 @@ grep -Fq 'La cualidad ligera y dispersante describe la facilidad con que una hie
 grep -Fq 'Qiang Huo is especially suited when Wind-Cold-Dampness presents' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'Qiang Huo destaca cuando el Viento-Frío-Humedad se manifiesta' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'single-herbs-guide__yang-interpretation' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'interpretation_label_en' => 'Interpretation of the relative warmth graph:'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'interpretation_label_es' => 'Interpretación de la gráfica de tibieza relativa:'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'Ma Huang (Ephedrae Herba)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'Gui Zhi (Cinnamomi Ramulus)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'Sheng Jiang (Zingiberis Rhizoma Recens)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'Qiang Huo (Notopterygii Rhizoma seu Radix)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'Xin Yi Hua (Magnoliae Flos)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'Relative warmth' => 'Tibieza relativa'" "$TEMP_DIR/moodle/single-herbs-study-guide-es.php"
 grep -Fq '<div class="single-herbs-guide__yang-visual">' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq '.single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq '[aria-hidden="true"], .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -74,6 +82,7 @@ if grep -Fq 'does not prescribe dosage' "$TEMP_DIR/moodle/single-herbs-study-gui
     echo "ERROR: Las conclusiones de las gráficas todavía incluyen aclaraciones generales retiradas." >&2
     exit 1
 fi
+grep -Fq "s(\$chart[\$ises ? 'interpretation_label_es' : 'interpretation_label_en'])" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "s(\$chart[\$ises ? 'interpretation_es' : 'interpretation_en'])" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "segment.replace(/[*＊]+/g, '').replace" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'const cleanSelectedPart = function(text)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -872,6 +881,8 @@ echo "OK: el lector omite títulos, referencias Fig., barras, nombres y números
 echo "OK: las conclusiones se concentran en el contenido académico y omiten aclaraciones generales sobre dosis o eficacia."
 echo "OK: Calor relativo explica grados internos de tibieza sin reclasificar las nueve hierbas como calientes."
 echo "OK: las cuatro conclusiones interpretan selección, mecanismo y énfasis terapéutico sin narrar lo evidente en las barras."
+echo "OK: cada conclusión anuncia la gráfica interpretada e incorpora pinyin y nombre farmacéutico."
+echo "OK: la gráfica española usa “Tibieza relativa” para conservar la clasificación térmica correcta."
 echo "OK: los asteriscos permanecen visibles como marcadores, pero se eliminan antes de narrar."
 echo "OK: Selección pausa por fragmentos sin insertar ni pronunciar “punto” donde estaba el asterisco."
 echo "OK: la etiqueta “In current guideline 2026” permanece visible y queda excluida de la narración."
