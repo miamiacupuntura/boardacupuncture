@@ -1569,7 +1569,7 @@ ob_start();
 .single-herbs-reader__heading h3{margin:0;color:#123246;font-size:18px}
 .single-herbs-reader__heading p{margin:3px 0 0;color:#60717e;font-size:13px;line-height:1.45}
 .single-herbs-reader__controls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;align-items:end}
-.single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:span 3}
+.single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:span 2}
 .single-herbs-reader select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #aebdc6;border-radius:8px;background:#fff;color:#17364a}
 .single-herbs-reader button{width:100%;min-height:42px;padding:8px 13px;border:1px solid #0b817d;border-radius:8px;background:#0b817d;color:#fff;font-weight:900;cursor:pointer;white-space:nowrap}
 .single-herbs-reader button:hover:not(:disabled),.single-herbs-reader button:focus-visible:not(:disabled){background:#086963;border-color:#086963}
@@ -1582,8 +1582,8 @@ ob_start();
 .single-herbs-reader__progress-value{color:#52677a;font-variant-numeric:tabular-nums;white-space:nowrap}
 .single-herbs-reader__status{min-height:21px;margin:10px 0 0;color:#52677a;font-size:13px;font-weight:800}
 .single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
-@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:1/-1}.single-herbs-reader__progress{grid-template-columns:1fr 1fr}.single-herbs-reader__progress-field{grid-column:1/-1;grid-row:1}}
-@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:auto}.single-herbs-reader__progress{grid-template-columns:1fr}.single-herbs-reader__progress-field{grid-column:auto;grid-row:auto}}
+@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:1/-1}.single-herbs-reader__progress{grid-template-columns:1fr 1fr}.single-herbs-reader__progress-field{grid-column:1/-1;grid-row:1}}
+@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:auto}.single-herbs-reader__progress{grid-template-columns:1fr}.single-herbs-reader__progress-field{grid-column:auto;grid-row:auto}}
 </style>
 
 <main class="single-herbs-guide">
@@ -1632,6 +1632,13 @@ ob_start();
                 <?php echo s($ises ? 'Voz' : 'Voice'); ?>
                 <select data-read-aloud-voice aria-label="<?php echo s($ises ? 'Seleccionar voz para la lectura' : 'Choose a reading voice'); ?>">
                     <option value=""><?php echo s($ises ? 'Automática — recomendada' : 'Automatic — recommended'); ?></option>
+                </select>
+            </label>
+            <label class="single-herbs-reader__field single-herbs-reader__field--mode">
+                <?php echo s($ises ? 'Explicación de tablas y recuadros' : 'Tables and cards explanation'); ?>
+                <select data-read-aloud-mode aria-label="<?php echo s($ises ? 'Elegir explicación resumida o extendida' : 'Choose a summarized or extended explanation'); ?>">
+                    <option value="summary"><?php echo s($ises ? 'Resumida · diferencias decisivas' : 'Summary · decisive differences'); ?></option>
+                    <option value="extended"><?php echo s($ises ? 'Extendida · razonamiento completo' : 'Extended · full reasoning'); ?></option>
                 </select>
             </label>
             <button type="button" data-read-aloud-full><?php echo s($ises ? '▶ Página completa' : '▶ Full Page'); ?></button>
@@ -2324,6 +2331,7 @@ ob_start();
         const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
         const sectionSelect = readAloudToolbar.querySelector('[data-read-aloud-section]');
         const voiceSelect = readAloudToolbar.querySelector('[data-read-aloud-voice]');
+        const explanationModeSelect = readAloudToolbar.querySelector('[data-read-aloud-mode]');
         const fullButton = readAloudToolbar.querySelector('[data-read-aloud-full]');
         const startButton = readAloudToolbar.querySelector('[data-read-aloud-start]');
         const selectionButton = readAloudToolbar.querySelector('[data-read-aloud-selection]');
@@ -2354,10 +2362,145 @@ ob_start();
             return Boolean(section && section.querySelector('.single-herbs-guide__yang-charts') && graphMetadataPattern.test(lead.textContent));
         };
 
+        const cleanStructuredText = function(text) {
+            return String(text || '').replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim();
+        };
+        const normalizeStructuredKey = function(text) {
+            return cleanStructuredText(text).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+        };
+        const installStructuredNarrations = function() {
+            const isSpanish = language.indexOf('es') === 0;
+            const herbLabels = new Map();
+            const registerHerb = function(nameElement, latinElement) {
+                const name = cleanStructuredText(nameElement ? nameElement.textContent : '');
+                const latin = cleanStructuredText(latinElement ? latinElement.textContent : '');
+                if (name) {
+                    herbLabels.set(normalizeStructuredKey(name), latin ? name + ' (' + latin + ')' : name);
+                }
+            };
+            readAloudRoot.querySelectorAll('.single-herbs-guide__category-herb-head').forEach(function(header) {
+                registerHerb(header.querySelector('strong'), header.querySelector('em'));
+            });
+            readAloudRoot.querySelectorAll('.single-herbs-guide__profile').forEach(function(profile) {
+                registerHerb(
+                    profile.querySelector('.single-herbs-guide__profile-name'),
+                    profile.querySelector('.single-herbs-guide__profile-latin')
+                );
+            });
+
+            const herbEntries = Array.from(herbLabels.entries()).sort(function(first, second) {
+                return second[0].length - first[0].length;
+            });
+            const containsHerb = function(text) {
+                const normalizedText = ' ' + normalizeStructuredKey(text) + ' ';
+                return herbEntries.some(function(entry) {
+                    return normalizedText.indexOf(' ' + entry[0] + ' ') !== -1;
+                });
+            };
+            const expandHerbs = function(text) {
+                let expanded = cleanStructuredText(text);
+                herbEntries.forEach(function(entry) {
+                    const visibleName = entry[1].replace(/\s*\([^)]*\)\s*$/, '');
+                    const escapedName = visibleName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    expanded = expanded.replace(
+                        new RegExp('\\b' + escapedName + '\\b(?!\\s*\\()', 'gi'),
+                        entry[1]
+                    );
+                });
+                return expanded;
+            };
+
+            readAloudRoot.querySelectorAll('.single-herbs-guide__decision:not([data-read-aloud-text])').forEach(function(container) {
+                const cards = Array.from(container.children).filter(function(card) {
+                    return card.querySelector('strong') && card.querySelector('span');
+                });
+                const narration = cards.map(function(card, index) {
+                    const heading = cleanStructuredText(card.querySelector('strong').textContent);
+                    const detail = cleanStructuredText(card.querySelector('span').textContent);
+                    const expandedHeading = expandHerbs(heading);
+                    const expandedDetail = expandHerbs(detail);
+                    const headingIsHerb = containsHerb(heading);
+                    const detailIsHerb = containsHerb(detail);
+                    if (detailIsHerb && !headingIsHerb) {
+                        if (isSpanish) {
+                            const spanishDecisionFrames = [
+                                'Cuando predomina ' + heading + ', considera ' + expandedDetail + '.',
+                                'En cambio, si predomina ' + heading + ', considera ' + expandedDetail + '.',
+                                'Recuerda que ' + heading + ' orienta a ' + expandedDetail + '.',
+                                'Por tanto, ante ' + heading + ', considera ' + expandedDetail + '.',
+                                'No olvides que ' + heading + ' orienta a ' + expandedDetail + '.'
+                            ];
+                            return spanishDecisionFrames[index % spanishDecisionFrames.length];
+                        }
+                        const englishDecisionFrames = [
+                            'When ' + heading + ' dominates, consider ' + expandedDetail + '.',
+                            'By contrast, when ' + heading + ' dominates, consider ' + expandedDetail + '.',
+                            'Remember that ' + heading + ' points to ' + expandedDetail + '.',
+                            'Therefore, for ' + heading + ', consider ' + expandedDetail + '.',
+                            'Do not forget that ' + heading + ' points to ' + expandedDetail + '.'
+                        ];
+                        return englishDecisionFrames[index % englishDecisionFrames.length];
+                    }
+                    if (headingIsHerb && !detailIsHerb) {
+                        if (isSpanish) {
+                            return (index ? 'Por otra parte, ' : '') + expandedHeading + ' se distingue por ' + detail + '.';
+                        }
+                        return (index ? 'On the other hand, ' : '') + expandedHeading + ' is distinguished by ' + detail + '.';
+                    }
+                    if (isSpanish) {
+                        return (index ? 'Por otra parte, ' : '') + 'relaciona ' + heading + ' con ' + expandedDetail + '.';
+                    }
+                    return (index ? 'On the other hand, ' : '') + 'connect ' + heading + ' with ' + expandedDetail + '.';
+                }).join(' ');
+                if (narration) {
+                    container.dataset.readAloudText = narration;
+                    container.dataset.readAloudGenerated = 'decision';
+                }
+            });
+
+            readAloudRoot.querySelectorAll('.single-herbs-guide__bensky-card table:not([data-read-aloud-text])').forEach(function(table) {
+                const rows = Array.from(table.querySelectorAll('tr'));
+                const narration = rows.map(function(row, index) {
+                    const headingCell = row.querySelector('th');
+                    const detailCell = row.querySelector('td');
+                    if (!headingCell || !detailCell) {
+                        return '';
+                    }
+                    const heading = expandHerbs(headingCell.textContent);
+                    const detail = cleanStructuredText(detailCell.textContent);
+                    if (isSpanish) {
+                        return (index ? 'En cambio, ' : '') + heading + ' se distingue porque ' + detail + '.';
+                    }
+                    return (index ? 'By contrast, ' : '') + heading + ' is distinguished because ' + detail + '.';
+                }).filter(Boolean).join(' ');
+                if (narration) {
+                    table.dataset.readAloudText = narration;
+                    table.dataset.readAloudGenerated = 'comparison-table';
+                }
+            });
+        };
+        installStructuredNarrations();
+
+        const readAloudAlternativeText = function(element) {
+            if (!element) {
+                return '';
+            }
+            if (explanationModeSelect.value === 'extended') {
+                return element.dataset.readAloudExtended
+                    || element.dataset.readAloudText
+                    || element.dataset.readAloudSummary
+                    || '';
+            }
+            return element.dataset.readAloudSummary
+                || element.dataset.readAloudText
+                || element.dataset.readAloudExtended
+                || '';
+        };
+
         const visibleText = function(element) {
             const clone = element.cloneNode(true);
-            clone.querySelectorAll('[data-read-aloud-text]').forEach(function(alternative) {
-                alternative.replaceChildren(document.createTextNode(alternative.dataset.readAloudText || ''));
+            clone.querySelectorAll('[data-read-aloud-text], [data-read-aloud-summary], [data-read-aloud-extended]').forEach(function(alternative) {
+                alternative.replaceChildren(document.createTextNode(readAloudAlternativeText(alternative)));
             });
             clone.querySelectorAll('.single-herbs-guide__section-lead').forEach(function(lead) {
                 if (isGraphMetadataElement(lead)) {
@@ -2373,7 +2516,7 @@ ob_start();
             ].join(',')).forEach(function(node) {
                 node.remove();
             });
-            const sentenceBoundarySelector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td';
+            const sentenceBoundarySelector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td, .single-herbs-guide__decision > div, .single-herbs-guide__pattern > article';
             clone.querySelectorAll(sentenceBoundarySelector).forEach(function(boundary) {
                 if (boundary.querySelector(sentenceBoundarySelector)) {
                     return;
@@ -2596,6 +2739,7 @@ ob_start();
             stopButton.disabled = !isReading;
             sectionSelect.disabled = isReading;
             voiceSelect.disabled = isReading;
+            explanationModeSelect.disabled = isReading;
             if (!isReading) {
                 progressInput.disabled = true;
                 backButton.disabled = true;
@@ -2781,10 +2925,10 @@ ob_start();
 
             let node = walker.nextNode();
             while (node) {
-                const alternative = node.parentElement ? node.parentElement.closest('[data-read-aloud-text]') : null;
+                const alternative = node.parentElement ? node.parentElement.closest('[data-read-aloud-text], [data-read-aloud-summary], [data-read-aloud-extended]') : null;
                 if (alternative) {
                     if (!emittedAlternatives.has(alternative)) {
-                        const alternativeText = cleanSelectedPart(alternative.dataset.readAloudText || '');
+                        const alternativeText = cleanSelectedPart(readAloudAlternativeText(alternative));
                         if (alternativeText) {
                             selectedParts.push(alternativeText);
                         }
@@ -2851,8 +2995,8 @@ ob_start();
             });
             const seen = new Set();
             return candidates.map(function(element) {
-                const alternative = element.closest('[data-read-aloud-text]');
-                let text = (alternative ? alternative.dataset.readAloudText : element.textContent).replace(/\s+/g, ' ').trim();
+                const alternative = element.closest('[data-read-aloud-text], [data-read-aloud-summary], [data-read-aloud-extended]');
+                let text = (alternative ? readAloudAlternativeText(alternative) : element.textContent).replace(/\s+/g, ' ').trim();
                 if (!text || seen.has(text)) {
                     return '';
                 }
@@ -2888,6 +3032,15 @@ ob_start();
             sectionSelect.appendChild(option);
         });
 
+        try {
+            const storedExplanationMode = window.localStorage.getItem('acupuncturetests-reader-explanation-mode');
+            if (storedExplanationMode === 'extended' || storedExplanationMode === 'summary') {
+                explanationModeSelect.value = storedExplanationMode;
+            }
+        } catch (error) {
+            // The summary remains the default when browser storage is unavailable.
+        }
+
         readAloudToolbar.hidden = false;
 
         if (!speechSupported) {
@@ -2896,6 +3049,7 @@ ob_start();
             selectionButton.disabled = true;
             visibleButton.disabled = true;
             voiceSelect.disabled = true;
+            explanationModeSelect.disabled = true;
             readStatus.textContent = language.indexOf('es') === 0
                 ? 'Este navegador no admite la lectura en voz alta.'
                 : 'Read Aloud is not supported by this browser.';
@@ -2914,6 +3068,19 @@ ob_start();
                 );
             } catch (error) {
                 // Reading still works when browser storage is unavailable.
+            }
+        });
+
+        explanationModeSelect.addEventListener('change', function() {
+            try {
+                window.localStorage.setItem('acupuncturetests-reader-explanation-mode', explanationModeSelect.value);
+            } catch (error) {
+                // The selected mode still applies to the current page.
+            }
+            if (!readingStopped) {
+                stopReading(language.indexOf('es') === 0
+                    ? 'Tipo de explicación cambiado.'
+                    : 'Explanation type changed.');
             }
         });
 
