@@ -2453,6 +2453,14 @@ ob_start();
                 .trim();
         };
 
+        const normalizeSpeechSymbols = function(text) {
+            const nextConnector = language.indexOf('es') === 0 ? ', luego ' : ', then ';
+            return String(text || '')
+                .replace(/\s*(?:\u2192|\u279c|\u21d2|\u27f6|\u27f9)\s*/g, nextConnector)
+                .replace(/\s{2,}/g, ' ')
+                .trim();
+        };
+
         const applySpeechPronunciations = function(text) {
             const languageKey = language.indexOf('es') === 0 ? 'es' : 'en';
             return Object.keys(speechPronunciations[languageKey])
@@ -2463,7 +2471,7 @@ ob_start();
                         new RegExp('\\b' + escapedName + '\\b', 'gi'),
                         speechPronunciations[languageKey][herbName]
                     );
-                }, stripFigureReferencesForSpeech(text));
+                }, stripFigureReferencesForSpeech(normalizeSpeechSymbols(text)));
         };
 
         const voicePreferenceScore = function(voice) {
