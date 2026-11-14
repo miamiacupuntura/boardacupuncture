@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
     single-herbs-category-aromatic-transform-dampness.php
@@ -106,6 +106,17 @@ grep -Fq 'position:sticky;top:70px' "$TEMP_DIR/moodle/single-herbs-study-guide.p
 grep -Fq 'revealSelectedSection' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'readAloudToolbar.getBoundingClientRect().height' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'single-herbs-reader__revealed' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "replace(/[\\u3400-\\u4DBF\\u4E00-\\u9FFF\\uF900-\\uFAFF]/g, ' ')" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "[·•]?\\s*[\\u3400-\\u4DBF" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "dataset.readAloudGenerated = 'comparison-card'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "dataset.readAloudGenerated = 'herb-heading'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "unitLabels[unit.toLowerCase()]" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'data-read-aloud-text="<?php echo s($duiyaospokencount); ?>"' "$TEMP_DIR/moodle/single-herbs-dui-yao-reference.php"
+grep -Fq 'data-read-aloud-text="<?php echo s($duiyaocardnarration); ?>"' "$TEMP_DIR/moodle/single-herbs-dui-yao-reference.php"
+if grep -Fq 'pareja(s)' "$TEMP_DIR/moodle/single-herbs-dui-yao-reference.php"; then
+    echo "ERROR: la referencia Duì Yào todavía contiene plurales con paréntesis." >&2
+    exit 1
+fi
 grep -Fq "const sentenceBoundarySelector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td, .single-herbs-guide__decision > div, .single-herbs-guide__pattern > article'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq '<li><strong>Roof and walls:</strong> body surface.</li>' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "'interpretation_en' => 'All nine herbs in this category remain warm in nature" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -980,6 +991,10 @@ echo "OK: tarjetas de fórmulas y hierbas conservan acceso contextual y botón d
 echo "OK: Single Herbs Study Guide permite escuchar la página actual o una sección, en inglés y español."
 echo "OK: la barra de audio permanece visible al desplazarse y la narración pausa después de cada encabezado."
 echo "OK: al escoger una sección del lector, la página la desplaza debajo de la barra y la resalta brevemente."
+echo "OK: el audio normaliza plurales entre paréntesis y omite caracteres chinos y símbolos decorativos."
+echo "OK: Referencia Duì Yào usa gramática visual correcta y una narración propia, numerada y sin caracteres chinos."
+echo "OK: encabezados de hierbas, perfiles, patrones y comparaciones reciben frases narrativas con pausas propias."
+echo "OK: rangos, unidades y relaciones matemáticas comunes se convierten en expresiones habladas naturales."
 echo "OK: encabezados, párrafos, listas y definiciones reciben puntuación de cierre para pausas naturales."
 echo "OK: las cuatro gráficas Yang incluyen una interpretación escrita, visible y narrable en inglés y español."
 echo "OK: el lector omite títulos, referencias Fig., barras, nombres y números; narra solamente las conclusiones."

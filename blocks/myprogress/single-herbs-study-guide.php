@@ -2415,6 +2415,50 @@ ob_start();
                 return expanded;
             };
 
+            readAloudRoot.querySelectorAll('.single-herbs-guide__category-herb-head:not([data-read-aloud-text])').forEach(function(header) {
+                const name = cleanStructuredText(header.querySelector('strong') ? header.querySelector('strong').textContent : '');
+                const latin = cleanStructuredText(header.querySelector('em') ? header.querySelector('em').textContent : '');
+                if (name) {
+                    header.dataset.readAloudText = name + '. ' + (latin
+                        ? (isSpanish ? 'Nombre farmacéutico: ' : 'Pharmaceutical name: ') + latin + '.'
+                        : '');
+                    header.dataset.readAloudGenerated = 'herb-heading';
+                }
+            });
+
+            readAloudRoot.querySelectorAll('.single-herbs-guide__profile summary:not([data-read-aloud-text])').forEach(function(summary) {
+                const name = cleanStructuredText(summary.querySelector('.single-herbs-guide__profile-name')
+                    ? summary.querySelector('.single-herbs-guide__profile-name').textContent : '');
+                const latin = cleanStructuredText(summary.querySelector('.single-herbs-guide__profile-latin')
+                    ? summary.querySelector('.single-herbs-guide__profile-latin').textContent : '');
+                const properties = cleanStructuredText(summary.querySelector('.single-herbs-guide__profile-meta')
+                    ? summary.querySelector('.single-herbs-guide__profile-meta').textContent : '');
+                if (name) {
+                    summary.dataset.readAloudText = name + '. '
+                        + (latin ? (isSpanish ? 'Nombre farmacéutico: ' : 'Pharmaceutical name: ') + latin + '. ' : '')
+                        + (properties ? (isSpanish ? 'Propiedades principales: ' : 'Main properties: ') + properties + '.' : '');
+                    summary.dataset.readAloudGenerated = 'profile-heading';
+                }
+            });
+
+            readAloudRoot.querySelectorAll('.single-herbs-guide__pattern > article:not([data-read-aloud-text])').forEach(function(card) {
+                const heading = cleanStructuredText(card.querySelector('strong') ? card.querySelector('strong').textContent : '');
+                const detail = cleanStructuredText(card.querySelector('span') ? card.querySelector('span').textContent : '');
+                if (heading || detail) {
+                    card.dataset.readAloudText = (heading ? heading + '. ' : '') + (detail ? detail + '.' : '');
+                    card.dataset.readAloudGenerated = 'pattern-card';
+                }
+            });
+
+            readAloudRoot.querySelectorAll('.single-herbs-guide__comparison:not([data-read-aloud-text])').forEach(function(card) {
+                const heading = expandHerbs(card.querySelector('strong') ? card.querySelector('strong').textContent : '');
+                const detail = expandHerbs(card.querySelector('span') ? card.querySelector('span').textContent : '');
+                if (heading || detail) {
+                    card.dataset.readAloudText = (heading ? heading + '. ' : '') + (detail ? detail + '.' : '');
+                    card.dataset.readAloudGenerated = 'comparison-card';
+                }
+            });
+
             readAloudRoot.querySelectorAll('.single-herbs-guide__decision:not([data-read-aloud-text])').forEach(function(container) {
                 const cards = Array.from(container.children).filter(function(card) {
                     return card.querySelector('strong') && card.querySelector('span');
@@ -2606,6 +2650,11 @@ ob_start();
 
         const normalizeSpeechSymbols = function(text) {
             const nextConnector = language.indexOf('es') === 0 ? ', luego ' : ', then ';
+            const andConnector = language.indexOf('es') === 0 ? ' y ' : ' and ';
+            const rangeConnector = language.indexOf('es') === 0 ? ' a ' : ' to ';
+            const unitLabels = language.indexOf('es') === 0
+                ? {mg: 'miligramos', g: 'gramos', ml: 'mililitros', cm: 'centímetros', mm: 'milímetros'}
+                : {mg: 'milligrams', g: 'grams', ml: 'milliliters', cm: 'centimeters', mm: 'millimeters'};
             const sequencePharmaceuticalNames = {
                 'Bo He': 'Menthae haplocalycis Herba',
                 'Niu Bang Zi': 'Arctii Fructus',
@@ -2624,7 +2673,35 @@ ob_start();
                 }, preparedText);
             }
             return preparedText
+                .replace(/[·•]?\s*[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+(?:\s*(?:\+|&|\/|·|•)\s*[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+)*/g, ' ')
+                .replace(/[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/g, ' ')
+                .replace(/\b([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)\((s|es)\)/g, '$1$2')
+                .replace(/(\d)\s*[–—−-]\s*(?=\d)/g, '$1' + rangeConnector)
+                .replace(/(\d+(?:[.,]\d+)?)\s*°\s*C\b/gi, function(match, value) {
+                    return value + (language.indexOf('es') === 0 ? ' grados Celsius' : ' degrees Celsius');
+                })
+                .replace(/(\d+(?:[.,]\d+)?)\s*(mg|g|ml|cm|mm)\b/gi, function(match, value, unit) {
+                    return value + ' ' + unitLabels[unit.toLowerCase()];
+                })
+                .replace(/≤\s*/g, language.indexOf('es') === 0 ? 'como máximo ' : 'at most ')
+                .replace(/≥\s*/g, language.indexOf('es') === 0 ? 'al menos ' : 'at least ')
+                .replace(/≈\s*/g, language.indexOf('es') === 0 ? 'aproximadamente ' : 'approximately ')
+                .replace(/≠\s*/g, language.indexOf('es') === 0 ? 'no equivale a ' : 'does not equal ')
+                .replace(/±\s*/g, language.indexOf('es') === 0 ? 'más o menos ' : 'plus or minus ')
+                .replace(/×\s*/g, language.indexOf('es') === 0 ? 'por ' : 'times ')
+                .replace(/÷\s*/g, language.indexOf('es') === 0 ? 'dividido entre ' : 'divided by ')
+                .replace(/°/g, language.indexOf('es') === 0 ? ' grados ' : ' degrees ')
                 .replace(/\s*(?:\u2192|\u279c|\u21d2|\u27f6|\u27f9)\s*/g, nextConnector)
+                .replace(/\s*(?:\+|&|\/|\u2194|\u21d4)\s*/g, andConnector)
+                .replace(/[·•|]+/g, ', ')
+                .replace(/[—–]+/g, ', ')
+                .replace(/[\[\]{}]/g, ' ')
+                .replace(/[()]/g, ', ')
+                .replace(/[←↑↓↗↘↶↷⇅]+/g, ' ')
+                .replace(/[★☆◆◇■□●○▪▫※†‡▶⏸🔊👁✨⚡ⓘ]+/gu, ' ')
+                .replace(/\s*,\s*,+/g, ', ')
+                .replace(/([.!?])(?:\s*[.!?])+/g, '$1')
+                .replace(/\s+([,.;:!?])/g, '$1')
                 .replace(/\s{2,}/g, ' ')
                 .trim();
         };
