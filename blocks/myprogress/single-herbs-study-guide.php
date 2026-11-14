@@ -2439,7 +2439,7 @@ ob_start();
                 'Bo He': 'Bó Ge', 'Niu Bang Zi': 'Niú, Bang, Tzí', 'Sang Ye': 'Sang Yé',
                 'Chan Tui': 'Chan Tuéi', 'Ju Hua': 'Yú Juá', 'Sheng Ma': 'Sheng Má',
                 'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
-                'Dan Dou Chi': 'Dan Dóu Chi', 'Mu Zei': 'Mu Dsei', 'Jin Yin Hua': 'Yin Yin Juá',
+                'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu Dsei', 'Jin Yin Hua': 'Yin Yin Juá',
                 'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin'
             }
         };
