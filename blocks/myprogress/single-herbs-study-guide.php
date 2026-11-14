@@ -698,7 +698,7 @@ $topiconeherbs = [
         'identity' => 'The strongest diaphoretic in this group; disseminates Lung Qi, calms wheezing and promotes urination.',
         'clue' => 'Marked chills, no sweating, body aches and wheezing in an Exterior excess presentation.',
         'memory' => 'MA = Maximum opening: Ma Huang throws open the pores when Cold has locked the exterior.',
-        'unique' => "Within this Board subset it is the hottest and ranks highest for both sweating and light dispersion in Yang's comparative figures.",
+        'unique' => "Within this Board subset it is the hottest and ranks highest for both sweating and light dispersion in the comparative figures by Yang, the author of the book.",
         'formulas' => 'Chief: Ma Huang Tang. Co-chief: Xiao Qing Long Tang with Gui Zhi, and Ma Xing Shi Gan Tang with Shi Gao.',
         'caution' => 'Use cautiously with spontaneous sweating, Yin deficiency, hypertension, insomnia or cardiovascular disease.',
     ],
@@ -711,7 +711,7 @@ $topiconeherbs = [
         'identity' => 'Releases the muscle layer, warms and unblocks the channels, supports Yang and harmonizes Nutritive and Defensive Qi.',
         'clue' => 'Exterior Wind-Cold with sweating, or Cold obstructing the channels and circulation.',
         'memory' => 'A twig reaches the branches: Gui Zhi carries warmth through the channels and limbs.',
-        'unique' => "Yang ranks it second in warmth in this Board subset. Its Heart-channel and Blood-circulating emphasis distinguishes it from Ma Huang's stronger surface release.",
+        'unique' => "In the comparison by Yang, the author of the book, it ranks second in warmth within this Board subset. Its Heart-channel and Blood-circulating emphasis distinguishes it from the stronger surface release of Ma Huang.",
         'formulas' => 'Chief: Gui Zhi Tang. Co-chief: Xiao Qing Long Tang with Ma Huang.',
         'caution' => 'Use cautiously with febrile disease, Yin deficiency with Heat, hot Blood or pregnancy with Heat signs.',
     ],
@@ -724,7 +724,7 @@ $topiconeherbs = [
         'identity' => 'Gently releases Wind-Cold while moving Qi, harmonizing the Middle and calming the fetus.',
         'clue' => 'A mild exterior pattern with chest or epigastric fullness, nausea, vomiting or pregnancy-related Qi constraint.',
         'memory' => 'The Perilla leaf moves at the surface and settles what is restless in the Middle—including the fetus.',
-        'unique' => "Among the least warm herbs in Yang's warm-herb figure, yet it uniquely combines gentle Exterior release with Middle-Jiao Qi regulation and calming the fetus.",
+        'unique' => "In the warm-herb figure by Yang, the author of the book, it is among the least warm herbs, yet it uniquely combines gentle Exterior release with Middle-Jiao Qi regulation and calming the fetus.",
         'formulas' => 'No chief or co-chief formula from the current Board Domain roster is linked here. Keep the herb profile without adding an off-list formula.',
         'caution' => 'Its aromatic oils are best preserved with a relatively short decoction.',
     ],
@@ -737,7 +737,7 @@ $topiconeherbs = [
         'identity' => 'A light, gentle Wind herb that releases the Exterior, vents rashes and benefits itchy skin eruptions.',
         'clue' => 'Superficial Wind with rash or itching; raw herb disperses Wind, while the charred form is used differently for bleeding.',
         'memory' => 'Jing Jie sweeps Wind from the skin; once charred, the same herb turns inward to stop bleeding.',
-        'unique' => "It is among the least warm yet tied for second in light dispersion in Yang's figures; processing can shift it from dispersing Wind to stopping bleeding.",
+        'unique' => "In the figures by Yang, the author of the book, it is among the least warm herbs yet tied for second in light dispersion; processing can shift it from dispersing Wind to stopping bleeding.",
         'formulas' => 'Co-chief: Xiao Feng San with Fang Feng. Supporting ingredient: Yin Qiao San and Zhi Sou San.',
         'caution' => 'Do not confuse the actions of raw Jing Jie, Jing Jie Sui and charred Jing Jie.',
     ],
@@ -763,7 +763,7 @@ $topiconeherbs = [
         'identity' => 'Strongly releases Wind-Cold-Damp and relieves pain, especially along the Taiyang region and upper body.',
         'clue' => 'Occipital headache, stiff upper back and generalized aches aggravated by Cold-Damp.',
         'memory' => 'Qiang Huo climbs the back of the head: occiput, neck and upper back reveal its Taiyang route.',
-        'unique' => "It ties for the highest exogenous-Dampness score among the Board herbs shown by Yang; its decisive location is the occiput, neck and upper Taiyang region.",
+        'unique' => "It ties for the highest exogenous-Dampness score among the Board herbs shown by Yang, the author of the book; its decisive location is the occiput, neck and upper Taiyang region.",
         'formulas' => 'Co-chief: Qiang Huo Sheng Shi Tang with Du Huo.',
         'caution' => 'Drying and dispersing; use cautiously with Yin or Blood deficiency and in patients with depleted fluids.',
     ],
@@ -776,7 +776,7 @@ $topiconeherbs = [
         'identity' => 'Releases Wind-Cold, opens the nasal passages, relieves Yangming frontal pain and reduces swelling and pus.',
         'clue' => 'Frontal headache with nasal obstruction or thick, foul discharge and sinus fullness.',
         'memory' => 'Bai Zhi lights the front of the face: forehead, eyebrows, nose, teeth and purulent swelling.',
-        'unique' => "It ties Qiang Huo for the highest exogenous-Dampness score among these Board herbs, but its rich aroma and Yangming route point to frontal pain, the nose and pus.",
+        'unique' => "In the comparison by Yang, the author of the book, it ties Qiang Huo for the highest exogenous-Dampness score among these Board herbs, but its rich aroma and Yangming route point to frontal pain, the nose and pus.",
         'formulas' => 'Appears in Cang Er Zi San and Chuan Xiong Cha Tiao San, but another herb leads each formula.',
         'caution' => 'Its warm, drying nature is unsuitable for headache or nasal disease caused primarily by Yin deficiency or Heat.',
     ],
@@ -789,7 +789,7 @@ $topiconeherbs = [
         'identity' => 'Gently releases Wind-Cold, warms the Middle, stops vomiting, warms the Lung and reduces toxicity of certain herbs.',
         'clue' => 'A mild exterior pattern accompanied by nausea, vomiting, cough or Middle-Jiao Cold.',
         'memory' => 'Fresh ginger begins at the front door but returns to the kitchen: Exterior release plus Stomach harmony.',
-        'unique' => "It sits in the middle of Yang's warmth comparison, but the text calls it a first-line choice for nausea because it uniquely joins mild Exterior release with Stomach harmony.",
+        'unique' => "It sits in the middle of the warmth comparison by Yang, the author of the book, but the text calls it a first-line choice for nausea because it uniquely joins mild Exterior release with Stomach harmony.",
         'formulas' => 'Appears in Gui Zhi Tang and Ju Pi Zhu Ru Tang as a supporting ingredient rather than the chief.',
         'caution' => 'Use cautiously with spontaneous sweating from deficiency or prominent internal Heat.',
     ],
@@ -802,7 +802,7 @@ $topiconeherbs = [
         'identity' => 'Focuses on opening the nasal passages, dispersing Wind-Cold and restoring the sense of smell.',
         'clue' => 'Nasal obstruction, reduced smell and sinus pain where the nose is the dominant problem.',
         'memory' => 'The Magnolia flower opens at the nose: when smell disappears, think Xin Yi Hua.',
-        'unique' => "It is among the least warm herbs yet tied with Jing Jie for second in light dispersion in Yang's figures; its most specific target is nasal opening and smell.",
+        'unique' => "In the figures by Yang, the author of the book, it is among the least warm herbs yet tied with Jing Jie for second in light dispersion; its most specific target is nasal opening and smell.",
         'formulas' => 'Appears in Cang Er Zi San as a supporting nasal-opening ingredient; Cang Er Zi is the chief herb.',
         'caution' => 'The flower hairs can irritate the throat; traditionally decocted in a cloth bag.',
     ],
@@ -960,7 +960,8 @@ $windcoldannexherbs = array_values(array_filter($windcoldcategoryherbs, static f
 $yangcomparisoncharts = [
     [
         'title' => 'Relative warmth',
-        'figure' => 'Yang Fig. 2.1',
+        'figure_en' => 'Yang, the book author · Fig. 2.1',
+        'figure_es' => 'Yang, autor del libro · Fig. 2.1',
         'interpretation_label_en' => 'Interpretation of the relative warmth graph:',
         'interpretation_label_es' => 'Interpretación de la gráfica de tibieza relativa:',
         'items' => ['Ma Huang' => 100, 'Gui Zhi' => 80, 'Sheng Jiang' => 50, 'Qiang Huo' => 50, 'Bai Zhi' => 30, 'Fang Feng' => 30, 'Jing Jie' => 20, 'Xin Yi Hua' => 20, 'Zi Su Ye' => 20],
@@ -969,7 +970,8 @@ $yangcomparisoncharts = [
     ],
     [
         'title' => 'Sweat-inducing strength',
-        'figure' => 'Yang Fig. 2.2',
+        'figure_en' => 'Yang, the book author · Fig. 2.2',
+        'figure_es' => 'Yang, autor del libro · Fig. 2.2',
         'interpretation_label_en' => 'Interpretation of the sweat-inducing strength graph:',
         'interpretation_label_es' => 'Interpretación de la gráfica de fuerza para inducir sudor:',
         'items' => ['Ma Huang' => 100, 'Gui Zhi' => 50, 'Zi Su Ye' => 30, 'Jing Jie' => 20],
@@ -978,7 +980,8 @@ $yangcomparisoncharts = [
     ],
     [
         'title' => 'Light and dispersing quality',
-        'figure' => 'Yang Fig. 2.3',
+        'figure_en' => 'Yang, the book author · Fig. 2.3',
+        'figure_es' => 'Yang, autor del libro · Fig. 2.3',
         'interpretation_label_en' => 'Interpretation of the light and dispersing quality graph:',
         'interpretation_label_es' => 'Interpretación de la gráfica de cualidad ligera y dispersante:',
         'items' => ['Ma Huang' => 100, 'Jing Jie' => 80, 'Xin Yi Hua' => 80, 'Fang Feng' => 60, 'Zi Su Ye' => 50, 'Gui Zhi' => 40],
@@ -987,7 +990,8 @@ $yangcomparisoncharts = [
     ],
     [
         'title' => 'Expelling exogenous Dampness',
-        'figure' => 'Yang Fig. 2.5',
+        'figure_en' => 'Yang, the book author · Fig. 2.5',
+        'figure_es' => 'Yang, autor del libro · Fig. 2.5',
         'interpretation_label_en' => 'Interpretation of the exogenous Dampness graph:',
         'interpretation_label_es' => 'Interpretación de la gráfica de expulsión de Humedad exógena:',
         'items' => ['Qiang Huo' => 70, 'Bai Zhi' => 70, 'Zi Su Ye' => 40, 'Fang Feng' => 40],
@@ -1821,14 +1825,14 @@ ob_start();
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-yang-title">
-                    <h4 id="topic-one-yang-title">Yang comparative fingerprint</h4>
+                    <h4 id="topic-one-yang-title">Comparative fingerprint from Yang, the book author</h4>
                     <p class="single-herbs-guide__section-lead">Use the bars to see what makes each Board herb stand out relative to its neighbors. The view below keeps only the nine herbs in this Board category.</p>
                     <div class="single-herbs-guide__yang-charts">
                         <?php foreach ($yangcomparisoncharts as $chart): ?>
                             <article class="single-herbs-guide__yang-chart">
                                 <div class="single-herbs-guide__yang-visual">
                                     <h5><?php echo s($chart['title']); ?></h5>
-                                    <small><?php echo s($chart['figure']); ?></small>
+                                    <small><?php echo s($chart[$ises ? 'figure_es' : 'figure_en']); ?></small>
                                     <?php foreach ($chart['items'] as $herbname => $value): ?>
                                         <div class="single-herbs-guide__yang-bar">
                                             <span><?php echo s($herbname); ?></span>
@@ -1846,8 +1850,8 @@ ob_start();
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-bensky-summary-title">
                     <h4 id="topic-one-bensky-summary-title"><?php echo s($ises ? 'Bensky · Resumen de funciones comparativas' : 'Bensky · Summary of Comparative Functions'); ?></h4>
                     <p class="single-herbs-guide__section-lead"><?php echo s($ises
-                        ? 'Este mapa amplía la comparación por fuerza, profundidad, localización y especialidad. Complementa a Yang; no sustituye sus perfiles, gráficos ni preguntas.'
-                        : 'This map expands the comparison by strength, depth, location and specialty. It supplements Yang; it does not replace Yang profiles, charts or questions.'); ?></p>
+                        ? 'Este mapa amplía la comparación por fuerza, profundidad, localización y especialidad. Complementa el análisis de Yang, autor del libro Chinese Herbal Medicines: Comparisons and Characteristics; no sustituye los perfiles, gráficas ni preguntas del libro.'
+                        : 'This map expands the comparison by strength, depth, location and specialty. It supplements the analysis by Yang, the author of Chinese Herbal Medicines: Comparisons and Characteristics; it does not replace the profiles, charts or questions in the book.'); ?></p>
                     <div class="single-herbs-guide__bensky-grid">
                         <article class="single-herbs-guide__bensky-card">
                             <h5><?php echo s($ises ? '1 · Las tres más fuertes para dispersar Frío' : '1 · Three stronger Cold-dispersing herbs'); ?></h5>
@@ -1889,7 +1893,7 @@ ob_start();
                             ? 'Bensky registra sabor acre, naturaleza tibia, entrada en Pulmón-Corazón-Riñón y dosis de estudio de 1–3 g. Destaca que la dosis debe mantenerse baja en polvo, píldoras o preparaciones sin cocción y advierte toxicidad grave por sobredosis o tiempo insuficiente de decocción. El texto histórico señala un máximo de 1.5 g al día cuando no se hierve. Appendix 1 del guideline vigente mantiene el límite general de hasta 3 g. Esta nota es para reconocimiento y seguridad de examen, no para prescripción.'
                             : 'Bensky records an acrid, warm herb entering Lung-Heart-Kidney, with a 1–3 g study dose. It emphasizes a low dose in powders, pills or uncooked preparations and warns of serious toxicity from overdose or insufficient decoction time. The historical text gives a 1.5 g daily maximum when unboiled. The current guideline Appendix 1 retains a general limit of up to 3 g. This is an exam-recognition and safety note, not prescribing guidance.'); ?>
                     </div>
-                    <p class="single-herbs-guide__bensky-source"><strong><?php echo s($ises ? 'Fuente y límite:' : 'Source and boundary:'); ?></strong> <?php echo s($ises ? 'síntesis de Bensky et al., Chinese Herbal Medicine: Materia Medica, 3.ª ed., capítulo 1, pp. 22–29 y 82–83, a partir del texto suministrado. Los valores existentes de Yang permanecen sin cambios.' : 'synthesis of Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1, pp. 22–29 and 82–83, from the supplied text. Existing Yang values remain unchanged.'); ?></p>
+                    <p class="single-herbs-guide__bensky-source"><strong><?php echo s($ises ? 'Fuente y límite:' : 'Source and boundary:'); ?></strong> <?php echo s($ises ? 'síntesis de Bensky et al., Chinese Herbal Medicine: Materia Medica, 3.ª ed., capítulo 1, pp. 22–29 y 82–83, a partir del texto suministrado. Los valores existentes de Yang, autor del libro, permanecen sin cambios.' : 'synthesis of Bensky et al., Chinese Herbal Medicine: Materia Medica, 3rd ed., Chapter 1, pp. 22–29 and 82–83, from the supplied text. Existing values from Yang, the book author, remain unchanged.'); ?></p>
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-decision-title">
@@ -1986,13 +1990,13 @@ ob_start();
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-yang-questions-title">
-                    <h4 id="topic-one-yang-questions-title">Yang questions for this category</h4>
+                    <h4 id="topic-one-yang-questions-title">Questions from Yang, the book author, for this category</h4>
                     <p class="single-herbs-guide__section-lead"><?php echo s($ises ? 'Todas las preguntas seleccionadas del capítulo 2 aparecen consecutivamente. Responde primero; después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.' : 'All selected Chapter 2 questions appear consecutively. Answer first; then open each response, or use the controls to open and close them all.'); ?></p>
                     <div class="single-herbs-guide__yang-deck" data-yang-deck data-card-label="<?php echo $ises ? 'Tarjeta' : 'Card'; ?>" data-of-label="<?php echo $ises ? 'de' : 'of'; ?>">
                         <?php foreach ($yangquestions as $questionindex => $yangquestion): ?>
                             <article class="single-herbs-guide__yang-card<?php echo $questionindex === 0 ? ' is-active' : ''; ?>" data-yang-card aria-hidden="<?php echo $questionindex === 0 ? 'false' : 'true'; ?>">
                                 <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--front">
-                                    <span class="single-herbs-guide__yang-label"><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $questionindex + 1; ?> <?php echo $ises ? 'de' : 'of'; ?> <?php echo count($yangquestions); ?> · Yang, <?php echo $ises ? 'capítulo' : 'Chapter'; ?> 2</span>
+                                    <span class="single-herbs-guide__yang-label"><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $questionindex + 1; ?> <?php echo $ises ? 'de' : 'of'; ?> <?php echo count($yangquestions); ?> · <?php echo $ises ? 'Yang, autor del libro · capítulo' : 'Yang, the book author · Chapter'; ?> 2</span>
                                     <p class="single-herbs-guide__yang-question"><?php echo s($yangquestion['question']); ?></p>
                                 </div>
                                 <div class="single-herbs-guide__yang-face single-herbs-guide__yang-face--back">
@@ -3080,7 +3084,7 @@ ob_start();
             question.className = 'single-herbs-guide__final-question';
             question.dataset.questionSource = sourceParts.length > 1
                 ? sourceParts.slice(1).join('·').trim()
-                : (isSpanishQuestions ? 'Yang · capítulo' : 'Yang · chapter');
+                : (isSpanishQuestions ? 'Yang, autor del libro · capítulo' : 'Yang, the book author · chapter');
             number.className = 'single-herbs-guide__final-number';
             Array.from(questionText.childNodes).forEach(function(node) {
                 prompt.appendChild(node.cloneNode(true));
@@ -3182,12 +3186,12 @@ ob_start();
     }
     if (hasLegacyYangQuestions && hasBenskyReviewQuestions) {
         lead.textContent = isSpanishQuestions
-            ? 'Las preguntas anteriores de Yang y las nuevas preguntas de repaso Bensky aparecen en una sola secuencia. Responde primero y después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.'
-            : 'Earlier Yang questions and newer Bensky review questions now appear in one sequence. Answer first, then open each response, or use the controls to open and close them all.';
+            ? 'Las preguntas anteriores de Yang, autor del libro, y las nuevas preguntas de repaso Bensky aparecen en una sola secuencia. Responde primero y después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.'
+            : 'Earlier questions from Yang, the book author, and newer Bensky review questions now appear in one sequence. Answer first, then open each response, or use the controls to open and close them all.';
     } else if (hasLegacyYangQuestions) {
         lead.textContent = isSpanishQuestions
-            ? 'Todas las preguntas de Yang y de repaso del capítulo aparecen en una sola secuencia. Responde primero y después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.'
-            : 'All Yang and chapter-review questions appear in one sequence. Answer first, then open each response, or use the controls to open and close them all.';
+            ? 'Todas las preguntas de Yang, autor del libro, y de repaso del capítulo aparecen en una sola secuencia. Responde primero y después abre cada respuesta, o usa los controles para abrirlas y cerrarlas todas.'
+            : 'All questions from Yang, the book author, and the chapter review appear in one sequence. Answer first, then open each response, or use the controls to open and close them all.';
     } else {
         lead.textContent = isSpanishQuestions
             ? 'Responde mentalmente antes de abrir cada elemento, o usa los controles para abrir y cerrar todas las respuestas.'
