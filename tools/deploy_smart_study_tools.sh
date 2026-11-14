@@ -55,6 +55,17 @@ grep -Fq '<li><strong>Roof and walls:</strong> body surface.</li>' "$TEMP_DIR/mo
 grep -Fq "'interpretation_en' => 'Ma Huang is the warmest reference at 100" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "'interpretation_es' => 'Ma Huang es la referencia más cálida con 100" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'single-herbs-guide__yang-interpretation' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq '<div class="single-herbs-guide__yang-visual">' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq '.single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq '[aria-hidden="true"], .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+if grep -Fq 'does not prescribe dosage' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
+    || grep -Fq 'no prescribe dosis' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
+    || grep -Fq 'not percentages of clinical effectiveness' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
+    || grep -Fq 'do not represent doses or efficacy' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
+    || grep -Fq 'How to read these bars:' "$TEMP_DIR/moodle/single-herbs-study-guide.php"; then
+    echo "ERROR: Las conclusiones de las gráficas todavía incluyen aclaraciones generales retiradas." >&2
+    exit 1
+fi
 grep -Fq "s(\$chart[\$ises ? 'interpretation_es' : 'interpretation_en'])" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "segment.replace(/[*＊]+/g, '').replace" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'const cleanSelectedPart = function(text)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
@@ -849,6 +860,8 @@ echo "OK: Single Herbs Study Guide permite escuchar la página actual o una secc
 echo "OK: la barra de audio permanece visible al desplazarse y la narración pausa después de cada encabezado."
 echo "OK: encabezados, párrafos, listas y definiciones reciben puntuación de cierre para pausas naturales."
 echo "OK: las cuatro gráficas Yang incluyen una interpretación escrita, visible y narrable en inglés y español."
+echo "OK: el lector omite títulos, referencias Fig., barras, nombres y números; narra solamente las conclusiones."
+echo "OK: las conclusiones se concentran en el contenido académico y omiten aclaraciones generales sobre dosis o eficacia."
 echo "OK: los asteriscos permanecen visibles como marcadores, pero se eliminan antes de narrar."
 echo "OK: Selección pausa por fragmentos sin insertar ni pronunciar “punto” donde estaba el asterisco."
 echo "OK: la etiqueta “In current guideline 2026” permanece visible y queda excluida de la narración."
