@@ -2436,7 +2436,7 @@ ob_start();
                 'Ma Huang': 'Ma Juang', 'Gui Zhi': 'Guéi Yi', 'Zi Su Ye': 'Dsi Su Yé',
                 'Xi Xin': 'Shi Shin', 'Bai Zhi': 'Bái Yi', 'Fang Feng': 'Fang Feng',
                 'Qiang Huo': 'Chiang Juo', 'Jing Jie': 'Ying Yie', 'Sheng Jiang': 'Sheng Chiang',
-                'Bo He': 'Bó Je', 'Niu Bang Zi': 'Nióu Bang Dsi', 'Sang Ye': 'Sang Yé',
+                'Bo He': 'Bó Ge', 'Niu Bang Zi': 'Nióu Bang Dsi', 'Sang Ye': 'Sang Yé',
                 'Chan Tui': 'Chan Tuéi', 'Ju Hua': 'Yú Juá', 'Sheng Ma': 'Sheng Má',
                 'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
                 'Dan Dou Chi': 'Dan Dóu Chi', 'Mu Zei': 'Mu Dsei', 'Jin Yin Hua': 'Yin Yin Juá',
