@@ -68,7 +68,8 @@ if grep -Fq 'data-read-aloud-speed' "$TEMP_DIR/moodle/single-herbs-study-guide.p
     exit 1
 fi
 grep -Fq 'activeUtterance.rate = 1;' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
-grep -Fq 'window.setTimeout(speakNextChunk, 280)' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'speechTimer = window.setTimeout(function()' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq 'speakNextChunk(sessionId);' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'id="read-aloud"' "$TEMP_DIR/static/read-aloud-test.html"
 grep -Fq 'speechSynthesis' "$TEMP_DIR/static/read-aloud-test.html"
 grep -Fq 'Chinese herbs are commonly organized' "$TEMP_DIR/static/read-aloud-test.html"
