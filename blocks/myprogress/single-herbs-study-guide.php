@@ -1776,12 +1776,12 @@ ob_start();
                     <aside class="single-herbs-guide__memory-path" aria-label="Memory path for warm acrid exterior-releasing herbs">
                         <p class="single-herbs-guide__memory-line">Picture the Exterior as a house.</p>
                         <ul class="single-herbs-guide__house">
-                            <li><strong>Roof and walls:</strong> body surface</li>
-                            <li><strong>Doors and windows:</strong> pores</li>
-                            <li><strong>Ventilation:</strong> Lung</li>
-                            <li><strong>Exterior guard:</strong> Wei Qi</li>
-                            <li><strong>Intruder:</strong> Wind-Cold</li>
-                            <li><strong>Exit strategy:</strong> a light sweat</li>
+                            <li><strong>Roof and walls:</strong> body surface.</li>
+                            <li><strong>Doors and windows:</strong> pores.</li>
+                            <li><strong>Ventilation:</strong> Lung.</li>
+                            <li><strong>Exterior guard:</strong> Wei Qi.</li>
+                            <li><strong>Intruder:</strong> Wind-Cold.</li>
+                            <li><strong>Exit strategy:</strong> a light sweat.</li>
                         </ul>
                         <p><strong>Acrid disperses, Warm mobilizes, the Lung opens and sweat escorts Wind-Cold out.</strong> This is the mechanism represented by the house image.</p>
                         <p>Walk through the house to remember the group: <strong>Ma Huang opens the locked door; Gui Zhi warms the branches; Zi Su Ye settles the kitchen; Jing Jie sweeps the skin; Fang Feng raises a Wind shield; Qiang Huo climbs the neck; Bai Zhi clears the forehead and sinuses; Sheng Jiang stops at the Stomach; Xin Yi Hua opens at the nose.</strong></p>
@@ -2308,14 +2308,6 @@ ob_start();
 
         const visibleText = function(element) {
             const clone = element.cloneNode(true);
-            clone.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function(heading) {
-                const headingText = heading.textContent.replace(/\s+/g, ' ').trim();
-                if (headingText && !/[.!?;:]$/.test(headingText)) {
-                    heading.appendChild(document.createTextNode('. '));
-                } else {
-                    heading.appendChild(document.createTextNode(' '));
-                }
-            });
             clone.querySelectorAll([
                 'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
                 '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
@@ -2323,6 +2315,17 @@ ob_start();
                 '.single-herbs-guide__roster-modal'
             ].join(',')).forEach(function(node) {
                 node.remove();
+            });
+            const sentenceBoundarySelector = 'h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, th, td';
+            clone.querySelectorAll(sentenceBoundarySelector).forEach(function(boundary) {
+                if (boundary.querySelector(sentenceBoundarySelector)) {
+                    return;
+                }
+                const boundaryText = boundary.textContent.replace(/\s+/g, ' ').trim();
+                if (!boundaryText) {
+                    return;
+                }
+                boundary.appendChild(document.createTextNode(/[.!?;:]$/.test(boundaryText) ? ' ' : '. '));
             });
             return clone.textContent.replace(/\s+/g, ' ').trim();
         };
