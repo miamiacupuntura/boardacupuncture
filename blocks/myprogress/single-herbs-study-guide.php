@@ -2436,7 +2436,7 @@ ob_start();
                 'Ma Huang': 'Ma Juang', 'Gui Zhi': 'Guéi Yi', 'Zi Su Ye': 'Dsi Su Yé',
                 'Xi Xin': 'Shi Shin', 'Bai Zhi': 'Bái Yi', 'Fang Feng': 'Fang Feng',
                 'Qiang Huo': 'Chiang Juo', 'Jing Jie': 'Ying Yie', 'Sheng Jiang': 'Sheng Chiang',
-                'Bo He': 'Bó Ge', 'Niu Bang Zi': 'Nióu Bang Dsi', 'Sang Ye': 'Sang Yé',
+                'Bo He': 'Bó Ge', 'Niu Bang Zi': 'Niú, Bang, Tzí', 'Sang Ye': 'Sang Yé',
                 'Chan Tui': 'Chan Tuéi', 'Ju Hua': 'Yú Juá', 'Sheng Ma': 'Sheng Má',
                 'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
                 'Dan Dou Chi': 'Dan Dóu Chi', 'Mu Zei': 'Mu Dsei', 'Jin Yin Hua': 'Yin Yin Juá',
@@ -2455,7 +2455,24 @@ ob_start();
 
         const normalizeSpeechSymbols = function(text) {
             const nextConnector = language.indexOf('es') === 0 ? ', luego ' : ', then ';
-            return String(text || '')
+            const sequencePharmaceuticalNames = {
+                'Bo He': 'Menthae haplocalycis Herba',
+                'Niu Bang Zi': 'Arctii Fructus',
+                'Chan Tui': 'Cicadae Periostracum',
+                'Sang Ye': 'Mori Folium',
+                'Ju Hua': 'Chrysanthemi Flos'
+            };
+            let preparedText = String(text || '');
+            if (/(?:\u2192|\u279c|\u21d2|\u27f6|\u27f9)/.test(preparedText)) {
+                preparedText = Object.keys(sequencePharmaceuticalNames).reduce(function(sequenceText, herbName) {
+                    const escapedName = herbName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    return sequenceText.replace(
+                        new RegExp('\\b' + escapedName + '\\b(?!\\s*\\()', 'gi'),
+                        herbName + ' (' + sequencePharmaceuticalNames[herbName] + ')'
+                    );
+                }, preparedText);
+            }
+            return preparedText
                 .replace(/\s*(?:\u2192|\u279c|\u21d2|\u27f6|\u27f9)\s*/g, nextConnector)
                 .replace(/\s{2,}/g, ' ')
                 .trim();
