@@ -962,15 +962,15 @@ $yangcomparisoncharts = [
         'title' => 'Relative warmth',
         'figure' => 'Yang Fig. 2.1',
         'items' => ['Ma Huang' => 100, 'Gui Zhi' => 80, 'Sheng Jiang' => 50, 'Qiang Huo' => 50, 'Bai Zhi' => 30, 'Fang Feng' => 30, 'Jing Jie' => 20, 'Xin Yi Hua' => 20, 'Zi Su Ye' => 20],
-        'interpretation_en' => 'Ma Huang is the warmest reference at 100, followed by Gui Zhi at 80. Sheng Jiang and Qiang Huo form the middle group at 50. Bai Zhi and Fang Feng are lower at 30, while Jing Jie, Xin Yi Hua and Zi Su Ye share the lowest displayed index at 20. The bars compare relative thermal direction within this group; they do not represent doses or efficacy.',
-        'interpretation_es' => 'Ma Huang es la referencia más cálida con 100, seguida por Gui Zhi con 80. Sheng Jiang y Qiang Huo forman el grupo intermedio con 50. Bai Zhi y Fang Feng quedan en 30, mientras Jing Jie, Xin Yi Hua y Zi Su Ye comparten el índice más bajo mostrado, con 20. Las barras comparan la dirección térmica relativa dentro de este grupo; no representan dosis ni eficacia.',
+        'interpretation_en' => 'Ma Huang is the warmest reference at 100, followed by Gui Zhi at 80. Sheng Jiang and Qiang Huo form the middle group at 50. Bai Zhi and Fang Feng are lower at 30, while Jing Jie, Xin Yi Hua and Zi Su Ye share the lowest displayed index at 20.',
+        'interpretation_es' => 'Ma Huang es la referencia más cálida con 100, seguida por Gui Zhi con 80. Sheng Jiang y Qiang Huo forman el grupo intermedio con 50. Bai Zhi y Fang Feng quedan en 30, mientras Jing Jie, Xin Yi Hua y Zi Su Ye comparten el índice más bajo mostrado, con 20.',
     ],
     [
         'title' => 'Sweat-inducing strength',
         'figure' => 'Yang Fig. 2.2',
         'items' => ['Ma Huang' => 100, 'Gui Zhi' => 50, 'Zi Su Ye' => 30, 'Jing Jie' => 20],
-        'interpretation_en' => 'Ma Huang is the strongest sweat-inducing reference at 100. Gui Zhi reaches half that reference at 50, followed by Zi Su Ye at 30 and Jing Jie at 20. This chart ranks relative sweat-inducing strength; it does not prescribe dosage.',
-        'interpretation_es' => 'Ma Huang es la referencia más fuerte para inducir sudor, con 100. Gui Zhi alcanza la mitad de esa referencia, con 50, seguida por Zi Su Ye con 30 y Jing Jie con 20. Esta gráfica ordena la fuerza relativa para inducir sudor; no prescribe dosis.',
+        'interpretation_en' => 'Ma Huang is the strongest sweat-inducing reference at 100. Gui Zhi reaches half that reference at 50, followed by Zi Su Ye at 30 and Jing Jie at 20.',
+        'interpretation_es' => 'Ma Huang es la referencia más fuerte para inducir sudor, con 100. Gui Zhi alcanza la mitad de esa referencia, con 50, seguida por Zi Su Ye con 30 y Jing Jie con 20.',
     ],
     [
         'title' => 'Light and dispersing quality',
@@ -983,8 +983,8 @@ $yangcomparisoncharts = [
         'title' => 'Expelling exogenous Dampness',
         'figure' => 'Yang Fig. 2.5',
         'items' => ['Qiang Huo' => 70, 'Bai Zhi' => 70, 'Zi Su Ye' => 40, 'Fang Feng' => 40],
-        'interpretation_en' => 'Qiang Huo and Bai Zhi lead the displayed comparison for expelling exogenous Dampness at 70. Zi Su Ye and Fang Feng form the lower group at 40. These are relative comparison indices, not percentages of clinical effectiveness.',
-        'interpretation_es' => 'Qiang Huo y Bai Zhi encabezan la comparación mostrada para expulsar Humedad exógena, con 70. Zi Su Ye y Fang Feng forman el grupo inferior, con 40. Estos son índices comparativos relativos, no porcentajes de efectividad clínica.',
+        'interpretation_en' => 'Qiang Huo and Bai Zhi lead the displayed comparison for expelling exogenous Dampness at 70. Zi Su Ye and Fang Feng form the lower group at 40.',
+        'interpretation_es' => 'Qiang Huo y Bai Zhi encabezan la comparación mostrada para expulsar Humedad exógena, con 70. Zi Su Ye y Fang Feng forman el grupo inferior, con 40.',
     ],
 ];
 
@@ -1818,20 +1818,21 @@ ob_start();
                     <div class="single-herbs-guide__yang-charts">
                         <?php foreach ($yangcomparisoncharts as $chart): ?>
                             <article class="single-herbs-guide__yang-chart">
-                                <h5><?php echo s($chart['title']); ?></h5>
-                                <small><?php echo s($chart['figure']); ?></small>
-                                <?php foreach ($chart['items'] as $herbname => $value): ?>
-                                    <div class="single-herbs-guide__yang-bar">
-                                        <span><?php echo s($herbname); ?></span>
-                                        <span class="single-herbs-guide__yang-bar-track"><span class="single-herbs-guide__yang-bar-fill" style="width:<?php echo (int) $value; ?>%"></span></span>
-                                        <b><?php echo (int) $value; ?></b>
-                                    </div>
-                                <?php endforeach; ?>
+                                <div class="single-herbs-guide__yang-visual">
+                                    <h5><?php echo s($chart['title']); ?></h5>
+                                    <small><?php echo s($chart['figure']); ?></small>
+                                    <?php foreach ($chart['items'] as $herbname => $value): ?>
+                                        <div class="single-herbs-guide__yang-bar">
+                                            <span><?php echo s($herbname); ?></span>
+                                            <span class="single-herbs-guide__yang-bar-track"><span class="single-herbs-guide__yang-bar-fill" style="width:<?php echo (int) $value; ?>%"></span></span>
+                                            <b><?php echo (int) $value; ?></b>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
                                 <p class="single-herbs-guide__yang-interpretation"><strong><?php echo s($ises ? 'Interpretación de la gráfica:' : 'Graph interpretation:'); ?></strong> <?php echo s($chart[$ises ? 'interpretation_es' : 'interpretation_en']); ?></p>
                             </article>
                         <?php endforeach; ?>
                     </div>
-                    <p class="single-herbs-guide__yang-note"><strong>How to read these bars:</strong> they are relative comparison indices transcribed from Yang, Chapter 2, Figures 2.1, 2.2, 2.3 and 2.5. They are not doses, efficacy percentages or prescribing instructions. Herbs outside this Board category that appear in the original figures are intentionally omitted here.</p>
                 </section>
 
                 <section class="single-herbs-guide__section" aria-labelledby="topic-one-bensky-summary-title">
@@ -2321,7 +2322,8 @@ ob_start();
                 'nav', 'button', 'form', 'script', 'style', 'svg', 'img',
                 '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
                 '.single-herbs-guide__source', '.single-herbs-guide__yang-controls',
-                '.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge'
+                '.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge',
+                '.single-herbs-guide__yang-visual'
             ].join(',')).forEach(function(node) {
                 node.remove();
             });
@@ -2588,7 +2590,7 @@ ob_start();
                         return NodeFilter.FILTER_REJECT;
                     }
                     const parent = node.parentElement;
-                    if (!parent || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"], .single-herbs-guide__category-herb-badge')) {
+                    if (!parent || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"], .single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual')) {
                         return NodeFilter.FILTER_REJECT;
                     }
                     try {
@@ -2644,7 +2646,7 @@ ob_start();
             const toolbarBottom = readAloudToolbar.getBoundingClientRect().bottom + 4;
             const viewportBottom = window.innerHeight || document.documentElement.clientHeight;
             const candidates = Array.from(readAloudRoot.querySelectorAll(selector)).filter(function(element) {
-                if (element.closest('[hidden], nav, form, [aria-hidden="true"]')) {
+                if (element.closest('[hidden], nav, form, [aria-hidden="true"], .single-herbs-guide__yang-visual')) {
                     return false;
                 }
                 const style = window.getComputedStyle(element);
