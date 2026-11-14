@@ -1548,17 +1548,17 @@ ob_start();
 .single-herbs-reader__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:13px}
 .single-herbs-reader__heading h3{margin:0;color:#123246;font-size:18px}
 .single-herbs-reader__heading p{margin:3px 0 0;color:#60717e;font-size:13px;line-height:1.45}
-.single-herbs-reader__controls{display:grid;grid-template-columns:minmax(220px,1fr) repeat(6,max-content);gap:9px;align-items:end}
-.single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}
+.single-herbs-reader__controls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;align-items:end}
+.single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:span 3}
 .single-herbs-reader select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #aebdc6;border-radius:8px;background:#fff;color:#17364a}
-.single-herbs-reader button{min-height:42px;padding:8px 13px;border:1px solid #0b817d;border-radius:8px;background:#0b817d;color:#fff;font-weight:900;cursor:pointer;white-space:nowrap}
+.single-herbs-reader button{width:100%;min-height:42px;padding:8px 13px;border:1px solid #0b817d;border-radius:8px;background:#0b817d;color:#fff;font-weight:900;cursor:pointer;white-space:nowrap}
 .single-herbs-reader button:hover:not(:disabled),.single-herbs-reader button:focus-visible:not(:disabled){background:#086963;border-color:#086963}
 .single-herbs-reader button.single-herbs-reader__secondary{background:#fff;color:#0b6f69}
 .single-herbs-reader button:disabled{cursor:not-allowed;opacity:.46}
 .single-herbs-reader__status{min-height:21px;margin:10px 0 0;color:#52677a;font-size:13px;font-weight:800}
 .single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
-@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field:first-child{grid-column:1/-1}}
-@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field:first-child{grid-column:auto}.single-herbs-reader button{width:100%}}
+@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:1/-1}}
+@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice{grid-column:auto}}
 </style>
 
 <main class="single-herbs-guide">
@@ -1599,9 +1599,15 @@ ob_start();
             </div>
         </div>
         <div class="single-herbs-reader__controls">
-            <label class="single-herbs-reader__field">
+            <label class="single-herbs-reader__field single-herbs-reader__field--section">
                 <?php echo s($ises ? 'Sección' : 'Section'); ?>
                 <select data-read-aloud-section aria-label="<?php echo s($ises ? 'Seleccionar sección para escuchar' : 'Choose a section to listen to'); ?>"></select>
+            </label>
+            <label class="single-herbs-reader__field single-herbs-reader__field--voice">
+                <?php echo s($ises ? 'Voz' : 'Voice'); ?>
+                <select data-read-aloud-voice aria-label="<?php echo s($ises ? 'Seleccionar voz para la lectura' : 'Choose a reading voice'); ?>">
+                    <option value=""><?php echo s($ises ? 'Automática — recomendada' : 'Automatic — recommended'); ?></option>
+                </select>
             </label>
             <button type="button" data-read-aloud-full><?php echo s($ises ? '▶ Página completa' : '▶ Full Page'); ?></button>
             <button type="button" data-read-aloud-start><?php echo s($ises ? '▶ Escuchar sección' : '▶ Read Section'); ?></button>
@@ -2280,6 +2286,7 @@ ob_start();
     if (readAloudToolbar && readAloudRoot) {
         const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
         const sectionSelect = readAloudToolbar.querySelector('[data-read-aloud-section]');
+        const voiceSelect = readAloudToolbar.querySelector('[data-read-aloud-voice]');
         const fullButton = readAloudToolbar.querySelector('[data-read-aloud-full]');
         const startButton = readAloudToolbar.querySelector('[data-read-aloud-start]');
         const selectionButton = readAloudToolbar.querySelector('[data-read-aloud-selection]');
@@ -2289,6 +2296,7 @@ ob_start();
         const readStatus = readAloudToolbar.querySelector('[data-read-aloud-status]');
         const language = readAloudToolbar.dataset.language || 'en-US';
         const sectionTargets = [];
+        let availableVoices = [];
         let speechChunks = [];
         let speechChunkIndex = 0;
         let activeReadTarget = null;
@@ -2353,14 +2361,69 @@ ob_start();
             return chunks;
         };
 
-        const chooseVoice = function() {
-            const voices = window.speechSynthesis.getVoices();
+        const voicePreferenceScore = function(voice) {
+            const name = voice.name.toLowerCase();
+            let score = voice.lang.toLowerCase() === language.toLowerCase() ? 0 : 20;
+            if (/natural|neural|premium|enhanced/.test(name)) {
+                score -= 60;
+            } else if (/aria|jenny|guy|samantha|google us english|google español|paulina|dalia/.test(name)) {
+                score -= 40;
+            }
+            if (!voice.localService) {
+                score -= 10;
+            }
+            return score;
+        };
+
+        const populateVoiceOptions = function() {
             const languagePrefix = language.slice(0, 2).toLowerCase();
-            return voices.find(function(voice) {
-                return voice.lang.toLowerCase() === language.toLowerCase();
-            }) || voices.find(function(voice) {
+            const previousValue = voiceSelect.value;
+            availableVoices = window.speechSynthesis.getVoices().filter(function(voice) {
                 return voice.lang.toLowerCase().slice(0, 2) === languagePrefix;
-            }) || null;
+            }).sort(function(first, second) {
+                const scoreDifference = voicePreferenceScore(first) - voicePreferenceScore(second);
+                return scoreDifference || first.name.localeCompare(second.name);
+            });
+
+            voiceSelect.replaceChildren();
+            const automaticOption = document.createElement('option');
+            automaticOption.value = '';
+            automaticOption.textContent = languagePrefix === 'es'
+                ? 'Automática — recomendada'
+                : 'Automatic — recommended';
+            voiceSelect.appendChild(automaticOption);
+
+            availableVoices.forEach(function(voice) {
+                const option = document.createElement('option');
+                option.value = voice.voiceURI;
+                option.textContent = voice.name + ' (' + voice.lang + ')' + (voice.localService ? '' : ' · online');
+                voiceSelect.appendChild(option);
+            });
+
+            let storedValue = '';
+            try {
+                storedValue = window.localStorage.getItem('acupuncturetests-reader-voice-' + languagePrefix) || '';
+            } catch (error) {
+                storedValue = '';
+            }
+            const preferredValue = storedValue || previousValue;
+            if (preferredValue && availableVoices.some(function(voice) {
+                return voice.voiceURI === preferredValue;
+            })) {
+                voiceSelect.value = preferredValue;
+            }
+        };
+
+        const chooseVoice = function() {
+            if (voiceSelect.value) {
+                const selectedVoice = availableVoices.find(function(voice) {
+                    return voice.voiceURI === voiceSelect.value;
+                });
+                if (selectedVoice) {
+                    return selectedVoice;
+                }
+            }
+            return availableVoices[0] || null;
         };
 
         const setReadControls = function(isReading) {
@@ -2371,6 +2434,7 @@ ob_start();
             pauseButton.disabled = !isReading;
             stopButton.disabled = !isReading;
             sectionSelect.disabled = isReading;
+            voiceSelect.disabled = isReading;
         };
 
         const finishReading = function(message) {
@@ -2532,12 +2596,27 @@ ob_start();
             startButton.disabled = true;
             selectionButton.disabled = true;
             visibleButton.disabled = true;
+            voiceSelect.disabled = true;
             readStatus.textContent = language.indexOf('es') === 0
                 ? 'Este navegador no admite la lectura en voz alta.'
                 : 'Read Aloud is not supported by this browser.';
         } else {
-            window.speechSynthesis.getVoices();
+            populateVoiceOptions();
+            if ('onvoiceschanged' in window.speechSynthesis) {
+                window.speechSynthesis.addEventListener('voiceschanged', populateVoiceOptions);
+            }
         }
+
+        voiceSelect.addEventListener('change', function() {
+            try {
+                window.localStorage.setItem(
+                    'acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase(),
+                    voiceSelect.value
+                );
+            } catch (error) {
+                // Reading still works when browser storage is unavailable.
+            }
+        });
 
         fullButton.addEventListener('click', function() {
             beginReading(
