@@ -1548,7 +1548,7 @@ ob_start();
 .single-herbs-reader__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:13px}
 .single-herbs-reader__heading h3{margin:0;color:#123246;font-size:18px}
 .single-herbs-reader__heading p{margin:3px 0 0;color:#60717e;font-size:13px;line-height:1.45}
-.single-herbs-reader__controls{display:grid;grid-template-columns:minmax(220px,1fr) repeat(6,max-content) minmax(100px,120px);gap:9px;align-items:end}
+.single-herbs-reader__controls{display:grid;grid-template-columns:minmax(220px,1fr) repeat(6,max-content);gap:9px;align-items:end}
 .single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}
 .single-herbs-reader select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #aebdc6;border-radius:8px;background:#fff;color:#17364a}
 .single-herbs-reader button{min-height:42px;padding:8px 13px;border:1px solid #0b817d;border-radius:8px;background:#0b817d;color:#fff;font-weight:900;cursor:pointer;white-space:nowrap}
@@ -1557,8 +1557,8 @@ ob_start();
 .single-herbs-reader button:disabled{cursor:not-allowed;opacity:.46}
 .single-herbs-reader__status{min-height:21px;margin:10px 0 0;color:#52677a;font-size:13px;font-weight:800}
 .single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
-@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field:first-child{grid-column:1/-1}.single-herbs-reader__field:last-child{grid-column:1/-1}}
-@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field:first-child,.single-herbs-reader__field:last-child{grid-column:auto}.single-herbs-reader button{width:100%}}
+@media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field:first-child{grid-column:1/-1}}
+@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field:first-child{grid-column:auto}.single-herbs-reader button{width:100%}}
 </style>
 
 <main class="single-herbs-guide">
@@ -1609,15 +1609,6 @@ ob_start();
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-visible><?php echo s($ises ? '👁 Texto visible' : '👁 Visible Text'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-pause disabled><?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-stop disabled><?php echo s($ises ? '■ Detener' : '■ Stop'); ?></button>
-            <label class="single-herbs-reader__field">
-                <?php echo s($ises ? 'Velocidad' : 'Speed'); ?>
-                <select data-read-aloud-speed>
-                    <option value="0.75">0.75×</option>
-                    <option value="1" selected>1×</option>
-                    <option value="1.25">1.25×</option>
-                    <option value="1.5">1.5×</option>
-                </select>
-            </label>
         </div>
         <p class="single-herbs-reader__status" data-read-aloud-status role="status" aria-live="polite"><?php echo s($ises ? 'Lista para escuchar.' : 'Ready to read.'); ?></p>
     </section>
@@ -2289,7 +2280,6 @@ ob_start();
     if (readAloudToolbar && readAloudRoot) {
         const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
         const sectionSelect = readAloudToolbar.querySelector('[data-read-aloud-section]');
-        const speedSelect = readAloudToolbar.querySelector('[data-read-aloud-speed]');
         const fullButton = readAloudToolbar.querySelector('[data-read-aloud-full]');
         const startButton = readAloudToolbar.querySelector('[data-read-aloud-start]');
         const selectionButton = readAloudToolbar.querySelector('[data-read-aloud-selection]');
@@ -2408,7 +2398,7 @@ ob_start();
 
             activeUtterance = new SpeechSynthesisUtterance(speechChunks[speechChunkIndex]);
             activeUtterance.lang = language;
-            activeUtterance.rate = Number(speedSelect.value) || 1;
+            activeUtterance.rate = 1;
             const voice = chooseVoice();
             if (voice) {
                 activeUtterance.voice = voice;
