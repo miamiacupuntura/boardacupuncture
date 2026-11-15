@@ -1566,11 +1566,11 @@ ob_start();
 
 .single-herbs-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;padding:16px 18px;border:1px solid #a9d5d1;border-left:5px solid #0b817d;border-radius:11px;background:#f5fbfa;box-shadow:0 8px 24px rgba(15,23,42,.12)}
 .single-herbs-reader[hidden]{display:none}
-.single-herbs-reader__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:13px}
-.single-herbs-reader__heading h3{margin:0;color:#123246;font-size:18px}
-.single-herbs-reader__heading p{margin:3px 0 0;color:#60717e;font-size:13px;line-height:1.45}
+.single-herbs-reader__disclosure>summary{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding-right:42px;cursor:pointer;list-style:none}.single-herbs-reader__disclosure>summary::-webkit-details-marker{display:none}.single-herbs-reader__disclosure>summary:after{content:'+';position:absolute;right:0;top:2px;display:flex;width:28px;height:28px;align-items:center;justify-content:center;border:1px solid #8fc9c4;border-radius:50%;background:#fff;color:#0b6f69;font-size:20px;font-weight:900;line-height:1}.single-herbs-reader__disclosure[open]>summary:after{content:'−'}
+.single-herbs-reader__heading{display:block}.single-herbs-reader__heading-title{display:block;color:#123246;font-size:18px;font-weight:900}.single-herbs-reader__heading-description{display:block;margin-top:3px;color:#60717e;font-size:13px;line-height:1.45}.single-herbs-reader__panel{padding-top:13px}
 .single-herbs-reader__controls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;align-items:end}
 .single-herbs-reader__field{display:grid;gap:5px;color:#17364a;font-size:12px;font-weight:800}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:span 2}
+.single-herbs-reader__mode-options{display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,.62fr);gap:8px;align-items:stretch}
 .single-herbs-reader select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #aebdc6;border-radius:8px;background:#fff;color:#17364a}
 .single-herbs-reader button{width:100%;min-height:42px;padding:8px 13px;border:1px solid #0b817d;border-radius:8px;background:#0b817d;color:#fff;font-weight:900;cursor:pointer;white-space:nowrap}
 .single-herbs-reader button:hover:not(:disabled),.single-herbs-reader button:focus-visible:not(:disabled){background:#086963;border-color:#086963}
@@ -1585,7 +1585,7 @@ ob_start();
 .single-herbs-reader__active{outline:3px solid rgba(11,129,125,.28);outline-offset:5px;border-radius:8px}
 .single-herbs-reader__revealed{outline:3px solid rgba(247,126,37,.45);outline-offset:6px;border-radius:8px;transition:outline-color .35s ease}
 @media(max-width:850px){.single-herbs-reader__controls{grid-template-columns:1fr 1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:1/-1}.single-herbs-reader__progress{grid-template-columns:1fr 1fr}.single-herbs-reader__progress-field{grid-column:1/-1;grid-row:1}}
-@media(max-width:520px){.single-herbs-reader{padding:14px}.single-herbs-reader__heading{display:block}.single-herbs-reader__controls{grid-template-columns:1fr}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:auto}.single-herbs-reader__progress{grid-template-columns:1fr}.single-herbs-reader__progress-field{grid-column:auto;grid-row:auto}}
+@media(max-width:520px){.single-herbs-reader{top:58px;padding:10px 11px}.single-herbs-reader__disclosure>summary{padding-right:34px}.single-herbs-reader__disclosure>summary:after{width:24px;height:24px;font-size:17px}.single-herbs-reader__heading-title{font-size:15px}.single-herbs-reader__heading-description{font-size:11px;line-height:1.3}.single-herbs-reader__panel{padding-top:9px}.single-herbs-reader__controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.single-herbs-reader__field--section,.single-herbs-reader__field--voice,.single-herbs-reader__field--mode{grid-column:1/-1;gap:3px;font-size:11px}.single-herbs-reader__mode-options{grid-template-columns:1fr;gap:5px}.single-herbs-reader select{min-height:34px;padding:5px 8px;font-size:12px}.single-herbs-reader button{min-height:34px;padding:5px 6px;font-size:12px;line-height:1.15;white-space:normal}.single-herbs-reader__progress{grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}.single-herbs-reader__progress-field{grid-column:1/-1;grid-row:1;gap:2px 8px;font-size:10px}.single-herbs-reader__progress-field input{height:17px}.single-herbs-reader__status{min-height:17px;margin-top:7px;font-size:11px}}
 </style>
 
 <main class="single-herbs-guide">
@@ -1617,14 +1617,14 @@ ob_start();
         data-pause-label="<?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?>"
         data-continue-label="<?php echo s($ises ? '▶ Continuar' : '▶ Continue'); ?>"
         hidden>
-        <div class="single-herbs-reader__heading">
-            <div>
-                <h3><?php echo s($ises ? 'Escuchar esta guía' : 'Listen to this Study Guide'); ?></h3>
-                <p><?php echo s($ises
-                    ? 'Escucha toda la página actual o selecciona una sección.'
-                    : 'Listen to the current page or choose one section.'); ?></p>
-            </div>
-        </div>
+        <details class="single-herbs-reader__disclosure" data-read-aloud-disclosure open>
+        <summary class="single-herbs-reader__heading">
+            <span class="single-herbs-reader__heading-title"><?php echo s($ises ? 'Escuchar esta guía' : 'Listen to this Study Guide'); ?></span>
+            <span class="single-herbs-reader__heading-description"><?php echo s($ises
+                ? 'Escucha toda la página actual o selecciona una sección.'
+                : 'Listen to the current page or choose one section.'); ?></span>
+        </summary>
+        <div class="single-herbs-reader__panel">
         <div class="single-herbs-reader__controls">
             <label class="single-herbs-reader__field single-herbs-reader__field--section">
                 <?php echo s($ises ? 'Sección' : 'Section'); ?>
@@ -1636,18 +1636,20 @@ ob_start();
                     <option value=""><?php echo s($ises ? 'Automática — recomendada' : 'Automatic — recommended'); ?></option>
                 </select>
             </label>
-            <label class="single-herbs-reader__field single-herbs-reader__field--mode">
-                <?php echo s($ises ? 'Explicación de tablas y recuadros' : 'Tables and cards explanation'); ?>
-                <select data-read-aloud-mode aria-label="<?php echo s($ises ? 'Elegir explicación resumida o extendida' : 'Choose a summarized or extended explanation'); ?>">
-                    <option value="summary"><?php echo s($ises ? 'Resumida · diferencias decisivas' : 'Summary · decisive differences'); ?></option>
-                    <option value="extended"><?php echo s($ises ? 'Extendida · razonamiento completo' : 'Extended · full reasoning'); ?></option>
-                </select>
-            </label>
+            <div class="single-herbs-reader__field single-herbs-reader__field--mode">
+                <label for="single-herbs-reader-mode"><?php echo s($ises ? 'Explicación de tablas y recuadros' : 'Tables and cards explanation'); ?></label>
+                <div class="single-herbs-reader__mode-options">
+                    <select id="single-herbs-reader-mode" data-read-aloud-mode aria-label="<?php echo s($ises ? 'Elegir explicación resumida o extendida' : 'Choose a summarized or extended explanation'); ?>">
+                        <option value="summary"><?php echo s($ises ? 'Resumida · diferencias decisivas' : 'Summary · decisive differences'); ?></option>
+                        <option value="extended"><?php echo s($ises ? 'Extendida · razonamiento completo' : 'Extended · full reasoning'); ?></option>
+                    </select>
+                    <button class="single-herbs-reader__secondary" type="button" data-read-aloud-flash hidden><?php echo s($ises ? '⚡ Flash de hierbas' : '⚡ Herb Flash'); ?></button>
+                </div>
+            </div>
             <button type="button" data-read-aloud-full><?php echo s($ises ? '▶ Página completa' : '▶ Full Page'); ?></button>
             <button type="button" data-read-aloud-start><?php echo s($ises ? '▶ Escuchar sección' : '▶ Read Section'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-selection><?php echo s($ises ? '🔊 Selección' : '🔊 Selection'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-visible><?php echo s($ises ? '👁 Texto visible' : '👁 Visible Text'); ?></button>
-            <button class="single-herbs-reader__secondary" type="button" data-read-aloud-flash hidden><?php echo s($ises ? '⚡ Flash de hierbas' : '⚡ Herb Flash'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-pause disabled><?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?></button>
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-stop disabled><?php echo s($ises ? '■ Detener' : '■ Stop'); ?></button>
         </div>
@@ -1662,6 +1664,8 @@ ob_start();
             <button class="single-herbs-reader__secondary" type="button" data-read-aloud-forward disabled><?php echo s($ises ? 'Avanzar ↷' : 'Forward ↷'); ?></button>
         </div>
         <p class="single-herbs-reader__status" data-read-aloud-status role="status" aria-live="polite"><?php echo s($ises ? 'Lista para escuchar.' : 'Ready to read.'); ?></p>
+        </div>
+        </details>
     </section>
 
     <?php if ($fromlibrary): ?>
