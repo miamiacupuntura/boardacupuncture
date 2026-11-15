@@ -2348,7 +2348,8 @@ ob_start();
         const progressValue = readAloudToolbar.querySelector('[data-read-aloud-progress-value]');
         const readStatus = readAloudToolbar.querySelector('[data-read-aloud-status]');
         const language = readAloudToolbar.dataset.language || 'en-US';
-        const flashSource = readAloudRoot.querySelector('[data-read-aloud-flash]');
+        let flashSource = readAloudRoot.querySelector('[data-read-aloud-flash]');
+        let flashNarration = flashSource ? (flashSource.dataset.readAloudFlash || '') : '';
         const sectionTargets = [];
         let availableVoices = [];
         let speechChunks = [];
@@ -2582,6 +2583,79 @@ ob_start();
             });
         };
         installStructuredNarrations();
+
+        const buildGenericHerbFlash = function() {
+            const isSpanish = language.indexOf('es') === 0;
+            const numberWords = isSpanish
+                ? ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 'veinte']
+                : ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+            const seenNames = new Set();
+            const entries = [];
+            const findDefinition = function(profile, labelPattern) {
+                const term = Array.from(profile.querySelectorAll('dt')).find(function(candidate) {
+                    return labelPattern.test(cleanStructuredText(candidate.textContent));
+                });
+                return cleanStructuredText(term && term.nextElementSibling ? term.nextElementSibling.textContent : '');
+            };
+            const addEntry = function(name, latin, clue) {
+                name = cleanStructuredText(name);
+                latin = cleanStructuredText(latin);
+                clue = cleanStructuredText(clue).replace(/[.!?]+$/, '');
+                const key = normalizeStructuredKey(name);
+                if (!name || !key || seenNames.has(key)) {
+                    return;
+                }
+                seenNames.add(key);
+                const position = entries.length + 1;
+                const spokenPosition = numberWords[position] || String(position);
+                let narration = (isSpanish ? 'La hierba número ' : 'Herb number ')
+                    + spokenPosition + (isSpanish ? ' es ' : ' is ') + name + '. ';
+                if (latin) {
+                    narration += (isSpanish ? 'Su nombre farmacéutico es ' : 'Its pharmaceutical name is ')
+                        + latin.replace(/[.!?]+$/, '') + '. ';
+                }
+                if (clue) {
+                    narration += (isSpanish ? 'Su pista principal es ' : 'Its main clue is ') + clue + '.';
+                }
+                entries.push(narration.trim());
+            };
+
+            const profiles = Array.from(readAloudRoot.querySelectorAll('.single-herbs-guide__profile'));
+            profiles.forEach(function(profile) {
+                const name = profile.querySelector('.single-herbs-guide__profile-name');
+                const latin = profile.querySelector('.single-herbs-guide__profile-latin');
+                const clue = findDefinition(profile, /^(?:exam clue|pista de examen)$/i)
+                    || findDefinition(profile, /^(?:unique fingerprint|huella única)$/i)
+                    || findDefinition(profile, /^(?:identity|identidad)$/i);
+                addEntry(name ? name.textContent : '', latin ? latin.textContent : '', clue);
+            });
+
+            if (!entries.length) {
+                Array.from(readAloudRoot.querySelectorAll('.single-herbs-guide__category-herb')).forEach(function(card) {
+                    const name = card.querySelector('.single-herbs-guide__category-herb-head strong');
+                    const latin = card.querySelector('.single-herbs-guide__category-herb-head em');
+                    const clue = card.querySelector(':scope > p');
+                    addEntry(
+                        name ? name.textContent : '',
+                        latin ? latin.textContent : '',
+                        clue ? clue.textContent : ''
+                    );
+                });
+            }
+
+            return {
+                source: profiles.length ? profiles[0].closest('.single-herbs-guide__profiles') : readAloudRoot,
+                text: entries.join(' ')
+            };
+        };
+
+        if (!flashNarration) {
+            const generatedFlash = buildGenericHerbFlash();
+            flashNarration = generatedFlash.text;
+            if (flashNarration) {
+                flashSource = generatedFlash.source || readAloudRoot;
+            }
+        }
 
         const readAloudAlternativeText = function(element) {
             if (!element) {
@@ -2871,7 +2945,7 @@ ob_start();
             startButton.disabled = isReading;
             selectionButton.disabled = isReading;
             visibleButton.disabled = isReading;
-            flashButton.disabled = isReading || !flashSource;
+            flashButton.disabled = isReading || !flashNarration;
             pauseButton.disabled = !isReading;
             stopButton.disabled = !isReading;
             sectionSelect.disabled = isReading;
@@ -3227,7 +3301,7 @@ ob_start();
         }
 
         readAloudToolbar.hidden = false;
-        flashButton.hidden = !flashSource;
+        flashButton.hidden = !flashNarration;
 
         if (!speechSupported) {
             fullButton.disabled = true;
@@ -3329,13 +3403,13 @@ ob_start();
         });
 
         flashButton.addEventListener('click', function() {
-            if (!flashSource || !flashSource.dataset.readAloudFlash) {
+            if (!flashNarration) {
                 readStatus.textContent = language.indexOf('es') === 0
                     ? 'Esta categoría todavía no tiene un flash de hierbas.'
                     : 'This category does not have a herb flash yet.';
                 return;
             }
-            const flashText = flashSource.dataset.readAloudFlash.replace(
+            const flashText = flashNarration.replace(
                 /\s+(?=(?:La hierba número|Herb number))/g,
                 '\n'
             );
