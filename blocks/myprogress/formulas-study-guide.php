@@ -2190,8 +2190,14 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
-    function comparisonCellText(cell) {
+    function comparisonCellText(cell, preserveEnglish) {
         var clone = cell.cloneNode(true);
+        if (preserveEnglish && isSpanish) {
+            clone.querySelectorAll('[data-formula-english-speech]').forEach(function(node) {
+                var englishName = (node.getAttribute('data-formula-english-speech') || '').trim();
+                node.replaceWith(document.createTextNode(englishName ? ' ([[en:' + englishName + ']]) ' : ''));
+            });
+        }
         clone.querySelectorAll('.formula-study-guide__domain-badge,.formula-study-guide__formula-translation,.formula-study-guide__formula-english-inline,[aria-hidden="true"]').forEach(function(node) {
             node.remove();
         });
@@ -2269,7 +2275,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             table.querySelectorAll('tbody tr').forEach(function(row) {
                 var cells = Array.from(row.querySelectorAll('td'));
                 var fields = cells.map(function(cell, index) {
-                    var value = comparisonCellText(cell);
+                    var value = comparisonCellText(cell, true);
                     if (!value) return '';
                     var heading = headers[index] || (isSpanish ? 'Dato' : 'Detail');
                     return heading + ': ' + value;
@@ -2664,8 +2670,8 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         var target = String(targetLanguage || '').toLowerCase();
         var targetPrefix = target.slice(0, 2);
         var referenceProvider = voiceProvider(referenceVoice);
-        var naturalNames = /natural|neural|premium|enhanced|studio|aria|ava|jenny|sonia|ryan|emma|guy|samantha|daniel|natasha/i;
-        var roboticNames = /espeak|compact|eloquence|festival|flite/i;
+        var naturalNames = /natural|neural|premium|enhanced|studio|online|google|aria|ava|jenny|sonia|ryan|emma|guy|samantha|daniel|natasha/i;
+        var roboticNames = /espeak|compact|eloquence|festival|flite|david|zira|mark|hazel|desktop/i;
         return voices.slice().sort(function(first, second) {
             function score(voice) {
                 var voiceLanguage = String(voice.lang || '').toLowerCase();
@@ -2786,7 +2792,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         var chunkLanguage = typeof chunk === 'string' ? language : (chunk.lang || language);
         var utterance = new SpeechSynthesisUtterance(chunkText);
         utterance.lang = chunkLanguage;
-        utterance.rate = 1;
+        utterance.rate = chunkLanguage.slice(0, 2).toLowerCase() === 'en' ? 0.96 : 1;
         var chunkVoice = chunkLanguage.slice(0, 2).toLowerCase() === language.slice(0, 2).toLowerCase()
             ? selectedVoice
             : voiceForLanguage(chunkLanguage);
