@@ -485,6 +485,7 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
     var language = reader.getAttribute('data-language') || 'en-US';
     var isSpanish = language.toLowerCase().indexOf('es') === 0;
     var voiceSelect = reader.querySelector('[data-herb-list-voice]');
+    var startSelect = reader.querySelector('[data-herb-list-start]');
     var readDisplayedButton = reader.querySelector('[data-herb-list-read-displayed]');
     var pauseButton = reader.querySelector('[data-herb-list-pause]');
     var stopButton = reader.querySelector('[data-herb-list-stop]');
@@ -499,6 +500,8 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
     var activeCard = null;
     var paused = false;
     var selectedVoice = null;
+    var readingCards = [];
+    var currentCardPosition = -1;
 
     function setStatus(message) {
         status.textContent = message;
@@ -609,19 +612,32 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
 
     function updateControls() {
         var active = speechChunks.length > 0;
+        var readingCardQueue = readingCards.length > 0 && currentCardPosition >= 0;
+        var position = readingCardQueue ? currentCardPosition : currentChunk;
+        var total = readingCardQueue ? readingCards.length : speechChunks.length;
         pauseButton.disabled = !active;
         stopButton.disabled = !active;
-        backButton.disabled = !active || currentChunk <= 0;
-        forwardButton.disabled = !active || currentChunk >= speechChunks.length - 1;
+        backButton.disabled = !active || position <= 0;
+        forwardButton.disabled = !active || position >= total - 1;
         progress.disabled = !active;
-        progress.max = Math.max(0, speechChunks.length - 1);
-        progress.value = Math.min(currentChunk, Math.max(0, speechChunks.length - 1));
-        progressValue.textContent = active
-            ? (currentChunk + 1) + ' / ' + speechChunks.length
-            : (isSpanish ? 'Sin lectura' : 'Not reading');
+        progress.max = Math.max(0, total - 1);
+        progress.value = Math.min(position, Math.max(0, total - 1));
+        if (readingCardQueue) {
+            progressValue.textContent = (isSpanish ? 'Hierba ' : 'Herb ') + (currentCardPosition + 1) + ' / ' + readingCards.length + ' · ' + readingCards[currentCardPosition].getAttribute('data-herb-read-label');
+        } else {
+            progressValue.textContent = active
+                ? (isSpanish ? 'Fragmento ' : 'Fragment ') + (currentChunk + 1) + ' / ' + speechChunks.length
+                : (isSpanish ? 'Sin lectura' : 'Not reading');
+        }
         pauseButton.textContent = paused
             ? (isSpanish ? '▶ Continuar' : '▶ Resume')
             : (isSpanish ? '⏸ Pausar' : '⏸ Pause');
+        backButton.textContent = readingCardQueue
+            ? (isSpanish ? '← Hierba anterior' : '← Previous herb')
+            : (isSpanish ? '↶ Retroceder' : '↶ Back');
+        forwardButton.textContent = readingCardQueue
+            ? (isSpanish ? 'Siguiente hierba →' : 'Next herb →')
+            : (isSpanish ? 'Avanzar ↷' : 'Forward ↷');
     }
 
     function clearActiveCard() {
@@ -633,6 +649,8 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
         window.speechSynthesis.cancel();
         speechChunks = [];
         currentChunk = 0;
+        readingCards = [];
+        currentCardPosition = -1;
         paused = false;
         clearActiveCard();
         setStatus(message || (isSpanish ? 'Lectura terminada.' : 'Reading finished.'));
@@ -653,6 +671,10 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
             if (activeSession !== sessionId || paused) return;
             currentChunk += 1;
             if (currentChunk >= speechChunks.length) {
+                if (readingCards.length && currentCardPosition < readingCards.length - 1) {
+                    startQueuedCard(currentCardPosition + 1);
+                    return;
+                }
                 finishReading();
                 return;
             }
@@ -663,15 +685,21 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
             if (activeSession !== sessionId || event.error === 'canceled' || event.error === 'interrupted') return;
             finishReading(isSpanish ? 'No se pudo continuar la lectura.' : 'Reading could not continue.');
         };
-        setStatus(isSpanish ? 'Leyendo…' : 'Reading…');
+        if (!readingCards.length) {
+            setStatus(isSpanish ? 'Leyendo…' : 'Reading…');
+        }
         updateControls();
         window.speechSynthesis.speak(utterance);
     }
 
-    function startReading(text, card, label) {
+    function startReading(text, card, label, preserveQueue) {
         sessionId += 1;
         window.speechSynthesis.cancel();
         clearActiveCard();
+        if (!preserveQueue) {
+            readingCards = [];
+            currentCardPosition = -1;
+        }
         speechChunks = splitSpeechText(text);
         currentChunk = 0;
         paused = false;
@@ -682,13 +710,30 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
         }
         if (card) {
             activeCard = card;
-            card.open = true;
+            if (!preserveQueue) card.open = true;
             card.classList.add('is-reading');
         }
         setStatus((isSpanish ? 'Preparando: ' : 'Preparing: ') + label + '.');
         updateControls();
         var activeSession = sessionId;
         window.setTimeout(function() { speakCurrent(activeSession); }, 80);
+    }
+
+    function startQueuedCard(position) {
+        if (!readingCards.length) return;
+        currentCardPosition = Math.max(0, Math.min(position, readingCards.length - 1));
+        var card = readingCards[currentCardPosition];
+        var name = card.getAttribute('data-herb-read-label');
+        startSelect.value = String(currentCardPosition);
+        var numberedIntroduction = (isSpanish ? 'Hierba número ' : 'Herb number ') + (currentCardPosition + 1) + (isSpanish ? ' de ' : ' of ') + readingCards.length + '. ';
+        startReading(numberedIntroduction + card.getAttribute('data-herb-read-text'), card, name, true);
+        var nextName = currentCardPosition < readingCards.length - 1
+            ? readingCards[currentCardPosition + 1].getAttribute('data-herb-read-label')
+            : '';
+        setStatus((isSpanish ? 'Leyendo hierba ' : 'Reading herb ') + (currentCardPosition + 1) + (isSpanish ? ' de ' : ' of ') + readingCards.length + ': ' + name + '. ' + (nextName
+            ? (isSpanish ? 'Después continuará automáticamente con ' : 'It will continue automatically with ') + nextName + '.'
+            : (isSpanish ? 'Esta es la última hierba de la lista.' : 'This is the final herb in the list.')));
+        updateControls();
     }
 
     if (!supported) {
@@ -701,6 +746,14 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
     reader.hidden = false;
     loadVoices();
     window.speechSynthesis.onvoiceschanged = loadVoices;
+    var availableCards = Array.prototype.slice.call(document.querySelectorAll('[data-herb-read-text]'));
+    startSelect.innerHTML = '';
+    availableCards.forEach(function(card, index) {
+        var option = document.createElement('option');
+        option.value = String(index);
+        option.textContent = (index + 1) + '. ' + card.getAttribute('data-herb-read-label');
+        startSelect.appendChild(option);
+    });
     voiceSelect.addEventListener('change', function() {
         var prefix = language.slice(0, 2).toLowerCase();
         var voices = window.speechSynthesis.getVoices().filter(function(voice) {
@@ -719,11 +772,12 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
         });
     });
     readDisplayedButton.addEventListener('click', function() {
-        var cards = Array.prototype.slice.call(document.querySelectorAll('[data-herb-read-text]'));
-        var text = cards.map(function(card, index) {
-            return (isSpanish ? 'Hierba número ' : 'Herb number ') + (index + 1) + '. ' + card.getAttribute('data-herb-read-text');
-        }).join(' ');
-        startReading(text, null, isSpanish ? 'hierbas mostradas' : 'displayed herbs');
+        readingCards = Array.prototype.slice.call(document.querySelectorAll('[data-herb-read-text]'));
+        if (!readingCards.length) {
+            setStatus(isSpanish ? 'No hay hierbas mostradas para leer.' : 'There are no displayed herbs to read.');
+            return;
+        }
+        startQueuedCard(Number(startSelect.value || 0));
     });
     pauseButton.addEventListener('click', function() {
         if (!speechChunks.length) return;
@@ -744,6 +798,10 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
     });
     function seekTo(index) {
         if (!speechChunks.length) return;
+        if (readingCards.length) {
+            startQueuedCard(index);
+            return;
+        }
         sessionId += 1;
         window.speechSynthesis.cancel();
         paused = false;
@@ -774,7 +832,7 @@ echo $OUTPUT->header();
 .single-herbs-list__button.is-active{border-color:#087c69;background:#087c69;color:#fff!important}
 .single-herbs-list-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;padding:13px 16px;border:1px solid #9ed3ce;border-left:5px solid #0b8f87;border-radius:12px;background:#f4fbfa;box-shadow:0 5px 16px rgba(15,76,81,.08)}
 .single-herbs-list-reader[hidden]{display:none}.single-herbs-list-reader__disclosure>summary{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-right:40px;cursor:pointer;list-style:none}.single-herbs-list-reader__disclosure>summary::-webkit-details-marker{display:none}.single-herbs-list-reader__disclosure>summary:after{content:'+';position:absolute;right:0;top:0;display:flex;width:27px;height:27px;align-items:center;justify-content:center;border:1px solid #8fc9c4;border-radius:50%;background:#fff;color:#0b6f69;font-size:19px;font-weight:900}.single-herbs-list-reader__disclosure[open]>summary:after{content:'−'}
-.single-herbs-list-reader__title{display:block;font-size:17px;font-weight:900}.single-herbs-list-reader__description{display:block;margin-top:2px;color:#5c7184;font-size:12px}.single-herbs-list-reader__panel{padding-top:11px}.single-herbs-list-reader__controls{display:grid;grid-template-columns:minmax(210px,1.4fr) repeat(3,auto);gap:8px;align-items:end}.single-herbs-list-reader__field{display:grid;gap:4px;color:#294b63;font-size:11px;font-weight:850}.single-herbs-list-reader select{box-sizing:border-box;min-height:39px;width:100%;padding:6px 9px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}.single-herbs-list-reader button{min-height:39px;padding:6px 11px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#087c69;font-weight:900;cursor:pointer}.single-herbs-list-reader button[data-herb-list-read-displayed]{background:#0b8f87;color:#fff}.single-herbs-list-reader button:disabled{cursor:not-allowed;opacity:.45}.single-herbs-list-reader__progress{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:8px;align-items:end;margin-top:8px}.single-herbs-list-reader__progress-field{display:grid;grid-template-columns:1fr auto;gap:3px 8px;color:#526b84;font-size:10px;font-weight:800}.single-herbs-list-reader__progress-field input{grid-column:1/-1;width:100%;accent-color:#0b8f87}.single-herbs-list-reader__status{min-height:18px;margin:7px 0 0;color:#526b84;font-size:11px;font-weight:750}
+.single-herbs-list-reader__title{display:block;font-size:17px;font-weight:900}.single-herbs-list-reader__description{display:block;margin-top:2px;color:#5c7184;font-size:12px}.single-herbs-list-reader__panel{padding-top:11px}.single-herbs-list-reader__controls{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) repeat(3,auto);gap:8px;align-items:end}.single-herbs-list-reader__field{display:grid;gap:4px;color:#294b63;font-size:11px;font-weight:850}.single-herbs-list-reader select{box-sizing:border-box;min-height:39px;width:100%;padding:6px 9px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}.single-herbs-list-reader button{min-height:39px;padding:6px 11px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#087c69;font-weight:900;cursor:pointer}.single-herbs-list-reader button[data-herb-list-read-displayed]{background:#0b8f87;color:#fff}.single-herbs-list-reader button:disabled{cursor:not-allowed;opacity:.45}.single-herbs-list-reader__progress{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:8px;align-items:end;margin-top:8px}.single-herbs-list-reader__progress-field{display:grid;grid-template-columns:1fr auto;gap:3px 8px;color:#526b84;font-size:10px;font-weight:800}.single-herbs-list-reader__progress-field input{grid-column:1/-1;width:100%;accent-color:#0b8f87}.single-herbs-list-reader__status{min-height:18px;margin:7px 0 0;color:#526b84;font-size:11px;font-weight:750}
 .single-herbs-list__controls{margin-bottom:18px;padding:16px;border:1px solid #c7ddd9;border-radius:12px;background:#f8fcfb}
 .single-herbs-list__modes{margin-bottom:13px}
 .single-herbs-list__form{display:grid;grid-template-columns:minmax(220px,1.5fr) minmax(220px,1fr) auto;gap:10px;align-items:end}
@@ -861,7 +919,7 @@ echo $OUTPUT->header();
             <summary>
                 <span>
                     <span class="single-herbs-list-reader__title"><?php echo $ises ? 'Escuchar lista de hierbas' : 'Listen to Single Herbs List'; ?></span>
-                    <span class="single-herbs-list-reader__description"><?php echo $ises ? 'Escucha todas las fichas mostradas o una hierba individual.' : 'Listen to every displayed card or one individual herb.'; ?></span>
+                    <span class="single-herbs-list-reader__description"><?php echo $ises ? 'Elige dónde comenzar; después continuará automáticamente con las demás hierbas mostradas.' : 'Choose where to begin; it will then continue automatically through the remaining displayed herbs.'; ?></span>
                 </span>
             </summary>
             <div class="single-herbs-list-reader__panel">
@@ -870,7 +928,11 @@ echo $OUTPUT->header();
                         <span><?php echo $ises ? 'Voz' : 'Voice'; ?></span>
                         <select data-herb-list-voice aria-label="<?php echo $ises ? 'Voz de lectura' : 'Reading voice'; ?>"></select>
                     </label>
-                    <button type="button" data-herb-list-read-displayed>▶ <?php echo $ises ? 'Hierbas mostradas' : 'Displayed herbs'; ?></button>
+                    <label class="single-herbs-list-reader__field">
+                        <span><?php echo $ises ? 'Comenzar en' : 'Start with'; ?></span>
+                        <select data-herb-list-start aria-label="<?php echo $ises ? 'Primera hierba que se leerá' : 'First herb to read'; ?>"></select>
+                    </label>
+                    <button type="button" data-herb-list-read-displayed>▶ <?php echo $ises ? 'Escuchar desde aquí' : 'Listen from here'; ?></button>
                     <button type="button" data-herb-list-pause disabled>⏸ <?php echo $ises ? 'Pausar' : 'Pause'; ?></button>
                     <button type="button" data-herb-list-stop disabled>■ <?php echo $ises ? 'Detener' : 'Stop'; ?></button>
                 </div>
