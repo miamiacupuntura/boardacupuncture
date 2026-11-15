@@ -3812,9 +3812,6 @@ echo $OUTPUT->header();
                             : ($ises ? 'Sección clínica del guideline' : 'Guideline clinical section')); ?></p>
                         <h4><?php echo s($ises ? $clinicalsection['nameEs'] : $clinicalsection['name']); ?></h4>
                         <p><?php echo s($ises ? $clinicalsection['copyEs'] : $clinicalsection['copy']); ?></p>
-                        <span class="formula-study-guide__chapter-section-meta"><?php echo count($clinicalsection['formulaNames']); ?> <?php echo $issupplemental
-                            ? ($ises ? 'fórmulas principales' : 'principal formulas')
-                            : ($ises ? 'fichas detalladas' : 'detailed core profiles'); ?></span>
                     </section>
                 <?php endif; ?>
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">

@@ -140,6 +140,10 @@ grep -Fq 'revealSelectedSection' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'function structuredSelectionRoot(node)' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "element.closest('[data-formula-dui-yao-card],[data-formula-comparison-table]')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'if (startRoot && startRoot === endRoot)' "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Fq "count(\$clinicalsection['formulaNames'])" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: la sección clínica todavía muestra y narra el conteo de fichas detalladas." >&2
+    exit 1
+fi
 grep -Fq 'installComparisonNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'installDuiYaoNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-dui-yao-card' "$TEMP_DIR/moodle/formulas-study-guide.php"
