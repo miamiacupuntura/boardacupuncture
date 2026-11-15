@@ -3400,7 +3400,8 @@ echo $OUTPUT->header();
                 $isintegratedofficialprofile = !empty($formula['integratedOfficialProfile']);
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
-                    : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : ($ises ? 'Seguridad revisada' : 'Safety reviewed'));
+                    : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : '');
+                $kingherbsplural = preg_match('/[,\/]/', (string) $formula['kings']) === 1;
                 $formulaenglishname = trim((string) ($formula['englishName'] ?? ''));
                 if ($formulaenglishname === '') {
                     $formulaenglishname = $getformulaenglishname($formula['name']);
@@ -3515,14 +3516,16 @@ echo $OUTPUT->header();
                                 : (is_numeric($formula['number'])
                                     ? (($ises ? 'Ficha del núcleo · Fórmula #' : 'Core profile · Formula #') . $formula['number'])
                                     : (($ises ? 'Bensky · Capítulo ' : 'Bensky · Chapter ') . $selected['sourceChapter']))); ?></span><?php endif; ?>
-                            <span class="formula-study-guide__risk<?php echo $tier !== 'standard' ? ' formula-study-guide__risk--' . s($tier) : ''; ?>"><?php echo s($risklabel); ?></span>
+                            <?php if ($risklabel !== ''): ?><span class="formula-study-guide__risk formula-study-guide__risk--<?php echo s($tier); ?>"><?php echo s($risklabel); ?></span><?php endif; ?>
                         </div>
                     </header>
                     <p class="formula-study-guide__formula-pattern"><strong><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></strong> <?php echo s($ises ? $formula['patternEs'] : $formula['pattern']); ?></p>
                     <div class="formula-study-guide__facts">
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Acción' : 'Action'; ?></strong><span><?php echo s($ises ? $formula['actionEs'] : $formula['action']); ?></span></div>
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Pista decisiva' : 'Decisive clue'; ?></strong><span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
-                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Hierba(s) emperador' : 'King herb(s)'; ?></strong><span><?php echo s($formula['kings']); ?></span></div>
+                        <div class="formula-study-guide__fact"><strong><?php echo s($ises
+                            ? ($kingherbsplural ? 'Hierbas emperador' : 'Hierba emperador')
+                            : ($kingherbsplural ? 'King herbs' : 'King herb')); ?></strong><span><?php echo s($formula['kings']); ?></span></div>
                     </div>
                     <?php if (isset($formula['examFocus'])): ?>
                         <p class="formula-study-guide__exam-focus"><strong><?php echo $issupplemental && !$isofficialformula($formula['name'])

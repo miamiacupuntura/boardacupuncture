@@ -55,7 +55,7 @@ MOODLE_FILES+=(
 )
 MENU_FILES=(herbology-board.php block_menu.php)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
-DATA_FILES=(single-herb-safety-supplement.json single-herb-properties.json single-herb-rich-profiles.json formula-architecture-data.json dui-yao-smart-data.json)
+DATA_FILES=(single-herb-safety-supplement.json single-herb-properties.json single-herb-rich-profiles.json formulas-study-guide-data.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(read-aloud-test.html formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html safety-toxicity.html safety-interactions.html safety-regulation.html safety-toxic-herbs.html safety-pregnancy.html safety-anticoagulants.html safety-ma-huang-hypertension.html safety-fu-zi-cardiac-toxicity.html safety-clinical-interaction-cases.html safety-obsolete-prohibited-substances.html safety-herb-specific-cautions.html safety-toxicity-es.html safety-interactions-es.html safety-regulation-es.html safety-toxic-herbs-es.html safety-pregnancy-es.html safety-anticoagulants-es.html safety-ma-huang-hypertension-es.html safety-fu-zi-cardiac-toxicity-es.html safety-clinical-interaction-cases-es.html safety-obsolete-prohibited-substances-es.html safety-herb-specific-cautions-es.html continuous-reader.html continuous-reader.js safety-library.html safety-library-es.html comparisons.js study-return-navigation.js chief-herbs-property.html chief-herbs-property-es.html formulas.html formulas-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html maciocia-formula-tips.html maciocia-formula-tips-es.html dui-yao.html dui-yao-es.html herb-comparison-bank.html herb-comparison-bank-es.html dui-yao-practice.html dui-yao-practice-es.html miscellaneous-practice.html miscellaneous-practice-es.html)
 STATIC_FILES+=(
     bai-ji-vs-ce-bai-ye.html bai-ji-vs-ce-bai-ye-es.html
@@ -147,6 +147,9 @@ grep -Fq 'data-formula-english-name' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "s('(' . \$formulaenglishname . ')')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__formula-translation' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'class="formula-study-guide__core" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$kingherbsplural ? 'Hierbas emperador' : 'Hierba emperador'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$kingherbsplural ? 'King herbs' : 'King herb'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "if (\$risklabel !== '')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$getformulaenglishname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$formulaenglishnamesbyname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)'" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -159,6 +162,15 @@ if grep -Fq 'En la secuencia detallada del núcleo · Fórmula ' "$TEMP_DIR/mood
     echo "ERROR: Formula Study Guide todavía muestra numeración interna o etiquetas de idioma innecesarias." >&2
     exit 1
 fi
+if grep -Fq 'Seguridad revisada' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'Safety reviewed' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'Hierba(s) emperador' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'King herb(s)' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: Formula Study Guide todavía muestra etiquetas ambiguas en las fichas." >&2
+    exit 1
+fi
+grep -Fq '"actionEs": "Libera capa muscular, regula Yin y Wei y armoniza exterior."' "$TEMP_DIR/data/formulas-study-guide-data.json"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); if (($data["version"] ?? null) !== 7 || count($data["formulas"] ?? []) !== 63 || count($data["supplementalFormulas"] ?? []) !== 227) { exit(1); }' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq 'formula-study-guide__domain-badge' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'utterance.rate = 1;' "$TEMP_DIR/moodle/formulas-study-guide.php"
