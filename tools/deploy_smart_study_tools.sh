@@ -141,7 +141,7 @@ grep -Fq 'installComparisonNarrations' "$TEMP_DIR/moodle/formulas-study-guide.ph
 grep -Fq 'installDuiYaoNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-dui-yao-card' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-position' "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq 'data-dui-yao-formulas' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-dui-yao-related-formulas' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-first-latin' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-second-latin' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$duiyaosmartbyslug' "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -170,6 +170,13 @@ grep -Fq "\$kingherbsplural ? 'King herbs' : 'King herb'" "$TEMP_DIR/moodle/form
 grep -Fq "if (\$risklabel !== '')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$getformulaenglishname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$formulaenglishnamesbyname' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq '$getrelatedformulaidentities' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Zhi Zi Chi Tang' => 'Gardenia and Prepared Soybean Decoction'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "El apéndice B del guideline es el listado oficial de parejas de hierbas" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "El apéndice C del guideline es el listado oficial de fórmulas" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "apéndice D, que es el listado de sustancias obsoletas" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "Este Duì Yào está relacionado con la fórmula '" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-dui-yao-related-formulas="<?php echo s($duiyaorelatedformulasjson' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$formulaenglishname = \$getformulaenglishname(\$formula['name']);" "$TEMP_DIR/moodle/formulas-study-guide.php"
 if grep -Fq 'En la secuencia detallada del núcleo · Fórmula ' "$TEMP_DIR/moodle/formulas-study-guide.php" \
@@ -188,6 +195,7 @@ if grep -Fq 'Seguridad revisada' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     exit 1
 fi
 grep -Fq '"actionEs": "Libera capa muscular, regula Yin y Wei y armoniza exterior."' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"relatedDuiYaoTextEs": "En esta categoría aparecen siete parejas oficiales.' "$TEMP_DIR/data/formulas-study-guide-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (($data["version"] ?? null) !== 7 || count($data["formulas"] ?? []) !== 63 || count($data["supplementalFormulas"] ?? []) !== 227) { exit(1); }' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq 'formula-study-guide__domain-badge' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/formulas-study-guide.php"

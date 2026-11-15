@@ -359,6 +359,18 @@ foreach ($officialroster['formulas'] as $officialformula) {
 foreach ($data['supplementalFormulas'] as $supplementalformula) {
     $formulaenglishnamesbyname[$supplementalformula['name']] = $supplementalformula['englishName'];
 }
+$formulaenglishnamesbyname += [
+    'Zhi Zi Chi Tang' => 'Gardenia and Prepared Soybean Decoction',
+    'Jiao Tai Wan' => 'Pill to Restore Proper Communication',
+    'Jie Geng Tang' => 'Platycodon Decoction',
+    'Fo Shou San' => "Buddha's Hand Powder",
+    'Xiang Fu Si Wu Tang' => 'Cyperus Four-Substance Decoction',
+    'Xiang Leng Wan' => 'Aucklandia and Sparganium Pill',
+    'Xiao Ban Xia Tang' => 'Minor Pinellia Decoction',
+    'She Gan Ma Huang Tang' => 'Belamcanda and Ephedra Decoction',
+    'Ting Li Da Zao Xie Fei Tang' => 'Descurainia and Jujube Decoction to Drain the Lungs',
+    'San Jin Tang' => 'Three-Gold Decoction',
+];
 $formulaenglishnamealiases = [
     'Jin Gui Shen Qi Wan' => 'Shen Qi Wan',
     'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)',
@@ -366,6 +378,51 @@ $formulaenglishnamealiases = [
 $getformulaenglishname = static function(string $name) use ($formulaenglishnamesbyname, $formulaenglishnamealiases): string {
     $lookupname = $formulaenglishnamealiases[$name] ?? $name;
     return trim((string) ($formulaenglishnamesbyname[$lookupname] ?? ''));
+};
+$normalizepinyin = static function(string $value): string {
+    return strtr($value, [
+        'ā' => 'a', 'á' => 'a', 'ǎ' => 'a', 'à' => 'a', 'Ā' => 'A', 'Á' => 'A', 'Ǎ' => 'A', 'À' => 'A',
+        'ē' => 'e', 'é' => 'e', 'ě' => 'e', 'è' => 'e', 'Ē' => 'E', 'É' => 'E', 'Ě' => 'E', 'È' => 'E',
+        'ī' => 'i', 'í' => 'i', 'ǐ' => 'i', 'ì' => 'i', 'Ī' => 'I', 'Í' => 'I', 'Ǐ' => 'I', 'Ì' => 'I',
+        'ō' => 'o', 'ó' => 'o', 'ǒ' => 'o', 'ò' => 'o', 'Ō' => 'O', 'Ó' => 'O', 'Ǒ' => 'O', 'Ò' => 'O',
+        'ū' => 'u', 'ú' => 'u', 'ǔ' => 'u', 'ù' => 'u', 'ǖ' => 'u', 'ǘ' => 'u', 'ǚ' => 'u', 'ǜ' => 'u',
+        'Ū' => 'U', 'Ú' => 'U', 'Ǔ' => 'U', 'Ù' => 'U', 'Ǖ' => 'U', 'Ǘ' => 'U', 'Ǚ' => 'U', 'Ǜ' => 'U',
+    ]);
+};
+$getrelatedformulaidentities = static function(string $text) use ($formulaenglishnamesbyname, $normalizepinyin): array {
+    $haystack = strtolower($normalizepinyin($text));
+    $matches = [];
+    foreach ($formulaenglishnamesbyname as $name => $englishname) {
+        $needle = strtolower($normalizepinyin($name));
+        $offset = strpos($haystack, $needle);
+        if ($offset === false) {
+            continue;
+        }
+        $matches[] = [
+            'offset' => $offset,
+            'length' => strlen($needle),
+            'name' => $name,
+            'englishName' => $englishname,
+        ];
+    }
+    usort($matches, static function(array $left, array $right): int {
+        return $left['offset'] === $right['offset']
+            ? $right['length'] <=> $left['length']
+            : $left['offset'] <=> $right['offset'];
+    });
+    $identities = [];
+    $occupieduntil = -1;
+    foreach ($matches as $match) {
+        if ($match['offset'] < $occupieduntil) {
+            continue;
+        }
+        $identities[] = [
+            'name' => $match['name'],
+            'englishName' => $match['englishName'],
+        ];
+        $occupieduntil = $match['offset'] + $match['length'];
+    }
+    return $identities;
 };
 $isofficialformula = static function(string $name) use ($officialformulasbyname, $officialformulaaliases): bool {
     $officialname = $officialformulaaliases[$name] ?? $name;
@@ -1967,10 +2024,12 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var firstLatin = card.getAttribute('data-dui-yao-first-latin') || '';
             var secondName = card.getAttribute('data-dui-yao-second-name') || '';
             var secondLatin = card.getAttribute('data-dui-yao-second-latin') || '';
-            var formulas = (card.getAttribute('data-dui-yao-formulas') || '')
-                .split(/\s*;\s*/)
-                .map(function(name) { return name.trim().replace(/[.]+$/, ''); })
-                .filter(Boolean);
+            var formulas = [];
+            try {
+                formulas = JSON.parse(card.getAttribute('data-dui-yao-related-formulas') || '[]');
+            } catch (error) {
+                formulas = [];
+            }
             if (!title) return;
             title = title.replace(/\s*\+\s*/g, isSpanish ? ' y ' : ' and ');
             var ordinal = isSpanish
@@ -1991,13 +2050,18 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                     : 'The ' + ordinal + ' related Duì Yào we will analyze combines ' + title + '.';
             }
             var relation = '';
-            if (formulas.length === 1) {
+            var formulaNames = formulas.map(function(formula) {
+                var name = String(formula.name || '').trim();
+                var englishName = String(formula.englishName || '').trim();
+                return name + (englishName ? ', ' + englishName : '');
+            }).filter(Boolean);
+            if (formulaNames.length === 1) {
                 relation = (isSpanish
                     ? 'Este Duì Yào está relacionado con la fórmula '
-                    : 'This Duì Yào is related to the formula ') + formulas[0] + '.';
-            } else if (formulas.length > 1) {
+                    : 'This Duì Yào is related to the formula ') + formulaNames[0] + '.';
+            } else if (formulaNames.length > 1) {
                 var connector = isSpanish ? ' y ' : ' and ';
-                var formulaList = formulas.slice(0, -1).join(', ') + connector + formulas[formulas.length - 1];
+                var formulaList = formulaNames.slice(0, -1).join(', ') + connector + formulaNames[formulaNames.length - 1];
                 relation = (isSpanish
                     ? 'Este Duì Yào está relacionado con las fórmulas '
                     : 'This Duì Yào is related to the formulas ') + formulaList + '.';
@@ -2032,7 +2096,38 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     }
 
     function normalizeSpeechText(value) {
-        return String(value || '')
+        var speechText = String(value || '');
+        if (isSpanish) {
+            if (/(?:Appendix|[Aa]péndice) B\b/.test(speechText)
+                    && !/(?:Appendix|[Aa]péndice) B[^.]{0,180}listado oficial de parejas/i.test(speechText)) {
+                speechText = speechText.replace(/(?:Appendix|[Aa]péndice) B\b/,
+                    'apéndice B, que es el listado oficial de parejas de hierbas conocidas como Duì Yào');
+            }
+            if (/(?:Appendix|[Aa]péndice) C\b/.test(speechText)
+                    && !/(?:Appendix|[Aa]péndice) C[^.]{0,180}listado oficial de fórmulas/i.test(speechText)) {
+                speechText = speechText.replace(/(?:Appendix|[Aa]péndice) C\b/,
+                    'apéndice C, que es el listado oficial de fórmulas del contenido vigente');
+            }
+            if (/(?:Appendix|[Aa]péndice) D\b/.test(speechText)
+                    && !/(?:Appendix|[Aa]péndice) D[^.]{0,180}listado de sustancias obsoletas/i.test(speechText)) {
+                speechText = speechText.replace(/(?:Appendix|[Aa]péndice) D\b/,
+                    'apéndice D, que es el listado de sustancias obsoletas');
+            }
+        } else {
+            if (/Appendix B\b/.test(speechText) && !/Appendix B[^.]{0,180}official list of herb pairs/i.test(speechText)) {
+                speechText = speechText.replace(/Appendix B\b/,
+                    'Appendix B, the guideline official list of herb pairs known as Duì Yào');
+            }
+            if (/Appendix C\b/.test(speechText) && !/Appendix C[^.]{0,180}official list of formulas/i.test(speechText)) {
+                speechText = speechText.replace(/Appendix C\b/,
+                    'Appendix C, the guideline official list of current formulas');
+            }
+            if (/Appendix D\b/.test(speechText) && !/Appendix D[^.]{0,180}list of obsolete substances/i.test(speechText)) {
+                speechText = speechText.replace(/Appendix D\b/,
+                    'Appendix D, the guideline list of obsolete substances');
+            }
+        }
+        return speechText
             .replace(/[*＊]+/g, '')
             .replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ')
             .replace(/[→⇒➜➝]/g, isSpanish ? '. Luego, ' : '. Then, ')
@@ -2407,9 +2502,9 @@ echo $OUTPUT->header();
             <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Guía de estudio · Fórmulas' : 'Study Guide · Formulas'); ?></p>
             <h2><?php echo s($pagetitle); ?></h2>
             <p class="formula-study-guide__lead"><?php echo s($ises
-                ? 'Recorre los 21 capítulos de Bensky en el orden de la fuente y comprueba por separado cuáles de sus fórmulas pertenecen al Appendix C oficial de 2026.'
-                : 'Work through all 21 Bensky chapters in source order and verify separately which formulas belong to the official 2026 Appendix C.'); ?></p>
-            <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* Incluida en el Appendix C oficial de NCBAHM 2026' : '* Included in the official 2026 NCBAHM Appendix C'); ?></p>
+                ? 'El apéndice C del guideline es el listado oficial de fórmulas que forman parte del contenido vigente de NCBAHM 2026. Recorre los 21 capítulos de Bensky en el orden de la fuente y comprueba cuáles de sus fórmulas aparecen en ese listado.'
+                : 'Appendix C of the guideline is the official list of formulas included in the current 2026 NCBAHM content. Work through all 21 Bensky chapters in source order and check which formulas appear in that list.'); ?></p>
+            <p class="formula-study-guide__marker-note"><?php echo s($ises ? '* El asterisco identifica una fórmula incluida en ese listado oficial.' : '* The asterisk identifies a formula included in that official list.'); ?></p>
         </div>
         <nav class="formula-study-guide__actions" aria-label="<?php echo s($ises ? 'Navegación de la guía' : 'Study Guide navigation'); ?>">
             <div class="formula-study-guide__utility-actions">
@@ -2855,6 +2950,9 @@ echo $OUTPUT->header();
                         <div>
                             <p class="formula-study-guide__eyebrow" data-read-aloud-ignore><?php echo s($ises ? 'Appendix B · Parejas oficiales' : 'Appendix B · Official pairs'); ?></p>
                             <h4 id="related-dui-yao-title"><?php echo s($ises ? $selectedguide['relatedDuiYaoTitleEs'] : $selectedguide['relatedDuiYaoTitle']); ?></h4>
+                            <p><?php echo s($ises
+                                ? 'El apéndice B del guideline es el listado oficial de parejas de hierbas, conocidas como Duì Yào, que forman parte del contenido de estudio.'
+                                : 'Appendix B of the guideline is the official list of herb pairs, known as Duì Yào, included in the study content.'); ?></p>
                             <p><?php echo s($ises ? $selectedguide['relatedDuiYaoTextEs'] : $selectedguide['relatedDuiYaoText']); ?></p>
                             <p class="formula-study-guide__dui-yao-study-intro"><?php echo s($ises
                                 ? 'A continuación, comenzaremos a estudiar individualmente los Duì Yào relacionados con esta categoría.'
@@ -2874,8 +2972,10 @@ echo $OUTPUT->header();
                             $duiyaosecondname = trim((string) ($duiyaopinyinherbs[1] ?? ''));
                             $duiyaofirstlatin = (string) ($herblatinbyname[$duiyaoplainherbs[0] ?? ''] ?? '');
                             $duiyaosecondlatin = (string) ($herblatinbyname[$duiyaoplainherbs[1] ?? ''] ?? '');
+                            $duiyaorelatedformulaidentities = $getrelatedformulaidentities((string) $duiyaopair['formulas']);
+                            $duiyaorelatedformulasjson = json_encode($duiyaorelatedformulaidentities, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                             ?>
-                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-related-position="<?php echo (int) $duiyaoindex + 1; ?>" data-dui-yao-formulas="<?php echo s($duiyaopair['formulas']); ?>" data-dui-yao-first-name="<?php echo s($duiyaofirstname); ?>" data-dui-yao-first-latin="<?php echo s($duiyaofirstlatin); ?>" data-dui-yao-second-name="<?php echo s($duiyaosecondname); ?>" data-dui-yao-second-latin="<?php echo s($duiyaosecondlatin); ?>" href="<?php echo $duiyaourl->out(false); ?>">
+                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-related-position="<?php echo (int) $duiyaoindex + 1; ?>" data-dui-yao-related-formulas="<?php echo s($duiyaorelatedformulasjson === false ? '[]' : $duiyaorelatedformulasjson); ?>" data-dui-yao-first-name="<?php echo s($duiyaofirstname); ?>" data-dui-yao-first-latin="<?php echo s($duiyaofirstlatin); ?>" data-dui-yao-second-name="<?php echo s($duiyaosecondname); ?>" data-dui-yao-second-latin="<?php echo s($duiyaosecondlatin); ?>" href="<?php echo $duiyaourl->out(false); ?>">
                                 <span class="formula-study-guide__dui-yao-number" data-read-aloud-ignore><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>
                                 <h5><?php echo s($duiyaopair['title']); ?></h5>
                                 <span class="formula-study-guide__dui-yao-characters" data-read-aloud-ignore><?php echo s($duiyaopair['characters']); ?></span>
@@ -3075,7 +3175,7 @@ echo $OUTPUT->header();
                             <tr>
                                 <td><span class="formula-study-guide__scope-analysis-count">5/7</span><?php echo s($ises ? 'Metales tóxicos históricos' : 'Historical toxic metals'); ?></td>
                                 <td><?php echo s($ises ? 'An Gong Niu Huang Wan, Zi Xue Dan, Zhi Bao Dan, Hui Chun Dan y Su He Xiang Wan incluían Zhu Sha/cinabrio; An Gong Niu Huang Wan y Zhi Bao Dan también Xiong Huang/rejalgar.' : 'An Gong Niu Huang Wan, Zi Xue Dan, Zhi Bao Dan, Hui Chun Dan, and Su He Xiang Wan historically included Zhu Sha/cinnabar; An Gong Niu Huang Wan and Zhi Bao Dan also included Xiong Huang/realgar.'); ?></td>
-                                <td><?php echo s($ises ? 'Cinabrio aporta mercurio y rejalgar arsénico. Zhu Sha figura como sustancia obsoleta en Appendix D; los perfiles modernos de esta guía los excluyen.' : 'Cinnabar contributes mercury and realgar arsenic. Zhu Sha is listed as obsolete in Appendix D; this guide’s modern profiles exclude both.'); ?></td>
+                                <td><?php echo s($ises ? 'Cinabrio aporta mercurio y rejalgar arsénico. El apéndice D del guideline es el listado de sustancias obsoletas; allí figura Zhu Sha. Por esta razón, los perfiles modernos de esta guía excluyen ambas sustancias.' : 'Cinnabar contributes mercury and realgar arsenic. Appendix D of the guideline is the list of obsolete substances; Zhu Sha appears there. For this reason, the modern profiles in this guide exclude both substances.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="formula-study-guide__scope-analysis-count">4/7</span><?php echo s($ises ? 'Especies protegidas o prohibidas' : 'Protected or prohibited species'); ?></td>
