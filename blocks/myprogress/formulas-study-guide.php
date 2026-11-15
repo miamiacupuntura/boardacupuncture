@@ -3353,7 +3353,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php
         $relatedduiyaomarkup = '';
-        $deferrelatedduiyao = in_array($selected['key'], [
+        $moverelatedduiyaototheend = $selected['key'] === 'regulate-qi-chapter-12';
+        $deferrelatedduiyao = $moverelatedduiyaototheend || in_array($selected['key'], [
             'calm-shen-chapter-10',
             'expel-wind-chapter-14',
             'digestive-chapter-18',
@@ -4086,7 +4087,7 @@ echo $OUTPUT->header();
                 </div>
             </section>
         <?php endif; ?>
-        <?php if ($deferrelatedduiyao): ?>
+        <?php if ($deferrelatedduiyao && !$moverelatedduiyaototheend): ?>
             <?php echo $relatedduiyaomarkup; ?>
         <?php endif; ?>
         <section class="formula-study-guide__formula-list" aria-label="<?php echo s($ises ? 'Fórmulas de la categoría' : 'Category formulas'); ?>">
@@ -4462,6 +4463,9 @@ echo $OUTPUT->header();
                     </div>
                 </div>
             </details>
+        <?php endif; ?>
+        <?php if ($moverelatedduiyaototheend): ?>
+            <?php echo $relatedduiyaomarkup; ?>
         <?php endif; ?>
         <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Límite educativo:' : 'Educational boundary:'; ?></strong> <?php echo s($ises
             ? 'Esta guía organiza contenido histórico normalizado para repaso académico. No sustituye diagnóstico, evaluación de seguridad ni prescripción profesional.'

@@ -173,6 +173,8 @@ grep -Fq 'data-dui-yao-related-formulas' "$TEMP_DIR/moodle/formulas-study-guide.
 grep -Fq "\$duiyaoformulasdisplay = preg_replace('/[.\\s]+\$/u'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-first-latin' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-second-latin' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$moverelatedduiyaototheend = \$selected['key'] === 'regulate-qi-chapter-12';" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'if ($deferrelatedduiyao && !$moverelatedduiyaototheend)' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$duiyaopharmaceuticaltitle = implode(' + ', array_filter([\$duiyaofirstlatin, \$duiyaosecondlatin]));" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__dui-yao-pharmaceutical" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$duiyaosmartbyslug' "$TEMP_DIR/moodle/formulas-study-guide.php"
