@@ -2398,6 +2398,12 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         return cachedSelection;
     }
 
+    function structuredSelectionRoot(node) {
+        var element = node && node.nodeType === 1 ? node : (node ? node.parentElement : null);
+        if (!element || !element.closest) return null;
+        return element.closest('[data-formula-dui-yao-card],[data-formula-comparison-table]');
+    }
+
     function visibleText() {
         var seen = new Set();
         var pieces = [];
@@ -2442,9 +2448,16 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         if (!selection || selection.isCollapsed || !selection.rangeCount) return;
         var range = selection.getRangeAt(0);
         if (!page.contains(range.commonAncestorContainer) || reader.contains(range.commonAncestorContainer)) return;
-        var wrapper = document.createElement('div');
-        wrapper.appendChild(range.cloneContents());
-        var text = extractText(wrapper);
+        var startRoot = structuredSelectionRoot(range.startContainer);
+        var endRoot = structuredSelectionRoot(range.endContainer);
+        var text = '';
+        if (startRoot && startRoot === endRoot) {
+            text = extractText(startRoot);
+        } else {
+            var wrapper = document.createElement('div');
+            wrapper.appendChild(range.cloneContents());
+            text = extractText(wrapper);
+        }
         if (text) cachedSelection = text;
     });
     voiceSelect.addEventListener('change', function() {
