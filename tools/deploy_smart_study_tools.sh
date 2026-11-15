@@ -330,6 +330,7 @@ fi
 grep -Fq '"actionEs": "Libera capa muscular, regula Yin y Wei y armoniza exterior."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"relatedDuiYaoTextEs": "En esta categoría aparecen siete parejas oficiales.' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"separatorEs": "Estreñimiento o plenitud dura y dolorosa con signos de Calor/exceso; las tres fórmulas Cheng Qi estudiadas en detalle forman la escala gradual central."' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"clinicalFrameTitleEs": "La fórmula para Flema se elige por el mecanismo acompañante, no solo por el esputo."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (($data["version"] ?? null) !== 7 || count($data["formulas"] ?? []) !== 63 || count($data["supplementalFormulas"] ?? []) !== 227) { exit(1); }' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq 'formula-study-guide__domain-badge' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/formulas-study-guide.php"
