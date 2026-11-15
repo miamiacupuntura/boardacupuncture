@@ -1536,6 +1536,7 @@ ob_start();
 .single-herbs-guide__profiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .single-herbs-guide__profile{overflow:hidden;border:1px solid #d9e2e7;border-top:4px solid #f77e25;border-radius:10px;background:#fff}
 .single-herbs-guide__profile summary{position:relative;cursor:pointer;padding:17px 42px 17px 17px;list-style:none}.single-herbs-guide__profile summary::-webkit-details-marker{display:none}.single-herbs-guide__profile summary:after{content:'+';position:absolute;right:16px;top:16px;display:flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#eaf5f3;color:#0d665e;font-size:19px;font-weight:900}.single-herbs-guide__profile[open] summary:after{content:'−'}
+.single-herbs-guide__mnemonic-intro{margin:18px 0 8px;color:#0d665e;font-size:14px;line-height:1.5}.single-herbs-guide__mnemonic-intro strong{color:#075e54}
 .single-herbs-guide__profile-name{display:block;color:#123246;font-size:18px;font-weight:900}.single-herbs-guide__profile-latin{display:block;margin-top:3px;color:#6b7b87;font-size:12px;font-style:italic}.single-herbs-guide__profile-meta{display:block;margin-top:9px;color:#0d665e;font-size:12px;font-weight:800;line-height:1.4}
 .single-herbs-guide__profile-body{padding:0 17px 17px;border-top:1px solid #e5eaed}.single-herbs-guide__profile-body dl{display:grid;grid-template-columns:max-content 1fr;gap:7px 10px;margin:15px 0 0;font-size:13px;line-height:1.45}.single-herbs-guide__profile-body dt{color:#17364a;font-weight:900}.single-herbs-guide__profile-body dd{margin:0;color:#5b6b79}.single-herbs-guide__profile-body .single-herbs-guide__profile-safety{color:#8a461b}
 .single-herbs-guide__profile-body .single-herbs-guide__profile-memory{color:#0d665e;font-weight:700}.single-herbs-guide__profile-body .single-herbs-guide__profile-formulas{color:#364f63}
@@ -2474,9 +2475,11 @@ ob_start();
                     return text ? (/[.!?]$/.test(text) ? text : text + '.') : '';
                 }).filter(Boolean);
                 if (memoryParts.length) {
-                    memoryPath.dataset.readAloudText = (isSpanish
+                    const visibleMnemonicIntro = memoryPath.previousElementSibling
+                        && memoryPath.previousElementSibling.classList.contains('single-herbs-guide__mnemonic-intro');
+                    memoryPath.dataset.readAloudText = (visibleMnemonicIntro ? '' : (isSpanish
                         ? 'Este es un recurso mnemotécnico para favorecer la memorización y el aprendizaje. '
-                        : 'This is a mnemonic resource designed to support memorization and learning. ')
+                        : 'This is a mnemonic resource designed to support memorization and learning. '))
                         + memoryParts.join(' ');
                     memoryPath.dataset.readAloudKind = 'mnemonic-resource';
                     memoryPath.dataset.readAloudGenerated = 'mnemonic-resource';
