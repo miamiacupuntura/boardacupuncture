@@ -169,7 +169,7 @@ fi
 grep -Fq "'examFocus' => true" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'Repaso para el examen: diferencia tres fórmulas clave que calman el Shen' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Patrón que debes reconocer:' : 'Pattern to recognize:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "\$ises ? 'Síntomas diferenciales para el examen:' : 'Differentiating exam symptoms:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$ises ? 'Síntomas clave para el examen:' : 'Key exam symptoms:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 if grep -Fq 'la secuencia detallada original enfatiza fórmulas que nutren el Shen' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
     echo "ERROR: el repaso de Calmar el Shen todavía conserva el análisis curricular anterior." >&2
     exit 1
