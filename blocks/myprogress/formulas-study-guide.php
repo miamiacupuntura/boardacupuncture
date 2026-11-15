@@ -3371,12 +3371,12 @@ echo $OUTPUT->header();
                     </div>
                     <div class="formula-study-guide__table-wrap">
                         <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
-                            ? 'Esta tabla relaciona cada sección clínica con su centro diagnóstico y con las fórmulas principales que se estudian en ella.'
-                            : 'This table connects each clinical section with its diagnostic focus and the principal formulas studied within it.'); ?>">
+                            ? 'Esta tabla relaciona cada sección clínica con sus claves para el diagnóstico y con las fórmulas principales que se estudian en ella.'
+                            : 'This table connects each clinical section with its diagnostic keys and the principal formulas studied within it.'); ?>">
                             <thead>
                                 <tr>
                                     <th><?php echo $ises ? 'Sección clínica:' : 'Clinical section:'; ?></th>
-                                    <th><?php echo $ises ? 'Centro diagnóstico:' : 'Diagnostic center:'; ?></th>
+                                    <th><?php echo $ises ? 'Claves para el diagnóstico:' : 'Diagnostic keys:'; ?></th>
                                     <th><?php echo $issupplemental ? ($ises ? 'Fórmulas principales:' : 'Principal formulas:') : ($ises ? 'Fichas detalladas:' : 'Detailed core profiles:'); ?></th>
                                 </tr>
                             </thead>

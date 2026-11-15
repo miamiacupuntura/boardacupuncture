@@ -161,6 +161,11 @@ grep -Fq 'data-formula-context-table data-table-narration=' "$TEMP_DIR/moodle/fo
 grep -Fq 'Esta tabla compara las clases terapéuticas de la categoría.' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Clase terapéutica:' : 'Therapeutic class:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Qué hace:' : 'What it does:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$ises ? 'Claves para el diagnóstico:' : 'Diagnostic keys:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Fq 'Centro diagnóstico:' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: Formula Study Guide todavía conserva la etiqueta Centro diagnóstico." >&2
+    exit 1
+fi
 grep -Fq 'data-formula-dui-yao-card' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-position' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-category-name' "$TEMP_DIR/moodle/formulas-study-guide.php"
