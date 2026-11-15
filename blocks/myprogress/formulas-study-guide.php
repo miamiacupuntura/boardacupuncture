@@ -2616,6 +2616,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         sections = [];
         page.querySelectorAll('h3,h4').forEach(function(heading) {
             if (heading.closest('[data-formula-read-aloud]')) return;
+            if (heading.closest('[data-formula-read-section-ignore]')) return;
             var label = (heading.textContent || '').replace(/\s+/g, ' ').trim();
             if (!label) return;
             var root = heading.closest('section,article,details,.formula-study-guide__overview,.formula-study-guide__category-header,.formula-study-guide__formula') || heading.parentElement;
@@ -3120,7 +3121,7 @@ echo $OUTPUT->header();
     <?php echo $renderchapternavigation('top'); ?>
 
     <?php if ($selected === null): ?>
-        <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title">
+        <section class="formula-study-guide__overview" aria-labelledby="formula-categories-title" data-formula-read-section-ignore>
             <div>
                 <h3 id="formula-categories-title"><?php echo s($ises ? '21 capítulos de Bensky' : '21 Bensky chapters'); ?></h3>
                 <p><?php echo s($ises
