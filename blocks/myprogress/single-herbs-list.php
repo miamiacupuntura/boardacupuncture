@@ -834,6 +834,7 @@ echo $OUTPUT->header();
 .single-herbs-list-reader[hidden]{display:none}.single-herbs-list-reader__disclosure>summary{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-right:40px;cursor:pointer;list-style:none}.single-herbs-list-reader__disclosure>summary::-webkit-details-marker{display:none}.single-herbs-list-reader__disclosure>summary:after{content:'+';position:absolute;right:0;top:0;display:flex;width:27px;height:27px;align-items:center;justify-content:center;border:1px solid #8fc9c4;border-radius:50%;background:#fff;color:#0b6f69;font-size:19px;font-weight:900}.single-herbs-list-reader__disclosure[open]>summary:after{content:'−'}
 .single-herbs-list-reader__title{display:block;font-size:17px;font-weight:900}.single-herbs-list-reader__description{display:block;margin-top:2px;color:#5c7184;font-size:12px}.single-herbs-list-reader__panel{padding-top:11px}.single-herbs-list-reader__controls{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) repeat(3,auto);gap:8px;align-items:end}.single-herbs-list-reader__field{display:grid;gap:4px;color:#294b63;font-size:11px;font-weight:850}.single-herbs-list-reader select{box-sizing:border-box;min-height:39px;width:100%;padding:6px 9px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}.single-herbs-list-reader button{min-height:39px;padding:6px 11px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#087c69;font-weight:900;cursor:pointer}.single-herbs-list-reader button[data-herb-list-read-displayed]{background:#0b8f87;color:#fff}.single-herbs-list-reader button:disabled{cursor:not-allowed;opacity:.45}.single-herbs-list-reader__progress{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:8px;align-items:end;margin-top:8px}.single-herbs-list-reader__progress-field{display:grid;grid-template-columns:1fr auto;gap:3px 8px;color:#526b84;font-size:10px;font-weight:800}.single-herbs-list-reader__progress-field input{grid-column:1/-1;width:100%;accent-color:#0b8f87}.single-herbs-list-reader__status{min-height:18px;margin:7px 0 0;color:#526b84;font-size:11px;font-weight:750}
 .single-herbs-list__controls{margin-bottom:14px;padding:12px 14px;border:1px solid #c7ddd9;border-radius:12px;background:#f8fcfb}
+.single-herbs-list__controls-disclosure>summary{position:relative;display:flex;min-height:25px;align-items:center;padding-right:36px;color:#17344a;font-size:14px;font-weight:900;cursor:pointer;list-style:none}.single-herbs-list__controls-disclosure>summary::-webkit-details-marker{display:none}.single-herbs-list__controls-disclosure>summary:after{content:'+';position:absolute;right:0;top:0;display:flex;width:25px;height:25px;align-items:center;justify-content:center;border:1px solid #8fc9c4;border-radius:50%;background:#fff;color:#0b6f69;font-size:18px;font-weight:900;line-height:1}.single-herbs-list__controls-disclosure[open]>summary:after{content:'−'}.single-herbs-list__controls-panel{padding-top:8px}
 .single-herbs-list__controls .single-herbs-list__button{min-height:38px;padding:6px 12px}
 .single-herbs-list__modes{margin-bottom:9px}
 .single-herbs-list__form{display:grid;grid-template-columns:minmax(220px,1.5fr) minmax(220px,1fr) auto;gap:10px;align-items:end}
@@ -954,7 +955,10 @@ echo $OUTPUT->header();
     </section>
 
     <section class="single-herbs-list__controls" aria-label="<?php echo $ises ? 'Controles de la lista' : 'List controls'; ?>">
-        <nav class="single-herbs-list__modes" aria-label="<?php echo $ises ? 'Organizar tarjetas' : 'Organize cards'; ?>">
+        <details class="single-herbs-list__controls-disclosure" open>
+            <summary><?php echo $ises ? 'Buscar y organizar hierbas' : 'Search and organize herbs'; ?></summary>
+            <div class="single-herbs-list__controls-panel">
+                <nav class="single-herbs-list__modes" aria-label="<?php echo $ises ? 'Organizar tarjetas' : 'Organize cards'; ?>">
             <?php
             // Sorting modes always start from the complete guideline roster.
             // Category filtering is controlled only by the selector or a card badge.
@@ -973,9 +977,9 @@ echo $OUTPUT->header();
             ?>
                 <a class="single-herbs-list__button" href="<?php echo $backtoallurl->out(false); ?>"><?php echo $ises ? '← Volver a todas las hierbas' : '← Back to all herbs'; ?></a>
             <?php } ?>
-        </nav>
+                </nav>
 
-        <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
+                <form class="single-herbs-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/single-herbs-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
             <?php if ($fromlibrary || $fromquiz || $fromchief || $fromingredients || $fromformula || $fromsmart || $fromcautions || $fromincompatibilities || $fromoriginmap || $fromformulatree) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
@@ -996,17 +1000,19 @@ echo $OUTPUT->header();
                 </select>
             </label>
             <button class="single-herbs-list__button is-active" type="submit"><?php echo $ises ? 'Aplicar' : 'Apply'; ?></button>
-        </form>
+                </form>
 
-        <div class="single-herbs-list__summary">
-            <div class="single-herbs-list__stat"><span><?php echo $ises ? 'Guideline' : 'Guideline'; ?></span><strong>304</strong></div>
-            <div class="single-herbs-list__stat"><span><?php echo $ises ? 'Mostradas' : 'Displayed'; ?></span><strong><?php echo count($cards); ?></strong></div>
-            <div class="single-herbs-list__stat"><span><?php echo $ises ? 'Categorías' : 'Categories'; ?></span><strong><?php echo count($categories); ?></strong></div>
-        </div>
-        <div class="single-herbs-list__tools">
-            <button class="single-herbs-list__button" type="button" data-herb-list-expand><?php echo $ises ? 'Expandir todas' : 'Expand all'; ?></button>
-            <button class="single-herbs-list__button" type="button" data-herb-list-collapse><?php echo $ises ? 'Cerrar todas' : 'Collapse all'; ?></button>
-        </div>
+                <div class="single-herbs-list__summary">
+                    <div class="single-herbs-list__stat"><span><?php echo $ises ? 'Guideline' : 'Guideline'; ?></span><strong>304</strong></div>
+                    <div class="single-herbs-list__stat"><span><?php echo $ises ? 'Mostradas' : 'Displayed'; ?></span><strong><?php echo count($cards); ?></strong></div>
+                    <div class="single-herbs-list__stat"><span><?php echo $ises ? 'Categorías' : 'Categories'; ?></span><strong><?php echo count($categories); ?></strong></div>
+                </div>
+                <div class="single-herbs-list__tools">
+                    <button class="single-herbs-list__button" type="button" data-herb-list-expand><?php echo $ises ? 'Expandir todas' : 'Expand all'; ?></button>
+                    <button class="single-herbs-list__button" type="button" data-herb-list-collapse><?php echo $ises ? 'Cerrar todas' : 'Collapse all'; ?></button>
+                </div>
+            </div>
+        </details>
     </section>
 
     <?php if (!$cards) { ?>
