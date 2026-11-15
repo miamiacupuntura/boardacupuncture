@@ -215,6 +215,17 @@ grep -Fq 'class="formula-study-guide__core" data-read-aloud-ignore' "$TEMP_DIR/m
 grep -Fq "\$kingherbsplural ? 'Hierbas emperador:' : 'Hierba emperador:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$kingherbsplural ? 'King herbs:' : 'King herb:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "if (\$risklabel !== '')" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$formulalabel = \$ises ? 'Ficha oficial integrada' : 'Integrated official profile';" "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Fq "Ficha oficial integrada · págs." "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq "Integrated official profile · pp." "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq "' · ' . (\$ises ? 'págs. ' : 'pp. ') . \$formula['sourcePages']" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: los encabezados de fórmulas todavía muestran referencias de páginas." >&2
+    exit 1
+fi
+if grep -Eiq '"(priorityText|priorityTextEs|referencesText|referencesTextEs)".*(pages|páginas|pp\.|págs\.)' "$TEMP_DIR/data/formulas-study-guide-data.json"; then
+    echo "ERROR: los textos visibles de la guía todavía incluyen referencias de páginas." >&2
+    exit 1
+fi
 grep -Fq '$getformulaenglishname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$formulaenglishnamesbyname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$getrelatedformulaidentities' "$TEMP_DIR/moodle/formulas-study-guide.php"

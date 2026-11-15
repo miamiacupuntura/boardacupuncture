@@ -2823,8 +2823,6 @@ echo $OUTPUT->header();
                     if ($associatedcount > 0) {
                         $categorymeta .= ' + ' . $associatedcount . ($ises ? ' asociada' : ' associated');
                     }
-                    $categorymeta .= ($ises ? ' · págs. ' : ' · pp. ')
-                        . $allcategories[$chapter['key']]['sourcePages'];
                     $statuslabel = $categoryboardstatus['label'];
                 } else {
                     $categorymeta = count($principalformulas)
@@ -2862,9 +2860,9 @@ echo $OUTPUT->header();
             $selectedeyebrow = $issupplemental
                 ? ($isofficialexpansionpage
                     ? (($ises ? 'Ampliación oficial · Capítulo ' : 'Official expansion · Chapter ')
-                        . $selected['sourceChapter'] . ' · ' . $selected['sourcePages'])
+                        . $selected['sourceChapter'])
                     : (($ises ? 'Capítulo suplementario ' : 'Supplementary chapter ')
-                        . $selected['sourceChapter'] . ' · ' . ($ises ? 'páginas ' : 'pages ') . $selected['sourcePages']))
+                        . $selected['sourceChapter']))
                 : (($ises ? 'Categoría ' : 'Category ') . $selected['number']);
             $selectedtitle = $ises ? $selected['nameEs'] : $selected['name'];
             $selectedvisiblecount = count($selected['formulas']);
@@ -3273,8 +3271,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'stabilize-bind-chapter-9'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 9, páginas 419–454.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 9, pages 419–454.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 9.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 9.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-nine-principles-title">
                 <h4 id="chapter-nine-principles-title"><?php echo s($ises ? 'Principio central: tonificar la raíz y contener la rama' : 'Core principle: tonify the root and secure the branch'); ?></h4>
                 <p><?php echo s($ises
@@ -3319,8 +3317,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'calm-shen-chapter-10'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 10, páginas 457–482.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 10, pages 457–482.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 10.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 10.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-ten-principles-title">
                 <h4 id="chapter-ten-principles-title"><?php echo s($ises ? 'Principio central: identifica primero raíz, exceso y sustancia que perturba el Shen' : 'Core principle: first identify the root, excess, and substance disturbing the Spirit'); ?></h4>
                 <p><?php echo s($ises
@@ -3365,8 +3363,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'open-orifices-chapter-11'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 11, páginas 485–502.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 11, pages 485–502.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 11.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 11.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-eleven-principles-title">
                 <h4 id="chapter-eleven-principles-title"><?php echo s($ises ? 'Principio central: confirma cierre y separa inmediatamente Calor de Frío' : 'Core principle: confirm closure and immediately separate Heat from Cold'); ?></h4>
                 <p><?php echo s($ises
@@ -3453,8 +3451,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'regulate-qi-chapter-12'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 12, páginas 505–554.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 12, pages 505–554.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 12.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 12.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-twelve-principles-title">
                 <h4 id="chapter-twelve-principles-title"><?php echo s($ises ? 'Principio central: localiza el bloqueo y sigue la dirección del Qi' : 'Core principle: locate the obstruction and follow the direction of Qi'); ?></h4>
                 <p><?php echo s($ises
@@ -3496,8 +3494,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'regulate-blood-chapter-13'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 13, páginas 557–615.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 13, pages 557–615.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 13.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 13.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-thirteen-principles-title">
                 <h4 id="chapter-thirteen-principles-title"><?php echo s($ises ? 'Principio central: regula el movimiento de la Sangre sin perder de vista la raíz' : 'Core principle: regulate Blood movement without losing sight of the root'); ?></h4>
                 <p><?php echo s($ises
@@ -3539,8 +3537,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'expel-damp-chapter-16'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 16, páginas 685–765.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 16, pages 685–765.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 16.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 16.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-sixteen-principles-title">
                 <h4 id="chapter-sixteen-principles-title"><?php echo s($ises ? 'Principio central: identifica qué impide transformar, mover o eliminar la Humedad' : 'Core principle: identify what prevents Dampness from being transformed, moved, or eliminated'); ?></h4>
                 <p><?php echo s($ises
@@ -3583,8 +3581,8 @@ echo $OUTPUT->header();
         <?php endif; ?>
         <?php if ($selected['key'] === 'expel-wind-chapter-14'): ?>
             <p class="formula-study-guide__source"><strong><?php echo $ises ? 'Fuente del capítulo:' : 'Chapter source:'; ?></strong> <?php echo s($ises
-                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 14, páginas 619–657.'
-                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 14, pages 619–657.'); ?></p>
+                ? 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, capítulo 14.'
+                : 'Bensky et al., Chinese Herbal Medicine: Formulas & Strategies, Chapter 14.'); ?></p>
             <section class="formula-study-guide__priority" aria-labelledby="chapter-fourteen-principles-title">
                 <h4 id="chapter-fourteen-principles-title"><?php echo s($ises ? 'Principio central: localiza el Viento y determina qué lo impulsa' : 'Core principle: locate the Wind and determine what drives it'); ?></h4>
                 <p><?php echo s($ises
@@ -3859,20 +3857,17 @@ echo $OUTPUT->header();
                 if (in_array($selected['key'], ['tonify-chapter-8', 'stabilize-bind-chapter-9', 'calm-shen-chapter-10', 'open-orifices-chapter-11', 'regulate-qi-chapter-12', 'regulate-blood-chapter-13', 'expel-wind-chapter-14', 'expel-damp-chapter-16', 'transform-phlegm-chapter-17', 'digestive-chapter-18', 'expel-parasites-chapter-19', 'treat-abscesses-chapter-20', 'external-application-chapter-21'], true)) {
                     $formulalabel = $isassociatedformula
                         ? (($ises ? 'Fórmula asociada bajo ' : 'Associated formula under ')
-                            . ($formula['associatedWith'] ?? '') . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages'])
+                            . ($formula['associatedWith'] ?? ''))
                         : (($ises ? 'Fórmula ' : 'Formula ') . $chapterformulaindex
-                            . ' ' . ($ises ? 'de' : 'of') . ' ' . $selectedprincipalformulacount
-                            . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages']);
+                            . ' ' . ($ises ? 'de' : 'of') . ' ' . $selectedprincipalformulacount);
                 } elseif ($isintegratedofficialprofile) {
-                    $formulalabel = ($ises ? 'Ficha oficial integrada · págs. ' : 'Integrated official profile · pp. ')
-                        . $formula['sourcePages'];
+                    $formulalabel = $ises ? 'Ficha oficial integrada' : 'Integrated official profile';
                 } elseif ($issupplemental) {
                     $formulalabel = $isofficialexpansionpage
                         ? (($ises ? 'Ficha oficial adicional ' : 'Additional official profile ') . $formula['sequence']
-                            . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']) . ' · ' . $formula['sourcePages'])
+                            . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']))
                         : (($ises ? 'Fórmula principal ' : 'Principal formula ') . $formula['sequence']
-                            . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas'])
-                            . ' · ' . ($ises ? 'págs. ' : 'pp. ') . $formula['sourcePages']);
+                            . ' ' . ($ises ? 'de' : 'of') . ' ' . count($selected['formulas']));
                 } else {
                     $formulalabel = ($ises ? 'Fórmula ' : 'Formula ') . $formula['number']
                         . ' ' . ($ises ? 'de' : 'of') . ' 63';
@@ -3892,7 +3887,7 @@ echo $OUTPUT->header();
                                 . (($formulacategory['associatedCount'] ?? 0) > 0
                                     ? (' + ' . $formulacategory['associatedCount'] . ($ises ? ' asociada' : ' associated'))
                                     : ''))
-                            : s(count($formulacategory['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas')); ?> · <?php echo s(($ises ? 'págs. ' : 'pp. ') . $formulacategory['sourcePages']); ?></span>
+                            : s(count($formulacategory['formulas']) . ' ' . ($ises ? 'fórmulas' : 'formulas')); ?></span>
                     </section>
                     <?php if ($formulacategoryguide !== null): ?>
                         <section class="formula-study-guide__priority" aria-label="<?php echo s($ises ? 'Diferenciación de la sección' : 'Section differentiation'); ?>">
@@ -4033,12 +4028,10 @@ echo $OUTPUT->header();
                             <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
                         <?php elseif ($isintegratedofficialprofile): ?>
                             <span class="formula-study-guide__source-pages"><?php echo s('Bensky · '
-                                . ($ises ? 'capítulo ' : 'Chapter ') . $formula['sourceChapter']
-                                . ($ises ? ' · págs. ' : ' · pp. ') . $formula['sourcePages']); ?></span>
+                                . ($ises ? 'capítulo ' : 'Chapter ') . $formula['sourceChapter']); ?></span>
                         <?php else: ?>
                             <span class="formula-study-guide__source-pages"><?php echo s('Bensky · '
-                                . ($ises ? 'capítulo ' : 'Chapter ') . $selected['sourceChapter']
-                                . ($ises ? ' · págs. ' : ' · pp. ') . $formula['sourcePages']); ?></span>
+                                . ($ises ? 'capítulo ' : 'Chapter ') . $selected['sourceChapter']); ?></span>
                         <?php endif; ?>
                     </div>
                     <details class="formula-study-guide__safety">
