@@ -909,8 +909,10 @@ echo $OUTPUT->header();
             <?php } else { ?>
                 <a class="single-herbs-list__button" href="<?php echo $studyguideurl->out(false); ?>"><?php echo $ises ? '← Single Herbs' : '← Single Herbs'; ?></a>
             <?php } ?>
-            <a class="single-herbs-list__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
-            <a class="single-herbs-list__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a>
+            <?php if (!$fromlibrary) { ?>
+                <a class="single-herbs-list__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
+                <a class="single-herbs-list__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a>
+            <?php } ?>
         </div>
     </header>
 
