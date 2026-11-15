@@ -152,6 +152,7 @@ grep -Fq "title.replace(/\\s*\\+\\s*/g, isSpanish ? ' y ' : ' and ')" "$TEMP_DIR
 grep -Fq "var spanishOrdinals = ['primer', 'segundo', 'tercer', 'cuarto', 'quinto', 'sexto', 'séptimo']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "' Duì Yào relacionado que analizaremos combina ' + firstName" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "cuyo nombre farmacéutico es ' + firstLatin" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Su acción principal es ' + normalizedAction" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Este Duì Yào está relacionado con la fórmula '" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__dui-yao-number" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "<span data-read-aloud-ignore><?php echo \$ises ? 'Abrir ficha →' : 'Open profile →'; ?></span>" "$TEMP_DIR/moodle/formulas-study-guide.php"

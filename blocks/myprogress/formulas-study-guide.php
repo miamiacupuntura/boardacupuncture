@@ -2003,7 +2003,14 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                     : 'This Duì Yào is related to the formulas ') + formulaList + '.';
             }
             var narration = document.createElement('p');
-            narration.textContent = introduction + ' ' + (action ? action + '. ' : '') + relation;
+            var actionNarration = '';
+            if (action) {
+                var normalizedAction = action.charAt(0).toLowerCase() + action.slice(1);
+                actionNarration = isSpanish
+                    ? 'Su acción principal es ' + normalizedAction + '. '
+                    : 'Its main action is to ' + normalizedAction + '. ';
+            }
+            narration.textContent = introduction + ' ' + actionNarration + relation;
             if (card === root) {
                 root.replaceChildren(narration);
             } else {
