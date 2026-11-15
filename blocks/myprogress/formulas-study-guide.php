@@ -3835,7 +3835,7 @@ echo $OUTPUT->header();
                 <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
                     <header class="formula-study-guide__formula-heading">
                         <div>
-                            <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
+                            <span class="formula-study-guide__formula-label"><?php echo s($formulalabel . ' —'); ?></span>
                             <h4><?php echo s($displayformulaname($formula['name'])); ?></h4>
                             <?php if ($formulaenglishname !== ''): ?><span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span><?php endif; ?>
                             <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
