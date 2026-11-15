@@ -533,7 +533,8 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
             'Gui Zhi': 'Guéi, Yí', 'Zi Su Ye': 'Tzí, Su, Yé', 'Xi Xin': 'Shí, Shín',
             'Bai Zhi': 'Bái, Yí', 'Fang Feng': 'Fang, Feng', 'Qiang Huo': 'Chiang, Juó',
             'Jing Jie': 'Ying, Yie', 'Sheng Jiang': 'Sheng, Chiang', 'Xing Ren': 'Xing Ren',
-            'Táo Rén': 'Tao Ren', 'Tao Ren': 'Tao Ren'
+            'Táo Rén': 'Tao Ren', 'Tao Ren': 'Tao Ren',
+            'Dāng Guī': 'Dang Qui', 'Dang Gui': 'Dang Qui'
         } : {
             'Bo He': 'Bo Huh', 'Niu Bang Zi': 'Nee-oh, Bahng, Dzuh', 'Chan Tui': 'Chahn, Tway',
             'Sang Ye': 'Sahng, Yeh', 'Ju Hua': 'Joo, Hwah', 'Man Jing Zi': 'Mahn, Jing, Dzuh',
@@ -542,7 +543,8 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
             'Gui Zhi': 'Gway, Jir', 'Zi Su Ye': 'Dzuh, Soo, Yeh', 'Xi Xin': 'Shee, Sheen',
             'Bai Zhi': 'Bye, Jir', 'Fang Feng': 'Fahng, Fung', 'Qiang Huo': 'Chyahng, Hwoh',
             'Jing Jie': 'Jing, Jyeh', 'Sheng Jiang': 'Shung, Jyahng', 'Xing Ren': 'Sheeng, Run',
-            'Táo Rén': 'Taow, Run', 'Tao Ren': 'Taow, Run'
+            'Táo Rén': 'Taow, Run', 'Tao Ren': 'Taow, Run',
+            'Dāng Guī': 'Dahng, Gway', 'Dang Gui': 'Dahng, Gway'
         };
         Object.keys(pronunciations).sort(function(a, b) { return b.length - a.length; }).forEach(function(name) {
             text = text.replace(new RegExp('\\b' + name.replace(/\s+/g, '\\s+') + '\\b', 'gi'), pronunciations[name]);

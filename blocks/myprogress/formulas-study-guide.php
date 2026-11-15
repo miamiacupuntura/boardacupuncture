@@ -2186,7 +2186,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 ['Da Huang', 'Dà Huáng', 'Dá Juáng'],
                 ['Da Zao', 'Dà Zǎo', 'Dá Tsáo'],
                 ['Dan Dou Chi', 'Dàn Dòu Chǐ', 'Dan Dou Chi'],
-                ['Dang Gui', 'Dāng Guī', 'Dang Guéi'],
+                ['Dang Gui', 'Dāng Guī', 'Dang Qui'],
                 ['Di Gu Pi', 'Dì Gǔ Pí', 'Dí Gú Pí'],
                 ['Di Yu', 'Dì Yú', 'Dí Yú'],
                 ['Du Zhong', 'Dù Zhòng', 'Dú Yong'],
