@@ -1690,21 +1690,22 @@ $chapterinterestinginsights = [
         'valueEs' => 'Las fórmulas omitidas enseñan una regla esencial de seguridad: nunca contener un patógeno o exceso no resuelto. Color, olor, temperatura, momento y presencia de Calor o Humedad cambian si la astringencia es apropiada.',
     ],
     'calm-shen-chapter-10' => [
-        'title' => 'Interesting point: the original detailed sequence emphasizes nourishing Shen formulas over the mineral-heavy historical branch',
-        'titleEs' => 'Dato interesante: la secuencia detallada original enfatiza fórmulas que nutren el Shen sobre la rama histórica rica en minerales',
-        'stat' => '3 of 9 in the original 63-profile sequence',
-        'statEs' => '3 de 9 en la secuencia original de 63 fichas',
-        'intro' => 'All three formulas selected for the original detailed sequence belong to the nourishing side of the chapter and present recognizable deficiency patterns rather than relying primarily on heavy settling substances. Official Appendix C membership is shown independently by the asterisk.',
-        'introEs' => 'Las tres fórmulas seleccionadas para la secuencia detallada original pertenecen al lado nutritivo del capítulo y presentan patrones reconocibles de deficiencia, en vez de depender principalmente de sustancias pesadas que asientan. La pertenencia al Appendix C oficial se indica de forma independiente con el asterisco.',
+        'examFocus' => true,
+        'title' => 'Exam review: distinguish three high-yield formulas that calm Shen',
+        'titleEs' => 'Repaso para el examen: diferencia tres fórmulas clave que calman el Shen',
+        'stat' => '3 high-yield formulas',
+        'statEs' => '3 fórmulas de alto rendimiento',
+        'intro' => 'Do not choose from insomnia alone. Identify the deficient substance and then match the differentiating symptoms: Liver Blood with Heart Yin, Heart-Kidney Yin and Blood, or the emotional pattern of Zang Zao.',
+        'introEs' => 'No elijas una fórmula solo por el insomnio. Identifica primero la sustancia deficiente y después relaciona los síntomas diferenciales: Sangre de Hígado con Yin de Corazón, Yin y Sangre de Corazón-Riñón, o el patrón emocional Zang Zao.',
         'rows' => [
-            ['coverage' => 'Liver Blood and Heart Yin deficiency with insomnia', 'coverageEs' => 'Deficiencia de Sangre de Hígado y Yin de Corazón con insomnio', 'boardNames' => ['Suan Zao Ren Tang'], 'additional' => 'Ding Zhi Wan and Huang Lian E Jiao Tang add Qi deficiency, Phlegm, constrained Fire, and Heart-Kidney disharmony.', 'additionalEs' => 'Ding Zhi Wan y Huang Lian E Jiao Tang añaden deficiencia de Qi, Flema, Fuego constreñido y desarmonía Corazón-Riñón.'],
-            ['coverage' => 'Heart-Kidney Yin and Blood deficiency', 'coverageEs' => 'Deficiencia de Yin y Sangre de Corazón-Riñón', 'boardNames' => ['Tian Wang Bu Xin Dan'], 'additional' => 'Bensky grades deeper Fire, sensory symptoms, and heavier anchoring methods.', 'additionalEs' => 'Bensky gradúa Fuego más profundo, síntomas sensoriales y métodos de anclaje más pesados.'],
-            ['coverage' => 'Zang Zao with emotional lability', 'coverageEs' => 'Zang Zao con labilidad emocional', 'boardNames' => ['Gan Mai Da Zao Tang'], 'additional' => 'The sedating branch includes Zhu Sha, magnetite, iron filings, and mother-of-pearl formulas with greater sourcing and safety complexity.', 'additionalEs' => 'La rama sedante incluye fórmulas con Zhu Sha, magnetita, limaduras de hierro y madreperla, con mayor complejidad de procedencia y seguridad.'],
+            ['coverage' => 'Liver Blood deficiency with Heart Yin deficiency and Empty Heat disturbing Shen', 'coverageEs' => 'Deficiencia de Sangre de Hígado con Yin de Corazón deficiente y Calor Vacío perturbando el Shen', 'boardNames' => ['Suan Zao Ren Tang'], 'additional' => 'Insomnia with irritability, palpitations, night sweating, dizziness, and a fine wiry pulse.', 'additionalEs' => 'Insomnio con irritabilidad, palpitaciones, sudor nocturno, mareo y pulso fino cuerda.'],
+            ['coverage' => 'Heart-Kidney Yin and Blood deficiency with deficient Fire disturbing Shen', 'coverageEs' => 'Deficiencia de Yin y Sangre de Corazón-Riñón con Fuego por deficiencia perturbando el Shen', 'boardNames' => ['Tian Wang Bu Xin Dan'], 'additional' => 'Restless insomnia, palpitations, night sweats, dryness, and a red tongue with little coat.', 'additionalEs' => 'Insomnio inquieto, palpitaciones, sudor nocturno, sequedad y lengua roja con poca capa.'],
+            ['coverage' => 'Heart nourishment or Yin deficiency with Liver constraint causing Zang Zao', 'coverageEs' => 'Desnutrición o deficiencia de Yin de Corazón con constricción de Hígado que causa Zang Zao', 'boardNames' => ['Gan Mai Da Zao Tang'], 'additional' => 'Frequent crying, emotional lability, restlessness, and yawning.', 'additionalEs' => 'Llanto frecuente, labilidad emocional, inquietud y bostezos.'],
         ],
-        'hypothesis' => 'A strong clinical suspicion is that broad deficiency archetypes are easier to standardize nationally, while cinnabar-containing and heavy-mineral formulas raise toxicity, quality-control, and modern-use concerns.',
-        'hypothesisEs' => 'Una sospecha clínica fuerte es que los arquetipos amplios de deficiencia son más fáciles de estandarizar nacionalmente, mientras las fórmulas con cinabrio y minerales pesados plantean problemas de toxicidad, control de calidad y uso moderno.',
-        'value' => 'The six additional formulas remain important for recognizing Fire, Phlegm, sensory changes, and historical sedating strategies—but historical Zhu Sha contains mercury and should not be treated as a routine modern ingredient.',
-        'valueEs' => 'Las seis fórmulas adicionales siguen siendo importantes para reconocer Fuego, Flema, cambios sensoriales y estrategias sedantes históricas; pero el Zhu Sha histórico contiene mercurio y no debe considerarse un ingrediente moderno rutinario.',
+        'hypothesis' => 'Irritable insomnia with night sweating and a fine wiry pulse points to Suan Zao Ren Tang. Marked dryness with a red, scantily coated tongue points to Tian Wang Bu Xin Dan. Crying, emotional lability, restlessness, and yawning point to Gan Mai Da Zao Tang.',
+        'hypothesisEs' => 'Insomnio irritable con sudor nocturno y pulso fino cuerda orienta a Suan Zao Ren Tang. Sequedad marcada con lengua roja y poca capa orienta a Tian Wang Bu Xin Dan. Llanto, labilidad emocional, inquietud y bostezos orientan a Gan Mai Da Zao Tang.',
+        'value' => 'Do not answer from the shared symptom of insomnia. The tested distinction is the complete pattern and its differentiating signs.',
+        'valueEs' => 'No respondas solo por el síntoma compartido de insomnio. La distinción examinable es el patrón completo y sus signos diferenciales.',
     ],
     'open-orifices-chapter-11' => [
         'title' => 'Interesting point: the original 63-profile sequence omitted this entire classical family',
@@ -4085,7 +4086,10 @@ echo $OUTPUT->header();
             </section>
         <?php endif; ?>
         <?php if (isset($chapterinterestinginsights[$selected['key']])): ?>
-            <?php $chapterinsight = $chapterinterestinginsights[$selected['key']]; ?>
+            <?php
+            $chapterinsight = $chapterinterestinginsights[$selected['key']];
+            $chapterinsightisexamreview = !empty($chapterinsight['examFocus']);
+            ?>
             <section class="formula-study-guide__medical-rationale" aria-labelledby="chapter-interesting-insight-title">
                 <div class="formula-study-guide__medical-rationale-header">
                     <span class="formula-study-guide__medical-rationale-stat"><?php echo s(($ises ? $chapterinsight['statEs'] : $chapterinsight['stat']) . ':'); ?></span>
@@ -4094,37 +4098,49 @@ echo $OUTPUT->header();
                 </div>
                 <div class="formula-study-guide__table-wrap">
                     <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
-                        ? 'Esta tabla contrasta la cobertura clínica de las fichas detalladas con los temas adicionales que desarrolla el capítulo completo de Bensky.'
-                        : 'This table contrasts the clinical coverage of the detailed profiles with the additional topics developed in the complete Bensky chapter.'); ?>">
+                        ? ($chapterinsightisexamreview
+                            ? 'Esta tabla resume tres patrones examinables. Relaciona cada patrón con su fórmula y con los síntomas que permiten diferenciarla.'
+                            : 'Esta tabla contrasta la cobertura clínica de las fichas detalladas con los temas adicionales que desarrolla el capítulo completo de Bensky.')
+                        : ($chapterinsightisexamreview
+                            ? 'This table summarizes three testable patterns. It links each pattern to its formula and differentiating symptoms.'
+                            : 'This table contrasts the clinical coverage of the detailed profiles with the additional topics developed in the complete Bensky chapter.')); ?>">
                         <thead>
                             <tr>
-                                <th><?php echo $ises ? 'Cobertura clínica representada en las fichas detalladas:' : 'Clinical coverage represented in the detailed profiles:'; ?></th>
-                                <th><?php echo $ises ? 'Fichas detalladas representativas:' : 'Representative detailed core profiles:'; ?></th>
-                                <th><?php echo $ises ? 'Qué añade el capítulo completo de Bensky:' : 'What the complete Bensky chapter adds:'; ?></th>
+                                <th><?php echo $chapterinsightisexamreview
+                                    ? ($ises ? 'Patrón que debes reconocer:' : 'Pattern to recognize:')
+                                    : ($ises ? 'Cobertura clínica representada en las fichas detalladas:' : 'Clinical coverage represented in the detailed profiles:'); ?></th>
+                                <th><?php echo $chapterinsightisexamreview
+                                    ? ($ises ? 'Fórmula clave:' : 'Key formula:')
+                                    : ($ises ? 'Fichas detalladas representativas:' : 'Representative detailed core profiles:'); ?></th>
+                                <th><?php echo $chapterinsightisexamreview
+                                    ? ($ises ? 'Síntomas diferenciales para el examen:' : 'Differentiating exam symptoms:')
+                                    : ($ises ? 'Qué añade el capítulo completo de Bensky:' : 'What the complete Bensky chapter adds:'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($chapterinsight['rows'] as $insightrow): ?>
-                                <?php $boardlabels = array_map($displayformulaname, $insightrow['boardNames']); ?>
+                                <?php $boardlabels = array_map($renderformulanamewithenglish, $insightrow['boardNames']); ?>
                                 <tr>
                                     <td><?php echo s($ises ? $insightrow['coverageEs'] : $insightrow['coverage']); ?></td>
-                                    <td class="formula-study-guide__medical-rationale-board"><?php echo s($boardlabels === []
-                                        ? ($ises ? 'Ninguna ficha detallada directa' : 'No direct detailed profile')
-                                        : implode(', ', $boardlabels)); ?></td>
+                                    <td class="formula-study-guide__medical-rationale-board"><?php echo $boardlabels === []
+                                        ? s($ises ? 'Ninguna fórmula clave directa' : 'No direct key formula')
+                                        : implode(', ', $boardlabels); ?></td>
                                     <td><?php echo s($ises ? $insightrow['additionalEs'] : $insightrow['additional']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-                <div class="formula-study-guide__medical-rationale-header formula-study-guide__medical-rationale-secondary">
-                    <h4><?php echo s($ises ? 'Una sospecha clínica y curricular razonable' : 'A reasonable clinical and curricular hypothesis'); ?></h4>
-                    <p><?php echo s($ises ? $chapterinsight['hypothesisEs'] : $chapterinsight['hypothesis']); ?></p>
-                    <p><strong><?php echo $ises ? 'Por qué sigue siendo interesante:' : 'Why this remains interesting:'; ?></strong> <?php echo s($ises ? $chapterinsight['valueEs'] : $chapterinsight['value']); ?></p>
-                    <p class="formula-study-guide__medical-rationale-caveat"><?php echo s($ises
-                        ? 'Nota de alcance: el Board no publica una justificación médica fórmula por fórmula. Esta es una hipótesis clínica y educativa basada en cobertura de patrones, aplicabilidad, seguridad y organización del temario; no una declaración oficial del Board.'
-                        : 'Scope note: the Board does not publish a formula-by-formula medical rationale. This is a clinical and educational hypothesis based on pattern coverage, applicability, safety, and syllabus organization—not an official Board statement.'); ?></p>
-                </div>
+                <?php if (!$chapterinsightisexamreview): ?>
+                    <div class="formula-study-guide__medical-rationale-header formula-study-guide__medical-rationale-secondary">
+                        <h4><?php echo s($ises ? 'Una sospecha clínica y curricular razonable' : 'A reasonable clinical and curricular hypothesis'); ?></h4>
+                        <p><?php echo s($ises ? $chapterinsight['hypothesisEs'] : $chapterinsight['hypothesis']); ?></p>
+                        <p><strong><?php echo $ises ? 'Por qué sigue siendo interesante:' : 'Why this remains interesting:'; ?></strong> <?php echo s($ises ? $chapterinsight['valueEs'] : $chapterinsight['value']); ?></p>
+                        <p class="formula-study-guide__medical-rationale-caveat"><?php echo s($ises
+                            ? 'Nota de alcance: el Board no publica una justificación médica fórmula por fórmula. Esta es una hipótesis clínica y educativa basada en cobertura de patrones, aplicabilidad, seguridad y organización del temario; no una declaración oficial del Board.'
+                            : 'Scope note: the Board does not publish a formula-by-formula medical rationale. This is a clinical and educational hypothesis based on pattern coverage, applicability, safety, and syllabus organization—not an official Board statement.'); ?></p>
+                    </div>
+                <?php endif; ?>
             </section>
         <?php endif; ?>
         <?php if ($deferrelatedduiyao && !$moverelatedduiyaototheend): ?>
