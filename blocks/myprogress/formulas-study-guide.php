@@ -1988,7 +1988,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 if (isSpanish) {
                     pattern = pattern.replace(/^Viento-Frío de exceso$/i, 'Viento-Frío en Exceso');
                     rows.push('La fórmula ' + formula
-                        + (englishName ? ', ' + englishName + ',' : '')
+                        + (englishName ? ' ([[en:' + englishName + ']]),' : '')
                         + ' tiene un patrón de ' + pattern + '. Sus síntomas clave son ' + signs + '.');
                 } else {
                     rows.push('The formula ' + formula
@@ -2050,6 +2050,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var title = titleElement ? (titleElement.textContent || '').trim() : '';
             var action = actionElement ? (actionElement.textContent || '').trim().replace(/[.]+$/, '') : '';
             var position = Math.max(1, Number(card.getAttribute('data-dui-yao-related-position') || 1));
+            var categoryName = (card.getAttribute('data-dui-yao-category-name') || '').trim();
             var firstName = card.getAttribute('data-dui-yao-first-name') || '';
             var firstLatin = card.getAttribute('data-dui-yao-first-latin') || '';
             var secondName = card.getAttribute('data-dui-yao-second-name') || '';
@@ -2065,23 +2066,28 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var ordinal = isSpanish
                 ? (spanishOrdinals[position - 1] || String(position))
                 : (englishOrdinals[position - 1] || String(position));
+            var categoryRelation = categoryName
+                ? (isSpanish ? ' con la categoría ' + categoryName : ' to the ' + categoryName + ' category')
+                : '';
             var introduction;
             if (firstName && firstLatin && secondName && secondLatin) {
                 introduction = isSpanish
-                    ? 'El ' + ordinal + ' Duì Yào relacionado que analizaremos combina ' + firstName
+                    ? 'El ' + ordinal + ' Duì Yào relacionado' + categoryRelation + ' que analizaremos combina ' + firstName
                         + ', ' + firstLatin + ', con ' + secondName + ', ' + secondLatin + '.'
-                    : 'The ' + ordinal + ' related Duì Yào we will analyze combines ' + firstName
+                    : 'The ' + ordinal + ' Duì Yào related' + categoryRelation + ' combines ' + firstName
                         + ', ' + firstLatin + ', with ' + secondName + ', ' + secondLatin + '.';
             } else {
                 introduction = isSpanish
-                    ? 'El ' + ordinal + ' Duì Yào relacionado que analizaremos combina ' + title + '.'
-                    : 'The ' + ordinal + ' related Duì Yào we will analyze combines ' + title + '.';
+                    ? 'El ' + ordinal + ' Duì Yào relacionado' + categoryRelation + ' que analizaremos combina ' + title + '.'
+                    : 'The ' + ordinal + ' Duì Yào related' + categoryRelation + ' combines ' + title + '.';
             }
             var relation = '';
             var formulaNames = formulas.map(function(formula) {
                 var name = String(formula.name || '').trim();
                 var englishName = String(formula.englishName || '').trim();
-                return name + (englishName ? ', ' + englishName : '');
+                return name + (englishName
+                    ? (isSpanish ? ' ([[en:' + englishName + ']])' : ', ' + englishName)
+                    : '');
             }).filter(Boolean);
             if (formulaNames.length === 1) {
                 relation = (isSpanish
@@ -2128,12 +2134,26 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
+    function installEnglishFormulaNarrations(root) {
+        if (!isSpanish) return;
+        var names = Array.from(root.querySelectorAll('[data-formula-english-speech]'));
+        if (root.matches && root.matches('[data-formula-english-speech]')) names.unshift(root);
+        names.forEach(function(name) {
+            var englishName = (name.getAttribute('data-formula-english-speech') || '')
+                .replace(/^\s*\(|\)\s*$/g, '')
+                .trim();
+            if (!englishName) return;
+            name.replaceWith(document.createTextNode(' ([[en:' + englishName + ']]) '));
+        });
+    }
+
     function extractText(element) {
         if (!element) return '';
         var clone = element.cloneNode(true);
         installComparisonNarrations(clone);
         installContextTableNarrations(clone);
         installDuiYaoNarrations(clone);
+        installEnglishFormulaNarrations(clone);
         installFormulaRiskNarrations(clone);
         clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore],.formula-study-guide__domain-badge').forEach(function(node) {
             node.remove();
@@ -2280,15 +2300,23 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             .trim();
     }
 
-    function splitSpeechText(text) {
-        var cleaned = normalizeSpeechText(text);
+    function normalizeEnglishFormulaText(value) {
+        return String(value || '').normalize('NFC')
+            .replace(/[*＊]+/g, '')
+            .replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .replace(/\s+([,.!?])/g, '$1')
+            .trim();
+    }
+
+    function appendSpeechChunks(chunks, value, chunkLanguage, englishFormula) {
+        var cleaned = englishFormula ? normalizeEnglishFormulaText(value) : normalizeSpeechText(value);
         var sentences = cleaned.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
-        var chunks = [];
         sentences.forEach(function(sentence) {
             sentence = sentence.trim();
-            if (!sentence) return;
+            if (!sentence || !/[A-Za-zÀ-ž0-9]/.test(sentence)) return;
             if (sentence.length <= 280) {
-                chunks.push(sentence);
+                chunks.push({text: sentence, lang: chunkLanguage});
                 return;
             }
             var parts = sentence.split(/,\s+/);
@@ -2296,14 +2324,27 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             parts.forEach(function(part) {
                 var candidate = current ? current + ', ' + part : part;
                 if (candidate.length > 280 && current) {
-                    chunks.push(current + '.');
+                    chunks.push({text: current + '.', lang: chunkLanguage});
                     current = part;
                 } else {
                     current = candidate;
                 }
             });
-            if (current) chunks.push(current);
+            if (current) chunks.push({text: current, lang: chunkLanguage});
         });
+    }
+
+    function splitSpeechText(text) {
+        var chunks = [];
+        var marker = /\(\[\[en:([^\]]+)\]\]\)/g;
+        var cursor = 0;
+        var match;
+        while ((match = marker.exec(String(text || ''))) !== null) {
+            appendSpeechChunks(chunks, String(text).slice(cursor, match.index), language, false);
+            appendSpeechChunks(chunks, match[1], 'en-US', true);
+            cursor = marker.lastIndex;
+        }
+        appendSpeechChunks(chunks, String(text || '').slice(cursor), language, false);
         return chunks;
     }
 
@@ -2345,6 +2386,15 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var saved = voices.find(function(voice) { return voice.name === stored; });
             if (saved) return saved;
         }
+        var natural = /natural|neural|premium|enhanced|online|google|microsoft|samantha|daniel|ava|aria|jorge|helena|monica/i;
+        return voices.find(function(voice) { return natural.test(voice.name); }) || voices[0] || null;
+    }
+
+    function voiceForLanguage(targetLanguage) {
+        var prefix = String(targetLanguage || '').slice(0, 2).toLowerCase();
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
+        });
         var natural = /natural|neural|premium|enhanced|online|google|microsoft|samantha|daniel|ava|aria|jorge|helena|monica/i;
         return voices.find(function(voice) { return natural.test(voice.name); }) || voices[0] || null;
     }
@@ -2403,10 +2453,16 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             finishReading();
             return;
         }
-        var utterance = new SpeechSynthesisUtterance(speechChunks[currentChunk]);
-        utterance.lang = language;
+        var chunk = speechChunks[currentChunk];
+        var chunkText = typeof chunk === 'string' ? chunk : chunk.text;
+        var chunkLanguage = typeof chunk === 'string' ? language : (chunk.lang || language);
+        var utterance = new SpeechSynthesisUtterance(chunkText);
+        utterance.lang = chunkLanguage;
         utterance.rate = 1;
-        if (selectedVoice) utterance.voice = selectedVoice;
+        var chunkVoice = chunkLanguage.slice(0, 2).toLowerCase() === language.slice(0, 2).toLowerCase()
+            ? selectedVoice
+            : voiceForLanguage(chunkLanguage);
+        if (chunkVoice) utterance.voice = chunkVoice;
         utterance.onend = function() {
             if (activeSession !== sessionId || paused) return;
             currentChunk += 1;
@@ -3080,6 +3136,7 @@ echo $OUTPUT->header();
                     ? '/study-guide/comparisons/dui-yao-es.html'
                     : '/study-guide/comparisons/dui-yao.html';
                 $duiyaoindexanchor = (string) ($selectedguide['relatedDuiYaoAnchor'] ?? 'cough-phlegm');
+                $duiyaocategoryname = $ises ? $selected['nameEs'] : $selected['name'];
                 $duiyaoreturnfocusmap = [
                     'tonify-chapter-8' => 'tonify',
                     'stabilize-bind-chapter-9' => 'stabilize-bind',
@@ -3115,8 +3172,8 @@ echo $OUTPUT->header();
                                 : 'Appendix B of the guideline is the official list of herb pairs, known as Duì Yào, included in the study content.'); ?></p>
                             <p><?php echo s($ises ? $selectedguide['relatedDuiYaoTextEs'] : $selectedguide['relatedDuiYaoText']); ?></p>
                             <p class="formula-study-guide__dui-yao-study-intro"><?php echo s($ises
-                                ? 'A continuación, comenzaremos a estudiar individualmente los Duì Yào relacionados con esta categoría.'
-                                : 'Next, we will begin studying the Duì Yào related to this category one at a time.'); ?></p>
+                                ? 'A continuación, comenzaremos a estudiar individualmente los Duì Yào relacionados con la categoría ' . $duiyaocategoryname . '.'
+                                : 'Next, we will begin studying the Duì Yào related to the ' . $duiyaocategoryname . ' category one at a time.'); ?></p>
                         </div>
                         <span class="formula-study-guide__dui-yao-count" data-read-aloud-ignore><?php echo s(count($selectedguide['relatedDuiYao']) . ($ises ? ' parejas relacionadas' : ' related pairs')); ?></span>
                     </header>
@@ -3134,14 +3191,19 @@ echo $OUTPUT->header();
                             $duiyaosecondlatin = (string) ($herblatinbyname[$duiyaoplainherbs[1] ?? ''] ?? '');
                             $duiyaopharmaceuticaltitle = implode(' + ', array_filter([$duiyaofirstlatin, $duiyaosecondlatin]));
                             $duiyaorelatedformulaidentities = $getrelatedformulaidentities((string) $duiyaopair['formulas']);
+                            $duiyaoenglishformulanames = array_values(array_filter(array_map(
+                                static fn(array $identity): string => trim((string) ($identity['englishName'] ?? '')),
+                                $duiyaorelatedformulaidentities
+                            )));
+                            $duiyaoformulasdisplay = preg_replace('/[.\s]+$/u', '', trim((string) $duiyaopair['formulas'])) ?? trim((string) $duiyaopair['formulas']);
                             $duiyaorelatedformulasjson = json_encode($duiyaorelatedformulaidentities, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                             ?>
-                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-related-position="<?php echo (int) $duiyaoindex + 1; ?>" data-dui-yao-related-formulas="<?php echo s($duiyaorelatedformulasjson === false ? '[]' : $duiyaorelatedformulasjson); ?>" data-dui-yao-first-name="<?php echo s($duiyaofirstname); ?>" data-dui-yao-first-latin="<?php echo s($duiyaofirstlatin); ?>" data-dui-yao-second-name="<?php echo s($duiyaosecondname); ?>" data-dui-yao-second-latin="<?php echo s($duiyaosecondlatin); ?>" href="<?php echo $duiyaourl->out(false); ?>">
+                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-related-position="<?php echo (int) $duiyaoindex + 1; ?>" data-dui-yao-category-name="<?php echo s($duiyaocategoryname); ?>" data-dui-yao-related-formulas="<?php echo s($duiyaorelatedformulasjson === false ? '[]' : $duiyaorelatedformulasjson); ?>" data-dui-yao-first-name="<?php echo s($duiyaofirstname); ?>" data-dui-yao-first-latin="<?php echo s($duiyaofirstlatin); ?>" data-dui-yao-second-name="<?php echo s($duiyaosecondname); ?>" data-dui-yao-second-latin="<?php echo s($duiyaosecondlatin); ?>" href="<?php echo $duiyaourl->out(false); ?>">
                                 <span class="formula-study-guide__dui-yao-number" data-read-aloud-ignore><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>
                                 <h5><?php echo s($duiyaopair['title']); ?></h5>
                                 <span class="formula-study-guide__dui-yao-pharmaceutical" data-read-aloud-ignore><?php echo s($duiyaopharmaceuticaltitle); ?></span>
                                 <p><?php echo s($ises ? $duiyaopair['actionEs'] : $duiyaopair['action']); ?></p>
-                                <small><strong><?php echo $ises ? 'Vínculo con fórmula del guideline:' : 'Guideline formula link:'; ?></strong> <?php echo s($duiyaopair['formulas']); ?><br><span data-read-aloud-ignore><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></span></small>
+                                <small><strong><?php echo $ises ? 'Vínculo con fórmula del guideline:' : 'Guideline formula link:'; ?></strong> <?php echo s($duiyaoformulasdisplay); ?><?php if ($duiyaoenglishformulanames !== []): ?> <span class="formula-study-guide__dui-yao-formula-translation" lang="en" data-formula-english-speech="<?php echo s(implode('; ', $duiyaoenglishformulanames)); ?>"><?php echo s('(' . implode('; ', $duiyaoenglishformulanames) . ')'); ?></span><?php endif; ?>.<br><span data-read-aloud-ignore><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></span></small>
                             </a>
                         <?php endforeach; ?>
                     </div>
@@ -3178,7 +3240,7 @@ echo $OUTPUT->header();
                                         <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                             <?php echo s($displayformulaname($row[0])); ?>
                                             <?php if ($formulaenglishname !== ''): ?>
-                                                <span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
+                                                <span class="formula-study-guide__formula-translation" lang="en" data-formula-english-speech="<?php echo s($formulaenglishname); ?>"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -3852,7 +3914,7 @@ echo $OUTPUT->header();
                                                 <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                                     <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($formulaenglishname !== ''): ?>
-                                                        <span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
+                                                        <span class="formula-study-guide__formula-translation" lang="en" data-formula-english-speech="<?php echo s($formulaenglishname); ?>"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -3879,7 +3941,7 @@ echo $OUTPUT->header();
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel . ' —'); ?></span>
                             <h4><?php echo s($displayformulaname($formula['name'])); ?></h4>
-                            <?php if ($formulaenglishname !== ''): ?><span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span><?php endif; ?>
+                            <?php if ($formulaenglishname !== ''): ?><span class="formula-study-guide__formula-translation" lang="en" data-formula-english-speech="<?php echo s($formulaenglishname); ?>"><?php echo s('(' . $formulaenglishname . ')'); ?></span><?php endif; ?>
                             <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
@@ -4006,7 +4068,7 @@ echo $OUTPUT->header();
                                                 <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                                     <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($formulaenglishname !== ''): ?>
-                                                        <span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
+                                                        <span class="formula-study-guide__formula-translation" lang="en" data-formula-english-speech="<?php echo s($formulaenglishname); ?>"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
