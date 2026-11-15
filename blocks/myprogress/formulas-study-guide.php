@@ -326,9 +326,20 @@ foreach ($officialroster['formulas'] as $officialformula) {
 $officialformulaaliases = [
     'Jin Gui Shen Qi Wan' => 'Shen Qi Wan',
 ];
-$getofficialformula = static function(string $name) use ($officialformulasbyname, $officialformulaaliases): ?array {
-    $officialname = $officialformulaaliases[$name] ?? $name;
-    return $officialformulasbyname[$officialname] ?? null;
+$formulaenglishnamesbyname = [];
+foreach ($officialroster['formulas'] as $officialformula) {
+    $formulaenglishnamesbyname[$officialformula['name']] = $officialformula['englishName'];
+}
+foreach ($data['supplementalFormulas'] as $supplementalformula) {
+    $formulaenglishnamesbyname[$supplementalformula['name']] = $supplementalformula['englishName'];
+}
+$formulaenglishnamealiases = [
+    'Jin Gui Shen Qi Wan' => 'Shen Qi Wan',
+    'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)',
+];
+$getformulaenglishname = static function(string $name) use ($formulaenglishnamesbyname, $formulaenglishnamealiases): string {
+    $lookupname = $formulaenglishnamealiases[$name] ?? $name;
+    return trim((string) ($formulaenglishnamesbyname[$lookupname] ?? ''));
 };
 $isofficialformula = static function(string $name) use ($officialformulasbyname, $officialformulaaliases): bool {
     $officialname = $officialformulaaliases[$name] ?? $name;
@@ -1842,7 +1853,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     }
 
     function addSentenceBoundaries(root) {
-        root.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li,dt,dd,summary,th,td,figcaption,blockquote,.formula-study-guide__fact,.formula-study-guide__category>strong,.formula-study-guide__category-meta,.formula-study-guide__board-status').forEach(function(element) {
+        root.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li,dt,dd,summary,th,td,figcaption,blockquote,.formula-study-guide__fact,.formula-study-guide__formula-translation,.formula-study-guide__category>strong,.formula-study-guide__category-meta,.formula-study-guide__board-status').forEach(function(element) {
             var text = (element.textContent || '').trim();
             if (text && !/[.!?:]$/.test(text)) element.appendChild(document.createTextNode('. '));
         });
@@ -2791,8 +2802,7 @@ echo $OUTPUT->header();
                             <tbody>
                                 <?php foreach ($comparerows as $row): ?>
                                     <?php
-                                    $officialmatch = $getofficialformula($row[0]);
-                                    $formulaenglishname = trim((string) ($officialmatch['englishName'] ?? ''));
+                                    $formulaenglishname = $getformulaenglishname($row[0]);
                                     ?>
                                     <tr>
                                         <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
@@ -3391,6 +3401,10 @@ echo $OUTPUT->header();
                 $risklabel = $tier === 'critical'
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
                     : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : ($ises ? 'Seguridad revisada' : 'Safety reviewed'));
+                $formulaenglishname = trim((string) ($formula['englishName'] ?? ''));
+                if ($formulaenglishname === '') {
+                    $formulaenglishname = $getformulaenglishname($formula['name']);
+                }
                 $formulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $formula['number']);
                 $practiceurl = null;
                 if (!$issupplemental && !$isintegratedofficialprofile) {
@@ -3455,8 +3469,7 @@ echo $OUTPUT->header();
                                     <tbody>
                                         <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
                                             <?php
-                                            $officialmatch = $getofficialformula($row[0]);
-                                            $formulaenglishname = trim((string) ($officialmatch['englishName'] ?? ''));
+                                            $formulaenglishname = $getformulaenglishname($row[0]);
                                             ?>
                                             <tr>
                                                 <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
@@ -3492,7 +3505,8 @@ echo $OUTPUT->header();
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
                             <h4><?php echo s($displayformulaname($formula['name'])); ?></h4>
-                            <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($formula['englishName']); ?> · <?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
+                            <?php if ($formulaenglishname !== ''): ?><span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span><?php endif; ?>
+                            <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
                             <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Ficha detallada del núcleo' : 'Detailed core profile'); ?></span><?php endif; ?>
@@ -3610,8 +3624,7 @@ echo $OUTPUT->header();
                                     <tbody>
                                         <?php foreach ($comparerows as $row): ?>
                                             <?php
-                                            $officialmatch = $getofficialformula($row[0]);
-                                            $formulaenglishname = trim((string) ($officialmatch['englishName'] ?? ''));
+                                            $formulaenglishname = $getformulaenglishname($row[0]);
                                             ?>
                                             <tr>
                                                 <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>

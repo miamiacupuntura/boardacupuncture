@@ -144,7 +144,10 @@ grep -Fq "'. Sus síntomas diferenciales son ' + signs" "$TEMP_DIR/moodle/formul
 grep -Fq 'data-formula-english-name' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'Nombre en inglés: ' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__formula-translation' "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq '$getofficialformula' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq '$getformulaenglishname' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq '$formulaenglishnamesbyname' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$formulaenglishname = \$getformulaenglishname(\$formula['name']);" "$TEMP_DIR/moodle/formulas-study-guide.php"
 if grep -Fq 'En la secuencia detallada del núcleo · Fórmula ' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'detailed core sequence · Formula ' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
     echo "ERROR: Formula Study Guide todavía muestra la numeración interna en tablas comparativas." >&2
