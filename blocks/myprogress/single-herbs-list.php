@@ -532,7 +532,7 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
             'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu, Tsei', 'Ma Huang': 'Má, Juáng',
             'Gui Zhi': 'Guéi, Yí', 'Zi Su Ye': 'Tzí, Su, Yé', 'Xi Xin': 'Shí, Shín',
             'Bai Zhi': 'Bái, Yí', 'Fang Feng': 'Fang, Feng', 'Qiang Huo': 'Chiang, Juó',
-            'Jing Jie': 'Ying, Yie', 'Sheng Jiang': 'Sheng, Chiang', 'Xing Ren': 'Shing, Rén'
+            'Jing Jie': 'Ying, Yie', 'Sheng Jiang': 'Sheng, Chiang', 'Xing Ren': 'Xing, Rén'
         } : {
             'Bo He': 'Bo Huh', 'Niu Bang Zi': 'Nee-oh, Bahng, Dzuh', 'Chan Tui': 'Chahn, Tway',
             'Sang Ye': 'Sahng, Yeh', 'Ju Hua': 'Joo, Hwah', 'Man Jing Zi': 'Mahn, Jing, Dzuh',

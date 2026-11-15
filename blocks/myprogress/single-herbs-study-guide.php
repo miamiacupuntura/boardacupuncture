@@ -2806,7 +2806,7 @@ ob_start();
                 'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
                 'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu, Tsei', 'Jin Yin Hua': 'Yin Yin Juá',
                 'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin',
-                'Xing Ren': 'Shing Rén'
+                'Xing Ren': 'Xing, Rén'
             }
         };
 

@@ -2096,7 +2096,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     }
 
     function normalizeSpeechText(value) {
-        var speechText = String(value || '');
+        var speechText = String(value || '').normalize('NFC');
         if (isSpanish) {
             var pinyinPronunciations = [
                 ['Ai Ye', 'Ài Yè', 'Ái Yé'],
@@ -2168,7 +2168,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 ['Tao Ren', 'Táo Rén', 'Táo Rén'],
                 ['Tian Ma', 'Tiān Má', 'Tián Má'],
                 ['Ting Li Zi', 'Tíng Lì Zǐ', 'Ting Lí Tzí'],
-                ['Xing Ren', 'Xìng Rén', 'Shing Rén'],
+                ['Xing Ren', 'Xìng Rén', 'Xing, Rén'],
                 ['Xiang Fu', 'Xiāng Fù', 'Shiáng Fú'],
                 ['Xie Bai', 'Xiè Bái', 'Shié Bái'],
                 ['Xin Yi Hua', 'Xīn Yí Huā', 'Shin Yí Juá'],
