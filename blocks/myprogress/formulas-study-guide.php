@@ -3074,6 +3074,7 @@ echo $OUTPUT->header();
 .formula-study-guide__formula-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:13px}.formula-study-guide__formula-label{display:block;margin-bottom:4px;color:#08746f;font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.formula-study-guide__formula h4{margin:0;font-size:23px;line-height:1.25}.formula-study-guide__badges{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.formula-study-guide__core{padding:5px 9px;border-radius:999px;background:#dff4ee;color:#0b675b;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}
 .formula-study-guide__risk{max-width:260px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:11px;font-weight:900;line-height:1.25;text-align:center;text-transform:uppercase;white-space:normal}.formula-study-guide__risk--high{background:#fff0d8;color:#955000}.formula-study-guide__risk--critical{background:#fde2df;color:#a12218}
 .formula-study-guide__formula-pattern{margin:0 0 15px;color:#334155;font-size:16px;line-height:1.55}
+.formula-study-guide__safety-summary{margin:-2px 0 14px;padding:9px 11px;border-left:4px solid #d38a19;border-radius:7px;background:#fff7e8;color:#704508;font-size:13px;line-height:1.45}.formula-study-guide__safety-summary--critical{border-left-color:#bd3429;background:#fff0ee;color:#7e211a}
 .formula-study-guide__facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__fact{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__fact strong{display:block;margin-bottom:5px;color:#123246;font-size:13px}.formula-study-guide__fact span{display:block;color:#52677a;line-height:1.5}
 .formula-study-guide__exam-focus{margin:14px 0 0;padding:11px 14px;border-left:4px solid #f77e25;border-radius:6px;background:#fff7ed;color:#6e481f;line-height:1.5}.formula-study-guide__exam-focus strong{color:#7c3f0a}
 .formula-study-guide__deep-dive{margin-top:12px;border:1px solid #d5e4e1;border-radius:8px;background:#f8fbfa}.formula-study-guide__deep-dive summary{padding:10px 13px;color:#17675e;font-weight:800;cursor:pointer}.formula-study-guide__deep-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;padding:0 13px 13px}.formula-study-guide__deep-grid p{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__deep-grid strong{display:block;margin-bottom:4px;color:#17232a}
@@ -4258,10 +4259,25 @@ echo $OUTPUT->header();
                     $risklabel = $formula['name'] === 'Tian Wang Bu Xin Dan'
                         ? ($ises ? 'Riesgo de mercurio: Zhu Sha histórico' : 'Mercury risk: historical Zhu Sha')
                         : ($ises
-                            ? 'Advertencia crítica: lee los detalles de seguridad'
-                            : 'Critical warning: read the safety details');
+                            ? 'Advertencia crítica: consulta el aviso inferior'
+                            : 'Critical warning: see the warning below');
                 } else {
-                    $risklabel = $tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : '';
+                    $risklabel = $tier === 'high'
+                        ? ($ises ? 'Precaución alta: consulta el aviso inferior' : 'High caution: see the warning below')
+                        : '';
+                }
+                $safetysummary = '';
+                if (in_array($tier, ['high', 'critical'], true)) {
+                    $safetytext = trim((string) ($ises ? $formula['safetyEs'] : $formula['safety']));
+                    if ($formula['name'] === 'Ding Zhi Wan') {
+                        $safetysummary = $ises
+                            ? 'No es una elección general para deficiencia de Sangre o Yin. Confusión grave, manía, ideas suicidas, síncope o cambios neurológicos requieren evaluación médica urgente.'
+                            : 'Not a general choice for Blood or Yin deficiency. Severe confusion, mania, suicidal thoughts, syncope, or neurologic changes require urgent medical assessment.';
+                    } elseif (preg_match('/^(.+?[.!?])(?:\\s|$)/u', $safetytext, $safetymatch) === 1) {
+                        $safetysummary = trim($safetymatch[1]);
+                    } else {
+                        $safetysummary = $safetytext;
+                    }
                 }
                 $kingherbsplural = preg_match('/[,\/]/', (string) $formula['kings']) === 1;
                 $kingherbsdisplay = $renderherbswithenglish((string) $formula['kings']);
@@ -4380,6 +4396,9 @@ echo $OUTPUT->header();
                         </div>
                     </header>
                     <p class="formula-study-guide__formula-pattern"><strong><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></strong> <?php echo s($ises ? $formula['patternEs'] : $formula['pattern']); ?></p>
+                    <?php if ($safetysummary !== ''): ?>
+                        <p class="formula-study-guide__safety-summary formula-study-guide__safety-summary--<?php echo s($tier); ?>"><strong><?php echo $ises ? 'Advertencia de seguridad:' : 'Safety warning:'; ?></strong> <?php echo s($safetysummary); ?></p>
+                    <?php endif; ?>
                     <div class="formula-study-guide__facts">
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Acción:' : 'Action:'; ?></strong> <span><?php echo s($ises ? $formula['actionEs'] : $formula['action']); ?></span></div>
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></strong> <span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
