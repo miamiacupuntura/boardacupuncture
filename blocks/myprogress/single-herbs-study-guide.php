@@ -2722,7 +2722,7 @@ ob_start();
             });
             clone.querySelectorAll([
                 'nav', 'button', 'form', 'select', 'option', 'script', 'style', 'svg', 'img',
-                '[hidden]', '[aria-hidden="true"]', '.single-herbs-guide__category-path',
+                '[hidden]', '[aria-hidden="true"]', '[data-read-aloud-ignore]', '.single-herbs-guide__category-path',
                 '.single-herbs-guide__source', '.single-herbs-guide__yang-controls',
                 '.single-herbs-guide__final-controls',
                 '.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge',
@@ -3160,7 +3160,7 @@ ob_start();
                         return NodeFilter.FILTER_REJECT;
                     }
                     const parent = node.parentElement;
-                    if (!parent || isGraphMetadataElement(parent) || parent.closest('script, style, nav, form, [hidden], [aria-hidden="true"], .single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual, .single-herbs-guide__yang-charts')) {
+                    if (!parent || isGraphMetadataElement(parent) || parent.closest('script, style, nav, form, button, [hidden], [aria-hidden="true"], [data-read-aloud-ignore], .single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual, .single-herbs-guide__yang-charts')) {
                         return NodeFilter.FILTER_REJECT;
                     }
                     try {
@@ -3228,7 +3228,7 @@ ob_start();
             const toolbarBottom = readAloudToolbar.getBoundingClientRect().bottom + 4;
             const viewportBottom = window.innerHeight || document.documentElement.clientHeight;
             const candidates = Array.from(readAloudRoot.querySelectorAll(selector)).filter(function(element) {
-                if (isGraphMetadataElement(element) || element.closest('[hidden], nav, form, [aria-hidden="true"], .single-herbs-guide__yang-visual, .single-herbs-guide__yang-charts')) {
+                if (isGraphMetadataElement(element) || element.closest('[hidden], nav, form, button, [aria-hidden="true"], [data-read-aloud-ignore], .single-herbs-guide__yang-visual, .single-herbs-guide__yang-charts')) {
                     return false;
                 }
                 const style = window.getComputedStyle(element);
@@ -3905,6 +3905,7 @@ ob_start();
     const closeAll = document.createElement('button');
     const questionList = document.createElement('div');
     controls.className = 'single-herbs-guide__final-controls';
+    controls.dataset.readAloudIgnore = 'true';
     controls.setAttribute('aria-label', isSpanishQuestions ? 'Controles de respuestas del capítulo' : 'Chapter answer controls');
     openAll.type = 'button';
     closeAll.type = 'button';

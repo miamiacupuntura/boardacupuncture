@@ -210,6 +210,8 @@ grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/single-herbs-study-g
 grep -Fq 'cachedSelectedStudyText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "clone.querySelectorAll('[data-read-aloud-text], [data-read-aloud-summary], [data-read-aloud-extended]')" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "closest('[data-read-aloud-text], [data-read-aloud-summary], [data-read-aloud-extended]')" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "controls.dataset.readAloudIgnore = 'true';" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "button, [hidden], [aria-hidden=\"true\"], [data-read-aloud-ignore]" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'installStructuredNarrations' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'readAloudAlternativeText' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'acupuncturetests-reader-explanation-mode' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
