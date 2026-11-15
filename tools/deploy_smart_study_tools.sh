@@ -106,8 +106,14 @@ if grep -RFq 'Yang, the book author, gives it' "$TEMP_DIR/moodle" "$TEMP_DIR/dat
     echo "ERROR: todavía queda una puntuación de Yang presentada sin interpretación comparativa." >&2
     exit 1
 fi
+if grep -REiq 'figure [0-9]+\.[0-9]+[^.]*gives it [0-9]+|figura [0-9]+\.[0-9]+[^.]*le (da|asigna) [0-9]+' "$TEMP_DIR/moodle" "$TEMP_DIR/data"; then
+    echo "ERROR: una Huella única todavía presenta el valor de una figura sin interpretación." >&2
+    exit 1
+fi
 grep -Fq 'Bai Shao muestra una acción fuerte para nutrir Sangre' "$TEMP_DIR/data/single-herb-rich-profiles.json"
 grep -Fq 'Bai Zhu es una tónica moderada de Qi centrada en Bazo' "$TEMP_DIR/data/single-herb-rich-profiles.json"
+grep -Fq 'Ba Ji Tian la mejor entre Xian Mao, Ba Ji Tian y Yin Yang Huo' "$TEMP_DIR/data/single-herb-rich-profiles.json"
+grep -Fq 'Rou Gui calienta Riñón de forma más lenta y sostenida' "$TEMP_DIR/data/single-herb-rich-profiles.json"
 grep -Fq "\$ises ? 'Dosis' : 'Dosage'" "$TEMP_DIR/moodle/single-herbs-list.php"
 
 grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
