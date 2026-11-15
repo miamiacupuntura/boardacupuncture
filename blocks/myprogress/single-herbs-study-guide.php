@@ -2794,7 +2794,8 @@ ob_start();
                 'Chan Tui': 'chahn tway', 'Ju Hua': 'jyoo hwah', 'Sheng Ma': 'shung mah',
                 'Man Jing Zi': 'mahn jeeng dzuh', 'Ge Gen': 'guh gun', 'Chai Hu': 'chye hoo',
                 'Dan Dou Chi': 'dahn doh chir', 'Mu Zei': 'moo dzay', 'Jin Yin Hua': 'jeen yin hwah',
-                'Lian Qiao': 'lyen chyow', 'Yin Qiao San': 'yin chyow sahn', 'Sang Ju Yin': 'sahng jyoo yin'
+                'Lian Qiao': 'lyen chyow', 'Yin Qiao San': 'yin chyow sahn', 'Sang Ju Yin': 'sahng jyoo yin',
+                'Xing Ren': 'sheeng run'
             },
             es: {
                 'Ma Huang': 'Ma Juang', 'Gui Zhi': 'Guéi Yi', 'Zi Su Ye': 'Dsi Su Yé',
@@ -2804,7 +2805,8 @@ ob_start();
                 'Chan Tui': 'Chan Tuéi', 'Ju Hua': 'Yú Juá', 'Sheng Ma': 'Sheng Má',
                 'Man Jing Zi': 'Man Ying Dsi', 'Ge Gen': 'Gue Guen', 'Chai Hu': 'Chái Ju',
                 'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu, Tsei', 'Jin Yin Hua': 'Yin Yin Juá',
-                'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin'
+                'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin',
+                'Xing Ren': 'Shing Rén'
             }
         };
 
