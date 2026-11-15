@@ -151,13 +151,16 @@ grep -Fq 'installFormulaRiskNarrations' "$TEMP_DIR/moodle/formulas-study-guide.p
 grep -Fq "pattern.textContent = riskText + (isSpanish ? ' — Patrón: ' : ' — Pattern: ') + patternText;" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "<?php echo s(\$risklabel . ' —'); ?>" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Riesgo de mercurio: Zhu Sha histórico' : 'Mercury risk: historical Zhu Sha'" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "'Critical warning: see the warning below'" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "'High caution: see the warning below'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$formula['name'] === 'Ding Zhi Wan'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'No indicada como elección general para deficiencia de Sangre o Yin'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "(\$ises ? 'Precaución alta' : 'High caution')" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "strlen(\$candidate) > 82" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'Confusión grave, manía, ideas suicidas, síncope o cambios neurológicos requieren evaluación médica urgente.' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__safety-summary' "$TEMP_DIR/moodle/formulas-study-guide.php"
-if grep -Fq "'Seguridad crítica' : 'Critical safety'" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
-    echo "ERROR: Formula Study Guide todavía muestra la alerta crítica sin explicar su significado." >&2
+if grep -Fq 'see the warning below' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'consulta el aviso inferior' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq "'Seguridad crítica' : 'Critical safety'" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: Formula Study Guide todavía muestra una alerta de seguridad sin resumir la precaución." >&2
     exit 1
 fi
 grep -Fq "<?php echo s(\$formulalabel . ' —'); ?>" "$TEMP_DIR/moodle/formulas-study-guide.php"

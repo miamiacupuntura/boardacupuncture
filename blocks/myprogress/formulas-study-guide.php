@@ -4255,17 +4255,6 @@ echo $OUTPUT->header();
                 }
                 $tier = $formula['safetyTier'];
                 $isintegratedofficialprofile = !empty($formula['integratedOfficialProfile']);
-                if ($tier === 'critical') {
-                    $risklabel = $formula['name'] === 'Tian Wang Bu Xin Dan'
-                        ? ($ises ? 'Riesgo de mercurio: Zhu Sha histórico' : 'Mercury risk: historical Zhu Sha')
-                        : ($ises
-                            ? 'Advertencia crítica: consulta el aviso inferior'
-                            : 'Critical warning: see the warning below');
-                } else {
-                    $risklabel = $tier === 'high'
-                        ? ($ises ? 'Precaución alta: consulta el aviso inferior' : 'High caution: see the warning below')
-                        : '';
-                }
                 $safetysummary = '';
                 if (in_array($tier, ['high', 'critical'], true)) {
                     $safetytext = trim((string) ($ises ? $formula['safetyEs'] : $formula['safety']));
@@ -4278,6 +4267,34 @@ echo $OUTPUT->header();
                     } else {
                         $safetysummary = $safetytext;
                     }
+                }
+                $safetybadgesummary = '';
+                if ($safetysummary !== '') {
+                    if ($formula['name'] === 'Ding Zhi Wan') {
+                        $safetybadgesummary = $ises
+                            ? 'No indicada como elección general para deficiencia de Sangre o Yin'
+                            : 'Not a general choice for Blood or Yin deficiency';
+                    } else {
+                        foreach (preg_split('/\\s+/u', $safetysummary) ?: [] as $safetyword) {
+                            $candidate = trim($safetybadgesummary . ' ' . $safetyword);
+                            if ($safetybadgesummary !== '' && strlen($candidate) > 82) {
+                                break;
+                            }
+                            $safetybadgesummary = $candidate;
+                        }
+                        $safetybadgesummary = rtrim($safetybadgesummary, " \\t\\n\\r\\0\\x0B,;:.");
+                    }
+                }
+                if ($tier === 'critical') {
+                    $risklabel = $formula['name'] === 'Tian Wang Bu Xin Dan'
+                        ? ($ises ? 'Riesgo de mercurio: Zhu Sha histórico' : 'Mercury risk: historical Zhu Sha')
+                        : (($ises ? 'Advertencia crítica' : 'Critical warning')
+                            . ($safetybadgesummary !== '' ? ': ' . $safetybadgesummary : ''));
+                } else {
+                    $risklabel = $tier === 'high'
+                        ? (($ises ? 'Precaución alta' : 'High caution')
+                            . ($safetybadgesummary !== '' ? ': ' . $safetybadgesummary : ''))
+                        : '';
                 }
                 $kingherbsplural = preg_match('/[,\/]/', (string) $formula['kings']) === 1;
                 $kingherbsdisplay = $renderherbswithenglish((string) $formula['kings']);
