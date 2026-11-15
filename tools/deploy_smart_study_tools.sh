@@ -119,6 +119,10 @@ grep -Fq 'Bai Zhu es una tónica moderada de Qi centrada en Bazo' "$TEMP_DIR/dat
 grep -Fq 'Ba Ji Tian la mejor entre Xian Mao, Ba Ji Tian y Yin Yang Huo' "$TEMP_DIR/data/single-herb-rich-profiles.json"
 grep -Fq 'Rou Gui calienta Riñón de forma más lenta y sostenida' "$TEMP_DIR/data/single-herb-rich-profiles.json"
 grep -Fq 'Tian Ma no es principalmente un ancla potente' "$TEMP_DIR/data/single-herb-rich-profiles.json"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); foreach (($data["profiles"] ?? []) as $profile) { $text=(string)($profile["unique"]["en"] ?? ""); if (preg_match("/Yang, the book author|by Yang, the book author/", $text) && preg_match("/\\b[0-9]{2,3}\\b/", $text)) { fwrite(STDERR, "ERROR: numeric Yang value remains in Unique fingerprint: " . ($profile["name"] ?? "unknown") . "\n"); exit(1); } }' "$TEMP_DIR/data/single-herb-rich-profiles.json"
+grep -Fq 'shows a stronger effect on Lung Qi than on Spleen-Stomach Qi' "$TEMP_DIR/data/single-herb-rich-profiles.json"
+grep -Fq 'Zhen Zhu Mu anchors more strongly than it directly calms' "$TEMP_DIR/moodle/single-herbs-category-anchor-settle-spirit.php"
+grep -Fq 'Bei Sha Shen alongside Mai Men Dong for nourishing Lung Yin' "$TEMP_DIR/moodle/single-herbs-category-tonify-yin.php"
 grep -Fq "\$ises ? 'Dosis' : 'Dosage'" "$TEMP_DIR/moodle/single-herbs-list.php"
 
 grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"

@@ -16,7 +16,7 @@ $yintonifyherbs = [
         'identity' => $yintonifytext('Gently nourishes Lung and Stomach Yin, generates fluids, moistens intestines and clears Heart irritability.', 'Nutre suavemente Yin de Pulmón y Estómago, genera líquidos, humedece intestinos y aclara irritabilidad de Corazón.'),
         'clue' => $yintonifytext('Dry cough or thirst with irritability, insomnia, palpitations or post-febrile Qi-and-Yin injury.', 'Tos seca o sed con irritabilidad, insomnio, palpitaciones o lesión posfebril de Qi y Yin.'),
         'memory' => $yintonifytext('The three-room humidifier mists Lung, Heart and Stomach without flooding the Spleen.', 'El humidificador de tres cuartos rocía Pulmón, Corazón y Estómago sin inundar el Bazo.'),
-        'unique' => $yintonifytext('Yang, the book author, scores it 70 for Lung Yin, 80 for Heart Yin and 90 for Stomach Yin: the broadest Upper–Middle Jiao bridge in this list.', 'Yang, autor del libro, le da 70 para Yin de Pulmón, 80 para Corazón y 90 para Estómago: el puente Jiao Superior–Medio más amplio de esta lista.'),
+        'unique' => $yintonifytext('The comparison by Yang, the book author, shows that Mai Men Dong nourishes Stomach Yin most strongly, followed by Heart Yin and then Lung Yin. This makes it the broadest bridge between the Upper and Middle Jiao in the current list.', 'La comparación de Yang, autor del libro, muestra que Mai Men Dong nutre con mayor fuerza Yin de Estómago, seguido de Yin de Corazón y después Yin de Pulmón. Esto la convierte en el puente más amplio entre Jiao Superior y Medio de la lista actual.'),
         'caution' => $yintonifytext('Use cautiously with Spleen deficiency, loose stool, Dampness or Phlegm-Damp; unresolved Exterior disease can be retained by rich tonics.', 'Cautela con deficiencia de Bazo, heces sueltas, Humedad o Flema-Humedad; las tónicas ricas pueden retener un Exterior no resuelto.'),
     ],
     [
@@ -28,7 +28,7 @@ $yintonifyherbs = [
         'identity' => $yintonifytext('Strongly nourishes Stomach Yin, generates fluids, clears deficiency Heat and benefits vision through Kidney Yin.', 'Nutre fuertemente Yin de Estómago, genera líquidos, aclara Calor por deficiencia y beneficia visión mediante Yin de Riñón.'),
         'clue' => $yintonifytext('Severe thirst, dry mouth, retching or poor appetite after Heat disease, especially with visual weakness.', 'Sed intensa, boca seca, arcadas o poco apetito después de enfermedad de Calor, especialmente con debilidad visual.'),
         'memory' => $yintonifytext('The orchid drip line delivers the deepest cold water directly to the Stomach greenhouse.', 'La línea de goteo de la orquídea lleva el agua fría más profunda al invernadero del Estómago.'),
-        'unique' => $yintonifytext('Figure 14.11 by Yang, the book author ranks Shi Hu 100—the strongest current-list herb for nourishing Stomach Yin.', 'La figura 14.11 de Yang, autor del libro, coloca Shi Hu en 100—la hierba más fuerte de la lista para nutrir Yin de Estómago.'),
+        'unique' => $yintonifytext('The comparison by Yang, the book author, identifies Shi Hu as the strongest current herb for nourishing Stomach Yin.', 'La comparación de Yang, autor del libro, identifica a Shi Hu como la hierba actual más fuerte para nutrir Yin de Estómago.'),
         'caution' => $yintonifytext('Cold and potentially cloying; avoid with Spleen-Stomach deficiency Cold or Dampness. Use authenticated, legally sourced species.', 'Fría y potencialmente empalagosa; evitar con Frío por deficiencia de Bazo-Estómago o Humedad. Usar especie autenticada y de origen legal.'),
     ],
     [
@@ -52,7 +52,7 @@ $yintonifyherbs = [
         'identity' => $yintonifytext('Strongly nourishes Lung and Kidney Yin, clears deficiency Heat and moistens dry intestines.', 'Nutre fuertemente Yin de Pulmón y Riñón, aclara Calor por deficiencia y humedece intestinos secos.'),
         'clue' => $yintonifytext('Severe dry cough with thick scant sputum or blood plus night sweats, five-center Heat or wasting-thirst.', 'Tos seca intensa con esputo escaso/espeso o sangre más sudor nocturno, Calor en cinco centros o consunción-sed.'),
         'memory' => $yintonifytext('The cold asparagus root sends one deep pipe from Lung dryness down to the Kidney reservoir.', 'La raíz fría de espárrago envía una tubería profunda desde sequedad de Pulmón al depósito de Riñón.'),
-        'unique' => $yintonifytext('Coldest and strongest Lung-Yin herb in question 27 from Yang, the book author; figures give it 80 for Lung and 100 for Kidney Yin.', 'La más fría y fuerte para Yin de Pulmón en la pregunta 27; las figuras le dan 80 para Pulmón y 100 para Riñón.'),
+        'unique' => $yintonifytext('The comparison by Yang, the book author, presents Tian Men Dong as the strongest Kidney-Yin tonic and a very strong, exceptionally cold Lung-Yin tonic.', 'La comparación de Yang, autor del libro, presenta a Tian Men Dong como la tónica más fuerte de Yin de Riñón y una tónica muy fuerte y especialmente fría de Yin de Pulmón.'),
         'caution' => $yintonifytext('Very cold and rich; avoid with Spleen deficiency Cold, loose stool, Dampness or an unresolved Exterior pathogen.', 'Muy fría y rica; evitar con Frío por deficiencia de Bazo, heces sueltas, Humedad o patógeno Exterior no resuelto.'),
     ],
     [
@@ -64,7 +64,7 @@ $yintonifyherbs = [
         'identity' => $yintonifytext('Nourishes Lung and Stomach Yin, clears mild Heat and generates fluids with a lighter action than Mai Men Dong.', 'Nutre Yin de Pulmón y Estómago, aclara Calor leve y genera líquidos con acción más ligera que Mai Men Dong.'),
         'clue' => $yintonifytext('Dry cough, dry throat, thirst and poor appetite without strong Heart irritability or deep Kidney signs.', 'Tos seca, garganta seca, sed y poco apetito sin irritabilidad fuerte de Corazón ni signos profundos de Riñón.'),
         'memory' => $yintonifytext('The northern sand-root is the light misting nozzle for Lung and Stomach.', 'La raíz de arena del norte es la boquilla de rocío ligero para Pulmón y Estómago.'),
-        'unique' => $yintonifytext('Yang, the book author, rates it equal to Mai Men Dong at 70 for Lung Yin, but lighter and weaker for Heat; it lacks Mai Men Dong’s Heart route.', 'Yang, autor del libro, la iguala con Mai Men Dong en 70 para Pulmón, pero es más ligera y menos fuerte contra Calor; no entra en Corazón.'),
+        'unique' => $yintonifytext('The comparison by Yang, the book author, places Bei Sha Shen alongside Mai Men Dong for nourishing Lung Yin, but Bei Sha Shen is lighter, clears Heat less strongly and lacks the Heart route of Mai Men Dong.', 'La comparación de Yang, autor del libro, coloca a Bei Sha Shen junto a Mai Men Dong para nutrir Yin de Pulmón, pero Bei Sha Shen es más ligera, aclara Calor con menos fuerza y carece de la vía de Corazón de Mai Men Dong.'),
         'caution' => $yintonifytext('Use cautiously with cold cough, Spleen deficiency or Dampness. Distinguish Bei Sha Shen from Nan Sha Shen in source questions.', 'Cautela con tos fría, deficiencia de Bazo o Humedad. Distinguir Bei Sha Shen de Nan Sha Shen en las preguntas.'),
     ],
     [

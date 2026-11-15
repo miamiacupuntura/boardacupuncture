@@ -28,7 +28,7 @@ $bindherbs = [
         'identity' => $bindtext('Contains Lung Qi, stops sweating, secures Essence, generates fluids and calms the Heart Spirit.', 'Contiene Qi de Pulmón, detiene sudor, asegura Esencia, genera líquidos y calma Shen de Corazón.'),
         'clue' => $bindtext('Chronic cough, spontaneous/night sweating, thirst, palpitations or seminal leakage in one deficiency pattern.', 'Tos crónica, sudor espontáneo/nocturno, sed, palpitaciones o pérdida seminal en un mismo patrón deficiente.'),
         'memory' => $bindtext('The five-flavor berry turns five locks: Lung, sweat, fluids, Essence and Shen.', 'La baya de cinco sabores gira cinco cerraduras: Pulmón, sudor, líquidos, Esencia y Shen.'),
-        'unique' => $bindtext('Broadest stabilizer in the group: Yang, the book author, scores 100 for Lung, sweating, intestinal leakage and Kidney Essence.', 'La estabilizadora más amplia: Yang, autor del libro, le da 100 para Pulmón, sudor, intestino y Esencia de Riñón.'),
+        'unique' => $bindtext('The comparison by Yang, the book author, identifies Wu Wei Zi as the broadest and strongest stabilizer across Lung Qi, sweating, intestinal leakage and Kidney Essence.', 'La comparación de Yang, autor del libro, identifica a Wu Wei Zi como la estabilizadora más amplia y fuerte para Qi de Pulmón, sudoración, pérdidas intestinales y Esencia de Riñón.'),
         'caution' => $bindtext('May trap an Exterior pathogen, internal Heat or Phlegm; review medicine interactions and hepatic monitoring when clinically relevant.', 'Puede encerrar Exterior, Calor interno o Flema; revisar interacciones y control hepático cuando corresponda.'),
     ],
     [
@@ -52,7 +52,7 @@ $bindherbs = [
         'identity' => $bindtext('Warms the Middle, moves Qi and strongly binds chronic diarrhea from Spleen-Kidney deficiency Cold.', 'Calienta el Centro, mueve Qi y contiene diarrea crónica por Frío-deficiencia de Bazo-Riñón.'),
         'clue' => $bindtext('Cock-crow or chronic watery diarrhea with cold abdominal pain, poor appetite and no Damp-Heat signs.', 'Diarrea de canto del gallo o acuosa crónica con dolor abdominal frío, poco apetito y sin Humedad-Calor.'),
         'memory' => $bindtext('Nutmeg is the warm cork in the cold leaking bowel bottle.', 'La nuez moscada es el corcho tibio de la botella intestinal fría que gotea.'),
-        'unique' => $bindtext('Warmest bowel binder in the current list and the one that also moves Middle-Jiao Qi; Yang, the book author, scores it 60 for diarrhea.', 'La ligadora intestinal más tibia de la lista y la que también mueve Qi del Centro; Yang, autor del libro, le da 60 para diarrea.'),
+        'unique' => $bindtext('The comparison by Yang, the book author, presents Rou Dou Kou as a moderate diarrhea binder. It is the warmest intestinal binder in the current list and also moves Middle-Jiao Qi.', 'La comparación de Yang, autor del libro, presenta a Rou Dou Kou como una ligadora moderada para diarrea. Es la astringente intestinal más tibia de la lista actual y también mueve Qi del Jiao Medio.'),
         'caution' => $bindtext('Do not use for acute infectious or Damp-Heat diarrhea. Excess nutmeg can cause serious neurologic toxicity.', 'No usar para diarrea infecciosa aguda o Humedad-Calor. El exceso de nuez moscada puede causar toxicidad neurológica grave.'),
     ],
     [
@@ -64,7 +64,7 @@ $bindherbs = [
         'identity' => $bindtext('Tonifies Spleen, stops diarrhea, nourishes Heart, secures Essence and stabilizes vaginal discharge.', 'Tonifica Bazo, detiene diarrea, nutre Corazón, asegura Esencia y estabiliza leucorrea.'),
         'clue' => $bindtext('Chronic diarrhea or leukorrhea with poor appetite plus seminal leakage, palpitations or irritability.', 'Diarrea crónica o leucorrea con poco apetito más pérdida seminal, palpitaciones o irritabilidad.'),
         'memory' => $bindtext('Lotus seed builds the Spleen floor while locking the Kidney basement and calming the Heart attic.', 'La semilla de loto construye el piso de Bazo, cierra el sótano de Riñón y calma el ático de Corazón.'),
-        'unique' => $bindtext('Only current binder that simultaneously tonifies Spleen and nourishes Heart; Yang, the book author, scores 60 for diarrhea and 80 for Essence.', 'La única que simultáneamente tonifica Bazo y nutre Corazón; Yang, autor del libro, le da 60 para diarrea y 80 para Esencia.'),
+        'unique' => $bindtext('The comparison by Yang, the book author, shows that Lian Zi is stronger for stabilizing Essence than for stopping diarrhea. It uniquely combines Spleen tonification with Heart nourishment.', 'La comparación de Yang, autor del libro, muestra que Lian Zi es más fuerte para estabilizar Esencia que para detener diarrea. Combina de forma única la tonificación de Bazo con la nutrición de Corazón.'),
         'caution' => $bindtext('Avoid with constipation, food stagnation or unresolved Damp-Heat diarrhea.', 'Evitar con estreñimiento, estancamiento de alimentos o diarrea por Humedad-Calor no resuelta.'),
     ],
     [
@@ -89,7 +89,7 @@ $bindherbs = [
         'identity' => $bindtext('Directly secures Kidney Essence and stops spermatorrhea, leukorrhea and deficiency bleeding.', 'Asegura directamente Esencia de Riñón y detiene espermatorrea, leucorrea y sangrado por deficiencia.'),
         'clue' => $bindtext('Seminal or vaginal leakage is the dominant problem without the Spleen-deficiency diarrhea that points to Lian Zi.', 'Pérdida seminal o vaginal dominante sin la diarrea de Bazo que señala Lian Zi.'),
         'memory' => $bindtext('The lotus stamen is the narrow seal placed directly over the Essence outlet.', 'El estambre de loto es el sello estrecho puesto directamente sobre la salida de Esencia.'),
-        'unique' => $bindtext('More directly astringent to Kidney Essence than Lian Zi and less tonifying; Yang, the book author, scores it 80 for Essence.', 'Más directamente astringente de Esencia que Lian Zi y menos tónica; Yang, autor del libro, le da 80 para Esencia.'),
+        'unique' => $bindtext('The comparison by Yang, the book author, presents Lian Xu as a strong direct astringent of Kidney Essence. It is less tonifying than Lian Zi.', 'La comparación de Yang, autor del libro, presenta a Lian Xu como una astringente directa y fuerte de Esencia de Riñón. Es menos tónica que Lian Zi.'),
         'caution' => $bindtext('Avoid when leakage is caused by Damp-Heat, active infection or another unresolved excess pattern.', 'Evitar cuando la pérdida se debe a Humedad-Calor, infección activa u otro exceso no resuelto.'),
     ],
     [
@@ -101,7 +101,7 @@ $bindherbs = [
         'identity' => $bindtext('Stops spontaneous and night sweating while nourishing Heart Qi and clearing deficiency irritability.', 'Detiene sudor espontáneo/nocturno mientras nutre Qi de Corazón y aclara irritabilidad por deficiencia.'),
         'clue' => $bindtext('Persistent sweating with palpitations, irritability or emotional fragility, especially after illness.', 'Sudor persistente con palpitaciones, irritabilidad o fragilidad emocional, especialmente posenfermedad.'),
         'memory' => $bindtext('Floating wheat floats over the Heart window and absorbs escaping sweat.', 'El trigo flotante cubre la ventana del Corazón y absorbe el sudor que escapa.'),
-        'unique' => $bindtext('Sweat-specific, food-like and cool; Yang, the book author, scores it 80 for stopping both spontaneous and night sweating.', 'Específica para sudor, alimenticia y fresca; Yang, autor del libro, le da 80 para detener sudor espontáneo y nocturno.'),
+        'unique' => $bindtext('The comparison by Yang, the book author, emphasizes Fu Xiao Mai as a strong, sweat-specific remedy for both spontaneous and night sweating; its food-like and cool nature distinguishes it.', 'La comparación de Yang, autor del libro, destaca a Fu Xiao Mai como un remedio fuerte y específico para sudor espontáneo y nocturno; su naturaleza fresca y semejante a un alimento la distingue.'),
         'caution' => $bindtext('Do not suppress sweating from active Heat, Exterior disease or other excess causes without treating the cause.', 'No suprimir sudor por Calor activo, Exterior u otras causas de exceso sin tratar la raíz.'),
     ],
     [

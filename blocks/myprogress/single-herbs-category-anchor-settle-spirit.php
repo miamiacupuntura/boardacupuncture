@@ -28,7 +28,7 @@ $spiritherbs = [
         'identity' => $spirittext('Heavily settles fright and the Spirit, anchors Liver Yang and secures deficiency leakage.', 'Asienta con peso el susto y Shen, ancla Yang de Hígado y asegura pérdidas por deficiencia.'),
         'clue' => $spirittext('Palpitations, insomnia or fright with dizziness plus sweating, spermatorrhea or chronic discharge.', 'Palpitaciones, insomnio o susto con mareo más sudor, espermatorrea o descarga crónica.'),
         'memory' => $spirittext('The fossil dragon is both an anchor and a lock: it grounds fright, then closes the leak.', 'El dragón fósil es ancla y cerradura: aterriza el susto y luego cierra la fuga.'),
-        'unique' => $spirittext('Stronger than Mu Li for calming the Heart Spirit: Yang, the book author, scores 70 direct calming and 80 anchoring.', 'Más fuerte que Mu Li para calmar Shen de Corazón: Yang, autor del libro, marca 70 en calma directa y 80 en anclaje.'),
+        'unique' => $spirittext('The comparison by Yang, the book author, shows that Long Gu anchors more strongly than it directly calms and is stronger than Mu Li for calming the Heart Spirit.', 'La comparación de Yang, autor del libro, muestra que Long Gu ancla con más fuerza de la que calma directamente y es más fuerte que Mu Li para calmar Shen de Corazón.'),
         'caution' => $spirittext('Use authenticated, contaminant-tested material. Heavy astringency can burden digestion and must not trap unresolved excess.', 'Usar material autenticado y analizado. Su astringencia pesada puede afectar digestión y no debe encerrar exceso no resuelto.'),
     ],
     [
@@ -41,7 +41,7 @@ $spiritherbs = [
         'identity' => $spirittext('The strongest direct Spirit settler here; anchors Yang, benefits hearing/vision and helps the Kidney grasp Qi.', 'La que asienta Shen directamente con más fuerza; ancla Yang, beneficia oído/visión y ayuda al Riñón a captar Qi.'),
         'clue' => $spirittext('Severe fright, restlessness or insomnia with tinnitus, deafness, blurred vision or deficiency wheezing.', 'Susto intenso, inquietud o insomnio con tinnitus, sordera, visión borrosa o sibilancia por deficiencia.'),
         'memory' => $spirittext('The magnet is the emergency brake: it pulls floating fear and Yang straight down.', 'El imán es el freno de emergencia: atrae hacia abajo el miedo y el Yang flotantes.'),
-        'unique' => $spirittext('Yang, the book author, scores it 100 for directly calming the Mind—the highest current-list value—and 60 for anchoring Liver Yang.', 'Yang, autor del libro, le da 100 para calmar directamente la Mente—el valor más alto de la lista—y 60 para anclar Yang.'),
+        'unique' => $spirittext('The comparison by Yang, the book author, shows that Ci Shi is strongest for directly calming the Mind, while its anchoring of Liver Yang is a more moderate secondary action.', 'La comparación de Yang, autor del libro, muestra que Ci Shi destaca principalmente por calmar directamente la Mente, mientras que anclar Yang de Hígado es una acción secundaria más moderada.'),
         'caution' => $spirittext('“Ci Zhi” in the supplied list is treated as the Ci Shi spelling variant. Only authenticated, heavy-metal-tested material is acceptable; avoid prolonged unsupervised use.', '“Ci Zhi” en la lista se trata como variante de Ci Shi. Solo material autenticado y analizado para metales pesados; evitar uso prolongado sin supervisión.'),
     ],
     [
@@ -53,7 +53,7 @@ $spiritherbs = [
         'identity' => $spirittext('Calms the Spirit, clears Heart-Liver Fire, settles convulsions, benefits the eyes and supports tissue healing.', 'Calma Shen, aclara Fuego de Corazón-Hígado, calma convulsiones, beneficia ojos y apoya cicatrización.'),
         'clue' => $spirittext('Restlessness or childhood convulsion with red painful eyes, visual disturbance or a topical sore.', 'Inquietud o convulsión infantil con ojos rojos/dolorosos, alteración visual o lesión tópica.'),
         'memory' => $spirittext('The pearl cools the Heart alarm and flashes its light toward the eyes.', 'La perla enfría la alarma del Corazón y dirige su luz hacia los ojos.'),
-        'unique' => $spirittext('Yang, the book author, scores the pearl 80 for direct calming; unlike its shell, it emphasizes Heart-Liver Fire, convulsions and eyes.', 'Yang, autor del libro, da 80 a la perla para calma directa; a diferencia de su concha, enfatiza Fuego Corazón-Hígado, convulsión y ojos.'),
+        'unique' => $spirittext('The comparison by Yang, the book author, presents Zhen Zhu as a strong direct calming substance. Unlike its shell, it emphasizes Heart-Liver Fire, convulsions and the eyes.', 'La comparación de Yang, autor del libro, presenta a Zhen Zhu como una sustancia fuerte para calmar directamente. A diferencia de su concha, enfatiza Fuego de Corazón-Hígado, convulsiones y ojos.'),
         'caution' => $spirittext('Use authenticated pharmaceutical-grade pearl powder. Confirm identity, purity and appropriate route; do not substitute cosmetic material.', 'Usar polvo de perla farmacéutico autenticado. Confirmar identidad, pureza y vía; no sustituir material cosmético.'),
     ],
     [
@@ -65,7 +65,7 @@ $spiritherbs = [
         'identity' => $spirittext('Anchors Liver Yang, clears Liver Fire, calms the Spirit and improves dizziness, tinnitus and visual disturbance.', 'Ancla Yang de Hígado, aclara Fuego de Hígado, calma Shen y mejora mareo, tinnitus y visión.'),
         'clue' => $spirittext('Liver-Yang dizziness, headache or tinnitus dominates more than acute fright or Heart-Fire agitation.', 'Predominan mareo, cefalea o tinnitus por Yang de Hígado más que susto agudo o agitación por Fuego de Corazón.'),
         'memory' => $spirittext('The mother-of-pearl shell is broad ballast under the Liver mast.', 'La concha madreperla es lastre ancho bajo el mástil del Hígado.'),
-        'unique' => $spirittext('Yang, the book author, scores it 70 for direct calming but 80 for anchoring—less pearl-like sedation, more Liver-Yang control.', 'Yang, autor del libro, le da 70 para calma directa pero 80 para anclar: menos sedación de perla, más control del Yang de Hígado.'),
+        'unique' => $spirittext('The comparison by Yang, the book author, shows that Zhen Zhu Mu anchors more strongly than it directly calms: less pearl-like sedation and more control of Liver Yang.', 'La comparación de Yang, autor del libro, muestra que Zhen Zhu Mu ancla con más fuerza de la que calma directamente: menos sedación semejante a la perla y más control de Yang de Hígado.'),
         'caution' => $spirittext('Use authenticated, contaminant-tested shell. Predecoct; use cautiously with weak digestion, constipation or pronounced Cold.', 'Usar concha autenticada y analizada. Predecoctar; cautela con digestión débil, estreñimiento o Frío marcado.'),
     ],
 ];
