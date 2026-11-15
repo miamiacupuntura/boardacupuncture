@@ -423,7 +423,7 @@ $buildcardnarration = static function(array $card, bool $ises): string {
         $append($segments, $ises ? 'Temperatura' : 'Temperature', (string)($card['temperature'] ?? ''));
     }
     $append($segments, $ises ? 'Meridianos que penetra' : 'Channels entered', (string)($card['channels'] ?? ''));
-    $append($segments, $ises ? 'Dosis de estudio' : 'Study dose', (string)($card['dose'] ?? ''));
+    $append($segments, $ises ? 'Dosis' : 'Dosage', (string)($card['dose'] ?? ''));
     $append($segments, $ises ? 'Acciones' : 'Actions', (string)($card['identity'] ?? ''));
     $append($segments, $ises ? 'Indicaciones' : 'Indications', (string)($card['clue'] ?? ''));
     $append($segments, $ises ? 'Recurso de memoria' : 'Memory aid', (string)($card['memory'] ?? ''));
@@ -1047,7 +1047,7 @@ echo $OUTPUT->header();
                             </summary>
                             <div class="single-herbs-list__body">
                                 <dl>
-                                    <?php if ($card['dose'] !== '') { ?><dt><?php echo $ises ? 'Dosis de estudio' : 'Study dose'; ?></dt><dd><?php echo s($card['dose']); ?></dd><?php } ?>
+                                    <?php if ($card['dose'] !== '') { ?><dt><?php echo $ises ? 'Dosis' : 'Dosage'; ?></dt><dd><?php echo s($card['dose']); ?></dd><?php } ?>
                                     <?php if ($card['identity'] !== '') { ?><dt><?php echo $ises ? 'Acciones' : 'Actions'; ?></dt><dd><?php echo s($card['identity']); ?></dd><?php } ?>
                                     <?php if ($card['clue'] !== '') { ?><dt><?php echo $ises ? 'Indicaciones' : 'Indications'; ?></dt><dd><?php echo s($card['clue']); ?></dd><?php } ?>
                                     <?php if ($card['memory'] !== '') { ?><dt><?php echo $ises ? 'Memoria' : 'Memory'; ?></dt><dd class="single-herbs-list__memory"><?php echo s($card['memory']); ?></dd><?php } ?>

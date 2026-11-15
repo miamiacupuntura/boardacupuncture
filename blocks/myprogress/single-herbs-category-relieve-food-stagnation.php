@@ -174,7 +174,7 @@ $foodquestions = [
     <div class="single-herbs-guide__profiles">
         <?php foreach ($foodherbs as $herb): ?>
             <details class="single-herbs-guide__profile"<?php echo $herb['name'] === 'Ji Nei Jin' ? ' open' : ''; ?>><summary><span class="single-herbs-guide__profile-name"><?php echo s($herb['name']); ?></span><span class="single-herbs-guide__profile-latin"><?php echo s($herb['latin']); ?></span><span class="single-herbs-guide__profile-meta"><?php echo s($herb['properties']); ?> · <?php echo s($herb['channels']); ?></span></summary><div class="single-herbs-guide__profile-body"><dl>
-                <dt><?php echo s($foodtext('Study dose', 'Dosis de estudio')); ?></dt><dd><?php echo s($herb['dose']); ?></dd>
+                <dt><?php echo s($foodtext('Dosage', 'Dosis')); ?></dt><dd><?php echo s($herb['dose']); ?></dd>
                 <dt><?php echo s($foodtext('Identity', 'Identidad')); ?></dt><dd><?php echo s($herb['identity']); ?></dd>
                 <dt><?php echo s($foodtext('Exam clue', 'Pista de examen')); ?></dt><dd><?php echo s($herb['clue']); ?></dd>
                 <dt><?php echo s($foodtext('Memory', 'Memoria')); ?></dt><dd class="single-herbs-guide__profile-memory"><?php echo s($herb['memory']); ?></dd>

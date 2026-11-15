@@ -58,8 +58,8 @@ $aromaticherbs = [
             'Más neutra y armoniosa que Huo Xiang; se reconoce especialmente por turbidez fétida o dulce-pegajosa en la boca.'
         ),
         'caution' => $aromatictext(
-            'Bensky notes pyrrolizidine alkaloids and restrictions in some countries; avoid prolonged or high-dose use and verify product quality and local rules. Double the study dose when used fresh.',
-            'Bensky señala alcaloides pirrolizidínicos y restricciones en algunos países; evitar uso prolongado o en dosis altas y verificar calidad del producto y normas locales. Duplicar la dosis de estudio cuando se usa fresca.'
+            'Bensky notes pyrrolizidine alkaloids and restrictions in some countries; avoid prolonged or high-dose use and verify product quality and local rules. Double the dosage when used fresh.',
+            'Bensky señala alcaloides pirrolizidínicos y restricciones en algunos países; evitar uso prolongado o en dosis altas y verificar calidad del producto y normas locales. Duplicar la dosis cuando se usa fresca.'
         ),
         'formulas' => [],
     ],
@@ -405,7 +405,7 @@ $aromaticchapterannex = [
             <details class="single-herbs-guide__profile"<?php echo $herb['name'] === 'Huo Xiang' ? ' open' : ''; ?>>
                 <summary><span class="single-herbs-guide__profile-name"><?php echo s($herb['name']); ?></span><span class="single-herbs-guide__profile-latin"><?php echo s($herb['latin']); ?></span><span class="single-herbs-guide__profile-meta"><?php echo s($herb['properties']); ?> · <?php echo s($herb['channels']); ?></span></summary>
                 <div class="single-herbs-guide__profile-body"><dl>
-                    <dt><?php echo s($aromatictext('Study dose', 'Dosis de estudio')); ?></dt><dd><?php echo s($herb['dose']); ?></dd>
+                    <dt><?php echo s($aromatictext('Dosage', 'Dosis')); ?></dt><dd><?php echo s($herb['dose']); ?></dd>
                     <dt><?php echo s($aromatictext('Identity', 'Identidad')); ?></dt><dd><?php echo s($herb['identity']); ?></dd>
                     <dt><?php echo s($aromatictext('Exam clue', 'Pista de examen')); ?></dt><dd><?php echo s($herb['clue']); ?></dd>
                     <dt><?php echo s($aromatictext('Memory', 'Memoria')); ?></dt><dd class="single-herbs-guide__profile-memory"><?php echo s($herb['memory']); ?></dd>

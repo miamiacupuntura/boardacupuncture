@@ -56,7 +56,7 @@ $summerherbs = [
         'memory' => $summertext('The reed root is the house water pipe: it cools Lung and Stomach rooms, refills fluids and flushes the drain.', 'La raíz de carrizo es la tubería de agua de la casa: enfría Pulmón y Estómago, repone líquidos y limpia el desagüe.'),
         'unique' => $summertext('Yang, the book author, scores it strongly for generating fluids and more moderately for Lung and Stomach Heat. The combination of thirst, cough and vomiting points to it.', 'Yang, autor del libro, la puntúa fuerte para generar líquidos y moderada para Calor de Pulmón y Estómago. La combinación de sed, tos y vómito apunta hacia ella.'),
         'formulas' => $summertext('No chief or co-chief role in the current 63-formula Board roster is assigned here.', 'No se asigna aquí ningún papel principal o coprincipal dentro de las 63 fórmulas Board vigentes.'),
-        'caution' => $summertext('Use cautiously with Spleen/Stomach Cold; fresh root doses differ from dried-root study doses.', 'Usar con precaución ante Frío de Bazo/Estómago; las dosis de raíz fresca difieren de las dosis de estudio para raíz seca.'),
+        'caution' => $summertext('Use cautiously with Spleen/Stomach Cold; fresh root doses differ from dried-root dosages.', 'Usar con precaución ante Frío de Bazo/Estómago; las dosis de raíz fresca difieren de las dosis para raíz seca.'),
     ],
     [
         'name' => 'Dan Zhu Ye', 'latin' => 'Lophatheri Herba', 'official' => true,
