@@ -663,6 +663,46 @@ $isofficialformula = static function(string $name) use ($officialformulasbyname,
     $officialname = $officialformulaaliases[$name] ?? $name;
     return isset($officialformulasbyname[$officialname]);
 };
+$officialformulanamesformarking = array_values(array_unique(array_merge(
+    array_keys($officialformulasbyname),
+    array_keys($officialformulaaliases)
+)));
+usort($officialformulanamesformarking, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
+$officialformulacharpatterns = [
+    'a' => '[aāáǎà]',
+    'e' => '[eēéěè]',
+    'i' => '[iīíǐì]',
+    'o' => '[oōóǒò]',
+    'u' => '[uūúǔùǖǘǚǜü]',
+];
+$officialformulapatterns = [];
+foreach ($officialformulanamesformarking as $officialformulaname) {
+    $pattern = '';
+    foreach (str_split($officialformulaname) as $character) {
+        $lowercharacter = strtolower($character);
+        if (isset($officialformulacharpatterns[$lowercharacter])) {
+            $pattern .= $officialformulacharpatterns[$lowercharacter];
+        } elseif ($character === ' ') {
+            $pattern .= '\\s+';
+        } else {
+            $pattern .= preg_quote($character, '/');
+        }
+    }
+    $officialformulapatterns[] = $pattern;
+}
+$markofficialformulasintext = static function(string $text) use ($officialformulapatterns): string {
+    foreach ($officialformulapatterns as $pattern) {
+        $markedtext = preg_replace(
+            '/(?<![\\p{L}\\p{N}])(' . $pattern . ')(?![\\p{L}\\p{N}*])/iu',
+            '$1*',
+            $text
+        );
+        if ($markedtext !== null) {
+            $text = $markedtext;
+        }
+    }
+    return $text;
+};
 $getboardstatus = static function(array $formulas, bool $spanish) use ($isofficialformula): array {
     $total = count($formulas);
     $included = 0;
@@ -3561,7 +3601,7 @@ echo $OUTPUT->header();
                                 <h5><?php echo s($duiyaopair['title']); ?></h5>
                                 <span class="formula-study-guide__dui-yao-pharmaceutical" data-read-aloud-ignore><?php echo s($duiyaopharmaceuticaltitle); ?></span>
                                 <p><?php echo s($ises ? $duiyaopair['actionEs'] : $duiyaopair['action']); ?></p>
-                                <small><strong><?php echo $ises ? 'Vínculo con fórmula del guideline:' : 'Guideline formula link:'; ?></strong> <?php echo s($duiyaoformulasdisplay); ?><?php if ($duiyaoenglishformulanames !== []): ?> <span class="formula-study-guide__dui-yao-formula-translation" lang="en" data-formula-english-speech="<?php echo s(implode('; ', $duiyaoenglishformulanames)); ?>"><?php echo s('(' . implode('; ', $duiyaoenglishformulanames) . ')'); ?></span><?php endif; ?>.<br><span data-read-aloud-ignore><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></span></small>
+                                <small><strong><?php echo $ises ? 'Vínculo con fórmula del guideline:' : 'Guideline formula link:'; ?></strong> <?php echo s($markofficialformulasintext($duiyaoformulasdisplay)); ?><?php if ($duiyaoenglishformulanames !== []): ?> <span class="formula-study-guide__dui-yao-formula-translation" lang="en" data-formula-english-speech="<?php echo s(implode('; ', $duiyaoenglishformulanames)); ?>"><?php echo s('(' . implode('; ', $duiyaoenglishformulanames) . ')'); ?></span><?php endif; ?>.<br><span data-read-aloud-ignore><?php echo $ises ? 'Abrir ficha →' : 'Open profile →'; ?></span></small>
                             </a>
                         <?php endforeach; ?>
                     </div>
