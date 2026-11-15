@@ -749,6 +749,7 @@ grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/single-herbs-list.ph
 grep -Fq "'Niu Bang Zi': 'Niú, Bang, Tzí'" "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq 'Después continuará automáticamente con' "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq '<?php if (!$fromlibrary) { ?>' "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq '.single-herbs-list__controls{margin-bottom:14px;padding:12px 14px' "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq '$fromsmart' "$TEMP_DIR/moodle/formula-list.php"
 grep -Fq '$fromsmart' "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq "data-practice-mode=\"weak\"" "$TEMP_DIR/static/formula-practice.html"

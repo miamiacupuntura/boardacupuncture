@@ -833,15 +833,16 @@ echo $OUTPUT->header();
 .single-herbs-list-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;padding:13px 16px;border:1px solid #9ed3ce;border-left:5px solid #0b8f87;border-radius:12px;background:#f4fbfa;box-shadow:0 5px 16px rgba(15,76,81,.08)}
 .single-herbs-list-reader[hidden]{display:none}.single-herbs-list-reader__disclosure>summary{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-right:40px;cursor:pointer;list-style:none}.single-herbs-list-reader__disclosure>summary::-webkit-details-marker{display:none}.single-herbs-list-reader__disclosure>summary:after{content:'+';position:absolute;right:0;top:0;display:flex;width:27px;height:27px;align-items:center;justify-content:center;border:1px solid #8fc9c4;border-radius:50%;background:#fff;color:#0b6f69;font-size:19px;font-weight:900}.single-herbs-list-reader__disclosure[open]>summary:after{content:'−'}
 .single-herbs-list-reader__title{display:block;font-size:17px;font-weight:900}.single-herbs-list-reader__description{display:block;margin-top:2px;color:#5c7184;font-size:12px}.single-herbs-list-reader__panel{padding-top:11px}.single-herbs-list-reader__controls{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) repeat(3,auto);gap:8px;align-items:end}.single-herbs-list-reader__field{display:grid;gap:4px;color:#294b63;font-size:11px;font-weight:850}.single-herbs-list-reader select{box-sizing:border-box;min-height:39px;width:100%;padding:6px 9px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}.single-herbs-list-reader button{min-height:39px;padding:6px 11px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#087c69;font-weight:900;cursor:pointer}.single-herbs-list-reader button[data-herb-list-read-displayed]{background:#0b8f87;color:#fff}.single-herbs-list-reader button:disabled{cursor:not-allowed;opacity:.45}.single-herbs-list-reader__progress{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:8px;align-items:end;margin-top:8px}.single-herbs-list-reader__progress-field{display:grid;grid-template-columns:1fr auto;gap:3px 8px;color:#526b84;font-size:10px;font-weight:800}.single-herbs-list-reader__progress-field input{grid-column:1/-1;width:100%;accent-color:#0b8f87}.single-herbs-list-reader__status{min-height:18px;margin:7px 0 0;color:#526b84;font-size:11px;font-weight:750}
-.single-herbs-list__controls{margin-bottom:18px;padding:16px;border:1px solid #c7ddd9;border-radius:12px;background:#f8fcfb}
-.single-herbs-list__modes{margin-bottom:13px}
+.single-herbs-list__controls{margin-bottom:14px;padding:12px 14px;border:1px solid #c7ddd9;border-radius:12px;background:#f8fcfb}
+.single-herbs-list__controls .single-herbs-list__button{min-height:38px;padding:6px 12px}
+.single-herbs-list__modes{margin-bottom:9px}
 .single-herbs-list__form{display:grid;grid-template-columns:minmax(220px,1.5fr) minmax(220px,1fr) auto;gap:10px;align-items:end}
 .single-herbs-list__form label{display:grid;gap:5px;color:#35566f;font-size:12px;font-weight:850}
-.single-herbs-list__form input,.single-herbs-list__form select{box-sizing:border-box;min-height:44px;width:100%;padding:8px 11px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}
-.single-herbs-list__summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:13px 0}
-.single-herbs-list__stat{padding:11px 13px;border:1px solid #c7ddd9;border-radius:9px;background:#fff}
+.single-herbs-list__form input,.single-herbs-list__form select{box-sizing:border-box;min-height:40px;width:100%;padding:6px 10px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}
+.single-herbs-list__summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:9px 0}
+.single-herbs-list__stat{padding:7px 11px;border:1px solid #c7ddd9;border-radius:9px;background:#fff}
 .single-herbs-list__stat span{display:block;color:#087c69;font-size:11px;font-weight:900;text-transform:uppercase}
-.single-herbs-list__stat strong{display:block;margin-top:4px;font-size:21px}
+.single-herbs-list__stat strong{display:block;margin-top:2px;font-size:19px}
 .single-herbs-list__tools{justify-content:flex-end}
 .single-herbs-list__group{scroll-margin-top:18px;margin:0 0 22px}
 .single-herbs-list__group-header{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:0 0 10px;padding:0 4px 8px;border-bottom:3px solid #f47b20}
