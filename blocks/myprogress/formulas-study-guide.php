@@ -84,6 +84,241 @@ foreach ($herbproperties['herbs'] as $herbproperty) {
     $herblatinbyname[$herbproperty['name']] = $herbproperty['latin'];
 }
 $herblatinbyname['Xin Yi Hua'] = $herblatinbyname['Xin Yi'] ?? 'Magnoliae Flos';
+$herbenglishbyname = [
+    'Ai Ye' => 'Mugwort Leaf',
+    'Bai Shao' => 'White Peony Root',
+    'Bai Zhu' => 'Largehead Atractylodes Rhizome',
+    'Bai Zi Ren' => 'Arborvitae Seed',
+    'Ban Xia' => 'Pinellia Rhizome',
+    'Bie Jia' => 'Softshell Turtle Shell',
+    'Bing Pian' => 'Borneol',
+    'Bu Gu Zhi' => 'Psoralea Fruit',
+    'Cang Er Zi' => 'Cocklebur Fruit',
+    'Cang Zhu' => 'Atractylodes Rhizome',
+    'Ce Bai Ye' => 'Arborvitae Leaf',
+    'Chai Hu' => 'Bupleurum Root',
+    'Chan Tui' => 'Cicada Molting',
+    'Chen Pi' => 'Aged Tangerine Peel',
+    'Chi Shao' => 'Red Peony Root',
+    'Chuan Bei Mu' => 'Fritillaria Bulb',
+    'Chuan Lian Zi' => 'Sichuan Chinaberry Fruit',
+    'Chuan Xiong' => 'Sichuan Lovage Rhizome',
+    'Da Huang' => 'Rhubarb Root and Rhizome',
+    'Da Zao' => 'Jujube Fruit',
+    'Dan Shen' => 'Red Sage Root',
+    'Dang Gui' => 'Chinese Angelica Root',
+    'Dang Shen' => 'Codonopsis Root',
+    'Di Gu Pi' => 'Lycium Root Bark',
+    'Ding Xiang' => 'Clove',
+    'Du Huo' => 'Pubescent Angelica Root',
+    'Du Zhong' => 'Eucommia Bark',
+    'E Jiao' => 'Donkey-Hide Gelatin',
+    'Fang Feng' => 'Siler Root',
+    'Fu Ling' => 'Poria',
+    'Fu Zi' => 'Prepared Aconite Root',
+    'Gan Cao' => 'Licorice Root',
+    'Gan Jiang' => 'Dried Ginger Rhizome',
+    'Ge Gen' => 'Kudzu Root',
+    'Gou Qi Zi' => 'Goji Berry',
+    'Gou Teng' => 'Gambir Vine Hook',
+    'Gua Lou' => 'Trichosanthes Fruit',
+    'Gui Ban' => 'Tortoise Plastron',
+    'Gui Zhi' => 'Cinnamon Twig',
+    'Hai Zao' => 'Sargassum Seaweed',
+    'Han Fang Ji' => 'Stephania Root',
+    'He Shou Wu' => 'Fleeceflower Root',
+    'Hong Hua' => 'Safflower',
+    'Hou Po' => 'Magnolia Bark',
+    'Hua Jiao' => 'Sichuan Pepper',
+    'Hua Shi' => 'Talc',
+    'Huang Bai' => 'Phellodendron Bark',
+    'Huang Lian' => 'Coptis Rhizome',
+    'Huang Qi' => 'Astragalus Root',
+    'Huang Qin' => 'Scutellaria Root',
+    'Huo Ma Ren' => 'Hemp Seed',
+    'Huo Xiang' => 'Patchouli Herb',
+    'Jiang Huang' => 'Turmeric Rhizome',
+    'Jin Yin Hua' => 'Honeysuckle Flower',
+    'Jing Jie' => 'Schizonepeta Herb',
+    'Ju Hua' => 'Chrysanthemum Flower',
+    'Ku Shen' => 'Sophora Root',
+    'Kun Bu' => 'Kelp',
+    'Lai Fu Zi' => 'Radish Seed',
+    'Lian Qiao' => 'Forsythia Fruit',
+    'Ling Yang Jiao' => 'Antelope Horn',
+    'Long Dan Cao' => 'Gentian Root',
+    'Long Gu' => 'Fossilized Bone',
+    'Long Yan Rou' => 'Longan Fruit',
+    'Lu Jiao Jiao' => 'Deer Antler Gelatin',
+    'Lu Rong' => 'Deer Antler Velvet',
+    'Ma Huang' => 'Ephedra Herb',
+    'Mai Men Dong' => 'Ophiopogon Root',
+    'Mang Xiao' => 'Mirabilite',
+    'Mo Yao' => 'Myrrh',
+    'Mu Dan Pi' => 'Moutan Root Bark',
+    'Mu Li' => 'Oyster Shell',
+    'Mu Tong' => 'Akebia Stem',
+    'Mu Xiang' => 'Costus Root',
+    'Niu Bang Zi' => 'Burdock Fruit',
+    'Niu Huang' => 'Cattle Gallstone',
+    'Niu Xi' => 'Achyranthes Root',
+    'Nu Zhen Zi' => 'Privet Fruit',
+    'Pu Huang' => 'Cattail Pollen',
+    'Qiang Huo' => 'Notopterygium Rhizome and Root',
+    'Qin Jiao' => 'Gentiana Root',
+    'Qing Dai' => 'Indigo Naturalis',
+    'Qing Hao' => 'Sweet Wormwood Herb',
+    'Quan Xie' => 'Scorpion',
+    'Ren Shen' => 'Ginseng Root',
+    'Rou Cong Rong' => 'Cistanche Stem',
+    'Rou Gui' => 'Cinnamon Bark',
+    'Ru Xiang' => 'Frankincense',
+    'San Leng' => 'Sparganium Rhizome',
+    'Sang Piao Xiao' => 'Mantis Egg Case',
+    'Sang Ye' => 'Mulberry Leaf',
+    'Sha Ren' => 'Amomum Fruit',
+    'Sha Shen' => 'Glehnia Root',
+    'Shan Yao' => 'Chinese Yam Rhizome',
+    'Shan Zha' => 'Hawthorn Fruit',
+    'Shan Zhu Yu' => 'Cornus Fruit',
+    'She Xiang' => 'Musk',
+    'Sheng Di Huang' => 'Raw Rehmannia Root',
+    'Sheng Jiang' => 'Fresh Ginger Rhizome',
+    'Shi Gao' => 'Gypsum',
+    'Shi Jue Ming' => 'Abalone Shell',
+    'Shu Di Huang' => 'Prepared Rehmannia Root',
+    'Shui Niu Jiao' => 'Water Buffalo Horn',
+    'Suan Zao Ren' => 'Sour Jujube Seed',
+    'Tao Ren' => 'Peach Kernel',
+    'Tian Hua Fen' => 'Trichosanthes Root',
+    'Tian Ma' => 'Gastrodia Rhizome',
+    'Tian Nan Xing' => 'Arisaema Rhizome',
+    'Tu Si Zi' => 'Dodder Seed',
+    'Wu Gong' => 'Centipede',
+    'Wu Ling Zhi' => 'Flying Squirrel Feces',
+    'Wu Mei' => 'Mume Fruit',
+    'Wu Yao' => 'Lindera Root',
+    'Wu Zhu Yu' => 'Evodia Fruit',
+    'Xi Xin' => 'Asarum Herb',
+    'Xi Yang Shen' => 'American Ginseng Root',
+    'Xian Mao' => 'Curculigo Rhizome',
+    'Xiang Fu' => 'Cyperus Rhizome',
+    'Xiang Ru' => 'Mosla Herb',
+    'Xiao Hui Xiang' => 'Fennel Fruit',
+    'Xing Ren' => 'Apricot Kernel',
+    'Xuan Fu Hua' => 'Inula Flower',
+    'Xuan Shen' => 'Scrophularia Root',
+    'Yan Hu Suo' => 'Corydalis Rhizome',
+    'Yi Tang' => 'Maltose',
+    'Yi Yi Ren' => 'Coix Seed',
+    'Yi Zhi Ren' => 'Alpinia Fruit',
+    'Yin Chen' => 'Capillaris Herb',
+    'Yin Chen Hao' => 'Capillaris Herb',
+    'Yin Yang Huo' => 'Epimedium Herb',
+    'Yu Jin' => 'Curcuma Root Tuber',
+    'Ze Xie' => 'Alisma Rhizome',
+    'Zhe Bei Mu' => 'Zhejiang Fritillaria Bulb',
+    'Zhi Ke' => 'Immature Bitter Orange Fruit',
+    'Zhi Mu' => 'Anemarrhena Rhizome',
+    'Zhi Shi' => 'Immature Bitter Orange',
+    'Zhi Zi' => 'Gardenia Fruit',
+    'Zhu Ling' => 'Polyporus',
+    'Zhu Ru' => 'Bamboo Shavings',
+    'Zi Cao' => 'Purple Gromwell Root',
+    'Zi Su Ye' => 'Perilla Leaf',
+    'Zi Su Zi' => 'Perilla Seed',
+    'Zi Wan' => 'Aster Root and Rhizome',
+];
+foreach ($herblatinbyname as $herbname => $pharmaceuticalname) {
+    if (!isset($herbenglishbyname[$herbname])) {
+        $herbenglishbyname[$herbname] = $pharmaceuticalname;
+    }
+}
+$herbenglishbyname += [
+    'An Xi Xiang' => 'Benzoin Resin',
+    'Bai Fu Zi' => 'Typhonium Rhizome',
+    'Chao Bai Zhu' => 'Dry-Fried Largehead Atractylodes Rhizome',
+    'Chao Qian Shi' => 'Dry-Fried Foxnut Seed',
+    'Chao Sha Yuan Zi' => 'Dry-Fried Astragalus Seed',
+    'Chao Shan Yao' => 'Dry-Fried Chinese Yam Rhizome',
+    'Chuan Jiao' => 'Sichuan Pepper',
+    'Dan Nan Xing' => 'Bile-Prepared Arisaema Rhizome',
+    'Duan Meng Shi' => 'Calcined Chlorite Schist',
+    'Duan Mu Li' => 'Calcined Oyster Shell',
+    'Fu Ling Pi' => 'Poria Peel',
+    'Fu Rong Ye' => 'Hibiscus Leaf',
+    'Ge Hua' => 'Kudzu Flower',
+    'Gua Di' => 'Melon Pedicel',
+    'Gui Ban Jiao' => 'Tortoise Plastron Gelatin',
+    'Hai Dai' => 'Kelp',
+    'He Shi' => 'Carpesium Fruit',
+    'Huai Hua' => 'Sophora Flower',
+    'Ji Zi Huang' => 'Egg Yolk',
+    'Jiang Can' => 'Stiff Silkworm',
+    'Jiu Da Huang' => 'Wine-Prepared Rhubarb Root and Rhizome',
+    'Ju He' => 'Tangerine Seed',
+    'Long Chi' => 'Fossilized Tooth',
+    'Meng Chong' => 'Horsefly',
+    'Mo Han Lian' => 'Eclipta Herb',
+    'Pao Jiang' => 'Quick-Fried Ginger Rhizome',
+    'Peng Sha' => 'Borax',
+    'Sheng Ce Bai Ye' => 'Raw Arborvitae Leaf',
+    'Sheng Chuan Wu' => 'Raw Sichuan Aconite Root',
+    'Sheng Fu Zi' => 'Raw Aconite Root',
+    'Sheng Nan Xing' => 'Raw Arisaema Rhizome',
+    'Sheng Tie Luo' => 'Iron Filings',
+    'Shi Di' => 'Persimmon Calyx',
+    'Shi Jun Zi' => 'Quisqualis Fruit',
+    'Shui Zhi' => 'Leech',
+    'Su He Xiang' => 'Styrax Resin',
+    'Su Zi' => 'Perilla Seed',
+    'Tou Gu Cao' => 'Bone-Penetrating Herb',
+    'Tu Chao Bai Zhu' => 'Earth-Fried Largehead Atractylodes Rhizome',
+    'Wei Jing' => 'Reed Rhizome',
+    'Wu Yi' => 'Elm Seed',
+    'Xi Gua' => 'Watermelon',
+    'Xian He Ye' => 'Fresh Lotus Leaf',
+    'Xian Jin Yin Hua' => 'Fresh Honeysuckle Flower',
+    'Xue Jie' => "Dragon's Blood Resin",
+    'Yang Rou' => 'Mutton',
+    'Yu Yu Liang' => 'Limonite',
+    'Zao Xin Tu' => 'Yellow Hearth Earth',
+    'Zhe Chong' => 'Ground Beetle',
+    'Zhen Zhu Mu' => 'Mother-of-Pearl',
+    'Zhi Ban Xia' => 'Prepared Pinellia Rhizome',
+    'Zhi Cao Wu' => 'Prepared Kusnezoff Aconite Root',
+    'Zhi Chuan Wu' => 'Prepared Sichuan Aconite Root',
+    'Zhi Fu Zi' => 'Prepared Aconite Root',
+    'Zhi Gan Cao' => 'Honey-Prepared Licorice Root',
+    'Zhu Li' => 'Bamboo Sap',
+    'Zhu Sha' => 'Cinnabar',
+    'Zhu Ya Zao' => 'Chinese Honeylocust Fruit',
+    'Zi He Che' => 'Human Placenta',
+    'Zi Shi Ying' => 'Fluorite',
+];
+$herbenglishnames = array_keys($herbenglishbyname);
+usort($herbenglishnames, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
+$herbenglishpattern = '/(?<![A-Za-z])(' . implode('|', array_map(
+    static fn(string $name): string => preg_quote($name, '/'),
+    $herbenglishnames
+)) . ')(?![A-Za-z])/u';
+$renderherbswithenglish = static function(string $text) use ($herbenglishbyname, $herbenglishpattern): string {
+    $parts = preg_split($herbenglishpattern, $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+    if (!is_array($parts)) {
+        return s($text);
+    }
+    $markup = '';
+    foreach ($parts as $part) {
+        if (isset($herbenglishbyname[$part])) {
+            $englishname = $herbenglishbyname[$part];
+            $markup .= s($part) . ' <small class="formula-study-guide__herb-english" lang="en"'
+                . ' data-herb-english-speech="' . s($englishname) . '">(' . s($englishname) . ')</small>';
+        } else {
+            $markup .= s($part);
+        }
+    }
+    return $markup;
+};
 
 $categorycopy = [
     'release-exterior' => [
@@ -2785,7 +3020,7 @@ echo $OUTPUT->header();
 .formula-study-guide__deep-dive{margin-top:12px;border:1px solid #d5e4e1;border-radius:8px;background:#f8fbfa}.formula-study-guide__deep-dive summary{padding:10px 13px;color:#17675e;font-weight:800;cursor:pointer}.formula-study-guide__deep-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;padding:0 13px 13px}.formula-study-guide__deep-grid p{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__deep-grid strong{display:block;margin-bottom:4px;color:#17232a}
 .formula-study-guide__modification{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:13px;padding:12px 13px;border:1px solid #bddfd7;border-left:4px solid #12816f;border-radius:8px;background:#f3fbf8;color:#365762;line-height:1.45}.formula-study-guide__modification p{margin:0}.formula-study-guide__modification strong{color:#087263}.formula-study-guide__modification b{color:#9b450e}.formula-study-guide__modification a{flex:0 0 auto;color:#075fc8;font-weight:800;text-decoration:none}.formula-study-guide__modification a:hover{text-decoration:underline}
 .formula-study-guide__branches{margin-top:12px;border:1px solid #d7e1e6;border-radius:8px;background:#fff}.formula-study-guide__branches summary{padding:11px 13px;color:#174c69;font-weight:800;cursor:pointer}.formula-study-guide__branch-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 13px 13px}.formula-study-guide__branch-group{padding:12px;border-radius:8px;background:#f6f9fa}.formula-study-guide__branch-group h5{margin:0 0 8px;color:#17232a;font-size:14px}.formula-study-guide__branch-group ul{margin:0;padding-left:18px}.formula-study-guide__branch-group li{margin:0 0 8px;color:#52677a;line-height:1.45}.formula-study-guide__branch-group li:last-child{margin-bottom:0}.formula-study-guide__branch-group strong{color:#17232a}
-.formula-study-guide__formula-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #dde5e9}.formula-study-guide__ingredients{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__ingredients strong{color:#17232a}
+.formula-study-guide__formula-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #dde5e9}.formula-study-guide__ingredients{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__ingredients strong{color:#17232a}.formula-study-guide__herb-english{color:#64748b;font-size:.72em;font-weight:650;line-height:1.2}
 .formula-study-guide__source-pages{flex:0 0 auto;padding:7px 10px;border-radius:7px;background:#eef3f6;color:#415a6b;font-size:12px;font-weight:800;white-space:nowrap}
 .formula-study-guide__safety{margin-top:12px;border:1px solid #ded6ec;border-radius:8px;background:#fbf9ff}.formula-study-guide__safety summary{padding:10px 13px;color:#60409a;font-weight:800;cursor:pointer}.formula-study-guide__safety p{margin:0;padding:0 13px 13px;color:#52677a;line-height:1.5}
 .formula-study-guide__references{margin:20px 0;border:1px solid #d8e1e7;border-radius:11px;background:#fff}.formula-study-guide__references>summary{padding:16px 18px;color:#334155;font-size:17px;font-weight:900;cursor:pointer}.formula-study-guide__references-body{padding:0 18px 18px}.formula-study-guide__references-body>p{margin:0 0 15px;color:#52677a;line-height:1.5}.formula-study-guide__reference-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__reference-group{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__reference-group h5{margin:0 0 10px;font-size:15px}.formula-study-guide__reference-group ul{margin:0;padding-left:18px}.formula-study-guide__reference-group li{margin:0 0 9px;color:#52677a;line-height:1.4}.formula-study-guide__reference-group li:last-child{margin-bottom:0}.formula-study-guide__reference-group strong{color:#17232a}
@@ -3837,10 +4072,6 @@ echo $OUTPUT->header();
             $chapterformulaindex = 0;
             $lastformulacategory = null;
             $lastclinicalsectionkey = null;
-            $kingherbenglishnames = [
-                'Dang Gui' => 'Chinese Angelica Root',
-                'Sheng Di Huang' => 'Raw Rehmannia Root',
-            ];
             ?>
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
@@ -3948,17 +4179,10 @@ echo $OUTPUT->header();
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
                     : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : '');
                 $kingherbsplural = preg_match('/[,\/]/', (string) $formula['kings']) === 1;
-                $kingherbsdisplayparts = [];
-                foreach (preg_split('/\s*,\s*/', trim((string) $formula['kings'])) as $kingherbname) {
-                    $kingherbdisplay = s($kingherbname);
-                    if (isset($kingherbenglishnames[$kingherbname])) {
-                        $kingherbenglishname = $kingherbenglishnames[$kingherbname];
-                        $kingherbdisplay .= ' <span lang="en" data-herb-english-speech="' . s($kingherbenglishname) . '">('
-                            . s($kingherbenglishname) . ')</span>';
-                    }
-                    $kingherbsdisplayparts[] = $kingherbdisplay;
-                }
-                $kingherbsdisplay = implode(', ', $kingherbsdisplayparts);
+                $kingherbsdisplay = $renderherbswithenglish((string) $formula['kings']);
+                $ingredientsdisplay = $renderherbswithenglish((string) ($ises
+                    ? $formula['ingredientsEs']
+                    : $formula['ingredients']));
                 $formulaenglishname = trim((string) ($formula['englishName'] ?? ''));
                 if ($formulaenglishname === '') {
                     $formulaenglishname = $getformulaenglishname($formula['name']);
@@ -4138,7 +4362,7 @@ echo $OUTPUT->header();
                         </div>
                     <?php endif; ?>
                     <div class="formula-study-guide__formula-footer">
-                        <p class="formula-study-guide__ingredients"><strong><?php echo $ises ? 'Ingredientes:' : 'Ingredients:'; ?></strong> <?php echo s($ises ? $formula['ingredientsEs'] : $formula['ingredients']); ?></p>
+                        <p class="formula-study-guide__ingredients"><strong><?php echo $ises ? 'Ingredientes:' : 'Ingredients:'; ?></strong> <?php echo $ingredientsdisplay; ?></p>
                         <?php if ($practiceurl !== null): ?>
                             <a class="formula-study-guide__button formula-study-guide__button--primary" href="<?php echo $practiceurl->out(false); ?>"><?php echo s(($ises ? 'Practicar ' : 'Practice ') . $formula['practiceCount'] . ($ises ? ' preguntas →' : ' questions →')); ?></a>
                         <?php elseif ($isintegratedofficialprofile): ?>
