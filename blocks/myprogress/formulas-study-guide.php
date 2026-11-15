@@ -1905,11 +1905,11 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 if (isSpanish) {
                     pattern = pattern.replace(/^Viento-Frío de exceso$/i, 'Viento-Frío en Exceso');
                     rows.push('La fórmula ' + formula
-                        + (englishName ? ', cuyo nombre en inglés es ' + englishName + ',' : '')
+                        + (englishName ? ', ' + englishName + ',' : '')
                         + ' tiene un patrón de ' + pattern + '. Sus síntomas diferenciales son ' + signs + '.');
                 } else {
                     rows.push('The formula ' + formula
-                        + (englishName ? ', also called ' + englishName + ',' : '')
+                        + (englishName ? ', ' + englishName + ',' : '')
                         + ' is used for a pattern of ' + pattern + '. Its decisive differentiating signs are ' + signs + '.');
                 }
             });
@@ -2808,7 +2808,7 @@ echo $OUTPUT->header();
                                         <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                             <?php echo s($displayformulaname($row[0])); ?>
                                             <?php if ($formulaenglishname !== ''): ?>
-                                                <span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span>
+                                                <span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -3475,7 +3475,7 @@ echo $OUTPUT->header();
                                                 <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                                     <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($formulaenglishname !== ''): ?>
-                                                        <span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span>
+                                                        <span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -3505,7 +3505,7 @@ echo $OUTPUT->header();
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel); ?></span>
                             <h4><?php echo s($displayformulaname($formula['name'])); ?></h4>
-                            <?php if ($formulaenglishname !== ''): ?><span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span><?php endif; ?>
+                            <?php if ($formulaenglishname !== ''): ?><span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span><?php endif; ?>
                             <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
@@ -3630,7 +3630,7 @@ echo $OUTPUT->header();
                                                 <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                                     <?php echo s($displayformulaname($row[0])); ?>
                                                     <?php if ($formulaenglishname !== ''): ?>
-                                                        <span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span>
+                                                        <span class="formula-study-guide__formula-translation"><?php echo s('(' . $formulaenglishname . ')'); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
