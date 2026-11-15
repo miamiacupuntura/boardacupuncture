@@ -3852,11 +3852,11 @@ echo $OUTPUT->header();
                     </header>
                     <p class="formula-study-guide__formula-pattern"><strong><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></strong> <?php echo s($ises ? $formula['patternEs'] : $formula['pattern']); ?></p>
                     <div class="formula-study-guide__facts">
-                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Acción' : 'Action'; ?></strong><span><?php echo s($ises ? $formula['actionEs'] : $formula['action']); ?></span></div>
-                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Pista decisiva' : 'Decisive clue'; ?></strong><span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
+                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Acción:' : 'Action:'; ?></strong> <span><?php echo s($ises ? $formula['actionEs'] : $formula['action']); ?></span></div>
+                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Pista decisiva:' : 'Decisive clue:'; ?></strong> <span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
                         <div class="formula-study-guide__fact"><strong><?php echo s($ises
-                            ? ($kingherbsplural ? 'Hierbas emperador' : 'Hierba emperador')
-                            : ($kingherbsplural ? 'King herbs' : 'King herb')); ?></strong><span><?php echo s($formula['kings']); ?></span></div>
+                            ? ($kingherbsplural ? 'Hierbas emperador:' : 'Hierba emperador:')
+                            : ($kingherbsplural ? 'King herbs:' : 'King herb:')); ?></strong> <span><?php echo s($formula['kings']); ?></span></div>
                     </div>
                     <?php if (isset($formula['examFocus'])): ?>
                         <p class="formula-study-guide__exam-focus"><strong><?php echo $issupplemental && !$isofficialformula($formula['name'])
@@ -3867,8 +3867,8 @@ echo $OUTPUT->header();
                         <details class="formula-study-guide__deep-dive">
                             <summary><?php echo s($ises ? 'Arquitectura y comparación de alto rendimiento' : 'High-yield architecture and comparison'); ?></summary>
                             <div class="formula-study-guide__deep-grid">
-                                <?php if (isset($formula['ingredientRoles'])): ?><p><strong><?php echo $ises ? 'Funciones de ingredientes' : 'Ingredient roles'; ?></strong><?php echo s($ises ? $formula['ingredientRolesEs'] : $formula['ingredientRoles']); ?></p><?php endif; ?>
-                                <?php if (isset($formula['comparison'])): ?><p><strong><?php echo $ises ? 'Comparación decisiva' : 'Decisive comparison'; ?></strong><?php echo s($ises ? $formula['comparisonEs'] : $formula['comparison']); ?></p><?php endif; ?>
+                                <?php if (isset($formula['ingredientRoles'])): ?><p><strong><?php echo $ises ? 'Funciones de ingredientes:' : 'Ingredient roles:'; ?></strong> <?php echo s($ises ? $formula['ingredientRolesEs'] : $formula['ingredientRoles']); ?></p><?php endif; ?>
+                                <?php if (isset($formula['comparison'])): ?><p><strong><?php echo $ises ? 'Comparación decisiva:' : 'Decisive comparison:'; ?></strong> <?php echo s($ises ? $formula['comparisonEs'] : $formula['comparison']); ?></p><?php endif; ?>
                             </div>
                         </details>
                     <?php endif; ?>
