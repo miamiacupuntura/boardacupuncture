@@ -2238,7 +2238,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 ['Sheng Jiang', 'Shēng Jiāng', 'Sheng Chiang'],
                 ['Sheng Ma', 'Shēng Má', 'Sheng Má'],
                 ['Shi Gao', 'Shí Gāo', 'Shí Gao'],
-                ['Tao Ren', 'Táo Rén', 'Táo Rén'],
+                ['Tao Ren', 'Táo Rén', 'Tao Ren'],
                 ['Tian Ma', 'Tiān Má', 'Tián Má'],
                 ['Ting Li Zi', 'Tíng Lì Zǐ', 'Ting Lí Tzí'],
                 ['Xing Ren', 'Xìng Rén', 'Xing Ren'],

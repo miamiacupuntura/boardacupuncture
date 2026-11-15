@@ -235,6 +235,7 @@ grep -Fq "El apéndice C del guideline es el listado oficial de fórmulas" "$TEM
 grep -Fq "apéndice D, que es el listado de sustancias obsoletas" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "String(value || '').normalize('NFC')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "['Tao Ren', 'Táo Rén', 'Tao Ren']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Gui Zhi', 'Guì Zhī', 'Guéi Yí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Niu Bang Zi', 'Niú Bàng Zǐ', 'Niú Bang Tzí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Cang Er Zi', 'Cāng Ěr Zǐ', 'Tsang Er Tzí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -243,10 +244,15 @@ grep -Fq "['Zi Wan', 'Zǐ Wǎn', 'Tzí Uán']" "$TEMP_DIR/moodle/formulas-study-
 grep -Fq "var namePattern = new RegExp('(^|[^A-Za-zÀ-ž])' + escapedName" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Xing Ren': 'Xing Ren'" "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq "'Xing Ren': 'Xing Ren'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'Táo Rén': 'Tao Ren'" "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq "'Tao Ren': 'Tao Ren'" "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq "'Táo Rén': 'Tao Ren'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'Tao Ren': 'Tao Ren'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 if grep -Fq 'cuyo nombre farmacéutico es' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'whose pharmaceutical name is' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'Shing' "$TEMP_DIR/moodle/formulas-study-guide.php" \
-    || grep -Fq 'Xing, Rén' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    || grep -Fq 'Xing, Rén' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq "['Tao Ren', 'Táo Rén', 'Táo Rén']" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
     echo "ERROR: la narración Duì Yào conserva una pronunciación o frase farmacéutica descartada." >&2
     exit 1
 fi
@@ -1046,8 +1052,13 @@ for file in "${MOODLE_FILES[@]}"; do
     php -l "$target" >/dev/null
 done
 grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq "['Tao Ren', 'Táo Rén', 'Tao Ren']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Xing Ren': 'Xing Ren'" "$TARGET_DIR/single-herbs-study-guide.php"
 grep -Fq "'Xing Ren': 'Xing Ren'" "$TARGET_DIR/single-herbs-list.php"
+grep -Fq "'Táo Rén': 'Tao Ren'" "$TARGET_DIR/single-herbs-study-guide.php"
+grep -Fq "'Tao Ren': 'Tao Ren'" "$TARGET_DIR/single-herbs-study-guide.php"
+grep -Fq "'Táo Rén': 'Tao Ren'" "$TARGET_DIR/single-herbs-list.php"
+grep -Fq "'Tao Ren': 'Tao Ren'" "$TARGET_DIR/single-herbs-list.php"
 
 MENU_TARGET_DIR="$MOODLE_ROOT/blocks/menu"
 [[ -d "$MENU_TARGET_DIR" ]] || { echo "ERROR: no existe $MENU_TARGET_DIR" >&2; exit 1; }
@@ -1264,6 +1275,7 @@ echo "OK: la selección se reconstruye por elementos para incluir barras, tarjet
 echo "OK: cada lectura usa una sesión aislada; al terminar no continúa con fragmentos anteriores."
 echo "OK: el último fragmento cierra la lectura inmediatamente y nunca reinicia desde el principio."
 echo "OK: revisión instalada $REVISION; Xìng Rén se envía a la voz española como ‘Xing Ren’, sin acento añadido."
+echo "OK: Táo Rén se envía a la voz española como ‘Tao Ren’, sin acento añadido en Ren."
 echo "OK: todas las categorías identifican a Yang como autor del libro sin alterar Yang Qi, Yangming, Liver-Yang, Yin Yang Huo ni las deficiencias de Yang."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
