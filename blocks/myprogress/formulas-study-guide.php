@@ -326,6 +326,10 @@ foreach ($officialroster['formulas'] as $officialformula) {
 $officialformulaaliases = [
     'Jin Gui Shen Qi Wan' => 'Shen Qi Wan',
 ];
+$getofficialformula = static function(string $name) use ($officialformulasbyname, $officialformulaaliases): ?array {
+    $officialname = $officialformulaaliases[$name] ?? $name;
+    return $officialformulasbyname[$officialname] ?? null;
+};
 $isofficialformula = static function(string $name) use ($officialformulasbyname, $officialformulaaliases): bool {
     $officialname = $officialformulaaliases[$name] ?? $name;
     return isset($officialformulasbyname[$officialname]);
@@ -1846,7 +1850,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
 
     function comparisonCellText(cell) {
         var clone = cell.cloneNode(true);
-        clone.querySelectorAll('.formula-study-guide__domain-badge,[aria-hidden="true"]').forEach(function(node) {
+        clone.querySelectorAll('.formula-study-guide__domain-badge,.formula-study-guide__formula-translation,[aria-hidden="true"]').forEach(function(node) {
             node.remove();
         });
         return (clone.textContent || '').replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim();
@@ -1883,14 +1887,19 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 var cells = row.querySelectorAll('td');
                 if (cells.length < 3) return;
                 var formula = comparisonCellText(cells[0]);
+                var englishName = cells[0].getAttribute('data-formula-english-name') || '';
                 var pattern = comparisonCellText(cells[1]);
                 var signs = joinComparisonSigns(comparisonCellText(cells[2]));
                 if (!formula || !pattern || !signs) return;
                 if (isSpanish) {
                     pattern = pattern.replace(/^Viento-Frío de exceso$/i, 'Viento-Frío en Exceso');
-                    rows.push('La fórmula ' + formula + ' tiene un patrón de ' + pattern + '. Sus síntomas diferenciales son ' + signs + '.');
+                    rows.push('La fórmula ' + formula
+                        + (englishName ? ', cuyo nombre en inglés es ' + englishName + ',' : '')
+                        + ' tiene un patrón de ' + pattern + '. Sus síntomas diferenciales son ' + signs + '.');
                 } else {
-                    rows.push('The formula ' + formula + ' is used for a pattern of ' + pattern + '. Its decisive differentiating signs are ' + signs + '.');
+                    rows.push('The formula ' + formula
+                        + (englishName ? ', also called ' + englishName + ',' : '')
+                        + ' is used for a pattern of ' + pattern + '. Its decisive differentiating signs are ' + signs + '.');
                 }
             });
             if (!rows.length) return;
@@ -2258,6 +2267,7 @@ echo $OUTPUT->header();
 .formula-study-guide__dui-yao{margin:0 0 20px;padding:22px;border:1px solid #d8d4f0;border-top:5px solid #6d4bc3;border-radius:12px;background:linear-gradient(135deg,#faf8ff,#f3fbfa)}.formula-study-guide__dui-yao-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.formula-study-guide__dui-yao-header h4{margin:2px 0 7px;font-size:22px}.formula-study-guide__dui-yao-header p{max-width:790px;margin:0;color:#52677a;line-height:1.55}.formula-study-guide__dui-yao-count{flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#ece7fb;color:#5a37ac;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__dui-yao-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.formula-study-guide__dui-yao-card{display:flex;min-height:212px;flex-direction:column;padding:14px;border:1px solid #e2def3;border-radius:10px;background:#fff;color:inherit;text-decoration:none}.formula-study-guide__dui-yao-card:hover{border-color:#8b6bd1;color:inherit;text-decoration:none;box-shadow:0 5px 14px rgba(71,50,122,.12)}.formula-study-guide__dui-yao-number{color:#6d4bc3;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.formula-study-guide__dui-yao-card h5{margin:6px 0 2px;font-size:16px;line-height:1.3}.formula-study-guide__dui-yao-characters{color:#7a6b8d;font-size:13px}.formula-study-guide__dui-yao-card p{margin:10px 0;color:#52677a;font-size:13px;line-height:1.45}.formula-study-guide__dui-yao-card small{display:block;margin-top:auto;color:#394b5a;font-size:11px;line-height:1.4}.formula-study-guide__dui-yao-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding-top:15px;border-top:1px solid #ded9ef}.formula-study-guide__dui-yao-footer p{margin:0;color:#5f5670;font-size:12px;line-height:1.5}
 .formula-study-guide__compare{margin:0 0 20px;border:1px solid #d8e1e7;border-radius:11px;background:#fff;overflow:hidden}.formula-study-guide__compare h4{margin:0;padding:16px 18px;background:#f5f8fa;font-size:18px}.formula-study-guide__table-wrap{overflow-x:auto}.formula-study-guide__table{width:100%;border-collapse:collapse}.formula-study-guide__table th,.formula-study-guide__table td{padding:11px 14px;border-top:1px solid #e2e8ec;text-align:left;vertical-align:top}.formula-study-guide__table th{color:#334155;font-size:12px;text-transform:uppercase}.formula-study-guide__table td{color:#52677a;line-height:1.4}.formula-study-guide__table td:first-child{color:#17232a;font-weight:800;white-space:nowrap}
 .formula-study-guide__domain-badge{display:inline-flex;align-items:center;margin:5px 0 0;padding:4px 7px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;white-space:nowrap}.formula-study-guide__domain-badge:hover{background:#c9ddff;color:#0b3b8c;text-decoration:none}
+.formula-study-guide__formula-translation{display:block;margin-top:5px;color:#315fa5;font-size:12px;font-weight:750;line-height:1.35}
 .formula-study-guide__category-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px}.formula-study-guide__category-nav>span{flex:1}.formula-study-guide__category-nav>span:last-child{text-align:right}.formula-study-guide__category-nav-center{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap}
 .formula-study-guide__formula-list{display:grid;gap:16px}
 .formula-study-guide__formula{padding:22px;border:1px solid #d8e1e7;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.04)}
@@ -2780,12 +2790,15 @@ echo $OUTPUT->header();
                             <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                             <tbody>
                                 <?php foreach ($comparerows as $row): ?>
-                                    <?php $boardmatch = $getboardformula($row[0]); ?>
+                                    <?php
+                                    $officialmatch = $getofficialformula($row[0]);
+                                    $formulaenglishname = trim((string) ($officialmatch['englishName'] ?? ''));
+                                    ?>
                                     <tr>
-                                        <td>
+                                        <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                             <?php echo s($displayformulaname($row[0])); ?>
-                                            <?php if ($boardmatch !== null): ?>
-                                                <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En la secuencia detallada del núcleo · Fórmula ' : 'detailed core sequence · Formula ') . $boardmatch['number']); ?></span>
+                                            <?php if ($formulaenglishname !== ''): ?>
+                                                <span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -3441,12 +3454,15 @@ echo $OUTPUT->header();
                                     <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
-                                            <?php $boardmatch = $getboardformula($row[0]); ?>
+                                            <?php
+                                            $officialmatch = $getofficialformula($row[0]);
+                                            $formulaenglishname = trim((string) ($officialmatch['englishName'] ?? ''));
+                                            ?>
                                             <tr>
-                                                <td>
+                                                <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                                     <?php echo s($displayformulaname($row[0])); ?>
-                                                    <?php if ($boardmatch !== null): ?>
-                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En la secuencia detallada del núcleo · Fórmula ' : 'detailed core sequence · Formula ') . $boardmatch['number']); ?></span>
+                                                    <?php if ($formulaenglishname !== ''): ?>
+                                                        <span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
@@ -3593,12 +3609,15 @@ echo $OUTPUT->header();
                                     <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($comparerows as $row): ?>
-                                            <?php $boardmatch = $getboardformula($row[0]); ?>
+                                            <?php
+                                            $officialmatch = $getofficialformula($row[0]);
+                                            $formulaenglishname = trim((string) ($officialmatch['englishName'] ?? ''));
+                                            ?>
                                             <tr>
-                                                <td>
+                                                <td<?php echo $formulaenglishname !== '' ? ' data-formula-english-name="' . s($formulaenglishname) . '"' : ''; ?>>
                                                     <?php echo s($displayformulaname($row[0])); ?>
-                                                    <?php if ($boardmatch !== null): ?>
-                                                        <br><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'En la secuencia detallada del núcleo · Fórmula ' : 'detailed core sequence · Formula ') . $boardmatch['number']); ?></span>
+                                                    <?php if ($formulaenglishname !== ''): ?>
+                                                        <span class="formula-study-guide__formula-translation"><?php echo s(($ises ? 'Nombre en inglés: ' : 'English name: ') . $formulaenglishname); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?php echo s($ises ? $row[3] : $row[1]); ?></td>
