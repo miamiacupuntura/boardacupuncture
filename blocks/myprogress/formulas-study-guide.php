@@ -2081,11 +2081,29 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
+    function installFormulaRiskNarrations(root) {
+        var risks = Array.from(root.querySelectorAll('.formula-study-guide__risk'));
+        if (root.matches && root.matches('.formula-study-guide__risk')) risks.unshift(root);
+        risks.forEach(function(risk) {
+            var card = risk.closest('.formula-study-guide__formula');
+            var pattern = card ? card.querySelector('.formula-study-guide__formula-pattern') : null;
+            var riskText = (risk.textContent || '').replace(/[.:;,]+\s*$/, '').trim();
+            if (!pattern || !riskText) return;
+            var patternText = (pattern.textContent || '')
+                .replace(/^\s*(?:Patrón|Pattern)\s*:\s*/i, '')
+                .trim();
+            if (!patternText) return;
+            pattern.textContent = riskText + (isSpanish ? ', patrón: ' : ', pattern: ') + patternText;
+            risk.remove();
+        });
+    }
+
     function extractText(element) {
         if (!element) return '';
         var clone = element.cloneNode(true);
         installComparisonNarrations(clone);
         installDuiYaoNarrations(clone);
+        installFormulaRiskNarrations(clone);
         clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore],.formula-study-guide__domain-badge').forEach(function(node) {
             node.remove();
         });
