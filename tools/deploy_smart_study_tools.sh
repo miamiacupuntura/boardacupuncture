@@ -159,7 +159,7 @@ grep -Fq 'Xin Yi Hua (Magnoliae Flos)' "$TEMP_DIR/moodle/single-herbs-study-guid
 grep -Fq "'Relative warmth' => 'Tibieza relativa'" "$TEMP_DIR/moodle/single-herbs-study-guide-es.php"
 grep -Fq '<div class="single-herbs-guide__yang-visual">' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq '.single-herbs-guide__category-herb-badge, .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
-grep -Fq '[aria-hidden="true"], .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq '[aria-hidden="true"], [data-read-aloud-ignore], .single-herbs-guide__yang-visual' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 if grep -Fq 'does not prescribe dosage' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
     || grep -Fq 'no prescribe dosis' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
     || grep -Fq 'not percentages of clinical effectiveness' "$TEMP_DIR/moodle/single-herbs-study-guide.php" \
@@ -178,7 +178,7 @@ if grep -Fq 'punctuateSelectedPart' "$TEMP_DIR/moodle/single-herbs-study-guide.p
     exit 1
 fi
 grep -Fq "'.single-herbs-guide__roster-modal', '.single-herbs-guide__category-herb-badge'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
-grep -Fq '[aria-hidden="true"], .single-herbs-guide__category-herb-badge' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq '[aria-hidden="true"], [data-read-aloud-ignore], .single-herbs-guide__category-herb-badge' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-full' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-selection' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'data-read-aloud-visible' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
