@@ -2093,7 +2093,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 .replace(/^\s*(?:Patrón|Pattern)\s*:\s*/i, '')
                 .trim();
             if (!patternText) return;
-            pattern.textContent = riskText + (isSpanish ? ', patrón: ' : ', pattern: ') + patternText;
+            pattern.textContent = riskText + (isSpanish ? '. Patrón: ' : '. Pattern: ') + patternText;
             risk.remove();
         });
     }

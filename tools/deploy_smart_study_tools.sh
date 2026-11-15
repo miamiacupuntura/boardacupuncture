@@ -147,7 +147,7 @@ fi
 grep -Fq 'installComparisonNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'installDuiYaoNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'installFormulaRiskNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "pattern.textContent = riskText + (isSpanish ? ', patrón: ' : ', pattern: ') + patternText;" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "pattern.textContent = riskText + (isSpanish ? '. Patrón: ' : '. Pattern: ') + patternText;" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-dui-yao-card' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-position' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-formulas' "$TEMP_DIR/moodle/formulas-study-guide.php"
