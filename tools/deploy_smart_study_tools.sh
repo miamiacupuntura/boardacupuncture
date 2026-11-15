@@ -252,6 +252,12 @@ grep -Fq '$ingredientsdisplay = $renderherbswithenglish' "$TEMP_DIR/moodle/formu
 grep -Fq 'formula-study-guide__herb-english' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "heading.closest('[data-formula-read-section-ignore]')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-read-section-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Fq 'Todas incluidas' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'All included' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: la guía todavía contiene la insignia redundante de cobertura completa." >&2
+    exit 1
+fi
+grep -Fq "\$selectedboardstatus['label'] !== ''" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Gui Zhi', 'Guì Zhī', 'Guéi Yí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Niu Bang Zi', 'Niú Bàng Zǐ', 'Niú Bang Tzí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Cang Er Zi', 'Cāng Ěr Zǐ', 'Tsang Er Tzí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -1090,6 +1096,12 @@ grep -Fq '$ingredientsdisplay = $renderherbswithenglish' "$TARGET_DIR/formulas-s
 grep -Fq 'formula-study-guide__herb-english' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "heading.closest('[data-formula-read-section-ignore]')" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'data-formula-read-section-ignore' "$TARGET_DIR/formulas-study-guide.php"
+if grep -Fq 'Todas incluidas' "$TARGET_DIR/formulas-study-guide.php" \
+    || grep -Fq 'All included' "$TARGET_DIR/formulas-study-guide.php"; then
+    echo "ERROR: la guía instalada todavía contiene la insignia redundante de cobertura completa." >&2
+    exit 1
+fi
+grep -Fq "\$selectedboardstatus['label'] !== ''" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Xing Ren': 'Xing Ren'" "$TARGET_DIR/single-herbs-study-guide.php"
 grep -Fq "'Xing Ren': 'Xing Ren'" "$TARGET_DIR/single-herbs-list.php"
 grep -Fq "'Táo Rén': 'Tao Ren'" "$TARGET_DIR/single-herbs-study-guide.php"
@@ -1322,6 +1334,7 @@ echo "OK: las hierbas emperador se narran como una frase completa para separar c
 echo "OK: Dang Gui y Sheng Di Huang muestran y narran sus nombres ingleses inmediatamente después del pinyin."
 echo "OK: todas las listas de ingredientes añaden un nombre inglés pequeño entre paréntesis después de cada pinyin reconocido."
 echo "OK: el selector de secciones excluye el bloque de navegación ‘21 capítulos de Bensky’."
+echo "OK: los distintivos ‘todas incluidas’ se eliminaron de la vista y de la narración."
 echo "OK: las fórmulas en inglés priorizan una voz natural del mismo proveedor que la voz española y permiten elegir otra voz inglesa."
 echo "OK: todas las categorías identifican a Yang como autor del libro sin alterar Yang Qi, Yangming, Liver-Yang, Yin Yang Huo ni las deficiencias de Yang."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."

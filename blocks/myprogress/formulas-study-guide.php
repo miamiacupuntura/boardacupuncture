@@ -676,7 +676,7 @@ $getboardstatus = static function(array $formulas, bool $spanish) use ($isoffici
         $summary = $spanish ? 'Ninguna incluida' : 'None included';
     } elseif ($included === $total) {
         $state = 'all';
-        $summary = $spanish ? 'Todas incluidas' : 'All included';
+        $summary = '';
     } else {
         $state = 'some';
         $summary = ($spanish ? 'Solo ' : 'Only ') . $included . ($spanish ? ' incluidas' : ' included');
@@ -685,7 +685,9 @@ $getboardstatus = static function(array $formulas, bool $spanish) use ($isoffici
         'included' => $included,
         'total' => $total,
         'state' => $state,
-        'label' => 'Appendix C: ' . $included . ($spanish ? ' de ' : ' of ') . $total . ' · ' . $summary,
+        'label' => $state === 'all'
+            ? ''
+            : 'Appendix C: ' . $included . ($spanish ? ' de ' : ' of ') . $total . ' · ' . $summary,
     ];
 };
 $displayformulaname = static function(string $name) use ($isofficialformula): string {
@@ -3167,7 +3169,7 @@ echo $OUTPUT->header();
                     <span class="formula-study-guide__category-number"><?php echo (int) $chapter['number']; ?></span>
                     <strong><?php echo s($ises ? $chapter['nameEs'] : $chapter['name']); ?></strong>
                     <span class="formula-study-guide__category-meta"><?php echo s($categorymeta); ?></span>
-                    <span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($statuslabel); ?></span>
+                    <?php if ($statuslabel !== ''): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($categoryboardstatus['state']); ?>"><?php echo s($statuslabel); ?></span><?php endif; ?>
                     <p><?php echo s($copy); ?></p>
                     <small><?php echo s($ises ? 'Abrir capítulo de Bensky →' : 'Open Bensky chapter →'); ?></small>
                 </a>
@@ -3208,7 +3210,8 @@ echo $OUTPUT->header();
         <section class="formula-study-guide__category-header<?php echo $issupplemental ? ' formula-study-guide__category-header--supplemental' : ''; ?>" aria-labelledby="selected-category-title">
             <p class="formula-study-guide__eyebrow"><?php echo s($selectedeyebrow); ?></p>
             <h3 id="selected-category-title"><?php echo s($selectedtitle); ?></h3>
-            <?php if ($selectedbenskychapter !== null || $issupplemental || isset($unifiedfamilystatusformulas[$selected['key']])): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
+            <?php if (($selectedbenskychapter !== null || $issupplemental || isset($unifiedfamilystatusformulas[$selected['key']]))
+                    && $selectedboardstatus['label'] !== ''): ?><span class="formula-study-guide__board-status formula-study-guide__board-status--<?php echo s($selectedboardstatus['state']); ?>" role="note"><?php echo s($selectedboardstatus['label']); ?></span><?php endif; ?>
             <p><?php echo s($selectedcopy); ?> <strong><?php echo $selectedvisiblecount; ?> <?php echo s($selectedcountlabel); ?></strong></p>
             <?php if ($selectedreference !== null): ?><span class="formula-study-guide__category-reference"><?php echo s($selectedreference); ?></span><?php endif; ?>
         </section>
