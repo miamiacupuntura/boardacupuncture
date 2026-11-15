@@ -326,7 +326,7 @@ grep -Fq '"separatorEs": "Estreñimiento o plenitud dura y dolorosa con signos d
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (($data["version"] ?? null) !== 7 || count($data["formulas"] ?? []) !== 63 || count($data["supplementalFormulas"] ?? []) !== 227) { exit(1); }' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq 'formula-study-guide__domain-badge' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq 'utterance.rate = 1;' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "utterance.rate = chunkLanguage.slice(0, 2).toLowerCase() === 'en' ? 0.96 : 1;" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'sessionId' "$TEMP_DIR/moodle/formulas-study-guide.php"
 
 grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
