@@ -2156,10 +2156,11 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
 
     function installEnglishFormulaNarrations(root) {
         if (!isSpanish) return;
-        var names = Array.from(root.querySelectorAll('[data-formula-english-speech]'));
-        if (root.matches && root.matches('[data-formula-english-speech]')) names.unshift(root);
+        var names = Array.from(root.querySelectorAll('[data-formula-english-speech],[data-herb-english-speech]'));
+        if (root.matches && root.matches('[data-formula-english-speech],[data-herb-english-speech]')) names.unshift(root);
         names.forEach(function(name) {
-            var englishName = (name.getAttribute('data-formula-english-speech') || '')
+            var englishName = (name.getAttribute('data-formula-english-speech')
+                || name.getAttribute('data-herb-english-speech') || '')
                 .replace(/^\s*\(|\)\s*$/g, '')
                 .trim();
             if (!englishName) return;
@@ -3832,7 +3833,15 @@ echo $OUTPUT->header();
             <?php echo $relatedduiyaomarkup; ?>
         <?php endif; ?>
         <section class="formula-study-guide__formula-list" aria-label="<?php echo s($ises ? 'Fórmulas de la categoría' : 'Category formulas'); ?>">
-            <?php $chapterformulaindex = 0; $lastformulacategory = null; $lastclinicalsectionkey = null; ?>
+            <?php
+            $chapterformulaindex = 0;
+            $lastformulacategory = null;
+            $lastclinicalsectionkey = null;
+            $kingherbenglishnames = [
+                'Dang Gui' => 'Chinese Angelica Root',
+                'Sheng Di Huang' => 'Raw Rehmannia Root',
+            ];
+            ?>
             <?php foreach ($selected['formulas'] as $formula): ?>
                 <?php
                 $isassociatedformula = ($formula['chapterRole'] ?? 'principal') === 'associated';
@@ -3939,6 +3948,17 @@ echo $OUTPUT->header();
                     ? ($ises ? 'Seguridad crítica' : 'Critical safety')
                     : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : '');
                 $kingherbsplural = preg_match('/[,\/]/', (string) $formula['kings']) === 1;
+                $kingherbsdisplayparts = [];
+                foreach (preg_split('/\s*,\s*/', trim((string) $formula['kings'])) as $kingherbname) {
+                    $kingherbdisplay = s($kingherbname);
+                    if (isset($kingherbenglishnames[$kingherbname])) {
+                        $kingherbenglishname = $kingherbenglishnames[$kingherbname];
+                        $kingherbdisplay .= ' <span lang="en" data-herb-english-speech="' . s($kingherbenglishname) . '">('
+                            . s($kingherbenglishname) . ')</span>';
+                    }
+                    $kingherbsdisplayparts[] = $kingherbdisplay;
+                }
+                $kingherbsdisplay = implode(', ', $kingherbsdisplayparts);
                 $formulaenglishname = trim((string) ($formula['englishName'] ?? ''));
                 if ($formulaenglishname === '') {
                     $formulaenglishname = $getformulaenglishname($formula['name']);
@@ -4056,7 +4076,7 @@ echo $OUTPUT->header();
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></strong> <span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
                         <div class="formula-study-guide__fact"><strong><?php echo s($ises
                             ? ($kingherbsplural ? 'Hierbas emperador:' : 'Hierba emperador:')
-                            : ($kingherbsplural ? 'King herbs:' : 'King herb:')); ?></strong> <span><?php echo s($formula['kings']); ?></span></div>
+                            : ($kingherbsplural ? 'King herbs:' : 'King herb:')); ?></strong> <span><?php echo $kingherbsdisplay; ?></span></div>
                     </div>
                     <?php if (isset($formula['examFocus'])): ?>
                         <p class="formula-study-guide__exam-focus"><strong><?php echo $issupplemental && !$isofficialformula($formula['name'])
