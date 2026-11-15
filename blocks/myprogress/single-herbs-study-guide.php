@@ -2657,6 +2657,43 @@ ob_start();
             }
         }
 
+        const buildFlashIntroduction = function() {
+            const isSpanish = language.indexOf('es') === 0;
+            const foundationHeading = Array.from(readAloudRoot.querySelectorAll('section h3, section h4, section h5')).find(function(heading) {
+                return /(?:general introduction|introducción general)\s*$/i.test(cleanStructuredText(heading.textContent));
+            });
+            const foundationSection = foundationHeading ? foundationHeading.closest('section') : null;
+            const selectedCategoryOption = document.querySelector('[data-single-herbs-category-jump] select option:checked');
+            let categoryName = foundationHeading ? cleanStructuredText(foundationHeading.textContent) : '';
+            categoryName = categoryName.replace(/\s*:\s*(?:general introduction|introducción general)\s*$/i, '');
+            if (!categoryName && selectedCategoryOption) {
+                categoryName = cleanStructuredText(selectedCategoryOption.textContent).replace(/^\d+\s*·\s*/, '');
+            }
+            const characteristicElement = foundationSection
+                ? foundationSection.querySelector(':scope > .single-herbs-guide__section-lead')
+                : readAloudRoot.querySelector('.single-herbs-guide__section-lead');
+            const characteristic = cleanStructuredText(characteristicElement ? characteristicElement.textContent : '');
+            const sentences = [];
+            if (categoryName) {
+                sentences.push((isSpanish ? 'La categoría que vamos a estudiar es ' : 'The category we are going to study is ')
+                    + categoryName + '.');
+            }
+            if (characteristic) {
+                sentences.push(isSpanish
+                    ? 'La característica general de esta categoría es la siguiente.'
+                    : 'The general characteristic of this category is the following.');
+                sentences.push(/[.!?]$/.test(characteristic) ? characteristic : characteristic + '.');
+            }
+            sentences.push(isSpanish
+                ? 'Vamos a estudiar las hierbas fundamentales de esta categoría, que son las siguientes:'
+                : 'We will now study the fundamental herbs in this category, which are the following:');
+            return sentences.join(' ');
+        };
+
+        if (flashNarration) {
+            flashNarration = buildFlashIntroduction() + '\n' + flashNarration;
+        }
+
         const readAloudAlternativeText = function(element) {
             if (!element) {
                 return '';
