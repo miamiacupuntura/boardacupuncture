@@ -162,6 +162,14 @@ grep -Fq "'Este Duì Yào está relacionado con la fórmula '" "$TEMP_DIR/moodle
 grep -Fq 'formula-study-guide__dui-yao-number" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "<span data-read-aloud-ignore><?php echo \$ises ? 'Abrir ficha →' : 'Open profile →'; ?></span>" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-comparison-table' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq '“Fórmulas estudiadas en detalle” identifica las que tienen una ficha principal en esta sección.' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Fórmulas estudiadas en detalle:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Otras fórmulas para comparar:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Fq "? 'Board:' : 'Board:'" "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq "? 'Referencia:' : 'Reference:'" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: la tabla terapéutica conserva etiquetas ambiguas Board o Referencia." >&2
+    exit 1
+fi
 grep -Fq "pattern = pattern.replace(/^Viento-Frío de exceso\$/i, 'Viento-Frío en Exceso')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "rows.push('La fórmula ' + formula" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "+ (englishName ? ', ' + englishName + ',' : '')" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -223,6 +231,7 @@ if grep -Fq 'Seguridad revisada' "$TEMP_DIR/moodle/formulas-study-guide.php" \
 fi
 grep -Fq '"actionEs": "Libera capa muscular, regula Yin y Wei y armoniza exterior."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"relatedDuiYaoTextEs": "En esta categoría aparecen siete parejas oficiales.' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"separatorEs": "Estreñimiento o plenitud dura y dolorosa con signos de Calor/exceso; las tres fórmulas Cheng Qi estudiadas en detalle forman la escala gradual central."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (($data["version"] ?? null) !== 7 || count($data["formulas"] ?? []) !== 63 || count($data["supplementalFormulas"] ?? []) !== 227) { exit(1); }' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq 'formula-study-guide__domain-badge' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/formulas-study-guide.php"

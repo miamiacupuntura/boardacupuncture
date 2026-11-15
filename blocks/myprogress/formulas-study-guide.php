@@ -2947,6 +2947,9 @@ echo $OUTPUT->header();
                         <span class="formula-study-guide__scope-analysis-count"><?php echo s(count($selectedguide['therapeuticClasses']) . ($ises ? ' clases terapéuticas' : ' therapeutic classes')); ?></span>
                         <h4 id="therapeutic-classification-title"><?php echo s($ises ? $selectedguide['classificationTitleEs'] : $selectedguide['classificationTitle']); ?></h4>
                         <p><?php echo s($ises ? $selectedguide['classificationTextEs'] : $selectedguide['classificationText']); ?></p>
+                        <p><?php echo s($ises
+                            ? '“Fórmulas estudiadas en detalle” identifica las que tienen una ficha principal en esta sección. “Otras fórmulas para comparar” añade ejemplos de la misma clase terapéutica. Estas etiquetas no determinan por sí solas si una fórmula pertenece al apéndice C, el listado oficial de fórmulas del guideline.'
+                            : '“Formulas studied in detail” identifies formulas with a principal profile in this section. “Other formulas for comparison” adds examples from the same therapeutic class. These labels do not by themselves determine whether a formula belongs to Appendix C, the guideline official list of formulas.'); ?></p>
                     </header>
                     <div class="formula-study-guide__table-wrap">
                         <table class="formula-study-guide__table">
@@ -2965,7 +2968,9 @@ echo $OUTPUT->header();
                                         <td><?php echo s($ises ? $therapeuticclass['logicEs'] : $therapeuticclass['logic']); ?></td>
                                         <td>
                                             <?php if ($therapeuticclass['boardNames'] !== []): ?>
-                                                <strong><?php echo $ises ? 'Board:' : 'Board:'; ?></strong>
+                                                <strong><?php echo s($ises
+                                                    ? (count($therapeuticclass['boardNames']) === 1 ? 'Fórmula estudiada en detalle:' : 'Fórmulas estudiadas en detalle:')
+                                                    : (count($therapeuticclass['boardNames']) === 1 ? 'Formula studied in detail:' : 'Formulas studied in detail:')); ?></strong>
                                                 <?php foreach ($therapeuticclass['boardNames'] as $classnameindex => $classname): ?>
                                                     <?php $classboardformula = $getboardformula($classname); ?>
                                                     <?php if ($classnameindex > 0): ?>, <?php endif; ?>
@@ -2974,7 +2979,9 @@ echo $OUTPUT->header();
                                             <?php endif; ?>
                                             <?php if ($therapeuticclass['boardNames'] !== [] && $therapeuticclass['otherNames'] !== []): ?><br><?php endif; ?>
                                             <?php if ($therapeuticclass['otherNames'] !== []): ?>
-                                                <strong><?php echo $ises ? 'Referencia:' : 'Reference:'; ?></strong>
+                                                <strong><?php echo s($ises
+                                                    ? (count($therapeuticclass['otherNames']) === 1 ? 'Otra fórmula para comparar:' : 'Otras fórmulas para comparar:')
+                                                    : (count($therapeuticclass['otherNames']) === 1 ? 'Other formula for comparison:' : 'Other formulas for comparison:')); ?></strong>
                                                 <?php echo s(implode(', ', $therapeuticclass['otherNames'])); ?>
                                             <?php endif; ?>
                                         </td>
