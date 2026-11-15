@@ -1912,6 +1912,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     var isSpanish = language.toLowerCase().indexOf('es') === 0;
     var sectionSelect = reader.querySelector('[data-formula-read-section-select]');
     var voiceSelect = reader.querySelector('[data-formula-read-voice]');
+    var englishVoiceSelect = reader.querySelector('[data-formula-read-english-voice]');
     var fullButton = reader.querySelector('[data-formula-read-full]');
     var sectionButton = reader.querySelector('[data-formula-read-section]');
     var selectionButton = reader.querySelector('[data-formula-read-selection]');
@@ -1929,6 +1930,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     var sessionId = 0;
     var paused = false;
     var selectedVoice = null;
+    var selectedEnglishVoice = null;
     var cachedSelection = '';
 
     function setStatus(message) {
@@ -2385,6 +2387,34 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
+    function voiceProvider(voice) {
+        var name = String((voice && voice.name) || '').toLowerCase();
+        var providers = ['google', 'microsoft', 'apple', 'amazon', 'samsung'];
+        return providers.find(function(provider) { return name.indexOf(provider) !== -1; }) || '';
+    }
+
+    function bestNaturalVoice(voices, targetLanguage, referenceVoice) {
+        var target = String(targetLanguage || '').toLowerCase();
+        var targetPrefix = target.slice(0, 2);
+        var referenceProvider = voiceProvider(referenceVoice);
+        var naturalNames = /natural|neural|premium|enhanced|studio|aria|ava|jenny|sonia|ryan|emma|guy|samantha|daniel|natasha/i;
+        var roboticNames = /espeak|compact|eloquence|festival|flite/i;
+        return voices.slice().sort(function(first, second) {
+            function score(voice) {
+                var voiceLanguage = String(voice.lang || '').toLowerCase();
+                var value = 0;
+                if (voiceLanguage === target) value += 30;
+                else if (voiceLanguage.slice(0, 2) === targetPrefix) value += 15;
+                if (naturalNames.test(voice.name)) value += 90;
+                if (referenceProvider && voiceProvider(voice) === referenceProvider) value += 70;
+                if (voice.localService === false) value += 25;
+                if (roboticNames.test(voice.name)) value -= 150;
+                return value;
+            }
+            return score(second) - score(first);
+        })[0] || null;
+    }
+
     function preferredVoice(voices) {
         var stored = '';
         try { stored = window.localStorage.getItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase()) || ''; } catch (error) {}
@@ -2392,17 +2422,41 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var saved = voices.find(function(voice) { return voice.name === stored; });
             if (saved) return saved;
         }
-        var natural = /natural|neural|premium|enhanced|online|google|microsoft|samantha|daniel|ava|aria|jorge|helena|monica/i;
-        return voices.find(function(voice) { return natural.test(voice.name); }) || voices[0] || null;
+        return bestNaturalVoice(voices, language, null);
     }
 
     function voiceForLanguage(targetLanguage) {
         var prefix = String(targetLanguage || '').slice(0, 2).toLowerCase();
+        if (prefix === 'en' && selectedEnglishVoice) return selectedEnglishVoice;
         var voices = window.speechSynthesis.getVoices().filter(function(voice) {
             return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
         });
-        var natural = /natural|neural|premium|enhanced|online|google|microsoft|samantha|daniel|ava|aria|jorge|helena|monica/i;
-        return voices.find(function(voice) { return natural.test(voice.name); }) || voices[0] || null;
+        return bestNaturalVoice(voices, targetLanguage, selectedVoice);
+    }
+
+    function loadEnglishVoices() {
+        if (!englishVoiceSelect || !supported) return;
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === 'en';
+        });
+        var stored = '';
+        try { stored = window.localStorage.getItem('acupuncturetests-reader-voice-en-formulas') || ''; } catch (error) {}
+        selectedEnglishVoice = voices.find(function(voice) { return voice.name === stored; })
+            || bestNaturalVoice(voices, 'en-US', selectedVoice);
+        englishVoiceSelect.innerHTML = '';
+        var automatic = document.createElement('option');
+        automatic.value = '';
+        automatic.textContent = 'Automática — similar a la voz española'
+            + (selectedEnglishVoice ? ': ' + selectedEnglishVoice.name : '');
+        automatic.selected = !stored;
+        englishVoiceSelect.appendChild(automatic);
+        voices.forEach(function(voice) {
+            var option = document.createElement('option');
+            option.value = voice.name;
+            option.textContent = voice.name + ' (' + voice.lang + ')' + (voice.localService ? '' : ' · online');
+            option.selected = stored === voice.name;
+            englishVoiceSelect.appendChild(option);
+        });
     }
 
     function loadVoices() {
@@ -2425,6 +2479,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             if (selectedVoice && selectedVoice.name === voice.name) option.selected = true;
             voiceSelect.appendChild(option);
         });
+        loadEnglishVoices();
     }
 
     function updateControls() {
@@ -2580,6 +2635,21 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         if (!voices.length) voices = window.speechSynthesis.getVoices();
         selectedVoice = voices.find(function(voice) { return voice.name === voiceSelect.value; }) || preferredVoice(voices);
         try { window.localStorage.setItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase(), voiceSelect.value); } catch (error) {}
+        loadEnglishVoices();
+    });
+    if (englishVoiceSelect) englishVoiceSelect.addEventListener('change', function() {
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === 'en';
+        });
+        selectedEnglishVoice = voices.find(function(voice) { return voice.name === englishVoiceSelect.value; })
+            || bestNaturalVoice(voices, 'en-US', selectedVoice);
+        try {
+            if (englishVoiceSelect.value) {
+                window.localStorage.setItem('acupuncturetests-reader-voice-en-formulas', englishVoiceSelect.value);
+            } else {
+                window.localStorage.removeItem('acupuncturetests-reader-voice-en-formulas');
+            }
+        } catch (error) {}
     });
     sectionSelect.addEventListener('change', function() {
         var section = sections[Number(sectionSelect.value || 0)];
@@ -2645,7 +2715,7 @@ echo $OUTPUT->header();
 .formula-study-guide__study-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:11px 14px;border:1px solid #d9e2e7;border-radius:9px;background:#fff;color:#64748b;font-size:12px;font-weight:750}.formula-study-guide__study-route a{color:#315fa5;text-decoration:none}.formula-study-guide__study-route a:hover{text-decoration:underline}.formula-study-guide__study-route-current{color:#17232a}
 .formula-study-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;border:1px solid #9ed3ce;border-left:5px solid #0b8f87;border-radius:12px;background:#f4fbfa;box-shadow:0 4px 14px rgba(15,23,42,.08)}
 .formula-study-reader[hidden]{display:none}.formula-study-reader__disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 15px;cursor:pointer;list-style:none}.formula-study-reader__disclosure>summary::-webkit-details-marker{display:none}.formula-study-reader__disclosure>summary:after{display:flex;width:28px;height:28px;flex:0 0 28px;align-items:center;justify-content:center;border:1px solid #85c8c1;border-radius:50%;background:#fff;color:#08746f;content:'+';font-size:20px;font-weight:800}.formula-study-reader__disclosure[open]>summary:after{content:'−'}
-.formula-study-reader__title{display:block;color:#163247;font-size:19px;font-weight:900}.formula-study-reader__description{display:block;margin-top:2px;color:#607487;font-size:12px;font-weight:500}.formula-study-reader__panel{padding:0 15px 13px}.formula-study-reader__fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}.formula-study-reader label>span{display:block;margin:0 0 4px;color:#26445a;font-size:12px;font-weight:800}.formula-study-reader select{width:100%;min-height:40px;padding:7px 32px 7px 10px;border:1px solid #a9c7d2;border-radius:8px;background:#fff;color:#243b53;font-size:13px}
+.formula-study-reader__title{display:block;color:#163247;font-size:19px;font-weight:900}.formula-study-reader__description{display:block;margin-top:2px;color:#607487;font-size:12px;font-weight:500}.formula-study-reader__panel{padding:0 15px 13px}.formula-study-reader__fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}.formula-study-reader__fields--bilingual{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}.formula-study-reader label>span{display:block;margin:0 0 4px;color:#26445a;font-size:12px;font-weight:800}.formula-study-reader select{width:100%;min-height:40px;padding:7px 32px 7px 10px;border:1px solid #a9c7d2;border-radius:8px;background:#fff;color:#243b53;font-size:13px}
 .formula-study-reader__actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:9px}.formula-study-reader button{min-height:40px;padding:7px 9px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#08746f;font-size:13px;font-weight:850;line-height:1.2}.formula-study-reader button:hover:not(:disabled){background:#e7f7f3}.formula-study-reader__actions button:first-child,.formula-study-reader__actions button:nth-child(2){background:#0b8f87;color:#fff}.formula-study-reader__actions button:first-child:hover:not(:disabled),.formula-study-reader__actions button:nth-child(2):hover:not(:disabled){border-color:#076d68;background:#076d68;color:#fff}.formula-study-reader button:disabled{cursor:not-allowed;opacity:.48}
 .formula-study-reader__progress{display:grid;grid-template-columns:auto minmax(160px,1fr) auto;gap:10px;align-items:end;margin-top:10px}.formula-study-reader__progress button{min-width:104px}.formula-study-reader__range-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.formula-study-reader__range input{width:100%;margin:4px 0 0;accent-color:#0b8f87}.formula-study-reader__status{margin:8px 0 0;color:#607487;font-size:12px;font-weight:700}
 .formula-study-guide__chapter-path{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:0 0 20px;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
@@ -2703,7 +2773,7 @@ echo $OUTPUT->header();
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:1050px){.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-reader{top:8px}.formula-study-reader__actions{grid-template-columns:repeat(3,minmax(0,1fr))}.formula-study-guide__chapter-path{grid-template-columns:1fr 1fr}.formula-study-guide__chapter-path--index{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:1/-1;grid-row:1}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-reader{top:8px}.formula-study-reader__fields--bilingual{grid-template-columns:1fr 1fr}.formula-study-reader__fields--bilingual label:first-child{grid-column:1/-1}.formula-study-reader__actions{grid-template-columns:repeat(3,minmax(0,1fr))}.formula-study-guide__chapter-path{grid-template-columns:1fr 1fr}.formula-study-guide__chapter-path--index{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:1/-1;grid-row:1}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__chapter-path{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:auto;grid-row:auto}.formula-study-guide__chapter-path-link--next{text-align:left}.formula-study-guide__chapter-jump form>div{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.formula-study-reader__disclosure>summary{padding:10px 11px}.formula-study-reader__title{font-size:16px}.formula-study-reader__description{font-size:11px}.formula-study-reader__panel{padding:0 10px 10px}.formula-study-reader__fields{grid-template-columns:1fr;gap:6px}.formula-study-reader__actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.formula-study-reader button{min-height:36px;padding:6px;font-size:12px}.formula-study-reader__progress{grid-template-columns:1fr 1fr;gap:6px}.formula-study-reader__progress button{min-width:0}.formula-study-reader__range{grid-column:1/-1;grid-row:1}.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
@@ -2752,7 +2822,7 @@ echo $OUTPUT->header();
                 </span>
             </summary>
             <div class="formula-study-reader__panel">
-                <div class="formula-study-reader__fields">
+                <div class="formula-study-reader__fields<?php echo $ises ? ' formula-study-reader__fields--bilingual' : ''; ?>">
                     <label>
                         <span><?php echo s($ises ? 'Sección' : 'Section'); ?></span>
                         <select data-formula-read-section-select aria-label="<?php echo s($ises ? 'Sección para escuchar' : 'Section to read'); ?>"></select>
@@ -2761,6 +2831,12 @@ echo $OUTPUT->header();
                         <span><?php echo s($ises ? 'Voz' : 'Voice'); ?></span>
                         <select data-formula-read-voice aria-label="<?php echo s($ises ? 'Voz de narración' : 'Narration voice'); ?>"></select>
                     </label>
+                    <?php if ($ises): ?>
+                    <label>
+                        <span>Voz para los nombres en inglés</span>
+                        <select data-formula-read-english-voice aria-label="Voz para los nombres de fórmulas en inglés"></select>
+                    </label>
+                    <?php endif; ?>
                 </div>
                 <div class="formula-study-reader__actions">
                     <button type="button" data-formula-read-full><?php echo s($ises ? '▶ Página completa' : '▶ Full Page'); ?></button>
