@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
     single-herbs-category-aromatic-transform-dampness.php
@@ -124,6 +124,20 @@ grep -Fq 'shows a stronger effect on Lung Qi than on Spleen-Stomach Qi' "$TEMP_D
 grep -Fq 'Zhen Zhu Mu anchors more strongly than it directly calms' "$TEMP_DIR/moodle/single-herbs-category-anchor-settle-spirit.php"
 grep -Fq 'Bei Sha Shen alongside Mai Men Dong for nourishing Lung Yin' "$TEMP_DIR/moodle/single-herbs-category-tonify-yin.php"
 grep -Fq "\$ises ? 'Dosis' : 'Dosage'" "$TEMP_DIR/moodle/single-herbs-list.php"
+
+grep -Fq 'data-formula-read-aloud' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'SpeechSynthesisUtterance' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-formula-read-full' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-formula-read-section' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-formula-read-selection' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-formula-read-visible' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-formula-read-progress' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'formula-study-reader__disclosure' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'position:sticky;top:70px' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'revealSelectedSection' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'acupuncturetests-reader-voice-' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'utterance.rate = 1;' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'sessionId' "$TEMP_DIR/moodle/formulas-study-guide.php"
 
 grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'SpeechSynthesisUtterance' "$TEMP_DIR/moodle/single-herbs-study-guide.php"

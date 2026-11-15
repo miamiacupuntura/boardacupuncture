@@ -1804,6 +1804,342 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         }
     });
 });
+(function() {
+    'use strict';
+    var reader = document.querySelector('[data-formula-read-aloud]');
+    var page = document.querySelector('.formula-study-guide');
+    if (!reader || !page) return;
+    var supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+    var language = reader.getAttribute('data-language') || 'en-US';
+    var isSpanish = language.toLowerCase().indexOf('es') === 0;
+    var sectionSelect = reader.querySelector('[data-formula-read-section-select]');
+    var voiceSelect = reader.querySelector('[data-formula-read-voice]');
+    var fullButton = reader.querySelector('[data-formula-read-full]');
+    var sectionButton = reader.querySelector('[data-formula-read-section]');
+    var selectionButton = reader.querySelector('[data-formula-read-selection]');
+    var visibleButton = reader.querySelector('[data-formula-read-visible]');
+    var pauseButton = reader.querySelector('[data-formula-read-pause]');
+    var stopButton = reader.querySelector('[data-formula-read-stop]');
+    var backButton = reader.querySelector('[data-formula-read-back]');
+    var forwardButton = reader.querySelector('[data-formula-read-forward]');
+    var progress = reader.querySelector('[data-formula-read-progress]');
+    var progressValue = reader.querySelector('[data-formula-read-progress-value]');
+    var status = reader.querySelector('[data-formula-read-status]');
+    var sections = [];
+    var speechChunks = [];
+    var currentChunk = 0;
+    var sessionId = 0;
+    var paused = false;
+    var selectedVoice = null;
+    var cachedSelection = '';
+
+    function setStatus(message) {
+        status.textContent = message;
+    }
+
+    function addSentenceBoundaries(root) {
+        root.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li,dt,dd,summary,th,td,figcaption,blockquote,.formula-study-guide__fact,.formula-study-guide__category>strong,.formula-study-guide__category-meta,.formula-study-guide__board-status').forEach(function(element) {
+            var text = (element.textContent || '').trim();
+            if (text && !/[.!?:]$/.test(text)) element.appendChild(document.createTextNode('. '));
+        });
+    }
+
+    function extractText(element) {
+        if (!element) return '';
+        var clone = element.cloneNode(true);
+        clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore]').forEach(function(node) {
+            node.remove();
+        });
+        addSentenceBoundaries(clone);
+        return (clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function normalizeSpeechText(value) {
+        return String(value || '')
+            .replace(/[*＊]+/g, '')
+            .replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ')
+            .replace(/[→⇒➜➝]/g, isSpanish ? '. Luego, ' : '. Then, ')
+            .replace(/[←↶↷]/g, ' ')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*[–—-]\s*(\d+(?:[.,]\d+)?)\s*mg\b/gi, isSpanish ? '$1 a $2 miligramos' : '$1 to $2 milligrams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*[–—-]\s*(\d+(?:[.,]\d+)?)\s*g\b/gi, isSpanish ? '$1 a $2 gramos' : '$1 to $2 grams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*mg\b/gi, isSpanish ? '$1 miligramos' : '$1 milligrams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*g\b/gi, isSpanish ? '$1 gramos' : '$1 grams')
+            .replace(/[•·|]+/g, '. ')
+            .replace(/\s*\/\s*/g, isSpanish ? ' o ' : ' or ')
+            .replace(/\s*;\s*/g, '. ')
+            .replace(/\s+/g, ' ')
+            .replace(/\s+([,.!?])/g, '$1')
+            .replace(/([.!?])\s*([.!?])+/g, '$1')
+            .trim();
+    }
+
+    function splitSpeechText(text) {
+        var cleaned = normalizeSpeechText(text);
+        var sentences = cleaned.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+        var chunks = [];
+        sentences.forEach(function(sentence) {
+            sentence = sentence.trim();
+            if (!sentence) return;
+            if (sentence.length <= 280) {
+                chunks.push(sentence);
+                return;
+            }
+            var parts = sentence.split(/,\s+/);
+            var current = '';
+            parts.forEach(function(part) {
+                var candidate = current ? current + ', ' + part : part;
+                if (candidate.length > 280 && current) {
+                    chunks.push(current + '.');
+                    current = part;
+                } else {
+                    current = candidate;
+                }
+            });
+            if (current) chunks.push(current);
+        });
+        return chunks;
+    }
+
+    function buildSections() {
+        sectionSelect.innerHTML = '';
+        sections = [];
+        page.querySelectorAll('h3,h4').forEach(function(heading) {
+            if (heading.closest('[data-formula-read-aloud]')) return;
+            var label = (heading.textContent || '').replace(/\s+/g, ' ').trim();
+            if (!label) return;
+            var root = heading.closest('section,article,details,.formula-study-guide__overview,.formula-study-guide__category-header,.formula-study-guide__formula') || heading.parentElement;
+            if (!root || sections.some(function(item) { return item.root === root; })) return;
+            sections.push({label: label, root: root});
+        });
+        if (!sections.length) sections.push({label: isSpanish ? 'Contenido de la página' : 'Page content', root: page});
+        sections.forEach(function(section, index) {
+            var option = document.createElement('option');
+            option.value = String(index);
+            option.textContent = section.label;
+            sectionSelect.appendChild(option);
+        });
+    }
+
+    function revealSelectedSection(section) {
+        if (!section) return;
+        var parentDetails = section.root.closest('details');
+        if (parentDetails) parentDetails.open = true;
+        window.requestAnimationFrame(function() {
+            var readerHeight = reader.getBoundingClientRect().height;
+            var targetTop = section.root.getBoundingClientRect().top + window.scrollY - readerHeight - 12;
+            window.scrollTo({top: Math.max(0, targetTop), behavior: 'smooth'});
+        });
+    }
+
+    function preferredVoice(voices) {
+        var stored = '';
+        try { stored = window.localStorage.getItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase()) || ''; } catch (error) {}
+        if (stored) {
+            var saved = voices.find(function(voice) { return voice.name === stored; });
+            if (saved) return saved;
+        }
+        var natural = /natural|neural|premium|enhanced|online|google|microsoft|samantha|daniel|ava|aria|jorge|helena|monica/i;
+        return voices.find(function(voice) { return natural.test(voice.name); }) || voices[0] || null;
+    }
+
+    function loadVoices() {
+        if (!supported) return;
+        var prefix = language.slice(0, 2).toLowerCase();
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
+        });
+        if (!voices.length) voices = window.speechSynthesis.getVoices();
+        selectedVoice = preferredVoice(voices);
+        voiceSelect.innerHTML = '';
+        var automatic = document.createElement('option');
+        automatic.value = '';
+        automatic.textContent = isSpanish ? 'Automática — recomendada' : 'Automatic — recommended';
+        voiceSelect.appendChild(automatic);
+        voices.forEach(function(voice) {
+            var option = document.createElement('option');
+            option.value = voice.name;
+            option.textContent = voice.name + ' (' + voice.lang + ')' + (voice.localService ? '' : ' · online');
+            if (selectedVoice && selectedVoice.name === voice.name) option.selected = true;
+            voiceSelect.appendChild(option);
+        });
+    }
+
+    function updateControls() {
+        var active = speechChunks.length > 0;
+        pauseButton.disabled = !active;
+        stopButton.disabled = !active;
+        backButton.disabled = !active || currentChunk <= 0;
+        forwardButton.disabled = !active || currentChunk >= speechChunks.length - 1;
+        progress.disabled = !active;
+        progress.max = Math.max(0, speechChunks.length - 1);
+        progress.value = Math.min(currentChunk, Math.max(0, speechChunks.length - 1));
+        progressValue.textContent = active
+            ? (isSpanish ? 'Fragmento ' : 'Fragment ') + (currentChunk + 1) + ' / ' + speechChunks.length
+            : (isSpanish ? 'Sin lectura' : 'Not reading');
+        pauseButton.textContent = paused
+            ? (isSpanish ? '▶ Continuar' : '▶ Resume')
+            : (isSpanish ? '⏸ Pausar' : '⏸ Pause');
+    }
+
+    function finishReading(message) {
+        window.speechSynthesis.cancel();
+        speechChunks = [];
+        currentChunk = 0;
+        paused = false;
+        setStatus(message || (isSpanish ? 'Lectura terminada.' : 'Reading finished.'));
+        updateControls();
+    }
+
+    function speakCurrent(activeSession) {
+        if (activeSession !== sessionId || !speechChunks.length) return;
+        if (currentChunk >= speechChunks.length) {
+            finishReading();
+            return;
+        }
+        var utterance = new SpeechSynthesisUtterance(speechChunks[currentChunk]);
+        utterance.lang = language;
+        utterance.rate = 1;
+        if (selectedVoice) utterance.voice = selectedVoice;
+        utterance.onend = function() {
+            if (activeSession !== sessionId || paused) return;
+            currentChunk += 1;
+            if (currentChunk >= speechChunks.length) {
+                finishReading();
+                return;
+            }
+            updateControls();
+            speakCurrent(activeSession);
+        };
+        utterance.onerror = function(event) {
+            if (activeSession !== sessionId || event.error === 'canceled' || event.error === 'interrupted') return;
+            finishReading(isSpanish ? 'No se pudo continuar la lectura.' : 'Reading could not continue.');
+        };
+        setStatus(isSpanish ? 'Leyendo…' : 'Reading…');
+        updateControls();
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function startReading(text, label) {
+        sessionId += 1;
+        window.speechSynthesis.cancel();
+        speechChunks = splitSpeechText(text);
+        currentChunk = 0;
+        paused = false;
+        if (!speechChunks.length) {
+            setStatus(isSpanish ? 'No hay texto disponible para leer.' : 'No text is available to read.');
+            updateControls();
+            return;
+        }
+        setStatus((isSpanish ? 'Preparando: ' : 'Preparing: ') + label + '.');
+        updateControls();
+        var activeSession = sessionId;
+        window.setTimeout(function() { speakCurrent(activeSession); }, 80);
+    }
+
+    function selectedText() {
+        return cachedSelection;
+    }
+
+    function visibleText() {
+        var seen = new Set();
+        var pieces = [];
+        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category').forEach(function(element) {
+            if (element.closest('[data-formula-read-aloud],nav,form') || element.offsetParent === null) return;
+            if (element.closest('.formula-study-guide__category') && !element.classList.contains('formula-study-guide__category')) return;
+            var rect = element.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+            var text = extractText(element);
+            if (text && !seen.has(text)) {
+                seen.add(text);
+                pieces.push(text);
+            }
+        });
+        return pieces.join(' ');
+    }
+
+    function seekTo(index) {
+        if (!speechChunks.length) return;
+        sessionId += 1;
+        window.speechSynthesis.cancel();
+        paused = false;
+        currentChunk = Math.max(0, Math.min(index, speechChunks.length - 1));
+        updateControls();
+        var activeSession = sessionId;
+        window.setTimeout(function() { speakCurrent(activeSession); }, 80);
+    }
+
+    if (!supported) {
+        reader.hidden = false;
+        setStatus(isSpanish ? 'Este navegador no ofrece lectura en voz alta.' : 'This browser does not provide read aloud.');
+        reader.querySelectorAll('button,select,input').forEach(function(control) { control.disabled = true; });
+        return;
+    }
+    reader.hidden = false;
+    buildSections();
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    document.addEventListener('selectionchange', function() {
+        var selection = window.getSelection();
+        if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+        var range = selection.getRangeAt(0);
+        if (!page.contains(range.commonAncestorContainer) || reader.contains(range.commonAncestorContainer)) return;
+        var wrapper = document.createElement('div');
+        wrapper.appendChild(range.cloneContents());
+        var text = extractText(wrapper);
+        if (text) cachedSelection = text;
+    });
+    voiceSelect.addEventListener('change', function() {
+        var prefix = language.slice(0, 2).toLowerCase();
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
+        });
+        if (!voices.length) voices = window.speechSynthesis.getVoices();
+        selectedVoice = voices.find(function(voice) { return voice.name === voiceSelect.value; }) || preferredVoice(voices);
+        try { window.localStorage.setItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase(), voiceSelect.value); } catch (error) {}
+    });
+    sectionSelect.addEventListener('change', function() {
+        var section = sections[Number(sectionSelect.value || 0)];
+        if (!section) return;
+        revealSelectedSection(section);
+    });
+    fullButton.addEventListener('click', function() {
+        startReading(extractText(page), isSpanish ? 'página completa' : 'full page');
+    });
+    sectionButton.addEventListener('click', function() {
+        var section = sections[Number(sectionSelect.value || 0)];
+        if (!section) return;
+        revealSelectedSection(section);
+        startReading(extractText(section.root), section.label);
+    });
+    selectionButton.addEventListener('click', function() {
+        startReading(selectedText(), isSpanish ? 'texto seleccionado' : 'selected text');
+    });
+    visibleButton.addEventListener('click', function() {
+        startReading(visibleText(), isSpanish ? 'texto visible' : 'visible text');
+    });
+    pauseButton.addEventListener('click', function() {
+        if (!speechChunks.length) return;
+        if (paused) {
+            paused = false;
+            window.speechSynthesis.resume();
+            setStatus(isSpanish ? 'Lectura reanudada.' : 'Reading resumed.');
+        } else {
+            paused = true;
+            window.speechSynthesis.pause();
+            setStatus(isSpanish ? 'Lectura en pausa.' : 'Reading paused.');
+        }
+        updateControls();
+    });
+    stopButton.addEventListener('click', function() {
+        sessionId += 1;
+        finishReading(isSpanish ? 'Lectura detenida.' : 'Reading stopped.');
+    });
+    backButton.addEventListener('click', function() { seekTo(currentChunk - 1); });
+    forwardButton.addEventListener('click', function() { seekTo(currentChunk + 1); });
+    progress.addEventListener('change', function() { seekTo(Number(progress.value)); });
+    window.addEventListener('beforeunload', function() { window.speechSynthesis.cancel(); });
+    updateControls();
+})();
 JS);
 
 echo $OUTPUT->header();
@@ -1823,6 +2159,11 @@ echo $OUTPUT->header();
 .formula-study-guide__button--primary{border-color:#2563eb;background:#2563eb;color:#fff}.formula-study-guide__button--primary:hover{background:#1d4ed8;color:#fff}
 .formula-study-guide__button--active{border-color:#0b817d;background:#0b817d;color:#fff}.formula-study-guide__button--active:hover{background:#0b817d;color:#fff}
 .formula-study-guide__study-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:11px 14px;border:1px solid #d9e2e7;border-radius:9px;background:#fff;color:#64748b;font-size:12px;font-weight:750}.formula-study-guide__study-route a{color:#315fa5;text-decoration:none}.formula-study-guide__study-route a:hover{text-decoration:underline}.formula-study-guide__study-route-current{color:#17232a}
+.formula-study-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;border:1px solid #9ed3ce;border-left:5px solid #0b8f87;border-radius:12px;background:#f4fbfa;box-shadow:0 4px 14px rgba(15,23,42,.08)}
+.formula-study-reader[hidden]{display:none}.formula-study-reader__disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 15px;cursor:pointer;list-style:none}.formula-study-reader__disclosure>summary::-webkit-details-marker{display:none}.formula-study-reader__disclosure>summary:after{display:flex;width:28px;height:28px;flex:0 0 28px;align-items:center;justify-content:center;border:1px solid #85c8c1;border-radius:50%;background:#fff;color:#08746f;content:'+';font-size:20px;font-weight:800}.formula-study-reader__disclosure[open]>summary:after{content:'−'}
+.formula-study-reader__title{display:block;color:#163247;font-size:19px;font-weight:900}.formula-study-reader__description{display:block;margin-top:2px;color:#607487;font-size:12px;font-weight:500}.formula-study-reader__panel{padding:0 15px 13px}.formula-study-reader__fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}.formula-study-reader label>span{display:block;margin:0 0 4px;color:#26445a;font-size:12px;font-weight:800}.formula-study-reader select{width:100%;min-height:40px;padding:7px 32px 7px 10px;border:1px solid #a9c7d2;border-radius:8px;background:#fff;color:#243b53;font-size:13px}
+.formula-study-reader__actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:9px}.formula-study-reader button{min-height:40px;padding:7px 9px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#08746f;font-size:13px;font-weight:850;line-height:1.2}.formula-study-reader button:hover:not(:disabled){background:#e7f7f3}.formula-study-reader__actions button:first-child,.formula-study-reader__actions button:nth-child(2){background:#0b8f87;color:#fff}.formula-study-reader button:disabled{cursor:not-allowed;opacity:.48}
+.formula-study-reader__progress{display:grid;grid-template-columns:auto minmax(160px,1fr) auto;gap:10px;align-items:end;margin-top:10px}.formula-study-reader__progress button{min-width:104px}.formula-study-reader__range-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.formula-study-reader__range input{width:100%;margin:4px 0 0;accent-color:#0b8f87}.formula-study-reader__status{margin:8px 0 0;color:#607487;font-size:12px;font-weight:700}
 .formula-study-guide__chapter-path{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:0 0 20px;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
 .formula-study-guide__chapter-path--index{grid-template-columns:minmax(300px,640px);justify-content:center}.formula-study-guide__chapter-path-link{display:flex;min-height:68px;flex-direction:column;justify-content:center;padding:10px 13px;border:1px solid #dbe4e9;border-radius:9px;background:#fff;color:#17344a;text-decoration:none}.formula-study-guide__chapter-path-link:hover{border-color:#f77e25;color:#17344a;text-decoration:none}.formula-study-guide__chapter-path-link span{color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.formula-study-guide__chapter-path-link strong{margin-top:4px;color:#e66716;font-size:13px;line-height:1.35}.formula-study-guide__chapter-path-link--next{text-align:right}.formula-study-guide__chapter-path-link--disabled{background:#f8fafb;opacity:.72}.formula-study-guide__chapter-path-link--disabled strong{color:#64748b}
 .formula-study-guide__chapter-jump{display:flex;flex-direction:column;justify-content:center;gap:5px}.formula-study-guide__chapter-jump form>label{display:block;margin:0 0 4px;color:#64748b;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.formula-study-guide__chapter-jump form>div{display:flex;gap:7px}.formula-study-guide__chapter-jump select{width:100%;min-width:0;min-height:42px;padding:8px 34px 8px 10px;border:1px solid #aebdc7;border-radius:8px;background:#fff;color:#17232a;font-weight:750}.formula-study-guide__chapter-jump>a{color:#075e54;font-size:12px;font-weight:800;text-align:center;text-decoration:none}.formula-study-guide__chapter-jump>a:hover{text-decoration:underline}
@@ -1877,9 +2218,9 @@ echo $OUTPUT->header();
 .formula-study-guide__source{margin-top:20px;padding:14px 17px;border-radius:9px;background:#f1f5f9;color:#52677a;font-size:13px;line-height:1.5}
 @media(max-width:1050px){.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.formula-study-guide__route,.formula-study-guide__reference-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-guide__chapter-path{grid-template-columns:1fr 1fr}.formula-study-guide__chapter-path--index{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:1/-1;grid-row:1}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.formula-study-guide__top{display:block}.formula-study-guide__actions{align-items:flex-start;margin-top:15px}.formula-study-guide__module-switcher,.formula-study-guide__utility-actions{justify-content:flex-start}.formula-study-reader{top:8px}.formula-study-reader__actions{grid-template-columns:repeat(3,minmax(0,1fr))}.formula-study-guide__chapter-path{grid-template-columns:1fr 1fr}.formula-study-guide__chapter-path--index{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:1/-1;grid-row:1}.formula-study-guide__facts,.formula-study-guide__deep-grid,.formula-study-guide__branch-body{grid-template-columns:1fr}.formula-study-guide__chapter-shortcut-links{grid-template-columns:repeat(2,minmax(0,1fr))}.formula-study-guide__board-roster-grid,.formula-study-guide__chapter-directory-grid,.formula-study-guide__additional-grid{grid-template-columns:1fr}.formula-study-guide__board-verification,.formula-study-guide__formula-footer,.formula-study-guide__modification,.formula-study-guide__dui-yao-header,.formula-study-guide__dui-yao-footer{align-items:flex-start;flex-direction:column}.formula-study-guide__modification a{width:100%}.formula-study-guide__overview{grid-template-columns:1fr}.formula-study-guide__stats{justify-content:flex-start}.formula-study-guide__supplement-heading{display:block}.formula-study-guide__supplement-badge{display:inline-block;margin-top:10px}.formula-study-guide__dui-yao-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.formula-study-guide__actions,.formula-study-guide__category-nav{align-items:stretch;flex-direction:column}.formula-study-guide__chapter-path{grid-template-columns:1fr}.formula-study-guide__chapter-jump{grid-column:auto;grid-row:auto}.formula-study-guide__chapter-path-link--next{text-align:left}.formula-study-guide__chapter-jump form>div{align-items:stretch;flex-direction:column}.formula-study-guide__button{white-space:normal}.formula-study-guide__category-nav>span,.formula-study-guide__category-nav>span:last-child{width:100%;text-align:stretch}.formula-study-guide__category-nav-center{align-items:stretch;flex-direction:column}.formula-study-guide__formula-heading{flex-direction:column}.formula-study-guide__stats{display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
+@media(max-width:560px){.formula-study-reader__disclosure>summary{padding:10px 11px}.formula-study-reader__title{font-size:16px}.formula-study-reader__description{font-size:11px}.formula-study-reader__panel{padding:0 10px 10px}.formula-study-reader__fields{grid-template-columns:1fr;gap:6px}.formula-study-reader__actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.formula-study-reader button{min-height:36px;padding:6px;font-size:12px}.formula-study-reader__progress{grid-template-columns:1fr 1fr;gap:6px}.formula-study-reader__progress button{min-width:0}.formula-study-reader__range{grid-column:1/-1;grid-row:1}.formula-study-guide__route,.formula-study-guide__reference-groups,.formula-study-guide__chapter-shortcut-links,.formula-study-guide__dui-yao-grid{grid-template-columns:1fr}.formula-study-guide__chapter-directory-group ol{columns:1}.formula-study-guide__badges{justify-content:flex-start}}
 </style>
 <main class="formula-study-guide">
     <header class="formula-study-guide__top herbology-sheet-hero">
@@ -1914,6 +2255,51 @@ echo $OUTPUT->header();
         <span class="formula-study-guide__study-route-current" aria-current="page"><?php echo s($formularoutetitle); ?></span>
     </nav>
     <?php endif; ?>
+
+    <section class="formula-study-reader" data-formula-read-aloud data-language="<?php echo $ises ? 'es-ES' : 'en-US'; ?>" hidden>
+        <details class="formula-study-reader__disclosure" open>
+            <summary>
+                <span>
+                    <span class="formula-study-reader__title"><?php echo s($ises ? 'Escuchar esta guía' : 'Listen to this Study Guide'); ?></span>
+                    <span class="formula-study-reader__description"><?php echo s($ises
+                        ? 'Escucha la página completa, una sección, una selección o el texto visible.'
+                        : 'Listen to the full page, one section, a selection, or the visible text.'); ?></span>
+                </span>
+            </summary>
+            <div class="formula-study-reader__panel">
+                <div class="formula-study-reader__fields">
+                    <label>
+                        <span><?php echo s($ises ? 'Sección' : 'Section'); ?></span>
+                        <select data-formula-read-section-select aria-label="<?php echo s($ises ? 'Sección para escuchar' : 'Section to read'); ?>"></select>
+                    </label>
+                    <label>
+                        <span><?php echo s($ises ? 'Voz' : 'Voice'); ?></span>
+                        <select data-formula-read-voice aria-label="<?php echo s($ises ? 'Voz de narración' : 'Narration voice'); ?>"></select>
+                    </label>
+                </div>
+                <div class="formula-study-reader__actions">
+                    <button type="button" data-formula-read-full><?php echo s($ises ? '▶ Página completa' : '▶ Full Page'); ?></button>
+                    <button type="button" data-formula-read-section><?php echo s($ises ? '▶ Escuchar sección' : '▶ Read Section'); ?></button>
+                    <button type="button" data-formula-read-selection><?php echo s($ises ? '🔊 Selección' : '🔊 Selection'); ?></button>
+                    <button type="button" data-formula-read-visible><?php echo s($ises ? '◉ Texto visible' : '◉ Visible Text'); ?></button>
+                    <button type="button" data-formula-read-pause disabled><?php echo s($ises ? '⏸ Pausar' : '⏸ Pause'); ?></button>
+                    <button type="button" data-formula-read-stop disabled><?php echo s($ises ? '■ Detener' : '■ Stop'); ?></button>
+                </div>
+                <div class="formula-study-reader__progress">
+                    <button type="button" data-formula-read-back disabled><?php echo s($ises ? '↶ Retroceder' : '↶ Back'); ?></button>
+                    <label class="formula-study-reader__range">
+                        <span class="formula-study-reader__range-heading">
+                            <span><?php echo s($ises ? 'Progreso de lectura' : 'Reading progress'); ?></span>
+                            <span data-formula-read-progress-value><?php echo s($ises ? 'Sin lectura' : 'Not reading'); ?></span>
+                        </span>
+                        <input type="range" min="0" max="0" value="0" data-formula-read-progress disabled>
+                    </label>
+                    <button type="button" data-formula-read-forward disabled><?php echo s($ises ? 'Avanzar ↷' : 'Forward ↷'); ?></button>
+                </div>
+                <p class="formula-study-reader__status" data-formula-read-status aria-live="polite"><?php echo s($ises ? 'Lista para escuchar.' : 'Ready to listen.'); ?></p>
+            </div>
+        </details>
+    </section>
 
     <?php echo $renderchapternavigation('top'); ?>
 
