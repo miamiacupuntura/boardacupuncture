@@ -2463,6 +2463,26 @@ ob_start();
                 }
             });
 
+            readAloudRoot.querySelectorAll('.single-herbs-guide__memory-path:not([data-read-aloud-text])').forEach(function(memoryPath) {
+                const memoryLine = cleanStructuredText(memoryPath.querySelector('.single-herbs-guide__memory-line')
+                    ? memoryPath.querySelector('.single-herbs-guide__memory-line').textContent : '');
+                if (/^(?:question|pregunta)\b/i.test(memoryLine)) {
+                    return;
+                }
+                const memoryParts = Array.from(memoryPath.querySelectorAll(':scope > p')).map(function(paragraph) {
+                    const text = cleanStructuredText(paragraph.textContent);
+                    return text ? (/[.!?]$/.test(text) ? text : text + '.') : '';
+                }).filter(Boolean);
+                if (memoryParts.length) {
+                    memoryPath.dataset.readAloudText = (isSpanish
+                        ? 'Este es un recurso mnemotécnico para favorecer la memorización y el aprendizaje. '
+                        : 'This is a mnemonic resource designed to support memorization and learning. ')
+                        + memoryParts.join(' ');
+                    memoryPath.dataset.readAloudKind = 'mnemonic-resource';
+                    memoryPath.dataset.readAloudGenerated = 'mnemonic-resource';
+                }
+            });
+
             readAloudRoot.querySelectorAll('.single-herbs-guide__comparison:not([data-read-aloud-text])').forEach(function(card) {
                 const heading = expandHerbs(card.querySelector('strong') ? card.querySelector('strong').textContent : '');
                 const detail = expandHerbs(card.querySelector('span') ? card.querySelector('span').textContent : '');
