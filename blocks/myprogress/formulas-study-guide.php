@@ -3072,7 +3072,7 @@ echo $OUTPUT->header();
 .formula-study-guide__formula-list{display:grid;gap:16px}
 .formula-study-guide__formula{padding:22px;border:1px solid #d8e1e7;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.04)}
 .formula-study-guide__formula-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:13px}.formula-study-guide__formula-label{display:block;margin-bottom:4px;color:#08746f;font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.formula-study-guide__formula h4{margin:0;font-size:23px;line-height:1.25}.formula-study-guide__badges{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.formula-study-guide__core{padding:5px 9px;border-radius:999px;background:#dff4ee;color:#0b675b;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}
-.formula-study-guide__risk{padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__risk--high{background:#fff0d8;color:#955000}.formula-study-guide__risk--critical{background:#fde2df;color:#a12218}
+.formula-study-guide__risk{max-width:260px;padding:5px 9px;border-radius:999px;background:#e8f5f1;color:#116553;font-size:11px;font-weight:900;line-height:1.25;text-align:center;text-transform:uppercase;white-space:normal}.formula-study-guide__risk--high{background:#fff0d8;color:#955000}.formula-study-guide__risk--critical{background:#fde2df;color:#a12218}
 .formula-study-guide__formula-pattern{margin:0 0 15px;color:#334155;font-size:16px;line-height:1.55}
 .formula-study-guide__facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__fact{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__fact strong{display:block;margin-bottom:5px;color:#123246;font-size:13px}.formula-study-guide__fact span{display:block;color:#52677a;line-height:1.5}
 .formula-study-guide__exam-focus{margin:14px 0 0;padding:11px 14px;border-left:4px solid #f77e25;border-radius:6px;background:#fff7ed;color:#6e481f;line-height:1.5}.formula-study-guide__exam-focus strong{color:#7c3f0a}
@@ -4254,9 +4254,15 @@ echo $OUTPUT->header();
                 }
                 $tier = $formula['safetyTier'];
                 $isintegratedofficialprofile = !empty($formula['integratedOfficialProfile']);
-                $risklabel = $tier === 'critical'
-                    ? ($ises ? 'Seguridad crítica' : 'Critical safety')
-                    : ($tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : '');
+                if ($tier === 'critical') {
+                    $risklabel = $formula['name'] === 'Tian Wang Bu Xin Dan'
+                        ? ($ises ? 'Riesgo de mercurio: Zhu Sha histórico' : 'Mercury risk: historical Zhu Sha')
+                        : ($ises
+                            ? 'Advertencia crítica: lee los detalles de seguridad'
+                            : 'Critical warning: read the safety details');
+                } else {
+                    $risklabel = $tier === 'high' ? ($ises ? 'Precaución alta' : 'High caution') : '';
+                }
                 $kingherbsplural = preg_match('/[,\/]/', (string) $formula['kings']) === 1;
                 $kingherbsdisplay = $renderherbswithenglish((string) $formula['kings']);
                 $ingredientsdisplay = $renderherbswithenglish((string) ($ises

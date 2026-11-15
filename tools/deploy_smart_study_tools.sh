@@ -150,6 +150,12 @@ grep -Fq 'installDuiYaoNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'installFormulaRiskNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "pattern.textContent = riskText + (isSpanish ? ' — Patrón: ' : ' — Pattern: ') + patternText;" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "<?php echo s(\$risklabel . ' —'); ?>" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Riesgo de mercurio: Zhu Sha histórico' : 'Mercury risk: historical Zhu Sha'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'Critical warning: read the safety details'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Fq "'Seguridad crítica' : 'Critical safety'" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: Formula Study Guide todavía muestra la alerta crítica sin explicar su significado." >&2
+    exit 1
+fi
 grep -Fq "<?php echo s(\$formulalabel . ' —'); ?>" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Funciones de ingredientes:' : 'Ingredient roles:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Comparación decisiva:' : 'Decisive comparison:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
