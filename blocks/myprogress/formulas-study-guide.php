@@ -2136,6 +2136,24 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
+    function installKingHerbNarrations(root) {
+        var facts = Array.from(root.querySelectorAll('.formula-study-guide__fact'));
+        if (root.matches && root.matches('.formula-study-guide__fact')) facts.unshift(root);
+        facts.forEach(function(fact) {
+            var label = fact.querySelector('strong');
+            var value = fact.querySelector('span');
+            var labelText = label ? (label.textContent || '').trim() : '';
+            var herbs = value ? (value.textContent || '').split(/\s*,\s*/).filter(Boolean) : [];
+            if (!/^(?:Hierbas? emperador|King herbs?)/i.test(labelText) || !herbs.length) return;
+            var herbList = herbs.length > 1
+                ? herbs.slice(0, -1).join(', ') + (isSpanish ? ' y ' : ' and ') + herbs[herbs.length - 1]
+                : herbs[0];
+            fact.textContent = isSpanish
+                ? (herbs.length > 1 ? 'Las hierbas emperador son ' : 'La hierba emperador es ') + herbList + '.'
+                : (herbs.length > 1 ? 'The king herbs are ' : 'The king herb is ') + herbList + '.';
+        });
+    }
+
     function installEnglishFormulaNarrations(root) {
         if (!isSpanish) return;
         var names = Array.from(root.querySelectorAll('[data-formula-english-speech]'));
@@ -2157,6 +2175,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         installDuiYaoNarrations(clone);
         installEnglishFormulaNarrations(clone);
         installFormulaRiskNarrations(clone);
+        installKingHerbNarrations(clone);
         clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore],.formula-study-guide__domain-badge').forEach(function(node) {
             node.remove();
         });
