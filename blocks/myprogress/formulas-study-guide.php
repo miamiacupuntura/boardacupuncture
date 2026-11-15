@@ -1918,7 +1918,47 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             narration.textContent = (isSpanish
                 ? 'Esta tabla compara fórmulas de la misma sección. Para comprenderla, relaciona cada fórmula con el patrón que trata y después con los signos que permiten distinguirla de las demás. '
                 : 'This table compares formulas in the same section. To understand it, connect each formula first with the pattern it treats and then with the signs that distinguish it from the others. ') + rows.join(' ');
-            table.replaceWith(narration);
+            if (table === root) {
+                root.replaceChildren(narration);
+            } else {
+                table.replaceWith(narration);
+            }
+        });
+    }
+
+    function installDuiYaoNarrations(root) {
+        var cards = Array.from(root.querySelectorAll('[data-formula-dui-yao-card]'));
+        if (root.matches && root.matches('[data-formula-dui-yao-card]')) cards.unshift(root);
+        cards.forEach(function(card) {
+            var titleElement = card.querySelector('h5');
+            var actionElement = card.querySelector('p');
+            var title = titleElement ? (titleElement.textContent || '').trim() : '';
+            var action = actionElement ? (actionElement.textContent || '').trim().replace(/[.]+$/, '') : '';
+            var formulas = (card.getAttribute('data-dui-yao-formulas') || '')
+                .split(/\s*;\s*/)
+                .map(function(name) { return name.trim().replace(/[.]+$/, ''); })
+                .filter(Boolean);
+            if (!title) return;
+            title = title.replace(/\s*\+\s*/g, isSpanish ? ' con ' : ' with ');
+            var relation = '';
+            if (formulas.length === 1) {
+                relation = (isSpanish
+                    ? 'Este Duì Yào está relacionado con la fórmula '
+                    : 'This Duì Yào is related to the formula ') + formulas[0] + '.';
+            } else if (formulas.length > 1) {
+                var connector = isSpanish ? ' y ' : ' and ';
+                var formulaList = formulas.slice(0, -1).join(', ') + connector + formulas[formulas.length - 1];
+                relation = (isSpanish
+                    ? 'Este Duì Yào está relacionado con las fórmulas '
+                    : 'This Duì Yào is related to the formulas ') + formulaList + '.';
+            }
+            var narration = document.createElement('p');
+            narration.textContent = title + '. ' + (action ? action + '. ' : '') + relation;
+            if (card === root) {
+                root.replaceChildren(narration);
+            } else {
+                card.replaceWith(narration);
+            }
         });
     }
 
@@ -1926,6 +1966,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         if (!element) return '';
         var clone = element.cloneNode(true);
         installComparisonNarrations(clone);
+        installDuiYaoNarrations(clone);
         clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore],.formula-study-guide__domain-badge').forEach(function(node) {
             node.remove();
         });
@@ -2122,9 +2163,10 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     function visibleText() {
         var seen = new Set();
         var pieces = [];
-        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category,[data-formula-comparison-table]').forEach(function(element) {
+        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category,[data-formula-comparison-table],[data-formula-dui-yao-card]').forEach(function(element) {
             if (element.closest('[data-formula-read-aloud],nav,form') || element.offsetParent === null) return;
             if (element.closest('.formula-study-guide__category') && !element.classList.contains('formula-study-guide__category')) return;
+            if (element.closest('[data-formula-dui-yao-card]') && !element.hasAttribute('data-formula-dui-yao-card')) return;
             var rect = element.getBoundingClientRect();
             if (rect.bottom < 0 || rect.top > window.innerHeight) return;
             var text = extractText(element);
@@ -2754,11 +2796,11 @@ echo $OUTPUT->header();
                 <section class="formula-study-guide__dui-yao" aria-labelledby="related-dui-yao-title">
                     <header class="formula-study-guide__dui-yao-header">
                         <div>
-                            <p class="formula-study-guide__eyebrow"><?php echo s($ises ? 'Appendix B · Parejas oficiales' : 'Appendix B · Official pairs'); ?></p>
+                            <p class="formula-study-guide__eyebrow" data-read-aloud-ignore><?php echo s($ises ? 'Appendix B · Parejas oficiales' : 'Appendix B · Official pairs'); ?></p>
                             <h4 id="related-dui-yao-title"><?php echo s($ises ? $selectedguide['relatedDuiYaoTitleEs'] : $selectedguide['relatedDuiYaoTitle']); ?></h4>
                             <p><?php echo s($ises ? $selectedguide['relatedDuiYaoTextEs'] : $selectedguide['relatedDuiYaoText']); ?></p>
                         </div>
-                        <span class="formula-study-guide__dui-yao-count"><?php echo s(count($selectedguide['relatedDuiYao']) . ($ises ? ' parejas relacionadas' : ' related pairs')); ?></span>
+                        <span class="formula-study-guide__dui-yao-count" data-read-aloud-ignore><?php echo s(count($selectedguide['relatedDuiYao']) . ($ises ? ' parejas relacionadas' : ' related pairs')); ?></span>
                     </header>
                     <div class="formula-study-guide__dui-yao-grid">
                         <?php foreach ($selectedguide['relatedDuiYao'] as $duiyaopair): ?>
@@ -2766,8 +2808,8 @@ echo $OUTPUT->header();
                             $duiyaopath = '/study-guide/comparisons/' . $duiyaopair['slug'] . ($ises ? '-es' : '') . '.html';
                             $duiyaourl = new moodle_url($duiyaopath, $duiyaoreturnparams);
                             ?>
-                            <a class="formula-study-guide__dui-yao-card" href="<?php echo $duiyaourl->out(false); ?>">
-                                <span class="formula-study-guide__dui-yao-number"><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>
+                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-formulas="<?php echo s($duiyaopair['formulas']); ?>" href="<?php echo $duiyaourl->out(false); ?>">
+                                <span class="formula-study-guide__dui-yao-number" data-read-aloud-ignore><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>
                                 <h5><?php echo s($duiyaopair['title']); ?></h5>
                                 <span class="formula-study-guide__dui-yao-characters"><?php echo s($duiyaopair['characters']); ?></span>
                                 <p><?php echo s($ises ? $duiyaopair['actionEs'] : $duiyaopair['action']); ?></p>
