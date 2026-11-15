@@ -693,6 +693,15 @@ $getboardstatus = static function(array $formulas, bool $spanish) use ($isoffici
 $displayformulaname = static function(string $name) use ($isofficialformula): string {
     return $name . ($isofficialformula($name) ? '*' : '');
 };
+$renderformulanamewithenglish = static function(string $name) use ($displayformulaname, $getformulaenglishname): string {
+    $englishname = $getformulaenglishname($name);
+    $markup = s($displayformulaname($name));
+    if ($englishname !== '') {
+        $markup .= ' <small class="formula-study-guide__formula-english-inline" lang="en"'
+            . ' data-formula-english-speech="' . s($englishname) . '">(' . s($englishname) . ')</small>';
+    }
+    return $markup;
+};
 $supplementalcategories = [];
 foreach ($data['supplementalCategories'] as $category) {
     $category['formulas'] = [];
@@ -2183,7 +2192,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
 
     function comparisonCellText(cell) {
         var clone = cell.cloneNode(true);
-        clone.querySelectorAll('.formula-study-guide__domain-badge,.formula-study-guide__formula-translation,[aria-hidden="true"]').forEach(function(node) {
+        clone.querySelectorAll('.formula-study-guide__domain-badge,.formula-study-guide__formula-translation,.formula-study-guide__formula-english-inline,[aria-hidden="true"]').forEach(function(node) {
             node.remove();
         });
         return (clone.textContent || '').replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim();
@@ -2486,7 +2495,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 ['Nu Zhen Zi', 'Nǚ Zhēn Zǐ', 'Nú Yen Tzí'],
                 ['Pei Lan', 'Pèi Lán', 'Pei Lán'],
                 ['Qing Hao', 'Qīng Hāo', 'Ching Jáo'],
-                ['Ren Shen', 'Rén Shēn', 'Rén Shen'],
+                ['Ren Shen', 'Rén Shēn', 'Ren Shen'],
                 ['Rou Cong Rong', 'Ròu Cōng Róng', 'Rou Tsong Rong'],
                 ['Rou Gui', 'Ròu Guì', 'Rou Guéi'],
                 ['Ru Xiang', 'Rǔ Xiāng', 'Rú Shiáng'],
@@ -3023,7 +3032,7 @@ echo $OUTPUT->header();
 .formula-study-guide__deep-dive{margin-top:12px;border:1px solid #d5e4e1;border-radius:8px;background:#f8fbfa}.formula-study-guide__deep-dive summary{padding:10px 13px;color:#17675e;font-weight:800;cursor:pointer}.formula-study-guide__deep-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;padding:0 13px 13px}.formula-study-guide__deep-grid p{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__deep-grid strong{display:block;margin-bottom:4px;color:#17232a}
 .formula-study-guide__modification{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:13px;padding:12px 13px;border:1px solid #bddfd7;border-left:4px solid #12816f;border-radius:8px;background:#f3fbf8;color:#365762;line-height:1.45}.formula-study-guide__modification p{margin:0}.formula-study-guide__modification strong{color:#087263}.formula-study-guide__modification b{color:#9b450e}.formula-study-guide__modification a{flex:0 0 auto;color:#075fc8;font-weight:800;text-decoration:none}.formula-study-guide__modification a:hover{text-decoration:underline}
 .formula-study-guide__branches{margin-top:12px;border:1px solid #d7e1e6;border-radius:8px;background:#fff}.formula-study-guide__branches summary{padding:11px 13px;color:#174c69;font-weight:800;cursor:pointer}.formula-study-guide__branch-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 13px 13px}.formula-study-guide__branch-group{padding:12px;border-radius:8px;background:#f6f9fa}.formula-study-guide__branch-group h5{margin:0 0 8px;color:#17232a;font-size:14px}.formula-study-guide__branch-group ul{margin:0;padding-left:18px}.formula-study-guide__branch-group li{margin:0 0 8px;color:#52677a;line-height:1.45}.formula-study-guide__branch-group li:last-child{margin-bottom:0}.formula-study-guide__branch-group strong{color:#17232a}
-.formula-study-guide__formula-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #dde5e9}.formula-study-guide__ingredients{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__ingredients strong{color:#17232a}.formula-study-guide__herb-english{color:#64748b;font-size:.72em;font-weight:650;line-height:1.2}
+.formula-study-guide__formula-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #dde5e9}.formula-study-guide__ingredients{margin:0;color:#52677a;line-height:1.5}.formula-study-guide__ingredients strong{color:#17232a}.formula-study-guide__herb-english,.formula-study-guide__formula-english-inline{color:#64748b;font-size:.72em;font-weight:650;line-height:1.2}
 .formula-study-guide__source-pages{flex:0 0 auto;padding:7px 10px;border-radius:7px;background:#eef3f6;color:#415a6b;font-size:12px;font-weight:800;white-space:nowrap}
 .formula-study-guide__safety{margin-top:12px;border:1px solid #ded6ec;border-radius:8px;background:#fbf9ff}.formula-study-guide__safety summary{padding:10px 13px;color:#60409a;font-weight:800;cursor:pointer}.formula-study-guide__safety p{margin:0;padding:0 13px 13px;color:#52677a;line-height:1.5}
 .formula-study-guide__references{margin:20px 0;border:1px solid #d8e1e7;border-radius:11px;background:#fff}.formula-study-guide__references>summary{padding:16px 18px;color:#334155;font-size:17px;font-weight:900;cursor:pointer}.formula-study-guide__references-body{padding:0 18px 18px}.formula-study-guide__references-body>p{margin:0 0 15px;color:#52677a;line-height:1.5}.formula-study-guide__reference-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.formula-study-guide__reference-group{padding:14px;border-radius:9px;background:#f6f9fa}.formula-study-guide__reference-group h5{margin:0 0 10px;font-size:15px}.formula-study-guide__reference-group ul{margin:0;padding-left:18px}.formula-study-guide__reference-group li{margin:0 0 9px;color:#52677a;line-height:1.4}.formula-study-guide__reference-group li:last-child{margin-bottom:0}.formula-study-guide__reference-group strong{color:#17232a}
@@ -3273,7 +3282,7 @@ echo $OUTPUT->header();
                                         ?>
                                         <li class="formula-study-guide__board-roster-formula">
                                             <span>
-                                                <strong><?php echo s($displayformulaname($boardformula['name'])); ?></strong>
+                                                <strong><?php echo $renderformulanamewithenglish($boardformula['name']); ?></strong>
                                                 <small class="formula-study-guide__board-roster-meta"><?php echo s(($ises ? 'Ficha del núcleo: ' : 'core profile: ') . $boardcategoryname); ?></small>
                                             </span>
                                             <span class="formula-study-guide__board-roster-number"><?php echo s(($ises ? 'Fórmula ' : 'Formula ') . $boardformula['number']); ?></span>
@@ -3328,7 +3337,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($chaptercategory['formulas'] as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -3374,7 +3383,7 @@ echo $OUTPUT->header();
                                             <?php foreach ($formulasection['formulaNames'] as $sectionformulaindex => $sectionformulaname): ?>
                                                 <?php $sectionformula = $getboardformula($sectionformulaname) ?? ($selectedformulasbyname[$sectionformulaname] ?? null); ?>
                                                 <?php if ($sectionformulaindex > 0): ?>, <?php endif; ?>
-                                                <a href="#formula-<?php echo s(preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $sectionformula['number'])); ?>"><?php echo s($displayformulaname($sectionformulaname)); ?></a>
+                                                <a href="#formula-<?php echo s(preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $sectionformula['number'])); ?>"><?php echo $renderformulanamewithenglish($sectionformulaname); ?></a>
                                             <?php endforeach; ?>
                                         </td>
                                     </tr>
@@ -3423,7 +3432,7 @@ echo $OUTPUT->header();
                                                 <?php foreach ($therapeuticclass['boardNames'] as $classnameindex => $classname): ?>
                                                     <?php $classboardformula = $getboardformula($classname); ?>
                                                     <?php if ($classnameindex > 0): ?>, <?php endif; ?>
-                                                    <a href="#formula-<?php echo s((string) $classboardformula['number']); ?>"><?php echo s($displayformulaname($classname)); ?></a>
+                                                    <a href="#formula-<?php echo s((string) $classboardformula['number']); ?>"><?php echo $renderformulanamewithenglish($classname); ?></a>
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                             <?php if ($therapeuticclass['boardNames'] !== [] && $therapeuticclass['otherNames'] !== []): ?><br><?php endif; ?>
@@ -3431,7 +3440,10 @@ echo $OUTPUT->header();
                                                 <strong><?php echo s($ises
                                                     ? (count($therapeuticclass['otherNames']) === 1 ? 'Otra fórmula para comparar:' : 'Otras fórmulas para comparar:')
                                                     : (count($therapeuticclass['otherNames']) === 1 ? 'Other formula for comparison:' : 'Other formulas for comparison:')); ?></strong>
-                                                <?php echo s(implode(', ', $therapeuticclass['otherNames'])); ?>
+                                                <?php foreach ($therapeuticclass['otherNames'] as $othernameindex => $othername): ?>
+                                                    <?php if ($othernameindex > 0): ?>, <?php endif; ?>
+                                                    <?php echo $renderformulanamewithenglish($othername); ?>
+                                                <?php endforeach; ?>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo s($ises ? $therapeuticclass['separatorEs'] : $therapeuticclass['separator']); ?></td>
@@ -3640,7 +3652,7 @@ echo $OUTPUT->header();
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
                                     <li>
-                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a>
+                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a>
                                         <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Ficha del núcleo #' : 'Core profile #') . $chapterformula['number']); ?></span><?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
@@ -3686,7 +3698,7 @@ echo $OUTPUT->header();
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
                                     <li>
-                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a>
+                                        <a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a>
                                         <?php if (is_numeric($chapterformula['number'])): ?><span class="formula-study-guide__domain-badge"><?php echo s(($ises ? 'Ficha del núcleo #' : 'Core profile #') . $chapterformula['number']); ?></span><?php endif; ?>
                                     </li>
                                 <?php endforeach; ?>
@@ -3776,7 +3788,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -3819,7 +3831,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -3862,7 +3874,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -3906,7 +3918,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -3962,19 +3974,19 @@ echo $OUTPUT->header();
                         </thead>
                         <tbody>
                             <tr>
-                                <td><?php echo s($displayformulaname('Xiao Feng San')); ?></td>
+                                <td><?php echo $renderformulanamewithenglish('Xiao Feng San'); ?></td>
                                 <td><?php echo s($ises ? 'Piel' : 'Skin'); ?></td>
                                 <td><?php echo s($ises ? 'Viento-Humedad-Calor con Sequedad de Sangre subyacente' : 'Wind-Damp-Heat with underlying Blood dryness'); ?></td>
                                 <td><?php echo s($ises ? 'Erupción roja, exudativa, cambiante y muy pruriginosa' : 'Red, weeping, changing, intensely itchy eruption'); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo s($displayformulaname('Xiao Huo Luo Dan')); ?></td>
+                                <td><?php echo $renderformulanamewithenglish('Xiao Huo Luo Dan'); ?></td>
                                 <td><?php echo s($ises ? 'Canales y articulaciones' : 'Channels and joints'); ?></td>
                                 <td><?php echo s($ises ? 'Viento-Frío-Humedad, Flema y estasis de Sangre' : 'Wind-Cold-Dampness, Phlegm, and Blood stasis'); ?></td>
                                 <td><?php echo s($ises ? 'Dolor crónico agravado por frío, rigidez, entumecimiento y movilidad reducida' : 'Chronic cold-aggravated pain, stiffness, numbness, and reduced movement'); ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo s($displayformulaname('Tian Ma Gou Teng Yin')); ?></td>
+                                <td><?php echo $renderformulanamewithenglish('Tian Ma Gou Teng Yin'); ?></td>
                                 <td><?php echo s($ises ? 'Interior · Hígado' : 'Interior · Liver'); ?></td>
                                 <td><?php echo s($ises ? 'Ascenso de Yang de Hígado que genera Viento interno' : 'Rising Liver Yang generating internal Wind'); ?></td>
                                 <td><?php echo s($ises ? 'Cefalea, vértigo, tinnitus e insomnio; en casos graves, temblor o espasmo' : 'Headache, vertigo, tinnitus, and insomnia; in severe cases, tremor or spasm'); ?></td>
@@ -4006,7 +4018,7 @@ echo $OUTPUT->header();
                             <ol>
                                 <?php foreach ($sectionformulas as $chapterformula): ?>
                                     <?php $chapterformulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $chapterformula['number']); ?>
-                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo s($displayformulaname($chapterformula['name'])); ?></a></li>
+                                    <li><a href="#formula-<?php echo s($chapterformulaid); ?>"><?php echo $renderformulanamewithenglish($chapterformula['name']); ?></a></li>
                                 <?php endforeach; ?>
                             </ol>
                         </section>
@@ -4336,7 +4348,7 @@ echo $OUTPUT->header();
                                     <section class="formula-study-guide__branch-group">
                                         <h5><?php echo s($ises ? 'Variaciones con nombre propio' : 'Named variations'); ?></h5>
                                         <ul><?php foreach ($formula['variations'] as $item): ?>
-                                            <li><strong><?php echo s($displayformulaname($item[0])); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                            <li><strong><?php echo $renderformulanamewithenglish($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
                                         <?php endforeach; ?></ul>
                                     </section>
                                 <?php endif; ?>
@@ -4344,7 +4356,7 @@ echo $OUTPUT->header();
                                     <section class="formula-study-guide__branch-group">
                                         <h5><?php echo s($ises ? 'Fórmulas asociadas' : 'Associated formulas'); ?></h5>
                                         <ul><?php foreach ($formula['associated'] as $item): ?>
-                                            <li><strong><?php echo s($displayformulaname($item[0])); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                            <li><strong><?php echo $renderformulanamewithenglish($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
                                         <?php endforeach; ?></ul>
                                     </section>
                                 <?php endif; ?>
@@ -4436,7 +4448,7 @@ echo $OUTPUT->header();
                                 <h5><?php echo s($ises ? $group['titleEs'] : $group['title']); ?></h5>
                                 <ul>
                                     <?php foreach ($group['items'] as $item): ?>
-                                        <li><strong><?php echo s($displayformulaname($item[0])); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
+                                        <li><strong><?php echo $renderformulanamewithenglish($item[0]); ?>:</strong> <?php echo s($ises ? $item[2] : $item[1]); ?></li>
                                     <?php endforeach; ?>
                                 </ul>
                             </section>

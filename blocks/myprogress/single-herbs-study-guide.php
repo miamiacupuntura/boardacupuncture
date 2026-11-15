@@ -2796,7 +2796,8 @@ ob_start();
                 'Dan Dou Chi': 'dahn doh chir', 'Mu Zei': 'moo dzay', 'Jin Yin Hua': 'jeen yin hwah',
                 'Lian Qiao': 'lyen chyow', 'Yin Qiao San': 'yin chyow sahn', 'Sang Ju Yin': 'sahng jyoo yin',
                 'Xing Ren': 'sheeng run', 'Táo Rén': 'taow run', 'Tao Ren': 'taow run',
-                'Dāng Guī': 'dahng gway', 'Dang Gui': 'dahng gway'
+                'Dāng Guī': 'dahng gway', 'Dang Gui': 'dahng gway',
+                'Rén Shēn': 'run shun', 'Ren Shen': 'run shun'
             },
             es: {
                 'Ma Huang': 'Ma Juang', 'Gui Zhi': 'Guéi Yi', 'Zi Su Ye': 'Dsi Su Yé',
@@ -2808,7 +2809,8 @@ ob_start();
                 'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu, Tsei', 'Jin Yin Hua': 'Yin Yin Juá',
                 'Lian Qiao': 'Lián Chiao', 'Yin Qiao San': 'Yin Chiao San', 'Sang Ju Yin': 'Sang Yú Yin',
                 'Xing Ren': 'Xing Ren', 'Táo Rén': 'Tao Ren', 'Tao Ren': 'Tao Ren',
-                'Dāng Guī': 'Dang Qui', 'Dang Gui': 'Dang Qui'
+                'Dāng Guī': 'Dang Qui', 'Dang Gui': 'Dang Qui',
+                'Rén Shēn': 'Ren Shen', 'Ren Shen': 'Ren Shen'
             }
         };
 

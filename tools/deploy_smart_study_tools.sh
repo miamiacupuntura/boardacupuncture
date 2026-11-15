@@ -237,6 +237,7 @@ grep -Fq "String(value || '').normalize('NFC')" "$TEMP_DIR/moodle/formulas-study
 grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Tao Ren', 'Táo Rén', 'Tao Ren']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Dang Gui', 'Dāng Guī', 'Dang Qui']" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "['Ren Shen', 'Rén Shēn', 'Ren Shen']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-read-english-voice' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'Automática — similar a la voz española' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "voiceProvider(voice) === referenceProvider" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -250,6 +251,8 @@ grep -Fq "'Mang Xiao' => 'Mirabilite'" "$TEMP_DIR/moodle/formulas-study-guide.ph
 grep -Fq "'Zhi Gan Cao' => 'Honey-Prepared Licorice Root'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$ingredientsdisplay = $renderherbswithenglish' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__herb-english' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'formula-study-guide__formula-english-inline' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq '$renderformulanamewithenglish($classname)' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "heading.closest('[data-formula-read-section-ignore]')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-read-section-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
 if grep -Fq 'Todas incluidas' "$TEMP_DIR/moodle/formulas-study-guide.php" \
@@ -274,12 +277,17 @@ grep -Fq "'Dāng Guī': 'Dang Qui'" "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq "'Dang Gui': 'Dang Qui'" "$TEMP_DIR/moodle/single-herbs-list.php"
 grep -Fq "'Dāng Guī': 'Dang Qui'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq "'Dang Gui': 'Dang Qui'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'Rén Shēn': 'Ren Shen'" "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq "'Ren Shen': 'Ren Shen'" "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq "'Rén Shēn': 'Ren Shen'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'Ren Shen': 'Ren Shen'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 if grep -Fq 'cuyo nombre farmacéutico es' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'whose pharmaceutical name is' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'Shing' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'Xing, Rén' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq "['Tao Ren', 'Táo Rén', 'Táo Rén']" "$TEMP_DIR/moodle/formulas-study-guide.php" \
-    || grep -Fq "['Dang Gui', 'Dāng Guī', 'Dang Guéi']" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    || grep -Fq "['Dang Gui', 'Dāng Guī', 'Dang Guéi']" "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq "['Ren Shen', 'Rén Shēn', 'Rén Shen']" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
     echo "ERROR: la narración Duì Yào conserva una pronunciación o frase farmacéutica descartada." >&2
     exit 1
 fi
@@ -1081,6 +1089,7 @@ done
 grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "['Tao Ren', 'Táo Rén', 'Tao Ren']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "['Dang Gui', 'Dāng Guī', 'Dang Qui']" "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq "['Ren Shen', 'Rén Shēn', 'Ren Shen']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'data-formula-read-english-voice' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'Automática — similar a la voz española' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "voiceProvider(voice) === referenceProvider" "$TARGET_DIR/formulas-study-guide.php"
@@ -1094,6 +1103,8 @@ grep -Fq "'Mang Xiao' => 'Mirabilite'" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Zhi Gan Cao' => 'Honey-Prepared Licorice Root'" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq '$ingredientsdisplay = $renderherbswithenglish' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__herb-english' "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq 'formula-study-guide__formula-english-inline' "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq '$renderformulanamewithenglish($classname)' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "heading.closest('[data-formula-read-section-ignore]')" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'data-formula-read-section-ignore' "$TARGET_DIR/formulas-study-guide.php"
 if grep -Fq 'Todas incluidas' "$TARGET_DIR/formulas-study-guide.php" \
@@ -1112,6 +1123,10 @@ grep -Fq "'Dāng Guī': 'Dang Qui'" "$TARGET_DIR/single-herbs-study-guide.php"
 grep -Fq "'Dang Gui': 'Dang Qui'" "$TARGET_DIR/single-herbs-study-guide.php"
 grep -Fq "'Dāng Guī': 'Dang Qui'" "$TARGET_DIR/single-herbs-list.php"
 grep -Fq "'Dang Gui': 'Dang Qui'" "$TARGET_DIR/single-herbs-list.php"
+grep -Fq "'Rén Shēn': 'Ren Shen'" "$TARGET_DIR/single-herbs-study-guide.php"
+grep -Fq "'Ren Shen': 'Ren Shen'" "$TARGET_DIR/single-herbs-study-guide.php"
+grep -Fq "'Rén Shēn': 'Ren Shen'" "$TARGET_DIR/single-herbs-list.php"
+grep -Fq "'Ren Shen': 'Ren Shen'" "$TARGET_DIR/single-herbs-list.php"
 
 MENU_TARGET_DIR="$MOODLE_ROOT/blocks/menu"
 [[ -d "$MENU_TARGET_DIR" ]] || { echo "ERROR: no existe $MENU_TARGET_DIR" >&2; exit 1; }
@@ -1330,9 +1345,11 @@ echo "OK: el último fragmento cierra la lectura inmediatamente y nunca reinicia
 echo "OK: revisión instalada $REVISION; Xìng Rén se envía a la voz española como ‘Xing Ren’, sin acento añadido."
 echo "OK: Táo Rén se envía a la voz española como ‘Tao Ren’, sin acento añadido en Ren."
 echo "OK: Dāng Guī se envía a la voz española como ‘Dang Qui’."
+echo "OK: Rén Shēn se envía a la voz española como ‘Ren Shen’, sin acento gráfico."
 echo "OK: las hierbas emperador se narran como una frase completa para separar con claridad Dang Qui y Sheng Di Huang."
 echo "OK: Dang Gui y Sheng Di Huang muestran y narran sus nombres ingleses inmediatamente después del pinyin."
 echo "OK: todas las listas de ingredientes añaden un nombre inglés pequeño entre paréntesis después de cada pinyin reconocido."
+echo "OK: las listas de fórmulas añaden el nombre inglés pequeño entre paréntesis y lo narran con la voz inglesa."
 echo "OK: el selector de secciones excluye el bloque de navegación ‘21 capítulos de Bensky’."
 echo "OK: los distintivos ‘todas incluidas’ se eliminaron de la vista y de la narración."
 echo "OK: las fórmulas en inglés priorizan una voz natural del mismo proveedor que la voz española y permiten elegir otra voz inglesa."
