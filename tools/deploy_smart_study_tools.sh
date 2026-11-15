@@ -139,7 +139,7 @@ grep -Fq 'installComparisonNarrations' "$TEMP_DIR/moodle/formulas-study-guide.ph
 grep -Fq 'data-formula-comparison-table' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "pattern = pattern.replace(/^Viento-Frío de exceso\$/i, 'Viento-Frío en Exceso')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "rows.push('La fórmula ' + formula" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "'cuyo nombre en inglés es ' + englishName" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "cuyo nombre en inglés es ' + englishName" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'. Sus síntomas diferenciales son ' + signs" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-english-name' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'Nombre en inglés: ' "$TEMP_DIR/moodle/formulas-study-guide.php"
