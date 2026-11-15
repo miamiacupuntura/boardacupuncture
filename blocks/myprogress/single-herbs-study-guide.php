@@ -2879,7 +2879,7 @@ ob_start();
 
         const applySpeechPronunciations = function(text) {
             const languageKey = language.indexOf('es') === 0 ? 'es' : 'en';
-            return Object.keys(speechPronunciations[languageKey])
+            const preparedText = Object.keys(speechPronunciations[languageKey])
                 .sort(function(first, second) { return second.length - first.length; })
                 .reduce(function(preparedText, herbName) {
                     const escapedName = herbName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -2888,6 +2888,9 @@ ob_start();
                         speechPronunciations[languageKey][herbName]
                     );
                 }, stripFigureReferencesForSpeech(normalizeSpeechSymbols(text)));
+            return preparedText.replace(/(^|[^A-Za-zÀ-ž])Q[iīíǐì](?=$|[^A-Za-zÀ-ž])/gi, function(match, prefix) {
+                return prefix + 'Chi';
+            });
         };
 
         const voicePreferenceScore = function(voice) {

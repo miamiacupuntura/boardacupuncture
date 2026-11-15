@@ -2162,6 +2162,12 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         return (clone.textContent || '').replace(/\s+/g, ' ').trim();
     }
 
+    function pronounceQiForSpeech(value) {
+        return String(value || '').replace(/(^|[^A-Za-zÀ-ž])Q[iīíǐì](?=$|[^A-Za-zÀ-ž])/gi, function(match, prefix) {
+            return prefix + 'Chi';
+        });
+    }
+
     function normalizeSpeechText(value) {
         var speechText = String(value || '').normalize('NFC');
         if (isSpanish) {
@@ -2282,7 +2288,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                     'Appendix D, the guideline list of obsolete substances');
             }
         }
-        return speechText
+        return pronounceQiForSpeech(speechText
             .replace(/[*＊]+/g, '')
             .replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ')
             .replace(/[→⇒➜➝]/g, isSpanish ? '. Luego, ' : '. Then, ')
@@ -2297,16 +2303,16 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             .replace(/\s+/g, ' ')
             .replace(/\s+([,.!?])/g, '$1')
             .replace(/([.!?])\s*([.!?])+/g, '$1')
-            .trim();
+            .trim());
     }
 
     function normalizeEnglishFormulaText(value) {
-        return String(value || '').normalize('NFC')
+        return pronounceQiForSpeech(String(value || '').normalize('NFC')
             .replace(/[*＊]+/g, '')
             .replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ')
             .replace(/\s+/g, ' ')
             .replace(/\s+([,.!?])/g, '$1')
-            .trim();
+            .trim());
     }
 
     function appendSpeechChunks(chunks, value, chunkLanguage, englishFormula) {

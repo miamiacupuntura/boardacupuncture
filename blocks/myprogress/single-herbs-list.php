@@ -545,6 +545,9 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
         Object.keys(pronunciations).sort(function(a, b) { return b.length - a.length; }).forEach(function(name) {
             text = text.replace(new RegExp('\\b' + name.replace(/\s+/g, '\\s+') + '\\b', 'gi'), pronunciations[name]);
         });
+        text = text.replace(/(^|[^A-Za-zÀ-ž])Q[iīíǐì](?=$|[^A-Za-zÀ-ž])/gi, function(match, prefix) {
+            return prefix + 'Chi';
+        });
         return text.replace(/\s+([,.])/g, '$1').replace(/([.!?])\s*([.!?])+/g, '$1').trim();
     }
 
