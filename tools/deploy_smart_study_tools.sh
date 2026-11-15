@@ -138,13 +138,14 @@ grep -Fq '.formula-study-reader__actions button:first-child:hover:not(:disabled)
 grep -Fq 'border-color:#076d68;background:#076d68;color:#fff' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'revealSelectedSection' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'function structuredSelectionRoot(node)' "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "element.closest('[data-formula-dui-yao-card],[data-formula-comparison-table]')" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "element.closest('[data-formula-dui-yao-card],[data-formula-comparison-table],[data-formula-context-table]')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'if (startRoot && startRoot === endRoot)' "$TEMP_DIR/moodle/formulas-study-guide.php"
 if grep -Fq "count(\$clinicalsection['formulaNames'])" "$TEMP_DIR/moodle/formulas-study-guide.php"; then
     echo "ERROR: la sección clínica todavía muestra y narra el conteo de fichas detalladas." >&2
     exit 1
 fi
 grep -Fq 'installComparisonNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'installContextTableNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'installDuiYaoNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'installFormulaRiskNarrations' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "pattern.textContent = riskText + (isSpanish ? ' — Patrón: ' : ' — Pattern: ') + patternText;" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -155,6 +156,11 @@ grep -Fq "\$ises ? 'Comparación decisiva:' : 'Decisive comparison:'" "$TEMP_DIR
 grep -Fq "\$ises ? 'Acción:' : 'Action:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Pista decisiva:' : 'Decisive clue:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$kingherbsplural ? 'Hierbas emperador:' : 'Hierba emperador:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "' clases terapéuticas:' : ' therapeutic classes:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'data-formula-context-table data-table-narration=' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'Esta tabla compara las clases terapéuticas de la categoría.' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$ises ? 'Clase terapéutica:' : 'Therapeutic class:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$ises ? 'Qué hace:' : 'What it does:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-dui-yao-card' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-position' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-formulas' "$TEMP_DIR/moodle/formulas-study-guide.php"

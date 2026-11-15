@@ -2009,6 +2009,36 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
+    function installContextTableNarrations(root) {
+        var tables = Array.from(root.querySelectorAll('[data-formula-context-table]'));
+        if (root.matches && root.matches('[data-formula-context-table]')) tables.unshift(root);
+        tables.forEach(function(table) {
+            var introduction = (table.getAttribute('data-table-narration') || '').trim();
+            var headers = Array.from(table.querySelectorAll('thead th')).map(function(header) {
+                return (header.textContent || '').replace(/\s*:\s*$/, '').replace(/\s+/g, ' ').trim();
+            });
+            var rows = [];
+            table.querySelectorAll('tbody tr').forEach(function(row) {
+                var cells = Array.from(row.querySelectorAll('td'));
+                var fields = cells.map(function(cell, index) {
+                    var value = comparisonCellText(cell);
+                    if (!value) return '';
+                    var heading = headers[index] || (isSpanish ? 'Dato' : 'Detail');
+                    return heading + ': ' + value;
+                }).filter(Boolean);
+                if (fields.length) rows.push(fields.join('. ') + '.');
+            });
+            if (!introduction && !rows.length) return;
+            var narration = document.createElement('p');
+            narration.textContent = (introduction ? introduction + ' ' : '') + rows.join(' ');
+            if (table === root) {
+                root.replaceChildren(narration);
+            } else {
+                table.replaceWith(narration);
+            }
+        });
+    }
+
     function installDuiYaoNarrations(root) {
         var spanishOrdinals = ['primer', 'segundo', 'tercer', 'cuarto', 'quinto', 'sexto', 'séptimo'];
         var englishOrdinals = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh'];
@@ -2102,6 +2132,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         if (!element) return '';
         var clone = element.cloneNode(true);
         installComparisonNarrations(clone);
+        installContextTableNarrations(clone);
         installDuiYaoNarrations(clone);
         installFormulaRiskNarrations(clone);
         clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore],.formula-study-guide__domain-badge').forEach(function(node) {
@@ -2419,16 +2450,17 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     function structuredSelectionRoot(node) {
         var element = node && node.nodeType === 1 ? node : (node ? node.parentElement : null);
         if (!element || !element.closest) return null;
-        return element.closest('[data-formula-dui-yao-card],[data-formula-comparison-table]');
+        return element.closest('[data-formula-dui-yao-card],[data-formula-comparison-table],[data-formula-context-table]');
     }
 
     function visibleText() {
         var seen = new Set();
         var pieces = [];
-        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category,[data-formula-comparison-table],[data-formula-dui-yao-card]').forEach(function(element) {
+        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category,[data-formula-comparison-table],[data-formula-context-table],[data-formula-dui-yao-card]').forEach(function(element) {
             if (element.closest('[data-formula-read-aloud],nav,form') || element.offsetParent === null) return;
             if (element.closest('.formula-study-guide__category') && !element.classList.contains('formula-study-guide__category')) return;
             if (element.closest('[data-formula-dui-yao-card]') && !element.hasAttribute('data-formula-dui-yao-card')) return;
+            if (element.closest('[data-formula-context-table]') && !element.hasAttribute('data-formula-context-table')) return;
             var rect = element.getBoundingClientRect();
             if (rect.bottom < 0 || rect.top > window.innerHeight) return;
             var text = extractText(element);
@@ -2923,17 +2955,19 @@ echo $OUTPUT->header();
                     <div class="formula-study-guide__medical-rationale-header">
                         <span class="formula-study-guide__medical-rationale-stat"><?php echo s(count($selected['formulas'])
                             . ($issupplemental ? ($ises ? ' fórmulas principales · ' : ' principal formulas · ') : ($ises ? ' fichas detalladas · ' : ' detailed core profiles · '))
-                            . count($selectedformulasections) . ($ises ? ' secciones clínicas' : ' clinical sections')); ?></span>
+                            . count($selectedformulasections) . ($ises ? ' secciones clínicas:' : ' clinical sections:')); ?></span>
                         <h4 id="clinical-frame-title"><?php echo s($ises ? $selectedguide['clinicalFrameTitleEs'] : $selectedguide['clinicalFrameTitle']); ?></h4>
                         <p><?php echo s($ises ? $selectedguide['clinicalFrameTextEs'] : $selectedguide['clinicalFrameText']); ?></p>
                     </div>
                     <div class="formula-study-guide__table-wrap">
-                        <table class="formula-study-guide__table">
+                        <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
+                            ? 'Esta tabla relaciona cada sección clínica con su centro diagnóstico y con las fórmulas principales que se estudian en ella.'
+                            : 'This table connects each clinical section with its diagnostic focus and the principal formulas studied within it.'); ?>">
                             <thead>
                                 <tr>
-                                    <th><?php echo $ises ? 'Sección clínica' : 'Clinical section'; ?></th>
-                                    <th><?php echo $ises ? 'Centro diagnóstico' : 'Diagnostic center'; ?></th>
-                                    <th><?php echo $issupplemental ? ($ises ? 'Fórmulas principales' : 'Principal formulas') : ($ises ? 'Fichas detalladas' : 'detailed core profiles'); ?></th>
+                                    <th><?php echo $ises ? 'Sección clínica:' : 'Clinical section:'; ?></th>
+                                    <th><?php echo $ises ? 'Centro diagnóstico:' : 'Diagnostic center:'; ?></th>
+                                    <th><?php echo $issupplemental ? ($ises ? 'Fórmulas principales:' : 'Principal formulas:') : ($ises ? 'Fichas detalladas:' : 'Detailed core profiles:'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2962,7 +2996,7 @@ echo $OUTPUT->header();
             <?php if (!empty($selectedguide['therapeuticClasses'])): ?>
                 <section class="formula-study-guide__scope-analysis" aria-labelledby="therapeutic-classification-title">
                     <header class="formula-study-guide__scope-analysis-header">
-                        <span class="formula-study-guide__scope-analysis-count"><?php echo s(count($selectedguide['therapeuticClasses']) . ($ises ? ' clases terapéuticas' : ' therapeutic classes')); ?></span>
+                        <span class="formula-study-guide__scope-analysis-count"><?php echo s(count($selectedguide['therapeuticClasses']) . ($ises ? ' clases terapéuticas:' : ' therapeutic classes:')); ?></span>
                         <h4 id="therapeutic-classification-title"><?php echo s($ises ? $selectedguide['classificationTitleEs'] : $selectedguide['classificationTitle']); ?></h4>
                         <p><?php echo s($ises ? $selectedguide['classificationTextEs'] : $selectedguide['classificationText']); ?></p>
                         <p><?php echo s($ises
@@ -2970,13 +3004,15 @@ echo $OUTPUT->header();
                             : '“Formulas studied in detail” identifies formulas with a principal profile in this section. “Other formulas for comparison” adds examples from the same therapeutic class. These labels do not by themselves determine whether a formula belongs to Appendix C, the guideline official list of formulas.'); ?></p>
                     </header>
                     <div class="formula-study-guide__table-wrap">
-                        <table class="formula-study-guide__table">
+                        <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
+                            ? 'Esta tabla compara las clases terapéuticas de la categoría. Para cada clase indica qué hace, qué fórmulas la representan y qué rasgo permite diferenciarla de las demás.'
+                            : 'This table compares the category therapeutic classes. For each class, it explains what it does, which formulas represent it, and which feature distinguishes it from the others.'); ?>">
                             <thead>
                                 <tr>
-                                    <th><?php echo $ises ? 'Clase terapéutica' : 'Therapeutic class'; ?></th>
-                                    <th><?php echo $ises ? 'Qué hace' : 'What it does'; ?></th>
-                                    <th><?php echo $ises ? 'Fórmulas representativas' : 'Representative formulas'; ?></th>
-                                    <th><?php echo $ises ? 'Separador crítico' : 'Critical separator'; ?></th>
+                                    <th><?php echo $ises ? 'Clase terapéutica:' : 'Therapeutic class:'; ?></th>
+                                    <th><?php echo $ises ? 'Qué hace:' : 'What it does:'; ?></th>
+                                    <th><?php echo $ises ? 'Fórmulas representativas:' : 'Representative formulas:'; ?></th>
+                                    <th><?php echo $ises ? 'Separador crítico:' : 'Critical separator:'; ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -3011,7 +3047,7 @@ echo $OUTPUT->header();
                     </div>
                     <?php if (!empty($selectedguide['boardScopeTitle'])): ?>
                         <aside class="formula-study-guide__scope-analysis-header formula-study-guide__scope-analysis-board-note">
-                            <span class="formula-study-guide__scope-analysis-count"><?php echo s($ises ? 'Fuera del Appendix C vigente' : 'Outside the current Appendix C'); ?></span>
+                            <span class="formula-study-guide__scope-analysis-count"><?php echo s($ises ? 'Fuera del Appendix C vigente:' : 'Outside the current Appendix C:'); ?></span>
                             <h4><?php echo s($ises ? $selectedguide['boardScopeTitleEs'] : $selectedguide['boardScopeTitle']); ?></h4>
                             <p><?php echo s($ises ? $selectedguide['boardScopeTextEs'] : $selectedguide['boardScopeText']); ?></p>
                             <p class="formula-study-guide__scope-analysis-caveat"><strong><?php echo s($ises ? 'Límite de la explicación:' : 'Limit of the explanation:'); ?></strong> <?php echo s($ises ? $selectedguide['boardScopeCaveatEs'] : $selectedguide['boardScopeCaveat']); ?></p>
@@ -3132,7 +3168,7 @@ echo $OUTPUT->header();
                         : ($ises ? $selectedguide['quickCompareTitleEs'] : $selectedguide['quickCompareTitle'])); ?></h4>
                     <div class="formula-study-guide__table-wrap">
                         <table class="formula-study-guide__table" data-formula-comparison-table>
-                            <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
+                            <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Separador decisivo:' : 'Decisive separator:'; ?></th></tr></thead>
                             <tbody>
                                 <?php foreach ($comparerows as $row): ?>
                                     <?php
@@ -3294,31 +3330,33 @@ echo $OUTPUT->header();
                         : 'NCBAHM publishes the roster but not an individual rationale for every omission. The following is a documented, plausible analysis, not an official Board explanation.'); ?></p>
                 </header>
                 <div class="formula-study-guide__table-wrap">
-                    <table class="formula-study-guide__table">
-                        <thead><tr><th><?php echo $ises ? 'Factor' : 'Factor'; ?></th><th><?php echo $ises ? 'Evidencia en el capítulo' : 'Chapter evidence'; ?></th><th><?php echo $ises ? 'Relevancia actual' : 'Current relevance'; ?></th></tr></thead>
+                    <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
+                        ? 'Esta tabla resume los factores que pueden explicar por qué ciertas fórmulas no forman parte del temario vigente. Relaciona cada factor con la evidencia del capítulo y con su relevancia actual.'
+                        : 'This table summarizes factors that may explain why certain formulas are outside the current syllabus. It connects each factor with chapter evidence and its current relevance.'); ?>">
+                        <thead><tr><th><?php echo $ises ? 'Factor:' : 'Factor:'; ?></th><th><?php echo $ises ? 'Evidencia en el capítulo:' : 'Chapter evidence:'; ?></th><th><?php echo $ises ? 'Relevancia actual:' : 'Current relevance:'; ?></th></tr></thead>
                         <tbody>
                             <tr>
-                                <td><span class="formula-study-guide__scope-analysis-count">5/7</span><?php echo s($ises ? 'Metales tóxicos históricos' : 'Historical toxic metals'); ?></td>
+                                <td><span class="formula-study-guide__scope-analysis-count">5/7:</span> <?php echo s($ises ? 'Metales tóxicos históricos' : 'Historical toxic metals'); ?></td>
                                 <td><?php echo s($ises ? 'An Gong Niu Huang Wan, Zi Xue Dan, Zhi Bao Dan, Hui Chun Dan y Su He Xiang Wan incluían Zhu Sha/cinabrio; An Gong Niu Huang Wan y Zhi Bao Dan también Xiong Huang/rejalgar.' : 'An Gong Niu Huang Wan, Zi Xue Dan, Zhi Bao Dan, Hui Chun Dan, and Su He Xiang Wan historically included Zhu Sha/cinnabar; An Gong Niu Huang Wan and Zhi Bao Dan also included Xiong Huang/realgar.'); ?></td>
                                 <td><?php echo s($ises ? 'Cinabrio aporta mercurio y rejalgar arsénico. El apéndice D del guideline es el listado de sustancias obsoletas; allí figura Zhu Sha. Por esta razón, los perfiles modernos de esta guía excluyen ambas sustancias.' : 'Cinnabar contributes mercury and realgar arsenic. Appendix D of the guideline is the list of obsolete substances; Zhu Sha appears there. For this reason, the modern profiles in this guide exclude both substances.'); ?></td>
                             </tr>
                             <tr>
-                                <td><span class="formula-study-guide__scope-analysis-count">4/7</span><?php echo s($ises ? 'Especies protegidas o prohibidas' : 'Protected or prohibited species'); ?></td>
+                                <td><span class="formula-study-guide__scope-analysis-count">4/7:</span> <?php echo s($ises ? 'Especies protegidas o prohibidas' : 'Protected or prohibited species'); ?></td>
                                 <td><?php echo s($ises ? 'Cuatro fórmulas usaban históricamente Xi Jiao/cuerno de rinoceronte; Zhi Bao Dan también Dai Mao/tortuga carey. Zi Xue Dan plantea además la procedencia de Ling Yang Jiao.' : 'Four formulas historically used Xi Jiao/rhinoceros horn; Zhi Bao Dan also used Dai Mao/hawksbill turtle. Zi Xue Dan additionally raises sourcing concerns for Ling Yang Jiao.'); ?></td>
                                 <td><?php echo s($ises ? 'La protección de especies y las restricciones comerciales obligan a excluir o sustituir componentes, por lo que la fórmula moderna ya no es idéntica a la clásica.' : 'Species protection and trade restrictions require components to be excluded or substituted, so the modern formula is no longer identical to the classical one.'); ?></td>
                             </tr>
                             <tr>
-                                <td><span class="formula-study-guide__scope-analysis-count">6/7</span><?php echo s($ises ? 'Ingredientes animales o regulados' : 'Animal-derived or regulated ingredients'); ?></td>
+                                <td><span class="formula-study-guide__scope-analysis-count">6/7:</span> <?php echo s($ises ? 'Ingredientes animales o regulados' : 'Animal-derived or regulated ingredients'); ?></td>
                                 <td><?php echo s($ises ? 'Niu Huang, She Xiang, Shui Niu Jiao y otros ingredientes animales aparecen en seis perfiles; Chen Xiang también requiere procedencia legal y sostenible.' : 'Niu Huang, She Xiang, Shui Niu Jiao, and other animal-derived ingredients appear across six profiles; Chen Xiang also requires legal, sustainable sourcing.'); ?></td>
                                 <td><?php echo s($ises ? 'Identidad, sustitución, control de calidad, legalidad y abastecimiento ético dificultan estandarizar estas fórmulas para un listado nacional.' : 'Identity, substitution, quality control, legality, and ethical sourcing complicate standardization for a national roster.'); ?></td>
                             </tr>
                             <tr>
-                                <td><span class="formula-study-guide__scope-analysis-count">1/7</span><?php echo s($ises ? 'Vía de administración peligrosa' : 'Hazardous administration route'); ?></td>
+                                <td><span class="formula-study-guide__scope-analysis-count">1/7:</span> <?php echo s($ises ? 'Vía de administración peligrosa' : 'Hazardous administration route'); ?></td>
                                 <td><?php echo s($ises ? 'Tong Guan San se insuflaba en la nariz para inducir estornudos y contenía Xi Xin.' : 'Tong Guan San was insufflated into the nose to induce sneezing and contained Xi Xin.'); ?></td>
                                 <td><?php echo s($ises ? 'Existe riesgo de irritación y aspiración pulmonar; Xi Xin exige además control estricto de identidad y dosis. La guía lo conserva solo para reconocimiento histórico.' : 'There is a risk of irritation and pulmonary aspiration; Xi Xin also requires strict identity and dose control. The guide retains it only for historical recognition.'); ?></td>
                             </tr>
                             <tr>
-                                <td><span class="formula-study-guide__scope-analysis-count">7/7</span><?php echo s($ises ? 'Uso en cuadros de urgencia' : 'Emergency presentations'); ?></td>
+                                <td><span class="formula-study-guide__scope-analysis-count">7/7:</span> <?php echo s($ises ? 'Uso en cuadros de urgencia' : 'Emergency presentations'); ?></td>
                                 <td><?php echo s($ises ? 'Las siete se relacionan con alteración de conciencia, convulsiones, colapso, fiebre grave, dificultad respiratoria u otros cuadros cerrados agudos.' : 'All seven are associated with impaired consciousness, seizures, collapse, severe fever, breathing difficulty, or other acute closed disorders.'); ?></td>
                                 <td><?php echo s($ises ? 'Son situaciones que requieren servicios de emergencia y reducen el papel de estas prescripciones históricas en la práctica moderna y en un temario de selección terapéutica habitual.' : 'These situations require emergency services and reduce the role of these historical prescriptions in modern practice and in a routine therapeutic-selection syllabus.'); ?></td>
                             </tr>
@@ -3510,13 +3548,15 @@ echo $OUTPUT->header();
                         : 'The three detailed core profiles condense three broad clinical territories: skin, painful channels, and the Interior. Together they test location, root, and manifestation without making the entire classical chapter a primary exam priority.'); ?></p>
                 </div>
                 <div class="formula-study-guide__table-wrap">
-                    <table class="formula-study-guide__table">
+                    <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
+                        ? 'Esta tabla compara tres fórmulas representativas según el lugar donde se manifiesta el Viento, el mecanismo responsable y la presentación clínica característica.'
+                        : 'This table compares three representative formulas by where Wind manifests, the responsible mechanism, and the characteristic clinical presentation.'); ?>">
                         <thead>
                             <tr>
-                                <th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th>
-                                <th><?php echo $ises ? 'Dónde se manifiesta' : 'Where it manifests'; ?></th>
-                                <th><?php echo $ises ? 'Mecanismo' : 'Mechanism'; ?></th>
-                                <th><?php echo $ises ? 'Presentación característica' : 'Characteristic presentation'; ?></th>
+                                <th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th>
+                                <th><?php echo $ises ? 'Dónde se manifiesta:' : 'Where it manifests:'; ?></th>
+                                <th><?php echo $ises ? 'Mecanismo:' : 'Mechanism:'; ?></th>
+                                <th><?php echo $ises ? 'Presentación característica:' : 'Characteristic presentation:'; ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -3588,17 +3628,19 @@ echo $OUTPUT->header();
             <?php $chapterinsight = $chapterinterestinginsights[$selected['key']]; ?>
             <section class="formula-study-guide__medical-rationale" aria-labelledby="chapter-interesting-insight-title">
                 <div class="formula-study-guide__medical-rationale-header">
-                    <span class="formula-study-guide__medical-rationale-stat"><?php echo s($ises ? $chapterinsight['statEs'] : $chapterinsight['stat']); ?></span>
+                    <span class="formula-study-guide__medical-rationale-stat"><?php echo s(($ises ? $chapterinsight['statEs'] : $chapterinsight['stat']) . ':'); ?></span>
                     <h4 id="chapter-interesting-insight-title"><?php echo s($ises ? $chapterinsight['titleEs'] : $chapterinsight['title']); ?></h4>
                     <p><?php echo s($ises ? $chapterinsight['introEs'] : $chapterinsight['intro']); ?></p>
                 </div>
                 <div class="formula-study-guide__table-wrap">
-                    <table class="formula-study-guide__table">
+                    <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
+                        ? 'Esta tabla contrasta la cobertura clínica de las fichas detalladas con los temas adicionales que desarrolla el capítulo completo de Bensky.'
+                        : 'This table contrasts the clinical coverage of the detailed profiles with the additional topics developed in the complete Bensky chapter.'); ?>">
                         <thead>
                             <tr>
-                                <th><?php echo $ises ? 'Cobertura clínica representada en las fichas detalladas' : 'Clinical coverage represented in the detailed profiles'; ?></th>
-                                <th><?php echo $ises ? 'Fichas detalladas representativas' : 'Representative detailed core profiles'; ?></th>
-                                <th><?php echo $ises ? 'Qué añade el capítulo completo de Bensky' : 'What the complete Bensky chapter adds'; ?></th>
+                                <th><?php echo $ises ? 'Cobertura clínica representada en las fichas detalladas:' : 'Clinical coverage represented in the detailed profiles:'; ?></th>
+                                <th><?php echo $ises ? 'Fichas detalladas representativas:' : 'Representative detailed core profiles:'; ?></th>
+                                <th><?php echo $ises ? 'Qué añade el capítulo completo de Bensky:' : 'What the complete Bensky chapter adds:'; ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -3800,7 +3842,7 @@ echo $OUTPUT->header();
                             <h4><?php echo s($ises ? $formulacategoryguide['quickCompareTitleEs'] : $formulacategoryguide['quickCompareTitle']); ?></h4>
                             <div class="formula-study-guide__table-wrap">
                                 <table class="formula-study-guide__table" data-formula-comparison-table>
-                                    <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
+                                    <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Separador decisivo:' : 'Decisive separator:'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
                                             <?php
@@ -3954,7 +3996,7 @@ echo $OUTPUT->header();
                             <h4 id="annex-comparison-<?php echo s($comparesection['key']); ?>-title"><?php echo s(($ises ? 'Comparación · ' : 'Comparison · ') . ($ises ? $comparesection['nameEs'] : $comparesection['name'])); ?></h4>
                             <div class="formula-study-guide__table-wrap">
                                 <table class="formula-study-guide__table" data-formula-comparison-table>
-                                    <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
+                                    <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Separador decisivo:' : 'Decisive separator:'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($comparerows as $row): ?>
                                             <?php
