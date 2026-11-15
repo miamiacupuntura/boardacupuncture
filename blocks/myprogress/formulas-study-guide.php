@@ -1844,10 +1844,69 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
     }
 
+    function comparisonCellText(cell) {
+        var clone = cell.cloneNode(true);
+        clone.querySelectorAll('.formula-study-guide__domain-badge,[aria-hidden="true"]').forEach(function(node) {
+            node.remove();
+        });
+        return (clone.textContent || '').replace(/[*＊]+/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function joinComparisonSigns(value) {
+        var items = String(value || '').split(/\s*[·•;]\s*/).map(function(item) {
+            item = item.trim();
+            if (!item) return '';
+            if (!isSpanish) return item;
+            var normalized = item
+                .replace(/^Sin sudor$/i, 'la falta de sudoración')
+                .replace(/^Sudor espontáneo$/i, 'la sudoración espontánea')
+                .replace(/^Nuca y espalda superior rígidas$/i, 'la rigidez de la nuca y de la parte superior de la espalda')
+                .replace(/^pulso\s+(.+)-(.+)$/i, 'un pulso $1 y $2');
+            if (normalized !== item) return normalized;
+            if (/^sibilancias$/i.test(item)) return 'las sibilancias';
+            if (/^pulso\b/i.test(item)) return 'un ' + item.toLowerCase();
+            if (/^(aversión|falta|rigidez|saburra|sudoración)\b/i.test(item)) return 'la ' + item.toLowerCase();
+            if (/^dolor\b/i.test(item)) return 'el ' + item.toLowerCase();
+            return item.charAt(0).toLowerCase() + item.slice(1);
+        }).filter(Boolean);
+        if (items.length < 2) return items[0] || '';
+        var connector = isSpanish ? ' y ' : ' and ';
+        return items.slice(0, -1).join(', ') + connector + items[items.length - 1];
+    }
+
+    function installComparisonNarrations(root) {
+        var tables = Array.from(root.querySelectorAll('[data-formula-comparison-table]'));
+        if (root.matches && root.matches('[data-formula-comparison-table]')) tables.unshift(root);
+        tables.forEach(function(table) {
+            var rows = [];
+            table.querySelectorAll('tbody tr').forEach(function(row) {
+                var cells = row.querySelectorAll('td');
+                if (cells.length < 3) return;
+                var formula = comparisonCellText(cells[0]);
+                var pattern = comparisonCellText(cells[1]);
+                var signs = joinComparisonSigns(comparisonCellText(cells[2]));
+                if (!formula || !pattern || !signs) return;
+                if (isSpanish) {
+                    pattern = pattern.replace(/^Viento-Frío de exceso$/i, 'Viento-Frío en Exceso');
+                    rows.push('La fórmula ' + formula + ' tiene un patrón de ' + pattern + '. Sus síntomas diferenciales son ' + signs + '.');
+                } else {
+                    rows.push('The formula ' + formula + ' is used for a pattern of ' + pattern + '. Its decisive differentiating signs are ' + signs + '.');
+                }
+            });
+            if (!rows.length) return;
+            var narration = document.createElement('p');
+            narration.textContent = (isSpanish
+                ? 'Esta tabla compara fórmulas de la misma sección. Para comprenderla, relaciona cada fórmula con el patrón que trata y después con los signos que permiten distinguirla de las demás. '
+                : 'This table compares formulas in the same section. To understand it, connect each formula first with the pattern it treats and then with the signs that distinguish it from the others. ') + rows.join(' ');
+            table.replaceWith(narration);
+        });
+    }
+
     function extractText(element) {
         if (!element) return '';
         var clone = element.cloneNode(true);
-        clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore]').forEach(function(node) {
+        installComparisonNarrations(clone);
+        clone.querySelectorAll('[data-formula-read-aloud],nav,form,button,input,select,option,script,style,[hidden],[aria-hidden="true"],[data-read-aloud-ignore],.formula-study-guide__domain-badge').forEach(function(node) {
             node.remove();
         });
         addSentenceBoundaries(clone);
@@ -2043,7 +2102,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     function visibleText() {
         var seen = new Set();
         var pieces = [];
-        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category').forEach(function(element) {
+        page.querySelectorAll('h2,h3,h4,h5,p,li,dt,dd,summary,.formula-study-guide__fact,.formula-study-guide__category,[data-formula-comparison-table]').forEach(function(element) {
             if (element.closest('[data-formula-read-aloud],nav,form') || element.offsetParent === null) return;
             if (element.closest('.formula-study-guide__category') && !element.classList.contains('formula-study-guide__category')) return;
             var rect = element.getBoundingClientRect();
@@ -2717,7 +2776,7 @@ echo $OUTPUT->header();
                         ? (($ises ? 'Comparación · ' : 'Comparison · ') . ($ises ? $comparesection['nameEs'] : $comparesection['name']))
                         : ($ises ? $selectedguide['quickCompareTitleEs'] : $selectedguide['quickCompareTitle'])); ?></h4>
                     <div class="formula-study-guide__table-wrap">
-                        <table class="formula-study-guide__table">
+                        <table class="formula-study-guide__table" data-formula-comparison-table>
                             <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                             <tbody>
                                 <?php foreach ($comparerows as $row): ?>
@@ -3378,7 +3437,7 @@ echo $OUTPUT->header();
                         <section class="formula-study-guide__compare" aria-label="<?php echo s($ises ? 'Comparación de fórmulas' : 'Formula comparison'); ?>">
                             <h4><?php echo s($ises ? $formulacategoryguide['quickCompareTitleEs'] : $formulacategoryguide['quickCompareTitle']); ?></h4>
                             <div class="formula-study-guide__table-wrap">
-                                <table class="formula-study-guide__table">
+                                <table class="formula-study-guide__table" data-formula-comparison-table>
                                     <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
@@ -3530,7 +3589,7 @@ echo $OUTPUT->header();
                         <section class="formula-study-guide__compare" aria-labelledby="annex-comparison-<?php echo s($comparesection['key']); ?>-title">
                             <h4 id="annex-comparison-<?php echo s($comparesection['key']); ?>-title"><?php echo s(($ises ? 'Comparación · ' : 'Comparison · ') . ($ises ? $comparesection['nameEs'] : $comparesection['name'])); ?></h4>
                             <div class="formula-study-guide__table-wrap">
-                                <table class="formula-study-guide__table">
+                                <table class="formula-study-guide__table" data-formula-comparison-table>
                                     <thead><tr><th><?php echo $ises ? 'Fórmula' : 'Formula'; ?></th><th><?php echo $ises ? 'Patrón' : 'Pattern'; ?></th><th><?php echo $ises ? 'Separador decisivo' : 'Decisive separator'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($comparerows as $row): ?>
