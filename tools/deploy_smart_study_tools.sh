@@ -147,6 +147,8 @@ grep -Fq 'data-dui-yao-related-position' "$TEMP_DIR/moodle/formulas-study-guide.
 grep -Fq 'data-dui-yao-related-formulas' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-first-latin' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-second-latin' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$duiyaopharmaceuticaltitle = implode(' + ', array_filter([\$duiyaofirstlatin, \$duiyaosecondlatin]));" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'formula-study-guide__dui-yao-pharmaceutical" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$duiyaosmartbyslug' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$herblatinbyname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$herblatinbyname['Xin Yi Hua']" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -193,6 +195,11 @@ if grep -Fq 'cuyo nombre farmacéutico es' "$TEMP_DIR/moodle/formulas-study-guid
     || grep -Fq 'Shing' "$TEMP_DIR/moodle/formulas-study-guide.php" \
     || grep -Fq 'Xing, Rén' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
     echo "ERROR: la narración Duì Yào conserva una pronunciación o frase farmacéutica descartada." >&2
+    exit 1
+fi
+if grep -Fq "\$duiyaopair['characters']" "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'formula-study-guide__dui-yao-characters' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: las tarjetas Duì Yào todavía muestran caracteres chinos." >&2
     exit 1
 fi
 grep -Fq "Este Duì Yào está relacionado con la fórmula '" "$TEMP_DIR/moodle/formulas-study-guide.php"
