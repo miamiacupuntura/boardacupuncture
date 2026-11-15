@@ -146,6 +146,7 @@ grep -Fq "'. Sus síntomas diferenciales son ' + signs" "$TEMP_DIR/moodle/formul
 grep -Fq 'data-formula-english-name' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "s('(' . \$formulaenglishname . ')')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__formula-translation' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'class="formula-study-guide__core" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$getformulaenglishname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq '$formulaenglishnamesbyname' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)'" "$TEMP_DIR/moodle/formulas-study-guide.php"

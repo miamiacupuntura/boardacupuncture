@@ -3509,7 +3509,7 @@ echo $OUTPUT->header();
                             <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__category-meta"><?php echo s($ises ? $formula['groupEs'] : $formula['group']); ?></span><?php endif; ?>
                         </div>
                         <div class="formula-study-guide__badges">
-                            <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core"><?php echo s($ises ? 'Ficha detallada del núcleo' : 'Detailed core profile'); ?></span><?php endif; ?>
+                            <?php if (($formula['priority'] ?? '') === 'core'): ?><span class="formula-study-guide__core" data-read-aloud-ignore><?php echo s($ises ? 'Ficha detallada del núcleo' : 'Detailed core profile'); ?></span><?php endif; ?>
                             <?php if ($issupplemental || $isintegratedofficialprofile): ?><span class="formula-study-guide__core"><?php echo s($isintegratedofficialprofile || $isofficialexpansionpage
                                 ? ($ises ? 'Appendix C 2026 · oficial' : 'Appendix C 2026 · official')
                                 : (is_numeric($formula['number'])
